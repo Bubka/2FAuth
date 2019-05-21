@@ -5,41 +5,28 @@ namespace Tests\Unit;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Auth\Authenticatable;
 
 class APITest extends TestCase
 {
     /**
-     * A basic unit test example.
+     * test User creation via API
      *
      * @return void
      */
-    public function testExample()
+    public function testUserCreation()
     {
-        $this->assertTrue(true);
-    }
-
-    /**
-     * test Account creation via API
-     *
-     * @return void
-     */
-    public function testAccountCreation()
-    {
-        $response = $this->json('POST', '/api/account', [
-            'name' => 'Unit Test Account',
-            'email' => str_random(10) . '@demo.com',
+        $response = $this->json('POST', '/api/register', [
+            'name' => 'Demo User',
+            'email' => str_random(10) . '@phpunit.com',
             'password' => '12345',
         ]);
 
         $response->assertStatus(200)->assertJsonStructure([
             'success' => ['token', 'name']
         ]);
-
-        $response->assertStatus(200)->assertJson([
-            'status' => true,
-            'message' => 'Category Created'
-        ]);
     }
+
 
     /**
      * test User login via API
@@ -49,14 +36,39 @@ class APITest extends TestCase
     public function testUserLogin()
     {
         $response = $this->json('POST', '/api/login', [
-            'email' => 'demo@demo.com',
-            'password' => 'secret'
+            'email' => 'edouard@ganeau.me',
+            'password' => 'bubka'
         ]);
 
         $response->assertStatus(200)->assertJsonStructure([
             'success' => ['token']
         ]);
     }
+
+    /**
+     * test Account creation via API
+     *
+     * @return void
+     */
+    public function testAccountCreation()
+    {
+        //$this->withoutMiddleware();
+
+        $user = \App\User::find(1);
+
+        $response = $this->actingAs($user, 'api')
+            ->json('POST', '/api/account', [
+            'name' => 'phpunit account #' . str_random(5),
+            'secret' => '3GB2I2P365J575LS',
+        ]);
+
+        $response->assertStatus(200)->assertJson([
+            // 'data' => $response->data,
+            'status' => true,
+            'message' => 'Account Created'
+        ]);
+    }
+
 
     /**
      * test Account index fetching via API
@@ -92,13 +104,13 @@ class APITest extends TestCase
     {
         $user = \App\User::find(1);
 
-        $category = \App\Account::create([
-            'name' => 'To be deleted',
-            'secret' => 'To be deleted'
+        $account = \App\Account::create([
+            'name' => 'To be deleted #' . str_random(5),
+            'secret' => '12345'
         ]);
 
         $response = $this->actingAs($user, 'api')
-            ->json('DELETE', "/api/account/{$category->id}")
+            ->json('DELETE', "/api/account/{$account->id}")
             ->assertStatus(200)->assertJson([
                 'status' => true,
                 'message' => 'Account Deleted'

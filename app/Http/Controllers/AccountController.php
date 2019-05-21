@@ -43,7 +43,7 @@ class AccountController extends Controller
         $data = [
             'data' => $account,
             'status' => (bool) $account,
-            'message' => $account ? 'Account Created!' : 'Error Creating Account',
+            'message' => $account ? 'Account Created' : 'Error Creating Account',
         ];
 
         return response()->json($data);
@@ -84,7 +84,7 @@ class AccountController extends Controller
 
         return response()->json([
             'status' => $status,
-            'message' => $status ? 'Account Updated!' : 'Error Updating Account'
+            'message' => $status ? 'Account Updated' : 'Error Updating Account'
         ]);
 
         //return response()->json($request, 200);
@@ -98,11 +98,17 @@ class AccountController extends Controller
      */
     public function destroy(account $account)
     {
-        $status = $account->delete();
+        if($account->deleted_at == null){
+          $status = $account->delete();
+        }
+        else {
+          $status = $account->forceDelete();
+        }
 
         return response()->json([
             'status' => $status,
-            'message' => $status ? 'Account Deleted!' : 'Error Deleting Account'
+            'message' => $status ? 'Account Deleted' : 'Error Deleting Account'
         ]);
     }
+
 }
