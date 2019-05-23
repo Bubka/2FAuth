@@ -4,14 +4,10 @@ namespace Tests\Unit;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Auth\Authenticatable;
 
 class APITest extends TestCase
 {
-
-    use DatabaseMigrations;
-
 
     /**
      * test User creation via API
