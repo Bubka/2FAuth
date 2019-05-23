@@ -4,11 +4,15 @@ namespace Tests\Unit;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Auth\Authenticatable;
 
 class APITest extends TestCase
 {
+
+    use DatabaseMigrations;
+
+
     /**
      * test User creation via API
      *
@@ -17,9 +21,9 @@ class APITest extends TestCase
     public function testUserCreation()
     {
         $response = $this->json('POST', '/api/register', [
-            'name' => 'Demo User',
-            'email' => str_random(10) . '@phpunit.com',
-            'password' => '12345',
+            'name' => 'testCreate',
+            'email' => str_random(10) . '@test.com',
+            'password' => 'test',
         ]);
 
         $response->assertStatus(200)->assertJsonStructure([
@@ -36,8 +40,8 @@ class APITest extends TestCase
     public function testUserLogin()
     {
         $response = $this->json('POST', '/api/login', [
-            'email' => 'edouard@ganeau.me',
-            'password' => 'bubka'
+            'email' => 'test@test.com',
+            'password' => 'test'
         ]);
 
         $response->assertStatus(200)->assertJsonStructure([
@@ -58,8 +62,8 @@ class APITest extends TestCase
 
         $response = $this->actingAs($user, 'api')
             ->json('POST', '/api/account', [
-            'name' => 'phpunit account #' . str_random(5),
-            'secret' => '3GB2I2P365J575LS',
+            'name' => 'testCreation',
+            'secret' => 'test',
         ]);
 
         $response->assertStatus(200)->assertJson([
@@ -105,8 +109,8 @@ class APITest extends TestCase
         $user = \App\User::find(1);
 
         $account = \App\Account::create([
-            'name' => 'To be deleted #' . str_random(5),
-            'secret' => '12345'
+            'name' => 'testDelete',
+            'secret' => 'test'
         ]);
 
         $response = $this->actingAs($user, 'api')
