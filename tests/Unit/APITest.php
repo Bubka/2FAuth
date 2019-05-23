@@ -3,11 +3,31 @@
 namespace Tests\Unit;
 
 use Tests\TestCase;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Auth\Authenticatable;
 
 class APITest extends TestCase
 {
+
+    /**
+     * Rollback and execute migrations for each test.
+     */
+    use DatabaseTransactions;
+
+
+    /**
+     * set up fresh db
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+        // Artisan::call('make:migrate', ['--force' => true]);
+        Artisan::call('migrate', ['--seed' => true]);
+        Artisan::call('passport:install',['--verbose' => 2]);
+    }
+
 
     /**
      * test User creation via API
