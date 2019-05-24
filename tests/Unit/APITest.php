@@ -66,18 +66,18 @@ class APITest extends TestCase
     }
 
     /**
-     * test Account creation via API
+     * test TwoFAccount creation via API
      *
      * @return void
      */
-    public function testAccountCreation()
+    public function testTwoFAccountCreation()
     {
         //$this->withoutMiddleware();
 
         $user = \App\User::find(1);
 
         $response = $this->actingAs($user, 'api')
-            ->json('POST', '/api/account', [
+            ->json('POST', '/api/twofaccounts', [
             'name' => 'testCreation',
             'secret' => 'test',
         ]);
@@ -91,16 +91,16 @@ class APITest extends TestCase
 
 
     /**
-     * test Account index fetching via API
+     * test TwoFAccount index fetching via API
      *
      * @return void
      */
-    public function testAccountFetch()
+    public function testTwoFAccountFetch()
     {
         $user = \App\User::find(1);
 
         $response = $this->actingAs($user, 'api')
-            ->json('GET', '/api/account')
+            ->json('GET', '/api/twofaccounts')
             ->assertStatus(200)->assertJsonStructure([
                 '*' => [
                     'id',
@@ -117,20 +117,20 @@ class APITest extends TestCase
 
 
     /**
-     * test Account deletion via API
+     * test TwoFAccount deletion via API
      * @return [type] [description]
      */
-    public function testAccountDeletion()
+    public function testTwoFAccountDeletion()
     {
         $user = \App\User::find(1);
 
-        $account = \App\Account::create([
+        $twoFAccount = \App\TwoFAccount::create([
             'name' => 'testDelete',
             'secret' => 'test'
         ]);
 
         $response = $this->actingAs($user, 'api')
-            ->json('DELETE', "/api/account/{$account->id}")
+            ->json('DELETE', "/api/twofaccounts/{$twoFAccount->id}")
             ->assertStatus(200)->assertJson([
                 'status' => true,
                 'message' => 'Account Deleted'

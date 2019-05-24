@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Account;
+use App\TwoFAccount;
 use Illuminate\Http\Request;
 
-class AccountController extends Controller
+class TwoFAccountController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,18 +14,9 @@ class AccountController extends Controller
      */
     public function index()
     {
-        return response()->json(Account::all()->toArray());
+        return response()->json(TwoFAccount::all()->toArray());
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -35,52 +26,43 @@ class AccountController extends Controller
      */
     public function store(Request $request)
     {
-        $account = Account::create([
+        $twofaccount = TwoFAccount::create([
             'name' => $request->name,
             'secret' => $request->secret
         ]);
 
         $data = [
-            'data' => $account,
-            'status' => (bool) $account,
-            'message' => $account ? 'Account Created' : 'Error Creating Account',
+            'data' => $twofaccount,
+            'status' => (bool) $twofaccount,
+            'message' => $twofaccount ? 'Account Created' : 'Error Creating Account',
         ];
 
         return response()->json($data);
     }
 
+
     /**
      * Display the specified resource.
      *
-     * @param  \App\account  $account
+     * @param  \App\TwoFAccount  $twofaccount
      * @return \Illuminate\Http\Response
      */
-    public function show(account $account)
+    public function show(TwoFAccount $twofaccount)
     {
-        return response()->json($account);
+        return response()->json($twofaccount);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\account  $account
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(account $account)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\account  $account
+     * @param  \App\TwoFAccount  $twofaccount
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, account $account)
+    public function update(Request $request, TwoFAccount $twofaccount)
     {
-        $status = $account->update($request->all());
+        $status = $twofaccount->update($request->all());
 
         return response()->json([
             'status' => $status,
@@ -90,24 +72,39 @@ class AccountController extends Controller
         //return response()->json($request, 200);
     }
 
+
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\account  $account
+     * @param  \App\TwoFAccount  $twofaccount
      * @return \Illuminate\Http\Response
      */
-    public function destroy(account $account)
+    public function destroy(TwoFAccount $twofaccount)
     {
-        if($account->deleted_at == null){
-          $status = $account->delete();
-        }
-        else {
-          $status = $account->forceDelete();
-        }
+        $status = $twofaccount->delete();
 
         return response()->json([
             'status' => $status,
             'message' => $status ? 'Account Deleted' : 'Error Deleting Account'
+        ]);
+    }
+
+
+    /**
+     * Remove the specified soft deleted resource from storage.
+     *
+     * @param  \App\TwoFAccount  $twofaccount
+     * @return \Illuminate\Http\Response
+     */
+    public function forceDestroy($id)
+    {
+        $twofaccount = TwoFAccount::onlyTrashed()->findOrFail($id);
+
+        $status = $twofaccount->forceDelete();
+
+        return response()->json([
+            'status' => $status,
+            'message' => $status ? 'Account Deleted permanently' : 'Error Deleting Account'
         ]);
     }
 

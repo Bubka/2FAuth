@@ -16,4 +16,4 @@ Route::get('/', function () {
 });
 
 
-Route::get('account/{account}', 'AccountController@show');
+Route::get('twofaccount/{TwoFAccount}', 'TwoFAccountController@show');

@@ -21,5 +21,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::group(['middleware' => 'auth:api'], function(){
-    Route::resource('/account', 'AccountController');
+    Route::apiResource('twofaccounts', 'TwoFAccountController');
+    Route::delete('twofaccounts/force/{id}', 'TwoFAccountController@forceDestroy')->name('twofaccounts.forceDestroy');
 });
