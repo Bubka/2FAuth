@@ -31,13 +31,7 @@ class TwoFAccountController extends Controller
             'secret' => $request->secret
         ]);
 
-        $data = [
-            'data' => $twofaccount,
-            'status' => (bool) $twofaccount,
-            'message' => $twofaccount ? 'Account Created' : 'Error Creating Account',
-        ];
-
-        return response()->json($data);
+        return response()->json($twofaccount, 201);
     }
 
 
@@ -49,7 +43,7 @@ class TwoFAccountController extends Controller
      */
     public function show(TwoFAccount $twofaccount)
     {
-        return response()->json($twofaccount);
+        return response()->json($twofaccount, 200);
     }
 
 
@@ -62,14 +56,9 @@ class TwoFAccountController extends Controller
      */
     public function update(Request $request, TwoFAccount $twofaccount)
     {
-        $status = $twofaccount->update($request->all());
+        $twofaccount->update($request->all());
 
-        return response()->json([
-            'status' => $status,
-            'message' => $status ? 'Account Updated' : 'Error Updating Account'
-        ]);
-
-        //return response()->json($request, 200);
+        return response()->json($twofaccount, 200);
     }
 
 
@@ -81,12 +70,9 @@ class TwoFAccountController extends Controller
      */
     public function destroy(TwoFAccount $twofaccount)
     {
-        $status = $twofaccount->delete();
+        $twofaccount->delete();
 
-        return response()->json([
-            'status' => $status,
-            'message' => $status ? 'Account Deleted' : 'Error Deleting Account'
-        ]);
+        return response()->json(null, 204);
     }
 
 
@@ -99,13 +85,9 @@ class TwoFAccountController extends Controller
     public function forceDestroy($id)
     {
         $twofaccount = TwoFAccount::onlyTrashed()->findOrFail($id);
+        $twofaccount->forceDelete();
 
-        $status = $twofaccount->forceDelete();
-
-        return response()->json([
-            'status' => $status,
-            'message' => $status ? 'Account Deleted permanently' : 'Error Deleting Account'
-        ]);
+        return response()->json(null, 204);
     }
 
 }

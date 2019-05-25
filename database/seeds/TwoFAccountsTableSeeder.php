@@ -2,6 +2,7 @@
 
 use App\TwoFAccount;
 use Illuminate\Database\Seeder;
+use Illuminate\Foundation\Testing\WithFaker;
 
 class TwoFAccountsTableSeeder extends Seeder
 {
@@ -12,21 +13,30 @@ class TwoFAccountsTableSeeder extends Seeder
      */
     public function run()
     {
-            TwoFAccount::create([
-                'name' => 'Firefly',
-                'secret' => '3G2I2P36J57LS',
-            ]);
-            TwoFAccount::create([
-                'name' => 'Facebook',
-                'secret' => '3GB2I2P365J5S',
-            ]);
-            TwoFAccount::create([
-                'name' => 'Twitter',
-                'secret' => '3GB2I25J575LS',
-            ]);
-            TwoFAccount::create([
-                'name' => 'Google',
-                'secret' => '3GB2I25J575LS',
-            ]);
+        $faker = \Faker\Factory::create();
+
+        TwoFAccount::create([
+            'name' => $faker->unique()->domainName,
+            'secret' => $faker->password,
+        ]);
+
+        $deletedResource = TwoFAccount::create([
+            'name' => $faker->unique()->domainName,
+            'secret' => $faker->password,
+        ]);
+        $deletedResource->delete();
+
+        TwoFAccount::create([
+            'name' => $faker->unique()->domainName,
+            'secret' => $faker->password,
+        ]);
+        TwoFAccount::create([
+            'name' => $faker->unique()->domainName,
+            'secret' => $faker->password,
+        ]);
+        TwoFAccount::create([
+            'name' => $faker->unique()->domainName,
+            'secret' => $faker->password,
+        ]);
     }
 }
