@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\TwoFAccount;
+use OTPHP\TOTP;
+use OTPHP\Factory;
 use Illuminate\Http\Request;
+use ParagonIE\ConstantTime\Base32;
 
 class TwoFAccountController extends Controller
 {
@@ -44,6 +47,29 @@ class TwoFAccountController extends Controller
     public function show(TwoFAccount $twofaccount)
     {
         return response()->json($twofaccount, 200);
+    }
+
+
+    /**
+     * Generate a TOTP
+     *
+     * @param  \App\TwoFAccount  $twofaccount
+     * @return \Illuminate\Http\Response
+     */
+    public function generateTOTP(TwoFAccount $twofaccount)
+    {
+        try {
+            $otp = Factory::loadFromProvisioningUri($twofaccount->secret);
+        } catch (InvalidArgumentException $exception) {
+            return response()->json([
+                'message' => 'Error generating TOTP',
+            ], 500);
+        }
+
+        return response()->json([
+                'totp' => $otp->now(),
+            ], 200);
+
     }
 
 

@@ -36,8 +36,6 @@ class TwoFAccountTest extends TestCase
      */
     public function testTwoFAccountCreation()
     {
-        //$this->withoutMiddleware();
-
         $user = \App\User::find(1);
 
         $response = $this->actingAs($user, 'api')
@@ -49,6 +47,29 @@ class TwoFAccountTest extends TestCase
             ->assertJson([
                 'name' => 'testCreation',
                 'secret' => 'test',
+            ]);
+    }
+
+
+    /**
+     * test TOTP generation via API
+     *
+     * @return void
+     */
+    public function testTOTPgeneration()
+    {
+        $user = \App\User::find(1);
+
+        $twofaccount = TwoFAccount::create([
+            'name' => 'testTOTP',
+            'secret' => 'otpauth://totp/test@test.com?secret=A4GRFHVVRBGY7UIW&issuer=test'
+        ]);
+
+        $response = $this->actingAs($user, 'api')
+            ->json('POST', '/api/twofaccounts/' . $twofaccount->id . '/totp')
+            ->assertStatus(200)
+            ->assertJsonStructure([
+                'totp',
             ]);
     }
 

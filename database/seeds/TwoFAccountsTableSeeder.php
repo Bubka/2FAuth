@@ -17,7 +17,7 @@ class TwoFAccountsTableSeeder extends Seeder
 
         TwoFAccount::create([
             'name' => $faker->unique()->domainName,
-            'secret' => $faker->password,
+            'secret' => 'otpauth://totp/test@test.com?secret=A4GRFHVVRBGY7UIW&issuer=test',
         ]);
 
         $deletedResource = TwoFAccount::create([
