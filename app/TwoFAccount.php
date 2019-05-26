@@ -9,7 +9,7 @@ class TwoFAccount extends Model
 {
         use SoftDeletes;
 
-        protected $fillable = ['name', 'secret', 'icon'];
+        protected $fillable = ['name', 'uri', 'icon'];
 
 
     /**

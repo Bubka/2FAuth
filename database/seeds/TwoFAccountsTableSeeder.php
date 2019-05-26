@@ -17,26 +17,26 @@ class TwoFAccountsTableSeeder extends Seeder
 
         TwoFAccount::create([
             'name' => $faker->unique()->domainName,
-            'secret' => 'otpauth://totp/test@test.com?secret=A4GRFHVVRBGY7UIW&issuer=test',
+            'uri' => 'otpauth://totp/test@test.com?secret=A4GRFHVVRBGY7UIW&issuer=test',
         ]);
 
         $deletedResource = TwoFAccount::create([
             'name' => $faker->unique()->domainName,
-            'secret' => $faker->password,
+            'uri' => 'otpauth://totp/test@test.com?secret=A4GRFHVVRBGY7UIW&issuer=test',
         ]);
         $deletedResource->delete();
 
         TwoFAccount::create([
             'name' => $faker->unique()->domainName,
-            'secret' => $faker->password,
+            'uri' => 'otpauth://totp/test@test.com?secret=A4GRFHVVRBGY7UIW&issuer=test',
         ]);
         TwoFAccount::create([
             'name' => $faker->unique()->domainName,
-            'secret' => $faker->password,
+            'uri' => 'otpauth://totp/test@test.com?secret=A4GRFHVVRBGY7UIW&issuer=test',
         ]);
         TwoFAccount::create([
             'name' => $faker->unique()->domainName,
-            'secret' => $faker->password,
+            'uri' => 'otpauth://totp/test@test.com?secret=A4GRFHVVRBGY7UIW&issuer=test',
         ]);
     }
 }

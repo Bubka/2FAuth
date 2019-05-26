@@ -41,12 +41,12 @@ class TwoFAccountTest extends TestCase
         $response = $this->actingAs($user, 'api')
             ->json('POST', '/api/twofaccounts', [
                     'name' => 'testCreation',
-                    'secret' => 'test',
+                    'uri' => 'test',
                 ])
             ->assertStatus(201)
             ->assertJson([
                 'name' => 'testCreation',
-                'secret' => 'test',
+                'uri' => 'test',
             ]);
     }
 
@@ -62,11 +62,11 @@ class TwoFAccountTest extends TestCase
 
         $twofaccount = TwoFAccount::create([
             'name' => 'testTOTP',
-            'secret' => 'otpauth://totp/test@test.com?secret=A4GRFHVVRBGY7UIW&issuer=test'
+            'uri' => 'otpauth://totp/test@test.com?secret=A4GRFHVVRBGY7UIW&issuer=test'
         ]);
 
         $response = $this->actingAs($user, 'api')
-            ->json('POST', '/api/twofaccounts/' . $twofaccount->id . '/totp')
+            ->json('GET', '/api/twofaccounts/' . $twofaccount->id . '/totp')
             ->assertStatus(200)
             ->assertJsonStructure([
                 'totp',
@@ -86,13 +86,13 @@ class TwoFAccountTest extends TestCase
         $response = $this->actingAs($user, 'api')
             ->json('PUT', '/api/twofaccounts/1', [
                     'name' => 'testUpdate',
-                    'secret' => 'testUpdate',
+                    'uri' => 'testUpdate',
                 ])
             ->assertStatus(200)
             ->assertJson([
                 'id' => 1,
                 'name' => 'testUpdate',
-                'secret' => 'testUpdate',
+                'uri' => 'testUpdate',
                 'icon' => null,
             ]);
     }
@@ -114,7 +114,7 @@ class TwoFAccountTest extends TestCase
                 '*' => [
                     'id',
                     'name',
-                    'secret',
+                    'uri',
                     'icon',
                     'created_at',
                     'updated_at',
@@ -135,7 +135,7 @@ class TwoFAccountTest extends TestCase
 
         $twofaccount = TwoFAccount::create([
             'name' => 'testDelete',
-            'secret' => 'test'
+            'uri' => 'test'
         ]);
 
         $response = $this->actingAs($user, 'api')
@@ -154,7 +154,7 @@ class TwoFAccountTest extends TestCase
 
         $twofaccount = TwoFAccount::create([
             'name' => 'testHardDelete',
-            'secret' => 'test'
+            'uri' => 'test'
         ]);
 
         $twofaccount->delete();

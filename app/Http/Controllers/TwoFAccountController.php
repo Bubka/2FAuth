@@ -31,7 +31,7 @@ class TwoFAccountController extends Controller
     {
         $twofaccount = TwoFAccount::create([
             'name' => $request->name,
-            'secret' => $request->secret
+            'uri' => $request->uri
         ]);
 
         return response()->json($twofaccount, 201);
@@ -59,7 +59,7 @@ class TwoFAccountController extends Controller
     public function generateTOTP(TwoFAccount $twofaccount)
     {
         try {
-            $otp = Factory::loadFromProvisioningUri($twofaccount->secret);
+            $otp = Factory::loadFromProvisioningUri($twofaccount->uri);
         } catch (InvalidArgumentException $exception) {
             return response()->json([
                 'message' => 'Error generating TOTP',
