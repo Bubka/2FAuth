@@ -11,9 +11,9 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
 Route::get('twofaccount/{TwoFAccount}', 'TwoFAccountController@show');
+Route::get('/{any}', 'SinglePageController@index')->where('any', '.*');
