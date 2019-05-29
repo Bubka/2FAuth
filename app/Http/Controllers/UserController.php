@@ -11,7 +11,10 @@ use Illuminate\Support\Facades\Auth;
 class UserController extends Controller
 {
 
-
+    /**
+     * log a user in
+     * @return [type] [description]
+     */
     public function login()
     {
         $credentials = [
@@ -30,6 +33,25 @@ class UserController extends Controller
     }
 
 
+    /**
+     * log out current user
+     * @param  Request $request
+     * @return json
+     */
+    public function logout()
+    {
+        $accessToken = Auth::user()->token();
+        $accessToken->revoke();
+
+        return response()->json(['success' => 'signed out']);
+    }
+
+
+    /**
+     * register new user
+     * @param  Request $request [description]
+     * @return json
+     */
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -53,8 +75,12 @@ class UserController extends Controller
     }
 
 
+    /**
+     * get detailed information about a user
+     * @return [type] [description]
+     */
     public function getDetails()
     {
-        return response()->json(['success' => Auth::user()]);
+        return response()->json(Auth::user(), 200);
     }
 }

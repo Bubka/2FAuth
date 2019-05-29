@@ -16,11 +16,9 @@ use Illuminate\Http\Request;
 Route::post('login', 'UserController@login');
 Route::post('register', 'UserController@register');
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 Route::group(['middleware' => 'auth:api'], function(){
+    Route::post('logout', 'UserController@logout');
+    Route::get('user', 'UserController@getDetails');
     Route::apiResource('twofaccounts', 'TwoFAccountController');
     Route::get('twofaccounts/{twofaccount}/totp', 'TwoFAccountController@generateTOTP')->name('twofaccounts.generateTOTP');
     Route::delete('twofaccounts/force/{id}', 'TwoFAccountController@forceDestroy')->name('twofaccounts.forceDestroy');
