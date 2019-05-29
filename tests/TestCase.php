@@ -2,9 +2,23 @@
 
 namespace Tests;
 
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
+
+        /**
+     * Rollback and execute migrations for each test.
+     */
+    use DatabaseTransactions;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        Artisan::call('migrate', ['--seed' => true]);
+        Artisan::call('passport:install',['--verbose' => 2]);
+    }
 }
