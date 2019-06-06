@@ -1,8 +1,8 @@
 <?php
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
-use App\User;
-use Illuminate\Support\Str;
+/* @var $factory \Illuminate\Database\Eloquent\Factory */
+
+use App\TwoFAccount;
 use Faker\Generator as Faker;
 
 /*
@@ -16,12 +16,10 @@ use Faker\Generator as Faker;
 |
 */
 
-$factory->define(User::class, function (Faker $faker) {
+
+$factory->define(TwoFAccount::class, function (Faker $faker) {
     return [
-        'name' => $faker->name,
-        'email' => $faker->unique()->safeEmail,
-        'email_verified_at' => now(),
-        'password' => bcrypt('password'),
-        'remember_token' => Str::random(10),
+        'name' => $faker->unique()->domainName,
+        'uri' => 'otpauth://totp/' . $faker->email . '?secret=' . $faker->regexify('[A-Z0-9]{16}') . '&issuer=test',
     ];
 });

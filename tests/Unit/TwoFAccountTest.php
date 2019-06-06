@@ -2,23 +2,35 @@
 
 namespace Tests\Unit;
 
+use App\User;
 use Tests\TestCase;
 use App\TwoFAccount;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Auth\Authenticatable;
 
 class TwoFAccountTest extends TestCase
 {
+    /** @var \App\User */
+    protected $user;
+
+
+    /**
+     * @test
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->user = factory(User::class)->create();
+    }
+
+
     /**
      * test TwoFAccount creation via API
      *
-     * @return void
+     * @test
      */
     public function testTwoFAccountCreation()
     {
-        $user = \App\User::find(1);
-
-        $response = $this->actingAs($user, 'api')
+        $response = $this->actingAs($this->user, 'api')
             ->json('POST', '/api/twofaccounts', [
                     'name' => 'testCreation',
                     'uri' => 'test',
@@ -34,18 +46,16 @@ class TwoFAccountTest extends TestCase
     /**
      * test TOTP generation via API
      *
-     * @return void
+     * @test
      */
     public function testTOTPgeneration()
     {
-        $user = \App\User::find(1);
-
-        $twofaccount = TwoFAccount::create([
+        $twofaccount = factory(TwoFAccount::class)->create([
             'name' => 'testTOTP',
             'uri' => 'otpauth://totp/test@test.com?secret=A4GRFHVVRBGY7UIW&issuer=test'
         ]);
 
-        $response = $this->actingAs($user, 'api')
+        $response = $this->actingAs($this->user, 'api')
             ->json('GET', '/api/twofaccounts/' . $twofaccount->id . '/totp')
             ->assertStatus(200)
             ->assertJsonStructure([
@@ -57,14 +67,14 @@ class TwoFAccountTest extends TestCase
     /**
      * test TwoFAccount update via API
      *
-     * @return void
+     * @test
      */
     public function testTwoFAccountUpdate()
     {
-        $user = \App\User::find(1);
+        $twofaccount = factory(TwoFAccount::class)->create();
 
-        $response = $this->actingAs($user, 'api')
-            ->json('PUT', '/api/twofaccounts/1', [
+        $response = $this->actingAs($this->user, 'api')
+            ->json('PUT', '/api/twofaccounts/' . $twofaccount->id, [
                     'name' => 'testUpdate',
                     'uri' => 'testUpdate',
                 ])
@@ -81,13 +91,13 @@ class TwoFAccountTest extends TestCase
     /**
      * test TwoFAccount index fetching via API
      *
-     * @return void
+     * @test
      */
     public function testTwoFAccountIndexListing()
     {
-        $user = \App\User::find(1);
+        $twofaccount = factory(TwoFAccount::class, 3)->create();
 
-        $response = $this->actingAs($user, 'api')
+        $response = $this->actingAs($this->user, 'api')
             ->json('GET', '/api/twofaccounts')
             ->assertStatus(200)
             ->assertJsonStructure([
@@ -107,18 +117,14 @@ class TwoFAccountTest extends TestCase
 
     /**
      * test TwoFAccount deletion via API
-     * @return [type] [description]
+     *
+     * @test
      */
     public function testTwoFAccountDeletion()
     {
-        $user = \App\User::find(1);
+        $twofaccount = factory(TwoFAccount::class)->create();
 
-        $twofaccount = TwoFAccount::create([
-            'name' => 'testDelete',
-            'uri' => 'test'
-        ]);
-
-        $response = $this->actingAs($user, 'api')
+        $response = $this->actingAs($this->user, 'api')
             ->json('DELETE', '/api/twofaccounts/' . $twofaccount->id)
             ->assertStatus(204);
     }
@@ -126,20 +132,15 @@ class TwoFAccountTest extends TestCase
 
     /**
      * test TwoFAccount permanent deletion via API
-     * @return [type] [description]
+     *
+     * @test
      */
     public function testTwoFAccountPermanentDeletion()
     {
-        $user = \App\User::find(1);
-
-        $twofaccount = TwoFAccount::create([
-            'name' => 'testHardDelete',
-            'uri' => 'test'
-        ]);
-
+        $twofaccount = factory(TwoFAccount::class)->create();
         $twofaccount->delete();
 
-        $response = $this->actingAs($user, 'api')
+        $response = $this->actingAs($this->user, 'api')
             ->json('DELETE', '/api/twofaccounts/force/' . $twofaccount->id)
             ->assertStatus(204);
     }

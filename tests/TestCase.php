@@ -15,10 +15,10 @@ abstract class TestCase extends BaseTestCase
      */
     use DatabaseTransactions;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
-        Artisan::call('migrate', ['--seed' => true]);
+        Artisan::call('migrate');
         Artisan::call('passport:install',['--verbose' => 2]);
     }
 }

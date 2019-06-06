@@ -2,24 +2,38 @@
 
 namespace Tests\Unit;
 
-use Tests\TestCase;
 use App\User;
-use Illuminate\Foundation\Testing\WithFaker;
+use Tests\TestCase;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Support\Facades\Auth;
 
 class UserTest extends TestCase
 {
+    /** @var \App\User */
+    protected $user;
+
+
+    /**
+     * @test
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->user = factory(User::class)->create();
+    }
+
+
     /**
      * test User creation via API
      *
-     * @return void
+     * @test
      */
     public function testUserCreation()
     {
         $response = $this->json('POST', '/api/register', [
             'name' => 'testCreate',
-            'email' => str_random(10) . '@test.com',
+            'email' => 'testCreate@example.org',
             'password' => 'test',
         ]);
 
@@ -33,13 +47,13 @@ class UserTest extends TestCase
     /**
      * test User login via API
      *
-     * @return void
+     * @test
      */
     public function testUserLogin()
     {
         $response = $this->json('POST', '/api/login', [
-            'email' => 'test@test.com',
-            'password' => 'test'
+            'email' => $this->user->email,
+            'password' => 'password'
         ]);
 
         $response->assertStatus(200)
@@ -52,15 +66,16 @@ class UserTest extends TestCase
     /**
      * test User logout via API
      *
-     * @return void
+     * @test
      */
     public function testUserLogout()
     {
-        $user = ['email' => 'test@test.com',
-            'password' => 'test'
+        $credentials = [
+            'email' => $this->user->email,
+            'password' => 'password'
         ];
 
-        Auth::attempt($user);
+        Auth::attempt($credentials);
         $token = Auth::user()->createToken('testToken')->accessToken;
         $headers = ['Authorization' => "Bearer $token"];
 
@@ -75,20 +90,14 @@ class UserTest extends TestCase
     /**
      * test User logout via API
      *
-     * @return void
+     * @test
      */
     public function testGetUserDetails()
     {
-        $user = \App\User::find(1);
-
-        $response = $this->actingAs($user, 'api')
+        $response = $this->actingAs($this->user, 'api')
             ->json('GET', '/api/user')
             ->assertStatus(200)
-            ->assertJsonFragment([
-                'id' => 1,
-                'name' => 'testLogin',
-                'email' => 'test@test.com',
-            ]);
+            ->assertJsonStructure(['id', 'name', 'email']);
     }
 
 }
