@@ -31,6 +31,7 @@ class TwoFAccountController extends Controller
     {
         $twofaccount = TwoFAccount::create([
             'name' => $request->name,
+            'email' => $request->email,
             'uri' => $request->uri
         ]);
 

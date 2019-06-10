@@ -17,6 +17,7 @@ class CreateTwoFAccountsTable extends Migration
             $table->increments('id');
             $table->string('name')->unique();
             $table->string('uri');
+            $table->string('email');
             $table->string('icon')->nullable();
             $table->timestamps();
             $table->softDeletes();
