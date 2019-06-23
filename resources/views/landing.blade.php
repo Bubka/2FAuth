@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html class="has-background-black-ter">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,7 +8,7 @@
     <title>{{ env("APP_NAME") }}</title>
     <link href=" {{ mix('css/app.css') }}" rel="stylesheet">
 </head>
-<body>
+<body class="has-text-lighter">
     <div id="app">
         <app></app>
     </div>

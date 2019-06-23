@@ -1,26 +1,33 @@
 <template>
     <div>
-        <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
-            <div class="container">
-                <router-link :to="{name: 'home'}" class="navbar-brand">Treclon</router-link>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav mr-auto"></ul>
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ml-auto">
-                        <!-- Authentication Links -->
-                        <router-link :to="{ name: 'login' }" class="nav-link" v-if="!isLoggedIn">Login</router-link>
-                        <router-link :to="{ name: 'register' }" class="nav-link" v-if="!isLoggedIn">Register</router-link>
-                        <li class="nav-link" v-if="isLoggedIn"> Hi, {{name}}</li>
-                        <router-link :to="{ name: 'home' }" class="nav-link" v-if="isLoggedIn">Home</router-link>
-                    </ul>
-                </div>
+        <nav class="navbar is-black level is-mobile has-text-grey-lighter">
+            <div class="level-left">
+                <router-link :to="{ name: 'home' }" class="is-size-4 has-text-weight-light" v-if="isLoggedIn">2FAccount</router-link>
+            </div>
+            <div class="level-right">
+                <p class="level-item">
+                    <a class="button is-black">
+                        <span class="icon has-text-grey-light">
+                            <font-awesome-icon :icon="['fas', 'plus-circle']" />
+                        </span>
+                    </a>
+                </p>
+                <p class="level-item" v-if="!isLoggedIn">
+                    <router-link :to="{ name: 'login' }" class="button is-black">
+                        login
+                    </router-link>
+                </p>
+                <p class="level-item" v-if="!isLoggedIn">
+                    <router-link :to="{ name: 'register' }" class="button is-black">
+                        Register
+                    </router-link>
+                </p>
+                <p class="level-item" v-if="isLoggedIn">
+                    Hi, {{username}}
+                </p>
             </div>
         </nav>
+
         <main class="py-4">
             <router-view></router-view>
         </main>
@@ -29,15 +36,16 @@
 
 <script>
     export default {
+        name: 'App',
         data(){
             return {
                 isLoggedIn : null,
-                name : null
+                username : null
             }
         },
         mounted(){
             this.isLoggedIn = localStorage.getItem('jwt')
-            this.name = localStorage.getItem('user')
+            this.username = localStorage.getItem('user')
         }
     }
 </script>

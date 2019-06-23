@@ -6,15 +6,23 @@ Vue.use(VueRouter)
 import App          from './views/App'
 import Login        from './views/Login'
 import Register     from './views/Register'
-import Home         from './views/Welcome'
+import Accounts         from './views/Accounts'
+
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faPlusCircle } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
+library.add(faPlusCircle);
+
+Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 const router = new VueRouter({
     mode: 'history',
     routes: [
         {
             path: '/',
-            name: 'home',
-            component: Home
+            name: 'accounts',
+            component: Accounts
         },
         {
             path: '/login',
