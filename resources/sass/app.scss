@@ -5,4 +5,57 @@
 @import 'variables';
 
 // Bootstrap
-@import '~bootstrap/scss/bootstrap';
+//@import '~bootstrap/scss/bootstrap';
+@import '~bulma/bulma';
+
+nav.level {
+    padding: 0 20px;
+    /*postion: fixed;*/
+}
+
+#otp {
+    cursor: pointer;
+}
+
+.twofaccount {
+    font-size: 1.7rem !important;
+    width: 250px;
+    display: block;
+    height: auto;
+    border-radius: 6px;
+}
+
+.twofaccount img {
+    height: 0.75em;
+    width: 0.75em;
+    margin-right: .1em;
+}
+
+.twofaccount span {
+  display: block;
+}
+
+.dots {
+  list-style: none;
+  padding: 0;
+}
+
+.dots li {
+  display: inline-block;
+  margin: 0 5px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: hsl(348, 100%, 61%); /* red */
+}
+.dots li[data-is-active] ~ li {
+  background: hsl(0, 0%, 7%);  /* grey */
+}
+
+.dots li:nth-child(-n+8) {
+  background: hsl(48, 100%, 67%); /* yellow */
+}
+
+.dots li:nth-child(-n+6) {
+  background: hsl(141, 71%, 48%); /* green */
+}
