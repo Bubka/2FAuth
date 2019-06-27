@@ -2,7 +2,7 @@
     <div>
         <div class="container">
             <div class="buttons are-large is-centered">
-                <span v-for="account in accounts" class="button is-black twofaccount" @click.stop="getOTP(account.id)">
+                <span v-for="account in accounts" class="button is-black twofaccount" @click.stop="getAccount(account.id)">
                     <img src="https://fakeimg.pl/64x64/">
                     {{ account.name }}
                     <span class="is-family-primary is-size-7 has-text-grey">{{ account.email }}</span>
@@ -10,7 +10,12 @@
             </div>
         </div>
         <modal v-model="ModalIsActive">
-            <modal-twofaccount v-bind="twofaccount"></modal-twofaccount>
+            <modal-twofaccount
+                :name='twofaccount.name'
+                :icon='twofaccount.icon'
+                :email='twofaccount.email'>
+                <one-time-password :AccountId='twofaccount.id' ></one-time-password>
+            </modal-twofaccount>
         </modal>
     </div>
 </template>
@@ -20,40 +25,35 @@
 
 <script>
     import Modal from '../components/Modal'
+    import ModalTwofaccount from '../components/ModalTwofaccount'
+    import OneTimePassword from '../components/OneTimePassword'
 
-    const ModalTwofaccount = {
-        props: ['id', 'name', 'email', 'uri', 'icon', 'totp'],
-        template: `
-            <section class="section">
-                <div class="columns is-centered">
-                    <div class="column is-three-quarters">
-                        <div class="box has-text-centered has-background-black-ter ">
-                            <figure class="image is-64x64" style="display: inline-block">
-                                <img :src="icon">
-                            </figure>
-                            <p class="is-size-4 has-text-grey-light">{{ name }}</p>
-                            <p class="is-size-6 has-text-grey">{{ email }}</p>
-                            <p id="otp" title="refresh" class="is-size-1 has-text-white">{{ totp }}</p>
-                            <ul class="dots">
-                                <li></li>
-                                <li></li>
-                                <li></li>
-                                <li></li>
-                                <li></li>
-                                <li></li>
-                                <li></li>
-                                <li></li>
-                                <li data-is-active></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        `
-    }
+    // const ModalTwofaccount = {
+    //     props: ['id', 'name', 'email', 'icon', 'totp'],
+    //     template: `
+    //         <section class="section">
+    //             <div class="columns is-centered">
+    //                 <div class="column is-three-quarters">
+    //                     <div class="box has-text-centered has-background-black-ter ">
+    //                         <figure class="image is-64x64" style="display: inline-block">
+    //                             <img :src="icon">
+    //                         </figure>
+    //                         <p class="is-size-4 has-text-grey-light">{{ name }}</p>
+    //                         <p class="is-size-6 has-text-grey">{{ email }}</p>
+    //                         <p id="otp" title="refresh" class="is-size-1 has-text-white">{{ totp }}</p>
+    //                         <ul class="dots">
+    //                             <li data-is-active style="display:none"></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li>
+    //                         </ul>
+    //                     </div>
+    //                 </div>
+    //             </div>
+    //         </section>
+    //     `
+    // }
+
+
 
     export default {
-        name: 'Accounts',
         data(){
             return {
                 accounts : [],
@@ -73,7 +73,6 @@
                         id : data.id,
                         name : data.name,
                         email : data.email,
-                        uri : data.uri,
                         icon : data.icon
                     })
                 })
@@ -82,27 +81,26 @@
         },
         components: {
             Modal,
-            ModalTwofaccount
+            ModalTwofaccount,
+            OneTimePassword
         },
         methods: {
-            getOTP: function (id) {
+            getAccount: function (id) {
                 let token = localStorage.getItem('jwt')
-                let twofa
+                let accountId = id
 
                 axios.defaults.headers.common['Content-Type'] = 'application/json'
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
 
                 axios.get('api/twofaccounts/' + id).then(response => {
-                    let res1 = response.data
-                    axios.get('api/twofaccounts/' + id + '/totp').then(response => {
-                        this.twofaccount = Object.assign(res1, response.data)
-                        this.twofaccount.totp = this.twofaccount.totp.substr(0, 3) + " " + this.twofaccount.totp.substr(3);
-                    })
+                    this.twofaccount.id = response.data.id
+                    this.twofaccount.name = response.data.name
+                    this.twofaccount.email = response.data.email
+                    this.twofaccount.icon = response.data.icon
+
+                    this.ModalIsActive = true;
+
                 })
-
-
-                console.log(this.twofaccount)
-                this.ModalIsActive = true
             }
         },
         beforeRouteEnter (to, from, next) {
@@ -113,5 +111,6 @@
             next()
         }
     }
+
 </script>
 
