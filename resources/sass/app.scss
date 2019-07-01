@@ -52,10 +52,15 @@ nav.level {
   background: hsl(0, 0%, 7%);  /* grey */
 }
 
-.dots li:nth-child(-n+9) {
+.dots li:nth-child(-n+27) {
   background: hsl(48, 100%, 67%); /* yellow */
 }
 
-.dots li:nth-child(-n+7) {
+.dots li:nth-child(-n+21) {
   background: hsl(141, 71%, 48%); /* green */
+}
+
+.dots li:nth-child(3n+1), .dots li:nth-child(3n+2) {
+    // background-color: black;
+    display:none;
 }

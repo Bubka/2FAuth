@@ -14,7 +14,7 @@
                 :name='twofaccount.name'
                 :icon='twofaccount.icon'
                 :email='twofaccount.email'>
-                <one-time-password :AccountId='twofaccount.id' ></one-time-password>
+                <one-time-password  ref="OneTimePassword"></one-time-password>
             </modal-twofaccount>
         </modal>
     </div>
@@ -27,31 +27,6 @@
     import Modal from '../components/Modal'
     import ModalTwofaccount from '../components/ModalTwofaccount'
     import OneTimePassword from '../components/OneTimePassword'
-
-    // const ModalTwofaccount = {
-    //     props: ['id', 'name', 'email', 'icon', 'totp'],
-    //     template: `
-    //         <section class="section">
-    //             <div class="columns is-centered">
-    //                 <div class="column is-three-quarters">
-    //                     <div class="box has-text-centered has-background-black-ter ">
-    //                         <figure class="image is-64x64" style="display: inline-block">
-    //                             <img :src="icon">
-    //                         </figure>
-    //                         <p class="is-size-4 has-text-grey-light">{{ name }}</p>
-    //                         <p class="is-size-6 has-text-grey">{{ email }}</p>
-    //                         <p id="otp" title="refresh" class="is-size-1 has-text-white">{{ totp }}</p>
-    //                         <ul class="dots">
-    //                             <li data-is-active style="display:none"></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li>
-    //                         </ul>
-    //                     </div>
-    //                 </div>
-    //             </div>
-    //         </section>
-    //     `
-    // }
-
-
 
     export default {
         data(){
@@ -76,8 +51,12 @@
                         icon : data.icon
                     })
                 })
-                // this.loadTasks()
             })
+
+            this.$on('modalClose', function() {
+                console.log('modalClose triggered')
+                this.$refs.OneTimePassword.clearOTP()
+            });
         },
         components: {
             Modal,
@@ -93,11 +72,14 @@
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
 
                 axios.get('api/twofaccounts/' + id).then(response => {
+
                     this.twofaccount.id = response.data.id
                     this.twofaccount.name = response.data.name
                     this.twofaccount.email = response.data.email
                     this.twofaccount.icon = response.data.icon
 
+                    this.$refs.OneTimePassword.AccountId = response.data.id
+                    this.$refs.OneTimePassword.getOTP()
                     this.ModalIsActive = true;
 
                 })

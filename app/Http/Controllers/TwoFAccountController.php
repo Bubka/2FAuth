@@ -67,8 +67,16 @@ class TwoFAccountController extends Controller
             ], 500);
         }
 
+        $currentPosition = time();
+        $PeriodCount = floor($currentPosition / 30); //nombre de période de 30s depuis T0
+        $currentPeriodStartAt = $PeriodCount * 30;
+        $currentPeriodendAt = $currentPeriodStartAt + 30;
+        $positionInCurrentPeriod = $currentPosition - $currentPeriodStartAt;
+
+
         return response()->json([
                 'totp' => $otp->now(),
+                'position' => $positionInCurrentPeriod
             ], 200);
 
     }
