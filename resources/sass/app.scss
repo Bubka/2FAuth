@@ -56,11 +56,16 @@ nav.level {
   background: hsl(48, 100%, 67%); /* yellow */
 }
 
-.dots li:nth-child(-n+21) {
+.dots li:nth-child(-n+18) {
   background: hsl(141, 71%, 48%); /* green */
 }
 
-.dots li:nth-child(3n+1), .dots li:nth-child(3n+2) {
-    // background-color: black;
+.dots li:nth-child(3n+2), .dots li:nth-child(3n+3) {
+    //background-color: black;
     display:none;
+}
+
+.dots li:last-child() {
+    // background-color: black;
+    //display:none;
 }
