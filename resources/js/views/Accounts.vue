@@ -9,30 +9,29 @@
                 </span>
             </div>
         </div>
-        <modal v-model="ModalIsActive">
-            <modal-twofaccount
+        <modal v-model="ShowTwofaccountInModal">
+            <twofaccount-show
+                :twofaccountid='twofaccount.id'
                 :name='twofaccount.name'
                 :icon='twofaccount.icon'
                 :email='twofaccount.email'>
-                <one-time-password  ref="OneTimePassword"></one-time-password>
-            </modal-twofaccount>
+                <one-time-password ref="OneTimePassword"></one-time-password>
+            </twofaccount-show>
         </modal>
     </div>
 </template>
 
 
-
-
 <script>
     import Modal from '../components/Modal'
-    import ModalTwofaccount from '../components/ModalTwofaccount'
+    import TwofaccountShow from '../components/TwofaccountShow'
     import OneTimePassword from '../components/OneTimePassword'
 
     export default {
         data(){
             return {
                 accounts : [],
-                ModalIsActive : false,
+                ShowTwofaccountInModal : false,
                 twofaccount: {}
             }
         },
@@ -57,10 +56,11 @@
                 console.log('modalClose triggered')
                 this.$refs.OneTimePassword.clearOTP()
             });
+
         },
         components: {
             Modal,
-            ModalTwofaccount,
+            TwofaccountShow,
             OneTimePassword
         },
         methods: {
@@ -80,7 +80,7 @@
 
                     this.$refs.OneTimePassword.AccountId = response.data.id
                     this.$refs.OneTimePassword.getOTP()
-                    this.ModalIsActive = true;
+                    this.ShowTwofaccountInModal = true;
 
                 })
             }

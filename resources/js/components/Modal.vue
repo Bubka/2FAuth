@@ -2,7 +2,15 @@
     <div class="modal modal-otp" v-bind:class="{ 'is-active': isActive }">
       <div class="modal-background" @click.stop="closeModal"></div>
       <div class="modal-content">
-        <slot></slot>
+        <section class="section">
+            <div class="columns is-centered">
+                <div class="column is-three-quarters">
+                    <div class="box has-text-centered has-background-black-ter ">
+                        <slot></slot>
+                    </div>
+                </div>
+            </div>
+        </section>
       </div>
       <button class="modal-close is-large" aria-label="close" @click.stop="closeModal"></button>
     </div>
