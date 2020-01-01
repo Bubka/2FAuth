@@ -2,10 +2,13 @@
     <div>
         <div class="container">
             <div class="buttons are-large is-centered">
-                <span v-for="account in accounts" class="button is-black twofaccount" @click.stop="getAccount(account.id)">
-                    <img src="https://fakeimg.pl/64x64/">
-                    {{ account.name }}
-                    <span class="is-family-primary is-size-7 has-text-grey">{{ account.email }}</span>
+                <span v-for="account in accounts" class="button is-black twofaccount" >
+                    <span @click.stop="getAccount(account.id)">
+                        <img src="https://fakeimg.pl/64x64/">
+                        {{ account.name }}
+                        <span class="is-family-primary is-size-7 has-text-grey">{{ account.email }}</span>
+                    </span>
+                    <a v-on:click="deleteAccount(account.id)">Delete</a>
                 </span>
             </div>
         </div>
@@ -82,6 +85,17 @@
                     this.$refs.OneTimePassword.getOTP()
                     this.ShowTwofaccountInModal = true;
 
+                })
+            },
+
+            deleteAccount:  function (id) {
+                let token = localStorage.getItem('jwt')
+
+                axios.defaults.headers.common['Content-Type'] = 'application/json'
+                axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
+
+                axios.delete('/api/twofaccounts/' + id).then(response => {
+                    this.accounts.splice(this.accounts.findIndex(x => x.id === id), 1);
                 })
             }
         },
