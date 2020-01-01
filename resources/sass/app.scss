@@ -69,3 +69,29 @@ nav.level {
     // background-color: black;
     //display:none;
 }
+
+
+
+.input, .select select, .textarea {
+  background-color: hsl(0, 0%, 21%);
+  border-color: hsl(0, 0%, 29%);
+  color: hsl(0, 0%, 71%);
+}
+
+.label {
+  color: hsl(0, 0%, 48%);
+}
+
+.modal .field.is-grouped:last-child {
+  justify-content: flex-end;
+  padding-top: 20px;
+}
+
+.modal-action-links {
+  position: absolute;
+  display: block;
+  bottom: 0px;
+  left: 0px;
+  width: 100%;
+  text-align: center;
+}

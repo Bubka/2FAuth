@@ -32,7 +32,8 @@ class TwoFAccountController extends Controller
         $twofaccount = TwoFAccount::create([
             'name' => $request->name,
             'email' => $request->email,
-            'uri' => $request->uri
+            'uri' => $request->uri,
+            'icon' => $request->icon
         ]);
 
         return response()->json($twofaccount, 201);

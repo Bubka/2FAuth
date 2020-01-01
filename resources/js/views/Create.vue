@@ -1,42 +1,49 @@
 <template>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card card-default">
-                    <div class="card-header">Register</div>
-                    <div class="card-body">
-                        <form @submit.prevent="createAccount">
-                            <div class="field">
-                                <label class="label">Name</label>
-                                <div class="control">
-                                    <input class="input" type="text" placeholder="Text input" v-model="twofaccount.name" required autofocus>
+    <div class="modal modal-otp is-active">
+        <div class="modal-background"></div>
+        <div class="modal-content">
+            <section class="section">
+                <div class="columns is-centered">
+                    <div class="column is-three-quarters">
+                        <div class="box has-background-black-ter ">
+                            <form @submit.prevent="createAccount">
+                                <div class="field">
+                                    <label class="label">Name</label>
+                                    <div class="control">
+                                        <input class="input" type="text" placeholder="Name" v-model="twofaccount.name" required autofocus />
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="field">
-                                <label class="label">Email</label>
-                                <div class="control">
-                                    <input class="input" type="email" placeholder="Text input" v-model="twofaccount.email" required>
+                                <div class="field">
+                                    <label class="label">Email</label>
+                                    <div class="control">
+                                        <input class="input" type="text" placeholder="Email" v-model="twofaccount.email" required />
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="field">
-                                <label class="label">Uri</label>
-                                <div class="control">
-                                    <input class="input" type="text" placeholder="Text input" v-model="twofaccount.uri" required>
+                                <div class="field">
+                                    <label class="label">Uri</label>
+                                    <div class="control">
+                                        <input class="input" type="text" placeholder="Uri" v-model="twofaccount.uri" required />
+                                    </div>
                                 </div>
-                            </div>
-
-                            <div class="field is-grouped">
-                                <div class="control">
-                                    <button class="button is-link">Submit</button>
+                                <div class="field">
+                                    <label class="label">Icon</label>
+                                    <div class="control">
+                                        <input class="input" type="text" placeholder="Icon" v-model="twofaccount.icon" required />
+                                    </div>
                                 </div>
-                                <div class="control">
-                                    <router-link :to="{ name: 'accounts' }" class="button is-text">Cancel</router-link>
+                                <div class="field is-grouped">
+                                    <div class="control">
+                                        <router-link :to="{ name: 'accounts' }" class="button is-light">Cancel</router-link>
+                                    </div>
+                                    <div class="control">
+                                        <button type="submit" class="button is-link">Submit</button>
+                                    </div>
                                 </div>
-                            </div>
-                        </form>
+                            </form>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </section>
         </div>
     </div>
 </template>
