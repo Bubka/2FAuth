@@ -7,8 +7,9 @@
                     <div class="column is-three-quarters">
                         <div class="box has-background-black-ter ">
                             <form @submit.prevent="updateAccount">
+                                <h1 class="subtitle is-2">Edit account</h1>
                                 <div class="field">
-                                    <label class="label">Name</label>
+                                    <label class="label">Service</label>
                                     <div class="control">
                                         <input class="input" type="text" placeholder="Account name" v-model="twofaccount.name" required autofocus />
                                     </div>
@@ -30,7 +31,7 @@
                                         <router-link :to="{ name: 'accounts' }" class="button is-light">Cancel</router-link>
                                     </div>
                                     <div class="control">
-                                        <button type="submit" class="button is-link">Submit</button>
+                                        <button type="submit" class="button is-link">Save</button>
                                     </div>
                                 </div>
                             </form>
