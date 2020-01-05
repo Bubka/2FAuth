@@ -9,22 +9,17 @@
                             <form @submit.prevent="createAccount">
                                 <h1 class="subtitle is-2">New account</h1>
                                 <div class="field">
-                                    <label class="label">qr code</label>
-                                    <div class="control">
-                                        
-                                    </div>
-                                </div>
-                                <div class="file has-name is-fullwidth">
-                                    <label class="file-label">
-                                        <input type="file" class="file-input" accept="image/*" v-on:change="uploadQrcode" ref="fileInput">
-                                        <span class="file-cta">
-                                            <span class="file-icon">
-                                                <i class="fas fa-qrcode"></i>
+                                    <div class="file is-dark is-boxed">
+                                        <label class="file-label">
+                                            <input class="file-input" type="file" accept="image/*" v-on:change="uploadQrcode" ref="fileInput">
+                                            <span class="file-cta">
+                                                <span class="file-icon">
+                                                    <font-awesome-icon :icon="['fas', 'qrcode']" />
+                                                </span>
+                                                <span class="file-label">Upload a qrcode</span>
                                             </span>
-                                            <span class="file-label">Use a QR Code</span>
-                                        </span>
-                                        <span class="file-name">Screen Shot 2017-07-29 at 15.54.25.png</span>
-                                    </label>
+                                        </label>
+                                    </div>
                                 </div>
                                 <div class="field">
                                     <label class="label">Service</label>
