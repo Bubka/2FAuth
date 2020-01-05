@@ -4,7 +4,7 @@
             <div class="buttons are-large is-centered">
                 <span v-for="account in accounts" class="button is-black twofaccount" >
                     <span @click.stop="getAccount(account.id)">
-                        <img src="https://fakeimg.pl/64x64/">
+                        <img :src="account.icon">
                         {{ account.name }}
                         <span class="is-family-primary is-size-7 has-text-grey">{{ account.email }}</span>
                     </span>

@@ -17,13 +17,26 @@
                                 <div class="field">
                                     <label class="label">Email</label>
                                     <div class="control">
-                                        <input class="input" type="email" placeholder="account email" v-model="twofaccount.email" required />
+                                        <input class="input" type="text" placeholder="account email" v-model="twofaccount.email" />
                                     </div>
                                 </div>
                                 <div class="field">
                                     <label class="label">Icon</label>
+                                    <div class="file is-dark">
+                                        <label class="file-label">
+                                            <input class="file-input" type="file" accept="image/*" v-on:change="uploadIcon" ref="iconInput">
+                                            <span class="file-cta">
+                                                <span class="file-icon">
+                                                    <font-awesome-icon :icon="['fas', 'image']" />
+                                                </span>
+                                                <span class="file-label">Choose an image…</span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="field">
                                     <div class="control">
-                                        <input class="input" type="text" placeholder="account icon" v-model="twofaccount.icon" required />
+                                        <input class="input" type="text" placeholder="Icon" v-model="twofaccount.icon" />
                                     </div>
                                 </div>
                                 <div class="field is-grouped">
@@ -77,6 +90,40 @@
                     this.$router.push({name: 'accounts'});
                 })
             },
+
+            uploadIcon(event) {
+
+                let token = localStorage.getItem('jwt')
+
+                axios.defaults.headers.common['Content-Type'] = 'application/json'
+                axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
+
+                 let files = this.$refs.iconInput.files
+
+                 if (!files.length) {
+                     console.log('no files');
+                     return false;
+                 }
+                 else {
+                    console.log(files.length + ' file(s) found');
+                 }
+
+                let imgdata = new FormData();
+
+                imgdata.append('icon', files[0]); 
+
+                let config = {
+                    header : {
+                        'Content-Type' : 'multipart/form-data',
+                    }
+                }
+
+                axios.post('/api/icon/upload', imgdata, config).then(response => {
+                        console.log('icon path > ', response);
+                        this.twofaccount.icon = response.data;
+                    }
+                )
+            }
         },
 
     }

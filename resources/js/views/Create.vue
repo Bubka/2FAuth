@@ -11,10 +11,10 @@
                                 <div class="field">
                                     <div class="file is-dark is-boxed">
                                         <label class="file-label">
-                                            <input class="file-input" type="file" accept="image/*" v-on:change="uploadQrcode" ref="fileInput">
+                                            <input class="file-input" type="file" accept="image/*" v-on:change="uploadQrcode" ref="qrcodeInput">
                                             <span class="file-cta">
                                                 <span class="file-icon">
-                                                    <font-awesome-icon :icon="['fas', 'qrcode']" />
+                                                    <font-awesome-icon :icon="['fas', 'qrcode']" size="lg" />
                                                 </span>
                                                 <span class="file-label">Upload a qrcode</span>
                                             </span>
@@ -41,6 +41,19 @@
                                 </div>
                                 <div class="field">
                                     <label class="label">Icon</label>
+                                    <div class="file is-dark">
+                                        <label class="file-label">
+                                            <input class="file-input" type="file" accept="image/*" v-on:change="uploadIcon" ref="iconInput">
+                                            <span class="file-cta">
+                                                <span class="file-icon">
+                                                    <font-awesome-icon :icon="['fas', 'image']" />
+                                                </span>
+                                                <span class="file-label">Choose an image…</span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="field">
                                     <div class="control">
                                         <input class="input" type="text" placeholder="Icon" v-model="twofaccount.icon" />
                                     </div>
@@ -66,7 +79,12 @@
     export default {
         data() {
             return {
-                twofaccount: {}
+                twofaccount: {
+                    'name' : '',
+                    'email' : '',
+                    'uri' : '',
+                    'icon' : ''
+                }
             }
         },
 
@@ -90,7 +108,7 @@
                 axios.defaults.headers.common['Content-Type'] = 'application/json'
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
 
-                 let files = this.$refs.fileInput.files
+                 let files = this.$refs.qrcodeInput.files
 
                  if (!files.length) {
                      console.log('no files');
@@ -113,6 +131,40 @@
                 axios.post('/api/qrcode/decode', imgdata, config).then(response => {
                         console.log('image upload response > ', response);
                         this.twofaccount = response.data;
+                    }
+                )
+            },
+
+            uploadIcon(event) {
+
+                let token = localStorage.getItem('jwt')
+
+                axios.defaults.headers.common['Content-Type'] = 'application/json'
+                axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
+
+                 let files = this.$refs.iconInput.files
+
+                 if (!files.length) {
+                     console.log('no files');
+                     return false;
+                 }
+                 else {
+                    console.log(files.length + ' file(s) found');
+                 }
+
+                let imgdata = new FormData();
+
+                imgdata.append('icon', files[0]); 
+
+                let config = {
+                    header : {
+                        'Content-Type' : 'multipart/form-data',
+                    }
+                }
+
+                axios.post('/api/icon/upload', imgdata, config).then(response => {
+                        console.log('icon path > ', response);
+                        this.twofaccount.icon = response.data;
                     }
                 )
             }

@@ -22,5 +22,6 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::apiResource('twofaccounts', 'TwoFAccountController');
     Route::get('twofaccounts/{twofaccount}/totp', 'TwoFAccountController@generateTOTP')->name('twofaccounts.generateTOTP');
     Route::post('qrcode/decode', 'QrCodeController@decode');
+    Route::post('icon/upload', 'IconController@upload');
     Route::delete('twofaccounts/force/{id}', 'TwoFAccountController@forceDestroy')->name('twofaccounts.forceDestroy');
 });

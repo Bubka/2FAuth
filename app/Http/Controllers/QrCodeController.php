@@ -56,6 +56,7 @@ class QrCodecontroller extends Controller
                 'name' => $service,
                 'email' => $email,
                 'uri' => $uri,
+                'icon' => '',
                 'options' => $options
             );
 
