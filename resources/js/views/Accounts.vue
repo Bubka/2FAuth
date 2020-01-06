@@ -1,6 +1,10 @@
 <template>
     <div>
         <div class="container">
+            <div class="has-text-centered">
+                <a class="button is-dark" @click="editMode = true" v-if="!editMode">Manage</a>
+                <a class="button is-dark" @click="editMode = false" v-if="editMode">Done</a>
+            </div>
             <div class="buttons are-large is-centered">
                 <span v-for="account in accounts" class="button is-black twofaccount" >
                     <span @click.stop="getAccount(account.id)">
@@ -8,7 +12,13 @@
                         {{ account.service }}
                         <span class="is-family-primary is-size-7 has-text-grey">{{ account.account }}</span>
                     </span>
-                    <a v-on:click="deleteAccount(account.id)">Delete</a>
+                    <span v-if="editMode">
+                        <a v-on:click="deleteAccount(account.id)" class="is-size-6 has-text-grey-dark">
+                            <font-awesome-icon :icon="['fas', 'trash']" />
+                        </a> <router-link :to="{ name: 'edit', params: { twofaccountId: account.id }}" class="is-size-6 has-text-grey-dark">
+                            <font-awesome-icon :icon="['fas', 'edit']" />
+                        </router-link>
+                    </span>
                 </span>
             </div>
         </div>
@@ -35,7 +45,8 @@
             return {
                 accounts : [],
                 ShowTwofaccountInModal : false,
-                twofaccount: {}
+                twofaccount: {},
+                editMode : false,
             }
         },
         mounted(){

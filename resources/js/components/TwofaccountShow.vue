@@ -6,9 +6,6 @@
         <p class="is-size-4 has-text-grey-light">{{ service }}</p>
         <p class="is-size-6 has-text-grey">{{ account }}</p>
         <slot></slot>
-        <div class="modal-action-links has-text-grey">
-            <router-link :to="{ name: 'edit', params: { twofaccountId: twofaccountid }}">Edit</router-link>
-        </div>
     </div>
 </template>
 
