@@ -7,26 +7,30 @@
                     <div class="field">
                         <label class="label">Name</label>
                         <div class="control">
-                            <input id="name" type="email" class="input" v-model="name" required autofocus />
+                            <input id="name" type="email" class="input" v-model="name" v-bind:class="{ 'is-danger' : nameMissing }" required autofocus />
                         </div>
+                        <p class="help is-danger" v-if="nameMissing">Field required</p>
                     </div>
                     <div class="field">
                         <label class="label">Email</label>
                         <div class="control">
-                            <input id="email" type="email" class="input" v-model="email" required />
+                            <input id="email" type="email" class="input" v-model="email" v-bind:class="{ 'is-danger' : emailMissing }" required />
                         </div>
+                        <p class="help is-danger" v-if="emailMissing">Field required</p>
                     </div>
                     <div class="field">
                         <label class="label">Password</label>
                         <div class="control">
-                            <input id="password" type="password" class="input" v-model="password" required />
+                            <input id="password" type="password" class="input" v-model="password" v-bind:class="{ 'is-danger' : passwordMissing }" required />
                         </div>
+                        <p class="help is-danger" v-if="passwordMissing">Field required</p>
                     </div>
                     <div class="field">
                         <label class="label">Confirm Password</label>
                         <div class="control">
-                            <input id="password-confirm" type="password" class="input" v-model="password_confirmation" required />
+                            <input id="password-confirm" type="password" class="input" v-model="password_confirmation" v-bind:class="{ 'is-danger' : passwordConfirmationMissing }" required />
                         </div>
+                        <p class="help is-danger" v-if="passwordConfirmationMissing">Field required</p>
                     </div>
                     <div class="field">
                         <div class="control">
@@ -34,6 +38,10 @@
                         </div>
                     </div>
                 </form>
+                <br />
+                <span class="tag is-danger" v-if="errorMessage">
+                    {{ errorMessage }}
+                </span>
             </div>
         </div>
     </div>
@@ -43,15 +51,29 @@
     export default {
         data(){
             return {
-                name : "",
-                email : "",
-                password : "",
-                password_confirmation : ""
+                name : '',
+                nameMissing : false,
+                email : '',
+                emailMissing : false,
+                password : '',
+                passwordMissing : false,
+                password_confirmation : '',
+                passwordConfirmationMissing : false,
+                errorMessage : '',
             }
         },
         methods : {
             handleSubmit(e) {
                 e.preventDefault()
+
+                this.nameMissing = (this.name.length === 0) ? true : false;
+                this.emailMissing = (this.email.length === 0) ? true : false;
+                this.passwordMissing = (this.password.length === 0) ? true : false;
+                this.passwordConfirmationMissing = (this.password_confirmation.length === 0) ? true : false;
+
+                if( this.nameMissing || this.emailMissing || this.passwordMissing || this.passwordConfirmationMissing ) {
+                    return false;
+                }
 
                 if (this.password === this.password_confirmation && this.password.length > 0)
                 {
@@ -66,17 +88,16 @@
                         localStorage.setItem('jwt',response.data.success.token)
 
                         if (localStorage.getItem('jwt') != null){
-                            this.$router.go('/')
+                            this.$router.push({name: 'accounts'});
                         }
                       })
                       .catch(error => {
                         console.error(error);
+                        this.errorMessage = error.message
                       });
                 } else {
-                    this.password = ""
-                    this.passwordConfirm = ""
-
-                    return alert('Passwords do not match')
+                    this.errorMessage = 'Passwords do not match'
+                    return false;
                 }
             }
         },
