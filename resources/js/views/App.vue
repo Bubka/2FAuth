@@ -5,7 +5,7 @@
                 <router-link :to="{ name: 'accounts' }" class="is-size-4 has-text-weight-light" v-if="isLoggedIn">2FAccount</router-link>
             </div>
             <div class="level-right">
-                <p class="level-item">
+                <p class="level-item" v-if="isLoggedIn">
                     <router-link :to="{ name: 'create' }" class="button is-black">
                         <span class="icon has-text-grey-light">
                             <font-awesome-icon :icon="['fas', 'plus-circle']" />
