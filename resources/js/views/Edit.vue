@@ -1,57 +1,50 @@
 <template>
-    <div class="modal modal-otp is-active">
-        <div class="modal-background"></div>
-        <div class="modal-content">
-            <section class="section">
-                <div class="columns is-centered">
-                    <div class="column is-three-quarters">
-                        <div class="box has-background-black-ter ">
-                            <form @submit.prevent="updateAccount">
-                                <h1 class="subtitle is-2">Edit account</h1>
-                                <div class="field">
-                                    <label class="label">Service</label>
-                                    <div class="control">
-                                        <input class="input" type="text" placeholder="Account name" v-model="twofaccount.name" required autofocus />
-                                    </div>
-                                </div>
-                                <div class="field">
-                                    <label class="label">Email</label>
-                                    <div class="control">
-                                        <input class="input" type="text" placeholder="account email" v-model="twofaccount.email" />
-                                    </div>
-                                </div>
-                                <div class="field">
-                                    <label class="label">Icon</label>
-                                    <div class="file is-dark">
-                                        <label class="file-label">
-                                            <input class="file-input" type="file" accept="image/*" v-on:change="uploadIcon" ref="iconInput">
-                                            <span class="file-cta">
-                                                <span class="file-icon">
-                                                    <font-awesome-icon :icon="['fas', 'image']" />
-                                                </span>
-                                                <span class="file-label">Choose an image…</span>
-                                            </span>
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="field">
-                                    <div class="control">
-                                        <input class="input" type="text" placeholder="Icon" v-model="twofaccount.icon" />
-                                    </div>
-                                </div>
-                                <div class="field is-grouped">
-                                    <div class="control">
-                                        <router-link :to="{ name: 'accounts' }" class="button is-light">Cancel</router-link>
-                                    </div>
-                                    <div class="control">
-                                        <button type="submit" class="button is-link">Save</button>
-                                    </div>
-                                </div>
-                            </form>
+    <div class="section">
+        <div class="columns is-mobile is-centered">
+            <div class="column is-two-thirds-tablet is-half-desktop is-one-third-widescreen is-one-quarter-fullhd">
+                <h1 class="title">Edit account</h1>
+                <form @submit.prevent="updateAccount">
+                    <div class="field">
+                        <label class="label">Service</label>
+                        <div class="control">
+                            <input class="input" type="text" placeholder="Account name" v-model="twofaccount.name" required autofocus />
                         </div>
                     </div>
-                </div>
-            </section>
+                    <div class="field">
+                        <label class="label">Email</label>
+                        <div class="control">
+                            <input class="input" type="text" placeholder="account email" v-model="twofaccount.email" />
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Icon</label>
+                        <div class="file is-dark">
+                            <label class="file-label">
+                                <input class="file-input" type="file" accept="image/*" v-on:change="uploadIcon" ref="iconInput">
+                                <span class="file-cta">
+                                    <span class="file-icon">
+                                        <font-awesome-icon :icon="['fas', 'image']" />
+                                    </span>
+                                    <span class="file-label">Choose an image…</span>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="control">
+                            <input class="input" type="text" placeholder="Icon" v-model="twofaccount.icon" />
+                        </div>
+                    </div>
+                    <div class="field is-grouped">
+                        <div class="control">
+                            <router-link :to="{ name: 'accounts' }" class="button is-light">Cancel</router-link>
+                        </div>
+                        <div class="control">
+                            <button type="submit" class="button is-link">Save</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </template>

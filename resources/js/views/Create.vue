@@ -1,76 +1,69 @@
 <template>
-    <div class="modal modal-otp is-active">
-        <div class="modal-background"></div>
-        <div class="modal-content">
-            <section class="section">
-                <div class="columns is-centered">
-                    <div class="column is-three-quarters">
-                        <div class="box has-background-black-ter ">
-                            <form @submit.prevent="createAccount">
-                                <h1 class="subtitle is-2">New account</h1>
-                                <div class="field">
-                                    <div class="file is-dark is-boxed">
-                                        <label class="file-label">
-                                            <input class="file-input" type="file" accept="image/*" v-on:change="uploadQrcode" ref="qrcodeInput">
-                                            <span class="file-cta">
-                                                <span class="file-icon">
-                                                    <font-awesome-icon :icon="['fas', 'qrcode']" size="lg" />
-                                                </span>
-                                                <span class="file-label">Upload a qrcode</span>
-                                            </span>
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="field">
-                                    <label class="label">Service</label>
-                                    <div class="control">
-                                        <input class="input" type="text" placeholder="Name" v-model="twofaccount.name" required autofocus />
-                                    </div>
-                                </div>
-                                <div class="field">
-                                    <label class="label">Email</label>
-                                    <div class="control">
-                                        <input class="input" type="text" placeholder="Email" v-model="twofaccount.email"  />
-                                    </div>
-                                </div>
-                                <div class="field">
-                                    <label class="label">Uri</label>
-                                    <div class="control">
-                                        <input class="input" type="text" placeholder="Uri" v-model="twofaccount.uri" />
-                                    </div>
-                                </div>
-                                <div class="field">
-                                    <label class="label">Icon</label>
-                                    <div class="file is-dark">
-                                        <label class="file-label">
-                                            <input class="file-input" type="file" accept="image/*" v-on:change="uploadIcon" ref="iconInput">
-                                            <span class="file-cta">
-                                                <span class="file-icon">
-                                                    <font-awesome-icon :icon="['fas', 'image']" />
-                                                </span>
-                                                <span class="file-label">Choose an image…</span>
-                                            </span>
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="field">
-                                    <div class="control">
-                                        <input class="input" type="text" placeholder="Icon" v-model="twofaccount.icon" />
-                                    </div>
-                                </div>
-                                <div class="field is-grouped">
-                                    <div class="control">
-                                        <router-link :to="{ name: 'accounts' }" class="button is-light">Cancel</router-link>
-                                    </div>
-                                    <div class="control">
-                                        <button type="submit" class="button is-link">Create</button>
-                                    </div>
-                                </div>
-                            </form>
+    <div class="section">
+        <div class="columns is-mobile is-centered">
+            <div class="column is-two-thirds-tablet is-half-desktop is-one-third-widescreen is-one-quarter-fullhd">
+                <h1 class="title">New account</h1>
+                <form @submit.prevent="createAccount">
+                    <div class="field">
+                        <div class="file is-dark is-boxed">
+                            <label class="file-label">
+                                <input class="file-input" type="file" accept="image/*" v-on:change="uploadQrcode" ref="qrcodeInput">
+                                <span class="file-cta">
+                                    <span class="file-icon">
+                                        <font-awesome-icon :icon="['fas', 'qrcode']" size="lg" />
+                                    </span>
+                                    <span class="file-label">Upload a qrcode</span>
+                                </span>
+                            </label>
                         </div>
                     </div>
-                </div>
-            </section>
+                    <div class="field">
+                        <label class="label">Service</label>
+                        <div class="control">
+                            <input class="input" type="text" placeholder="Name" v-model="twofaccount.name" required autofocus />
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Email</label>
+                        <div class="control">
+                            <input class="input" type="text" placeholder="Email" v-model="twofaccount.email"  />
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Uri</label>
+                        <div class="control">
+                            <input class="input" type="text" placeholder="Uri" v-model="twofaccount.uri" />
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Icon</label>
+                        <div class="file is-dark">
+                            <label class="file-label">
+                                <input class="file-input" type="file" accept="image/*" v-on:change="uploadIcon" ref="iconInput">
+                                <span class="file-cta">
+                                    <span class="file-icon">
+                                        <font-awesome-icon :icon="['fas', 'image']" />
+                                    </span>
+                                    <span class="file-label">Choose an image…</span>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="control">
+                            <input class="input" type="text" placeholder="Icon" v-model="twofaccount.icon" />
+                        </div>
+                    </div>
+                    <div class="field is-grouped">
+                        <div class="control">
+                            <router-link :to="{ name: 'accounts' }" class="button is-light">Cancel</router-link>
+                        </div>
+                        <div class="control">
+                            <button type="submit" class="button is-link">Create</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </template>
