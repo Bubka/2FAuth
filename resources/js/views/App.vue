@@ -2,7 +2,7 @@
     <div>
         <nav class="navbar is-black level is-mobile has-text-grey-lighter">
             <div class="level-left">
-                <router-link :to="{ name: 'accounts' }" class="is-size-4 has-text-weight-light" v-if="isLoggedIn">2FAccount</router-link>
+                <router-link :to="{ name: 'accounts' }" class="is-size-4 has-text-weight-light">2FAccount</router-link>
             </div>
             <div class="level-right">
                 <p class="level-item" v-if="isLoggedIn">
@@ -14,7 +14,12 @@
                 </p>
                 <p class="level-item" v-if="!isLoggedIn">
                     <router-link :to="{ name: 'login' }" class="button is-black">
-                        login
+                        Sign in
+                    </router-link>
+                </p>
+                <p class="level-item" v-else>
+                    <router-link :to="{ name: 'sign out' }" class="button is-black">
+                        Sign out
                     </router-link>
                 </p>
                 <p class="level-item" v-if="!isLoggedIn">

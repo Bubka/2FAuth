@@ -32,6 +32,10 @@ const router = new VueRouter({
             component: Login,
         },
         {
+            path: '/logout',
+            name: 'logout',
+        },
+        {
             path: '/register',
             name: 'register',
             component: Register,
