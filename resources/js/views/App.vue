@@ -18,9 +18,9 @@
                     </router-link>
                 </p>
                 <p class="level-item" v-if="isLoggedIn">
-                    <router-link :to="{ name: 'sign out' }" class="button is-black">
+                    <a class="button is-black" @click="logout">
                         Sign out
-                    </router-link>
+                    </a>
                 </p>
                 <p class="level-item" v-if="!isLoggedIn">
                     <router-link :to="{ name: 'register' }" class="button is-black">
@@ -51,6 +51,26 @@
         mounted(){
             this.isLoggedIn = localStorage.getItem('jwt')
             this.username = localStorage.getItem('user')
+        },
+
+        methods: {
+            logout(evt) {
+                if(confirm("Are you sure you want to log out?")) {
+                    axios.post('api/logout').then(response => {
+
+                        localStorage.removeItem('jwt');
+                        delete axios.defaults.headers.common['Authorization'];
+
+                        this.$router.go('/login');
+                    })
+                    .catch(error => {
+                        localStorage.removeItem('jwt');
+                        delete axios.defaults.headers.common['Authorization'];
+
+                        this.$router.go('/login');
+                    });       
+                }
+            }
         }
     }
 </script>
