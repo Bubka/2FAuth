@@ -17,7 +17,7 @@
                         Sign in
                     </router-link>
                 </p>
-                <p class="level-item" v-else>
+                <p class="level-item" v-if="isLoggedIn">
                     <router-link :to="{ name: 'sign out' }" class="button is-black">
                         Sign out
                     </router-link>
