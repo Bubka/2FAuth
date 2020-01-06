@@ -89,14 +89,16 @@
             },
 
             deleteAccount:  function (id) {
-                let token = localStorage.getItem('jwt')
+                if(confirm("Are you sure you want to delete this account?")) {
+                    let token = localStorage.getItem('jwt')
 
-                axios.defaults.headers.common['Content-Type'] = 'application/json'
-                axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
+                    axios.defaults.headers.common['Content-Type'] = 'application/json'
+                    axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
 
-                axios.delete('/api/twofaccounts/' + id).then(response => {
-                    this.accounts.splice(this.accounts.findIndex(x => x.id === id), 1);
-                })
+                    axios.delete('/api/twofaccounts/' + id).then(response => {
+                        this.accounts.splice(this.accounts.findIndex(x => x.id === id), 1);
+                    })
+                }
             }
         },
         beforeRouteEnter (to, from, next) {
