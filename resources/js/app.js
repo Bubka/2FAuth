@@ -22,27 +22,27 @@ const router = new VueRouter({
     mode: 'history',
     routes: [
         {
-            path: '/',
+            path: './',
             name: 'accounts',
             component: Accounts
         },
         {
-            path: '/login',
+            path: './login',
             name: 'login',
             component: Login,
         },
         {
-            path: '/register',
+            path: './register',
             name: 'register',
             component: Register,
         },
         {
-            path: '/create',
+            path: './create',
             name: 'create',
             component: Create,
         },
         {
-            path: '/edit/:twofaccountId',
+            path: './edit/:twofaccountId',
             name: 'edit',
             component: Edit,
         },
