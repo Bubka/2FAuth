@@ -14,32 +14,32 @@ class TwoFAccountsTableSeeder extends Seeder
         $faker = \Faker\Factory::create();
 
         TwoFAccount::create([
-            'name' => $faker->unique()->domainName,
-            'email' => $faker->email,
+            'service' => $faker->unique()->domainName,
+            'account' => $faker->email,
             'uri' => 'otpauth://totp/test@test.com?secret=A4GRFTVVRBGY7UIW&issuer=test',
             'icon' => 'https://fakeimg.pl/64x64/'
         ]);
         TwoFAccount::create([
-            'name' => $faker->unique()->domainName,
-            'email' => $faker->email,
+            'service' => $faker->unique()->domainName,
+            'account' => $faker->email,
             'uri' => 'otpauth://totp/test@test.com?secret=A4GRFHYVRBGY7UIW&issuer=test',
             'icon' => 'https://fakeimg.pl/64x64/'
         ]);
         TwoFAccount::create([
-            'name' => $faker->unique()->domainName,
-            'email' => $faker->email,
+            'service' => $faker->unique()->domainName,
+            'account' => $faker->email,
             'uri' => 'otpauth://totp/test@test.com?secret=A4GRFHZVRBGY7UIW&issuer=test',
             'icon' => 'https://fakeimg.pl/64x64/'
         ]);
         TwoFAccount::create([
-            'name' => $faker->unique()->domainName,
-            'email' => $faker->email,
+            'service' => $faker->unique()->domainName,
+            'account' => $faker->email,
             'uri' => 'otpauth://totp/test@test.com?secret=A4GRFHVIRBGY7UIW&issuer=test',
             'icon' => 'https://fakeimg.pl/64x64/'
         ]);
         TwoFAccount::create([
-            'name' => $faker->unique()->domainName,
-            'email' => $faker->email,
+            'service' => $faker->unique()->domainName,
+            'account' => $faker->email,
             'uri' => 'otpauth://totp/test@test.com?secret=A4GRFHVVOBGY7UIW&issuer=test',
             'icon' => 'https://fakeimg.pl/64x64/'
         ]);

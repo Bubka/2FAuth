@@ -15,9 +15,9 @@ class CreateTwoFAccountsTable extends Migration
     {
         Schema::create('twofaccounts', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name')->unique();
+            $table->string('service');
             $table->string('uri');
-            $table->string('email');
+            $table->string('account');
             $table->string('icon')->nullable();
             $table->timestamps();
             $table->softDeletes();

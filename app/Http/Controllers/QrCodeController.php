@@ -33,18 +33,18 @@ class QrCodecontroller extends Controller
                 $options[$option[0]] = $option[1];
             }
 
-            $email = $service = '';
+            $account = $service = '';
 
             $serviceChunks = explode(':', str_replace('otpauth://totp/', '', $uriChunks[0]));
 
             if( count($serviceChunks) > 1 ) {
-                $email = $serviceChunks[1];
+                $account = $serviceChunks[1];
             }
 
             $service = $serviceChunks[0];
 
             if( strstr( $service, '@') ) {
-                $email = $service;
+                $account = $service;
                 $service = '';
             }
 
@@ -53,8 +53,8 @@ class QrCodecontroller extends Controller
             }
 
             $twofaccount = (object) array(
-                'name' => $service,
-                'email' => $email,
+                'service' => $service,
+                'account' => $account,
                 'uri' => $uri,
                 'icon' => '',
                 'options' => $options

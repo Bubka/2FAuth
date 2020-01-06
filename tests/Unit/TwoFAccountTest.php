@@ -32,14 +32,14 @@ class TwoFAccountTest extends TestCase
     {
         $response = $this->actingAs($this->user, 'api')
             ->json('POST', '/api/twofaccounts', [
-                    'name' => 'testCreation',
-                    'email' => 'test@example.org',
+                    'service' => 'testCreation',
+                    'account' => 'test@example.org',
                     'uri' => 'test',
                 ])
             ->assertStatus(201)
             ->assertJson([
-                'name' => 'testCreation',
-                'email' => 'test@example.org',
+                'service' => 'testCreation',
+                'account' => 'test@example.org',
                 'uri' => 'test',
             ]);
     }
@@ -53,8 +53,8 @@ class TwoFAccountTest extends TestCase
     public function testTOTPgeneration()
     {
         $twofaccount = factory(TwoFAccount::class)->create([
-            'name' => 'testTOTP',
-            'email' => 'test@test.com',
+            'service' => 'testTOTP',
+            'account' => 'test@test.com',
             'uri' => 'otpauth://totp/test@test.com?secret=A4GRFHVVRBGY7UIW&issuer=test'
         ]);
 
@@ -78,15 +78,15 @@ class TwoFAccountTest extends TestCase
 
         $response = $this->actingAs($this->user, 'api')
             ->json('PUT', '/api/twofaccounts/' . $twofaccount->id, [
-                    'name' => 'testUpdate',
-                    'email' => 'testUpdate@test.com',
+                    'service' => 'testUpdate',
+                    'account' => 'testUpdate@test.com',
                     'uri' => 'testUpdate',
                 ])
             ->assertStatus(200)
             ->assertJson([
                 'id' => 1,
-                'name' => 'testUpdate',
-                'email' => 'testUpdate@test.com',
+                'service' => 'testUpdate',
+                'account' => 'testUpdate@test.com',
                 'uri' => 'testUpdate',
                 'icon' => null,
             ]);
@@ -108,8 +108,8 @@ class TwoFAccountTest extends TestCase
             ->assertJsonStructure([
                 '*' => [
                     'id',
-                    'name',
-                    'email',
+                    'service',
+                    'account',
                     'uri',
                     'icon',
                     'created_at',

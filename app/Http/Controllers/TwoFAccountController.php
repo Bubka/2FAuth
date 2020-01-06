@@ -30,8 +30,8 @@ class TwoFAccountController extends Controller
     public function store(Request $request)
     {
         $twofaccount = TwoFAccount::create([
-            'name' => $request->name,
-            'email' => $request->email,
+            'service' => $request->service,
+            'account' => $request->account,
             'uri' => $request->uri,
             'icon' => $request->icon
         ]);

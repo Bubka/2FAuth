@@ -5,8 +5,8 @@
                 <span v-for="account in accounts" class="button is-black twofaccount" >
                     <span @click.stop="getAccount(account.id)">
                         <img :src="account.icon">
-                        {{ account.name }}
-                        <span class="is-family-primary is-size-7 has-text-grey">{{ account.email }}</span>
+                        {{ account.service }}
+                        <span class="is-family-primary is-size-7 has-text-grey">{{ account.account }}</span>
                     </span>
                     <a v-on:click="deleteAccount(account.id)">Delete</a>
                 </span>
@@ -15,9 +15,9 @@
         <modal v-model="ShowTwofaccountInModal">
             <twofaccount-show
                 :twofaccountid='twofaccount.id'
-                :name='twofaccount.name'
+                :service='twofaccount.service'
                 :icon='twofaccount.icon'
-                :email='twofaccount.email'>
+                :account='twofaccount.account'>
                 <one-time-password ref="OneTimePassword"></one-time-password>
             </twofaccount-show>
         </modal>
@@ -48,8 +48,8 @@
                 response.data.forEach((data) => {
                     this.accounts.push({
                         id : data.id,
-                        name : data.name,
-                        email : data.email,
+                        service : data.service,
+                        account : data.account,
                         icon : data.icon
                     })
                 })
@@ -77,8 +77,8 @@
                 axios.get('api/twofaccounts/' + id).then(response => {
 
                     this.twofaccount.id = response.data.id
-                    this.twofaccount.name = response.data.name
-                    this.twofaccount.email = response.data.email
+                    this.twofaccount.service = response.data.service
+                    this.twofaccount.account = response.data.account
                     this.twofaccount.icon = response.data.icon
 
                     this.$refs.OneTimePassword.AccountId = response.data.id

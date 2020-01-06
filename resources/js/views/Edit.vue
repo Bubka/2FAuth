@@ -7,13 +7,13 @@
                     <div class="field">
                         <label class="label">Service</label>
                         <div class="control">
-                            <input class="input" type="text" placeholder="Account name" v-model="twofaccount.name" required autofocus />
+                            <input class="input" type="text" placeholder="Service" v-model="twofaccount.service" required autofocus />
                         </div>
                     </div>
                     <div class="field">
-                        <label class="label">Email</label>
+                        <label class="label">Account</label>
                         <div class="control">
-                            <input class="input" type="text" placeholder="account email" v-model="twofaccount.email" />
+                            <input class="input" type="text" placeholder="Account" v-model="twofaccount.account" />
                         </div>
                     </div>
                     <div class="field">

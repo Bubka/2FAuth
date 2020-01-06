@@ -19,8 +19,8 @@ use Faker\Generator as Faker;
 
 $factory->define(TwoFAccount::class, function (Faker $faker) {
     return [
-        'name' => $faker->unique()->domainName,
-        'email' => $faker->safeEmail,
+        'service' => $faker->unique()->domainName,
+        'account' => $faker->safeEmail,
         'uri' => 'otpauth://totp/' . $faker->email . '?secret=' . $faker->regexify('[A-Z0-9]{16}') . '&issuer=test',
     ];
 });
