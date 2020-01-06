@@ -7,14 +7,16 @@
                     <div class="field">
                         <label class="label">Email</label>
                         <div class="control">
-                            <input id="email" type="email" class="input" v-model="email" required autofocus />
+                            <input id="email" type="email" class="input" v-model="email" v-bind:class="{ 'is-danger' : emailMissing }" required autofocus />
                         </div>
+                        <p class="help is-danger" v-if="emailMissing">Field required</p>
                     </div>
                     <div class="field">
                         <label class="label">Password</label>
                         <div class="control">
-                            <input id="password" type="password" class="input" v-model="password" required />
+                            <input id="password" type="password" class="input" v-model="password" v-bind:class="{ 'is-danger' : passwordMissing }" required />
                         </div>
+                        <p class="help is-danger" v-if="passwordMissing">Field required</p>
                     </div>
                     <div class="field">
                         <div class="control">
@@ -22,6 +24,10 @@
                         </div>
                     </div>
                 </form>
+                <br />
+                <span class="tag is-danger" v-if="errorMessage">
+                    {{ errorMessage }}
+                </span>
             </div>
         </div>
     </div>
@@ -31,15 +37,22 @@
     export default {
         data(){
             return {
-                email : "",
-                password : ""
+                email : '',
+                emailMissing : false,
+                password : '',
+                passwordMissing : false,
+                errorMessage : '',
             }
         },
         methods : {
             handleSubmit(e){
                 e.preventDefault()
 
-                if (this.password.length > 0) {
+                this.emailMissing = (this.email.length === 0) ? true : false;
+                this.passwordMissing = (this.password.length === 0) ? true : false;
+
+                if (this.password.length > 0 && this.email.length > 0) {
+
                     axios.post('api/login', {
                         email: this.email,
                         password: this.password
@@ -49,11 +62,18 @@
                         localStorage.setItem('jwt',response.data.success.token)
 
                         if (localStorage.getItem('jwt') != null){
-                            this.$router.go('/')
+                            this.$router.push({name: 'accounts'});
                         }
                       })
-                      .catch(function (error) {
-                        console.error(error);
+                      .catch(e => {
+                        console.error(e);
+
+                        if (e.response.status === 401) {
+                            this.errorMessage = 'bad credential, please try again'
+                        }
+                        else {
+                            this.errorMessage = 'An error occured, please retry'
+                        }
                       });
                 }
             }
