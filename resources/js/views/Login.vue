@@ -1,38 +1,27 @@
 <template>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card card-default">
-                    <div class="card-header">Login</div>
-
-                    <div class="card-body">
-                        <form method="POST" action="/login">
-                            <div class="form-group row">
-                                <label for="email" class="col-sm-4 col-form-label text-md-right">E-Mail Address</label>
-
-                                <div class="col-md-6">
-                                    <input id="email" type="email" class="form-control" v-model="email" required autofocus>
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
-                                <label for="password" class="col-md-4 col-form-label text-md-right">Password</label>
-
-                                <div class="col-md-6">
-                                    <input id="password" type="password" class="form-control" v-model="password" required>
-                                </div>
-                            </div>
-
-                            <div class="form-group row mb-0">
-                                <div class="col-md-8 offset-md-4">
-                                    <button type="submit" class="btn btn-primary" @click="handleSubmit">
-                                        Login
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
+    <div class="section">
+        <div class="columns is-mobile  is-centered">
+            <div class="column is-two-thirds-tablet is-half-desktop is-one-third-widescreen is-one-quarter-fullhd">
+                <h1 class="title">Login</h1>
+                <form method="POST" action="/login">
+                    <div class="field">
+                        <label class="label">Email</label>
+                        <div class="control">
+                            <input id="email" type="email" class="input" v-model="email" required autofocus />
+                        </div>
                     </div>
-                </div>
+                    <div class="field">
+                        <label class="label">Password</label>
+                        <div class="control">
+                            <input id="password" type="password" class="input" v-model="password" required />
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="control">
+                            <button type="submit" class="button is-link" @click="handleSubmit">Sign in</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -71,7 +60,7 @@
         },
         beforeRouteEnter (to, from, next) {
             if (localStorage.getItem('jwt')) {
-                return next('home');
+                return next('accounts');
             }
 
             next();
