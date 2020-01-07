@@ -56,7 +56,7 @@
                     </div>
                     <div class="field is-grouped">
                         <div class="control">
-                            <router-link :to="{ name: 'accounts', params: { InitialEditMode: true } }" class="button is-light">Cancel</router-link>
+                            <router-link :to="{ name: 'accounts', params: { InitialEditMode: false } }" class="button is-light">Cancel</router-link>
                         </div>
                         <div class="control">
                             <button type="submit" class="button is-link">Create</button>
