@@ -19,11 +19,14 @@
                 </span>
             </div>
         </div>
-        <div class="container" v-else>
-            <figure class="image is-128x128">
-                <img src="https://bulma.io/images/placeholders/128x128.png">
-            </figure>
-            No account here! <router-link :to="{ name: 'create' }" class="is-link">create one</router-link>
+        <div class="container has-text-centered" v-else>
+            <p>
+                <img class="bg" src="storage/bg.png">
+            </p>
+            <p class="subtitle is-5">
+                No 2FA here!
+            </p>
+            <router-link :to="{ name: 'create' }" class="button is-medium is-link is-focused">Add one</router-link>
         </div>
         <modal v-model="ShowTwofaccountInModal">
             <twofaccount-show
@@ -35,7 +38,7 @@
             </twofaccount-show>
         </modal>
         <footer class="has-background-black-ter">
-            <div class="columns is-gapless">
+            <div class="columns is-gapless" v-if="this.accounts.length > 0">
                 <div class="column has-text-centered">
                     <a class="button is-dark is-rounded" @click="editMode = true" v-if="!editMode">Manage</a>
                     <div class="field has-addons" v-if="editMode">

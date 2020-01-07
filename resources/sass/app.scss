@@ -70,8 +70,6 @@ nav.level {
     //display:none;
 }
 
-
-
 .input, .select select, .textarea {
   background-color: hsl(0, 0%, 21%);
   border-color: hsl(0, 0%, 29%);
@@ -98,4 +96,8 @@ footer {
 
 footer .field.has-addons {
   justify-content: center;
+}
+
+.bg {
+  opacity: 0.05;
 }
