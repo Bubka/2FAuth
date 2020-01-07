@@ -44,7 +44,7 @@
                         <p class="control">
                             <router-link :to="{ name: 'create' }" class="button is-dark is-rounded">
                                 <span class="icon is-small">
-                                    <font-awesome-icon :icon="['fas', 'plus']" />
+                                    <font-awesome-icon :icon="['fas', 'qrcode']" />
                                 </span>
                             </router-link>
                         </p>
