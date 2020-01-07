@@ -44,6 +44,13 @@
                 </span>
             </div>
         </div>
+        <div class="columns is-mobile is-centered">
+            <div class="column is-two-thirds-tablet is-half-desktop is-one-third-widescreen is-one-quarter-fullhd">
+                Already registered? <router-link :to="{ name: 'login' }" class="is-link">
+                    Sign in
+                </router-link>
+            </div>
+        </div>
     </div>
 </template>
 
