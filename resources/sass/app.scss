@@ -87,11 +87,15 @@ nav.level {
   padding-top: 20px;
 }
 
-.modal-action-links {
-  position: absolute;
-  display: block;
-  bottom: 0px;
-  left: 0px;
-  width: 100%;
-  text-align: center;
+footer {
+  padding: 10px 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  position: fixed;
+  z-index: 30;
+}
+
+footer .field.has-addons {
+  justify-content: center;
 }
