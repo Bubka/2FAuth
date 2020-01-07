@@ -111,8 +111,6 @@
                 console.log('modalClose triggered')
                 this.$refs.OneTimePassword.clearOTP()
             });
-
-            this.editMode = this.$router.params.editMode
         },
 
         components: {
