@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="container" v-if="this.accounts.length > 0">
+        <div class="container" v-if="this.showAccounts">
             <div class="buttons are-large is-centered">
                 <span v-for="account in accounts" class="button is-black twofaccount" >
                     <span @click.stop="getAccount(account.id)">
@@ -19,7 +19,7 @@
                 </span>
             </div>
         </div>
-        <div class="container has-text-centered" v-else>
+        <div class="container has-text-centered" v-show="this.showNoAccount">
             <p>
                 <img class="bg" src="storage/bg.png">
             </p>
@@ -92,7 +92,9 @@
                 twofaccount: {},
                 token : null,
                 username : null,
-                editMode: this.InitialEditMode
+                editMode: this.InitialEditMode,
+                showAccounts: null,
+                showNoAccount: null
             }
         },
 
@@ -114,6 +116,8 @@
                         icon : data.icon
                     })
                 })
+                this.showAccounts = this.accounts.length > 0 ? true : false
+                this.showNoAccount = !this.showAccounts
             })
 
             // stop OTP generation on modal close
@@ -129,6 +133,7 @@
             TwofaccountShow,
             OneTimePassword
         },
+
         methods: {
             getAccount: function (id) {
                 let accountId = id
@@ -158,6 +163,9 @@
 
                     axios.delete('/api/twofaccounts/' + id).then(response => {
                         this.accounts.splice(this.accounts.findIndex(x => x.id === id), 1);
+
+                        this.showAccounts = this.accounts.length > 0 ? true : false
+                        this.showNoAccount = !this.showAccounts
                     })
                 }
             },
@@ -181,6 +189,7 @@
             }
 
         },
+        
         beforeRouteEnter (to, from, next) {
             if ( ! localStorage.getItem('jwt')) {
                 return next('login')
