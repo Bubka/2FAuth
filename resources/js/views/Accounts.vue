@@ -110,7 +110,7 @@
                     this.accounts.push({
                         id : data.id,
                         service : data.service,
-                        account : data.account,
+                        account : data.account ? data.account : '-',
                         icon : data.icon
                     })
                 })
