@@ -20,7 +20,6 @@ class CreateTwoFAccountsTable extends Migration
             $table->string('account');
             $table->string('icon')->nullable();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

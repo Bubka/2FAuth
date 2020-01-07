@@ -135,20 +135,4 @@ class TwoFAccountTest extends TestCase
             ->assertStatus(204);
     }
 
-
-    /**
-     * test TwoFAccount permanent deletion via API
-     *
-     * @test
-     */
-    public function testTwoFAccountPermanentDeletion()
-    {
-        $twofaccount = factory(TwoFAccount::class)->create();
-        $twofaccount->delete();
-
-        $response = $this->actingAs($this->user, 'api')
-            ->json('DELETE', '/api/twofaccounts/force/' . $twofaccount->id)
-            ->assertStatus(204);
-    }
-
 }

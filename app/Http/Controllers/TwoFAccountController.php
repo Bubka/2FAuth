@@ -7,6 +7,7 @@ use OTPHP\TOTP;
 use OTPHP\Factory;
 use Illuminate\Http\Request;
 use ParagonIE\ConstantTime\Base32;
+use Illuminate\Support\Facades\Storage;
 
 class TwoFAccountController extends Controller
 {
@@ -106,22 +107,14 @@ class TwoFAccountController extends Controller
      */
     public function destroy(TwoFAccount $twofaccount)
     {
+        // delete icon
+        $storedIcon = 'public/' . pathinfo($twofaccount->icon)['basename'];
+
+        if( Storage::exists($storedIcon) ) {
+            Storage::delete($storedIcon);
+        }
+
         $twofaccount->delete();
-
-        return response()->json(null, 204);
-    }
-
-
-    /**
-     * Remove the specified soft deleted resource from storage.
-     *
-     * @param  \App\TwoFAccount  $twofaccount
-     * @return \Illuminate\Http\Response
-     */
-    public function forceDestroy($id)
-    {
-        $twofaccount = TwoFAccount::onlyTrashed()->findOrFail($id);
-        $twofaccount->forceDelete();
 
         return response()->json(null, 204);
     }
