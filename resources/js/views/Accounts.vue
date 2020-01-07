@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="container">
+        <div class="container" v-if="this.accounts.length > 0">
             <div class="buttons are-large is-centered">
                 <span v-for="account in accounts" class="button is-black twofaccount" >
                     <span @click.stop="getAccount(account.id)">
@@ -18,6 +18,12 @@
                     </span>
                 </span>
             </div>
+        </div>
+        <div class="container" v-else>
+            <figure class="image is-128x128">
+                <img src="https://bulma.io/images/placeholders/128x128.png">
+            </figure>
+            No account here! <router-link :to="{ name: 'create' }" class="is-link">create one</router-link>
         </div>
         <modal v-model="ShowTwofaccountInModal">
             <twofaccount-show
@@ -107,10 +113,12 @@
                 })
             })
 
+            // stop OTP generation on modal close
             this.$on('modalClose', function() {
                 console.log('modalClose triggered')
                 this.$refs.OneTimePassword.clearOTP()
             });
+
         },
 
         components: {
