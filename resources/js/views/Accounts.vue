@@ -40,30 +40,30 @@
         <footer class="has-background-black-ter">
             <div class="columns is-gapless" v-if="this.accounts.length > 0">
                 <div class="column has-text-centered">
-                    <a class="button is-dark is-rounded" @click="editMode = true" v-if="!editMode">Manage</a>
-                    <div class="field has-addons" v-if="editMode">
+                    <div class="field is-grouped">
                         <p class="control">
-                            <button class="button is-success is-rounded" @click="editMode = false">
-                                <span class="icon is-small">
-                                    <font-awesome-icon :icon="['fas', 'check']" />
-                                </span>
-                                <span>Done</span>
-                            </button>
-                        </p>
-                        <p class="control">
-                            <router-link :to="{ name: 'create' }" class="button is-dark is-rounded">
+                            <router-link :to="{ name: 'create' }" class="button is-link is-rounded is-focus">
+                                <span>New</span>
                                 <span class="icon is-small">
                                     <font-awesome-icon :icon="['fas', 'qrcode']" />
                                 </span>
                             </router-link>
                         </p>
+                        <p class="control">
+                            <a class="button is-dark is-rounded" @click="editMode = true" v-if="!editMode">Manage</a>
+                            <a class="button is-success is-rounded" @click="editMode = false" v-if="editMode">
+                                <span class="icon is-small">
+                                    <font-awesome-icon :icon="['fas', 'check']" />
+                                </span>
+                                <span>Done</span>
+                            </a>
+                        </p>
                     </div>
-
                 </div>
             </div>
             <div class="content has-text-centered">
                 <span v-if="token">
-                    Hi {{username}} ! <a class="" @click="logout">Sign out</a>
+                    Hi {{username}} ! <a @click="logout">Sign out</a>
                 </span>
                 <span v-else>
                     <router-link :to="{ name: 'login' }" class="button is-black">

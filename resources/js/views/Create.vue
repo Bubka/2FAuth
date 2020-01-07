@@ -90,7 +90,7 @@
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
 
                 axios.post('/api/twofaccounts', this.twofaccount).then(response => {
-                    this.$router.push({name: 'accounts', params: { InitialEditMode: true }});
+                    this.$router.push({name: 'accounts', params: { InitialEditMode: false }});
                 })
             },
 
