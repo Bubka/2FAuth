@@ -24,7 +24,8 @@ const router = new VueRouter({
         {
             path: '/',
             name: 'accounts',
-            component: Accounts
+            component: Accounts,
+            props: true
         },
         {
             path: '/login',

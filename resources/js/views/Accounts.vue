@@ -81,11 +81,14 @@
                 accounts : [],
                 ShowTwofaccountInModal : false,
                 twofaccount: {},
-                editMode : false,
                 token : null,
                 username : null,
+                editMode: this.InitialEditMode
             }
         },
+
+        props: ['InitialEditMode'],
+
         mounted(){
             this.token = localStorage.getItem('jwt')
             this.username = localStorage.getItem('user')
@@ -109,7 +112,9 @@
                 this.$refs.OneTimePassword.clearOTP()
             });
 
+            this.editMode = this.$router.params.editMode
         },
+
         components: {
             Modal,
             TwofaccountShow,

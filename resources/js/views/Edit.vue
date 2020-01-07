@@ -37,7 +37,7 @@
                     </div>
                     <div class="field is-grouped">
                         <div class="control">
-                            <router-link :to="{ name: 'accounts' }" class="button is-light">Cancel</router-link>
+                            <router-link :to="{ name: 'accounts', params: { InitialEditMode: true } }" class="button is-light">Cancel</router-link>
                         </div>
                         <div class="control">
                             <button type="submit" class="button is-link">Save</button>
@@ -80,7 +80,7 @@
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
 
                 axios.put('/api/twofaccounts/' + this.$route.params.twofaccountId, this.twofaccount).then(response => {
-                    this.$router.push({name: 'accounts'});
+                    this.$router.push({name: 'accounts', params: { InitialEditMode: true }});
                 })
             },
 
