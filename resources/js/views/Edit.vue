@@ -28,8 +28,8 @@
                                     <span class="file-label">Choose an image…</span>
                                 </span>
                             </label>
-                            <span class="tag is-black is-large" v-if="twofaccount.icon.length > 0">
-                                <img class="icon-preview" :src="twofaccount.icon" >
+                            <span class="tag is-black is-large" v-if="twofaccount.icon">
+                                <img class="icon-preview" :src="'../' + twofaccount.icon" >
                                 <button class="delete is-small" @click="deleteIcon"></button>
                             </span>
                         </div>

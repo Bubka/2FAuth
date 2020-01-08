@@ -1,6 +1,6 @@
 <template>
     <div>
-        <figure class="image is-64x64" style="display: inline-block">
+        <figure class="image is-64x64" style="display: inline-block"  v-if="icon">
             <img :src="icon">
         </figure>
         <p class="is-size-4 has-text-grey-light">{{ service }}</p>

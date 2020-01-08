@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class TwoFAccount extends Model
 {
@@ -16,4 +17,22 @@ class TwoFAccount extends Model
      * @var string
      */
     protected $table = 'twofaccounts';
+
+
+    /**
+     * Null empty icon resource has gone
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getIconAttribute($value)
+    {
+
+        if( !Storage::exists('public/' . pathinfo($value)['basename']) ) {
+
+            return '';
+        }
+
+        return $value;
+    }
 }
