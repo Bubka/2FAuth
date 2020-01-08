@@ -11,7 +11,7 @@ use Illuminate\Filesystem\Filesystem;
 class IconController extends Controller
 {
    /**
-     * Handle uploaded qr code image
+     * Handle uploaded icon image
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -25,8 +25,27 @@ class IconController extends Controller
 
             return response()->json('storage/' . pathinfo($path)['basename'], 201);
         }
-        else {
+        else
+        {
             return response()->json('no file in $request', 204);
         }
+    }
+
+
+   /**
+     * delete an icon
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function delete($icon)
+    {
+
+        if( Storage::exists('public/' . $icon) ) {
+
+            Storage::delete('public/' . $icon); 
+        }
+
+        return response()->json(null, 204);
     }
 }

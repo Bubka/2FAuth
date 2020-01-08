@@ -65,7 +65,7 @@
                             </label>
                             <span class="tag is-black is-large" v-if="twofaccount.icon.length > 0">
                                 <img class="icon-preview" :src="twofaccount.icon" >
-                                <button class="delete is-small"></button>
+                                <button class="delete is-small" @click="deleteIcon"></button>
                             </span>
                         </div>
                     </div>
@@ -154,11 +154,12 @@
                  let files = this.$refs.iconInput.files
 
                  if (!files.length) {
-                     console.log('no files');
                      return false;
                  }
-                 else {
-                    console.log(files.length + ' file(s) found');
+
+                 // clean possible already uploaded icon
+                 if( this.twofaccount.icon ) {
+                    this.deleteIcon()
                  }
 
                 let imgdata = new FormData();
@@ -176,6 +177,22 @@
                         this.twofaccount.icon = response.data;
                     }
                 )
+            },
+
+            deleteIcon(event) {
+
+                let token = localStorage.getItem('jwt')
+
+                axios.defaults.headers.common['Content-Type'] = 'application/json'
+                axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
+
+                axios.delete('/api/icon/delete/' + this.twofaccount.icon.replace('storage/', '')).then(response => {
+                        this.twofaccount.icon = ''
+                    }
+                )
+                
+
+
             }
         },
 
