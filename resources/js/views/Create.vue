@@ -65,7 +65,7 @@
                             </label>
                             <span class="tag is-black is-large" v-if="twofaccount.icon.length > 0">
                                 <img class="icon-preview" :src="twofaccount.icon" >
-                                <button class="delete is-small" @click="deleteIcon"></button>
+                                <button class="delete is-small" @click.prevent="deleteIcon"></button>
                             </span>
                         </div>
                     </div>
