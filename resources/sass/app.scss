@@ -76,6 +76,30 @@ nav.level {
   color: hsl(0, 0%, 71%);
 }
 
+.select select::placeholder, .textarea::placeholder, .input::placeholder {
+    color: hsl(0, 0%, 48%);
+}
+
+.select select[disabled], [disabled].textarea, [disabled].input, fieldset[disabled] .select select, .select fieldset[disabled] select, fieldset[disabled] .textarea, fieldset[disabled] .input {
+  background-color: hsl(0, 0%, 10%);
+  border-color: hsl(0, 0%, 21%);
+  box-shadow: none;
+  color: hsl(0, 0%, 21%);
+}
+
+.select select[disabled]::placeholder, [disabled].textarea::placeholder, [disabled].input::placeholder, fieldset[disabled] .select select::placeholder, .select fieldset[disabled] select::placeholder, fieldset[disabled] .textarea::placeholder, fieldset[disabled] .input::placeholder {
+  color: hsl(0, 0%, 21%);
+}
+
+.button.is-dark.field-lock, .button.is-dark.field-unlock {
+  color: hsl(0, 0%, 48%);
+}
+
+.button.is-dark.field-unlock {
+  border-color: hsl(0, 0%, 29%);
+  border-left: none;
+}
+
 .label {
   color: hsl(0, 0%, 48%);
 }
@@ -100,4 +124,17 @@ footer .field.is-grouped {
 
 .bg {
   opacity: 0.05;
+}
+
+.file .tag {
+  margin-left: 0.75rem;
+}
+
+.icon-preview {
+  height: 24px;
+  width: 24px;
+}
+
+.field.is-grouped:last-child {
+  padding-top: 0.75rem;
 }

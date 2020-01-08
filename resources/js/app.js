@@ -11,10 +11,10 @@ import Create       from './views/Create'
 import Edit         from './views/Edit'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faPlus, faQrcode, faImage, faTrash, faEdit, faCheck } from '@fortawesome/free-solid-svg-icons'
+import { faPlus, faQrcode, faImage, faTrash, faEdit, faCheck, faLock, faLockOpen } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-library.add(faPlus, faQrcode, faImage, faTrash, faEdit, faCheck);
+library.add(faPlus, faQrcode, faImage, faTrash, faEdit, faCheck, faLock, faLockOpen);
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 

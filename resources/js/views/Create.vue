@@ -6,13 +6,13 @@
                 <form @submit.prevent="createAccount">
                     <div class="field">
                         <div class="file is-dark is-boxed">
-                            <label class="file-label">
+                            <label class="file-label" title="Use a QR code to fill the form magically">
                                 <input class="file-input" type="file" accept="image/*" v-on:change="uploadQrcode" ref="qrcodeInput">
                                 <span class="file-cta">
                                     <span class="file-icon">
                                         <font-awesome-icon :icon="['fas', 'qrcode']" size="lg" />
                                     </span>
-                                    <span class="file-label">Upload a qrcode</span>
+                                    <span class="file-label">Use a qrcode</span>
                                 </span>
                             </label>
                         </div>
@@ -20,19 +20,35 @@
                     <div class="field">
                         <label class="label">Service</label>
                         <div class="control">
-                            <input class="input" type="text" placeholder="Service" v-model="twofaccount.service" required autofocus />
+                            <input class="input" type="text" placeholder="example.com" v-model="twofaccount.service" required autofocus />
                         </div>
                     </div>
                     <div class="field">
                         <label class="label">Account</label>
                         <div class="control">
-                            <input class="input" type="text" placeholder="Email" v-model="twofaccount.account"  />
+                            <input class="input" type="text" placeholder="John DOE" v-model="twofaccount.account"  />
                         </div>
                     </div>
-                    <div class="field">
-                        <label class="label">Uri</label>
-                        <div class="control">
-                            <input class="input" type="text" placeholder="Uri" v-model="twofaccount.uri" />
+                    <div class="field" style="margin-bottom: 0.5rem;">
+                        <label class="label">TOTP Uri</label>
+                    </div>
+                    <div class="field has-addons">
+                        <div class="control is-expanded">
+                            <input class="input" type="text" placeholder="otpauth://totp/..." v-model="twofaccount.uri" :disabled="uriIsLocked" />
+                        </div>
+                        <div class="control" v-if="uriIsLocked">
+                            <a class="button is-dark field-lock" @click="uriIsLocked = false" title="Unlock it (at your own risk)">
+                                <span class="icon">
+                                    <font-awesome-icon :icon="['fas', 'lock']" />
+                                </span>
+                            </a>
+                        </div>
+                        <div class="control" v-else>
+                            <a class="button is-dark field-unlock"  @click="uriIsLocked = true" title="Lock it">
+                                <span class="icon has-text-danger">
+                                    <font-awesome-icon :icon="['fas', 'lock-open']" />
+                                </span>
+                            </a>
                         </div>
                     </div>
                     <div class="field">
@@ -47,19 +63,18 @@
                                     <span class="file-label">Choose an image…</span>
                                 </span>
                             </label>
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="control">
-                            <input class="input" type="text" placeholder="Icon" v-model="twofaccount.icon" />
+                            <span class="tag is-black is-large" v-if="twofaccount.icon.length > 0">
+                                <img class="icon-preview" :src="twofaccount.icon" >
+                                <button class="delete is-small"></button>
+                            </span>
                         </div>
                     </div>
                     <div class="field is-grouped">
                         <div class="control">
-                            <router-link :to="{ name: 'accounts', params: { InitialEditMode: false } }" class="button is-light">Cancel</router-link>
+                            <button type="submit" class="button is-link">Create</button>
                         </div>
                         <div class="control">
-                            <button type="submit" class="button is-link">Create</button>
+                            <router-link :to="{ name: 'accounts', params: { InitialEditMode: false } }" class="button is-text">Cancel</router-link>
                         </div>
                     </div>
                 </form>
@@ -77,7 +92,8 @@
                     'account' : '',
                     'uri' : '',
                     'icon' : ''
-                }
+                },
+                uriIsLocked: true
             }
         },
 
