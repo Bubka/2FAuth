@@ -7,13 +7,13 @@
                     <div class="field">
                         <label class="label">Service</label>
                         <div class="control">
-                            <input class="input" type="text" placeholder="Service" v-model="twofaccount.service" required autofocus />
+                            <input class="input" type="text" placeholder="example.com" v-model="twofaccount.service" required autofocus />
                         </div>
                     </div>
                     <div class="field">
                         <label class="label">Account</label>
                         <div class="control">
-                            <input class="input" type="text" placeholder="Account" v-model="twofaccount.account" />
+                            <input class="input" type="text" placeholder="John DOE" v-model="twofaccount.account" />
                         </div>
                     </div>
                     <div class="field">
@@ -28,19 +28,18 @@
                                     <span class="file-label">Choose an image…</span>
                                 </span>
                             </label>
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="control">
-                            <input class="input" type="text" placeholder="Icon" v-model="twofaccount.icon" />
+                            <span class="tag is-black is-large" v-if="twofaccount.icon.length > 0">
+                                <img class="icon-preview" :src="twofaccount.icon" >
+                                <button class="delete is-small" @click="deleteIcon"></button>
+                            </span>
                         </div>
                     </div>
                     <div class="field is-grouped">
                         <div class="control">
-                            <router-link :to="{ name: 'accounts', params: { InitialEditMode: true } }" class="button is-light">Cancel</router-link>
+                            <button type="submit" class="button is-link">Save</button>
                         </div>
                         <div class="control">
-                            <button type="submit" class="button is-link">Save</button>
+                            <router-link :to="{ name: 'accounts', params: { InitialEditMode: true } }" class="button is-text">Cancel</router-link>
                         </div>
                     </div>
                 </form>
@@ -53,7 +52,12 @@
     export default {
         data() {
             return {
-                twofaccount: {}
+                twofaccount: {
+                    'service' : '',
+                    'account' : '',
+                    'uri' : '',
+                    'icon' : ''
+                }
             }
         },
 
@@ -94,11 +98,12 @@
                  let files = this.$refs.iconInput.files
 
                  if (!files.length) {
-                     console.log('no files');
                      return false;
                  }
-                 else {
-                    console.log(files.length + ' file(s) found');
+
+                 // clean possible already uploaded icon
+                 if( this.twofaccount.icon ) {
+                    this.deleteIcon()
                  }
 
                 let imgdata = new FormData();
@@ -116,7 +121,21 @@
                         this.twofaccount.icon = response.data;
                     }
                 )
+            },
+
+            deleteIcon(event) {
+
+                let token = localStorage.getItem('jwt')
+
+                axios.defaults.headers.common['Content-Type'] = 'application/json'
+                axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
+
+                axios.delete('/api/icon/delete/' + this.twofaccount.icon.replace('storage/', '')).then(response => {
+                        this.twofaccount.icon = ''
+                    }
+                )
             }
+
         },
 
     }
