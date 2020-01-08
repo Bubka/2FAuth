@@ -21,9 +21,9 @@ class IconController extends Controller
 
         if($request->hasFile('icon')){
 
-            $path = $request->file('icon')->storePublicly('public');
+            $path = $request->file('icon')->storePublicly('public/icons');
 
-            return response()->json('storage/' . pathinfo($path)['basename'], 201);
+            return response()->json(pathinfo($path)['basename'], 201);
         }
         else
         {
@@ -41,9 +41,9 @@ class IconController extends Controller
     public function delete($icon)
     {
 
-        if( Storage::exists('public/' . $icon) ) {
+        if( Storage::exists('public/icons/' . $icon) ) {
 
-            Storage::delete('public/' . $icon); 
+            Storage::delete('public/icons/' . $icon); 
         }
 
         return response()->json(null, 204);

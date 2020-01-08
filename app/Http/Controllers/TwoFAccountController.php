@@ -108,7 +108,7 @@ class TwoFAccountController extends Controller
     public function destroy(TwoFAccount $twofaccount)
     {
         // delete icon
-        $storedIcon = 'public/' . pathinfo($twofaccount->icon)['basename'];
+        $storedIcon = 'public/icons/' . $twofaccount->icon;
 
         if( Storage::exists($storedIcon) ) {
             Storage::delete($storedIcon);

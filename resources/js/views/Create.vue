@@ -63,8 +63,8 @@
                                     <span class="file-label">Choose an image…</span>
                                 </span>
                             </label>
-                            <span class="tag is-black is-large" v-if="twofaccount.icon.length > 0">
-                                <img class="icon-preview" :src="twofaccount.icon" >
+                            <span class="tag is-black is-large" v-if="tempIcon">
+                                <img class="icon-preview" :src="'storage/icons/' + tempIcon" >
                                 <button class="delete is-small" @click.prevent="deleteIcon"></button>
                             </span>
                         </div>
@@ -74,7 +74,7 @@
                             <button type="submit" class="button is-link">Create</button>
                         </div>
                         <div class="control">
-                            <router-link :to="{ name: 'accounts', params: { InitialEditMode: false } }" class="button is-text">Cancel</router-link>
+                            <button class="button is-text" @click="cancelCreation">Cancel</button>
                         </div>
                     </div>
                 </form>
@@ -93,13 +93,18 @@
                     'uri' : '',
                     'icon' : ''
                 },
-                uriIsLocked: true
+                uriIsLocked: true,
+                tempIcon: ''
             }
         },
 
         methods: {
 
             createAccount: function() {
+                // set current temp icon as account icon
+                this.twofaccount.icon = this.tempIcon
+
+                // store the account
                 let token = localStorage.getItem('jwt')
 
                 axios.defaults.headers.common['Content-Type'] = 'application/json'
@@ -110,6 +115,15 @@
                 })
             },
 
+            cancelCreation: function() {
+                // clean possible uploaded temp icon
+                if( this.tempIcon ) {
+                    this.deleteIcon()
+                }
+
+                this.$router.push({name: 'accounts', params: { InitialEditMode: false }});
+            },
+
             uploadQrcode(event) {
 
                 let token = localStorage.getItem('jwt')
@@ -117,15 +131,15 @@
                 axios.defaults.headers.common['Content-Type'] = 'application/json'
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
 
-                 let files = this.$refs.qrcodeInput.files
+                let files = this.$refs.qrcodeInput.files
 
-                 if (!files.length) {
-                     console.log('no files');
-                     return false;
-                 }
-                 else {
+                if (!files.length) {
+                    console.log('no files');
+                    return false;
+                }
+                else {
                     console.log(files.length + ' file(s) found');
-                 }
+                }
 
                 let imgdata = new FormData();
 
@@ -151,16 +165,16 @@
                 axios.defaults.headers.common['Content-Type'] = 'application/json'
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
 
-                 let files = this.$refs.iconInput.files
+                let files = this.$refs.iconInput.files
 
-                 if (!files.length) {
-                     return false;
-                 }
+                if (!files.length) {
+                    return false;
+                }
 
-                 // clean possible already uploaded icon
-                 if( this.twofaccount.icon ) {
+                // clean possible already uploaded temp icon
+                if( this.tempIcon ) {
                     this.deleteIcon()
-                 }
+                }
 
                 let imgdata = new FormData();
 
@@ -174,7 +188,7 @@
 
                 axios.post('/api/icon/upload', imgdata, config).then(response => {
                         console.log('icon path > ', response);
-                        this.twofaccount.icon = response.data;
+                        this.tempIcon = response.data;
                     }
                 )
             },
@@ -186,11 +200,10 @@
                 axios.defaults.headers.common['Content-Type'] = 'application/json'
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
 
-                axios.delete('/api/icon/delete/' + this.twofaccount.icon.replace('storage/', '')).then(response => {
-                        this.twofaccount.icon = ''
+                axios.delete('/api/icon/delete/' + this.tempIcon).then(response => {
+                        this.tempIcon = ''
                     }
                 )
-                
             }
             
         },

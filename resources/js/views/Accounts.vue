@@ -4,7 +4,7 @@
             <div class="buttons are-large is-centered">
                 <span v-for="account in accounts" class="button is-black twofaccount" >
                     <span @click.stop="getAccount(account.id)">
-                        <img :src="account.icon" v-if="account.icon">
+                        <img :src="'storage/icons/' + account.icon" v-if="account.icon">
                         {{ account.service }}
                         <span class="is-family-primary is-size-7 has-text-grey">{{ account.account }}</span>
                     </span>
@@ -21,7 +21,7 @@
         </div>
         <div class="container has-text-centered" v-show="this.showNoAccount">
             <p>
-                <img class="bg" src="storage/bg.png">
+                <img class="bg" src="storage/img/bg.png">
             </p>
             <p class="subtitle is-5">
                 No 2FA here!

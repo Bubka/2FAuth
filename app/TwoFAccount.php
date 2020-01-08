@@ -28,7 +28,7 @@ class TwoFAccount extends Model
     public function getIconAttribute($value)
     {
 
-        if( !Storage::exists('public/' . pathinfo($value)['basename']) ) {
+        if( !Storage::exists('public/icons/' . pathinfo($value)['basename']) ) {
 
             return '';
         }
