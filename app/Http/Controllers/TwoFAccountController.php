@@ -118,18 +118,29 @@ class TwoFAccountController extends Controller
      * @param  \App\TwoFAccount  $twofaccount
      * @return \Illuminate\Http\Response
      */
-    public function destroy(TwoFAccount $twofaccount)
+    public function destroy($id)
     {
-        // delete icon
-        $storedIcon = 'public/icons/' . $twofaccount->icon;
+        try {
 
-        if( Storage::exists($storedIcon) ) {
-            Storage::delete($storedIcon);
+            $twofaccount = TwoFAccount::FindOrFail($id);
+
+            // delete icon
+            $storedIcon = 'public/icons/' . $twofaccount->icon;
+
+            if( Storage::exists($storedIcon) ) {
+                Storage::delete($storedIcon);
+            }
+
+            $twofaccount->delete();
+
+            return response()->json(null, 204);
+
         }
+        catch (\Exception $e) {
 
-        $twofaccount->delete();
+            return response()->json('already gone', 404);
 
-        return response()->json(null, 204);
+        }
     }
 
 }

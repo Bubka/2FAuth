@@ -169,12 +169,12 @@
                     axios.defaults.headers.common['Content-Type'] = 'application/json'
                     axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.token
 
-                    axios.delete('/api/twofaccounts/' + id).then(response => {
-                        this.accounts.splice(this.accounts.findIndex(x => x.id === id), 1);
+                    axios.delete('/api/twofaccounts/' + id)
 
-                        this.showAccounts = this.accounts.length > 0 ? true : false
-                        this.showNoAccount = !this.showAccounts
-                    })
+                    this.accounts.splice(this.accounts.findIndex(x => x.id === id), 1);
+
+                    this.showAccounts = this.accounts.length > 0 ? true : false
+                    this.showNoAccount = !this.showAccounts
                 }
             },
 
