@@ -42,22 +42,12 @@ class QrCodecontroller extends Controller
         // delete uploaded file
         Storage::delete($path);
 
-        if( empty($uri) ) {
-
-            return response()->json([
-                'error' => [
-                   'qrcode' => 'Nothing readable in this QR code 😕'
-                ]
-            ], 400);
-
-        }
-
         // Check uri validity
         if( !TimedTOTP::get($uri) ) {
 
             return response()->json([
                 'error' => [
-                   'uri' => 'This uri do not return any TOTP code 😕'
+                   'qrcode' => 'No valid TOTP resource in this QR code'
                 ]
             ], 400);
 

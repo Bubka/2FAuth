@@ -161,6 +161,7 @@
                     .catch(error => {
                         if (error.response.status === 400) {
                             this.errors = error.response.data.error
+                            this.clearTwofaccount()
                         }
                     });
             },
@@ -203,15 +204,26 @@
 
             deleteIcon(event) {
 
-                let token = localStorage.getItem('jwt')
+                if(this.tempIcon) {
+                    let token = localStorage.getItem('jwt')
 
-                axios.defaults.headers.common['Content-Type'] = 'application/json'
-                axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
+                    axios.defaults.headers.common['Content-Type'] = 'application/json'
+                    axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
 
-                axios.delete('/api/icon/delete/' + this.tempIcon).then(response => {
-                        this.tempIcon = ''
-                    }
-                )
+                    axios.delete('/api/icon/delete/' + this.tempIcon).then(response => {
+                            this.tempIcon = ''
+                        }
+                    )
+                }
+            },
+
+            clearTwofaccount() {
+                this.twofaccount.service = ''
+                this.twofaccount.account = ''
+                this.twofaccount.uri = ''
+                this.twofaccount.icon = ''
+
+                this.deleteIcon()
             }
             
         },
