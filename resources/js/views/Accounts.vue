@@ -50,10 +50,10 @@
                         <p class="control">
                             <a class="button is-dark is-rounded" @click="editMode = true" v-if="!editMode">Manage</a>
                             <a class="button is-success is-rounded" @click="editMode = false" v-if="editMode">
+                                <span>Done</span>
                                 <span class="icon is-small">
                                     <font-awesome-icon :icon="['fas', 'check']" />
                                 </span>
-                                <span>Done</span>
                             </a>
                         </p>
                     </div>
