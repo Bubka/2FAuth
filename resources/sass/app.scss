@@ -73,7 +73,7 @@ nav.level {
 .input, .select select, .textarea {
   background-color: hsl(0, 0%, 21%);
   border-color: hsl(0, 0%, 29%);
-  color: hsl(0, 0%, 71%);
+  color: hsl(0, 0%, 100%);
 }
 
 .select select::placeholder, .textarea::placeholder, .input::placeholder {
@@ -133,6 +133,11 @@ footer .field.is-grouped {
 
 .field.is-grouped:last-child {
   padding-top: 0.75rem;
+}
+
+.help-for-file {
+  margin-top: -0.50rem;
+  margin-bottom: 0.75rem;
 }
 
 .no-account {

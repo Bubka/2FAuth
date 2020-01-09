@@ -17,17 +17,20 @@
                             </label>
                         </div>
                     </div>
+                    <p class="help is-danger help-for-file" v-if="errors.qrcode">{{ errors.qrcode.toString() }}</p>
                     <div class="field">
                         <label class="label">Service</label>
                         <div class="control">
-                            <input class="input" type="text" placeholder="example.com" v-model="twofaccount.service" required autofocus />
+                            <input class="input" type="text" placeholder="example.com" v-model="twofaccount.service"  autofocus />
                         </div>
+                        <p class="help is-danger" v-if="errors.service">{{ errors.service.toString() }}</p>
                     </div>
                     <div class="field">
                         <label class="label">Account</label>
                         <div class="control">
                             <input class="input" type="text" placeholder="John DOE" v-model="twofaccount.account"  />
                         </div>
+                        <p class="help is-danger" v-if="errors.account">{{ errors.account.toString() }}</p>
                     </div>
                     <div class="field" style="margin-bottom: 0.5rem;">
                         <label class="label">TOTP Uri</label>
@@ -51,6 +54,7 @@
                             </a>
                         </div>
                     </div>
+                    <p class="help is-danger help-for-file" v-if="errors.uri">{{ errors.uri.toString() }}</p>
                     <div class="field">
                         <label class="label">Icon</label>
                         <div class="file is-dark">
@@ -69,6 +73,7 @@
                             </span>
                         </div>
                     </div>
+                    <p class="help is-danger help-for-file" v-if="errors.icon">{{ errors.icon.toString() }}</p>
                     <div class="field is-grouped">
                         <div class="control">
                             <button type="submit" class="button is-link">Create</button>
@@ -94,7 +99,8 @@
                     'icon' : ''
                 },
                 uriIsLocked: true,
-                tempIcon: ''
+                tempIcon: '',
+                errors: {}
             }
         },
 
@@ -110,9 +116,15 @@
                 axios.defaults.headers.common['Content-Type'] = 'application/json'
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
 
-                axios.post('/api/twofaccounts', this.twofaccount).then(response => {
+                axios.post('/api/twofaccounts', this.twofaccount)
+                .then(response => {
                     this.$router.push({name: 'accounts', params: { InitialEditMode: false }});
                 })
+                .catch(error => {
+                    if (error.response.status === 400) {
+                        this.errors = error.response.data.error
+                    }
+                });
             },
 
             cancelCreation: function() {
@@ -131,19 +143,9 @@
                 axios.defaults.headers.common['Content-Type'] = 'application/json'
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
 
-                let files = this.$refs.qrcodeInput.files
-
-                if (!files.length) {
-                    console.log('no files');
-                    return false;
-                }
-                else {
-                    console.log(files.length + ' file(s) found');
-                }
-
                 let imgdata = new FormData();
 
-                imgdata.append('qrcode', files[0]); 
+                imgdata.append('qrcode', this.$refs.qrcodeInput.files[0]); 
 
                 let config = {
                     header : {
@@ -151,11 +153,16 @@
                     }
                 }
 
-                axios.post('/api/qrcode/decode', imgdata, config).then(response => {
-                        console.log('image upload response > ', response);
+                axios.post('/api/qrcode/decode', imgdata, config)
+                    .then(response => {
                         this.twofaccount = response.data;
-                    }
-                )
+                        this.errors['qrcode'] = '';
+                    })
+                    .catch(error => {
+                        if (error.response.status === 400) {
+                            this.errors = error.response.data.error
+                        }
+                    });
             },
 
             uploadIcon(event) {
@@ -165,12 +172,6 @@
                 axios.defaults.headers.common['Content-Type'] = 'application/json'
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
 
-                let files = this.$refs.iconInput.files
-
-                if (!files.length) {
-                    return false;
-                }
-
                 // clean possible already uploaded temp icon
                 if( this.tempIcon ) {
                     this.deleteIcon()
@@ -178,7 +179,7 @@
 
                 let imgdata = new FormData();
 
-                imgdata.append('icon', files[0]); 
+                imgdata.append('icon', this.$refs.iconInput.files[0]); 
 
                 let config = {
                     header : {
@@ -186,11 +187,18 @@
                     }
                 }
 
-                axios.post('/api/icon/upload', imgdata, config).then(response => {
+                axios.post('/api/icon/upload', imgdata, config)
+                    .then(response => {
                         console.log('icon path > ', response);
                         this.tempIcon = response.data;
-                    }
-                )
+                        this.errors['icon'] = '';
+                    })
+                    .catch(error => {
+                        if (error.response.status === 400) {
+                            this.errors = error.response.data.error
+                        }
+                    });
+
             },
 
             deleteIcon(event) {

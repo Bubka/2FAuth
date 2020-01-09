@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Validator;
 use App\TwoFAccount;
 use OTPHP\TOTP;
 use OTPHP\Factory;
@@ -30,6 +31,22 @@ class TwoFAccountController extends Controller
      */
     public function store(Request $request)
     {
+
+        // see https://github.com/google/google-authenticator/wiki/Key-Uri-Format
+        // for otpauth uri format validation
+        $messages = [
+            'uri.starts_with' => 'Only valid TOTP uri are supported',
+        ];
+
+        $validator = Validator::make($request->all(), [
+            'service' => 'required',
+            'uri' => 'required|starts_with:otpauth://totp/',
+        ], $messages);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+
         $twofaccount = TwoFAccount::create([
             'service' => $request->service,
             'account' => $request->account,
