@@ -4,6 +4,7 @@ namespace App\Classes;
 
 use OTPHP\TOTP;
 use OTPHP\Factory;
+use Assert\AssertionFailedException;
 
 class TimedTOTP
 {
@@ -16,10 +17,11 @@ class TimedTOTP
      */
     public static function get($uri)
     {
+        
         try {
             $otp = Factory::loadFromProvisioningUri($uri);
         }
-        catch (InvalidArgumentException $exception) {
+        catch (AssertionFailedException $exception) {
             return false;
         }
 

@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use Validator;
-use Illuminate\Http\Request;
-use Illuminate\Http\File;
-use Illuminate\Support\Facades\Storage;
 use Zxing\QrReader;
-use App\TwoFAccount;
+use App\Classes\TimedTOTP;
+use Illuminate\Http\File;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class QrCodecontroller extends Controller
 {
@@ -39,6 +39,7 @@ class QrCodecontroller extends Controller
         $qrcode = new QrReader(storage_path('app/' . $path));
         $uri = urldecode($qrcode->text());
 
+        // delete uploaded file
         Storage::delete($path);
 
         if( empty($uri) ) {
@@ -46,6 +47,17 @@ class QrCodecontroller extends Controller
             return response()->json([
                 'error' => [
                    'qrcode' => 'Nothing readable in this QR code 😕'
+                ]
+            ], 400);
+
+        }
+
+        // Check uri validity
+        if( !TimedTOTP::get($uri) ) {
+
+            return response()->json([
+                'error' => [
+                   'uri' => 'This uri do not return any TOTP code 😕'
                 ]
             ], 400);
 
