@@ -7,16 +7,16 @@
                     <div class="field">
                         <label class="label">Email</label>
                         <div class="control">
-                            <input id="email" type="email" class="input" v-model="email" v-bind:class="{ 'is-danger' : emailMissing }" required autofocus />
+                            <input id="email" type="email" class="input" v-model="email" v-bind:class="{ 'is-danger' : errors.email }" required autofocus />
                         </div>
-                        <p class="help is-danger" v-if="emailMissing">Field required</p>
+                        <p class="help is-danger" v-if="errors.email">{{ errors.email.toString() }}</p>
                     </div>
                     <div class="field">
                         <label class="label">Password</label>
                         <div class="control">
-                            <input id="password" type="password" class="input" v-model="password" v-bind:class="{ 'is-danger' : passwordMissing }" required />
+                            <input id="password" type="password" class="input" v-model="password" v-bind:class="{ 'is-danger' : errors.password }" required />
                         </div>
-                        <p class="help is-danger" v-if="passwordMissing">Field required</p>
+                        <p class="help is-danger" v-if="errors.password">{{ errors.password.toString() }}</p>
                     </div>
                     <div class="field">
                         <div class="control">
@@ -24,10 +24,6 @@
                         </div>
                     </div>
                 </form>
-                <br />
-                <span class="tag is-danger" v-if="errorMessage">
-                    {{ errorMessage }}
-                </span>
             </div>
         </div>
         <div class="columns is-mobile is-centered">
@@ -45,44 +41,34 @@
         data(){
             return {
                 email : '',
-                emailMissing : false,
                 password : '',
-                passwordMissing : false,
-                errorMessage : '',
+                errors: {}
             }
         },
         methods : {
             handleSubmit(e){
                 e.preventDefault()
 
-                this.emailMissing = (this.email.length === 0) ? true : false;
-                this.passwordMissing = (this.password.length === 0) ? true : false;
+                axios.post('api/login', {
+                    email: this.email,
+                    password: this.password
+                })
+                .then(response => {
+                    localStorage.setItem('user',response.data.success.name)
+                    localStorage.setItem('jwt',response.data.success.token)
 
-                if (this.password.length > 0 && this.email.length > 0) {
-
-                    axios.post('api/login', {
-                        email: this.email,
-                        password: this.password
-                      })
-                      .then(response => {
-                        localStorage.setItem('user',response.data.success.name)
-                        localStorage.setItem('jwt',response.data.success.token)
-
-                        if (localStorage.getItem('jwt') != null){
-                            this.$router.go('/');
-                        }
-                      })
-                      .catch(e => {
-                        console.error(e);
-
-                        if (e.response.status === 401) {
-                            this.errorMessage = 'bad credential, please try again'
-                        }
-                        else {
-                            this.errorMessage = 'An error occured, please retry'
-                        }
-                      });
-                }
+                    if (localStorage.getItem('jwt') != null){
+                        this.$router.go('/');
+                    }
+                })
+                .catch(error => {
+                    if (error.response.status === 400) {
+                        this.errors = error.response.data.error
+                    }
+                    else {
+                        this.errors['password'] = [ 'Password do not match' ]
+                    }
+                });
             }
         },
         beforeRouteEnter (to, from, next) {

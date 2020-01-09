@@ -7,30 +7,30 @@
                     <div class="field">
                         <label class="label">Name</label>
                         <div class="control">
-                            <input id="name" type="email" class="input" v-model="name" v-bind:class="{ 'is-danger' : nameMissing }" required autofocus />
+                            <input id="name" type="text" class="input" v-model="name" v-bind:class="{ 'is-danger' : errors.name }" required autofocus />
                         </div>
-                        <p class="help is-danger" v-if="nameMissing">Field required</p>
+                        <p class="help is-danger" v-if="errors.name">{{ errors.name.toString() }}</p>
                     </div>
                     <div class="field">
                         <label class="label">Email</label>
                         <div class="control">
-                            <input id="email" type="email" class="input" v-model="email" v-bind:class="{ 'is-danger' : emailMissing }" required />
+                            <input id="email" type="email" class="input" v-model="email" v-bind:class="{ 'is-danger' : errors.email }" required />
                         </div>
-                        <p class="help is-danger" v-if="emailMissing">Field required</p>
+                        <p class="help is-danger" v-if="errors.email">{{ errors.email.toString() }}</p>
                     </div>
                     <div class="field">
                         <label class="label">Password</label>
                         <div class="control">
-                            <input id="password" type="password" class="input" v-model="password" v-bind:class="{ 'is-danger' : passwordMissing }" required />
+                            <input id="password" type="password" class="input" v-model="password" v-bind:class="{ 'is-danger' : errors.password }" required />
                         </div>
-                        <p class="help is-danger" v-if="passwordMissing">Field required</p>
+                        <p class="help is-danger" v-if="errors.password">{{ errors.password.toString() }}</p>
                     </div>
                     <div class="field">
                         <label class="label">Confirm Password</label>
                         <div class="control">
-                            <input id="password-confirm" type="password" class="input" v-model="password_confirmation" v-bind:class="{ 'is-danger' : passwordConfirmationMissing }" required />
+                            <input id="password_confirmation" type="password" class="input" v-model="password_confirmation" v-bind:class="{ 'is-danger' : errors.passwordConfirmation }" required />
                         </div>
-                        <p class="help is-danger" v-if="passwordConfirmationMissing">Field required</p>
+                        <p class="help is-danger" v-if="errors.passwordConfirmation">{{ errors.passwordConfirmation.toString() }}</p>
                     </div>
                     <div class="field">
                         <div class="control">
@@ -38,10 +38,6 @@
                         </div>
                     </div>
                 </form>
-                <br />
-                <span class="tag is-danger" v-if="errorMessage">
-                    {{ errorMessage }}
-                </span>
             </div>
         </div>
         <div class="columns is-mobile is-centered">
@@ -59,55 +55,37 @@
         data(){
             return {
                 name : '',
-                nameMissing : false,
                 email : '',
-                emailMissing : false,
                 password : '',
-                passwordMissing : false,
                 password_confirmation : '',
-                passwordConfirmationMissing : false,
-                errorMessage : '',
+                errors: {}
             }
         },
+
         methods : {
             handleSubmit(e) {
                 e.preventDefault()
 
-                this.nameMissing = (this.name.length === 0) ? true : false;
-                this.emailMissing = (this.email.length === 0) ? true : false;
-                this.passwordMissing = (this.password.length === 0) ? true : false;
-                this.passwordConfirmationMissing = (this.password_confirmation.length === 0) ? true : false;
+                axios.post('api/register', {
+                    name: this.name,
+                    email: this.email,
+                    password: this.password,
+                    password_confirmation : this.password_confirmation
+                })
+                .then(response => {
+                    localStorage.setItem('user',response.data.success.name)
+                    localStorage.setItem('jwt',response.data.success.token)
 
-                if( this.nameMissing || this.emailMissing || this.passwordMissing || this.passwordConfirmationMissing ) {
-                    return false;
-                }
-
-                if (this.password === this.password_confirmation && this.password.length > 0)
-                {
-                    axios.post('api/register', {
-                        name: this.name,
-                        email: this.email,
-                        password: this.password,
-                        c_password : this.password_confirmation
-                      })
-                      .then(response => {
-                        localStorage.setItem('user',response.data.success.name)
-                        localStorage.setItem('jwt',response.data.success.token)
-
-                        if (localStorage.getItem('jwt') != null){
-                            this.$router.go('/');
-                        }
-                      })
-                      .catch(error => {
-                        console.error(error);
-                        this.errorMessage = error.message
-                      });
-                } else {
-                    this.errorMessage = 'Passwords do not match'
-                    return false;
-                }
+                    if (localStorage.getItem('jwt') != null){
+                        this.$router.go('/');
+                    }
+                })
+                .catch(error => {
+                    this.errors = error.response.data.error
+                });
             }
         },
+
         beforeRouteEnter (to, from, next) {
             if (localStorage.getItem('jwt')) {
                 return next('/');

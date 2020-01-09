@@ -15,8 +15,22 @@ class UserController extends Controller
      * log a user in
      * @return [type] [description]
      */
-    public function login()
+    public function login(Request $request)
     {
+
+        $messages = [
+            'email.exists' => 'No account found using this email',
+        ];
+
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|exists:users,email',
+            'password' => 'required',
+        ], $messages);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+
         $credentials = [
             'email' => request('email'),
             'password' => request('password')
@@ -57,7 +71,7 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'email' => 'required|email',
-            'password' => 'required',
+            'password' => 'required|confirmed',
         ]);
 
         if ($validator->fails()) {
