@@ -6,6 +6,7 @@ use Validator;
 use App\TwoFAccount;
 use OTPHP\TOTP;
 use OTPHP\Factory;
+use App\Classes\TimedTOTP;
 use Illuminate\Http\Request;
 use ParagonIE\ConstantTime\Base32;
 use Illuminate\Support\Facades\Storage;
@@ -78,25 +79,8 @@ class TwoFAccountController extends Controller
      */
     public function generateTOTP(TwoFAccount $twofaccount)
     {
-        try {
-            $otp = Factory::loadFromProvisioningUri($twofaccount->uri);
-        } catch (InvalidArgumentException $exception) {
-            return response()->json([
-                'message' => 'Error generating TOTP',
-            ], 500);
-        }
 
-        $currentPosition = time();
-        $PeriodCount = floor($currentPosition / 30); //nombre de période de 30s depuis T0
-        $currentPeriodStartAt = $PeriodCount * 30;
-        $currentPeriodendAt = $currentPeriodStartAt + 30;
-        $positionInCurrentPeriod = $currentPosition - $currentPeriodStartAt;
-
-
-        return response()->json([
-                'totp' => $otp->now(),
-                'position' => $positionInCurrentPeriod
-            ], 200);
+        return response()->json(TimedTOTP::get($twofaccount->uri), 200);
 
     }
 
