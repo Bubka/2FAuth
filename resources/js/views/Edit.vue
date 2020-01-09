@@ -7,14 +7,16 @@
                     <div class="field">
                         <label class="label">Service</label>
                         <div class="control">
-                            <input class="input" type="text" placeholder="example.com" v-model="twofaccount.service" required autofocus />
+                            <input class="input" type="text" placeholder="example.com" v-model="twofaccount.service" autofocus />
                         </div>
+                        <p class="help is-danger" v-if="errors.service">{{ errors.service.toString() }}</p>
                     </div>
                     <div class="field">
                         <label class="label">Account</label>
                         <div class="control">
                             <input class="input" type="text" placeholder="John DOE" v-model="twofaccount.account" />
                         </div>
+                        <p class="help is-danger" v-if="errors.account">{{ errors.account.toString() }}</p>
                     </div>
                     <div class="field">
                         <label class="label">Icon</label>
@@ -34,6 +36,7 @@
                             </span>
                         </div>
                     </div>
+                    <p class="help is-danger help-for-file" v-if="errors.icon">{{ errors.icon.toString() }}</p>
                     <div class="field is-grouped">
                         <div class="control">
                             <button type="submit" class="button is-link">Save</button>
@@ -58,7 +61,8 @@
                     'uri' : '',
                     'icon' : ''
                 },
-                tempIcon: ''
+                tempIcon: '',
+                errors: {}
             }
         },
 
@@ -100,9 +104,15 @@
                 axios.defaults.headers.common['Content-Type'] = 'application/json'
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
 
-                axios.put('/api/twofaccounts/' + this.$route.params.twofaccountId, this.twofaccount).then(response => {
+                axios.put('/api/twofaccounts/' + this.$route.params.twofaccountId, this.twofaccount)
+                .then(response => {
                     this.$router.push({name: 'accounts', params: { InitialEditMode: true }});
                 })
+                .catch(error => {
+                    if (error.response.status === 400) {
+                        this.errors = error.response.data.error
+                    }
+                });
             },
 
             cancelCreation: function() {
@@ -121,20 +131,14 @@
                 axios.defaults.headers.common['Content-Type'] = 'application/json'
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
 
-                let files = this.$refs.iconInput.files
-
-                if (!files.length) {
-                    return false;
-                }
-
                 // clean possible tempIcon but keep original one
-                if( this.tempIcon && this.tempIcon !== this.twofaccount.icon ) {
+                // if( this.tempIcon && this.tempIcon !== this.twofaccount.icon ) {
                     this.deleteIcon()
-                }
+                // }
 
                 let imgdata = new FormData();
 
-                imgdata.append('icon', files[0]); 
+                imgdata.append('icon', this.$refs.iconInput.files[0]); 
 
                 let config = {
                     header : {
@@ -142,22 +146,29 @@
                     }
                 }
 
-                axios.post('/api/icon/upload', imgdata, config).then(response => {
+                axios.post('/api/icon/upload', imgdata, config)
+                    .then(response => {
                         console.log('icon path > ', response);
                         this.tempIcon = response.data;
-                    }
-                )
+                        this.errors['icon'] = '';
+                    })
+                    .catch(error => {
+                        if (error.response.status === 400) {
+                            this.errors = error.response.data.error
+                        }
+                    });
             },
 
             deleteIcon(event) {
 
-                if( this.tempIcon !== this.twofaccount.icon ) {
+                if( this.tempIcon && this.tempIcon !== this.twofaccount.icon ) {
                     let token = localStorage.getItem('jwt')
 
                     axios.defaults.headers.common['Content-Type'] = 'application/json'
                     axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
 
-                    axios.delete('/api/icon/delete/' + this.tempIcon).then(response => {
+                    axios.delete('/api/icon/delete/' + this.tempIcon)
+                        .then(response => {
                             this.tempIcon = ''
                         }
                     )

@@ -92,6 +92,15 @@ class TwoFAccountController extends Controller
      */
     public function update(Request $request, TwoFAccount $twofaccount)
     {
+
+        $validator = Validator::make($request->all(), [
+            'service' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+
         $twofaccount->update($request->all());
 
         return response()->json($twofaccount, 200);
