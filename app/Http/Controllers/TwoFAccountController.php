@@ -63,9 +63,14 @@ class TwoFAccountController extends Controller
      * @param  \App\TwoFAccount  $twofaccount
      * @return \Illuminate\Http\Response
      */
-    public function show(TwoFAccount $twofaccount)
+    public function show($id)
     {
-        return response()->json($twofaccount, 200);
+        try {
+            $twofaccount = TwoFAccount::FindOrFail($id);
+            return response()->json($twofaccount, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error'=>'not found'], 404);
+        }
     }
 
 

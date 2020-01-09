@@ -9,6 +9,7 @@ import Register     from './views/Register'
 import Accounts     from './views/Accounts'
 import Create       from './views/Create'
 import Edit         from './views/Edit'
+import NotFound     from './views/NotFound'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faPlus, faQrcode, faImage, faTrash, faEdit, faCheck, faLock, faLockOpen } from '@fortawesome/free-solid-svg-icons'
@@ -46,6 +47,11 @@ const router = new VueRouter({
             path: '/edit/:twofaccountId',
             name: 'edit',
             component: Edit,
+        },
+        {
+            path: '/404',
+            name: '404',
+            component: NotFound,
         },
     ],
 });

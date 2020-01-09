@@ -1,5 +1,5 @@
 <template>
-    <div class="section">
+    <div class="section" v-if="twofaccountExists">
         <div class="columns is-mobile is-centered">
             <div class="column is-two-thirds-tablet is-half-desktop is-one-third-widescreen is-one-quarter-fullhd">
                 <h1 class="title">Edit account</h1>
@@ -61,12 +61,13 @@
                     'uri' : '',
                     'icon' : ''
                 },
+                twofaccountExists: false,
                 tempIcon: '',
                 errors: {}
             }
         },
 
-        created: function(){
+        created: function() {
             this.getAccount();
         },
 
@@ -79,10 +80,16 @@
 
                 axios.get('/api/twofaccounts/' + this.$route.params.twofaccountId).then(response => {
                     this.twofaccount = response.data
+                    this.twofaccountExists = true
 
                     // set account icon as temp icon
                     this.tempIcon = this.twofaccount.icon
                 })
+                .catch(error => {
+                    if (error.response.status === 404) {
+                        this.$router.push({name: '404' });
+                    }
+                });
             },
 
             updateAccount: function() {

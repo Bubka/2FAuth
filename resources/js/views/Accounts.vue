@@ -35,11 +35,6 @@
                 <one-time-password ref="OneTimePassword"></one-time-password>
             </twofaccount-show>
         </modal>
-        <modal v-model="ShowNoTwofaccountInModal">
-            <div>
-                resource not found, please <a @click="()=>{this.$router.go()}" class="is-text has-text-white">refresh</a>
-            </div>
-        </modal>
         <footer class="has-background-black-ter">
             <div class="columns is-gapless" v-if="this.accounts.length > 0">
                 <div class="column has-text-centered">
@@ -92,7 +87,6 @@
             return {
                 accounts : [],
                 ShowTwofaccountInModal : false,
-                ShowNoTwofaccountInModal : false,
                 twofaccount: {},
                 token : null,
                 username : null,
@@ -163,7 +157,9 @@
 
                 })
                 .catch(error => {
-                    this.ShowNoTwofaccountInModal = true;
+                    if (error.response.status === 404) {
+                        this.$router.push({name: '404' });
+                    }
                 });  
             },
 
