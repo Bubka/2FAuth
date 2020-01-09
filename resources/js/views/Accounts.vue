@@ -20,9 +20,7 @@
             </div>
         </div>
         <div class="container has-text-centered" v-show="this.showNoAccount">
-            <p>
-                <img class="bg" src="storage/img/bg.png">
-            </p>
+            <p class="no-account"></p>
             <p class="subtitle is-5">
                 No 2FA here!
             </p>
