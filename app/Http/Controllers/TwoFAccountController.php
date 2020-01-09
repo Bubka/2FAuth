@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use Validator;
 use App\TwoFAccount;
-use OTPHP\TOTP;
-use OTPHP\Factory;
 use App\Classes\TimedTOTP;
 use Illuminate\Http\Request;
 use ParagonIE\ConstantTime\Base32;
