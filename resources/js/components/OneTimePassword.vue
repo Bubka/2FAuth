@@ -18,19 +18,8 @@
                 AccountId : null
             }
         },
-        //props: ['AccountId'],
-        // watch: {
-        //     AccountId: function(newVal, oldVal) {
-        //         this.getOTP()
-        //     }
-        // },
         methods: {
             getOTP: function () {
-
-                // if( !this.$props.AccountId ) {
-                //     console.log("AccountId is undefined")
-                //     return
-                // }
 
                 let token = localStorage.getItem('jwt')
 
@@ -42,7 +31,6 @@
                     this.position = response.data.position;
 
                     let dots = this.$el.querySelector('.dots');
-                    //let lastdot = dots.querySelector('li:last-child');
 
                     // clear active dots
                     while (dots.querySelector('[data-is-active]')) {
@@ -53,20 +41,11 @@
                     let active = dots.querySelector('li:nth-child(' + (this.position + 1 ) + ')');
                     active.setAttribute('data-is-active', true);
 
-                    // if (active === null) {
-                    //     this.$el.querySelector('.dots li:first-child').setAttribute('data-is-active', true);
-                    //     active = dots.querySelector('[data-is-active]');
-                    // }
-
                     let self = this;
 
                     this.timerID = setInterval(function() {
 
                         let sibling = active.nextSibling;
-
-                        // axios.get('api/twofaccounts/' + self.AccountId + '/totp').then(response => {
-                            // console.log(response.data.totp.substr(0, 3) + " " + response.data.totp.substr(3))
-                            // console.log(response.data.position);
 
                             if(active.nextSibling === null) {
                                 console.log('no more sibling to activate, we refresh the TOTP')
@@ -79,8 +58,6 @@
                                 sibling.setAttribute('data-is-active', true);
                                 active = sibling
                             }
-                        // })
-
 
                     }, 1000);
                 })
