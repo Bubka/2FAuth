@@ -183,15 +183,13 @@
                     axios.post('api/logout').then(response => {
 
                         localStorage.removeItem('jwt');
+                        localStorage.removeItem('user');
                         delete axios.defaults.headers.common['Authorization'];
 
                         this.$router.go('/login');
                     })
                     .catch(error => {
-                        localStorage.removeItem('jwt');
-                        delete axios.defaults.headers.common['Authorization'];
-
-                        this.$router.go('/login');
+                        this.$router.push({ name: 'error' });
                     });       
                 }
             }
