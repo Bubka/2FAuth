@@ -7,8 +7,12 @@ use Illuminate\Support\Facades\Storage;
 
 class TwoFAccount extends Model
 {
-
-        protected $fillable = ['service', 'account', 'uri', 'icon'];
+    /**
+     * model's array form.
+     *
+     * @var array
+     */
+    protected $fillable = ['service', 'account', 'uri', 'icon'];
 
 
     /**
@@ -27,10 +31,11 @@ class TwoFAccount extends Model
      */
     public function getIconAttribute($value)
     {
+        if (\App::environment('testing') == false) {
+            if( !Storage::exists('public/icons/' . pathinfo($value)['basename']) ) {
 
-        if( !Storage::exists('public/icons/' . pathinfo($value)['basename']) ) {
-
-            return '';
+                return '';
+            }
         }
 
         return $value;

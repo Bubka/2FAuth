@@ -22,5 +22,6 @@ $factory->define(TwoFAccount::class, function (Faker $faker) {
         'service' => $faker->unique()->domainName,
         'account' => $faker->safeEmail,
         'uri' => 'otpauth://totp/' . $faker->email . '?secret=' . $faker->regexify('[A-Z0-9]{16}') . '&issuer=test',
+        'icon' => '',
     ];
 });

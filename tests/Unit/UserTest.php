@@ -35,12 +35,49 @@ class UserTest extends TestCase
             'name' => 'testCreate',
             'email' => 'testCreate@example.org',
             'password' => 'test',
+            'password_confirmation' => 'test',
         ]);
 
         $response->assertStatus(200)
             ->assertJsonStructure([
                 'success' => ['token', 'name']
             ]);
+    }
+
+
+    /**
+     * test User creation with missing values via API
+     *
+     * @test
+     */
+    public function testUserCreationWithMissingValues()
+    {
+        $response = $this->json('POST', '/api/register', [
+            'name' => '',
+            'email' => '',
+            'password' => '',
+            'password_confirmation' => '',
+        ]);
+
+        $response->assertStatus(400);
+    }
+
+
+    /**
+     * test User creation with invalid values via API
+     *
+     * @test
+     */
+    public function testUserCreationWithInvalidData()
+    {
+        $response = $this->json('POST', '/api/register', [
+            'name' => 'testInvalid',
+            'email' => 'email',
+            'password' => 'test',
+            'password_confirmation' => 'tset',
+        ]);
+
+        $response->assertStatus(400);
     }
 
 
@@ -59,6 +96,41 @@ class UserTest extends TestCase
         $response->assertStatus(200)
             ->assertJsonStructure([
                 'success' => ['token']
+            ]);
+    }
+
+
+    /**
+     * test User login with missing values via API
+     *
+     * @test
+     */
+    public function testUserLoginWithMissingValues()
+    {
+        $response = $this->json('POST', '/api/login', [
+            'email' => '',
+            'password' => ''
+        ]);
+
+        $response->assertStatus(400);
+    }
+
+
+    /**
+     * test User login with invalid credentials via API
+     *
+     * @test
+     */
+    public function testUserLoginWithInvalidCredential()
+    {
+        $response = $this->json('POST', '/api/login', [
+            'email' => $this->user->email,
+            'password' => 'badPassword'
+        ]);
+
+        $response->assertStatus(401)
+            ->assertJson([
+                'error' => 'Unauthorised'
             ]);
     }
 

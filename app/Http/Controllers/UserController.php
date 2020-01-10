@@ -40,7 +40,7 @@ class UserController extends Controller
             $success['token'] = Auth::user()->createToken('MyApp')->accessToken;
             $success['name'] = Auth::user()->name;
 
-            return response()->json(['success' => $success]);
+            return response()->json(['success' => $success], 200);
         }
 
         return response()->json(['error' => 'Unauthorised'], 401);
@@ -75,7 +75,7 @@ class UserController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 401);
+            return response()->json(['error' => $validator->errors()], 400);
         }
 
         $input = $request->all();

@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use App\User;
 use Tests\TestCase;
 use App\TwoFAccount;
+use Illuminate\Support\Facades\Storage;
 
 class TwoFAccountTest extends TestCase
 {
@@ -24,6 +25,48 @@ class TwoFAccountTest extends TestCase
 
 
     /**
+     * test TwoFAccount display via API
+     *
+     * @test
+     */
+    public function testTwoFAccountDisplay()
+    {
+        Storage::put('test.png', 'emptied to prevent missing resource replaced by null by the model getter');
+
+        $twofaccount = factory(TwoFAccount::class)->create([
+            'service' => 'testTOTP',
+            'account' => 'test@test.com',
+            'uri' => 'otpauth://totp/test@test.com?secret=A4GRFHVVRBGY7UIW&issuer=test',
+            'icon' => 'test.png',
+        ]);
+
+
+        $response = $this->actingAs($this->user, 'api')
+            ->json('GET', '/api/twofaccounts/' . $twofaccount->id)
+            ->assertStatus(200)
+            ->assertJson([
+                'service' => 'testTOTP',
+                'account' => 'test@test.com',
+                'uri' => 'otpauth://totp/test@test.com?secret=A4GRFHVVRBGY7UIW&issuer=test',
+                'icon' => 'test.png',
+            ]);
+    }
+
+
+    /**
+     * test missing TwoFAccount display via API
+     *
+     * @test
+     */
+    public function testMissingTwoFAccountDisplay()
+    {
+        $response = $this->actingAs($this->user, 'api')
+            ->json('GET', '/api/twofaccounts/1000')
+            ->assertStatus(404);
+    }
+
+
+    /**
      * test TwoFAccount creation via API
      *
      * @test
@@ -34,14 +77,52 @@ class TwoFAccountTest extends TestCase
             ->json('POST', '/api/twofaccounts', [
                     'service' => 'testCreation',
                     'account' => 'test@example.org',
-                    'uri' => 'test',
+                    'uri' => 'otpauth://totp/test@test.com?secret=A4GRFHZVRBGY7UIW&issuer=test',
+                    'icon' => 'test.png',
                 ])
             ->assertStatus(201)
             ->assertJson([
                 'service' => 'testCreation',
                 'account' => 'test@example.org',
-                'uri' => 'test',
+                'uri' => 'otpauth://totp/test@test.com?secret=A4GRFHZVRBGY7UIW&issuer=test',
+                'icon' => 'test.png',
             ]);
+    }
+
+
+    /**
+     * test TwoFAccount creation when fiels are empty via API
+     *
+     * @test
+     */
+    public function testTwoFAccountCreationWithEmptyRequest()
+    {
+        $response = $this->actingAs($this->user, 'api')
+            ->json('POST', '/api/twofaccounts', [
+                    'service' => '',
+                    'account' => '',
+                    'uri' => '',
+                    'icon' => '',
+                ])
+            ->assertStatus(400);
+    }
+
+
+    /**
+     * test TwoFAccount creation with an invalid TOTP uri via API
+     *
+     * @test
+     */
+    public function testTwoFAccountCreationWithInvalidTOTP()
+    {
+        $response = $this->actingAs($this->user, 'api')
+            ->json('POST', '/api/twofaccounts', [
+                    'service' => 'testCreation',
+                    'account' => 'test@example.org',
+                    'uri' => 'invalidTOTP',
+                    'icon' => 'test.png',
+                ])
+            ->assertStatus(400);
     }
 
 
@@ -81,6 +162,7 @@ class TwoFAccountTest extends TestCase
                     'service' => 'testUpdate',
                     'account' => 'testUpdate@test.com',
                     'uri' => 'testUpdate',
+                    'icon' => 'testUpdate.png',
                 ])
             ->assertStatus(200)
             ->assertJson([
@@ -88,8 +170,27 @@ class TwoFAccountTest extends TestCase
                 'service' => 'testUpdate',
                 'account' => 'testUpdate@test.com',
                 'uri' => 'testUpdate',
-                'icon' => null,
+                'icon' => 'testUpdate.png',
             ]);
+    }
+
+
+    /**
+     * test TwoFAccount update via API
+     *
+     * @test
+     */
+    public function testTwoFAccountUpdateOfMissingTwoFAccount()
+    {
+        $twofaccount = factory(TwoFAccount::class)->create();
+        $id = $twofaccount->id;
+        $twofaccount->delete();
+
+        $response = $this->actingAs($this->user, 'api')
+            ->json('PUT', '/api/twofaccounts/' . $id, [
+                    'service' => 'testUpdate'
+                ])
+            ->assertStatus(404);
     }
 
 
@@ -105,6 +206,7 @@ class TwoFAccountTest extends TestCase
         $response = $this->actingAs($this->user, 'api')
             ->json('GET', '/api/twofaccounts')
             ->assertStatus(200)
+            ->assertJsonCount(3, $key = null)
             ->assertJsonStructure([
                 '*' => [
                     'id',
