@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Validator;
 use Zxing\QrReader;
-use App\Classes\TimedTOTP;
+use OTPHP\TOTP;
+use OTPHP\Factory;
+use Assert\AssertionFailedException;
 use Illuminate\Http\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -37,13 +39,35 @@ class QrCodecontroller extends Controller
         // qrcode analysis
         $path = $request->file('qrcode')->store('qrcodes');
         $qrcode = new QrReader(storage_path('app/' . $path));
+
         $uri = urldecode($qrcode->text());
 
         // delete uploaded file
         Storage::delete($path);
 
-        // Check uri validity
-        if( !TimedTOTP::get($uri) ) {
+        // return the OTP object
+        try {
+
+            $otp = Factory::loadFromProvisioningUri($uri);
+
+            if(!$otp->getIssuer()) {
+                $otp->setIssuer($otp->getLabel());
+                $otp->setLabel('');
+            }
+
+            // returned object
+            $twofaccount = (object) array(
+                'service' => $otp->getIssuer(),
+                'account' => $otp->getLabel(),
+                'uri' => $uri,
+                'icon' => '',
+                'options' => $otp->getParameters()
+            );
+
+            return response()->json($twofaccount, 200);
+
+        }
+        catch (AssertionFailedException $exception) {
 
             return response()->json([
                 'error' => [
@@ -52,44 +76,6 @@ class QrCodecontroller extends Controller
             ], 400);
 
         }
-
-        $uriChunks = explode('?', $uri);
-
-        foreach(explode('&', $uriChunks[1]) as $option) {
-            $option = explode('=', $option);
-            $options[$option[0]] = $option[1];
-        }
-
-        $account = $service = '';
-
-        $serviceChunks = explode(':', str_replace('otpauth://totp/', '', $uriChunks[0]));
-
-        if( count($serviceChunks) > 1 ) {
-            $account = $serviceChunks[1];
-        }
-
-        $service = $serviceChunks[0];
-
-        if( strstr( $service, '@') ) {
-            $account = $service;
-            $service = '';
-        }
-
-        if( empty($service) & !empty($options['issuer']) ) {
-            $service = $options['issuer'];
-        }
-
-
-        // returned object
-        $twofaccount = (object) array(
-            'service' => $service,
-            'account' => $account,
-            'uri' => $uri,
-            'icon' => '',
-            'options' => $options
-        );
-
-        return response()->json($twofaccount, 201);
     }
     
 }
