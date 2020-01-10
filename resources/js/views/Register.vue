@@ -7,28 +7,28 @@
                     <div class="field">
                         <label class="label">Name</label>
                         <div class="control">
-                            <input id="name" type="text" class="input" v-model="name" v-bind:class="{ 'is-danger' : errors.name }" required autofocus />
+                            <input id="name" type="text" class="input" v-model="name" required autofocus />
                         </div>
                         <p class="help is-danger" v-if="errors.name">{{ errors.name.toString() }}</p>
                     </div>
                     <div class="field">
                         <label class="label">Email</label>
                         <div class="control">
-                            <input id="email" type="email" class="input" v-model="email" v-bind:class="{ 'is-danger' : errors.email }" required />
+                            <input id="email" type="email" class="input" v-model="email" required />
                         </div>
                         <p class="help is-danger" v-if="errors.email">{{ errors.email.toString() }}</p>
                     </div>
                     <div class="field">
                         <label class="label">Password</label>
                         <div class="control">
-                            <input id="password" type="password" class="input" v-model="password" v-bind:class="{ 'is-danger' : errors.password }" required />
+                            <input id="password" type="password" class="input" v-model="password" required />
                         </div>
                         <p class="help is-danger" v-if="errors.password">{{ errors.password.toString() }}</p>
                     </div>
                     <div class="field">
                         <label class="label">Confirm Password</label>
                         <div class="control">
-                            <input id="password_confirmation" type="password" class="input" v-model="password_confirmation" v-bind:class="{ 'is-danger' : errors.passwordConfirmation }" required />
+                            <input id="password_confirmation" type="password" class="input" v-model="password_confirmation" required />
                         </div>
                         <p class="help is-danger" v-if="errors.passwordConfirmation">{{ errors.passwordConfirmation.toString() }}</p>
                     </div>

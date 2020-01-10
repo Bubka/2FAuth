@@ -2,7 +2,7 @@
     <div>
         <div class="container" v-if="this.showAccounts">
             <div class="buttons are-large is-centered">
-                <span v-for="account in accounts" class="button is-black twofaccount" >
+                <span v-for="account in accounts" class="button is-black has-background-black-bis twofaccount" >
                     <span @click.stop="getAccount(account.id)">
                         <img :src="'storage/icons/' + account.icon" v-if="account.icon">
                         {{ account.service }}
@@ -21,7 +21,7 @@
         </div>
         <div class="container has-text-centered" v-show="this.showNoAccount">
             <p class="no-account"></p>
-            <p class="subtitle is-5">
+            <p class="subtitle is-5 has-text-grey">
                 No 2FA here!
             </p>
             <router-link :to="{ name: 'create' }" class="button is-medium is-link is-focused">Add one</router-link>
@@ -61,7 +61,7 @@
             </div>
             <div class="content has-text-centered">
                 <span v-if="token">
-                    Hi {{username}} ! <a @click="logout">Sign out</a>
+                    Hi {{username}} ! <a class="has-text-grey" @click="logout">Sign out</a>
                 </span>
                 <span v-else>
                     <router-link :to="{ name: 'login' }" class="button is-black">

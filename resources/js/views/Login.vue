@@ -7,14 +7,14 @@
                     <div class="field">
                         <label class="label">Email</label>
                         <div class="control">
-                            <input id="email" type="email" class="input" v-model="email" v-bind:class="{ 'is-danger' : errors.email }" required autofocus />
+                            <input id="email" type="email" class="input" v-model="email" required autofocus />
                         </div>
                         <p class="help is-danger" v-if="errors.email">{{ errors.email.toString() }}</p>
                     </div>
                     <div class="field">
                         <label class="label">Password</label>
                         <div class="control">
-                            <input id="password" type="password" class="input" v-model="password" v-bind:class="{ 'is-danger' : errors.password }" required />
+                            <input id="password" type="password" class="input" v-model="password" required />
                         </div>
                         <p class="help is-danger" v-if="errors.password">{{ errors.password.toString() }}</p>
                     </div>
