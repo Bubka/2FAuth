@@ -95,7 +95,7 @@ class TwoFAccountController extends Controller
      * @param  \App\TwoFAccount  $twofaccount
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, TwoFAccount $twofaccount)
+    public function update(Request $request, $id)
     {
 
         $validator = Validator::make($request->all(), [
@@ -106,9 +106,20 @@ class TwoFAccountController extends Controller
             return response()->json(['error' => $validator->errors()], 400);
         }
 
-        $twofaccount->update($request->all());
 
-        return response()->json($twofaccount, 200);
+        try {
+
+            $twofaccount = TwoFAccount::FindOrFail($id);
+            $twofaccount->update($request->all());
+
+            return response()->json($twofaccount, 200);
+
+        }
+        catch (\Exception $e) {
+
+            return response()->json(['error'=>'not found'], 404);
+
+        }
     }
 
 

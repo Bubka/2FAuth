@@ -119,6 +119,9 @@
                     if (error.response.status === 400) {
                         this.errors = error.response.data.error
                     }
+                    else if (error.response.status === 404) {
+                        this.$router.push({name: '404' });
+                    }
                 });
             },
 
