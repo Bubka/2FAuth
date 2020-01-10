@@ -9,6 +9,13 @@
                 <p class="error-generic"></p>
                 <p>An error occured, please <router-link :to="{ name: 'accounts' }" class="is-text has-text-white">refresh</router-link></p>
             </div>
+            <div v-if="debugMode == 'development'">
+                <p class="debug">
+                    <code>
+                        {{ debug }}
+                    </code>
+                </p>
+            </div>
         </modal>
     </div>
 </template>
@@ -20,9 +27,18 @@
     export default {
         data(){
             return {
-                ShowModal : true
+                ShowModal : true,
+                debug : this.err.data,
             }
         },
+
+        computed: {
+            debugMode: function() {
+                return process.env.NODE_ENV
+            }
+        },
+
+        props: ['err'],
 
         components: {
             Modal

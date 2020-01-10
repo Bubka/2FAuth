@@ -51,12 +51,14 @@ const router = new VueRouter({
         {
             path: '/404',
             name: '404',
-            component: NotFound
+            component: NotFound,
+            props: true
         },
         {
             path: '/error',
             name: 'GenericError',
-            component: NotFound
+            component: NotFound,
+            props: true
         },
     ],
 });

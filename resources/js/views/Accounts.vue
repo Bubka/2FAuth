@@ -158,7 +158,7 @@
                 })
                 .catch(error => {
                     if (error.response.status === 404) {
-                        this.$router.push({name: '404' });
+                        this.$router.push({name: '404', params: { err : error.response }});
                     }
                 });  
             },
