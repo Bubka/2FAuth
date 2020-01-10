@@ -87,7 +87,7 @@
                 })
                 .catch(error => {
                     if (error.response.status === 404) {
-                        this.$router.push({name: '404' });
+                        this.$router.push({ name: '404' });
                     }
                 });
             },
@@ -120,7 +120,7 @@
                         this.errors = error.response.data.error
                     }
                     else if (error.response.status === 404) {
-                        this.$router.push({name: '404' });
+                        this.$router.push({ name: '404' });
                     }
                 });
             },
