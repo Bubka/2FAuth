@@ -18,6 +18,7 @@
                 AccountId : null
             }
         },
+
         methods: {
             getOTP: function () {
 
@@ -27,7 +28,9 @@
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
 
                 axios.get('api/twofaccounts/' + this.AccountId + '/totp').then(response => {
-                    this.totp = response.data.totp.substr(0, 3) + " " + response.data.totp.substr(3);
+                    let spacePosition = Math.ceil(response.data.totp.length / 2);
+                    
+                    this.totp = response.data.totp.substr(0, spacePosition) + " " + response.data.totp.substr(spacePosition);
                     this.position = response.data.position;
 
                     let dots = this.$el.querySelector('.dots');
