@@ -26,10 +26,13 @@ class TimedTOTP
         }
 
         $currentPosition = time();
-        $PeriodCount = floor($currentPosition / 30); //nombre de période de 30s depuis T0
-        $currentPeriodStartAt = $PeriodCount * 30;
-        $currentPeriodendAt = $currentPeriodStartAt + 30;
+        $PeriodCount = floor($currentPosition / $otp->getPeriod()); //nombre de période de x s depuis T0 (x=30 par défaut)
+        $currentPeriodStartAt = $PeriodCount * $otp->getPeriod();
         $positionInCurrentPeriod = $currentPosition - $currentPeriodStartAt;
+
+        // for memo :
+        // $nextOtpAt = ($PeriodCount+1)*$period
+        // $remainingTime = $nextOtpAt - time()
 
         $totp = [
             'totp' => $otp->now(),
