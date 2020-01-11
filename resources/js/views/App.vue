@@ -1,5 +1,5 @@
 <template>
-    <div class="section">
+    <div class="section main-section">
         <main class="py-4">
             <router-view></router-view>
         </main>

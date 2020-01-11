@@ -8,6 +8,10 @@
 //@import '~bootstrap/scss/bootstrap';
 @import '~bulma/bulma';
 
+.main-section {
+  padding: 1.5rem 1.5rem 8rem 1.5rem;
+}
+
 nav.level {
     padding: 0 20px;
     /*postion: fixed;*/
@@ -102,6 +106,14 @@ nav.level {
 
 .label {
   color: hsl(0, 0%, 48%);
+}
+
+.control.has-icons-left .icon, .control.has-icons-right .icon {
+  color: inherit;
+}
+
+.is-search {
+  border-color: hsl(0, 0%, 21%);
 }
 
 .modal .field.is-grouped:last-child {

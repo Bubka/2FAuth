@@ -1,8 +1,21 @@
 <template>
     <div>
         <div class="container" v-if="this.showAccounts">
+            <div class="columns is-gapless is-mobile is-centered">
+                <div class="column is-three-quarters-mobile is-one-third-tablet is-one-quarter-desktop is-one-quarter-widescreen is-one-quarter-fullhd">
+                    <div class="field">
+                        <div class="control has-icons-right">
+                            <input type="text" class="input is-rounded is-search" v-model="search" placeholder="">
+                            <span class="icon is-small is-right">
+                                <font-awesome-icon :icon="['fas', 'search']"  v-if="!search" />
+                                <a class="delete" v-if="search" @click="search = '' "></a>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="buttons are-large is-centered">
-                <span v-for="account in accounts" class="button is-black has-background-black-bis twofaccount" >
+                <span v-for="account in filteredAccounts" class="button is-black has-background-black-bis twofaccount" >
                     <span @click.stop="getAccount(account.id)">
                         <img :src="'storage/icons/' + account.icon" v-if="account.icon">
                         {{ account.service }}
@@ -88,12 +101,24 @@
                 accounts : [],
                 ShowTwofaccountInModal : false,
                 twofaccount: {},
+                search: '',
                 token : null,
                 username : null,
                 editMode: this.InitialEditMode,
                 showAccounts: null,
                 showNoAccount: null
             }
+        },
+
+        computed: {
+            filteredAccounts() {
+                return this.accounts.filter(
+                    item => {
+                        return item.service.toLowerCase().includes(this.search.toLowerCase()) || item.account.toLowerCase().includes(this.search.toLowerCase());
+                    }
+                );
+            }
+            
         },
 
         props: ['InitialEditMode'],
