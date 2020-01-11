@@ -10,7 +10,7 @@
                 <p>An error occured, please <router-link :to="{ name: 'accounts' }" class="is-text has-text-white">refresh</router-link></p>
             </div>
             <div v-if="debugMode == 'development'">
-                <p class="debug">
+                <p v-if="debug" class="debug">
                     <code>
                         {{ debug }}
                     </code>
@@ -28,7 +28,7 @@
         data(){
             return {
                 ShowModal : true,
-                debug : this.err.data,
+                debug : this.err ? this.err.data : null,
             }
         },
 

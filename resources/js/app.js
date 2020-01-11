@@ -49,17 +49,21 @@ const router = new VueRouter({
             component: Edit,
         },
         {
+            path: '/error',
+            name: 'GenericError',
+            component: NotFound,
+            props: true
+        },
+        {
             path: '/404',
             name: '404',
             component: NotFound,
             props: true
         },
         {
-            path: '/error',
-            name: 'GenericError',
-            component: NotFound,
-            props: true
-        },
+            path: '*',
+            redirect: { name: '404' }
+        }
     ],
 });
 
