@@ -1,7 +1,10 @@
 import Vue          from 'vue'
 import VueRouter    from 'vue-router'
+import VueInternationalization from 'vue-i18n';
+import Locale from './vue-i18n-locales.generated';
 
 Vue.use(VueRouter)
+Vue.use(VueInternationalization);
 
 import App          from './views/App'
 import Login        from './views/Login'
@@ -18,6 +21,14 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 library.add(faPlus, faQrcode, faImage, faTrash, faEdit, faCheck, faLock, faLockOpen, faSearch);
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
+
+// const lang = document.documentElement.lang.substr(0, 2);
+const lang = 'en';
+
+const i18n = new VueInternationalization({
+    locale: lang,
+    messages: Locale
+});
 
 const router = new VueRouter({
     mode: 'history',
@@ -70,5 +81,6 @@ const router = new VueRouter({
 const app = new Vue({
     el: '#app',
     components: { App },
+    i18n,
     router,
 });
