@@ -9,6 +9,13 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>{{ env("APP_NAME") }}</title>
+
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}" />
+    <link rel="apple-touch-icon" href="{{ asset('favicon_lg.png') }}" />
+    <link rel="apple-touch-icon-precomposed" href="{{ asset('favicon_lg.png') }}" />
+    <link rel="manifest" href="/manifest.json">
+    
     <link href=" {{ mix('css/app.css') }}" rel="stylesheet">
 </head>
 <body class="has-text-lighter">

@@ -1,0 +1,15 @@
+{
+  "short_name": "2FAuth",
+  "name": "2FAuth",
+  "icons": [
+    {
+      "src": "/favicon_lg.png",
+      "type": "image/png",
+      "sizes": "180x180"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "scope": "/",
+  "theme_color": "#242424"
+}
