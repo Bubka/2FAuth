@@ -25,7 +25,10 @@ export default {
         "errors": {
             "resource_not_found": "Resource not found, please ",
             "error_occured": "An error occured, please ",
-            "refresh": "refresh"
+            "refresh": "refresh",
+            "response": {
+                "no_valid_totp": "No valid TOTP resource in this QR code"
+            }
         },
         "pagination": {
             "previous": "&laquo; Previous",
@@ -184,6 +187,18 @@ export default {
             "custom": {
                 "attribute-name": {
                     "rule-name": "custom-message"
+                },
+                "icon": {
+                    "image": "Supported format are jpeg, png, bmp, gif, svg, or webp"
+                },
+                "qrcode": {
+                    "image": "Supported format are jpeg, png, bmp, gif, svg, or webp"
+                },
+                "uri": {
+                    "starts_with": "Only valid TOTP uri are supported"
+                },
+                "email": {
+                    "exists": "No account found using this email"
                 }
             },
             "attributes": []
