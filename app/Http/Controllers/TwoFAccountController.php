@@ -33,14 +33,11 @@ class TwoFAccountController extends Controller
 
         // see https://github.com/google/google-authenticator/wiki/Key-Uri-Format
         // for otpauth uri format validation
-        $messages = [
-            'uri.starts_with' => 'Only valid TOTP uri are supported',
-        ];
 
         $validator = Validator::make($request->all(), [
             'service' => 'required',
             'uri' => 'required|starts_with:otpauth://totp/',
-        ], $messages);
+        ]);
 
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 400);
@@ -69,7 +66,7 @@ class TwoFAccountController extends Controller
             $twofaccount = TwoFAccount::FindOrFail($id);
             return response()->json($twofaccount, 200);
         } catch (\Exception $e) {
-            return response()->json(['error'=>'not found'], 404);
+            return response()->json( ['error' => 'not found' ], 404);
         }
     }
 
@@ -103,7 +100,7 @@ class TwoFAccountController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 400);
+            return response()->json( ['error' => $validator->errors() ], 400);
         }
 
 
@@ -117,7 +114,7 @@ class TwoFAccountController extends Controller
         }
         catch (\Exception $e) {
 
-            return response()->json(['error'=>'not found'], 404);
+            return response()->json( ['error' => 'not found' ] , 404);
 
         }
     }

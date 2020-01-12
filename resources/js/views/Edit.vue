@@ -2,24 +2,24 @@
     <div class="section" v-if="twofaccountExists">
         <div class="columns is-mobile is-centered">
             <div class="column is-two-thirds-tablet is-half-desktop is-one-third-widescreen is-one-quarter-fullhd">
-                <h1 class="title">Edit account</h1>
+                <h1 class="title">{{ $t('twofaccounts.forms.edit_account') }}</h1>
                 <form @submit.prevent="updateAccount">
                     <div class="field">
-                        <label class="label">Service</label>
+                        <label class="label">{{ $t('twofaccounts.service') }}</label>
                         <div class="control">
-                            <input class="input" type="text" placeholder="example.com" v-model="twofaccount.service" autofocus />
+                            <input class="input" type="text" :placeholder="$t('twofaccounts.forms.service.placeholder')" v-model="twofaccount.service" autofocus />
                         </div>
                         <p class="help is-danger" v-if="errors.service">{{ errors.service.toString() }}</p>
                     </div>
                     <div class="field">
-                        <label class="label">Account</label>
+                        <label class="label">{{ $t('twofaccounts.account') }}</label>
                         <div class="control">
-                            <input class="input" type="text" placeholder="John DOE" v-model="twofaccount.account" />
+                            <input class="input" type="text" :placeholder="$t('twofaccounts.forms.account.placeholder')" v-model="twofaccount.account" />
                         </div>
                         <p class="help is-danger" v-if="errors.account">{{ errors.account.toString() }}</p>
                     </div>
                     <div class="field">
-                        <label class="label">Icon</label>
+                        <label class="label">{{ $t('twofaccounts.icon') }}</label>
                         <div class="file is-dark">
                             <label class="file-label">
                                 <input class="file-input" type="file" accept="image/*" v-on:change="uploadIcon" ref="iconInput">
@@ -27,7 +27,7 @@
                                     <span class="file-icon">
                                         <font-awesome-icon :icon="['fas', 'image']" />
                                     </span>
-                                    <span class="file-label">Choose an image…</span>
+                                    <span class="file-label">{{ $t('twofaccounts.forms.choose_image') }}</span>
                                 </span>
                             </label>
                             <span class="tag is-black is-large" v-if="tempIcon">
@@ -39,10 +39,10 @@
                     <p class="help is-danger help-for-file" v-if="errors.icon">{{ errors.icon.toString() }}</p>
                     <div class="field is-grouped">
                         <div class="control">
-                            <button type="submit" class="button is-link">Save</button>
+                            <button type="submit" class="button is-link">{{ $t('twofaccounts.forms.save') }}</button>
                         </div>
                         <div class="control">
-                            <button class="button is-text" @click.prevent="cancelCreation">Cancel</button>
+                            <button class="button is-text" @click.prevent="cancelCreation">{{ $t('commons.cancel') }}</button>
                         </div>
                     </div>
                 </form>

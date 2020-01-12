@@ -2,31 +2,31 @@
     <div class="section">
         <div class="columns is-mobile  is-centered">
             <div class="column is-two-thirds-tablet is-half-desktop is-one-third-widescreen is-one-quarter-fullhd">
-                <h1 class="title">Register</h1>
+                <h1 class="title">{{ $t('auth.register') }}</h1>
                 <form method="POST" action="/register">
                     <div class="field">
-                        <label class="label">Name</label>
+                        <label class="label">{{ $t('auth.forms.name') }}</label>
                         <div class="control">
                             <input id="name" type="text" class="input" v-model="name" required autofocus />
                         </div>
                         <p class="help is-danger" v-if="errors.name">{{ errors.name.toString() }}</p>
                     </div>
                     <div class="field">
-                        <label class="label">Email</label>
+                        <label class="label">{{ $t('auth.forms.email') }}</label>
                         <div class="control">
                             <input id="email" type="email" class="input" v-model="email" required />
                         </div>
                         <p class="help is-danger" v-if="errors.email">{{ errors.email.toString() }}</p>
                     </div>
                     <div class="field">
-                        <label class="label">Password</label>
+                        <label class="label">{{ $t('auth.forms.password') }}</label>
                         <div class="control">
                             <input id="password" type="password" class="input" v-model="password" required />
                         </div>
                         <p class="help is-danger" v-if="errors.password">{{ errors.password.toString() }}</p>
                     </div>
                     <div class="field">
-                        <label class="label">Confirm Password</label>
+                        <label class="label">{{ $t('auth.forms.confirm_password') }}</label>
                         <div class="control">
                             <input id="password_confirmation" type="password" class="input" v-model="password_confirmation" required />
                         </div>
@@ -34,7 +34,7 @@
                     </div>
                     <div class="field">
                         <div class="control">
-                            <button type="submit" class="button is-link" @click="handleSubmit">Register</button>
+                            <button type="submit" class="button is-link" @click="handleSubmit">{{ $t('auth.register') }}</button>
                         </div>
                     </div>
                 </form>
@@ -42,8 +42,8 @@
         </div>
         <div class="columns is-mobile is-centered">
             <div class="column is-two-thirds-tablet is-half-desktop is-one-third-widescreen is-one-quarter-fullhd">
-                Already registered? <router-link :to="{ name: 'login' }" class="is-link">
-                    Sign in
+                {{ $t('auth.forms.already_register') }}&nbsp;<router-link :to="{ name: 'login' }" class="is-link">
+                    {{ $t('auth.sign_in') }}
                 </router-link>
             </div>
         </div>

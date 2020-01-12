@@ -19,29 +19,17 @@ class IconController extends Controller
      */
     public function upload(Request $request)
     {
-        $messages = [
-            'icon.image' => 'Supported format are jpeg, png, bmp, gif, svg, or webp'
-        ];
-
         $validator = Validator::make($request->all(), [
             'icon' => 'required|image',
-        ], $messages);
+        ]);
 
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 400);
         }
+        
+        $path = $request->file('icon')->storePublicly('public/icons');
 
-
-        // if($request->hasFile('icon')){
-
-            $path = $request->file('icon')->storePublicly('public/icons');
-
-            return response()->json(pathinfo($path)['basename'], 201);
-        // }
-        // else
-        // {
-        //     return response()->json('no file in $request', 204);
-        // }
+        return response()->json(pathinfo($path)['basename'], 201);
     }
 
 

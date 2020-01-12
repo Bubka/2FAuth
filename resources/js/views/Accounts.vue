@@ -5,7 +5,7 @@
                 <div class="column is-three-quarters-mobile is-one-third-tablet is-one-quarter-desktop is-one-quarter-widescreen is-one-quarter-fullhd">
                     <div class="field">
                         <div class="control has-icons-right">
-                            <input type="text" class="input is-rounded is-search" v-model="search" placeholder="">
+                            <input type="text" class="input is-rounded is-search" v-model="search">
                             <span class="icon is-small is-right">
                                 <font-awesome-icon :icon="['fas', 'search']"  v-if="!search" />
                                 <a class="delete" v-if="search" @click="search = '' "></a>
@@ -35,9 +35,9 @@
         <div class="container has-text-centered" v-show="this.showNoAccount">
             <p class="no-account"></p>
             <p class="subtitle is-5 has-text-grey">
-                No 2FA here!
+                {{ $t('twofaccounts.no_account_here') }}
             </p>
-            <router-link :to="{ name: 'create' }" class="button is-medium is-link is-focused">Add one</router-link>
+            <router-link :to="{ name: 'create' }" class="button is-medium is-link is-focused">{{ $t('twofaccounts.add_one') }}</router-link>
         </div>
         <modal v-model="ShowTwofaccountInModal">
             <twofaccount-show
@@ -54,16 +54,16 @@
                     <div class="field is-grouped">
                         <p class="control">
                             <router-link :to="{ name: 'create' }" class="button is-link is-rounded is-focus">
-                                <span>New</span>
+                                <span>{{ $t('twofaccounts.new') }}</span>
                                 <span class="icon is-small">
                                     <font-awesome-icon :icon="['fas', 'qrcode']" />
                                 </span>
                             </router-link>
                         </p>
                         <p class="control">
-                            <a class="button is-dark is-rounded" @click="editMode = true" v-if="!editMode">Manage</a>
+                            <a class="button is-dark is-rounded" @click="editMode = true" v-if="!editMode">{{ $t('twofaccounts.manage') }}</a>
                             <a class="button is-success is-rounded" @click="editMode = false" v-if="editMode">
-                                <span>Done</span>
+                                <span>{{ $t('twofaccounts.done') }}</span>
                                 <span class="icon is-small">
                                     <font-awesome-icon :icon="['fas', 'check']" />
                                 </span>
@@ -74,14 +74,14 @@
             </div>
             <div class="content has-text-centered">
                 <span v-if="token">
-                    Hi {{username}} ! <a class="has-text-grey" @click="logout">Sign out</a>
+                    {{ $t('auth.hello', {username: username}) }} <a class="has-text-grey" @click="logout">{{ $t('auth.sign_out') }}</a>
                 </span>
                 <span v-else>
                     <router-link :to="{ name: 'login' }" class="button is-black">
-                        Sign in
+                        {{ $t('auth.sign_in') }}
                     </router-link>
                     <router-link :to="{ name: 'register' }" class="button is-black">
-                        Register
+                        {{ $t('auth.register') }}
                     </router-link>
                 </span>
             </div>
@@ -189,7 +189,7 @@
             },
 
             deleteAccount:  function (id) {
-                if(confirm("Are you sure you want to delete this account?")) {
+                if(confirm(this.$t('twofaccounts.confirm.delete'))) {
 
                     axios.defaults.headers.common['Content-Type'] = 'application/json'
                     axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.token
@@ -204,7 +204,7 @@
             },
 
             logout(evt) {
-                if(confirm("Are you sure you want to log out?")) {
+                if(confirm(this.$t('auth.confirm.logout'))) {
                     axios.post('api/logout').then(response => {
 
                         localStorage.removeItem('jwt');

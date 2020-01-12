@@ -2,52 +2,52 @@
     <div class="section">
         <div class="columns is-mobile is-centered">
             <div class="column is-two-thirds-tablet is-half-desktop is-one-third-widescreen is-one-quarter-fullhd">
-                <h1 class="title">New account</h1>
+                <h1 class="title">{{ $t('twofaccounts.forms.new_account') }}</h1>
                 <form @submit.prevent="createAccount">
                     <div class="field">
                         <div class="file is-dark is-boxed">
-                            <label class="file-label" title="Use a QR code to fill the form magically">
+                            <label class="file-label" :title="$t('twofaccounts.forms.use_qrcode.title')">
                                 <input class="file-input" type="file" accept="image/*" v-on:change="uploadQrcode" ref="qrcodeInput">
                                 <span class="file-cta">
                                     <span class="file-icon">
                                         <font-awesome-icon :icon="['fas', 'qrcode']" size="lg" />
                                     </span>
-                                    <span class="file-label">Use a qrcode</span>
+                                    <span class="file-label">{{ $t('twofaccounts.forms.use_qrcode.val') }}</span>
                                 </span>
                             </label>
                         </div>
                     </div>
                     <p class="help is-danger help-for-file" v-if="errors.qrcode">{{ errors.qrcode.toString() }}</p>
                     <div class="field">
-                        <label class="label">Service</label>
+                        <label class="label">{{ $t('twofaccounts.service') }}</label>
                         <div class="control">
-                            <input class="input" type="text" placeholder="example.com" v-model="twofaccount.service"  autofocus />
+                            <input class="input" type="text" :placeholder="$t('twofaccounts.forms.service.placeholder')" v-model="twofaccount.service"  autofocus />
                         </div>
                         <p class="help is-danger" v-if="errors.service">{{ errors.service.toString() }}</p>
                     </div>
                     <div class="field">
-                        <label class="label">Account</label>
+                        <label class="label">{{ $t('twofaccounts.account') }}</label>
                         <div class="control">
-                            <input class="input" type="text" placeholder="John DOE" v-model="twofaccount.account"  />
+                            <input class="input" type="text" :placeholder="$t('twofaccounts.forms.account.placeholder')" v-model="twofaccount.account"  />
                         </div>
                         <p class="help is-danger" v-if="errors.account">{{ errors.account.toString() }}</p>
                     </div>
                     <div class="field" style="margin-bottom: 0.5rem;">
-                        <label class="label">TOTP Uri</label>
+                        <label class="label">{{ $t('twofaccounts.forms.totp_uri') }}</label>
                     </div>
                     <div class="field has-addons">
                         <div class="control is-expanded">
                             <input class="input" type="text" placeholder="otpauth://totp/..." v-model="twofaccount.uri" :disabled="uriIsLocked" />
                         </div>
                         <div class="control" v-if="uriIsLocked">
-                            <a class="button is-dark field-lock" @click="uriIsLocked = false" title="Unlock it (at your own risk)">
+                            <a class="button is-dark field-lock" @click="uriIsLocked = false" :title="$t('twofaccounts.forms.unlock.title')">
                                 <span class="icon">
                                     <font-awesome-icon :icon="['fas', 'lock']" />
                                 </span>
                             </a>
                         </div>
                         <div class="control" v-else>
-                            <a class="button is-dark field-unlock"  @click="uriIsLocked = true" title="Lock it">
+                            <a class="button is-dark field-unlock"  @click="uriIsLocked = true" :title="$t('twofaccounts.forms.lock.title')">
                                 <span class="icon has-text-danger">
                                     <font-awesome-icon :icon="['fas', 'lock-open']" />
                                 </span>
@@ -56,7 +56,7 @@
                     </div>
                     <p class="help is-danger help-for-file" v-if="errors.uri">{{ errors.uri.toString() }}</p>
                     <div class="field">
-                        <label class="label">Icon</label>
+                        <label class="label">{{ $t('twofaccounts.icon') }}</label>
                         <div class="file is-dark">
                             <label class="file-label">
                                 <input class="file-input" type="file" accept="image/*" v-on:change="uploadIcon" ref="iconInput">
@@ -64,7 +64,7 @@
                                     <span class="file-icon">
                                         <font-awesome-icon :icon="['fas', 'image']" />
                                     </span>
-                                    <span class="file-label">Choose an image…</span>
+                                    <span class="file-label">{{ $t('twofaccounts.forms.choose_image') }}</span>
                                 </span>
                             </label>
                             <span class="tag is-black is-large" v-if="tempIcon">
@@ -76,10 +76,10 @@
                     <p class="help is-danger help-for-file" v-if="errors.icon">{{ errors.icon.toString() }}</p>
                     <div class="field is-grouped">
                         <div class="control">
-                            <button type="submit" class="button is-link">Create</button>
+                            <button type="submit" class="button is-link">{{ $t('twofaccounts.forms.create') }}</button>
                         </div>
                         <div class="control">
-                            <button class="button is-text" @click="cancelCreation">Cancel</button>
+                            <button class="button is-text" @click="cancelCreation">{{ $t('commons.cancel') }}</button>
                         </div>
                     </div>
                 </form>

@@ -23,18 +23,13 @@ class QrCodecontroller extends Controller
     {
 
         // input validation
-        $messages = [
-            'qrcode.image' => 'Supported format are jpeg, png, bmp, gif, svg, or webp'
-        ];
-
         $validator = Validator::make($request->all(), [
             'qrcode' => 'required|image',
-        ], $messages);
+        ]);
 
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 400);
         }
-
 
         // qrcode analysis
         $path = $request->file('qrcode')->store('qrcodes');
@@ -71,7 +66,7 @@ class QrCodecontroller extends Controller
 
             return response()->json([
                 'error' => [
-                   'qrcode' => 'No valid TOTP resource in this QR code'
+                   'qrcode' => __('errors.response.no_valid_totp')
                 ]
             ], 400);
 
