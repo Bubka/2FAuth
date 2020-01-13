@@ -4,23 +4,23 @@
 A web app to manage your Two-factors Auth (2FA) accounts and generate their TOTP tokens
 
 ## Purpose
-2FAuth is an web based self-hosted alternative to One Time Passcode (OTP) generators like Google Authenticator that you can use both on mobile or desktop.
+2FAuth is a web based self-hosted alternative to One Time Passcode (OTP) generators like Google Authenticator that you can use both on mobile or desktop.
 
 I created it because :
 * Most of the UIs for this kind of apps show tokens for all accounts in the same time with stressful countdowns (in my opinion)
 * I wanted my 2FA accounts to be stored in a database I can easily backup and restore.
-* I hate taking out my smartphone to get an OTP when I'm at my desktop
-* I love self-hosted solution
+* I hate taking out my smartphone to get an OTP when I use a desktop computer.
+* I love coding and I love self-hosted solution
 
 ## Features
-* Manage your 2FA accounts (add, edit, delete), with QR code upload support
+* Manage 2FA accounts (add, edit, delete), with QR code support
 * Generate tokens
 * User authentication to protect access to 2FA accounts
 
 #### Single user app
-2FA are sensitives data so it is necessary to sign in an user account in order to use the app. And because they are also owned by you only, it is not possible to create more than one account.
+2FA are sensitives data so it is necessary to sign in an user account in order to use the app. And because they are owned by the same person, it is not possible to create more than one account.
 
-## RFC compliance
+#### RFC compliance
 2FAuth generates OTP according to RFC 4226 (HOTP Algorithm) and RFC 6238 (TOTP Algorithm) thanks to [Spomky-Labs/OTPHP](https://github.com/Spomky-Labs/otphp) php library.
 
 ## Requirements
