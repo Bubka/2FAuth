@@ -14,7 +14,7 @@ export default {
                 "email": "Email",
                 "password": "Password",
                 "confirm_password": "Confirm password",
-                "dont_have_account_yet": "Don't have an account yet?",
+                "dont_have_account_yet": "Don't have your account yet?",
                 "already_register": "Already registered?",
                 "passwords_do_not_match": "Passwords do not match"
             }
@@ -25,7 +25,10 @@ export default {
         "errors": {
             "resource_not_found": "Resource not found, please ",
             "error_occured": "An error occured, please ",
+            "already_one_user_registered": "There is already a registered user.",
+            "cannot_register_more_user": "You cannot register more than one user.",
             "refresh": "refresh",
+            "please": "Please ",
             "response": {
                 "no_valid_totp": "No valid TOTP resource in this QR code"
             }

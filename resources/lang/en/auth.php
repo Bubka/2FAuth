@@ -26,7 +26,7 @@ return [
         'email' => 'Email',
         'password' => 'Password',
         'confirm_password' => 'Confirm password',
-        'dont_have_account_yet' => 'Don\'t have an account yet?',
+        'dont_have_account_yet' => 'Don\'t have your account yet?',
         'already_register' => 'Already registered?',
         'passwords_do_not_match' => 'Passwords do not match',
     ]

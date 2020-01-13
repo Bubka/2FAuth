@@ -15,7 +15,10 @@ return [
 
     'resource_not_found' => 'Resource not found, please ',
     'error_occured' => 'An error occured, please ',
+    'already_one_user_registered' => 'There is already a registered user.',
+    'cannot_register_more_user' => 'You cannot register more than one user.',
     'refresh' => 'refresh',
+    'please' => 'Please ',
     'response' => [
         'no_valid_totp' => 'No valid TOTP resource in this QR code',
     ]

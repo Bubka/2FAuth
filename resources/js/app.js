@@ -60,6 +60,12 @@ const router = new VueRouter({
             component: Edit,
         },
         {
+            path: '/flooded',
+            name: 'flooded',
+            component: NotFound,
+            props: true
+        },
+        {
             path: '/error',
             name: 'GenericError',
             component: NotFound,

@@ -5,6 +5,12 @@
                 <p class="error-404"></p>
                 <p>{{ $t('errors.resource_not_found') }}<router-link :to="{ name: 'accounts' }" class="is-text has-text-white">{{ $t('errors.refresh') }}</router-link></p>
             </div>
+            <div v-else-if="$route.name == 'flooded'">
+                <p class="error-generic"></p>
+                <p>{{ $t('errors.already_one_user_registered') }}<br>
+                    {{ $t('errors.cannot_register_more_user') }}<br><br>
+                    {{ $t('errors.please') }}<router-link :to="{ name: 'accounts' }" class="is-text has-text-white">{{ $t('auth.sign_in') }}</router-link></p>
+            </div>
             <div v-else>
                 <p class="error-generic"></p>
                 <p>{{ $t('errors.error_occured') }}<router-link :to="{ name: 'accounts' }" class="is-text has-text-white">{{ $t('errors.refresh') }}</router-link></p>
@@ -50,14 +56,6 @@
                 this.$router.push({name: 'accounts' });
             });
 
-        },
-        
-        beforeRouteEnter (to, from, next) {
-            if ( ! localStorage.getItem('jwt')) {
-                return next('login')
-            }
-
-            next()
         }
     }
 

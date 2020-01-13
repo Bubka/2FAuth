@@ -38,6 +38,10 @@
                         </div>
                     </div>
                 </form>
+                <br />
+                <span class="tag is-danger" v-if="errorMessage">
+                    {{ errorMessage }}
+                </span>
             </div>
         </div>
         <div class="columns is-mobile is-centered">
@@ -58,8 +62,23 @@
                 email : '',
                 password : '',
                 password_confirmation : '',
-                errors: {}
+                errors: {},
+                errorMessage: ''
             }
+        },
+
+        created: function() {
+            // we check if a user account already exists
+            axios.post('api/checkuser')
+            .then(response => {
+                if( response.data.userCount > 0) {
+                    this.errorMessage = this.$t('errors.already_one_user_registered') + ' ' + this.$t('errors.cannot_register_more_user')
+                    this.$router.push({ name: 'flooded' });
+                }
+            })
+            .catch(error => {
+                this.$router.push({ name: 'error', params: { err: error.response.message } });
+            });
         },
 
         methods : {
