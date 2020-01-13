@@ -15,13 +15,13 @@
                 <p class="error-generic"></p>
                 <p>{{ $t('errors.error_occured') }}<router-link :to="{ name: 'accounts' }" class="is-text has-text-white">{{ $t('errors.refresh') }}</router-link></p>
             </div>
-            <div v-if="debugMode == 'development'">
+            <!-- <div v-if="debugMode == 'development'"> -->
                 <p v-if="debug" class="debug">
                     <code>
                         {{ debug }}
                     </code>
                 </p>
-            </div>
+            <!-- </div> -->
         </modal>
     </div>
 </template>
@@ -34,7 +34,7 @@
         data(){
             return {
                 ShowModal : true,
-                debug : this.err ? this.err.data : null,
+                debug : this.err ? this.err : null,
             }
         },
 

@@ -24,7 +24,7 @@ class UserController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 400);
+            return response()->json(['validation' => $validator->errors()], 400);
         }
 
         $credentials = [
@@ -93,7 +93,7 @@ class UserController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 400);
+            return response()->json(['validation' => $validator->errors()], 400);
         }
 
         $input = $request->all();

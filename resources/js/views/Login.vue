@@ -62,11 +62,15 @@
                     }
                 })
                 .catch(error => {
-                    if (error.response.status === 400) {
-                        this.errors = error.response.data.error
+                    console.log(error.response);
+                    if( error.response.status === 401 ) {
+                        this.errors['password'] = [ this.$t('auth.forms.password_do_not_match') ]
+                    }
+                    else if( error.response.data.validation ) {
+                        this.errors = error.response.data.validation
                     }
                     else {
-                        this.errors['password'] = [ this.$t('auth.forms.passwords_do_not_match') ]
+                        this.$router.push({ name: 'genericError', params: { err: error.response.data.message } });
                     }
                 });
             }

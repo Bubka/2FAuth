@@ -183,7 +183,10 @@
                 })
                 .catch(error => {
                     if (error.response.status === 404) {
-                        this.$router.push({name: '404', params: { err : error.response }});
+                        this.$router.push({name: '404', params: { err : error.response.data.error }});
+                    }
+                    else {
+                        this.$router.push({ name: 'genericError', params: { err: error.response.data.message } });
                     }
                 });  
             },
@@ -214,7 +217,7 @@
                         this.$router.go('/login');
                     })
                     .catch(error => {
-                        this.$router.push({ name: 'error' });
+                        this.$router.push({ name: 'genericError', params: { err: error.response.data.message } });
                     });       
                 }
             }

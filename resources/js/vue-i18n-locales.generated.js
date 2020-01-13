@@ -16,7 +16,7 @@ export default {
                 "confirm_password": "Confirm password",
                 "dont_have_account_yet": "Don't have your account yet?",
                 "already_register": "Already registered?",
-                "passwords_do_not_match": "Passwords do not match"
+                "password_do_not_match": "Password do not match"
             }
         },
         "commons": {

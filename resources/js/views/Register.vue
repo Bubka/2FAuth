@@ -77,7 +77,7 @@
                 }
             })
             .catch(error => {
-                this.$router.push({ name: 'error', params: { err: error.response.message } });
+                this.$router.push({ name: 'genericError', params: { err: error.response.data.message } });
             });
         },
 
@@ -100,7 +100,7 @@
                     }
                 })
                 .catch(error => {
-                    this.errors = error.response.data.error
+                    this.errors = error.response.data.validation
                 });
             }
         },

@@ -67,7 +67,7 @@ const router = new VueRouter({
         },
         {
             path: '/error',
-            name: 'GenericError',
+            name: 'genericError',
             component: NotFound,
             props: true
         },
