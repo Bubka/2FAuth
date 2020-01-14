@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Validator;
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 
 class ForgotPasswordController extends Controller
@@ -33,26 +32,38 @@ class ForgotPasswordController extends Controller
     }
 
     /**
-     * Send a reset link to the given user.
-     * Override native function to validate if email to reset exists
+     * Validate the email for the given request.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\JsonResponse
+     * @return void
      */
-    public function sendResetLinkEmail(Request $request)
+    protected function validateEmail(Request $request)
     {
+        $request->validate(['email' => 'required|exists:users,email']);
+    }
 
-        $this->validate($request, ['email' => 'required|exists:users,email']);
+    /**
+     * Get the response for a successful password reset link.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @param  string  $response
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    protected function sendResetLinkResponse(Request $request, $response)
+    {
+        return ['status' => trans($response)];
+        // return response()->json(['status' => $response], 200);
+    }
 
-        // We will send the password reset link to this user. Once we have attempted
-        // to send the link, we will examine the response then see the message we
-        // need to show to the user. Finally, we'll send out a proper response.
-        $response = $this->broker()->sendResetLink(
-            $this->credentials($request)
-        );
-
-        return $response == Password::RESET_LINK_SENT
-                    ? $this->sendResetLinkResponse($request, $response)
-                    : $this->sendResetLinkFailedResponse($request, $response);
+    /**
+     * Get the response for a failed password reset link.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @param  string  $response
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    protected function sendResetLinkFailedResponse(Request $request, $response)
+    {
+        return response()->json(['email' => trans($response)], 400);
     }
 }
