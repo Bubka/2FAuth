@@ -13,11 +13,19 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::post('login', 'UserController@login');
-Route::post('checkuser', 'UserController@checkUser');
-Route::post('register', 'UserController@register');
+Route::group(['middleware' => 'guest:api'], function () {
 
-Route::group(['middleware' => 'auth:api'], function(){
+    Route::post('login', 'UserController@login');
+    Route::post('checkuser', 'UserController@checkUser');
+    Route::post('register', 'UserController@register');
+
+    Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail');
+    Route::post('password/reset', 'Auth\ResetPasswordController@reset');
+
+});
+
+Route::group(['middleware' => 'auth:api'], function() {
+
     Route::post('logout', 'UserController@logout');
     Route::get('user', 'UserController@getDetails');
     Route::apiResource('twofaccounts', 'TwoFAccountController');
@@ -25,4 +33,5 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('qrcode/decode', 'QrCodeController@decode');
     Route::post('icon/upload', 'IconController@upload');
     Route::delete('icon/delete/{icon}', 'IconController@delete');
+
 });

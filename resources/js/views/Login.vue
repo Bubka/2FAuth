@@ -33,6 +33,13 @@
                 </router-link>
             </div>
         </div>
+        <div class="columns is-mobile is-centered">
+            <div class="column is-two-thirds-tablet is-half-desktop is-one-third-widescreen is-one-quarter-fullhd">
+                {{ $t('auth.forms.forgot_your_password') }}&nbsp;<router-link :to="{ name: 'password.request' }" class="is-link">
+                    {{ $t('auth.forms.request_password_reset') }}
+                </router-link>
+            </div>
+        </div>
     </div>
 </template>
 

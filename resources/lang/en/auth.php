@@ -29,6 +29,8 @@ return [
         'dont_have_account_yet' => 'Don\'t have your account yet?',
         'already_register' => 'Already registered?',
         'password_do_not_match' => 'Password do not match',
+        'forgot_your_password' => 'Forgot your password?',
+        'request_password_reset' => 'Request a password reset',
     ]
 
 

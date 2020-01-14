@@ -6,13 +6,15 @@ import Locale from './vue-i18n-locales.generated';
 Vue.use(VueRouter)
 Vue.use(VueInternationalization);
 
-import App          from './views/App'
-import Login        from './views/Login'
-import Register     from './views/Register'
-import Accounts     from './views/Accounts'
-import Create       from './views/Create'
-import Edit         from './views/Edit'
-import NotFound     from './views/Error'
+import App              from './views/App'
+import Login            from './views/Login'
+import Register         from './views/Register'
+import Accounts         from './views/Accounts'
+import Create           from './views/Create'
+import Edit             from './views/Edit'
+import PasswordRequest  from './views/auth/password/Request'
+import NotFound         from './views/Error'
+
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faPlus, faQrcode, faImage, faTrash, faEdit, faCheck, faLock, faLockOpen, faSearch } from '@fortawesome/free-solid-svg-icons'
@@ -33,54 +35,19 @@ const i18n = new VueInternationalization({
 const router = new VueRouter({
     mode: 'history',
     routes: [
-        {
-            path: '/',
-            name: 'accounts',
-            component: Accounts,
-            props: true
-        },
-        {
-            path: '/login',
-            name: 'login',
-            component: Login,
-        },
-        {
-            path: '/register',
-            name: 'register',
-            component: Register,
-        },
-        {
-            path: '/create',
-            name: 'create',
-            component: Create,
-        },
-        {
-            path: '/edit/:twofaccountId',
-            name: 'edit',
-            component: Edit,
-        },
-        {
-            path: '/flooded',
-            name: 'flooded',
-            component: NotFound,
-            props: true
-        },
-        {
-            path: '/error',
-            name: 'genericError',
-            component: NotFound,
-            props: true
-        },
-        {
-            path: '/404',
-            name: '404',
-            component: NotFound,
-            props: true
-        },
-        {
-            path: '*',
-            redirect: { name: '404' }
-        }
+        { path: '/', name: 'accounts', component: Accounts, props: true },
+        { path: '/login', name: 'login',component: Login },
+        { path: '/register', name: 'register',component: Register },
+        { path: '/create', name: 'create',component: Create },
+        { path: '/edit/:twofaccountId', name: 'edit',component: Edit },
+
+        { path: '/password/request', name: 'password.request', component: PasswordRequest },
+        //{ path: '/password/reset/:token', name: 'password.reset', component: page('auth/password/reset.vue') },
+
+        { path: '/flooded', name: 'flooded',component: NotFound,props: true },
+        { path: '/error', name: 'genericError',component: NotFound,props: true },
+        { path: '/404', name: '404',component: NotFound,props: true },
+        { path: '*', redirect: { name: '404' } }
     ],
 });
 

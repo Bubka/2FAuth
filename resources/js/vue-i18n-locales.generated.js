@@ -16,7 +16,9 @@ export default {
                 "confirm_password": "Confirm password",
                 "dont_have_account_yet": "Don't have your account yet?",
                 "already_register": "Already registered?",
-                "password_do_not_match": "Password do not match"
+                "password_do_not_match": "Password do not match",
+                "forgot_your_password": "Forgot your password?",
+                "request_password_reset": "Request a password reset"
             }
         },
         "commons": {
@@ -42,7 +44,9 @@ export default {
             "reset": "Your password has been reset!",
             "sent": "We have e-mailed your password reset link!",
             "token": "This password reset token is invalid.",
-            "user": "We can't find a user with that e-mail address."
+            "user": "We can't find a user with that e-mail address.",
+            "send_password_reset_link": "Send password reset link",
+            "reset_password": "Reset your password"
         },
         "twofaccounts": {
             "service": "Service",
