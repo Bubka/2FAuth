@@ -28,7 +28,7 @@ class QrCodecontroller extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 400);
+            return response()->json(['validation' => $validator->errors()], 400);
         }
 
         // qrcode analysis
@@ -65,7 +65,7 @@ class QrCodecontroller extends Controller
         catch (AssertionFailedException $exception) {
 
             return response()->json([
-                'error' => [
+                'validation' => [
                    'qrcode' => __('errors.response.no_valid_totp')
                 ]
             ], 400);

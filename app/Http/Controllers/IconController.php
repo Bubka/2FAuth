@@ -24,7 +24,7 @@ class IconController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 400);
+            return response()->json(['validation' => $validator->errors()], 400);
         }
         
         $path = $request->file('icon')->storePublicly('public/icons');

@@ -40,7 +40,7 @@ class TwoFAccountController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 400);
+            return response()->json(['validation' => $validator->errors()], 400);
         }
 
         $twofaccount = TwoFAccount::create([
@@ -66,7 +66,7 @@ class TwoFAccountController extends Controller
             $twofaccount = TwoFAccount::FindOrFail($id);
             return response()->json($twofaccount, 200);
         } catch (\Exception $e) {
-            return response()->json( ['error' => 'not found' ], 404);
+            return response()->json( ['message' => 'not found' ], 404);
         }
     }
 
@@ -100,7 +100,7 @@ class TwoFAccountController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json( ['error' => $validator->errors() ], 400);
+            return response()->json( ['validation' => $validator->errors() ], 400);
         }
 
 
@@ -114,7 +114,7 @@ class TwoFAccountController extends Controller
         }
         catch (\Exception $e) {
 
-            return response()->json( ['error' => 'not found' ] , 404);
+            return response()->json( ['message' => 'not found' ] , 404);
 
         }
     }
@@ -146,7 +146,7 @@ class TwoFAccountController extends Controller
         }
         catch (\Exception $e) {
 
-            return response()->json('already gone', 404);
+            return response()->json(['message' => 'already gone'], 404);
 
         }
     }

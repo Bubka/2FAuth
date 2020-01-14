@@ -17,20 +17,20 @@
                             </label>
                         </div>
                     </div>
-                    <p class="help is-danger help-for-file" v-if="errors.qrcode">{{ errors.qrcode.toString() }}</p>
+                    <p class="help is-danger help-for-file" v-if="validationErrors.qrcode">{{ validationErrors.qrcode.toString() }}</p>
                     <div class="field">
                         <label class="label">{{ $t('twofaccounts.service') }}</label>
                         <div class="control">
                             <input class="input" type="text" :placeholder="$t('twofaccounts.forms.service.placeholder')" v-model="twofaccount.service"  autofocus />
                         </div>
-                        <p class="help is-danger" v-if="errors.service">{{ errors.service.toString() }}</p>
+                        <p class="help is-danger" v-if="validationErrors.service">{{ validationErrors.service.toString() }}</p>
                     </div>
                     <div class="field">
                         <label class="label">{{ $t('twofaccounts.account') }}</label>
                         <div class="control">
                             <input class="input" type="text" :placeholder="$t('twofaccounts.forms.account.placeholder')" v-model="twofaccount.account"  />
                         </div>
-                        <p class="help is-danger" v-if="errors.account">{{ errors.account.toString() }}</p>
+                        <p class="help is-danger" v-if="validationErrors.account">{{ validationErrors.account.toString() }}</p>
                     </div>
                     <div class="field" style="margin-bottom: 0.5rem;">
                         <label class="label">{{ $t('twofaccounts.forms.totp_uri') }}</label>
@@ -54,7 +54,7 @@
                             </a>
                         </div>
                     </div>
-                    <p class="help is-danger help-for-file" v-if="errors.uri">{{ errors.uri.toString() }}</p>
+                    <p class="help is-danger help-for-file" v-if="validationErrors.uri">{{ validationErrors.uri.toString() }}</p>
                     <div class="field">
                         <label class="label">{{ $t('twofaccounts.icon') }}</label>
                         <div class="file is-dark">
@@ -73,7 +73,7 @@
                             </span>
                         </div>
                     </div>
-                    <p class="help is-danger help-for-file" v-if="errors.icon">{{ errors.icon.toString() }}</p>
+                    <p class="help is-danger help-for-file" v-if="validationErrors.icon">{{ validationErrors.icon.toString() }}</p>
                     <div class="field is-grouped">
                         <div class="control">
                             <button type="submit" class="button is-link">{{ $t('twofaccounts.forms.create') }}</button>
@@ -100,7 +100,7 @@
                 },
                 uriIsLocked: true,
                 tempIcon: '',
-                errors: {}
+                validationErrors: {}
             }
         },
 
@@ -121,8 +121,11 @@
                     this.$router.push({name: 'accounts', params: { InitialEditMode: false }});
                 })
                 .catch(error => {
-                    if (error.response.status === 400) {
-                        this.errors = error.response.data.error
+                    if( error.response.data.validation ) {
+                        this.validationErrors = error.response.data.validation
+                    }
+                    else {
+                        this.$router.push({ name: 'genericError', params: { err: error.response.data.message } });
                     }
                 });
             },
@@ -156,12 +159,15 @@
                 axios.post('/api/qrcode/decode', imgdata, config)
                     .then(response => {
                         this.twofaccount = response.data;
-                        this.errors['qrcode'] = '';
+                        this.validationErrors['qrcode'] = '';
                     })
                     .catch(error => {
-                        if (error.response.status === 400) {
-                            this.errors = error.response.data.error
+                        if( error.response.data.validation ) {
+                            this.validationErrors = error.response.data.validation
                             this.clearTwofaccount()
+                        }
+                        else {
+                            this.$router.push({ name: 'genericError', params: { err: error.response.data.message } });
                         }
                     });
             },
@@ -192,11 +198,14 @@
                     .then(response => {
                         console.log('icon path > ', response);
                         this.tempIcon = response.data;
-                        this.errors['icon'] = '';
+                        this.validationErrors['icon'] = '';
                     })
                     .catch(error => {
-                        if (error.response.status === 400) {
-                            this.errors = error.response.data.error
+                        if( error.response.data.validation ) {
+                            this.validationErrors = error.response.data.validation
+                        }
+                        else {
+                            this.$router.push({ name: 'genericError', params: { err: error.response.data.message } });
                         }
                     });
 
