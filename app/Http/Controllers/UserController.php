@@ -36,10 +36,10 @@ class UserController extends Controller
             $success['token'] = Auth::user()->createToken('MyApp')->accessToken;
             $success['name'] = Auth::user()->name;
 
-            return response()->json(['success' => $success], 200);
+            return response()->json(['message' => $success], 200);
         }
 
-        return response()->json(['error' => 'Unauthorised'], 401);
+        return response()->json(['message' => 'unauthorised'], 401);
     }
 
 
@@ -53,7 +53,7 @@ class UserController extends Controller
         $accessToken = Auth::user()->token();
         $accessToken->revoke();
 
-        return response()->json(['success' => 'signed out']);
+        return response()->json(['message' => 'signed out']);
     }
 
 
@@ -83,7 +83,7 @@ class UserController extends Controller
         $count = DB::table('users')->count();
 
         if( $count > 0 ) {
-            return response()->json(['error' => __('already_one_user_registered')], 400);
+            return response()->json(['message' => __('errors.already_one_user_registered')], 400);
         }
 
         $validator = Validator::make($request->all(), [
@@ -103,7 +103,7 @@ class UserController extends Controller
         $success['token'] = $user->createToken('MyApp')->accessToken;
         $success['name'] = $user->name;
 
-        return response()->json(['success' => $success]);
+        return response()->json(['message' => $success]);
     }
 
 

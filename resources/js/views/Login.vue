@@ -9,14 +9,14 @@
                         <div class="control">
                             <input id="email" type="email" class="input" v-model="email" required autofocus />
                         </div>
-                        <p class="help is-danger" v-if="errors.email">{{ errors.email.toString() }}</p>
+                        <p class="help is-danger" v-if="validationErrors.email">{{ validationErrors.email.toString() }}</p>
                     </div>
                     <div class="field">
                         <label class="label">{{ $t('auth.forms.password') }}</label>
                         <div class="control">
                             <input id="password" type="password" class="input" v-model="password" required />
                         </div>
-                        <p class="help is-danger" v-if="errors.password">{{ errors.password.toString() }}</p>
+                        <p class="help is-danger" v-if="validationErrors.password">{{ validationErrors.password.toString() }}</p>
                     </div>
                     <div class="field">
                         <div class="control">
@@ -42,7 +42,7 @@
             return {
                 email : '',
                 password : '',
-                errors: {}
+                validationErrors: {}
             }
         },
         methods : {
@@ -54,20 +54,20 @@
                     password: this.password
                 })
                 .then(response => {
-                    localStorage.setItem('user',response.data.success.name)
-                    localStorage.setItem('jwt',response.data.success.token)
+                    localStorage.setItem('user',response.data.message.name)
+                    localStorage.setItem('jwt',response.data.message.token)
 
                     if (localStorage.getItem('jwt') != null){
                         this.$router.go('/');
                     }
                 })
                 .catch(error => {
-                    console.log(error.response);
                     if( error.response.status === 401 ) {
-                        this.errors['password'] = [ this.$t('auth.forms.password_do_not_match') ]
+                        this.validationErrors['email'] = ''
+                        this.validationErrors['password'] = [ this.$t('auth.forms.password_do_not_match') ]
                     }
                     else if( error.response.data.validation ) {
-                        this.errors = error.response.data.validation
+                        this.validationErrors = error.response.data.validation
                     }
                     else {
                         this.$router.push({ name: 'genericError', params: { err: error.response.data.message } });
