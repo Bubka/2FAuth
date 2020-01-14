@@ -25,11 +25,11 @@ class UserTest extends TestCase
 
 
     /**
-     * test User creation via API
+     * test creation of another user via API
      *
      * @test
      */
-    public function testUserCreation()
+    public function testMoreThanOneUserCreation()
     {
         $response = $this->json('POST', '/api/register', [
             'name' => 'testCreate',
@@ -38,10 +38,7 @@ class UserTest extends TestCase
             'password_confirmation' => 'test',
         ]);
 
-        $response->assertStatus(200)
-            ->assertJsonStructure([
-                'success' => ['token', 'name']
-            ]);
+        $response->assertStatus(400);
     }
 
 
@@ -88,6 +85,7 @@ class UserTest extends TestCase
      */
     public function testUserLogin()
     {
+
         $response = $this->json('POST', '/api/login', [
             'email' => $this->user->email,
             'password' => 'password'
@@ -95,7 +93,7 @@ class UserTest extends TestCase
 
         $response->assertStatus(200)
             ->assertJsonStructure([
-                'success' => ['token']
+                'message' => ['token']
             ]);
     }
 
@@ -130,7 +128,7 @@ class UserTest extends TestCase
 
         $response->assertStatus(401)
             ->assertJson([
-                'error' => 'Unauthorised'
+                'message' => 'unauthorised'
             ]);
     }
 
@@ -154,7 +152,7 @@ class UserTest extends TestCase
         $response = $this->json('POST', '/api/logout', [], $headers)
             ->assertStatus(200)
             ->assertJson([
-                'success' => 'signed out',
+                'message' => 'signed out',
             ]);
     }
 
@@ -166,10 +164,37 @@ class UserTest extends TestCase
      */
     public function testGetUserDetails()
     {
-        $response = $this->actingAs($this->user, 'api')
+        $user = User::find(1);
+
+        $response = $this->actingAs($user, 'api')
             ->json('GET', '/api/user')
             ->assertStatus(200)
             ->assertJsonStructure(['id', 'name', 'email']);
+    }
+
+
+    /**
+     * test User creation via API
+     *
+     * @test
+     */
+    public function testUserCreation()
+    {
+
+        // we delete the existing user
+        User::destroy(1);
+
+        $response = $this->json('POST', '/api/register', [
+            'name' => 'newUser',
+            'email' => 'newUser@example.org',
+            'password' => 'password',
+            'password_confirmation' => 'password',
+        ]);
+
+        $response->assertStatus(200)
+            ->assertJsonStructure([
+                'message' => ['token', 'name']
+            ]);
     }
 
 }
