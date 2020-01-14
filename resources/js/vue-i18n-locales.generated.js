@@ -23,8 +23,8 @@ export default {
             "cancel": "Cancel"
         },
         "errors": {
-            "resource_not_found": "Resource not found, please ",
-            "error_occured": "An error occured, please ",
+            "resource_not_found": "Resource not found",
+            "error_occured": "An error occured",
             "already_one_user_registered": "There is already a registered user.",
             "cannot_register_more_user": "You cannot register more than one user.",
             "refresh": "refresh",
