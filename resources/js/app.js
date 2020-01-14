@@ -13,6 +13,7 @@ import Accounts         from './views/Accounts'
 import Create           from './views/Create'
 import Edit             from './views/Edit'
 import PasswordRequest  from './views/auth/password/Request'
+import PasswordReset    from './views/auth/password/Reset'
 import NotFound         from './views/Error'
 
 
@@ -42,7 +43,7 @@ const router = new VueRouter({
         { path: '/edit/:twofaccountId', name: 'edit',component: Edit },
 
         { path: '/password/request', name: 'password.request', component: PasswordRequest },
-        //{ path: '/password/reset/:token', name: 'password.reset', component: page('auth/password/reset.vue') },
+        { path: '/password/reset/:token', name: 'password.reset', component: PasswordReset },
 
         { path: '/flooded', name: 'flooded',component: NotFound,props: true },
         { path: '/error', name: 'genericError',component: NotFound,props: true },
