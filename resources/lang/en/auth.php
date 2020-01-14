@@ -31,7 +31,10 @@ return [
         'password_do_not_match' => 'Password do not match',
         'forgot_your_password' => 'Forgot your password?',
         'request_password_reset' => 'Request a password reset',
-    ]
+    ],
+    'send_password_reset_link' => 'Send password reset link',
+    'reset_password' => 'Reset your password',
+    'new_password' => 'New password',
 
 
 ];
