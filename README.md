@@ -49,6 +49,8 @@ Edit the `.env` file and adapt the settings to your running environment (see ins
 ```
 php artisan migrate:refresh
 php artisan passport:install
+php artisan storage:link
+php artisan config:cache
 ```
 
 # Contributing
