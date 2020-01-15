@@ -61,8 +61,6 @@
                     password: this.password
                 })
                 .then(response => {
-                    localStorage.setItem('user',response.data.message.name)
-                    localStorage.setItem('jwt',response.data.message.token)
 
                     if (localStorage.getItem('jwt') != null){
                         this.$router.go('/');

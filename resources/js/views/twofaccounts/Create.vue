@@ -111,11 +111,6 @@
                 this.twofaccount.icon = this.tempIcon
 
                 // store the account
-                let token = localStorage.getItem('jwt')
-
-                axios.defaults.headers.common['Content-Type'] = 'application/json'
-                axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
-
                 axios.post('/api/twofaccounts', this.twofaccount)
                 .then(response => {
                     this.$router.push({name: 'accounts', params: { InitialEditMode: false }});
@@ -140,11 +135,6 @@
             },
 
             uploadQrcode(event) {
-
-                let token = localStorage.getItem('jwt')
-
-                axios.defaults.headers.common['Content-Type'] = 'application/json'
-                axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
 
                 let imgdata = new FormData();
 
@@ -173,11 +163,6 @@
             },
 
             uploadIcon(event) {
-
-                let token = localStorage.getItem('jwt')
-
-                axios.defaults.headers.common['Content-Type'] = 'application/json'
-                axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
 
                 // clean possible already uploaded temp icon
                 if( this.tempIcon ) {
@@ -214,11 +199,6 @@
             deleteIcon(event) {
 
                 if(this.tempIcon) {
-                    let token = localStorage.getItem('jwt')
-
-                    axios.defaults.headers.common['Content-Type'] = 'application/json'
-                    axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
-
                     axios.delete('/api/icon/delete/' + this.tempIcon).then(response => {
                             this.tempIcon = ''
                         }

@@ -1,38 +1,22 @@
 import Vue          from 'vue'
 import VueRouter    from 'vue-router'
-import VueInternationalization from 'vue-i18n';
-import Locale from './vue-i18n-locales.generated';
-
-Vue.use(VueRouter)
-Vue.use(VueInternationalization);
+import axios        from './packages/axios'
+import i18n         from './packages/i18n'
+import FontAwesome  from './packages/fontawesome'
 
 import App              from './views/App'
-import Login            from './views/Login'
-import Register         from './views/Register'
 import Accounts         from './views/Accounts'
-import Create           from './views/Create'
-import Edit             from './views/Edit'
+import Create           from './views/twofaccounts/Create'
+import Edit             from './views/twofaccounts/Edit'
+import Login            from './views/auth/Login'
+import Register         from './views/auth/Register'
 import PasswordRequest  from './views/auth/password/Request'
 import PasswordReset    from './views/auth/password/Reset'
 import NotFound         from './views/Error'
 
 import './components'
 
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { faPlus, faQrcode, faImage, faTrash, faEdit, faCheck, faLock, faLockOpen, faSearch } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-
-library.add(faPlus, faQrcode, faImage, faTrash, faEdit, faCheck, faLock, faLockOpen, faSearch);
-
-Vue.component('font-awesome-icon', FontAwesomeIcon)
-
-// const lang = document.documentElement.lang.substr(0, 2);
-const lang = 'en';
-
-const i18n = new VueInternationalization({
-    locale: lang,
-    messages: Locale
-});
+Vue.use(VueRouter)
 
 const router = new VueRouter({
     mode: 'history',

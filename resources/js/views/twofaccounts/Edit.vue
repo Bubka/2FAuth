@@ -73,11 +73,6 @@
 
         methods: {
             getAccount: function () {
-                let token = localStorage.getItem('jwt')
-
-                axios.defaults.headers.common['Content-Type'] = 'application/json'
-                axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
-
                 axios.get('/api/twofaccounts/' + this.$route.params.twofaccountId).then(response => {
                     this.twofaccount = response.data
                     this.twofaccountExists = true
@@ -109,11 +104,6 @@
                 }
 
                 // store the account
-                let token = localStorage.getItem('jwt')
-
-                axios.defaults.headers.common['Content-Type'] = 'application/json'
-                axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
-
                 axios.put('/api/twofaccounts/' + this.$route.params.twofaccountId, this.twofaccount)
                 .then(response => {
                     this.$router.push({name: 'accounts', params: { InitialEditMode: true }});
@@ -141,11 +131,6 @@
             },
 
             uploadIcon(event) {
-
-                let token = localStorage.getItem('jwt')
-
-                axios.defaults.headers.common['Content-Type'] = 'application/json'
-                axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
 
                 // clean possible tempIcon but keep original one
                 // if( this.tempIcon && this.tempIcon !== this.twofaccount.icon ) {
@@ -181,11 +166,6 @@
             deleteIcon(event) {
 
                 if( this.tempIcon && this.tempIcon !== this.twofaccount.icon ) {
-                    let token = localStorage.getItem('jwt')
-
-                    axios.defaults.headers.common['Content-Type'] = 'application/json'
-                    axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
-
                     axios.delete('/api/icon/delete/' + this.tempIcon)
                         .then(response => {
                             this.tempIcon = ''

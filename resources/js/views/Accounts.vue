@@ -73,17 +73,7 @@
                 </div>
             </div>
             <div class="content has-text-centered">
-                <span v-if="token">
-                    {{ $t('auth.hello', {username: username}) }} <a class="has-text-grey" @click="logout">{{ $t('auth.sign_out') }}</a>
-                </span>
-                <span v-else>
-                    <router-link :to="{ name: 'login' }" class="button is-black">
-                        {{ $t('auth.sign_in') }}
-                    </router-link>
-                    <router-link :to="{ name: 'register' }" class="button is-black">
-                        {{ $t('auth.register') }}
-                    </router-link>
-                </span>
+                {{ $t('auth.hello', {username: username}) }} <a class="has-text-grey" @click="logout">{{ $t('auth.sign_out') }}</a>
             </div>
         </footer>
     </div>
@@ -91,6 +81,7 @@
 
 
 <script>
+    // import axios from '../packages/axios'
     import Modal from '../components/Modal'
     import TwofaccountShow from '../components/TwofaccountShow'
     import OneTimePassword from '../components/OneTimePassword'
@@ -124,11 +115,8 @@
         props: ['InitialEditMode'],
 
         mounted(){
-            this.token = localStorage.getItem('jwt')
-            this.username = localStorage.getItem('user')
 
-            axios.defaults.headers.common['Content-Type'] = 'application/json'
-            axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.token
+            this.username = localStorage.getItem('user')
 
             axios.get('api/twofaccounts').then(response => {
                 response.data.forEach((data) => {
@@ -166,9 +154,6 @@
             getAccount: function (id) {
                 let accountId = id
 
-                axios.defaults.headers.common['Content-Type'] = 'application/json'
-                axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.token
-
                 axios.get('api/twofaccounts/' + id).then(response => {
 
                     this.twofaccount.id = response.data.id
@@ -193,9 +178,6 @@
 
             deleteAccount:  function (id) {
                 if(confirm(this.$t('twofaccounts.confirm.delete'))) {
-
-                    axios.defaults.headers.common['Content-Type'] = 'application/json'
-                    axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.token
 
                     axios.delete('/api/twofaccounts/' + id)
 
