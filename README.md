@@ -45,13 +45,25 @@ In your installation directory make a copy of the `.env.example` file and rename
 
 Edit the `.env` file and adapt the settings to your running environment (see instructions in the file)
 
-#### Prepare the database
+#### Prepare some stuff
 ```
 php artisan migrate:refresh
 php artisan passport:install
 php artisan storage:link
 php artisan config:cache
+php artisan vue-i18n:generate
 ```
+
+#### Install js dependencies
+```
+npm install
+```
+
+#### Build
+`npm run dev` or `npm run prod`
+
+You are ready to go.
+
 
 # Contributing
 to complete
