@@ -52,7 +52,6 @@ class ForgotPasswordController extends Controller
     protected function sendResetLinkResponse(Request $request, $response)
     {
         return ['status' => trans($response)];
-        // return response()->json(['status' => $response], 200);
     }
 
     /**
@@ -64,6 +63,6 @@ class ForgotPasswordController extends Controller
      */
     protected function sendResetLinkFailedResponse(Request $request, $response)
     {
-        return response()->json(['email' => trans($response)], 400);
+        return response()->json(['requestFailed' => trans($response)], 400);
     }
 }
