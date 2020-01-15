@@ -15,6 +15,7 @@ import Edit             from './views/Edit'
 import PasswordRequest  from './views/auth/password/Request'
 import PasswordReset    from './views/auth/password/Reset'
 import NotFound         from './views/Error'
+import Button           from './components/Button'
 
 
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -24,6 +25,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 library.add(faPlus, faQrcode, faImage, faTrash, faEdit, faCheck, faLock, faLockOpen, faSearch);
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
+Vue.component('VButton', Button)
 
 // const lang = document.documentElement.lang.substr(0, 2);
 const lang = 'en';
