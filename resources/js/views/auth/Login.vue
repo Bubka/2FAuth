@@ -52,23 +52,28 @@
                 validationErrors: {}
             }
         },
+
         methods : {
-            handleSubmit(e){
+            async handleSubmit(e) {
                 e.preventDefault()
 
-                axios.post('api/login', {
-                    email: this.email,
-                    password: this.password
-                })
-                .then(response => {
-                    localStorage.setItem('user',response.data.message.name)
-                    localStorage.setItem('jwt',response.data.message.token)
+                try {
+                    const { data } = await axios.post('api/login', {
+                            email: this.email,
+                            password: this.password
+                        })
+
+                    localStorage.setItem('user',data.message.name)
+                    localStorage.setItem('jwt',data.message.token)
 
                     if (localStorage.getItem('jwt') != null){
                         this.$router.go('/');
                     }
-                })
-                .catch(error => {
+                }
+                catch (error) {
+
+                    this.validationErrors = {}
+
                     if( error.response.status === 401 ) {
                         this.validationErrors['email'] = ''
                         this.validationErrors['password'] = [ this.$t('auth.forms.password_do_not_match') ]
@@ -79,9 +84,11 @@
                     else {
                         this.$router.push({ name: 'genericError', params: { err: error.response.data.message } });
                     }
-                });
+                }
             }
+            
         },
+
         beforeRouteEnter (to, from, next) {
             if (localStorage.getItem('jwt')) {
                 return next('/');

@@ -73,7 +73,7 @@
             .then(response => {
                 if( response.data.userCount > 0) {
                     this.errorMessage = this.$t('errors.already_one_user_registered') + ' ' + this.$t('errors.cannot_register_more_user')
-                    //this.$router.push({ name: 'flooded' });
+                    this.$router.push({ name: 'flooded' });
                 }
             })
             .catch(error => {
@@ -82,28 +82,35 @@
         },
 
         methods : {
-            handleSubmit(e) {
+            async handleSubmit(e) {
                 e.preventDefault()
 
-                axios.post('api/register', {
-                    name: this.name,
-                    email: this.email,
-                    password: this.password,
-                    password_confirmation : this.password_confirmation
-                })
-                .then(response => {
+                try {
+                    const { data } = await axios.post('api/register', {
+                        name: this.name,
+                        email: this.email,
+                        password: this.password,
+                        password_confirmation : this.password_confirmation
+                    })
+
+                    localStorage.setItem('user',data.message.name)
+                    localStorage.setItem('jwt',data.message.token)
+
                     if (localStorage.getItem('jwt') != null){
-                        this.$router.go('/');
+                        this.$router.push({name: 'accounts'})
                     }
-                })
-                .catch(error => {
+                }
+                catch (error) {
+
+                    this.validationErrors = {}
+
                     if( error.response.data.validation ) {
                         this.validationErrors = error.response.data.validation
                     }
                     else {
                         this.$router.push({ name: 'genericError', params: { err: error.response.data.message } });
                     }
-                });
+                }
             }
         },
 
