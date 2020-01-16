@@ -13,3 +13,19 @@ axios.interceptors.request.use(request => {
 
     return request
 })
+
+// Response interceptor
+axios.interceptors.response.use(response => response, error => {
+
+    const { status } = error.response
+
+    if (status >= 500) {
+        // do something ?
+    }
+
+    if (status === 404) {
+        router.push({name: '404', params: { err : error.response.data.error }})
+    }
+
+    return Promise.reject(error)
+})
