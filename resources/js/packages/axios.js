@@ -20,11 +20,11 @@ axios.interceptors.response.use(response => response, error => {
     const { status } = error.response
 
     if (status >= 500) {
-        // do something ?
+        router.push({name: 'genericError', params: { err : error.response }})
     }
 
     if (status === 404) {
-        router.push({name: '404', params: { err : error.response.data.error }})
+        router.push({name: '404'})
     }
 
     return Promise.reject(error)

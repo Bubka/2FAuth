@@ -83,7 +83,7 @@
                     this.tempIcon = this.twofaccount.icon
                 }
                 catch (error) {
-                    this.$router.push({ name: 'genericError', params: { err: error.response.data.message } });
+                    this.$router.push({ name: 'genericError', params: { err: error.response } });
                 }
             },
 
@@ -110,7 +110,7 @@
                         this.validationErrors = error.response.data.validation
                     }
                     else {
-                        this.$router.push({ name: 'genericError', params: { err: error.response.data.message } });
+                        this.$router.push({ name: 'genericError', params: { err: error.response } });
                     }
                 }
             },
@@ -148,7 +148,7 @@
                         this.validationErrors = error.response.data.validation
                     }
                     else {
-                        this.$router.push({ name: 'genericError', params: { err: error.response.data.message } });
+                        this.$router.push({ name: 'genericError', params: { err: error.response } });
                     }
                 }
 

@@ -4,7 +4,7 @@
             <div class="error-message" v-if="$route.name == '404'">
                 <p class="error-404"></p>
                 <p>{{ $t('errors.resource_not_found') }}</p>
-                <p class="">{{ $t('errors.please') }}<router-link :to="{ name: 'accounts' }" class="is-text has-text-white">{{ $t('errors.refresh') }}</router-link></p>
+                <p class="">{{ $t('errors.please') }}<router-link :to="{ name: 'accounts' }" class="is-text has-text-grey-light">{{ $t('errors.refresh') }}</router-link></p>
             </div>
             <div v-else-if="$route.name == 'flooded'">
                 <p class="error-generic"></p>
@@ -12,16 +12,18 @@
                     {{ $t('errors.already_one_user_registered') }}<br>
                     {{ $t('errors.cannot_register_more_user') }}
                 </p>
-                <p>{{ $t('errors.please') }}<router-link :to="{ name: 'accounts' }" class="is-text has-text-white">{{ $t('auth.sign_in') }}</router-link></p>
+                <p>{{ $t('errors.please') }}<router-link :to="{ name: 'accounts' }" class="is-text has-text-grey-light">{{ $t('auth.sign_in') }}</router-link></p>
             </div>
             <div v-else>
                 <p class="error-generic"></p>
                 <p>{{ $t('errors.error_occured') }}</p>
-                <p v-if="debugMessage">{{ debugMessage }}</p>
-                <p>{{ $t('errors.please') }}<router-link :to="{ name: 'accounts' }" class="is-text has-text-white">{{ $t('errors.refresh') }}</router-link></p>
+                <p v-if="error" class="has-text-grey-lighter">{{ error.statusText }}</p>
+                <p>{{ $t('errors.please') }}<router-link :to="{ name: 'accounts' }" class="is-text has-text-grey-light">{{ $t('errors.refresh') }}</router-link></p>
+                <p v-if="debugMode == 'development' && error.data">
+                    <strong>{{ error.data.message }}</strong><br>
+                    {{ error.data.debug }}
+                </p>
             </div>
-            <!-- <div v-if="debugMode == 'development'"> -->
-            <!-- </div> -->
         </modal>
     </div>
 </template>
@@ -34,17 +36,19 @@
         data(){
             return {
                 ShowModal : true,
-                debugMessage : this.err ? this.err : null,
             }
         },
 
         computed: {
             debugMode: function() {
                 return process.env.NODE_ENV
+            },
+            error: function() {
+                return this.err === undefined ? {} : this.err
             }
         },
 
-        props: ['err'],
+        props: ['err'], // error.response
 
         components: {
             Modal

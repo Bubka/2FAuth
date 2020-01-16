@@ -14,13 +14,14 @@ return [
     */
 
     'resource_not_found' => 'Resource not found',
-    'error_occured' => 'An error occured',
+    'error_occured' => 'An error occured:',
     'already_one_user_registered' => 'There is already a registered user.',
     'cannot_register_more_user' => 'You cannot register more than one user.',
     'refresh' => 'refresh',
     'please' => 'Please ',
     'response' => [
         'no_valid_totp' => 'No valid TOTP resource in this QR code',
-    ]
+    ],
+    'something_wrong_with_server' => 'Something is wrong with your server'
 
 ];

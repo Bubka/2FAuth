@@ -85,7 +85,7 @@
                         this.errorMessage = error.response.data.resetFailed
                     }
                     else {
-                        this.$router.push({ name: 'genericError', params: { err: error.response.data.message } });
+                        this.$router.push({ name: 'genericError', params: { err: error.response } });
                     }
                 }
             }

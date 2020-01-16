@@ -165,7 +165,7 @@
                     this.ShowTwofaccountInModal = true;
                 }
                 catch (error) {
-                    this.$router.push({ name: 'genericError', params: { err: error.response.data.message } });
+                    //this.$router.push({ name: 'genericError', params: { err: error.response } });
                 }
             },
 
@@ -194,7 +194,7 @@
                         this.$router.go('/login');
                     }
                     catch (error) {
-                        this.$router.push({ name: 'genericError', params: { err: error.response.data.message } });
+                        this.$router.push({ name: 'genericError', params: { err: error.response } });
                     }  
                 }
             }

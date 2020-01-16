@@ -23,6 +23,11 @@
                             <button type="submit" class="button is-link" @click="handleSubmit">{{ $t('auth.sign_in') }}</button>
                         </div>
                     </div>
+                    <div class="field" v-if="errorMessage">
+                        <span class="tag is-danger">
+                            {{ errorMessage }}
+                        </span>
+                    </div>
                 </form>
             </div>
         </div>
@@ -49,7 +54,8 @@
             return {
                 email : '',
                 password : '',
-                validationErrors: {}
+                validationErrors: {},
+                errorMessage: ''
             }
         },
 
@@ -73,16 +79,16 @@
                 catch (error) {
 
                     this.validationErrors = {}
+                    this.errorMessage = ''
 
                     if( error.response.status === 401 ) {
-                        this.validationErrors['email'] = ''
-                        this.validationErrors['password'] = [ this.$t('auth.forms.password_do_not_match') ]
+                        this.errorMessage = this.$t('auth.forms.password_do_not_match')
                     }
                     else if( error.response.data.validation ) {
                         this.validationErrors = error.response.data.validation
                     }
                     else {
-                        this.$router.push({ name: 'genericError', params: { err: error.response.data.message } });
+                        this.$router.push({ name: 'genericError', params: { err: error.response } });
                     }
                 }
             }
