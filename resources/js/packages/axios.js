@@ -1,3 +1,5 @@
+import Vue from 'vue'
+import router from '../routes/routes'
 
 axios.interceptors.request.use(request => {
 
