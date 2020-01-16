@@ -72,25 +72,22 @@
         },
 
         methods: {
-            getAccount: function () {
-                axios.get('/api/twofaccounts/' + this.$route.params.twofaccountId).then(response => {
-                    this.twofaccount = response.data
+            async getAccount () {
+                try {
+                    const { data } = await axios.get('/api/twofaccounts/' + this.$route.params.twofaccountId)
+
+                    this.twofaccount = data
                     this.twofaccountExists = true
 
                     // set account icon as temp icon
                     this.tempIcon = this.twofaccount.icon
-                })
-                .catch(error => {
-                    if( error.response.status === 404 ) {
-                        this.$router.push({ name: '404' });
-                    }
-                    else {
-                        this.$router.push({ name: 'genericError', params: { err: error.response.data.message } });
-                    }
-                });
+                }
+                catch (error) {
+                    this.$router.push({ name: 'genericError', params: { err: error.response.data.message } });
+                }
             },
 
-            updateAccount: function() {
+            async updateAccount() {
 
                 // Set new icon and delete old one
                 if( this.tempIcon !== this.twofaccount.icon ) {
@@ -103,39 +100,32 @@
                     this.deleteIcon()
                 }
 
-                // store the account
-                axios.put('/api/twofaccounts/' + this.$route.params.twofaccountId, this.twofaccount)
-                .then(response => {
+                try {
+                    await axios.put('/api/twofaccounts/' + this.$route.params.twofaccountId, this.twofaccount)
+
                     this.$router.push({name: 'accounts', params: { InitialEditMode: true }});
-                })
-                .catch(error => {
-                    if (error.response.status === 404) {
-                        this.$router.push({ name: '404' });
-                    }
-                    else if( error.response.data.validation ) {
+                }
+                catch (error) {
+                    if( error.response.data.validation ) {
                         this.validationErrors = error.response.data.validation
                     }
                     else {
                         this.$router.push({ name: 'genericError', params: { err: error.response.data.message } });
                     }
-                });
+                }
             },
 
             cancelCreation: function() {
                 // clean new temp icon
-                if( this.tempIcon ) {
-                    this.deleteIcon()
-                }
+                this.deleteIcon()
 
                 this.$router.push({name: 'accounts', params: { InitialEditMode: true }});
             },
 
-            uploadIcon(event) {
+            async uploadIcon(event) {
 
                 // clean possible tempIcon but keep original one
-                // if( this.tempIcon && this.tempIcon !== this.twofaccount.icon ) {
-                    this.deleteIcon()
-                // }
+                this.deleteIcon()
 
                 let imgdata = new FormData();
 
@@ -147,30 +137,27 @@
                     }
                 }
 
-                axios.post('/api/icon/upload', imgdata, config)
-                    .then(response => {
-                        console.log('icon path > ', response);
-                        this.tempIcon = response.data;
-                        this.validationErrors['icon'] = '';
-                    })
-                    .catch(error => {
-                        if( error.response.data.validation ) {
-                            this.validationErrors = error.response.data.validation
-                        }
-                        else {
-                            this.$router.push({ name: 'genericError', params: { err: error.response.data.message } });
-                        }
-                    });
+                try {
+                    const { data } = await axios.post('/api/icon/upload', imgdata, config)
+
+                    this.tempIcon = data;
+                    this.validationErrors['icon'] = '';
+                }
+                catch (error) {
+                    if( error.response.data.validation ) {
+                        this.validationErrors = error.response.data.validation
+                    }
+                    else {
+                        this.$router.push({ name: 'genericError', params: { err: error.response.data.message } });
+                    }
+                }
+
             },
 
-            deleteIcon(event) {
+            async deleteIcon(event) {
 
                 if( this.tempIcon && this.tempIcon !== this.twofaccount.icon ) {
-                    axios.delete('/api/icon/delete/' + this.tempIcon)
-                        .then(response => {
-                            this.tempIcon = ''
-                        }
-                    )
+                    await axios.delete('/api/icon/delete/' + this.tempIcon)
                 }
 
                 this.tempIcon = ''
