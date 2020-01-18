@@ -56,7 +56,7 @@ return [
     |
     */
     'jsPath' => '/resources/js/langs/',
-    'jsFile' => '/resources/js/vue-i18n-locales.generated.js',
+    'jsFile' => '/resources/js/langs/locales.js',
 
     /*
     |--------------------------------------------------------------------------

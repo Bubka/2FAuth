@@ -1,7 +1,6 @@
 import Vue  from 'vue'
 import VueInternationalization from 'vue-i18n';
-import Locale from './vue-i18n-locales.generated';
-
+import Locale from './locales';
 
 Vue.use(VueInternationalization);
 

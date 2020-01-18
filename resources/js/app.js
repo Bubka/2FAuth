@@ -1,7 +1,7 @@
 import Vue          from 'vue'
-import router       from './routes/routes'
+import router       from './routes'
+import i18n         from './langs/i18n'
 import axios        from './packages/axios'
-import i18n         from './packages/i18n'
 import FontAwesome  from './packages/fontawesome'
 import App          from './components/App'
 
