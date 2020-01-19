@@ -81,7 +81,7 @@
 
 
 <script>
-    // import axios from '../packages/axios'
+
     import Modal from '../components/Modal'
     import TwofaccountShow from '../components/TwofaccountShow'
     import OneTimePassword from '../components/OneTimePassword'
@@ -127,6 +127,7 @@
                         icon : data.icon
                     })
                 })
+                
                 this.showAccounts = this.accounts.length > 0 ? true : false
                 this.showNoAccount = !this.showAccounts
             })
