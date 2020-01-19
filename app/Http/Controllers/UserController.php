@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\User;
-use Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -18,14 +17,11 @@ class UserController extends Controller
      */
     public function login(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+
+        $this->validate($request, [
             'email' => 'required|exists:users,email',
             'password' => 'required',
         ]);
-
-        if ($validator->fails()) {
-            return response()->json(['validation' => $validator->errors()], 400);
-        }
 
         $credentials = [
             'email' => request('email'),
@@ -86,15 +82,11 @@ class UserController extends Controller
             return response()->json(['message' => __('errors.already_one_user_registered')], 400);
         }
 
-        $validator = Validator::make($request->all(), [
+        $this->validate($request, [
             'name' => 'required',
             'email' => 'required|email',
             'password' => 'required|confirmed',
         ]);
-
-        if ($validator->fails()) {
-            return response()->json(['validation' => $validator->errors()], 400);
-        }
 
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);

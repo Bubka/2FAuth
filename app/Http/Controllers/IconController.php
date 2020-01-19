@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Validator;
 use Illuminate\Http\Request;
 use Illuminate\Http\File;
 use Illuminate\Support\Facades\Storage;
@@ -19,13 +18,10 @@ class IconController extends Controller
      */
     public function upload(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+
+        $this->validate($request, [
             'icon' => 'required|image',
         ]);
-
-        if ($validator->fails()) {
-            return response()->json(['validation' => $validator->errors()], 400);
-        }
         
         $path = $request->file('icon')->storePublicly('public/icons');
 

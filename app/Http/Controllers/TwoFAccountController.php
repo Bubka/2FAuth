@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Validator;
 use App\TwoFAccount;
 use App\Classes\TimedTOTP;
 use Illuminate\Http\Request;
@@ -33,15 +32,10 @@ class TwoFAccountController extends Controller
 
         // see https://github.com/google/google-authenticator/wiki/Key-Uri-Format
         // for otpauth uri format validation
-
-        $validator = Validator::make($request->all(), [
+        $this->validate($request, [
             'service' => 'required',
             'uri' => 'required|starts_with:otpauth://totp/',
         ]);
-
-        if ($validator->fails()) {
-            return response()->json(['validation' => $validator->errors()], 400);
-        }
 
         $twofaccount = TwoFAccount::create([
             'service' => $request->service,
@@ -95,14 +89,9 @@ class TwoFAccountController extends Controller
     public function update(Request $request, $id)
     {
 
-        $validator = Validator::make($request->all(), [
+        $this->validate($request, [
             'service' => 'required',
         ]);
-
-        if ($validator->fails()) {
-            return response()->json( ['validation' => $validator->errors() ], 400);
-        }
-
 
         try {
 

@@ -80,7 +80,7 @@
                 })
                 .catch(error => {
 
-                    if( error.response.data.errors ) {
+                    if( error.response.status == 422 ) {
                         this.validationErrors = error.response.data.errors
                     }
                     else if( error.response.data.resetFailed ) {

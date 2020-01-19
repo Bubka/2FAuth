@@ -83,8 +83,8 @@
                     if( error.response.status === 401 ) {
                         this.errorMessage = this.$t('auth.forms.password_do_not_match')
                     }
-                    else if( error.response.data.validation ) {
-                        this.validationErrors = error.response.data.validation
+                    else if( error.response.status == 422 ) {
+                        this.validationErrors = error.response.data.errors
                     }
                     else {
                         this.$router.push({ name: 'genericError', params: { err: error.response } });

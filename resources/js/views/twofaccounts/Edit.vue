@@ -106,8 +106,8 @@
                     this.$router.push({name: 'accounts', params: { InitialEditMode: true }});
                 })
                 .catch(error => {
-                    if( error.response.data.validation ) {
-                        this.validationErrors = error.response.data.validation
+                    if( error.response.status == 422 ) {
+                        this.validationErrors = error.response.data.errors
                     }
                     else {
                         this.$router.push({ name: 'genericError', params: { err: error.response } });
@@ -144,8 +144,8 @@
                     this.validationErrors['icon'] = '';
                 })
                 .catch(error => {
-                    if( error.response.data.validation ) {
-                        this.validationErrors = error.response.data.validation
+                    if( error.response.status == 422 ) {
+                        this.validationErrors = error.response.data.errors
                     }
                     else {
                         this.$router.push({ name: 'genericError', params: { err: error.response } });

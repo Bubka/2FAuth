@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Validator;
 use Zxing\QrReader;
 use OTPHP\TOTP;
 use OTPHP\Factory;
@@ -23,13 +22,9 @@ class QrCodecontroller extends Controller
     {
 
         // input validation
-        $validator = Validator::make($request->all(), [
+        $this->validate($request, [
             'qrcode' => 'required|image',
         ]);
-
-        if ($validator->fails()) {
-            return response()->json(['validation' => $validator->errors()], 400);
-        }
 
         // qrcode analysis
         $path = $request->file('qrcode')->store('qrcodes');
@@ -64,12 +59,12 @@ class QrCodecontroller extends Controller
         }
         catch (AssertionFailedException $exception) {
 
-            return response()->json([
-                'validation' => [
-                   'qrcode' => __('errors.response.no_valid_totp')
-                ]
-            ], 400);
+            $error = \Illuminate\Validation\ValidationException::withMessages([
+                'qrcode' => __('errors.response.no_valid_totp')
+            ]);
 
+            throw $error;
+            
         }
     }
     
