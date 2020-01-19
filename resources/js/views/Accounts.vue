@@ -156,12 +156,12 @@
 
                 axios.get('api/twofaccounts/' + id)
                 .then(response => {
-                    this.twofaccount.id = data.id
-                    this.twofaccount.service = data.service
-                    this.twofaccount.account = data.account
-                    this.twofaccount.icon = data.icon
+                    this.twofaccount.id = response.data.id
+                    this.twofaccount.service = response.data.service
+                    this.twofaccount.account = response.data.account
+                    this.twofaccount.icon = response.data.icon
 
-                    this.$refs.OneTimePassword.AccountId = data.id
+                    this.$refs.OneTimePassword.AccountId = response.data.id
                     this.$refs.OneTimePassword.getOTP()
                     this.ShowTwofaccountInModal = true;
                 })
