@@ -62,22 +62,24 @@
         },
 
         methods : {
-            async handleSubmit(e) {
+            handleSubmit(e) {
                 e.preventDefault()
 
                 this.validationErrors = {}
 
-                try {
-                    const { data } = await axios.post('/api/password/reset', {
-                        email: this.email,
-                        password: this.password,
-                        password_confirmation : this.password_confirmation,
-                        token: this.token
-                    })
+                axios.post('/api/password/reset', {
+                    email: this.email,
+                    password: this.password,
+                    password_confirmation : this.password_confirmation,
+                    token: this.token
+                })
+                .then(response => {
 
                     this.$router.go('/');
-                }
-                catch (error) {
+
+                })
+                .catch(error => {
+
                     if( error.response.data.errors ) {
                         this.validationErrors = error.response.data.errors
                     }
@@ -87,7 +89,8 @@
                     else {
                         this.$router.push({ name: 'genericError', params: { err: error.response } });
                     }
-                }
+                    
+                });
             }
         },
     }

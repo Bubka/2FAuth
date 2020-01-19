@@ -151,10 +151,10 @@
         },
 
         methods: {
-            async getAccount(id) {
-                try {
-                    const { data } = await axios.get('api/twofaccounts/' + id)
+            getAccount(id) {
 
+                axios.get('api/twofaccounts/' + id)
+                .then(response => {
                     this.twofaccount.id = data.id
                     this.twofaccount.service = data.service
                     this.twofaccount.account = data.account
@@ -163,10 +163,11 @@
                     this.$refs.OneTimePassword.AccountId = data.id
                     this.$refs.OneTimePassword.getOTP()
                     this.ShowTwofaccountInModal = true;
-                }
-                catch (error) {
-                    //this.$router.push({ name: 'genericError', params: { err: error.response } });
-                }
+                })
+                .catch(error => {
+                    this.$router.push({ name: 'genericError', params: { err: error.response } });
+                });
+
             },
 
             deleteAccount:  function (id) {
@@ -175,27 +176,27 @@
                     axios.delete('/api/twofaccounts/' + id)
 
                     this.accounts.splice(this.accounts.findIndex(x => x.id === id), 1);
-
                     this.showAccounts = this.accounts.length > 0 ? true : false
                     this.showNoAccount = !this.showAccounts
                 }
             },
 
-            async logout(evt) {
+            logout(evt) {
                 if(confirm(this.$t('auth.confirm.logout'))) {
-                    try {
-                        await axios.get('api/logout')
 
+                    axios.get('api/logout')
+                    .then(response => {
                         localStorage.removeItem('jwt');
                         localStorage.removeItem('user');
 
                         delete axios.defaults.headers.common['Authorization'];
 
                         this.$router.go('/login');
-                    }
-                    catch (error) {
+                    })
+                    .catch(error => {
                         this.$router.push({ name: 'genericError', params: { err: error.response } });
-                    }  
+                    });
+
                 }
             }
 

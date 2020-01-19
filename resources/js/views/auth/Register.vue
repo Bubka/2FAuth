@@ -82,25 +82,25 @@
         },
 
         methods : {
-            async handleSubmit(e) {
+            handleSubmit(e) {
                 e.preventDefault()
 
-                try {
-                    const { data } = await axios.post('api/register', {
-                        name: this.name,
-                        email: this.email,
-                        password: this.password,
-                        password_confirmation : this.password_confirmation
-                    })
+                axios.post('api/register', {
+                    name: this.name,
+                    email: this.email,
+                    password: this.password,
+                    password_confirmation : this.password_confirmation
+                })
+                .then(response => {
 
-                    localStorage.setItem('user',data.message.name)
-                    localStorage.setItem('jwt',data.message.token)
+                    localStorage.setItem('user',response.data.message.name)
+                    localStorage.setItem('jwt',response.data.message.token)
 
                     if (localStorage.getItem('jwt') != null){
                         this.$router.push({name: 'accounts'})
                     }
-                }
-                catch (error) {
+                })
+                .catch(error => {
 
                     this.validationErrors = {}
 
@@ -110,7 +110,7 @@
                     else {
                         this.$router.push({ name: 'genericError', params: { err: error.response } });
                     }
-                }
+                });
             }
         },
 

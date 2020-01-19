@@ -106,23 +106,22 @@
 
         methods: {
 
-            async createAccount() {
+            createAccount() {
                 // set current temp icon as account icon
                 this.twofaccount.icon = this.tempIcon
 
-                try {
-                    await axios.post('/api/twofaccounts', this.twofaccount)
-
+                axios.post('/api/twofaccounts', this.twofaccount)
+                .then(response => {
                     this.$router.push({name: 'accounts', params: { InitialEditMode: false }});
-                }
-                catch (error) {
+                })
+                .catch(error => {
                     if( error.response.data.validation ) {
                         this.validationErrors = error.response.data.validation
                     }
                     else {
-                        this.$router.push({ name: 'genericError', params: { err: error.response } });
+                        this.$router.push({ name: 'genericError', params: { err: error.response.data.message } });
                     }
-                }
+                });
 
             },
 
@@ -135,7 +134,7 @@
                 this.$router.push({name: 'accounts', params: { InitialEditMode: false }});
             },
 
-            async uploadQrcode(event) {
+            uploadQrcode(event) {
 
                 let imgdata = new FormData();
 
@@ -147,24 +146,23 @@
                     }
                 }
 
-                try {
-                    const { data } = await axios.post('/api/qrcode/decode', imgdata, config)
-
-                    this.twofaccount = data;
+                axios.post('/api/qrcode/decode', imgdata, config)
+                .then(response => {
+                    this.twofaccount = response.data;
                     this.validationErrors['qrcode'] = '';
-                }
-                catch (error) {
+                })
+                .catch(error => {
                     if( error.response.data.validation ) {
                         this.validationErrors = error.response.data.validation
                     }
                     else {
-                        this.$router.push({ name: 'genericError', params: { err: error.response } });
+                        this.$router.push({ name: 'genericError', params: { err: error.response.data.message } });
                     }
-                }
+                });
 
             },
 
-            async uploadIcon(event) {
+            uploadIcon(event) {
 
                 // clean possible already uploaded temp icon
                 if( this.tempIcon ) {
@@ -181,27 +179,26 @@
                     }
                 }
 
-                try {
-                    const { data } = await axios.post('/api/icon/upload', imgdata, config)
-
-                    this.tempIcon = data;
+                axios.post('/api/icon/upload', imgdata, config)
+                .then(response => {
+                    this.tempIcon = response.data;
                     this.validationErrors['icon'] = '';
-                }
-                catch (error) {
+                })
+                .catch(error => {
                     if( error.response.data.validation ) {
                         this.validationErrors = error.response.data.validation
                     }
                     else {
-                        this.$router.push({ name: 'genericError', params: { err: error.response } });
+                        this.$router.push({ name: 'genericError', params: { err: error.response.data.message } });
                     }
-                }
+                });
 
             },
 
-            async deleteIcon(event) {
+            deleteIcon(event) {
 
                 if(this.tempIcon) {
-                    await axios.delete('/api/icon/delete/' + this.tempIcon)
+                    axios.delete('/api/icon/delete/' + this.tempIcon)
                     this.tempIcon = ''
                 }
             },

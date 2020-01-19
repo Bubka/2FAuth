@@ -60,23 +60,22 @@
         },
 
         methods : {
-            async handleSubmit(e) {
+            handleSubmit(e) {
                 e.preventDefault()
 
-                try {
-                    const { data } = await axios.post('api/login', {
-                            email: this.email,
-                            password: this.password
-                        })
-
-                    localStorage.setItem('user',data.message.name)
-                    localStorage.setItem('jwt',data.message.token)
+                axios.post('api/login', {
+                    email: this.email,
+                    password: this.password
+                })
+                .then(response => {
+                    localStorage.setItem('user',response.data.message.name)
+                    localStorage.setItem('jwt',response.data.message.token)
 
                     if (localStorage.getItem('jwt') != null){
                         this.$router.go('/');
                     }
-                }
-                catch (error) {
+                })
+                .catch(error => {
 
                     this.validationErrors = {}
                     this.errorMessage = ''
@@ -90,7 +89,7 @@
                     else {
                         this.$router.push({ name: 'genericError', params: { err: error.response } });
                     }
-                }
+                });
             }
             
         },

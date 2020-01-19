@@ -72,22 +72,23 @@
         },
 
         methods: {
-            async getAccount () {
-                try {
-                    const { data } = await axios.get('/api/twofaccounts/' + this.$route.params.twofaccountId)
+            getAccount () {
 
-                    this.twofaccount = data
+                axios.get('/api/twofaccounts/' + this.$route.params.twofaccountId)
+                .then(response => {
+                    this.twofaccount = response.data
                     this.twofaccountExists = true
 
                     // set account icon as temp icon
                     this.tempIcon = this.twofaccount.icon
-                }
-                catch (error) {
+                })
+                .catch(error => {
                     this.$router.push({ name: 'genericError', params: { err: error.response } });
-                }
+                });
+
             },
 
-            async updateAccount() {
+            updateAccount() {
 
                 // Set new icon and delete old one
                 if( this.tempIcon !== this.twofaccount.icon ) {
@@ -100,19 +101,19 @@
                     this.deleteIcon()
                 }
 
-                try {
-                    await axios.put('/api/twofaccounts/' + this.$route.params.twofaccountId, this.twofaccount)
-
+                axios.put('/api/twofaccounts/' + this.$route.params.twofaccountId, this.twofaccount)
+                .then(response => {
                     this.$router.push({name: 'accounts', params: { InitialEditMode: true }});
-                }
-                catch (error) {
+                })
+                .catch(error => {
                     if( error.response.data.validation ) {
                         this.validationErrors = error.response.data.validation
                     }
                     else {
                         this.$router.push({ name: 'genericError', params: { err: error.response } });
                     }
-                }
+                });
+
             },
 
             cancelCreation: function() {
@@ -122,7 +123,7 @@
                 this.$router.push({name: 'accounts', params: { InitialEditMode: true }});
             },
 
-            async uploadIcon(event) {
+            uploadIcon(event) {
 
                 // clean possible tempIcon but keep original one
                 this.deleteIcon()
@@ -137,27 +138,26 @@
                     }
                 }
 
-                try {
-                    const { data } = await axios.post('/api/icon/upload', imgdata, config)
-
-                    this.tempIcon = data;
+                axios.post('/api/icon/upload', imgdata, config)
+                .then(response => {
+                    this.tempIcon = response.data;
                     this.validationErrors['icon'] = '';
-                }
-                catch (error) {
+                })
+                .catch(error => {
                     if( error.response.data.validation ) {
                         this.validationErrors = error.response.data.validation
                     }
                     else {
                         this.$router.push({ name: 'genericError', params: { err: error.response } });
                     }
-                }
+                });
 
             },
 
-            async deleteIcon(event) {
+            deleteIcon(event) {
 
                 if( this.tempIcon && this.tempIcon !== this.twofaccount.icon ) {
-                    await axios.delete('/api/icon/delete/' + this.tempIcon)
+                    axios.delete('/api/icon/delete/' + this.tempIcon)
                 }
 
                 this.tempIcon = ''
