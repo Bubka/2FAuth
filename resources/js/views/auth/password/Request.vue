@@ -7,9 +7,9 @@
                     <div class="field">
                         <label class="label">{{ $t('auth.forms.email') }}</label>
                         <div class="control">
-                            <input id="email" type="email" class="input" v-model="email" required autofocus />
+                            <input id="email" type="email" class="input" v-model="form.email" required autofocus />
                         </div>
-                        <p class="help is-danger" v-if="validationErrors.email">{{ validationErrors.email.toString() }}</p>
+                        <field-error :form="form" field="email" />
                     </div>
                     <div class="field is-grouped">
                         <div class="control">
@@ -19,58 +19,52 @@
                             <router-link :to="{ name: 'login' }" class="button is-text">{{ $t('commons.cancel') }}</router-link>
                         </div>
                     </div>
+                    <div class="field" v-if="errorMessage">
+                        <span class="tag is-danger">
+                            {{ errorMessage }}
+                        </span>
+                    </div>
                 </form>
-                <br />
-                <span class="tag is-danger" v-if="errorMessage">
-                    {{ errorMessage }}
-                </span>
             </div>
         </div>
         <div class="columns is-mobile is-centered" v-if="response">
             <div class="column is-two-thirds-tablet is-half-desktop is-one-third-widescreen is-one-quarter-fullhd">
                 {{ response }}
-                </router-link>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+
+    import Form from './../../../components/Form'
+
     export default {
         data(){
             return {
-                email : '',
-                validationErrors: {},
                 response: '',
-                errorMessage: ''
+                errorMessage: '',
+                form: new Form({
+                    email: '',
+                })
             }
         },
         methods : {
-            handleSubmit(e){
+            handleSubmit(e) {
                 e.preventDefault()
 
-                this.validationErrors = {}
-
-                axios.post('/api/password/email', {
-                    email: this.email
-                })
+                this.form.post('/api/password/email')
                 .then(response => {
 
                     this.response = response.data.status
-
                 })
                 .catch(error => {
-
-                    if( error.response.status == 422 ) {
-                        this.validationErrors = error.response.data.errors
-                    }
-                    else if( error.response.data.requestFailed ) {
+                    if( error.response.data.requestFailed ) {
                         this.errorMessage = error.response.data.requestFailed
                     }
-                    else {
-                        this.$router.push({ name: 'genericError', params: { err: error.response } });
+                    else if( error.response.status !== 422 ) {
+                        this.$router.push({ name: 'genericError', params: { err: error.response.data.message } });
                     }
-                    
                 });
 
             }

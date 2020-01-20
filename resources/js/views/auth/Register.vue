@@ -7,30 +7,30 @@
                     <div class="field">
                         <label class="label">{{ $t('auth.forms.name') }}</label>
                         <div class="control">
-                            <input id="name" type="text" class="input" v-model="name" required autofocus />
+                            <input id="name" type="text" class="input" v-model="form.name" required autofocus />
                         </div>
-                        <p class="help is-danger" v-if="validationErrors.name">{{ validationErrors.name.toString() }}</p>
+                        <field-error :form="form" field="name" />
                     </div>
                     <div class="field">
                         <label class="label">{{ $t('auth.forms.email') }}</label>
                         <div class="control">
-                            <input id="email" type="email" class="input" v-model="email" required />
+                            <input id="email" type="email" class="input" v-model="form.email" required />
                         </div>
-                        <p class="help is-danger" v-if="validationErrors.email">{{ validationErrors.email.toString() }}</p>
+                        <field-error :form="form" field="email" />
                     </div>
                     <div class="field">
                         <label class="label">{{ $t('auth.forms.password') }}</label>
                         <div class="control">
-                            <input id="password" type="password" class="input" v-model="password" required />
+                            <input id="password" type="password" class="input" v-model="form.password" required />
                         </div>
-                        <p class="help is-danger" v-if="validationErrors.password">{{ validationErrors.password.toString() }}</p>
+                        <field-error :form="form" field="password" />
                     </div>
                     <div class="field">
                         <label class="label">{{ $t('auth.forms.confirm_password') }}</label>
                         <div class="control">
-                            <input id="password_confirmation" type="password" class="input" v-model="password_confirmation" required />
+                            <input id="password_confirmation" type="password" class="input" v-model="form.password_confirmation" required />
                         </div>
-                        <p class="help is-danger" v-if="validationErrors.passwordConfirmation">{{ validationErrors.passwordConfirmation.toString() }}</p>
+                        <field-error :form="form" field="password_confirmation" />
                     </div>
                     <div class="field">
                         <div class="control">
@@ -55,15 +55,19 @@
 </template>
 
 <script>
+
+    import Form from './../../components/Form'
+
     export default {
         data(){
             return {
-                name : '',
-                email : '',
-                password : '',
-                password_confirmation : '',
-                validationErrors: {},
-                errorMessage: ''
+                errorMessage: '',
+                form: new Form({
+                    name : '',
+                    email : '',
+                    password : '',
+                    password_confirmation : '',
+                })
             }
         },
 
@@ -77,7 +81,7 @@
                 }
             })
             .catch(error => {
-                this.$router.push({ name: 'genericError', params: { err: error.response } });
+                this.$router.push({ name: 'genericError', params: { err: error.response.data.message } });
             });
         },
 
@@ -85,14 +89,8 @@
             handleSubmit(e) {
                 e.preventDefault()
 
-                axios.post('api/register', {
-                    name: this.name,
-                    email: this.email,
-                    password: this.password,
-                    password_confirmation : this.password_confirmation
-                })
+                this.form.post('api/register')
                 .then(response => {
-
                     localStorage.setItem('user',response.data.message.name)
                     localStorage.setItem('jwt',response.data.message.token)
 
@@ -101,14 +99,8 @@
                     }
                 })
                 .catch(error => {
-
-                    this.validationErrors = {}
-
-                    if( error.response.status == 422 ) {
-                        this.validationErrors = error.response.data.errors
-                    }
-                    else {
-                        this.$router.push({ name: 'genericError', params: { err: error.response } });
+                    if( error.response.status !== 422 ) {
+                        this.$router.push({ name: 'genericError', params: { err: error.response.data.message } });
                     }
                 });
             }

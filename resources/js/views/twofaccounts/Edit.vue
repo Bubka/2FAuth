@@ -3,20 +3,20 @@
         <div class="columns is-mobile is-centered">
             <div class="column is-two-thirds-tablet is-half-desktop is-one-third-widescreen is-one-quarter-fullhd">
                 <h1 class="title">{{ $t('twofaccounts.forms.edit_account') }}</h1>
-                <form @submit.prevent="updateAccount">
+                <form @submit.prevent="updateAccount" @keydown="form.onKeydown($event)">
                     <div class="field">
                         <label class="label">{{ $t('twofaccounts.service') }}</label>
                         <div class="control">
-                            <input class="input" type="text" :placeholder="$t('twofaccounts.forms.service.placeholder')" v-model="twofaccount.service" autofocus />
+                            <input class="input" type="text" :placeholder="$t('twofaccounts.forms.service.placeholder')" v-model="form.service" autofocus />
                         </div>
-                        <p class="help is-danger" v-if="validationErrors.service">{{ validationErrors.service.toString() }}</p>
+                        <field-error :form="form" field="service" />
                     </div>
                     <div class="field">
                         <label class="label">{{ $t('twofaccounts.account') }}</label>
                         <div class="control">
-                            <input class="input" type="text" :placeholder="$t('twofaccounts.forms.account.placeholder')" v-model="twofaccount.account" />
+                            <input class="input" type="text" :placeholder="$t('twofaccounts.forms.account.placeholder')" v-model="form.account" />
                         </div>
-                        <p class="help is-danger" v-if="validationErrors.account">{{ validationErrors.account.toString() }}</p>
+                        <field-error :form="form" field="account" />
                     </div>
                     <div class="field">
                         <label class="label">{{ $t('twofaccounts.icon') }}</label>
@@ -36,7 +36,7 @@
                             </span>
                         </div>
                     </div>
-                    <p class="help is-danger help-for-file" v-if="validationErrors.icon">{{ validationErrors.icon.toString() }}</p>
+                    <field-error :form="form" field="icon" class="help-for-file" />
                     <div class="field is-grouped">
                         <div class="control">
                             <button type="submit" class="button is-link">{{ $t('twofaccounts.forms.save') }}</button>
@@ -52,18 +52,21 @@
 </template>
 
 <script>
+
+    import Form from './../../components/Form'
+
     export default {
         data() {
             return {
-                twofaccount: {
-                    'service' : '',
-                    'account' : '',
-                    'uri' : '',
-                    'icon' : ''
-                },
                 twofaccountExists: false,
                 tempIcon: '',
-                validationErrors: {}
+                form: new Form({
+                    service: '',
+                    account: '',
+                    uri: '',
+                    icon: '',
+                    qrcode: null
+                })
             }
         },
 
@@ -76,11 +79,11 @@
 
                 axios.get('/api/twofaccounts/' + this.$route.params.twofaccountId)
                 .then(response => {
-                    this.twofaccount = response.data
+                    this.form.fill(response.data)
                     this.twofaccountExists = true
 
                     // set account icon as temp icon
-                    this.tempIcon = this.twofaccount.icon
+                    this.tempIcon = this.form.icon
                 })
                 .catch(error => {
                     this.$router.push({ name: 'genericError', params: { err: error.response } });
@@ -91,26 +94,23 @@
             updateAccount() {
 
                 // Set new icon and delete old one
-                if( this.tempIcon !== this.twofaccount.icon ) {
+                if( this.tempIcon !== this.form.icon ) {
                     let oldIcon = ''
 
-                    oldIcon = this.twofaccount.icon
+                    oldIcon = this.form.icon
 
-                    this.twofaccount.icon = this.tempIcon
+                    this.form.icon = this.tempIcon
                     this.tempIcon = oldIcon
                     this.deleteIcon()
                 }
 
-                axios.put('/api/twofaccounts/' + this.$route.params.twofaccountId, this.twofaccount)
+                this.form.put('/api/twofaccounts/' + this.$route.params.twofaccountId)
                 .then(response => {
                     this.$router.push({name: 'accounts', params: { InitialEditMode: true }});
                 })
                 .catch(error => {
-                    if( error.response.status == 422 ) {
-                        this.validationErrors = error.response.data.errors
-                    }
-                    else {
-                        this.$router.push({ name: 'genericError', params: { err: error.response } });
+                    if( error.response.status !== 422 ) {
+                        this.$router.push({ name: 'genericError', params: { err: error.response.data.message } });
                     }
                 });
 
@@ -129,26 +129,15 @@
                 this.deleteIcon()
 
                 let imgdata = new FormData();
+                imgdata.append('icon', this.$refs.iconInput.files[0]);
 
-                imgdata.append('icon', this.$refs.iconInput.files[0]); 
-
-                let config = {
-                    header : {
-                        'Content-Type' : 'multipart/form-data',
-                    }
-                }
-
-                axios.post('/api/icon/upload', imgdata, config)
+                this.form.upload('/api/icon/upload', imgdata)
                 .then(response => {
                     this.tempIcon = response.data;
-                    this.validationErrors['icon'] = '';
                 })
                 .catch(error => {
-                    if( error.response.status == 422 ) {
-                        this.validationErrors = error.response.data.errors
-                    }
-                    else {
-                        this.$router.push({ name: 'genericError', params: { err: error.response } });
+                    if( error.response.status !== 422 ) {
+                        this.$router.push({ name: 'genericError', params: { err: error.response.data.message } });
                     }
                 });
 
@@ -156,7 +145,7 @@
 
             deleteIcon(event) {
 
-                if( this.tempIcon && this.tempIcon !== this.twofaccount.icon ) {
+                if( this.tempIcon && this.tempIcon !== this.form.icon ) {
                     axios.delete('/api/icon/delete/' + this.tempIcon)
                 }
 

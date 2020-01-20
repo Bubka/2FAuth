@@ -21,14 +21,14 @@
                     <div class="field">
                         <label class="label">{{ $t('twofaccounts.service') }}</label>
                         <div class="control">
-                            <input class="input" type="text" :placeholder="$t('twofaccounts.forms.service.placeholder')" v-model="twofaccount.service"  autofocus />
+                            <input class="input" type="text" :placeholder="$t('twofaccounts.forms.service.placeholder')" v-model="form.service"  autofocus />
                         </div>
                         <field-error :form="form" field="service" />
                     </div>
                     <div class="field">
                         <label class="label">{{ $t('twofaccounts.account') }}</label>
                         <div class="control">
-                            <input class="input" type="text" :placeholder="$t('twofaccounts.forms.account.placeholder')" v-model="twofaccount.account"  />
+                            <input class="input" type="text" :placeholder="$t('twofaccounts.forms.account.placeholder')" v-model="form.account"  />
                         </div>
                         <field-error :form="form" field="account" />
                     </div>
@@ -37,7 +37,7 @@
                     </div>
                     <div class="field has-addons">
                         <div class="control is-expanded">
-                            <input class="input" type="text" placeholder="otpauth://totp/..." v-model="twofaccount.uri" :disabled="uriIsLocked" />
+                            <input class="input" type="text" placeholder="otpauth://totp/..." v-model="form.uri" :disabled="uriIsLocked" />
                         </div>
                         <div class="control" v-if="uriIsLocked">
                             <a class="button is-dark field-lock" @click="uriIsLocked = false" :title="$t('twofaccounts.forms.unlock.title')">
@@ -95,15 +95,8 @@
     export default {
         data() {
             return {
-                twofaccount: {
-                    'service' : '',
-                    'account' : '',
-                    'uri' : '',
-                    'icon' : ''
-                },
                 uriIsLocked: true,
                 tempIcon: '',
-                validationErrors: {},
                 form: new Form({
                     service: '',
                     account: '',
@@ -118,17 +111,14 @@
 
             createAccount() {
                 // set current temp icon as account icon
-                this.twofaccount.icon = this.tempIcon
+                this.form.icon = this.tempIcon
 
-                this.form.post('/api/twofaccounts', this.twofaccount)
+                this.form.post('/api/twofaccounts')
                 .then(response => {
                     this.$router.push({name: 'accounts', params: { InitialEditMode: false }});
                 })
                 .catch(error => {
-                    if( error.response.status == 422 ) {
-                        this.validationErrors = error.response.data.errors
-                    }
-                    else {
+                    if( error.response.status !== 422 ) {
                         this.$router.push({ name: 'genericError', params: { err: error.response.data.message } });
                     }
                 });
@@ -137,9 +127,7 @@
 
             cancelCreation: function() {
                 // clean possible uploaded temp icon
-                if( this.tempIcon ) {
-                    this.deleteIcon()
-                }
+                this.deleteIcon()
 
                 this.$router.push({name: 'accounts', params: { InitialEditMode: false }});
             },
@@ -147,19 +135,16 @@
             uploadQrcode(event) {
 
                 let imgdata = new FormData();
-
                 imgdata.append('qrcode', this.$refs.qrcodeInput.files[0]);
 
                 this.form.upload('/api/qrcode/decode', imgdata)
                 .then(response => {
-                    this.twofaccount = response.data;
-                    this.validationErrors['qrcode'] = '';
+                    this.form.service = response.data.service;
+                    this.form.account = response.data.account;
+                    this.form.uri = response.data.uri;
                 })
                 .catch(error => {
-                    if( error.response.status == 422 ) {
-                        this.validationErrors = error.response.data.errors
-                    }
-                    else {
+                    if( error.response.status !== 422 ) {
                         this.$router.push({ name: 'genericError', params: { err: error.response.data.message } });
                     }
                 });
@@ -169,24 +154,17 @@
             uploadIcon(event) {
 
                 // clean possible already uploaded temp icon
-                if( this.tempIcon ) {
-                    this.deleteIcon()
-                }
+                this.deleteIcon()
 
                 let imgdata = new FormData();
-
                 imgdata.append('icon', this.$refs.iconInput.files[0]);
 
                 this.form.upload('/api/icon/upload', imgdata)
                 .then(response => {
                     this.tempIcon = response.data;
-                    this.validationErrors['icon'] = '';
                 })
                 .catch(error => {
-                    if( error.response.status == 422 ) {
-                        this.validationErrors = error.response.data.errors
-                    }
-                    else {
+                    if( error.response.status !== 422 ) {
                         this.$router.push({ name: 'genericError', params: { err: error.response.data.message } });
                     }
                 });
@@ -199,15 +177,6 @@
                     this.tempIcon = ''
                 }
             },
-
-            clearTwofaccount() {
-                this.twofaccount.service = ''
-                this.twofaccount.account = ''
-                this.twofaccount.uri = ''
-                this.twofaccount.icon = ''
-
-                this.deleteIcon()
-            }
             
         },
 

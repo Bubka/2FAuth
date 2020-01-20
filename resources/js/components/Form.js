@@ -77,13 +77,13 @@ class Form {
     /**
      * Reset the form fields.
      */
-    // reset () {
-    //   Object.keys(this)
-    //     .filter(key => !Form.ignore.includes(key))
-    //     .forEach(key => {
-    //       this[key] = deepCopy(this.originalData[key])
-    //     })
-    // }
+    reset () {
+      Object.keys(this)
+        .filter(key => !Form.ignore.includes(key))
+        .forEach(key => {
+          this[key] = deepCopy(this.originalData[key])
+        })
+    }
 
     /**
      * Submit the form via a GET request.
@@ -267,6 +267,6 @@ class Form {
 
 Form.routes = {}
 Form.errorMessage = 'Something went wrong. Please try again.'
-Form.ignore = ['isBusy', /*'successful', 'errors',*/ 'originalData']
+Form.ignore = ['isBusy', /*'successful'*/, 'errors', 'originalData']
 
 export default Form

@@ -7,16 +7,16 @@
                     <div class="field">
                         <label class="label">{{ $t('auth.forms.email') }}</label>
                         <div class="control">
-                            <input id="email" type="email" class="input" v-model="email" required autofocus />
+                            <input id="email" type="email" class="input" v-model="form.email" required autofocus />
                         </div>
-                        <p class="help is-danger" v-if="validationErrors.email">{{ validationErrors.email.toString() }}</p>
+                        <field-error :form="form" field="email" />
                     </div>
                     <div class="field">
                         <label class="label">{{ $t('auth.forms.password') }}</label>
                         <div class="control">
-                            <input id="password" type="password" class="input" v-model="password" required />
+                            <input id="password" type="password" class="input" v-model="form.password" required />
                         </div>
-                        <p class="help is-danger" v-if="validationErrors.password">{{ validationErrors.password.toString() }}</p>
+                        <field-error :form="form" field="password" />
                     </div>
                     <div class="field">
                         <div class="control">
@@ -49,13 +49,17 @@
 </template>
 
 <script>
+
+    import Form from './../../components/Form'
+
     export default {
         data(){
             return {
-                email : '',
-                password : '',
-                validationErrors: {},
-                errorMessage: ''
+                errorMessage: '',
+                form: new Form({
+                    email: '',
+                    password: ''
+                })
             }
         },
 
@@ -63,10 +67,7 @@
             handleSubmit(e) {
                 e.preventDefault()
 
-                axios.post('api/login', {
-                    email: this.email,
-                    password: this.password
-                })
+                this.form.post('/api/login')
                 .then(response => {
                     localStorage.setItem('user',response.data.message.name)
                     localStorage.setItem('jwt',response.data.message.token)
@@ -76,18 +77,11 @@
                     }
                 })
                 .catch(error => {
-
-                    this.validationErrors = {}
-                    this.errorMessage = ''
-
                     if( error.response.status === 401 ) {
                         this.errorMessage = this.$t('auth.forms.password_do_not_match')
                     }
-                    else if( error.response.status == 422 ) {
-                        this.validationErrors = error.response.data.errors
-                    }
-                    else {
-                        this.$router.push({ name: 'genericError', params: { err: error.response } });
+                    else if( error.response.status !== 422 ) {
+                        this.$router.push({ name: 'genericError', params: { err: error.response.data.message } });
                     }
                 });
             }

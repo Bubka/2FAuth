@@ -7,23 +7,23 @@
                     <div class="field">
                         <label class="label">{{ $t('auth.forms.email') }}</label>
                         <div class="control">
-                            <input id="email" type="email" class="input" v-model="email" disabled readonly />
+                            <input id="email" type="email" class="input" v-model="form.email" disabled readonly />
                         </div>
-                        <p class="help is-danger" v-if="validationErrors.email">{{ validationErrors.email.toString() }}</p>
+                        <field-error :form="form" field="email" />
                     </div>
                     <div class="field">
                         <label class="label">{{ $t('auth.forms.new_password') }}</label>
                         <div class="control">
-                            <input id="password" type="password" class="input" v-model="password" required />
+                            <input id="password" type="password" class="input" v-model="form.password" required />
                         </div>
-                        <p class="help is-danger" v-if="validationErrors.password">{{ validationErrors.password.toString() }}</p>
+                        <field-error :form="form" field="password" />
                     </div>
                     <div class="field">
                         <label class="label">{{ $t('auth.forms.confirm_password') }}</label>
                         <div class="control">
-                            <input id="password_confirmation" type="password" class="input" v-model="password_confirmation" required />
+                            <input id="password_confirmation" type="password" class="input" v-model="form.password_confirmation" required />
                         </div>
-                        <p class="help is-danger" v-if="validationErrors.password_confirmation">{{ validationErrors.password_confirmation.toString() }}</p>
+                        <field-error :form="form" field="password_confirmation" />
                     </div>
                     <div class="field is-grouped">
                         <div class="control">
@@ -33,63 +33,55 @@
                             <router-link :to="{ name: 'login' }" class="button is-text">{{ $t('commons.cancel') }}</router-link>
                         </div>
                     </div>
+                    <div class="field" v-if="errorMessage">
+                        <span class="tag is-danger">
+                            {{ errorMessage }}
+                        </span>
+                    </div>
                 </form>
-                <br />
-                <span class="tag is-danger" v-if="errorMessage">
-                    {{ errorMessage }}
-                </span>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+
+    import Form from './../../../components/Form'
+
     export default {
         data(){
             return {
-                email : '',
-                password : '',
-                password_confirmation : '',
-                token : '',
-                validationErrors: {},
-                errorMessage: ''
+                errorMessage: '',
+                form: new Form({
+                    email : '',
+                    password : '',
+                    password_confirmation : '',
+                    token: ''
+                })
             }
         },
 
         created () {
-            this.email = this.$route.query.email
-            this.token = this.$route.params.token
+            this.form.email = this.$route.query.email
+            this.form.token = this.$route.params.token
         },
 
         methods : {
             handleSubmit(e) {
                 e.preventDefault()
 
-                this.validationErrors = {}
-
-                axios.post('/api/password/reset', {
-                    email: this.email,
-                    password: this.password,
-                    password_confirmation : this.password_confirmation,
-                    token: this.token
-                })
+                this.form.post('/api/password/reset')
                 .then(response => {
 
                     this.$router.go('/');
-
                 })
                 .catch(error => {
-
-                    if( error.response.status == 422 ) {
-                        this.validationErrors = error.response.data.errors
-                    }
-                    else if( error.response.data.resetFailed ) {
+                    if( error.response.data.resetFailed ) {
                         this.errorMessage = error.response.data.resetFailed
                     }
-                    else {
-                        this.$router.push({ name: 'genericError', params: { err: error.response } });
+                    else if( error.response.status !== 422 ) {
+                        this.$router.push({ name: 'genericError', params: { err: error.response.data.message } });
                     }
-                    
                 });
             }
         },
