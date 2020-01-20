@@ -3,7 +3,7 @@
         <div class="columns is-mobile is-centered">
             <div class="column is-two-thirds-tablet is-half-desktop is-one-third-widescreen is-one-quarter-fullhd">
                 <h1 class="title">{{ $t('twofaccounts.forms.new_account') }}</h1>
-                <form @submit.prevent="createAccount">
+                <form @submit.prevent="createAccount" @keydown="form.onKeydown($event)">
                     <div class="field">
                         <div class="file is-dark is-boxed">
                             <label class="file-label" :title="$t('twofaccounts.forms.use_qrcode.title')">
@@ -17,20 +17,20 @@
                             </label>
                         </div>
                     </div>
-                    <p class="help is-danger help-for-file" v-if="validationErrors.qrcode">{{ validationErrors.qrcode.toString() }}</p>
+                    <field-error :form="form" field="qrcode" class="help-for-file" />
                     <div class="field">
                         <label class="label">{{ $t('twofaccounts.service') }}</label>
                         <div class="control">
                             <input class="input" type="text" :placeholder="$t('twofaccounts.forms.service.placeholder')" v-model="twofaccount.service"  autofocus />
                         </div>
-                        <p class="help is-danger" v-if="validationErrors.service">{{ validationErrors.service.toString() }}</p>
+                        <field-error :form="form" field="service" />
                     </div>
                     <div class="field">
                         <label class="label">{{ $t('twofaccounts.account') }}</label>
                         <div class="control">
                             <input class="input" type="text" :placeholder="$t('twofaccounts.forms.account.placeholder')" v-model="twofaccount.account"  />
                         </div>
-                        <p class="help is-danger" v-if="validationErrors.account">{{ validationErrors.account.toString() }}</p>
+                        <field-error :form="form" field="account" />
                     </div>
                     <div class="field" style="margin-bottom: 0.5rem;">
                         <label class="label">{{ $t('twofaccounts.forms.totp_uri') }}</label>
@@ -54,7 +54,7 @@
                             </a>
                         </div>
                     </div>
-                    <p class="help is-danger help-for-file" v-if="validationErrors.uri">{{ validationErrors.uri.toString() }}</p>
+                    <field-error :form="form" field="uri" class="help-for-file" />
                     <div class="field">
                         <label class="label">{{ $t('twofaccounts.icon') }}</label>
                         <div class="file is-dark">
@@ -73,10 +73,10 @@
                             </span>
                         </div>
                     </div>
-                    <p class="help is-danger help-for-file" v-if="validationErrors.icon">{{ validationErrors.icon.toString() }}</p>
+                    <field-error :form="form" field="icon" class="help-for-file" />
                     <div class="field is-grouped">
                         <div class="control">
-                            <button type="submit" class="button is-link">{{ $t('twofaccounts.forms.create') }}</button>
+                            <button type="submit" class="button is-link" :disabled="form.busy" >{{ $t('twofaccounts.forms.create') }}</button>
                         </div>
                         <div class="control">
                             <button class="button is-text" @click="cancelCreation">{{ $t('commons.cancel') }}</button>
@@ -89,6 +89,9 @@
 </template>
 
 <script>
+
+    import Form from './../../components/Form'
+
     export default {
         data() {
             return {
@@ -100,7 +103,14 @@
                 },
                 uriIsLocked: true,
                 tempIcon: '',
-                validationErrors: {}
+                validationErrors: {},
+                form: new Form({
+                    service: '',
+                    account: '',
+                    uri: '',
+                    icon: '',
+                    qrcode: null
+                })
             }
         },
 
@@ -110,7 +120,7 @@
                 // set current temp icon as account icon
                 this.twofaccount.icon = this.tempIcon
 
-                axios.post('/api/twofaccounts', this.twofaccount)
+                this.form.post('/api/twofaccounts', this.twofaccount)
                 .then(response => {
                     this.$router.push({name: 'accounts', params: { InitialEditMode: false }});
                 })
@@ -138,15 +148,9 @@
 
                 let imgdata = new FormData();
 
-                imgdata.append('qrcode', this.$refs.qrcodeInput.files[0]); 
+                imgdata.append('qrcode', this.$refs.qrcodeInput.files[0]);
 
-                let config = {
-                    header : {
-                        'Content-Type' : 'multipart/form-data',
-                    }
-                }
-
-                axios.post('/api/qrcode/decode', imgdata, config)
+                this.form.upload('/api/qrcode/decode', imgdata)
                 .then(response => {
                     this.twofaccount = response.data;
                     this.validationErrors['qrcode'] = '';
@@ -171,15 +175,9 @@
 
                 let imgdata = new FormData();
 
-                imgdata.append('icon', this.$refs.iconInput.files[0]); 
+                imgdata.append('icon', this.$refs.iconInput.files[0]);
 
-                let config = {
-                    header : {
-                        'Content-Type' : 'multipart/form-data',
-                    }
-                }
-
-                axios.post('/api/icon/upload', imgdata, config)
+                this.form.upload('/api/icon/upload', imgdata)
                 .then(response => {
                     this.tempIcon = response.data;
                     this.validationErrors['icon'] = '';
@@ -196,7 +194,6 @@
             },
 
             deleteIcon(event) {
-
                 if(this.tempIcon) {
                     axios.delete('/api/icon/delete/' + this.tempIcon)
                     this.tempIcon = ''
