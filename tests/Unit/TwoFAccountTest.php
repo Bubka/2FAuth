@@ -104,7 +104,7 @@ class TwoFAccountTest extends TestCase
                     'uri' => '',
                     'icon' => '',
                 ])
-            ->assertStatus(400);
+            ->assertStatus(422);
     }
 
 
@@ -122,7 +122,7 @@ class TwoFAccountTest extends TestCase
                     'uri' => 'invalidTOTP',
                     'icon' => 'test.png',
                 ])
-            ->assertStatus(400);
+            ->assertStatus(422);
     }
 
 

@@ -110,7 +110,7 @@ class UserTest extends TestCase
             'password' => ''
         ]);
 
-        $response->assertStatus(400);
+        $response->assertStatus(422);
     }
 
 
