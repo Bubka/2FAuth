@@ -81,7 +81,7 @@
                 }
             })
             .catch(error => {
-                this.$router.push({ name: 'genericError', params: { err: error.response.data.message } });
+                this.$router.push({ name: 'genericError', params: { err: error.response } });
             });
         },
 
@@ -100,7 +100,7 @@
                 })
                 .catch(error => {
                     if( error.response.status !== 422 ) {
-                        this.$router.push({ name: 'genericError', params: { err: error.response.data.message } });
+                        this.$router.push({ name: 'genericError', params: { err: error.response } });
                     }
                 });
             }
