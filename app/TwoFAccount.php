@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Contracts\Encryption\DecryptException;
 
 class TwoFAccount extends Model
 {
@@ -40,4 +41,35 @@ class TwoFAccount extends Model
 
         return $value;
     }
+
+    /**
+     * Set the user's first name.
+     *
+     * @param  string  $value
+     * @return void
+     */
+    // public function setUriAttribute($value)
+    // {
+    //     $this->attributes['uri'] = encrypt($value);
+    // }
+
+    /**
+     * Get the user's first name.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    // public function getUriAttribute($value)
+    // {
+    //     try {
+
+    //         return decrypt($value);
+
+    //     } catch (DecryptException $e) {
+
+    //         return null;
+    //     }
+
+    // }
+
 }
