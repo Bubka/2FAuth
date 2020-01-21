@@ -1,12 +1,12 @@
 <template>
     <button 
-        :type="nativeType" 
+        :type="nativeType"
+        :disabled="isLoading"
         :class="{
+            'button': true,
             [`${color}`]: true,
-            'is-large': isLarge,
-            'is-focused': isFocused,
-          }" 
-        class="button">
+            'is-loading': isLoading,
+          }">
         <slot />
     </button>
 </template>
@@ -26,15 +26,10 @@
                 default: 'submit'
             },
 
-            isFocused: {
+            isLoading: {
                 type: Boolean,
                 default: false
             },
-
-            isLarge: {
-                type: Boolean,
-                default: false
-            }
         }
     }
 

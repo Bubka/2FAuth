@@ -3,24 +3,24 @@
         <div class="columns is-mobile  is-centered">
             <div class="column is-two-thirds-tablet is-half-desktop is-one-third-widescreen is-one-quarter-fullhd">
                 <h1 class="title">{{ $t('auth.forms.login') }}</h1>
-                <form method="POST" action="/login">
+                <form @submit.prevent="handleSubmit" @keydown="form.onKeydown($event)">
                     <div class="field">
                         <label class="label">{{ $t('auth.forms.email') }}</label>
                         <div class="control">
-                            <input id="email" type="email" class="input" v-model="form.email" required autofocus />
+                            <input id="email" type="email" class="input" v-model="form.email" autofocus />
                         </div>
                         <field-error :form="form" field="email" />
                     </div>
                     <div class="field">
                         <label class="label">{{ $t('auth.forms.password') }}</label>
                         <div class="control">
-                            <input id="password" type="password" class="input" v-model="form.password" required />
+                            <input id="password" type="password" class="input" v-model="form.password" />
                         </div>
                         <field-error :form="form" field="password" />
                     </div>
                     <div class="field">
                         <div class="control">
-                            <button type="submit" class="button is-link" @click="handleSubmit">{{ $t('auth.sign_in') }}</button>
+                            <v-button :isLoading="form.isBusy" >{{ $t('auth.sign_in') }}</v-button>
                         </div>
                     </div>
                     <div class="field" v-if="errorMessage">

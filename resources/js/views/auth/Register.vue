@@ -3,38 +3,38 @@
         <div class="columns is-mobile  is-centered">
             <div class="column is-two-thirds-tablet is-half-desktop is-one-third-widescreen is-one-quarter-fullhd">
                 <h1 class="title">{{ $t('auth.register') }}</h1>
-                <form method="POST" action="/register">
+                <form @submit.prevent="handleSubmit" @keydown="form.onKeydown($event)">
                     <div class="field">
                         <label class="label">{{ $t('auth.forms.name') }}</label>
                         <div class="control">
-                            <input id="name" type="text" class="input" v-model="form.name" required autofocus />
+                            <input id="name" type="text" class="input" v-model="form.name" autofocus />
                         </div>
                         <field-error :form="form" field="name" />
                     </div>
                     <div class="field">
                         <label class="label">{{ $t('auth.forms.email') }}</label>
                         <div class="control">
-                            <input id="email" type="email" class="input" v-model="form.email" required />
+                            <input id="email" type="email" class="input" v-model="form.email" />
                         </div>
                         <field-error :form="form" field="email" />
                     </div>
                     <div class="field">
                         <label class="label">{{ $t('auth.forms.password') }}</label>
                         <div class="control">
-                            <input id="password" type="password" class="input" v-model="form.password" required />
+                            <input id="password" type="password" class="input" v-model="form.password" />
                         </div>
                         <field-error :form="form" field="password" />
                     </div>
                     <div class="field">
                         <label class="label">{{ $t('auth.forms.confirm_password') }}</label>
                         <div class="control">
-                            <input id="password_confirmation" type="password" class="input" v-model="form.password_confirmation" required />
+                            <input id="password_confirmation" type="password" class="input" v-model="form.password_confirmation" />
                         </div>
                         <field-error :form="form" field="password_confirmation" />
                     </div>
                     <div class="field">
                         <div class="control">
-                            <button type="submit" class="button is-link" @click="handleSubmit">{{ $t('auth.register') }}</button>
+                            <v-button :isLoading="form.isBusy" >{{ $t('auth.register') }}</v-button>
                         </div>
                     </div>
                 </form>

@@ -3,7 +3,7 @@
         <div class="columns is-mobile  is-centered">
             <div class="column is-two-thirds-tablet is-half-desktop is-one-third-widescreen is-one-quarter-fullhd">
                 <h1 class="title">{{ $t('auth.forms.new_password') }}</h1>
-                <form method="POST">
+                <form @submit.prevent="handleSubmit" @keydown="form.onKeydown($event)">
                     <div class="field">
                         <label class="label">{{ $t('auth.forms.email') }}</label>
                         <div class="control">
@@ -14,20 +14,20 @@
                     <div class="field">
                         <label class="label">{{ $t('auth.forms.new_password') }}</label>
                         <div class="control">
-                            <input id="password" type="password" class="input" v-model="form.password" required />
+                            <input id="password" type="password" class="input" v-model="form.password" />
                         </div>
                         <field-error :form="form" field="password" />
                     </div>
                     <div class="field">
                         <label class="label">{{ $t('auth.forms.confirm_password') }}</label>
                         <div class="control">
-                            <input id="password_confirmation" type="password" class="input" v-model="form.password_confirmation" required />
+                            <input id="password_confirmation" type="password" class="input" v-model="form.password_confirmation" />
                         </div>
                         <field-error :form="form" field="password_confirmation" />
                     </div>
                     <div class="field is-grouped">
                         <div class="control">
-                            <button type="submit" class="button is-link" @click="handleSubmit">{{ $t('auth.forms.change_password') }}</button>
+                            <v-button :isLoading="form.isBusy" >{{ $t('auth.forms.change_password') }}</v-button>
                         </div>
                         <div class="control">
                             <router-link :to="{ name: 'login' }" class="button is-text">{{ $t('commons.cancel') }}</router-link>

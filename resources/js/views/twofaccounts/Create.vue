@@ -76,7 +76,7 @@
                     <field-error :form="form" field="icon" class="help-for-file" />
                     <div class="field is-grouped">
                         <div class="control">
-                            <button type="submit" class="button is-link" :disabled="form.busy" >{{ $t('twofaccounts.forms.create') }}</button>
+                            <v-button :isLoading="form.isBusy" >{{ $t('twofaccounts.forms.create') }}</v-button>
                         </div>
                         <div class="control">
                             <button class="button is-text" @click="cancelCreation">{{ $t('commons.cancel') }}</button>

@@ -3,17 +3,17 @@
         <div class="columns is-mobile  is-centered">
             <div class="column is-two-thirds-tablet is-half-desktop is-one-third-widescreen is-one-quarter-fullhd">
                 <h1 class="title">{{ $t('auth.forms.reset_password') }}</h1>
-                <form method="POST" action="/password/email">
+                <form @submit.prevent="handleSubmit" @keydown="form.onKeydown($event)">
                     <div class="field">
                         <label class="label">{{ $t('auth.forms.email') }}</label>
                         <div class="control">
-                            <input id="email" type="email" class="input" v-model="form.email" required autofocus />
+                            <input id="email" type="email" class="input" v-model="form.email" autofocus />
                         </div>
                         <field-error :form="form" field="email" />
                     </div>
                     <div class="field is-grouped">
                         <div class="control">
-                            <button type="submit" class="button is-link" @click="handleSubmit">{{ $t('auth.forms.send_password_reset_link') }}</button>
+                            <v-button :isLoading="form.isBusy" >{{ $t('auth.forms.send_password_reset_link') }}</v-button>
                         </div>
                         <div class="control">
                             <router-link :to="{ name: 'login' }" class="button is-text">{{ $t('commons.cancel') }}</router-link>
