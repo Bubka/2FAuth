@@ -85,7 +85,7 @@ class UserController extends Controller
         $this->validate($request, [
             'name' => 'required',
             'email' => 'required|email',
-            'password' => 'required|confirmed',
+            'password' => 'required|confirmed|min:8',
         ]);
 
         $input = $request->all();
@@ -106,5 +106,42 @@ class UserController extends Controller
     public function getDetails()
     {
         return response()->json(Auth::user(), 200);
+    }
+
+
+    /**
+     * Update the user's profile information.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request)
+    {
+        $user = $request->user();
+
+        $this->validate($request, [
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email,'.$user->id,
+        ]);
+
+        return tap($user)->update($request->only('name', 'email'));
+    }
+
+
+    /**
+     * Update the user's password.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function changePassword(Request $request)
+    {
+        $this->validate($request, [
+            'password' => 'required|confirmed|min:8',
+        ]);
+
+        $request->user()->update([
+            'password' => bcrypt($request->password),
+        ]);
     }
 }

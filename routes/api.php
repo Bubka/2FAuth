@@ -27,7 +27,10 @@ Route::group(['middleware' => 'guest:api'], function () {
 Route::group(['middleware' => 'auth:api'], function() {
 
     Route::post('logout', 'UserController@logout');
+    Route::patch('user/edit', 'UserController@update');
+    Route::patch('user/password', 'UserController@changePassword');
     Route::get('user', 'UserController@getDetails');
+
     Route::apiResource('twofaccounts', 'TwoFAccountController');
     Route::get('twofaccounts/{twofaccount}/totp', 'TwoFAccountController@generateTOTP')->name('twofaccounts.generateTOTP');
     Route::post('qrcode/decode', 'QrCodeController@decode');
