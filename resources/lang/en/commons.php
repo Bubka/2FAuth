@@ -14,5 +14,6 @@ return [
     */
 
     'cancel' => 'Cancel',
+    'copy_to_clipboard' => 'Copy to clipboard',
 
 ];

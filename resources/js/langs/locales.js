@@ -26,7 +26,8 @@ export default {
             }
         },
         "commons": {
-            "cancel": "Cancel"
+            "cancel": "Cancel",
+            "copy_to_clipboard": "Copy to clipboard"
         },
         "errors": {
             "resource_not_found": "Resource not found",

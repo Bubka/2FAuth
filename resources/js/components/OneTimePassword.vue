@@ -1,13 +1,14 @@
 <template>
     <div>
-        <p id="otp" title="refresh" class="is-size-1 has-text-white">{{ totp }}</p>
+        <p id="otp" class="is-size-1 has-text-white" :title="$t('commons.copy_to_clipboard')" v-clipboard="() => totp.replace(/ /g, '')" v-clipboard:success="clipboardSuccessHandler">{{ totp }}</p>
         <ul class="dots">
-            <li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li>
+            <li v-for="n in 30"></li>
         </ul>
     </div>
 </template>
 
 <script>
+
     export default {
         data() {
             return {
@@ -65,6 +66,7 @@
                     }, 1000);
                 })
             },
+
             clearOTP: function() {
                 this.stopLoop()
                 this.timerID = null
@@ -72,9 +74,19 @@
                 this.$el.querySelector('[data-is-active]').removeAttribute('data-is-active');
                 this.$el.querySelector('.dots li:first-child').setAttribute('data-is-active', true);
             },
+
             stopLoop: function() {
                 clearInterval(this.timerID)
+            },
+
+            clipboardSuccessHandler ({ value, event }) {
+                console.log('success', value)
+            },
+
+            clipboardErrorHandler ({ value, event }) {
+                console.log('error', value)
             }
+
         },
         beforeDestroy () {
             this.stopLoop()
