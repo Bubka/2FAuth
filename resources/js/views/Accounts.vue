@@ -44,8 +44,8 @@
                 :twofaccountid='twofaccount.id'
                 :service='twofaccount.service'
                 :icon='twofaccount.icon'
-                :account='twofaccount.account'>
-                <one-time-password ref="OneTimePassword"></one-time-password>
+                :account='twofaccount.account'
+                ref="TwofaccountShow" >
             </twofaccount-show>
         </modal>
         <footer class="has-background-black-ter">
@@ -84,7 +84,6 @@
 
     import Modal from '../components/Modal'
     import TwofaccountShow from '../components/TwofaccountShow'
-    import OneTimePassword from '../components/OneTimePassword'
 
     export default {
         data(){
@@ -135,7 +134,7 @@
             // stop OTP generation on modal close
             this.$on('modalClose', function() {
                 console.log('modalClose triggered')
-                this.$refs.OneTimePassword.clearOTP()
+                this.$refs.TwofaccountShow.clearOTP()
 
                 this.twofaccount.id = ''
                 this.twofaccount.service = ''
@@ -148,26 +147,25 @@
         components: {
             Modal,
             TwofaccountShow,
-            OneTimePassword
         },
 
         methods: {
-            getAccount(id) {
+            async getAccount(id) {
 
-                axios.get('api/twofaccounts/' + id)
-                .then(response => {
-                    this.twofaccount.id = response.data.id
-                    this.twofaccount.service = response.data.service
-                    this.twofaccount.account = response.data.account
-                    this.twofaccount.icon = response.data.icon
-
-                    this.$refs.OneTimePassword.AccountId = response.data.id
-                    this.$refs.OneTimePassword.getOTP()
-                    this.ShowTwofaccountInModal = true;
-                })
+                const { data } = await axios.get('api/twofaccounts/' + id)
                 .catch(error => {
                     this.$router.push({ name: 'genericError', params: { err: error.response } });
                 });
+
+                this.twofaccount.id = data.id
+                this.twofaccount.service = data.service
+                this.twofaccount.account = data.account
+                this.twofaccount.icon = data.icon
+
+                this.$refs.TwofaccountShow.AccountId = data.id
+                await this.$refs.TwofaccountShow.getOTP()
+
+                this.ShowTwofaccountInModal = true
 
             },
 
