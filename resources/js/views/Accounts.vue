@@ -16,7 +16,7 @@
             </div>
             <div class="buttons are-large is-centered">
                 <span v-for="account in filteredAccounts" class="button is-black has-background-black-bis twofaccount" >
-                    <span @click.stop="getAccount(account.id)">
+                    <span @click.stop="showAccount(account.id)">
                         <img :src="'storage/icons/' + account.icon" v-if="account.icon">
                         {{ account.service }}
                         <span class="is-family-primary is-size-7 has-text-grey">{{ account.account }}</span>
@@ -40,13 +40,7 @@
             <router-link :to="{ name: 'create' }" class="button is-medium is-link is-focused">{{ $t('twofaccounts.add_one') }}</router-link>
         </div>
         <modal v-model="ShowTwofaccountInModal">
-            <twofaccount-show
-                :twofaccountid='twofaccount.id'
-                :service='twofaccount.service'
-                :icon='twofaccount.icon'
-                :account='twofaccount.account'
-                ref="TwofaccountShow" >
-            </twofaccount-show>
+            <twofaccount-show ref="TwofaccountShow" ></twofaccount-show>
         </modal>
         <footer class="has-background-black-ter">
             <div class="columns is-gapless" v-if="this.accounts.length > 0">
@@ -90,9 +84,7 @@
             return {
                 accounts : [],
                 ShowTwofaccountInModal : false,
-                twofaccount: {},
                 search: '',
-                token : null,
                 username : null,
                 editMode: this.InitialEditMode,
                 showAccounts: null,
@@ -135,11 +127,6 @@
             this.$on('modalClose', function() {
                 console.log('modalClose triggered')
                 this.$refs.TwofaccountShow.clearOTP()
-
-                this.twofaccount.id = ''
-                this.twofaccount.service = ''
-                this.twofaccount.account = ''
-                this.twofaccount.icon = ''
             });
 
         },
@@ -150,20 +137,10 @@
         },
 
         methods: {
-            async getAccount(id) {
+            async showAccount(id) {
 
-                const { data } = await axios.get('api/twofaccounts/' + id)
-                .catch(error => {
-                    this.$router.push({ name: 'genericError', params: { err: error.response } });
-                });
-
-                this.twofaccount.id = data.id
-                this.twofaccount.service = data.service
-                this.twofaccount.account = data.account
-                this.twofaccount.icon = data.icon
-
-                this.$refs.TwofaccountShow.AccountId = data.id
-                await this.$refs.TwofaccountShow.getOTP()
+                this.$refs.TwofaccountShow.twofaccountid = id
+                await this.$refs.TwofaccountShow.getAccount()
 
                 this.ShowTwofaccountInModal = true
 
