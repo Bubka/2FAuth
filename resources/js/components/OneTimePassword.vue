@@ -23,11 +23,6 @@
         methods: {
             getOTP: function () {
 
-                let token = localStorage.getItem('jwt')
-
-                axios.defaults.headers.common['Content-Type'] = 'application/json'
-                axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
-
                 axios.get('api/twofaccounts/' + this.AccountId + '/totp').then(response => {
                     let spacePosition = Math.ceil(response.data.totp.length / 2);
                     
