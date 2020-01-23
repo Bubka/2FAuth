@@ -137,18 +137,15 @@
         },
 
         methods: {
-            async showAccount(id) {
+            showAccount(id) {
                 
                 if( id ) {
-                    await this.$refs.TwofaccountShow.getAccount(id)
+                    this.$refs.TwofaccountShow.getAccount(id)
                 }
                 else {
                     let err = new Error("Id missing")
                     this.$router.push({ name: 'genericError', params: { err: err } });
                 }
-
-                this.ShowTwofaccountInModal = true
-
             },
 
             deleteAccount:  function (id) {

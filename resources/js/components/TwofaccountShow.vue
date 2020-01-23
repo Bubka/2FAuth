@@ -33,13 +33,14 @@
                 this.id = id
 
                 axios.get('api/twofaccounts/' + this.id)
-                    .then(response => {
+                    .then(async (response) => {
 
                         this.service = response.data.service
                         this.account = response.data.account
                         this.icon = response.data.icon
 
-                        this.getOTP()
+                        await this.getOTP()
+                        this.$parent.isActive = true
                     })
                     .catch(error => {
                         this.$router.push({ name: 'genericError', params: { err: error.response } });
