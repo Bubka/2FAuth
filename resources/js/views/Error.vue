@@ -19,9 +19,9 @@
                 <p>{{ $t('errors.error_occured') }}</p>
                 <p v-if="error" class="has-text-grey-lighter">{{ error.statusText }}</p>
                 <p>{{ $t('errors.please') }}<router-link :to="{ name: 'accounts' }" class="is-text has-text-grey-light">{{ $t('errors.refresh') }}</router-link></p>
-                <p v-if="debugMode == 'development' && error.data">
-                    <strong>{{ error.data.message }}</strong><br>
-                    {{ error.data.debug }}
+                <p v-if="debugMode == 'development' && error">
+                    <strong>{{ error.message }}</strong><br>
+                    {{ error.debug }}
                 </p>
             </div>
         </modal>
@@ -40,12 +40,30 @@
         },
 
         computed: {
+
             debugMode: function() {
                 return process.env.NODE_ENV
             },
+
             error: function() {
-                return this.err === undefined ? {} : this.err
+                if( this.err === undefined ) {
+                    return null
+                }
+                else
+                {
+                    if(this.err.data) {
+                        return this.err.data
+                    }
+                    else
+                    {
+                        return {
+                            statusText: this.err
+                        }
+                    }
+
+                }
             }
+
         },
 
         props: ['err'], // error.response
