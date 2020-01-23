@@ -14,6 +14,8 @@ return [
     */
 
     'cancel' => 'Cancel',
+    'update' => 'Update',
     'copy_to_clipboard' => 'Copy to clipboard',
+    'profile' => 'Profile',
 
 ];

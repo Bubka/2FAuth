@@ -33,8 +33,12 @@ return [
         'request_password_reset' => 'Request a password reset',
         'reset_password' => 'Reset password',
         'new_password' => 'New password',
+        'current_password' => 'Current password',
         'change_password' => 'Change password',
         'send_password_reset_link' => 'Send password reset link',
+        'change_your_password' => 'Change your password',
+        'password_successfully_changed' => 'Password successfully changed ',
+        'profile_saved' => 'Profile successfully updated!'
     ],
     
 

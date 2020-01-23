@@ -27,8 +27,8 @@ Route::group(['middleware' => 'guest:api'], function () {
 Route::group(['middleware' => 'auth:api'], function() {
 
     Route::post('logout', 'UserController@logout');
-    Route::patch('user/edit', 'UserController@update');
-    Route::patch('user/password', 'UserController@changePassword');
+    Route::patch('password', 'UserController@updatePassword');
+    Route::patch('user', 'UserController@update');
     Route::get('user', 'UserController@getDetails');
 
     Route::apiResource('twofaccounts', 'TwoFAccountController');

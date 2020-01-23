@@ -67,7 +67,7 @@
                 </div>
             </div>
             <div class="content has-text-centered">
-                {{ $t('auth.hello', {username: username}) }} <a class="has-text-grey" @click="logout">{{ $t('auth.sign_out') }}</a>
+                {{ $t('auth.hello', {username: username}) }} <router-link :to="{ name: 'profile' }" class="has-text-grey">{{ $t('commons.profile') }}</router-link> - <a class="has-text-grey" @click="logout">{{ $t('auth.sign_out') }}</a>
             </div>
         </footer>
     </div>

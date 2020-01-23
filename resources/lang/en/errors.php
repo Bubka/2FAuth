@@ -22,7 +22,8 @@ return [
     'response' => [
         'no_valid_totp' => 'No valid TOTP resource in this QR code',
     ],
-    'something_wrong_with_server' => 'Something is wrong with your server',,
+    'something_wrong_with_server' => 'Something is wrong with your server',
     'Unable_to_decrypt_uri' => 'Unable to decrypt uri',
+    'wrong_current_password' => 'Wrong current password, nothing has changed'
 
 ];

@@ -21,13 +21,19 @@ export default {
                 "request_password_reset": "Request a password reset",
                 "reset_password": "Reset password",
                 "new_password": "New password",
+                "current_password": "Current password",
                 "change_password": "Change password",
-                "send_password_reset_link": "Send password reset link"
+                "send_password_reset_link": "Send password reset link",
+                "change_your_password": "Change your password",
+                "your_password_has_been_changed": "Your password has been successfully changed ",
+                "profile_saved": "Profile successfully updated!"
             }
         },
         "commons": {
             "cancel": "Cancel",
-            "copy_to_clipboard": "Copy to clipboard"
+            "update": "Update",
+            "copy_to_clipboard": "Copy to clipboard",
+            "profile": "Profile"
         },
         "errors": {
             "resource_not_found": "Resource not found",
@@ -39,7 +45,9 @@ export default {
             "response": {
                 "no_valid_totp": "No valid TOTP resource in this QR code"
             },
-            "something_wrong_with_server": "Something is wrong with your server"
+            "something_wrong_with_server": "Something is wrong with your server",
+            "Unable_to_decrypt_uri": "Unable to decrypt uri",
+            "wrong_current_password": "Wrong current password, nothing has changed"
         },
         "pagination": {
             "previous": "&laquo; Previous",
