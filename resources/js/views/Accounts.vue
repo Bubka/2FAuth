@@ -138,9 +138,14 @@
 
         methods: {
             async showAccount(id) {
-
-                this.$refs.TwofaccountShow.twofaccountid = id
-                await this.$refs.TwofaccountShow.getAccount()
+                
+                if( id ) {
+                    await this.$refs.TwofaccountShow.getAccount(id)
+                }
+                else {
+                    let err = new Error("Id missing")
+                    this.$router.push({ name: 'genericError', params: { err: err } });
+                }
 
                 this.ShowTwofaccountInModal = true
 

@@ -16,6 +16,7 @@
     export default {
         data() {
             return {
+                id: null,
                 service: '',
                 account: '',
                 icon: '',
@@ -25,29 +26,29 @@
             }
         },
 
-        props: ['twofaccountid'],
-
         methods: {
 
-            getAccount: function() {
+            getAccount: function(id) {
 
-                axios.get('api/twofaccounts/' + this.twofaccountid)
+                this.id = id
+
+                axios.get('api/twofaccounts/' + this.id)
                     .then(response => {
 
                         this.service = response.data.service
                         this.account = response.data.account
                         this.icon = response.data.icon
 
-                        this.getOTP(this.twofaccountid)
+                        this.getOTP()
                     })
                     .catch(error => {
                         this.$router.push({ name: 'genericError', params: { err: error.response } });
                     });
             },
 
-            getOTP: function(id) {
+            getOTP: function() {
 
-                axios.get('api/twofaccounts/' + id + '/totp').then(response => {
+                axios.get('api/twofaccounts/' + this.id + '/totp').then(response => {
                     let spacePosition = Math.ceil(response.data.totp.length / 2);
                     
                     this.totp = response.data.totp.substr(0, spacePosition) + " " + response.data.totp.substr(spacePosition);
