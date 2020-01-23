@@ -169,7 +169,7 @@ class UserTest extends TestCase
         $response = $this->actingAs($user, 'api')
             ->json('GET', '/api/user')
             ->assertStatus(200)
-            ->assertJsonStructure(['id', 'name', 'email']);
+            ->assertJsonStructure(['name', 'email']);
     }
 
 
