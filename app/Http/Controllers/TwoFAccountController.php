@@ -34,7 +34,7 @@ class TwoFAccountController extends Controller
         // for otpauth uri format validation
         $this->validate($request, [
             'service' => 'required',
-            'uri' => 'required|starts_with:otpauth://totp/',
+            'uri' => 'required|regex:/^otpauth:\/\/[h,t]otp\//i',
         ]);
 
         $twofaccount = TwoFAccount::create([

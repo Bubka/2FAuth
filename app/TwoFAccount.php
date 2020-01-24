@@ -2,6 +2,8 @@
 
 namespace App;
 
+use OTPHP\HOTP;
+use OTPHP\Factory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Contracts\Encryption\DecryptException;
@@ -25,6 +27,14 @@ class TwoFAccount extends Model
 
 
     /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['type', 'counter'];
+
+
+    /**
      * Null empty icon resource has gone
      *
      * @param  string  $value
@@ -41,6 +51,35 @@ class TwoFAccount extends Model
 
         return $value;
     }
+
+    /**
+    * Get the account type.
+    *
+    * @return string
+    */
+    public function getTypeAttribute()
+    {
+        
+        return substr( $this->uri, 0, 15 ) === "otpauth://totp/" ? 'totp' : 'hotp';
+    }
+
+    /**
+    * Get the account counter in case of HOTP.
+    *
+    * @return integer
+    */
+    public function getCounterAttribute()
+    {
+        
+        if( $this->type === 'hotp' ) {
+            $otp = Factory::loadFromProvisioningUri($this->uri);
+
+            return $otp->getCounter();
+        }
+
+        return null;
+    }
+
 
     /**
      * Set the user's first name.

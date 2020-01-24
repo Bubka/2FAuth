@@ -25,7 +25,7 @@ export default {
                 "change_password": "Change password",
                 "send_password_reset_link": "Send password reset link",
                 "change_your_password": "Change your password",
-                "your_password_has_been_changed": "Your password has been successfully changed ",
+                "password_successfully_changed": "Password successfully changed ",
                 "profile_saved": "Profile successfully updated!"
             }
         },
@@ -79,6 +79,7 @@ export default {
                 "new_account": "New account",
                 "edit_account": "Edit account",
                 "totp_uri": "TOTP Uri",
+                "hotp_counter": "HOTP Counter",
                 "use_qrcode": {
                     "val": "Use a qrcode",
                     "title": "Use a QR code to fill the form magically"

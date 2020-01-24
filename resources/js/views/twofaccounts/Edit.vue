@@ -18,6 +18,31 @@
                         </div>
                         <field-error :form="form" field="account" />
                     </div>
+                    <div v-if="form.counter">
+                        <div class="field" style="margin-bottom: 0.5rem;">
+                            <label class="label">{{ $t('twofaccounts.forms.hotp_counter') }}</label>
+                        </div>
+                        <div class="field has-addons">
+                            <div class="control is-expanded">
+                                <input class="input" type="text" placeholder="" v-model="form.counter" :disabled="counterIsLocked" />
+                            </div>
+                            <div class="control" v-if="counterIsLocked">
+                                <a class="button is-dark field-lock" @click="counterIsLocked = false" :title="$t('twofaccounts.forms.unlock.title')">
+                                    <span class="icon">
+                                        <font-awesome-icon :icon="['fas', 'lock']" />
+                                    </span>
+                                </a>
+                            </div>
+                            <div class="control" v-else>
+                                <a class="button is-dark field-unlock"  @click="counterIsLocked = true" :title="$t('twofaccounts.forms.lock.title')">
+                                    <span class="icon has-text-danger">
+                                        <font-awesome-icon :icon="['fas', 'lock-open']" />
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                        <field-error :form="form" field="uri" class="help-for-file" />
+                    </div>
                     <div class="field">
                         <label class="label">{{ $t('twofaccounts.icon') }}</label>
                         <div class="file is-dark">
@@ -58,6 +83,7 @@
     export default {
         data() {
             return {
+                counterIsLocked: true,
                 twofaccountExists: false,
                 tempIcon: '',
                 form: new Form({
@@ -65,7 +91,9 @@
                     account: '',
                     uri: '',
                     icon: '',
-                    qrcode: null
+                    qrcode: null,
+                    type: '',
+                    counter: null
                 })
             }
         },

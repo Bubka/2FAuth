@@ -31,6 +31,7 @@ return [
         'new_account' => 'New account',
         'edit_account' => 'Edit account',
         'totp_uri' => 'TOTP Uri',
+        'hotp_counter' => 'HOTP Counter',
         'use_qrcode' => [
             'val' => 'Use a qrcode',
             'title' => 'Use a QR code to fill the form magically',
