@@ -37,6 +37,8 @@ class TwoFAccountController extends Controller
             'uri' => 'required|regex:/^otpauth:\/\/[h,t]otp\//i',
         ]);
 
+        $this->validateOTP($request->uri);
+
         $twofaccount = TwoFAccount::create([
             'service' => $request->service,
             'account' => $request->account,
@@ -138,6 +140,29 @@ class TwoFAccountController extends Controller
             return response()->json(['message' => 'already gone'], 404);
 
         }
+    }
+
+
+    /**
+     * check if the provided uri is a valid OTP uri
+     *
+     * @param  \App\TwoFAccount  $twofaccount
+     * @return \Illuminate\Http\Response
+     */
+    private function validateOTP(String $uri) {
+
+        try {
+            $otp = \OTPHP\Factory::loadFromProvisioningUri($uri);
+            return true;
+        }
+        catch (\Assert\AssertionFailedException $exception) {
+            $error = \Illuminate\Validation\ValidationException::withMessages([
+                'qrcode' => __('errors.response.no_valid_totp')
+            ]);
+
+            throw $error;
+        }
+
     }
 
 }
