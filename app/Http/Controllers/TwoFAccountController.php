@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\TwoFAccount;
-use App\Classes\TimedTOTP;
+use App\Classes\OTP;
 use Illuminate\Http\Request;
 use ParagonIE\ConstantTime\Base32;
 use Illuminate\Support\Facades\Storage;
@@ -71,10 +71,10 @@ class TwoFAccountController extends Controller
      * @param  \App\TwoFAccount  $twofaccount
      * @return \Illuminate\Http\Response
      */
-    public function generateTOTP(TwoFAccount $twofaccount)
+    public function generateOTP(TwoFAccount $twofaccount)
     {
 
-        return response()->json(TimedTOTP::get($twofaccount->uri), 200);
+        return response()->json(OTP::get($twofaccount->uri), 200);
 
     }
 

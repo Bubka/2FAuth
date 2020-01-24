@@ -5,9 +5,12 @@
         </figure>
         <p class="is-size-4 has-text-grey-light">{{ service }}</p>
         <p class="is-size-6 has-text-grey">{{ account }}</p>
-        <p id="otp" class="is-size-1 has-text-white" :title="$t('commons.copy_to_clipboard')" v-clipboard="() => totp.replace(/ /g, '')" v-clipboard:success="clipboardSuccessHandler">{{ totp }}</p>
-        <ul class="dots">
+        <p id="otp" class="is-size-1 has-text-white" :title="$t('commons.copy_to_clipboard')" v-clipboard="() => otp.replace(/ /g, '')" v-clipboard:success="clipboardSuccessHandler">{{ otp }}</p>
+        <ul class="dots" v-if="type === 'totp'">
             <li v-for="n in 30"></li>
+        </ul>
+        <ul v-else-if="type === 'hotp'">
+            <li>(counter = {{ counter }})</li>
         </ul>
     </div>
 </template>
@@ -20,9 +23,11 @@
                 service: '',
                 account: '',
                 icon: '',
-                totp : '',
+                type : '',
+                otp : '',
                 timerID: null,
                 position: null,
+                counter: null,
             }
         },
 
@@ -38,8 +43,9 @@
                         this.service = response.data.service
                         this.account = response.data.account
                         this.icon = response.data.icon
+                        this.type = response.data.type
 
-                        await this.getOTP()
+                        this.type === 'totp' ? await this.getTOTP() : await this.getHOTP()
                         this.$parent.isActive = true
                     })
                     .catch(error => {
@@ -47,12 +53,12 @@
                     });
             },
 
-            getOTP: function() {
+            getTOTP: function() {
 
-                axios.get('api/twofaccounts/' + this.id + '/totp').then(response => {
-                    let spacePosition = Math.ceil(response.data.totp.length / 2);
+                axios.get('api/twofaccounts/' + this.id + '/otp').then(response => {
+                    let spacePosition = Math.ceil(response.data.otp.length / 2);
                     
-                    this.totp = response.data.totp.substr(0, spacePosition) + " " + response.data.totp.substr(spacePosition);
+                    this.otp = response.data.otp.substr(0, spacePosition) + " " + response.data.otp.substr(spacePosition);
                     this.position = response.data.position;
 
                     let dots = this.$el.querySelector('.dots');
@@ -73,9 +79,9 @@
                         let sibling = active.nextSibling;
 
                             if(active.nextSibling === null) {
-                                console.log('no more sibling to activate, we refresh the TOTP')
+                                console.log('no more sibling to activate, we refresh the OTP')
                                 self.stopLoop()
-                                self.getOTP();
+                                self.getTOTP();
                             }
                             else
                             {
@@ -88,10 +94,21 @@
                 })
             },
 
+            getHOTP: function() {
+
+                axios.get('api/twofaccounts/' + this.id + '/otp').then(response => {
+                    let spacePosition = Math.ceil(response.data.otp.length / 2);
+                    
+                    this.otp = response.data.otp.substr(0, spacePosition) + " " + response.data.otp.substr(spacePosition);
+                    this.counter = response.data.counter;
+                })
+            },
+
             clearOTP: function() {
                 this.stopLoop()
-                this.timerID = null
-                this.totp = '... ...'
+                this.id = this.timerID = this.position = this.counter = null
+                this.service = this.account = this.icon = this.type = ''
+                this.otp = '... ...'
                 this.$el.querySelector('[data-is-active]').removeAttribute('data-is-active');
                 this.$el.querySelector('.dots li:first-child').setAttribute('data-is-active', true);
             },
