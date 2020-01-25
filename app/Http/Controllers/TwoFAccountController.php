@@ -98,7 +98,33 @@ class TwoFAccountController extends Controller
         try {
 
             $twofaccount = TwoFAccount::FindOrFail($id);
-            $twofaccount->update($request->all());
+
+            if( $twofaccount->type === 'hotp' ) {
+
+                // HOTP can be desynchronized from the verification
+                // server so we let the user the possibility to force
+                // the counter.
+
+                $this->validate($request, [
+                    'counter' => 'required|integer',
+                ]);
+
+                // we set an OTP object to get the its current counter
+                // and we update it if a new one has been submited
+                $otp = OTP::get($twofaccount->uri);
+
+                if( $otp->getCounter() !== $request->counter ) {
+                    $otp->setParameter( 'counter', $request->counter );
+                    $twofaccount->uri = $otp->getProvisioningUri();
+                }
+            }
+
+            $twofaccount->update([
+                'service' => $request->service,
+                'account' => $request->account,
+                'icon' => $request->icon,
+                'uri' => $twofaccount->uri,
+            ]);
 
             return response()->json($twofaccount, 200);
 
