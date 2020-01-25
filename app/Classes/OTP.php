@@ -15,15 +15,10 @@ class OTP
      * @param  \App\TwoFAccount  $twofaccount
      * @return an array that represent the totp code
      */
-    public static function get($uri)
+    public static function generate($uri)
     {
         
-        try {
-            $otp = Factory::loadFromProvisioningUri($uri);
-        }
-        catch (AssertionFailedException $exception) {
-            return false;
-        }
+        $otp = $this->get($uri);
 
         if( get_class($otp) === 'OTPHP\TOTP' ) {
 
@@ -58,7 +53,27 @@ class OTP
             return $hotp;
         }
 
-        
+    }
+
+
+    /**
+     * check if the provided uri is a valid OTP uri
+     *
+     * @param  \App\TwoFAccount  $twofaccount
+     * @return \Illuminate\Http\Response
+     */
+    public static function get(String $uri) {
+
+        try {
+            return Factory::loadFromProvisioningUri($uri);
+        }
+        catch (AssertionFailedException $exception) {
+            $error = \Illuminate\Validation\ValidationException::withMessages([
+                'qrcode' => __('errors.response.no_valid_totp')
+            ]);
+
+            throw $error;
+        }
 
     }
 
