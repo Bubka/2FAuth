@@ -18,7 +18,7 @@
                         </div>
                         <field-error :form="form" field="account" />
                     </div>
-                    <div v-if="form.counter">
+                    <div v-if="form.type === 'hotp'">
                         <div class="field" style="margin-bottom: 0.5rem;">
                             <label class="label">{{ $t('twofaccounts.forms.hotp_counter') }}</label>
                         </div>
