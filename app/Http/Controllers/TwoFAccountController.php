@@ -58,12 +58,9 @@ class TwoFAccountController extends Controller
      */
     public function show($id)
     {
-        try {
-            $twofaccount = TwoFAccount::FindOrFail($id);
-            return response()->json($twofaccount, 200);
-        } catch (\Exception $e) {
-            return response()->json( ['message' => 'not found' ], 404);
-        }
+        $twofaccount = TwoFAccount::FindOrFail($id);
+
+        return response()->json($twofaccount, 200);
     }
 
 
@@ -95,45 +92,37 @@ class TwoFAccountController extends Controller
             'service' => 'required',
         ]);
 
-        try {
+        $twofaccount = TwoFAccount::FindOrFail($id);
 
-            $twofaccount = TwoFAccount::FindOrFail($id);
+        if( $twofaccount->type === 'hotp' ) {
 
-            if( $twofaccount->type === 'hotp' ) {
+            // HOTP can be desynchronized from the verification
+            // server so we let the user the possibility to force
+            // the counter.
 
-                // HOTP can be desynchronized from the verification
-                // server so we let the user the possibility to force
-                // the counter.
-
-                $this->validate($request, [
-                    'counter' => 'required|integer',
-                ]);
-
-                // we set an OTP object to get the its current counter
-                // and we update it if a new one has been submited
-                $otp = OTP::get($twofaccount->uri);
-
-                if( $otp->getCounter() !== $request->counter ) {
-                    $otp->setParameter( 'counter', $request->counter );
-                    $twofaccount->uri = $otp->getProvisioningUri();
-                }
-            }
-
-            $twofaccount->update([
-                'service' => $request->service,
-                'account' => $request->account,
-                'icon' => $request->icon,
-                'uri' => $twofaccount->uri,
+            $this->validate($request, [
+                'counter' => 'required|integer',
             ]);
 
-            return response()->json($twofaccount, 200);
+            // we set an OTP object to get the its current counter
+            // and we update it if a new one has been submited
+            $otp = OTP::get($twofaccount->uri);
 
+            if( $otp->getCounter() !== $request->counter ) {
+                $otp->setParameter( 'counter', $request->counter );
+                $twofaccount->uri = $otp->getProvisioningUri();
+            }
         }
-        catch (\Exception $e) {
 
-            return response()->json( ['message' => 'not found' ] , 404);
+        $twofaccount->update([
+            'service' => $request->service,
+            'account' => $request->account,
+            'icon' => $request->icon,
+            'uri' => $twofaccount->uri,
+        ]);
 
-        }
+        return response()->json($twofaccount, 200);
+
     }
 
 
@@ -145,27 +134,20 @@ class TwoFAccountController extends Controller
      */
     public function destroy($id)
     {
-        try {
 
-            $twofaccount = TwoFAccount::FindOrFail($id);
+        $twofaccount = TwoFAccount::FindOrFail($id);
 
-            // delete icon
-            $storedIcon = 'public/icons/' . $twofaccount->icon;
+        // delete icon
+        $storedIcon = 'public/icons/' . $twofaccount->icon;
 
-            if( Storage::exists($storedIcon) ) {
-                Storage::delete($storedIcon);
-            }
-
-            $twofaccount->delete();
-
-            return response()->json(null, 204);
-
+        if( Storage::exists($storedIcon) ) {
+            Storage::delete($storedIcon);
         }
-        catch (\Exception $e) {
 
-            return response()->json(['message' => 'already gone'], 404);
+        // delete account
+        $twofaccount->delete();
 
-        }
+        return response()->json(null, 204);
     }
 
 }
