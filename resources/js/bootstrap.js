@@ -23,6 +23,8 @@ window.axios = require('axios');
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
+import router       from './routes'
+
 /**
  * Next we will register the CSRF Token as a common header with Axios so that
  * all outgoing HTTP requests automatically have it attached. This is just
@@ -54,15 +56,10 @@ window.axios.interceptors.request.use(function (request) {
 
 window.axios.interceptors.response.use(response => response, error => {
 
-    const { status } = error.response
+    if ( error.response.status === 404 ) { viewName = '404' }
+    if ( error.response.status >= 500 ) { viewName = 'genericError' }
 
-    if (status >= 500) {
-        router.push({name: 'genericError', params: { err : error.response }})
-    }
-
-    // if (status === 404) {
-    //     router.push({name: '404'})
-    // }
+    router.push({name: viewName, params: { err : error.response }})
 
     return Promise.reject(error)
 })

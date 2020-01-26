@@ -105,7 +105,7 @@
         methods: {
             getAccount () {
 
-                axios.get('/api/twofaccounts/' + this.$route.params.twofaccountId)
+                this.axios.get('/api/twofaccounts/' + this.$route.params.twofaccountId)
                 .then(response => {
                     this.form.fill(response.data)
                     this.twofaccountExists = true
@@ -174,7 +174,7 @@
             deleteIcon(event) {
 
                 if( this.tempIcon && this.tempIcon !== this.form.icon ) {
-                    axios.delete('/api/icon/delete/' + this.tempIcon)
+                    this.axios.delete('/api/icon/delete/' + this.tempIcon)
                 }
 
                 this.tempIcon = ''

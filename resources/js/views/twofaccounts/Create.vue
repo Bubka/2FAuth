@@ -173,7 +173,7 @@
 
             deleteIcon(event) {
                 if(this.tempIcon) {
-                    axios.delete('/api/icon/delete/' + this.tempIcon)
+                    this.axios.delete('/api/icon/delete/' + this.tempIcon)
                     this.tempIcon = ''
                 }
             },

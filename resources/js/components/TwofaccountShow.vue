@@ -37,7 +37,7 @@
 
                 this.id = id
 
-                axios.get('api/twofaccounts/' + this.id)
+                this.axios.get('api/twofaccounts/' + this.id)
                     .then(async (response) => {
 
                         this.service = response.data.service
@@ -55,7 +55,7 @@
 
             getTOTP: function() {
 
-                axios.get('api/twofaccounts/' + this.id + '/otp').then(response => {
+                this.axios.get('api/twofaccounts/' + this.id + '/otp').then(response => {
                     let spacePosition = Math.ceil(response.data.otp.length / 2);
                     
                     this.otp = response.data.otp.substr(0, spacePosition) + " " + response.data.otp.substr(spacePosition);
@@ -96,7 +96,7 @@
 
             getHOTP: function() {
 
-                axios.get('api/twofaccounts/' + this.id + '/otp').then(response => {
+                this.axios.get('api/twofaccounts/' + this.id + '/otp').then(response => {
                     let spacePosition = Math.ceil(response.data.otp.length / 2);
                     
                     this.otp = response.data.otp.substr(0, spacePosition) + " " + response.data.otp.substr(spacePosition);

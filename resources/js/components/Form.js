@@ -1,5 +1,6 @@
+import Vue      from 'vue'
+import Errors   from './FormErrors'
 
-import Errors from './FormErrors'
 // import { deepCopy } from './util'
 
 class Form {
@@ -157,7 +158,7 @@ class Form {
 
         return new Promise((resolve, reject) => {
             // (Form.axios || axios).request({ url: this.route(url), method, data, ...config })
-            axios.request({ url: this.route(url), method, data, ...config })
+            Vue.axios.request({ url: this.route(url), method, data, ...config })
                 .then(response => {
                     this.finishProcessing()
 
@@ -188,7 +189,7 @@ class Form {
 
         return new Promise((resolve, reject) => {
             // (Form.axios || axios).request({ url: this.route(url), method, data, ...config })
-            axios.request({ url: this.route(url), method: 'post', data: formData, header: {'Content-Type' : 'multipart/form-data'} })
+            Vue.axios.request({ url: this.route(url), method: 'post', data: formData, header: {'Content-Type' : 'multipart/form-data'} })
                 .then(response => {
                     this.finishProcessing()
 

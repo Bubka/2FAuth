@@ -1,5 +1,6 @@
 import Vue          from 'vue'
 import router       from './routes'
+import api          from './api'
 import i18n         from './langs/i18n'
 import FontAwesome  from './packages/fontawesome'
 import Clipboard    from './packages/clipboard'

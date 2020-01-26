@@ -109,7 +109,7 @@
 
             this.username = localStorage.getItem('user')
 
-            axios.get('api/twofaccounts').then(response => {
+            this.axios.get('api/twofaccounts').then(response => {
                 response.data.forEach((data) => {
                     this.accounts.push({
                         id : data.id,
@@ -151,7 +151,7 @@
             deleteAccount:  function (id) {
                 if(confirm(this.$t('twofaccounts.confirm.delete'))) {
 
-                    axios.delete('/api/twofaccounts/' + id)
+                    this.axios.delete('/api/twofaccounts/' + id)
 
                     this.accounts.splice(this.accounts.findIndex(x => x.id === id), 1);
                     this.showAccounts = this.accounts.length > 0 ? true : false
@@ -162,12 +162,12 @@
             logout(evt) {
                 if(confirm(this.$t('auth.confirm.logout'))) {
 
-                    axios.get('api/logout')
+                    this.axios.get('api/logout')
                     .then(response => {
                         localStorage.removeItem('jwt');
                         localStorage.removeItem('user');
 
-                        delete axios.defaults.headers.common['Authorization'];
+                        delete this.axios.defaults.headers.common['Authorization'];
 
                         this.$router.go('/login');
                     })

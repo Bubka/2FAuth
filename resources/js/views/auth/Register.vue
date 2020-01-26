@@ -73,7 +73,7 @@
 
         created: function() {
             // we check if a user account already exists
-            axios.post('api/checkuser')
+            this.axios.post('api/checkuser')
             .then(response => {
                 if( response.data.userCount > 0) {
                     this.errorMessage = this.$t('errors.already_one_user_registered') + ' ' + this.$t('errors.cannot_register_more_user')
