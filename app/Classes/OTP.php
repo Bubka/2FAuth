@@ -18,7 +18,7 @@ class OTP
     public static function generate($uri)
     {
         
-        $otp = $this->get($uri);
+        $otp = OTP::get($uri);
 
         if( get_class($otp) === 'OTPHP\TOTP' ) {
 
