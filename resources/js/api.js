@@ -32,14 +32,21 @@ Vue.axios.interceptors.request.use(function (request) {
 
 Vue.axios.interceptors.response.use(response => response, error => {
 
-    if ( error.response.status === 404 ) {
+    // Return the error when it has been asked
+    if( error.config.hasOwnProperty('returnError') && error.config.returnError === true ) {
+        return Promise.reject(error);
+    }
 
+    if( error.response.status === 422 ) {
+        return Promise.reject(error);
+    }
+
+    // Otherwise we push to the error views
+    if ( error.response.status === 404 ) {
         router.push({name: '404', params: { err : error.response }})
     }
     else {
-
-        // router.push({ name: 'genericError', params: { err: error.response } });
-        return Promise.reject(error)
+        router.push({ name: 'genericError', params: { err: error.response } })
     }
 
 

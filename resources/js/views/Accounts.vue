@@ -159,21 +159,17 @@
                 }
             },
 
-            logout(evt) {
+            async logout(evt) {
                 if(confirm(this.$t('auth.confirm.logout'))) {
 
-                    this.axios.get('api/logout')
-                    .then(response => {
-                        localStorage.removeItem('jwt');
-                        localStorage.removeItem('user');
+                    await this.axios.get('api/logout')
 
-                        delete this.axios.defaults.headers.common['Authorization'];
+                    localStorage.removeItem('jwt');
+                    localStorage.removeItem('user');
 
-                        this.$router.go('/login');
-                    })
-                    .catch(error => {
-                        this.$router.push({ name: 'genericError', params: { err: error.response } });
-                    });
+                    delete this.axios.defaults.headers.common['Authorization'];
+
+                    this.$router.go('/login');
 
                 }
             }

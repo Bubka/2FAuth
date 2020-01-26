@@ -71,18 +71,15 @@
             }
         },
 
-        created: function() {
+        async created() {
             // we check if a user account already exists
-            this.axios.post('api/checkuser')
-            .then(response => {
-                if( response.data.userCount > 0) {
-                    this.errorMessage = this.$t('errors.already_one_user_registered') + ' ' + this.$t('errors.cannot_register_more_user')
-                    this.$router.push({ name: 'flooded' });
-                }
-            })
-            .catch(error => {
-                this.$router.push({ name: 'genericError', params: { err: error.response } });
-            });
+            const { data } = await this.axios.post('api/checkuser')
+
+            if( data.userCount > 0) {
+                this.errorMessage = this.$t('errors.already_one_user_registered') + ' ' + this.$t('errors.cannot_register_more_user')
+                this.$router.push({ name: 'flooded' });
+            }
+
         },
 
         methods : {

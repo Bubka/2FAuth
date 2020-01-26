@@ -103,23 +103,19 @@
         },
 
         methods: {
-            getAccount () {
+            async getAccount () {
 
-                this.axios.get('/api/twofaccounts/' + this.$route.params.twofaccountId)
-                .then(response => {
-                    this.form.fill(response.data)
-                    this.twofaccountExists = true
+                const { data } = await this.axios.get('/api/twofaccounts/' + this.$route.params.twofaccountId)
 
-                    // set account icon as temp icon
-                    this.tempIcon = this.form.icon
-                })
-                .catch(error => {
-                    this.$router.push({ name: 'genericError', params: { err: error.response } });
-                });
+                this.form.fill(data)
+                this.twofaccountExists = true
 
+                // set account icon as temp icon
+                this.tempIcon = this.form.icon
+                
             },
 
-            updateAccount() {
+            async updateAccount() {
 
                 // Set new icon and delete old one
                 if( this.tempIcon !== this.form.icon ) {
