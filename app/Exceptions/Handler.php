@@ -134,12 +134,12 @@ class Handler extends ExceptionHandler
 
             default:
                 $response['message'] = ($statusCode >= 500) ? 'Whoops, looks like something went wrong' : $exception->getMessage();
+
+                if (env('APP_DEBUG')) {
+                    $response['debug'] = $debug;
+                }
+
                 break;
-        }
-
-        if (env('APP_DEBUG')) {
-
-            $response['debug'] = $debug;
         }
 
         return response()->json($response, $statusCode);
