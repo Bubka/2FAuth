@@ -1,7 +1,7 @@
 ![Travis (.com)](https://img.shields.io/travis/com/bubka/2fauth?style=flat-square)
 
 # 2FAuth
-A web app to manage your Two-factors Auth (2FA) accounts and generate their TOTP tokens
+A web app to manage your Two-factors Auth (2FA) accounts and generate their OTP tokens
 
 ## Purpose
 2FAuth is a web based self-hosted alternative to One Time Passcode (OTP) generators like Google Authenticator that you can use both on mobile or desktop.
@@ -14,11 +14,11 @@ I created it because :
 
 ## Features
 * Manage 2FA accounts (add, edit, delete), with QR code support
-* Generate tokens
+* Generate TOTP and HOTP tokens
 * User authentication to protect access to 2FA accounts
 
 #### Single user app
-2FA are sensitives data so it is necessary to sign in an user account in order to use the app. And because they are owned by the same person, it is not possible to create more than one account.
+2FA are sensitives data so an authentication is needed to use the app. And because they are usually owned by the same person, it is not possible to create more than one account.
 
 #### RFC compliance
 2FAuth generates OTP according to RFC 4226 (HOTP Algorithm) and RFC 6238 (TOTP Algorithm) thanks to [Spomky-Labs/OTPHP](https://github.com/Spomky-Labs/otphp) php library.
