@@ -43,10 +43,13 @@ Vue.axios.interceptors.response.use(response => response, error => {
 
     // Otherwise we push to the error views
     if ( error.response.status === 404 ) {
-        router.push({name: '404', params: { err : error.response }})
+
+        router.push({name: '404'})
+        throw new Vue.axios.Cancel('pushed to 404');
     }
     else {
         router.push({ name: 'genericError', params: { err: error.response } })
+        throw new Vue.axios.Cancel('pushed to generic error');
     }
 
 
