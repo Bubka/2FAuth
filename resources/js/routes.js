@@ -11,8 +11,8 @@ import Register         from './views/auth/Register'
 import PasswordUpdate   from './views/auth/password/Update'
 import PasswordRequest  from './views/auth/password/Request'
 import PasswordReset    from './views/auth/password/Reset'
-import Profile         from './views/profile/Edit'
-import NotFound         from './views/Error'
+import Profile          from './views/profile/Edit'
+import Errors           from './views/Error'
 
 const router = new Router({
     mode: 'history',
@@ -28,9 +28,9 @@ const router = new Router({
         { path: '/password/request', name: 'password.request', component: PasswordRequest },
         { path: '/password/reset/:token', name: 'password.reset', component: PasswordReset },
 
-        { path: '/flooded', name: 'flooded',component: NotFound,props: true },
-        { path: '/error', name: 'genericError',component: NotFound,props: true },
-        { path: '/404', name: '404',component: NotFound,props: true },
+        { path: '/flooded', name: 'flooded',component: Errors,props: true },
+        { path: '/error', name: 'genericError',component: Errors,props: true },
+        { path: '/404', name: '404',component: Errors,props: true },
         { path: '*', redirect: { name: '404' } }
     ],
 });
