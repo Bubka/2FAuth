@@ -38,10 +38,7 @@ class IconController extends Controller
     public function delete($icon)
     {
 
-        if( Storage::exists('public/icons/' . $icon) ) {
-
-            Storage::delete('public/icons/' . $icon); 
-        }
+        Storage::delete('public/icons/' . $icon); 
 
         return response()->json(null, 204);
     }
