@@ -70,7 +70,7 @@
             handleSubmit(e) {
                 e.preventDefault()
 
-                this.form.post('/api/password/reset')
+                this.form.post('/api/password/reset', {returnError: true})
                 .then(response => {
 
                     this.$router.go('/');

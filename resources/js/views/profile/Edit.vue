@@ -75,14 +75,10 @@
             }
         },
 
-        mounted: function() {
-            this.form.get('/api/user')
-            .then(response => {
-                this.form.fill(response.data)
-            })
-            .catch(error => {
-                this.$router.push({ name: 'genericError', params: { err: error.response } });
-            });
+        async mounted() {
+            const { data } = await this.form.get('/api/user')
+
+            this.form.fill(data)
         },
 
         methods : {
@@ -92,7 +88,7 @@
                 this.errorMessage = ''
                 this.response = ''
 
-                this.form.patch('/api/user')
+                this.form.patch('/api/user', {returnError: true})
                 .then(response => {
 
                     this.response = response.data.message

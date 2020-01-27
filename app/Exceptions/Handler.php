@@ -49,44 +49,7 @@ class Handler extends ExceptionHandler
      * @return \Illuminate\Http\Response
      */
     public function render($request, Exception $exception)
-    {
-        // if (!($exception instanceof ValidationException)) {
-
-        //     if ($exception instanceof \Illuminate\Auth\AuthenticationException) {
-
-        //         $response['message'] = (string)$exception->getMessage();
-        //         $response['status_code'] = Response::HTTP_UNAUTHORIZED;
-
-        //     } else if ($exception instanceof HttpException) {
-
-        //         $response['message'] = Response::$statusTexts[$exception->getStatusCode()];
-        //         $response['status_code'] = $exception->getStatusCode();
-
-        //     } else if ($exception instanceof ModelNotFoundException) {
-
-        //         $response['message'] = Response::$statusTexts[Response::HTTP_NOT_FOUND];
-        //         $response['status_code'] = Response::HTTP_NOT_FOUND;
-        //     }
-        //     else {
-        //         $response = [
-        //             'message' => (string)$exception->getMessage(),
-        //             'status_code' => $exception->getStatusCode(),
-        //         ];
-        //     }
-
-        //     if ($this->isDebugMode()) {
-        //         $response['debug'] = [
-        //             'exception' => get_class($exception),
-        //             'trace' => $exception->getTrace()
-        //         ];
-        //         // return parent::render($request, $exception);
-        //     }
-
-        //     return response()->json($response, $response['status_code']);
-        // }
-
-        // return parent::render($request, $exception);
-        
+    {        
         if ( $request->wantsJson() ) {
 
             return $this->handleApiException($request, $exception);
@@ -95,7 +58,6 @@ class Handler extends ExceptionHandler
 
            return parent::render($request, $exception);
         }
-
     }
 
 
@@ -108,6 +70,11 @@ class Handler extends ExceptionHandler
      */
     private function handleApiException($request, Exception $exception)
     {
+        $debug = [
+            'exception' => get_class($exception),
+            'trace' => $exception->getTrace(),
+        ];
+
         $exception = $this->prepareException($exception);
 
         if ($exception instanceof \Illuminate\Http\Exception\HttpResponseException) {
@@ -122,7 +89,7 @@ class Handler extends ExceptionHandler
             $exception = $this->convertValidationExceptionToResponse($exception, $request);
         }
 
-        return $this->customApiResponse($exception);
+        return $this->customApiResponse($exception, $debug);
     }
 
 
@@ -132,7 +99,7 @@ class Handler extends ExceptionHandler
      * @param  \Exception  $exception
      * @return \Illuminate\Http\JsonResponse
      */
-    private function customApiResponse($exception)
+    private function customApiResponse($exception, $debug)
     {
         if (method_exists($exception, 'getStatusCode')) {
             $statusCode = $exception->getStatusCode();
@@ -172,11 +139,7 @@ class Handler extends ExceptionHandler
 
         if (env('APP_DEBUG')) {
 
-            $response['debug'] = [
-                    // 'exception' => get_class($exception),
-                    // 'code' => $exception->getCode(),
-                    // 'trace' => $exception->getTrace(),
-                ];
+            $response['debug'] = $debug;
         }
 
         return response()->json($response, $statusCode);

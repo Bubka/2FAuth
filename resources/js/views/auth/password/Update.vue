@@ -75,7 +75,7 @@
                 this.errorMessage = ''
                 this.response = ''
 
-                this.form.patch('/api/password')
+                this.form.patch('/api/password', {returnError: true})
                 .then(response => {
 
                     this.response = response.data.message

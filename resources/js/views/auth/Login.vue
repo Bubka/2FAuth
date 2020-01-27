@@ -67,7 +67,7 @@
             handleSubmit(e) {
                 e.preventDefault()
 
-                this.form.post('/api/login')
+                this.form.post('/api/login', {returnError: true})
                 .then(response => {
                     localStorage.setItem('user',response.data.message.name)
                     localStorage.setItem('jwt',response.data.message.token)

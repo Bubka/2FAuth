@@ -53,7 +53,7 @@
             handleSubmit(e) {
                 e.preventDefault()
 
-                this.form.post('/api/password/email')
+                this.form.post('/api/password/email', {returnError: true})
                 .then(response => {
 
                     this.response = response.data.status

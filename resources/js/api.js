@@ -32,25 +32,23 @@ Vue.axios.interceptors.request.use(function (request) {
 
 Vue.axios.interceptors.response.use(response => response, error => {
 
-    // Return the error when it has been asked
+    // Return the error when we need to handle it at component level
     if( error.config.hasOwnProperty('returnError') && error.config.returnError === true ) {
         return Promise.reject(error);
     }
 
+    // Return the error for form validation at component level
     if( error.response.status === 422 ) {
         return Promise.reject(error);
     }
 
-    // Otherwise we push to the error views
-    if ( error.response.status === 404 ) {
+    // Otherwise we push to a specific or generic error view
+    let routeName = 'genericError'
 
-        router.push({name: '404'})
-        throw new Vue.axios.Cancel('pushed to 404');
-    }
-    else {
-        router.push({ name: 'genericError', params: { err: error.response } })
-        throw new Vue.axios.Cancel('pushed to generic error');
-    }
+    if ( error.response.status === 401 ) routeName = 'login'
+    if ( error.response.status === 404 ) routeName = '404'
 
+    router.push({ name: routeName, params: { err: error.response } })
+    throw new Vue.axios.Cancel();
 
 })
