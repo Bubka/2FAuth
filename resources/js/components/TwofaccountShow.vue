@@ -10,7 +10,7 @@
             <li v-for="n in 30"></li>
         </ul>
         <ul v-else-if="type === 'hotp'">
-            <li>(counter = {{ counter }})</li>
+            <li>counter: {{ counter }}</li>
         </ul>
     </div>
 </template>
