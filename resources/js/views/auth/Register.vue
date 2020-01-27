@@ -75,7 +75,7 @@
             // we check if a user account already exists
             const { data } = await this.axios.post('api/checkuser')
 
-            if( data.userCount > 0) {
+            if( data.userCount > 0 ) {
                 this.errorMessage = this.$t('errors.already_one_user_registered') + ' ' + this.$t('errors.cannot_register_more_user')
                 this.$router.push({ name: 'flooded' });
             }
@@ -83,23 +83,20 @@
         },
 
         methods : {
-            handleSubmit(e) {
+            async handleSubmit(e) {
                 e.preventDefault()
 
-                this.form.post('api/register')
-                .then(response => {
-                    localStorage.setItem('user',response.data.message.name)
-                    localStorage.setItem('jwt',response.data.message.token)
+                const { data } = await this.form.post('api/register')
 
-                    if (localStorage.getItem('jwt') != null){
+                if( this.form.errors.any() === false ) {
+
+                    localStorage.setItem('user',data.message.name)
+                    localStorage.setItem('jwt',data.message.token)
+
+                    if (localStorage.getItem('jwt') != null) {
                         this.$router.push({name: 'accounts'})
                     }
-                })
-                .catch(error => {
-                    if( error.response.status !== 422 ) {
-                        this.$router.push({ name: 'genericError', params: { err: error.response } });
-                    }
-                });
+                }
             }
         },
 

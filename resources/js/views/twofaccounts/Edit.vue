@@ -128,15 +128,11 @@
                     this.deleteIcon()
                 }
 
-                this.form.put('/api/twofaccounts/' + this.$route.params.twofaccountId)
-                .then(response => {
-                    this.$router.push({name: 'accounts', params: { InitialEditMode: true }});
-                })
-                .catch(error => {
-                    if( error.response.status !== 422 ) {
-                        this.$router.push({ name: 'genericError', params: { err: error.response } });
-                    }
-                });
+                await this.form.put('/api/twofaccounts/' + this.$route.params.twofaccountId)
+
+                if( this.form.errors.any() === false ) {
+                    this.$router.push({name: 'accounts', params: { InitialEditMode: true }})
+                }
 
             },
 
@@ -147,7 +143,7 @@
                 this.$router.push({name: 'accounts', params: { InitialEditMode: true }});
             },
 
-            uploadIcon(event) {
+            async uploadIcon(event) {
 
                 // clean possible tempIcon but keep original one
                 this.deleteIcon()
@@ -155,15 +151,9 @@
                 let imgdata = new FormData();
                 imgdata.append('icon', this.$refs.iconInput.files[0]);
 
-                this.form.upload('/api/icon/upload', imgdata)
-                .then(response => {
-                    this.tempIcon = response.data;
-                })
-                .catch(error => {
-                    if( error.response.status !== 422 ) {
-                        this.$router.push({ name: 'genericError', params: { err: error.response } });
-                    }
-                });
+                const { data } = await this.form.upload('/api/icon/upload', imgdata)
+
+                this.tempIcon = data;
 
             },
 

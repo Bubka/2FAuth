@@ -109,19 +109,15 @@
 
         methods: {
 
-            createAccount() {
+            async createAccount() {
                 // set current temp icon as account icon
                 this.form.icon = this.tempIcon
 
-                this.form.post('/api/twofaccounts')
-                .then(response => {
+                await this.form.post('/api/twofaccounts')
+
+                if( this.form.errors.any() === false ) {
                     this.$router.push({name: 'accounts', params: { InitialEditMode: false }});
-                })
-                .catch(error => {
-                    if( error.response.status !== 422 ) {
-                        this.$router.push({ name: 'genericError', params: { err: error.response } });
-                    }
-                });
+                }
 
             },
 
@@ -132,26 +128,18 @@
                 this.$router.push({name: 'accounts', params: { InitialEditMode: false }});
             },
 
-            uploadQrcode(event) {
+            async uploadQrcode(event) {
 
                 let imgdata = new FormData();
                 imgdata.append('qrcode', this.$refs.qrcodeInput.files[0]);
 
-                this.form.upload('/api/qrcode/decode', imgdata)
-                .then(response => {
-                    this.form.service = response.data.service;
-                    this.form.account = response.data.account;
-                    this.form.uri = response.data.uri;
-                })
-                .catch(error => {
-                    if( error.response.status !== 422 ) {
-                        this.$router.push({ name: 'genericError', params: { err: error.response } });
-                    }
-                });
+                const { data } = await this.form.upload('/api/qrcode/decode', imgdata)
+
+                this.form.fill(data)
 
             },
 
-            uploadIcon(event) {
+            async uploadIcon(event) {
 
                 // clean possible already uploaded temp icon
                 this.deleteIcon()
@@ -159,15 +147,9 @@
                 let imgdata = new FormData();
                 imgdata.append('icon', this.$refs.iconInput.files[0]);
 
-                this.form.upload('/api/icon/upload', imgdata)
-                .then(response => {
-                    this.tempIcon = response.data;
-                })
-                .catch(error => {
-                    if( error.response.status !== 422 ) {
-                        this.$router.push({ name: 'genericError', params: { err: error.response } });
-                    }
-                });
+                const { data } = await this.form.upload('/api/icon/upload', imgdata)
+
+                this.tempIcon = data;
 
             },
 
