@@ -92,7 +92,22 @@ class TwoFAccountController extends Controller
             'service' => 'required',
         ]);
 
-        $twofaccount = TwoFAccount::FindOrFail($id);
+
+        // Here we catch a possible missing model exception in order to
+        // delete orphan submited icon
+        try {
+
+            $twofaccount = TwoFAccount::FindOrFail($id);
+
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+
+            if( $request->icon ) {
+                Storage::delete('public/icons/' . $request->icon);
+            }
+            
+            throw $e;
+        }
+        
 
         if( $twofaccount->type === 'hotp' ) {
 
@@ -138,11 +153,7 @@ class TwoFAccountController extends Controller
         $twofaccount = TwoFAccount::FindOrFail($id);
 
         // delete icon
-        $storedIcon = 'public/icons/' . $twofaccount->icon;
-
-        if( Storage::exists($storedIcon) ) {
-            Storage::delete($storedIcon);
-        }
+        Storage::delete('public/icons/' . $twofaccount->icon);
 
         // delete account
         $twofaccount->delete();
