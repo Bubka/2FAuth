@@ -92,6 +92,8 @@
                 .then(response => {
 
                     this.response = response.data.message
+
+                    localStorage.setItem('user',response.data.username)
                 })
                 .catch(error => {
                     if( error.response.status === 400 ) {

@@ -132,7 +132,10 @@ class UserController extends Controller
 
         tap($user)->update($request->only('name', 'email'));
 
-        return response()->json(['message' => __('auth.forms.profile_saved')]);
+        return response()->json([
+                'message' => __('auth.forms.profile_saved'),
+                'username' => $request->name
+            ]);
     }
 
 
