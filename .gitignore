@@ -1,6 +1,5 @@
 /node_modules
 /public/storage
-/public/mix-manifest.json
 /storage/*.key
 /vendor
 .env
