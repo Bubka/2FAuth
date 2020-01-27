@@ -43,7 +43,7 @@ class TwoFAccount extends Model
     public function getIconAttribute($value)
     {
         if (\App::environment('testing') == false) {
-            if( !Storage::exists('public/icons/' . pathinfo($value)['basename']) ) {
+            if( !Storage::exists('public/icons/' . $value) ) {
 
                 return '';
             }
@@ -62,7 +62,7 @@ class TwoFAccount extends Model
     public function setIconAttribute($value)
     {
 
-        if( !Storage::exists('public/icons/' . pathinfo($value)['basename']) ) {
+        if( !Storage::exists('public/icons/' . $value) && \App::environment('testing') == false ) {
 
             $this->attributes['icon'] = '';
         }

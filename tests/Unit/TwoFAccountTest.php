@@ -140,10 +140,10 @@ class TwoFAccountTest extends TestCase
         ]);
 
         $response = $this->actingAs($this->user, 'api')
-            ->json('GET', '/api/twofaccounts/' . $twofaccount->id . '/totp')
+            ->json('GET', '/api/twofaccounts/' . $twofaccount->id . '/otp')
             ->assertStatus(200)
             ->assertJsonStructure([
-                'totp',
+                'otp',
             ]);
     }
 
@@ -161,7 +161,6 @@ class TwoFAccountTest extends TestCase
             ->json('PUT', '/api/twofaccounts/' . $twofaccount->id, [
                     'service' => 'testUpdate',
                     'account' => 'testUpdate@test.com',
-                    'uri' => 'testUpdate',
                     'icon' => 'testUpdate.png',
                 ])
             ->assertStatus(200)
@@ -169,7 +168,7 @@ class TwoFAccountTest extends TestCase
                 'id' => 1,
                 'service' => 'testUpdate',
                 'account' => 'testUpdate@test.com',
-                'uri' => 'testUpdate',
+                'uri' => $twofaccount->uri,
                 'icon' => 'testUpdate.png',
             ]);
     }
