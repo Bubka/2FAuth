@@ -52,6 +52,28 @@ class TwoFAccount extends Model
         return $value;
     }
 
+
+    /**
+     * Prevent setting a missing icon
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function setIconAttribute($value)
+    {
+
+        if( !Storage::exists('public/icons/' . pathinfo($value)['basename']) ) {
+
+            $this->attributes['icon'] = '';
+        }
+        else {
+
+            $this->attributes['icon'] = $value;
+        }
+    }
+
+
+
     /**
     * Get the account type.
     *
