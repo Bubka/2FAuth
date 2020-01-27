@@ -17,10 +17,10 @@
             <div v-else>
                 <p class="error-generic"></p>
                 <p>{{ $t('errors.error_occured') }}</p>
-                <p v-if="error" class="has-text-grey-lighter">{{ error.statusText }}</p>
+                <p v-if="error" class="has-text-grey-lighter">{{ error.message }}</p>
                 <p>{{ $t('errors.please') }}<router-link :to="{ name: 'accounts' }" class="is-text has-text-grey-light">{{ $t('errors.refresh') }}</router-link></p>
                 <p v-if="debugMode == 'development' && error">
-                    <strong>{{ error.message }}</strong><br>
+                    <br>
                     {{ error.debug }}
                 </p>
             </div>
@@ -52,6 +52,7 @@
                 else
                 {
                     if(this.err.data) {
+                console.log(this.err.data)
                         return this.err.data
                     }
                     else
