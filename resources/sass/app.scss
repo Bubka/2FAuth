@@ -12,6 +12,19 @@
   padding: 1.5rem 1.5rem 8rem 1.5rem;
 }
 
+.form-column {
+  padding-top: 3rem;
+}
+
+.form-column > p {
+  margin-bottom: 0.75rem;
+  padding-top: 0.75rem;
+}
+
+.form-column > p:first-of-type {
+  padding-top: 1.5rem !important;
+}
+
 nav.level {
     padding: 0 20px;
     /*postion: fixed;*/
