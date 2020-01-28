@@ -21,7 +21,9 @@ if (mix.inProduction()) {
   mix.extract([
     'vue',
     'axios',
+    'vue-axios',
     'vue-i18n',
-    'vue-router'
+    'vue-router',
+    'v-clipboard'
   ])
 }
