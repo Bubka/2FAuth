@@ -43,14 +43,16 @@
             </p>
             <router-link :to="{ name: 'create' }" class="button is-medium is-link is-focused">{{ $t('twofaccounts.add_one') }}</router-link>
         </div>
+        <!-- modal -->
         <modal v-model="ShowTwofaccountInModal">
             <twofaccount-show ref="TwofaccountShow" ></twofaccount-show>
         </modal>
+        <!-- footer -->
         <footer class="has-background-black-ter">
             <div class="columns is-gapless" v-if="this.accounts.length > 0">
                 <div class="column has-text-centered">
                     <div class="field is-grouped">
-                        <p class="control">
+                        <p class="control" v-if="!editMode">
                             <router-link :to="{ name: 'create' }" class="button is-link is-rounded is-focus">
                                 <span>{{ $t('twofaccounts.new') }}</span>
                                 <span class="icon is-small">
@@ -60,7 +62,7 @@
                         </p>
                         <p class="control">
                             <a class="button is-dark is-rounded" @click="editMode = true" v-if="!editMode">{{ $t('twofaccounts.manage') }}</a>
-                            <a class="button is-success is-rounded" @click="editMode = false" v-if="editMode">
+                            <a class="button is-success is-rounded is-medium" @click="editMode = false" v-if="editMode">
                                 <span>{{ $t('twofaccounts.done') }}</span>
                                 <span class="icon is-small">
                                     <font-awesome-icon :icon="['fas', 'check']" />
