@@ -29,6 +29,10 @@
     cursor: pointer;
 }
 
+.modal-background {
+  background-color: black;
+}
+
 .tfa {
     display: block;
     height: auto;
@@ -40,7 +44,7 @@
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
-    background-color: hsl(0, 0%, 7%); /*black-bis from Bulma*/
+    background-color: hsl(0, 0%, 10%); /*black-bis from Bulma*/
     max-width: 400px;
 }
 
@@ -51,7 +55,7 @@
       border-bottom: 1px solid hsl(0, 0%, 21%);
       background-color: hsl(0, 0%, 14%); /*black-ter from Bulma*/
       margin: 0;
-      padding: 0 0.5rem 0.5rem 0.5rem;
+      padding: 0.5rem 0.5rem 0.5rem 0.5rem;
       max-width: none;
   }
 }
