@@ -3,8 +3,8 @@
         <figure class="image is-64x64" style="display: inline-block"  v-if="icon">
             <img :src="'storage/icons/' + icon">
         </figure>
-        <p class="is-size-4 has-text-grey-light">{{ service }}</p>
-        <p class="is-size-6 has-text-grey">{{ account }}</p>
+        <p class="is-size-4 has-text-grey-light has-ellipsis">{{ service }}</p>
+        <p class="is-size-6 has-text-grey has-ellipsis">{{ account }}</p>
         <p id="otp" class="is-size-1 has-text-white" :title="$t('commons.copy_to_clipboard')" v-clipboard="() => otp.replace(/ /g, '')" v-clipboard:success="clipboardSuccessHandler">{{ otp }}</p>
         <ul class="dots" v-if="type === 'totp'">
             <li v-for="n in 30"></li>
