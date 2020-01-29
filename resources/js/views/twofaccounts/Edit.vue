@@ -53,7 +53,7 @@
                         </span>
                     </label>
                     <span class="tag is-black is-large" v-if="tempIcon">
-                        <img class="icon-preview" :src="'../storage/icons/' + tempIcon" >
+                        <img class="icon-preview" :src="'/storage/icons/' + tempIcon" >
                         <button class="delete is-small" @click.prevent="deleteIcon"></button>
                     </span>
                 </div>
