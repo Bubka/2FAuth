@@ -23,7 +23,7 @@ class IconController extends Controller
             'icon' => 'required|image',
         ]);
         
-        $path = $request->file('icon')->storePublicly('public/icons');
+        $path = $request->file('icon')->store('public/icons');
 
         return response()->json(pathinfo($path)['basename'], 201);
     }
