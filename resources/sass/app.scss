@@ -40,6 +40,20 @@
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
+    background-color: hsl(0, 0%, 7%); /*black-bis from Bulma*/
+    max-width: 400px;
+}
+
+@media screen and (max-width: 768px) {
+  .tfa {
+      border-radius: unset;
+      text-align: inherit;
+      border-bottom: 1px solid hsl(0, 0%, 21%);
+      background-color: hsl(0, 0%, 14%); /*black-ter from Bulma*/
+      margin: 0;
+      padding: 0 0.5rem 0.5rem 0.5rem;
+      max-width: none;
+  }
 }
 
 .tfa img {
