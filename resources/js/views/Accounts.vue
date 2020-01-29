@@ -1,6 +1,7 @@
 <template>
     <div>
         <div class="container" v-if="this.showAccounts">
+            <!-- search -->
             <div class="columns is-gapless is-mobile is-centered">
                 <div class="column is-three-quarters-mobile is-one-third-tablet is-one-quarter-desktop is-one-quarter-widescreen is-one-quarter-fullhd">
                     <div class="field">
@@ -14,13 +15,14 @@
                     </div>
                 </div>
             </div>
-            <div class="buttons are-large is-centered">
-                <span v-for="account in filteredAccounts" class="button is-black has-background-black-bis twofaccount" >
-                    <span @click.stop="showAccount(account.id)">
+            <!-- accounts -->
+            <div class="columns is-multiline is-centered is-gapless">
+                <div class="column is-narrow" v-for="account in filteredAccounts">
+                    <div class="tfa has-background-black-bis has-text-white is-size-3" @click.stop="showAccount(account.id)">
                         <img :src="'storage/icons/' + account.icon" v-if="account.icon">
                         {{ account.service }}
-                        <span class="is-family-primary is-size-7 has-text-grey">{{ account.account }}</span>
-                    </span>
+                        <span class="is-family-primary is-size-6 has-text-grey">{{ account.account }}</span>
+                    </div>
                     <span v-if="editMode">
                         <router-link :to="{ name: 'edit', params: { twofaccountId: account.id }}" class="tag is-dark">
                             <font-awesome-icon :icon="['fas', 'edit']" />
@@ -29,9 +31,11 @@
                             <font-awesome-icon :icon="['fas', 'trash']" />
                         </a>
                     </span>
-                </span>
+                </div>
             </div>
         </div>
+
+        <!-- No account -->
         <div class="container has-text-centered" v-show="this.showNoAccount">
             <p class="no-account"></p>
             <p class="subtitle is-5 has-text-grey">
