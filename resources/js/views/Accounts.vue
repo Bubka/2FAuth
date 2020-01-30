@@ -16,25 +16,37 @@
                 </div>
             </div>
             <!-- accounts -->
-            <div class="columns is-multiline is-centered is-gapless">
-                <div class="column is-narrow" v-for="account in filteredAccounts">
-                    <div class="tfa has-text-white is-size-4 has-ellipsis" @click.stop="showAccount(account.id)">
-                        <img :src="'/storage/icons/' + account.icon" v-if="account.icon">
-                        {{ account.service }}
-                        <span class="is-family-primary is-size-7 has-text-grey ">{{ account.account }}</span>
+            <div class="columns is-multiline is-centered">
+                <div class="tfa column is-narrow has-text-white" v-for="account in filteredAccounts">
+                    <div class="tfa-container">
+                        <div class="tfa-checkbox" v-if="editMode">
+                            <div class="field">
+                                <input class="is-checkradio is-small is-white" :id="'ckb_' + account.id" type="checkbox" :name="'ckb_' + account.id">
+                                <label :for="'ckb_' + account.id"></label>
+                            </div>
+                        </div>
+                        <div class="tfa-content is-size-4" @click.stop="showAccount(account.id)">  
+                            <div class="tfa-text has-ellipsis">
+                                <img :src="'/storage/icons/' + account.icon" v-if="account.icon">
+                                {{ account.service }}
+                                <span class="is-family-primary is-size-7 has-text-grey ">{{ account.account }}</span>
+                            </div>
+                        </div>
+                        <div class="tfa-dots has-text-grey" v-if="!editMode">
+                            <font-awesome-icon :icon="['fas', 'ellipsis-h']" />
+                        </div>
                     </div>
-                    <span v-if="editMode">
+                </div>
+<!--                     <span v-if="editMode">
                         <router-link :to="{ name: 'edit', params: { twofaccountId: account.id }}" class="tag is-dark">
                             <font-awesome-icon :icon="['fas', 'edit']" />
                         </router-link>
                         <a class="tag is-dark" v-on:click="deleteAccount(account.id)">
                             <font-awesome-icon :icon="['fas', 'trash']" />
                         </a>
-                    </span>
-                </div>
+                    </span> -->
             </div>
         </div>
-
         <!-- No account -->
         <div class="container has-text-centered" v-show="this.showNoAccount">
             <p class="no-account"></p>
