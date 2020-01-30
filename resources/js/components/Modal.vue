@@ -5,7 +5,7 @@
         <section class="section">
             <div class="columns is-centered">
                 <div class="column is-three-quarters">
-                    <div class="box has-text-centered has-background-black-ter ">
+                    <div class="box has-text-centered has-background-black-ter is-shadowless">
                         <slot></slot>
                     </div>
                 </div>

@@ -2,7 +2,7 @@
     <div>
         <div class="container" v-if="this.showAccounts">
             <!-- search -->
-            <div class="columns is-gapless is-mobile is-centered">
+            <div class="search columns is-gapless is-mobile is-centered">
                 <div class="column is-three-quarters-mobile is-one-third-tablet is-one-quarter-desktop is-one-quarter-widescreen is-one-quarter-fullhd">
                     <div class="field">
                         <div class="control has-icons-right">
@@ -18,10 +18,10 @@
             <!-- accounts -->
             <div class="columns is-multiline is-centered is-gapless">
                 <div class="column is-narrow" v-for="account in filteredAccounts">
-                    <div class="tfa has-text-white is-size-3 has-ellipsis" @click.stop="showAccount(account.id)">
+                    <div class="tfa has-text-white is-size-4 has-ellipsis" @click.stop="showAccount(account.id)">
                         <img :src="'/storage/icons/' + account.icon" v-if="account.icon">
                         {{ account.service }}
-                        <span class="is-family-primary is-size-6 has-text-grey ">{{ account.account }}</span>
+                        <span class="is-family-primary is-size-7 has-text-grey ">{{ account.account }}</span>
                     </div>
                     <span v-if="editMode">
                         <router-link :to="{ name: 'edit', params: { twofaccountId: account.id }}" class="tag is-dark">
@@ -62,7 +62,7 @@
                         </p>
                         <p class="control">
                             <a class="button is-dark is-rounded" @click="editMode = true" v-if="!editMode">{{ $t('twofaccounts.manage') }}</a>
-                            <a class="button is-success is-rounded is-medium" @click="editMode = false" v-if="editMode">
+                            <a class="button is-success is-rounded" @click="editMode = false" v-if="editMode">
                                 <span>{{ $t('twofaccounts.done') }}</span>
                                 <span class="icon is-small">
                                     <font-awesome-icon :icon="['fas', 'check']" />
@@ -111,7 +111,7 @@
 
         props: ['InitialEditMode'],
 
-        mounted(){
+        created() {
 
             this.username = localStorage.getItem('user')
 
