@@ -13,14 +13,25 @@
   padding: 1.5rem 1rem 8rem 1rem;
 }
 
+.search {
+  margin-bottom: 0 !important;
+}
+
+.accounts {
+  margin-top: 0.75rem;
+}
+
 @media screen and (max-width: 768px) {
   .main-section {
     padding: 0.75rem 1rem 8rem 1rem;
   }
+}
 
-  .search {
-    margin-bottom: 0.75rem !important;
-  }
+.toolbar {
+  position: fixed;
+  width: 100%;
+  z-index: 30;
+  padding: 0.75rem 0;
 }
 
 .form-column {

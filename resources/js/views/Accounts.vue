@@ -16,7 +16,7 @@
                 </div>
             </div>
             <!-- accounts -->
-            <div class="columns is-multiline is-centered">
+            <div class="accounts columns is-multiline is-centered">
                 <div class="tfa column is-narrow has-text-white" v-for="account in filteredAccounts">
                     <div class="tfa-container">
                         <div class="tfa-checkbox" v-if="editMode">
@@ -37,14 +37,6 @@
                         </div>
                     </div>
                 </div>
-<!--                     <span v-if="editMode">
-                        <router-link :to="{ name: 'edit', params: { twofaccountId: account.id }}" class="tag is-dark">
-                            <font-awesome-icon :icon="['fas', 'edit']" />
-                        </router-link>
-                        <a class="tag is-dark" v-on:click="deleteAccount(account.id)">
-                            <font-awesome-icon :icon="['fas', 'trash']" />
-                        </a>
-                    </span> -->
             </div>
         </div>
         <!-- No account -->
@@ -73,8 +65,8 @@
                             </router-link>
                         </p>
                         <p class="control">
-                            <a class="button is-dark is-rounded" @click="editMode = true" v-if="!editMode">{{ $t('twofaccounts.manage') }}</a>
-                            <a class="button is-success is-rounded" @click="editMode = false" v-if="editMode">
+                            <a class="button is-dark is-rounded" @click="setEditModeTo(true)" v-if="!editMode">{{ $t('twofaccounts.manage') }}</a>
+                            <a class="button is-success is-rounded" @click="setEditModeTo(false)" v-if="editMode">
                                 <span>{{ $t('twofaccounts.done') }}</span>
                                 <span class="icon is-small">
                                     <font-awesome-icon :icon="['fas', 'check']" />
@@ -190,6 +182,11 @@
                     this.$router.go('/login');
 
                 }
+            },
+
+            setEditModeTo(state) {
+                this.editMode = state
+                this.$parent.showToolbar = state
             }
 
         },
