@@ -25,11 +25,11 @@
                                 <label :for="'ckb_' + account.id"></label>
                             </div>
                         </div>
-                        <div class="tfa-content is-size-4" @click.stop="showAccount(account.id)">  
+                        <div class="tfa-content is-size-3 is-size-4-mobile" @click.stop="showAccount(account.id)">  
                             <div class="tfa-text has-ellipsis">
                                 <img :src="'/storage/icons/' + account.icon" v-if="account.icon">
                                 {{ account.service }}
-                                <span class="is-family-primary is-size-7 has-text-grey ">{{ account.account }}</span>
+                                <span class="is-family-primary is-size-6 is-size-7-mobile has-text-grey ">{{ account.account }}</span>
                             </div>
                         </div>
                         <div class="tfa-dots has-text-grey" v-if="!editMode">

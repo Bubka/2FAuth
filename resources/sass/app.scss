@@ -72,14 +72,6 @@
   flex-direction: column;
 }
 
-.tfa-container > div:first-of-type {
-    padding: 0;
-}
-
-.tfa-container > div:last-of-type {
-    padding: 0.5rem 0;
-}
-
 @media screen and (max-width: 768px) {
   .tfa-container {
     flex-direction: row;
@@ -97,7 +89,7 @@
 .tfa-checkbox, .tfa-dots {
   display: flex;
   align-items: center;
-  padding: 0
+  padding: 0.5rem 0 0 0;
 }
 
 @media screen and (max-width: 768px) {
@@ -139,6 +131,8 @@
 @media screen and (min-width: 769px) {
   .is-checkradio[type="checkbox"] + label, .is-checkradio[type="radio"] + label {
     padding-left: 0 !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
   }
 }
 
@@ -155,7 +149,6 @@
 
 .tfa span {
   display: block;
-  // margin-left: 2.3em;
 }
 
 .has-ellipsis {
