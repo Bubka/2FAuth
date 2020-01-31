@@ -6,7 +6,7 @@
                 <div class="column is-three-quarters-mobile is-one-third-tablet is-one-quarter-desktop is-one-quarter-widescreen is-one-quarter-fullhd">
                     <!-- toolbar -->
                     <div class="toolbar has-text-centered" v-if="editMode">
-                        <a class="button is-text has-text-grey">
+                        <a class="button" :class="{ 'is-dark': selectedAccounts.length === 0, 'is-danger': selectedAccounts.length > 0 }" :disabled="selectedAccounts.length == 0" @click="destroyAccounts">
                             <span class="icon is-small">
                                 <font-awesome-icon :icon="['fas', 'trash']" />
                             </span>
@@ -31,7 +31,7 @@
                     <div class="tfa-container">
                         <div class="tfa-checkbox" v-if="editMode">
                             <div class="field">
-                                <input class="is-checkradio is-small is-white" :id="'ckb_' + account.id" type="checkbox" :name="'ckb_' + account.id">
+                                <input class="is-checkradio is-small is-white" :id="'ckb_' + account.id" :value="account" type="checkbox" :name="'ckb_' + account.id" v-model="selectedAccounts">
                                 <label :for="'ckb_' + account.id"></label>
                             </div>
                         </div>
@@ -103,12 +103,13 @@
         data(){
             return {
                 accounts : [],
+                selectedAccounts: [],
                 ShowTwofaccountInModal : false,
                 search: '',
                 username : null,
                 editMode: this.InitialEditMode,
                 showAccounts: null,
-                showNoAccount: null
+                showNoAccount: null,
             }
         },
 
@@ -119,7 +120,7 @@
                         return item.service.toLowerCase().includes(this.search.toLowerCase()) || item.account.toLowerCase().includes(this.search.toLowerCase());
                     }
                 );
-            }
+            },
             
         },
 
@@ -128,20 +129,7 @@
         created() {
 
             this.username = localStorage.getItem('user')
-
-            this.axios.get('api/twofaccounts').then(response => {
-                response.data.forEach((data) => {
-                    this.accounts.push({
-                        id : data.id,
-                        service : data.service,
-                        account : data.account ? data.account : '-',
-                        icon : data.icon
-                    })
-                })
-                
-                this.showAccounts = this.accounts.length > 0 ? true : false
-                this.showNoAccount = !this.showAccounts
-            })
+            this.fetchAccounts()
 
             // stop OTP generation on modal close
             this.$on('modalClose', function() {
@@ -157,8 +145,27 @@
         },
 
         methods: {
+
+            fetchAccounts() {
+                this.accounts = []
+                this.selectedAccounts = []
+
+                this.axios.get('api/twofaccounts').then(response => {
+                    response.data.forEach((data) => {
+                        this.accounts.push({
+                            id : data.id,
+                            service : data.service,
+                            account : data.account ? data.account : '-',
+                            icon : data.icon
+                        })
+                    })
+                    
+                    this.showAccounts = this.accounts.length > 0 ? true : false
+                    this.showNoAccount = !this.showAccounts
+                })
+            },
+
             showAccount(id) {
-                
                 if( id ) {
                     this.$refs.TwofaccountShow.getAccount(id)
                 }
@@ -170,12 +177,28 @@
 
             deleteAccount:  function (id) {
                 if(confirm(this.$t('twofaccounts.confirm.delete'))) {
-
                     this.axios.delete('/api/twofaccounts/' + id)
 
-                    this.accounts.splice(this.accounts.findIndex(x => x.id === id), 1);
+                    // Remove the deleted account from the collection
+                    this.accounts = this.accounts.filter(a => a.id !== id)
+
                     this.showAccounts = this.accounts.length > 0 ? true : false
                     this.showNoAccount = !this.showAccounts
+                }
+            },
+
+            async destroyAccounts() {
+                if(confirm(this.$t('twofaccounts.confirm.delete'))) {
+
+                    let ids = []
+                    this.selectedAccounts.forEach(account => ids.push(account.id))
+
+                    // Backend will delete all accounts at the same time
+                    await this.axios.delete('/api/twofaccounts/batch', {data: ids} )
+
+                    // we fetch the accounts again to prevent the js collection being
+                    // desynchronize from the backend php collection
+                    this.fetchAccounts()
                 }
             },
 

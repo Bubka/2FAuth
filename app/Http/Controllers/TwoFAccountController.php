@@ -147,16 +147,25 @@ class TwoFAccountController extends Controller
      * @param  \App\TwoFAccount  $twofaccount
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(TwoFAccount $twofaccount)
     {
-
-        $twofaccount = TwoFAccount::FindOrFail($id);
-
-        // delete icon
-        Storage::delete('public/icons/' . $twofaccount->icon);
-
-        // delete account
         $twofaccount->delete();
+
+        return response()->json(null, 204);
+    }
+
+
+    /**
+     * Remove the specified resources from storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function batchDestroy(Request $request)
+    {
+        $ids = $request->all();
+        
+        TwoFAccount::destroy($ids);
 
         return response()->json(null, 204);
     }

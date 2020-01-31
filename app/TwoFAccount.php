@@ -35,6 +35,21 @@ class TwoFAccount extends Model
 
 
     /**
+     * Override The "booting" method of the model
+     *
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+        
+        static::deleted(function ($model) {
+            Storage::delete('public/icons/' . $model->icon);
+        });
+    }
+
+
+    /**
      * Null empty icon resource has gone
      *
      * @param  string  $value
