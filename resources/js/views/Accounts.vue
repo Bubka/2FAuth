@@ -1,10 +1,20 @@
 <template>
     <div>
         <div class="container" v-if="this.showAccounts">
-            <!-- search -->
-            <div class="search columns is-gapless is-mobile is-centered">
+            <!-- header -->
+            <div class="columns is-gapless is-mobile is-centered">
                 <div class="column is-three-quarters-mobile is-one-third-tablet is-one-quarter-desktop is-one-quarter-widescreen is-one-quarter-fullhd">
-                    <div class="field">
+                    <!-- toolbar -->
+                    <div class="toolbar has-text-centered" v-if="editMode">
+                        <a class="button is-text has-text-grey">
+                            <span class="icon is-small">
+                                <font-awesome-icon :icon="['fas', 'trash']" />
+                            </span>
+                            <span>delete</span>
+                        </a>
+                    </div>
+                    <!-- search -->
+                    <div class="field" v-else>
                         <div class="control has-icons-right">
                             <input type="text" class="input is-rounded is-search" v-model="search">
                             <span class="icon is-small is-right">
