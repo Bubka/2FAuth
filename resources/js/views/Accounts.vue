@@ -218,6 +218,10 @@
             },
 
             setEditModeTo(state) {
+                if( state === false ) {
+                    this.selectedAccounts = []
+                }
+
                 this.editMode = state
                 this.$parent.showToolbar = state
             }
