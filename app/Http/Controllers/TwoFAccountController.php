@@ -56,10 +56,8 @@ class TwoFAccountController extends Controller
      * @param  \App\TwoFAccount  $twofaccount
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(TwoFAccount $twofaccount)
     {
-        $twofaccount = TwoFAccount::FindOrFail($id);
-
         return response()->json($twofaccount, 200);
     }
 
@@ -72,9 +70,7 @@ class TwoFAccountController extends Controller
      */
     public function generateOTP(TwoFAccount $twofaccount)
     {
-
         return response()->json(OTP::generate($twofaccount->uri), 200);
-
     }
 
 
