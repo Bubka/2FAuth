@@ -10,7 +10,7 @@
                             <span class="icon is-small">
                                 <font-awesome-icon :icon="['fas', 'trash']" />
                             </span>
-                            <span>delete</span>
+                            <span>{{ $t('commons.delete') }}</span>
                         </a>
                     </div>
                     <!-- search -->
@@ -42,8 +42,10 @@
                                 <span class="is-family-primary is-size-6 is-size-7-mobile has-text-grey ">{{ account.account }}</span>
                             </div>
                         </div>
-                        <div class="tfa-dots has-text-grey" v-if="!editMode">
-                            <font-awesome-icon :icon="['fas', 'ellipsis-h']" />
+                        <div class="tfa-dots has-text-grey" v-if="editMode">
+                            <router-link :to="{ name: 'edit', params: { twofaccountId: account.id }}" class="tag is-dark is-rounded">
+                                {{ $t('commons.edit') }}
+                            </router-link>
                         </div>
                     </div>
                 </div>

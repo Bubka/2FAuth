@@ -106,16 +106,16 @@
 
 .tfa-content {
     flex-grow: 1;
-    order: 1;
+    // order: 1;
     overflow: hidden;
 }
 
 .tfa-checkbox {
-  order: 2;
+  // order: 2;
 }
 
 .tfa-dots {
-  order: 3;
+  // order: 3;
 }
 
 @media screen and (max-width: 768px) {

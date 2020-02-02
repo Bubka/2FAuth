@@ -17,5 +17,7 @@ return [
     'update' => 'Update',
     'copy_to_clipboard' => 'Copy to clipboard',
     'profile' => 'Profile',
+    'edit' => 'Edit',
+    'delete' => 'Delete',
 
 ];
