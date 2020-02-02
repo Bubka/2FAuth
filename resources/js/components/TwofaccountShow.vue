@@ -33,24 +33,20 @@
 
         methods: {
 
-            getAccount: function(id) {
+            async getAccount(id) {
 
                 this.id = id
 
-                this.axios.get('api/twofaccounts/' + this.id)
-                    .then(async (response) => {
+                const { data } = await this.axios.get('api/twofaccounts/' + this.id)
 
-                        this.service = response.data.service
-                        this.account = response.data.account
-                        this.icon = response.data.icon
-                        this.type = response.data.type
+                this.service = data.service
+                this.account = data.account
+                this.icon = data.icon
+                this.type = data.type
 
-                        this.type === 'totp' ? await this.getTOTP() : await this.getHOTP()
-                        this.$parent.isActive = true
-                    })
-                    .catch(error => {
-                        this.$router.push({ name: 'genericError', params: { err: error.response } });
-                    });
+                this.type === 'totp' ? await this.getTOTP() : await this.getHOTP()
+                this.$parent.isActive = true
+                
             },
 
             getTOTP: function() {
