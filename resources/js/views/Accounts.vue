@@ -54,7 +54,7 @@
         <!-- No account -->
         <div class="container has-text-centered" v-show="showQuickForm">
             <div class="columns is-mobile" :class="{ 'is-invisible' : this.accounts.length > 0}">
-                <div class="column catchphrase">
+                <div class="column quickform-header">
                     {{ $t('twofaccounts.no_account_here') }}<br>
                     {{ $t('twofaccounts.add_first_account') }}
                 </div>
@@ -72,7 +72,7 @@
                 </form>
             </div>
             <div class="columns is-mobile">
-                <div class="column fullform-link">
+                <div class="column quickform-footer">
                     <router-link :to="{ name: 'create' }" class="is-link">{{ $t('twofaccounts.use_full_form') }}</router-link>
                 </div>
             </div>

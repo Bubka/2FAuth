@@ -162,32 +162,7 @@
 }
 
 .no-icon {
-  border: 1px solid hsl(0, 0%, 7%);
-  overflow: hidden;
-}
-
-.no-icon::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-bottom: 1px solid hsl(0, 0%, 7%);
-  transform: skewY(-45deg);
-  transform-origin: left bottom;
-}
-
-.no-icon::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-top: 1px solid hsl(0, 0%, 7%);
-  transform: skewY(45deg);
-  transform-origin: left top;
+  border: 1px dashed hsl(0, 0%, 7%);
 }
 
 .dots {
@@ -307,12 +282,17 @@ footer .field.is-grouped {
   margin-bottom: 0.5rem;
 }
 
-.catchphrase {
-  padding: 3rem 0.75rem;
+.quickform-header {
+  height: 20vh;
+  padding-top: 2rem;
 }
 
-.fullform-link {
-  padding: 2rem 0.75rem;
+.quickform-footer {
+  padding-top: 3rem;
+}
+
+.preview {
+  margin-top: 20vh;
 }
 
 .no-account {
