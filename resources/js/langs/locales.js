@@ -68,6 +68,8 @@ export default {
             "icon": "Icon",
             "new": "New",
             "no_account_here": "No 2FA here!",
+            "add_first_account": "Add your first account",
+            "use_full_form": "Or use the full form",
             "add_one": "Add one",
             "manage": "Manage",
             "done": "Done",

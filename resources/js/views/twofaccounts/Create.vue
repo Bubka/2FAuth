@@ -1,5 +1,26 @@
 <template>
-    <form-wrapper :title="$t('twofaccounts.forms.new_account')">
+    <form @submit.prevent="createAccount" @keydown="form.onKeydown($event)" v-if="isQuickForm">
+        <div class="modal modal-otp is-active">
+            <div class="modal-background"></div>
+            <div class="modal-content has-text-centered">
+                <twofaccount-show
+                    :service="form.service"
+                    :account="form.account"
+                    :uri="form.uri"
+                    :type="form.type">
+                </twofaccount-show>
+                <div class="field is-grouped is-grouped-centered">
+                    <div class="control">
+                        <v-button :isLoading="form.isBusy" >{{ $t('twofaccounts.forms.save') }}</v-button>
+                    </div>
+                    <div class="control">
+                        <button class="button is-text" @click="cancelCreation">{{ $t('commons.cancel') }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <form-wrapper :title="$t('twofaccounts.forms.new_account')" v-else>
         <form @submit.prevent="createAccount" @keydown="form.onKeydown($event)">
             <div class="field">
                 <div class="file is-dark is-boxed">
@@ -86,10 +107,12 @@
 <script>
 
     import Form from './../../components/Form'
+    import TwofaccountShow from '../../components/TwofaccountShow'
 
     export default {
         data() {
             return {
+                isQuickForm: false,
                 uriIsLocked: true,
                 tempIcon: '',
                 form: new Form({
@@ -97,9 +120,24 @@
                     account: '',
                     uri: '',
                     icon: '',
+                    type: '',
                     qrcode: null
                 })
             }
+        },
+
+        mounted: function () {
+            if( this.$route.params.qrAccount ) {
+
+                this.isQuickForm = true
+                this.form.fill(this.$route.params.qrAccount)
+                this.form.type = this.form.uri.slice(0, 15 ) === "otpauth://totp/" ? 'totp' : 'hotp';
+
+            }
+        },
+
+        components: {
+            TwofaccountShow,
         },
 
         methods: {

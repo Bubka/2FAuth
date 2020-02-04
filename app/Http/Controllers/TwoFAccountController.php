@@ -65,12 +65,20 @@ class TwoFAccountController extends Controller
     /**
      * Generate a TOTP
      *
-     * @param  \App\TwoFAccount  $twofaccount
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function generateOTP(TwoFAccount $twofaccount)
+    public function generateOTP(Request $request)
     {
-        return response()->json(OTP::generate($twofaccount->uri), 200);
+        if( is_int($request->data) ) {
+            $twofaccount = TwoFAccount::FindOrFail($request->data);
+            $uri = $twofaccount->uri;
+        }
+        else {
+            $uri = $request->data;
+        }
+
+        return response()->json(OTP::generate($uri), 200);
     }
 
 

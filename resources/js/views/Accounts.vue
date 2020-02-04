@@ -52,12 +52,30 @@
             </div>
         </div>
         <!-- No account -->
-        <div class="container has-text-centered" v-show="this.showNoAccount">
-            <p class="no-account"></p>
-            <p class="subtitle is-5 has-text-grey">
-                {{ $t('twofaccounts.no_account_here') }}
-            </p>
-            <router-link :to="{ name: 'create' }" class="button is-medium is-link is-focused">{{ $t('twofaccounts.add_one') }}</router-link>
+        <div class="container has-text-centered" v-show="showQuickForm">
+            <div class="columns is-mobile" :class="{ 'is-invisible' : this.accounts.length > 0}">
+                <div class="column catchphrase">
+                    {{ $t('twofaccounts.no_account_here') }}<br>
+                    {{ $t('twofaccounts.add_first_account') }}
+                </div>
+            </div>
+            <div class="container">
+                <form @submit.prevent="createAccount" @keydown="form.onKeydown($event)">
+                    <div class="columns is-mobile no-account is-vcentered">
+                        <div class="column has-text-centered">
+                            <label class="button is-link is-medium is-rounded is-focused">
+                                <input class="file-input" type="file" accept="image/*" v-on:change="uploadQrcode" ref="qrcodeInput">
+                                {{ $t('twofaccounts.forms.use_qrcode.val') }}
+                            </label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="columns is-mobile">
+                <div class="column fullform-link">
+                    <router-link :to="{ name: 'create' }" class="is-link">{{ $t('twofaccounts.use_full_form') }}</router-link>
+                </div>
+            </div>
         </div>
         <!-- modal -->
         <modal v-model="ShowTwofaccountInModal">
@@ -68,21 +86,32 @@
             <div class="columns is-gapless" v-if="this.accounts.length > 0">
                 <div class="column has-text-centered">
                     <div class="field is-grouped">
-                        <p class="control" v-if="!editMode">
-                            <router-link :to="{ name: 'create' }" class="button is-link is-rounded is-focus">
+                        <!-- New item buttons -->
+                        <p class="control" v-if="!showQuickForm && !editMode">
+                            <a class="button is-link is-rounded is-focus" @click="showQuickForm = true">
                                 <span>{{ $t('twofaccounts.new') }}</span>
                                 <span class="icon is-small">
                                     <font-awesome-icon :icon="['fas', 'qrcode']" />
                                 </span>
-                            </router-link>
+                            </a>
                         </p>
-                        <p class="control">
-                            <a class="button is-dark is-rounded" @click="setEditModeTo(true)" v-if="!editMode">{{ $t('twofaccounts.manage') }}</a>
-                            <a class="button is-success is-rounded" @click="setEditModeTo(false)" v-if="editMode">
+                        <!-- Manage button -->
+                        <p class="control" v-if="!showQuickForm && !editMode">
+                            <a class="button is-dark is-rounded" @click="setEditModeTo(true)">{{ $t('twofaccounts.manage') }}</a>
+                        </p>
+                        <!-- Done button -->
+                        <p class="control" v-if="!showQuickForm && editMode">
+                            <a class="button is-success is-rounded" @click="setEditModeTo(false)">
                                 <span>{{ $t('twofaccounts.done') }}</span>
                                 <span class="icon is-small">
                                     <font-awesome-icon :icon="['fas', 'check']" />
                                 </span>
+                            </a>
+                        </p>
+                        <!-- Cancel QuickFormButton -->
+                        <p class="control" v-if="showQuickForm">
+                            <a class="button is-dark is-rounded" @click="showQuickForm = false">
+                                {{ $t('commons.cancel') }}
                             </a>
                         </p>
                     </div>
@@ -100,6 +129,7 @@
 
     import Modal from '../components/Modal'
     import TwofaccountShow from '../components/TwofaccountShow'
+    import Form from './../components/Form'
 
     export default {
         data(){
@@ -110,8 +140,11 @@
                 search: '',
                 username : null,
                 editMode: this.InitialEditMode,
-                showAccounts: null,
-                showNoAccount: null,
+                QuickFormIsVisible: false,
+                form: new Form({
+                    qrcode: null
+                }),
+                axiosIsComplete: null,
             }
         },
 
@@ -122,6 +155,15 @@
                         return item.service.toLowerCase().includes(this.search.toLowerCase()) || item.account.toLowerCase().includes(this.search.toLowerCase());
                     }
                 );
+            },
+
+            showAccounts() {
+                return this.accounts.length > 0 && !this.QuickFormIsVisible ? true : false
+            },
+
+            showQuickForm: {
+                get: function() { return (this.QuickFormIsVisible || this.accounts.length === 0) && this.axiosIsComplete },
+                set: function(value) { this.QuickFormIsVisible = value }
             },
             
         },
@@ -148,6 +190,17 @@
 
         methods: {
 
+            async uploadQrcode(event) {
+
+                let imgdata = new FormData();
+                imgdata.append('qrcode', this.$refs.qrcodeInput.files[0]);
+
+                const { data } = await this.form.upload('/api/qrcode/decode', imgdata)
+
+                this.$router.push({ name: 'create', params: { qrAccount: data } });
+
+            },
+
             fetchAccounts() {
                 this.accounts = []
                 this.selectedAccounts = []
@@ -162,8 +215,7 @@
                         })
                     })
                     
-                    this.showAccounts = this.accounts.length > 0 ? true : false
-                    this.showNoAccount = !this.showAccounts
+                    this.axiosIsComplete = true
                 })
             },
 
@@ -183,9 +235,6 @@
 
                     // Remove the deleted account from the collection
                     this.accounts = this.accounts.filter(a => a.id !== id)
-
-                    this.showAccounts = this.accounts.length > 0 ? true : false
-                    this.showNoAccount = !this.showAccounts
                 }
             },
 
@@ -226,7 +275,7 @@
 
                 this.editMode = state
                 this.$parent.showToolbar = state
-            }
+            },
 
         },
         

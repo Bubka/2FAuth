@@ -1,15 +1,15 @@
 <template>
     <div>
-        <figure class="image is-64x64" style="display: inline-block"  v-if="icon">
-            <img :src="'storage/icons/' + icon">
+        <figure class="image is-64x64" :class="{ 'no-icon' : !internal_icon }" style="display: inline-block">
+            <img :src="'storage/icons/' + internal_icon" v-if="internal_icon">
         </figure>
-        <p class="is-size-4 has-text-grey-light has-ellipsis">{{ service }}</p>
-        <p class="is-size-6 has-text-grey has-ellipsis">{{ account }}</p>
+        <p class="is-size-4 has-text-grey-light has-ellipsis">{{ internal_service }}</p>
+        <p class="is-size-6 has-text-grey has-ellipsis">{{ internal_account }}</p>
         <p id="otp" class="is-size-1 has-text-white" :title="$t('commons.copy_to_clipboard')" v-clipboard="() => otp.replace(/ /g, '')" v-clipboard:success="clipboardSuccessHandler">{{ otp }}</p>
-        <ul class="dots" v-if="type === 'totp'">
+        <ul class="dots" v-if="internal_type === 'totp'">
             <li v-for="n in 30"></li>
         </ul>
-        <ul v-else-if="type === 'hotp'">
+        <ul v-else-if="internal_type === 'hotp'">
             <li>counter: {{ counter }}</li>
         </ul>
     </div>
@@ -20,14 +20,57 @@
         data() {
             return {
                 id: null,
-                service: '',
-                account: '',
-                icon: '',
-                type : '',
+                internal_service: '',
+                internal_account: '',
+                internal_icon: '',
+                internal_uri: '',
+                internal_type: '',
                 otp : '',
                 timerID: null,
                 position: null,
                 counter: null,
+            }
+        },
+
+        computed: {
+            setService: {
+                get: function () { return this.internal_service },
+                set: function(value) { this.internal_service = value }
+            },
+            setAccount: {
+                get: function () { return this.internal_account },
+                set: function(value) { this.internal_account = value }
+            },
+            setIcon: {
+                get: function () { return this.internal_icon },
+                set: function(value) { this.internal_icon = value }
+            },
+            setUri: {
+                get: function () { return this.internal_uri },
+                set: function(value) { this.internal_uri = value }
+            },
+            setType: {
+                get: function () { return this.internal_type },
+                set: function(value) { this.internal_type = value }
+            },
+        },
+
+        props: {
+            service: '',
+            account: '',
+            uri : '',
+            type: '',
+        },
+
+        mounted: function() {
+            if( this.uri && this.type ) {
+
+                this.setService = this.service
+                this.setAccount = this.account
+                this.setUri = this.uri
+                this.setType = this.type
+
+                this.internal_type === 'totp' ? this.getTOTP() : this.getHOTP()
             }
         },
 
@@ -39,19 +82,19 @@
 
                 const { data } = await this.axios.get('api/twofaccounts/' + this.id)
 
-                this.service = data.service
-                this.account = data.account
-                this.icon = data.icon
-                this.type = data.type
+                this.setService = data.service
+                this.setAccount = data.account
+                this.setIcon = data.icon
+                this.setType = data.type
 
-                this.type === 'totp' ? await this.getTOTP() : await this.getHOTP()
+                this.internal_type === 'totp' ? await this.getTOTP() : await this.getHOTP()
                 this.$parent.isActive = true
                 
             },
 
             getTOTP: function() {
 
-                this.axios.get('api/twofaccounts/' + this.id + '/otp').then(response => {
+                this.axios.post('api/twofaccounts/otp', {data: this.id ? this.id : this.internal_uri }).then(response => {
                     let spacePosition = Math.ceil(response.data.otp.length / 2);
                     
                     this.otp = response.data.otp.substr(0, spacePosition) + " " + response.data.otp.substr(spacePosition);
@@ -92,7 +135,7 @@
 
             getHOTP: function() {
 
-                this.axios.get('api/twofaccounts/' + this.id + '/otp').then(response => {
+                this.axios.get('api/twofaccounts/otp', {data: this.id ? this.id : this.internal_uri }).then(response => {
                     let spacePosition = Math.ceil(response.data.otp.length / 2);
                     
                     this.otp = response.data.otp.substr(0, spacePosition) + " " + response.data.otp.substr(spacePosition);
