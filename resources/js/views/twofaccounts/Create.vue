@@ -61,7 +61,7 @@
                 <field-error :form="form" field="account" />
             </div>
             <div class="field" style="margin-bottom: 0.5rem;">
-                <label class="label">{{ $t('twofaccounts.forms.totp_uri') }}</label>
+                <label class="label">{{ $t('twofaccounts.forms.otp_uri') }}</label>
             </div>
             <div class="field has-addons">
                 <div class="control is-expanded">

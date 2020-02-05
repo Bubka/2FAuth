@@ -20,7 +20,7 @@ return [
     'refresh' => 'refresh',
     'please' => 'Please ',
     'response' => [
-        'no_valid_totp' => 'No valid TOTP resource in this QR code',
+        'no_valid_otp' => 'No valid OTP resource in this QR code',
     ],
     'something_wrong_with_server' => 'Something is wrong with your server',
     'Unable_to_decrypt_uri' => 'Unable to decrypt uri',

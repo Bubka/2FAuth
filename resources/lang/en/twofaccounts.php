@@ -32,7 +32,7 @@ return [
         ],
         'new_account' => 'New account',
         'edit_account' => 'Edit account',
-        'totp_uri' => 'TOTP Uri',
+        'otp_uri' => 'OTP Uri',
         'hotp_counter' => 'HOTP Counter',
         'use_qrcode' => [
             'val' => 'Use a qrcode',

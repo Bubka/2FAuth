@@ -139,7 +139,7 @@ return [
             'image' => 'Supported format are jpeg, png, bmp, gif, svg, or webp',
         ],
         'uri' => [
-            'starts_with' => 'Only valid TOTP uri are supported',
+            'starts_with' => 'Only valid OTP uri are supported',
         ],
         'email' => [
             'exists' => 'No account found using this email',
