@@ -11,8 +11,7 @@
                     <twofaccount-show ref="TwofaccountShow"
                         :service="form.service"
                         :account="form.account"
-                        :uri="form.uri"
-                        :type="form.type">
+                        :uri="form.uri">
                     </twofaccount-show>
                 </div>
             </div>
@@ -106,16 +105,29 @@
                 <div class="control">
                     <v-button :isLoading="form.isBusy" >{{ $t('twofaccounts.forms.create') }}</v-button>
                 </div>
+                <div class="control" v-if="form.uri">
+                    <button type="button" class="button is-success" @click="previewAccount">{{ $t('twofaccounts.forms.test') }}</button>
+                </div>
                 <div class="control">
                     <button type="button" class="button is-text" @click="cancelCreation">{{ $t('commons.cancel') }}</button>
                 </div>
             </div>
         </form>
+        <!-- modal -->
+        <modal v-model="ShowTwofaccountInModal">
+            <twofaccount-show ref="TwofaccountPreview" 
+                :service="form.service"
+                :account="form.account"
+                :uri="form.uri"
+                :icon="tempIcon">
+            </twofaccount-show>
+        </modal>
     </form-wrapper>
 </template>
 
 <script>
 
+    import Modal from '../../components/Modal'
     import Form from './../../components/Form'
     import TwofaccountShow from '../../components/TwofaccountShow'
 
@@ -123,6 +135,7 @@
         data() {
             return {
                 isQuickForm: false,
+                ShowTwofaccountInModal : false,
                 uriIsLocked: true,
                 tempIcon: '',
                 form: new Form({
@@ -130,7 +143,6 @@
                     account: '',
                     uri: '',
                     icon: '',
-                    type: '',
                     qrcode: null
                 })
             }
@@ -139,9 +151,9 @@
         watch: {
             tempIcon: function(val) {
                 if( this.isQuickForm ) {
-                    this.$refs.TwofaccountShow.setIcon = val
+                    this.$refs.TwofaccountShow.internal_icon = val
                 }
-            }
+            },
         },
 
         mounted: function () {
@@ -149,12 +161,17 @@
 
                 this.isQuickForm = true
                 this.form.fill(this.$route.params.qrAccount)
-                this.form.type = this.form.uri.slice(0, 15 ) === "otpauth://totp/" ? 'totp' : 'hotp';
 
             }
+
+            // stop OTP generation on modal close
+            this.$on('modalClose', function() {
+                this.$refs.TwofaccountPreview.clearOTP()
+            });
         },
 
         components: {
+            Modal,
             TwofaccountShow,
         },
 
@@ -170,6 +187,13 @@
                     this.$router.push({name: 'accounts', params: { InitialEditMode: false }});
                 }
 
+            },
+
+            previewAccount() {
+                // preview is possible only if we have an uri
+                if( this.form.uri ) {
+                    this.$refs.TwofaccountPreview.showAccount()
+                }
             },
 
             cancelCreation: function() {

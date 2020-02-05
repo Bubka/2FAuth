@@ -221,13 +221,7 @@
             },
 
             showAccount(id) {
-                if( id ) {
-                    this.$refs.TwofaccountShow.getAccount(id)
-                }
-                else {
-                    let err = new Error("Id missing")
-                    this.$router.push({ name: 'genericError', params: { err: err } });
-                }
+                this.$refs.TwofaccountShow.showAccount(id)
             },
 
             deleteAccount:  function (id) {

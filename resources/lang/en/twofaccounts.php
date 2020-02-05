@@ -49,6 +49,7 @@ return [
         'choose_image' => 'Choose an image…',
         'create' => 'Create',
         'save' => 'Save',
+        'test' => 'Test',
     ],
     'confirm' => [
         'delete' => 'Are you sure you want to delete this account?',

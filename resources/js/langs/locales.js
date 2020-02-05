@@ -45,7 +45,7 @@ export default {
             "refresh": "refresh",
             "please": "Please ",
             "response": {
-                "no_valid_totp": "No valid TOTP resource in this QR code"
+                "no_valid_otp": "No valid OTP resource in this QR code"
             },
             "something_wrong_with_server": "Something is wrong with your server",
             "Unable_to_decrypt_uri": "Unable to decrypt uri",
@@ -82,7 +82,7 @@ export default {
                 },
                 "new_account": "New account",
                 "edit_account": "Edit account",
-                "totp_uri": "TOTP Uri",
+                "otp_uri": "OTP Uri",
                 "hotp_counter": "HOTP Counter",
                 "use_qrcode": {
                     "val": "Use a qrcode",
@@ -98,7 +98,8 @@ export default {
                 },
                 "choose_image": "Choose an image…",
                 "create": "Create",
-                "save": "Save"
+                "save": "Save",
+                "test": "Test"
             },
             "confirm": {
                 "delete": "Are you sure you want to delete this account?",
@@ -220,7 +221,7 @@ export default {
                     "image": "Supported format are jpeg, png, bmp, gif, svg, or webp"
                 },
                 "uri": {
-                    "starts_with": "Only valid TOTP uri are supported"
+                    "starts_with": "Only valid OTP uri are supported"
                 },
                 "email": {
                     "exists": "No account found using this email"
