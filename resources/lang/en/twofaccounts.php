@@ -52,6 +52,7 @@ return [
     ],
     'confirm' => [
         'delete' => 'Are you sure you want to delete this account?',
+        'cancel' => 'The account will be lost. Are you sure?'
     ],
 
 ];

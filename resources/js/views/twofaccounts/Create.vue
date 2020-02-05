@@ -173,6 +173,13 @@
             },
 
             cancelCreation: function() {
+
+                if( this.form.service && this.form.uri ) {
+                    if( confirm(this.$t('twofaccounts.confirm.cancel')) === false ) {
+                        return
+                    }
+                }
+
                 // clean possible uploaded temp icon
                 this.deleteIcon()
 
