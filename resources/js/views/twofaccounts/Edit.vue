@@ -64,7 +64,7 @@
                     <v-button :isLoading="form.isBusy" >{{ $t('twofaccounts.forms.save') }}</v-button>
                 </div>
                 <div class="control">
-                    <button class="button is-text" @click.prevent="cancelCreation">{{ $t('commons.cancel') }}</button>
+                    <button type="button" class="button is-text" @click.prevent="cancelCreation">{{ $t('commons.cancel') }}</button>
                 </div>
             </div>
         </form>
