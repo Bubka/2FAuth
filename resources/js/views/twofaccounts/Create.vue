@@ -5,7 +5,7 @@
                 <div class="column">
                     <label class="add-icon-button" v-if="!tempIcon">
                         <input class="file-input" type="file" accept="image/*" v-on:change="uploadIcon" ref="iconInput">
-                        <font-awesome-icon :icon="['fas', 'image']" size="lg" />
+                        <font-awesome-icon :icon="['fas', 'image']" size="2x" />
                     </label>
                     <button class="delete delete-icon-button is-medium" v-if="tempIcon" @click.prevent="deleteIcon"></button>
                     <twofaccount-show ref="TwofaccountShow"
