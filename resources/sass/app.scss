@@ -9,6 +9,10 @@
 @import '~bulma';
 @import '~bulma-checkradio';
 
+a:hover {
+  color: hsl(204, 86%, 53%);
+}
+
 .main-section {
   padding: 1.5rem 1rem 8rem 1rem;
 }
