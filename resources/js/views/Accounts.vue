@@ -69,6 +69,7 @@
                             </label>
                         </div>
                     </div>
+                    <field-error :form="form" field="qrcode" />
                 </form>
             </div>
             <div class="columns is-mobile">
@@ -110,7 +111,7 @@
                         </p>
                         <!-- Cancel QuickFormButton -->
                         <p class="control" v-if="showQuickForm">
-                            <a class="button is-dark is-rounded" @click="showQuickForm = false">
+                            <a class="button is-dark is-rounded" @click="cancelQuickForm">
                                 {{ $t('commons.cancel') }}
                             </a>
                         </p>
@@ -277,6 +278,10 @@
                 this.$parent.showToolbar = state
             },
 
+            cancelQuickForm() {
+                this.form.clear()
+                this.showQuickForm = false
+            }
         },
         
         beforeRouteEnter (to, from, next) {
