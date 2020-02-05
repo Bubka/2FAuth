@@ -3,7 +3,12 @@
         <div class="container preview has-text-centered">
             <div class="columns is-mobile">
                 <div class="column">
-                    <twofaccount-show
+                    <label class="add-icon-button" v-if="!tempIcon">
+                        <input class="file-input" type="file" accept="image/*" v-on:change="uploadIcon" ref="iconInput">
+                        <font-awesome-icon :icon="['fas', 'image']" size="lg" />
+                    </label>
+                    <button class="delete delete-icon-button is-medium" v-if="tempIcon" @click.prevent="deleteIcon"></button>
+                    <twofaccount-show ref="TwofaccountShow"
                         :service="form.service"
                         :account="form.account"
                         :uri="form.uri"
@@ -128,6 +133,14 @@
                     type: '',
                     qrcode: null
                 })
+            }
+        },
+
+        watch: {
+            tempIcon: function(val) {
+                if( this.isQuickForm ) {
+                    this.$refs.TwofaccountShow.setIcon = val
+                }
             }
         },
 

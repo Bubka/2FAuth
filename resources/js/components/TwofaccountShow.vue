@@ -1,6 +1,6 @@
 <template>
     <div>
-        <figure class="image is-64x64" :class="{ 'no-icon' : !internal_icon }" style="display: inline-block">
+        <figure class="image is-64x64" style="display: inline-block">
             <img :src="'storage/icons/' + internal_icon" v-if="internal_icon">
         </figure>
         <p class="is-size-4 has-text-grey-light has-ellipsis">{{ internal_service }}</p>

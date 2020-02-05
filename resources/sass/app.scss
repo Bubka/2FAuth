@@ -161,8 +161,27 @@
   white-space: nowrap;
 }
 
-.no-icon {
+.add-icon-button {
+  height: 64px;
+  width: 64px;
+  padding-top: calc(32px - 0.665rem);
+  position: absolute;
+  margin-left: -32px;
+  z-index: 40;
   border: 1px dashed hsl(0, 0%, 7%);
+}
+
+.delete-icon-button {
+  position: absolute;
+  margin-left: 37px;
+}
+
+.file-input {
+  cursor: pointer;
+}
+
+.add-icon-button, .add-icon-button:hover {
+  color: hsl(0, 0%, 7%);
 }
 
 .dots {
@@ -297,10 +316,6 @@ footer .field.is-grouped {
 
 .no-account {
   height: 256px;
-}
-
-.no-account input {
-  cursor: pointer;
 }
 
 .no-account::before {
