@@ -140,7 +140,7 @@ class TwoFAccountTest extends TestCase
         ]);
 
         $response = $this->actingAs($this->user, 'api')
-            ->json('GET', '/api/twofaccounts/' . $twofaccount->id . '/otp')
+            ->json('POST', '/api/twofaccounts/otp', ['data' => $twofaccount->id])
             ->assertStatus(200)
             ->assertJsonStructure([
                 'otp',
