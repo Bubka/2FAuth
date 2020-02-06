@@ -31,11 +31,11 @@
                     <div class="tfa-container">
                         <div class="tfa-checkbox" v-if="editMode">
                             <div class="field">
-                                <input class="is-checkradio is-small is-white" :id="'ckb_' + account.id" :value="account" type="checkbox" :name="'ckb_' + account.id" v-model="selectedAccounts">
+                                <input class="is-checkradio is-small is-white" :id="'ckb_' + account.id" :value="account.id" type="checkbox" :name="'ckb_' + account.id" v-model="selectedAccounts">
                                 <label :for="'ckb_' + account.id"></label>
                             </div>
                         </div>
-                        <div class="tfa-content is-size-3 is-size-4-mobile" @click.stop="showAccount(account.id)">  
+                        <div class="tfa-content is-size-3 is-size-4-mobile" @click.stop="showAccount(account)">  
                             <div class="tfa-text has-ellipsis">
                                 <img :src="'/storage/icons/' + account.icon" v-if="account.icon">
                                 {{ account.service }}
@@ -220,8 +220,21 @@
                 })
             },
 
-            showAccount(id) {
-                this.$refs.TwofaccountShow.showAccount(id)
+            showAccount(account) {
+                if(this.editMode) {
+
+                    for (var i=0 ; i<this.selectedAccounts.length ; i++) {
+                        if ( this.selectedAccounts[i] === account.id ) {
+                            this.selectedAccounts.splice(i,1);
+                            return
+                        }
+                    }
+
+                    this.selectedAccounts.push(account.id)
+                }
+                else {
+                    this.$refs.TwofaccountShow.showAccount(account.id)
+                }
             },
 
             deleteAccount:  function (id) {
@@ -237,7 +250,7 @@
                 if(confirm(this.$t('twofaccounts.confirm.delete'))) {
 
                     let ids = []
-                    this.selectedAccounts.forEach(account => ids.push(account.id))
+                    this.selectedAccounts.forEach(id => ids.push(id))
 
                     // Backend will delete all accounts at the same time
                     await this.axios.delete('/api/twofaccounts/batch', {data: ids} )
