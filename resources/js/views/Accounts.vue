@@ -280,6 +280,9 @@
                 if( state === false ) {
                     this.selectedAccounts = []
                 }
+                else {
+                    this.search = '';
+                }
 
                 this.editMode = state
                 this.$parent.showToolbar = state
