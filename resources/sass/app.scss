@@ -84,6 +84,7 @@ a:hover {
 @media screen and (max-width: 768px) {
   .tfa-container {
     flex-direction: row;
+  padding: 0;
   }
 
   .tfa-container > div:first-of-type {
