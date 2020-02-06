@@ -14,7 +14,13 @@ a:hover {
 }
 
 .main-section {
-  padding: 1.5rem 1rem 8rem 1rem;
+  padding: 1.5rem 1rem 9rem 1rem;
+}
+
+@media screen and (max-width: 768px) {
+  .main-section {
+    padding-top: 0.75rem;
+  }
 }
 
 .search {
@@ -23,12 +29,6 @@ a:hover {
 
 .accounts {
   margin-top: 0.75rem;
-}
-
-@media screen and (max-width: 768px) {
-  .main-section {
-    padding: 0.75rem 1rem 8rem 1rem;
-  }
 }
 
 .form-column {
@@ -78,6 +78,7 @@ a:hover {
   display: flex;
   justify-content: left;
   flex-direction: column;
+  padding: 0 1.5rem;
 }
 
 @media screen and (max-width: 768px) {
@@ -172,12 +173,15 @@ a:hover {
   position: absolute;
   margin-left: -32px;
   z-index: 40;
-  border: 1px dashed hsl(0, 0%, 7%);
 }
 
 .delete-icon-button {
   position: absolute;
   margin-left: 37px;
+}
+
+figure.no-icon {
+  border: 1px dashed hsl(0, 0%, 7%);
 }
 
 .file-input {
