@@ -70,15 +70,18 @@ class TwoFAccountController extends Controller
      */
     public function generateOTP(Request $request)
     {
+        $isPreview = false;
+
         if( is_int($request->data) ) {
             $twofaccount = TwoFAccount::FindOrFail($request->data);
             $uri = $twofaccount->uri;
         }
         else {
             $uri = $request->data;
+            $isPreview = true;
         }
 
-        return response()->json(OTP::generate($uri), 200);
+        return response()->json(OTP::generate($uri, $isPreview), 200);
     }
 
 

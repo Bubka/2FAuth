@@ -13,9 +13,10 @@ class OTP
      * Generate a TOTP
      *
      * @param  \App\TwoFAccount  $twofaccount
+     * @param  Boolean $isPreview   Prevent updating storage in case of HOTP preview
      * @return an array that represent the totp code
      */
-    public static function generate($uri)
+    public static function generate($uri, $isPreview = false)
     {
         
         $otp = OTP::get($uri);
@@ -40,15 +41,18 @@ class OTP
             // It's a HOTP
             $hotp = [
                 'otp' => $otp->at($otp->getCounter()),
-                'counter' => $otp->getCounter(),
+                'counter' => $otp->getCounter()
             ];
 
-            // now we update the counter for next code
+            // now we update the counter for the next OTP generation
             $otp->setParameter( 'counter', $otp->getcounter() + 1 );
+            $hotp['nextUri'] = urldecode($otp->getProvisioningUri());
 
-            $twofaccount = \App\TwoFAccount::where('uri', $uri)->first();
-            $twofaccount->uri = $otp->getProvisioningUri();
-            $twofaccount->save();
+            if( !$isPreview ) {
+                $twofaccount = \App\TwoFAccount::where('uri', $uri)->first();
+                $twofaccount->uri = $hotp['nextUri'];
+                $twofaccount->save();
+            }
 
             return $hotp;
         }

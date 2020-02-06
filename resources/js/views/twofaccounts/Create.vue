@@ -1,4 +1,5 @@
 <template>
+    <!-- Quick form -->
     <form @submit.prevent="createAccount" @keydown="form.onKeydown($event)" v-if="isQuickForm">
         <div class="container preview has-text-centered">
             <div class="columns is-mobile">
@@ -29,6 +30,7 @@
             </div>
         </div>
     </form>
+    <!-- Full form -->
     <form-wrapper :title="$t('twofaccounts.forms.new_account')" v-else>
         <form @submit.prevent="createAccount" @keydown="form.onKeydown($event)">
             <div class="field">
@@ -164,9 +166,9 @@
 
             }
 
-            // stop OTP generation on modal close
+            // stop TOTP generation on modal close
             this.$on('modalClose', function() {
-                this.$refs.TwofaccountPreview.clearOTP()
+                this.$refs.TwofaccountPreview.stopLoop()
             });
         },
 
@@ -180,6 +182,17 @@
             async createAccount() {
                 // set current temp icon as account icon
                 this.form.icon = this.tempIcon
+
+                // The quick form (possibly the preview feature too) has incremented the HOTP counter so the next_uri property
+                // must be used as the uri to store
+                // This could desynchronized the HOTP verification server and our local counter if the user never verified the HOTP but this
+                // is acceptable (and HOTP counter can be edited by the way)
+                if( this.isQuickForm && this.$refs.TwofaccountShow.next_uri ) {
+                    this.form.uri = this.$refs.TwofaccountShow.next_uri
+                }
+                else if( this.$refs.TwofaccountPreview && this.$refs.TwofaccountPreview.next_uri ) {
+                    this.form.uri = this.$refs.TwofaccountPreview.next_uri
+                }
 
                 await this.form.post('/api/twofaccounts')
 

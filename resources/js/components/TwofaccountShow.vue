@@ -23,6 +23,7 @@
                 internal_service: '',
                 internal_account: '',
                 internal_uri: '',
+                next_uri: '',
                 internal_icon: '',
                 type: '',
                 otp : '',
@@ -50,8 +51,8 @@
                 // 2 possible cases :
                 //   - ID is provided so we fetch the account data from db but without the uri.
                 //     This prevent the uri (a sensitive data) to transit via http request unnecessarily. In this
-                //     case this.type is send by the backend.
-                //   - an URI has been set in $parent because we need to preview some OTP before storing the account.
+                //     case this.type is sent by the backend.
+                //   - the URI prop has been set via the create form, we need to preview some OTP before storing the account.
                 //     So this.type is set on client side from the provided URI
                 
                 this.id = id
@@ -72,9 +73,6 @@
                         this.internal_account = this.account
                         this.internal_icon = this.icon
                         this.internal_uri = this.uri
-                    }
-
-                    if( !this.type ) {
                         this.type = this.internal_uri.slice(0, 15 ) === "otpauth://totp/" ? 'totp' : 'hotp';
                     }
 
@@ -129,8 +127,10 @@
                 this.axios.post('api/twofaccounts/otp', {data: this.id ? this.id : this.internal_uri }).then(response => {
                     let spacePosition = Math.ceil(response.data.otp.length / 2);
                     
-                    this.otp = response.data.otp.substr(0, spacePosition) + " " + response.data.otp.substr(spacePosition);
-                    this.counter = response.data.counter;
+                    this.otp = response.data.otp.substr(0, spacePosition) + " " + response.data.otp.substr(spacePosition)
+                    this.counter = response.data.counter
+                    this.next_uri = response.data.nextUri
+
                 })
             },
 
@@ -139,12 +139,20 @@
                 this.id = this.timerID = this.position = this.counter = null
                 this.internal_service = this.internal_account = this.internal_icon = this.internal_uri = ''
                 this.otp = '... ...'
-                this.$el.querySelector('[data-is-active]').removeAttribute('data-is-active');
-                this.$el.querySelector('.dots li:first-child').setAttribute('data-is-active', true);
+
+                try {
+                    this.$el.querySelector('[data-is-active]').removeAttribute('data-is-active');
+                    this.$el.querySelector('.dots li:first-child').setAttribute('data-is-active', true);
+                }
+                catch(e) {
+                    // we do not throw anything
+                }
             },
 
             stopLoop: function() {
-                clearInterval(this.timerID)
+                if( this.type === 'totp' ) {
+                    clearInterval(this.timerID)
+                }
             },
 
             clipboardSuccessHandler ({ value, event }) {
