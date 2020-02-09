@@ -34,6 +34,7 @@
         "v-clipboard": "^2.2.2",
         "vue-axios": "^2.1.5",
         "vue-i18n": "^8.15.3",
+        "vue-pull-refresh": "^0.2.7",
         "vue-router": "^3.1.3"
     }
 }
