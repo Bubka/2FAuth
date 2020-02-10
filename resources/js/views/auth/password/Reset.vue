@@ -64,7 +64,7 @@
                 this.form.post('/api/password/reset', {returnError: true})
                 .then(response => {
 
-                    this.$router.go('/');
+                    this.success = response.data.status
                 })
                 .catch(error => {
                     if( error.response.data.resetFailed ) {
