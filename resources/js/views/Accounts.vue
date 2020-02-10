@@ -26,37 +26,35 @@
                 </div>
             </div>
             <!-- accounts -->
-            <div class="accounts columns is-multiline is-centered">
-                <vue-pull-refresh :on-refresh="onRefresh" :config="{
-                    errorLabel: 'error',
-                    startLabel: '',
-                    readyLabel: '',
-                    loadingLabel: 'refreshing'
-                    }">
-                    <div class="tfa column is-narrow has-text-white" v-for="account in filteredAccounts">
-                        <div class="tfa-container">
-                            <div class="tfa-checkbox" v-if="editMode">
-                                <div class="field">
-                                    <input class="is-checkradio is-small is-white" :id="'ckb_' + account.id" :value="account.id" type="checkbox" :name="'ckb_' + account.id" v-model="selectedAccounts">
-                                    <label :for="'ckb_' + account.id"></label>
-                                </div>
-                            </div>
-                            <div class="tfa-content is-size-3 is-size-4-mobile" @click.stop="showAccount(account)">  
-                                <div class="tfa-text has-ellipsis">
-                                    <img :src="'/storage/icons/' + account.icon" v-if="account.icon">
-                                    {{ account.service }}
-                                    <span class="is-family-primary is-size-6 is-size-7-mobile has-text-grey ">{{ account.account }}</span>
-                                </div>
-                            </div>
-                            <div class="tfa-dots has-text-grey" v-if="editMode">
-                                <router-link :to="{ name: 'edit', params: { twofaccountId: account.id }}" class="tag is-dark is-rounded">
-                                    {{ $t('commons.edit') }}
-                                </router-link>
+            <vue-pull-refresh :on-refresh="onRefresh" :config="{
+                errorLabel: 'error',
+                startLabel: '',
+                readyLabel: '',
+                loadingLabel: 'refreshing'
+                }" class="accounts columns is-multiline is-centered">
+                <div class="tfa column is-narrow has-text-white" v-for="account in filteredAccounts">
+                    <div class="tfa-container">
+                        <div class="tfa-checkbox" v-if="editMode">
+                            <div class="field">
+                                <input class="is-checkradio is-small is-white" :id="'ckb_' + account.id" :value="account.id" type="checkbox" :name="'ckb_' + account.id" v-model="selectedAccounts">
+                                <label :for="'ckb_' + account.id"></label>
                             </div>
                         </div>
+                        <div class="tfa-content is-size-3 is-size-4-mobile" @click.stop="showAccount(account)">  
+                            <div class="tfa-text has-ellipsis">
+                                <img :src="'/storage/icons/' + account.icon" v-if="account.icon">
+                                {{ account.service }}
+                                <span class="is-family-primary is-size-6 is-size-7-mobile has-text-grey ">{{ account.account }}</span>
+                            </div>
+                        </div>
+                        <div class="tfa-dots has-text-grey" v-if="editMode">
+                            <router-link :to="{ name: 'edit', params: { twofaccountId: account.id }}" class="tag is-dark is-rounded">
+                                {{ $t('commons.edit') }}
+                            </router-link>
+                        </div>
                     </div>
-                </vue-pull-refresh>
-            </div>
+                </div>
+            </vue-pull-refresh>
         </div>
         <!-- No account -->
         <div class="container has-text-centered" v-show="showQuickForm">
