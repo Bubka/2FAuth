@@ -92,45 +92,36 @@
             <twofaccount-show ref="TwofaccountShow" ></twofaccount-show>
         </modal>
         <!-- footer -->
-        <footer class="has-background-black-ter">
-            <div class="columns is-gapless" v-if="this.accounts.length > 0">
-                <div class="column has-text-centered">
-                    <div class="field is-grouped">
-                        <!-- New item buttons -->
-                        <p class="control" v-if="!showQuickForm && !editMode">
-                            <a class="button is-link is-rounded is-focus" @click="showQuickForm = true">
-                                <span>{{ $t('twofaccounts.new') }}</span>
-                                <span class="icon is-small">
-                                    <font-awesome-icon :icon="['fas', 'qrcode']" />
-                                </span>
-                            </a>
-                        </p>
-                        <!-- Manage button -->
-                        <p class="control" v-if="!showQuickForm && !editMode">
-                            <a class="button is-dark is-rounded" @click="setEditModeTo(true)">{{ $t('twofaccounts.manage') }}</a>
-                        </p>
-                        <!-- Done button -->
-                        <p class="control" v-if="!showQuickForm && editMode">
-                            <a class="button is-success is-rounded" @click="setEditModeTo(false)">
-                                <span>{{ $t('twofaccounts.done') }}</span>
-                                <span class="icon is-small">
-                                    <font-awesome-icon :icon="['fas', 'check']" />
-                                </span>
-                            </a>
-                        </p>
-                        <!-- Cancel QuickFormButton -->
-                        <p class="control" v-if="showQuickForm">
-                            <a class="button is-dark is-rounded" @click="cancelQuickForm">
-                                {{ $t('commons.cancel') }}
-                            </a>
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="content has-text-centered">
-                {{ $t('auth.hello', {username: username}) }} <router-link :to="{ name: 'profile' }" class="has-text-grey">{{ $t('commons.profile') }}</router-link> - <a class="has-text-grey" @click="logout">{{ $t('auth.sign_out') }}</a>
-            </div>
-        </footer>
+        <vue-footer :showButtons="this.accounts.length > 0">
+            <!-- New item buttons -->
+            <p class="control" v-if="!showQuickForm && !editMode">
+                <a class="button is-link is-rounded is-focus" @click="showQuickForm = true">
+                    <span>{{ $t('twofaccounts.new') }}</span>
+                    <span class="icon is-small">
+                        <font-awesome-icon :icon="['fas', 'qrcode']" />
+                    </span>
+                </a>
+            </p>
+            <!-- Manage button -->
+            <p class="control" v-if="!showQuickForm && !editMode">
+                <a class="button is-dark is-rounded" @click="setEditModeTo(true)">{{ $t('twofaccounts.manage') }}</a>
+            </p>
+            <!-- Done button -->
+            <p class="control" v-if="!showQuickForm && editMode">
+                <a class="button is-success is-rounded" @click="setEditModeTo(false)">
+                    <span>{{ $t('twofaccounts.done') }}</span>
+                    <span class="icon is-small">
+                        <font-awesome-icon :icon="['fas', 'check']" />
+                    </span>
+                </a>
+            </p>
+            <!-- Cancel QuickFormButton -->
+            <p class="control" v-if="showQuickForm">
+                <a class="button is-dark is-rounded" @click="cancelQuickForm">
+                    {{ $t('commons.cancel') }}
+                </a>
+            </p>
+        </vue-footer>
     </div>
 </template>
 
@@ -273,21 +264,6 @@
                     // we fetch the accounts again to prevent the js collection being
                     // desynchronize from the backend php collection
                     this.fetchAccounts()
-                }
-            },
-
-            async logout(evt) {
-                if(confirm(this.$t('auth.confirm.logout'))) {
-
-                    await this.axios.get('api/logout')
-
-                    localStorage.removeItem('jwt');
-                    localStorage.removeItem('user');
-
-                    delete this.axios.defaults.headers.common['Authorization'];
-
-                    this.$router.go('/login');
-
                 }
             },
 
