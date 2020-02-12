@@ -2,13 +2,6 @@
     <form-wrapper :title="$t('auth.forms.change_password')" :fail="fail" :success="success">
         <form @submit.prevent="handleSubmit" @keydown="form.onKeydown($event)">
             <div class="field">
-                <label class="label">{{ $t('auth.forms.current_password') }}</label>
-                <div class="control">
-                    <input id="currentPassword" type="password" class="input" v-model="form.currentPassword" />
-                </div>
-                <field-error :form="form" field="currentPassword" />
-            </div>
-            <div class="field">
                 <label class="label">{{ $t('auth.forms.new_password') }}</label>
                 <div class="control">
                     <input id="password" type="password" class="input" v-model="form.password" />
@@ -16,18 +9,22 @@
                 <field-error :form="form" field="password" />
             </div>
             <div class="field">
-                <label class="label">{{ $t('auth.forms.confirm_password') }}</label>
+                <label class="label">{{ $t('auth.forms.confirm_new_password') }}</label>
                 <div class="control">
                     <input id="password_confirmation" type="password" class="input" v-model="form.password_confirmation" />
                 </div>
                 <field-error :form="form" field="password_confirmation" />
             </div>
+            <div class="field">
+                <label class="label">{{ $t('auth.forms.current_password') }}</label>
+                <div class="control">
+                    <input id="currentPassword" type="password" class="input" v-model="form.currentPassword" />
+                </div>
+                <field-error :form="form" field="currentPassword" />
+            </div>
             <div class="field is-grouped">
                 <div class="control">
                     <v-button :isLoading="form.isBusy" >{{ $t('auth.forms.change_password') }}</v-button>
-                </div>
-                <div class="control">
-                    <router-link :to="{ name: 'profile' }" class="button is-text">{{ $t('commons.cancel') }}</router-link>
                 </div>
             </div>
         </form>

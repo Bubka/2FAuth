@@ -8,7 +8,6 @@ import Create           from './views/twofaccounts/Create'
 import Edit             from './views/twofaccounts/Edit'
 import Login            from './views/auth/Login'
 import Register         from './views/auth/Register'
-import PasswordUpdate   from './views/auth/password/Update'
 import PasswordRequest  from './views/auth/password/Request'
 import PasswordReset    from './views/auth/password/Reset'
 import Profile          from './views/profile/Index'
@@ -24,7 +23,6 @@ const router = new Router({
         { path: '/create', name: 'create',component: Create },
         { path: '/edit/:twofaccountId', name: 'edit',component: Edit },
 
-        // { path: '/password/update', name: 'password.update',component: PasswordUpdate },
         { path: '/password/request', name: 'password.request', component: PasswordRequest },
         { path: '/password/reset/:token', name: 'password.reset', component: PasswordReset },
 

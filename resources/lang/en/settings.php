@@ -4,7 +4,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Authentication Language Lines
+    | Settings Language Lines
     |--------------------------------------------------------------------------
     |
     | The following language lines are used during authentication for various
@@ -13,11 +13,15 @@ return [
     |
     */
 
-    'cancel' => 'Cancel',
-    'update' => 'Update',
-    'copy_to_clipboard' => 'Copy to clipboard',
-    'profile' => 'Profile',
-    'edit' => 'Edit',
-    'delete' => 'Delete',
-    'save' => 'Save'
+    'settings' => 'Settings',
+    'account' => 'Account',
+    'password' => 'Password',
+    'confirm' => [
+
+    ],
+    'forms' => [
+        'edit_settings' => 'Edit settings',
+    ],
+    
+
 ];

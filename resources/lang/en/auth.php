@@ -25,7 +25,7 @@ return [
         'login' => 'Login',
         'email' => 'Email',
         'password' => 'Password',
-        'confirm_password' => 'Confirm password',
+        'confirm_new_password' => 'Confirm new password',
         'dont_have_account_yet' => 'Don\'t have your account yet?',
         'already_register' => 'Already registered?',
         'password_do_not_match' => 'Password do not match',
@@ -38,6 +38,7 @@ return [
         'send_password_reset_link' => 'Send password reset link',
         'change_your_password' => 'Change your password',
         'password_successfully_changed' => 'Password successfully changed ',
+        'edit_account' => 'Edit account',
         'profile_saved' => 'Profile successfully updated!'
     ],
     

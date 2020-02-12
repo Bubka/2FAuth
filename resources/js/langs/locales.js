@@ -13,7 +13,7 @@ export default {
                 "login": "Login",
                 "email": "Email",
                 "password": "Password",
-                "confirm_password": "Confirm password",
+                "confirm_new_password": "Confirm new password",
                 "dont_have_account_yet": "Don't have your account yet?",
                 "already_register": "Already registered?",
                 "password_do_not_match": "Password do not match",
@@ -26,6 +26,7 @@ export default {
                 "send_password_reset_link": "Send password reset link",
                 "change_your_password": "Change your password",
                 "password_successfully_changed": "Password successfully changed ",
+                "edit_account": "Edit account",
                 "profile_saved": "Profile successfully updated!"
             }
         },
@@ -35,7 +36,8 @@ export default {
             "copy_to_clipboard": "Copy to clipboard",
             "profile": "Profile",
             "edit": "Edit",
-            "delete": "Delete"
+            "delete": "Delete",
+            "save": "Save"
         },
         "errors": {
             "resource_not_found": "Resource not found",
@@ -61,6 +63,15 @@ export default {
             "sent": "We have e-mailed your password reset link!",
             "token": "This password reset token is invalid.",
             "user": "We can't find a user with that e-mail address."
+        },
+        "settings": {
+            "settings": "Settings",
+            "account": "Account",
+            "password": "Password",
+            "confirm": [],
+            "forms": {
+                "edit_settings": "Edit settings"
+            }
         },
         "twofaccounts": {
             "service": "Service",

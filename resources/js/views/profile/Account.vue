@@ -1,5 +1,5 @@
 <template>
-    <form-wrapper :title="$t('commons.profile')" :fail="fail" :success="success">
+    <form-wrapper :title="$t('auth.forms.edit_account')" :fail="fail" :success="success">
         <form @submit.prevent="handleSubmit" @keydown="form.onKeydown($event)">
             <div class="field">
                 <label class="label">{{ $t('auth.forms.name') }}</label>
@@ -16,7 +16,7 @@
                 <field-error :form="form" field="email" />
             </div>
             <div class="field">
-                <label class="label">{{ $t('auth.forms.password') }}</label>
+                <label class="label">{{ $t('auth.forms.current_password') }}</label>
                 <div class="control">
                     <input id="password" type="password" class="input" v-model="form.password" />
                 </div>
@@ -26,14 +26,9 @@
                 <div class="control">
                     <v-button :isLoading="form.isBusy" >{{ $t('commons.update') }}</v-button>
                 </div>
-                <div class="control">
-                    <router-link :to="{ name: 'accounts' }" class="button is-text">{{ $t('commons.cancel') }}</router-link>
-                </div>
             </div>
         </form>
-        <p><router-link :to="{ name: 'password.update' }" class="is-link">{{ $t('auth.forms.change_your_password') }}</router-link></p>
     </form-wrapper>
-
 </template>
 
 <script>
