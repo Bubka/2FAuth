@@ -140,7 +140,6 @@
                 selectedAccounts: [],
                 ShowTwofaccountInModal : false,
                 search: '',
-                username : null,
                 editMode: this.InitialEditMode,
                 showQuickForm: false,
                 form: new Form({
@@ -167,7 +166,6 @@
 
         created() {
 
-            this.username = localStorage.getItem('user')
             this.fetchAccounts()
 
             // stop OTP generation on modal close
