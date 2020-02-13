@@ -5,6 +5,7 @@
             <input :id="fieldName" :type="inputType" class="input" v-model="form[fieldName]" :placeholder="placeholder" v-bind="$attrs" />
         </div>
         <field-error :form="form" :field="fieldName" />
+        <p class="help" v-html="help" v-if="help"></p>
     </div> 
 </template>
 
@@ -42,6 +43,11 @@
             },
 
             placeholder: {
+                type: String,
+                default: ''
+            },
+
+            help: {
                 type: String,
                 default: ''
             },
