@@ -3,6 +3,8 @@
 # 2FAuth
 A web app to manage your Two-factors Auth (2FA) accounts and generate their OTP tokens
 
+![screens](https://user-images.githubusercontent.com/858858/74479269-267a1600-4eaf-11ea-9281-415e5a54bd9f.png)
+
 ## Purpose
 2FAuth is a web based self-hosted alternative to One Time Passcode (OTP) generators like Google Authenticator that you can use both on mobile or desktop.
 
@@ -13,7 +15,7 @@ I created it because :
 * I love coding and I love self-hosted solution
 
 ## Features
-* Manage 2FA accounts (add, edit, delete), with QR code support
+* Manage 2FA accounts with QR code scanning and decoding
 * Generate TOTP and HOTP tokens
 * User authentication to protect access to 2FA accounts
 
