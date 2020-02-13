@@ -1,0 +1,50 @@
+<template>
+    <div class="field">
+        <label class="label" v-html="label"></label>
+        <div class="control">
+            <input :id="fieldName" :type="inputType" class="input" v-model="form[fieldName]" :placeholder="placeholder" v-bind="$attrs" />
+        </div>
+        <field-error :form="form" :field="fieldName" />
+    </div> 
+</template>
+
+<script>
+    export default {
+        name: 'FormField',
+        inheritAttrs: false,
+        
+        data() {
+            return {
+
+            }
+        },
+
+        props: {
+            label: {
+                type: String,
+                default: ''
+            },
+
+            fieldName: {
+                type: String,
+                default: '',
+                required: true
+            },
+
+            inputType: {
+                type: String,
+                default: 'text'
+            },
+
+            form: {
+                type: Object,
+                required: true
+            },
+
+            placeholder: {
+                type: String,
+                default: ''
+            },
+        }
+    }
+</script>

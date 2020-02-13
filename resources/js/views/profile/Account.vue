@@ -1,32 +1,10 @@
 <template>
     <form-wrapper :fail="fail" :success="success">
         <form @submit.prevent="handleSubmit" @keydown="form.onKeydown($event)">
-            <div class="field">
-                <label class="label">{{ $t('auth.forms.name') }}</label>
-                <div class="control">
-                    <input id="name" type="text" class="input" v-model="form.name" autofocus />
-                </div>
-                <field-error :form="form" field="name" />
-            </div>
-            <div class="field">
-                <label class="label">{{ $t('auth.forms.email') }}</label>
-                <div class="control">
-                    <input id="email" type="email" class="input" v-model="form.email" />
-                </div>
-                <field-error :form="form" field="email" />
-            </div>
-            <div class="field">
-                <label class="label">{{ $t('auth.forms.current_password') }}</label>
-                <div class="control">
-                    <input id="password" type="password" class="input" v-model="form.password" />
-                </div>
-                <field-error :form="form" field="password" />
-            </div>
-            <div class="field is-grouped">
-                <div class="control">
-                    <v-button :isLoading="form.isBusy" >{{ $t('commons.update') }}</v-button>
-                </div>
-            </div>
+            <form-field :form="form" fieldName="name" :label="$t('auth.forms.name')" autofocus />
+            <form-field :form="form" fieldName="email" inputType="email" :label="$t('auth.forms.email')" />
+            <form-field :form="form" fieldName="password" inputType="password" :label="$t('auth.forms.current_password')" />
+            <form-buttons :isBusy="form.isBusy" :caption="$t('commons.update')" />
         </form>
     </form-wrapper>
 </template>

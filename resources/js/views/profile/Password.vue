@@ -1,32 +1,10 @@
 <template>
     <form-wrapper :fail="fail" :success="success">
         <form @submit.prevent="handleSubmit" @keydown="form.onKeydown($event)">
-            <div class="field">
-                <label class="label">{{ $t('auth.forms.new_password') }}</label>
-                <div class="control">
-                    <input id="password" type="password" class="input" v-model="form.password" />
-                </div>
-                <field-error :form="form" field="password" />
-            </div>
-            <div class="field">
-                <label class="label">{{ $t('auth.forms.confirm_new_password') }}</label>
-                <div class="control">
-                    <input id="password_confirmation" type="password" class="input" v-model="form.password_confirmation" />
-                </div>
-                <field-error :form="form" field="password_confirmation" />
-            </div>
-            <div class="field">
-                <label class="label">{{ $t('auth.forms.current_password') }}</label>
-                <div class="control">
-                    <input id="currentPassword" type="password" class="input" v-model="form.currentPassword" />
-                </div>
-                <field-error :form="form" field="currentPassword" />
-            </div>
-            <div class="field is-grouped">
-                <div class="control">
-                    <v-button :isLoading="form.isBusy" >{{ $t('auth.forms.change_password') }}</v-button>
-                </div>
-            </div>
+            <form-field :form="form" fieldName="password" inputType="password" :label="$t('auth.forms.new_password')" />
+            <form-field :form="form" fieldName="password_confirmation" inputType="password" :label="$t('auth.forms.confirm_new_password')" />
+            <form-field :form="form" fieldName="currentPassword" inputType="password" :label="$t('auth.forms.current_password')" />
+            <form-buttons :isBusy="form.isBusy" :caption="$t('auth.forms.change_password')" />
         </form>
     </form-wrapper>
 </template>

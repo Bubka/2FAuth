@@ -1,25 +1,9 @@
 <template>
     <form-wrapper :title="$t('auth.forms.login')" :fail="fail" :success="success">
         <form @submit.prevent="handleSubmit" @keydown="form.onKeydown($event)">
-            <div class="field">
-                <label class="label">{{ $t('auth.forms.email') }}</label>
-                <div class="control">
-                    <input id="email" type="email" class="input" v-model="form.email" autofocus />
-                </div>
-                <field-error :form="form" field="email" />
-            </div>
-            <div class="field">
-                <label class="label">{{ $t('auth.forms.password') }}</label>
-                <div class="control">
-                    <input id="password" type="password" class="input" v-model="form.password" />
-                </div>
-                <field-error :form="form" field="password" />
-            </div>
-            <div class="field is-grouped">
-                <div class="control">
-                    <v-button :isLoading="form.isBusy" >{{ $t('auth.sign_in') }}</v-button>
-                </div>
-            </div>
+            <form-field :form="form" fieldName="email" inputType="email" :label="$t('auth.forms.email')" autofocus />
+            <form-field :form="form" fieldName="password" inputType="password" :label="$t('auth.forms.password')" />
+            <form-buttons :isBusy="form.isBusy" :caption="$t('auth.sign_in')" />
         </form>
         <p>{{ $t('auth.forms.dont_have_account_yet') }}&nbsp;<router-link :to="{ name: 'register' }" class="is-link">{{ $t('auth.register') }}</router-link></p>
         <p>{{ $t('auth.forms.forgot_your_password') }}&nbsp;<router-link :to="{ name: 'password.request' }" class="is-link">{{ $t('auth.forms.request_password_reset') }}</router-link></p>

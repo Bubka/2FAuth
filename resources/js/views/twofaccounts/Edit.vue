@@ -1,20 +1,8 @@
 <template>
     <form-wrapper :title="$t('twofaccounts.forms.edit_account')">
         <form @submit.prevent="updateAccount" @keydown="form.onKeydown($event)">
-            <div class="field">
-                <label class="label">{{ $t('twofaccounts.service') }}</label>
-                <div class="control">
-                    <input class="input" type="text" :placeholder="$t('twofaccounts.forms.service.placeholder')" v-model="form.service" autofocus />
-                </div>
-                <field-error :form="form" field="service" />
-            </div>
-            <div class="field">
-                <label class="label">{{ $t('twofaccounts.account') }}</label>
-                <div class="control">
-                    <input class="input" type="text" :placeholder="$t('twofaccounts.forms.account.placeholder')" v-model="form.account" />
-                </div>
-                <field-error :form="form" field="account" />
-            </div>
+            <form-field :form="form" fieldName="service" inputType="text" :label="$t('twofaccounts.service')" :placeholder="$t('twofaccounts.forms.service.placeholder')" autofocus />
+            <form-field :form="form" fieldName="account" inputType="text" :label="$t('twofaccounts.account')" :placeholder="$t('twofaccounts.forms.account.placeholder')" />
             <div v-if="form.type === 'hotp'">
                 <div class="field" style="margin-bottom: 0.5rem;">
                     <label class="label">{{ $t('twofaccounts.forms.hotp_counter') }}</label>
@@ -64,7 +52,7 @@
                     <v-button :isLoading="form.isBusy" >{{ $t('twofaccounts.forms.save') }}</v-button>
                 </div>
                 <div class="control">
-                    <button type="button" class="button is-text" @click.prevent="cancelCreation">{{ $t('commons.cancel') }}</button>
+                    <button type="button" class="button is-text" @click="cancelCreation">{{ $t('commons.cancel') }}</button>
                 </div>
             </div>
         </form>

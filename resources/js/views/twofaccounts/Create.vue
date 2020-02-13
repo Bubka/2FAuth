@@ -47,20 +47,8 @@
                 </div>
             </div>
             <field-error :form="form" field="qrcode" class="help-for-file" />
-            <div class="field">
-                <label class="label">{{ $t('twofaccounts.service') }}</label>
-                <div class="control">
-                    <input class="input" type="text" :placeholder="$t('twofaccounts.forms.service.placeholder')" v-model="form.service"  autofocus />
-                </div>
-                <field-error :form="form" field="service" />
-            </div>
-            <div class="field">
-                <label class="label">{{ $t('twofaccounts.account') }}</label>
-                <div class="control">
-                    <input class="input" type="text" :placeholder="$t('twofaccounts.forms.account.placeholder')" v-model="form.account"  />
-                </div>
-                <field-error :form="form" field="account" />
-            </div>
+            <form-field :form="form" fieldName="service" inputType="text" :label="$t('twofaccounts.service')" :placeholder="$t('twofaccounts.forms.service.placeholder')" autofocus />
+            <form-field :form="form" fieldName="account" inputType="text" :label="$t('twofaccounts.account')" :placeholder="$t('twofaccounts.forms.account.placeholder')" />
             <div class="field" style="margin-bottom: 0.5rem;">
                 <label class="label">{{ $t('twofaccounts.forms.otp_uri') }}</label>
             </div>
