@@ -1,5 +1,5 @@
 <template>
-    <form-wrapper :title="$t('auth.forms.change_password')" :fail="fail" :success="success">
+    <form-wrapper :fail="fail" :success="success">
         <form @submit.prevent="handleSubmit" @keydown="form.onKeydown($event)">
             <div class="field">
                 <label class="label">{{ $t('auth.forms.new_password') }}</label>

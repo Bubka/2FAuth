@@ -1,5 +1,5 @@
 <template>
-    <form-wrapper :title="$t('settings.forms.edit_settings')" :fail="fail" :success="success">
+    <form-wrapper :fail="fail" :success="success">
         <form @submit.prevent="handleSubmit" @keydown="form.onKeydown($event)">
             <div class="field">
                 <label class="label">{{ $t('auth.forms.name') }}</label>
