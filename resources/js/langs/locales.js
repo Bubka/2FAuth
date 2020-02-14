@@ -240,5 +240,248 @@ export default {
             },
             "attributes": []
         }
+    },
+    "fr": {
+        "auth": {
+            "sign_out": "Déconnexion",
+            "sign_in": "Se connecter",
+            "register": "Créer un compte",
+            "hello": "Hi {username} !",
+            "confirm": {
+                "logout": "Etes-vous sûrs de vouloir vous déconnecter ?"
+            },
+            "forms": {
+                "name": "Nom",
+                "login": "Connexion",
+                "email": "Email",
+                "password": "Mot de passe",
+                "confirm_new_password": "Confirmez le mot de passe",
+                "dont_have_account_yet": "Pas encore de compte ?",
+                "already_register": "Déjà enregistré ?",
+                "password_do_not_match": "Le mot de passe ne correspond pas",
+                "forgot_your_password": "Mot de passe oublié ?",
+                "request_password_reset": "Réinitialiser le",
+                "reset_password": "Mot de passe oublié",
+                "new_password": "Nouveau mot de passe",
+                "current_password": "Mot de passe actuel",
+                "change_password": "Modifier le mot de passe",
+                "send_password_reset_link": "Envoyer",
+                "change_your_password": "Modifier votre mot de passe",
+                "password_successfully_changed": "Mot de passe modifié avec succès",
+                "edit_account": "Mis à jour du profil",
+                "profile_saved": "Profil mis à jour avec succès !"
+            }
+        },
+        "commons": {
+            "cancel": "Annuler",
+            "update": "Mettre à jour",
+            "copy_to_clipboard": "Copier",
+            "profile": "Profil",
+            "edit": "Modifier",
+            "delete": "Supprimer",
+            "save": "Enregistrer"
+        },
+        "errors": {
+            "resource_not_found": "Ressource introuvable",
+            "error_occured": "Une erreur est survenue :",
+            "already_one_user_registered": "Un compte utilisateur existe déjà.",
+            "cannot_register_more_user": "Vous ne pouvez pas enregistrer plus d'un utilisateur.",
+            "refresh": "Actualiser",
+            "please": "",
+            "response": {
+                "no_valid_otp": "Aucune donnée OTP valide dans ce QR code"
+            },
+            "something_wrong_with_server": "Il y a un problème avec votre serveur",
+            "Unable_to_decrypt_uri": "uri impossible à décoder",
+            "wrong_current_password": "Mot de passe actuel érroné, rien n\\a été modifié"
+        },
+        "pagination": {
+            "previous": "&laquo; Précédent",
+            "next": "Suivant &raquo;"
+        },
+        "passwords": {
+            "password": "Les mots de passe doivent contenir au moins huit caractères et être identiques.",
+            "reset": "Votre mot de passe a été réinitialisé !",
+            "sent": "Le lien pour réinitialiser votre mot de passe vient d'être envoyé !",
+            "token": "Ce jeton de réinitialisation n'est pas valide.",
+            "user": "Cette adresse email n'est pas celle de votre compte."
+        },
+        "settings": {
+            "settings": "Réglages",
+            "account": "Compte",
+            "password": "Mot de passe",
+            "confirm": [],
+            "forms": {
+                "edit_settings": "Modifier les réglages"
+            }
+        },
+        "twofaccounts": {
+            "service": "Service",
+            "account": "Compte",
+            "icon": "Icône",
+            "new": "Nouveau",
+            "no_account_here": "Aucun compte 2FA !",
+            "add_first_account": "Ajouter votre premier compte",
+            "use_full_form": "Ou utiliser le formulaire détaillé",
+            "add_one": "Add one",
+            "manage": "Gérer",
+            "done": "Terminé",
+            "forms": {
+                "service": {
+                    "placeholder": "example.com"
+                },
+                "account": {
+                    "placeholder": "Marc Dupont"
+                },
+                "new_account": "Nouveau compte",
+                "edit_account": "Modifier le compte",
+                "otp_uri": "OTP Uri",
+                "hotp_counter": "Compteur HOTP",
+                "use_qrcode": {
+                    "val": "Utiliser un QR code",
+                    "title": "Utiliser un QR code pour renseigner le formulaire d'un seul coup d'un seul"
+                },
+                "unlock": {
+                    "val": "Déverouiller",
+                    "title": "Déverouiller le champ (à vos risques et périls)"
+                },
+                "lock": {
+                    "val": "Vérouiller",
+                    "title": "Vérouiller le champ"
+                },
+                "choose_image": "Choisir une image…",
+                "create": "Créer",
+                "save": "Enregistrer",
+                "test": "Tester"
+            },
+            "confirm": {
+                "delete": "Etes-vous sûrs de vouloir supprimer le compte ?",
+                "cancel": "Les données seront perdues, vous êtes sûrs ?"
+            }
+        },
+        "validation": {
+            "accepted": "Le champ {attribute} doit être accepté.",
+            "active_url": "Le champ {attribute} n'est pas une URL valide.",
+            "after": "Le champ {attribute} doit être une date postérieure au {date}.",
+            "after_or_equal": "Le champ {attribute} doit être une date postérieure ou égale au {date}.",
+            "alpha": "Le champ {attribute} doit contenir uniquement des lettres.",
+            "alpha_dash": "Le champ {attribute} doit contenir uniquement des lettres, des chiffres et des tirets.",
+            "alpha_num": "Le champ {attribute} doit contenir uniquement des chiffres et des lettres.",
+            "array": "Le champ {attribute} doit être un tableau.",
+            "before": "Le champ {attribute} doit être une date antérieure au {date}.",
+            "before_or_equal": "Le champ {attribute} doit être une date antérieure ou égale au {date}.",
+            "between": {
+                "numeric": "La valeur de {attribute} doit être comprise entre {min} et {max}.",
+                "file": "La taille du fichier de {attribute} doit être comprise entre {min} et {max} kilo-octets.",
+                "string": "Le texte {attribute} doit contenir entre {min} et {max} caractères.",
+                "array": "Le tableau {attribute} doit contenir entre {min} et {max} éléments."
+            },
+            "boolean": "Le champ {attribute} doit être vrai ou faux.",
+            "confirmed": "Le champ de confirmation {attribute} ne correspond pas.",
+            "date": "Le champ {attribute} n'est pas une date valide.",
+            "date_equals": "Le champ {attribute} doit être une date égale à {date}.",
+            "date_format": "Le champ {attribute} ne correspond pas au format {format}.",
+            "different": "Les champs {attribute} et {other} doivent être différents.",
+            "digits": "Le champ {attribute} doit contenir {digits} chiffres.",
+            "digits_between": "Le champ {attribute} doit contenir entre {min} et {max} chiffres.",
+            "dimensions": "La taille de l'image {attribute} n'est pas conforme.",
+            "distinct": "Le champ {attribute} a une valeur en double.",
+            "email": "Le champ {attribute} doit être une adresse email valide.",
+            "ends_with": "Le champ {attribute} doit se terminer par une des valeurs suivantes : {values}",
+            "exists": "Le champ {attribute} sélectionné est invalide.",
+            "file": "Le champ {attribute} doit être un fichier.",
+            "filled": "Le champ {attribute} doit avoir une valeur.",
+            "gt": {
+                "numeric": "La valeur de {attribute} doit être supérieure à {value}.",
+                "file": "La taille du fichier de {attribute} doit être supérieure à {value} kilo-octets.",
+                "string": "Le texte {attribute} doit contenir plus de {value} caractères.",
+                "array": "Le tableau {attribute} doit contenir plus de {value} éléments."
+            },
+            "gte": {
+                "numeric": "La valeur de {attribute} doit être supérieure ou égale à {value}.",
+                "file": "La taille du fichier de {attribute} doit être supérieure ou égale à {value} kilo-octets.",
+                "string": "Le texte {attribute} doit contenir au moins {value} caractères.",
+                "array": "Le tableau {attribute} doit contenir au moins {value} éléments."
+            },
+            "image": "Le champ {attribute} doit être une image.",
+            "in": "Le champ {attribute} est invalide.",
+            "in_array": "Le champ {attribute} n'existe pas dans {other}.",
+            "integer": "Le champ {attribute} doit être un entier.",
+            "ip": "Le champ {attribute} doit être une adresse IP valide.",
+            "ipv4": "Le champ {attribute} doit être une adresse IPv4 valide.",
+            "ipv6": "Le champ {attribute} doit être une adresse IPv6 valide.",
+            "json": "Le champ {attribute} doit être un document JSON valide.",
+            "lt": {
+                "numeric": "La valeur de {attribute} doit être inférieure à {value}.",
+                "file": "La taille du fichier de {attribute} doit être inférieure à {value} kilo-octets.",
+                "string": "Le texte {attribute} doit contenir moins de {value} caractères.",
+                "array": "Le tableau {attribute} doit contenir moins de {value} éléments."
+            },
+            "lte": {
+                "numeric": "La valeur de {attribute} doit être inférieure ou égale à {value}.",
+                "file": "La taille du fichier de {attribute} doit être inférieure ou égale à {value} kilo-octets.",
+                "string": "Le texte {attribute} doit contenir au plus {value} caractères.",
+                "array": "Le tableau {attribute} doit contenir au plus {value} éléments."
+            },
+            "max": {
+                "numeric": "La valeur de {attribute} ne peut être supérieure à {max}.",
+                "file": "La taille du fichier de {attribute} ne peut pas dépasser {max} kilo-octets.",
+                "string": "Le texte de {attribute} ne peut contenir plus de {max} caractères.",
+                "array": "Le tableau {attribute} ne peut contenir plus de {max} éléments."
+            },
+            "mimes": "Le champ {attribute} doit être un fichier de type : {values}.",
+            "mimetypes": "Le champ {attribute} doit être un fichier de type : {values}.",
+            "min": {
+                "numeric": "La valeur de {attribute} doit être supérieure ou égale à {min}.",
+                "file": "La taille du fichier de {attribute} doit être supérieure à {min} kilo-octets.",
+                "string": "Le texte {attribute} doit contenir au moins {min} caractères.",
+                "array": "Le tableau {attribute} doit contenir au moins {min} éléments."
+            },
+            "not_in": "Le champ {attribute} sélectionné n'est pas valide.",
+            "not_regex": "Le format du champ {attribute} n'est pas valide.",
+            "numeric": "Le champ {attribute} doit contenir un nombre.",
+            "password": "Le mot de passe est incorrect",
+            "present": "Le champ {attribute} doit être présent.",
+            "regex": "Le format du champ {attribute} est invalide.",
+            "required": "Le champ {attribute} est obligatoire.",
+            "required_if": "Le champ {attribute} est obligatoire quand la valeur de {other} est {value}.",
+            "required_unless": "Le champ {attribute} est obligatoire sauf si {other} est {values}.",
+            "required_with": "Le champ {attribute} est obligatoire quand {values} est présent.",
+            "required_with_all": "Le champ {attribute} est obligatoire quand {values} sont présents.",
+            "required_without": "Le champ {attribute} est obligatoire quand {values} n'est pas présent.",
+            "required_without_all": "Le champ {attribute} est requis quand aucun de {values} n'est présent.",
+            "same": "Les champs {attribute} et {other} doivent être identiques.",
+            "size": {
+                "numeric": "La valeur de {attribute} doit être {size}.",
+                "file": "La taille du fichier de {attribute} doit être de {size} kilo-octets.",
+                "string": "Le texte de {attribute} doit contenir {size} caractères.",
+                "array": "Le tableau {attribute} doit contenir {size} éléments."
+            },
+            "starts_with": "Le champ {attribute} doit commencer avec une des valeurs suivantes : {values}",
+            "string": "Le champ {attribute} doit être une chaîne de caractères.",
+            "timezone": "Le champ {attribute} doit être un fuseau horaire valide.",
+            "unique": "La valeur du champ {attribute} est déjà utilisée.",
+            "uploaded": "Le fichier du champ {attribute} n'a pu être téléversé.",
+            "url": "Le format de l'URL de {attribute} n'est pas valide.",
+            "uuid": "Le champ {attribute} doit être un UUID valide",
+            "custom": {
+                "attribute-name": {
+                    "rule-name": "custom-message"
+                },
+                "icon": {
+                    "image": "Les formats acceptés sont jpeg, png, bmp, gif, svg, or webp"
+                },
+                "qrcode": {
+                    "image": "Les formats acceptés sont jpeg, png, bmp, gif, svg, or webp"
+                },
+                "uri": {
+                    "starts_with": "La valeur n'est pas une uri OTP valide"
+                },
+                "email": {
+                    "exists": "Aucun compte utilisateur n'utilise cette email"
+                }
+            },
+            "attributes": []
+        }
     }
 }
