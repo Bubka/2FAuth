@@ -26,8 +26,9 @@ I created it because :
 2FAuth generates OTP according to RFC 4226 (HOTP Algorithm) and RFC 6238 (TOTP Algorithm) thanks to [Spomky-Labs/OTPHP](https://github.com/Spomky-Labs/otphp) php library.
 
 ## Requirements
-* [![Requires PHP7](https://img.shields.io/badge/php-7.*-red.svg?style=flat-square)](https://secure.php.net/downloads.php)
-* MySQL or SQLITE database
+[![Requires PHP7](https://img.shields.io/badge/php-7.1.3-red.svg?style=flat-square)](https://secure.php.net/downloads.php) 
+* See [Laravel server requirements](https://laravel.com/docs/5.8/installation#server-requirements)
+* Any database [supported by Laravel](https://laravel.com/docs/5.8/database)
 
 ## Installation (using command line)
 
