@@ -1,7 +1,7 @@
 <template>
     <div class="field is-grouped">
         <div class="control">
-            <v-button :isLoading="isBusy" >{{ caption }}</v-button>
+            <v-button :isLoading="isBusy" :disabled="isDisabled" >{{ caption }}</v-button>
         </div>
         <div class="control" v-if="showCancelButton">
             <router-link :to="{ name: cancelLandingView }" class="button is-text">{{ $t('commons.cancel') }}</router-link>
@@ -26,6 +26,11 @@
             },
 
             isBusy: {
+                type: Boolean,
+                default: false
+            },
+
+            isDisabled: {
                 type: Boolean,
                 default: false
             },

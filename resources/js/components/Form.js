@@ -11,6 +11,7 @@ class Form {
      */
     constructor (data = {}) {
         this.isBusy = false
+        this.isDisabled = false
         // this.successful = false
         this.errors = new Errors()
         // this.originalData = deepCopy(data)
@@ -268,6 +269,6 @@ class Form {
 
 Form.routes = {}
 Form.errorMessage = 'Something went wrong. Please try again.'
-Form.ignore = ['isBusy', /*'successful'*/, 'errors', 'originalData']
+Form.ignore = ['isBusy', 'isDisabled', 'errors', 'originalData']
 
 export default Form
