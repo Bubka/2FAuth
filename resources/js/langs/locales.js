@@ -13,6 +13,7 @@ export default {
                 "login": "Login",
                 "email": "Email",
                 "password": "Password",
+                "confirm_password": "Confirm password",
                 "confirm_new_password": "Confirm new password",
                 "dont_have_account_yet": "Don't have your account yet?",
                 "already_register": "Already registered?",
@@ -80,7 +81,7 @@ export default {
             "new": "New",
             "no_account_here": "No 2FA here!",
             "add_first_account": "Add your first account",
-            "use_full_form": "Or use the full form",
+            "use_full_form": "Use the full form",
             "add_one": "Add one",
             "manage": "Manage",
             "done": "Done",
@@ -322,7 +323,7 @@ export default {
             "new": "Nouveau",
             "no_account_here": "Aucun compte 2FA !",
             "add_first_account": "Ajouter votre premier compte",
-            "use_full_form": "Ou utiliser le formulaire détaillé",
+            "use_full_form": "Utiliser le formulaire détaillé",
             "add_one": "Add one",
             "manage": "Gérer",
             "done": "Terminé",
@@ -356,7 +357,7 @@ export default {
             },
             "confirm": {
                 "delete": "Etes-vous sûrs de vouloir supprimer le compte ?",
-                "cancel": "Les données seront perdues, vous êtes sûrs ?"
+                "cancel": "Les données seront perdues, êtes-vous sûrs ?"
             }
         },
         "validation": {

@@ -25,6 +25,7 @@ return [
         'login' => 'Login',
         'email' => 'Email',
         'password' => 'Password',
+        'confirm_password' => 'Confirm password',
         'confirm_new_password' => 'Confirm new password',
         'dont_have_account_yet' => 'Don\'t have your account yet?',
         'already_register' => 'Already registered?',
