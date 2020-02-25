@@ -5,7 +5,7 @@
             <form-field :form="form" fieldName="email" inputType="email" :label="$t('auth.forms.email')" />
             <form-field :form="form" fieldName="password" inputType="password" :label="$t('auth.forms.password')" />
             <form-field :form="form" fieldName="password_confirmation" inputType="password" :label="$t('auth.forms.confirm_password')" />
-            <form-buttons :isBusy="form.isBusy" :caption="$t('auth.register')" />
+            <form-buttons :isBusy="form.isBusy" :isDisabled="form.isDisabled" :caption="$t('auth.register')" />
         </form>
         <p>{{ $t('auth.forms.already_register') }}&nbsp;<router-link :to="{ name: 'login' }" class="is-link">{{ $t('auth.sign_in') }}</router-link></p>
     </form-wrapper>
@@ -27,17 +27,6 @@
                     password_confirmation : '',
                 })
             }
-        },
-
-        async created() {
-            // we check if a user account already exists
-            const { data } = await this.axios.post('api/checkuser')
-
-            if( data.userCount > 0 ) {
-                this.fail = this.$t('errors.already_one_user_registered') + ' ' + this.$t('errors.cannot_register_more_user')
-                this.$router.push({ name: 'flooded' });
-            }
-
         },
 
         methods : {
@@ -63,7 +52,14 @@
                 return next('/');
             }
 
-            next();
+            next(async vm => {
+                const { data } = await vm.axios.post('api/checkuser')
+
+                if( data.userCount > 0 ) {
+                    vm.form.isDisabled = true
+                    vm.fail = vm.$t('errors.already_one_user_registered') + ' ' + vm.$t('errors.cannot_register_more_user')
+                }
+            });
         }
     }
 </script>
