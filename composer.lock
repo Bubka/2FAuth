@@ -4,8 +4,70 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "10378cb8a477dbb2e47e8800a62fe942",
+    "content-hash": "5dee139310062586317c9425413e71e3",
     "packages": [
+        {
+            "name": "appstract/laravel-options",
+            "version": "3.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/appstract/laravel-options.git",
+                "reference": "904f566b3b05ea10f5c752737fcd24f068703917"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/appstract/laravel-options/zipball/904f566b3b05ea10f5c752737fcd24f068703917",
+                "reference": "904f566b3b05ea10f5c752737fcd24f068703917",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/database": "^5.4|^6.0",
+                "illuminate/support": "^5.4|^6.0",
+                "php": ">=5.6"
+            },
+            "require-dev": {
+                "orchestra/database": "^3.7",
+                "orchestra/testbench": "~3.7"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Appstract\\Options\\OptionsServiceProvider"
+                    ],
+                    "aliases": {
+                        "Option": "Appstract\\Options\\OptionFacade"
+                    }
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/helpers.php"
+                ],
+                "psr-4": {
+                    "Appstract\\Options\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Gijs Jorissen",
+                    "email": "hello@appstract.team",
+                    "homepage": "https://appstract.team",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Global options loaded from the database",
+            "homepage": "https://github.com/appstract/laravel-options",
+            "keywords": [
+                "appstract",
+                "laravel-options"
+            ],
+            "time": "2019-11-18T21:20:27+00:00"
+        },
         {
             "name": "beberlei/assert",
             "version": "v3.2.7",
