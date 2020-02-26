@@ -1,7 +1,7 @@
 <template>
     <form-wrapper :fail="fail" :success="success">
         <form @submit.prevent="handleSubmit" @keydown="form.onKeydown($event)">
-            <form-field :form="form" fieldName="FirstSetting" :label="$t('auth.forms.FirstSetting')" />
+            <form-select :options="options" :form="form" fieldName="lang" :label="$t('settings.language')" />
             <form-buttons :isBusy="form.isBusy" :caption="$t('commons.save')" />
         </form>
     </form-wrapper>
@@ -17,8 +17,12 @@
                 success: '',
                 fail: '',
                 form: new Form({
-                    FirstSetting: ''
-                })
+                    lang: 'fr'
+                }),
+                options: [
+                    { text: 'en', value: 'en' },
+                    { text: 'fr', value: 'fr' },
+                ]
             }
         },
 

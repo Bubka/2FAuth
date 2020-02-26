@@ -69,6 +69,7 @@ export default {
             "settings": "Settings",
             "account": "Account",
             "password": "Password",
+            "language": "Language",
             "confirm": [],
             "forms": {
                 "edit_settings": "Edit settings"
@@ -311,6 +312,7 @@ export default {
             "settings": "Réglages",
             "account": "Compte",
             "password": "Mot de passe",
+            "language": "Langue",
             "confirm": [],
             "forms": {
                 "edit_settings": "Modifier les réglages"
