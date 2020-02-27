@@ -1,7 +1,8 @@
 <template>
     <form-wrapper :fail="fail" :success="success">
         <form @submit.prevent="handleSubmit" @keydown="form.onKeydown($event)">
-            <form-select :options="options" :form="form" fieldName="lang" :label="$t('settings.language')" />
+            <form-select :options="options" :form="form" fieldName="lang" :label="$t('settings.forms.language.label')"  :help="$t('settings.forms.language.help')" />
+            <form-switch :form="form" fieldName="showTokenAsDot" :label="$t('settings.forms.show_token_as_dot.label')" :help="$t('settings.forms.show_token_as_dot.help')" />
             <form-buttons :isBusy="form.isBusy" :caption="$t('commons.save')" />
         </form>
     </form-wrapper>
@@ -17,22 +18,14 @@
                 success: '',
                 fail: '',
                 form: new Form({
-                    lang: ''
+                    lang: appSettings.lang,
+                    showTokenAsDot: Boolean(Number(appSettings.showTokenAsDot)),
                 }),
                 options: [
                     { text: this.$t('languages.en'), value: 'en' },
                     { text: this.$t('languages.fr'), value: 'fr' },
                 ]
             }
-        },
-
-        async mounted() {
-
-            const { data } = await this.axios.get('/api/settings')
-
-            data.settings.forEach((setting) => {
-                this.form[setting.key] = setting.value
-            })
         },
 
         methods : {

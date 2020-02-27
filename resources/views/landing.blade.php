@@ -22,6 +22,9 @@
     <div id="app">
         <app></app>
     </div>
+    <script type="text/javascript">
+        var appSettings = @json(\Illuminate\Support\Facades\DB::table('options')->pluck('value', 'key')->toArray(), JSON_PRETTY_PRINT)
+    </script>
     <script src="{{ mix('js/app.js') }}"></script>
     <script src="{{ mix('js/locales.js') }}"></script>
 </body>

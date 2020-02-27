@@ -73,11 +73,18 @@ export default {
             "settings": "Settings",
             "account": "Account",
             "password": "Password",
-            "language": "Language",
             "confirm": [],
             "forms": {
                 "edit_settings": "Edit settings",
-                "setting_saved": "Settings saved"
+                "setting_saved": "Settings saved",
+                "language": {
+                    "label": "Language",
+                    "help": "Change the language used to translate the app interface."
+                },
+                "show_token_as_dot": {
+                    "label": "Show generated tokens as dot",
+                    "help": "Replace generated token caracters with *** to ensure confidentiality. Do not affect the copy/paste feature."
+                }
             }
         },
         "twofaccounts": {
@@ -321,11 +328,18 @@ export default {
             "settings": "Réglages",
             "account": "Compte",
             "password": "Mot de passe",
-            "language": "Langue",
             "confirm": [],
             "forms": {
                 "edit_settings": "Modifier les réglages",
-                "setting_saved": "Réglages sauvegardés"
+                "setting_saved": "Réglages sauvegardés",
+                "language": {
+                    "label": "Langue",
+                    "help": "Traduit l'application dans la langue choisie"
+                },
+                "show_token_as_dot": {
+                    "label": "Masquer les codes générés",
+                    "help": "Remplace les caractères des codes générés par des *** pour garantir leur confidentialité. N'affecte pas la fonction copier/coller qui reste utilisable."
+                }
             }
         },
         "twofaccounts": {
