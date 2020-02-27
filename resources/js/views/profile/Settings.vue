@@ -20,8 +20,8 @@
                     lang: 'fr'
                 }),
                 options: [
-                    { text: 'en', value: 'en' },
-                    { text: 'fr', value: 'fr' },
+                    { text: this.$t('languages.en'), value: 'en' },
+                    { text: this.$t('languages.fr'), value: 'fr' },
                 ]
             }
         },

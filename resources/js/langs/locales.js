@@ -54,6 +54,10 @@ export default {
             "Unable_to_decrypt_uri": "Unable to decrypt uri",
             "wrong_current_password": "Wrong current password, nothing has changed"
         },
+        "languages": {
+            "en": "English",
+            "fr": "French"
+        },
         "pagination": {
             "previous": "&laquo; Previous",
             "next": "Next &raquo;"
@@ -296,6 +300,10 @@ export default {
             "something_wrong_with_server": "Il y a un problème avec votre serveur",
             "Unable_to_decrypt_uri": "uri impossible à décoder",
             "wrong_current_password": "Mot de passe actuel érroné, rien n\\a été modifié"
+        },
+        "languages": {
+            "en": "Anglais",
+            "fr": "Français"
         },
         "pagination": {
             "previous": "&laquo; Précédent",
