@@ -45,7 +45,12 @@ Vue.axios.interceptors.response.use(response => response, error => {
     // Otherwise we push to a specific or generic error view
     let routeName = 'genericError'
 
-    if ( error.response.status === 401 ) routeName = 'login'
+    if ( error.response.status === 401 ) {
+        localStorage.removeItem('jwt');
+        localStorage.removeItem('user');
+        routeName = 'login'
+    }
+    
     if ( error.response.status === 404 ) routeName = '404'
 
     router.push({ name: routeName, params: { err: error.response } })
