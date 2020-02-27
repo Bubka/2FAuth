@@ -38,7 +38,8 @@ export default {
             "profile": "Profile",
             "edit": "Edit",
             "delete": "Delete",
-            "save": "Save"
+            "save": "Save",
+            "close": "Close"
         },
         "errors": {
             "resource_not_found": "Resource not found",
@@ -293,7 +294,8 @@ export default {
             "profile": "Profil",
             "edit": "Modifier",
             "delete": "Supprimer",
-            "save": "Enregistrer"
+            "save": "Enregistrer",
+            "close": "Fermer"
         },
         "errors": {
             "resource_not_found": "Ressource introuvable",

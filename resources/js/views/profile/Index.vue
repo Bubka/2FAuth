@@ -17,7 +17,7 @@
         <vue-footer :showButtons="true">
             <!-- Cancel button -->
             <p class="control">
-                <router-link :to="{ name: 'accounts' }" class="button is-dark is-rounded">{{ $t('commons.cancel') }}</router-link>
+                <router-link :to="{ name: 'accounts' }" class="button is-dark is-rounded">{{ $t('commons.close') }}</router-link>
             </p>
         </vue-footer>
     </div>

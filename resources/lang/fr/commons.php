@@ -19,5 +19,6 @@ return [
     'profile' => 'Profil',
     'edit' => 'Modifier',
     'delete' => 'Supprimer',
-    'save' => 'Enregistrer'
+    'save' => 'Enregistrer',
+    'close' => 'Fermer'
 ];
