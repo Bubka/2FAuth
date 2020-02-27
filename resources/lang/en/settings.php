@@ -22,6 +22,7 @@ return [
     ],
     'forms' => [
         'edit_settings' => 'Edit settings',
+        'setting_saved' => 'Settings saved',
     ],
     
 

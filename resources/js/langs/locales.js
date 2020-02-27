@@ -76,7 +76,8 @@ export default {
             "language": "Language",
             "confirm": [],
             "forms": {
-                "edit_settings": "Edit settings"
+                "edit_settings": "Edit settings",
+                "setting_saved": "Settings saved"
             }
         },
         "twofaccounts": {
@@ -323,7 +324,8 @@ export default {
             "language": "Langue",
             "confirm": [],
             "forms": {
-                "edit_settings": "Modifier les réglages"
+                "edit_settings": "Modifier les réglages",
+                "setting_saved": "Réglages sauvegardés"
             }
         },
         "twofaccounts": {

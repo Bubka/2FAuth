@@ -22,6 +22,7 @@ return [
     ],
     'forms' => [
         'edit_settings' => 'Modifier les réglages',
+        'setting_saved' => 'Réglages sauvegardés',
     ],
     
 

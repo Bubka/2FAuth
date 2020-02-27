@@ -17,7 +17,7 @@
                 success: '',
                 fail: '',
                 form: new Form({
-                    lang: 'fr'
+                    lang: ''
                 }),
                 options: [
                     { text: this.$t('languages.en'), value: 'en' },
@@ -26,8 +26,35 @@
             }
         },
 
-        methods : {
+        async mounted() {
 
+            const { data } = await this.axios.get('/api/settings')
+
+            data.settings.forEach((setting) => {
+                this.form[setting.key] = setting.value
+            })
+        },
+
+        methods : {
+            handleSubmit(e) {
+                e.preventDefault()
+
+                this.fail = ''
+                this.success = ''
+
+                this.form.post('/api/settings', {returnError: true})
+                .then(response => {
+                    this.$router.go()
+                })
+                .catch(error => {
+                    if( error.response.status === 400 ) {
+                        this.fail = error.response.data.message
+                    }
+                    else if( error.response.status !== 422 ) {
+                        this.$router.push({ name: 'genericError', params: { err: error.response } });
+                    }
+                });
+            }
         },
     }
 </script>

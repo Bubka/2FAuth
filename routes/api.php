@@ -31,6 +31,9 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::patch('user', 'UserController@update');
     Route::get('user', 'UserController@getDetails');
 
+    Route::get('settings', 'SettingController@index');
+    Route::post('settings', 'SettingController@store');
+
     Route::delete('twofaccounts/batch', 'TwoFAccountController@batchDestroy');
     Route::apiResource('twofaccounts', 'TwoFAccountController');
     Route::post('twofaccounts/otp', 'TwoFAccountController@generateOTP')->name('twofaccounts.generateOTP');
