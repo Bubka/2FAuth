@@ -18,7 +18,7 @@
                 success: '',
                 fail: '',
                 form: new Form({
-                    lang: appSettings.lang,
+                    lang: this.$root.$i18n.locale,
                     showTokenAsDot: Boolean(Number(appSettings.showTokenAsDot)),
                 }),
                 options: [
