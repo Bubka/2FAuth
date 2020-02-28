@@ -42,9 +42,12 @@
                     if(response.data.settings.lang !== this.$root.$i18n.locale) {
                         this.$router.go()
                     }
+                    else {
+                        appSettings = response.data.settings
+                    }
                 })
                 .catch(error => {
-
+                    
                     this.fail = error.response.data.message
                 });
             }
