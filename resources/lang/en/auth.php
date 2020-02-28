@@ -34,7 +34,10 @@ return [
         'request_password_reset' => 'Request a password reset',
         'reset_password' => 'Reset password',
         'new_password' => 'New password',
-        'current_password' => 'Current password',
+        'current_password' => [
+            'label' => 'Current password',
+            'help' => 'Fill in your current password to confirm that it\'s you'
+        ],
         'change_password' => 'Change password',
         'send_password_reset_link' => 'Send password reset link',
         'change_your_password' => 'Change your password',

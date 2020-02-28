@@ -3,7 +3,7 @@
         <form @submit.prevent="handleSubmit" @keydown="form.onKeydown($event)">
             <form-field :form="form" fieldName="password" inputType="password" :label="$t('auth.forms.new_password')" />
             <form-field :form="form" fieldName="password_confirmation" inputType="password" :label="$t('auth.forms.confirm_new_password')" />
-            <form-field :form="form" fieldName="currentPassword" inputType="password" :label="$t('auth.forms.current_password')" />
+            <form-field :form="form" fieldName="currentPassword" inputType="password" :label="$t('auth.forms.current_password.label')" :help="$t('auth.forms.current_password.help')" :hasOffset="true" />
             <form-buttons :isBusy="form.isBusy" :caption="$t('auth.forms.change_password')" />
         </form>
     </form-wrapper>

@@ -33,7 +33,10 @@ return [
         'request_password_reset' => 'Réinitialiser le',
         'reset_password' => 'Mot de passe oublié',
         'new_password' => 'Nouveau mot de passe',
-        'current_password' => 'Mot de passe actuel',
+        'current_password' => [
+            'label' => 'Mot de passe actuel',
+            'help' => 'Indiquez votre mot de passe actuel pour confirmer qu\'il s\'agit bien de vous'
+        ],
         'change_password' => 'Modifier le mot de passe',
         'send_password_reset_link' => 'Envoyer',
         'change_your_password' => 'Modifier votre mot de passe',

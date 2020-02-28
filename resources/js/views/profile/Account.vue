@@ -3,7 +3,7 @@
         <form @submit.prevent="handleSubmit" @keydown="form.onKeydown($event)">
             <form-field :form="form" fieldName="name" :label="$t('auth.forms.name')" autofocus />
             <form-field :form="form" fieldName="email" inputType="email" :label="$t('auth.forms.email')" />
-            <form-field :form="form" fieldName="password" inputType="password" :label="$t('auth.forms.current_password')" />
+            <form-field :form="form" fieldName="password" inputType="password" :label="$t('auth.forms.current_password.label')" :help="$t('auth.forms.current_password.help')" :hasOffset="true" />
             <form-buttons :isBusy="form.isBusy" :caption="$t('commons.update')" />
         </form>
     </form-wrapper>

@@ -1,5 +1,5 @@
 <template>
-    <div class="field">
+    <div class="field" :class="{ 'with-offset' : hasOffset }">
         <label class="label" v-html="label"></label>
         <div class="control">
             <input :id="fieldName" :type="inputType" class="input" v-model="form[fieldName]" :placeholder="placeholder" v-bind="$attrs" />
@@ -51,6 +51,11 @@
                 type: String,
                 default: ''
             },
+
+            hasOffset: {
+                type: Boolean,
+                default: false
+            }
         }
     }
 </script>

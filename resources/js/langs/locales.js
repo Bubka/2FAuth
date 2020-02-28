@@ -22,7 +22,10 @@ export default {
                 "request_password_reset": "Request a password reset",
                 "reset_password": "Reset password",
                 "new_password": "New password",
-                "current_password": "Current password",
+                "current_password": {
+                    "label": "Current password",
+                    "help": "Fill in your current password to confirm that it's you"
+                },
                 "change_password": "Change password",
                 "send_password_reset_link": "Send password reset link",
                 "change_your_password": "Change your password",
@@ -278,7 +281,10 @@ export default {
                 "request_password_reset": "Réinitialiser le",
                 "reset_password": "Mot de passe oublié",
                 "new_password": "Nouveau mot de passe",
-                "current_password": "Mot de passe actuel",
+                "current_password": {
+                    "label": "Mot de passe actuel",
+                    "help": "Indiquez votre mot de passe actuel pour confirmer qu'il s'agit bien de vous"
+                },
                 "change_password": "Modifier le mot de passe",
                 "send_password_reset_link": "Envoyer",
                 "change_your_password": "Modifier votre mot de passe",
