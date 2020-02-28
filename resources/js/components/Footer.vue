@@ -33,13 +33,12 @@
 
                     await this.axios.get('api/logout')
 
-                    localStorage.removeItem('jwt');
-                    localStorage.removeItem('user');
+                    localStorage.removeItem('jwt')
+                    localStorage.removeItem('user')
 
-                    delete this.axios.defaults.headers.common['Authorization'];
+                    delete this.axios.defaults.headers.common['Authorization']
 
-                    this.$router.go('/login');
-
+                    this.$router.push({ name: 'login' })
                 }
             },
 
