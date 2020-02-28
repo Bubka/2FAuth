@@ -4,8 +4,8 @@
             <h1 class="title" v-html="title" v-if="title"></h1>
             <slot />
             <p v-if="showTag">
-                <div class="notification is-danger" v-if="fail" v-html="fail" />
-                <div class="notification is-success" v-if="success" v-html="success" />
+                <notification :message="fail" type="is-danger" v-if="fail" />
+                <notification :message="success" type="is-success" v-if="success" />
             </p>
         </div>
     </div>    

@@ -6,6 +6,7 @@ import FormField from './FormField'
 import FormSelect from './FormSelect'
 import FormSwitch from './FormSwitch'
 import FormButtons from './FormButtons'
+import Notification from './Notification'
 import VueFooter from './Footer'
 
 // Components that are registered globaly.
@@ -17,6 +18,7 @@ import VueFooter from './Footer'
     FormSelect,
     FormSwitch,
     FormButtons,
+    Notification,
     VueFooter,
 ].forEach(Component => {
 	Vue.component(Component.name, Component)
