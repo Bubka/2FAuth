@@ -25,11 +25,26 @@ class UserTest extends TestCase
 
 
     /**
+     * test Existing user count via API
+     *
+     * @test
+     */
+    public function testExistingUserCount()
+    {
+        $response = $this->json('POST', '/api/checkuser')
+            ->assertStatus(200)
+            ->assertJson([
+                'userCount' => '1',
+            ]);
+    }
+
+
+    /**
      * test creation of another user via API
      *
      * @test
      */
-    public function testMoreThanOneUserCreation()
+    public function testUserCreationWithAnExistingUser()
     {
         $response = $this->json('POST', '/api/register', [
             'name' => 'testCreate',
@@ -49,6 +64,9 @@ class UserTest extends TestCase
      */
     public function testUserCreationWithMissingValues()
     {
+        // we delete the existing user
+        User::destroy(1);
+
         $response = $this->json('POST', '/api/register', [
             'name' => '',
             'email' => '',
@@ -56,7 +74,7 @@ class UserTest extends TestCase
             'password_confirmation' => '',
         ]);
 
-        $response->assertStatus(400);
+        $response->assertStatus(422);
     }
 
 
@@ -67,6 +85,9 @@ class UserTest extends TestCase
      */
     public function testUserCreationWithInvalidData()
     {
+        // we delete the existing user
+        User::destroy(1);
+
         $response = $this->json('POST', '/api/register', [
             'name' => 'testInvalid',
             'email' => 'email',
@@ -74,7 +95,7 @@ class UserTest extends TestCase
             'password_confirmation' => 'tset',
         ]);
 
-        $response->assertStatus(400);
+        $response->assertStatus(422);
     }
 
 
@@ -170,6 +191,92 @@ class UserTest extends TestCase
             ->json('GET', '/api/user')
             ->assertStatus(200)
             ->assertJsonStructure(['name', 'email']);
+    }
+
+
+    /**
+     * test User update with wrong current password via API
+     *
+     * @test
+     */
+    public function testUserUpdateWithWrongCurrentPassword()
+    {
+        $user = User::find(1);
+
+        $response = $this->actingAs($user, 'api')
+            ->json('PATCH', '/api/user', [
+                'name' => 'userUpdated',
+                'email' => 'userUpdated@example.org',
+                'password' => 'wrongPassword',
+            ]);
+
+        $response->assertStatus(400)
+            ->assertJsonStructure(['message']);
+    }
+
+
+    /**
+     * test User update via API
+     *
+     * @test
+     */
+    public function testUserUpdate()
+    {
+        $user = User::find(1);
+
+        $response = $this->actingAs($user, 'api')
+            ->json('PATCH', '/api/user', [
+                'name' => 'userUpdated',
+                'email' => 'userUpdated@example.org',
+                'password' => 'password',
+            ]);
+
+        $response->assertStatus(200)
+            ->assertJsonFragment([
+                'username' => 'userUpdated'
+            ]);
+    }
+
+
+    /**
+     * test User password update with wrong current password via API
+     *
+     * @test
+     */
+    public function testUserPasswordUpdateWithWrongCurrentPassword()
+    {
+        $user = User::find(1);
+        
+        $response = $this->actingAs($user, 'api')
+            ->json('PATCH', '/api/password', [
+                'currentPassword' => 'wrongPassword',
+                'password' => 'passwordUpdated',
+                'password_confirmation' => 'passwordUpdated',
+            ]);
+
+        $response->assertStatus(400)
+            ->assertJsonStructure(['message']);
+    }
+
+
+    /**
+     * test User password update via API
+     *
+     * @test
+     */
+    public function testUserPasswordUpdate()
+    {
+        $user = User::find(1);
+        
+        $response = $this->actingAs($user, 'api')
+            ->json('PATCH', '/api/password', [
+                'currentPassword' => 'password',
+                'password' => 'passwordUpdated',
+                'password_confirmation' => 'passwordUpdated',
+            ]);
+
+        $response->assertStatus(200)
+            ->assertJsonStructure(['message']);
     }
 
 
