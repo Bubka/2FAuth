@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\Profile;
 
 use App\User;
 use Tests\TestCase;
@@ -30,7 +30,7 @@ class SettingTest extends TestCase
     public function testSettingsStorage()
     {
         $response = $this->actingAs($this->user, 'api')
-            ->json('POST', '/api/settings', [
+            ->json('POST', '/api/profile/settings', [
                     'setting_1' => 'value_1',
                     'setting_2' => 'value_2',
                 ])
@@ -56,7 +56,7 @@ class SettingTest extends TestCase
         option(['setting_2' => 'value_2']);
 
         $response = $this->actingAs($this->user, 'api')
-            ->json('GET', '/api/settings')
+            ->json('GET', '/api/profile/settings')
             ->assertStatus(200)
             ->assertJson([
                 'settings' => [
