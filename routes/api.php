@@ -27,12 +27,12 @@ Route::group(['middleware' => 'guest:api'], function () {
 Route::group(['middleware' => 'auth:api'], function() {
 
     Route::post('logout', 'UserController@logout');
-    Route::patch('password', 'UserController@updatePassword');
-    Route::patch('user', 'UserController@update');
-    Route::get('user', 'UserController@getDetails');
 
-    Route::get('settings', 'SettingController@index');
-    Route::post('settings', 'SettingController@store');
+    Route::get('profile/account', 'Profile\AccountController@show');
+    Route::patch('profile/account', 'Profile\AccountController@update');
+    Route::patch('profile/password', 'Profile\PasswordController@update');
+    Route::get('profile/settings', 'Profile\SettingController@index');
+    Route::post('profile/settings', 'Profile\SettingController@store');
 
     Route::delete('twofaccounts/batch', 'TwoFAccountController@batchDestroy');
     Route::apiResource('twofaccounts', 'TwoFAccountController');

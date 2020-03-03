@@ -27,7 +27,7 @@
         },
 
         async mounted() {
-            const { data } = await this.form.get('/api/user')
+            const { data } = await this.form.get('/api/profile/account')
 
             this.form.fill(data)
         },
@@ -39,7 +39,7 @@
                 this.fail = ''
                 this.success = ''
 
-                this.form.patch('/api/user', {returnError: true})
+                this.form.patch('/api/profile/account', {returnError: true})
                 .then(response => {
 
                     this.success = response.data.message

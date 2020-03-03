@@ -34,7 +34,7 @@
                 this.fail = ''
                 this.success = ''
 
-                this.form.post('/api/settings', {returnError: true})
+                this.form.post('/api/profile/settings', {returnError: true})
                 .then(response => {
 
                     this.success = response.data.message

@@ -33,7 +33,7 @@
                 this.fail = ''
                 this.success = ''
 
-                this.form.patch('/api/password', {returnError: true})
+                this.form.patch('/api/profile/password', {returnError: true})
                 .then(response => {
 
                     this.success = response.data.message
