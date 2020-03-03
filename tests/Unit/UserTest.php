@@ -6,6 +6,7 @@ use App\User;
 use Tests\TestCase;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class UserTest extends TestCase
 {
@@ -277,6 +278,10 @@ class UserTest extends TestCase
 
         $response->assertStatus(200)
             ->assertJsonStructure(['message']);
+
+        $user->refresh();
+
+        $this->assertTrue(Hash::check('passwordUpdated', $user->password));
     }
 
 

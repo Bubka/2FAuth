@@ -127,11 +127,11 @@ class TwoFAccountTest extends TestCase
 
 
     /**
-     * test TOTP generation via API
+     * test TOTP generation for a given existing account via API
      *
      * @test
      */
-    public function testTOTPgeneration()
+    public function testTOTPgenerationWithProvidedAccountId()
     {
         $twofaccount = factory(TwoFAccount::class)->create([
             'service' => 'testTOTP',
@@ -149,11 +149,29 @@ class TwoFAccountTest extends TestCase
 
 
     /**
-     * test TwoFAccount update via API
+     * test TOTP generation as preview via API
      *
      * @test
      */
-    public function testTwoFAccountUpdate()
+    public function testTOTPgenerationPreview()
+    {
+        $uri = 'otpauth://totp/test@test.com?secret=A4GRFHVVRBGY7UIW&issuer=test';
+
+        $response = $this->actingAs($this->user, 'api')
+            ->json('POST', '/api/twofaccounts/otp', ['data' => $uri])
+            ->assertStatus(200)
+            ->assertJsonStructure([
+                'otp',
+            ]);
+    }
+
+
+    /**
+     * test TwoFAccount TOTP update via API
+     *
+     * @test
+     */
+    public function testTwoFAccountTOTPUpdate()
     {
         $twofaccount = factory(TwoFAccount::class)->create();
 
@@ -175,6 +193,37 @@ class TwoFAccountTest extends TestCase
 
 
     /**
+     * test TwoFAccount HOTP update via API
+     *
+     * @test
+     */
+    public function testTwoFAccountHOTPUpdate()
+    {
+        $twofaccount = factory(TwoFAccount::class)->create([
+            'service' => 'test.com',
+            'account' => 'test',
+            'uri' => 'otpauth://hotp/service?counter=1&secret=A4GRFHVVRBGY7UIW'
+        ]);
+
+        $response = $this->actingAs($this->user, 'api')
+            ->json('PUT', '/api/twofaccounts/' . $twofaccount->id, [
+                    'service' => 'testUpdate.com',
+                    'account' => 'testUpdate',
+                    'icon' => 'testUpdate.png',
+                    'counter' => '5'
+                ])
+            ->assertStatus(200)
+            ->assertJson([
+                'id' => 1,
+                'service' => 'testUpdate.com',
+                'account' => 'testUpdate',
+                'uri' => 'otpauth://hotp/service?counter=5&secret=A4GRFHVVRBGY7UIW',
+                'icon' => 'testUpdate.png',
+            ]);
+    }
+
+
+    /**
      * test TwoFAccount update via API
      *
      * @test
@@ -187,7 +236,8 @@ class TwoFAccountTest extends TestCase
 
         $response = $this->actingAs($this->user, 'api')
             ->json('PUT', '/api/twofaccounts/' . $id, [
-                    'service' => 'testUpdate'
+                    'service' => 'testUpdate',
+                    'icon' => 'name.png'
                 ])
             ->assertStatus(404);
     }
@@ -232,6 +282,26 @@ class TwoFAccountTest extends TestCase
 
         $response = $this->actingAs($this->user, 'api')
             ->json('DELETE', '/api/twofaccounts/' . $twofaccount->id)
+            ->assertStatus(204);
+    }
+
+
+    /**
+     * test TwoFAccounts batch deletion via API
+     *
+     * @test
+     */
+    public function testTwoFAccountBatchDestroy()
+    {
+        $twofaccount = factory(TwoFAccount::class)->create();
+        $twofaccount = factory(TwoFAccount::class)->create();
+        $twofaccount = factory(TwoFAccount::class)->create();
+
+        $ids = \Illuminate\Support\Facades\DB::table('twofaccounts')->value('id');
+
+        $response = $this->actingAs($this->user, 'api')
+            ->json('DELETE', '/api/twofaccounts/batch', [
+                'data' => $ids])
             ->assertStatus(204);
     }
 
