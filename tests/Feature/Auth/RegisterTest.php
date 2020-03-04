@@ -1,14 +1,11 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\Auth;
 
 use App\User;
 use Tests\TestCase;
-use Illuminate\Auth\Authenticatable;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 
-class UserTest extends TestCase
+class RegisterTest extends TestCase
 {
     /** @var \App\User */
     protected $user;
@@ -97,85 +94,6 @@ class UserTest extends TestCase
         ]);
 
         $response->assertStatus(422);
-    }
-
-
-    /**
-     * test User login via API
-     *
-     * @test
-     */
-    public function testUserLogin()
-    {
-
-        $response = $this->json('POST', '/api/login', [
-            'email' => $this->user->email,
-            'password' => 'password'
-        ]);
-
-        $response->assertStatus(200)
-            ->assertJsonStructure([
-                'message' => ['token']
-            ]);
-    }
-
-
-    /**
-     * test User login with missing values via API
-     *
-     * @test
-     */
-    public function testUserLoginWithMissingValues()
-    {
-        $response = $this->json('POST', '/api/login', [
-            'email' => '',
-            'password' => ''
-        ]);
-
-        $response->assertStatus(422);
-    }
-
-
-    /**
-     * test User login with invalid credentials via API
-     *
-     * @test
-     */
-    public function testUserLoginWithInvalidCredential()
-    {
-        $response = $this->json('POST', '/api/login', [
-            'email' => $this->user->email,
-            'password' => 'badPassword'
-        ]);
-
-        $response->assertStatus(401)
-            ->assertJson([
-                'message' => 'unauthorised'
-            ]);
-    }
-
-
-    /**
-     * test User logout via API
-     *
-     * @test
-     */
-    public function testUserLogout()
-    {
-        $credentials = [
-            'email' => $this->user->email,
-            'password' => 'password'
-        ];
-
-        Auth::attempt($credentials);
-        $token = Auth::user()->createToken('testToken')->accessToken;
-        $headers = ['Authorization' => "Bearer $token"];
-
-        $response = $this->json('POST', '/api/logout', [], $headers)
-            ->assertStatus(200)
-            ->assertJson([
-                'message' => 'signed out',
-            ]);
     }
 
 
