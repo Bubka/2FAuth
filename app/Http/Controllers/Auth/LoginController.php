@@ -127,7 +127,8 @@ class LoginController extends Controller
      */
     public function logout(Request $request)
     {
-        $this->guard()->logout();
+        $accessToken = Auth::user()->token();
+        $accessToken->revoke();
 
         return response()->json(['message' => 'signed out'], Response::HTTP_OK);
     }
