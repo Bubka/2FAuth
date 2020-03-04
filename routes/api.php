@@ -16,9 +16,8 @@ use Illuminate\Http\Request;
 Route::group(['middleware' => 'guest:api'], function () {
 
     Route::post('login', 'Auth\LoginController@login');
-    
-    Route::post('checkuser', 'UserController@checkUser');
-    Route::post('register', 'UserController@register');
+    Route::post('checkuser', 'Auth\RegisterController@checkUser');
+    Route::post('register', 'Auth\RegisterController@register');
 
     Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail');
     Route::post('password/reset', 'Auth\ResetPasswordController@reset');

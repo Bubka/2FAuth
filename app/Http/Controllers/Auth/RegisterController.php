@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 
@@ -22,22 +25,46 @@ class RegisterController extends Controller
     */
 
     use RegistersUsers;
-
+    
     /**
-     * Where to redirect users after registration.
-     *
-     * @var string
+     * check if a user exists
+     * @param  Request $request [description]
+     * @return json
      */
-    protected $redirectTo = '/home';
-
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    public function checkUser()
     {
-        $this->middleware('guest');
+
+        $count = DB::table('users')->count();
+
+        return response()->json(['userCount' => $count], 200);
+    }
+
+    /**
+     * Handle a registration request for the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function register(Request $request)
+    {
+        // check if a user already exists
+        if( DB::table('users')->count() > 0 ) {
+            return response()->json(['message' => __('errors.already_one_user_registered')], 400);
+        }
+
+        $this->validator($request->all())->validate();
+
+        event(new Registered($user = $this->create($request->all())));
+
+        //$this->guard()->login($user);
+
+        $success['token'] = $user->createToken('MyApp')->accessToken;
+        $success['name'] = $user->name;
+
+        return response()->json(['message' => $success]);
+
+        // return $this->registered($request, $user)
+        //                 ?: redirect($this->redirectPath());
     }
 
     /**
