@@ -11,47 +11,6 @@ use Illuminate\Support\Facades\Auth;
 class UserController extends Controller
 {
 
-    /**
-     * log a user in
-     * @return [type] [description]
-     */
-    public function login(Request $request)
-    {
-
-        $this->validate($request, [
-            'email' => 'required|exists:users,email',
-            'password' => 'required',
-        ]);
-
-        $credentials = [
-            'email' => request('email'),
-            'password' => request('password')
-        ];
-
-        if (Auth::attempt($credentials)) {
-            $success['token'] = Auth::user()->createToken('MyApp')->accessToken;
-            $success['name'] = Auth::user()->name;
-
-            return response()->json(['message' => $success], 200);
-        }
-
-        return response()->json(['message' => 'unauthorised'], 401);
-    }
-
-
-    /**
-     * log out current user
-     * @param  Request $request
-     * @return json
-     */
-    public function logout()
-    {
-        $accessToken = Auth::user()->token();
-        $accessToken->revoke();
-
-        return response()->json(['message' => 'signed out']);
-    }
-
 
     /**
      * check if a user exists

@@ -15,7 +15,8 @@ use Illuminate\Http\Request;
 
 Route::group(['middleware' => 'guest:api'], function () {
 
-    Route::post('login', 'UserController@login');
+    Route::post('login', 'Auth\LoginController@login');
+    
     Route::post('checkuser', 'UserController@checkUser');
     Route::post('register', 'UserController@register');
 
@@ -26,7 +27,7 @@ Route::group(['middleware' => 'guest:api'], function () {
 
 Route::group(['middleware' => 'auth:api'], function() {
 
-    Route::post('logout', 'UserController@logout');
+    Route::post('logout', 'Auth\LoginController@logout');
 
     Route::get('profile/account', 'Profile\AccountController@show');
     Route::patch('profile/account', 'Profile\AccountController@update');

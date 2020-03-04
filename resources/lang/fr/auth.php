@@ -17,6 +17,7 @@ return [
     'sign_in' => 'Se connecter',
     'register' => 'Créer un compte',
     'hello' => 'Hi {username} !',
+    'throttle' => 'Trop de tentatives de connexion. Veuillez réessayer dans :seconds secondes.',
     'confirm' => [
         'logout' => 'Etes-vous sûrs de vouloir vous déconnecter ?',
     ],

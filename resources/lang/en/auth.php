@@ -17,6 +17,7 @@ return [
     'sign_in' => 'Sign in',
     'register' => 'Register',
     'hello' => 'Hi {username} !',
+    'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
     'confirm' => [
         'logout' => 'Are you sure you want to log out?',
     ],
@@ -45,6 +46,5 @@ return [
         'edit_account' => 'Edit account',
         'profile_saved' => 'Profile successfully updated!'
     ],
-    
 
 ];
