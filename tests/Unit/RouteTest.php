@@ -14,9 +14,10 @@ class RouteTest extends TestCase
      */
     public function testLandingViewIsReturned()
     {
-        $response = $this->get('/');
+        $response = $this->get(route('landing', ['any' => '']));
 
-        $response->assertViewIs('landing');
+        $response->assertSuccessful()
+            ->assertViewIs('landing');
     }
 
 }

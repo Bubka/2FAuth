@@ -15,6 +15,6 @@ class SinglePageController extends Controller
     {
         $appSettings = \Illuminate\Support\Facades\DB::table('options')->pluck('value', 'key')->toJson();
 
-        return view("landing")->with('appSettings', $appSettings);;
+        return view('landing')->with('appSettings', $appSettings);
     }
 }

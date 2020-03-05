@@ -16,4 +16,4 @@
 // });
 
 // Route::get('twofaccount/{TwoFAccount}', 'TwoFAccountController@show');
-Route::get('/{any}', 'SinglePageController@index')->where('any', '.*');
+Route::get('/{any}', 'SinglePageController@index')->where('any', '.*')->name('landing');
