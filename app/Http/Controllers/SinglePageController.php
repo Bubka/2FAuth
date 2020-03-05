@@ -13,6 +13,8 @@ class SinglePageController extends Controller
      */
     public function index()
     {
-        return view("landing");
+        $appSettings = \Illuminate\Support\Facades\DB::table('options')->pluck('value', 'key')->toJson();
+
+        return view("landing")->with('appSettings', $appSettings);;
     }
 }
