@@ -8,6 +8,10 @@ before_script:
   - composer self-update
   - composer install --no-interaction
   - php artisan key:generate
+  - nvm install node
+  - npm install npm@latest -g
+  - npm install
 
 script:
-- vendor/bin/phpunit
+  - npm run dev
+  - vendor/bin/phpunit
