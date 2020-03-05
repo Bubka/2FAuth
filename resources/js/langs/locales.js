@@ -6,6 +6,7 @@ export default {
             "register": "Register",
             "hello": "Hi {username} !",
             "throttle": "Too many login attempts. Please try again in {seconds} seconds.",
+            "already_authenticated": "Already authenticated",
             "confirm": {
                 "logout": "Are you sure you want to log out?"
             },
@@ -267,6 +268,7 @@ export default {
             "register": "Créer un compte",
             "hello": "Hi {username} !",
             "throttle": "Trop de tentatives de connexion. Veuillez réessayer dans {seconds} secondes.",
+            "already_authenticated": "Déjà authentifié",
             "confirm": {
                 "logout": "Etes-vous sûrs de vouloir vous déconnecter ?"
             },

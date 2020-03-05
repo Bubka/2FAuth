@@ -47,6 +47,32 @@ class LoginTest extends TestCase
 
 
     /**
+     * test User login via API
+     *
+     * @test
+     */
+    public function testUserLoginAlreadyAuthenticated()
+    {
+
+        $response = $this->json('POST', '/api/login', [
+            'email' => $this->user->email,
+            'password' => 'password'
+        ]);
+
+        $response = $this->actingAs($this->user, 'api')
+            ->json('POST', '/api/login', [
+                'email' => $this->user->email,
+                'password' => 'password'
+            ]);
+
+        $response->assertStatus(400)
+            ->assertJson([
+                'message' => __('auth.already_authenticated')
+            ]);
+    }
+
+
+    /**
      * test User login with missing values via API
      *
      * @test

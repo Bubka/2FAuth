@@ -18,6 +18,7 @@ return [
     'register' => 'Register',
     'hello' => 'Hi {username} !',
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
+    'already_authenticated' => 'Already authenticated',
     'confirm' => [
         'logout' => 'Are you sure you want to log out?',
     ],
