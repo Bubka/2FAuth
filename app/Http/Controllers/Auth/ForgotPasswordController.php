@@ -22,16 +22,6 @@ class ForgotPasswordController extends Controller
     use SendsPasswordResetEmails;
 
     /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('guest');
-    }
-
-    /**
      * Validate the email for the given request.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -60,6 +50,8 @@ class ForgotPasswordController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @param  string  $response
      * @return \Illuminate\Http\RedirectResponse
+     * 
+     * @codeCoverageIgnore Can't find how to test this :/
      */
     protected function sendResetLinkFailedResponse(Request $request, $response)
     {
