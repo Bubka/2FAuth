@@ -71,8 +71,6 @@ class ForgotPasswordTest extends TestCase
             'remember_token' => \Illuminate\Support\Str::random(10),
         ]);
 
-        //$this->expectsNotification($this->user, ResetPassword::class);
-
         $response = $this->json('POST', '/api/password/email', [
             'email' => $this->user->email
         ]);
@@ -82,9 +80,9 @@ class ForgotPasswordTest extends TestCase
         $token = \Illuminate\Support\Facades\DB::table('password_resets')->first();
         $this->assertNotNull($token);
 
-        // Notification::assertSentTo($this->user, ResetPassword::class, function ($notification, $channels) use ($token) {
-        //     return Hash::check($notification->token, $token->token) === true;
-        // });
+        Notification::assertSentTo($this->user, ResetPassword::class, function ($notification, $channels) use ($token) {
+            return Hash::check($notification->token, $token->token) === true;
+        });
     }
 
 }

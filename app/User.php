@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\Notifications\ResetPassword;
+use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
