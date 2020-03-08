@@ -84,7 +84,11 @@ class LoginTest extends TestCase
             'password' => ''
         ]);
 
-        $response->assertStatus(422);
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors([
+                'email',
+                'password'
+            ]);
     }
 
 

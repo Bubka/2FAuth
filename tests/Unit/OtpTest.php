@@ -2,13 +2,19 @@
 
 namespace Tests\Unit;
 
+use App\User;
 use Tests\TestCase;
 use App\Classes\OTP;
 use OTPHP\TOTP;
 use OTPHP\HOTP;
+use App\TwoFAccount;
 
 class OtpTest extends TestCase
 {
+
+    /** @var \App\User */
+    protected $user;
+
 
     /**
      * @test
@@ -16,6 +22,8 @@ class OtpTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
+
+        $this->user = factory(User::class)->create();
     }
 
 
@@ -36,11 +44,11 @@ class OtpTest extends TestCase
 
 
     /**
-     * test HOTP generation (with $isPreview = false to prevent db update)
+     * test HOTP generation for Preview
      *
      * @test
      */
-    public function testHOTPGeneration()
+    public function testHOTPGenerationforPreview()
     {
         $uri = 'otpauth://hotp/test:test@test.com?counter=16&secret=A4GRFHVIRBGY7UIW';
 
@@ -49,6 +57,31 @@ class OtpTest extends TestCase
         $this->assertArrayHasKey('otp', $result);
         $this->assertArrayHasKey('counter', $result);
         $this->assertArrayHasKey('nextUri', $result);
+    }
+
+
+    /**
+     * test HOTP generation for existing HOTP account
+     *
+     * @test
+     */
+    public function testHOTPGenerationForExistingAccount()
+    {
+        $response = $this->actingAs($this->user, 'api')
+            ->json('POST', '/api/twofaccounts', [
+                    'service' => 'hotp',
+                    'account' => 'test.com',
+                    'uri' => 'otpauth://hotp/test@test.com?counter=1&secret=A4GRFHZVRBGY7UIW',
+                    'icon' => 'test.png',
+                ]);
+
+        $testedAccount = TwoFAccount::where('service', 'hotp')->first();
+
+        $result = OTP::generate($testedAccount->uri, false);
+
+        $testedAccount->refresh();
+
+        $this->assertEquals($testedAccount->uri, 'otpauth://hotp/test@test.com?counter=2&secret=A4GRFHZVRBGY7UIW');
     }
 
 

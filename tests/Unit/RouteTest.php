@@ -20,4 +20,16 @@ class RouteTest extends TestCase
             ->assertViewIs('landing');
     }
 
+    /**
+     * test return main web view
+     *
+     * @test
+     */
+    public function testExceptionHandlerWithWebRoute()
+    {
+        $response = $this->post('/');
+
+        $response->assertStatus(405);
+    }
+
 }

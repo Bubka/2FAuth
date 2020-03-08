@@ -54,6 +54,8 @@ class TwoFAccount extends Model
      *
      * @param  string  $value
      * @return string
+     *
+     * @codeCoverageIgnore
      */
     public function getIconAttribute($value)
     {
@@ -73,6 +75,8 @@ class TwoFAccount extends Model
      *
      * @param  string  $value
      * @return string
+     * 
+     * @codeCoverageIgnore
      */
     public function setIconAttribute($value)
     {

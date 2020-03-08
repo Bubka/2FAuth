@@ -11,6 +11,8 @@ class BroadcastServiceProvider extends ServiceProvider
      * Bootstrap any application services.
      *
      * @return void
+     *
+     * @codeCoverageIgnore unused, see config/app::Providers
      */
     public function boot()
     {

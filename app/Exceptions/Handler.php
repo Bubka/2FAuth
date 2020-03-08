@@ -101,10 +101,10 @@ class Handler extends ExceptionHandler
      */
     private function customApiResponse($exception, $debug)
     {
+        $statusCode = 500;
+
         if (method_exists($exception, 'getStatusCode')) {
             $statusCode = $exception->getStatusCode();
-        } else {
-            $statusCode = 500;
         }
 
         $response = [];
