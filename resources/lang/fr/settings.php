@@ -16,6 +16,7 @@ return [
     'settings' => 'Réglages',
     'account' => 'Compte',
     'password' => 'Mot de passe',
+    'options' => 'Options',
     'confirm' => [
 
     ],

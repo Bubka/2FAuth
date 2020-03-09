@@ -33,7 +33,7 @@ return [
         'already_register' => 'Déjà enregistré ?',
         'password_do_not_match' => 'Le mot de passe ne correspond pas',
         'forgot_your_password' => 'Mot de passe oublié ?',
-        'request_password_reset' => 'Réinitialiser le',
+        'request_password_reset' => 'Réinitialiser le mot de passe',
         'reset_password' => 'Mot de passe oublié',
         'new_password' => 'Nouveau mot de passe',
         'current_password' => [

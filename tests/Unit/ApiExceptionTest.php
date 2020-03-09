@@ -35,7 +35,7 @@ class ApiExceptionTest extends TestCase
      */
     public function test_HTTP_UNAUTHORIZED()
     {
-        $response = $this->json('GET', '/api/profile/settings')
+        $response = $this->json('GET', '/api/settings/options')
             ->assertStatus(401)
             ->assertJson([
                 'message' => 'Unauthorized'
@@ -78,7 +78,7 @@ class ApiExceptionTest extends TestCase
     public function test_HTTP_METHOD_NOT_ALLOWED()
     {
         $response = $this->actingAs($this->user, 'api')
-            ->json('PATCH', '/api/profile/settings')
+            ->json('PATCH', '/api/settings/options')
             ->assertStatus(405)
             ->assertJson([
                 'message' => 'Method Not Allowed'

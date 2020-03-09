@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Profile;
+namespace Tests\Unit\Settings;
 
 use App\User;
 use Tests\TestCase;
@@ -32,7 +32,7 @@ class AccountTest extends TestCase
         $user = User::find(1);
 
         $response = $this->actingAs($user, 'api')
-            ->json('GET', '/api/profile/account')
+            ->json('GET', '/api/settings/account')
             ->assertStatus(200)
             ->assertJsonStructure(['name', 'email']);
     }
@@ -48,7 +48,7 @@ class AccountTest extends TestCase
         $user = User::find(1);
 
         $response = $this->actingAs($user, 'api')
-            ->json('PATCH', '/api/profile/account', [
+            ->json('PATCH', '/api/settings/account', [
                 'name' => 'userUpdated',
                 'email' => 'userUpdated@example.org',
                 'password' => 'wrongPassword',
@@ -69,7 +69,7 @@ class AccountTest extends TestCase
         $user = User::find(1);
 
         $response = $this->actingAs($user, 'api')
-            ->json('PATCH', '/api/profile/account', [
+            ->json('PATCH', '/api/settings/account', [
                 'name' => 'userUpdated',
                 'email' => 'userUpdated@example.org',
                 'password' => 'password',

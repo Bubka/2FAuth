@@ -28,11 +28,11 @@ Route::group(['middleware' => 'auth:api'], function() {
 
     Route::post('logout', 'Auth\LoginController@logout');
 
-    Route::get('profile/account', 'Profile\AccountController@show');
-    Route::patch('profile/account', 'Profile\AccountController@update');
-    Route::patch('profile/password', 'Profile\PasswordController@update');
-    Route::get('profile/settings', 'Profile\SettingController@index');
-    Route::post('profile/settings', 'Profile\SettingController@store');
+    Route::get('settings/account', 'Settings\AccountController@show');
+    Route::patch('settings/account', 'Settings\AccountController@update');
+    Route::patch('settings/password', 'Settings\PasswordController@update');
+    Route::get('settings/options', 'Settings\OptionController@index');
+    Route::post('settings/options', 'Settings\OptionController@store');
 
     Route::delete('twofaccounts/batch', 'TwoFAccountController@batchDestroy');
     Route::apiResource('twofaccounts', 'TwoFAccountController');

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Profile;
+namespace Tests\Unit\Settings;
 
 use App\User;
 use Tests\TestCase;
@@ -31,7 +31,7 @@ class PasswordTest extends TestCase
     public function testPasswordUpdateWithWrongCurrentPassword()
     {        
         $response = $this->actingAs($this->user, 'api')
-            ->json('PATCH', '/api/profile/password', [
+            ->json('PATCH', '/api/settings/password', [
                 'currentPassword' => 'wrongPassword',
                 'password' => 'passwordUpdated',
                 'password_confirmation' => 'passwordUpdated',
@@ -50,7 +50,7 @@ class PasswordTest extends TestCase
     public function testPasswordUpdate()
     {
         $response = $this->actingAs($this->user, 'api')
-            ->json('PATCH', '/api/profile/password', [
+            ->json('PATCH', '/api/settings/password', [
                 'currentPassword' => 'password',
                 'password' => 'passwordUpdated',
                 'password_confirmation' => 'passwordUpdated',

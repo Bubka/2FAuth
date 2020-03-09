@@ -8,7 +8,7 @@
             </div>
         </div>
         <div class="content has-text-centered">
-            <router-link :to="{ name: 'profile' }" class="has-text-grey">{{ $t('commons.profile') }}</router-link> - <a class="has-text-grey" @click="logout">{{ $t('auth.sign_out') }}</a>
+            <router-link :to="{ name: 'settings' }" class="has-text-grey">{{ $t('settings.settings') }}</router-link> - <a class="has-text-grey" @click="logout">{{ $t('auth.sign_out') }}</a>
         </div>
     </footer>
 </template>

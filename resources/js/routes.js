@@ -10,7 +10,7 @@ import Login            from './views/auth/Login'
 import Register         from './views/auth/Register'
 import PasswordRequest  from './views/auth/password/Request'
 import PasswordReset    from './views/auth/password/Reset'
-import Profile          from './views/profile/Index'
+import Settings          from './views/Settings/Index'
 import Errors           from './views/Error'
 
 const router = new Router({
@@ -19,7 +19,7 @@ const router = new Router({
         { path: '/', name: 'accounts', component: Accounts, props: true },
         { path: '/login', name: 'login',component: Login },
         { path: '/register', name: 'register',component: Register },
-        { path: '/profile', name: 'profile',component: Profile },
+        { path: '/settings', name: 'settings',component: Settings },
         { path: '/create', name: 'create',component: Create },
         { path: '/edit/:twofaccountId', name: 'edit',component: Edit },
 

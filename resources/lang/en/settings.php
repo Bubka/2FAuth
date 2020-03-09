@@ -16,6 +16,7 @@ return [
     'settings' => 'Settings',
     'account' => 'Account',
     'password' => 'Password',
+    'options' => 'Options',
     'confirm' => [
 
     ],

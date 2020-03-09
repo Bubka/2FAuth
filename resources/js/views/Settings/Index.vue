@@ -11,7 +11,7 @@
         		</div>
             </div>
     	</div>
-        <settings v-if="activeTab === $t('settings.settings')"></settings>
+        <options v-if="activeTab === $t('settings.options')"></options>
         <account v-if="activeTab === $t('settings.account')"></account>
         <password v-if="activeTab === $t('settings.password')"></password>
         <vue-footer :showButtons="true">
@@ -25,7 +25,7 @@
 
 <script>
 
-    import Settings from './Settings'
+    import Options from './Options'
     import Account 	from './Account'
     import Password from './Password'
 
@@ -34,7 +34,7 @@
             return {
                 tabs: [
                 	{
-                		'name' : this.$t('settings.settings'),
+                		'name' : this.$t('settings.options'),
                 		'isActive': true
                 	},
                 	{
@@ -46,12 +46,12 @@
                 		'isActive': false
                 	},
             	],
-            	activeTab: this.$t('settings.settings')
+            	activeTab: this.$t('settings.options')
             }
         },
 
         components: {
-        	Settings,
+        	Options,
             Account,
             Password
         },
