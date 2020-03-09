@@ -10,7 +10,7 @@ import Login            from './views/auth/Login'
 import Register         from './views/auth/Register'
 import PasswordRequest  from './views/auth/password/Request'
 import PasswordReset    from './views/auth/password/Reset'
-import Settings          from './views/Settings/Index'
+import Settings          from './views/settings/Index'
 import Errors           from './views/Error'
 
 const router = new Router({
