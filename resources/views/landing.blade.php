@@ -23,7 +23,8 @@
         <app></app>
     </div>
     <script type="text/javascript">
-        var appSettings = {!! $appSettings !!}
+        var appSettings = {!! $appSettings !!};
+        var appVersion = '{{ config("app.version") }}';
     </script>
     <script src="{{ mix('js/app.js') }}"></script>
     <script src="{{ mix('js/locales.js') }}"></script>
