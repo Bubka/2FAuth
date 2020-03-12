@@ -13,17 +13,16 @@ const mix = require('laravel-mix');
 
 mix.js('resources/js/app.js', 'public/js')
     .js('resources/js/langs/locales.js', 'public/js')
+    .extract([
+      'vue',
+      'axios',
+      'vue-axios',
+      'vue-i18n',
+      'vue-router',
+      'v-clipboard'
+    ])
     .sass('resources/sass/app.scss', 'public/css');
 
 if (mix.inProduction()) {
   mix.version()
-
-  mix.extract([
-    'vue',
-    'axios',
-    'vue-axios',
-    'vue-i18n',
-    'vue-router',
-    'v-clipboard'
-  ])
 }
