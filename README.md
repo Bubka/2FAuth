@@ -1,4 +1,7 @@
-![Travis (.com)](https://img.shields.io/travis/com/bubka/2fauth?style=flat-square)
+![https://travis-ci.com/github/Bubka/2FAuth](https://img.shields.io/travis/com/bubka/2fauth?style=flat-square)
+![https://codecov.io/gh/Bubka/2FAuth](https://img.shields.io/codecov/c/github/Bubka/2FAuth?style=flat-square)
+![https://github.com/Bubka/2FAuth/blob/master/LICENSE](https://img.shields.io/github/license/Bubka/2FAuth.svg?style=flat-square)
+
 
 # 2FAuth
 A web app to manage your Two-factors Auth (2FA) accounts and generate their OTP tokens
@@ -26,7 +29,7 @@ I created it because :
 2FAuth generates OTP according to RFC 4226 (HOTP Algorithm) and RFC 6238 (TOTP Algorithm) thanks to [Spomky-Labs/OTPHP](https://github.com/Spomky-Labs/otphp) php library.
 
 ## Requirements
-[![Requires PHP7](https://img.shields.io/badge/php-7.1.3-red.svg?style=flat-square)](https://secure.php.net/downloads.php) 
+[![Requires PHP7](https://img.shields.io/badge/php-7.2.*-red.svg?style=flat-square)](https://secure.php.net/downloads.php) 
 * See [Laravel server requirements](https://laravel.com/docs/5.8/installation#server-requirements)
 * Any database [supported by Laravel](https://laravel.com/docs/5.8/database)
 
