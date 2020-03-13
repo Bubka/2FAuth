@@ -60,16 +60,8 @@ class OptionTest extends TestCase
             ->assertStatus(200)
             ->assertJson([
                 'settings' => [
-                    [
-                        'id' => '1',
-                        'key' => 'setting_1',
-                        'value' => 'value_1'
-                    ],
-                    [
-                        'id' => '2',
-                        'key' => 'setting_2',
-                        'value' => 'value_2' 
-                    ]
+                    'setting_1' => 'value_1',
+                    'setting_2' => 'value_2'
                 ]
             ]);
     }

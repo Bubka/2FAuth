@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Classes\Options;
 use Illuminate\Http\Request;
 
 class SinglePageController extends Controller
@@ -13,8 +14,6 @@ class SinglePageController extends Controller
      */
     public function index()
     {
-        $appSettings = \Illuminate\Support\Facades\DB::table('options')->pluck('value', 'key')->toJson();
-
-        return view('landing')->with('appSettings', $appSettings);
+        return view('landing')->with('appSettings', Options::get()->toJson());
     }
 }

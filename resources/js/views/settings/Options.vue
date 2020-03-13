@@ -23,8 +23,8 @@
                 fail: '',
                 form: new Form({
                     lang: this.$root.$i18n.locale,
-                    showTokenAsDot: Boolean(Number(appSettings.showTokenAsDot)),
-                    isDemoApp: Boolean(Number(appSettings.isDemoApp)),
+                    showTokenAsDot: appSettings.showTokenAsDot,
+                    isDemoApp: appSettings.isDemoApp,
                 }),
                 options: [
                     { text: this.$t('languages.en'), value: 'en' },
