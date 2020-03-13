@@ -1,8 +1,8 @@
 <template>
     <div class="field">
-        <label for="fieldName" class="label" v-html="label"></label>
-        <input id="fieldName" type="checkbox" name="fieldName" class="switch is-thin is-info" v-model="form[fieldName]">
-        <label for="fieldName" class="label"></label>
+        <label :for="fieldName" class="label" v-html="label"></label>
+        <input :id="fieldName" type="checkbox" :name="fieldName" class="switch is-thin is-info" v-model="form[fieldName]">
+        <label :for="fieldName" class="label"></label>
         <p class="help" v-html="help" v-if="help"></p>
     </div>
 </template>
