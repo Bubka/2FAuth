@@ -91,6 +91,10 @@ export default {
                 "show_token_as_dot": {
                     "label": "Show generated tokens as dot",
                     "help": "Replace generated token caracters with *** to ensure confidentiality. Do not affect the copy/paste feature."
+                },
+                "is_demo_app": {
+                    "label": "Set the app as a demo",
+                    "help": "If set to Yes, the app content (including the registered user) will be reset every hours. Use the 'demo' user and 'demo' password to connect to the app in demo mode."
                 }
             }
         },
@@ -354,6 +358,10 @@ export default {
                 "show_token_as_dot": {
                     "label": "Masquer les codes générés",
                     "help": "Remplace les caractères des codes générés par des *** pour garantir leur confidentialité. N'affecte pas la fonction copier/coller qui reste utilisable."
+                },
+                "is_demo_app": {
+                    "label": "Activer le mode Démo",
+                    "help": "Le mode Démo remet à zéro le contenu de l'application (y compris l'utilisateur enregistré) toutes les heures. Utilisez le compte 'demo' et le mot de passe 'demo' pour vous y connecter."
                 }
             }
         },
