@@ -33,7 +33,8 @@ export default {
                 "change_your_password": "Change your password",
                 "password_successfully_changed": "Password successfully changed ",
                 "edit_account": "Edit account",
-                "profile_saved": "Profile successfully updated!"
+                "profile_saved": "Profile successfully updated!",
+                "welcome_to_demo_app_use_those_credentials": "Welcome to the 2FAuth demo.<br><br>You can connect using the email address <strong>demo@2fauth.app</strong> and the password <strong>demo</demo>"
             }
         },
         "commons": {
@@ -44,7 +45,8 @@ export default {
             "edit": "Edit",
             "delete": "Delete",
             "save": "Save",
-            "close": "Close"
+            "close": "Close",
+            "demo_do_not_post_sensitive_data": "This is a demo app, do not post any sensitive data"
         },
         "errors": {
             "resource_not_found": "Resource not found",
@@ -91,10 +93,6 @@ export default {
                 "show_token_as_dot": {
                     "label": "Show generated tokens as dot",
                     "help": "Replace generated token caracters with *** to ensure confidentiality. Do not affect the copy/paste feature."
-                },
-                "is_demo_app": {
-                    "label": "Set the app as a demo",
-                    "help": "If set to Yes, the app content (including the registered user) will be reset every hours. Use the 'demo' user and 'demo' password to connect to the app in demo mode."
                 }
             }
         },
@@ -300,7 +298,8 @@ export default {
                 "change_your_password": "Modifier votre mot de passe",
                 "password_successfully_changed": "Mot de passe modifié avec succès",
                 "edit_account": "Mis à jour du profil",
-                "profile_saved": "Profil mis à jour avec succès !"
+                "profile_saved": "Profil mis à jour avec succès !",
+                "welcome_to_demo_app_use_those_credentials": "bienvenue sur la démo de 2FAuth.<br><br>Vous pouvez vous connecter en utilisant l'adresse email <strong>demo@2fauth.app</strong> et le mot de passe <strong>demo</demo>"
             }
         },
         "commons": {
@@ -311,7 +310,8 @@ export default {
             "edit": "Modifier",
             "delete": "Supprimer",
             "save": "Enregistrer",
-            "close": "Fermer"
+            "close": "Fermer",
+            "demo_do_not_post_sensitive_data": "Site de démonstration, ne postez aucune donnée sensible"
         },
         "errors": {
             "resource_not_found": "Ressource introuvable",
@@ -358,10 +358,6 @@ export default {
                 "show_token_as_dot": {
                     "label": "Masquer les codes générés",
                     "help": "Remplace les caractères des codes générés par des *** pour garantir leur confidentialité. N'affecte pas la fonction copier/coller qui reste utilisable."
-                },
-                "is_demo_app": {
-                    "label": "Activer le mode Démo",
-                    "help": "Le mode Démo remet à zéro le contenu de l'application (y compris l'utilisateur enregistré) toutes les heures. Utilisez le compte 'demo' et le mot de passe 'demo' pour vous y connecter."
                 }
             }
         },

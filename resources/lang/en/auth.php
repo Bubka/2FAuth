@@ -45,7 +45,8 @@ return [
         'change_your_password' => 'Change your password',
         'password_successfully_changed' => 'Password successfully changed ',
         'edit_account' => 'Edit account',
-        'profile_saved' => 'Profile successfully updated!'
+        'profile_saved' => 'Profile successfully updated!',
+        'welcome_to_demo_app_use_those_credentials' => 'Welcome to the 2FAuth demo.<br><br>You can connect using the email address <strong>demo@2fauth.app</strong> and the password <strong>demo</demo>',
     ],
 
 ];
