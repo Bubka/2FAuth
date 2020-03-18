@@ -32,7 +32,7 @@ return [
     */
 
     'options' => [
-        'isDemoApp' => false,
+        'isDemoApp' => env('IS_DEMO_APP', false),
         'showTokenAsDot' => false,
     ],
 
