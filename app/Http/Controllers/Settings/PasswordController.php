@@ -27,9 +27,11 @@ class PasswordController extends Controller
             return response()->json(['message' => __('errors.wrong_current_password')], 400);
         }
 
-        $request->user()->update([
-            'password' => bcrypt($request->password),
-        ]);
+        if (!config('app.options.isDemoApp') ) {
+            $request->user()->update([
+                'password' => bcrypt($request->password),
+            ]);
+        }
 
         return response()->json(['message' => __('auth.forms.password_successfully_changed')]);
     }
