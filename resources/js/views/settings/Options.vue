@@ -7,7 +7,6 @@
         <form @submit.prevent="handleSubmit" @change="handleSubmit" @keydown="form.onKeydown($event)">
             <form-select :options="options" :form="form" fieldName="lang" :label="$t('settings.forms.language.label')"  :help="$t('settings.forms.language.help')" />
             <form-switch :form="form" fieldName="showTokenAsDot" :label="$t('settings.forms.show_token_as_dot.label')" :help="$t('settings.forms.show_token_as_dot.help')" />
-            <form-switch :form="form" fieldName="isDemoApp" :label="$t('settings.forms.is_demo_app.label')" :help="$t('settings.forms.is_demo_app.help')" />
         </form>
     </form-wrapper>
 </template>
@@ -24,7 +23,6 @@
                 form: new Form({
                     lang: this.$root.$i18n.locale,
                     showTokenAsDot: appSettings.showTokenAsDot,
-                    isDemoApp: appSettings.isDemoApp,
                 }),
                 options: [
                     { text: this.$t('languages.en'), value: 'en' },

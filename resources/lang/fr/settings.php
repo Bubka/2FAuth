@@ -31,10 +31,6 @@ return [
             'label' => 'Masquer les codes générés',
             'help' => 'Remplace les caractères des codes générés par des *** pour garantir leur confidentialité. N\'affecte pas la fonction copier/coller qui reste utilisable.'
         ],
-        'is_demo_app' => [
-            'label' => 'Activer le mode Démo',
-            'help' => 'Le mode Démo remet à zéro le contenu de l\'application (y compris l\'utilisateur enregistré) toutes les heures. Utilisez le compte \'demo\' et le mot de passe \'demo\' pour vous y connecter.'
-        ],
 
     ],
     
