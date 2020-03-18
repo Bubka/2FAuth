@@ -2,7 +2,7 @@
     <form-wrapper :fail="fail" :success="success">
         <div class="tags has-addons">
             <span class="tag is-dark">2FAuth</span>
-            <span class="tag is-info">v{{ version }}</span>
+            <span class="tag is-info">v{{ $appVersion }}</span>
         </div>
         <form @submit.prevent="handleSubmit" @change="handleSubmit" @keydown="form.onKeydown($event)">
             <form-select :options="options" :form="form" fieldName="lang" :label="$t('settings.forms.language.label')"  :help="$t('settings.forms.language.help')" />
@@ -22,13 +22,12 @@
                 fail: '',
                 form: new Form({
                     lang: this.$root.$i18n.locale,
-                    showTokenAsDot: appSettings.showTokenAsDot,
+                    showTokenAsDot: this.$appSettings.showTokenAsDot,
                 }),
                 options: [
                     { text: this.$t('languages.en'), value: 'en' },
                     { text: this.$t('languages.fr'), value: 'fr' },
-                ],
-                version: appVersion
+                ]
             }
         },
 
@@ -48,7 +47,7 @@
                         this.$router.go()
                     }
                     else {
-                        appSettings = response.data.settings
+                        this.$appSettings = response.data.settings
                     }
                 })
                 .catch(error => {

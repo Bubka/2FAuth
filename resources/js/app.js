@@ -8,6 +8,9 @@ import App          from './components/App'
 
 import './components'
 
+Vue.prototype.$appSettings = appSettings
+Vue.prototype.$appVersion = appVersion
+
 const app = new Vue({
     el: '#app',
     components: { App },
