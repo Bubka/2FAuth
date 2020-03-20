@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class ResetDemo extends Command
@@ -59,6 +60,12 @@ class ResetDemo extends Command
             $icons = Storage::allFiles('public/icons');
             Storage::delete($icons);
 
+            $filesForDelete = array_filter(glob('public/icons/*'), function($file) {
+                return false === strpos($file, '.gitignore');
+            });
+
+            Storage::delete($filesForDelete);
+
             $this->line('Existing icons deleted');
 
             // Regenerate icons for seeded accounts
@@ -75,26 +82,19 @@ class ResetDemo extends Command
             $this->line('Icons regenerated');
             
             // Reset the db
-            $this->callSilent('migrate:fresh');
+            DB::table('users')->truncate();
+            DB::table('oauth_access_tokens')->truncate();
+            DB::table('twofaccounts')->truncate();
+            DB::table('options')->truncate();
             
             // Seed the db
             $this->callSilent('db:seed', [
                 '--class' => 'DemoSeeder'
             ]);
 
-            $this->line('Database reset and seeded');
+            $this->line('Database cleaned and seeded');
 
-            // Reset auth
-            $this->callSilent('passport:install');
-
-            $this->line('Passport installed');
-
-            // Reset auth
-            $this->callSilent('config:cache');
-
-            $this->line('Config cached');
-
-            $this->info('App ready for demo usage');
+            $this->info('Demo app refreshed');
         }
         else {
             $this->comment('Bad confirmation word, nothing appened');
