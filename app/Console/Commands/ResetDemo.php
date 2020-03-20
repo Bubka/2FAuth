@@ -12,7 +12,7 @@ class ResetDemo extends Command
      *
      * @var string
      */
-    protected $signature = '2fauth:reset-demo';
+    protected $signature = '2fauth:reset-demo {--no-confirm}';
 
     /**
      * The console command description.
@@ -45,9 +45,13 @@ class ResetDemo extends Command
             return;
         }
 
-        $this->line('This will reset the app in order to run a clean and fresh demo.');
-
-        $demo = $this->ask('To prevent any mistake please type the word "demo" to go on');
+        if( $this->option('no-confirm') ) {
+            $demo = 'demo';
+        }
+        else {
+            $this->line('This will reset the app in order to run a clean and fresh demo.');
+            $demo = $this->ask('To prevent any mistake please type the word "demo" to go on');
+        }
 
         if ($demo === 'demo') {
 
