@@ -57,9 +57,6 @@ class ResetDemo extends Command
         if ($demo === 'demo') {
 
             // Delete all icons
-            $icons = Storage::allFiles('public/icons');
-            Storage::delete($icons);
-
             $filesForDelete = array_filter(glob('public/icons/*'), function($file) {
                 return false === strpos($file, '.gitignore');
             });
@@ -93,7 +90,6 @@ class ResetDemo extends Command
             ]);
 
             $this->line('Database cleaned and seeded');
-
             $this->info('Demo app refreshed');
         }
         else {
