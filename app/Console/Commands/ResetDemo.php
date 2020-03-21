@@ -39,8 +39,6 @@ class ResetDemo extends Command
      */
     public function handle()
     {
-        $this->callSilent('config:cache');
-
         if( !config('app.options.isDemoApp') ) {
             $this->comment('2fauth:reset-demo can only run when isDemoApp option is On');
             return;
@@ -57,10 +55,7 @@ class ResetDemo extends Command
         if ($demo === 'demo') {
 
             // Delete all icons
-            $filesForDelete = array_filter(glob('public/icons/*'), function($file) {
-                return false === strpos($file, '.gitignore');
-            });
-
+            $filesForDelete = \Illuminate\Support\Facades\File::glob('public/icons/*.png');
             Storage::delete($filesForDelete);
 
             $this->line('Existing icons deleted');
