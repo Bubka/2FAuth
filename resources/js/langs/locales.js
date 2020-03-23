@@ -93,6 +93,10 @@ export default {
                 "show_token_as_dot": {
                     "label": "Show generated tokens as dot",
                     "help": "Replace generated token caracters with *** to ensure confidentiality. Do not affect the copy/paste feature."
+                },
+                "close_token_on_copy": {
+                    "label": "Close token after copy",
+                    "help": "Automatically close the popup showing the generated token after it has been copied"
                 }
             }
         },
@@ -356,8 +360,12 @@ export default {
                     "help": "Traduit l'application dans la langue choisie"
                 },
                 "show_token_as_dot": {
-                    "label": "Masquer les codes générés",
-                    "help": "Remplace les caractères des codes générés par des *** pour garantir leur confidentialité. N'affecte pas la fonction copier/coller qui reste utilisable."
+                    "label": "Rendre illisible les codes générés",
+                    "help": "Remplace les caractères des codes générés par des *** pour garantir leur confidentialité. N'affecte pas la fonction de copier/coller qui reste utilisable."
+                },
+                "close_token_on_copy": {
+                    "label": "Ne plus afficher les codes copiés",
+                    "help": "Ferme automatiquement le popup affichant le code généré dès que ce dernier a été copié."
                 }
             }
         },

@@ -31,6 +31,10 @@ return [
             'label' => 'Show generated tokens as dot',
             'help' => 'Replace generated token caracters with *** to ensure confidentiality. Do not affect the copy/paste feature.'
         ],
+        'close_token_on_copy' => [
+            'label' => 'Close token after copy',
+            'help' => 'Automatically close the popup showing the generated token after it has been copied'
+        ],
     ],
     
 

@@ -7,6 +7,7 @@
         <form @submit.prevent="handleSubmit" @change="handleSubmit" @keydown="form.onKeydown($event)">
             <form-select :options="options" :form="form" fieldName="lang" :label="$t('settings.forms.language.label')"  :help="$t('settings.forms.language.help')" />
             <form-switch :form="form" fieldName="showTokenAsDot" :label="$t('settings.forms.show_token_as_dot.label')" :help="$t('settings.forms.show_token_as_dot.help')" />
+            <form-switch :form="form" fieldName="closeTokenOnCopy" :label="$t('settings.forms.close_token_on_copy.label')" :help="$t('settings.forms.close_token_on_copy.help')" />
         </form>
     </form-wrapper>
 </template>
@@ -23,6 +24,7 @@
                 form: new Form({
                     lang: this.$root.$i18n.locale,
                     showTokenAsDot: this.$root.appSettings.showTokenAsDot,
+                    closeTokenOnCopy: this.$root.appSettings.closeTokenOnCopy,
                 }),
                 options: [
                     { text: this.$t('languages.en'), value: 'en' },
