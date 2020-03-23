@@ -10,6 +10,10 @@ import './components'
 
 const app = new Vue({
     el: '#app',
+    data: {
+        appSettings: window.appSettings,
+        appVersion: window.appVersion
+    },
     components: { App },
     i18n,
     router,

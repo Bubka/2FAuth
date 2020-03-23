@@ -2,11 +2,12 @@
     <form-wrapper :fail="fail" :success="success">
         <div class="tags has-addons">
             <span class="tag is-dark">2FAuth</span>
-            <span class="tag is-info">v{{ version }}</span>
+            <span class="tag is-info">v{{ $root.appVersion }}</span>
         </div>
         <form @submit.prevent="handleSubmit" @change="handleSubmit" @keydown="form.onKeydown($event)">
             <form-select :options="options" :form="form" fieldName="lang" :label="$t('settings.forms.language.label')"  :help="$t('settings.forms.language.help')" />
             <form-switch :form="form" fieldName="showTokenAsDot" :label="$t('settings.forms.show_token_as_dot.label')" :help="$t('settings.forms.show_token_as_dot.help')" />
+            <form-switch :form="form" fieldName="closeTokenOnCopy" :label="$t('settings.forms.close_token_on_copy.label')" :help="$t('settings.forms.close_token_on_copy.help')" />
         </form>
     </form-wrapper>
 </template>
@@ -22,13 +23,13 @@
                 fail: '',
                 form: new Form({
                     lang: this.$root.$i18n.locale,
-                    showTokenAsDot: Boolean(Number(appSettings.showTokenAsDot)),
+                    showTokenAsDot: this.$root.appSettings.showTokenAsDot,
+                    closeTokenOnCopy: this.$root.appSettings.closeTokenOnCopy,
                 }),
                 options: [
                     { text: this.$t('languages.en'), value: 'en' },
                     { text: this.$t('languages.fr'), value: 'fr' },
-                ],
-                version: appVersion
+                ]
             }
         },
 
@@ -48,7 +49,7 @@
                         this.$router.go()
                     }
                     else {
-                        appSettings = response.data.settings
+                        this.$root.appSettings = response.data.settings
                     }
                 })
                 .catch(error => {

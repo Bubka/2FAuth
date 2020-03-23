@@ -45,7 +45,8 @@ return [
         'change_your_password' => 'Modifier votre mot de passe',
         'password_successfully_changed' => 'Mot de passe modifié avec succès',
         'edit_account' => 'Mis à jour du profil',
-        'profile_saved' => 'Profil mis à jour avec succès !'
+        'profile_saved' => 'Profil mis à jour avec succès !',
+        'welcome_to_demo_app_use_those_credentials' => 'bienvenue sur la démo de 2FAuth.<br><br>Vous pouvez vous connecter en utilisant l\'adresse email <strong>demo@2fauth.app</strong> et le mot de passe <strong>demo</demo>',
     ],
     
 

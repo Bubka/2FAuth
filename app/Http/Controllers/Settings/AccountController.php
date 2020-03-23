@@ -41,7 +41,9 @@ class AccountController extends Controller
             return response()->json(['message' => __('errors.wrong_current_password')], 400);
         }
 
-        tap($user)->update($request->only('name', 'email'));
+        if (!config('app.options.isDemoApp') ) {
+            tap($user)->update($request->only('name', 'email'));
+        }        
 
         return response()->json([
                 'message' => __('auth.forms.profile_saved'),

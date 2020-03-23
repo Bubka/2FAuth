@@ -42,7 +42,7 @@
 
         computed: {
             displayedOtp() {
-                return Boolean(Number(appSettings.showTokenAsDot)) ? this.otp.replace(/[0-9]/g, '●') : this.otp
+                return this.$root.appSettings.showTokenAsDot ? this.otp.replace(/[0-9]/g, '●') : this.otp
             }
         },
 
@@ -163,6 +163,11 @@
 
             clipboardSuccessHandler ({ value, event }) {
                 console.log('success', value)
+
+                if(this.$root.appSettings.closeTokenOnCopy) {
+                    this.$parent.isActive = false
+                    this.clearOTP()
+                }
             },
 
             clipboardErrorHandler ({ value, event }) {
