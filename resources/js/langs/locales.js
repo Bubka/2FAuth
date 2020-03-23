@@ -360,8 +360,8 @@ export default {
                     "help": "Traduit l'application dans la langue choisie"
                 },
                 "show_token_as_dot": {
-                    "label": "Rendre illisible les codes générés",
-                    "help": "Remplace les caractères des codes générés par des *** pour garantir leur confidentialité. N'affecte pas la fonction de copier/coller qui reste utilisable."
+                    "label": "Rendre illisibles les codes générés",
+                    "help": "Remplace les caractères des codes générés par des ●●● pour garantir leur confidentialité. N'affecte pas la fonction de copier/coller qui reste utilisable."
                 },
                 "close_token_on_copy": {
                     "label": "Ne plus afficher les codes copiés",
