@@ -32,14 +32,16 @@ class OptionTest extends TestCase
         $response = $this->actingAs($this->user, 'api')
             ->json('POST', '/api/settings/options', [
                     'setting_1' => 'value_1',
-                    'setting_2' => 'value_2',
+                    'setting_2' => true,
+                    'setting_3' => false,
                 ])
             ->assertStatus(200)
             ->assertJson([
                 'message' => __('settings.forms.setting_saved'),
                 'settings' => [
                     'setting_1' => 'value_1',
-                    'setting_2' => 'value_2',
+                    'setting_2' => true,
+                    'setting_3' => false,
                 ]
             ]);
     }
@@ -53,7 +55,8 @@ class OptionTest extends TestCase
     public function testSettingsIndexListing()
     {
         option(['setting_1' => 'value_1']);
-        option(['setting_2' => 'value_2']);
+        option(['setting_2' => true]);
+        option(['setting_3' => false]);
 
         $response = $this->actingAs($this->user, 'api')
             ->json('GET', '/api/settings/options')
@@ -61,7 +64,8 @@ class OptionTest extends TestCase
             ->assertJson([
                 'settings' => [
                     'setting_1' => 'value_1',
-                    'setting_2' => 'value_2'
+                    'setting_2' => true,
+                    'setting_3' => false,
                 ]
             ]);
     }
