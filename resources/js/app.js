@@ -8,11 +8,12 @@ import App          from './components/App'
 
 import './components'
 
-Vue.prototype.$appSettings = appSettings
-Vue.prototype.$appVersion = appVersion
-
 const app = new Vue({
     el: '#app',
+    data: {
+        appSettings: window.appSettings,
+        appVersion: window.appVersion
+    },
     components: { App },
     i18n,
     router,

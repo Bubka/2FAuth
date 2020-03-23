@@ -42,7 +42,7 @@
 
         computed: {
             displayedOtp() {
-                return appSettings.showTokenAsDot ? this.otp.replace(/[0-9]/g, '●') : this.otp
+                return this.$root.appSettings.showTokenAsDot ? this.otp.replace(/[0-9]/g, '●') : this.otp
             }
         },
 
