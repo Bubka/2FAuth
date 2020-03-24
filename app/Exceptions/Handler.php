@@ -135,7 +135,7 @@ class Handler extends ExceptionHandler
             default:
                 $response['message'] = ($statusCode >= 500) ? 'Whoops, looks like something went wrong' : $exception->getMessage();
 
-                if (env('APP_DEBUG')) {
+                if (config('app.debug')) {
                     $response['originalMessage'] = $exception->getMessage();
                     $response['debug'] = $debug;
                 }
