@@ -17,7 +17,7 @@ class TwoFAccountController extends Controller
      */
     public function index()
     {
-        return response()->json(TwoFAccount::all()->toArray());
+        return response()->json(TwoFAccount::ordered()->get()->toArray());
     }
 
 
