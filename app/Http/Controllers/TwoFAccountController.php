@@ -63,6 +63,19 @@ class TwoFAccountController extends Controller
 
 
     /**
+     * Save new order.
+     *
+     * @param  \App\TwoFAccount  $twofaccount
+     * @return \Illuminate\Http\Response
+     */
+    public function reorder(Request $request)
+    {
+        TwoFAccount::setNewOrder($request->orderedIds);
+        return response()->json('order saved', 200);
+    }
+
+
+    /**
      * Generate a TOTP
      *
      * @param  \Illuminate\Http\Request  $request

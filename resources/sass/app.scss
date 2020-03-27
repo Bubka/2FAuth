@@ -52,7 +52,6 @@ a:hover {
 .tfa {
     border-radius: 6px;
     text-align: center;
-    cursor: pointer;
     background-color: hsl(0, 0%, 10%); /*black-bis from Bulma*/
     padding: 0.75rem 1.5rem;
     margin: 0.5rem;
@@ -89,21 +88,25 @@ a:hover {
   }
 
   .tfa-container > div:last-of-type {
-      padding: 0 0.5rem 0 0;
+      padding: 0 1rem 0 0;
   }
 }
 
-.tfa-checkbox, .tfa-dots {
+.tfa-checkbox, .tfa-dots, .tfa-edit {
   display: flex;
   align-items: center;
   padding: 0.5rem 0 0 0;
 }
 
 @media screen and (max-width: 768px) {
-  .tfa-checkbox, .tfa-dots {
+  .tfa-checkbox, .tfa-dots, .tfa-edit {
     display: flex;
     align-items: center;
       padding: 0
+  }
+
+  .tfa-dots {
+    margin-left: 1.5rem;
   }
 }
 
@@ -118,7 +121,7 @@ a:hover {
 }
 
 .tfa-dots {
-  // order: 3;
+  cursor: grab;
 }
 
 @media screen and (max-width: 768px) {
@@ -130,8 +133,12 @@ a:hover {
       order: 2;
   }
 
-  .tfa-dots {
+  .tfa-edit {
     order: 3;
+  }
+
+  .tfa-dots {
+    order: 4;
   }
 }
 
@@ -146,6 +153,7 @@ a:hover {
 .tfa-text {
     display: block;
     max-width: 300px;
+    cursor: pointer;
 }
 
 .tfa img {

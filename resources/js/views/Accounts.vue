@@ -26,39 +26,46 @@
                 </div>
             </div>
             <!-- accounts -->
-            <vue-pull-refresh :on-refresh="onRefresh" :config="{
+            <!-- <vue-pull-refresh :on-refresh="onRefresh" :config="{
                 errorLabel: 'error',
                 startLabel: '',
                 readyLabel: '',
                 loadingLabel: 'refreshing'
-                }" class="accounts columns is-multiline is-centered">
-                <div class="tfa column is-narrow has-text-white" v-for="account in filteredAccounts">
-                    <div class="tfa-container">
-	                    <transition name="slideCheckbox">
-	                        <div class="tfa-checkbox" v-if="editMode">
-	                            <div class="field">
-	                                <input class="is-checkradio is-small is-white" :id="'ckb_' + account.id" :value="account.id" type="checkbox" :name="'ckb_' + account.id" v-model="selectedAccounts">
-	                                <label :for="'ckb_' + account.id"></label>
-	                            </div>
-	                        </div>
-	                    </transition>
-                        <div class="tfa-content is-size-3 is-size-4-mobile" @click.stop="showAccount(account)">  
-                            <div class="tfa-text has-ellipsis">
-                                <img :src="'/storage/icons/' + account.icon" v-if="account.icon">
-                                {{ account.service }}
-                                <span class="is-family-primary is-size-6 is-size-7-mobile has-text-grey ">{{ account.account }}</span>
+                }" > -->
+                <draggable v-model="filteredAccounts" @end="saveOrder" handle=".tfa-dots" class="accounts columns is-multiline is-centered">
+                    <div class="tfa column is-narrow has-text-white" v-for="account in filteredAccounts" :key="account.id">
+                        <div class="tfa-container">
+    	                    <transition name="slideCheckbox">
+    	                        <div class="tfa-checkbox" v-if="editMode">
+    	                            <div class="field">
+    	                                <input class="is-checkradio is-small is-white" :id="'ckb_' + account.id" :value="account.id" type="checkbox" :name="'ckb_' + account.id" v-model="selectedAccounts">
+    	                                <label :for="'ckb_' + account.id"></label>
+    	                            </div>
+    	                        </div>
+    	                    </transition>
+                            <div class="tfa-content is-size-3 is-size-4-mobile" @click.stop="showAccount(account)">  
+                                <div class="tfa-text has-ellipsis">
+                                    <img :src="'/storage/icons/' + account.icon" v-if="account.icon">
+                                    {{ account.service }}
+                                    <span class="is-family-primary is-size-6 is-size-7-mobile has-text-grey ">{{ account.account }}</span>
+                                </div>
                             </div>
+    	                    <transition name="fadeInOut">
+    	                        <div class="tfa-edit has-text-grey" v-if="editMode">
+    	                            <router-link :to="{ name: 'edit', params: { twofaccountId: account.id }}" class="tag is-dark is-rounded">
+    	                                {{ $t('commons.edit') }}
+    	                            </router-link>
+    	                        </div>
+    	                    </transition>
+                            <transition name="fadeInOut">
+                                <div class="tfa-dots has-text-grey" v-if="editMode">
+                                    <font-awesome-icon :icon="['fas', 'bars']" />
+                                </div>
+                            </transition>
                         </div>
-	                    <transition name="fadeInOut">
-	                        <div class="tfa-dots has-text-grey" v-if="editMode">
-	                            <router-link :to="{ name: 'edit', params: { twofaccountId: account.id }}" class="tag is-dark is-rounded">
-	                                {{ $t('commons.edit') }}
-	                            </router-link>
-	                        </div>
-	                    </transition>
                     </div>
-                </div>
-            </vue-pull-refresh>
+                </draggable>
+            <!-- </vue-pull-refresh> -->
         </div>
         <!-- No account -->
         <div class="container has-text-centered" v-show="showQuickForm">
@@ -132,6 +139,7 @@
     import TwofaccountShow from '../components/TwofaccountShow'
     import Form from './../components/Form'
     import vuePullRefresh from 'vue-pull-refresh';
+    import draggable from 'vuedraggable'
 
     export default {
         data(){
@@ -149,12 +157,17 @@
         },
 
         computed: {
-            filteredAccounts() {
-                return this.accounts.filter(
-                    item => {
-                        return item.service.toLowerCase().includes(this.search.toLowerCase()) || item.account.toLowerCase().includes(this.search.toLowerCase());
-                    }
-                );
+            filteredAccounts: {
+                get: function() {
+                    return this.accounts.filter(
+                        item => {
+                            return item.service.toLowerCase().includes(this.search.toLowerCase()) || item.account.toLowerCase().includes(this.search.toLowerCase());
+                        }
+                    );
+                },
+                set: function(reorderedAccounts) {
+                    this.accounts = reorderedAccounts
+                }
             },
 
             showAccounts() {
@@ -179,7 +192,8 @@
         components: {
             Modal,
             TwofaccountShow,
-            'vue-pull-refresh': vuePullRefresh
+            'vue-pull-refresh': vuePullRefresh,
+            draggable,
         },
 
         methods: {
@@ -239,6 +253,10 @@
                 else {
                     this.$refs.TwofaccountShow.showAccount(account.id)
                 }
+            },
+
+            saveOrder() {
+                this.axios.patch('/api/twofaccounts/reorder', {orderedIds: this.accounts.map(a => a.id)})
             },
 
             deleteAccount:  function (id) {
