@@ -32,38 +32,40 @@
                 readyLabel: '',
                 loadingLabel: 'refreshing'
                 }" > -->
-                <draggable v-model="filteredAccounts" @end="saveOrder" handle=".tfa-dots" class="accounts columns is-multiline is-centered">
-                    <div class="tfa column is-narrow has-text-white" v-for="account in filteredAccounts" :key="account.id">
-                        <div class="tfa-container">
-    	                    <transition name="slideCheckbox">
-    	                        <div class="tfa-checkbox" v-if="editMode">
-    	                            <div class="field">
-    	                                <input class="is-checkradio is-small is-white" :id="'ckb_' + account.id" :value="account.id" type="checkbox" :name="'ckb_' + account.id" v-model="selectedAccounts">
-    	                                <label :for="'ckb_' + account.id"></label>
-    	                            </div>
-    	                        </div>
-    	                    </transition>
-                            <div class="tfa-content is-size-3 is-size-4-mobile" @click.stop="showAccount(account)">  
-                                <div class="tfa-text has-ellipsis">
-                                    <img :src="'/storage/icons/' + account.icon" v-if="account.icon">
-                                    {{ account.service }}
-                                    <span class="is-family-primary is-size-6 is-size-7-mobile has-text-grey ">{{ account.account }}</span>
+                <draggable v-model="filteredAccounts" @start="drag = true" @end="saveOrder" ghost-class="ghost" handle=".tfa-dots" animation="200" class="accounts columns is-multiline is-centered">
+                    <transition-group type="transition" :name="!drag ? 'flip-list' : null">
+                        <div class="tfa column is-narrow has-text-white" v-for="account in filteredAccounts" :key="account.id">
+                            <div class="tfa-container">
+        	                    <transition name="slideCheckbox">
+        	                        <div class="tfa-checkbox" v-if="editMode">
+        	                            <div class="field">
+        	                                <input class="is-checkradio is-small is-white" :id="'ckb_' + account.id" :value="account.id" type="checkbox" :name="'ckb_' + account.id" v-model="selectedAccounts">
+        	                                <label :for="'ckb_' + account.id"></label>
+        	                            </div>
+        	                        </div>
+        	                    </transition>
+                                <div class="tfa-content is-size-3 is-size-4-mobile" @click.stop="showAccount(account)">  
+                                    <div class="tfa-text has-ellipsis">
+                                        <img :src="'/storage/icons/' + account.icon" v-if="account.icon">
+                                        {{ account.service }}
+                                        <span class="is-family-primary is-size-6 is-size-7-mobile has-text-grey ">{{ account.account }}</span>
+                                    </div>
                                 </div>
+        	                    <transition name="fadeInOut">
+        	                        <div class="tfa-edit has-text-grey" v-if="editMode">
+        	                            <router-link :to="{ name: 'edit', params: { twofaccountId: account.id }}" class="tag is-dark is-rounded">
+        	                                {{ $t('commons.edit') }}
+        	                            </router-link>
+        	                        </div>
+        	                    </transition>
+                                <transition name="fadeInOut">
+                                    <div class="tfa-dots has-text-grey" v-if="editMode">
+                                        <font-awesome-icon :icon="['fas', 'bars']" />
+                                    </div>
+                                </transition>
                             </div>
-    	                    <transition name="fadeInOut">
-    	                        <div class="tfa-edit has-text-grey" v-if="editMode">
-    	                            <router-link :to="{ name: 'edit', params: { twofaccountId: account.id }}" class="tag is-dark is-rounded">
-    	                                {{ $t('commons.edit') }}
-    	                            </router-link>
-    	                        </div>
-    	                    </transition>
-                            <transition name="fadeInOut">
-                                <div class="tfa-dots has-text-grey" v-if="editMode">
-                                    <font-awesome-icon :icon="['fas', 'bars']" />
-                                </div>
-                            </transition>
                         </div>
-                    </div>
+                    </transition-group>
                 </draggable>
             <!-- </vue-pull-refresh> -->
         </div>
@@ -153,6 +155,7 @@
                 form: new Form({
                     qrcode: null
                 }),
+                drag: false,
             }
         },
 
@@ -256,6 +259,7 @@
             },
 
             saveOrder() {
+                this.drag = false
                 this.axios.patch('/api/twofaccounts/reorder', {orderedIds: this.accounts.map(a => a.id)})
             },
 
@@ -311,3 +315,14 @@
     };
 
 </script>
+
+<style>
+    .flip-list-move {
+      transition: transform 0.5s;
+    }
+
+    .ghost {
+      opacity: 1;
+      /*background: hsl(0, 0%, 21%);*/
+    }
+</style>
