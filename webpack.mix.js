@@ -19,7 +19,8 @@ mix.js('resources/js/app.js', 'public/js')
       'vue-axios',
       'vue-i18n',
       'vue-router',
-      'v-clipboard'
+      'v-clipboard',
+      'vuedraggable'
     ])
     .sass('resources/sass/app.scss', 'public/css');
 
