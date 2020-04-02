@@ -8,6 +8,7 @@
             <form-select :options="options" :form="form" fieldName="lang" :label="$t('settings.forms.language.label')"  :help="$t('settings.forms.language.help')" />
             <form-switch :form="form" fieldName="showTokenAsDot" :label="$t('settings.forms.show_token_as_dot.label')" :help="$t('settings.forms.show_token_as_dot.help')" />
             <form-switch :form="form" fieldName="closeTokenOnCopy" :label="$t('settings.forms.close_token_on_copy.label')" :help="$t('settings.forms.close_token_on_copy.help')" />
+            <form-switch :form="form" fieldName="useBasicQrcodeReader" :label="$t('settings.forms.use_basic_qrcode_reader.label')" :help="$t('settings.forms.use_basic_qrcode_reader.help')" />
         </form>
     </form-wrapper>
 </template>
@@ -25,6 +26,7 @@
                     lang: this.$root.$i18n.locale,
                     showTokenAsDot: this.$root.appSettings.showTokenAsDot,
                     closeTokenOnCopy: this.$root.appSettings.closeTokenOnCopy,
+                    useBasicQrcodeReader: this.$root.appSettings.useBasicQrcodeReader,
                 }),
                 options: [
                     { text: this.$t('languages.en'), value: 'en' },

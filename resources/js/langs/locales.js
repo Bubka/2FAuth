@@ -97,6 +97,10 @@ export default {
                 "close_token_on_copy": {
                     "label": "Close token after copy",
                     "help": "Automatically close the popup showing the generated token after it has been copied"
+                },
+                "use_basic_qrcode_reader": {
+                    "label": "Use basic qrcode reader",
+                    "help": "If you experiences issues when capturing qrCodes enables this option to switch to a more basic but more reliable qrcode reader"
                 }
             }
         },
@@ -366,6 +370,10 @@ export default {
                 "close_token_on_copy": {
                     "label": "Ne plus afficher les codes copiés",
                     "help": "Ferme automatiquement le popup affichant le code généré dès que ce dernier a été copié."
+                },
+                "use_basic_qrcode_reader": {
+                    "label": "Utiliser le lecteur de qrcode basique",
+                    "help": "Si vous rencontrez des problèmes lors de la lecture des qrCodes activez cette option pour utiliser un lecteur de qrcode moins évolué mais plus largement compatible"
                 }
             }
         },
