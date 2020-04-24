@@ -167,6 +167,30 @@ a:hover {
   display: block;
 }
 
+.fullscreen-streamer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100%;
+}
+
+.fullscreen-alert {
+  position: fixed;
+  top: 25vh;
+  left: 0;
+  width: 100%;
+  padding: 0.75rem;
+}
+
+.fullscreen-footer {
+  position: fixed;
+  top: calc(100vh - 8rem );
+  left: 0;
+  width: 100%;
+  text-align: center;
+}
+
 .has-ellipsis {
   text-overflow: ellipsis;
   overflow: hidden;
@@ -320,27 +344,38 @@ footer .field.is-grouped {
   margin-bottom: 0.5rem;
 }
 
-.quickform-header {
-  height: 20vh;
-  padding-top: 2rem;
+.quick-uploader {
+  flex-direction: column
 }
 
-.quickform-footer {
-  padding-top: 3rem;
+.quick-uploader-header {
+  padding-top: 7vh;
+  padding-bottom: 7vh;
 }
 
 .preview {
   margin-top: 20vh;
 }
 
-.no-account {
+.quick-uploader-button {
   height: 256px;
+  padding-top: 0;
+  padding-bottom: 0;
+  margin-bottom: 2rem;
 }
 
-.no-account::before {
+.quick-uploader-centerer {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  height: 256px;
+  width: 100%;
+}
+
+.quick-uploader-button::before {
   content: "";
   position: absolute;
-  top: 0; 
   left: 0;
   width: 100%; 
   opacity: 0.05;
