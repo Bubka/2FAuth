@@ -35,6 +35,10 @@ return [
             'label' => 'Ne plus afficher les codes copiés',
             'help' => 'Ferme automatiquement le popup affichant le code généré dès que ce dernier a été copié.'
         ],
+        'use_basic_qrcode_reader' => [
+            'label' => 'Utiliser le lecteur de qrcode basique',
+            'help' => 'Si vous rencontrez des problèmes lors de la lecture des qrCodes activez cette option pour utiliser un lecteur de qrcode moins évolué mais plus largement compatible'
+        ],
 
     ],
     

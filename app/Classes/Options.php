@@ -6,11 +6,11 @@ class Options
 {
 
     /**
-     * Build a collection of options to apply
+     * Compile both default and user options
      *
-     * @return Options collection
+     * @return Options collection or a signle
      */
-    public static function get()
+    public static function get($option = null)
     {
         // Get a collection of user saved options
         $userOptions = \Illuminate\Support\Facades\DB::table('options')->pluck('value', 'key');
@@ -32,7 +32,7 @@ class Options
         // fallback values for every options
         $options = collect(config('app.options'))->merge($userOptions);
 
-        return $options;
+        return !is_null($option) ? $options[$option] : $options;
     }
 
 

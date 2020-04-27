@@ -34,6 +34,7 @@
         "vue-axios": "^2.1.5",
         "vue-i18n": "^8.16.0",
         "vue-pull-refresh": "^0.2.7",
+        "vue-qrcode-reader": "^2.1.1",
         "vue-router": "^3.1.6",
         "vuedraggable": "^2.23.2"
     }

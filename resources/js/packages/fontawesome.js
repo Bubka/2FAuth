@@ -15,7 +15,8 @@ import {
     faLockOpen,
     faSearch,
     faEllipsisH,
-    faBars
+    faBars,
+    faSpinner
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
@@ -29,7 +30,8 @@ library.add(
     faLockOpen,
     faSearch,
     faEllipsisH,
-    faBars
+    faBars,
+    faSpinner
 );
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
