@@ -14,7 +14,7 @@
         "bootstrap": "^4.4.1",
         "bulma": "^0.8.0",
         "cross-env": "^5.2.1",
-        "jquery": "^3.2",
+        "jquery": "^3.5",
         "laravel-mix": "^4.1.4",
         "lodash": "^4.17.15",
         "popper.js": "^1.16.1",
