@@ -34,8 +34,8 @@
                 loadingLabel: 'refreshing'
                 }" > -->
                 <draggable v-model="filteredAccounts" @start="drag = true" @end="saveOrder" ghost-class="ghost" handle=".tfa-dots" animation="200" class="accounts">
-                    <transition-group class="columns is-multiline is-centered" type="transition" :name="!drag ? 'flip-list' : null">
-                        <div class="tfa column is-narrow has-text-white" v-for="account in filteredAccounts" :key="account.id">
+                    <transition-group class="columns is-multiline" :class="{ 'is-centered': $root.appSettings.displayMode === 'grid' }" type="transition" :name="!drag ? 'flip-list' : null">
+                        <div :class="[$root.appSettings.displayMode === 'grid' ? 'tfa-grid' : 'tfa-list']" class="column is-narrow has-text-white" v-for="account in filteredAccounts" :key="account.id">
                             <div class="tfa-container">
         	                    <transition name="slideCheckbox">
         	                        <div class="tfa-checkbox" v-if="editMode">

@@ -36,6 +36,7 @@ return [
         'showTokenAsDot' => false,
         'closeTokenOnCopy' => false,
         'useBasicQrcodeReader' => false,
+        'displayMode' => 'list',
     ],
 
     /*

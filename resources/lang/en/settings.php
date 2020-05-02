@@ -39,6 +39,12 @@ return [
             'label' => 'Use basic qrcode reader',
             'help' => 'If you experiences issues when capturing qrCodes enables this option to switch to a more basic but more reliable qrcode reader'
         ],
+        'display_mode' => [
+            'label' => 'Desktop display mode',
+            'help' => 'Choose whether you want accounts to be displayed as a list or as a grid on desktop'
+        ],
+        'grid' => 'Grid',
+        'list' => 'List',
     ],
     
 
