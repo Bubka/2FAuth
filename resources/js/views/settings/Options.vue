@@ -1,5 +1,5 @@
 <template>
-    <form-wrapper :fail="fail" :success="success">
+    <form-wrapper :fail="fail" :success="success" :hasFixedNotification="true">
         <div class="tags has-addons">
             <span class="tag is-dark">2FAuth</span>
             <span class="tag is-info">v{{ $root.appVersion }}</span>
