@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Tests\TestCase;
 use Tests\Classes\LocalFile;
+use App\Classes\Options;
 
 class QrcodeTest extends TestCase
 {
@@ -55,8 +56,37 @@ class QrcodeTest extends TestCase
      *
      * @test
      */
+    public function testDecodeValidUri()
+    {
+        $response = $this->json('POST', '/api/qrcode/decode', [
+                                'uri' => 'otpauth://totp/test@test.com?secret=A4GRFHVIRBGY7UIW'
+                          ]);
+
+        $response->assertStatus(200)
+                 ->assertJsonFragment([
+                    'service' => 'test@test.com',
+                    'account' => '',
+                    'options' => [
+                        'algorithm' => 'sha1',
+                        'digits' => 6,
+                        'epoch' => 0,
+                        'period' => 30,
+                        'secret' => 'A4GRFHVIRBGY7UIW'
+                    ],
+                    'uri' => 'otpauth://totp/test@test.com?secret=A4GRFHVIRBGY7UIW'
+                 ]);
+    }
+
+
+    /**
+     * test Decode a qrcode via API
+     *
+     * @test
+     */
     public function testDecodeValidQrcode()
-    {        
+    {    
+        Options::store(array('useBasicQrcodeReader' => true));
+
         $file = LocalFile::fake()->validQrcode();
 
         $response = $this->withHeaders(['Content-Type' => 'multipart/form-data'])
