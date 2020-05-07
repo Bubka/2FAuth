@@ -4,8 +4,8 @@
             <h1 class="title" v-html="title" v-if="title"></h1>
             <slot />
             <p v-if="showTag">
-                <notification :message="fail" type="is-danger" v-if="fail" />
-                <notification :message="success" type="is-success" v-if="success" />
+                <notification :message="fail" type="is-danger" isFixed="hasFixedNotification" v-if="fail" />
+                <notification :message="success" type="is-success" isFixed="hasFixedNotification" v-if="success" />
             </p>
         </div>
     </div>    
@@ -41,6 +41,11 @@
             success: {
                 type: String,
                 default: ''
+            },
+
+            hasFixedNotification: {
+                type: Boolean,
+                default: false
             },
         }
     }

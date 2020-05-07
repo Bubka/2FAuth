@@ -1,5 +1,5 @@
 <template>
-    <div class="notification" :class="type" v-if="show">
+    <div class="notification" :class="[type, isFixed ? 'is-fixed' : '']" v-if="show">
         <button class="delete" v-if="isDeletable" @click="close"></button>
         {{ message }}
     </div>
@@ -30,6 +30,11 @@
                 type: Boolean,
                 default: true,
             },
+
+            isFixed: {
+                type: Boolean,
+                default: false
+            }
         },
 
         methods: {
