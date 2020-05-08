@@ -102,9 +102,9 @@ export default {
                     "label": "Use basic qrcode reader",
                     "help": "If you experiences issues when capturing qrCodes enables this option to switch to a more basic but more reliable qrcode reader"
                 },
-                "desktop_display_mode": {
-                    "label": "Desktop display mode",
-                    "help": "Choose whether you want accounts to be displayed as a list or as a grid on desktop"
+                "display_mode": {
+                    "label": "Display mode",
+                    "help": "Choose whether you want accounts to be displayed as a list or as a grid"
                 },
                 "grid": "Grid",
                 "list": "List"
@@ -390,9 +390,9 @@ export default {
                     "label": "Utiliser le lecteur de qrcode basique",
                     "help": "Si vous rencontrez des problèmes lors de la lecture des qrCodes activez cette option pour utiliser un lecteur de qrcode moins évolué mais plus largement compatible"
                 },
-                "desktop_display_mode": {
-                    "label": "Mode d'affichage Desktop",
-                    "help": "Change la représentation des comptes, soit sous forme de liste, soit sous forme de grille"
+                "display_mode": {
+                    "label": "Mode d'affichage",
+                    "help": "Change le mode d'affichage des comptes, soit sous forme de liste, soit sous forme de grille"
                 },
                 "grid": "Grille",
                 "list": "Liste"

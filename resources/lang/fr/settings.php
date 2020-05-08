@@ -40,8 +40,8 @@ return [
             'help' => 'Si vous rencontrez des problèmes lors de la lecture des qrCodes activez cette option pour utiliser un lecteur de qrcode moins évolué mais plus largement compatible'
         ],
         'display_mode' => [
-            'label' => 'Mode d\'affichage Desktop',
-            'help' => 'Change la représentation des comptes, soit sous forme de liste, soit sous forme de grille'
+            'label' => 'Mode d\'affichage',
+            'help' => 'Change le mode d\'affichage des comptes, soit sous forme de liste, soit sous forme de grille'
         ],
         'grid' => 'Grille',
         'list' => 'Liste',
