@@ -178,6 +178,11 @@
                 this.showFooter = true
             });
 
+            this.$on('cannotStream', function() {
+                
+                this.showFooter = true
+            });
+
         },
 
         components: {

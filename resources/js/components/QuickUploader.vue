@@ -134,6 +134,8 @@
                 this.showStream = false
 
                 this.$parent.$emit('stopStreaming')
+
+                console.log('stream disabled')
             },
 
             async onStreamerInit (promise) {
@@ -175,15 +177,21 @@
 
                 if( this.errorName ) {
                     this.canStream = false
-                    console.log(this.errorText)
+                    this.$parent.$emit('cannotStream')
+
+                    console.log('fail to stream : ' + this.errorText)
                 }
 
                 if( !this.errorName && !this.showStream ) {
                     this.camera = 'off'
+
+                    console.log('stream stopped')
                 }
 
                 if( this.canStream && this.showStream) {
                     this.$parent.$emit('startStreaming')
+
+                    console.log('stream started')
                 }
             },
 
