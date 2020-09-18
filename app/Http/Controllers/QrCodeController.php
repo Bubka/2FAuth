@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Zxing\QrReader;
 use OTPHP\TOTP;
 use OTPHP\Factory;
+use App\Classes\Options;
 use Assert\AssertionFailedException;
 use Illuminate\Http\File;
 use Illuminate\Http\Request;
@@ -21,19 +22,30 @@ class QrCodecontroller extends Controller
     public function decode(Request $request)
     {
 
-        // input validation
-        $this->validate($request, [
-            'qrcode' => 'required|image',
-        ]);
+        if(Options::get('useBasicQrcodeReader')) {
 
-        // qrcode analysis
-        $path = $request->file('qrcode')->store('qrcodes');
-        $qrcode = new QrReader(storage_path('app/' . $path));
+            // input validation
+            $this->validate($request, [
+                'qrcode' => 'required|image',
+            ]);
 
-        $uri = urldecode($qrcode->text());
+            // qrcode analysis
+            $path = $request->file('qrcode')->store('qrcodes');
+            $qrcode = new QrReader(storage_path('app/' . $path));
 
-        // delete uploaded file
-        Storage::delete($path);
+            $uri = urldecode($qrcode->text());
+
+            // delete uploaded file
+            Storage::delete($path);
+        }
+        else {
+
+            $this->validate($request, [
+                'uri' => 'required|string',
+            ]);
+
+            $uri = $request->uri;
+        }
 
         // return the OTP object
         try {

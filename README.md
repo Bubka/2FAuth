@@ -8,6 +8,10 @@ A web app to manage your Two-factors Auth (2FA) accounts and generate their OTP 
 
 ![screens](https://user-images.githubusercontent.com/858858/74479269-267a1600-4eaf-11ea-9281-415e5a54bd9f.png)
 
+#### [2FAuth Demo](https://demo.2fauth.app/)
+
+Credentials (login - password) : *demo@2fauth.app* - *demo*
+
 ## Purpose
 2FAuth is a web based self-hosted alternative to One Time Passcode (OTP) generators like Google Authenticator that you can use both on mobile or desktop.
 
@@ -46,9 +50,14 @@ php composer.phar install
 ```
 Don't have `composer`? [you can get it here](https://getcomposer.org/download/)
 
-#### Set your variables
-In your installation directory make a copy of the `.env.example` file and rename the copy `.env`.
+#### Set up your database
 
+Create a database with one of the supported tools (see Requirements).
+For SQLite, place the database `.sqlite` file in the `database/` folder of your 2FAuth installation.
+
+#### Set your variables
+
+In your installation directory make a copy of the `.env.example` file and rename the copy `.env`.
 Edit the `.env` file and adapt the settings to your running environment (see instructions in the file)
 
 #### Prepare some stuff
@@ -59,17 +68,25 @@ php artisan storage:link
 php artisan config:cache
 php artisan vue-i18n:generate
 ```
-
-#### Install js dependencies
-```
-npm install
-```
-
-#### Build
-`npm run dev` or `npm run prod`
-
 You are ready to go.
 
+#### For development only
+Install and build js dependencies
+```
+npm install
+npm run dev
+```
+
+## Update your installation
+First, **backup your database**.
+
+Then, using command line :
+```
+git pull
+php composer.phar install
+php artisan migrate
+php artisan config:clear
+```
 
 # Contributing
 to complete

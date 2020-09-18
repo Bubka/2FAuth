@@ -22,7 +22,7 @@ return [
     |
     */
 
-    'version' => '1.1.0',
+    'version' => '1.2.0',
 
     /*
     |--------------------------------------------------------------------------
@@ -35,6 +35,8 @@ return [
         'isDemoApp' => env('IS_DEMO_APP', false),
         'showTokenAsDot' => false,
         'closeTokenOnCopy' => false,
+        'useBasicQrcodeReader' => false,
+        'displayMode' => 'list',
     ],
 
     /*

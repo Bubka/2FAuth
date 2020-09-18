@@ -4,12 +4,18 @@ namespace App;
 
 use OTPHP\HOTP;
 use OTPHP\Factory;
+use Spatie\EloquentSortable\Sortable;
+use Spatie\EloquentSortable\SortableTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Contracts\Encryption\DecryptException;
 
-class TwoFAccount extends Model
+class TwoFAccount extends Model implements Sortable
 {
+
+    use SortableTrait;
+
+
     /**
      * model's array form.
      *
@@ -47,6 +53,17 @@ class TwoFAccount extends Model
             Storage::delete('public/icons/' . $model->icon);
         });
     }
+
+
+    /**
+     * Sortable settings
+     *
+     * @var array
+     */
+    public $sortable = [
+        'order_column_name' => 'order_column',
+        'sort_when_creating' => true,
+    ];
 
 
     /**

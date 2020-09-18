@@ -97,7 +97,17 @@ export default {
                 "close_token_on_copy": {
                     "label": "Close token after copy",
                     "help": "Automatically close the popup showing the generated token after it has been copied"
-                }
+                },
+                "use_basic_qrcode_reader": {
+                    "label": "Use basic qrcode reader",
+                    "help": "If you experiences issues when capturing qrCodes enables this option to switch to a more basic but more reliable qrcode reader"
+                },
+                "display_mode": {
+                    "label": "Display mode",
+                    "help": "Choose whether you want accounts to be displayed as a list or as a grid"
+                },
+                "grid": "Grid",
+                "list": "List"
             }
         },
         "twofaccounts": {
@@ -107,7 +117,7 @@ export default {
             "new": "New",
             "no_account_here": "No 2FA here!",
             "add_first_account": "Add your first account",
-            "use_full_form": "Use the full form",
+            "use_full_form": "Or use the full form",
             "add_one": "Add one",
             "manage": "Manage",
             "done": "Done",
@@ -122,6 +132,7 @@ export default {
                 "edit_account": "Edit account",
                 "otp_uri": "OTP Uri",
                 "hotp_counter": "HOTP Counter",
+                "scan_qrcode": "Scan a qrcode",
                 "use_qrcode": {
                     "val": "Use a qrcode",
                     "title": "Use a QR code to fill the form magically"
@@ -138,6 +149,14 @@ export default {
                 "create": "Create",
                 "save": "Save",
                 "test": "Test"
+            },
+            "stream": {
+                "need_grant_permission": "You need to grant camera access permission",
+                "not_readable": "Fail to load scanner. Is the camera already in use?",
+                "no_cam_on_device": "No camera on this device",
+                "secured_context_required": "Secure context required (HTTPS or localhost)",
+                "camera_not_suitable": "Installed cameras are not suitable",
+                "stream_api_not_supported": "Stream API is not supported in this browser"
             },
             "confirm": {
                 "delete": "Are you sure you want to delete this account?",
@@ -366,7 +385,17 @@ export default {
                 "close_token_on_copy": {
                     "label": "Ne plus afficher les codes copiés",
                     "help": "Ferme automatiquement le popup affichant le code généré dès que ce dernier a été copié."
-                }
+                },
+                "use_basic_qrcode_reader": {
+                    "label": "Utiliser le lecteur de qrcode basique",
+                    "help": "Si vous rencontrez des problèmes lors de la lecture des qrCodes activez cette option pour utiliser un lecteur de qrcode moins évolué mais plus largement compatible"
+                },
+                "display_mode": {
+                    "label": "Mode d'affichage",
+                    "help": "Change le mode d'affichage des comptes, soit sous forme de liste, soit sous forme de grille"
+                },
+                "grid": "Grille",
+                "list": "Liste"
             }
         },
         "twofaccounts": {
@@ -376,7 +405,7 @@ export default {
             "new": "Nouveau",
             "no_account_here": "Aucun compte 2FA !",
             "add_first_account": "Ajouter votre premier compte",
-            "use_full_form": "Utiliser le formulaire détaillé",
+            "use_full_form": "Ou utiliser le formulaire détaillé",
             "add_one": "Add one",
             "manage": "Gérer",
             "done": "Terminé",
@@ -391,6 +420,7 @@ export default {
                 "edit_account": "Modifier le compte",
                 "otp_uri": "OTP Uri",
                 "hotp_counter": "Compteur HOTP",
+                "scan_qrcode": "Scanner un QR code",
                 "use_qrcode": {
                     "val": "Utiliser un QR code",
                     "title": "Utiliser un QR code pour renseigner le formulaire d'un seul coup d'un seul"
@@ -407,6 +437,14 @@ export default {
                 "create": "Créer",
                 "save": "Enregistrer",
                 "test": "Tester"
+            },
+            "stream": {
+                "need_grant_permission": "Vous devez autoriser l'utilisation de votre caméra",
+                "not_readable": "Le scanner ne se charge pas. La caméra est-elle déjà utilisée ?",
+                "no_cam_on_device": "Votre équipement ne dispose pas de caméra",
+                "secured_context_required": "Contexte sécurisé requis (HTTPS ou localhost)",
+                "camera_not_suitable": "Votre équipement ne dispose pas d'une caméra adaptée",
+                "stream_api_not_supported": "L'API Stream n'est pas supportée par votre navigateur"
             },
             "confirm": {
                 "delete": "Etes-vous sûrs de vouloir supprimer le compte ?",

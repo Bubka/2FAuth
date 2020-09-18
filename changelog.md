@@ -1,3 +1,15 @@
+# Change log
+
+## [1.2.0] - 2020-09-18
+
+### Added
+- QR Code scan using live stream when a camera is detected. Previous QR Code scanner remains available as fallback method or can be forced in Settings.
+- New alternative layouts: List or Grid
+- Accounts can be reordered
+
+### Changed
+- Notification banner (when saving settings) now has a fixed position
+
 ## [1.1.0] - 2020-03-23
 
 ### Added

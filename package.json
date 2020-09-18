@@ -10,32 +10,32 @@
         "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
     },
     "devDependencies": {
-        "axios": "^0.19.2",
-        "bootstrap": "^4.4.1",
-        "bulma": "^0.8.0",
         "cross-env": "^5.2.1",
-        "jquery": "^3.2",
-        "laravel-mix": "^4.1.4",
-        "lodash": "^4.17.15",
+        "laravel-mix": "^5.0.5",
+        "lodash": "^4.17.20",
         "popper.js": "^1.16.1",
         "resolve-url-loader": "^2.3.1",
-        "sass": "^1.26.3",
+        "sass": "^1.26.10",
         "sass-loader": "^7.3.1",
-        "vue": "^2.6.11",
-        "vue-template-compiler": "^2.6.11"
+        "vue-template-compiler": "^2.6.12"
     },
     "dependencies": {
-        "@fortawesome/fontawesome-svg-core": "^1.2.27",
-        "@fortawesome/free-brands-svg-icons": "^5.12.1",
-        "@fortawesome/free-regular-svg-icons": "^5.12.1",
-        "@fortawesome/free-solid-svg-icons": "^5.12.1",
-        "@fortawesome/vue-fontawesome": "^0.1.9",
+        "@fortawesome/fontawesome-svg-core": "^1.2.30",
+        "@fortawesome/free-brands-svg-icons": "^5.14.0",
+        "@fortawesome/free-regular-svg-icons": "^5.14.0",
+        "@fortawesome/free-solid-svg-icons": "^5.14.0",
+        "@fortawesome/vue-fontawesome": "^0.1.10",
+        "axios": "^0.19.2",
+        "bulma": "^0.8.2",
         "bulma-checkradio": "^1.1.1",
         "bulma-switch": "^2.0.0",
-        "v-clipboard": "^2.2.2",
+        "v-clipboard": "^2.2.3",
+        "vue": "^2.6.12",
         "vue-axios": "^2.1.5",
-        "vue-i18n": "^8.15.5",
+        "vue-i18n": "^8.21.1",
         "vue-pull-refresh": "^0.2.7",
-        "vue-router": "^3.1.6"
+        "vue-qrcode-reader": "^2.3.13",
+        "vue-router": "^3.4.3",
+        "vuedraggable": "^2.24.1"
     }
 }

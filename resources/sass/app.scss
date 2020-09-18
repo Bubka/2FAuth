@@ -49,17 +49,31 @@ a:hover {
     background-color: hsl(0, 0%, 21%) !important;
 }
 
-.tfa {
+.tfa-grid {
     border-radius: 6px;
     text-align: center;
-    cursor: pointer;
     background-color: hsl(0, 0%, 10%); /*black-bis from Bulma*/
     padding: 0.75rem 1.5rem;
     margin: 0.5rem;
 }
 
-@media screen and (max-width: 768px) {
-  .tfa {
+.tfa-list {
+    text-align: inherit;
+    border-bottom: 1px solid hsl(0, 0%, 21%);
+    background-color: hsl(0, 0%, 14%); /*black-ter from Bulma*/
+    margin: 0 1%;
+    padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+    width: 31.3%;
+}
+
+@media screen and (max-width: 1217px) {
+  .tfa-list  {
+      width: 48%;
+  }
+}
+
+@media screen and (max-width: 769px) {
+  .tfa-list {
       border-radius: unset;
       text-align: inherit;
       border-bottom: 1px solid hsl(0, 0%, 21%);
@@ -67,6 +81,7 @@ a:hover {
       margin: 0;
       padding: 0.5rem 0.5rem 0.5rem 0.5rem;
       max-width: none;
+      width: auto;
   }
 }
 
@@ -74,88 +89,102 @@ a:hover {
   align-items: center;
   display: flex;
   justify-content: left;
+}
+
+.tfa-grid .tfa-container {
   flex-direction: column;
   padding: 0 1.5rem;
 }
 
-@media screen and (max-width: 768px) {
-  .tfa-container {
-    flex-direction: row;
+.tfa-list .tfa-container {
+  flex-direction: row;
   padding: 0;
-  }
-
-  .tfa-container > div:first-of-type {
-      padding: 0 0 0 0.5rem;
-  }
-
-  .tfa-container > div:last-of-type {
-      padding: 0 0.5rem 0 0;
-  }
 }
 
-.tfa-checkbox, .tfa-dots {
+.tfa-list .tfa-container > div:first-of-type {
+    padding: 0 0 0 0.5rem;
+}
+
+.tfa-list .tfa-container > div:last-of-type {
+    padding: 0 1rem 0 0;
+}
+
+.tfa-grid .tfa-checkbox,
+.tfa-grid .tfa-dots,
+.tfa-grid .tfa-edit {
   display: flex;
   align-items: center;
   padding: 0.5rem 0 0 0;
 }
 
-@media screen and (max-width: 768px) {
-  .tfa-checkbox, .tfa-dots {
-    display: flex;
-    align-items: center;
-      padding: 0
-  }
+.tfa-list .tfa-checkbox,
+.tfa-list .tfa-dots,
+.tfa-list .tfa-edit {
+  display: flex;
+  align-items: center;
+    padding: 0
 }
 
-.tfa-content {
+.tfa-list .tfa-dots {
+  margin-left: 1.5rem;
+}
+
+.tfa-grid .tfa-content {
     flex-grow: 1;
-    // order: 1;
     overflow: hidden;
 }
-
-.tfa-checkbox {
-  // order: 2;
+.tfa-list .tfa-content {
+    width: 100%;
 }
 
 .tfa-dots {
-  // order: 3;
+  cursor: grab;
 }
 
-@media screen and (max-width: 768px) {
-  .tfa-checkbox {
-    order: 1;
-  }
-
-  .tfa-content {
-      order: 2;
-  }
-
-  .tfa-dots {
-    order: 3;
-  }
-}
-
-@media screen and (min-width: 769px) {
-  .is-checkradio[type="checkbox"] + label, .is-checkradio[type="radio"] + label {
+.tfa-grid .is-checkradio[type="checkbox"] + label, .tfa-grid .is-checkradio[type="radio"] + label {
     padding-left: 0 !important;
     margin-top: 0 !important;
     margin-bottom: 0 !important;
   }
-}
 
 .tfa-text {
     display: block;
     max-width: 300px;
+    cursor: pointer;
 }
 
-.tfa img {
+.tfa-container img {
     height: 0.75em;
     width: 0.75em;
     margin-right: .1em;
 }
 
-.tfa span {
+.tfa-container span {
   display: block;
+}
+
+.fullscreen-streamer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100%;
+}
+
+.fullscreen-alert {
+  position: fixed;
+  top: 25vh;
+  left: 0;
+  width: 100%;
+  padding: 0.75rem;
+}
+
+.fullscreen-footer {
+  position: fixed;
+  top: calc(100vh - 8rem );
+  left: 0;
+  width: 100%;
+  text-align: center;
 }
 
 .has-ellipsis {
@@ -285,6 +314,16 @@ footer .field.is-grouped {
   justify-content: center;
 }
 
+.notification.is-fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  border-radius: 0;
+  padding: 0.5rem 2.5rem 0.5rem 1.5rem;
+  text-align: center;
+}
+
 .file .tag {
   margin-left: 0.75rem;
 }
@@ -311,27 +350,38 @@ footer .field.is-grouped {
   margin-bottom: 0.5rem;
 }
 
-.quickform-header {
-  height: 20vh;
-  padding-top: 2rem;
+.quick-uploader {
+  flex-direction: column
 }
 
-.quickform-footer {
-  padding-top: 3rem;
+.quick-uploader-header {
+  padding-top: 7vh;
+  padding-bottom: 7vh;
 }
 
 .preview {
   margin-top: 20vh;
 }
 
-.no-account {
+.quick-uploader-button {
   height: 256px;
+  padding-top: 0;
+  padding-bottom: 0;
+  margin-bottom: 2rem;
 }
 
-.no-account::before {
+.quick-uploader-centerer {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  height: 256px;
+  width: 100%;
+}
+
+.quick-uploader-button::before {
   content: "";
   position: absolute;
-  top: 0; 
   left: 0;
   width: 100%; 
   opacity: 0.05;
@@ -367,39 +417,40 @@ footer .field.is-grouped {
     animation: fadeOut 500ms
 }
 
-.slideCheckbox-enter-active {
+
+.tfa-grid .slideCheckbox-enter-active {
     animation: enterFromTop 500ms
 }
 
-.slideCheckbox-enter-active + .tfa-content {
+.tfa-grid .slideCheckbox-enter-active + .tfa-content {
     animation: addTopOffset 500ms
 }
 
-.slideCheckbox-leave-active {
+.tfa-grid .slideCheckbox-leave-active {
     animation: leaveToTop 500ms
 }
 
-.slideCheckbox-leave-active + .tfa-content {
+.tfa-grid .slideCheckbox-leave-active + .tfa-content {
     animation: removeTopOffset 500ms
 }
 
-@media screen and (max-width: 768px) {
-  .slideCheckbox-enter-active {
+// @media screen and (max-width: 768px) {
+  .tfa-list .slideCheckbox-enter-active {
       animation: enterFromLeft 500ms
   }
 
-  .slideCheckbox-enter-active + .tfa-content {
+  .tfa-list .slideCheckbox-enter-active + .tfa-content {
       animation: addLeftOffset 500ms
   }
 
-  .slideCheckbox-leave-active {
+  .tfa-list .slideCheckbox-leave-active {
       animation: leaveToLeft 500ms
   }
 
-  .slideCheckbox-leave-active + .tfa-content {
+  .tfa-list .slideCheckbox-leave-active + .tfa-content {
       animation: removeLeftOffset 500ms
   }
-}
+// }
 
 /*FadeInOut*/
 

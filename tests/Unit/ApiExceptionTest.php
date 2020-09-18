@@ -4,6 +4,7 @@ namespace Tests\Unit;
 
 use App\User;
 use Tests\TestCase;
+use App\TwoFAccount;
 use App\Http\Controllers\TwoFAccountController;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Support\Facades\Auth;
@@ -113,7 +114,21 @@ class ApiExceptionTest extends TestCase
      */
     public function test_HTTP_INTERNAL_SERVER_ERROR()
     {
+        factory(TwoFAccount::class, 3)->create();
 
+        $response = $this->actingAs($this->user, 'api')
+            ->json('PATCH', '/api/twofaccounts/reorder', [
+                'orderedIds' => 'x'])
+            ->assertStatus(500)
+            ->assertJsonStructure([
+                'message',
+                'originalMessage',
+                'debug'
+            ])
+            ->assertJsonFragment([
+                'message' => 'Whoops, looks like something went wrong'
+            ]);
+            
     }
 
 }

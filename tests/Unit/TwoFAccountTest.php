@@ -250,7 +250,7 @@ class TwoFAccountTest extends TestCase
      */
     public function testTwoFAccountIndexListing()
     {
-        $twofaccount = factory(TwoFAccount::class, 3)->create();
+        factory(TwoFAccount::class, 3)->create();
 
         $response = $this->actingAs($this->user, 'api')
             ->json('GET', '/api/twofaccounts')
@@ -293,9 +293,7 @@ class TwoFAccountTest extends TestCase
      */
     public function testTwoFAccountBatchDestroy()
     {
-        $twofaccount = factory(TwoFAccount::class)->create();
-        $twofaccount = factory(TwoFAccount::class)->create();
-        $twofaccount = factory(TwoFAccount::class)->create();
+        factory(TwoFAccount::class, 3)->create();
 
         $ids = \Illuminate\Support\Facades\DB::table('twofaccounts')->value('id');
 
@@ -305,4 +303,19 @@ class TwoFAccountTest extends TestCase
             ->assertStatus(204);
     }
 
+
+    /**
+     * test TwoFAccounts reorder
+     *
+     * @test
+     */
+    public function testTwoFAccountReorder()
+    {
+        factory(TwoFAccount::class, 3)->create();
+
+        $response = $this->actingAs($this->user, 'api')
+            ->json('PATCH', '/api/twofaccounts/reorder', [
+                'orderedIds' => [3,2,1]])
+            ->assertStatus(200);
+    }
 }

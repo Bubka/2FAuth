@@ -17,7 +17,7 @@ class TwoFAccountController extends Controller
      */
     public function index()
     {
-        return response()->json(TwoFAccount::all()->toArray());
+        return response()->json(TwoFAccount::ordered()->get()->toArray());
     }
 
 
@@ -59,6 +59,19 @@ class TwoFAccountController extends Controller
     public function show(TwoFAccount $twofaccount)
     {
         return response()->json($twofaccount, 200);
+    }
+
+
+    /**
+     * Save new order.
+     *
+     * @param  \App\TwoFAccount  $twofaccount
+     * @return \Illuminate\Http\Response
+     */
+    public function reorder(Request $request)
+    {
+        TwoFAccount::setNewOrder($request->orderedIds);
+        return response()->json('order saved', 200);
     }
 
 
