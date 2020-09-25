@@ -17,7 +17,9 @@
         <vue-footer :showButtons="true">
             <!-- Cancel button -->
             <p class="control">
-                <router-link :to="{ name: 'accounts' }" class="button is-dark is-rounded">{{ $t('commons.close') }}</router-link>
+                <a class="button is-dark is-rounded" @click.stop="exitSettings">
+                    {{ $t('commons.close') }}
+                </a>
             </p>
         </vue-footer>
     </div>
@@ -64,6 +66,13 @@
                     	this.activeTab = selectedTab.name
                     }
                 });
+            },
+
+            exitSettings: function(event) {
+                if (event) {
+                    this.$notify({ clean: true })
+                    this.$router.push({ name: 'accounts' })
+                }
             }
         }
     };

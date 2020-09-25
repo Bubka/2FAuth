@@ -31,9 +31,6 @@
                 <div class="column is-full quick-uploader-footer">
                     <router-link :to="{ name: 'create' }" class="is-link">{{ $t('twofaccounts.use_full_form') }}</router-link>
                 </div>
-                <div v-if="showError" class="column is-full quick-uploader-footer">
-                    <notification :message="errorText" :isDeletable="false" type="is-danger" />
-                </div>
             </div>
         </div>
         <!-- camera stream fullscreen scanner -->
@@ -75,17 +72,6 @@
                 canStream: true,
                 camera: 'auto',
             }
-        },
-
-        computed: {
-
-            debugMode: function() {
-                return process.env.NODE_ENV
-            },
-
-            showError: function() {
-                return this.debugMode == 'development' && this.errorName == 'NotAllowedError'
-            },
         },
 
         props: {
@@ -180,6 +166,10 @@
                     this.$parent.$emit('cannotStream')
 
                     console.log('fail to stream : ' + this.errorText)
+
+                    if (this.errorName === 'NotAllowedError') {
+                        this.$notify({ type: 'is-danger', text: this.errorText })
+                    }
                 }
 
                 if( !this.errorName && !this.showStream ) {

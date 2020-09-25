@@ -1,5 +1,5 @@
 <template>
-    <form-wrapper :fail="fail" :success="success" :hasFixedNotification="true">
+    <form-wrapper>
         <div class="tags has-addons">
             <span class="tag is-dark">2FAuth</span>
             <span class="tag is-info">v{{ $root.appVersion }}</span>
@@ -21,8 +21,8 @@
     export default {
         data(){
             return {
-                success: '',
-                fail: '',
+                // success: '',
+                // fail: '',
                 form: new Form({
                     lang: this.$root.$i18n.locale,
                     showTokenAsDot: this.$root.appSettings.showTokenAsDot,
@@ -45,13 +45,10 @@
             handleSubmit(e) {
                 e.preventDefault()
 
-                this.fail = ''
-                this.success = ''
-
                 this.form.post('/api/settings/options', {returnError: true})
                 .then(response => {
 
-                    this.success = response.data.message
+                    this.$notify({ type: 'is-success', text: response.data.message })
 
                     if(response.data.settings.lang !== this.$root.$i18n.locale) {
                         this.$router.go()
@@ -62,7 +59,7 @@
                 })
                 .catch(error => {
                     
-                    this.fail = error.response.data.message
+                    this.$notify({ type: 'is-danger', text: error.response.data.message })
                 });
             }
         },

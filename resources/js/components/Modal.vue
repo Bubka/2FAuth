@@ -24,9 +24,11 @@
 <script>
 export default {
     name: 'Modal',
+
     props: {
         value: Boolean,
     },
+
     computed: {
         isActive: {
             get () {
@@ -37,10 +39,12 @@ export default {
             }
         }
     },
+
     methods: {
         closeModal: function(event) {
             if (event) {
                 this.isActive = false
+                this.$notify({ clean: true })
                 this.$parent.$emit('modalClose')
             }
         }

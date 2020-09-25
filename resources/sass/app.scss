@@ -314,13 +314,16 @@ footer .field.is-grouped {
   justify-content: center;
 }
 
-.notification.is-fixed {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
+.notification {
   border-radius: 0;
-  padding: 0.5rem 2.5rem 0.5rem 1.5rem;
+  padding: 0.75rem 1.5rem;
+}
+
+.notification .notification-title {
+  // Style for title line
+}
+
+.notification .notification-content {
   text-align: center;
 }
 
