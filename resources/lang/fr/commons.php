@@ -16,6 +16,7 @@ return [
     'cancel' => 'Annuler',
     'update' => 'Mettre à jour',
     'copy_to_clipboard' => 'Copier',
+    'copied_to_clipboard' => 'Copié dans le presse-papier',
     'profile' => 'Profil',
     'edit' => 'Modifier',
     'delete' => 'Supprimer',

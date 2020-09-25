@@ -168,6 +168,8 @@
                     this.$parent.isActive = false
                     this.clearOTP()
                 }
+
+                this.$notify({ type: 'is-success', text: this.$t('commons.copied_to_clipboard') })
             },
 
             clipboardErrorHandler ({ value, event }) {

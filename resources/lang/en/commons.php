@@ -16,6 +16,7 @@ return [
     'cancel' => 'Cancel',
     'update' => 'Update',
     'copy_to_clipboard' => 'Copy to clipboard',
+    'copied_to_clipboard' => 'Copied to clipboard',
     'profile' => 'Profile',
     'edit' => 'Edit',
     'delete' => 'Delete',
