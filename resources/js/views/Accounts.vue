@@ -52,12 +52,12 @@
                 <div class="column is-three-quarters-mobile is-one-third-tablet is-one-quarter-desktop is-one-quarter-widescreen is-one-quarter-fullhd">
                     <!-- toolbar -->
                     <div class="toolbar has-text-centered" v-if="editMode">
-                        <a class="button is-rounded is-outlined" :class="{ 'is-dark': selectedAccounts.length === 0, 'is-danger': selectedAccounts.length > 0 }" :disabled="selectedAccounts.length == 0" @click="destroyAccounts">
-                            <span class="icon is-small">
-                                <font-awesome-icon :icon="['fas', 'trash']" />
-                            </span>
-                            <span>{{ $t('commons.delete') }}</span>
-                        </a>
+                        <div class="manage-buttons tags has-addons are-medium">
+                            <span class="tag is-dark">{{ selectedAccounts.length }}&nbsp;{{ $t('commons.selected') }}</span>
+                            <a class="tag is-danger" v-if="selectedAccounts.length > 0" @click="destroyAccounts">
+                                {{ $t('commons.delete') }}&nbsp;<font-awesome-icon :icon="['fas', 'trash']" />
+                            </a>
+                        </div>
                     </div>
                     <!-- search -->
                     <div class="field" v-else>

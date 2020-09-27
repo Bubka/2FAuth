@@ -47,7 +47,8 @@ export default {
             "delete": "Delete",
             "save": "Save",
             "close": "Close",
-            "demo_do_not_post_sensitive_data": "This is a demo app, do not post any sensitive data"
+            "demo_do_not_post_sensitive_data": "This is a demo app, do not post any sensitive data",
+            "selected": "selected"
         },
         "errors": {
             "resource_not_found": "Resource not found",
@@ -336,7 +337,8 @@ export default {
             "delete": "Supprimer",
             "save": "Enregistrer",
             "close": "Fermer",
-            "demo_do_not_post_sensitive_data": "Site de démonstration, ne postez aucune donnée sensible"
+            "demo_do_not_post_sensitive_data": "Site de démonstration, ne postez aucune donnée sensible",
+            "selected": "selectionné(s)"
         },
         "errors": {
             "resource_not_found": "Ressource introuvable",
