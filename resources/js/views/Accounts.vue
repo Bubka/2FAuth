@@ -2,30 +2,6 @@
     <div>
         <!-- show accounts list -->
         <div class="container" v-if="this.showAccounts">
-            <!-- header -->
-            <div class="columns is-gapless is-mobile is-centered">
-                <div class="column is-three-quarters-mobile is-one-third-tablet is-one-quarter-desktop is-one-quarter-widescreen is-one-quarter-fullhd">
-                    <!-- toolbar -->
-                    <div class="toolbar has-text-centered" v-if="editMode">
-                        <a class="button" :class="{ 'is-dark': selectedAccounts.length === 0, 'is-danger': selectedAccounts.length > 0 }" :disabled="selectedAccounts.length == 0" @click="destroyAccounts">
-                            <span class="icon is-small">
-                                <font-awesome-icon :icon="['fas', 'trash']" />
-                            </span>
-                            <span>{{ $t('commons.delete') }}</span>
-                        </a>
-                    </div>
-                    <!-- search -->
-                    <div class="field" v-else>
-                        <div class="control has-icons-right">
-                            <input type="text" class="input is-rounded is-search" v-model="search">
-                            <span class="icon is-small is-right">
-                                <font-awesome-icon :icon="['fas', 'search']"  v-if="!search" />
-                                <a class="delete" v-if="search" @click="search = '' "></a>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <!-- accounts -->
             <!-- <vue-pull-refresh :on-refresh="onRefresh" :config="{
                 errorLabel: 'error',
@@ -69,6 +45,32 @@
                     </transition-group>
                 </draggable>
             <!-- </vue-pull-refresh> -->
+        </div>
+        <!-- header -->
+        <div class="header has-background-black-ter" v-if="this.showAccounts">
+            <div class="columns is-gapless is-mobile is-centered">
+                <div class="column is-three-quarters-mobile is-one-third-tablet is-one-quarter-desktop is-one-quarter-widescreen is-one-quarter-fullhd">
+                    <!-- toolbar -->
+                    <div class="toolbar has-text-centered" v-if="editMode">
+                        <a class="button is-rounded is-outlined" :class="{ 'is-dark': selectedAccounts.length === 0, 'is-danger': selectedAccounts.length > 0 }" :disabled="selectedAccounts.length == 0" @click="destroyAccounts">
+                            <span class="icon is-small">
+                                <font-awesome-icon :icon="['fas', 'trash']" />
+                            </span>
+                            <span>{{ $t('commons.delete') }}</span>
+                        </a>
+                    </div>
+                    <!-- search -->
+                    <div class="field" v-else>
+                        <div class="control has-icons-right">
+                            <input type="text" class="input is-rounded is-search" v-model="search">
+                            <span class="icon is-small is-right">
+                                <font-awesome-icon :icon="['fas', 'search']"  v-if="!search" />
+                                <a class="delete" v-if="search" @click="search = '' "></a>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <!-- Show uploader (because no account) -->
         <quick-uploader v-if="showUploader" :directStreaming="accounts.length > 0" :showTrailer="accounts.length === 0" ref="QuickUploader"></quick-uploader>

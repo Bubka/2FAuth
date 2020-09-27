@@ -16,12 +16,27 @@ a:hover {
   }
 }
 
-.search {
-  margin-bottom: 0 !important;
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  width: 100%;
 }
 
 .accounts {
-  margin-top: 0.75rem;
+  margin-top: 40px;
+}
+
+@media screen and (min-width: 769px) {
+  .accounts {
+    margin-top: 60px;
+  }
+}
+
+.search {
+  margin-bottom: 0 !important;
 }
 
 .form-column {
@@ -325,6 +340,19 @@ footer .field.is-grouped {
 
 .notification .notification-content {
   text-align: center;
+}
+
+.options-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 0 1rem 0.5rem;
+  z-index: 1000;
+}
+
+.options-tabs {
+  margin-top: 80px;
 }
 
 .file .tag {
