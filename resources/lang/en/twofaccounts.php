@@ -57,6 +57,7 @@ return [
         'not_readable' => 'Fail to load scanner. Is the camera already in use?',
         'no_cam_on_device' => 'No camera on this device',
         'secured_context_required' => 'Secure context required (HTTPS or localhost)',
+        'https_required' => 'HTTPS required for camera streaming',
         'camera_not_suitable' => 'Installed cameras are not suitable',
         'stream_api_not_supported' => 'Stream API is not supported in this browser'
     ],

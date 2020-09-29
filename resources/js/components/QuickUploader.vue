@@ -170,6 +170,10 @@
                     if (this.errorName === 'NotAllowedError') {
                         this.$notify({ type: 'is-danger', text: this.errorText })
                     }
+
+                    if (this.errorName === 'InsecureContextError') {
+                        this.$notify({ type: 'is-warning', text: "HTTPS required for camera streaming" })
+                    }
                 }
 
                 if( !this.errorName && !this.showStream ) {

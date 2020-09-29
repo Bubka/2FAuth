@@ -157,6 +157,7 @@ export default {
                 "not_readable": "Fail to load scanner. Is the camera already in use?",
                 "no_cam_on_device": "No camera on this device",
                 "secured_context_required": "Secure context required (HTTPS or localhost)",
+                "https_required": "HTTPS required for camera streaming",
                 "camera_not_suitable": "Installed cameras are not suitable",
                 "stream_api_not_supported": "Stream API is not supported in this browser"
             },
@@ -447,6 +448,7 @@ export default {
                 "not_readable": "Le scanner ne se charge pas. La caméra est-elle déjà utilisée ?",
                 "no_cam_on_device": "Votre équipement ne dispose pas de caméra",
                 "secured_context_required": "Contexte sécurisé requis (HTTPS ou localhost)",
+                "https_required": "HTTPS requis pour utiliser la caméra",
                 "camera_not_suitable": "Votre équipement ne dispose pas d'une caméra adaptée",
                 "stream_api_not_supported": "L'API Stream n'est pas supportée par votre navigateur"
             },
