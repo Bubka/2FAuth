@@ -10,6 +10,7 @@
         "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
     },
     "devDependencies": {
+        "@kirschbaum-development/laravel-translations-loader": "^1.0.2",
         "cross-env": "^5.2.1",
         "laravel-mix": "^5.0.5",
         "lodash": "^4.17.20",

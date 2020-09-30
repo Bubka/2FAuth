@@ -66,7 +66,6 @@ php artisan migrate:refresh
 php artisan passport:install
 php artisan storage:link
 php artisan config:cache
-php artisan vue-i18n:generate
 ```
 You are ready to go.
 
