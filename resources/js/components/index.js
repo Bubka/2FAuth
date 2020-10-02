@@ -5,6 +5,7 @@ import FormWrapper from './FormWrapper'
 import FormField from './FormField'
 import FormSelect from './FormSelect'
 import FormSwitch from './FormSwitch'
+import FormCheckbox from './FormCheckbox'
 import FormButtons from './FormButtons'
 import VueFooter from './Footer'
 
@@ -16,6 +17,7 @@ import VueFooter from './Footer'
     FormField,
     FormSelect,
     FormSwitch,
+    FormCheckbox,
     FormButtons,
     VueFooter,
 ].forEach(Component => {
