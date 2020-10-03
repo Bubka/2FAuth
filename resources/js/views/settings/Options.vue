@@ -1,9 +1,5 @@
 <template>
     <form-wrapper>
-        <div class="tags has-addons">
-            <span class="tag is-dark">2FAuth</span>
-            <span class="tag is-info">v{{ $root.appVersion }}</span>
-        </div>
         <form @submit.prevent="handleSubmit" @change="handleSubmit" @keydown="form.onKeydown($event)">
             <form-select :options="langs" :form="form" fieldName="lang" :label="$t('settings.forms.language.label')"  :help="$t('settings.forms.language.help')" />
             <form-select :options="layouts" :form="form" fieldName="displayMode" :label="$t('settings.forms.display_mode.label')" :help="$t('settings.forms.display_mode.help')" />

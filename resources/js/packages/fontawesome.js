@@ -3,7 +3,6 @@ import Vue  from 'vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-
 import {
     faPlus,
     faQrcode,
@@ -19,6 +18,10 @@ import {
     faSpinner
 } from '@fortawesome/free-solid-svg-icons'
 
+import {
+    faGithubAlt
+} from '@fortawesome/free-brands-svg-icons'
+
 library.add(
     faPlus,
     faQrcode,
@@ -31,7 +34,8 @@ library.add(
     faSearch,
     faEllipsisH,
     faBars,
-    faSpinner
+    faSpinner,
+    faGithubAlt
 );
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
