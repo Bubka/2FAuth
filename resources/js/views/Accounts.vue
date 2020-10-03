@@ -23,7 +23,7 @@
         	                    </transition>
                                 <div class="tfa-content is-size-3 is-size-4-mobile" @click.stop="showAccount(account)">  
                                     <div class="tfa-text has-ellipsis">
-                                        <img :src="'/storage/icons/' + account.icon" v-if="account.icon">
+                                        <img :src="'/storage/icons/' + account.icon" v-if="account.icon && $root.appSettings.showAccountsIcons">
                                         {{ account.service }}
                                         <span class="is-family-primary is-size-6 is-size-7-mobile has-text-grey ">{{ account.account }}</span>
                                     </div>

@@ -37,6 +37,7 @@ return [
         'closeTokenOnCopy' => false,
         'useBasicQrcodeReader' => false,
         'displayMode' => 'list',
+        'showAccountsIcons' => true
     ],
 
     /*

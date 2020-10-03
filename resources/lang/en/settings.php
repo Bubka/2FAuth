@@ -45,6 +45,10 @@ return [
         ],
         'grid' => 'Grid',
         'list' => 'List',
+        'show_accounts_icons' => [
+            'label' => 'Show icons',
+            'help' => 'Show icons accounts in the main view'
+        ],
     ],
     
 

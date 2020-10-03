@@ -45,6 +45,10 @@ return [
         ],
         'grid' => 'Grille',
         'list' => 'Liste',
+        'show_accounts_icons' => [
+            'label' => 'Afficher les icônes',
+            'help' => 'Affiche les icônes des comptes dans la vue principale'
+        ],
 
     ],
     
