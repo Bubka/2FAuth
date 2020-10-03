@@ -4,7 +4,7 @@
 
 
 # 2FAuth
-A web app to manage your Two-factors Auth (2FA) accounts and generate their OTP tokens
+A web app to manage your Two-Factor Authentication (2FA) accounts and generate their security codes
 
 ![screens](https://user-images.githubusercontent.com/858858/74479269-267a1600-4eaf-11ea-9281-415e5a54bd9f.png)
 
