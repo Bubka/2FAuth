@@ -1,16 +1,19 @@
-import Vue from 'vue'
-import Button from './Button'
-import FieldError from './FieldError'
-import FormWrapper from './FormWrapper'
-import FormField from './FormField'
-import FormSelect from './FormSelect'
-import FormSwitch from './FormSwitch'
+import Vue          from 'vue'
+import App          from './App'
+import Button       from './Button'
+import FieldError   from './FieldError'
+import FormWrapper  from './FormWrapper'
+import FormField    from './FormField'
+import FormSelect   from './FormSelect'
+import FormSwitch   from './FormSwitch'
 import FormCheckbox from './FormCheckbox'
-import FormButtons from './FormButtons'
-import VueFooter from './Footer'
+import FormButtons  from './FormButtons'
+import VueFooter    from './Footer'
+import Kicker       from './Kicker'
 
 // Components that are registered globaly.
 [
+    App,
 	Button,
     FieldError,
     FormWrapper,
@@ -20,6 +23,7 @@ import VueFooter from './Footer'
     FormCheckbox,
     FormButtons,
     VueFooter,
+    Kicker
 ].forEach(Component => {
 	Vue.component(Component.name, Component)
 })

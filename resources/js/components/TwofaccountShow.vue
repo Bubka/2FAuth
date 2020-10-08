@@ -162,9 +162,11 @@
             },
 
             clipboardSuccessHandler ({ value, event }) {
-                console.log('success', value)
 
-                if(this.$root.appSettings.closeTokenOnCopy) {
+                if(this.$root.appSettings.kickUserAfter == -1) {
+                    this.appLogout()
+                }
+                else if(this.$root.appSettings.closeTokenOnCopy) {
                     this.$parent.isActive = false
                     this.clearOTP()
                 }

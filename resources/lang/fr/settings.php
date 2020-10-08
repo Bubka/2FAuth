@@ -20,6 +20,9 @@ return [
     'confirm' => [
 
     ],
+    'general' => 'General',
+    'security' => 'Sécurité',
+    'advanced' => 'Avancés',
     'forms' => [
         'edit_settings' => 'Modifier les réglages',
         'setting_saved' => 'Réglages sauvegardés',
@@ -49,7 +52,19 @@ return [
             'label' => 'Afficher les icônes',
             'help' => 'Affiche les icônes des comptes dans la vue principale'
         ],
-
+        'auto_lock' => [
+            'label' => 'Verouillage automatique',
+            'help' => 'Déconnecter automatiquement l\'utilisateur en cas d\'inactivité'
+        ],
+        'never' => 'Jamais',
+        'on_token_copy' => 'Après copie d\'un code de sécurité',
+        '1_minutes' => 'Après 1 minute',
+        '5_minutes' => 'Après 5 minutes',
+        '10_minutes' => 'Après 10 minutes',
+        '15_minutes' => 'Après 15 minutes',
+        '30_minutes' => 'Après 15 minutes',
+        '1_hour' => 'Après 1 heure',
+        '1_day' => 'Après 1 journée',
     ],
     
 
