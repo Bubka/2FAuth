@@ -15,8 +15,7 @@ Vue.use(Notifications)
 const app = new Vue({
     el: '#app',
     data: {
-        appSettings: window.appSettings,
-        appVersion: window.appVersion
+        appSettings: window.appSettings
     },
     components: { App },
     i18n,
