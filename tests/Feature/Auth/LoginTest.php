@@ -8,6 +8,7 @@ use Illuminate\Auth\Authenticatable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\RequestGuard;
+use Illuminate\Support\Facades\Config;
 
 class LoginTest extends TestCase
 {
@@ -171,6 +172,28 @@ class LoginTest extends TestCase
             ->assertJson([
                 'message' => 'signed out',
             ]);
+    }
+
+
+    /**
+     * test User logout after inactivity via API
+     *
+     * @test
+     */
+    public function testUserLogoutAfterInactivity()
+    {
+        // Set the autolock period to 1 minute
+        $response = $this->actingAs($this->user, 'api')
+            ->json('POST', '/api/settings/options', [
+                    'kickUserAfter' => '1'])
+            ->assertStatus(200);
+
+        sleep(61);
+
+        // Ping a restricted endpoint to log last_seen_at time
+        $response = $this->actingAs($this->user, 'api')
+            ->json('GET', '/api/settings/account')
+            ->assertStatus(401);
     }
 
 }

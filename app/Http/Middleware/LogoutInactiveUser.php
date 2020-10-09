@@ -29,20 +29,27 @@ class LogoutInactiveUser
         $user = Auth::guard('api')->user();
 
         $now = Carbon::now();
-        $last_seen = Carbon::parse($user->last_seen_at);
-        $inactiveFor = $now->diffInMinutes($last_seen);
+        $inactiveFor = $now->diffInSeconds(Carbon::parse($user->last_seen_at));
 
         // Fetch all setting values
         $settings = Options::get();
-     
-        // If user has been inactivity longer than the allowed inactivity period
-        if ($settings['kickUserAfter'] > 0 && $inactiveFor > $settings['kickUserAfter']) {
 
+        $kickUserAfterXSecond = intval($settings['kickUserAfter']) * 60;
+
+        // If user has been inactive longer than the allowed inactivity period
+        if ($kickUserAfterXSecond > 0 && $inactiveFor > $kickUserAfterXSecond) {
+     
             $user->last_seen_at = $now->format('Y-m-d H:i:s');
             $user->save();
-     
-            $accessToken = Auth::user()->token();
-            $accessToken->revoke();
+
+            $accessToken = $user->token();
+
+            // phpunit does not generate token during tests, so we revoke it only if it exists
+            // @codeCoverageIgnoreStart
+            if( $accessToken ) {
+                $accessToken->revoke();
+            }
+            // @codeCoverageIgnoreEnd
      
             return response()->json(['message' => 'unauthorised'], Response::HTTP_UNAUTHORIZED);
         }
