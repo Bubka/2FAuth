@@ -43,7 +43,7 @@
 
                 clearTimeout(this.logoutTimer)
 
-                this.appLogout
+                this.appLogout()
             },
 
             resetTimer: function() {
