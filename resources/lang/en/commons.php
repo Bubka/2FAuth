@@ -16,10 +16,12 @@ return [
     'cancel' => 'Cancel',
     'update' => 'Update',
     'copy_to_clipboard' => 'Copy to clipboard',
+    'copied_to_clipboard' => 'Copied to clipboard',
     'profile' => 'Profile',
     'edit' => 'Edit',
     'delete' => 'Delete',
     'save' => 'Save',
     'close' => 'Close',
     'demo_do_not_post_sensitive_data' => 'This is a demo app, do not post any sensitive data',
+    'selected' => 'selected',
 ];

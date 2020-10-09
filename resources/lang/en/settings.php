@@ -20,6 +20,9 @@ return [
     'confirm' => [
 
     ],
+    'general' => 'General',
+    'security' => 'Security',
+    'advanced' => 'Advanced',
     'forms' => [
         'edit_settings' => 'Edit settings',
         'setting_saved' => 'Settings saved',
@@ -45,6 +48,23 @@ return [
         ],
         'grid' => 'Grid',
         'list' => 'List',
+        'show_accounts_icons' => [
+            'label' => 'Show icons',
+            'help' => 'Show icons accounts in the main view'
+        ],
+        'auto_lock' => [
+            'label' => 'Auto lock',
+            'help' => 'Log out the user automatically in case of inactivity'
+        ],
+        'never' => 'Never',
+        'on_token_copy' => 'On security code copy',
+        '1_minutes' => 'After 1 minute',
+        '5_minutes' => 'After 5 minutes',
+        '10_minutes' => 'After 10 minutes',
+        '15_minutes' => 'After 15 minutes',
+        '30_minutes' => 'After 15 minutes',
+        '1_hour' => 'After 1 hour',
+        '1_day' => 'After 1 day',
     ],
     
 

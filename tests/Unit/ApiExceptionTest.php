@@ -45,17 +45,6 @@ class ApiExceptionTest extends TestCase
 
 
     /**
-     * test Unauthorized
-     *
-     * @test
-     */
-    public function test_HTTP_FORBIDDEN()
-    {
-
-    }
-
-
-    /**
      * test Not Found
      *
      * @test

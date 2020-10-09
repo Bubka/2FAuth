@@ -4,7 +4,7 @@
 
 
 # 2FAuth
-A web app to manage your Two-factors Auth (2FA) accounts and generate their OTP tokens
+A web app to manage your Two-Factor Authentication (2FA) accounts and generate their security codes
 
 ![screens](https://user-images.githubusercontent.com/858858/74479269-267a1600-4eaf-11ea-9281-415e5a54bd9f.png)
 
@@ -13,21 +13,25 @@ A web app to manage your Two-factors Auth (2FA) accounts and generate their OTP 
 Credentials (login - password) : *demo@2fauth.app* - *demo*
 
 ## Purpose
-2FAuth is a web based self-hosted alternative to One Time Passcode (OTP) generators like Google Authenticator that you can use both on mobile or desktop.
+2FAuth is a web based self-hosted alternative to One Time Passcode (OTP) generators like Google Authenticator, designed for both mobile and desktop.
+
+It aims to ease you perform your 2FA authentication steps whatever the device you handle, with a clean and suitable interface.
 
 I created it because :
 * Most of the UIs for this kind of apps show tokens for all accounts in the same time with stressful countdowns (in my opinion)
-* I wanted my 2FA accounts to be stored in a database I can easily backup and restore.
-* I hate taking out my smartphone to get an OTP when I use a desktop computer.
-* I love coding and I love self-hosted solution
+* I wanted my 2FA accounts to be stored in a standalone database I can easily backup and restore (did you already encountered a smartphone loss with all your 2FA accounts in Google Auth? I did...)
+* I hate taking out my smartphone to get an OTP when I use a desktop computer
+* I love coding and I love self-hosted solutions
 
-## Features
-* Manage 2FA accounts with QR code scanning and decoding
-* Generate TOTP and HOTP tokens
-* User authentication to protect access to 2FA accounts
+## Main features
+* Manage 2FA accounts with QR code flashing/scanning and decoding
+* Generate TOTP and HOTP security codes
+* User authentication to protect 2FA data stored in 2FAuth
+
+2FAuth is currently localized in English and in French.
 
 #### Single user app
-2FA are sensitives data so an authentication is needed to use the app. And because they are usually owned by the same person, it is not possible to create more than one account.
+2FA are sensitives data so you have to create an account and authenticate yourself to use the app. It is not possible to create more than one user account, the app is thought for personal use.
 
 #### RFC compliance
 2FAuth generates OTP according to RFC 4226 (HOTP Algorithm) and RFC 6238 (TOTP Algorithm) thanks to [Spomky-Labs/OTPHP](https://github.com/Spomky-Labs/otphp) php library.
@@ -66,18 +70,17 @@ php artisan migrate:refresh
 php artisan passport:install
 php artisan storage:link
 php artisan config:cache
-php artisan vue-i18n:generate
 ```
 You are ready to go.
 
 #### For development only
-Install and build js dependencies
+Checkout the 'dev' branch then install and build js dependencies
 ```
 npm install
 npm run dev
 ```
 
-## Update your installation
+## Upgrading
 First, **backup your database**.
 
 Then, using command line :

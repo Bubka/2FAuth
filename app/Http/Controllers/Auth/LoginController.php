@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Carbon\Carbon;
 
 
 class LoginController extends Controller
@@ -73,6 +74,8 @@ class LoginController extends Controller
         $success['token'] = $this->guard()->user()->createToken('2FAuth')->accessToken;
         $success['name'] = $this->guard()->user()->name;
 
+        $this->authenticated($request, $this->guard()->user());
+
         return response()->json(['message' => $success], Response::HTTP_OK);
     }
 
@@ -119,6 +122,18 @@ class LoginController extends Controller
         ]);
     }
 
+    /**
+     * The user has been authenticated.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  mixed  $user
+     * @return mixed
+     */
+    protected function authenticated(Request $request, $user)
+    {
+        $user->last_seen_at = Carbon::now()->format('Y-m-d H:i:s');
+        $user->save();
+    }
 
     /**
      * log out current user

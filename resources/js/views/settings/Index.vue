@@ -1,23 +1,29 @@
 <template>
     <div>
-        <div class="columns is-centered">
-            <div class="form-column column is-two-thirds-tablet is-half-desktop is-one-third-widescreen is-one-quarter-fullhd">
-        		<div class="tabs is-centered is-fullwidth">
-        		    <ul>
-                        <li v-for="tab in tabs" :class="{ 'is-active': tab.isActive }">
-                            <a @click="selectTab(tab)">{{ tab.name }}</a>
-                        </li>
-        		    </ul>
-        		</div>
-            </div>
-    	</div>
-        <options v-if="activeTab === $t('settings.options')"></options>
-        <account v-if="activeTab === $t('settings.account')"></account>
-        <password v-if="activeTab === $t('settings.password')"></password>
+        <div class="options-header has-background-black-ter">
+            <div class="columns is-centered">
+                <div class="form-column column is-two-thirds-tablet is-half-desktop is-one-third-widescreen is-one-quarter-fullhd">
+            		<div class="tabs is-centered is-fullwidth">
+            		    <ul>
+                            <li v-for="tab in tabs" :class="{ 'is-active': tab.isActive }">
+                                <a @click="selectTab(tab)">{{ tab.name }}</a>
+                            </li>
+            		    </ul>
+            		</div>
+                </div>
+        	</div>
+        </div>
+        <div class="options-tabs">
+            <options v-if="activeTab === $t('settings.options')"></options>
+            <account v-if="activeTab === $t('settings.account')"></account>
+            <password v-if="activeTab === $t('settings.password')"></password>
+        </div>
         <vue-footer :showButtons="true">
             <!-- Cancel button -->
             <p class="control">
-                <router-link :to="{ name: 'accounts' }" class="button is-dark is-rounded">{{ $t('commons.close') }}</router-link>
+                <a class="button is-dark is-rounded" @click.stop="exitSettings">
+                    {{ $t('commons.close') }}
+                </a>
             </p>
         </vue-footer>
     </div>
@@ -64,6 +70,13 @@
                     	this.activeTab = selectedTab.name
                     }
                 });
+            },
+
+            exitSettings: function(event) {
+                if (event) {
+                    this.$notify({ clean: true })
+                    this.$router.push({ name: 'accounts' })
+                }
             }
         }
     };

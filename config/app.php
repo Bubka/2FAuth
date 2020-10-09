@@ -22,7 +22,7 @@ return [
     |
     */
 
-    'version' => '1.2.0',
+    'version' => '1.3.0',
 
     /*
     |--------------------------------------------------------------------------
@@ -37,6 +37,8 @@ return [
         'closeTokenOnCopy' => false,
         'useBasicQrcodeReader' => false,
         'displayMode' => 'list',
+        'showAccountsIcons' => true,
+        'kickUserAfter' => '15'
     ],
 
     /*
@@ -197,7 +199,7 @@ return [
         App\Providers\AuthServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
-        App\Providers\RouteServiceProvider::class,
+        App\Providers\RouteServiceProvider::class
 
     ],
 

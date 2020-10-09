@@ -162,12 +162,16 @@
             },
 
             clipboardSuccessHandler ({ value, event }) {
-                console.log('success', value)
 
-                if(this.$root.appSettings.closeTokenOnCopy) {
+                if(this.$root.appSettings.kickUserAfter == -1) {
+                    this.appLogout()
+                }
+                else if(this.$root.appSettings.closeTokenOnCopy) {
                     this.$parent.isActive = false
                     this.clearOTP()
                 }
+
+                this.$notify({ type: 'is-success', text: this.$t('commons.copied_to_clipboard') })
             },
 
             clipboardErrorHandler ({ value, event }) {

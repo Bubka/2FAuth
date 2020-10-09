@@ -6,6 +6,18 @@ a:hover {
   color: hsl(204, 86%, 53%);
 }
 
+@supports (padding-top: env(safe-area-inset-top)) {
+  #app {
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-left);
+  }
+}
+
+@supports (padding-top: constant(safe-area-inset-top)) {
+  #app {
+    padding: constant(safe-area-inset-top) constant(safe-area-inset-right) constant(safe-area-inset-left);
+  }
+}
+
 .main-section {
   padding: 1.5rem 1rem 9rem 1rem;
 }
@@ -16,12 +28,45 @@ a:hover {
   }
 }
 
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  width: 100%;
+}
+
+@supports (padding-top: env(safe-area-inset-top)) {
+  .header {
+    --safe-area-inset-top: env(safe-area-inset-top);
+    padding-top: calc(1rem + var(--safe-area-inset-top));
+  }
+}
+
+@supports (padding-top: constant(safe-area-inset-top)) {
+  .header {
+    --safe-area-inset-top: constant(safe-area-inset-top);
+    padding-top: calc(1rem + var(--safe-area-inset-top));
+  }
+}
+
+.accounts {
+  margin-top: 40px;
+}
+
+@media screen and (min-width: 769px) {
+  .accounts {
+    margin-top: 60px;
+  }
+}
+
 .search {
   margin-bottom: 0 !important;
 }
 
-.accounts {
-  margin-top: 0.75rem;
+.manage-buttons {
+  justify-content: center;
 }
 
 .form-column {
@@ -165,15 +210,31 @@ a:hover {
 
 .fullscreen-streamer {
   position: fixed;
-  top: 0;
+  top: 10%;
   left: 0;
-  height: 100vh;
   width: 100%;
+  height: 65%;
+}
+
+/* Corner borders */
+.overlay {
+  background:
+    linear-gradient(to right, white 1px, transparent 1px) 0 0,
+    linear-gradient(to right, white 1px, transparent 1px) 0 100%,
+    linear-gradient(to left, white 1px, transparent 1px) 100% 0,
+    linear-gradient(to left, white 1px, transparent 1px) 100% 100%,
+    linear-gradient(to bottom, white 1px, transparent 1px) 0 0,
+    linear-gradient(to bottom, white 1px, transparent 1px) 100% 0,
+    linear-gradient(to top, white 1px, transparent 1px) 0 100%,
+    linear-gradient(to top, white 1px, transparent 1px) 100% 100%;
+
+  background-repeat: no-repeat;
+  background-size: 20px 20px;
 }
 
 .fullscreen-alert {
   position: fixed;
-  top: 25vh;
+  top: 37.5vh;
   left: 0;
   width: 100%;
   padding: 0.75rem;
@@ -314,14 +375,56 @@ footer .field.is-grouped {
   justify-content: center;
 }
 
-.notification.is-fixed {
+.notification {
+  border-radius: 0;
+  padding: 0.4rem 1.5rem;
+}
+
+@supports (padding-top: env(safe-area-inset-top)) {
+  .notification {
+    --safe-area-inset-top: env(safe-area-inset-top);
+    padding-top: calc(0.4rem + var(--safe-area-inset-top));
+  }
+}
+
+@supports (padding-top: constant(safe-area-inset-top)) {
+  .notification {
+    --safe-area-inset-top: constant(safe-area-inset-top);
+    padding-top: calc(0.4rem + var(--safe-area-inset-top));
+  }
+}
+
+.notification .notification-title {
+  // Style for title line
+}
+
+.notification .notification-content {
+  text-align: center;
+}
+
+.options-header {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  border-radius: 0;
-  padding: 0.5rem 2.5rem 0.5rem 1.5rem;
-  text-align: center;
+  padding: 0 1rem 0.5rem;
+  z-index: 1000;
+}
+
+@supports (padding-top: env(safe-area-inset-top)) {
+  .options-header {
+    padding-top: env(safe-area-inset-top);
+  }
+}
+
+@supports (padding-top: constant(safe-area-inset-top)) {
+  .options-header {
+    padding-top: constant(safe-area-inset-top);
+  }
+}
+
+.options-tabs {
+  margin-top: 80px;
 }
 
 .file .tag {

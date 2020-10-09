@@ -10,6 +10,7 @@
         "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
     },
     "devDependencies": {
+        "@kirschbaum-development/laravel-translations-loader": "^1.0.2",
         "cross-env": "^5.2.1",
         "laravel-mix": "^5.0.5",
         "lodash": "^4.17.20",
@@ -33,6 +34,7 @@
         "vue": "^2.6.12",
         "vue-axios": "^2.1.5",
         "vue-i18n": "^8.21.1",
+        "vue-notification": "^1.3.20",
         "vue-pull-refresh": "^0.2.7",
         "vue-qrcode-reader": "^2.3.13",
         "vue-router": "^3.4.3",

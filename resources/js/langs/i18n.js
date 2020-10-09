@@ -1,6 +1,6 @@
 import Vue  from 'vue'
 import VueInternationalization from 'vue-i18n';
-import Locale from './locales';
+import Locale from '@kirschbaum-development/laravel-translations-loader/php!@kirschbaum-development/laravel-translations-loader';
 
 Vue.use(VueInternationalization);
 

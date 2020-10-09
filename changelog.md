@@ -1,5 +1,24 @@
 # Change log
 
+## [1.3.0] - 2020-10-09
+
+### Added
+- Application lock on security code copy or after a fixed period of inactivity
+- Notify user that https is required in order to use camera streaming to flash QR code
+- Notify user that the security code has been copied to clipboard when user click it
+- Show selected accounts count in Manage view
+- New option to show/hide icons in accounts list
+
+### Changed
+- More mobile friendly Close button for modal
+- More advanced notification component
+- Fixed header to keep Search field and Delete button always visible
+- Switches replaced by checkboxes in Settings
+
+### Fixed
+- Hide context around iPhone X+ notch
+- Unwanted access to restricted pages as guest
+
 ## [1.2.0] - 2020-09-18
 
 ### Added

@@ -16,10 +16,12 @@ return [
     'cancel' => 'Annuler',
     'update' => 'Mettre à jour',
     'copy_to_clipboard' => 'Copier',
+    'copied_to_clipboard' => 'Copié dans le presse-papier',
     'profile' => 'Profil',
     'edit' => 'Modifier',
     'delete' => 'Supprimer',
     'save' => 'Enregistrer',
     'close' => 'Fermer',
     'demo_do_not_post_sensitive_data' => 'Site de démonstration, ne postez aucune donnée sensible',
+    'selected' => 'selectionné(s)',
 ];
