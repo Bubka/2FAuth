@@ -1,6 +1,6 @@
 # Change log
 
-## [1.3.0] - 2020-mm-dd
+## [1.3.0] - 2020-10-09
 
 ### Added
 - Application lock on security code copy or after a fixed period of inactivity
@@ -11,13 +11,13 @@
 
 ### Changed
 - More mobile friendly Close button for modal
-- Nore advanced notification component
+- More advanced notification component
 - Fixed header to keep Search field and Delete button always visible
 - Switches replaced by checkboxes in Settings
 
 ### Fixed
 - Hide context around iPhone X+ notch
-- Unwanted access to restricted pages
+- Unwanted access to restricted pages as guest
 
 ## [1.2.0] - 2020-09-18
 
