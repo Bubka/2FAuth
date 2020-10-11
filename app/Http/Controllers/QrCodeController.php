@@ -11,7 +11,7 @@ use Illuminate\Http\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-class QrCodecontroller extends Controller
+class QrCodeController extends Controller
 {
     /**
      * Handle uploaded qr code image
