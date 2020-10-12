@@ -1,5 +1,5 @@
 <template>
-    <form-wrapper :title="$t('auth.forms.login')" :fail="fail" :success="success">
+    <form-wrapper :title="$t('auth.forms.login')">
         <div v-if="$root.appSettings.isDemoApp" class="notification is-info has-text-centered" v-html="$t('auth.forms.welcome_to_demo_app_use_those_credentials')" />
         <form @submit.prevent="handleSubmit" @keydown="form.onKeydown($event)">
             <form-field :form="form" fieldName="email" inputType="email" :label="$t('auth.forms.email')" autofocus />
@@ -18,8 +18,6 @@
     export default {
         data(){
             return {
-                success: '',
-                fail: '',
                 form: new Form({
                     email: '',
                     password: ''
@@ -42,9 +40,11 @@
                 })
                 .catch(error => {
                     if( error.response.status === 401 ) {
-                        this.fail = this.$t('auth.forms.password_do_not_match')
+
+                        this.$notify({ type: 'is-danger', text: this.$t('auth.forms.password_do_not_match'), duration:-1 })
                     }
                     else if( error.response.status !== 422 ) {
+                        
                         this.$router.push({ name: 'genericError', params: { err: error.response } });
                     }
                 });
@@ -58,6 +58,14 @@
             }
 
             next();
+        },
+
+        beforeRouteLeave (to, from, next) {
+            this.$notify({
+                clean: true
+            })
+            
+            next()
         }
     }
 </script>

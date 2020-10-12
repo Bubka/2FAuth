@@ -1,5 +1,5 @@
 <template>
-    <form-wrapper :title="$t('auth.register')" :fail="fail" :success="success">
+    <form-wrapper :title="$t('auth.register')">
         <form @submit.prevent="handleSubmit" @keydown="form.onKeydown($event)">
             <form-field :form="form" fieldName="name" inputType="text" :label="$t('auth.forms.name')" autofocus />
             <form-field :form="form" fieldName="email" inputType="email" :label="$t('auth.forms.email')" />
@@ -18,8 +18,6 @@
     export default {
         data(){
             return {
-                success: '',
-                fail: '',
                 form: new Form({
                     name : '',
                     email : '',
@@ -57,9 +55,18 @@
 
                 if( data.userCount > 0 ) {
                     vm.form.isDisabled = true
-                    vm.fail = vm.$t('errors.already_one_user_registered') + ' ' + vm.$t('errors.cannot_register_more_user')
+
+                    vm.$notify({ type: 'is-danger', text: vm.$t('errors.already_one_user_registered') + ' ' + vm.$t('errors.cannot_register_more_user'), duration:-1 })
                 }
             });
+        },
+
+        beforeRouteLeave (to, from, next) {
+            this.$notify({
+                clean: true
+            })
+
+            next()
         }
     }
 </script>

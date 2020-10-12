@@ -1,5 +1,5 @@
 <template>
-    <form-wrapper :title="$t('auth.forms.new_password')" :fail="fail" :success="success">
+    <form-wrapper :title="$t('auth.forms.new_password')">
         <form @submit.prevent="handleSubmit" @keydown="form.onKeydown($event)">
             <form-field :form="form" fieldName="email" inputType="email" :label="$t('auth.forms.email')" disabled readonly />
             <form-field :form="form" fieldName="password" inputType="password" :label="$t('auth.forms.new_password')" />
@@ -39,17 +39,27 @@
                 this.form.post('/api/password/reset', {returnError: true})
                 .then(response => {
 
-                    this.success = response.data.status
+                    this.$notify({ type: 'is-success', text: response.data.status, duration:-1 })
                 })
                 .catch(error => {
                     if( error.response.data.resetFailed ) {
-                        this.fail = error.response.data.resetFailed
+
+                        this.$notify({ type: 'is-danger', text: error.response.data.resetFailed, duration:-1 })
                     }
                     else if( error.response.status !== 422 ) {
+                        
                         this.$router.push({ name: 'genericError', params: { err: error.response } });
                     }
                 });
             }
         },
+
+        beforeRouteLeave (to, from, next) {
+            this.$notify({
+                clean: true
+            })
+
+            next()
+        }
     }
 </script>
