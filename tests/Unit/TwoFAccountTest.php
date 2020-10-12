@@ -44,7 +44,7 @@ class TwoFAccountTest extends TestCase
         $response = $this->actingAs($this->user, 'api')
             ->json('GET', '/api/twofaccounts/' . $twofaccount->id)
             ->assertStatus(200)
-            ->assertJson([
+            ->assertJsonFragment([
                 'service' => 'testTOTP',
                 'account' => 'test@test.com',
                 'uri' => 'otpauth://totp/test@test.com?secret=A4GRFHVVRBGY7UIW&issuer=test',
@@ -81,7 +81,7 @@ class TwoFAccountTest extends TestCase
                     'icon' => 'test.png',
                 ])
             ->assertStatus(201)
-            ->assertJson([
+            ->assertJsonFragment([
                 'service' => 'testCreation',
                 'account' => 'test@example.org',
                 'uri' => 'otpauth://totp/test@test.com?secret=A4GRFHZVRBGY7UIW&issuer=test',
@@ -182,7 +182,7 @@ class TwoFAccountTest extends TestCase
                     'icon' => 'testUpdate.png',
                 ])
             ->assertStatus(200)
-            ->assertJson([
+            ->assertJsonFragment([
                 'id' => 1,
                 'service' => 'testUpdate',
                 'account' => 'testUpdate@test.com',
@@ -213,7 +213,7 @@ class TwoFAccountTest extends TestCase
                     'counter' => '5'
                 ])
             ->assertStatus(200)
-            ->assertJson([
+            ->assertJsonFragment([
                 'id' => 1,
                 'service' => 'testUpdate.com',
                 'account' => 'testUpdate',
