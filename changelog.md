@@ -1,5 +1,15 @@
 # Change log
 
+## [1.3.1] - 2020-10-12
+
+### Changed
+- Upgrade to Laravel 7.0
+- Drop PHP 7.2 support
+- Enable the Request reset password form in Demo mode but inactivated
+
+### Fixed
+- Fix missing notifications in Auth views
+
 ## [1.3.0] - 2020-10-09
 
 ### Added
