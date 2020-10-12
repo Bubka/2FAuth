@@ -7,7 +7,7 @@
             <form-buttons :isBusy="form.isBusy" :caption="$t('auth.sign_in')" />
         </form>
         <p>{{ $t('auth.forms.dont_have_account_yet') }}&nbsp;<router-link :to="{ name: 'register' }" class="is-link">{{ $t('auth.register') }}</router-link></p>
-        <p v-if="!$root.appSettings.isDemoApp">{{ $t('auth.forms.forgot_your_password') }}&nbsp;<router-link :to="{ name: 'password.request' }" class="is-link">{{ $t('auth.forms.request_password_reset') }}</router-link></p>
+        <p>{{ $t('auth.forms.forgot_your_password') }}&nbsp;<router-link :to="{ name: 'password.request' }" class="is-link">{{ $t('auth.forms.request_password_reset') }}</router-link></p>
     </form-wrapper>
 </template>
 
@@ -44,7 +44,7 @@
                         this.$notify({ type: 'is-danger', text: this.$t('auth.forms.password_do_not_match'), duration:-1 })
                     }
                     else if( error.response.status !== 422 ) {
-                        
+
                         this.$router.push({ name: 'genericError', params: { err: error.response } });
                     }
                 });

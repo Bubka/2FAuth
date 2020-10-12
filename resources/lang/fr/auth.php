@@ -35,6 +35,7 @@ return [
         'forgot_your_password' => 'Mot de passe oublié ?',
         'request_password_reset' => 'Réinitialiser le mot de passe',
         'reset_password' => 'Mot de passe oublié',
+        'no_reset_password_in_demo' => 'Réinitialisation impossible en mode Démo',
         'new_password' => 'Nouveau mot de passe',
         'current_password' => [
             'label' => 'Mot de passe actuel',
