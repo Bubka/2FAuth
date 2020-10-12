@@ -21,11 +21,12 @@ class Kernel extends ConsoleKernel
      *
      * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
      * @return void
+     *
+     * @codeCoverageIgnore Because no code will always remains Not Executed code
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+        //
     }
 
     /**

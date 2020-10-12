@@ -4,6 +4,7 @@ namespace Tests\Feature\Auth;
 
 use App\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Support\Facades\Notification;
@@ -83,6 +84,20 @@ class ForgotPasswordTest extends TestCase
         Notification::assertSentTo($this->user, ResetPassword::class, function ($notification, $channels) use ($token) {
             return Hash::check($notification->token, $token->token) === true;
         });
+    }
+
+    /**
+     * Testing submitting the email password request in Demo mode
+     */
+    public function testSubmitEmailPasswordRequestInDemoMode()
+    {
+        Config::set('app.options.isDemoApp', true);
+
+        $response = $this->json('POST', '/api/password/email', [
+            'email' => ''
+        ]);
+
+        $response->assertStatus(401);
     }
 
 }
