@@ -19,7 +19,7 @@ Route::group(['middleware' => 'guest:api'], function () {
     Route::post('checkuser', 'Auth\RegisterController@checkUser');
     Route::post('register', 'Auth\RegisterController@register');
 
-    Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail');
+    Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->middleware('AvoidResetPassword');
     Route::post('password/reset', 'Auth\ResetPasswordController@reset')->name('password.reset');
 
 });

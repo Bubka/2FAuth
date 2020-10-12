@@ -2,7 +2,7 @@
 
 namespace App\Exceptions;
 
-use Exception;
+use Throwable;
 use Illuminate\Http\Response;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Database\Eloquent\ModelNotFoundException as ModelNotFoundException;
@@ -33,10 +33,10 @@ class Handler extends ExceptionHandler
     /**
      * Report or log an exception.
      *
-     * @param  \Exception  $exception
+     * @param  \Throwable  $exception
      * @return void
      */
-    public function report(Exception $exception)
+    public function report(Throwable $exception)
     {
         parent::report($exception);
     }
@@ -45,10 +45,10 @@ class Handler extends ExceptionHandler
      * Render an exception into an HTTP response.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Exception  $exception
+     * @param  \Throwable  $exception
      * @return \Illuminate\Http\Response
      */
-    public function render($request, Exception $exception)
+    public function render($request, Throwable $exception)
     {        
         if ( $request->wantsJson() ) {
 
@@ -65,10 +65,10 @@ class Handler extends ExceptionHandler
      * Render an exception into an HTTP response.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Exception  $exception
+     * @param  \Throwable  $exception
      * @return \Illuminate\Http\JsonResponse
      */
-    private function handleApiException($request, Exception $exception)
+    private function handleApiException($request, Throwable $exception)
     {
         $debug = [
             'exception' => get_class($exception),
@@ -96,7 +96,7 @@ class Handler extends ExceptionHandler
     /**
      * Set a specific response payload for commons http error codes
      *
-     * @param  \Exception  $exception
+     * @param  \Throwable  $exception
      * @return \Illuminate\Http\JsonResponse
      */
     private function customApiResponse($exception, $debug)

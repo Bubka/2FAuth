@@ -35,6 +35,7 @@ return [
         'forgot_your_password' => 'Forgot your password?',
         'request_password_reset' => 'Request a password reset',
         'reset_password' => 'Reset password',
+        'no_reset_password_in_demo' => 'No reset in Demo mode',
         'new_password' => 'New password',
         'current_password' => [
             'label' => 'Current password',

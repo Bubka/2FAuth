@@ -6,7 +6,7 @@
 # 2FAuth
 A web app to manage your Two-Factor Authentication (2FA) accounts and generate their security codes
 
-![screens](https://user-images.githubusercontent.com/858858/74479269-267a1600-4eaf-11ea-9281-415e5a54bd9f.png)
+![screens](https://user-images.githubusercontent.com/858858/95789691-47b13180-0cde-11eb-9d06-7c6d2ede5f3c.png)
 
 #### [2FAuth Demo](https://demo.2fauth.app/)
 
@@ -37,9 +37,9 @@ I created it because :
 2FAuth generates OTP according to RFC 4226 (HOTP Algorithm) and RFC 6238 (TOTP Algorithm) thanks to [Spomky-Labs/OTPHP](https://github.com/Spomky-Labs/otphp) php library.
 
 ## Requirements
-[![Requires PHP7](https://img.shields.io/badge/php-7.2.*-red.svg?style=flat-square)](https://secure.php.net/downloads.php) 
-* See [Laravel server requirements](https://laravel.com/docs/5.8/installation#server-requirements)
-* Any database [supported by Laravel](https://laravel.com/docs/5.8/database)
+[![Requires PHP7](https://img.shields.io/badge/php-7.3.*-red.svg?style=flat-square)](https://secure.php.net/downloads.php) 
+* See [Laravel server requirements](https://laravel.com/docs/7.x/installation#server-requirements)
+* Any database [supported by Laravel](https://laravel.com/docs/7.x/database)
 
 ## Installation (using command line)
 

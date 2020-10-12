@@ -1,31 +1,31 @@
 {
-    "name": "laravel/laravel",
+    "name": "bubka/2fauth",
     "type": "project",
-    "description": "The Laravel Framework.",
+    "description": "Two-Factor authentication generator",
     "keywords": [
-        "framework",
-        "laravel"
+        "2fauth",
+        "two-actor authentication"
     ],
     "license": "MIT",
     "require": {
-        "php": "^7.1.3",
-        "appstract/laravel-options": "^3.0",
+        "php": "^7.3",
+        "appstract/laravel-options": "^4.1.1",
         "doctrine/dbal": "^2.10",
-        "fideloper/proxy": "^4.0",
+        "fideloper/proxy": "^4.2",
         "khanamiryan/qrcode-detector-decoder": "^1.0",
-        "laravel/framework": "5.8.*",
-        "laravel/passport": "^7.2",
-        "laravel/tinker": "^1.0",
-        "spatie/eloquent-sortable": "^3.8",
+        "laravel/framework": "^7.0",
+        "laravel/passport": "^9.3.2",
+        "laravel/tinker": "^2.0",
+        "laravel/ui": "^2.0",
+        "spatie/eloquent-sortable": "^3.9",
         "spomky-labs/otphp": "^10.0"
     },
     "require-dev": {
-        "beyondcode/laravel-dump-server": "^1.0",
-        "filp/whoops": "^2.0",
-        "fzaninotto/faker": "^1.4",
-        "mockery/mockery": "^1.0",
-        "nunomaduro/collision": "^3.0",
-        "phpunit/phpunit": "^7.5"
+        "facade/ignition": "^2.3",
+        "fzaninotto/faker": "^1.9",
+        "mockery/mockery": "^1.3",
+        "nunomaduro/collision": "^4.1",
+        "phpunit/phpunit": "^9.3"
     },
     "config": {
         "optimize-autoloader": true,
