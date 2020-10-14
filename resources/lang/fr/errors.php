@@ -18,7 +18,7 @@ return [
     'already_one_user_registered' => 'Un compte utilisateur existe déjà.',
     'cannot_register_more_user' => 'Vous ne pouvez pas enregistrer plus d\'un utilisateur.',
     'refresh' => 'Actualiser',
-    'please' => '',
+    'please' => 'Please ',
     'response' => [
         'no_valid_otp' => 'Aucune donnée OTP valide dans ce QR code',
     ],
