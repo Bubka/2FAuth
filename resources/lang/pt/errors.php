@@ -17,8 +17,7 @@ return [
     'error_occured' => 'An error occured:',
     'already_one_user_registered' => 'There is already a registered user.',
     'cannot_register_more_user' => 'You cannot register more than one user.',
-    'refresh' => 'refresh',
-    'please' => 'Please ',
+    'refresh' => 'Refresh',
     'response' => [
         'no_valid_otp' => 'No valid OTP resource in this QR code',
     ],
