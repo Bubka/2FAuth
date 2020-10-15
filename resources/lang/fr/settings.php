@@ -62,7 +62,7 @@ return [
         '5_minutes' => 'Après 5 minutes',
         '10_minutes' => 'Après 10 minutes',
         '15_minutes' => 'Après 15 minutes',
-        '30_minutes' => 'Après 15 minutes',
+        '30_minutes' => 'Après 30 minutes',
         '1_hour' => 'Après 1 heure',
         '1_day' => 'Après 1 journée',
     ],

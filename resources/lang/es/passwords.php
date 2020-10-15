@@ -13,9 +13,14 @@ return [
     |
     */
 
+    // Laravel
+    'reset' => '¡Tu contraseña ha sido restablecida!',
+    'sent' => '¡Te hemos enviado por correo el enlace para restablecer tu contraseña!',
+    'throttled' => 'Por favor espera antes de intentar de nuevo.',
+    'token' => 'El token de recuperación de contraseña es inválido.',
+    'user' => "No podemos encontrar ningún usuario con ese correo electrónico.",
+
+    // 2FAuth
     'password' => 'Passwords must be at least eight characters and match the confirmation.',
-    'reset' => 'Your password has been reset!',
-    'sent' => 'We have e-mailed your password reset link!',
-    'token' => 'This password reset token is invalid.',
-    'user' => "We can't find a user with that e-mail address.",
+    
 ];

@@ -12,12 +12,16 @@ return [
     | these language lines according to your application's requirements.
     |
     */
+   
+    // Laravel
+    'failed' => 'As credenciais indicadas não coincidem com as registadas no sistema.',
+    'throttle' => 'O número limite de tentativas de login foi atingido. Por favor tente novamente dentro de :seconds segundos.',
 
+    // 2FAuth
     'sign_out' => 'Sign out',
     'sign_in' => 'Sign in',
     'register' => 'Register',
     'hello' => 'Hi {username} !',
-    'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
     'already_authenticated' => 'Already authenticated',
     'confirm' => [
         'logout' => 'Are you sure you want to log out?',

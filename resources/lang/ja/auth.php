@@ -12,12 +12,16 @@ return [
     | these language lines according to your application's requirements.
     |
     */
+   
+    // Laravel
+    'failed' => '認証情報と一致するレコードがありません。',
+    'throttle' => 'ログインの試行回数が多すぎます。:seconds 秒後にお試しください。',
 
+    // 2FAuth
     'sign_out' => 'Sign out',
     'sign_in' => 'Sign in',
     'register' => 'Register',
     'hello' => 'Hi {username} !',
-    'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
     'already_authenticated' => 'Already authenticated',
     'confirm' => [
         'logout' => 'Are you sure you want to log out?',

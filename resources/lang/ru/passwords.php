@@ -13,9 +13,14 @@ return [
     |
     */
 
+    // Laravel
+    'reset' => 'Ваш пароль был сброшен!',
+    'sent' => 'Ссылка на сброс пароля была отправлена!',
+    'throttled' => 'Пожалуйста, подождите перед повторной попыткой.',
+    'token' => 'Ошибочный код сброса пароля.',
+    'user' => "Не удалось найти пользователя с указанным электронным адресом.",
+
+    // 2FAuth
     'password' => 'Passwords must be at least eight characters and match the confirmation.',
-    'reset' => 'Your password has been reset!',
-    'sent' => 'We have e-mailed your password reset link!',
-    'token' => 'This password reset token is invalid.',
-    'user' => "We can't find a user with that e-mail address.",
+    
 ];

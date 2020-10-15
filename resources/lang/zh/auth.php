@@ -12,12 +12,16 @@ return [
     | these language lines according to your application's requirements.
     |
     */
+   
+    // Laravel
+    'failed' => '用户名或密码错误',
+    'throttle' => '您尝试的登录次数过多，请 :seconds 秒后再试。',
 
+    // 2FAuth
     'sign_out' => 'Sign out',
     'sign_in' => 'Sign in',
     'register' => 'Register',
     'hello' => 'Hi {username} !',
-    'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
     'already_authenticated' => 'Already authenticated',
     'confirm' => [
         'logout' => 'Are you sure you want to log out?',

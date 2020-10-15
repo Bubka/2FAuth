@@ -130,9 +130,6 @@ return [
     */
 
     'custom' => [
-        'attribute-name' => [
-            'rule-name' => 'custom-message',
-        ],
         'icon' => [
             'image' => 'Supported format are jpeg, png, bmp, gif, svg, or webp',
         ],
