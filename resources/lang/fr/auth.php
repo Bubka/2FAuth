@@ -12,12 +12,16 @@ return [
     | these language lines according to your application's requirements.
     |
     */
+   
+    // Laravel
+    'failed' => 'Ces identifiants ne correspondent pas à nos enregistrements',
+    'throttle' => 'Tentatives de connexion trop nombreuses. Veuillez essayer de nouveau dans :seconds secondes.',
 
+    // 2FAuth
     'sign_out' => 'Déconnexion',
     'sign_in' => 'Se connecter',
     'register' => 'Créer un compte',
     'hello' => 'Hi {username} !',
-    'throttle' => 'Trop de tentatives de connexion. Veuillez réessayer dans :seconds secondes.',
     'already_authenticated' => 'Déjà authentifié',
     'confirm' => [
         'logout' => 'Etes-vous sûrs de vouloir vous déconnecter ?',
@@ -49,6 +53,5 @@ return [
         'profile_saved' => 'Profil mis à jour avec succès !',
         'welcome_to_demo_app_use_those_credentials' => 'bienvenue sur la démo de 2FAuth.<br><br>Vous pouvez vous connecter en utilisant l\'adresse email <strong>demo@2fauth.app</strong> et le mot de passe <strong>demo</demo>',
     ],
-    
 
 ];

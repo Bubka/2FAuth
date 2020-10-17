@@ -14,11 +14,11 @@ return [
     */
 
     // Laravel
-    'reset' => 'Your password has been reset!',
-    'sent' => 'We have emailed your password reset link!',
-    'throttled' => 'Please wait before retrying.',
-    'token' => 'This password reset token is invalid.',
-    'user' => "We can't find a user with that email address.",
+    'reset' => 'パスワードをリセットしました。',
+    'sent' => 'パスワードリマインダーを送信しました。',
+    'throttled' => '時間を置いて再度お試しください。',
+    'token' => 'このパスワードリセットトークンは無効です。',
+    'user' => "このメールアドレスに一致するユーザーを見つけることが出来ませんでした。",
 
     // 2FAuth
     'password' => 'Passwords must be at least eight characters and match the confirmation.',

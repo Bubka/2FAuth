@@ -14,8 +14,8 @@ return [
     */
    
     // Laravel
-    'failed' => 'These credentials do not match our records.',
-    'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
+    'failed' => 'Credenziali non valide.',
+    'throttle' => 'Troppi tentativi di accesso. Riprova tra :seconds secondi.',
 
     // 2FAuth
     'sign_out' => 'Sign out',

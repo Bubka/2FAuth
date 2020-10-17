@@ -37,7 +37,7 @@ return [
         'scan_qrcode' => 'Scanner un QR code',
         'use_qrcode' => [
             'val' => 'Utiliser un QR code',
-            'title' => 'Utiliser un QR code pour renseigner le formulaire d\'un seul coup d\'un seul'
+            'title' => 'Utiliser un QR code pour renseigner le formulaire d\'un seul coup d\'un seul',
         ],
         'unlock' => [
             'val' => 'Déverouiller',

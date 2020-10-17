@@ -28,7 +28,7 @@ I created it because :
 * Generate TOTP and HOTP security codes
 * User authentication to protect 2FA data stored in 2FAuth
 
-2FAuth is currently localized in English and in French.
+2FAuth is currently fully localized in English and French. See [Contributing](#Contributing) if you want to help on adding more languages.
 
 #### Single user app
 2FA are sensitives data so you have to create an account and authenticate yourself to use the app. It is not possible to create more than one user account, the app is thought for personal use.
@@ -92,7 +92,11 @@ php artisan config:clear
 ```
 
 # Contributing
-to complete
+You can contribute to 2FAuth in many ways:
+
+- By [reporting bugs](https://github.com/Bubka/2FAuth/issues/new?template=bug_report.md), or even better, by submitting a fix with a pull request on the *dev* branch.
+- By [suggesting enhancement or new feature](https://github.com/Bubka/2FAuth/issues/new?template=feature_request.md). Please have a look to the [2FAuth development project](https://github.com/Bubka/2FAuth/projects/2), maybe your idea is already there.
+- By correcting or completing translations in a language you speak, using the [Crowdin platform](https://crowdin.com/project/2fauth). Ask for your language if this one is lacking.
 
 # License
 [AGPL-3.0](https://www.gnu.org/licenses/agpl-3.0.html)
