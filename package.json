@@ -27,7 +27,7 @@
         "@fortawesome/free-solid-svg-icons": "^5.14.0",
         "@fortawesome/vue-fontawesome": "^0.1.10",
         "axios": "^0.19.2",
-        "bulma": "^0.8.2",
+        "bulma": "^0.9.0",
         "bulma-checkradio": "^1.1.1",
         "bulma-switch": "^2.0.0",
         "v-clipboard": "^2.2.3",
