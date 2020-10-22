@@ -15,7 +15,8 @@ import {
     faSearch,
     faEllipsisH,
     faBars,
-    faSpinner
+    faSpinner,
+    faChevronLeft
 } from '@fortawesome/free-solid-svg-icons'
 
 import {
@@ -35,7 +36,8 @@ library.add(
     faEllipsisH,
     faBars,
     faSpinner,
-    faGithubAlt
+    faGithubAlt,
+    faChevronLeft
 );
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
