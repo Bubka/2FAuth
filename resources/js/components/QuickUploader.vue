@@ -29,7 +29,7 @@
                 </div>
                 <!-- Fallback link to classic form -->
                 <div class="column is-full quick-uploader-footer">
-                    <router-link :to="{ name: 'create' }" class="is-link">{{ $t('twofaccounts.use_full_form') }}</router-link>
+                    <router-link :to="{ name: 'createAccount' }" class="is-link">{{ $t('twofaccounts.use_full_form') }}</router-link>
                 </div>
             </div>
         </div>
@@ -210,7 +210,7 @@
                     response = await this.form.post('/api/qrcode/decode')
                 }
 
-                this.$router.push({ name: 'create', params: { qrAccount: response.data } });
+                this.$router.push({ name: 'createAccount', params: { qrAccount: response.data } });
 
             },
 

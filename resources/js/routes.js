@@ -4,8 +4,11 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 import Accounts         from './views/Accounts'
-import Create           from './views/twofaccounts/Create'
-import Edit             from './views/twofaccounts/Edit'
+import CreateAccount    from './views/twofaccounts/Create'
+import EditAccount      from './views/twofaccounts/Edit'
+import Groups           from './views/Groups'
+import CreateGroup      from './views/groups/Create'
+import EditGroup        from './views/groups/Edit'
 import Login            from './views/auth/Login'
 import Register         from './views/auth/Register'
 import PasswordRequest  from './views/auth/password/Request'
@@ -17,9 +20,14 @@ const router = new Router({
     mode: 'history',
     routes: [
         { path: '/accounts', name: 'accounts', component: Accounts, meta: { requiresAuth: true }, alias: '/', props: true },
+        { path: '/account/create', name: 'createAccount', component: CreateAccount, meta: { requiresAuth: true } },
+        { path: '/account/edit/:twofaccountId', name: 'editAccount', component: EditAccount, meta: { requiresAuth: true } },
+
+        { path: '/groups', name: 'groups', component: Groups, meta: { requiresAuth: true }, props: true },
+        { path: '/group/create', name: 'createGroup', component: CreateGroup, meta: { requiresAuth: true } },
+        { path: '/group/edit/:groupId', name: 'editGroup', component: EditGroup, meta: { requiresAuth: true } },
+
         { path: '/settings', name: 'settings', component: Settings, meta: { requiresAuth: true } },
-        { path: '/create', name: 'create', component: Create, meta: { requiresAuth: true } },
-        { path: '/edit/:twofaccountId', name: 'edit', component: Edit, meta: { requiresAuth: true } },
 
         { path: '/login', name: 'login', component: Login },
         { path: '/register', name: 'register', component: Register },

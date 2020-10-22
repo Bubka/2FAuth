@@ -30,7 +30,7 @@
                                 </div>
         	                    <transition name="fadeInOut">
         	                        <div class="tfa-edit has-text-grey" v-if="editMode">
-        	                            <router-link :to="{ name: 'edit', params: { twofaccountId: account.id }}" class="tag is-dark is-rounded">
+        	                            <router-link :to="{ name: 'editAccount', params: { twofaccountId: account.id }}" class="tag is-dark is-rounded">
         	                                {{ $t('commons.edit') }}
         	                            </router-link>
         	                        </div>
