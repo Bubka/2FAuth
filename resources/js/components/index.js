@@ -10,7 +10,6 @@ import FormCheckbox     from './FormCheckbox'
 import FormButtons      from './FormButtons'
 import VueFooter        from './Footer'
 import Kicker           from './Kicker'
-import Breadcrumb       from './Breadcrumb'
 
 // Components that are registered globaly.
 [
@@ -24,8 +23,7 @@ import Breadcrumb       from './Breadcrumb'
     FormCheckbox,
     FormButtons,
     VueFooter,
-    Kicker,
-    Breadcrumb
+    Kicker
 ].forEach(Component => {
 	Vue.component(Component.name, Component)
 })
