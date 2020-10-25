@@ -38,7 +38,8 @@ return [
         'useBasicQrcodeReader' => false,
         'displayMode' => 'list',
         'showAccountsIcons' => true,
-        'kickUserAfter' => '15'
+        'kickUserAfter' => '15',
+        'activeGroup' => 0,
     ],
 
     /*
