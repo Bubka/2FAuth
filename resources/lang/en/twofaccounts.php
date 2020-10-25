@@ -15,14 +15,12 @@ return [
 
     'service' => 'Service',
     'account' => 'Account',
+    'accounts' => 'Accounts',
     'icon' => 'Icon',
-    'new' => 'New',
     'no_account_here' => 'No 2FA here!',
     'add_first_account' => 'Add your first account',
     'use_full_form' => 'Or use the full form',
     'add_one' => 'Add one',
-    'manage' => 'Manage',
-    'done' => 'Done',
     'forms' => [
         'service' => [
             'placeholder' => 'example.com',
@@ -48,8 +46,6 @@ return [
             'title' => 'Lock it',
         ],
         'choose_image' => 'Choose an image…',
-        'create' => 'Create',
-        'save' => 'Save',
         'test' => 'Test',
     ],
     'stream' => [

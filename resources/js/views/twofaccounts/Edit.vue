@@ -49,7 +49,7 @@
             <field-error :form="form" field="icon" class="help-for-file" />
             <div class="field is-grouped">
                 <div class="control">
-                    <v-button :isLoading="form.isBusy" >{{ $t('twofaccounts.forms.save') }}</v-button>
+                    <v-button :isLoading="form.isBusy" >{{ $t('commons.save') }}</v-button>
                 </div>
                 <div class="control">
                     <button type="button" class="button is-text" @click="cancelCreation">{{ $t('commons.cancel') }}</button>
