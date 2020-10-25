@@ -1,5 +1,22 @@
 <template>
     <div>
+        <!-- Group selector -->
+        <div class="container groups" v-if="showGroupSelector">
+            <div class="columns is-centered">
+                <div class="column is-one-third-tablet is-one-quarter-desktop is-one-quarter-widescreen is-one-quarter-fullhd">
+                    <div class="columns is-multiline">
+                        <div class="column is-full" v-for="group in groups" v-if="group.count > 0" :key="group.id">
+                            <button :disabled="group.id == $root.appSettings.activeGroup" class="button is-fullwidth is-dark has-text-light is-outlined" @click="setActiveGroup(group.id)">{{ group.name }}</button>
+                        </div>
+                    </div>
+                    <div class="columns is-centered">
+                        <div class="column has-text-centered">
+                            <router-link :to="{ name: 'groups' }" >{{ $t('groups.manage_groups') }}</router-link>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- show accounts list -->
         <div class="container" v-if="this.showAccounts">
             <!-- accounts -->
@@ -47,13 +64,16 @@
             <!-- </vue-pull-refresh> -->
         </div>
         <!-- header -->
-        <div class="header has-background-black-ter" v-if="this.showAccounts">
+        <div class="header has-background-black-ter" v-if="this.showAccounts || this.showGroupSelector">
             <div class="columns is-gapless is-mobile is-centered">
                 <div class="column is-three-quarters-mobile is-one-third-tablet is-one-quarter-desktop is-one-quarter-widescreen is-one-quarter-fullhd">
                     <!-- toolbar -->
                     <div class="toolbar has-text-centered" v-if="editMode">
                         <div class="manage-buttons tags has-addons are-medium">
                             <span class="tag is-dark">{{ selectedAccounts.length }}&nbsp;{{ $t('commons.selected') }}</span>
+                            <a class="tag is-link" v-if="selectedAccounts.length > 0" @click="moveAccounts">
+                                {{ $t('commons.move') }}&nbsp;<font-awesome-icon :icon="['fas', 'layer-group']" />
+                            </a>
                             <a class="tag is-danger" v-if="selectedAccounts.length > 0" @click="destroyAccounts">
                                 {{ $t('commons.delete') }}&nbsp;<font-awesome-icon :icon="['fas', 'trash']" />
                             </a>
@@ -69,6 +89,18 @@
                             </span>
                         </div>
                     </div>
+                    <!-- group selector -->
+                    <div class="group-selector has-text-centered" v-if="!editMode">
+                        <div class="columns" @click="toggleGroupSelector">
+                            <div class="column" v-if="!showGroupSelector">
+                                {{ this.activeGroupName }} ({{ this.accounts.length }})
+                                <font-awesome-icon  :icon="['fas', 'caret-down']" />
+                            </div>
+                            <div class="column" v-else>
+                                {{ $t('groups.select_accounts_to_show') }}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -79,11 +111,11 @@
             <twofaccount-show ref="TwofaccountShow" ></twofaccount-show>
         </modal>
         <!-- footer -->
-        <vue-footer v-if="showFooter" :showButtons="accounts.length > 0">
+        <vue-footer v-if="showFooter && !showGroupSelector" :showButtons="accounts.length > 0">
             <!-- New item buttons -->
             <p class="control" v-if="!showUploader && !editMode">
                 <a class="button is-link is-rounded is-focus" @click="showUploader = true">
-                    <span>{{ $t('twofaccounts.new') }}</span>
+                    <span>{{ $t('commons.new') }}</span>
                     <span class="icon is-small">
                         <font-awesome-icon :icon="['fas', 'qrcode']" />
                     </span>
@@ -91,12 +123,12 @@
             </p>
             <!-- Manage button -->
             <p class="control" v-if="!showUploader && !editMode">
-                <a class="button is-dark is-rounded" @click="setEditModeTo(true)">{{ $t('twofaccounts.manage') }}</a>
+                <a class="button is-dark is-rounded" @click="setEditModeTo(true)">{{ $t('commons.manage') }}</a>
             </p>
             <!-- Done button -->
             <p class="control" v-if="!showUploader && editMode">
                 <a class="button is-success is-rounded" @click="setEditModeTo(false)">
-                    <span>{{ $t('twofaccounts.done') }}</span>
+                    <span>{{ $t('commons.done') }}</span>
                     <span class="icon is-small">
                         <font-awesome-icon :icon="['fas', 'check']" />
                     </span>
@@ -107,6 +139,12 @@
                 <a class="button is-dark is-rounded" @click="showUploader = false">
                     {{ $t('commons.cancel') }}
                 </a>
+            </p>
+        </vue-footer>
+        <vue-footer v-if="showFooter && showGroupSelector" :showButtons="true">
+            <!-- Close Group selector button -->
+            <p class="control">
+                <a class="button is-dark is-rounded" @click="closeGroupSelector()">{{ $t('commons.close') }}</a>
             </p>
         </vue-footer>
     </div>
@@ -120,18 +158,24 @@
     import QuickUploader from './../components/QuickUploader'
     // import vuePullRefresh from 'vue-pull-refresh';
     import draggable from 'vuedraggable'
+    import Form from './../components/Form'
 
 
     export default {
         data(){
             return {
                 accounts : [],
+                groups : [],
                 selectedAccounts: [],
+                form: new Form({
+                    activeGroup: this.$root.appSettings.activeGroup,
+                }),
                 showTwofaccountInModal : false,
                 search: '',
                 editMode: this.InitialEditMode,
                 showUploader: false,
                 showFooter: true,
+                showGroupSelector: false,
                 drag: false,
             }
         },
@@ -151,8 +195,19 @@
             },
 
             showAccounts() {
-                return this.accounts.length > 0 && !this.showUploader ? true : false
+                return this.accounts.length > 0 && !this.showUploader && !this.showGroupSelector ? true : false
             },
+
+            activeGroupName() {
+                let g = this.groups.find(el => el.id === parseInt(this.$root.appSettings.activeGroup))
+
+                if(g) {
+                    return g.name
+                }
+                else {
+                    return this.$t('commons.all')
+                }
+            }
 
         },
 
@@ -161,6 +216,7 @@
         mounted() {
 
             this.fetchAccounts()
+            this.fetchGroups()
 
             // stop OTP generation on modal close
             this.$on('modalClose', function() {
@@ -259,6 +315,72 @@
                     // desynchronize from the backend php collection
                     this.fetchAccounts()
                 }
+            },
+
+            async moveAccounts() {
+
+                let accountsIds = []
+                this.selectedAccounts.forEach(id => accountsIds.push(id))
+
+                // Backend will associate all accounts with the selected group in the same move
+                await this.axios.patch('/api/group/accounts', {accountsIds: accountsIds, groupId: '3'} )
+
+                // we fetch the accounts again to prevent the js collection being
+                // desynchronize from the backend php collection
+                this.fetchAccounts()
+
+            },
+
+            fetchGroups() {
+                this.groups = []
+
+                this.axios.get('api/groups').then(response => {
+                    response.data.forEach((data) => {
+                        this.groups.push({
+                            id : data.id,
+                            name : data.name,
+                            isActive: data.isActive,
+                            count: data.twofaccounts_count
+                        })
+                    })
+                })
+            },
+
+            async setActiveGroup(id) {
+
+                this.form.activeGroup = id
+
+                await this.form.post('/api/settings/options', {returnError: true})
+                .then(response => {
+
+                    this.$root.appSettings.activeGroup = response.data.settings.activeGroup
+
+                    this.closeGroupSelector()
+
+                })
+                .catch(error => {
+                    
+                    this.$router.push({ name: 'genericError', params: { err: error.response } })
+                });
+
+                this.fetchAccounts()
+            },
+
+            toggleGroupSelector: function(event) {
+
+                if (event) {
+                    this.showGroupSelector ? this.closeGroupSelector() : this.openGroupSelector()
+                }
+            },
+
+            openGroupSelector: function(event) {
+
+                this.showGroupSelector = true
+            },
+
+            closeGroupSelector: function(event) {
+
+                this.showGroupSelector = false
             },
 
             setEditModeTo(state) {

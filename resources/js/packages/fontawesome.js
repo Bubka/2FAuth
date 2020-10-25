@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 import {
     faPlus,
+    faPlusCircle,
     faQrcode,
     faImage,
     faTrash,
@@ -16,7 +17,11 @@ import {
     faEllipsisH,
     faBars,
     faSpinner,
-    faChevronLeft
+    faChevronLeft,
+    faCaretUp,
+    faCaretDown,
+    faLayerGroup,
+    faMinusCircle,
 } from '@fortawesome/free-solid-svg-icons'
 
 import {
@@ -25,6 +30,7 @@ import {
 
 library.add(
     faPlus,
+    faPlusCircle,
     faQrcode,
     faImage,
     faTrash,
@@ -37,7 +43,11 @@ library.add(
     faBars,
     faSpinner,
     faGithubAlt,
-    faChevronLeft
+    faChevronLeft,
+    faCaretUp,
+    faCaretDown,
+    faLayerGroup,
+    faMinusCircle,
 );
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)

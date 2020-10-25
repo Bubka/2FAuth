@@ -51,13 +51,34 @@ a:hover {
   }
 }
 
+.group-selector {
+  cursor: pointer;
+}
+
+.group-item {
+  border-bottom: 1px solid hsl(0, 0%, 21%);
+  padding: 0.75rem;
+}
+
+.group-item:first-of-type {
+  margin-top: 2.5rem;
+}
+
+.group-item span {
+  display: block;
+}
+
 .accounts {
-  margin-top: 40px;
+  margin-top: 64px;
+}
+
+.groups {
+  margin-top: 110px;
 }
 
 @media screen and (min-width: 769px) {
   .accounts {
-    margin-top: 60px;
+    margin-top: 84px;
   }
 }
 
