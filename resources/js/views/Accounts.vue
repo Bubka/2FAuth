@@ -1,7 +1,7 @@
 <template>
     <div>
-        <!-- Group selector -->
-        <div class="container groups" v-if="showGroupSelector">
+        <!-- Group switch -->
+        <div class="container groups" v-if="showGroupSwitch">
             <div class="columns is-centered">
                 <div class="column is-one-third-tablet is-one-quarter-desktop is-one-quarter-widescreen is-one-quarter-fullhd">
                     <div class="columns is-multiline">
@@ -12,6 +12,25 @@
                     <div class="columns is-centered">
                         <div class="column has-text-centered">
                             <router-link :to="{ name: 'groups' }" >{{ $t('groups.manage_groups') }}</router-link>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Group selector -->
+        <div class="container groups with-heading" v-if="showGroupSelector">
+            <div class="columns is-centered">
+                <div class="column is-one-third-tablet is-one-quarter-desktop is-one-quarter-widescreen is-one-quarter-fullhd">
+                    <div class="columns is-multiline">
+                        <div class="column is-full" v-for="group in groups" :key="group.id">
+                            <button class="button is-fullwidth is-dark has-text-light is-outlined" :class="{ 'is-link' : moveAccountsTo === group.id}" @click="moveAccountsTo = group.id">
+                                <span v-if="group.id === 0">
+                                    {{ $t('groups.no_group') }}
+                                </span>
+                                <span v-else>
+                                    {{ group.name }}
+                                </span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -64,14 +83,14 @@
             <!-- </vue-pull-refresh> -->
         </div>
         <!-- header -->
-        <div class="header has-background-black-ter" v-if="this.showAccounts || this.showGroupSelector">
+        <div class="header has-background-black-ter" v-if="this.showAccounts || this.showGroupSwitch">
             <div class="columns is-gapless is-mobile is-centered">
                 <div class="column is-three-quarters-mobile is-one-third-tablet is-one-quarter-desktop is-one-quarter-widescreen is-one-quarter-fullhd">
                     <!-- toolbar -->
                     <div class="toolbar has-text-centered" v-if="editMode">
                         <div class="manage-buttons tags has-addons are-medium">
                             <span class="tag is-dark">{{ selectedAccounts.length }}&nbsp;{{ $t('commons.selected') }}</span>
-                            <a class="tag is-link" v-if="selectedAccounts.length > 0" @click="moveAccounts">
+                            <a class="tag is-link" v-if="selectedAccounts.length > 0" @click="showGroupSelector = true">
                                 {{ $t('commons.move') }}&nbsp;<font-awesome-icon :icon="['fas', 'layer-group']" />
                             </a>
                             <a class="tag is-danger" v-if="selectedAccounts.length > 0" @click="destroyAccounts">
@@ -89,10 +108,10 @@
                             </span>
                         </div>
                     </div>
-                    <!-- group selector -->
-                    <div class="group-selector has-text-centered" v-if="!editMode">
-                        <div class="columns" @click="toggleGroupSelector">
-                            <div class="column" v-if="!showGroupSelector">
+                    <!-- group switch toggle -->
+                    <div class="is-clickable has-text-centered" v-if="!editMode">
+                        <div class="columns" @click="toggleGroupSwitch">
+                            <div class="column" v-if="!showGroupSwitch">
                                 {{ this.activeGroupName }} ({{ this.accounts.length }})
                                 <font-awesome-icon  :icon="['fas', 'caret-down']" />
                             </div>
@@ -111,7 +130,7 @@
             <twofaccount-show ref="TwofaccountShow" ></twofaccount-show>
         </modal>
         <!-- footer -->
-        <vue-footer v-if="showFooter && !showGroupSelector" :showButtons="accounts.length > 0">
+        <vue-footer v-if="showFooter && !showGroupSwitch" :showButtons="accounts.length > 0">
             <!-- New item buttons -->
             <p class="control" v-if="!showUploader && !editMode">
                 <a class="button is-link is-rounded is-focus" @click="showUploader = true">
@@ -141,10 +160,20 @@
                 </a>
             </p>
         </vue-footer>
-        <vue-footer v-if="showFooter && showGroupSelector" :showButtons="true">
-            <!-- Close Group selector button -->
+        <vue-footer v-if="showFooter && showGroupSwitch" :showButtons="true">
+            <!-- Close Group switch button -->
             <p class="control">
-                <a class="button is-dark is-rounded" @click="closeGroupSelector()">{{ $t('commons.close') }}</a>
+                <a class="button is-dark is-rounded" @click="closeGroupSwitch()">{{ $t('commons.close') }}</a>
+            </p>
+        </vue-footer>
+        <vue-footer v-if="showFooter && showGroupSelector" :showButtons="true">
+            <!-- Move to selected group button -->
+            <p class="control">
+                <a class="button is-link is-rounded" @click="moveAccounts()">{{ $t('commons.move') }}</a>
+            </p>
+            <!-- Cancel button -->
+            <p class="control">
+                <a class="button is-dark is-rounded" @click="showGroupSelector = false">{{ $t('commons.cancel') }}</a>
             </p>
         </vue-footer>
     </div>
@@ -175,8 +204,10 @@
                 editMode: this.InitialEditMode,
                 showUploader: false,
                 showFooter: true,
+                showGroupSwitch: false,
                 showGroupSelector: false,
                 drag: false,
+                moveAccountsTo: false,
             }
         },
 
@@ -195,7 +226,7 @@
             },
 
             showAccounts() {
-                return this.accounts.length > 0 && !this.showUploader && !this.showGroupSelector ? true : false
+                return this.accounts.length > 0 && !this.showUploader && !this.showGroupSwitch && !this.showGroupSelector ? true : false
             },
 
             activeGroupName() {
@@ -323,11 +354,13 @@
                 this.selectedAccounts.forEach(id => accountsIds.push(id))
 
                 // Backend will associate all accounts with the selected group in the same move
-                await this.axios.patch('/api/group/accounts', {accountsIds: accountsIds, groupId: '3'} )
+                await this.axios.patch('/api/group/accounts', {accountsIds: accountsIds, groupId: this.moveAccountsTo} )
 
                 // we fetch the accounts again to prevent the js collection being
                 // desynchronize from the backend php collection
                 this.fetchAccounts()
+                this.fetchGroups()
+                this.showGroupSelector = false
 
             },
 
@@ -355,7 +388,7 @@
 
                     this.$root.appSettings.activeGroup = response.data.settings.activeGroup
 
-                    this.closeGroupSelector()
+                    this.closeGroupSwitch()
 
                 })
                 .catch(error => {
@@ -366,21 +399,21 @@
                 this.fetchAccounts()
             },
 
-            toggleGroupSelector: function(event) {
+            toggleGroupSwitch: function(event) {
 
                 if (event) {
-                    this.showGroupSelector ? this.closeGroupSelector() : this.openGroupSelector()
+                    this.showGroupSwitch ? this.closeGroupSwitch() : this.openGroupSwitch()
                 }
             },
 
-            openGroupSelector: function(event) {
+            openGroupSwitch: function(event) {
 
-                this.showGroupSelector = true
+                this.showGroupSwitch = true
             },
 
-            closeGroupSelector: function(event) {
+            closeGroupSwitch: function(event) {
 
-                this.showGroupSelector = false
+                this.showGroupSwitch = false
             },
 
             setEditModeTo(state) {

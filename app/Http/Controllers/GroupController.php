@@ -111,13 +111,24 @@ class GroupController extends Controller
      */
     public function associateAccounts(Request $request)
     {
+        if( $request->input('groupId') > 0 ) {
 
-        $twofaccounts = TwoFAccount::find($request->input('accountsIds'));
-        $group = Group::FindOrFail($request->input('groupId'));
-        
-        $group->twofaccounts()->saveMany($twofaccounts);
+            $twofaccounts = TwoFAccount::find($request->input('accountsIds'));
+            $group = Group::FindOrFail($request->input('groupId'));
+            
+            $group->twofaccounts()->saveMany($twofaccounts);
+            
+            return response()->json($group, 200);
+        }
+        else {
 
-        return response()->json($group, 200);
+            TwoFAccount::whereIn('id', $request->input('accountsIds'))
+                        ->update(['group_id' => NULL]);
+            
+            return response()->json(['message' => 'moved to null'], 200);
+        }
+
+
     }
 
 

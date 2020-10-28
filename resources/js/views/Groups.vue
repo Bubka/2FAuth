@@ -20,7 +20,7 @@
                 </router-link>
                 <span class="is-family-primary is-size-6 is-size-7-mobile has-text-grey">{{ group.count }} {{ $t('twofaccounts.accounts') }}</span>
             </div>
-            <p class="is-size-7 is-pulled-right">
+            <p class="is-size-7 is-pulled-right" v-if="groups.length > 0">
                 {{ $t('groups.deleting_group_does_not_delete_accounts')}}
             </p>
             <!-- footer -->
