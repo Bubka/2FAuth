@@ -4,10 +4,12 @@ namespace App;
 
 use OTPHP\HOTP;
 use OTPHP\Factory;
+use App\Classes\Options;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
 
 class TwoFAccount extends Model implements Sortable
@@ -157,33 +159,70 @@ class TwoFAccount extends Model implements Sortable
 
 
     /**
-     * Set the user's first name.
+     * Set encrypted uri
      *
      * @param  string  $value
      * @return void
      */
-    // public function setUriAttribute($value)
-    // {
-    //     $this->attributes['uri'] = encrypt($value);
-    // }
+    public function setUriAttribute($value)
+    {
+        $this->attributes['uri'] = Options::get('useEncryption') ? Crypt::encryptString($value) : $value;
+    }
 
     /**
-     * Get the user's first name.
+     * Get decyphered uri
      *
      * @param  string  $value
      * @return string
      */
-    // public function getUriAttribute($value)
-    // {
-    //     try {
+    public function getUriAttribute($value)
+    {
+        if( Options::get('useEncryption') )
+        {
+            try {
+                return Crypt::decryptString($value);
+            }
+            catch (DecryptException $e) {
+                return '*encrypted*';
+            }
+        }
+        else {
+            return $value;
+        }
+    }
 
-    //         return decrypt($value);
 
-    //     } catch (DecryptException $e) {
+    /**
+     * Set encrypted account
+     *
+     * @param  string  $value
+     * @return void
+     */
+    public function setAccountAttribute($value)
+    {
+        $this->attributes['account'] = Options::get('useEncryption') ? Crypt::encryptString($value) : $value;
+    }
 
-    //         return null;
-    //     }
-
-    // }
+    /**
+     * Get decyphered account
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getAccountAttribute($value)
+    {
+        if( Options::get('useEncryption') )
+        {
+            try {
+                return Crypt::decryptString($value);
+            }
+            catch (DecryptException $e) {
+                return '*encrypted*';
+            }
+        }
+        else {
+            return $value;
+        }
+    }
 
 }

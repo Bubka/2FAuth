@@ -56,6 +56,10 @@ return [
             'label' => 'Auto lock',
             'help' => 'Log out the user automatically in case of inactivity'
         ],
+        'use_encryption' => [
+            'label' => 'Protect sensible data',
+            'help' => 'Sensitive data, the 2FA secrets and emails, are stored encrypted in database. Be sure to backup the APP_KEY value of your .env file (or the whole file) as it serves as key encryption. There is no way to decypher encrypted data without this key.',
+        ],
         'never' => 'Never',
         'on_token_copy' => 'On security code copy',
         '1_minutes' => 'After 1 minute',
@@ -66,6 +70,5 @@ return [
         '1_hour' => 'After 1 hour',
         '1_day' => 'After 1 day',
     ],
-    
 
 ];
