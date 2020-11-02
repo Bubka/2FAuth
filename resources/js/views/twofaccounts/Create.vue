@@ -215,6 +215,7 @@
 
                 let imgdata = new FormData();
                 imgdata.append('qrcode', this.$refs.qrcodeInput.files[0]);
+                imgdata.append('inputFormat', 'fileUpload');
 
                 const { data } = await this.form.upload('/api/qrcode/decode', imgdata)
 

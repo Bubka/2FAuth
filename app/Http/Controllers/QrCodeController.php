@@ -44,7 +44,7 @@ class QrCodeController extends Controller
     public function decode(Request $request)
     {
 
-        if(Options::get('useBasicQrcodeReader')) {
+        if( Options::get('useBasicQrcodeReader') || $request->inputFormat === 'fileUpload') {
 
             // input validation
             $this->validate($request, [
