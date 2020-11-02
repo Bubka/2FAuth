@@ -43,6 +43,7 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::apiResource('groups', 'GroupController');
     Route::post('twofaccounts/otp', 'TwoFAccountController@generateOTP')->name('twofaccounts.generateOTP');
     Route::post('qrcode/decode', 'QrCodeController@decode');
+    Route::get('qrcode/{twofaccount}', 'QrCodeController@show');
     Route::post('icon/upload', 'IconController@upload');
     Route::delete('icon/delete/{icon}', 'IconController@delete');
 

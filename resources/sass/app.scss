@@ -163,13 +163,13 @@ a:hover {
   padding: 0;
 }
 
-.tfa-list .tfa-container > div:first-of-type {
-    padding: 0 0 0 0.5rem;
-}
+// .tfa-list .tfa-container > div:first-of-type {
+//     padding: 0 0 0 0.5rem;
+// }
 
-.tfa-list .tfa-container > div:last-of-type {
-    padding: 0 1rem 0 0;
-}
+// .tfa-list .tfa-container > div:last-of-type {
+//     padding: 0 1rem 0 0;
+// }
 
 .tfa-grid .tfa-checkbox,
 .tfa-grid .tfa-dots,
@@ -620,7 +620,7 @@ footer .field.is-grouped {
 
 @keyframes addLeftOffset {
   from {
-    transform: translateX(-2.875rem);
+    transform: translateX(-2.375rem);
   }
   to {
     transform: translateX(0);
@@ -664,7 +664,7 @@ footer .field.is-grouped {
     transform: translateX(0);
   }
   to {
-    transform: translateX(-2.875rem);
+    transform: translateX(-2.375rem);
   }
 }
 

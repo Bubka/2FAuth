@@ -2,17 +2,39 @@
 
 namespace App\Http\Controllers;
 
-use Zxing\QrReader;
 use OTPHP\TOTP;
 use OTPHP\Factory;
+use Zxing\QrReader;
+use App\TwoFAccount;
+use chillerlan\QRCode\{QRCode, QROptions};
 use App\Classes\Options;
-use Assert\AssertionFailedException;
 use Illuminate\Http\File;
 use Illuminate\Http\Request;
+use Assert\AssertionFailedException;
 use Illuminate\Support\Facades\Storage;
 
 class QrCodeController extends Controller
 {
+    /**
+     * Return a QR code image
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function show(TwoFAccount $twofaccount)
+    {
+        
+        $options = new QROptions([
+            'quietzoneSize' => 2,
+            'scale'         => 8,
+        ]);
+
+        $qrcode = new QRCode($options);
+
+        return response()->json(['qrcode' => $qrcode->render($twofaccount->uri)], 200);
+    }
+
+
     /**
      * Handle uploaded qr code image
      *

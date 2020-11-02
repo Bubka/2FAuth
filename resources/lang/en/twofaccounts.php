@@ -21,6 +21,7 @@ return [
     'add_first_account' => 'Add your first account',
     'use_full_form' => 'Or use the full form',
     'add_one' => 'Add one',
+    'show_qrcode' => 'Show QR code',
     'forms' => [
         'service' => [
             'placeholder' => 'example.com',

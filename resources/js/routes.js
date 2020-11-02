@@ -6,6 +6,7 @@ Vue.use(Router)
 import Accounts         from './views/Accounts'
 import CreateAccount    from './views/twofaccounts/Create'
 import EditAccount      from './views/twofaccounts/Edit'
+import QRcodeAccount      from './views/twofaccounts/QRcode'
 import Groups           from './views/Groups'
 import CreateGroup      from './views/groups/Create'
 import EditGroup        from './views/groups/Edit'
@@ -22,6 +23,7 @@ const router = new Router({
         { path: '/accounts', name: 'accounts', component: Accounts, meta: { requiresAuth: true }, alias: '/', props: true },
         { path: '/account/create', name: 'createAccount', component: CreateAccount, meta: { requiresAuth: true } },
         { path: '/account/edit/:twofaccountId', name: 'editAccount', component: EditAccount, meta: { requiresAuth: true } },
+        { path: '/account/qrcode/:twofaccountId', name: 'showQRcode', component: QRcodeAccount, meta: { requiresAuth: true } },
 
         { path: '/groups', name: 'groups', component: Groups, meta: { requiresAuth: true }, props: true },
         { path: '/group/create', name: 'createGroup', component: CreateGroup, meta: { requiresAuth: true } },

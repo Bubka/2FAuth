@@ -66,9 +66,14 @@
                                 </div>
         	                    <transition name="fadeInOut">
         	                        <div class="tfa-edit has-text-grey" v-if="editMode">
-        	                            <router-link :to="{ name: 'editAccount', params: { twofaccountId: account.id }}" class="tag is-dark is-rounded">
-        	                                {{ $t('commons.edit') }}
-        	                            </router-link>
+                                        <!-- <div class="tags has-addons"> -->
+                                            <router-link :to="{ name: 'editAccount', params: { twofaccountId: account.id }}" class="tag is-dark is-rounded mr-1">
+                                            {{ $t('commons.edit') }}
+                                            </router-link>
+                                            <router-link :to="{ name: 'showQRcode', params: { twofaccountId: account.id }}" class="tag is-dark is-rounded" :title="$t('twofaccounts.show_qrcode')">
+                                                <font-awesome-icon :icon="['fas', 'qrcode']" />
+                                            </router-link>
+                                       <!-- </div> -->
         	                        </div>
         	                    </transition>
                                 <transition name="fadeInOut">
