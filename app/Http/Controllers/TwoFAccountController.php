@@ -18,8 +18,7 @@ class TwoFAccountController extends Controller
      */
     public function index()
     {
-        return response()->json(TwoFAccount::ofGroup(Options::get('activeGroup'))->get()->toArray());
-        //return response()->json(TwoFAccount::ordered()->get()->toArray());
+        return response()->json(TwoFAccount::ofGroup(Options::get('activeGroup'))->ordered()->get()->toArray());
     }
 
 
