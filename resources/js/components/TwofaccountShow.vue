@@ -89,7 +89,7 @@
 
             getTOTP: function() {
 
-                this.axios.post('api/twofaccounts/otp', {data: this.id ? this.id : this.internal_uri }).then(response => {
+                this.axios.post('/api/twofaccounts/otp', {data: this.id ? this.id : this.internal_uri }).then(response => {
                     let spacePosition = Math.ceil(response.data.otp.length / 2);
                     
                     this.otp = response.data.otp.substr(0, spacePosition) + " " + response.data.otp.substr(spacePosition);
@@ -130,7 +130,7 @@
 
             getHOTP: function() {
 
-                this.axios.post('api/twofaccounts/otp', {data: this.id ? this.id : this.internal_uri }).then(response => {
+                this.axios.post('/api/twofaccounts/otp', {data: this.id ? this.id : this.internal_uri }).then(response => {
                     let spacePosition = Math.ceil(response.data.otp.length / 2);
                     
                     this.otp = response.data.otp.substr(0, spacePosition) + " " + response.data.otp.substr(spacePosition)
