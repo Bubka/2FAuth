@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Group;
 use App\TwoFAccount;
 use App\Classes\OTP;
 use App\Classes\Options;
@@ -46,6 +47,18 @@ class TwoFAccountController extends Controller
             'uri' => $request->uri,
             'icon' => $request->icon
         ]);
+
+        // Possible group association
+        $groupId = Options::get('defaultGroup') === '-1' ? (int) Options::get('activeGroup') : (int) Options::get('defaultGroup');
+        
+        // 0 is the pseudo group 'All', only groups with id > 0 are true user groups
+        if( $groupId > 0 ) {
+            $group = Group::find($groupId);
+
+            if($group) {
+                $group->twofaccounts()->save($twofaccount);
+            }
+        }
 
         return response()->json($twofaccount, 201);
     }

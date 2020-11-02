@@ -60,6 +60,10 @@ return [
             'label' => 'Protect sensible data',
             'help' => 'Sensitive data, the 2FA secrets and emails, are stored encrypted in database. Be sure to backup the APP_KEY value of your .env file (or the whole file) as it serves as key encryption. There is no way to decypher encrypted data without this key.',
         ],
+        'default_group' => [
+            'label' => 'Default group',
+            'help' => 'The group to which the newly created accounts are associated',
+        ],
         'never' => 'Never',
         'on_token_copy' => 'On security code copy',
         '1_minutes' => 'After 1 minute',

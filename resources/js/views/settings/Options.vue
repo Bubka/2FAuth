@@ -8,6 +8,8 @@
             <form-select :options="layouts" :form="form" fieldName="displayMode" :label="$t('settings.forms.display_mode.label')" :help="$t('settings.forms.display_mode.help')" />
             <!-- show icon -->
             <form-checkbox :form="form" fieldName="showAccountsIcons" :label="$t('settings.forms.show_accounts_icons.label')" :help="$t('settings.forms.show_accounts_icons.help')" />
+            <!-- default group -->
+            <form-select :options="groups" :form="form" fieldName="defaultGroup" :label="$t('settings.forms.default_group.label')" :help="$t('settings.forms.default_group.help')" />
 
             <h4 class="title is-4">{{ $t('settings.security') }}</h4>
             <!-- auto lock -->
@@ -42,6 +44,7 @@
                     displayMode: this.$root.appSettings.displayMode,
                     kickUserAfter: this.$root.appSettings.kickUserAfter,
                     useEncryption: this.$root.appSettings.useEncryption,
+                    defaultGroup: this.$root.appSettings.defaultGroup,
                 }),
                 langs: [
                     { text: this.$t('languages.en'), value: 'en' },
@@ -61,8 +64,16 @@
                     { text: this.$t('settings.forms.30_minutes'), value: '30' },
                     { text: this.$t('settings.forms.1_hour'), value: '60' },
                     { text: this.$t('settings.forms.1_day'), value: '1440' }, 
+                ],
+                groups: [
+                    { text: this.$t('groups.no_group'), value: 0 },
+                    { text: this.$t('groups.active_group'), value: -1 },
                 ]
             }
+        },
+
+        mounted() {
+            this.fetchGroups()
         },
 
         methods : {
@@ -86,6 +97,21 @@
                     this.$notify({ type: 'is-danger', text: error.response.data.message })
                 });
             },
+
+            fetchGroups() {
+
+                this.axios.get('api/groups').then(response => {
+                    response.data.forEach((data) => {
+                        if( data.id >0 ) {
+                                this.groups.push({
+                                text: data.name,
+                                value: data.id
+                            })
+                        }
+                    })
+                })
+            },
+
         },
     }
 </script>
