@@ -19,7 +19,7 @@
                 <p>{{ $t('errors.error_occured') }}</p>
                 <p v-if="error" class="has-text-grey-lighter">{{ error.message }}</p>
                 <p><router-link :to="{ name: 'accounts' }" class="is-text">{{ $t('errors.refresh') }}</router-link></p>
-                <p v-if="debugMode == 'development' && error">
+                <p v-if="debugMode == 'development' && error.debug">
                     <br>
                     {{ error.debug }}
                 </p>
@@ -52,14 +52,12 @@
                 else
                 {
                     if(this.err.data) {
-                console.log(this.err.data)
+                        console.log(this.err.data)
                         return this.err.data
                     }
                     else
                     {
-                        return {
-                            statusText: this.err
-                        }
+                        return { 'message' : this.err }
                     }
 
                 }
