@@ -73,7 +73,7 @@ class OTP
         }
         catch (AssertionFailedException $exception) {
             $error = \Illuminate\Validation\ValidationException::withMessages([
-                'qrcode' => __('errors.response.no_valid_totp')
+                'qrcode' => __('errors.response.no_valid_otp')
             ]);
 
             throw $error;
