@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Exception;
 use OTPHP\HOTP;
 use OTPHP\Factory;
 use App\Classes\Options;
@@ -10,7 +11,6 @@ use Spatie\EloquentSortable\SortableTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Crypt;
-use Illuminate\Contracts\Encryption\DecryptException;
 
 class TwoFAccount extends Model implements Sortable
 {
@@ -193,7 +193,7 @@ class TwoFAccount extends Model implements Sortable
             try {
                 return Crypt::decryptString($value);
             }
-            catch (DecryptException $e) {
+            catch (Exception $e) {
                 return '*encrypted*';
             }
         }
@@ -227,7 +227,7 @@ class TwoFAccount extends Model implements Sortable
             try {
                 return Crypt::decryptString($value);
             }
-            catch (DecryptException $e) {
+            catch (Exception $e) {
                 return '*encrypted*';
             }
         }

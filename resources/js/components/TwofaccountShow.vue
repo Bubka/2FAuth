@@ -136,6 +136,9 @@
 
                     }, 1000);
                 })
+                .catch(error => {
+                    this.$router.push({ name: 'genericError', params: { err: error.response } });
+                });
             },
 
             getHOTP: function() {
@@ -148,6 +151,9 @@
                     this.next_uri = response.data.nextUri
 
                 })
+                .catch(error => {
+                    this.$router.push({ name: 'genericError', params: { err: error.response } });
+                });
             },
 
             clearOTP: function() {
