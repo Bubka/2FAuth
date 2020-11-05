@@ -142,8 +142,7 @@ class TwoFAccountController extends Controller
             throw $e;
         }
         
-
-        if( $twofaccount->type === 'hotp' ) {
+        if( $twofaccount->otpType === 'hotp' ) {
 
             // HOTP can be desynchronized from the verification
             // server so we let the user the possibility to force

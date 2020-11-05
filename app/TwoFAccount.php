@@ -39,7 +39,7 @@ class TwoFAccount extends Model implements Sortable
      *
      * @var array
      */
-    protected $appends = ['type', 'counter'];
+    protected $appends = ['otpType', 'counter'];
 
 
     /**
@@ -130,14 +130,25 @@ class TwoFAccount extends Model implements Sortable
 
 
     /**
-    * Get the account type.
+    * Get the account OTP type.
     *
     * @return string
     */
-    public function getTypeAttribute()
+    public function getOtpTypeAttribute()
     {
-        
-        return substr( $this->uri, 0, 15 ) === "otpauth://totp/" ? 'totp' : 'hotp';
+        switch (substr( $this->uri, 0, 15 )) {
+
+            case "otpauth://totp/" :
+                return 'totp';
+                break;
+
+            case "otpauth://hotp/" :
+                return 'hotp';
+                break;
+
+            default:
+                return null;
+        }
     }
 
     /**
@@ -148,7 +159,7 @@ class TwoFAccount extends Model implements Sortable
     public function getCounterAttribute()
     {
         
-        if( $this->type === 'hotp' ) {
+        if( $this->otpType === 'hotp' ) {
             $otp = Factory::loadFromProvisioningUri($this->uri);
 
             return $otp->getCounter();

@@ -6,10 +6,10 @@
         <p class="is-size-4 has-text-grey-light has-ellipsis">{{ internal_service }}</p>
         <p class="is-size-6 has-text-grey has-ellipsis">{{ internal_account }}</p>
         <p id="otp" class="is-size-1 has-text-white" :title="$t('commons.copy_to_clipboard')" v-clipboard="() => otp.replace(/ /g, '')" v-clipboard:success="clipboardSuccessHandler">{{ displayedOtp }}</p>
-        <ul class="dots" v-if="type === 'totp'">
+        <ul class="dots" v-if="otpType === 'totp'">
             <li v-for="n in 30"></li>
         </ul>
-        <ul v-else-if="type === 'hotp'">
+        <ul v-else-if="otpType === 'hotp'">
             <li>counter: {{ counter }}</li>
         </ul>
     </div>
@@ -25,7 +25,7 @@
                 internal_uri: '',
                 next_uri: '',
                 internal_icon: '',
-                type: '',
+                otpType: '',
                 otp : '',
                 timerID: null,
                 position: null,
@@ -57,9 +57,9 @@
                 // 2 possible cases :
                 //   - ID is provided so we fetch the account data from db but without the uri.
                 //     This prevent the uri (a sensitive data) to transit via http request unnecessarily. In this
-                //     case this.type is sent by the backend.
+                //     case this.otpType is sent by the backend.
                 //   - the URI prop has been set via the create form, we need to preview some OTP before storing the account.
-                //     So this.type is set on client side from the provided URI
+                //     So this.otpType is set on client side from the provided URI
                 
                 this.id = id
 
@@ -71,7 +71,7 @@
                         this.internal_service = data.service
                         this.internal_account = data.account
                         this.internal_icon = data.icon
-                        this.type = data.type
+                        this.otpType = data.otpType
                     }
                     else {
 
@@ -79,10 +79,20 @@
                         this.internal_account = this.account
                         this.internal_icon = this.icon
                         this.internal_uri = this.uri
-                        this.type = this.internal_uri.slice(0, 15 ) === "otpauth://totp/" ? 'totp' : 'hotp';
+                        this.otpType = this.internal_uri.slice(0, 15 ) === "otpauth://totp/" ? 'totp' : 'hotp';
                     }
 
-                    this.type === 'totp' ? await this.getTOTP() : await this.getHOTP()
+                    switch(this.otpType) {
+                        case 'totp':
+                            await this.getTOTP()
+                            break;
+                        case 'hotp':
+                            await this.getHOTP()
+                            break;
+                        default:
+                            this.$router.push({ name: 'genericError', params: { err: this.$t('errors.not_a_supported_otp_type') } });
+                    } 
+
                     this.$parent.isActive = true
                 }
             },
@@ -156,7 +166,7 @@
             },
 
             stopLoop: function() {
-                if( this.type === 'totp' ) {
+                if( this.otpType === 'totp' ) {
                     clearInterval(this.timerID)
                 }
             },
