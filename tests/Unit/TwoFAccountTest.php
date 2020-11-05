@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use App\User;
 use Tests\TestCase;
 use App\TwoFAccount;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class TwoFAccountTest extends TestCase
@@ -123,6 +124,37 @@ class TwoFAccountTest extends TestCase
                     'icon' => 'test.png',
                 ])
             ->assertStatus(422);
+    }
+
+
+    /**
+     * test otpType is null in case of invalid uri via API
+     *
+     * @test
+     */
+    public function testOtpTypeIsNullForAccountWithInvalidUri()
+    {
+        $response = $this->actingAs($this->user, 'api')
+            ->json('POST', '/api/twofaccounts', [
+                    'service' => 'testCreation',
+                    'account' => 'test@example.org',
+                    'uri' => 'otpauth://totp/test@test.com?secret=A4GRFHZVRBGY7UIW&issuer=test',
+                    'icon' => 'test.png',
+                ])
+            ->assertStatus(201);
+
+        DB::table('twofaccounts')
+            ->where('id', 1)
+            ->update([
+                'uri' => 'iCanHasCheeseBurger',
+            ]);
+
+        $response = $this->actingAs($this->user, 'api')
+            ->json('GET', '/api/twofaccounts/1')
+            ->assertStatus(200)
+            ->assertJsonFragment([
+                'otpType' => null,
+            ]);
     }
 
 
@@ -318,4 +350,26 @@ class TwoFAccountTest extends TestCase
                 'orderedIds' => [3,2,1]])
             ->assertStatus(200);
     }
+
+
+    /**
+     * test show QR code via API
+     *
+     * @test
+     */
+    public function testShowQRCode()
+    {
+
+        $twofaccount = factory(TwoFAccount::class)->create();
+
+        $response = $this->actingAs($this->user, 'api')
+            ->json('GET', '/api/qrcode/' . $twofaccount->id)
+            ->assertJsonStructure([
+                'qrcode',
+            ])
+            ->assertStatus(200);
+            
+            $this->assertStringStartsWith('data:image/png;base64', $response->getData()->qrcode);
+    }
+
 }

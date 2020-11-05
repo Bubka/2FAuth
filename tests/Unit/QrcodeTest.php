@@ -2,13 +2,15 @@
 
 namespace Tests\Unit;
 
+use App\User;
 use Zxing\QrReader;
+use Tests\TestCase;
+use App\TwoFAccount;
+use App\Classes\Options;
+use Tests\Classes\LocalFile;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Tests\TestCase;
-use Tests\Classes\LocalFile;
-use App\Classes\Options;
 
 class QrcodeTest extends TestCase
 {
@@ -32,7 +34,7 @@ class QrcodeTest extends TestCase
 
 
     /**
-     * test delete an uploaded icon via API
+     * test decode an invalid QR code uplloaded via API
      *
      * @test
      */
@@ -43,9 +45,10 @@ class QrcodeTest extends TestCase
         $response = $this->withHeaders([
                                 'Content-Type' => 'multipart/form-data',
                             ])
-                            ->json('POST', '/api/qrcode/decode', [
-                                'qrcode' => $file
-                            ]);
+                        ->json('POST', '/api/qrcode/decode', [
+                            'qrcode' => $file,
+                            'inputFormat' => 'fileUpload'
+                        ]);
 
         $response->assertStatus(422);
     }
@@ -91,7 +94,8 @@ class QrcodeTest extends TestCase
 
         $response = $this->withHeaders(['Content-Type' => 'multipart/form-data'])
                           ->json('POST', '/api/qrcode/decode', [
-                                'qrcode' => $file
+                                'qrcode' => $file,
+                                'inputFormat' => 'fileUpload'
                           ]);
 
         $response->assertStatus(200)
