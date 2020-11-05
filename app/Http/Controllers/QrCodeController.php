@@ -6,24 +6,24 @@ use OTPHP\TOTP;
 use OTPHP\Factory;
 use Zxing\QrReader;
 use App\TwoFAccount;
-use chillerlan\QRCode\{QRCode, QROptions};
 use App\Classes\Options;
 use Illuminate\Http\File;
 use Illuminate\Http\Request;
 use Assert\AssertionFailedException;
 use Illuminate\Support\Facades\Storage;
+use chillerlan\QRCode\{QRCode, QROptions};
 
 class QrCodeController extends Controller
 {
     /**
      * Return a QR code image
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  App\TwoFAccount  $twofaccount
      * @return \Illuminate\Http\Response
      */
     public function show(TwoFAccount $twofaccount)
     {
-        
+
         $options = new QROptions([
             'quietzoneSize' => 2,
             'scale'         => 8,
