@@ -17,10 +17,10 @@ import {
     faEllipsisH,
     faBars,
     faSpinner,
-    faCaretUp,
     faCaretDown,
     faLayerGroup,
     faMinusCircle,
+    faExclamationCircle,
 } from '@fortawesome/free-solid-svg-icons'
 
 import {
@@ -42,10 +42,10 @@ library.add(
     faBars,
     faSpinner,
     faGithubAlt,
-    faCaretUp,
     faCaretDown,
     faLayerGroup,
     faMinusCircle,
+    faExclamationCircle,
 );
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)

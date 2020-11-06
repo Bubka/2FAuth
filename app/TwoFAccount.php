@@ -39,7 +39,7 @@ class TwoFAccount extends Model implements Sortable
      *
      * @var array
      */
-    protected $appends = ['otpType', 'counter'];
+    protected $appends = ['otpType', 'counter', 'isConsistent'];
 
 
     /**
@@ -242,6 +242,19 @@ class TwoFAccount extends Model implements Sortable
         else {
             return $value;
         }
+    }
+
+
+    /**
+     * Null empty icon resource has gone
+     *
+     * @param  string  $value
+     * @return string
+     *
+     */
+    public function getIsConsistentAttribute($value)
+    {
+        return $this->uri === '*encrypted*' || $this->account === '*encrypted*' ? false : true;
     }
 
 }

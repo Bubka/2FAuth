@@ -60,7 +60,7 @@
                                 <div class="tfa-content is-size-3 is-size-4-mobile" @click.stop="showAccount(account)">  
                                     <div class="tfa-text has-ellipsis">
                                         <img :src="'/storage/icons/' + account.icon" v-if="account.icon && $root.appSettings.showAccountsIcons">
-                                        {{ account.service }}
+                                        {{ account.service }}<font-awesome-icon class="has-text-danger is-size-5 ml-2" v-if="$root.appSettings.useEncryption && account.isConsistent === false" :icon="['fas', 'exclamation-circle']" />
                                         <span class="is-family-primary is-size-6 is-size-7-mobile has-text-grey ">{{ account.account }}</span>
                                     </div>
                                 </div>
@@ -299,7 +299,8 @@
                             id : data.id,
                             service : data.service,
                             account : data.account ? data.account : '-',
-                            icon : data.icon
+                            icon : data.icon,
+                            isConsistent : data.isConsistent
                         })
                     })
                     
