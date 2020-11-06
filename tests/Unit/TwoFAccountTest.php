@@ -48,8 +48,10 @@ class TwoFAccountTest extends TestCase
             ->assertJsonFragment([
                 'service' => 'testTOTP',
                 'account' => 'test@test.com',
-                'uri' => 'otpauth://totp/test@test.com?secret=A4GRFHVVRBGY7UIW&issuer=test',
                 'icon' => 'test.png',
+            ])
+            ->assertJsonMissing([
+                'uri' => 'otpauth://totp/test@test.com?secret=A4GRFHVVRBGY7UIW&issuer=test',
             ]);
     }
 
@@ -85,8 +87,10 @@ class TwoFAccountTest extends TestCase
             ->assertJsonFragment([
                 'service' => 'testCreation',
                 'account' => 'test@example.org',
-                'uri' => 'otpauth://totp/test@test.com?secret=A4GRFHZVRBGY7UIW&issuer=test',
                 'icon' => 'test.png',
+            ])
+            ->assertJsonMissing([
+                'uri' => 'otpauth://totp/test@test.com?secret=A4GRFHVVRBGY7UIW&issuer=test',
             ]);
     }
 
@@ -218,8 +222,10 @@ class TwoFAccountTest extends TestCase
                 'id' => 1,
                 'service' => 'testUpdate',
                 'account' => 'testUpdate@test.com',
-                'uri' => $twofaccount->uri,
                 'icon' => 'testUpdate.png',
+            ])
+            ->assertJsonMissing([
+                'uri' => $twofaccount->uri,
             ]);
     }
 
@@ -242,15 +248,15 @@ class TwoFAccountTest extends TestCase
                     'service' => 'testUpdate.com',
                     'account' => 'testUpdate',
                     'icon' => 'testUpdate.png',
-                    'counter' => '5'
+                    'counter' => 5
                 ])
             ->assertStatus(200)
             ->assertJsonFragment([
                 'id' => 1,
                 'service' => 'testUpdate.com',
                 'account' => 'testUpdate',
-                'uri' => 'otpauth://hotp/service?counter=5&secret=A4GRFHVVRBGY7UIW',
                 'icon' => 'testUpdate.png',
+                'counter' => 5,
             ]);
     }
 
@@ -293,7 +299,6 @@ class TwoFAccountTest extends TestCase
                     'id',
                     'service',
                     'account',
-                    'uri',
                     'icon',
                     'created_at',
                     'updated_at'

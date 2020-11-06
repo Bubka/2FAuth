@@ -43,6 +43,14 @@ class TwoFAccount extends Model implements Sortable
 
 
     /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = ['uri'];
+
+
+    /**
      * Override The "booting" method of the model
      *
      * @return void

@@ -60,7 +60,6 @@ class ProtectDbTest extends TestCase
             ->assertJsonFragment([
                 'service' => 'test',
                 'account' => Crypt::decryptString($encrypted->account),
-                'uri' => Crypt::decryptString($encrypted->uri),
             ]);
 
         $response = $this->actingAs($this->user, 'api')
@@ -69,7 +68,6 @@ class ProtectDbTest extends TestCase
             ->assertJsonFragment([
                 'service' => 'testAlt',
                 'account' => Crypt::decryptString($encryptedAlt->account),
-                'uri' => Crypt::decryptString($encryptedAlt->uri),
             ]);
     }
 
@@ -129,7 +127,6 @@ class ProtectDbTest extends TestCase
             ->assertJsonFragment([
                 'service' => 'test',
                 'account' => 'test@test.com',
-                'uri' => 'otpauth://totp/test@test.com?secret=A4GRFHVVRBGY7UIW&issuer=test',
             ]);
 
         $response = $this->actingAs($this->user, 'api')
@@ -138,7 +135,6 @@ class ProtectDbTest extends TestCase
             ->assertJsonFragment([
                 'service' => 'testAlt',
                 'account' => 'testAlt@test.com',
-                'uri' => 'otpauth://totp/testAlt@test.com?secret=A4GRFHVVRBGY7UIW&issuer=testAlt',
             ]);
     }
 
@@ -170,7 +166,6 @@ class ProtectDbTest extends TestCase
             ->assertJsonFragment([
                 'service' => 'test',
                 'account' => 'test@test.com',
-                'uri' => 'otpauth://totp/test@test.com?secret=A4GRFHVVRBGY7UIW&issuer=test',
             ]);
 
         $response = $this->actingAs($this->user, 'api')
@@ -179,7 +174,6 @@ class ProtectDbTest extends TestCase
             ->assertJsonFragment([
                 'service' => 'testAlt',
                 'account' => 'testAlt@test.com',
-                'uri' => 'otpauth://totp/testAlt@test.com?secret=A4GRFHVVRBGY7UIW&issuer=testAlt',
             ]);
     }
 
@@ -199,7 +193,7 @@ class ProtectDbTest extends TestCase
             ->json('POST', '/api/settings/options', [
                     'useEncryption' => true,
                 ])
-            ->assertStatus(422);
+            ->assertStatus(400);
 
         // Check ProtectDB option is not active
         $response = $this->actingAs($this->user, 'api')
@@ -234,7 +228,7 @@ class ProtectDbTest extends TestCase
             ->json('POST', '/api/settings/options', [
                     'useEncryption' => false,
                 ])
-            ->assertStatus(422);
+            ->assertStatus(400);
 
         // Check ProtectDB option has been restored
         $response = $this->actingAs($this->user, 'api')
@@ -263,15 +257,13 @@ class ProtectDbTest extends TestCase
         DB::table('twofaccounts')
             ->where('id', 1)
             ->update([
-                'account' => 'IAmYourFather',
-                'uri' => 'YouShallNotPass',
+                'account' => 'YoushallNotPass',
             ]);
 
         $response = $this->actingAs($this->user, 'api')
             ->json('GET', '/api/twofaccounts/1')
             ->assertStatus(200)
             ->assertJsonFragment([
-                'uri' => '*encrypted*',
                 'account' => '*encrypted*',
             ]);
     }
