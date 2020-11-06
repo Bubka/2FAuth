@@ -25,7 +25,7 @@ return [
     'Unable_to_decrypt_uri' => 'Unable to decrypt uri',
     'not_a_supported_otp_type' => 'This OTP format is not currently supported',
     'wrong_current_password' => 'Wrong current password, nothing has changed',
-    'error_during_encryption' => 'Encryption failed, your database remains unprotected',
-    'error_during_decryption' => 'Decryption failed, your database is still protected',
+    'error_during_encryption' => 'Encryption failed, your database remains unprotected.',
+    'error_during_decryption' => 'Decryption failed, your database is still protected. This is mainly caused by an integrity issue of encrypted data for one or more accounts.',
 
 ];

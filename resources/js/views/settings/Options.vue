@@ -80,7 +80,7 @@
             handleSubmit(e) {
                 e.preventDefault()
 
-                this.form.post('/api/settings/options', {returnError: true})
+                this.form.post('/api/settings/options', {returnError: false})
                 .then(response => {
 
                     this.$notify({ type: 'is-success', text: response.data.message })
@@ -91,10 +91,6 @@
                     else {
                         this.$root.appSettings = response.data.settings
                     }
-                })
-                .catch(error => {
-                    
-                    this.$notify({ type: 'is-danger', text: error.response.data.message })
                 });
             },
 
