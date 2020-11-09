@@ -6,6 +6,7 @@ import FormWrapper      from './FormWrapper'
 import FormField        from './FormField'
 import FormSelect       from './FormSelect'
 import FormSwitch       from './FormSwitch'
+import FormToggle       from './FormToggle'
 import FormCheckbox     from './FormCheckbox'
 import FormButtons      from './FormButtons'
 import VueFooter        from './Footer'
@@ -20,6 +21,7 @@ import Kicker           from './Kicker'
     FormField,
     FormSelect,
     FormSwitch,
+    FormToggle,
     FormCheckbox,
     FormButtons,
     VueFooter,

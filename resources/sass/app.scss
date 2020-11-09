@@ -366,6 +366,11 @@ figure.no-icon {
   color: hsl(0, 0%, 48%);
 }
 
+.is-toggle.buttons,
+.is-toggle.buttons a.button {
+  margin-bottom: 0 !important;
+}
+
 .control.has-icons-left .icon, .control.has-icons-right .icon {
   color: inherit;
 }
