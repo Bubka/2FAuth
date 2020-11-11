@@ -11,6 +11,7 @@
         "php": "^7.3",
         "appstract/laravel-options": "^4.1.1",
         "chillerlan/php-qrcode": "3.3",
+        "curl/curl": "^2.3",
         "doctrine/dbal": "^2.10",
         "fideloper/proxy": "^4.2",
         "khanamiryan/qrcode-detector-decoder": "^1.0",
@@ -18,6 +19,7 @@
         "laravel/passport": "^9.3.2",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^2.0",
+        "paragonie/constant_time_encoding": "^2.3",
         "spatie/eloquent-sortable": "^3.9",
         "spomky-labs/otphp": "^10.0"
     },
