@@ -3,6 +3,7 @@
 namespace App;
 
 use Exception;
+use OTPHP\TOTP;
 use OTPHP\HOTP;
 use OTPHP\Factory;
 use App\Classes\Options;
@@ -39,7 +40,7 @@ class TwoFAccount extends Model implements Sortable
      *
      * @var array
      */
-    protected $appends = ['otpType', 'counter', 'isConsistent'];
+    protected $appends = ['isConsistent', 'otpType', 'secret', 'algorithm', 'digits', 'totpPeriod', 'hotpCounter', 'imageLink'];
 
 
     /**
@@ -47,7 +48,15 @@ class TwoFAccount extends Model implements Sortable
      *
      * @var array
      */
-    protected $hidden = ['uri'];
+    protected $hidden = ['uri', 'secret', 'algorithm'];
+
+
+    /**
+     *  An OTP object from package Spomky-Labs/otphp
+     *
+     * @var OTPHP/TOTP || OTPHP/HOTP
+     */
+    protected $otp;
 
 
     /**
@@ -58,6 +67,10 @@ class TwoFAccount extends Model implements Sortable
     protected static function boot()
     {
         parent::boot();
+
+        static::retrieved(function ($model) {
+            $model->populateFromUri();
+        });
         
         static::deleted(function ($model) {
             Storage::delete('public/icons/' . $model->icon);
@@ -124,7 +137,6 @@ class TwoFAccount extends Model implements Sortable
      */
     public function setIconAttribute($value)
     {
-
         if( !Storage::exists('public/icons/' . $value) && \App::environment('testing') == false ) {
 
             $this->attributes['icon'] = '';
@@ -134,46 +146,28 @@ class TwoFAccount extends Model implements Sortable
             $this->attributes['icon'] = $value;
         }
     }
-
-
-
-    /**
-    * Get the account OTP type.
-    *
-    * @return string
-    */
-    public function getOtpTypeAttribute()
-    {
-        switch (substr( $this->uri, 0, 15 )) {
-
-            case "otpauth://totp/" :
-                return 'totp';
-                break;
-
-            case "otpauth://hotp/" :
-                return 'hotp';
-                break;
-
-            default:
-                return null;
-        }
-    }
+     
 
     /**
-    * Get the account counter in case of HOTP.
-    *
-    * @return integer
-    */
-    public function getCounterAttribute()
+     * Get decyphered uri
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getUriAttribute($value)
     {
-        
-        if( $this->otpType === 'hotp' ) {
-            $otp = Factory::loadFromProvisioningUri($this->uri);
-
-            return $otp->getCounter();
+        if( Options::get('useEncryption') )
+        {
+            try {
+                return Crypt::decryptString($value);
+            }
+            catch (Exception $e) {
+                return '*encrypted*';
+            }
         }
-
-        return null;
+        else {
+            return $value;
+        }
     }
 
 
@@ -188,13 +182,14 @@ class TwoFAccount extends Model implements Sortable
         $this->attributes['uri'] = Options::get('useEncryption') ? Crypt::encryptString($value) : $value;
     }
 
+
     /**
-     * Get decyphered uri
+     * Get decyphered account
      *
      * @param  string  $value
      * @return string
      */
-    public function getUriAttribute($value)
+    public function getAccountAttribute($value)
     {
         if( Options::get('useEncryption') )
         {
@@ -222,39 +217,249 @@ class TwoFAccount extends Model implements Sortable
         $this->attributes['account'] = Options::get('useEncryption') ? Crypt::encryptString($value) : $value;
     }
 
+
     /**
-     * Get decyphered account
+     * Get IsConsistent attribute
      *
-     * @param  string  $value
-     * @return string
+     * @return bool
+     *
      */
-    public function getAccountAttribute($value)
+    public function getIsConsistentAttribute()
     {
-        if( Options::get('useEncryption') )
-        {
-            try {
-                return Crypt::decryptString($value);
-            }
-            catch (Exception $e) {
-                return '*encrypted*';
-            }
+        return $this->uri === '*encrypted*' || $this->account === '*encrypted*' ? false : true;
+    }
+
+
+    /**
+     * Populate some attributes of the model from an uri
+     *
+     * @param   $foreignUri an URI to parse
+     * @return  Boolean wether or not the URI provided a valid OTP resource
+     */
+    public function populateFromUri(String $foreignUri = null) : bool
+    {
+        // No uri to parse
+        if( !$this->uri && !$foreignUri ) {
+            return false;
         }
-        else {
-            return $value;
+
+        // The foreign uri is used in first place. This parameter is passed
+        // when we need a TwoFAccount new object, for example after a qrcode upload
+        // or for a preview
+        $uri = $foreignUri ? $foreignUri : $this->uri;
+
+        try {
+
+            $this->otp = Factory::loadFromProvisioningUri($uri);
+
+            // Account and service values are already recorded in the db so we set them
+            // only when the uri used is a foreign uri, otherwise it would override
+            // the db values
+            if( $foreignUri ) {
+
+                if(!$this->otp->getIssuer()) {
+                    $this->otp->setIssuer($this->otp->getLabel());
+                    $this->otp->setLabel('');
+                }
+
+                $this->service = $this->otp->getIssuer();
+                $this->account = $this->otp->getLabel();
+                $this->uri = $foreignUri;
+            }
+
+            return true;
+        }
+        catch (\Exception $e) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'qrcode' => __('errors.response.no_valid_otp')
+            ]);
+        }
+
+    }
+
+
+    /**
+     *  Populate attributes with direct values
+     * @param  Array|array $attrib All attributes to be set
+     */
+    public function populate(Array $attrib = [])
+    {
+        // The Type and Secret attributes are mandatory
+        // All other attributes have default value set by OTPHP
+        
+        if( strcasecmp($attrib['otpType'], 'totp') == 0 && strcasecmp($attrib['otpType'], 'hotp') == 0 ) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'otpType' => __('errors.not_a_supported_otp_type')
+            ]);
+        }
+
+        if( !$attrib['secret'] ) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'secret' => __('errors.cannot_create_otp_without_secret')
+            ]); 
+        }
+
+        try {
+            // Create an OTP object using our secret but with default parameters
+            $secret = $attrib['secretIsBase32Encoded'] === 1 ? $attrib['secret'] : Encoding::base32EncodeUpper($attrib['secret']);
+
+            $this->otp = strtolower($attrib['otpType']) === 'totp' ? TOTP::create($secret) : HOTP::create($secret);
+
+            // and we change parameters if needed
+            if ($attrib['service']) {
+                $this->service = $attrib['service'];
+                $this->otp->setIssuer( $attrib['service'] );
+            }
+            if ($attrib['account']) {
+                $this->account = $attrib['account'];
+                $this->otp->setLabel( $attrib['account'] );
+            }
+            if ($attrib['icon']) { $this->account = $attrib['icon']; }
+            if ($attrib['digits'] > 0) { $this->otp->setParameter( 'digits', (int) $attrib['digits'] ); }
+            if ($attrib['algorithm']) { $this->otp->setParameter( 'digest', $attrib['algorithm'] ); }
+            if ($attrib['totpPeriod'] && $attrib['otpType'] !== 'totp') { $this->otp->setParameter( 'period', (int) $attrib['totpPeriod'] ); }
+            if ($attrib['hotpCounter'] && $attrib['otpType'] !== 'hotp') { $this->otp->setParameter( 'counter', (int) $attrib['hotpCounter'] ); }
+            if ($attrib['imageLink']) { $this->otp->setParameter( 'image', $attrib['imageLink'] ); }
+
+            // We can now generate a fresh URI
+            $this->uri = $this->otp->getProvisioningUri();
+
+        }
+        catch (\Exception $e) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'qrcode' => __('errors.cannot_create_otp_without_parameters')
+            ]);
+        }
+
+    }
+
+
+    /**
+     * Update the uri attribute using the OTP object
+     * @return void
+     */
+    private function refreshUri() : void
+    {
+        $this->uri = urldecode($this->otp->getProvisioningUri());
+    }
+
+
+    /**
+     * Generate a token which is valid at the current time (now)
+     * @return string The generated token
+     */
+    public function token() : string
+    {
+        return $this->otpType === 'totp' ? $this->otp->now() : $this->otp->at($this->otp->getCounter());
+    }
+
+
+    /**
+     * Increment the hotp counter by 1
+     * @return string The generated token
+     */
+    public function increaseHotpCounter() : void
+    {
+        if( $this->otpType === 'hotp' ) {
+            $this->hotpCounter = $this->hotpCounter + 1;
+            $this->refreshUri();
         }
     }
 
 
     /**
-     * Null empty icon resource has gone
+     * get OTP Type attribute
      *
-     * @param  string  $value
      * @return string
      *
      */
-    public function getIsConsistentAttribute($value)
+    public function getOtpTypeAttribute()
     {
-        return $this->uri === '*encrypted*' || $this->account === '*encrypted*' ? false : true;
+        return get_class($this->otp) === 'OTPHP\TOTP' ? 'totp' : 'hotp';
+    }
+
+
+    /**
+     * get Secret attribute
+     *
+     * @return string
+     *
+     */
+    public function getSecretAttribute()
+    {
+        return $this->otp->getSecret();
+    }
+
+
+    /**
+     * get algorithm attribute
+     *
+     * @return string
+     *
+     */
+    public function getAlgorithmAttribute()
+    {
+        return $this->otp->getDigest(); // default is SHA1
+    }
+
+
+    /**
+     * get Digits attribute
+     *
+     * @return string
+     *
+     */
+    public function getDigitsAttribute()
+    {
+        return $this->otp->getDigits();    // Default is 6
+    }
+
+
+    /**
+     * get TOTP Period attribute
+     *
+     * @return string
+     *
+     */
+    public function getTotpPeriodAttribute()
+    {
+        return $this->otpType === 'totp' ? $this->otp->getPeriod() : null;    // Default is 30
+    }
+
+
+    /**
+     * get HOTP counter attribute
+     *
+     * @return string
+     *
+     */
+    public function getHotpCounterAttribute()
+    {
+        return $this->otpType === 'hotp' ? $this->otp->getCounter() : null;    // Default is 0
+    }
+
+
+    /**
+     * set HOTP counter attribute
+     *
+     * @return string
+     *
+     */
+    public function setHotpCounterAttribute($value)
+    {
+        $this->otp->setParameter( 'counter', $this->otp->getcounter() + 1 );
+    }
+
+
+    /**
+     * get Image parameter attribute
+     *
+     * @return string
+     *
+     */
+    public function getImageLinkAttribute()
+    {
+        return $this->otp->hasParameter('image') ? $this->otp->getParameter('image') : null;
     }
 
 }
