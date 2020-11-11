@@ -2,14 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use OTPHP\TOTP;
-use OTPHP\Factory;
 use Zxing\QrReader;
 use App\TwoFAccount;
 use App\Classes\Options;
-use Illuminate\Http\File;
 use Illuminate\Http\Request;
-use Assert\AssertionFailedException;
 use Illuminate\Support\Facades\Storage;
 use chillerlan\QRCode\{QRCode, QROptions};
 
@@ -46,6 +42,8 @@ class QrCodeController extends Controller
 
         if( Options::get('useBasicQrcodeReader') || $request->inputFormat === 'fileUpload') {
 
+            // The frontend send an image resource of the QR code
+
             // input validation
             $this->validate($request, [
                 'qrcode' => 'required|image',
@@ -61,7 +59,7 @@ class QrCodeController extends Controller
             Storage::delete($path);
         }
         else {
-
+            // The QR code has been flashed and the URI is already decoded
             $this->validate($request, [
                 'uri' => 'required|string',
             ]);
@@ -70,36 +68,10 @@ class QrCodeController extends Controller
         }
 
         // return the OTP object
-        try {
+        $twofaccount = new TwoFAccount;
+        $twofaccount->populateFromUri($uri);
 
-            $otp = Factory::loadFromProvisioningUri($uri);
-
-            if(!$otp->getIssuer()) {
-                $otp->setIssuer($otp->getLabel());
-                $otp->setLabel('');
-            }
-
-            // returned object
-            $twofaccount = (object) array(
-                'service' => $otp->getIssuer(),
-                'account' => $otp->getLabel(),
-                'uri' => $uri,
-                'icon' => '',
-                'options' => $otp->getParameters()
-            );
-
-            return response()->json($twofaccount, 200);
-
-        }
-        catch (AssertionFailedException $exception) {
-
-            $error = \Illuminate\Validation\ValidationException::withMessages([
-                'qrcode' => __('errors.response.no_valid_otp')
-            ]);
-
-            throw $error;
-            
-        }
+        return response()->json($twofaccount->makeVisible(['secret', 'algorithm']), 200);
     }
     
 }
