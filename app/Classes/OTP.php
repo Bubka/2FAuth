@@ -16,16 +16,14 @@ class OTP
      * @param  Boolean $isPreview   Prevent updating storage in case of HOTP preview
      * @return an array that represent the totp code
      */
-    public static function generate($uri, $isPreview = false)
+    public static function generate($twofaccount, $isPreview = false)
     {
-        
-        $otp = OTP::get($uri);
 
-        if( get_class($otp) === 'OTPHP\TOTP' ) {
+        if( $twofaccount->otpType === 'totp' ) {
 
             $currentPosition = time();
-            $PeriodCount = floor($currentPosition / $otp->getPeriod()); //nombre de période de x s depuis T0 (x=30 par défaut)
-            $currentPeriodStartAt = $PeriodCount * $otp->getPeriod();
+            $PeriodCount = floor($currentPosition / $twofaccount->totpPeriod); //nombre de période de x s depuis T0 (x=30 par défaut)
+            $currentPeriodStartAt = $PeriodCount * $twofaccount->totpPeriod;
             $positionInCurrentPeriod = $currentPosition - $currentPeriodStartAt;
 
             // For memo :
@@ -33,24 +31,22 @@ class OTP
             // $remainingTime = $nextOtpAt - time()
 
             return $totp = [
-                'otp' => $otp->now(),
+                'otp' => $twofaccount->token(),
                 'position' => $positionInCurrentPeriod
             ];
         }
         else {
             // It's a HOTP
             $hotp = [
-                'otp' => $otp->at($otp->getCounter()),
-                'counter' => $otp->getCounter()
+                'otp' => $twofaccount->token(),
+                'counter' => $twofaccount->hotpCounter
             ];
 
             // now we update the counter for the next OTP generation
-            $otp->setParameter( 'counter', $otp->getcounter() + 1 );
-            $hotp['nextUri'] = urldecode($otp->getProvisioningUri());
+            $twofaccount->increaseCounter();
+            $hotp['nextUri'] = $twofaccount->uri;
 
             if( !$isPreview ) {
-                $twofaccount = \App\TwoFAccount::where('uri', $uri)->first();
-                $twofaccount->uri = $hotp['nextUri'];
                 $twofaccount->save();
             }
 
@@ -58,28 +54,5 @@ class OTP
         }
 
     }
-
-
-    /**
-     * check if the provided uri is a valid OTP uri
-     *
-     * @param  \App\TwoFAccount  $twofaccount
-     * @return \Illuminate\Http\Response
-     */
-    public static function get(String $uri) {
-
-        try {
-            return Factory::loadFromProvisioningUri($uri);
-        }
-        catch (AssertionFailedException $exception) {
-            $error = \Illuminate\Validation\ValidationException::withMessages([
-                'qrcode' => __('errors.response.no_valid_otp')
-            ]);
-
-            throw $error;
-        }
-
-    }
-
 
 }

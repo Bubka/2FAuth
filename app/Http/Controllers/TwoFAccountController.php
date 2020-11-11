@@ -99,16 +99,19 @@ class TwoFAccountController extends Controller
     {
         $isPreview = false;
 
-        if( is_int($request->data) ) {
-            $twofaccount = TwoFAccount::FindOrFail($request->data);
-            $uri = $twofaccount->uri;
+        if( $request->id ) {
+            // The request data is the Id of the account
+            $twofaccount = TwoFAccount::FindOrFail($request->id);
         }
         else {
-            $uri = $request->data;
-            $isPreview = true;
+            // The request data is supposed to be a valid uri
+            $twofaccount = new TwoFAccount;
+            $twofaccount->populateFromUri($request->uri);
+
+            $isPreview = true;  // HOTP generated for preview (in the Create form) will not have its counter updated
         }
 
-        return response()->json(OTP::generate($uri, $isPreview), 200);
+        return response()->json(OTP::generate($twofaccount, $isPreview ? true : false), 200);
     }
 
 
