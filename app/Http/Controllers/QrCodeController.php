@@ -32,7 +32,7 @@ class QrCodeController extends Controller
 
 
     /**
-     * Handle uploaded qr code image
+     * Decode an uploaded QR Code image
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -71,7 +71,7 @@ class QrCodeController extends Controller
         $twofaccount = new TwoFAccount;
         $twofaccount->populateFromUri($uri);
 
-        return response()->json($twofaccount->makeVisible(['secret', 'algorithm']), 200);
+        return response()->json($twofaccount->makeVisible(['uri', 'secret', 'algorithm']), 200);
     }
     
 }
