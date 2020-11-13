@@ -321,7 +321,7 @@
                     this.selectedAccounts.push(account.id)
                 }
                 else {
-                    this.$refs.TokenDisplayer.showAccount(account.id)
+                    this.$refs.TokenDisplayer.getToken(account.id)
                 }
             },
 
