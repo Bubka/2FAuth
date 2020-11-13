@@ -33,4 +33,5 @@ return [
     'move' => 'Move',
     'all' => 'All',
     'rename' => 'Rename',
+    'options' => 'Options',
 ];

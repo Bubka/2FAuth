@@ -31,19 +31,21 @@ class OTP
             // $remainingTime = $nextOtpAt - time()
 
             return $totp = [
-                'otp' => $twofaccount->token(),
+                'token' => $twofaccount->token(),
                 'position' => $positionInCurrentPeriod
             ];
         }
         else {
             // It's a HOTP
             $hotp = [
-                'otp' => $twofaccount->token(),
-                'counter' => $twofaccount->hotpCounter
+                'token' => $twofaccount->token(),
+                'hotpCounter' => $twofaccount->hotpCounter
             ];
 
             // now we update the counter for the next OTP generation
-            $twofaccount->increaseCounter();
+            $twofaccount->increaseHotpCounter();
+
+            $hotp['nextHotpCounter'] = $twofaccount->hotpCounter;
             $hotp['nextUri'] = $twofaccount->uri;
 
             if( !$isPreview ) {

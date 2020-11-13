@@ -9,11 +9,8 @@
                         <font-awesome-icon :icon="['fas', 'image']" size="2x" />
                     </label>
                     <button class="delete delete-icon-button is-medium" v-if="tempIcon" @click.prevent="deleteIcon"></button>
-                    <twofaccount-show ref="TwofaccountShow"
-                        :service="form.service"
-                        :account="form.account"
-                        :uri="form.uri">
-                    </twofaccount-show>
+                    <token-displayer ref="QuickFormTokenDisplayer" v-bind="form.data()">
+                    </token-displayer>
                 </div>
             </div>
             <div class="columns is-mobile">
@@ -33,45 +30,26 @@
     <!-- Full form -->
     <form-wrapper :title="$t('twofaccounts.forms.new_account')" v-else>
         <form @submit.prevent="createAccount" @keydown="form.onKeydown($event)">
+            <!-- qcode fileupload -->
             <div class="field">
-                <div class="file is-dark is-boxed">
+                <div class="file is-black is-small">
                     <label class="file-label" :title="$t('twofaccounts.forms.use_qrcode.title')">
                         <input class="file-input" type="file" accept="image/*" v-on:change="uploadQrcode" ref="qrcodeInput">
                         <span class="file-cta">
                             <span class="file-icon">
                                 <font-awesome-icon :icon="['fas', 'qrcode']" size="lg" />
                             </span>
-                            <span class="file-label">{{ $t('twofaccounts.forms.use_qrcode.val') }}</span>
+                            <span class="file-label">{{ $t('twofaccounts.forms.prefill_using_qrcode') }}</span>
                         </span>
                     </label>
                 </div>
             </div>
             <field-error :form="form" field="qrcode" class="help-for-file" />
+            <!-- service -->
             <form-field :form="form" fieldName="service" inputType="text" :label="$t('twofaccounts.service')" :placeholder="$t('twofaccounts.forms.service.placeholder')" autofocus />
+            <!-- account -->
             <form-field :form="form" fieldName="account" inputType="text" :label="$t('twofaccounts.account')" :placeholder="$t('twofaccounts.forms.account.placeholder')" />
-            <div class="field" style="margin-bottom: 0.5rem;">
-                <label class="label">{{ $t('twofaccounts.forms.otp_uri') }}</label>
-            </div>
-            <div class="field has-addons">
-                <div class="control is-expanded">
-                    <input class="input" type="text" placeholder="otpauth://totp/..." v-model="form.uri" :disabled="uriIsLocked" />
-                </div>
-                <div class="control" v-if="uriIsLocked">
-                    <a class="button is-dark field-lock" @click="uriIsLocked = false" :title="$t('twofaccounts.forms.unlock.title')">
-                        <span class="icon">
-                            <font-awesome-icon :icon="['fas', 'lock']" />
-                        </span>
-                    </a>
-                </div>
-                <div class="control" v-else>
-                    <a class="button is-dark field-unlock"  @click="uriIsLocked = true" :title="$t('twofaccounts.forms.lock.title')">
-                        <span class="icon has-text-danger">
-                            <font-awesome-icon :icon="['fas', 'lock-open']" />
-                        </span>
-                    </a>
-                </div>
-            </div>
-            <field-error :form="form" field="uri" class="help-for-file" />
+            <!-- icon upload -->
             <div class="field">
                 <label class="label">{{ $t('twofaccounts.icon') }}</label>
                 <div class="file is-dark">
@@ -91,26 +69,58 @@
                 </div>
             </div>
             <field-error :form="form" field="icon" class="help-for-file" />
-            <div class="field is-grouped">
-                <div class="control">
-                    <v-button :isLoading="form.isBusy" >{{ $t('commons.create') }}</v-button>
+            <!-- otp type -->
+            <form-toggle :form="form" :choices="otpTypes" fieldName="otpType" :label="$t('twofaccounts.forms.otp_type.label')" :help="$t('twofaccounts.forms.otp_type.help')" :hasOffset="true" />
+            <div v-if="form.otpType">
+                <!-- secret -->
+                <label class="label" v-html="$t('twofaccounts.forms.secret.label')"></label>
+                <div class="field has-addons">
+                    <p class="control">
+                        <span class="select">
+                            <select v-model="form.secretIsBase32Encoded">
+                                <option v-for="format in secretFormats" :value="format.value">{{ format.text }}</option>
+                            </select>
+                        </span>
+                    </p>
+                    <p class="control is-expanded">
+                        <input class="input" type="text" v-model="form.secret">
+                    </p>
                 </div>
-                <div class="control" v-if="form.uri">
-                    <button type="button" class="button is-success" @click="previewAccount">{{ $t('twofaccounts.forms.test') }}</button>
+                <div class="field">
+                    <field-error :form="form" field="secret" class="help-for-file" />
+                    <p class="help" v-html="$t('twofaccounts.forms.secret.help')"></p>
                 </div>
-                <div class="control">
-                    <button type="button" class="button is-text" @click="cancelCreation">{{ $t('commons.cancel') }}</button>
-                </div>
+                <h2 class="title is-4 mt-5 mb-2">{{ $t('commons.options') }}</h2>
+                <p class="help mb-4">
+                    {{ $t('twofaccounts.forms.options_help') }}
+                </p>
+                <!-- digits -->
+                <form-toggle :form="form" :choices="digitsChoices" fieldName="digits" :label="$t('twofaccounts.forms.digits.label')" :help="$t('twofaccounts.forms.digits.help')" />
+                <!-- algorithm -->
+                <form-toggle :form="form" :choices="algorithms" fieldName="algorithm" :label="$t('twofaccounts.forms.algorithm.label')" :help="$t('twofaccounts.forms.algorithm.help')" />
+                <!-- TOTP period -->
+                <form-field v-if="form.otpType === 'TOTP'" :form="form" fieldName="totpPeriod" inputType="text" :label="$t('twofaccounts.forms.totpPeriod.label')" :placeholder="$t('twofaccounts.forms.totpPeriod.placeholder')" :help="$t('twofaccounts.forms.totpPeriod.help')" />
+                <!-- HOTP counter -->
+                <form-field v-if="form.otpType === 'HOTP'" :form="form" fieldName="hotpCounter" inputType="text" :label="$t('twofaccounts.forms.hotpCounter.label')" :placeholder="$t('twofaccounts.forms.hotpCounter.placeholder')" :help="$t('twofaccounts.forms.hotpCounter.help')" />
+                <!-- image link -->
+                <form-field :form="form" fieldName="imageLink" inputType="text" :label="$t('twofaccounts.forms.image_link.label')" :placeholder="$t('twofaccounts.forms.image_link.placeholder')" :help="$t('twofaccounts.forms.image_link.help')" />
             </div>
+            <vue-footer :showButtons="true">
+                <p class="control">
+                    <v-button :isLoading="form.isBusy" class="is-rounded" >{{ $t('commons.create') }}</v-button>
+                </p>
+                <p class="control" v-if="form.otpType && form.secret">
+                    <button type="button" class="button is-success is-rounded" @click="previewAccount">{{ $t('twofaccounts.forms.test') }}</button>
+                </p>
+                <p class="control">
+                    <button type="button" class="button is-text is-rounded" @click="cancelCreation">{{ $t('commons.cancel') }}</button>
+                </p>
+            </vue-footer>
         </form>
         <!-- modal -->
         <modal v-model="ShowTwofaccountInModal">
-            <twofaccount-show ref="TwofaccountPreview" 
-                :service="form.service"
-                :account="form.account"
-                :uri="form.uri"
-                :icon="tempIcon">
-            </twofaccount-show>
+            <token-displayer ref="AdvancedFormTokenDisplayer" v-bind="form.data()" @update-hotp-counter="updateHotpCounter">
+            </token-displayer>
         </modal>
     </form-wrapper>
 </template>
@@ -119,29 +129,43 @@
 
     import Modal from '../../components/Modal'
     import Form from './../../components/Form'
-    import TwofaccountShow from '../../components/TwofaccountShow'
+    import TokenDisplayer from '../../components/TokenDisplayer'
 
     export default {
         data() {
             return {
                 isQuickForm: false,
                 ShowTwofaccountInModal : false,
-                uriIsLocked: true,
                 tempIcon: '',
                 form: new Form({
                     service: '',
                     account: '',
+                    otpType: '',
                     uri: '',
                     icon: '',
-                    qrcode: null
-                })
+                    secret: '',
+                    secretIsBase32Encoded: 0,
+                    algorithm: '',
+                    digits: null,
+                    hotpCounter: null,
+                    totpPeriod: null,
+                    imageLink: '',
+                    qrcode: null,
+                }),
+                otpTypes: ['TOTP', 'HOTP'],
+                digitsChoices: [6,7,8,9,10],
+                secretFormats: [
+                    { text: this.$t('twofaccounts.forms.plain_text'), value: 0 },
+                    { text: 'Base32', value: 1 }
+                ],
+                algorithms: ['sha1', 'sha256', 'sha512', 'md5'],
             }
         },
 
         watch: {
             tempIcon: function(val) {
                 if( this.isQuickForm ) {
-                    this.$refs.TwofaccountShow.internal_icon = val
+                    this.$refs.QuickFormTokenDisplayer.internal_icon = val
                 }
             },
         },
@@ -149,20 +173,21 @@
         mounted: function () {
             if( this.$route.params.qrAccount ) {
 
-                this.isQuickForm = true
                 this.form.fill(this.$route.params.qrAccount)
+                this.isQuickForm = true
 
             }
 
             // stop TOTP generation on modal close
             this.$on('modalClose', function() {
-                this.$refs.TwofaccountPreview.stopLoop()
+
+                this.$refs.AdvancedFormTokenDisplayer.stopLoop()
             });
         },
 
         components: {
             Modal,
-            TwofaccountShow,
+            TokenDisplayer,
         },
 
         methods: {
@@ -171,15 +196,15 @@
                 // set current temp icon as account icon
                 this.form.icon = this.tempIcon
 
-                // The quick form (possibly the preview feature too) has incremented the HOTP counter so the next_uri property
-                // must be used as the uri to store
+                // The quick form or the preview feature has incremented the HOTP counter so the next_uri property
+                // must be used as the uri to store.
                 // This could desynchronized the HOTP verification server and our local counter if the user never verified the HOTP but this
                 // is acceptable (and HOTP counter can be edited by the way)
-                if( this.isQuickForm && this.$refs.TwofaccountShow.next_uri ) {
-                    this.form.uri = this.$refs.TwofaccountShow.next_uri
+                if( this.isQuickForm && this.$refs.QuickFormTokenDisplayer.next_uri ) {
+                    this.form.uri = this.$refs.QuickFormTokenDisplayer.next_uri
                 }
-                else if( this.$refs.TwofaccountPreview && this.$refs.TwofaccountPreview.next_uri ) {
-                    this.form.uri = this.$refs.TwofaccountPreview.next_uri
+                else if( this.$refs.AdvancedFormTokenDisplayer && this.$refs.AdvancedFormTokenDisplayer.next_uri ) {
+                    this.form.uri = this.$refs.AdvancedFormTokenDisplayer.next_uri
                 }
 
                 await this.form.post('/api/twofaccounts')
@@ -191,10 +216,7 @@
             },
 
             previewAccount() {
-                // preview is possible only if we have an uri
-                if( this.form.uri ) {
-                    this.$refs.TwofaccountPreview.showAccount()
-                }
+                this.$refs.AdvancedFormTokenDisplayer.getToken()
             },
 
             cancelCreation: function() {
@@ -220,6 +242,9 @@
                 const { data } = await this.form.upload('/api/qrcode/decode', imgdata)
 
                 this.form.fill(data)
+                this.form.otpType = this.form.otpType.toUpperCase()
+                this.form.secretIsBase32Encoded = 1
+                this.form.uri = '' // we don't want an uri now because the user can change any otp parameter in the form
 
             },
 
@@ -242,6 +267,10 @@
                     this.axios.delete('/api/icon/delete/' + this.tempIcon)
                     this.tempIcon = ''
                 }
+            },
+
+            updateHotpCounter(payload) {
+                this.form.hotpCounter = payload.nextHotpCounter
             },
             
         },

@@ -286,7 +286,7 @@ class TwoFAccount extends Model implements Sortable
     {
         // The Type and Secret attributes are mandatory
         // All other attributes have default value set by OTPHP
-        
+
         if( strcasecmp($attrib['otpType'], 'totp') == 0 && strcasecmp($attrib['otpType'], 'hotp') == 0 ) {
             throw \Illuminate\Validation\ValidationException::withMessages([
                 'otpType' => __('errors.not_a_supported_otp_type')
@@ -306,20 +306,33 @@ class TwoFAccount extends Model implements Sortable
             $this->otp = strtolower($attrib['otpType']) === 'totp' ? TOTP::create($secret) : HOTP::create($secret);
 
             // and we change parameters if needed
-            if ($attrib['service']) {
+            if (array_key_exists('service', $attrib) && $attrib['service']) {
                 $this->service = $attrib['service'];
                 $this->otp->setIssuer( $attrib['service'] );
             }
-            if ($attrib['account']) {
+
+            if (array_key_exists('account', $attrib) && $attrib['account']) {
                 $this->account = $attrib['account'];
                 $this->otp->setLabel( $attrib['account'] );
             }
-            if ($attrib['icon']) { $this->account = $attrib['icon']; }
-            if ($attrib['digits'] > 0) { $this->otp->setParameter( 'digits', (int) $attrib['digits'] ); }
-            if ($attrib['algorithm']) { $this->otp->setParameter( 'digest', $attrib['algorithm'] ); }
-            if ($attrib['totpPeriod'] && $attrib['otpType'] !== 'totp') { $this->otp->setParameter( 'period', (int) $attrib['totpPeriod'] ); }
-            if ($attrib['hotpCounter'] && $attrib['otpType'] !== 'hotp') { $this->otp->setParameter( 'counter', (int) $attrib['hotpCounter'] ); }
-            if ($attrib['imageLink']) { $this->otp->setParameter( 'image', $attrib['imageLink'] ); }
+
+            if (array_key_exists('icon', $attrib) && $attrib['icon'])
+                { $this->icon = $attrib['icon']; }
+
+            if (array_key_exists('digits', $attrib) && $attrib['digits'] > 0)
+                { $this->otp->setParameter( 'digits', (int) $attrib['digits'] ); }
+
+            if (array_key_exists('digest', $attrib) && $attrib['algorithm'])
+                { $this->otp->setParameter( 'digest', $attrib['algorithm'] ); }
+
+            if (array_key_exists('totpPeriod', $attrib) && $attrib['totpPeriod'] && $attrib['otpType'] !== 'totp')
+                { $this->otp->setParameter( 'period', (int) $attrib['totpPeriod'] ); }
+
+            if (array_key_exists('hotpCounter', $attrib) && $attrib['hotpCounter'] && $attrib['otpType'] !== 'hotp')
+                { $this->otp->setParameter( 'counter', (int) $attrib['hotpCounter'] ); }
+
+            if (array_key_exists('imageLink', $attrib) && $attrib['imageLink'])
+                { $this->otp->setParameter( 'image', $attrib['imageLink'] ); }
 
             // We can now generate a fresh URI
             $this->uri = $this->otp->getProvisioningUri();
@@ -327,7 +340,7 @@ class TwoFAccount extends Model implements Sortable
         }
         catch (\Exception $e) {
             throw \Illuminate\Validation\ValidationException::withMessages([
-                'qrcode' => __('errors.cannot_create_otp_without_parameters')
+                'qrcode' => __('errors.cannot_create_otp_with_those_parameters')
             ]);
         }
 

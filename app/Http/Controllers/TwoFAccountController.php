@@ -34,19 +34,36 @@ class TwoFAccountController extends Controller
 
         // see https://github.com/google/google-authenticator/wiki/Key-Uri-Format
         // for otpauth uri format validation
+
         $this->validate($request, [
-            'service' => 'required',
-            'uri' => 'required|regex:/^otpauth:\/\/[h,t]otp\//i',
+            'service' => 'required|string',
+            'account' => 'nullable|string',
+            'icon' => 'nullable|string',
+            'uri' => 'nullable|string|regex:/^otpauth:\/\/[h,t]otp\//i',
+            'otpType' => 'required_without:uri|in:TOTP,HOTP',
+            'secret' => 'required_without:uri|string',
+            'digits' => 'nullable|integer|between:6,10',
+            'algorithm' => 'nullable|in:sha1,sha256,sha512,md5',
+            'totpPeriod' => 'nullable|integer|min:1',
+            'hotpCounter' => 'nullable|integer|min:0',
+            'imageLink' => 'nullable|url',
         ]);
 
-        OTP::get($request->uri);
+        // Two possible cases :
+        // - The most common case, the uri is provided thanks to a QR code live scan or file upload
+        //     -> We use this uri to populate the account
+        // - The advanced form has been used and provide no uri but all individual parameters
+        //     -> We use the parameters collection to populate the account
+        $twofaccount = new TwoFAccount;
 
-        $twofaccount = TwoFAccount::create([
-            'service' => $request->service,
-            'account' => $request->account,
-            'uri' => $request->uri,
-            'icon' => $request->icon
-        ]);
+        if( $request->uri ) {
+            $twofaccount->populateFromUri($request->uri);
+        }
+        else {
+            $twofaccount->populate($request->all());
+        }
+
+        $twofaccount->save();
 
         // Possible group association
         $groupId = Options::get('defaultGroup') === '-1' ? (int) Options::get('activeGroup') : (int) Options::get('defaultGroup');
@@ -103,10 +120,17 @@ class TwoFAccountController extends Controller
             // The request data is the Id of the account
             $twofaccount = TwoFAccount::FindOrFail($request->id);
         }
-        else {
-            // The request data is supposed to be a valid uri
+        else if( $request->otp['uri'] ) {
+            // The request data contain an uri
             $twofaccount = new TwoFAccount;
-            $twofaccount->populateFromUri($request->uri);
+            $twofaccount->populateFromUri($request->otp['uri']);
+
+            $isPreview = true;  // HOTP generated for preview (in the Create form) will not have its counter updated
+        }
+        else {
+            // The request data should contain all otp parameter
+            $twofaccount = new TwoFAccount;
+            $twofaccount->populate($request->otp);
 
             $isPreview = true;  // HOTP generated for preview (in the Create form) will not have its counter updated
         }

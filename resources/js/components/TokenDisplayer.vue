@@ -5,84 +5,107 @@
         </figure>
         <p class="is-size-4 has-text-grey-light has-ellipsis">{{ internal_service }}</p>
         <p class="is-size-6 has-text-grey has-ellipsis">{{ internal_account }}</p>
-        <p id="otp" class="is-size-1 has-text-white" :title="$t('commons.copy_to_clipboard')" v-clipboard="() => otp.replace(/ /g, '')" v-clipboard:success="clipboardSuccessHandler">{{ displayedOtp }}</p>
-        <ul class="dots" v-if="otpType === 'totp'">
+        <p class="is-size-1 has-text-white is-clickable" :title="$t('commons.copy_to_clipboard')" v-clipboard="() => token.replace(/ /g, '')" v-clipboard:success="clipboardSuccessHandler">{{ displayedToken }}</p>
+        <ul class="dots" v-if="internal_otpType === 'totp'">
             <li v-for="n in 30"></li>
         </ul>
-        <ul v-else-if="otpType === 'hotp'">
-            <li>counter: {{ counter }}</li>
+        <ul v-else-if="internal_otpType === 'hotp'">
+            <li>counter: {{ internal_hotpCounter }}</li>
         </ul>
     </div>
 </template>
 
 <script>
     export default {
+        name: 'TokenDisplayer',
+
         data() {
             return {
                 id: null,
-                internal_service: '',
-                internal_account: '',
-                internal_uri: '',
                 next_uri: '',
-                internal_icon: '',
-                otpType: '',
-                otp : '',
+                nextHotpCounter: null,
+                token : '',
                 timerID: null,
                 position: null,
-                counter: null,
+                internal_otpType: '',
+                internal_account: '',
+                internal_service: '',
+                internal_icon: '',
+                internal_hotpCounter: null,
             }
         },
 
         props: {
-            service: '',
-            account: '',
-            uri : '',
-            icon: ''
+            account : String,
+            algorithm : String,
+            digits : Number,
+            hotpCounter : Number,
+            icon : String,
+            imageLink : String,
+            otpType : String,
+            qrcode : null,
+            secret : String,
+            secretIsBase32Encoded : Number,
+            service : String,
+            totpPeriod : Number,
+            uri : String
         },
 
         computed: {
-            displayedOtp() {
-                return this.$root.appSettings.showTokenAsDot ? this.otp.replace(/[0-9]/g, '●') : this.otp
+            displayedToken() {
+                return this.$root.appSettings.showTokenAsDot ? this.token.replace(/[0-9]/g, '●') : this.token
             }
         },
 
         mounted: function() {
-            this.showAccount()
+            this.getToken()
         },
 
         methods: {
 
-            async showAccount(id) {
+            async getToken(id) {
 
-                // 2 possible cases :
-                //   - ID is provided so we fetch the account data from db but without the uri.
+                // 3 possible cases :
+                //   - Trigger when user ask for a token of an existing account: the ID is provided so we fetch the account data
+                //     from db but without the uri.
                 //     This prevent the uri (a sensitive data) to transit via http request unnecessarily. In this
                 //     case this.otpType is sent by the backend.
-                //   - the URI prop has been set via the create form, we need to preview some OTP before storing the account.
-                //     So this.otpType is set on client side from the provided URI
-                
-                this.id = id
+                //   - Trigger when user use the Quick Uploader and preview the account: No ID but we have an URI.
+                //   - Trigger when user use the Advanced form and preview the account: We should have all OTP parameter
+                //     to obtain a token, including Secret and otpType which are required
 
-                if( this.id || this.uri ) {
-                    if( this.id ) {
+                try {
+                    this.internal_otpType = this.otpType.toLowerCase()
+                }
+                catch(e) {
+                    //do nothing
+                }
+                finally {
+                    this.internal_account = this.account
+                    this.internal_service = this.service
+                    this.internal_icon = this.icon
+                    this.internal_hotpCounter = this.hotpCounter
+                }
 
-                        const { data } = await this.axios.get('api/twofaccounts/' + this.id)
+                if( id ) {
 
-                        this.internal_service = data.service
-                        this.internal_account = data.account
-                        this.internal_icon = data.icon
-                        this.otpType = data.otpType
-                    }
-                    else {
+                    this.id = id
+                    const { data } = await this.axios.get('api/twofaccounts/' + this.id)
 
-                        this.internal_service = this.service
-                        this.internal_account = this.account
-                        this.internal_icon = this.icon
-                        this.internal_uri = this.uri
-                        this.otpType = this.internal_uri.slice(0, 15 ) === "otpauth://totp/" ? 'totp' : 'hotp';
-                    }
+                    this.internal_service = data.service
+                    this.internal_account = data.account
+                    this.internal_icon = data.icon
+                    this.internal_otpType = data.otpType
+                }
 
-                    switch(this.otpType) {
+                // We force the otpType to be based on the uri
+                if( this.uri ) {
+                    this.internal_otpType = this.uri.slice(0, 15 ).toLowerCase() === "otpauth://totp/" ? 'totp' : 'hotp';
+                }
+
+                if( this.id || this.uri || this.secret ) { // minimun required vars to get a token from the backend
+                    
+                    switch(this.internal_otpType) {
                         case 'totp':
                             await this.getTOTP()
                             break;
@@ -97,12 +120,13 @@
                 }
             },
 
+
             getTOTP: function() {
 
-                this.axios.post('/api/twofaccounts/otp', { id: this.id, uri: this.internal_uri }).then(response => {
-                    let spacePosition = Math.ceil(response.data.otp.length / 2);
+                this.axios.post('/api/twofaccounts/otp', { id: this.id, otp: this.$props }).then(response => {
+                    let spacePosition = Math.ceil(response.data.token.length / 2);
                     
-                    this.otp = response.data.otp.substr(0, spacePosition) + " " + response.data.otp.substr(spacePosition);
+                    this.token = response.data.token.substr(0, spacePosition) + " " + response.data.token.substr(spacePosition);
                     this.position = response.data.position;
 
                     let dots = this.$el.querySelector('.dots');
@@ -141,14 +165,18 @@
                 });
             },
 
+
             getHOTP: function() {
 
-                this.axios.post('/api/twofaccounts/otp', { id: this.id, uri: this.internal_uri }).then(response => {
-                    let spacePosition = Math.ceil(response.data.otp.length / 2);
+                this.axios.post('/api/twofaccounts/otp', { id: this.id, otp: this.$props }).then(response => {
+                    let spacePosition = Math.ceil(response.data.token.length / 2);
                     
-                    this.otp = response.data.otp.substr(0, spacePosition) + " " + response.data.otp.substr(spacePosition)
-                    this.counter = response.data.counter
+                    this.token = response.data.token.substr(0, spacePosition) + " " + response.data.token.substr(spacePosition)
+                    this.internal_hotpCounter = response.data.hotpCounter
+                    this.nextHotpCounter = response.data.nextHotpCounter
                     this.next_uri = response.data.nextUri
+
+                    this.$emit('update-hotp-counter', { nextHotpCounter: this.nextHotpCounter })
 
                 })
                 .catch(error => {
@@ -156,11 +184,12 @@
                 });
             },
 
+
             clearOTP: function() {
                 this.stopLoop()
-                this.id = this.timerID = this.position = this.counter = null
-                this.internal_service = this.internal_account = this.internal_icon = this.internal_uri = ''
-                this.otp = '... ...'
+                this.id = this.timerID = this.position = this.internal_hotpCounter = null
+                this.internal_service = this.internal_account = this.internal_icon = this.internal_otpType = ''
+                this.token = '... ...'
 
                 try {
                     this.$el.querySelector('[data-is-active]').removeAttribute('data-is-active');
@@ -171,11 +200,13 @@
                 }
             },
 
+
             stopLoop: function() {
-                if( this.otpType === 'totp' ) {
+                if( this.internal_otpType === 'totp' ) {
                     clearInterval(this.timerID)
                 }
             },
+
 
             clipboardSuccessHandler ({ value, event }) {
 
@@ -189,6 +220,7 @@
 
                 this.$notify({ type: 'is-success', text: this.$t('commons.copied_to_clipboard') })
             },
+
 
             clipboardErrorHandler ({ value, event }) {
                 console.log('error', value)

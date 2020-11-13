@@ -132,7 +132,7 @@
         <quick-uploader v-if="showUploader" :directStreaming="accounts.length > 0" :showTrailer="accounts.length === 0" ref="QuickUploader"></quick-uploader>
         <!-- modal -->
         <modal v-model="showTwofaccountInModal">
-            <twofaccount-show ref="TwofaccountShow" ></twofaccount-show>
+            <token-displayer ref="TokenDisplayer" ></token-displayer>
         </modal>
         <!-- footer -->
         <vue-footer v-if="showFooter && !showGroupSwitch" :showButtons="accounts.length > 0">
@@ -188,7 +188,7 @@
 <script>
 
     import Modal from '../components/Modal'
-    import TwofaccountShow from '../components/TwofaccountShow'
+    import TokenDisplayer from '../components/TokenDisplayer'
     import QuickUploader from './../components/QuickUploader'
     // import vuePullRefresh from 'vue-pull-refresh';
     import draggable from 'vuedraggable'
@@ -257,7 +257,7 @@
             // stop OTP generation on modal close
             this.$on('modalClose', function() {
                 console.log('modalClose triggered')
-                this.$refs.TwofaccountShow.clearOTP()
+                this.$refs.TokenDisplayer.clearOTP()
             });
 
             // hide Footer when stream is on
@@ -281,7 +281,7 @@
 
         components: {
             Modal,
-            TwofaccountShow,
+            TokenDisplayer,
             // 'vue-pull-refresh': vuePullRefresh,
             QuickUploader,
             draggable,
@@ -321,7 +321,7 @@
                     this.selectedAccounts.push(account.id)
                 }
                 else {
-                    this.$refs.TwofaccountShow.showAccount(account.id)
+                    this.$refs.TokenDisplayer.showAccount(account.id)
                 }
             },
 
