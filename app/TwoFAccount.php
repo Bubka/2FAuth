@@ -71,6 +71,10 @@ class TwoFAccount extends Model implements Sortable
         static::retrieved(function ($model) {
             $model->populateFromUri();
         });
+
+        static::saving(function ($model) {
+            $model->refreshUri();
+        });
         
         static::deleted(function ($model) {
             Storage::delete('public/icons/' . $model->icon);
@@ -333,9 +337,6 @@ class TwoFAccount extends Model implements Sortable
 
             if (array_key_exists('imageLink', $attrib) && $attrib['imageLink'])
                 { $this->otp->setParameter( 'image', $attrib['imageLink'] ); }
-
-            // We can now generate a fresh URI
-            $this->uri = $this->otp->getProvisioningUri();
 
         }
         catch (\Exception $e) {
