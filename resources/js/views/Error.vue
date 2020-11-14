@@ -16,8 +16,9 @@
             </div>
             <div v-else>
                 <p class="error-generic"></p>
-                <p>{{ $t('errors.error_occured') }}</p>
+                <p>{{ $t('errors.error_occured') }} </p>
                 <p v-if="error" class="has-text-grey-lighter">{{ error.message }}</p>
+                <p v-if="error.originalMessage" class="has-text-grey-lighter">{{ error.originalMessage }}</p>
                 <p><router-link :to="{ name: 'accounts' }" class="is-text">{{ $t('errors.refresh') }}</router-link></p>
                 <p v-if="debugMode == 'development' && error.debug">
                     <br>
