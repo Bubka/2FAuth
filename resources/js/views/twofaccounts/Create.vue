@@ -13,6 +13,15 @@
                     </token-displayer>
                 </div>
             </div>
+            <div class="columns is-mobile" v-if="form.errors.any()">
+                <div class="column">
+                    <p v-for="field in form.errors.errors" class="help is-danger">
+                        <ul>
+                            <li v-for="(error, index) in field">{{ error }}</li>
+                        </ul>
+                    </p>
+                </div>
+            </div>
             <div class="columns is-mobile">
                 <div class="column quickform-footer">
                     <div class="field is-grouped is-grouped-centered">
