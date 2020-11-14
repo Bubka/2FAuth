@@ -148,6 +148,10 @@ return [
         'secret' => [
             'required_without' => 'The :attribute field is required.',
         ],
+        'account' => [
+            'required_without' => 'The :attribute field is required.',
+            'regex' => 'The :attribute field must not contain colon.',
+        ],
     ],
 
     /*

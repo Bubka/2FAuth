@@ -37,10 +37,10 @@ class TwoFAccountController extends Controller
 
         $this->validate($request, [
             'service' => 'required|string',
-            'account' => 'nullable|string',
+            'account' => 'required_without:uri|nullable|string|regex:/^[^:]+$/i',
             'icon' => 'nullable|string',
             'uri' => 'nullable|string|regex:/^otpauth:\/\/[h,t]otp\//i',
-            'otpType' => 'required_without:uri|in:TOTP,HOTP',
+            'otpType' => 'required_without:uri|in:totp,hotp,TOTP,HOTP',
             'secret' => 'required_without:uri|string',
             'digits' => 'nullable|integer|between:6,10',
             'algorithm' => 'nullable|in:sha1,sha256,sha512,md5',
