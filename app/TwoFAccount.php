@@ -40,7 +40,7 @@ class TwoFAccount extends Model implements Sortable
      *
      * @var array
      */
-    protected $appends = ['isConsistent', 'otpType', 'secret', 'algorithm', 'digits', 'totpPeriod', 'hotpCounter', 'imageLink'];
+    protected $appends = ['token', 'isConsistent', 'otpType', 'secret', 'algorithm', 'digits', 'totpPeriod', 'totpPosition', 'hotpCounter', 'imageLink'];
 
 
     /**
@@ -349,6 +349,29 @@ class TwoFAccount extends Model implements Sortable
 
 
     /**
+     * Calculate where is now() in the totp current period
+     * @return mixed The position
+     */
+    private function getTotpPosition()
+    {
+        // For memo :
+        // $nextOtpAt = ($PeriodCount+1)*$period
+        // $remainingTime = $nextOtpAt - time()
+        if( $this->otpType === 'totp' ) {
+
+            $currentPosition = time();
+            $PeriodCount = floor($currentPosition / $this->totpPeriod); //nombre de période de x s depuis T0 (x=30 par défaut)
+            $currentPeriodStartAt = $PeriodCount * $this->totpPeriod;
+            $positionInCurrentPeriod = $currentPosition - $currentPeriodStartAt;
+
+            return $positionInCurrentPeriod;
+        }
+
+        return null;
+    }
+
+
+    /**
      * Update the uri attribute using the OTP object
      * @return void
      */
@@ -362,10 +385,11 @@ class TwoFAccount extends Model implements Sortable
      * Generate a token which is valid at the current time (now)
      * @return string The generated token
      */
-    public function token() : string
+    public function generateToken() : string
     {
         return $this->otpType === 'totp' ? $this->otp->now() : $this->otp->at($this->otp->getCounter());
     }
+
 
 
     /**
@@ -378,6 +402,28 @@ class TwoFAccount extends Model implements Sortable
             $this->hotpCounter = $this->hotpCounter + 1;
             $this->refreshUri();
         }
+    }
+
+
+    /**
+     * get token attribute
+     * 
+     * @return string The token
+     */
+    public function getTokenAttribute() : string
+    {
+        return $this->generateToken();
+    }
+
+
+    /**
+     * get totpPosition attribute
+     * 
+     * @return int The position
+     */
+    public function getTotpPositionAttribute()
+    {
+        return $this->getTotpPosition();
     }
 
 

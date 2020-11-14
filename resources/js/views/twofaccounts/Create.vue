@@ -9,7 +9,7 @@
                         <font-awesome-icon :icon="['fas', 'image']" size="2x" />
                     </label>
                     <button class="delete delete-icon-button is-medium" v-if="tempIcon" @click.prevent="deleteIcon"></button>
-                    <token-displayer ref="QuickFormTokenDisplayer" v-bind="form.data()">
+                    <token-displayer ref="QuickFormTokenDisplayer" v-bind="form.data()" @increment-hotp="incrementHotp">
                     </token-displayer>
                 </div>
             </div>
@@ -128,7 +128,7 @@
         </form>
         <!-- modal -->
         <modal v-model="ShowTwofaccountInModal">
-            <token-displayer ref="AdvancedFormTokenDisplayer" v-bind="form.data()" @update-hotp-counter="updateHotpCounter">
+            <token-displayer ref="AdvancedFormTokenDisplayer" v-bind="form.data()" @increment-hotp="incrementHotp">
             </token-displayer>
         </modal>
     </form-wrapper>
@@ -205,17 +205,6 @@
                 // set current temp icon as account icon
                 this.form.icon = this.tempIcon
 
-                // The quick form or the preview feature has incremented the HOTP counter so the next_uri property
-                // must be used as the uri to store.
-                // This could desynchronized the HOTP verification server and our local counter if the user never verified the HOTP but this
-                // is acceptable (and HOTP counter can be edited by the way)
-                if( this.isQuickForm && this.$refs.QuickFormTokenDisplayer.next_uri ) {
-                    this.form.uri = this.$refs.QuickFormTokenDisplayer.next_uri
-                }
-                else if( this.$refs.AdvancedFormTokenDisplayer && this.$refs.AdvancedFormTokenDisplayer.next_uri ) {
-                    this.form.uri = this.$refs.AdvancedFormTokenDisplayer.next_uri
-                }
-
                 await this.form.post('/api/twofaccounts')
 
                 if( this.form.errors.any() === false ) {
@@ -253,7 +242,7 @@
                 this.form.fill(data)
                 this.form.otpType = this.form.otpType.toUpperCase()
                 this.form.secretIsBase32Encoded = 1
-                this.form.uri = '' // we don't want an uri now because the user can change any otp parameter in the form
+                this.form.uri = '' // we don't want the uri because the user can change any otp parameter in the form
 
             },
 
@@ -278,8 +267,13 @@
                 }
             },
 
-            updateHotpCounter(payload) {
+            incrementHotp(payload) {
+                // The quick form or the preview feature has incremented the HOTP counter so we get the new value from
+                // the component.
+                // This could desynchronized the HOTP verification server and our local counter if the user never verified the HOTP but this
+                // is acceptable (and HOTP counter can be edited by the way)
                 this.form.hotpCounter = payload.nextHotpCounter
+                this.form.uri = payload.nextUri
             },
             
         },

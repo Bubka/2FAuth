@@ -114,29 +114,43 @@ class TwoFAccountController extends Controller
      */
     public function generateOTP(Request $request)
     {
-        $isPreview = false;
 
         if( $request->id ) {
-            // The request data is the Id of the account
+
+            // The request data is the Id of an existing account
             $twofaccount = TwoFAccount::FindOrFail($request->id);
         }
         else if( $request->otp['uri'] ) {
+
             // The request data contain an uri
             $twofaccount = new TwoFAccount;
             $twofaccount->populateFromUri($request->otp['uri']);
-
-            $isPreview = true;  // HOTP generated for preview (in the Create form) will not have its counter updated
         }
         else {
+
             // The request data should contain all otp parameter
             $twofaccount = new TwoFAccount;
             $twofaccount->populate($request->otp);
-
-            $isPreview = true;  // HOTP generated for preview (in the Create form) will not have its counter updated
         }
 
-        return response()->json(OTP::generate($twofaccount, $isPreview ? true : false), 200);
+        if( $twofaccount->otpType === 'hotp' ) {
+
+            // returned counter & uri will be updated
+            $twofaccount->increaseHotpCounter();
+
+            // and the db too
+            if( $request->id ) {
+                $twofaccount->save();
+            }
+        }
+
+        if( $request->id ) {
+            return response()->json($twofaccount, 200);
+        }
+
+        return response()->json($twofaccount->makeVisible(['uri', 'secret', 'algorithm']), 200);
     }
+
 
 
     /**

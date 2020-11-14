@@ -22,8 +22,6 @@
         data() {
             return {
                 id: null,
-                next_uri: '',
-                nextHotpCounter: null,
                 token : '',
                 timerID: null,
                 position: null,
@@ -127,7 +125,7 @@
                     let spacePosition = Math.ceil(response.data.token.length / 2);
                     
                     this.token = response.data.token.substr(0, spacePosition) + " " + response.data.token.substr(spacePosition);
-                    this.position = response.data.position;
+                    this.position = response.data.totpPosition;
 
                     let dots = this.$el.querySelector('.dots');
 
@@ -172,11 +170,9 @@
                     let spacePosition = Math.ceil(response.data.token.length / 2);
                     
                     this.token = response.data.token.substr(0, spacePosition) + " " + response.data.token.substr(spacePosition)
-                    this.internal_hotpCounter = response.data.hotpCounter
-                    this.nextHotpCounter = response.data.nextHotpCounter
-                    this.next_uri = response.data.nextUri
 
-                    this.$emit('update-hotp-counter', { nextHotpCounter: this.nextHotpCounter })
+                    // returned counter & uri are incremented
+                    this.$emit('increment-hotp', { nextHotpCounter: response.data.hotpCounter, nextUri: response.data.uri })
 
                 })
                 .catch(error => {
