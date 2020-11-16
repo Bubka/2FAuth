@@ -94,6 +94,18 @@ class TwoFAccountController extends Controller
 
 
     /**
+     * Display the specified resource with all attributes.
+     *
+     * @param  \App\TwoFAccount  $twofaccount
+     * @return \Illuminate\Http\Response
+     */
+    public function showWithSensitive(TwoFAccount $twofaccount)
+    {
+        return response()->json($twofaccount->makeVisible(['uri', 'secret', 'algorithm']), 200);
+    }
+
+
+    /**
      * Save new order.
      *
      * @param  \App\TwoFAccount  $twofaccount
