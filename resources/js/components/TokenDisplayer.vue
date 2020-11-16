@@ -7,7 +7,7 @@
         <p class="is-size-6 has-text-grey has-ellipsis">{{ internal_account }}</p>
         <p class="is-size-1 has-text-white is-clickable" :title="$t('commons.copy_to_clipboard')" v-clipboard="() => token.replace(/ /g, '')" v-clipboard:success="clipboardSuccessHandler">{{ displayedToken }}</p>
         <ul class="dots" v-if="internal_otpType === 'totp'">
-            <li v-for="n in 30"></li>
+            <li v-for="n in 10"></li>
         </ul>
         <ul v-else-if="internal_otpType === 'hotp'">
             <li>counter: {{ internal_hotpCounter }}</li>
@@ -23,13 +23,18 @@
             return {
                 id: null,
                 token : '',
-                timerID: null,
+                remainingTimeout: null,
+                firstDotToNextOneTimeout: null,
+                dotToDotInterval: null,
                 position: null,
+                totpTimestamp: null,
                 internal_otpType: '',
                 internal_account: '',
                 internal_service: '',
                 internal_icon: '',
                 internal_hotpCounter: null,
+                lastActiveDot: null,
+                dotToDotCounter: null,
             }
         },
 
@@ -121,42 +126,62 @@
 
             getTOTP: function() {
 
+                this.dotToDotCounter = 0
+
                 this.axios.post('/api/twofaccounts/otp', { id: this.id, otp: this.$props }).then(response => {
+
                     let spacePosition = Math.ceil(response.data.token.length / 2);
                     
                     this.token = response.data.token.substr(0, spacePosition) + " " + response.data.token.substr(spacePosition);
-                    this.position = response.data.totpPosition;
+                    this.totpTimestamp = response.data.totpTimestamp; // the timestamp used to generate the token
+                    this.position = this.totpTimestamp % response.data.totpPeriod // The position of the totp timestamp in the current period
 
+                    // Hide all dots
                     let dots = this.$el.querySelector('.dots');
 
-                    // clear active dots
                     while (dots.querySelector('[data-is-active]')) {
                         dots.querySelector('[data-is-active]').removeAttribute('data-is-active');
                     }
 
-                    // set dot at given position as the active one
-                    let active = dots.querySelector('li:nth-child(' + (this.position + 1 ) + ')');
-                    active.setAttribute('data-is-active', true);
+                    // Activate the dot at the totp position
+                    let relativePosition = (this.position * 10) / response.data.totpPeriod
+                    let dotNumber = (Math.floor(relativePosition) +1)
 
-                    let self = this;
+                    this.lastActiveDot = dots.querySelector('li:nth-child(' + dotNumber + ')');
+                    this.lastActiveDot.setAttribute('data-is-active', true);
 
-                    this.timerID = setInterval(function() {
+                    // Main timeout which run all over the totpPeriod.
 
-                        let sibling = active.nextSibling;
+                    let remainingTimeBeforeEndOfPeriod = response.data.totpPeriod - this.position
+                    let self = this; // because of the setInterval/setTimeout closures
 
-                            if(active.nextSibling === null) {
-                                console.log('no more sibling to activate, we refresh the OTP')
-                                self.stopLoop()
-                                self.getTOTP();
-                            }
-                            else
-                            {
-                                active.removeAttribute('data-is-active');
-                                sibling.setAttribute('data-is-active', true);
-                                active = sibling
-                            }
+                    this.remainingTimeout = setTimeout(function() {
+                        self.stopLoop()
+                        self.getTOTP();
+                    }, remainingTimeBeforeEndOfPeriod*1000);
 
-                    }, 1000);
+                    // During the remainingTimeout countdown we have to show a next dot every durationBetweenTwoDots seconds
+                    // except for the first next dot
+
+                    let durationBetweenTwoDots = response.data.totpPeriod / 10 // we have 10 dots
+                    let firstDotTimeout = (Math.ceil(this.position / durationBetweenTwoDots) * durationBetweenTwoDots) - this.position
+
+                    this.firstDotToNextOneTimeout = setTimeout(function() {
+
+                        if( firstDotTimeout > 0 ) {
+                            self.activeNextDot()
+                            dotNumber += 1
+                        }
+
+                        self.dotToDotInterval = setInterval(function() {
+
+                            self.dotToDotCounter += 1
+                            self.activeNextDot()
+                            dotNumber += 1
+
+                        }, durationBetweenTwoDots*1000)
+
+                    }, firstDotTimeout*1000)
                 })
                 .catch(error => {
                     this.$router.push({ name: 'genericError', params: { err: error.response } });
@@ -183,7 +208,7 @@
 
             clearOTP: function() {
                 this.stopLoop()
-                this.id = this.timerID = this.position = this.internal_hotpCounter = null
+                this.id = this.remainingTimeout = this.dotToDotInterval = this.firstDotToNextOneTimeout = this.position = this.internal_hotpCounter = null
                 this.internal_service = this.internal_account = this.internal_icon = this.internal_otpType = ''
                 this.token = '... ...'
 
@@ -199,7 +224,19 @@
 
             stopLoop: function() {
                 if( this.internal_otpType === 'totp' ) {
-                    clearInterval(this.timerID)
+                    clearTimeout(this.remainingTimeout)
+                    clearTimeout(this.firstDotToNextOneTimeout)
+                    clearInterval(this.dotToDotInterval)
+                }
+            },
+
+
+            activeNextDot: function() {
+                if(this.lastActiveDot.nextSibling !== null) {
+
+                    this.lastActiveDot.removeAttribute('data-is-active')
+                    this.lastActiveDot.nextSibling.setAttribute('data-is-active', true)
+                    this.lastActiveDot = this.lastActiveDot.nextSibling
                 }
             },
 

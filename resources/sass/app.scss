@@ -310,23 +310,17 @@ figure.no-icon {
   background: hsl(0, 0%, 7%);  /* grey */
 }
 
-.dots li:nth-child(-n+27) {
+.dots li:nth-child(-n+9) {
   background: hsl(48, 100%, 67%); /* yellow */
 }
 
-.dots li:nth-child(-n+18) {
+.dots li:nth-child(-n+6) {
   background: hsl(141, 71%, 48%); /* green */
 }
 
-.dots li:nth-child(3n+2), .dots li:nth-child(3n+3) {
-    //background-color: black;
-    display:none;
-}
-
-.dots li:last-child() {
-    // background-color: black;
-    //display:none;
-}
+// .dots li:nth-child(3n+2), .dots li:nth-child(3n+3) {
+//     display:none;
+// }
 
 .input, .select select, .textarea {
   background-color: hsl(0, 0%, 21%);
