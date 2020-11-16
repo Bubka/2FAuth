@@ -42,7 +42,7 @@
             account : String,
             algorithm : String,
             digits : Number,
-            hotpCounter : Number,
+            hotpCounter : null,
             icon : String,
             imageLink : String,
             otpType : String,
@@ -50,7 +50,7 @@
             secret : String,
             secretIsBase32Encoded : Number,
             service : String,
-            totpPeriod : Number,
+            totpPeriod : null,
             uri : String
         },
 
