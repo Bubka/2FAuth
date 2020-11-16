@@ -92,6 +92,10 @@
                     this.internal_account = data.account
                     this.internal_icon = data.icon
                     this.internal_otpType = data.otpType
+                    
+                    if( data.otpType === 'hotp' && data.hotpCounter ) {
+                        this.internal_hotpCounter = data.hotpCounter
+                    }
                 }
 
                 // We force the otpType to be based on the uri
