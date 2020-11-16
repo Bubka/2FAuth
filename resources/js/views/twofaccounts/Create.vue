@@ -79,7 +79,7 @@
             </div>
             <field-error :form="form" field="icon" class="help-for-file" />
             <!-- otp type -->
-            <form-toggle :form="form" :choices="otpTypes" fieldName="otpType" :label="$t('twofaccounts.forms.otp_type.label')" :help="$t('twofaccounts.forms.otp_type.help')" :hasOffset="true" />
+            <form-toggle class="has-uppercased-button" :form="form" :choices="otpTypes" fieldName="otpType" :label="$t('twofaccounts.forms.otp_type.label')" :help="$t('twofaccounts.forms.otp_type.help')" :hasOffset="true" />
             <div v-if="form.otpType">
                 <!-- secret -->
                 <label class="label" v-html="$t('twofaccounts.forms.secret.label')"></label>
@@ -108,9 +108,9 @@
                 <!-- algorithm -->
                 <form-toggle :form="form" :choices="algorithms" fieldName="algorithm" :label="$t('twofaccounts.forms.algorithm.label')" :help="$t('twofaccounts.forms.algorithm.help')" />
                 <!-- TOTP period -->
-                <form-field v-if="form.otpType === 'TOTP'" :form="form" fieldName="totpPeriod" inputType="text" :label="$t('twofaccounts.forms.totpPeriod.label')" :placeholder="$t('twofaccounts.forms.totpPeriod.placeholder')" :help="$t('twofaccounts.forms.totpPeriod.help')" />
+                <form-field v-if="form.otpType === 'totp'" :form="form" fieldName="totpPeriod" inputType="text" :label="$t('twofaccounts.forms.totpPeriod.label')" :placeholder="$t('twofaccounts.forms.totpPeriod.placeholder')" :help="$t('twofaccounts.forms.totpPeriod.help')" />
                 <!-- HOTP counter -->
-                <form-field v-if="form.otpType === 'HOTP'" :form="form" fieldName="hotpCounter" inputType="text" :label="$t('twofaccounts.forms.hotpCounter.label')" :placeholder="$t('twofaccounts.forms.hotpCounter.placeholder')" :help="$t('twofaccounts.forms.hotpCounter.help')" />
+                <form-field v-if="form.otpType === 'hotp'" :form="form" fieldName="hotpCounter" inputType="text" :label="$t('twofaccounts.forms.hotpCounter.label')" :placeholder="$t('twofaccounts.forms.hotpCounter.placeholder')" :help="$t('twofaccounts.forms.hotpCounter.help')" />
                 <!-- image link -->
                 <form-field :form="form" fieldName="imageLink" inputType="text" :label="$t('twofaccounts.forms.image_link.label')" :placeholder="$t('twofaccounts.forms.image_link.placeholder')" :help="$t('twofaccounts.forms.image_link.help')" />
             </div>
@@ -161,7 +161,7 @@
                     imageLink: '',
                     qrcode: null,
                 }),
-                otpTypes: ['TOTP', 'HOTP'],
+                otpTypes: ['totp', 'hotp'],
                 digitsChoices: [6,7,8,9,10],
                 secretFormats: [
                     { text: this.$t('twofaccounts.forms.plain_text'), value: 0 },
@@ -240,7 +240,6 @@
                 const { data } = await this.form.upload('/api/qrcode/decode', imgdata)
 
                 this.form.fill(data)
-                this.form.otpType = this.form.otpType.toUpperCase()
                 this.form.secretIsBase32Encoded = 1
                 this.form.uri = '' // we don't want the uri because the user can change any otp parameter in the form
 

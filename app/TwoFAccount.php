@@ -291,7 +291,7 @@ class TwoFAccount extends Model implements Sortable
         // The Type and Secret attributes are mandatory
         // All other attributes have default value set by OTPHP
 
-        if( strcasecmp($attrib['otpType'], 'totp') == 0 && strcasecmp($attrib['otpType'], 'hotp') == 0 ) {
+        if( $attrib['otpType'] !== 'totp' && $attrib['otpType'] !== 'hotp' ) {
             throw \Illuminate\Validation\ValidationException::withMessages([
                 'otpType' => __('errors.not_a_supported_otp_type')
             ]);
@@ -307,7 +307,7 @@ class TwoFAccount extends Model implements Sortable
             // Create an OTP object using our secret but with default parameters
             $secret = $attrib['secretIsBase32Encoded'] === 1 ? $attrib['secret'] : Encoding::base32EncodeUpper($attrib['secret']);
 
-            $this->otp = strtolower($attrib['otpType']) === 'totp' ? TOTP::create($secret) : HOTP::create($secret);
+            $this->otp = $attrib['otpType'] === 'totp' ? TOTP::create($secret) : HOTP::create($secret);
 
             // and we change parameters if needed
             if (array_key_exists('service', $attrib) && $attrib['service']) {

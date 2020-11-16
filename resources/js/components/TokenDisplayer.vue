@@ -77,18 +77,11 @@
                 //   - Trigger when user use the Advanced form and preview the account: We should have all OTP parameter
                 //     to obtain a token, including Secret and otpType which are required
 
-                try {
-                    this.internal_otpType = this.otpType.toLowerCase()
-                }
-                catch(e) {
-                    //do nothing
-                }
-                finally {
-                    this.internal_account = this.account
-                    this.internal_service = this.service
-                    this.internal_icon = this.icon
-                    this.internal_hotpCounter = this.hotpCounter
-                }
+                this.internal_service = this.service
+                this.internal_account = this.account
+                this.internal_icon = this.icon
+                this.internal_otpType = this.otpType
+                this.internal_hotpCounter = this.hotpCounter
 
                 if( id ) {
 

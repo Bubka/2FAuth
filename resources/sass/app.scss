@@ -361,6 +361,10 @@ figure.no-icon {
   margin-bottom: 0 !important;
 }
 
+.has-uppercased-button .is-toggle {
+  text-transform: uppercase !important;
+}
+
 .control.has-icons-left .icon, .control.has-icons-right .icon {
   color: inherit;
 }
