@@ -326,13 +326,13 @@ class TwoFAccount extends Model implements Sortable
             if (array_key_exists('digits', $attrib) && $attrib['digits'] > 0)
                 { $this->otp->setParameter( 'digits', (int) $attrib['digits'] ); }
 
-            if (array_key_exists('digest', $attrib) && $attrib['algorithm'])
-                { $this->otp->setParameter( 'digest', $attrib['algorithm'] ); }
+            if (array_key_exists('algorithm', $attrib) && $attrib['algorithm'])
+                { $this->otp->setParameter( 'algorithm', $attrib['algorithm'] ); }
 
-            if (array_key_exists('totpPeriod', $attrib) && $attrib['totpPeriod'] && $attrib['otpType'] !== 'totp')
+            if (array_key_exists('totpPeriod', $attrib) && $attrib['totpPeriod'] && $attrib['otpType'] === 'totp')
                 { $this->otp->setParameter( 'period', (int) $attrib['totpPeriod'] ); }
 
-            if (array_key_exists('hotpCounter', $attrib) && $attrib['hotpCounter'] && $attrib['otpType'] !== 'hotp')
+            if (array_key_exists('hotpCounter', $attrib) && $attrib['hotpCounter'] && $attrib['otpType'] === 'hotp')
                 { $this->otp->setParameter( 'counter', (int) $attrib['hotpCounter'] ); }
 
             if (array_key_exists('imageLink', $attrib) && $attrib['imageLink'])
