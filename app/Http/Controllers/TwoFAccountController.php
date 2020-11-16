@@ -40,7 +40,7 @@ class TwoFAccountController extends Controller
             'account' => 'required_without:uri|nullable|string|regex:/^[^:]+$/i',
             'icon' => 'nullable|string',
             'uri' => 'nullable|string|regex:/^otpauth:\/\/[h,t]otp\//i',
-            'otpType' => 'required_without:uri|in:totp,hotp,TOTP,HOTP',
+            'otpType' => 'required_without:uri|in:totp,hotp',
             'secret' => 'required_without:uri|string',
             'digits' => 'nullable|integer|between:6,10',
             'algorithm' => 'nullable|in:sha1,sha256,sha512,md5',
@@ -176,9 +176,18 @@ class TwoFAccountController extends Controller
     {
 
         $this->validate($request, [
-            'service' => 'required',
+            'service' => 'required|string',
+            'account' => 'required_without:uri|nullable|string|regex:/^[^:]+$/i',
+            'icon' => 'nullable|string',
+            'uri' => 'nullable|string|regex:/^otpauth:\/\/[h,t]otp\//i',
+            'otpType' => 'required_without:uri|in:totp,hotp',
+            'secret' => 'required_without:uri|string',
+            'digits' => 'nullable|integer|between:6,10',
+            'algorithm' => 'nullable|in:sha1,sha256,sha512,md5',
+            'totpPeriod' => 'required_if:otpType,totp|nullable|integer|min:1',
+            'hotpCounter' => 'required_if:otpType,hotp|nullable|integer|min:0',
+            'imageLink' => 'nullable|url',
         ]);
-
 
         // Here we catch a possible missing model exception in order to
         // delete orphan submited icon
@@ -194,33 +203,9 @@ class TwoFAccountController extends Controller
             
             throw $e;
         }
-        
-        if( $twofaccount->otpType === 'hotp' ) {
 
-            // HOTP can be desynchronized from the verification
-            // server so we let the user the possibility to force
-            // the counter.
-
-            $this->validate($request, [
-                'counter' => 'required|integer',
-            ]);
-
-            // we set an OTP object to get the its current counter
-            // and we update it if a new one has been submited
-            $otp = OTP::get($twofaccount->uri);
-
-            if( $otp->getCounter() !== $request->counter ) {
-                $otp->setParameter( 'counter', $request->counter );
-                $twofaccount->uri = $otp->getProvisioningUri();
-            }
-        }
-
-        $twofaccount->update([
-            'service' => $request->service,
-            'account' => $request->account,
-            'icon' => $request->icon,
-            'uri' => $twofaccount->uri,
-        ]);
+        $twofaccount->populate($request->all());
+        $twofaccount->save();
 
         return response()->json($twofaccount, 200);
 

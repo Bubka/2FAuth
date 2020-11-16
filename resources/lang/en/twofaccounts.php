@@ -32,7 +32,6 @@ return [
         'new_account' => 'New account',
         'edit_account' => 'Edit account',
         'otp_uri' => 'OTP Uri',
-        'hotp_counter' => 'HOTP Counter',
         'scan_qrcode' => 'Scan a qrcode',
         'prefill_using_qrcode' => 'Prefill using a QR Code',
         'use_qrcode' => [
@@ -74,7 +73,8 @@ return [
         'hotpCounter' => [
             'label' => 'Counter',
             'placeholder' => 'Default is 0',
-            'help' => 'The initial counter value'
+            'help' => 'The initial counter value',
+            'help_lock' => 'It is risky to edit the counter as you can desynchronize the account with the verification server of the service. Use the lock icon to enable modification, but only if you know for you are doing'
         ],
         'image_link' => [
             'label' => 'Image',
