@@ -2,7 +2,7 @@
     <div class="field" :class="{ 'with-offset' : hasOffset }">
         <label class="label" v-html="label"></label>
         <div class="is-toggle buttons">
-            <a class="button is-dark" v-for="choice in choices" :class="{ 'is-link' : form[fieldName] === choice }" @click="form[fieldName] = choice">{{ choice }}</a>
+            <a class="button is-dark" :disabled="isDisabled" v-for="choice in choices" :class="{ 'is-link' : form[fieldName] === choice }" @click="setField(choice)">{{ choice }}</a>
         </div>
         <field-error :form="form" :field="fieldName" />
         <p class="help" v-html="help" v-if="help"></p>
@@ -49,7 +49,22 @@
             hasOffset: {
                 type: Boolean,
                 default: false
+            },
+
+            isDisabled: {
+                type: Boolean,
+                default: false
             }
+        },
+
+        methods: {
+
+            setField(value) {
+                if( !this.isDisabled ) {
+                    this.form[this.fieldName] = value
+                }
+            }
+
         }
     }
 </script>
