@@ -7,6 +7,7 @@ use OTPHP\TOTP;
 use OTPHP\HOTP;
 use OTPHP\Factory;
 use App\Classes\Options;
+use ParagonIE\ConstantTime\Base32;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 use Illuminate\Database\Eloquent\Model;
@@ -283,7 +284,7 @@ class TwoFAccount extends Model implements Sortable
 
         try {
             // Create an OTP object using our secret but with default parameters
-            $secret = $attrib['secretIsBase32Encoded'] === 1 ? $attrib['secret'] : Encoding::base32EncodeUpper($attrib['secret']);
+            $secret = $attrib['secretIsBase32Encoded'] === 1 ? $attrib['secret'] : Base32::encodeUpper($attrib['secret']);
 
             $this->otp = $attrib['otpType'] === 'totp' ? TOTP::create($secret) : HOTP::create($secret);
 

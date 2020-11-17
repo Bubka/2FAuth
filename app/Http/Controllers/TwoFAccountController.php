@@ -4,10 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Group;
 use App\TwoFAccount;
-use App\Classes\OTP;
 use App\Classes\Options;
 use Illuminate\Http\Request;
-use ParagonIE\ConstantTime\Base32;
 use Illuminate\Support\Facades\Storage;
 
 class TwoFAccountController extends Controller
@@ -19,7 +17,7 @@ class TwoFAccountController extends Controller
      */
     public function index()
     {
-        return response()->json(TwoFAccount::ofGroup(Options::get('activeGroup'))->ordered()->get()->toArray());
+        return response()->json(TwoFAccount::all());
     }
 
 
