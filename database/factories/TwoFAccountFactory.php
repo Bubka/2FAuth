@@ -18,10 +18,14 @@ use Faker\Generator as Faker;
 
 
 $factory->define(TwoFAccount::class, function (Faker $faker) {
+
+    $service = $faker->unique()->domainName;
+    $account = $faker->safeEmail;
+
     return [
-        'service' => $faker->unique()->domainName,
-        'account' => $faker->safeEmail,
-        'uri' => 'otpauth://totp/' . $faker->email . '?secret=' . $faker->regexify('[A-Z0-9]{16}') . '&issuer=test',
+        'service' => $service,
+        'account' => $account,
+        'uri' => 'otpauth://totp/' . $service . ':' . $account . '?secret=' . $faker->regexify('[A-Z0-9]{16}') . '&issuer=' . $service,
         'icon' => '',
     ];
 });
