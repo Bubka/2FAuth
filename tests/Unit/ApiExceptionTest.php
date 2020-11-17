@@ -115,7 +115,7 @@ class ApiExceptionTest extends TestCase
                 'debug'
             ])
             ->assertJsonFragment([
-                'message' => 'Whoops, looks like something went wrong'
+                'message' => 'Whoops, looks like something went wrong :('
             ]);
             
     }

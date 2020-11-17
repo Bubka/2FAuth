@@ -91,6 +91,12 @@ class ProtectDbTest extends TestCase
             ->json('PUT', '/api/twofaccounts/' . $this->twofaccount->id, [
                     'service' => 'testUpdate',
                     'account' => 'testUpdate@test.com',
+                    'otpType' => 'totp',
+                    'secret' => 'A4GRFHVVRBGY7UIW',
+                    'secretIsBase32Encoded' => 1,
+                    'digits' => 8,
+                    'totpPeriod' => 30,
+                    'algorithm' => 'sha256',
                 ])
             ->assertStatus(200)
             ->assertJsonFragment([

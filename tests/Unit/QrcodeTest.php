@@ -62,21 +62,17 @@ class QrcodeTest extends TestCase
     public function testDecodeValidUri()
     {
         $response = $this->json('POST', '/api/qrcode/decode', [
-                                'uri' => 'otpauth://totp/test@test.com?secret=A4GRFHVIRBGY7UIW'
+                                'uri' => 'otpauth://totp/service:account?secret=A4GRFHVIRBGY7UIW'
                           ]);
 
         $response->assertStatus(200)
                  ->assertJsonFragment([
-                    'service' => 'test@test.com',
-                    'account' => '',
-                    'options' => [
-                        'algorithm' => 'sha1',
-                        'digits' => 6,
-                        'epoch' => 0,
-                        'period' => 30,
-                        'secret' => 'A4GRFHVIRBGY7UIW'
-                    ],
-                    'uri' => 'otpauth://totp/test@test.com?secret=A4GRFHVIRBGY7UIW'
+                    'service' => 'service',
+                    'account' => 'account',
+                    'algorithm' => 'sha1',
+                    'digits' => 6,
+                    'totpPeriod' => 30,
+                    'secret' => 'A4GRFHVIRBGY7UIW'
                  ]);
     }
 
@@ -100,16 +96,11 @@ class QrcodeTest extends TestCase
 
         $response->assertStatus(200)
                  ->assertJsonFragment([
-                    'service' => 'test@test.com',
-                    'account' => '',
-                    'options' => [
-                        'algorithm' => 'sha1',
-                        'digits' => 6,
-                        'epoch' => 0,
-                        'period' => 30,
-                        'secret' => 'A4GRFHVIRBGY7UIW'
-                    ],
-                    'uri' => 'otpauth://totp/test@test.com?secret=A4GRFHVIRBGY7UIW'
+                    'account' => 'test@test.com',
+                    'algorithm' => 'sha1',
+                    'digits' => 6,
+                    'totpPeriod' => 30,
+                    'secret' => 'A4GRFHVIRBGY7UIW'
                  ]);
     }
 
