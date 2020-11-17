@@ -57,7 +57,7 @@ class TwoFAccountController extends Controller
         $twofaccount = new TwoFAccount;
 
         if( $request->uri ) {
-            $twofaccount->populateFromUri($request->uri);
+            $twofaccount->uri = $request->uri;
         }
         else {
             $twofaccount->populate($request->all());
@@ -136,7 +136,7 @@ class TwoFAccountController extends Controller
 
             // The request data contain an uri
             $twofaccount = new TwoFAccount;
-            $twofaccount->populateFromUri($request->otp['uri']);
+            $twofaccount->uri = $request->otp['uri'];
         }
         else {
 

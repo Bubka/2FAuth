@@ -69,7 +69,7 @@ class TwoFAccount extends Model implements Sortable
         parent::boot();
 
         static::retrieved(function ($model) {
-            $model->populateFromUri();
+            $model->populateFromUri($model->uri);
         });
 
         static::saving(function ($model) {
@@ -176,13 +176,14 @@ class TwoFAccount extends Model implements Sortable
 
 
     /**
-     * Set encrypted uri
+     * Set uri attribute
      *
      * @param  string  $value
      * @return void
      */
     public function setUriAttribute($value)
     {
+        $this->populateFromUri($value);
         $this->attributes['uri'] = Options::get('useEncryption') ? Crypt::encryptString($value) : $value;
     }
 
@@ -235,43 +236,20 @@ class TwoFAccount extends Model implements Sortable
 
 
     /**
-     * Populate some attributes of the model from an uri
+     * Populate the OTP sub-object wih the model URI
      *
-     * @param   $foreignUri an URI to parse
-     * @return  Boolean wether or not the URI provided a valid OTP resource
      */
-    public function populateFromUri(String $foreignUri = null) : bool
+    private function populateFromUri($uri)
     {
-        // No uri to parse
-        if( !$this->uri && !$foreignUri ) {
-            return false;
-        }
-
-        // The foreign uri is used in first place. This parameter is passed
-        // when we need a TwoFAccount new object, for example after a qrcode upload
-        // or for a preview
-        $uri = $foreignUri ? $foreignUri : $this->uri;
-
         try {
 
             $this->otp = Factory::loadFromProvisioningUri($uri);
 
-            // Account and service values are already recorded in the db so we set them
-            // only when the uri used is a foreign uri, otherwise it would override
-            // the db values
-            if( $foreignUri ) {
+            // Account and Service values should be already recorded in the db so we set them
+            // only when db has no value
+            if( !$this->service ) { $this->service = $this->otp->getIssuer(); }
+            if( !$this->account ) { $this->account = $this->otp->getLabel(); }
 
-                if(!$this->otp->getIssuer()) {
-                    $this->otp->setIssuer($this->otp->getLabel());
-                    $this->otp->setLabel('');
-                }
-
-                $this->service = $this->otp->getIssuer();
-                $this->account = $this->otp->getLabel();
-                $this->uri = $foreignUri;
-            }
-
-            return true;
         }
         catch (\Exception $e) {
             throw \Illuminate\Validation\ValidationException::withMessages([

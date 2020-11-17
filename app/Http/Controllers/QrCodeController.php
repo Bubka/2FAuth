@@ -69,7 +69,7 @@ class QrCodeController extends Controller
 
         // return the OTP object
         $twofaccount = new TwoFAccount;
-        $twofaccount->populateFromUri($uri);
+        $twofaccount->uri = $uri;
 
         return response()->json($twofaccount->makeVisible(['uri', 'secret', 'algorithm']), 200);
     }
