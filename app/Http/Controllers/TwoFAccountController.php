@@ -55,6 +55,9 @@ class TwoFAccountController extends Controller
         // - The advanced form has been used and provide no uri but all individual parameters
         //     -> We use the parameters collection to populate the account
         $twofaccount = new TwoFAccount;
+        $twofaccount->service = $request->service;
+        $twofaccount->account = $request->account;
+        $twofaccount->icon = $request->icon;
 
         if( $request->uri ) {
             $twofaccount->uri = $request->uri;
