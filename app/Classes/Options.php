@@ -32,7 +32,12 @@ class Options
         // fallback values for every options
         $options = collect(config('app.options'))->merge($userOptions);
 
-        return !is_null($option) ? $options[$option] : $options;
+        if( $option ) {
+
+            return isset($options[$option]) ? $options[$option] : null;
+        }
+
+        return $options;
     }
 
 
