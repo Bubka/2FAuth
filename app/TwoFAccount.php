@@ -49,7 +49,7 @@ class TwoFAccount extends Model implements Sortable
      *
      * @var array
      */
-    protected $hidden = ['uri', 'secret', 'algorithm'];
+    protected $hidden = ['uri', 'secret', 'algorithm', 'created_at', 'updated_at'];
 
 
     /**
@@ -109,156 +109,6 @@ class TwoFAccount extends Model implements Sortable
         'order_column_name' => 'order_column',
         'sort_when_creating' => true,
     ];
-
-
-    /**
-     * Null empty icon resource has gone
-     *
-     * @param  string  $value
-     * @return string
-     *
-     * @codeCoverageIgnore
-     */
-    public function getIconAttribute($value)
-    {
-        if (\App::environment('testing') == false) {
-            if( !Storage::exists('public/icons/' . $value) ) {
-
-                return '';
-            }
-        }
-
-        return $value;
-    }
-
-
-    /**
-     * Prevent setting a missing icon
-     *
-     * @param  string  $value
-     * @return string
-     * 
-     * @codeCoverageIgnore
-     */
-    public function setIconAttribute($value)
-    {
-        if( !Storage::exists('public/icons/' . $value) && \App::environment('testing') == false ) {
-
-            $this->attributes['icon'] = '';
-        }
-        else {
-
-            $this->attributes['icon'] = $value;
-        }
-    }
-     
-
-    /**
-     * Get decyphered uri
-     *
-     * @param  string  $value
-     * @return string
-     */
-    public function getUriAttribute($value)
-    {
-        if( Options::get('useEncryption') )
-        {
-            try {
-                return Crypt::decryptString($value);
-            }
-            catch (Exception $e) {
-                return '*encrypted*';
-            }
-        }
-        else {
-            return $value;
-        }
-    }
-
-
-    /**
-     * Set uri attribute
-     *
-     * @param  string  $value
-     * @return void
-     */
-    public function setUriAttribute($value)
-    {
-        $this->populateFromUri($value);
-        $this->attributes['uri'] = Options::get('useEncryption') ? Crypt::encryptString($value) : $value;
-    }
-
-
-    /**
-     * Get decyphered account
-     *
-     * @param  string  $value
-     * @return string
-     */
-    public function getAccountAttribute($value)
-    {
-        if( Options::get('useEncryption') )
-        {
-            try {
-                return Crypt::decryptString($value);
-            }
-            catch (Exception $e) {
-                return '*encrypted*';
-            }
-        }
-        else {
-            return $value;
-        }
-    }
-
-
-    /**
-     * Set encrypted account
-     *
-     * @param  string  $value
-     * @return void
-     */
-    public function setAccountAttribute($value)
-    {
-        $this->attributes['account'] = Options::get('useEncryption') ? Crypt::encryptString($value) : $value;
-    }
-
-
-    /**
-     * Get IsConsistent attribute
-     *
-     * @return bool
-     *
-     */
-    public function getIsConsistentAttribute()
-    {
-        return $this->uri === '*encrypted*' || $this->account === '*encrypted*' ? false : true;
-    }
-
-
-    /**
-     * Populate the OTP sub-object wih the model URI
-     *
-     */
-    private function populateFromUri($uri)
-    {
-        try {
-
-            $this->otp = Factory::loadFromProvisioningUri($uri);
-
-            // Account and Service values should be already recorded in the db so we set them
-            // only when db has no value
-            if( !$this->service ) { $this->service = $this->otp->getIssuer(); }
-            if( !$this->account ) { $this->account = $this->otp->getLabel(); }
-
-        }
-        catch (\Exception $e) {
-            throw \Illuminate\Validation\ValidationException::withMessages([
-                'qrcode' => __('errors.response.no_valid_otp')
-            ]);
-        }
-
-    }
 
 
     /**
@@ -328,16 +178,6 @@ class TwoFAccount extends Model implements Sortable
 
 
     /**
-     * Update the uri attribute using the OTP object
-     * @return void
-     */
-    private function refreshUri() : void
-    {
-        $this->uri = urldecode($this->otp->getProvisioningUri());
-    }
-
-
-    /**
      * Generate a token which is valid at the current time
      * @return string The generated token
      */
@@ -350,7 +190,6 @@ class TwoFAccount extends Model implements Sortable
     }
 
 
-
     /**
      * Increment the hotp counter by 1
      * @return string The generated token
@@ -361,6 +200,174 @@ class TwoFAccount extends Model implements Sortable
             $this->hotpCounter = $this->hotpCounter + 1;
             $this->refreshUri();
         }
+    }
+
+
+    /**
+     * Populate the OTP sub-object wih the model URI
+     *
+     */
+    private function populateFromUri($uri)
+    {
+        try {
+
+            $this->otp = Factory::loadFromProvisioningUri($uri);
+
+            // Account and Service values should be already recorded in the db so we set them
+            // only when db has no value
+            if( !$this->service ) { $this->service = $this->otp->getIssuer(); }
+            if( !$this->account ) { $this->account = $this->otp->getLabel(); }
+
+        }
+        catch (\Exception $e) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'qrcode' => __('errors.response.no_valid_otp')
+            ]);
+        }
+    }
+
+
+    /**
+     * Update the uri attribute using the OTP object
+     * @return void
+     */
+    private function refreshUri() : void
+    {
+        $this->uri = urldecode($this->otp->getProvisioningUri());
+    }
+
+
+    /**
+     * Get icon attribute
+     *
+     * @param  string  $value
+     * @return string
+     *
+     * @codeCoverageIgnore
+     */
+    public function getIconAttribute($value)
+    {
+        // Return an empty string if the corresponding resource does not exist on storage
+        if (\App::environment('testing') == false) {
+            if( !Storage::exists('public/icons/' . $value) ) {
+
+                return '';
+            }
+        }
+
+        return $value;
+    }
+
+
+    /**
+     * Icon attribute setter
+     *
+     * @param  string  $value
+     * @return string
+     * 
+     * @codeCoverageIgnore
+     */
+    public function setIconAttribute($value)
+    {
+        // Prevent setting a missing icon
+        if( !Storage::exists('public/icons/' . $value) && \App::environment('testing') == false ) {
+
+            $this->attributes['icon'] = '';
+        }
+        else {
+
+            $this->attributes['icon'] = $value;
+        }
+    }
+     
+
+    /**
+     * Get uri attribute
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getUriAttribute($value)
+    {
+        // Decipher when needed
+        if( Options::get('useEncryption') )
+        {
+            try {
+                return Crypt::decryptString($value);
+            }
+            catch (Exception $e) {
+                return '*encrypted*';
+            }
+        }
+        else {
+            return $value;
+        }
+    }
+
+
+    /**
+     * Set uri attribute
+     *
+     * @param  string  $value
+     * @return void
+     */
+    public function setUriAttribute($value)
+    {
+        // An uri contains all expected data to define an OTP object.
+        // So we populate the model instance at every uri definition
+        $this->populateFromUri($value);
+
+        // Encrypt if needed
+        $this->attributes['uri'] = Options::get('useEncryption') ? Crypt::encryptString($value) : $value;
+    }
+
+
+    /**
+     * Get account attribute
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getAccountAttribute($value)
+    {
+        // Decipher when needed
+        if( Options::get('useEncryption') )
+        {
+            try {
+                return Crypt::decryptString($value);
+            }
+            catch (Exception $e) {
+                return '*encrypted*';
+            }
+        }
+        else {
+            return $value;
+        }
+    }
+
+
+    /**
+     * Set account account
+     *
+     * @param  string  $value
+     * @return void
+     */
+    public function setAccountAttribute($value)
+    {
+        // Encrypt when needed
+        $this->attributes['account'] = Options::get('useEncryption') ? Crypt::encryptString($value) : $value;
+    }
+
+
+    /**
+     * Get IsConsistent attribute
+     *
+     * @return bool
+     *
+     */
+    public function getIsConsistentAttribute()
+    {
+        return $this->uri === '*encrypted*' || $this->account === '*encrypted*' ? false : true;
     }
 
 
@@ -387,7 +394,7 @@ class TwoFAccount extends Model implements Sortable
 
 
     /**
-     * get OTP Type attribute
+     * get otpType attribute
      *
      * @return string
      *
@@ -435,7 +442,7 @@ class TwoFAccount extends Model implements Sortable
 
 
     /**
-     * get TOTP Period attribute
+     * get totpPeriod attribute
      *
      * @return string
      *
@@ -447,7 +454,7 @@ class TwoFAccount extends Model implements Sortable
 
 
     /**
-     * get HOTP counter attribute
+     * get HotpCounter attribute
      *
      * @return string
      *
@@ -459,7 +466,7 @@ class TwoFAccount extends Model implements Sortable
 
 
     /**
-     * set HOTP counter attribute
+     * set HotpCounter attribute
      *
      * @return string
      *
