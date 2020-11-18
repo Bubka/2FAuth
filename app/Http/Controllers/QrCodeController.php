@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Zxing\QrReader;
 use App\TwoFAccount;
 use App\Classes\Options;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use chillerlan\QRCode\{QRCode, QROptions};
@@ -70,6 +71,29 @@ class QrCodeController extends Controller
         // return the OTP object
         $twofaccount = new TwoFAccount;
         $twofaccount->uri = $uri;
+
+        // When present, use the imageLink parameter to prefill the icon field
+        if( $twofaccount->imageLink ) {
+
+            $chunks = explode('.', $twofaccount->imageLink);
+            $hashFilename = Str::random(40) . '.' . end($chunks);
+
+            try {
+
+                Storage::disk('local')->put('imagesLink/' . $hashFilename, file_get_contents($twofaccount->imageLink));
+
+                if( in_array(Storage::mimeType('imagesLink/' . $hashFilename), ['image/png', 'image/jpeg', 'image/webp', 'image/bmp']) ) {
+                    if( getimagesize(storage_path() . '/app/imagesLink/' . $hashFilename) ) {
+
+                        Storage::move('imagesLink/' . $hashFilename, 'public/icons/' . $hashFilename);
+                        $twofaccount->icon = $hashFilename;
+                    }
+                }
+            }
+            catch( Exception $e ) {
+                $twofaccount->imageLink = null;
+            }
+        }
 
         return response()->json($twofaccount->makeVisible(['uri', 'secret', 'algorithm']), 200);
     }

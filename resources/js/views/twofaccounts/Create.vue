@@ -111,8 +111,6 @@
                 <form-field v-if="form.otpType === 'totp'" :form="form" fieldName="totpPeriod" inputType="text" :label="$t('twofaccounts.forms.totpPeriod.label')" :placeholder="$t('twofaccounts.forms.totpPeriod.placeholder')" :help="$t('twofaccounts.forms.totpPeriod.help')" />
                 <!-- HOTP counter -->
                 <form-field v-if="form.otpType === 'hotp'" :form="form" fieldName="hotpCounter" inputType="text" :label="$t('twofaccounts.forms.hotpCounter.label')" :placeholder="$t('twofaccounts.forms.hotpCounter.placeholder')" :help="$t('twofaccounts.forms.hotpCounter.help')" />
-                <!-- image link -->
-                <form-field :form="form" fieldName="imageLink" inputType="text" :label="$t('twofaccounts.forms.image_link.label')" :placeholder="$t('twofaccounts.forms.image_link.placeholder')" :help="$t('twofaccounts.forms.image_link.help')" />
             </div>
             <vue-footer :showButtons="true">
                 <p class="control">
@@ -183,6 +181,7 @@
             if( this.$route.params.qrAccount ) {
 
                 this.form.fill(this.$route.params.qrAccount)
+                this.tempIcon = this.$route.params.qrAccount.icon ? this.$route.params.qrAccount.icon : null
                 this.isQuickForm = true
 
             }
@@ -241,6 +240,7 @@
 
                 this.form.fill(data)
                 this.form.secretIsBase32Encoded = 1
+                this.tempIcon = data.icon ? data.icon : null
                 this.form.uri = '' // we don't want the uri because the user can change any otp parameter in the form
 
             },

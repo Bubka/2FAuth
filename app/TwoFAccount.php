@@ -164,9 +164,6 @@ class TwoFAccount extends Model implements Sortable
             if (array_key_exists('hotpCounter', $attrib) && $attrib['hotpCounter'] && $attrib['otpType'] === 'hotp')
                 { $this->otp->setParameter( 'counter', (int) $attrib['hotpCounter'] ); }
 
-            if (array_key_exists('imageLink', $attrib) && $attrib['imageLink'])
-                { $this->otp->setParameter( 'image', $attrib['imageLink'] ); }
-
         }
         catch (\Exception $e) {
             throw \Illuminate\Validation\ValidationException::withMessages([

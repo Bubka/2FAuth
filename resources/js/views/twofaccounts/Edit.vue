@@ -83,8 +83,6 @@
                     <field-error :form="form" field="uri" class="help-for-file" />
                     <p class="help" v-html="$t('twofaccounts.forms.hotpCounter.help_lock')"></p>
                 </div>
-                <!-- image link -->
-                <form-field :form="form" fieldName="imageLink" inputType="text" :label="$t('twofaccounts.forms.image_link.label')" :placeholder="$t('twofaccounts.forms.image_link.placeholder')" :help="$t('twofaccounts.forms.image_link.help')" />
             </div>
             <!-- form buttons -->
             <vue-footer :showButtons="true">

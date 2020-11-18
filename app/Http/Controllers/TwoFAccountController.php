@@ -44,7 +44,6 @@ class TwoFAccountController extends Controller
             'algorithm' => 'nullable|in:sha1,sha256,sha512,md5',
             'totpPeriod' => 'nullable|integer|min:1',
             'hotpCounter' => 'nullable|integer|min:0',
-            'imageLink' => 'nullable|url',
         ]);
 
         // Two possible cases :
@@ -187,7 +186,6 @@ class TwoFAccountController extends Controller
             'algorithm' => 'nullable|in:sha1,sha256,sha512,md5',
             'totpPeriod' => 'required_if:otpType,totp|nullable|integer|min:1',
             'hotpCounter' => 'required_if:otpType,hotp|nullable|integer|min:0',
-            'imageLink' => 'nullable|url',
         ]);
 
         // Here we catch a possible missing model exception in order to
