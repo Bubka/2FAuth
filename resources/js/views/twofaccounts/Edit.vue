@@ -132,13 +132,27 @@
                     totpPeriod: null,
                     imageLink: '',
                 }),
-                otpTypes: ['totp', 'hotp'],
-                digitsChoices: [6,7,8,9,10],
+                otpTypes: [
+                    { text: 'TOTP', value: 'totp' },
+                    { text: 'HOTP', value: 'hotp' },
+                ],
+                digitsChoices: [
+                    { text: 6, value: 6 },
+                    { text: 7, value: 7 },
+                    { text: 8, value: 8 },
+                    { text: 9, value: 9 },
+                    { text: 10, value: 10 },
+                ],
                 secretFormats: [
                     { text: this.$t('twofaccounts.forms.plain_text'), value: 0 },
                     { text: 'Base32', value: 1 }
                 ],
-                algorithms: ['sha1', 'sha256', 'sha512', 'md5'],
+                algorithms: [
+                    { text: 'sha1', value: 'sha1' },
+                    { text: 'sha256', value: 'sha256' },
+                    { text: 'sha512', value: 'sha512' },
+                    { text: 'md5', value: 'md5' },
+                ],
             }
         },
 

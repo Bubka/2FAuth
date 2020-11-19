@@ -2,7 +2,10 @@
     <div class="field" :class="{ 'with-offset' : hasOffset }">
         <label class="label" v-html="label"></label>
         <div class="is-toggle buttons">
-            <a class="button is-dark" :disabled="isDisabled" v-for="choice in choices" :class="{ 'is-link' : form[fieldName] === choice }" @click="setField(choice)">{{ choice }}</a>
+            <label class="button is-dark" :disabled="isDisabled" v-for="choice in choices" :class="{ 'is-link' : form[fieldName] === choice.value }">
+                <input type="radio" class="is-hidden" :checked="form[fieldName] === choice.value" :value="choice.value" v-model="form[fieldName]" :disabled="isDisabled" />
+                <font-awesome-icon :icon="['fas', choice.icon]" v-if="choice.icon" class="mr-3" /> {{ choice.text }}
+            </label>
         </div>
         <field-error :form="form" :field="fieldName" />
         <p class="help" v-html="help" v-if="help"></p>
@@ -55,16 +58,6 @@
                 type: Boolean,
                 default: false
             }
-        },
-
-        methods: {
-
-            setField(value) {
-                if( !this.isDisabled ) {
-                    this.form[this.fieldName] = value
-                }
-            }
-
         }
     }
 </script>
