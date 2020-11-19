@@ -21,6 +21,8 @@ import {
     faLayerGroup,
     faMinusCircle,
     faExclamationCircle,
+    faTh,
+    faList,
 } from '@fortawesome/free-solid-svg-icons'
 
 import {
@@ -46,6 +48,8 @@ library.add(
     faLayerGroup,
     faMinusCircle,
     faExclamationCircle,
+    faTh,
+    faList,
 );
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)

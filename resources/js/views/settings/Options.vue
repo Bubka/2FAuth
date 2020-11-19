@@ -5,7 +5,7 @@
             <!-- Language -->
             <form-select :options="langs" :form="form" fieldName="lang" :label="$t('settings.forms.language.label')"  :help="$t('settings.forms.language.help')" />
             <!-- display mode -->
-            <form-select :options="layouts" :form="form" fieldName="displayMode" :label="$t('settings.forms.display_mode.label')" :help="$t('settings.forms.display_mode.help')" />
+            <form-toggle :choices="layouts" :form="form" fieldName="displayMode" :label="$t('settings.forms.display_mode.label')" :help="$t('settings.forms.display_mode.help')" />
             <!-- show icon -->
             <form-checkbox :form="form" fieldName="showAccountsIcons" :label="$t('settings.forms.show_accounts_icons.label')" :help="$t('settings.forms.show_accounts_icons.help')" />
             <!-- default group -->
@@ -51,8 +51,8 @@
                     { text: this.$t('languages.fr'), value: 'fr' },
                 ],
                 layouts: [
-                    { text: this.$t('settings.forms.grid'), value: 'grid' },
-                    { text: this.$t('settings.forms.list'), value: 'list' },
+                    { text: this.$t('settings.forms.grid'), value: 'grid', icon: 'th' },
+                    { text: this.$t('settings.forms.list'), value: 'list', icon: 'list' },
                 ],
                 kickUserAfters: [
                     { text: this.$t('settings.forms.never'), value: '0' },
