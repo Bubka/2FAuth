@@ -134,53 +134,55 @@
         <modal v-model="showTwofaccountInModal">
             <token-displayer ref="TokenDisplayer" ></token-displayer>
         </modal>
-        <!-- footer -->
-        <vue-footer v-if="showFooter && !showGroupSwitch" :showButtons="accounts.length > 0">
-            <!-- New item buttons -->
-            <p class="control" v-if="!showUploader && !editMode">
-                <a class="button is-link is-rounded is-focus" @click="showUploader = true">
-                    <span>{{ $t('commons.new') }}</span>
-                    <span class="icon is-small">
-                        <font-awesome-icon :icon="['fas', 'qrcode']" />
-                    </span>
-                </a>
-            </p>
-            <!-- Manage button -->
-            <p class="control" v-if="!showUploader && !editMode">
-                <a class="button is-dark is-rounded" @click="setEditModeTo(true)">{{ $t('commons.manage') }}</a>
-            </p>
-            <!-- Done button -->
-            <p class="control" v-if="!showUploader && editMode">
-                <a class="button is-success is-rounded" @click="setEditModeTo(false)">
-                    <span>{{ $t('commons.done') }}</span>
-                    <span class="icon is-small">
-                        <font-awesome-icon :icon="['fas', 'check']" />
-                    </span>
-                </a>
-            </p>
-            <!-- Cancel QuickFormButton -->
-            <p class="control" v-if="showUploader && showFooter">
-                <a class="button is-dark is-rounded" @click="showUploader = false">
-                    {{ $t('commons.cancel') }}
-                </a>
-            </p>
-        </vue-footer>
-        <vue-footer v-if="showFooter && showGroupSwitch" :showButtons="true">
-            <!-- Close Group switch button -->
-            <p class="control">
-                <a class="button is-dark is-rounded" @click="closeGroupSwitch()">{{ $t('commons.close') }}</a>
-            </p>
-        </vue-footer>
-        <vue-footer v-if="showFooter && showGroupSelector" :showButtons="true">
-            <!-- Move to selected group button -->
-            <p class="control">
-                <a class="button is-link is-rounded" @click="moveAccounts()">{{ $t('commons.move') }}</a>
-            </p>
-            <!-- Cancel button -->
-            <p class="control">
-                <a class="button is-dark is-rounded" @click="showGroupSelector = false">{{ $t('commons.cancel') }}</a>
-            </p>
-        </vue-footer>
+        <!-- footers -->
+        <div v-if="showFooter">
+            <vue-footer v-if="showGroupSwitch" :showButtons="true">
+                <!-- Close Group switch button -->
+                <p class="control">
+                    <a class="button is-dark is-rounded" @click="closeGroupSwitch()">{{ $t('commons.close') }}</a>
+                </p>
+            </vue-footer>
+            <vue-footer v-else :showButtons="accounts.length > 0">
+                <!-- New item buttons -->
+                <p class="control" v-if="!showUploader && !editMode">
+                    <a class="button is-link is-rounded is-focus" @click="showUploader = true">
+                        <span>{{ $t('commons.new') }}</span>
+                        <span class="icon is-small">
+                            <font-awesome-icon :icon="['fas', 'qrcode']" />
+                        </span>
+                    </a>
+                </p>
+                <!-- Manage button -->
+                <p class="control" v-if="!showUploader && !editMode">
+                    <a class="button is-dark is-rounded" @click="setEditModeTo(true)">{{ $t('commons.manage') }}</a>
+                </p>
+                <!-- Done button -->
+                <p class="control" v-if="!showUploader && editMode">
+                    <a class="button is-success is-rounded" @click="setEditModeTo(false)">
+                        <span>{{ $t('commons.done') }}</span>
+                        <span class="icon is-small">
+                            <font-awesome-icon :icon="['fas', 'check']" />
+                        </span>
+                    </a>
+                </p>
+                <!-- Cancel QuickFormButton -->
+                <p class="control" v-if="showUploader && showFooter">
+                    <a class="button is-dark is-rounded" @click="showUploader = false">
+                        {{ $t('commons.cancel') }}
+                    </a>
+                </p>
+            </vue-footer>
+            <vue-footer v-if="showGroupSelector" :showButtons="true">
+                <!-- Move to selected group button -->
+                <p class="control">
+                    <a class="button is-link is-rounded" @click="moveAccounts()">{{ $t('commons.move') }}</a>
+                </p>
+                <!-- Cancel button -->
+                <p class="control">
+                    <a class="button is-dark is-rounded" @click="showGroupSelector = false">{{ $t('commons.cancel') }}</a>
+                </p>
+            </vue-footer>
+        </div>
     </div>
 </template>
 
