@@ -11,7 +11,7 @@
             <!-- default group -->
             <form-select :options="groups" :form="form" fieldName="defaultGroup" :label="$t('settings.forms.default_group.label')" :help="$t('settings.forms.default_group.help')" />
 
-            <h4 class="title is-4">{{ $t('settings.security') }}</h4>
+            <h4 class="title is-4 pt-4">{{ $t('settings.security') }}</h4>
             <!-- auto lock -->
             <form-select :options="kickUserAfters" :form="form" fieldName="kickUserAfter" :label="$t('settings.forms.auto_lock.label')"  :help="$t('settings.forms.auto_lock.help')" />
             <!-- protect db -->
@@ -21,9 +21,13 @@
             <!-- close token on copy -->
             <form-checkbox :form="form" fieldName="closeTokenOnCopy" :label="$t('settings.forms.close_token_on_copy.label')" :help="$t('settings.forms.close_token_on_copy.help')" />
 
-            <h4 class="title is-4">{{ $t('settings.advanced') }}</h4>
+            <h4 class="title is-4 pt-4">{{ $t('settings.data_input') }}</h4>
             <!-- basic qrcode -->
             <form-checkbox :form="form" fieldName="useBasicQrcodeReader" :label="$t('settings.forms.use_basic_qrcode_reader.label')" :help="$t('settings.forms.use_basic_qrcode_reader.help')" />
+            <!-- direct capture -->
+            <form-checkbox :form="form" fieldName="useDirectCapture" :label="$t('settings.forms.useDirectCapture.label')" :help="$t('settings.forms.useDirectCapture.help')" />
+            <!-- default capture mode -->
+            <form-select :options="captureModes" :form="form" fieldName="defaultCaptureMode" :label="$t('settings.forms.defaultCaptureMode.label')" :help="$t('settings.forms.defaultCaptureMode.help')" />
         </form>
     </form-wrapper>
 </template>
@@ -36,15 +40,17 @@
         data(){
             return {
                 form: new Form({
-                    lang: this.$root.$i18n.locale,
-                    showTokenAsDot: this.$root.appSettings.showTokenAsDot,
-                    closeTokenOnCopy: this.$root.appSettings.closeTokenOnCopy,
-                    useBasicQrcodeReader: this.$root.appSettings.useBasicQrcodeReader,
-                    showAccountsIcons: this.$root.appSettings.showAccountsIcons,
-                    displayMode: this.$root.appSettings.displayMode,
-                    kickUserAfter: this.$root.appSettings.kickUserAfter,
-                    useEncryption: this.$root.appSettings.useEncryption,
-                    defaultGroup: this.$root.appSettings.defaultGroup,
+                    lang: '',
+                    showTokenAsDot: null,
+                    closeTokenOnCopy: null,
+                    useBasicQrcodeReader: null,
+                    showAccountsIcons: null,
+                    displayMode: '',
+                    kickUserAfter: '',
+                    useEncryption: null,
+                    defaultGroup: '',
+                    useDirectCapture: null,
+                    defaultCaptureMode: '',
                 }),
                 langs: [
                     { text: this.$t('languages.en'), value: 'en' },
@@ -68,11 +74,17 @@
                 groups: [
                     { text: this.$t('groups.no_group'), value: 0 },
                     { text: this.$t('groups.active_group'), value: -1 },
-                ]
+                ],
+                captureModes: [
+                    { text: this.$t('settings.forms.livescan'), value: 'livescan' },
+                    { text: this.$t('settings.forms.upload'), value: 'upload' },
+                    { text: this.$t('settings.forms.advanced_form'), value: 'advancedForm' },
+                ],
             }
         },
 
         mounted() {
+            this.form.fill(this.$root.appSettings)
             this.fetchGroups()
         },
 

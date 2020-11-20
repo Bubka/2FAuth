@@ -42,6 +42,8 @@ return [
         'activeGroup' => 0,
         'defaultGroup' => 0,
         'useEncryption' => false,
+        'defaultCaptureMode' => 'livescan',
+        'useDirectCapture' => false,
     ],
 
     /*

@@ -257,7 +257,12 @@
         methods: {
 
             start() {
-                this.$router.push({ name: 'start', params: { accountCount: this.accounts.length } });
+                if( this.$root.appSettings.useDirectCapture && this.$root.appSettings.defaultCaptureMode === 'advancedForm' ) {
+                    this.$router.push({ name: 'createAccount' })
+                }
+                else {
+                    this.$router.push({ name: 'start', params: { accountCount: this.accounts.length } })
+                }
             },
 
             fetchAccounts() {

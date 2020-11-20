@@ -22,7 +22,7 @@ return [
     ],
     'general' => 'General',
     'security' => 'Security',
-    'advanced' => 'Advanced',
+    'data_input' => 'Data input',
     'forms' => [
         'edit_settings' => 'Edit settings',
         'setting_saved' => 'Settings saved',
@@ -64,6 +64,14 @@ return [
             'label' => 'Default group',
             'help' => 'The group to which the newly created accounts are associated',
         ],
+        'useDirectCapture' => [
+            'label' => 'Direct input',
+            'help' => 'Choose whether you want to be prompted to choose an input mode among those available or if you want to directly use the default input mode',
+        ],
+        'defaultCaptureMode' => [
+            'label' => 'Default input mode',
+            'help' => 'Default input mode used when the Direct input option is On',
+        ],
         'never' => 'Never',
         'on_token_copy' => 'On security code copy',
         '1_minutes' => 'After 1 minute',
@@ -73,6 +81,9 @@ return [
         '30_minutes' => 'After 30 minutes',
         '1_hour' => 'After 1 hour',
         '1_day' => 'After 1 day',
+        'livescan' => 'QR code livescan',
+        'upload' => 'QR code upload',
+        'advanced_form' => 'Advanced form',
     ],
 
 ];

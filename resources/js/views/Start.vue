@@ -12,7 +12,7 @@
                 <div class="column is-full quick-uploader-button" >
                     <div class="quick-uploader-centerer">
                         <!-- upload a qr code (with basic file field and backend decoding) -->
-                        <label v-if="$root.appSettings.useBasicQrcodeReader" class="button is-link is-medium is-rounded is-focused" >
+                        <label v-if="$root.appSettings.useBasicQrcodeReader" class="button is-link is-medium is-rounded is-focused" ref="qrcodeInputLabel">
                             <input class="file-input" type="file" accept="image/*" v-on:change="submitQrCode" ref="qrcodeInput">
                             {{ $t('twofaccounts.forms.upload_qrcode') }}
                         </label>
@@ -28,7 +28,7 @@
                     <!-- upload a qr code (with qrcode-capture component) -->
                     <div class="block has-text-link" v-if="!$root.appSettings.useBasicQrcodeReader">
                         <form @submit.prevent="createAccount" @keydown="form.onKeydown($event)">
-                            <label :class="{'is-loading' : form.isBusy}" class="button is-link is-outlined is-rounded">
+                            <label :class="{'is-loading' : form.isBusy}" class="button is-link is-outlined is-rounded" ref="qrcodeInputLabel">
                                 <qrcode-capture @decode="submitUri" class="file-input" ref="qrcodeInput" />
                                 {{ $t('twofaccounts.forms.upload_qrcode') }}
                             </label>
@@ -48,7 +48,7 @@
             <vue-footer :showButtons="true">
                 <!-- back button -->
                 <p class="control">
-                    <router-link class="button is-dark is-rounded" :to="{ name: '/' }" >
+                    <router-link class="button is-dark is-rounded" :to="{ name: 'accounts' }" >
                         {{ $t('commons.back') }}
                     </router-link>
                 </p>
@@ -96,7 +96,7 @@
      *
      *  Output : both decoders provide an URI and push it the Create form
      * 
-     *  The view behaviour is affected by the user options :
+     *  The view behavior is affected by the user options :
      *  - 'appSettings.useBasicQrcodeReader' totally disable the vue-qrcode-reader decoder
      *  - 'appSettings.useDirectCapture' trigger the acquisition mode set by 'appSettings.defaultCaptureMode' automatically at vue @created event
      *
@@ -116,7 +116,7 @@
                 errorName: '',
                 errorText: '',
                 showStream: false,
-                canStream: true,
+                canStream: null,
                 camera: 'auto',
             }
         },
@@ -124,12 +124,19 @@
         props: ['accountCount'],
 
         created() {
+
+            this.$nextTick(() => {
+                if( this.$root.appSettings.useDirectCapture && this.$root.appSettings.defaultCaptureMode === 'upload' ) {
+                    this.$refs.qrcodeInputLabel.click()
+                }
+            })
+
             if( this.$root.appSettings.useBasicQrcodeReader ) {
                 // User has set the basic QR code reader (run by backend) so we disable the other one (run by js)
                 this.canStream = this.showStream = false
             }
-            else {
-                if( this.accountCount > 0 && this.$root.appSettings.useDirectCapture ) {
+            else if( this.accountCount > 0 && this.$root.appSettings.useDirectCapture ) {
+                if( this.$root.appSettings.defaultCaptureMode === 'livescan' ) {
                     this.enableStream()
                 }
             }
@@ -143,12 +150,16 @@
 
             async enableStream() {
 
-                this.setUploader()
-
                 this.camera = 'auto'
-                this.showStream = true
 
-                console.log('stream enabled')
+                if( this.canStream ) {
+                    this.showStream = true
+
+                    console.log('stream started')
+                }
+                else if( this.errorText && !this.$root.appSettings.useBasicQrcodeReader ) {
+                    this.$notify({ type: 'is-warning', text: this.errorText })
+                }
             },
 
             async disableStream() {
@@ -156,9 +167,7 @@
                 this.camera = 'off'
                 this.showStream = false
 
-                this.$parent.$emit('stopStreaming')
-
-                console.log('stream disabled')
+                console.log('stream stopped')
             },
 
             async onStreamerInit (promise) {
@@ -168,6 +177,9 @@
 
                 try {
                     await promise
+
+                    this.canStream = true
+                    console.log('stream is possible')
                 }
                 catch (error) {
 
@@ -191,33 +203,20 @@
                     } else if (error.name === 'StreamApiNotSupportedError') {
                         this.errorText = this.$t('twofaccounts.stream.stream_api_not_supported')
                     }
-                }
-            },
-
-            setUploader() {
-
-                if( this.errorName ) {
-                    console.log('fail to stream : ' + this.errorText)
 
                     this.canStream = false
-                    this.$notify({ type: 'is-warning', text: this.errorText })
-                }
-                else
-                {
-                    if( !this.errorName && !this.showStream ) {
-                        this.camera = 'off'
 
-                        console.log('stream stopped')
+                    if( !this.$root.appSettings.useBasicQrcodeReader && this.$root.appSettings.useDirectCapture && this.$root.appSettings.defaultCaptureMode === 'livescan') {
+                        this.$notify({ type: 'is-warning', text: this.errorText })
                     }
 
-                    console.log('stream started')
+                    console.log('stream no possible : ' + this.errorText)
                 }
-
             },
 
 
             /**
-             * the basicQRcodeReader option is On, so qrcode decoding has to be done by the backend, which in return
+             * the basicQRcodeReader option is On, so qrcode decoding will be done by the backend, which in return
              * send the corresponding URI
              */
             async submitQrCode() {
@@ -238,7 +237,7 @@
              * We simply check the uri validity to prevent useless push to the Create form, but the form will check uri validity too.
              */
             async submitUri(event) {
-                // We post the URI automatically decoded by vue-qrcode-reader
+                
                 this.form.uri = event
 
                 if( !this.form.uri ) {
