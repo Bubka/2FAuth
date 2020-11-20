@@ -33,6 +33,8 @@ return [
         'edit_account' => 'Edit account',
         'otp_uri' => 'OTP Uri',
         'scan_qrcode' => 'Scan a qrcode',
+        'upload_qrcode' => 'Upload a qrcode',
+        'use_advanced_form' => 'Use the advanced form',
         'prefill_using_qrcode' => 'Prefill using a QR Code',
         'use_qrcode' => [
             'val' => 'Use a qrcode',

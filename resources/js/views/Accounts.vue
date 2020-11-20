@@ -16,6 +16,12 @@
                     </div>
                 </div>
             </div>
+            <vue-footer :showButtons="true">
+                <!-- Close Group switch button -->
+                <p class="control">
+                    <a class="button is-dark is-rounded" @click="closeGroupSwitch()">{{ $t('commons.close') }}</a>
+                </p>
+            </vue-footer>
         </div>
         <!-- Group selector -->
         <div class="container groups with-heading" v-if="showGroupSelector">
@@ -35,6 +41,16 @@
                     </div>
                 </div>
             </div>
+            <vue-footer :showButtons="true">
+                <!-- Move to selected group button -->
+                <p class="control">
+                    <a class="button is-link is-rounded" @click="moveAccounts()">{{ $t('commons.move') }}</a>
+                </p>
+                <!-- Cancel button -->
+                <p class="control">
+                    <a class="button is-dark is-rounded" @click="showGroupSelector = false">{{ $t('commons.cancel') }}</a>
+                </p>
+            </vue-footer>
         </div>
         <!-- show accounts list -->
         <div class="container" v-if="this.showAccounts">
@@ -86,6 +102,30 @@
                     </transition-group>
                 </draggable>
             <!-- </vue-pull-refresh> -->
+            <vue-footer :showButtons="true">
+                <!-- New item buttons -->
+                <p class="control" v-if="!editMode">
+                    <a class="button is-link is-rounded is-focus" @click="start">
+                        <span>{{ $t('commons.new') }}</span>
+                        <span class="icon is-small">
+                            <font-awesome-icon :icon="['fas', 'qrcode']" />
+                        </span>
+                    </a>
+                </p>
+                <!-- Manage button -->
+                <p class="control" v-if="!editMode">
+                    <a class="button is-dark is-rounded" @click="setEditModeTo(true)">{{ $t('commons.manage') }}</a>
+                </p>
+                <!-- Done button -->
+                <p class="control" v-if="editMode">
+                    <a class="button is-success is-rounded" @click="setEditModeTo(false)">
+                        <span>{{ $t('commons.done') }}</span>
+                        <span class="icon is-small">
+                            <font-awesome-icon :icon="['fas', 'check']" />
+                        </span>
+                    </a>
+                </p>
+            </vue-footer>
         </div>
         <!-- header -->
         <div class="header has-background-black-ter" v-if="this.showAccounts || this.showGroupSwitch">
@@ -128,61 +168,10 @@
                 </div>
             </div>
         </div>
-        <!-- Show uploader (because no account) -->
-        <quick-uploader v-if="showUploader" :directStreaming="accounts.length > 0" :showTrailer="accounts.length === 0" ref="QuickUploader"></quick-uploader>
         <!-- modal -->
         <modal v-model="showTwofaccountInModal">
             <token-displayer ref="TokenDisplayer" ></token-displayer>
         </modal>
-        <!-- footers -->
-        <div v-if="showFooter">
-            <vue-footer v-if="showGroupSwitch" :showButtons="true">
-                <!-- Close Group switch button -->
-                <p class="control">
-                    <a class="button is-dark is-rounded" @click="closeGroupSwitch()">{{ $t('commons.close') }}</a>
-                </p>
-            </vue-footer>
-            <vue-footer v-else :showButtons="accounts.length > 0">
-                <!-- New item buttons -->
-                <p class="control" v-if="!showUploader && !editMode">
-                    <a class="button is-link is-rounded is-focus" @click="showUploader = true">
-                        <span>{{ $t('commons.new') }}</span>
-                        <span class="icon is-small">
-                            <font-awesome-icon :icon="['fas', 'qrcode']" />
-                        </span>
-                    </a>
-                </p>
-                <!-- Manage button -->
-                <p class="control" v-if="!showUploader && !editMode">
-                    <a class="button is-dark is-rounded" @click="setEditModeTo(true)">{{ $t('commons.manage') }}</a>
-                </p>
-                <!-- Done button -->
-                <p class="control" v-if="!showUploader && editMode">
-                    <a class="button is-success is-rounded" @click="setEditModeTo(false)">
-                        <span>{{ $t('commons.done') }}</span>
-                        <span class="icon is-small">
-                            <font-awesome-icon :icon="['fas', 'check']" />
-                        </span>
-                    </a>
-                </p>
-                <!-- Cancel QuickFormButton -->
-                <p class="control" v-if="showUploader && showFooter">
-                    <a class="button is-dark is-rounded" @click="showUploader = false">
-                        {{ $t('commons.cancel') }}
-                    </a>
-                </p>
-            </vue-footer>
-            <vue-footer v-if="showGroupSelector" :showButtons="true">
-                <!-- Move to selected group button -->
-                <p class="control">
-                    <a class="button is-link is-rounded" @click="moveAccounts()">{{ $t('commons.move') }}</a>
-                </p>
-                <!-- Cancel button -->
-                <p class="control">
-                    <a class="button is-dark is-rounded" @click="showGroupSelector = false">{{ $t('commons.cancel') }}</a>
-                </p>
-            </vue-footer>
-        </div>
     </div>
 </template>
 
@@ -191,11 +180,8 @@
 
     import Modal from '../components/Modal'
     import TokenDisplayer from '../components/TokenDisplayer'
-    import QuickUploader from './../components/QuickUploader'
-    // import vuePullRefresh from 'vue-pull-refresh';
     import draggable from 'vuedraggable'
     import Form from './../components/Form'
-
 
     export default {
         data(){
@@ -203,18 +189,16 @@
                 accounts : [],
                 groups : [],
                 selectedAccounts: [],
+                search: '',
+                editMode: this.InitialEditMode,
+                drag: false,
+                showTwofaccountInModal : false,
+                showGroupSwitch: false,
+                showGroupSelector: false,
+                moveAccountsTo: false,
                 form: new Form({
                     activeGroup: this.$root.appSettings.activeGroup,
                 }),
-                showTwofaccountInModal : false,
-                search: '',
-                editMode: this.InitialEditMode,
-                showUploader: false,
-                showFooter: true,
-                showGroupSwitch: false,
-                showGroupSelector: false,
-                drag: false,
-                moveAccountsTo: false,
             }
         },
 
@@ -233,7 +217,7 @@
             },
 
             showAccounts() {
-                return this.accounts.length > 0 && !this.showUploader && !this.showGroupSwitch && !this.showGroupSelector ? true : false
+                return this.accounts.length > 0 && !this.showGroupSwitch && !this.showGroupSelector ? true : false
             },
 
             activeGroupName() {
@@ -262,34 +246,19 @@
                 this.$refs.TokenDisplayer.clearOTP()
             });
 
-            // hide Footer when stream is on
-            this.$on('initStreaming', function() {
-                // this.showFooter = this.accounts.length > 0 ? false : true
-                this.showFooter = false
-            });
-
-            this.$on('stopStreaming', function() {
-
-                this.showUploader = this.accounts.length > 0 ? false : true
-                this.showFooter = true
-            });
-
-            this.$on('cannotStream', function() {
-                
-                this.showFooter = true
-            });
-
         },
 
         components: {
             Modal,
             TokenDisplayer,
-            // 'vue-pull-refresh': vuePullRefresh,
-            QuickUploader,
             draggable,
         },
 
         methods: {
+
+            start() {
+                this.$router.push({ name: 'start', params: { accountCount: this.accounts.length } });
+            },
 
             fetchAccounts() {
                 this.accounts = []
@@ -306,7 +275,10 @@
                         })
                     })
                     
-                    this.showUploader = response.data.length === 0 ? true : false
+                    // No account yet, we push user to the start view
+                    if( this.accounts.length === 0 ) {
+                        this.$router.push({ name: 'start', params: { accountCount: 0 } });
+                    }
                 })
             },
 

@@ -4,34 +4,55 @@
         <div v-show="!(showStream && canStream)" class="container has-text-centered">
             <div class="columns quick-uploader">
                 <!-- trailer phrase that invite to add an account -->
-                <div class="column is-full quick-uploader-header" :class="{ 'is-invisible' : !showTrailer }">
+                <div class="column is-full quick-uploader-header" :class="{ 'is-invisible' : accountCount > 0 }">
                     {{ $t('twofaccounts.no_account_here') }}<br>
                     {{ $t('twofaccounts.add_first_account') }}
                 </div>
-                <!-- add button -->
+                <!-- Livescan button -->
                 <div class="column is-full quick-uploader-button" >
                     <div class="quick-uploader-centerer">
+                        <!-- upload a qr code (with basic file field and backend decoding) -->
+                        <label v-if="$root.appSettings.useBasicQrcodeReader" class="button is-link is-medium is-rounded is-focused" >
+                            <input class="file-input" type="file" accept="image/*" v-on:change="submitQrCode" ref="qrcodeInput">
+                            {{ $t('twofaccounts.forms.upload_qrcode') }}
+                        </label>
                         <!-- scan button that launch camera stream -->
-                        <label v-if="canStream" class="button is-link is-medium is-rounded is-focused" @click="enableStream()">
+                        <label v-else class="button is-link is-medium is-rounded is-focused" @click="enableStream()">
                             {{ $t('twofaccounts.forms.scan_qrcode') }}
                         </label>
-                        <!-- or classic input field -->
-                        <form v-else @submit.prevent="createAccount" @keydown="form.onKeydown($event)">
-                            <label :class="{'is-loading' : form.isBusy}" class="button is-link is-medium is-rounded is-focused">
-                                <input v-if="$root.appSettings.useBasicQrcodeReader" class="file-input" type="file" accept="image/*" v-on:change="uploadQrcode" ref="qrcodeInput">
-                                <qrcode-capture v-else @decode="uploadQrcode" class="file-input" ref="qrcodeInput" />
-                                {{ $t('twofaccounts.forms.use_qrcode.val') }}
+                    </div>
+                </div>
+                <!-- alternative methods -->
+                <div class="column is-full">
+                    <div class="block has-text-light">Alternative methods</div>
+                    <!-- upload a qr code (with qrcode-capture component) -->
+                    <div class="block has-text-link" v-if="!$root.appSettings.useBasicQrcodeReader">
+                        <form @submit.prevent="createAccount" @keydown="form.onKeydown($event)">
+                            <label :class="{'is-loading' : form.isBusy}" class="button is-link is-outlined is-rounded">
+                                <qrcode-capture @decode="submitUri" class="file-input" ref="qrcodeInput" />
+                                {{ $t('twofaccounts.forms.upload_qrcode') }}
                             </label>
                             <field-error :form="form" field="qrcode" />
                             <field-error :form="form" field="uri" />
                         </form>
                     </div>
-                </div>
-                <!-- Fallback link to classic form -->
-                <div class="column is-full quick-uploader-footer">
-                    <router-link :to="{ name: 'createAccount' }" class="is-link">{{ $t('twofaccounts.use_full_form') }}</router-link>
+                    <!-- link to advanced form -->
+                    <div class="block has-text-link">
+                        <router-link class="button is-link is-outlined is-rounded" :to="{ name: 'createAccount' }" >
+                            {{ $t('twofaccounts.forms.use_advanced_form') }}
+                        </router-link>
+                    </div>
                 </div>
             </div>
+            <!-- Footer -->
+            <vue-footer :showButtons="true">
+                <!-- back button -->
+                <p class="control">
+                    <router-link class="button is-dark is-rounded" :to="{ name: '/' }" >
+                        {{ $t('commons.back') }}
+                    </router-link>
+                </p>
+            </vue-footer>
         </div>
         <!-- camera stream fullscreen scanner -->
         <div v-show="showStream && canStream">
@@ -41,7 +62,7 @@
                 </span>
             </div>
             <div class="fullscreen-streamer">
-                <qrcode-stream @decode="uploadQrcode" @init="onStreamerInit" :camera="camera" />
+                <qrcode-stream @decode="submitUri" @init="onStreamerInit" :camera="camera" />
             </div>
             <div class="fullscreen-footer">
                 <!-- Cancel button -->
@@ -55,10 +76,10 @@
 
 <script>
 
-    import Form from './Form'
+    import Form from './../components/Form'
 
     export default {
-        name: 'QuickUploader',
+        name: 'Start',
 
         data(){
             return {
@@ -74,25 +95,15 @@
             }
         },
 
-        props: {
-            showTrailer: {
-                type: Boolean,
-                default: false
-            },
-
-            directStreaming: {
-                type: Boolean,
-                default: true
-            },
-        },
+        props: ['accountCount'],
 
         created() {
             if( this.$root.appSettings.useBasicQrcodeReader ) {
-                // User has set the basic QR code reader so we disable the modern one
+                // User has set the basic QR code reader (run by backend) so we disable the other one (run by js)
                 this.canStream = this.showStream = false
             }
             else {
-                if( this.directStreaming ) {
+                if( this.accountCount > 0 && this.$root.appSettings.useDirectCapture ) {
                     this.enableStream()
                 }
             }
@@ -106,7 +117,7 @@
 
             async enableStream() {
 
-                this.$parent.$emit('initStreaming')
+                this.setUploader()
 
                 this.camera = 'auto'
                 this.showStream = true
@@ -155,64 +166,69 @@
                         this.errorText = this.$t('twofaccounts.stream.stream_api_not_supported')
                     }
                 }
-
-                this.setUploader()
             },
 
             setUploader() {
 
                 if( this.errorName ) {
-                    this.canStream = false
-                    this.$parent.$emit('cannotStream')
-
                     console.log('fail to stream : ' + this.errorText)
 
-                    if (this.errorName === 'NotAllowedError') {
-                        this.$notify({ type: 'is-danger', text: this.errorText })
-                    }
-
-                    if (this.errorName === 'InsecureContextError') {
-                        this.$notify({ type: 'is-warning', text: "HTTPS required for camera streaming" })
-                    }
+                    this.canStream = false
+                    this.$notify({ type: 'is-warning', text: this.errorText })
                 }
+                else
+                {
+                    if( !this.errorName && !this.showStream ) {
+                        this.camera = 'off'
 
-                if( !this.errorName && !this.showStream ) {
-                    this.camera = 'off'
-
-                    console.log('stream stopped')
-                }
-
-                if( this.canStream && this.showStream) {
-                    this.$parent.$emit('startStreaming')
+                        console.log('stream stopped')
+                    }
 
                     console.log('stream started')
                 }
+
             },
 
-            async uploadQrcode(event) {
 
-                var response
+            /**
+             * the basicQRcodeReader option is On, so qrcode decoding has to be done by the backend, which in return
+             * send the corresponding URI
+             */
+            async submitQrCode() {
 
-                if(this.$root.appSettings.useBasicQrcodeReader) {
-                    let imgdata = new FormData();
-                    imgdata.append('qrcode', this.$refs.qrcodeInput.files[0]);
+                let imgdata = new FormData();
+                imgdata.append('qrcode', this.$refs.qrcodeInput.files[0]);
+                imgdata.append('inputFormat', 'fileUpload');
 
-                    response = await this.form.upload('/api/qrcode/decode', imgdata)
+                const { data } = await this.form.upload('/api/qrcode/decode', imgdata)
+
+                this.pushUriToCreateForm(data.uri)
+            },
+
+
+            /**
+             * The basicQRcodeReader option is Off, so qrcode decoding has already be done by vue-qrcode-reader, whether
+             * from livescan or file input.
+             * We simply check the uri validity to prevent useless push to the Create form, but the form will check uri validity too.
+             */
+            async submitUri(event) {
+                // We post the URI automatically decoded by vue-qrcode-reader
+                this.form.uri = event
+
+                if( !this.form.uri ) {
+                    this.$notify({type: 'is-warning', text: this.$t('errors.qrcode_cannot_be_read') })
+                }
+                else if( this.form.uri.slice(0, 15 ).toLowerCase() !== "otpauth://totp/" && this.form.uri.slice(0, 15 ).toLowerCase() !== "otpauth://hotp/" ) {
+                    this.$notify({type: 'is-warning', text: this.$t('errors.no_valid_otp') })
                 }
                 else {
-                    // We post the decoded URI instead of an image to decode
-                    this.form.uri = event
-
-                    if( !this.form.uri ) {
-                        return false
-                    }
-
-                    response = await this.form.post('/api/qrcode/decode')
+                    this.pushUriToCreateForm(this.form.uri)
                 }
-
-                this.$router.push({ name: 'createAccount', params: { qrAccount: response.data } });
-
             },
+
+            pushUriToCreateForm(data) {
+                this.$router.push({ name: 'createAccount', params: { decodedUri: data } });
+            }
 
         }
     };

@@ -218,7 +218,7 @@ class TwoFAccount extends Model implements Sortable
         }
         catch (\Exception $e) {
             throw \Illuminate\Validation\ValidationException::withMessages([
-                'qrcode' => __('errors.response.no_valid_otp')
+                'qrcode' => __('errors.no_valid_otp')
             ]);
         }
     }

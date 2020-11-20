@@ -1,135 +1,137 @@
 <template>
-    <!-- Quick form -->
-    <form @submit.prevent="createAccount" @keydown="form.onKeydown($event)" v-if="isQuickForm">
-        <div class="container preview has-text-centered">
-            <div class="columns is-mobile">
-                <div class="column">
-                    <label class="add-icon-button" v-if="!tempIcon">
-                        <input class="file-input" type="file" accept="image/*" v-on:change="uploadIcon" ref="iconInput">
-                        <font-awesome-icon :icon="['fas', 'image']" size="2x" />
-                    </label>
-                    <button class="delete delete-icon-button is-medium" v-if="tempIcon" @click.prevent="deleteIcon"></button>
-                    <token-displayer ref="QuickFormTokenDisplayer" v-bind="form.data()" @increment-hotp="incrementHotp">
-                    </token-displayer>
+    <div>
+        <!-- Quick form -->
+        <form @submit.prevent="createAccount" @keydown="form.onKeydown($event)" v-if="showQuickForm">
+            <div class="container preview has-text-centered">
+                <div class="columns is-mobile">
+                    <div class="column">
+                        <label class="add-icon-button" v-if="!tempIcon">
+                            <input class="file-input" type="file" accept="image/*" v-on:change="uploadIcon" ref="iconInput">
+                            <font-awesome-icon :icon="['fas', 'image']" size="2x" />
+                        </label>
+                        <button class="delete delete-icon-button is-medium" v-if="tempIcon" @click.prevent="deleteIcon"></button>
+                        <token-displayer ref="QuickFormTokenDisplayer" v-bind="form.data()" @increment-hotp="incrementHotp">
+                        </token-displayer>
+                    </div>
                 </div>
-            </div>
-            <div class="columns is-mobile" v-if="form.errors.any()">
-                <div class="column">
-                    <p v-for="field in form.errors.errors" class="help is-danger">
-                        <ul>
-                            <li v-for="(error, index) in field">{{ error }}</li>
-                        </ul>
-                    </p>
+                <div class="columns is-mobile" v-if="form.errors.any()">
+                    <div class="column">
+                        <p v-for="field in form.errors.errors" class="help is-danger">
+                            <ul>
+                                <li v-for="(error, index) in field">{{ error }}</li>
+                            </ul>
+                        </p>
+                    </div>
                 </div>
-            </div>
-            <div class="columns is-mobile">
-                <div class="column quickform-footer">
-                    <div class="field is-grouped is-grouped-centered">
-                        <div class="control">
-                            <v-button :isLoading="form.isBusy" >{{ $t('commons.save') }}</v-button>
-                        </div>
-                        <div class="control">
-                            <button type="button" class="button is-text" @click="cancelCreation">{{ $t('commons.cancel') }}</button>
+                <div class="columns is-mobile">
+                    <div class="column quickform-footer">
+                        <div class="field is-grouped is-grouped-centered">
+                            <div class="control">
+                                <v-button :isLoading="form.isBusy" >{{ $t('commons.save') }}</v-button>
+                            </div>
+                            <div class="control">
+                                <button type="button" class="button is-text" @click="cancelCreation">{{ $t('commons.cancel') }}</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </form>
-    <!-- Full form -->
-    <form-wrapper :title="$t('twofaccounts.forms.new_account')" v-else>
-        <form @submit.prevent="createAccount" @keydown="form.onKeydown($event)">
-            <!-- qcode fileupload -->
-            <div class="field">
-                <div class="file is-black is-small">
-                    <label class="file-label" :title="$t('twofaccounts.forms.use_qrcode.title')">
-                        <input class="file-input" type="file" accept="image/*" v-on:change="uploadQrcode" ref="qrcodeInput">
-                        <span class="file-cta">
-                            <span class="file-icon">
-                                <font-awesome-icon :icon="['fas', 'qrcode']" size="lg" />
-                            </span>
-                            <span class="file-label">{{ $t('twofaccounts.forms.prefill_using_qrcode') }}</span>
-                        </span>
-                    </label>
-                </div>
-            </div>
-            <field-error :form="form" field="qrcode" class="help-for-file" />
-            <!-- service -->
-            <form-field :form="form" fieldName="service" inputType="text" :label="$t('twofaccounts.service')" :placeholder="$t('twofaccounts.forms.service.placeholder')" autofocus />
-            <!-- account -->
-            <form-field :form="form" fieldName="account" inputType="text" :label="$t('twofaccounts.account')" :placeholder="$t('twofaccounts.forms.account.placeholder')" />
-            <!-- icon upload -->
-            <div class="field">
-                <label class="label">{{ $t('twofaccounts.icon') }}</label>
-                <div class="file is-dark">
-                    <label class="file-label">
-                        <input class="file-input" type="file" accept="image/*" v-on:change="uploadIcon" ref="iconInput">
-                        <span class="file-cta">
-                            <span class="file-icon">
-                                <font-awesome-icon :icon="['fas', 'image']" />
-                            </span>
-                            <span class="file-label">{{ $t('twofaccounts.forms.choose_image') }}</span>
-                        </span>
-                    </label>
-                    <span class="tag is-black is-large" v-if="tempIcon">
-                        <img class="icon-preview" :src="'/storage/icons/' + tempIcon" >
-                        <button class="delete is-small" @click.prevent="deleteIcon"></button>
-                    </span>
-                </div>
-            </div>
-            <field-error :form="form" field="icon" class="help-for-file" />
-            <!-- otp type -->
-            <form-toggle class="has-uppercased-button" :form="form" :choices="otpTypes" fieldName="otpType" :label="$t('twofaccounts.forms.otp_type.label')" :help="$t('twofaccounts.forms.otp_type.help')" :hasOffset="true" />
-            <div v-if="form.otpType">
-                <!-- secret -->
-                <label class="label" v-html="$t('twofaccounts.forms.secret.label')"></label>
-                <div class="field has-addons">
-                    <p class="control">
-                        <span class="select">
-                            <select v-model="form.secretIsBase32Encoded">
-                                <option v-for="format in secretFormats" :value="format.value">{{ format.text }}</option>
-                            </select>
-                        </span>
-                    </p>
-                    <p class="control is-expanded">
-                        <input class="input" type="text" v-model="form.secret">
-                    </p>
-                </div>
-                <div class="field">
-                    <field-error :form="form" field="secret" class="help-for-file" />
-                    <p class="help" v-html="$t('twofaccounts.forms.secret.help')"></p>
-                </div>
-                <h2 class="title is-4 mt-5 mb-2">{{ $t('commons.options') }}</h2>
-                <p class="help mb-4">
-                    {{ $t('twofaccounts.forms.options_help') }}
-                </p>
-                <!-- digits -->
-                <form-toggle :form="form" :choices="digitsChoices" fieldName="digits" :label="$t('twofaccounts.forms.digits.label')" :help="$t('twofaccounts.forms.digits.help')" />
-                <!-- algorithm -->
-                <form-toggle :form="form" :choices="algorithms" fieldName="algorithm" :label="$t('twofaccounts.forms.algorithm.label')" :help="$t('twofaccounts.forms.algorithm.help')" />
-                <!-- TOTP period -->
-                <form-field v-if="form.otpType === 'totp'" :form="form" fieldName="totpPeriod" inputType="text" :label="$t('twofaccounts.forms.totpPeriod.label')" :placeholder="$t('twofaccounts.forms.totpPeriod.placeholder')" :help="$t('twofaccounts.forms.totpPeriod.help')" />
-                <!-- HOTP counter -->
-                <form-field v-if="form.otpType === 'hotp'" :form="form" fieldName="hotpCounter" inputType="text" :label="$t('twofaccounts.forms.hotpCounter.label')" :placeholder="$t('twofaccounts.forms.hotpCounter.placeholder')" :help="$t('twofaccounts.forms.hotpCounter.help')" />
-            </div>
-            <vue-footer :showButtons="true">
-                <p class="control">
-                    <v-button :isLoading="form.isBusy" class="is-rounded" >{{ $t('commons.create') }}</v-button>
-                </p>
-                <p class="control" v-if="form.otpType && form.secret">
-                    <button type="button" class="button is-success is-rounded" @click="previewAccount">{{ $t('twofaccounts.forms.test') }}</button>
-                </p>
-                <p class="control">
-                    <button type="button" class="button is-text is-rounded" @click="cancelCreation">{{ $t('commons.cancel') }}</button>
-                </p>
-            </vue-footer>
         </form>
-        <!-- modal -->
-        <modal v-model="ShowTwofaccountInModal">
-            <token-displayer ref="AdvancedFormTokenDisplayer" v-bind="form.data()" @increment-hotp="incrementHotp">
-            </token-displayer>
-        </modal>
-    </form-wrapper>
+        <!-- Full form -->
+        <form-wrapper :title="$t('twofaccounts.forms.new_account')" v-if="showAdvancedForm">
+            <form @submit.prevent="createAccount" @keydown="form.onKeydown($event)">
+                <!-- qcode fileupload -->
+                <div class="field">
+                    <div class="file is-black is-small">
+                        <label class="file-label" :title="$t('twofaccounts.forms.use_qrcode.title')">
+                            <input class="file-input" type="file" accept="image/*" v-on:change="uploadQrcode" ref="qrcodeInput">
+                            <span class="file-cta">
+                                <span class="file-icon">
+                                    <font-awesome-icon :icon="['fas', 'qrcode']" size="lg" />
+                                </span>
+                                <span class="file-label">{{ $t('twofaccounts.forms.prefill_using_qrcode') }}</span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+                <field-error :form="form" field="qrcode" class="help-for-file" />
+                <!-- service -->
+                <form-field :form="form" fieldName="service" inputType="text" :label="$t('twofaccounts.service')" :placeholder="$t('twofaccounts.forms.service.placeholder')" autofocus />
+                <!-- account -->
+                <form-field :form="form" fieldName="account" inputType="text" :label="$t('twofaccounts.account')" :placeholder="$t('twofaccounts.forms.account.placeholder')" />
+                <!-- icon upload -->
+                <div class="field">
+                    <label class="label">{{ $t('twofaccounts.icon') }}</label>
+                    <div class="file is-dark">
+                        <label class="file-label">
+                            <input class="file-input" type="file" accept="image/*" v-on:change="uploadIcon" ref="iconInput">
+                            <span class="file-cta">
+                                <span class="file-icon">
+                                    <font-awesome-icon :icon="['fas', 'image']" />
+                                </span>
+                                <span class="file-label">{{ $t('twofaccounts.forms.choose_image') }}</span>
+                            </span>
+                        </label>
+                        <span class="tag is-black is-large" v-if="tempIcon">
+                            <img class="icon-preview" :src="'/storage/icons/' + tempIcon" >
+                            <button class="delete is-small" @click.prevent="deleteIcon"></button>
+                        </span>
+                    </div>
+                </div>
+                <field-error :form="form" field="icon" class="help-for-file" />
+                <!-- otp type -->
+                <form-toggle class="has-uppercased-button" :form="form" :choices="otpTypes" fieldName="otpType" :label="$t('twofaccounts.forms.otp_type.label')" :help="$t('twofaccounts.forms.otp_type.help')" :hasOffset="true" />
+                <div v-if="form.otpType">
+                    <!-- secret -->
+                    <label class="label" v-html="$t('twofaccounts.forms.secret.label')"></label>
+                    <div class="field has-addons">
+                        <p class="control">
+                            <span class="select">
+                                <select v-model="form.secretIsBase32Encoded">
+                                    <option v-for="format in secretFormats" :value="format.value">{{ format.text }}</option>
+                                </select>
+                            </span>
+                        </p>
+                        <p class="control is-expanded">
+                            <input class="input" type="text" v-model="form.secret">
+                        </p>
+                    </div>
+                    <div class="field">
+                        <field-error :form="form" field="secret" class="help-for-file" />
+                        <p class="help" v-html="$t('twofaccounts.forms.secret.help')"></p>
+                    </div>
+                    <h2 class="title is-4 mt-5 mb-2">{{ $t('commons.options') }}</h2>
+                    <p class="help mb-4">
+                        {{ $t('twofaccounts.forms.options_help') }}
+                    </p>
+                    <!-- digits -->
+                    <form-toggle :form="form" :choices="digitsChoices" fieldName="digits" :label="$t('twofaccounts.forms.digits.label')" :help="$t('twofaccounts.forms.digits.help')" />
+                    <!-- algorithm -->
+                    <form-toggle :form="form" :choices="algorithms" fieldName="algorithm" :label="$t('twofaccounts.forms.algorithm.label')" :help="$t('twofaccounts.forms.algorithm.help')" />
+                    <!-- TOTP period -->
+                    <form-field v-if="form.otpType === 'totp'" :form="form" fieldName="totpPeriod" inputType="text" :label="$t('twofaccounts.forms.totpPeriod.label')" :placeholder="$t('twofaccounts.forms.totpPeriod.placeholder')" :help="$t('twofaccounts.forms.totpPeriod.help')" />
+                    <!-- HOTP counter -->
+                    <form-field v-if="form.otpType === 'hotp'" :form="form" fieldName="hotpCounter" inputType="text" :label="$t('twofaccounts.forms.hotpCounter.label')" :placeholder="$t('twofaccounts.forms.hotpCounter.placeholder')" :help="$t('twofaccounts.forms.hotpCounter.help')" />
+                </div>
+                <vue-footer :showButtons="true">
+                    <p class="control">
+                        <v-button :isLoading="form.isBusy" class="is-rounded" >{{ $t('commons.create') }}</v-button>
+                    </p>
+                    <p class="control" v-if="form.otpType && form.secret">
+                        <button type="button" class="button is-success is-rounded" @click="previewAccount">{{ $t('twofaccounts.forms.test') }}</button>
+                    </p>
+                    <p class="control">
+                        <button type="button" class="button is-text is-rounded" @click="cancelCreation">{{ $t('commons.cancel') }}</button>
+                    </p>
+                </vue-footer>
+            </form>
+            <!-- modal -->
+            <modal v-model="ShowTwofaccountInModal">
+                <token-displayer ref="AdvancedFormTokenDisplayer" v-bind="form.data()" @increment-hotp="incrementHotp">
+                </token-displayer>
+            </modal>
+        </form-wrapper>
+    </div>
 </template>
 
 <script>
@@ -141,7 +143,8 @@
     export default {
         data() {
             return {
-                isQuickForm: false,
+                showQuickForm: false,
+                showAdvancedForm: false,
                 ShowTwofaccountInModal : false,
                 tempIcon: '',
                 form: new Form({
@@ -185,19 +188,31 @@
 
         watch: {
             tempIcon: function(val) {
-                if( this.isQuickForm ) {
+                if( this.showQuickForm ) {
                     this.$refs.QuickFormTokenDisplayer.internal_icon = val
                 }
             },
         },
 
         mounted: function () {
-            if( this.$route.params.qrAccount ) {
+            if( this.$route.params.decodedUri ) {
 
-                this.form.fill(this.$route.params.qrAccount)
-                this.tempIcon = this.$route.params.qrAccount.icon ? this.$route.params.qrAccount.icon : null
-                this.isQuickForm = true
+                // the Start view provided an uri so we parse it and prefill the quick form
+                this.axios.post('/api/twofaccounts/preview', { uri: this.$route.params.decodedUri }).then(response => {
 
+                    this.form.fill(response.data)
+                    this.tempIcon = response.data.icon ? response.data.icon : null
+                    this.showQuickForm = true
+                })
+                .catch(error => {
+                    if( error.response.status === 422 ) {
+
+                        this.$router.push({ name: 'genericError', params: { err: this.$t('errors.cannot_create_otp_with_those_parameters') } });
+                    }
+                });
+
+            } else {
+                this.showAdvancedForm = true
             }
 
             // stop TOTP generation on modal close

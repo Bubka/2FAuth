@@ -38,6 +38,7 @@ Route::group(['middleware' => 'auth:api'], function() {
 
     Route::delete('twofaccounts/batch', 'TwoFAccountController@batchDestroy');
     Route::patch('twofaccounts/reorder', 'TwoFAccountController@reorder');
+    Route::post('twofaccounts/preview', 'TwoFAccountController@preview');
     Route::get('twofaccounts/{twofaccount}/withSensitive', 'TwoFAccountController@showWithSensitive');
     Route::apiResource('twofaccounts', 'TwoFAccountController');
     Route::patch('group/accounts', 'GroupController@associateAccounts');
