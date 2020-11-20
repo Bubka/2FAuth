@@ -76,6 +76,32 @@
 
 <script>
 
+    /**
+     *  Start view
+     *  
+     *  route: '/start'
+     *  
+     *  Offer the user all available possibilities for capturing an account :
+     *  - By decoding a QR code acquired by live scan
+     *  - By decoding a QR code submitted with a form 'File' field
+     *  - By browsing to the advanced form
+     *
+     *  2 QR code decoders are implemented :
+     *  - vue-qrcode-reader  (the default one)
+     *    ~ QR codes are acquired by live scan or with a 'File' field by the js front-end
+     *    ~ Decoding is done by the js front-end, there is no call to the back-end API
+     *  - chillerlan/php-qrcode  (aka 'BasicQrcodeReader')
+     *    ~ QR codes are acquired with a 'File' field and uploaded to the php backend
+     *    ~ Decoding is done by the php back-end
+     *
+     *  Output : both decoders provide an URI and push it the Create form
+     * 
+     *  The view behaviour is affected by the user options :
+     *  - 'appSettings.useBasicQrcodeReader' totally disable the vue-qrcode-reader decoder
+     *  - 'appSettings.useDirectCapture' trigger the acquisition mode set by 'appSettings.defaultCaptureMode' automatically at vue @created event
+     *
+     */
+
     import Form from './../components/Form'
 
     export default {
