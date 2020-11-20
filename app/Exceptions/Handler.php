@@ -3,11 +3,7 @@
 namespace App\Exceptions;
 
 use Throwable;
-use Illuminate\Http\Response;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Illuminate\Database\Eloquent\ModelNotFoundException as ModelNotFoundException;
-use Illuminate\Validation\ValidationException as ValidationException;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -46,99 +42,12 @@ class Handler extends ExceptionHandler
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Throwable  $exception
-     * @return \Illuminate\Http\Response
+     * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @throws \Throwable
      */
     public function render($request, Throwable $exception)
-    {        
-        if ( $request->wantsJson() ) {
-
-            return $this->handleApiException($request, $exception);
-
-        } else {
-
-           return parent::render($request, $exception);
-        }
-    }
-
-
-    /**
-     * Render an exception into an HTTP response.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Throwable  $exception
-     * @return \Illuminate\Http\JsonResponse
-     */
-    private function handleApiException($request, Throwable $exception)
     {
-        $debug = [
-            'exception' => get_class($exception),
-            'trace' => $exception->getTrace(),
-        ];
-
-        $exception = $this->prepareException($exception);
-
-        if ($exception instanceof \Illuminate\Http\Exception\HttpResponseException) {
-            $exception = $exception->getResponse();
-        }
-
-        if ($exception instanceof \Illuminate\Auth\AuthenticationException) {
-            $exception = $this->unauthenticated($request, $exception);
-        }
-
-        if ($exception instanceof \Illuminate\Validation\ValidationException) {
-            $exception = $this->convertValidationExceptionToResponse($exception, $request);
-        }
-
-        return $this->customApiResponse($exception, $debug);
-    }
-
-
-    /**
-     * Set a specific response payload for commons http error codes
-     *
-     * @param  \Throwable  $exception
-     * @return \Illuminate\Http\JsonResponse
-     */
-    private function customApiResponse($exception, $debug)
-    {
-        $statusCode = 500;
-
-        if (method_exists($exception, 'getStatusCode')) {
-            $statusCode = $exception->getStatusCode();
-        }
-
-        $response = [];
-        $response['status_code'] = $statusCode;
-
-        switch ($statusCode) {
-            case 401:
-                $response['message'] = 'Unauthorized';
-                break;
-
-            case 404:
-                $response['message'] = 'Not Found';
-                break;
-
-            case 405:
-                $response['message'] = 'Method Not Allowed';
-                break;
-
-            case 422:
-                $response['message'] = $exception->original['message'];
-                $response['errors'] = $exception->original['errors'];
-                break;
-
-            default:
-                $response['message'] = ($statusCode >= 500) ? 'Whoops, looks like something went wrong :(' : $exception->getMessage();
-
-                if (config('app.debug')) {
-                    $response['originalMessage'] = $exception->getMessage();
-                    $response['debug'] = $debug;
-                }
-
-                break;
-        }
-
-        return response()->json($response, $statusCode);
+        return parent::render($request, $exception);
     }
 }
