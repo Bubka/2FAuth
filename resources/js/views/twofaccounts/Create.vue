@@ -136,6 +136,23 @@
 
 <script>
 
+    /**
+     *  Create form view
+     *  
+     *  route: '/account/create'
+     *  
+     *  Offer the user to define, preview and store an account. The form has 2 designs :
+     *  - The 'Quick Form', a read only design fed with $route.params.decodedUri passed by the Start view.
+     *  - The 'Advanced Form', a fully editable form, that let user define all field and OTP parameters.
+     *    ~ A qrcode can be used to automatically fill the form
+     *    ~ If an 'image' parameter is embeded in the qrcode, the remote image is downloaded and preset in the icon field
+     *
+     *  Both design use the tokenDisplayer component to preview the account with a token rotation.
+     *
+     *  input : [optional, for the Quick Form] an URI previously decoded by the Start view
+     *  submit : post account data to php backend to create the account
+     */
+
     import Modal from '../../components/Modal'
     import Form from './../../components/Form'
     import TokenDisplayer from '../../components/TokenDisplayer'
