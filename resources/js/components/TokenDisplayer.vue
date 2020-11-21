@@ -125,7 +125,7 @@
 
                 this.dotToDotCounter = 0
 
-                this.axios.post('/api/twofaccounts/otp', { id: this.id, otp: this.$props }).then(response => {
+                this.axios.post('/api/twofaccounts/token', { id: this.id, otp: this.$props }).then(response => {
 
                     let spacePosition = Math.ceil(response.data.token.length / 2);
                     
@@ -188,7 +188,7 @@
 
             getHOTP: function() {
 
-                this.axios.post('/api/twofaccounts/otp', { id: this.id, otp: this.$props }).then(response => {
+                this.axios.post('/api/twofaccounts/token', { id: this.id, otp: this.$props }).then(response => {
                     let spacePosition = Math.ceil(response.data.token.length / 2);
                     
                     this.token = response.data.token.substr(0, spacePosition) + " " + response.data.token.substr(spacePosition)

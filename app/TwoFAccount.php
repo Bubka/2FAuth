@@ -49,7 +49,7 @@ class TwoFAccount extends Model implements Sortable
      *
      * @var array
      */
-    protected $hidden = ['uri', 'secret', 'algorithm', 'created_at', 'updated_at'];
+    protected $hidden = ['token', 'uri', 'secret', 'algorithm', 'created_at', 'updated_at'];
 
 
     /**

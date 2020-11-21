@@ -164,13 +164,16 @@ class TwoFAccountController extends Controller
 
 
     /**
-     * Generate a TOTP
+     * Generate an OTP token
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function generateOTP(Request $request)
+    public function token(Request $request)
     {
+        // When the method is called during the process of creating/editing an HOTP account the 
+        // sensitive data have to be returned, because of the hotpCounter increment
+        $shouldResponseWithSensitiveData = false;
 
         if( $request->id ) {
 
@@ -182,13 +185,19 @@ class TwoFAccountController extends Controller
             // The request data contain an uri
             $twofaccount = new TwoFAccount;
             $twofaccount->uri = $request->otp['uri'];
+            $shouldResponseWithSensitiveData = true;
         }
         else {
 
             // The request data should contain all otp parameter
             $twofaccount = new TwoFAccount;
             $twofaccount->populate($request->otp);
+            $shouldResponseWithSensitiveData = true;
         }
+
+        $response = [
+            'token' => $twofaccount->token,
+        ];
 
         if( $twofaccount->otpType === 'hotp' ) {
 
@@ -199,13 +208,19 @@ class TwoFAccountController extends Controller
             if( $request->id ) {
                 $twofaccount->save();
             }
+
+            if( $shouldResponseWithSensitiveData ) {
+                $response['hotpCounter'] = $twofaccount->hotpCounter;
+                $response['uri'] = $twofaccount->uri;
+            }
+        }
+        else {
+
+            $response['totpPeriod'] = $twofaccount->totpPeriod;
+            $response['totpTimestamp'] = $twofaccount->totpTimestamp;
         }
 
-        if( $request->id ) {
-            return response()->json($twofaccount, 200);
-        }
-
-        return response()->json($twofaccount->makeVisible(['uri', 'secret', 'algorithm']), 200);
+        return response()->json($response, 200);
     }
 
 
