@@ -40,6 +40,7 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::patch('twofaccounts/reorder', 'TwoFAccountController@reorder');
     Route::post('twofaccounts/preview', 'TwoFAccountController@preview');
     Route::get('twofaccounts/{twofaccount}/withSensitive', 'TwoFAccountController@showWithSensitive');
+    Route::get('twofaccounts/count', 'TwoFAccountController@count');
     Route::apiResource('twofaccounts', 'TwoFAccountController');
     Route::patch('group/accounts', 'GroupController@associateAccounts');
     Route::apiResource('groups', 'GroupController');

@@ -261,7 +261,7 @@
                     this.$router.push({ name: 'createAccount' })
                 }
                 else {
-                    this.$router.push({ name: 'start', params: { accountCount: this.accounts.length } })
+                    this.$router.push({ name: 'start' })
                 }
             },
 
@@ -280,9 +280,9 @@
                         })
                     })
                     
-                    // No account yet, we push user to the start view
+                    // No account yet, we force user to land on the start view.
                     if( this.accounts.length === 0 ) {
-                        this.$router.push({ name: 'start', params: { accountCount: 0 } });
+                        this.$router.push({ name: 'start' });
                     }
                 })
             },

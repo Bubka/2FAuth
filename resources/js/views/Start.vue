@@ -45,7 +45,7 @@
                 </div>
             </div>
             <!-- Footer -->
-            <vue-footer :showButtons="true">
+            <vue-footer :showButtons="true" v-if="accountCount > 0">
                 <!-- back button -->
                 <p class="control">
                     <router-link class="button is-dark is-rounded" :to="{ name: 'accounts' }" >
@@ -109,6 +109,7 @@
 
         data(){
             return {
+                accountCount: null,
                 form: new Form({
                     qrcode: null,
                     uri: '',
@@ -121,7 +122,14 @@
             }
         },
 
-        props: ['accountCount'],
+        // props: ['accountCount'],
+
+        mounted() {
+
+            this.axios.get('api/twofaccounts/count').then(response => {
+                this.accountCount = response.data.count
+            })
+        },
 
         created() {
 

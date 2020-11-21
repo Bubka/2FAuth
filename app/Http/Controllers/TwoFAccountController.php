@@ -257,6 +257,18 @@ class TwoFAccountController extends Controller
 
 
     /**
+     * A simple and light method to get the account count.
+     *
+     * @param  \App\TwoFAccount  $twofaccount
+     * @return \Illuminate\Http\Response
+     */
+    public function count(Request $request)
+    {
+        return response()->json([ 'count' => TwoFAccount::count() ], 200);
+    }
+
+
+    /**
      * Remove the specified resource from storage.
      *
      * @param  \App\TwoFAccount  $twofaccount
