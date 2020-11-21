@@ -25,6 +25,14 @@ class Group extends Model
 
 
     /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = ['created_at', 'updated_at'];
+
+
+    /**
      * Get the TwoFAccounts of the group.
      */
     public function twofaccounts()
