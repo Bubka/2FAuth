@@ -282,13 +282,16 @@
                 imgdata.append('qrcode', this.$refs.qrcodeInput.files[0]);
                 imgdata.append('inputFormat', 'fileUpload');
 
+                // First we get the uri encoded in the qrcode
                 const { data } = await this.form.upload('/api/qrcode/decode', imgdata)
 
-                this.form.fill(data)
-                this.form.secretIsBase32Encoded = 1
-                this.tempIcon = data.icon ? data.icon : null
-                this.form.uri = '' // we don't want the uri because the user can change any otp parameter in the form
-
+                // Then the otp described by the uri
+                this.axios.post('/api/twofaccounts/preview', { uri: data.uri }).then(response => {
+                    this.form.fill(response.data)
+                    this.form.secretIsBase32Encoded = 1
+                    this.tempIcon = response.data.icon ? response.data.icon : null
+                    this.form.uri = '' // we don't want the uri because the user can change any otp parameter in the form
+                })
             },
 
             async uploadIcon(event) {
