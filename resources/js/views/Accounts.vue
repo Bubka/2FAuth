@@ -178,6 +178,38 @@
 
 <script>
 
+    /**
+     *  Accounts view
+     *  
+     *  route: '/account' (alias: '/')
+     *  
+     *  The main view of 2FAuth that list all existing account recorded in DB.
+     *  Available feature in this view :
+     *  - Token generation
+     *  - Account fetching :
+     *    ~ Search
+     *    ~ Filtering (by group)
+     *  - Accounts management :
+     *    ~ Sorting
+     *    ~ QR code recovering
+     *    ~ Mass association to group
+     *    ~ Mass account deletion
+     *    ~ Access to account editing
+     *
+     *  Behavior :
+     *  - The view has 2 modes (toggle is done with the 'manage' button) :
+     *    ~ The View mode (the default one)
+     *    ~ The Edit mode
+     *  - User are automatically pushed to the start view if there is no account to list.
+     *  - The view is affected by :
+     *    ~ 'appSettings.showAccountsIcons' toggle the icon visibility
+     *    ~ 'appSettings.displayMode' change the account appearance
+     *
+     *  Input : 
+     *  - The 'InitialEditMode' props : allows to load the view directly in Edit mode
+     *  
+     */
+
     import Modal from '../components/Modal'
     import TokenDisplayer from '../components/TokenDisplayer'
     import draggable from 'vuedraggable'
@@ -256,6 +288,9 @@
 
         methods: {
 
+            /**
+             * Route user to the appropriate submitting view
+             */
             start() {
                 if( this.$root.appSettings.useDirectCapture && this.$root.appSettings.defaultCaptureMode === 'advancedForm' ) {
                     this.$router.push({ name: 'createAccount' })
@@ -265,6 +300,9 @@
                 }
             },
 
+            /**
+             * Populate the view with existing accounts
+             */
             fetchAccounts() {
                 this.accounts = []
                 this.selectedAccounts = []
@@ -287,7 +325,11 @@
                 })
             },
 
+            /**
+             * Show account with a generated token rotation
+             */
             showAccount(account) {
+                // In Edit mode clicking an account do not show the tokenDisplayer but select the account
                 if(this.editMode) {
 
                     for (var i=0 ; i<this.selectedAccounts.length ; i++) {
@@ -304,11 +346,17 @@
                 }
             },
 
+            /**
+             * Save the account order in db
+             */
             saveOrder() {
                 this.drag = false
                 this.axios.patch('/api/twofaccounts/reorder', {orderedIds: this.accounts.map(a => a.id)})
             },
 
+            /**
+             * Delete the provided account
+             */
             deleteAccount(id) {
                 if(confirm(this.$t('twofaccounts.confirm.delete'))) {
                     this.axios.delete('/api/twofaccounts/' + id)
@@ -318,6 +366,9 @@
                 }
             },
 
+            /**
+             * Delete accounts selected from the Edit mode
+             */
             async destroyAccounts() {
                 if(confirm(this.$t('twofaccounts.confirm.delete'))) {
 
@@ -333,6 +384,9 @@
                 }
             },
 
+            /**
+             * Move accounts selected from the Edit mode to another group
+             */
             async moveAccounts() {
 
                 let accountsIds = []
@@ -349,6 +403,9 @@
 
             },
 
+            /**
+             * Get the existing group list
+             */
             fetchGroups() {
                 this.groups = []
 
@@ -364,6 +421,9 @@
                 })
             },
 
+            /**
+             * Set the provided group as the active group
+             */
             async setActiveGroup(id) {
 
                 this.form.activeGroup = id
@@ -384,6 +444,9 @@
                 this.fetchAccounts()
             },
 
+            /**
+             * Toggle the group switch visibility
+             */
             toggleGroupSwitch: function(event) {
 
                 if (event) {
@@ -391,16 +454,25 @@
                 }
             },
 
+            /**
+             * show the group switch which allow to select a group to activate
+             */
             openGroupSwitch: function(event) {
 
                 this.showGroupSwitch = true
             },
 
+            /**
+             * hide the group switch
+             */
             closeGroupSwitch: function(event) {
 
                 this.showGroupSwitch = false
             },
 
+            /**
+             * Toggle the accounts list between View mode and Edit mode
+             */
             setEditModeTo(state) {
                 if( state === false ) {
                     this.selectedAccounts = []
