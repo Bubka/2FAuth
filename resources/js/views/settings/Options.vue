@@ -85,6 +85,7 @@
 
         mounted() {
             this.form.fill(this.$root.appSettings)
+            this.form.lang = this.$root.$i18n.locale
             this.fetchGroups()
         },
 
