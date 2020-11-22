@@ -24,7 +24,7 @@
                 </div>
                 <!-- alternative methods -->
                 <div class="column is-full">
-                    <div class="block has-text-light">Alternative methods</div>
+                    <div class="block has-text-light">{{ $t('twofaccounts.forms.alternative_methods') }}</div>
                     <!-- upload a qr code (with qrcode-capture component) -->
                     <div class="block has-text-link" v-if="!$root.appSettings.useBasicQrcodeReader">
                         <form @submit.prevent="createAccount" @keydown="form.onKeydown($event)">
