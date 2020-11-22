@@ -77,7 +77,7 @@ class ProtectDbTest extends TestCase
      *
      * @test
      */
-    public function testTwoFAccountUpdateOnProtectedDB()
+    public function testTwofaccountUpdateOnProtectedDb()
     {
         // Encrypt db
         $response = $this->actingAs($this->user, 'api')
@@ -263,7 +263,8 @@ class ProtectDbTest extends TestCase
         DB::table('twofaccounts')
             ->where('id', 1)
             ->update([
-                'account' => 'YoushallNotPass',
+                'account' => 'YouShallNotPass',
+                'uri' => 'PasDeBrasPasDeChocolat',
             ]);
 
         $response = $this->actingAs($this->user, 'api')
@@ -271,6 +272,16 @@ class ProtectDbTest extends TestCase
             ->assertStatus(200)
             ->assertJsonFragment([
                 'account' => '*encrypted*',
+                'service' => 'test',
+                'group_id' => null,
+                'isConsistent' => false,
+                'otpType' => null,
+                'digits' => null,
+                'hotpCounter' => null,
+                'totpPeriod' => null,
+            ])
+            ->assertJsonMissing([
+                'uri' => '*encrypted*',
             ]);
     }
 
