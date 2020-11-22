@@ -57,7 +57,7 @@ class TwoFAccount extends Model implements Sortable
      *
      * @var OTPHP/TOTP || OTPHP/HOTP
      */
-    protected $otp, $timestamp;
+    protected $otp, $timestamp, $badUri;
 
 
     /**
@@ -70,7 +70,12 @@ class TwoFAccount extends Model implements Sortable
         parent::boot();
 
         static::retrieved(function ($model) {
-            $model->populateFromUri($model->uri);
+            try {
+                $model->populateFromUri($model->uri);
+            }
+            catch( \App\Exceptions\InvalidOtpParameterException $e ) {
+                $model->badUri = true;
+            }
         });
 
         static::saving(function ($model) {
@@ -217,9 +222,7 @@ class TwoFAccount extends Model implements Sortable
 
         }
         catch (\Exception $e) {
-            throw \Illuminate\Validation\ValidationException::withMessages([
-                'qrcode' => __('errors.no_valid_otp')
-            ]);
+            throw new \App\Exceptions\InvalidOtpParameterException;
         }
     }
 
@@ -364,7 +367,7 @@ class TwoFAccount extends Model implements Sortable
      */
     public function getIsConsistentAttribute()
     {
-        return $this->uri === '*encrypted*' || $this->account === '*encrypted*' ? false : true;
+        return $this->uri === '*encrypted*' || $this->account === '*encrypted*' || $this->badUri ? false : true;
     }
 
 
@@ -398,7 +401,12 @@ class TwoFAccount extends Model implements Sortable
      */
     public function getOtpTypeAttribute()
     {
-        return get_class($this->otp) === 'OTPHP\TOTP' ? 'totp' : 'hotp';
+        if( isset($this->otp) ) {
+            return get_class($this->otp) === 'OTPHP\TOTP' ? 'totp' : 'hotp';
+        }
+        else {
+            return null;
+        }
     }
 
 
@@ -410,7 +418,7 @@ class TwoFAccount extends Model implements Sortable
      */
     public function getSecretAttribute()
     {
-        return $this->otp->getSecret();
+        return isset($this->otp) ? $this->otp->getSecret() : null;
     }
 
 
@@ -422,7 +430,7 @@ class TwoFAccount extends Model implements Sortable
      */
     public function getAlgorithmAttribute()
     {
-        return $this->otp->getDigest(); // default is SHA1
+        return isset($this->otp) ? $this->otp->getDigest() : null; // default is SHA1
     }
 
 
@@ -434,7 +442,7 @@ class TwoFAccount extends Model implements Sortable
      */
     public function getDigitsAttribute()
     {
-        return $this->otp->getDigits();    // Default is 6
+        return isset($this->otp) ? $this->otp->getDigits() : null;  // Default is 6
     }
 
 
@@ -458,7 +466,7 @@ class TwoFAccount extends Model implements Sortable
      */
     public function getHotpCounterAttribute()
     {
-        return $this->otpType === 'hotp' ? $this->otp->getCounter() : null;    // Default is 0
+        return isset($this->otp) && $this->otpType === 'hotp' ? $this->otp->getCounter() : null;    // Default is 0
     }
 
 
@@ -482,7 +490,12 @@ class TwoFAccount extends Model implements Sortable
      */
     public function getImageLinkAttribute()
     {
-        return $this->otp->hasParameter('image') ? $this->otp->getParameter('image') : null;
+        if( isset($this->otp) ) {
+            return $this->otp->hasParameter('image') ? $this->otp->getParameter('image') : null;
+        }
+        else {
+            return false;
+        }
     }
 
 }
