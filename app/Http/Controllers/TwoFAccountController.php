@@ -154,7 +154,7 @@ class TwoFAccountController extends Controller
                     }
                 }
             }
-            catch( Exception $e ) {
+            catch( \Exception $e ) {
                 $twofaccount->imageLink = null;
             }
         }
