@@ -48,10 +48,10 @@ class TwoFAccountController extends Controller
         ]);
 
         // Two possible cases :
-        // - The most common case, the uri is provided thanks to a QR code live scan or file upload
+        // - The most common case, the uri is provided by the QuickForm, thanks to a QR code live scan or file upload
         //     -> We use this uri to populate the account
         // - The advanced form has been used and provide no uri but all individual parameters
-        //     -> We use the parameters collection to populate the account
+        //     -> We use the parameters array to populate the account
         $twofaccount = new TwoFAccount;
         $twofaccount->service = $request->service;
         $twofaccount->account = $request->account;
@@ -139,10 +139,10 @@ class TwoFAccountController extends Controller
         // If present, use the imageLink parameter to prefill the icon field
         if( $twofaccount->imageLink ) {
 
-            $chunks = explode('.', $twofaccount->imageLink);
-            $hashFilename = Str::random(40) . '.' . end($chunks);
-
             try {
+
+                $chunks = explode('.', $twofaccount->imageLink);
+                $hashFilename = Str::random(40) . '.' . end($chunks);
 
                 Storage::disk('local')->put('imagesLink/' . $hashFilename, file_get_contents($twofaccount->imageLink));
 
@@ -155,7 +155,7 @@ class TwoFAccountController extends Controller
                 }
             }
             catch( \Exception $e ) {
-                $twofaccount->imageLink = null;
+                // do nothing
             }
         }
 
