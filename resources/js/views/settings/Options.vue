@@ -34,6 +34,22 @@
 
 <script>
 
+    /**
+     *  Options view
+     *  
+     *  route: '/settings'
+     *  
+     *  Allow user to edit any option.
+     *  
+     *  This is the content of the Options tab set in views/settings/index.vue
+     *  The view is a form that automatically post to backend every time a field is changed.
+     *
+     *  All changes are dynamically applied thanks to vue reacivity, except the lang one which force the
+     *  page to reload.
+     *
+     *  inputs : Running options values are passed using the this.$root.appSettings var to feed the form
+     */
+
     import Form from './../../components/Form'
 
     export default {
