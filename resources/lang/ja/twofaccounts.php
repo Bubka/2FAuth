@@ -15,14 +15,13 @@ return [
 
     'service' => 'Service',
     'account' => 'Account',
+    'accounts' => 'Accounts',
     'icon' => 'Icon',
-    'new' => 'New',
     'no_account_here' => 'No 2FA here!',
     'add_first_account' => 'Add your first account',
     'use_full_form' => 'Or use the full form',
     'add_one' => 'Add one',
-    'manage' => 'Manage',
-    'done' => 'Done',
+    'show_qrcode' => 'Show QR code',
     'forms' => [
         'service' => [
             'placeholder' => 'example.com',
@@ -33,8 +32,10 @@ return [
         'new_account' => 'New account',
         'edit_account' => 'Edit account',
         'otp_uri' => 'OTP Uri',
-        'hotp_counter' => 'HOTP Counter',
-        'scan_qrcode' => 'Scan a qrcode',
+        'scan_qrcode' => 'Scan a QR code',
+        'upload_qrcode' => 'Upload a QR code',
+        'use_advanced_form' => 'Use the advanced form',
+        'prefill_using_qrcode' => 'Prefill using a QR Code',
         'use_qrcode' => [
             'val' => 'Use a qrcode',
             'title' => 'Use a QR code to fill the form magically',
@@ -48,9 +49,42 @@ return [
             'title' => 'Lock it',
         ],
         'choose_image' => 'Choose an image…',
-        'create' => 'Create',
-        'save' => 'Save',
         'test' => 'Test',
+        'secret' => [
+            'label' => 'Secret',
+            'help' => 'The key used to generate your security codes'
+        ],
+        'plain_text' => 'Plain text',
+        'otp_type' => [
+            'label' => 'Choose the type of OTP to create',
+            'help' => 'Time-based OTP or HMAC-based OTP'
+        ],
+        'digits' => [
+            'label' => 'Digits',
+            'help' => 'The number of digits of the generated security codes'
+        ],
+        'algorithm' => [
+            'label' => 'Algorithm',
+            'help' => 'The algorithm used to secure your security codes'
+        ],
+        'totpPeriod' => [
+            'label' => 'Period',
+            'placeholder' => 'Default is 30',
+            'help' => 'The period of validity of the generated security codes in second'
+        ],
+        'hotpCounter' => [
+            'label' => 'Counter',
+            'placeholder' => 'Default is 0',
+            'help' => 'The initial counter value',
+            'help_lock' => 'It is risky to edit the counter as you can desynchronize the account with the verification server of the service. Use the lock icon to enable modification, but only if you know for you are doing'
+        ],
+        'image_link' => [
+            'label' => 'Image',
+            'placeholder' => 'http://...',
+            'help' => 'The url of an external image to use as the account icon'
+        ],
+        'options_help' => 'You can leave the following options blank if you don\'t know how to set them. The most commonly used values will be applied.',
+        'alternative_methods' => 'Alternative methods',
     ],
     'stream' => [
         'need_grant_permission' => 'You need to grant camera access permission',

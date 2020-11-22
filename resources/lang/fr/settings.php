@@ -22,7 +22,7 @@ return [
     ],
     'general' => 'General',
     'security' => 'Sécurité',
-    'advanced' => 'Avancés',
+    'data_input' => 'Saisie des données',
     'forms' => [
         'edit_settings' => 'Modifier les réglages',
         'setting_saved' => 'Réglages sauvegardés',
@@ -39,8 +39,8 @@ return [
             'help' => 'Ferme automatiquement le popup affichant le code généré dès que ce dernier a été copié.'
         ],
         'use_basic_qrcode_reader' => [
-            'label' => 'Utiliser le lecteur de qrcode basique',
-            'help' => 'Si vous rencontrez des problèmes lors de la lecture des qrCodes activez cette option pour utiliser un lecteur de qrcode moins évolué mais plus largement compatible'
+            'label' => 'Utiliser le lecteur de QR code basique',
+            'help' => 'Si vous rencontrez des problèmes lors de la lecture des QR codes activez cette option pour utiliser un lecteur de QR code moins évolué mais plus largement compatible'
         ],
         'display_mode' => [
             'label' => 'Mode d\'affichage',
@@ -56,6 +56,22 @@ return [
             'label' => 'Verouillage automatique',
             'help' => 'Déconnecter automatiquement l\'utilisateur en cas d\'inactivité'
         ],
+        'use_encryption' => [
+            'label' => 'Protéger les données sensibles',
+            'help' => 'Les données sensibles, les secrets et les e-mails 2FA, sont stockés chiffrés dans la base de données. Assurez-vous de sauvegarder la valeur APP_KEY de votre fichier env (ou tout le fichier) car il sert de clé de chiffrement. Il n\'y a aucun moyen de déchiffrer les données chiffrées sans cette clé.',
+        ],
+        'default_group' => [
+            'label' => 'Groupe par défaut',
+            'help' => 'Le groupe auquel sont associés les nouveaux comptes',
+        ],
+        'useDirectCapture' => [
+            'label' => 'Saisie directe',
+            'help' => 'Choisissez si vous voulez être invité à choisir un mode de saisie parmi ceux disponibles ou si vous voulez utiliser directement le mode de saisie par défaut',
+        ],
+        'defaultCaptureMode' => [
+            'label' => 'Mode de saisie par défaut',
+            'help' => 'Mode de saisie utilisé par défaut lorsque l\'option Saisie directe est activée',
+        ],
         'never' => 'Jamais',
         'on_token_copy' => 'Après copie d\'un code de sécurité',
         '1_minutes' => 'Après 1 minute',
@@ -65,7 +81,9 @@ return [
         '30_minutes' => 'Après 30 minutes',
         '1_hour' => 'Après 1 heure',
         '1_day' => 'Après 1 journée',
+        'livescan' => 'Scanner avec la caméra',
+        'upload' => 'Téléchargement de QR code',
+        'advanced_form' => 'Formulaire avancé',
     ],
-    
 
 ];

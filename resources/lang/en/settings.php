@@ -39,8 +39,8 @@ return [
             'help' => 'Automatically close the popup showing the generated token after it has been copied'
         ],
         'use_basic_qrcode_reader' => [
-            'label' => 'Use basic qrcode reader',
-            'help' => 'If you experiences issues when capturing qrCodes enables this option to switch to a more basic but more reliable qrcode reader'
+            'label' => 'Use basic QR code reader',
+            'help' => 'If you experiences issues when capturing QR codes enables this option to switch to a more basic but more reliable QR code reader'
         ],
         'display_mode' => [
             'label' => 'Display mode',

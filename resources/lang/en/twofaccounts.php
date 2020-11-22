@@ -32,8 +32,8 @@ return [
         'new_account' => 'New account',
         'edit_account' => 'Edit account',
         'otp_uri' => 'OTP Uri',
-        'scan_qrcode' => 'Scan a qrcode',
-        'upload_qrcode' => 'Upload a qrcode',
+        'scan_qrcode' => 'Scan a QR code',
+        'upload_qrcode' => 'Upload a QR code',
         'use_advanced_form' => 'Use the advanced form',
         'prefill_using_qrcode' => 'Prefill using a QR Code',
         'use_qrcode' => [
@@ -84,6 +84,7 @@ return [
             'help' => 'The url of an external image to use as the account icon'
         ],
         'options_help' => 'You can leave the following options blank if you don\'t know how to set them. The most commonly used values will be applied.',
+        'alternative_methods' => 'Alternative methods',
     ],
     'stream' => [
         'need_grant_permission' => 'You need to grant camera access permission',

@@ -115,7 +115,7 @@ return [
     'timezone' => 'Поле :attribute должно быть действительным часовым поясом.',
     'unique' => 'Такое значение поля :attribute уже существует.',
     'uploaded' => 'Загрузка поля :attribute не удалась.',
-    'url' => 'Поле :attribute имеет ошибочный формат URL.',
+    'url' => 'The :attribute must be a valid url.',
     'uuid' => 'Поле :attribute должно быть корректным UUID.',
 
     /*
@@ -141,7 +141,17 @@ return [
         ],
         'email' => [
             'exists' => 'No account found using this email',
-        ]
+        ],
+        'otpType' => [
+            'required_without' => 'The :attribute field is required.',
+        ],
+        'secret' => [
+            'required_without' => 'The :attribute field is required.',
+        ],
+        'account' => [
+            'required_without' => 'The :attribute field is required.',
+            'regex' => 'The :attribute field must not contain colon.',
+        ],
     ],
 
     /*
