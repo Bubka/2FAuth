@@ -8,8 +8,12 @@
             <form-toggle :choices="layouts" :form="form" fieldName="displayMode" :label="$t('settings.forms.display_mode.label')" :help="$t('settings.forms.display_mode.help')" />
             <!-- show icon -->
             <form-checkbox :form="form" fieldName="showAccountsIcons" :label="$t('settings.forms.show_accounts_icons.label')" :help="$t('settings.forms.show_accounts_icons.help')" />
+
+            <h4 class="title is-4 pt-4">{{ $t('groups.groups') }}</h4>
             <!-- default group -->
             <form-select :options="groups" :form="form" fieldName="defaultGroup" :label="$t('settings.forms.default_group.label')" :help="$t('settings.forms.default_group.help')" />
+            <!-- retain active group -->
+            <form-checkbox :form="form" fieldName="rememberActiveGroup" :label="$t('settings.forms.remember_active_group.label')" :help="$t('settings.forms.remember_active_group.help')" />
 
             <h4 class="title is-4 pt-4">{{ $t('settings.security') }}</h4>
             <!-- auto lock -->
@@ -67,6 +71,7 @@
                     defaultGroup: '',
                     useDirectCapture: null,
                     defaultCaptureMode: '',
+                    rememberActiveGroup: true,
                 }),
                 langs: [
                     { text: this.$t('languages.en'), value: 'en' },

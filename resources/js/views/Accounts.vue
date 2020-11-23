@@ -438,14 +438,16 @@
 
                 this.form.activeGroup = this.$root.appSettings.activeGroup = id
 
-                this.form.post('/api/settings/options', {returnError: true})
-                .then(response => {
-                    // everything's fine
-                })
-                .catch(error => {
-                    
-                    this.$router.push({ name: 'genericError', params: { err: error.response } })
-                });
+                if( this.$root.appSettings.rememberActiveGroup ) {
+                    this.form.post('/api/settings/options', {returnError: true})
+                    .then(response => {
+                        // everything's fine
+                    })
+                    .catch(error => {
+                        
+                        this.$router.push({ name: 'genericError', params: { err: error.response } })
+                    });
+                }
 
                 this.closeGroupSwitch()
             },

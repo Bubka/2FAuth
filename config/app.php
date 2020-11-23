@@ -40,6 +40,7 @@ return [
         'showAccountsIcons' => true,
         'kickUserAfter' => '15',
         'activeGroup' => 0,
+        'rememberActiveGroup' => true,
         'defaultGroup' => 0,
         'useEncryption' => false,
         'defaultCaptureMode' => 'livescan',
