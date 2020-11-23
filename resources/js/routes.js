@@ -4,6 +4,7 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 import Start            from './views/Start'
+import Capture          from './views/Capture'
 import Accounts         from './views/Accounts'
 import CreateAccount    from './views/twofaccounts/Create'
 import EditAccount      from './views/twofaccounts/Edit'
@@ -22,6 +23,7 @@ const router = new Router({
     mode: 'history',
     routes: [
         { path: '/start', name: 'start', component: Start, meta: { requiresAuth: true }, props: true },
+        { path: '/capture', name: 'capture', component: Capture, meta: { requiresAuth: true }, props: true },
 
         { path: '/accounts', name: 'accounts', component: Accounts, meta: { requiresAuth: true }, alias: '/', props: true },
         { path: '/account/create', name: 'createAccount', component: CreateAccount, meta: { requiresAuth: true } },

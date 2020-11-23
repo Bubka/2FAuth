@@ -304,6 +304,9 @@
                 if( this.$root.appSettings.useDirectCapture && this.$root.appSettings.defaultCaptureMode === 'advancedForm' ) {
                     this.$router.push({ name: 'createAccount' })
                 }
+                else if( this.$root.appSettings.useDirectCapture && this.$root.appSettings.defaultCaptureMode === 'livescan' ) {
+                    this.$router.push({ name: 'capture' })
+                }
                 else {
                     this.$router.push({ name: 'start' })
                 }
