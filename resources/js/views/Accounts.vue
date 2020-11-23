@@ -157,7 +157,7 @@
                     <div class="is-clickable has-text-centered" v-if="!editMode">
                         <div class="columns" @click="toggleGroupSwitch">
                             <div class="column" v-if="!showGroupSwitch">
-                                {{ this.activeGroupName }} ({{ this.accounts.length }})
+                                {{ activeGroupName }} ({{ filteredAccounts.length }})
                                 <font-awesome-icon  :icon="['fas', 'caret-down']" />
                             </div>
                             <div class="column" v-else>
@@ -237,9 +237,18 @@
         computed: {
             filteredAccounts: {
                 get: function() {
+
                     return this.accounts.filter(
                         item => {
-                            return item.service.toLowerCase().includes(this.search.toLowerCase()) || item.account.toLowerCase().includes(this.search.toLowerCase());
+                            if( parseInt(this.$root.appSettings.activeGroup) > 0 ) {
+                                return (item.service.toLowerCase().includes(this.search.toLowerCase()) || 
+                                    item.account.toLowerCase().includes(this.search.toLowerCase())) && 
+                                    (item.group_id == parseInt(this.$root.appSettings.activeGroup))
+                            }
+                            else {
+                                return (item.service.toLowerCase().includes(this.search.toLowerCase()) || 
+                                    item.account.toLowerCase().includes(this.search.toLowerCase()))
+                            }
                         }
                     );
                 },
@@ -314,7 +323,8 @@
                             service : data.service,
                             account : data.account ? data.account : '-',
                             icon : data.icon,
-                            isConsistent : data.isConsistent
+                            isConsistent : data.isConsistent,
+                            group_id : data.group_id,
                         })
                     })
                     
@@ -424,24 +434,20 @@
             /**
              * Set the provided group as the active group
              */
-            async setActiveGroup(id) {
+            setActiveGroup(id) {
 
-                this.form.activeGroup = id
+                this.form.activeGroup = this.$root.appSettings.activeGroup = id
 
-                await this.form.post('/api/settings/options', {returnError: true})
+                this.form.post('/api/settings/options', {returnError: true})
                 .then(response => {
-
-                    this.$root.appSettings.activeGroup = response.data.settings.activeGroup
-
-                    this.closeGroupSwitch()
-
+                    // everything's fine
                 })
                 .catch(error => {
                     
                     this.$router.push({ name: 'genericError', params: { err: error.response } })
                 });
 
-                this.fetchAccounts()
+                this.closeGroupSwitch()
             },
 
             /**
