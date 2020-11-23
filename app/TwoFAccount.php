@@ -53,6 +53,17 @@ class TwoFAccount extends Model implements Sortable
 
 
     /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'group_id' => 'integer',
+        'order_column' => 'integer',
+    ];
+
+
+    /**
      *  An OTP object from package Spomky-Labs/otphp
      *
      * @var OTPHP/TOTP || OTPHP/HOTP

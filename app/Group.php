@@ -33,6 +33,16 @@ class Group extends Model
 
 
     /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'twofaccounts_count' => 'integer',
+    ];
+
+
+    /**
      * Get the TwoFAccounts of the group.
      */
     public function twofaccounts()
