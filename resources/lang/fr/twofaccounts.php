@@ -87,13 +87,32 @@ return [
         'alternative_methods' => 'Méthodes alternatives',
     ],
     'stream' => [
-        'need_grant_permission' => 'Vous devez autoriser l\'utilisation de votre caméra',
-        'not_readable' => 'Le scanner ne se charge pas. La caméra est-elle déjà utilisée ?',
-        'no_cam_on_device' => 'Votre équipement ne dispose pas de caméra',
-        'secured_context_required' => 'Contexte sécurisé requis (HTTPS ou localhost)',
+        'live_scan_cant_start' => 'Le scanner ne peut pas démarrer :(',
+        'need_grant_permission' => [
+            'reason' => '2FAuth n\'a pas la permission d\'accéder à votre caméra',
+            'solution' => 'Vous devez autoriser l\'utilisation de l\'appareil photo de votre appareil. Si vous avez déjà refusé et que votre navigateur ne vous le demande plus, veuillez vous référer à la documentation du navigateur pour savoir comment accorder l’autorisation.'
+        ],
+        'not_readable' => [
+            'reason' => 'Impossible de charger le scanner',
+            'solution' => 'La caméra est-elle déjà en cours d\'utilisation ? Assurez-vous qu\'aucune autre application n\'utilise votre appareil photo et réessayez'
+        ],
+        'no_cam_on_device' => [
+            'reason' => 'Votre équipement ne dispose pas de caméra',
+            'solution' => 'Peut-être avez-vous oublié de brancher votre webcam'
+        ],
+        'secured_context_required' => [
+            'reason' => 'Contexte sécurisé requis',
+            'solution' => 'Une connexion sécurisée HTTPS est requise pour utiliser le scanner. Si vous exécutez 2FAuth depuis votre ordinateur, n\'utilisez pas d\'hôte virtuel autre que localhost'
+        ],
         'https_required' => 'HTTPS requis pour utiliser la caméra',
-        'camera_not_suitable' => 'Votre équipement ne dispose pas d\'une caméra adaptée',
-        'stream_api_not_supported' => 'L\'API Stream n\'est pas supportée par votre navigateur'
+        'camera_not_suitable' => [
+            'reason' => 'Votre équipement ne dispose pas d\'une caméra adaptée',
+            'solution' => 'Veuillez utiliser un autre appareil'
+        ],
+        'stream_api_not_supported' => [
+            'reason' => 'L\'API Stream n\'est pas prise en charge dans ce navigateur',
+            'solution' => 'Vous devriez utiliser un navigateur moderne'
+        ],
     ],
     'confirm' => [
         'delete' => 'Etes-vous sûrs de vouloir supprimer le compte ?',

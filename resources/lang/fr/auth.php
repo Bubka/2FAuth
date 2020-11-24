@@ -21,7 +21,7 @@ return [
     'sign_out' => 'Déconnexion',
     'sign_in' => 'Se connecter',
     'register' => 'Créer un compte',
-    'hello' => 'Hi {username} !',
+    'welcome_back_x' => 'Bienvenue {0}',
     'already_authenticated' => 'Déjà authentifié',
     'confirm' => [
         'logout' => 'Etes-vous sûrs de vouloir vous déconnecter ?',
@@ -37,7 +37,7 @@ return [
         'already_register' => 'Déjà enregistré ?',
         'password_do_not_match' => 'Le mot de passe ne correspond pas',
         'forgot_your_password' => 'Mot de passe oublié ?',
-        'request_password_reset' => 'Réinitialiser le mot de passe',
+        'request_password_reset' => 'Réinitialisez-le',
         'reset_password' => 'Mot de passe oublié',
         'no_reset_password_in_demo' => 'Réinitialisation impossible en mode Démo',
         'new_password' => 'Nouveau mot de passe',
@@ -52,6 +52,9 @@ return [
         'edit_account' => 'Mis à jour du profil',
         'profile_saved' => 'Profil mis à jour avec succès !',
         'welcome_to_demo_app_use_those_credentials' => 'bienvenue sur la démo de 2FAuth.<br><br>Vous pouvez vous connecter en utilisant l\'adresse email <strong>demo@2fauth.app</strong> et le mot de passe <strong>demo</demo>',
+        'register_punchline' => 'Bienvenue sur 2FAuth.<br/>
+                Vous avez besoin d\'un compte pour aller plus loin. Remplissez ce formulaire pour vous inscrire et, s\'il vous plaît, choisissez un mot de passe fort, les données 2FA sont sensibles.',
+        'reset_punchline' => '2FAuth vous enverra un lien de réinitialisation de mot de passe à cette adresse. Cliquez sur le lien dans l\'e-mail reçu pour définir un nouveau mot de passe.',
     ],
 
 ];

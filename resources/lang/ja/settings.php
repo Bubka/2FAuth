@@ -72,6 +72,10 @@ return [
             'label' => 'Default input mode',
             'help' => 'Default input mode used when the Direct input option is On',
         ],
+        'remember_active_group' => [
+            'label' => 'Remember group filter',
+            'help' => 'Save the last group filter applied and restore it on your next visit',
+        ],
         'never' => 'Never',
         'on_token_copy' => 'On security code copy',
         '1_minutes' => 'After 1 minute',

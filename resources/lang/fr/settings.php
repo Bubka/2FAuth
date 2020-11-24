@@ -72,6 +72,10 @@ return [
             'label' => 'Mode de saisie par défaut',
             'help' => 'Mode de saisie utilisé par défaut lorsque l\'option Saisie directe est activée',
         ],
+        'remember_active_group' => [
+            'label' => 'Mémoriser le filtrage par groupe',
+            'help' => 'Enregistre le dernier groupe affiché et le restaure lors de votre prochaine visite',
+        ],
         'never' => 'Jamais',
         'on_token_copy' => 'Après copie d\'un code de sécurité',
         '1_minutes' => 'Après 1 minute',
