@@ -1,6 +1,6 @@
 <template>
-    <form-wrapper :title="$t('auth.forms.login')" v-if="userCount === 1">
-        <div v-if="$root.appSettings.isDemoApp" class="notification is-info has-text-centered" v-html="$t('auth.forms.welcome_to_demo_app_use_those_credentials')" />
+    <form-wrapper :title="$t('auth.forms.login')" :punchline="punchline" v-if="userCount === 1">
+        <div v-if="isDemo" class="notification is-info has-text-centered" v-html="$t('auth.forms.welcome_to_demo_app_use_those_credentials')" />
         <form @submit.prevent="handleSubmit" @keydown="form.onKeydown($event)">
             <form-field :form="form" fieldName="email" inputType="email" :label="$t('auth.forms.email')" autofocus />
             <form-field :form="form" fieldName="password" inputType="password" :label="$t('auth.forms.password')" />
@@ -18,11 +18,20 @@
     export default {
         data(){
             return {
+
                 userCount: null,
+                username: '',
+                isDemo: this.$root.appSettings.isDemoApp,
                 form: new Form({
                     email: '',
                     password: ''
                 })
+            }
+        },
+
+        computed : {
+            punchline: function() {
+                return this.isDemo ? '' : this.$t('auth.welcome_back_x', [this.username])
             }
         },
 
@@ -66,6 +75,7 @@
                 }
                 else {
                     vm.userCount = data.userCount
+                    vm.username = data.username
                 }
             });
 

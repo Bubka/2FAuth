@@ -1,8 +1,6 @@
 <template>
-    <form-wrapper :title="$t('auth.register')">
+    <form-wrapper :title="$t('auth.register')" :punchline="$t('auth.forms.register_punchline')">
         <form @submit.prevent="handleSubmit" @keydown="form.onKeydown($event)">
-            <p class="block" v-html="$t('auth.forms.punchline')">
-            </p>
             <form-field :form="form" fieldName="name" inputType="text" :label="$t('auth.forms.name')" autofocus />
             <form-field :form="form" fieldName="email" inputType="email" :label="$t('auth.forms.email')" />
             <form-field :form="form" fieldName="password" inputType="password" :label="$t('auth.forms.password')" />
