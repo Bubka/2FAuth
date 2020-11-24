@@ -176,61 +176,28 @@ class AccountsGroupTest extends TestCase
         $response = $this->actingAs($this->user, 'api')
             ->json('GET', '/api/twofaccounts/1')
             ->assertJsonFragment([
-                'group_id' => (string) $this->group->id
+                'group_id' => $this->group->id
             ]);
 
         $response = $this->actingAs($this->user, 'api')
             ->json('GET', '/api/twofaccounts/2')
             ->assertJsonFragment([
-                'group_id' => (string) $this->group->id
+                'group_id' => $this->group->id
             ]);
 
         $response = $this->actingAs($this->user, 'api')
             ->json('GET', '/api/twofaccounts/3')
             ->assertJsonFragment([
-                'group_id' => (string) $this->group->id
+                'group_id' => $this->group->id
             ]);
 
         // test the accounts count of the user group
         $response = $this->actingAs($this->user, 'api')
             ->json('GET', '/api/groups')
             ->assertJsonFragment([
-                'twofaccounts_count' => '3'
+                'twofaccounts_count' => 3
             ]
         );
-    }
-
-
-    /**
-     * test 2FAccounts are scoped when an active group is set via API
-     *
-     * @test
-     */
-    public function testScopedAccounts()
-    {
-        // Set the default group to the existing one
-        $response = $this->actingAs($this->user, 'api')
-            ->json('POST', '/api/settings/options', [
-                    'activeGroup' => $this->group->id,
-                ])
-            ->assertStatus(200);
-
-        // We associate 2 accounts to the group
-        $response = $this->actingAs($this->user, 'api')
-            ->json('PATCH', '/api/group/accounts/', [
-                    'groupId' => $this->group->id,
-                    'accountsIds' => [1,2]
-                ])
-            ->assertStatus(200);
-
-        // Test accounts index is scoped with active group
-        $response = $this->actingAs($this->user, 'api')
-            ->json('GET', '/api/twofaccounts')
-            ->assertJsonCount(2)
-            ->assertJsonFragment([
-                'id' => 1,
-                'id' => 2
-            ]);
     }
 
 
@@ -284,8 +251,8 @@ class AccountsGroupTest extends TestCase
         $response = $this->actingAs($this->user, 'api')
             ->json('GET', '/api/groups')
             ->assertJsonFragment([
-                'twofaccounts_count' => '3', // the 3 accounts for 'all'
-                'twofaccounts_count' => '2'  // the 2 accounts that remain in the user group
+                'twofaccounts_count' => 3, // the 3 accounts for 'all'
+                'twofaccounts_count' => 2  // the 2 accounts that remain in the user group
             ]
         );
 

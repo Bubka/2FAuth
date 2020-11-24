@@ -100,23 +100,6 @@ class TwoFAccount extends Model implements Sortable
 
 
     /**
-     * Scope a query to only include TwoFAccounts of a given group.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  mixed  $groupId
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeOfGroup($query, $groupId)
-    {
-        if( $groupId ) {
-            return $query->where('group_id', $groupId);
-        }
-
-        return $query;
-    }
-
-
-    /**
      * Sortable settings
      *
      * @var array
