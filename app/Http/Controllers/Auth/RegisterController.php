@@ -33,16 +33,9 @@ class RegisterController extends Controller
      */
     public function checkUser()
     {
-
-        $count = DB::table('users')->count();
         $username = DB::table('users')->where('id', 1)->value('name');
 
-        if( $count === 1 ) {
-            return response()->json(['userCount' => $count, 'username' => $username], 200);
-        }
-        else {
-            return response()->json(['userCount' => $count], 200);
-        }
+        return response()->json(['username' => $username], 200);
     }
 
     /**
