@@ -1,6 +1,6 @@
 <template>
     <div class="columns is-centered">
-        <div class="form-column column is-two-thirds-tablet is-half-desktop is-one-third-widescreen is-one-quarter-fullhd">
+        <div class="form-column column is-two-thirds-tablet is-half-desktop is-one-third-widescreen is-one-third-fullhd">
             <h1 class="title">
                 {{ $t('groups.groups') }}
             </h1>
