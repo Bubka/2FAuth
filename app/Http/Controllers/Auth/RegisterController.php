@@ -49,7 +49,8 @@ class RegisterController extends Controller
     {
         // check if a user already exists
         if( DB::table('users')->count() > 0 ) {
-            return response()->json(['message' => __('errors.already_one_user_registered')], 400);
+            // return response()->json(['message' => __('errors.already_one_user_registered')], 400);
+            throw \Illuminate\Validation\ValidationException::withMessages(['taken' => __('errors.already_one_user_registered')]);
         }
 
         $this->validator($request->all())->validate();

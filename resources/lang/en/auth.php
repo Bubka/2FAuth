@@ -52,6 +52,8 @@ return [
         'edit_account' => 'Edit account',
         'profile_saved' => 'Profile successfully updated!',
         'welcome_to_demo_app_use_those_credentials' => 'Welcome to the 2FAuth demo.<br><br>You can connect using the email address <strong>demo@2fauth.app</strong> and the password <strong>demo</demo>',
+        'punchline' => 'Welcome to 2FAuth.<br/>
+                You need an account to go further. Fill this form to register yourself, and please, choose a strong password, 2FA data are sensitives.',
     ],
 
 ];

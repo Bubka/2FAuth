@@ -1,12 +1,12 @@
 <template>
-    <form-wrapper :title="$t('auth.forms.login')">
+    <form-wrapper :title="$t('auth.forms.login')" v-if="userCount === 1">
         <div v-if="$root.appSettings.isDemoApp" class="notification is-info has-text-centered" v-html="$t('auth.forms.welcome_to_demo_app_use_those_credentials')" />
         <form @submit.prevent="handleSubmit" @keydown="form.onKeydown($event)">
             <form-field :form="form" fieldName="email" inputType="email" :label="$t('auth.forms.email')" autofocus />
             <form-field :form="form" fieldName="password" inputType="password" :label="$t('auth.forms.password')" />
             <form-buttons :isBusy="form.isBusy" :caption="$t('auth.sign_in')" />
         </form>
-        <p>{{ $t('auth.forms.dont_have_account_yet') }}&nbsp;<router-link :to="{ name: 'register' }" class="is-link">{{ $t('auth.register') }}</router-link></p>
+        <p v-if="userCount === 0 ">{{ $t('auth.forms.dont_have_account_yet') }}&nbsp;<router-link :to="{ name: 'register' }" class="is-link">{{ $t('auth.register') }}</router-link></p>
         <p>{{ $t('auth.forms.forgot_your_password') }}&nbsp;<router-link :to="{ name: 'password.request' }" class="is-link">{{ $t('auth.forms.request_password_reset') }}</router-link></p>
     </form-wrapper>
 </template>
@@ -18,6 +18,7 @@
     export default {
         data(){
             return {
+                userCount: null,
                 form: new Form({
                     email: '',
                     password: ''
@@ -56,6 +57,17 @@
             if (localStorage.getItem('jwt')) {
                 return next('/');
             }
+
+            next(async vm => {
+                const { data } = await vm.axios.post('api/checkuser')
+
+                if( data.userCount === 0 ) {
+                    return next({ name: 'register' });
+                }
+                else {
+                    vm.userCount = data.userCount
+                }
+            });
 
             next();
         },
