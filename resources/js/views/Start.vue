@@ -65,6 +65,7 @@
      *
      */
 
+    import Form from './../components/Form'
 
     export default {
         name: 'Start',
@@ -72,6 +73,7 @@
         data(){
             return {
                 accountCount: null,
+                form: new Form(),
             }
         },
 
