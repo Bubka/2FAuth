@@ -4,12 +4,14 @@
             <h1 class="title">
                 {{ $t('groups.groups') }}
             </h1>
-            <p class="is-size-7-mobile">
+            <div class="is-size-7-mobile">
                 {{ $t('groups.manage_groups_legend')}}
-            </p>
-            <router-link class="is-link" :to="{ name: 'createGroup' }">
-                <font-awesome-icon :icon="['fas', 'plus-circle']" /> Create new group
-            </router-link>
+            </div>
+            <div class="mt-3 mb-6">
+                <router-link class="is-link mt-5" :to="{ name: 'createGroup' }">
+                    <font-awesome-icon :icon="['fas', 'plus-circle']" /> Create new group
+                </router-link>
+            </div>
             <div v-for="group in groups" :key="group.id" class="group-item has-text-light is-size-5 is-size-6-mobile">
                 {{ group.name }}
                 <a class="has-text-grey is-pulled-right" @click="deleteGroup(group.id)">
@@ -20,9 +22,9 @@
                 </router-link>
                 <span class="is-family-primary is-size-6 is-size-7-mobile has-text-grey">{{ group.count }} {{ $t('twofaccounts.accounts') }}</span>
             </div>
-            <p class="is-size-7 is-pulled-right" v-if="groups.length > 0">
+            <div class="mt-2 is-size-7 is-pulled-right" v-if="groups.length > 0">
                 {{ $t('groups.deleting_group_does_not_delete_accounts')}}
-            </p>
+            </div>
             <!-- footer -->
             <vue-footer :showButtons="true">
                 <!-- close button -->

@@ -24,13 +24,16 @@
             </vue-footer>
         </div>
         <!-- Group selector -->
-        <div class="container groups with-heading" v-if="showGroupSelector">
-            <div class="columns is-centered">
+        <div class="container group-selector" v-if="showGroupSelector">
+            <div class="columns is-centered is-multiline">
+                <div class="column is-full has-text-centered">
+                    {{ $t('groups.move_selected_to') }}
+                </div>
                 <div class="column is-one-third-tablet is-one-quarter-desktop is-one-quarter-widescreen is-one-quarter-fullhd">
                     <div class="columns is-multiline">
                         <div class="column is-full" v-for="group in groups" :key="group.id">
                             <button class="button is-fullwidth is-dark has-text-light is-outlined" :class="{ 'is-link' : moveAccountsTo === group.id}" @click="moveAccountsTo = group.id">
-                                <span v-if="group.id === 0">
+                                <span v-if="group.id === 0" class="is-italic">
                                     {{ $t('groups.no_group') }}
                                 </span>
                                 <span v-else>
