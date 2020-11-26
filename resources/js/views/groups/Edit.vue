@@ -21,40 +21,29 @@
     export default {
         data() {
             return {
-                groupExists: false,
                 form: new Form({
-                    name: '',
+                    name: this.name,
                 })
             }
         },
 
-        created: function() {
-            this.getGroup();
-        },
+        props: ['id', 'name'],
 
         methods: {
-            async getGroup () {
-
-                const { data } = await this.axios.get('/api/groups/' + this.$route.params.groupId)
-
-                this.form.fill(data)
-                this.groupExists = true
-                
-            },
 
             async updateGroup() {
 
-                await this.form.put('/api/groups/' + this.$route.params.groupId)
+                await this.form.put('/api/groups/' + this.id)
 
                 if( this.form.errors.any() === false ) {
-                    this.$router.push({name: 'groups', params: { InitialEditMode: true }})
+                    this.$router.push({ name: 'groups' })
                 }
 
             },
 
             cancelCreation: function() {
 
-                this.$router.push({name: 'groups', params: { InitialEditMode: true }});
+                this.$router.push({ name: 'groups' });
             },
 
         },

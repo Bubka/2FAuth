@@ -15,10 +15,12 @@
             <div v-if="groups.length > 0">
                 <div v-for="group in groups" :key="group.id" class="group-item has-text-light is-size-5 is-size-6-mobile">
                     {{ group.name }}
+                    <!-- delete icon -->
                     <a class="has-text-grey is-pulled-right" @click="deleteGroup(group.id)">
                         <font-awesome-icon :icon="['fas', 'trash']" />
                     </a>
-                    <router-link :to="{ name: 'editGroup', params: { groupId: group.id }}" class="tag is-dark">
+                    <!-- edit link -->
+                    <router-link :to="{ name: 'editGroup', params: { id: group.id, name: group.name }}" class="tag is-dark">
                         {{ $t('commons.rename') }}
                     </router-link>
                     <span class="is-family-primary is-size-6 is-size-7-mobile has-text-grey">{{ group.count }} {{ $t('twofaccounts.accounts') }}</span>
