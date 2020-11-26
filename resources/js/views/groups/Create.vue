@@ -34,14 +34,14 @@
                 await this.form.post('/api/groups')
 
                 if( this.form.errors.any() === false ) {
-                    this.$router.push({name: 'groups', params: { InitialEditMode: false }});
+                    this.$router.push({ name: 'groups' });
                 }
 
             },
 
             cancelCreation: function() {
 
-                this.$router.push({name: 'groups', params: { InitialEditMode: false }});
+                this.$router.push({ name: 'groups' });
             },
             
         },
