@@ -253,7 +253,7 @@
                 await this.form.post('/api/twofaccounts')
 
                 if( this.form.errors.any() === false ) {
-                    this.$router.push({name: 'accounts', params: { InitialEditMode: false }});
+                    this.$router.push({name: 'accounts', params: { toRefresh: true }});
                 }
 
             },
@@ -273,7 +273,7 @@
                 // clean possible uploaded temp icon
                 this.deleteIcon()
 
-                this.$router.push({name: 'accounts', params: { InitialEditMode: false }});
+                this.$router.push({name: 'accounts'});
             },
 
             async uploadQrcode(event) {

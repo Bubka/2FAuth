@@ -277,12 +277,20 @@
 
         },
 
-        props: ['InitialEditMode'],
+        props: ['initialEditMode', 'toRefresh'],
 
         mounted() {
 
-            this.fetchAccounts()
-            this.fetchGroups()
+            if( this.toRefresh || this.$route.params.isFirstLoad ) {
+                this.fetchAccounts()
+                this.fetchGroups()
+            } else {
+                const accounts = this.$storage.get('accounts', null) // use null as fallback if localstorage is empty
+                !accounts ? this.fetchAccounts() : this.accounts = accounts
+
+                const groups = this.$storage.get('groups', null) // use null as fallback if localstorage is empty
+                !groups ? this.fetchGroups() : this.groups = groups
+            }
 
             // stop OTP generation on modal close
             this.$on('modalClose', function() {
@@ -333,6 +341,8 @@
                             group_id : data.group_id,
                         })
                     })
+
+                    this.$storage.set('accounts', this.accounts)
                     
                     // No account yet, we force user to land on the start view.
                     if( this.accounts.length === 0 ) {
@@ -368,18 +378,6 @@
             saveOrder() {
                 this.drag = false
                 this.axios.patch('/api/twofaccounts/reorder', {orderedIds: this.accounts.map(a => a.id)})
-            },
-
-            /**
-             * Delete the provided account
-             */
-            deleteAccount(id) {
-                if(confirm(this.$t('twofaccounts.confirm.delete'))) {
-                    this.axios.delete('/api/twofaccounts/' + id)
-
-                    // Remove the deleted account from the collection
-                    this.accounts = this.accounts.filter(a => a.id !== id)
-                }
             },
 
             /**
@@ -434,6 +432,8 @@
                             count: data.twofaccounts_count
                         })
                     })
+
+                    this.$storage.set('groups', this.groups)
                 })
             },
 

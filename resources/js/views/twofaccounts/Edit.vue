@@ -206,7 +206,7 @@
                 await this.form.put('/api/twofaccounts/' + this.$route.params.twofaccountId)
 
                 if( this.form.errors.any() === false ) {
-                    this.$router.push({name: 'accounts', params: { InitialEditMode: true }})
+                    this.$router.push({name: 'accounts', params: { InitialEditMode: true, toRefresh: true }})
                 }
 
             },

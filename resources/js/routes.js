@@ -32,7 +32,7 @@ const router = new Router({
 
         { path: '/groups', name: 'groups', component: Groups, meta: { requiresAuth: true }, props: true },
         { path: '/group/create', name: 'createGroup', component: CreateGroup, meta: { requiresAuth: true } },
-        { path: '/group/edit/:groupId', name: 'editGroup', component: EditGroup, meta: { requiresAuth: true } },
+        { path: '/group/edit/:groupId', name: 'editGroup', component: EditGroup, meta: { requiresAuth: true }, props: true },
 
         { path: '/settings', name: 'settings', component: Settings, meta: { requiresAuth: true } },
 
@@ -48,7 +48,16 @@ const router = new Router({
     ],
 });
 
-router.beforeEach((to, from, next) => {
+let isFirstLoad = true;
+
+router.beforeEach((to, from, next) => {   
+
+    if( to.name === 'accounts') {
+        to.params.isFirstLoad = isFirstLoad ? true : false
+        isFirstLoad = false;
+    }
+    
+
     if (to.matched.some(record => record.meta.requiresAuth)) {
         // Accesses to restricted pages without a jwt token are routed to the login page
         if ( !localStorage.getItem('jwt') ) {
@@ -61,9 +70,11 @@ router.beforeEach((to, from, next) => {
             next()
         }
     }
-    else {
-        next()
-    }
+    else next()
+});
+
+router.afterEach(to => {
+    Vue.$storage.set('lastRoute', to.name)
 });
 
 export default router

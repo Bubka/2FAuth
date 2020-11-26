@@ -55,7 +55,10 @@
         },
 
         mounted() {
-
+            // Load groups for localstorage at first to avoid latency
+            const groups = this.$storage.get('groups', null) // use null as fallback if localstorage is empty
+            
+            if( groups ) this.groups = groups
             this.fetchGroups()
         },
 
@@ -64,13 +67,17 @@
             async fetchGroups() {
 
                 await this.axios.get('api/groups').then(response => {
+                    const groups = []
+
                     response.data.forEach((data) => {
-                        this.groups.push({
+                        groups.push({
                             id : data.id,
                             name : data.name,
                             count: data.twofaccounts_count
                         })
                     })
+
+                    this.groups = groups
                 })
 
                 // Remove the pseudo 'All' group
@@ -87,6 +94,13 @@
             }
 
         },
+
+        beforeRouteLeave(to, from, next) {
+            // Refresh localstorage
+            this.$storage.set('groups', this.groups)
+
+            next()
+        }
 
     }
 </script>
