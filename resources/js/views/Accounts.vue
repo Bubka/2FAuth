@@ -346,7 +346,7 @@
                     })
 
                     if ( this.accounts.length > 0 && !objectEquals(accounts, this.accounts) ) {
-                        this.$notify({ type: 'is-warning', text: '<span class="is-size-7">' + this.$t('commons.some_data_have_changed') + '</span><br /><a href="." class="button is-rounded is-dark is-small">' + this.$t('commons.reload') + '</a>', duration:-1, closeOnClick: false })
+                        this.$notify({ type: 'is-dark', text: '<span class="is-size-7">' + this.$t('commons.some_data_have_changed') + '</span><br /><a href="." class="button is-rounded is-warning is-small">' + this.$t('commons.reload') + '</a>', duration:-1, closeOnClick: false })
                     }
                     else if( this.accounts.length === 0 && accounts.length === 0 ) {
                         // No account yet, we force user to land on the start view.
