@@ -51,6 +51,7 @@
         data() {
             return {
                 groups : [],
+                TheAllGroup : null,
             }
         },
 
@@ -58,7 +59,13 @@
             // Load groups for localstorage at first to avoid latency
             const groups = this.$storage.get('groups', null) // use null as fallback if localstorage is empty
             
-            if( groups ) this.groups = groups
+            // We don't want the pseudo group 'All' to be managed so we shift it
+            if( groups ) {
+                this.groups = groups
+                this.TheAllGroup = this.groups.shift()
+            }
+
+            // we refresh the collection whatever
             this.fetchGroups()
         },
 
@@ -77,11 +84,11 @@
                         })
                     })
 
+                    // Remove the pseudo 'All' group
+                    this.TheAllGroup = groups.shift()
+
                     this.groups = groups
                 })
-
-                // Remove the pseudo 'All' group
-                this.groups.shift()
             },
 
             deleteGroup(id) {
@@ -96,6 +103,7 @@
         },
 
         beforeRouteLeave(to, from, next) {
+            this.groups.unshift(this.TheAllGroup)
             // Refresh localstorage
             this.$storage.set('groups', this.groups)
 
