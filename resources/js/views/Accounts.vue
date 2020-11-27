@@ -217,6 +217,7 @@
     import TokenDisplayer from '../components/TokenDisplayer'
     import draggable from 'vuedraggable'
     import Form from './../components/Form'
+    import objectEquals from 'object-equals'
 
     export default {
         data(){
@@ -281,16 +282,18 @@
 
         mounted() {
 
-            if( this.toRefresh || this.$route.params.isFirstLoad ) {
-                this.fetchAccounts()
-                this.fetchGroups()
-            } else {
+            // we don't have to fetch fresh data so we try to load them from localstorage to avoid display latency
+            if( !this.toRefresh && !this.$route.params.isFirstLoad ) {
                 const accounts = this.$storage.get('accounts', null) // use null as fallback if localstorage is empty
-                !accounts ? this.fetchAccounts() : this.accounts = accounts
+                if( accounts ) this.accounts = accounts
 
                 const groups = this.$storage.get('groups', null) // use null as fallback if localstorage is empty
-                !groups ? this.fetchGroups() : this.groups = groups
+                if( groups ) this.groups = groups
             }
+
+            // we fetch fresh data whatever. The user will be notified to reload the page if there are any data changes
+            this.fetchAccounts()
+            this.fetchGroups()
 
             // stop OTP generation on modal close
             this.$on('modalClose', function() {
@@ -324,15 +327,15 @@
             },
 
             /**
-             * Populate the view with existing accounts
+             * Fetch accounts from db
              */
             fetchAccounts() {
-                this.accounts = []
+                let accounts = []
                 this.selectedAccounts = []
 
                 this.axios.get('api/twofaccounts').then(response => {
                     response.data.forEach((data) => {
-                        this.accounts.push({
+                        accounts.push({
                             id : data.id,
                             service : data.service,
                             account : data.account ? data.account : '-',
@@ -342,11 +345,16 @@
                         })
                     })
 
-                    this.$storage.set('accounts', this.accounts)
-                    
-                    // No account yet, we force user to land on the start view.
-                    if( this.accounts.length === 0 ) {
+                    if ( this.accounts.length > 0 && !objectEquals(accounts, this.accounts) ) {
+                        this.$notify({ type: 'is-warning', text: '<span class="is-size-7">' + this.$t('commons.some_data_have_changed') + '</span><br /><a href="." class="button is-rounded is-dark is-small">' + this.$t('commons.reload') + '</a>', duration:-1, closeOnClick: false })
+                    }
+                    else if( this.accounts.length === 0 && accounts.length === 0 ) {
+                        // No account yet, we force user to land on the start view.
                         this.$router.push({ name: 'start' });
+                    }
+                    else {
+                        this.accounts = accounts
+                        this.$storage.set('accounts', this.accounts)
                     }
                 })
             },
@@ -421,17 +429,21 @@
              * Get the existing group list
              */
             fetchGroups() {
-                this.groups = []
+                let groups = []
 
                 this.axios.get('api/groups').then(response => {
                     response.data.forEach((data) => {
-                        this.groups.push({
+                        groups.push({
                             id : data.id,
                             name : data.name,
                             isActive: data.isActive,
                             count: data.twofaccounts_count
                         })
                     })
+
+                    if ( !objectEquals(groups, this.groups) ) {
+                        this.groups = groups
+                    } 
 
                     this.$storage.set('groups', this.groups)
                 })
