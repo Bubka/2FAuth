@@ -69,14 +69,14 @@
                         <div :class="[$root.appSettings.displayMode === 'grid' ? 'tfa-grid' : 'tfa-list']" class="column is-narrow has-text-white" v-for="account in filteredAccounts" :key="account.id">
                             <div class="tfa-container">
         	                    <transition name="slideCheckbox">
-        	                        <div class="tfa-checkbox" v-if="editMode">
+        	                        <div class="tfa-cell tfa-checkbox" v-if="editMode">
         	                            <div class="field">
         	                                <input class="is-checkradio is-small is-white" :id="'ckb_' + account.id" :value="account.id" type="checkbox" :name="'ckb_' + account.id" v-model="selectedAccounts">
         	                                <label :for="'ckb_' + account.id"></label>
         	                            </div>
         	                        </div>
         	                    </transition>
-                                <div class="tfa-content is-size-3 is-size-4-mobile" @click.stop="showAccount(account)">  
+                                <div class="tfa-cell tfa-content is-size-3 is-size-4-mobile" @click.stop="showAccount(account)">  
                                     <div class="tfa-text has-ellipsis">
                                         <img :src="'/storage/icons/' + account.icon" v-if="account.icon && $root.appSettings.showAccountsIcons">
                                         {{ account.service }}<font-awesome-icon class="has-text-danger is-size-5 ml-2" v-if="$root.appSettings.useEncryption && account.isConsistent === false" :icon="['fas', 'exclamation-circle']" />
@@ -84,7 +84,7 @@
                                     </div>
                                 </div>
         	                    <transition name="fadeInOut">
-        	                        <div class="tfa-edit has-text-grey" v-if="editMode">
+        	                        <div class="tfa-cell tfa-edit has-text-grey" v-if="editMode">
                                         <!-- <div class="tags has-addons"> -->
                                             <router-link :to="{ name: 'editAccount', params: { twofaccountId: account.id }}" class="tag is-dark is-rounded mr-1">
                                             {{ $t('commons.edit') }}
@@ -96,7 +96,7 @@
         	                        </div>
         	                    </transition>
                                 <transition name="fadeInOut">
-                                    <div class="tfa-dots has-text-grey" v-if="editMode">
+                                    <div class="tfa-cell tfa-dots has-text-grey" v-if="editMode">
                                         <font-awesome-icon :icon="['fas', 'bars']" />
                                     </div>
                                 </transition>
