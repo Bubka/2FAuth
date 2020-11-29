@@ -42,6 +42,11 @@
                             </button>
                         </div>
                     </div>
+                    <div class="columns is-centered">
+                        <div class="column has-text-centered">
+                            <router-link :to="{ name: 'groups' }" >{{ $t('groups.manage_groups') }}</router-link>
+                        </div>
+                    </div>
                 </div>
             </div>
             <vue-footer :showButtons="true">
