@@ -1,4 +1,29 @@
 # Change log
+## [2.0.0] - 2020-11-29
+
+2FAuth goes to v2.0!
+
+This release comes with multiple improvements and a lot of changes under the hood.
+Don't forget to backup your database before you upgrade. Have fun :)
+
+### Added
+- Add Groups to enhance accounts management
+- New advanced form to define fully customized accounts without QR code
+- New user option to skip the submitting page
+- New DB protection option to encrypt sensitive 2FA data
+- QR code generation of recorded accounts
+- Support of the OTP `image` parameter when a QR code is imported
+
+### Changed
+- Performance improvement thanks to data caching
+- Show Register/Login forms and their links only when relevant
+- Let the user choose between all available submitting methods (livescan, qrcode upload, advanced form)
+- Translations are now managed on [Crowdin.com/2fauth](https://crowdin.com/project/2fauth). You master some foreign languages? Why not help translate 2FAuth, your help would be welcome.
+
+### Fixed
+- [issue #13](https://github.com/Bubka/2FAuth/issues/13) Long Service name push content out of viewport
+- [issue #11](https://github.com/Bubka/2FAuth/issues/11) Token generation do not loop if TOTP period is different from 30s
+- [issue #9](https://github.com/Bubka/2FAuth/issues/9) Upload QR code in standard form return a 422 missing uri field
 
 ## [1.3.1] - 2020-10-12
 
