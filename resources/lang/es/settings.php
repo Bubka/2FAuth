@@ -13,47 +13,47 @@ return [
     |
     */
 
-    'settings' => 'Settings',
-    'account' => 'Account',
-    'password' => 'Password',
-    'options' => 'Options',
+    'settings' => 'Configuración',
+    'account' => 'Cuenta',
+    'password' => 'Contraseña',
+    'options' => 'Opciones',
     'confirm' => [
 
     ],
     'general' => 'General',
-    'security' => 'Security',
-    'data_input' => 'Data input',
+    'security' => 'Seguridad',
+    'data_input' => 'Datos de entrada',
     'forms' => [
-        'edit_settings' => 'Edit settings',
-        'setting_saved' => 'Settings saved',
+        'edit_settings' => 'Modificar configuración',
+        'setting_saved' => 'Ajustes guardados',
         'language' => [
-            'label' => 'Language',
-            'help' => 'Change the language used to translate the app interface.'
+            'label' => 'Idioma',
+            'help' => 'Cambiar el idioma utilizado para traducir la interfaz de la aplicación.'
         ],
         'show_token_as_dot' => [
-            'label' => 'Show generated tokens as dot',
-            'help' => 'Replace generated token caracters with *** to ensure confidentiality. Do not affect the copy/paste feature.'
+            'label' => 'Mostrar tokens generados como punto',
+            'help' => 'Sustituya los carácteres de token generados por *** para asegurar la confidencialidad. No afecta a la función de copiar/pegar.'
         ],
         'close_token_on_copy' => [
-            'label' => 'Close token after copy',
-            'help' => 'Automatically close the popup showing the generated token after it has been copied'
+            'label' => 'Cerrar token después de la copia',
+            'help' => 'Cerrar automáticamente la ventana emergente mostrando el token generado después de que ha sido copiado'
         ],
         'use_basic_qrcode_reader' => [
-            'label' => 'Use basic QR code reader',
-            'help' => 'If you experiences issues when capturing QR codes enables this option to switch to a more basic but more reliable QR code reader'
+            'label' => 'Usar lector de código QR básico',
+            'help' => 'Si experimenta problemas al capturar códigos QR habilita esta opción para cambiar a un lector de código QR más básico pero más fiable'
         ],
         'display_mode' => [
-            'label' => 'Display mode',
-            'help' => 'Choose whether you want accounts to be displayed as a list or as a grid'
+            'label' => 'Modo de visualización',
+            'help' => 'Elija si desea que las cuentas se muestren como una lista o como una cuadrícula'
         ],
-        'grid' => 'Grid',
-        'list' => 'List',
+        'grid' => 'Cuadrícula',
+        'list' => 'Lista',
         'show_accounts_icons' => [
-            'label' => 'Show icons',
-            'help' => 'Show icons accounts in the main view'
+            'label' => 'Mostrar iconos',
+            'help' => 'Mostar iconos de aplicaciones en la vista principal'
         ],
         'auto_lock' => [
-            'label' => 'Auto lock',
+            'label' => 'Bloqueo automático',
             'help' => 'Log out the user automatically in case of inactivity'
         ],
         'use_encryption' => [

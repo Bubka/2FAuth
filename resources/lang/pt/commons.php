@@ -34,4 +34,6 @@ return [
     'all' => 'All',
     'rename' => 'Rename',
     'options' => 'Options',
+    'reload' => 'Reload',
+    'some_data_have_changed' => 'Some data have changed. You should'
 ];

@@ -52,28 +52,28 @@ return [
         'test' => 'Test',
         'secret' => [
             'label' => 'Secret',
-            'help' => 'The key used to generate your security codes'
+            'help' => 'La clave utilizada para generar sus códigos de seguridad'
         ],
-        'plain_text' => 'Plain text',
+        'plain_text' => 'Texto plano',
         'otp_type' => [
-            'label' => 'Choose the type of OTP to create',
+            'label' => 'Elija el tipo de OTP a crear',
             'help' => 'Time-based OTP or HMAC-based OTP'
         ],
         'digits' => [
-            'label' => 'Digits',
-            'help' => 'The number of digits of the generated security codes'
+            'label' => 'Dígitos',
+            'help' => 'El número de dígitos del código de seguridad generado'
         ],
         'algorithm' => [
-            'label' => 'Algorithm',
-            'help' => 'The algorithm used to secure your security codes'
+            'label' => 'Algorítmo',
+            'help' => 'El algoritmo usado para proteger sus códigos de seguridad'
         ],
         'totpPeriod' => [
-            'label' => 'Period',
-            'placeholder' => 'Default is 30',
+            'label' => 'Plazo',
+            'placeholder' => 'Por defecto es 30',
             'help' => 'The period of validity of the generated security codes in second'
         ],
         'hotpCounter' => [
-            'label' => 'Counter',
+            'label' => 'Contador',
             'placeholder' => 'Default is 0',
             'help' => 'The initial counter value',
             'help_lock' => 'It is risky to edit the counter as you can desynchronize the account with the verification server of the service. Use the lock icon to enable modification, but only if you know for you are doing'

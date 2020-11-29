@@ -34,4 +34,6 @@ return [
     'all' => 'Tous',
     'rename' => 'Renommer',
     'options' => 'Options',
+    'reload' => 'Actualiser',
+    'some_data_have_changed' => 'Certaines données ont été modifiées. Vous devriez'
 ];
