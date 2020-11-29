@@ -29,7 +29,7 @@
                     {{ $t('groups.deleting_group_does_not_delete_accounts')}}
                 </div>
             </div>
-            <div v-else class="has-text-centered">
+            <div v-if="isFetching && groups.length === 0" class="has-text-centered">
                 <span class="is-size-4">
                     <font-awesome-icon :icon="['fas', 'spinner']" spin />
                 </span>
@@ -52,6 +52,7 @@
             return {
                 groups : [],
                 TheAllGroup : null,
+                isFetching: false,
             }
         },
 
@@ -73,6 +74,8 @@
 
             async fetchGroups() {
 
+                this.isFetching = true
+
                 await this.axios.get('api/groups').then(response => {
                     const groups = []
 
@@ -89,6 +92,8 @@
 
                     this.groups = groups
                 })
+
+                this.isFetching = false
             },
 
             deleteGroup(id) {
