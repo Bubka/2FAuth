@@ -38,9 +38,15 @@ Route::group(['middleware' => 'auth:api'], function() {
 
     Route::delete('twofaccounts/batch', 'TwoFAccountController@batchDestroy');
     Route::patch('twofaccounts/reorder', 'TwoFAccountController@reorder');
+    Route::post('twofaccounts/preview', 'TwoFAccountController@preview');
+    Route::get('twofaccounts/{twofaccount}/withSensitive', 'TwoFAccountController@showWithSensitive');
+    Route::get('twofaccounts/count', 'TwoFAccountController@count');
+    Route::post('twofaccounts/token', 'TwoFAccountController@token');
     Route::apiResource('twofaccounts', 'TwoFAccountController');
-    Route::post('twofaccounts/otp', 'TwoFAccountController@generateOTP')->name('twofaccounts.generateOTP');
+    Route::patch('group/accounts', 'GroupController@associateAccounts');
+    Route::apiResource('groups', 'GroupController');
     Route::post('qrcode/decode', 'QrCodeController@decode');
+    Route::get('qrcode/{twofaccount}', 'QrCodeController@show');
     Route::post('icon/upload', 'IconController@upload');
     Route::delete('icon/delete/{icon}', 'IconController@delete');
 

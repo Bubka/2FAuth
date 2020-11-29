@@ -22,7 +22,7 @@ return [
     ],
     'general' => 'General',
     'security' => 'Security',
-    'advanced' => 'Advanced',
+    'data_input' => 'Data input',
     'forms' => [
         'edit_settings' => 'Edit settings',
         'setting_saved' => 'Settings saved',
@@ -39,8 +39,8 @@ return [
             'help' => 'Automatically close the popup showing the generated token after it has been copied'
         ],
         'use_basic_qrcode_reader' => [
-            'label' => 'Use basic qrcode reader',
-            'help' => 'If you experiences issues when capturing qrCodes enables this option to switch to a more basic but more reliable qrcode reader'
+            'label' => 'Use basic QR code reader',
+            'help' => 'If you experiences issues when capturing QR codes enables this option to switch to a more basic but more reliable QR code reader'
         ],
         'display_mode' => [
             'label' => 'Display mode',
@@ -56,6 +56,26 @@ return [
             'label' => 'Auto lock',
             'help' => 'Log out the user automatically in case of inactivity'
         ],
+        'use_encryption' => [
+            'label' => 'Protect sensible data',
+            'help' => 'Sensitive data, the 2FA secrets and emails, are stored encrypted in database. Be sure to backup the APP_KEY value of your .env file (or the whole file) as it serves as key encryption. There is no way to decypher encrypted data without this key.',
+        ],
+        'default_group' => [
+            'label' => 'Default group',
+            'help' => 'The group to which the newly created accounts are associated',
+        ],
+        'useDirectCapture' => [
+            'label' => 'Direct input',
+            'help' => 'Choose whether you want to be prompted to choose an input mode among those available or if you want to directly use the default input mode',
+        ],
+        'defaultCaptureMode' => [
+            'label' => 'Default input mode',
+            'help' => 'Default input mode used when the Direct input option is On',
+        ],
+        'remember_active_group' => [
+            'label' => 'Remember group filter',
+            'help' => 'Save the last group filter applied and restore it on your next visit',
+        ],
         'never' => 'Never',
         'on_token_copy' => 'On security code copy',
         '1_minutes' => 'After 1 minute',
@@ -65,7 +85,9 @@ return [
         '30_minutes' => 'After 30 minutes',
         '1_hour' => 'After 1 hour',
         '1_day' => 'After 1 day',
+        'livescan' => 'QR code livescan',
+        'upload' => 'QR code upload',
+        'advanced_form' => 'Advanced form',
     ],
-    
 
 ];

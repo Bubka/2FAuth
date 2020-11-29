@@ -14,9 +14,7 @@ Vue.mixin({
 
             await this.axios.get('api/logout')
 
-            localStorage.removeItem('jwt')
-            localStorage.removeItem('user')
-
+            this.$storage.clear()
             delete this.axios.defaults.headers.common['Authorization']
 
             this.$router.push({ name: 'login' })

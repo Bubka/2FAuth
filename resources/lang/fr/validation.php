@@ -115,7 +115,7 @@ return [
     'timezone' => 'Le champ :attribute doit être un fuseau horaire valide.',
     'unique' => 'La valeur du champ :attribute est déjà utilisée.',
     'uploaded' => 'Le fichier du champ :attribute n\'a pu être téléversé.',
-    'url' => 'Le format de l\'URL de :attribute n\'est pas valide.',
+    'url' => 'Le champ :attribute doit être une url valide.',
     'uuid' => 'Le champ :attribute doit être un UUID valide',
 
     /*
@@ -141,7 +141,17 @@ return [
         ],
         'email' => [
             'exists' => 'Aucun compte utilisateur n\'utilise cette email',
-        ]
+        ],
+        'otpType' => [
+            'required_without' => 'Le champ :attribute est obligatoire.',
+        ],
+        'secret' => [
+            'required_without' => 'Le champ :attribute est obligatoire.',
+        ],
+        'account' => [
+            'required_without' => 'Le champ :attribute est obligatoire.',
+            'regex' => 'Le champ :attribute ne doit pas contenir de deux-points.',
+        ],
     ],
 
     /*

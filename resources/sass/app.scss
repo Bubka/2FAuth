@@ -51,13 +51,34 @@ a:hover {
   }
 }
 
+.group-item {
+  border-bottom: 1px solid hsl(0, 0%, 21%);
+  padding: 0.75rem;
+}
+
+.group-item:first-of-type {
+  margin-top: 2.5rem;
+}
+
+.group-item span {
+  display: block;
+}
+
 .accounts {
-  margin-top: 40px;
+  margin-top: 64px;
+}
+
+.groups {
+  margin-top: 110px;
+}
+
+.group-selector {
+  margin-top: 55px;
 }
 
 @media screen and (min-width: 769px) {
   .accounts {
-    margin-top: 60px;
+    margin-top: 84px;
   }
 }
 
@@ -82,10 +103,6 @@ a:hover {
   padding-top: 1.5rem !important;
 }
 
-#otp {
-    cursor: pointer;
-}
-
 .modal-background {
   background-color: hsl(0, 0%, 14%) !important;
 }
@@ -98,7 +115,7 @@ a:hover {
     border-radius: 6px;
     text-align: center;
     background-color: hsl(0, 0%, 10%); /*black-bis from Bulma*/
-    padding: 0.75rem 1.5rem;
+    padding: 0.75rem 3rem;
     margin: 0.5rem;
 }
 
@@ -138,7 +155,7 @@ a:hover {
 
 .tfa-grid .tfa-container {
   flex-direction: column;
-  padding: 0 1.5rem;
+  // padding: 0 1.5rem;
 }
 
 .tfa-list .tfa-container {
@@ -146,26 +163,32 @@ a:hover {
   padding: 0;
 }
 
-.tfa-list .tfa-container > div:first-of-type {
-    padding: 0 0 0 0.5rem;
-}
+// .tfa-list .tfa-container > div:first-of-type {
+//     padding: 0 0 0 0.5rem;
+// }
 
-.tfa-list .tfa-container > div:last-of-type {
-    padding: 0 1rem 0 0;
+// .tfa-list .tfa-container > div:last-of-type {
+//     padding: 0 1rem 0 0;
+// }
+
+.tfa-cell {
+  display: flex;
 }
 
 .tfa-grid .tfa-checkbox,
 .tfa-grid .tfa-dots,
 .tfa-grid .tfa-edit {
-  display: flex;
   align-items: center;
   padding: 0.5rem 0 0 0;
+}
+
+.tfa-grid .tfa-checkbox {
+  padding: 0;
 }
 
 .tfa-list .tfa-checkbox,
 .tfa-list .tfa-dots,
 .tfa-list .tfa-edit {
-  display: flex;
   align-items: center;
     padding: 0
 }
@@ -174,12 +197,16 @@ a:hover {
   margin-left: 1.5rem;
 }
 
-.tfa-grid .tfa-content {
+.tfa-content {
     flex-grow: 1;
     overflow: hidden;
 }
+
+// .tfa-grid .tfa-content {
+// }
+
 .tfa-list .tfa-content {
-    width: 100%;
+    padding-right: 1rem;
 }
 
 .tfa-dots {
@@ -194,7 +221,7 @@ a:hover {
 
 .tfa-text {
     display: block;
-    max-width: 300px;
+    // max-width: 300px;
     cursor: pointer;
 }
 
@@ -214,6 +241,7 @@ a:hover {
   left: 0;
   width: 100%;
   height: 65%;
+  padding: 2%;
 }
 
 /* Corner borders */
@@ -297,23 +325,17 @@ figure.no-icon {
   background: hsl(0, 0%, 7%);  /* grey */
 }
 
-.dots li:nth-child(-n+27) {
+.dots li:nth-child(-n+9) {
   background: hsl(48, 100%, 67%); /* yellow */
 }
 
-.dots li:nth-child(-n+18) {
+.dots li:nth-child(-n+6) {
   background: hsl(141, 71%, 48%); /* green */
 }
 
-.dots li:nth-child(3n+2), .dots li:nth-child(3n+3) {
-    //background-color: black;
-    display:none;
-}
-
-.dots li:last-child() {
-    // background-color: black;
-    //display:none;
-}
+// .dots li:nth-child(3n+2), .dots li:nth-child(3n+3) {
+//     display:none;
+// }
 
 .input, .select select, .textarea {
   background-color: hsl(0, 0%, 21%);
@@ -347,6 +369,15 @@ figure.no-icon {
 
 .label {
   color: hsl(0, 0%, 48%);
+}
+
+.is-toggle.buttons,
+.is-toggle.buttons a.button {
+  margin-bottom: 0 !important;
+}
+
+.has-uppercased-button .is-toggle {
+  text-transform: uppercase !important;
 }
 
 .control.has-icons-left .icon, .control.has-icons-right .icon {
@@ -603,7 +634,7 @@ footer .field.is-grouped {
 
 @keyframes addLeftOffset {
   from {
-    transform: translateX(-2.875rem);
+    transform: translateX(-2.375rem);
   }
   to {
     transform: translateX(0);
@@ -647,7 +678,7 @@ footer .field.is-grouped {
     transform: translateX(0);
   }
   to {
-    transform: translateX(-2.875rem);
+    transform: translateX(-2.375rem);
   }
 }
 

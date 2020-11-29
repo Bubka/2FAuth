@@ -21,7 +21,7 @@ return [
     'sign_out' => 'Sign out',
     'sign_in' => 'Sign in',
     'register' => 'Register',
-    'hello' => 'Hi {username} !',
+    'welcome_back_x' => 'Welcome back {0}',
     'already_authenticated' => 'Already authenticated',
     'confirm' => [
         'logout' => 'Are you sure you want to log out?',
@@ -37,7 +37,7 @@ return [
         'already_register' => 'Already registered?',
         'password_do_not_match' => 'Password do not match',
         'forgot_your_password' => 'Forgot your password?',
-        'request_password_reset' => 'Request a password reset',
+        'request_password_reset' => 'Reset it',
         'reset_password' => 'Reset password',
         'no_reset_password_in_demo' => 'No reset in Demo mode',
         'new_password' => 'New password',
@@ -52,6 +52,9 @@ return [
         'edit_account' => 'Edit account',
         'profile_saved' => 'Profile successfully updated!',
         'welcome_to_demo_app_use_those_credentials' => 'Welcome to the 2FAuth demo.<br><br>You can connect using the email address <strong>demo@2fauth.app</strong> and the password <strong>demo</demo>',
+        'register_punchline' => 'Welcome to 2FAuth.<br/>
+                You need an account to go further. Fill this form to register yourself, and please, choose a strong password, 2FA data are sensitives.',
+        'reset_punchline' => '2FAuth will send you a password reset link to this address. Click the link in the received email to set a new password.',
     ],
 
 ];

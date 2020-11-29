@@ -115,7 +115,7 @@ return [
     'timezone' => 'El :attribute debe ser una zona válida.',
     'unique' => 'El campo :attribute ya ha sido registrado.',
     'uploaded' => 'Subir :attribute ha fallado.',
-    'url' => 'El formato :attribute es inválido.',
+    'url' => 'The :attribute must be a valid url.',
     'uuid' => 'El campo :attribute debe ser un UUID válido.',
 
     /*
@@ -141,7 +141,17 @@ return [
         ],
         'email' => [
             'exists' => 'No account found using this email',
-        ]
+        ],
+        'otpType' => [
+            'required_without' => 'The :attribute field is required.',
+        ],
+        'secret' => [
+            'required_without' => 'The :attribute field is required.',
+        ],
+        'account' => [
+            'required_without' => 'The :attribute field is required.',
+            'regex' => 'The :attribute field must not contain colon.',
+        ],
     ],
 
     /*

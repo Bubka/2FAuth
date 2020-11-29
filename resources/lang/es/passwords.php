@@ -21,6 +21,6 @@ return [
     'user' => "No podemos encontrar ningún usuario con ese correo electrónico.",
 
     // 2FAuth
-    'password' => 'Passwords must be at least eight characters and match the confirmation.',
+    'password' => 'La contraseña debe tener al menos ocho caracteres y coincidir con la confirmación de contraseña.',
     
 ];

@@ -115,7 +115,7 @@ return [
     'timezone' => ':attribute 必须是一个合法的时区值。',
     'unique' => ':attribute 已经存在。',
     'uploaded' => ':attribute 上传失败。',
-    'url' => ':attribute 格式不正确。',
+    'url' => 'The :attribute must be a valid url.',
     'uuid' => ':attribute 必须是有效的 UUID。',
 
     /*
@@ -141,7 +141,17 @@ return [
         ],
         'email' => [
             'exists' => 'No account found using this email',
-        ]
+        ],
+        'otpType' => [
+            'required_without' => 'The :attribute field is required.',
+        ],
+        'secret' => [
+            'required_without' => 'The :attribute field is required.',
+        ],
+        'account' => [
+            'required_without' => 'The :attribute field is required.',
+            'regex' => 'The :attribute field must not contain colon.',
+        ],
     ],
 
     /*

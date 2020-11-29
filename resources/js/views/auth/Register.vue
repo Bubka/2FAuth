@@ -1,5 +1,5 @@
 <template>
-    <form-wrapper :title="$t('auth.register')">
+    <form-wrapper :title="$t('auth.register')" :punchline="$t('auth.forms.register_punchline')">
         <form @submit.prevent="handleSubmit" @keydown="form.onKeydown($event)">
             <form-field :form="form" fieldName="name" inputType="text" :label="$t('auth.forms.name')" autofocus />
             <form-field :form="form" fieldName="email" inputType="email" :label="$t('auth.forms.email')" />
@@ -31,34 +31,27 @@
             async handleSubmit(e) {
                 e.preventDefault()
 
-                const { data } = await this.form.post('api/register')
+                this.form.post('/api/register', {returnError: true})
+                .then(response => {
+                    localStorage.setItem('user',response.data.message.name)
+                    localStorage.setItem('jwt',response.data.message.token)
 
-                if( this.form.errors.any() === false ) {
-
-                    localStorage.setItem('user',data.message.name)
-                    localStorage.setItem('jwt',data.message.token)
-
-                    if (localStorage.getItem('jwt') != null) {
-                        this.$router.push({name: 'accounts'})
+                    if (localStorage.getItem('jwt') != null){
+                        this.$router.go('/');
                     }
-                }
+                })
+                .catch(error => {
+                    console.log(error.response)
+                    if( error.response.status === 422 && error.response.data.errors.taken ) {
+
+                        this.$notify({ type: 'is-danger', text: this.$t('errors.already_one_user_registered') + ' ' + this.$t('errors.cannot_register_more_user'), duration:-1 })
+                    }
+                    else if( error.response.status !== 422 ) {
+
+                        this.$router.push({ name: 'genericError', params: { err: error.response } });
+                    }
+                });
             }
-        },
-
-        beforeRouteEnter (to, from, next) {
-            if (localStorage.getItem('jwt')) {
-                return next('/');
-            }
-
-            next(async vm => {
-                const { data } = await vm.axios.post('api/checkuser')
-
-                if( data.userCount > 0 ) {
-                    vm.form.isDisabled = true
-
-                    vm.$notify({ type: 'is-danger', text: vm.$t('errors.already_one_user_registered') + ' ' + vm.$t('errors.cannot_register_more_user'), duration:-1 })
-                }
-            });
         },
 
         beforeRouteLeave (to, from, next) {

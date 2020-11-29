@@ -115,7 +115,7 @@ return [
     'timezone' => ':attributeには、有効なタイムゾーンを指定してください。',
     'unique' => '指定の:attributeは既に使用されています。',
     'uploaded' => ':attributeのアップロードに失敗しました。',
-    'url' => ':attributeは、有効なURL形式で指定してください。',
+    'url' => 'The :attribute must be a valid url.',
     'uuid' => ':attributeは、有効なUUIDでなければなりません。',
 
     /*
@@ -141,7 +141,17 @@ return [
         ],
         'email' => [
             'exists' => 'No account found using this email',
-        ]
+        ],
+        'otpType' => [
+            'required_without' => 'The :attribute field is required.',
+        ],
+        'secret' => [
+            'required_without' => 'The :attribute field is required.',
+        ],
+        'account' => [
+            'required_without' => 'The :attribute field is required.',
+            'regex' => 'The :attribute field must not contain colon.',
+        ],
     ],
 
     /*

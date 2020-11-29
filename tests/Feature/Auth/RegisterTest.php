@@ -32,7 +32,7 @@ class RegisterTest extends TestCase
         $response = $this->json('POST', '/api/checkuser')
             ->assertStatus(200)
             ->assertJson([
-                'userCount' => '1',
+                'username' => $this->user->name,
             ]);
     }
 
@@ -51,7 +51,7 @@ class RegisterTest extends TestCase
             'password_confirmation' => 'test',
         ]);
 
-        $response->assertStatus(400);
+        $response->assertStatus(422);
     }
 
 

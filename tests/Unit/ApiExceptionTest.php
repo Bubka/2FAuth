@@ -34,12 +34,12 @@ class ApiExceptionTest extends TestCase
      *
      * @test
      */
-    public function test_HTTP_UNAUTHORIZED()
+    public function testHttpUnauthenticated()
     {
         $response = $this->json('GET', '/api/settings/options')
             ->assertStatus(401)
             ->assertJson([
-                'message' => 'Unauthorized'
+                'message' => 'Unauthenticated.'
             ]);
     }
 
@@ -49,14 +49,11 @@ class ApiExceptionTest extends TestCase
      *
      * @test
      */
-    public function test_HTTP_NOT_FOUND()
+    public function testHttpNotFound()
     {
         $response = $this->actingAs($this->user, 'api')
             ->json('GET', '/api/twofaccounts/1000')
-            ->assertStatus(404)
-            ->assertJson([
-                'message' => 'Not Found'
-            ]);
+            ->assertStatus(404);
     }
 
 
@@ -65,14 +62,11 @@ class ApiExceptionTest extends TestCase
      *
      * @test
      */
-    public function test_HTTP_METHOD_NOT_ALLOWED()
+    public function testHttpMethodNotAllowed()
     {
         $response = $this->actingAs($this->user, 'api')
             ->json('PATCH', '/api/settings/options')
-            ->assertStatus(405)
-            ->assertJson([
-                'message' => 'Method Not Allowed'
-            ]);
+            ->assertStatus(405);
     }
 
 
@@ -81,7 +75,7 @@ class ApiExceptionTest extends TestCase
      *
      * @test
      */
-    public function test_HTTP_UNPROCESSABLE_ENTITY()
+    public function testHttpUnprocessableEntity()
     {
         $response = $this->json('POST', '/api/login')
             ->assertStatus(422)
@@ -101,22 +95,14 @@ class ApiExceptionTest extends TestCase
      *
      * @test
      */
-    public function test_HTTP_INTERNAL_SERVER_ERROR()
+    public function testHttpInternalServerError()
     {
         factory(TwoFAccount::class, 3)->create();
 
         $response = $this->actingAs($this->user, 'api')
             ->json('PATCH', '/api/twofaccounts/reorder', [
                 'orderedIds' => 'x'])
-            ->assertStatus(500)
-            ->assertJsonStructure([
-                'message',
-                'originalMessage',
-                'debug'
-            ])
-            ->assertJsonFragment([
-                'message' => 'Whoops, looks like something went wrong'
-            ]);
+            ->assertStatus(500);
             
     }
 

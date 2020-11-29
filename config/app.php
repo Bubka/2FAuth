@@ -22,7 +22,7 @@ return [
     |
     */
 
-    'version' => '1.3.1',
+    'version' => '2.0.0',
 
     /*
     |--------------------------------------------------------------------------
@@ -38,7 +38,13 @@ return [
         'useBasicQrcodeReader' => false,
         'displayMode' => 'list',
         'showAccountsIcons' => true,
-        'kickUserAfter' => '15'
+        'kickUserAfter' => '15',
+        'activeGroup' => 0,
+        'rememberActiveGroup' => true,
+        'defaultGroup' => 0,
+        'useEncryption' => false,
+        'defaultCaptureMode' => 'livescan',
+        'useDirectCapture' => false,
     ],
 
     /*

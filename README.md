@@ -6,7 +6,7 @@
 # 2FAuth
 A web app to manage your Two-Factor Authentication (2FA) accounts and generate their security codes
 
-![screens](https://user-images.githubusercontent.com/858858/95789691-47b13180-0cde-11eb-9d06-7c6d2ede5f3c.png)
+![screens](https://user-images.githubusercontent.com/858858/100485897-18c21400-3102-11eb-9c72-ea0b1b46ef2e.png)
 
 #### [2FAuth Demo](https://demo.2fauth.app/)
 
@@ -24,14 +24,26 @@ I created it because :
 * I love coding and I love self-hosted solutions
 
 ## Main features
-* Manage 2FA accounts with QR code flashing/scanning and decoding
+* Manage your 2FA accounts and organize them using Groups
+* Scan and decode any QR code to add account in no time
+* Add custom account without QR code thanks to an advanced form
+* Edit accounts, even the imported ones
 * Generate TOTP and HOTP security codes
-* User authentication to protect 2FA data stored in 2FAuth
 
 2FAuth is currently fully localized in English and French. See [Contributing](#Contributing) if you want to help on adding more languages.
 
+## Security
+
+2FAuth provide with several security mechanisms to protect your 2FA data as best as possible.
+
 #### Single user app
-2FA are sensitives data so you have to create an account and authenticate yourself to use the app. It is not possible to create more than one user account, the app is thought for personal use.
+You have to create a user account and authenticate yourself to use the app. It is not possible to create more than one user account, the app is thought for personal use.
+
+#### Data encryption
+Sensitive data stored in the database can be encrypted to protect them against db compromise. Encryption is provided as an option which is disabled by default. It is strongly recommanded to backup the APP_KEY value of your .env file (or the whole file) when encryption is On.
+
+#### Auto logout
+2FAuth automatically log you out after an inactivity period to prevent long life session. The auto logout can be deactivated or triggered when a security code is copied.
 
 #### RFC compliance
 2FAuth generates OTP according to RFC 4226 (HOTP Algorithm) and RFC 6238 (TOTP Algorithm) thanks to [Spomky-Labs/OTPHP](https://github.com/Spomky-Labs/otphp) php library.

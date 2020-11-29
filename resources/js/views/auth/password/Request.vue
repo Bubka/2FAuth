@@ -1,5 +1,5 @@
 <template>
-    <form-wrapper :title="$t('auth.forms.reset_password')">
+    <form-wrapper :title="$t('auth.forms.reset_password')" :punchline="$t('auth.forms.reset_punchline')">
         <form @submit.prevent="handleSubmit" @keydown="form.onKeydown($event)">
             <form-field :form="form" fieldName="email" inputType="email" :label="$t('auth.forms.email')" autofocus />
             <form-buttons :isBusy="form.isBusy" :caption="$t('auth.forms.send_password_reset_link')" :showCancelButton="true" cancelLandingView="login" />

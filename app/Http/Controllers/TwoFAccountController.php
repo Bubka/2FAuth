@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Group;
 use App\TwoFAccount;
-use App\Classes\OTP;
+use App\Classes\Options;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use ParagonIE\ConstantTime\Base32;
 use Illuminate\Support\Facades\Storage;
 
 class TwoFAccountController extends Controller
@@ -32,19 +33,50 @@ class TwoFAccountController extends Controller
 
         // see https://github.com/google/google-authenticator/wiki/Key-Uri-Format
         // for otpauth uri format validation
+
         $this->validate($request, [
-            'service' => 'required',
-            'uri' => 'required|regex:/^otpauth:\/\/[h,t]otp\//i',
+            'service' => 'required|string',
+            'account' => 'required_without:uri|nullable|string|regex:/^[^:]+$/i',
+            'icon' => 'nullable|string',
+            'uri' => 'nullable|string|regex:/^otpauth:\/\/[h,t]otp\//i',
+            'otpType' => 'required_without:uri|in:totp,hotp',
+            'secret' => 'required_without:uri|string',
+            'digits' => 'nullable|integer|between:6,10',
+            'algorithm' => 'nullable|in:sha1,sha256,sha512,md5',
+            'totpPeriod' => 'nullable|integer|min:1',
+            'hotpCounter' => 'nullable|integer|min:0',
         ]);
 
-        OTP::get($request->uri);
+        // Two possible cases :
+        // - The most common case, the uri is provided by the QuickForm, thanks to a QR code live scan or file upload
+        //     -> We use this uri to populate the account
+        // - The advanced form has been used and provide no uri but all individual parameters
+        //     -> We use the parameters array to populate the account
+        $twofaccount = new TwoFAccount;
+        $twofaccount->service = $request->service;
+        $twofaccount->account = $request->account;
+        $twofaccount->icon = $request->icon;
 
-        $twofaccount = TwoFAccount::create([
-            'service' => $request->service,
-            'account' => $request->account,
-            'uri' => $request->uri,
-            'icon' => $request->icon
-        ]);
+        if( $request->uri ) {
+            $twofaccount->uri = $request->uri;
+        }
+        else {
+            $twofaccount->populate($request->all());
+        }
+
+        $twofaccount->save();
+
+        // Possible group association
+        $groupId = Options::get('defaultGroup') === '-1' ? (int) Options::get('activeGroup') : (int) Options::get('defaultGroup');
+        
+        // 0 is the pseudo group 'All', only groups with id > 0 are true user groups
+        if( $groupId > 0 ) {
+            $group = Group::find($groupId);
+
+            if($group) {
+                $group->twofaccounts()->save($twofaccount);
+            }
+        }
 
         return response()->json($twofaccount, 201);
     }
@@ -63,6 +95,18 @@ class TwoFAccountController extends Controller
 
 
     /**
+     * Display the specified resource with all attributes.
+     *
+     * @param  \App\TwoFAccount  $twofaccount
+     * @return \Illuminate\Http\Response
+     */
+    public function showWithSensitive(TwoFAccount $twofaccount)
+    {
+        return response()->json($twofaccount->makeVisible(['uri', 'secret', 'algorithm']), 200);
+    }
+
+
+    /**
      * Save new order.
      *
      * @param  \App\TwoFAccount  $twofaccount
@@ -75,27 +119,110 @@ class TwoFAccountController extends Controller
     }
 
 
+
     /**
-     * Generate a TOTP
+     * Preview account using an uri, without any db moves
+     * 
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function preview(Request $request)
+    {
+
+        $this->validate($request, [
+            'uri' => 'required|string|regex:/^otpauth:\/\/[h,t]otp\//i',
+        ]);
+
+        $twofaccount = new TwoFAccount;
+        $twofaccount->uri = $request->uri;
+
+        // If present, use the imageLink parameter to prefill the icon field
+        if( $twofaccount->imageLink ) {
+
+            try {
+
+                $chunks = explode('.', $twofaccount->imageLink);
+                $hashFilename = Str::random(40) . '.' . end($chunks);
+
+                Storage::disk('local')->put('imagesLink/' . $hashFilename, file_get_contents($twofaccount->imageLink));
+
+                if( in_array(Storage::mimeType('imagesLink/' . $hashFilename), ['image/png', 'image/jpeg', 'image/webp', 'image/bmp']) ) {
+                    if( getimagesize(storage_path() . '/app/imagesLink/' . $hashFilename) ) {
+
+                        Storage::move('imagesLink/' . $hashFilename, 'public/icons/' . $hashFilename);
+                        $twofaccount->icon = $hashFilename;
+                    }
+                }
+            }
+            catch( \Exception $e ) {
+                // do nothing
+            }
+        }
+
+        return response()->json($twofaccount->makeVisible(['uri', 'secret', 'algorithm']), 200);
+    }
+
+
+    /**
+     * Generate an OTP token
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function generateOTP(Request $request)
+    public function token(Request $request)
     {
-        $isPreview = false;
+        // When the method is called during the process of creating/editing an HOTP account the 
+        // sensitive data have to be returned, because of the hotpCounter increment
+        $shouldResponseWithSensitiveData = false;
 
-        if( is_int($request->data) ) {
-            $twofaccount = TwoFAccount::FindOrFail($request->data);
-            $uri = $twofaccount->uri;
+        if( $request->id ) {
+
+            // The request data is the Id of an existing account
+            $twofaccount = TwoFAccount::FindOrFail($request->id);
+        }
+        else if( $request->otp['uri'] ) {
+
+            // The request data contain an uri
+            $twofaccount = new TwoFAccount;
+            $twofaccount->uri = $request->otp['uri'];
+            $shouldResponseWithSensitiveData = true;
         }
         else {
-            $uri = $request->data;
-            $isPreview = true;
+
+            // The request data should contain all otp parameter
+            $twofaccount = new TwoFAccount;
+            $twofaccount->populate($request->otp);
+            $shouldResponseWithSensitiveData = true;
         }
 
-        return response()->json(OTP::generate($uri, $isPreview), 200);
+        $response = [
+            'token' => $twofaccount->token,
+        ];
+
+        if( $twofaccount->otpType === 'hotp' ) {
+
+            // returned counter & uri will be updated
+            $twofaccount->increaseHotpCounter();
+
+            // and the db too
+            if( $request->id ) {
+                $twofaccount->save();
+            }
+
+            if( $shouldResponseWithSensitiveData ) {
+                $response['hotpCounter'] = $twofaccount->hotpCounter;
+                $response['uri'] = $twofaccount->uri;
+            }
+        }
+        else {
+
+            $response['totpPeriod'] = $twofaccount->totpPeriod;
+            $response['totpTimestamp'] = $twofaccount->totpTimestamp;
+        }
+
+        return response()->json($response, 200);
     }
+
 
 
     /**
@@ -109,9 +236,17 @@ class TwoFAccountController extends Controller
     {
 
         $this->validate($request, [
-            'service' => 'required',
+            'service' => 'required|string',
+            'account' => 'required_without:uri|nullable|string|regex:/^[^:]+$/i',
+            'icon' => 'nullable|string',
+            'uri' => 'nullable|string|regex:/^otpauth:\/\/[h,t]otp\//i',
+            'otpType' => 'required_without:uri|in:totp,hotp',
+            'secret' => 'required_without:uri|string',
+            'digits' => 'nullable|integer|between:6,10',
+            'algorithm' => 'nullable|in:sha1,sha256,sha512,md5',
+            'totpPeriod' => 'required_if:otpType,totp|nullable|integer|min:1',
+            'hotpCounter' => 'required_if:otpType,hotp|nullable|integer|min:0',
         ]);
-
 
         // Here we catch a possible missing model exception in order to
         // delete orphan submited icon
@@ -127,37 +262,24 @@ class TwoFAccountController extends Controller
             
             throw $e;
         }
-        
 
-        if( $twofaccount->type === 'hotp' ) {
-
-            // HOTP can be desynchronized from the verification
-            // server so we let the user the possibility to force
-            // the counter.
-
-            $this->validate($request, [
-                'counter' => 'required|integer',
-            ]);
-
-            // we set an OTP object to get the its current counter
-            // and we update it if a new one has been submited
-            $otp = OTP::get($twofaccount->uri);
-
-            if( $otp->getCounter() !== $request->counter ) {
-                $otp->setParameter( 'counter', $request->counter );
-                $twofaccount->uri = $otp->getProvisioningUri();
-            }
-        }
-
-        $twofaccount->update([
-            'service' => $request->service,
-            'account' => $request->account,
-            'icon' => $request->icon,
-            'uri' => $twofaccount->uri,
-        ]);
+        $twofaccount->populate($request->all());
+        $twofaccount->save();
 
         return response()->json($twofaccount, 200);
 
+    }
+
+
+    /**
+     * A simple and light method to get the account count.
+     *
+     * @param  \App\TwoFAccount  $twofaccount
+     * @return \Illuminate\Http\Response
+     */
+    public function count(Request $request)
+    {
+        return response()->json([ 'count' => TwoFAccount::count() ], 200);
     }
 
 

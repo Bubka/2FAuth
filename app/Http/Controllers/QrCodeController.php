@@ -3,81 +3,57 @@
 namespace App\Http\Controllers;
 
 use Zxing\QrReader;
-use OTPHP\TOTP;
-use OTPHP\Factory;
-use App\Classes\Options;
-use Assert\AssertionFailedException;
-use Illuminate\Http\File;
+use App\TwoFAccount;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use chillerlan\QRCode\{QRCode, QROptions};
 
 class QrCodeController extends Controller
 {
     /**
-     * Handle uploaded qr code image
+     * Return a QR code image
+     *
+     * @param  App\TwoFAccount  $twofaccount
+     * @return \Illuminate\Http\Response
+     */
+    public function show(TwoFAccount $twofaccount)
+    {
+
+        $options = new QROptions([
+            'quietzoneSize' => 2,
+            'scale'         => 8,
+        ]);
+
+        $qrcode = new QRCode($options);
+
+        return response()->json(['qrcode' => $qrcode->render($twofaccount->uri)], 200);
+    }
+
+
+    /**
+     * Decode an uploaded QR Code image
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function decode(Request $request)
     {
+        
+        // input validation
+        $this->validate($request, [
+            'qrcode' => 'required|image',
+        ]);
 
-        if(Options::get('useBasicQrcodeReader')) {
+        // qrcode analysis
+        $path = $request->file('qrcode')->store('qrcodes');
+        $qrcode = new QrReader(storage_path('app/' . $path));
 
-            // input validation
-            $this->validate($request, [
-                'qrcode' => 'required|image',
-            ]);
+        $uri = urldecode($qrcode->text());
 
-            // qrcode analysis
-            $path = $request->file('qrcode')->store('qrcodes');
-            $qrcode = new QrReader(storage_path('app/' . $path));
+        // delete uploaded file
+        Storage::delete($path);
 
-            $uri = urldecode($qrcode->text());
-
-            // delete uploaded file
-            Storage::delete($path);
-        }
-        else {
-
-            $this->validate($request, [
-                'uri' => 'required|string',
-            ]);
-
-            $uri = $request->uri;
-        }
-
-        // return the OTP object
-        try {
-
-            $otp = Factory::loadFromProvisioningUri($uri);
-
-            if(!$otp->getIssuer()) {
-                $otp->setIssuer($otp->getLabel());
-                $otp->setLabel('');
-            }
-
-            // returned object
-            $twofaccount = (object) array(
-                'service' => $otp->getIssuer(),
-                'account' => $otp->getLabel(),
-                'uri' => $uri,
-                'icon' => '',
-                'options' => $otp->getParameters()
-            );
-
-            return response()->json($twofaccount, 200);
-
-        }
-        catch (AssertionFailedException $exception) {
-
-            $error = \Illuminate\Validation\ValidationException::withMessages([
-                'qrcode' => __('errors.response.no_valid_otp')
-            ]);
-
-            throw $error;
-            
-        }
+        return response()->json(['uri' => $uri], 200);
     }
     
 }

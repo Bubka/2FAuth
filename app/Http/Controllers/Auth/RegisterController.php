@@ -33,10 +33,9 @@ class RegisterController extends Controller
      */
     public function checkUser()
     {
+        $username = DB::table('users')->where('id', 1)->value('name');
 
-        $count = DB::table('users')->count();
-
-        return response()->json(['userCount' => $count], 200);
+        return response()->json(['username' => $username], 200);
     }
 
     /**
@@ -49,7 +48,8 @@ class RegisterController extends Controller
     {
         // check if a user already exists
         if( DB::table('users')->count() > 0 ) {
-            return response()->json(['message' => __('errors.already_one_user_registered')], 400);
+            // return response()->json(['message' => __('errors.already_one_user_registered')], 400);
+            throw \Illuminate\Validation\ValidationException::withMessages(['taken' => __('errors.already_one_user_registered')]);
         }
 
         $this->validator($request->all())->validate();

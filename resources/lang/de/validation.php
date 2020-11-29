@@ -115,7 +115,7 @@ return [
     'timezone' => ':attribute muss eine gültige Zeitzone sein.',
     'unique' => ':attribute ist bereits vergeben.',
     'uploaded' => ':attribute konnte nicht hochgeladen werden.',
-    'url' => ':attribute muss eine URL sein.',
+    'url' => 'The :attribute must be a valid url.',
     'uuid' => ':attribute muss ein UUID sein.',
 
     /*
@@ -141,7 +141,17 @@ return [
         ],
         'email' => [
             'exists' => 'No account found using this email',
-        ]
+        ],
+        'otpType' => [
+            'required_without' => 'The :attribute field is required.',
+        ],
+        'secret' => [
+            'required_without' => 'The :attribute field is required.',
+        ],
+        'account' => [
+            'required_without' => 'The :attribute field is required.',
+            'regex' => 'The :attribute field must not contain colon.',
+        ],
     ],
 
     /*
