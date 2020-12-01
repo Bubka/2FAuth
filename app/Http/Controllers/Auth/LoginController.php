@@ -105,6 +105,22 @@ class LoginController extends Controller
         return response()->json(['message' => Lang::get('auth.throttle', ['seconds' => $seconds])], Response::HTTP_TOO_MANY_REQUESTS);
     }
 
+    /**
+     * Get the needed authorization credentials from the request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array
+     */
+    protected function credentials(Request $request)
+    {
+        $credentials = [
+            $this->username() => strtolower($request->input($this->username())),
+            'password' => $request->get('password'),
+        ];
+
+        return $credentials;
+    }
+
 
     /**
      * Validate the user login request.
@@ -117,7 +133,7 @@ class LoginController extends Controller
     protected function validateLogin(Request $request)
     {
         $request->validate([
-            $this->username() => 'required|string|exists:users,email',
+            $this->username() => 'required|email|exists:users,email',
             'password' => 'required|string',
         ]);
     }
