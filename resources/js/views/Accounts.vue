@@ -334,7 +334,7 @@
             /**
              * Fetch accounts from db
              */
-            fetchAccounts() {
+            fetchAccounts(forceRefresh = false) {
                 let accounts = []
                 this.selectedAccounts = []
 
@@ -350,7 +350,7 @@
                         })
                     })
 
-                    if ( this.accounts.length > 0 && !objectEquals(accounts, this.accounts) ) {
+                    if ( this.accounts.length > 0 && !objectEquals(accounts, this.accounts) && !forceRefresh ) {
                         this.$notify({ type: 'is-dark', text: '<span class="is-size-7">' + this.$t('commons.some_data_have_changed') + '</span><br /><a href="." class="button is-rounded is-warning is-small">' + this.$t('commons.reload') + '</a>', duration:-1, closeOnClick: false })
                     }
                     else if( this.accounts.length === 0 && accounts.length === 0 ) {
@@ -407,7 +407,7 @@
 
                     // we fetch the accounts again to prevent the js collection being
                     // desynchronize from the backend php collection
-                    this.fetchAccounts()
+                    this.fetchAccounts(true)
                 }
             },
 
@@ -424,7 +424,7 @@
 
                 // we fetch the accounts again to prevent the js collection being
                 // desynchronize from the backend php collection
-                this.fetchAccounts()
+                this.fetchAccounts(true)
                 this.fetchGroups()
                 this.showGroupSelector = false
 
