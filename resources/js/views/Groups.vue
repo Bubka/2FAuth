@@ -102,6 +102,13 @@
 
                     // Remove the deleted group from the collection
                     this.groups = this.groups.filter(a => a.id !== id)
+
+                    // Reset persisted group filter to 'All' (groupId=0)
+                    if( parseInt(this.$root.appSettings.activeGroup) === id ) {
+                        this.axios.post('/api/settings/options', { activeGroup: 0 }).then(response => {
+                            this.$root.appSettings.activeGroup = 0
+                        })
+                    }
                 }
             }
 
