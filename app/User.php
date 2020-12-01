@@ -49,4 +49,13 @@ class User extends Authenticatable
     {
         $this->notify(new ResetPassword($token));
     }
+
+    /**
+     * Get Email attribute
+     * @param string $value
+     */
+    public function getEmailAttribute($value)
+    {
+        return strtolower($value);
+    }
 }
