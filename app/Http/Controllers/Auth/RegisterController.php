@@ -33,9 +33,9 @@ class RegisterController extends Controller
      */
     public function checkUser()
     {
-        $username = DB::table('users')->where('id', 1)->value('name');
+        $user = DB::table('users')->first();
 
-        return response()->json(['username' => $username], 200);
+        return response()->json(['username' => isset($user->name) ? $user->name : null], 200);
     }
 
     /**
