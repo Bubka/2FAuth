@@ -51,11 +51,11 @@ class User extends Authenticatable
     }
 
     /**
-     * Get Email attribute
+     * set Email attribute
      * @param string $value
      */
-    public function getEmailAttribute($value)
+    public function setEmailAttribute($value)
     {
-        return strtolower($value);
+        $this->attributes['email'] = strtolower($value);
     }
 }
