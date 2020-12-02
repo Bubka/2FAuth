@@ -13,14 +13,14 @@ class AddGroupIdColumnToTwofaccountsTable extends Migration
      */
     public function up()
     {
-        Schema::enableForeignKeyConstraints();
-
         Schema::table('twofaccounts', function (Blueprint $table) {
-            $table->foreignId('group_id')
+            $table->unsignedInteger('group_id')
                   ->after('id')
                   ->nullable()
                   ->constrained()
                   ->onDelete('set null');
+
+            $table->foreign('group_id')->references('id')->on('groups');
         });
     }
 
@@ -31,10 +31,15 @@ class AddGroupIdColumnToTwofaccountsTable extends Migration
      */
     public function down()
     {
-        Schema::disableForeignKeyConstraints();
+        Schema::table('twofaccounts', function (Blueprint $table) {
+                // cannot drop foreign keys in SQLite:
+                if ('sqlite' !== config('database.default')) {
+                    $table->dropForeign(['group_id']);
+                }
+            }
+        );
 
         Schema::table('twofaccounts', function (Blueprint $table) {
-            //$table->dropForeign('group_id');
             $table->dropColumn('group_id');
         });
     }
