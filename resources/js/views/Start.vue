@@ -40,9 +40,9 @@
             </div>
         </div>
         <!-- Footer -->
-        <vue-footer :showButtons="true" v-if="accountCount > 0">
+        <vue-footer :showButtons="true" >
             <!-- back button -->
-            <p class="control">
+            <p class="control" v-if="accountCount > 0">
                 <router-link class="button is-dark is-rounded" :to="{ name: 'accounts' }" >
                     {{ $t('commons.back') }}
                 </router-link>

@@ -1,4 +1,15 @@
 # Change log
+
+## [2.0.1] - 2020-12-03
+
+### Fixed
+- [issue #18](https://github.com/Bubka/2FAuth/issues/18) Install using MySQL causes exception
+- [issue #17](https://github.com/Bubka/2FAuth/issues/17) Capitalization of email address during login should not matter
+- [issue #15](https://github.com/Bubka/2FAuth/issues/15) Applied group filter is not removed if the group is deleted
+- [issue #14](https://github.com/Bubka/2FAuth/issues/14) Cache is not refreshed automatically after group changes
+- Missing footer links at first start
+- Missing redirection after registration
+
 ## [2.0.0] - 2020-11-29
 
 2FAuth goes to v2.0!
