@@ -355,6 +355,7 @@
                     }
                     else if( this.accounts.length === 0 && accounts.length === 0 ) {
                         // No account yet, we force user to land on the start view.
+                        this.$storage.set('accounts', this.accounts)
                         this.$router.push({ name: 'start' });
                     }
                     else {
