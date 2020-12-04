@@ -1,5 +1,10 @@
 # Change log
 
+## [2.0.2] - 2020-12-04
+
+### Fixed
+- [issue #20](https://github.com/Bubka/2FAuth/issues/20) Issues using 'Protect sensible data'
+
 ## [2.0.1] - 2020-12-03
 
 ### Fixed
