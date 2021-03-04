@@ -1,5 +1,10 @@
 # Change log
 
+## [2.1.0] - 2021-03-04
+
+### Added
+- German translation, thanks to [@chenmichael](https://crowdin.com/profile/chenmichael)
+
 ## [2.0.2] - 2020-12-04
 
 ### Fixed
