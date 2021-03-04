@@ -115,7 +115,7 @@ return [
     'timezone' => ':attribute muss eine gültige Zeitzone sein.',
     'unique' => ':attribute ist bereits vergeben.',
     'uploaded' => ':attribute konnte nicht hochgeladen werden.',
-    'url' => 'The :attribute must be a valid url.',
+    'url' => ':attribute muss eine gültige URL sein.',
     'uuid' => ':attribute muss ein UUID sein.',
 
     /*
@@ -131,26 +131,26 @@ return [
 
     'custom' => [
         'icon' => [
-            'image' => 'Supported format are jpeg, png, bmp, gif, svg, or webp',
+            'image' => 'Unterstützte Formate sind jpeg, png, bmp, gif, svg oder webp',
         ],
         'qrcode' => [
-            'image' => 'Supported format are jpeg, png, bmp, gif, svg, or webp',
+            'image' => 'Unterstützte Formate sind jpeg, png, bmp, gif, svg oder webp',
         ],
         'uri' => [
-            'starts_with' => 'Only valid OTP uri are supported',
+            'starts_with' => 'Nur gültige OTP Uri werden unterstützt',
         ],
         'email' => [
-            'exists' => 'No account found using this email',
+            'exists' => 'Kein Konto mit dieser E-Mail gefunden',
         ],
         'otpType' => [
-            'required_without' => 'The :attribute field is required.',
+            'required_without' => 'Das Feld :attribute ist erforderlich.',
         ],
         'secret' => [
-            'required_without' => 'The :attribute field is required.',
+            'required_without' => 'Das Feld :attribute ist erforderlich.',
         ],
         'account' => [
-            'required_without' => 'The :attribute field is required.',
-            'regex' => 'The :attribute field must not contain colon.',
+            'required_without' => 'Das Feld :attribute ist erforderlich.',
+            'regex' => 'Das Feld :attribute darf keinen Doppelpunkt enthalten.',
         ],
     ],
 

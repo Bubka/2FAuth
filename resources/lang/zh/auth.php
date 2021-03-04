@@ -47,13 +47,11 @@ return [
         ],
         'change_password' => 'Change password',
         'send_password_reset_link' => 'Send password reset link',
-        'change_your_password' => 'Change your password',
-        'password_successfully_changed' => 'Password successfully changed ',
+        'password_successfully_changed' => 'Password successfully changed',
         'edit_account' => 'Edit account',
         'profile_saved' => 'Profile successfully updated!',
         'welcome_to_demo_app_use_those_credentials' => 'Welcome to the 2FAuth demo.<br><br>You can connect using the email address <strong>demo@2fauth.app</strong> and the password <strong>demo</demo>',
-        'register_punchline' => 'Welcome to 2FAuth.<br/>
-                You need an account to go further. Fill this form to register yourself, and please, choose a strong password, 2FA data are sensitives.',
+        'register_punchline' => 'Welcome to 2FAuth.<br/>You need an account to go further. Fill this form to register yourself, and please, choose a strong password, 2FA data are sensitives.',
         'reset_punchline' => '2FAuth will send you a password reset link to this address. Click the link in the received email to set a new password.',
     ],
 

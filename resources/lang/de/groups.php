@@ -13,20 +13,20 @@ return [
     |
     */
 
-    'groups' => 'Groups',
-    'select_accounts_to_show' => 'Select accounts to show',
-    'manage_groups' => 'Manage groups',
-    'active_group' => 'Active group',
-    'manage_groups_legend' => 'You can create groups to organize your accounts the way you want. All accounts remain visible in the pseudo group named \'All\', regardless of the group they belong to.',
-    'deleting_group_does_not_delete_accounts' => 'Deleting a group does not delete accounts',
-    'move_selected_to' => 'Move selected to',
-    'no_group' => 'No group',
+    'groups' => 'Gruppen',
+    'select_accounts_to_show' => 'Konten zum Anzeigen auswählen',
+    'manage_groups' => 'Gruppen verwalten',
+    'active_group' => 'Aktive Gruppe',
+    'manage_groups_legend' => 'Sie können Gruppen erstellen, um Ihre Konten so zu organisieren, wie Sie wollen. Alle Konten bleiben in der Pseudo-Gruppe mit dem Namen "Alle" sichtbar, unabhängig davon, zu welcher Gruppe sie gehören.',
+    'deleting_group_does_not_delete_accounts' => 'Konten bleiben beim Löschen der Gruppe erhalten',
+    'move_selected_to' => 'Ausgewählte verschieben',
+    'no_group' => 'Keine Gruppe',
     'forms' => [
-        'new_group' => 'New group',
-        'new_name' => 'New name',
-        'rename_group' => 'Rename group',
+        'new_group' => 'Neue Gruppe',
+        'new_name' => 'Neuer Name',
+        'rename_group' => 'Gruppe umbenennen',
     ],
     'confirm' => [
-        'delete' => 'Are you sure you want to delete this group?',
+        'delete' => 'Sind Sie sicher, dass Sie diese Gruppe löschen möchten?',
     ],
 ];

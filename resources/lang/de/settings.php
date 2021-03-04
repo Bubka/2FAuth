@@ -13,81 +13,81 @@ return [
     |
     */
 
-    'settings' => 'Settings',
+    'settings' => 'Einstellungen',
     'account' => 'Account',
-    'password' => 'Password',
-    'options' => 'Options',
+    'password' => 'Passwort',
+    'options' => 'Einstellungen',
     'confirm' => [
 
     ],
-    'general' => 'General',
-    'security' => 'Security',
-    'data_input' => 'Data input',
+    'general' => 'Allgemein',
+    'security' => 'Sicherheit',
+    'data_input' => 'Daten-Eingabe',
     'forms' => [
-        'edit_settings' => 'Edit settings',
-        'setting_saved' => 'Settings saved',
+        'edit_settings' => 'Einstellungen bearbeiten',
+        'setting_saved' => 'Einstellungen gespeichert',
         'language' => [
-            'label' => 'Language',
-            'help' => 'Change the language used to translate the app interface.'
+            'label' => 'Sprache',
+            'help' => 'Ändern Sie die Sprache, in der die App-Oberfläche angezeigt wird.'
         ],
         'show_token_as_dot' => [
-            'label' => 'Show generated tokens as dot',
-            'help' => 'Replace generated token caracters with *** to ensure confidentiality. Do not affect the copy/paste feature.'
+            'label' => 'Generiertes Token als Punkte anzeigen',
+            'help' => 'Tokenzeichen werden als *** angezeigt, um die Vertraulichkeit zu gewährleisten. Dies beeinflusst nicht die Kopieren/Einfügen Funktion.'
         ],
         'close_token_on_copy' => [
-            'label' => 'Close token after copy',
-            'help' => 'Automatically close the popup showing the generated token after it has been copied'
+            'label' => 'Token nach dem Kopieren schließen',
+            'help' => 'Schließe automatisch das Popup-Fenster mit dem generierten Token nachdem es kopiert wurde'
         ],
         'use_basic_qrcode_reader' => [
-            'label' => 'Use basic QR code reader',
-            'help' => 'If you experiences issues when capturing QR codes enables this option to switch to a more basic but more reliable QR code reader'
+            'label' => 'Benutze den einfachen QR-Codeleser',
+            'help' => 'Wenn bei der Erfassung von QR-Codes Probleme auftreten können Sie mit dieser Option zu einem einfacheren, aber zuverlässigeren QR-Codeleser wechseln'
         ],
         'display_mode' => [
-            'label' => 'Display mode',
-            'help' => 'Choose whether you want accounts to be displayed as a list or as a grid'
+            'label' => 'Anzeigemodus',
+            'help' => 'Wählen Sie, ob Konten als Liste oder als Raster angezeigt werden sollen'
         ],
-        'grid' => 'Grid',
-        'list' => 'List',
+        'grid' => 'Raster',
+        'list' => 'Liste',
         'show_accounts_icons' => [
-            'label' => 'Show icons',
-            'help' => 'Show icons accounts in the main view'
+            'label' => 'Symbole anzeigen',
+            'help' => 'Kontosymbole in der Hauptansicht anzeigen'
         ],
         'auto_lock' => [
-            'label' => 'Auto lock',
-            'help' => 'Log out the user automatically in case of inactivity'
+            'label' => 'Automatische Sperrung',
+            'help' => 'Bei Inaktivität automatisch abmelden'
         ],
         'use_encryption' => [
-            'label' => 'Protect sensible data',
-            'help' => 'Sensitive data, the 2FA secrets and emails, are stored encrypted in database. Be sure to backup the APP_KEY value of your .env file (or the whole file) as it serves as key encryption. There is no way to decypher encrypted data without this key.',
+            'label' => 'Sensible Daten schützen',
+            'help' => 'Vertrauliche Daten, die 2FA-Geheimnisse und E-Mails, werden verschlüsselt in der Datenbank gespeichert. Erstellen Sie ein Backup von der APP_KEY Variablen in der .env Datei (oder der gesamten Datei), da sie als Schlüssel zur gesicherten Datenbank dient. Es gibt keine Möglichkeit, verschlüsselte Daten ohne diesen Schlüssel zu wiederherzustellen.',
         ],
         'default_group' => [
-            'label' => 'Default group',
-            'help' => 'The group to which the newly created accounts are associated',
+            'label' => 'Standardgruppe',
+            'help' => 'Die Gruppe, der neu erstellte Konten zugeordnet werden',
         ],
         'useDirectCapture' => [
-            'label' => 'Direct input',
-            'help' => 'Choose whether you want to be prompted to choose an input mode among those available or if you want to directly use the default input mode',
+            'label' => 'Direkteingabe',
+            'help' => 'Wählen Sie aus, ob Sie einen Eingabemodus unter den Verfügbaren wählen möchten oder ob Sie direkt den Standard-Eingabemodus verwenden möchten',
         ],
         'defaultCaptureMode' => [
-            'label' => 'Default input mode',
-            'help' => 'Default input mode used when the Direct input option is On',
+            'label' => 'Standard-Eingabemodus',
+            'help' => 'Standard-Eingabemodus, der verwendet wird, falls die Direkteingabe aktiviert ist',
         ],
         'remember_active_group' => [
-            'label' => 'Remember group filter',
-            'help' => 'Save the last group filter applied and restore it on your next visit',
+            'label' => 'Gruppenfilter merken',
+            'help' => 'Speichert den letzten Gruppenfilter und stellt ihn bei Ihrem nächsten Besuch wieder her',
         ],
-        'never' => 'Never',
-        'on_token_copy' => 'On security code copy',
-        '1_minutes' => 'After 1 minute',
-        '5_minutes' => 'After 5 minutes',
-        '10_minutes' => 'After 10 minutes',
-        '15_minutes' => 'After 15 minutes',
-        '30_minutes' => 'After 30 minutes',
-        '1_hour' => 'After 1 hour',
-        '1_day' => 'After 1 day',
-        'livescan' => 'QR code livescan',
-        'upload' => 'QR code upload',
-        'advanced_form' => 'Advanced form',
+        'never' => 'Niemals',
+        'on_token_copy' => 'Beim Kopieren des Tokens',
+        '1_minutes' => 'Nach 1 Minute',
+        '5_minutes' => 'Nach 5 Minuten',
+        '10_minutes' => 'Nach 10 Minuten',
+        '15_minutes' => 'Nach 15 Minuten',
+        '30_minutes' => 'Nach 30 Minuten',
+        '1_hour' => 'Nach 1 Stunde',
+        '1_day' => 'Nach 1 Tag',
+        'livescan' => 'QR-Code scannen',
+        'upload' => 'QR-Code hochladen',
+        'advanced_form' => 'Erweitertes Formular',
     ],
 
 ];
