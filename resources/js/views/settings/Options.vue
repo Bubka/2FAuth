@@ -76,6 +76,7 @@
                 langs: [
                     { text: this.$t('languages.en'), value: 'en' },
                     { text: this.$t('languages.fr'), value: 'fr' },
+                    { text: this.$t('languages.de'), value: 'de' },
                 ],
                 layouts: [
                     { text: this.$t('settings.forms.grid'), value: 'grid', icon: 'th' },

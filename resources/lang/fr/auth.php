@@ -47,13 +47,11 @@ return [
         ],
         'change_password' => 'Modifier le mot de passe',
         'send_password_reset_link' => 'Envoyer',
-        'change_your_password' => 'Modifier votre mot de passe',
         'password_successfully_changed' => 'Mot de passe modifié avec succès',
         'edit_account' => 'Mis à jour du profil',
         'profile_saved' => 'Profil mis à jour avec succès !',
         'welcome_to_demo_app_use_those_credentials' => 'bienvenue sur la démo de 2FAuth.<br><br>Vous pouvez vous connecter en utilisant l\'adresse email <strong>demo@2fauth.app</strong> et le mot de passe <strong>demo</demo>',
-        'register_punchline' => 'Bienvenue sur 2FAuth.<br/>
-                Vous avez besoin d\'un compte pour aller plus loin. Remplissez ce formulaire pour vous inscrire et, s\'il vous plaît, choisissez un mot de passe fort, les données 2FA sont sensibles.',
+        'register_punchline' => 'Bienvenue sur 2FAuth.<br/>Vous avez besoin d\'un compte pour aller plus loin. Remplissez ce formulaire pour vous inscrire et, s\'il vous plaît, choisissez un mot de passe fort, les données 2FA sont sensibles.',
         'reset_punchline' => '2FAuth vous enverra un lien de réinitialisation de mot de passe à cette adresse. Cliquez sur le lien dans l\'e-mail reçu pour définir un nouveau mot de passe.',
     ],
 

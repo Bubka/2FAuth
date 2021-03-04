@@ -10,6 +10,7 @@ return [
     |
     */
 
-    'en' => 'English',
-    'fr' => 'French',
+    'en' => 'Englisch',
+    'fr' => 'Französisch',
+    'de' => 'Deutsch',
 ];

@@ -14,27 +14,27 @@ return [
     */
    
     // Laravel
-    'failed' => 'Estas credenciales no coinciden con nuestros registros.',
-    'throttle' => 'Demasiados intentos de acceso. Por favor intente nuevamente en :seconds segundos.',
+    'failed' => 'මෙම අක්තපත්ර අපගේ වාර්තා වලට ගැලපෙන්නේ නැත.',
+    'throttle' => 'බොහෝ පිවිසුම් උත්සහයන් සිදු කර ඇත. කරුණාකර නැවත උත්සාහ කරන්න: තත්පර තත්පර.',
 
     // 2FAuth
-    'sign_out' => 'Sign out',
-    'sign_in' => 'Sign in',
-    'register' => 'Register',
+    'sign_out' => 'වරන්න',
+    'sign_in' => 'පුරන්න',
+    'register' => 'ලියාපදිංචි වන්න',
     'welcome_back_x' => 'Welcome back {0}',
     'already_authenticated' => 'Already authenticated',
     'confirm' => [
         'logout' => 'Are you sure you want to log out?',
     ],
     'forms' => [
-        'name' => 'Name',
-        'login' => 'Login',
-        'email' => 'Email',
-        'password' => 'Password',
-        'confirm_password' => 'Confirm password',
-        'confirm_new_password' => 'Confirm new password',
+        'name' => 'නම',
+        'login' => 'පිවිසෙන්න',
+        'email' => 'විද්‍යුත් තැපෑල',
+        'password' => 'මුර පදය',
+        'confirm_password' => 'මුරපදය තහවුරු කරන්න',
+        'confirm_new_password' => 'නව මුර පදය තහවුරු කරන්න',
         'dont_have_account_yet' => 'Don\'t have your account yet?',
-        'already_register' => 'Already registered?',
+        'already_register' => 'දැනටමත් ලියාපදිංචි වී ඇත්ද ?',
         'password_do_not_match' => 'Password do not match',
         'forgot_your_password' => 'Forgot your password?',
         'request_password_reset' => 'Reset it',
