@@ -12,14 +12,14 @@
         "appstract/laravel-options": "^4.1.1",
         "chillerlan/php-qrcode": "3.3",
         "doctrine/dbal": "^2.10",
-        "fideloper/proxy": "^4.2",
-        "khanamiryan/qrcode-detector-decoder": "^1.0",
+        "fideloper/proxy": "^4.4.1",
+        "khanamiryan/qrcode-detector-decoder": "^1.0.4",
         "laravel/framework": "^7.0",
         "laravel/passport": "^9.3.2",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^2.0",
-        "paragonie/constant_time_encoding": "^2.3",
-        "spatie/eloquent-sortable": "^3.9",
+        "paragonie/constant_time_encoding": "^2.4",
+        "spatie/eloquent-sortable": "^3.11",
         "spomky-labs/otphp": "^10.0"
     },
     "require-dev": {
