@@ -49,7 +49,7 @@ RUN apt-get update && \
     /etc/nginx/nginx.conf && \
     chown -R www-data /var/log/nginx /var/lib/nginx/
 RUN touch /run/nginx.pid && \
-    chown -R www-data /run/nginx.pid
+    chown www-data /run/nginx.pid
 RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
     ln -sf /dev/stderr /var/log/nginx/error.log
 COPY --chown=www-data docker/nginx.conf /etc/nginx/nginx.conf
