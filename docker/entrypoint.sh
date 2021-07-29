@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# TODO fail on any error
+set -e
 
 if [ "${DB_CONNECTION}" = "sqlite" ]; then
   if [ ! -f /2fauth/.sqlite ]; then
