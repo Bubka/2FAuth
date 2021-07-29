@@ -1,5 +1,11 @@
 #!/bin/bash
 
+cleanup() {
+  set +e
+  echo "Stopping php7.3-fpm service..."
+  sudo service php7.3-fpm stop
+}
+trap cleanup 0
 set -e
 
 if [ "${DB_CONNECTION}" = "sqlite" ]; then
@@ -25,4 +31,4 @@ else
 fi
 
 nginx
-sudo service php7.3-fpm stop
+
