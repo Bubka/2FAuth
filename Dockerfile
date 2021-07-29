@@ -35,10 +35,12 @@ RUN apt-get update && \
     rm -rf /var/cache/* /var/lib/apt/lists/*
 RUN echo "www-data ALL = NOPASSWD: /usr/sbin/service php7.3-fpm start, /usr/sbin/service php7.3-fpm status, /usr/sbin/service php7.3-fpm stop" > /etc/sudoers.d/www-data && \
     chmod 0440 /etc/sudoers.d/www-data
-# Pre-create directories with the correct permissions
+# Pre-create files with the correct permissions
 RUN mkdir /run/php && \
-    chown www-data /run/php && \
-    chmod 700 /run/php
+    touch /var/log/php7.3-fpm.log && \
+    chown www-data /run/php /var/log/php7.3-fpm.log && \
+    chmod 700 /run/php /var/log/php7.3-fpm.log && \
+    ln -sf /dev/stdout /var/log/php7.3-fpm.log
 
 # NGINX
 EXPOSE 8000/tcp
