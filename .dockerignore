@@ -1,0 +1,17 @@
+.git
+.github
+tests
+.dockerignore
+.editorconfig
+.env.example
+.env.testing
+.env.travis
+.gitattributes
+.gitignore
+.styleci.yml
+.travis.yml
+changelog.md
+Dockerfile
+LICENSE
+phpunit.xml
+README.md
