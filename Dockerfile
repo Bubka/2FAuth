@@ -90,8 +90,7 @@ RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
     ln -sf /dev/stderr /var/log/nginx/error.log
 
 # Entrypoint
-# ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ]
-ENTRYPOINT [ "/bin/bash" ]
+ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ]
 COPY --chown=www-data docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 
 ENV \
