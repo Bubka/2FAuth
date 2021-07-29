@@ -30,5 +30,5 @@ else
   echo "" > /2fauth/installed
 fi
 
+echo "Nginx listening on :8000"
 nginx
-
