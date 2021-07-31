@@ -82,6 +82,7 @@ RUN composer dump-autoload --no-scripts --no-dev --optimize
 # Entrypoint
 ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ]
 COPY --chown=www-data docker/entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod 500 /usr/local/bin/entrypoint.sh
 
 ENV \
   # You can change the name of the app
