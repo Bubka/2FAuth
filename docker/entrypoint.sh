@@ -16,6 +16,14 @@ if [ "${DB_CONNECTION}" = "sqlite" ]; then
   ln -sF /2fauth/database.sqlite /srv/database/database.sqlite
 fi
 
+# Inject storage in /2fauth and use it with a symlink
+if [ ! -d /2fauth/storage ]; then
+  mv /srv/storage /2fauth/storage
+else
+  rm -r /srv/storage
+fi
+ln -sF /2fauth/storage /srv/storage
+
 sudo service php7.3-fpm start
 sudo service php7.3-fpm status
 
