@@ -59,6 +59,7 @@ The container will automagically pick it up.
 
 ## TODOs
 
+- Write short commit hash to installed file to only migrate on commit change
 - Base image (or other image) on Alpine.
 - Setup CI to build image on push to master
 - Change Dockerfile and CI to cross build for all architectures.
