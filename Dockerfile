@@ -6,33 +6,33 @@ FROM composer:${COMPOSER_VERSION} AS composer
 FROM debian:${DEBIAN_VERSION}
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install PHP and PHP system dependencies
-RUN apt-get update && \
-    apt-get install -y \
-    php7.3 \
-    php7.3-sqlite3 php7.3-mysql \
-    php-xml && \
-    apt-get clean && \
-    rm -rf /var/cache/* /var/lib/apt/lists/*
-
-# Composer
-RUN apt-get update && \
-    apt-get install -y unzip composer && \
-    apt-get clean && \
-    rm -rf /var/cache/* /var/lib/apt/lists/* /usr/bin/composer
-# Use composer 2 instead of composer 1
+# Composer 2
 COPY --from=composer --chown=www-data /usr/bin/composer /usr/bin/composer
 
-# PHP FPM
+# Install PHP and PHP system dependencies
 RUN apt-get update && \
-    apt-get install -y php7.3-fpm && \
+    apt-get install -y --no-install-recommends \
+    # PHP
+    php7.3 \
+    # PHP SQL drivers
+    php7.3-sqlite3 php7.3-mysql \
+    # PHP extensions
+    php-xml php7.3-gd php7.3-mbstring \
+    # Unzip for composer
+    unzip \
+    # PHP FPM and sudo to run PHP-FPM without root
+    php7.3-fpm sudo \
+    # Nginx to serve HTTP and communicate with PHP-FPM
+    nginx \
+    && \
+    # Clean up
     apt-get clean && \
-    rm -rf /var/cache/* /var/lib/apt/lists/*
-# Sudo to start PHP-FPM without root
-RUN apt-get update && \
-    apt-get install -y sudo && \
-    apt-get clean && \
-    rm -rf /var/cache/* /var/lib/apt/lists/*
+    rm -rf /var/cache/* /var/lib/apt/lists/* /etc/nginx/nginx.conf && \
+    # Fix ownership to www-data
+    chown -R www-data /var/log/nginx /var/lib/nginx/
+
+# PHP FPM configuration
+# Allow to run it with sudo from user www-data
 RUN echo "www-data ALL = NOPASSWD: /usr/sbin/service php7.3-fpm start, /usr/sbin/service php7.3-fpm status, /usr/sbin/service php7.3-fpm stop" > /etc/sudoers.d/www-data && \
     chmod 0440 /etc/sudoers.d/www-data
 # Pre-create files with the correct permissions
@@ -42,14 +42,8 @@ RUN mkdir /run/php && \
     chmod 700 /run/php /var/log/php7.3-fpm.log && \
     ln -sf /dev/stdout /var/log/php7.3-fpm.log
 
-# NGINX
+# Nginx configuration
 EXPOSE 8000/tcp
-RUN apt-get update && \
-    apt-get install -y nginx && \
-    apt-get clean && \
-    rm -rf /var/cache/* /var/lib/apt/lists/* \
-    /etc/nginx/nginx.conf && \
-    chown -R www-data /var/log/nginx /var/lib/nginx/
 RUN touch /run/nginx.pid && \
     chown www-data /run/nginx.pid
 RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
