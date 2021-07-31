@@ -27,7 +27,7 @@ else
   php artisan passport:install
   php artisan storage:link
   php artisan config:cache
-  echo "" > /2fauth/installed
+  echo "do not remove me" > /2fauth/installed
 fi
 
 echo "Nginx listening on :8000"
