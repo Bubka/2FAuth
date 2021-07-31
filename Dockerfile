@@ -116,7 +116,7 @@ ENV \
   # Database config & credentials
   # DB_CONNECTION can be mysql
   DB_CONNECTION=sqlite \
-  DB_DATABASE="/srv/database/.sqlite" \
+  DB_DATABASE="/srv/database/database.sqlite" \
   # if you want to use MySQL:
   DB_HOST=127.0.0.1 \
   DB_PORT=3306 \

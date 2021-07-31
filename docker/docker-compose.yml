@@ -40,7 +40,7 @@ services:
       # Database config & credentials
       # DB_CONNECTION can be mysql
       - DB_CONNECTION=sqlite
-      - DB_DATABASE="/srv/database/.sqlite"
+      - DB_DATABASE="/srv/database/database.sqlite"
       # if you want to use MySQL:
       - DB_HOST=mysql
       - DB_PORT=3306

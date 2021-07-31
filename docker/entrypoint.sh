@@ -9,11 +9,11 @@ trap cleanup 0
 set -e
 
 if [ "${DB_CONNECTION}" = "sqlite" ]; then
-  if [ ! -f /2fauth/.sqlite ]; then
-    touch /2fauth/.sqlite
+  if [ ! -f /2fauth/database.sqlite ]; then
+    touch /2fauth/database.sqlite
   fi
-  rm -f /srv/database/.sqlite
-  ln -sF /2fauth/.sqlite /srv/database/.sqlite
+  rm -f /srv/database/database.sqlite
+  ln -sF /2fauth/database.sqlite /srv/database/database.sqlite
 fi
 
 sudo service php7.3-fpm start
