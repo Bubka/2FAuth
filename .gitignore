@@ -3,6 +3,7 @@
 /storage/*.key
 /tests/Coverage
 /vendor
+/.vscode
 .env
 .phpunit.result.cache
 Homestead.json
