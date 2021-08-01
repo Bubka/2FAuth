@@ -10,6 +10,8 @@ A web app to manage your Two-Factor Authentication (2FA) accounts and generate t
 
 [**2FAuth Demo**](https://demo.2fauth.app/)
 
+[**Use it with Docker**](docker)
+
 Credentials (login - password) : *demo@2fauth.app* - *demo*
 
 ## Purpose
