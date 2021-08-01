@@ -1,5 +1,7 @@
 # Docker
 
+[![dockeri.co](https://dockeri.co/image/2fauth/2fauth)](https://hub.docker.com/r/2fauth/2fauth)
+
 You can run 2fauth in a single Docker container.
 
 ## Features
