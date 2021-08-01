@@ -57,6 +57,20 @@ The Docker image `2fauth/2fauth` is built on every commit pushed to the `master`
 
 You can therefore pull the image with `docker pull 2fauth/2fauth` and restart the container to update it.
 
+## Build the image
+
+You can build the image from the `master` branch with `docker` and `git` using:
+
+```sh
+docker build -t 2fauth/2fauth https://github.com/Bubka/2FAuth.git
+```
+
+You can also build a specific commit (see [master's commits](https://github.com/Bubka/2FAuth/commits/master)) by appending the commit hash with `#<commit-hash>` to the command. For example:
+
+```sh
+docker build -t 2fauth/2fauth https://github.com/Bubka/2FAuth.git#fba9e29bd4e3bb697296bb0bde60ae869537528b
+```
+
 ## Implementation details
 
 - The container is based on `debian:buster-slim`
