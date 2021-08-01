@@ -7,7 +7,7 @@ You can run 2fauth in a single Docker container.
 ## Features
 
 - Runs without root as user `www-data`
-- Only **182MB** (uncompressed amd64 image)
+- [![Latest size](https://img.shields.io/docker/image-size/2fauth/2fauth/latest?label=Image%20size)](https://hub.docker.com/r/2fauth/2fauth/tags)
 - Compatible with `amd64` only for now
 
 ## Setup
@@ -29,7 +29,7 @@ You can run 2fauth in a single Docker container.
 
     ```sh
     docker run -it --rm -p 8000:8000/tcp \
-    -v /yourpath/2fauth:/2fauth qmcgaw/2fauth
+    -v /yourpath/2fauth:/2fauth 2fauth/2fauth
     ```
 
 1. Access it at [http://localhost:8000](http://localhost:8000)
