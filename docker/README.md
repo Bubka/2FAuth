@@ -51,6 +51,12 @@ chmod 700 /yourpath/2fauth/database.sqlite
 
 The container will automagically pick it up.
 
+## Update
+
+The Docker image `2fauth/2fauth` is built on every commit pushed to the `master` branch.
+
+You can therefore pull the image with `docker pull 2fauth/2fauth` and restart the container to update it.
+
 ## Implementation details
 
 - The container is based on `debian:buster-slim`
