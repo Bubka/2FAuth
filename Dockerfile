@@ -1,13 +1,17 @@
 ARG DEBIAN_VERSION=buster-slim
 ARG COMPOSER_VERSION=2.1
+ARG SUPERVISORD_VERSION=v0.7.3
 
 FROM composer:${COMPOSER_VERSION} AS composer
+FROM qmcgaw/binpot:supervisord-${SUPERVISORD_VERSION} AS supervisord
 
 FROM debian:${DEBIAN_VERSION}
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Composer 2
 COPY --from=composer --chown=www-data /usr/bin/composer /usr/bin/composer
+# Supervisord from https://github.com/ochinchina/supervisord
+COPY --from=supervisord --chown=www-data /bin /usr/local/bin/supervisord
 
 # Install PHP and PHP system dependencies
 RUN apt-get update && \
@@ -20,10 +24,8 @@ RUN apt-get update && \
     php-xml php7.3-gd php7.3-mbstring \
     # Unzip for composer
     unzip \
-    # PHP FPM and sudo to run PHP-FPM without root
-    php7.3-fpm sudo \
-    # Nginx to serve HTTP and communicate with PHP-FPM
-    nginx \
+    # Nginx and PHP FPM to serve over HTTP
+    php7.3-fpm nginx \
     && \
     # Clean up
     apt-get clean && \
@@ -32,15 +34,11 @@ RUN apt-get update && \
     chown -R www-data /var/log/nginx /var/lib/nginx/
 
 # PHP FPM configuration
-# Allow to run it with sudo from user www-data
-RUN echo "www-data ALL = NOPASSWD: /usr/sbin/service php7.3-fpm start, /usr/sbin/service php7.3-fpm status, /usr/sbin/service php7.3-fpm stop" > /etc/sudoers.d/www-data && \
-    chmod 0440 /etc/sudoers.d/www-data
 # Pre-create files with the correct permissions
 RUN mkdir /run/php && \
     touch /var/log/php7.3-fpm.log && \
     chown www-data /run/php /var/log/php7.3-fpm.log && \
-    chmod 700 /run/php /var/log/php7.3-fpm.log && \
-    ln -sf /dev/stdout /var/log/php7.3-fpm.log
+    chmod 700 /run/php /var/log/php7.3-fpm.log
 
 # Nginx configuration
 EXPOSE 8000/tcp
@@ -48,6 +46,9 @@ RUN touch /run/nginx.pid && \
     chown www-data /run/nginx.pid
 COPY --chown=www-data docker/nginx.conf /etc/nginx/nginx.conf
 RUN nginx -t
+
+# Supervisord configuration
+COPY --chown=www-data docker/supervisord.conf /etc/supervisor/supervisord.conf
 
 # Create end user directory
 RUN mkdir -p /2fauth && \
