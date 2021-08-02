@@ -2,6 +2,11 @@
 
 set -e
 
+# Show versions
+echo "supervisord version: $(supervisord version)"
+php-fpm7.3 -v | head -n 1
+nginx -v
+
 if [ "${DB_CONNECTION}" = "sqlite" ]; then
   if [ ! -f /2fauth/database.sqlite ]; then
     touch /2fauth/database.sqlite
