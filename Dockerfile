@@ -47,6 +47,7 @@ EXPOSE 8000/tcp
 RUN touch /run/nginx.pid && \
     chown www-data /run/nginx.pid
 COPY --chown=www-data docker/nginx.conf /etc/nginx/nginx.conf
+RUN nginx -t
 
 # Create end user directory
 RUN mkdir -p /2fauth && \
