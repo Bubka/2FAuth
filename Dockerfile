@@ -1,13 +1,16 @@
+ARG BUILDPLATFORM=linux/amd64
+ARG TARGETPLATFORM
 ARG DEBIAN_VERSION=buster-slim
 ARG COMPOSER_VERSION=2.1
 ARG SUPERVISORD_VERSION=v0.7.3
 
+FROM --platform=${BUILDPLATFORM} composer:${COMPOSER_VERSION} AS build-composer
 FROM composer:${COMPOSER_VERSION} AS composer
 FROM qmcgaw/binpot:supervisord-${SUPERVISORD_VERSION} AS supervisord
 
-FROM debian:${DEBIAN_VERSION} AS vendor
+FROM --platform=${BUILDPLATFORM} debian:${DEBIAN_VERSION} AS vendor
 ENV DEBIAN_FRONTEND=noninteractive
-COPY --from=composer --chown=www-data /usr/bin/composer /usr/bin/composer
+COPY --from=build-composer --chown=www-data /usr/bin/composer /usr/bin/composer
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     # PHP
