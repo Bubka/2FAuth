@@ -26,14 +26,13 @@ ln -sF /2fauth/storage /srv/storage
 if [ -f /2fauth/installed ]; then
   php artisan migrate
   php artisan config:clear
-  php artisan storage:link
-  php artisan config:cache
 else
   php artisan migrate:refresh
   php artisan passport:install
-  php artisan storage:link
-  php artisan config:cache
   echo "do not remove me" > /2fauth/installed
 fi
+
+php artisan storage:link
+php artisan config:cache
 
 supervisord
