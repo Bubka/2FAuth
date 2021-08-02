@@ -60,10 +60,6 @@ WORKDIR /srv
 RUN chown -R www-data /srv && \
     chmod 700 /srv
 
-# Fix ownership for /var/www
-RUN chown -R www-data /var/www && \
-    chmod 700 /var/www
-
 # Run without root
 USER www-data
 
@@ -72,8 +68,7 @@ COPY --chown=www-data artisan composer.json composer.lock ./
 # Disable xdebug
 RUN phpdismod xdebug
 COPY --chown=www-data database ./database
-RUN composer install --prefer-dist --no-scripts --no-dev --no-autoloader && \
-    rm -rf /var/www/.composer
+RUN composer install --prefer-dist --no-scripts --no-dev --no-autoloader
 
 # Copy the rest of the code
 COPY --chown=www-data . .
