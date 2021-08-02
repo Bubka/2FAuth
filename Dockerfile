@@ -46,8 +46,6 @@ RUN mkdir /run/php && \
 EXPOSE 8000/tcp
 RUN touch /run/nginx.pid && \
     chown www-data /run/nginx.pid
-RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
-    ln -sf /dev/stderr /var/log/nginx/error.log
 COPY --chown=www-data docker/nginx.conf /etc/nginx/nginx.conf
 
 # Create end user directory
