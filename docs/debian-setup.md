@@ -112,7 +112,7 @@ chmod 500 /usr/local/bin/composer
     mv /tmp/supervisord_static /usr/local/bin/supervisord
     ```
 
-1. Set its configuration in `/etc/supervisor/supervisord.conf` as:
+1. Set its configuration in `/etc/supervisord.conf` as:
 
     ```ini
     [supervisord]
