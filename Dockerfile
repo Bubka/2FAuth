@@ -5,6 +5,26 @@ ARG SUPERVISORD_VERSION=v0.7.3
 FROM composer:${COMPOSER_VERSION} AS composer
 FROM qmcgaw/binpot:supervisord-${SUPERVISORD_VERSION} AS supervisord
 
+FROM debian:${DEBIAN_VERSION} AS vendor
+ENV DEBIAN_FRONTEND=noninteractive
+COPY --from=composer --chown=www-data /usr/bin/composer /usr/bin/composer
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    # PHP
+    php7.3 \
+    # PHP extensions for composer
+    php-xml php7.3-mbstring  \
+    # Unzip for composer
+    unzip \
+    && \
+    # Clean up
+    apt-get clean && \
+    rm -rf /var/cache/* /var/lib/apt/lists/*
+WORKDIR /srv
+COPY artisan composer.json composer.lock ./
+COPY database ./database
+RUN composer install --prefer-dist --no-scripts --no-dev --no-autoloader
+
 FROM debian:${DEBIAN_VERSION}
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -22,8 +42,6 @@ RUN apt-get update && \
     php7.3-sqlite3 php7.3-mysql \
     # PHP extensions
     php-xml php7.3-gd php7.3-mbstring \
-    # Unzip for composer
-    unzip \
     # Nginx and PHP FPM to serve over HTTP
     php7.3-fpm nginx \
     && \
@@ -64,11 +82,7 @@ RUN chown -R www-data /srv && \
 USER www-data
 
 # Dependencies
-COPY --chown=www-data artisan composer.json composer.lock ./
-# Disable xdebug
-RUN phpdismod xdebug
-COPY --chown=www-data database ./database
-RUN composer install --prefer-dist --no-scripts --no-dev --no-autoloader
+COPY --from=vendor --chown=www-data /srv/vendor /srv/vendor
 
 # Copy the rest of the code
 COPY --chown=www-data . .
