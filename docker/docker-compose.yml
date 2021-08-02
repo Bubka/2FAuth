@@ -16,7 +16,7 @@ services:
       # Set to true if you want to see debug information in error screens.
       - APP_DEBUG=false
       # This should be your email address
-      - SITE_OWNER=mail@example.com 
+      - SITE_OWNER=mail@example.com
       # The encryption key for  our database and sessions. Keep this very secure.
       # If you generate a new one all existing data must be considered LOST.
       # Change it to a string of exactly 32 chars or use command `php artisan key:generate` to generate it
