@@ -63,6 +63,8 @@ Sensitive data stored in the database can be encrypted to protect them against d
 
 ## Installation (using command line)
 
+➡️ [Set it up on Debian](docs/debian-setup.md)
+
 ### Clone the repo
 
 ```sh
