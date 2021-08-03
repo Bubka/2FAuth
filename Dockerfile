@@ -165,4 +165,16 @@ ENV \
   MIX_PUSHER_APP_CLUSTER="${PUSHER_APP_CLUSTER}" \
   MIX_ENV=local
 
-
+ARG VERSION=unknown
+ARG CREATED="an unknown date"
+ARG COMMIT=unknown
+LABEL \
+    org.opencontainers.image.authors="https://github.com/Bubka" \
+    org.opencontainers.image.version=$VERSION \
+    org.opencontainers.image.created=$CREATED \
+    org.opencontainers.image.revision=$COMMIT \
+    org.opencontainers.image.url="https://github.com/Bubka/2FAuth" \
+    org.opencontainers.image.documentation="https://hub.docker.com/r/2fauth/2fauth" \
+    org.opencontainers.image.source="https://github.com/Bubka/2FAuth" \
+    org.opencontainers.image.title="2fauth" \
+    org.opencontainers.image.description="A web app to manage your Two-Factor Authentication (2FA) accounts and generate their security codes"
