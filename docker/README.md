@@ -15,7 +15,7 @@ You can run 2fauth in a single Docker container.
 1. Create a directory on your host `2fauth`:
 
     ```sh
-    mkdir 2fauth 
+    mkdir 2fauth
     ```
 
 1. **If your host is not Windows**: since the container runs without root as user `www-data` (`uid=33(www-data) gid=33(www-data) groups=33(www-data)`), you need to fix the ownership and permissions of that directory:
@@ -87,7 +87,4 @@ You might want to remove the `installed` file bind mounted in `/2fauth` so the d
 
 ## TODOs
 
-- Write short commit hash to installed file to only migrate on commit change
-- Base image (or other image) on Alpine.
-- Setup CI to build image on push to master
-- Change Dockerfile and CI to cross build for all architectures.
+- Base image (or other image) on Alpine (for a possibly smaller image)
