@@ -1,5 +1,7 @@
 # Docker
 
+[![Build status](https://github.com/Bubka/2fauth/actions/workflows/ci.yml/badge.svg)](https://github.com/Bubka/2fauth/actions/workflows/ci.yml)
+
 [![dockeri.co](https://dockeri.co/image/2fauth/2fauth)](https://hub.docker.com/r/2fauth/2fauth)
 
 You can run 2fauth in a single Docker container.

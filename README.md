@@ -1,6 +1,7 @@
 # 2FAuth
 
 ![https://travis-ci.com/github/Bubka/2FAuth](https://img.shields.io/travis/com/bubka/2fauth?style=flat-square)
+[![Docker build status](https://github.com/Bubka/2fauth/actions/workflows/ci.yml/badge.svg)](https://github.com/Bubka/2fauth/actions/workflows/ci.yml)
 ![https://codecov.io/gh/Bubka/2FAuth](https://img.shields.io/codecov/c/github/Bubka/2FAuth?style=flat-square)
 ![https://github.com/Bubka/2FAuth/blob/master/LICENSE](https://img.shields.io/github/license/Bubka/2FAuth.svg?style=flat-square)
 
