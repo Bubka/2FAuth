@@ -1,6 +1,7 @@
 ARG BUILDPLATFORM=linux/amd64
 ARG TARGETPLATFORM
 ARG DEBIAN_VERSION=buster-slim
+ARG PHP_VERSION=7.3
 ARG COMPOSER_VERSION=2.1
 ARG SUPERVISORD_VERSION=v0.7.3
 
@@ -8,20 +9,11 @@ FROM --platform=${BUILDPLATFORM} composer:${COMPOSER_VERSION} AS build-composer
 FROM composer:${COMPOSER_VERSION} AS composer
 FROM qmcgaw/binpot:supervisord-${SUPERVISORD_VERSION} AS supervisord
 
-FROM --platform=${BUILDPLATFORM} debian:${DEBIAN_VERSION} AS vendor
+FROM --platform=${BUILDPLATFORM} php:${PHP_VERSION} AS vendor
 ENV DEBIAN_FRONTEND=noninteractive
 COPY --from=build-composer --chown=www-data /usr/bin/composer /usr/bin/composer
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-    # PHP
-    php7.3 \
-    # PHP extensions for composer
-    php-xml php7.3-mbstring  \
-    # Unzip for composer
-    unzip \
-    && \
-    # Clean up
-    apt-get clean && \
+    apt-get install -y --no-install-recommends unzip && \
     rm -rf /var/cache/* /var/lib/apt/lists/*
 WORKDIR /srv
 COPY artisan composer.json composer.lock ./
