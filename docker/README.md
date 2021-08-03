@@ -71,6 +71,12 @@ You can also build a specific commit (see [master's commits](https://github.com/
 docker build -t 2fauth/2fauth https://github.com/Bubka/2FAuth.git#fba9e29bd4e3bb697296bb0bde60ae869537528b
 ```
 
+## Change database
+
+If you want to change database, for example switch from SQLite to MySQL, there is no migration yet.
+
+You might want to remove the `installed` file bind mounted in `/2fauth` so the database is re-created.
+
 ## Implementation details
 
 - The container is based on `debian:buster-slim`
