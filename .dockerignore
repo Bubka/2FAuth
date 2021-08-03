@@ -5,7 +5,6 @@ tests
 .editorconfig
 .env.example
 .env.testing
-.env.travis
 .gitattributes
 .gitignore
 .styleci.yml
@@ -13,5 +12,4 @@ tests
 changelog.md
 Dockerfile
 LICENSE
-phpunit.xml
 README.md

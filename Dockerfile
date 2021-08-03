@@ -20,6 +20,13 @@ COPY artisan composer.json composer.lock ./
 COPY database ./database
 RUN composer install --prefer-dist --no-scripts --no-dev --no-autoloader
 
+FROM --platform=${BUILDPLATFORM} vendor AS test
+COPY . .
+RUN mv .env.travis .env
+RUN composer install
+RUN php artisan key:generate
+ENTRYPOINT [ "/srv/vendor/bin/phpunit" ]
+
 FROM debian:${DEBIAN_VERSION}
 ENV DEBIAN_FRONTEND=noninteractive
 
