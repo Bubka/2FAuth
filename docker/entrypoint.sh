@@ -23,15 +23,20 @@ else
 fi
 ln -sF /2fauth/storage /srv/storage
 
+# Note: ${COMMIT} is set by the CI
 if [ -f /2fauth/installed ]; then
-  php artisan migrate
-  php artisan config:clear
+  INSTALLED_COMMIT="$(cat /2fauth/installed)"
+  if [ "${INSTALLED_COMMIT}" != "${COMMIT}" ]; then
+    echo "Installed commit ${INSTALLED_COMMIT} is different from program commit ${COMMIT}, we are migrating..."
+    php artisan migrate
+    php artisan config:clear
+  fi
 else
   php artisan migrate:refresh
   php artisan passport:install
-  echo "do not remove me" > /2fauth/installed
 fi
 
+echo "${COMMIT}" > /2fauth/installed
 php artisan storage:link
 php artisan config:cache
 

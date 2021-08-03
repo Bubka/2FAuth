@@ -168,6 +168,7 @@ ENV \
 ARG VERSION=unknown
 ARG CREATED="an unknown date"
 ARG COMMIT=unknown
+ENV COMMIT=${COMMIT}
 LABEL \
     org.opencontainers.image.authors="https://github.com/Bubka" \
     org.opencontainers.image.version=$VERSION \
