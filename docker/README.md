@@ -28,6 +28,8 @@ You can run 2fauth in a single Docker container.
     chmod 700 2fauth
     ```
 
+    💁 if you feel like using another ID, you can [build the image with build arguments](#Build-the-image-with-build-arguments).
+
 1. Run the container interactively:
 
     ```sh
@@ -83,6 +85,22 @@ You can build a specific commit (see [master's commits](https://github.com/Bubka
 ```sh
 docker build -t 2fauth/2fauth https://github.com/Bubka/2FAuth.git#fba9e29bd4e3bb697296bb0bde60ae869537528b
 ```
+
+### Build the image with build arguments
+
+There are the following build arguments you can use to customize the image using `--build-arg key=value`:
+
+| Build argument | Default | Description |
+| --- | --- | --- |
+| `UID` | 1000 | The UID of the user to run the container as |
+| `GID` | 1000 | The GID of the user to run the container as |
+| `DEBIAN_VERSION` | `buster-slim` | The Debian version to use |
+| `PHP_VERSION` | `7.3-buster` | The PHP version to use to get composer dependencies |
+| `COMPOSER_VERSION` | `2.1` | The version of composer to use |
+| `SUPERVISORD_VERSION` | `v0.7.3` | The version of supervisord to use |
+| `VERSION` | `unknown` | The version of the image |
+| `CREATED` | `an unknown date` | The date of the image build time |
+| `COMMIT` | `unknown` | The commit hash of the Git commit used |
 
 ## Implementation details
 
