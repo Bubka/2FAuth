@@ -8,10 +8,10 @@ You can run 2fauth in a single Docker container.
 
 ## Features
 
-- Runs without root as user `www-data`
 - [![Latest size](https://img.shields.io/docker/image-size/2fauth/2fauth/latest?label=Image%20size)](https://hub.docker.com/r/2fauth/2fauth/tags)
 - Compatible with `amd64` only for now
 - Stores data in a Sqlite database file
+- Runs without root as user with id `1000` and group id `1000`
 
 ## Setup
 
@@ -21,10 +21,10 @@ You can run 2fauth in a single Docker container.
     mkdir 2fauth
     ```
 
-1. **If your host is not Windows**: since the container runs without root as user `www-data` (`uid=33(www-data) gid=33(www-data) groups=33(www-data)`), you need to fix the ownership and permissions of that directory:
+1. **If your host is not Windows**: since the container runs without root as user `1000:1000`, you need to fix the ownership and permissions of that directory:
 
     ```sh
-    chown 33:33 2fauth
+    chown 1000:1000 2fauth
     chmod 700 2fauth
     ```
 

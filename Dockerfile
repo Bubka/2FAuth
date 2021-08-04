@@ -11,7 +11,7 @@ FROM qmcgaw/binpot:supervisord-${SUPERVISORD_VERSION} AS supervisord
 
 FROM --platform=${BUILDPLATFORM} php:${PHP_VERSION} AS vendor
 ENV DEBIAN_FRONTEND=noninteractive
-COPY --from=build-composer --chown=www-data /usr/bin/composer /usr/bin/composer
+COPY --from=build-composer --chown=${UID}:${GID} /usr/bin/composer /usr/bin/composer
 RUN apt-get update && \
     apt-get install -y --no-install-recommends unzip && \
     rm -rf /var/cache/* /var/lib/apt/lists/*
@@ -30,10 +30,13 @@ ENTRYPOINT [ "/srv/vendor/bin/phpunit" ]
 FROM debian:${DEBIAN_VERSION}
 ENV DEBIAN_FRONTEND=noninteractive
 
+ARG UID=1000
+ARG GID=1000
+
 # Composer 2
-COPY --from=composer --chown=www-data /usr/bin/composer /usr/bin/composer
+COPY --from=composer --chown=${UID}:${GID} /usr/bin/composer /usr/bin/composer
 # Supervisord from https://github.com/ochinchina/supervisord
-COPY --from=supervisord --chown=www-data /bin /usr/local/bin/supervisord
+COPY --from=supervisord --chown=${UID}:${GID} /bin /usr/local/bin/supervisord
 
 # Install PHP and PHP system dependencies
 RUN apt-get update && \
@@ -50,52 +53,54 @@ RUN apt-get update && \
     # Clean up
     apt-get clean && \
     rm -rf /var/cache/* /var/lib/apt/lists/* /etc/nginx/nginx.conf && \
-    # Fix ownership to www-data
-    chown -R www-data /var/log/nginx /var/lib/nginx/
+    # Fix ownership to ${UID}:${GID}
+    chown -R ${UID}:${GID} /var/log/nginx /var/lib/nginx/
 
 # PHP FPM configuration
-# Remove ignored directives from php-fpm pool config
+# Change username and ownership in php-fpm pool config
 RUN sed -i '/user = www-data/d' /etc/php/7.3/fpm/pool.d/www.conf && \
-    sed -i '/group = www-data/d' /etc/php/7.3/fpm/pool.d/www.conf
+    sed -i '/group = www-data/d' /etc/php/7.3/fpm/pool.d/www.conf && \
+    sed -i 's/listen.owner = www-data/listen.owner = ${UID}/g' /etc/php/7.3/fpm/pool.d/www.conf && \
+    sed -i 's/listen.group = www-data/listen.group = ${GID}/g' /etc/php/7.3/fpm/pool.d/www.conf
 # Pre-create files with the correct permissions
 RUN mkdir /run/php && \
     touch /var/log/php7.3-fpm.log && \
-    chown www-data /run/php /var/log/php7.3-fpm.log && \
+    chown ${UID}:${GID} /run/php /var/log/php7.3-fpm.log && \
     chmod 700 /run/php /var/log/php7.3-fpm.log
 
 # Nginx configuration
 EXPOSE 8000/tcp
 RUN touch /run/nginx.pid && \
-    chown www-data /run/nginx.pid
-COPY --chown=www-data docker/nginx.conf /etc/nginx/nginx.conf
+    chown ${UID}:${GID} /run/nginx.pid
+COPY --chown=${UID}:${GID} docker/nginx.conf /etc/nginx/nginx.conf
 RUN nginx -t
 
 # Supervisord configuration
-COPY --chown=www-data docker/supervisord.conf /etc/supervisor/supervisord.conf
+COPY --chown=${UID}:${GID} docker/supervisord.conf /etc/supervisor/supervisord.conf
 
 # Create end user directory
 RUN mkdir -p /2fauth && \
-    chown -R www-data /2fauth && \
+    chown -R ${UID}:${GID} /2fauth && \
     chmod 700 /2fauth
 
 # Create /srv internal directory
 WORKDIR /srv
-RUN chown -R www-data /srv && \
+RUN chown -R ${UID}:${GID} /srv && \
     chmod 700 /srv
 
 # Run without root
-USER www-data
+USER ${UID}:${GID}
 
 # Dependencies
-COPY --from=vendor --chown=www-data /srv/vendor /srv/vendor
+COPY --from=vendor --chown=${UID}:${GID} /srv/vendor /srv/vendor
 
 # Copy the rest of the code
-COPY --chown=www-data . .
+COPY --chown=${UID}:${GID} . .
 RUN composer dump-autoload --no-scripts --no-dev --optimize
 
 # Entrypoint
 ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ]
-COPY --chown=www-data docker/entrypoint.sh /usr/local/bin/entrypoint.sh
+COPY --chown=${UID}:${GID} docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod 500 /usr/local/bin/entrypoint.sh
 
 ENV \
