@@ -2,6 +2,8 @@
 
 set -e
 
+echo "Running version ${VERSION} commit ${COMMIT} built on ${CREATED}"
+
 # Show versions
 echo "supervisord version: $(supervisord version)"
 php-fpm7.3 -v | head -n 1
