@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 set -e
 
@@ -6,7 +6,7 @@ echo "Running version ${VERSION} commit ${COMMIT} built on ${CREATED}"
 
 # Show versions
 echo "supervisord version: $(supervisord version)"
-php-fpm7.3 -v | head -n 1
+php-fpm7 -v | head -n 1
 nginx -v
 
 if [ "${DB_CONNECTION}" = "sqlite" ]; then
@@ -14,7 +14,7 @@ if [ "${DB_CONNECTION}" = "sqlite" ]; then
     touch /2fauth/database.sqlite
   fi
   rm -f /srv/database/database.sqlite
-  ln -sF /2fauth/database.sqlite /srv/database/database.sqlite
+  ln -s /2fauth/database.sqlite /srv/database/database.sqlite
 fi
 
 # Inject storage in /2fauth and use it with a symlink
@@ -23,7 +23,7 @@ if [ ! -d /2fauth/storage ]; then
 else
   rm -r /srv/storage
 fi
-ln -sF /2fauth/storage /srv/storage
+ln -s /2fauth/storage /srv/storage
 
 # Note: ${COMMIT} is set by the CI
 if [ -f /2fauth/installed ]; then

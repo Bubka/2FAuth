@@ -1,7 +1,7 @@
 ARG BUILDPLATFORM=linux/amd64
 ARG TARGETPLATFORM
-ARG DEBIAN_VERSION=buster-slim
-ARG PHP_VERSION=7.3-buster
+ARG ALPINE_VERSION=3.14
+ARG PHP_VERSION=7.3-alpine${ALPINE_VERSION}
 ARG COMPOSER_VERSION=2.1
 ARG SUPERVISORD_VERSION=v0.7.3
 
@@ -10,15 +10,13 @@ FROM composer:${COMPOSER_VERSION} AS composer
 FROM qmcgaw/binpot:supervisord-${SUPERVISORD_VERSION} AS supervisord
 
 FROM --platform=${BUILDPLATFORM} php:${PHP_VERSION} AS vendor
-ENV DEBIAN_FRONTEND=noninteractive
 COPY --from=build-composer --chown=${UID}:${GID} /usr/bin/composer /usr/bin/composer
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends unzip && \
-    rm -rf /var/cache/* /var/lib/apt/lists/*
+RUN apk add --no-cache unzip
 WORKDIR /srv
 COPY artisan composer.json composer.lock ./
 COPY database ./database
 RUN composer install --prefer-dist --no-scripts --no-dev --no-autoloader
+RUN composer dump-autoload --no-scripts --no-dev --optimize
 
 FROM --platform=${BUILDPLATFORM} vendor AS test
 COPY . .
@@ -27,8 +25,7 @@ RUN composer install
 RUN php artisan key:generate
 ENTRYPOINT [ "/srv/vendor/bin/phpunit" ]
 
-FROM debian:${DEBIAN_VERSION}
-ENV DEBIAN_FRONTEND=noninteractive
+FROM alpine:${ALPINE_VERSION}
 
 ARG UID=1000
 ARG GID=1000
@@ -39,39 +36,40 @@ COPY --from=composer --chown=${UID}:${GID} /usr/bin/composer /usr/bin/composer
 COPY --from=supervisord --chown=${UID}:${GID} /bin /usr/local/bin/supervisord
 
 # Install PHP and PHP system dependencies
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
+RUN apk add --update --no-cache \
     # PHP
-    php7.3 \
+    php7 \
+    # Composer dependencies
+    php7-phar \
     # PHP SQLite driver
-    php7.3-sqlite3 \
+    php7-pdo_sqlite php7-sqlite3 \
     # PHP extensions
-    php-xml php7.3-gd php7.3-mbstring \
+    php7-xml php7-gd php7-mbstring \
+    # Runtime dependencies
+    php7-session php7-json php7-openssl \
     # Nginx and PHP FPM to serve over HTTP
-    php7.3-fpm nginx \
+    php7-fpm nginx \
     && \
     # Clean up
-    apt-get clean && \
-    rm -rf /var/cache/* /var/lib/apt/lists/* /etc/nginx/nginx.conf && \
+    rm /etc/nginx/nginx.conf && \
     # Fix ownership to ${UID}:${GID}
-    chown -R ${UID}:${GID} /var/log/nginx /var/lib/nginx/
+    chown -R ${UID}:${GID} /var/lib/nginx/
 
 # PHP FPM configuration
 # Change username and ownership in php-fpm pool config
-RUN sed -i '/user = www-data/d' /etc/php/7.3/fpm/pool.d/www.conf && \
-    sed -i '/group = www-data/d' /etc/php/7.3/fpm/pool.d/www.conf && \
-    sed -i 's/listen.owner = www-data/listen.owner = ${UID}/g' /etc/php/7.3/fpm/pool.d/www.conf && \
-    sed -i 's/listen.group = www-data/listen.group = ${GID}/g' /etc/php/7.3/fpm/pool.d/www.conf
+RUN sed -i '/user = nobody/d' /etc/php7/php-fpm.d/www.conf && \
+    sed -i '/group = nobody/d' /etc/php7/php-fpm.d/www.conf && \
+    sed -i '/listen.owner/d' /etc/php7/php-fpm.d/www.conf && \
+    sed -i '/listen.group/d' /etc/php7/php-fpm.d/www.conf
 # Pre-create files with the correct permissions
 RUN mkdir /run/php && \
-    touch /var/log/php7.3-fpm.log && \
-    chown ${UID}:${GID} /run/php /var/log/php7.3-fpm.log && \
-    chmod 700 /run/php /var/log/php7.3-fpm.log
+    chown ${UID}:${GID} /run/php /var/log/php7 && \
+    chmod 700 /run/php /var/log/php7
 
 # Nginx configuration
 EXPOSE 8000/tcp
-RUN touch /run/nginx.pid && \
-    chown ${UID}:${GID} /run/nginx.pid
+RUN touch /run/nginx/nginx.pid /var/lib/nginx/logs/error.log && \
+    chown ${UID}:${GID} /run/nginx/nginx.pid /var/lib/nginx/logs/error.log
 COPY --chown=${UID}:${GID} docker/nginx.conf /etc/nginx/nginx.conf
 RUN nginx -t
 
@@ -96,7 +94,7 @@ COPY --from=vendor --chown=${UID}:${GID} /srv/vendor /srv/vendor
 
 # Copy the rest of the code
 COPY --chown=${UID}:${GID} . .
-RUN composer dump-autoload --no-scripts --no-dev --optimize
+# RUN composer dump-autoload --no-scripts --no-dev --optimize
 
 # Entrypoint
 ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ]
