@@ -68,7 +68,17 @@ You can build the image from the `master` branch with `docker` and `git` using:
 docker build -t 2fauth/2fauth https://github.com/Bubka/2FAuth.git
 ```
 
-You can also build a specific commit (see [master's commits](https://github.com/Bubka/2FAuth/commits/master)) by appending the commit hash with `#<commit-hash>` to the command. For example:
+### Build the image for a specific release
+
+You can build a [specific release](https://github.com/Bubka/2FAuth/releases) by appending the release tag with `#<release-tag>` to the command. For example:
+
+```sh
+docker build -t 2fauth/2fauth https://github.com/Bubka/2FAuth.git#v2.1.0
+```
+
+### Build the image for a specific commit
+
+You can build a specific commit (see [master's commits](https://github.com/Bubka/2FAuth/commits/master)) by appending the commit hash with `#<commit-hash>` to the command. For example:
 
 ```sh
 docker build -t 2fauth/2fauth https://github.com/Bubka/2FAuth.git#fba9e29bd4e3bb697296bb0bde60ae869537528b
