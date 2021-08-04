@@ -37,15 +37,8 @@ services:
       # If you set it to debug your logs will grow large, and fast. If you set it to emergency probably
       # nothing will get logged, ever.
       - APP_LOG_LEVEL=notice
-      # Database config & credentials
-      # DB_CONNECTION can be mysql
-      - DB_CONNECTION=sqlite
+      # Database config (can only be sqlite)
       - DB_DATABASE="/srv/database/database.sqlite"
-      # if you want to use MySQL:
-      - DB_HOST=mysql
-      - DB_PORT=3306
-      - DB_USERNAME=homestead
-      - DB_PASSWORD=secret
       # If you're looking for performance improvements, you could install memcached.
       - CACHE_DRIVER=file
       - SESSION_DRIVER=file

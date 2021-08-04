@@ -11,6 +11,7 @@ You can run 2fauth in a single Docker container.
 - Runs without root as user `www-data`
 - [![Latest size](https://img.shields.io/docker/image-size/2fauth/2fauth/latest?label=Image%20size)](https://hub.docker.com/r/2fauth/2fauth/tags)
 - Compatible with `amd64` only for now
+- Stores data in a Sqlite database file
 
 ## Setup
 
@@ -72,12 +73,6 @@ You can also build a specific commit (see [master's commits](https://github.com/
 ```sh
 docker build -t 2fauth/2fauth https://github.com/Bubka/2FAuth.git#fba9e29bd4e3bb697296bb0bde60ae869537528b
 ```
-
-## Change database
-
-If you want to change database, for example switch from SQLite to MySQL, there is no migration yet.
-
-You might want to remove the `installed` file bind mounted in `/2fauth` so the database is re-created.
 
 ## Implementation details
 

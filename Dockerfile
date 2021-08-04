@@ -40,8 +40,8 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     # PHP
     php7.3 \
-    # PHP SQL drivers
-    php7.3-sqlite3 php7.3-mysql \
+    # PHP SQLite driver
+    php7.3-sqlite3 \
     # PHP extensions
     php-xml php7.3-gd php7.3-mbstring \
     # Nginx and PHP FPM to serve over HTTP
@@ -126,14 +126,9 @@ ENV \
   # nothing will get logged, ever.
   APP_LOG_LEVEL=notice \
   # Database config & credentials
-  # DB_CONNECTION can be mysql
+  # DB_CONNECTION can only be sqlite
   DB_CONNECTION=sqlite \
   DB_DATABASE="/srv/database/database.sqlite" \
-  # if you want to use MySQL:
-  DB_HOST=127.0.0.1 \
-  DB_PORT=3306 \
-  DB_USERNAME=homestead \
-  DB_PASSWORD=secret \
   # If you're looking for performance improvements, you could install memcached.
   CACHE_DRIVER=file \
   SESSION_DRIVER=file \
