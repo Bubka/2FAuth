@@ -54,6 +54,9 @@ RUN apt-get update && \
     chown -R www-data /var/log/nginx /var/lib/nginx/
 
 # PHP FPM configuration
+# Remove ignored directives from php-fpm pool config
+RUN sed -i '/user = www-data/d' /etc/php/7.3/fpm/pool.d/www.conf && \
+    sed -i '/group = www-data/d' /etc/php/7.3/fpm/pool.d/www.conf
 # Pre-create files with the correct permissions
 RUN mkdir /run/php && \
     touch /var/log/php7.3-fpm.log && \
