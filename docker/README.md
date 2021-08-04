@@ -9,13 +9,15 @@ You can run 2fauth in a single Docker container.
 ## Features
 
 - [![Latest size](https://img.shields.io/docker/image-size/2fauth/2fauth/latest?label=Image%20size)](https://hub.docker.com/r/2fauth/2fauth/tags)
-- Compatible with `amd64` only for now
-- Stores data in a Sqlite database file
+- Compatible with: `amd64`, `386`, `arm64`, `arm/v6` and `arm/v7`
+- Stores data in an Sqlite database file
 - Runs without root as user with id `1000` and group id `1000`
 
 ## Setup
 
-1. Create a directory on your host `2fauth`:
+We assume your current directory is `/yourpath`.
+
+1. Create a directory on your host:
 
     ```sh
     mkdir 2fauth
@@ -50,7 +52,7 @@ You can stop it with `CTRL+C`.
 If you already have an SQLite file, move it to `/yourpath/2fauth/database.sqlite` on your host before starting the container. Don't forget to fix its ownership and permissions if you run on *nix:
 
 ```sh
-chown 33:33 /yourpath/2fauth/database.sqlite
+chown 1000:1000 /yourpath/2fauth/database.sqlite
 chmod 700 /yourpath/2fauth/database.sqlite
 ```
 
@@ -58,9 +60,13 @@ The container will automagically pick it up.
 
 ## Update
 
+⚠️ At the very least, backup your `database.sqlite` file to avoid bad surprises!
+
 The Docker image `2fauth/2fauth` is built on every commit pushed to the `master` branch.
 
 You can therefore pull the image with `docker pull 2fauth/2fauth` and restart the container to update it.
+
+You can also use tagged images, see [Docker Hub tags](https://hub.docker.com/r/2fauth/2fauth/tags?page=1&ordering=last_updated) which are produced on Github releases.
 
 ## Build the image
 
@@ -104,12 +110,8 @@ There are the following build arguments you can use to customize the image using
 
 ## Implementation details
 
-- The container is based on `debian:buster-slim`
-- The container runs an Nginx server together with PHP-FPM as a  system service.
+- The final Docker image is based on `alpine:3.14` with minimal packages installed
+- The container runs [`supervisord`](https://github.com/ochinchina/supervisord) to handle both an Nginx server and a PHP-FPM server together
 - The `/srv` directory holds the repository data and PHP code.
 - The `/2fauth` directory is targeted for the container end users.
-- By default the container logs the Nginx logs and the PHP-FPM logs. The application logs can be found in `/2fauth/storage/logs`.
-
-## TODOs
-
-- Base image (or other image) on Alpine (for a possibly smaller image)
+- By default the container logs the Nginx logs and the PHP-FPM logs. The application logs (if any) can be found in `/2fauth/storage/logs`.
