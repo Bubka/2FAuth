@@ -63,6 +63,14 @@ Sensitive data stored in the database can be encrypted to protect them against d
 
 ## Installation (using command line)
 
+### Guides
+
+Searching for a guide on how to set up your running environment and deploy 2FAuth?
+
+Here are the guides available:
+
+* [Comprehensive guide for a Debian setup](docs/debian-setup.md)
+
 ### Clone the repo
 
 ```sh
