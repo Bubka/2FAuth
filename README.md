@@ -1,6 +1,7 @@
 # 2FAuth
 
 ![https://travis-ci.com/github/Bubka/2FAuth](https://img.shields.io/travis/com/bubka/2fauth?style=flat-square)
+[![Docker build status](https://github.com/Bubka/2fauth/actions/workflows/ci.yml/badge.svg)](https://github.com/Bubka/2fauth/actions/workflows/ci.yml)
 ![https://codecov.io/gh/Bubka/2FAuth](https://img.shields.io/codecov/c/github/Bubka/2FAuth?style=flat-square)
 ![https://github.com/Bubka/2FAuth/blob/master/LICENSE](https://img.shields.io/github/license/Bubka/2FAuth.svg?style=flat-square)
 
@@ -9,6 +10,8 @@ A web app to manage your Two-Factor Authentication (2FA) accounts and generate t
 ![screens](https://user-images.githubusercontent.com/858858/100485897-18c21400-3102-11eb-9c72-ea0b1b46ef2e.png)
 
 [**2FAuth Demo**](https://demo.2fauth.app/)
+
+[**Use it with Docker**](docker)
 
 Credentials (login - password) : *demo@2fauth.app* - *demo*
 
