@@ -65,7 +65,9 @@ jobs:
 
   publish:
     needs: [verify]
-    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == 'Bubka/2fauth' && github.actor != 'dependabot[bot]')
+    if: |
+      (github.event_name == 'push' && github.event.push.head.repo.full_name == 'Bubka/2fauth') ||
+      (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == 'Bubka/2fauth' && github.actor != 'dependabot[bot]')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2.3.4
