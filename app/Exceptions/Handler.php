@@ -48,6 +48,10 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
+        if ($exception instanceof InvalidQrCodeException) {
+            return response()->json([
+                'message' => 'not a valid QR code'], 400);
+        }
         return parent::render($request, $exception);
     }
 }

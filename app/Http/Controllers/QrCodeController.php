@@ -2,16 +2,33 @@
 
 namespace App\Http\Controllers;
 
-use Zxing\QrReader;
 use App\TwoFAccount;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use chillerlan\QRCode\{QRCode, QROptions};
+use App\Services\QrCodeService;
+use App\Http\Requests\QrCodeDecodeRequest;
+
 
 class QrCodeController extends Controller
 {
     /**
-     * Return a QR code image
+     * The TwoFAccount Service instance.
+     */
+    protected $qrcodeService;
+
+
+    /**
+     * Create a new controller instance.
+     *
+     * @param  QrCodeService  $qrcodeService
+     * @return void
+     */
+    public function __construct(QrCodeService $qrcodeService)
+    {
+        $this->qrcodeService = $qrcodeService;
+    }
+
+
+    /**
+     * Show a QR code image
      *
      * @param  App\TwoFAccount  $twofaccount
      * @return \Illuminate\Http\Response
@@ -19,41 +36,22 @@ class QrCodeController extends Controller
     public function show(TwoFAccount $twofaccount)
     {
 
-        $options = new QROptions([
-            'quietzoneSize' => 2,
-            'scale'         => 8,
-        ]);
-
-        $qrcode = new QRCode($options);
-
-        return response()->json(['qrcode' => $qrcode->render($twofaccount->uri)], 200);
+        return response()->json(['qrcode' => $this->qrcodeService->encode($twofaccount->uri)], 200);
     }
 
 
     /**
      * Decode an uploaded QR Code image
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\QrCodeDecodeRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function decode(Request $request)
+    public function decode(QrCodeDecodeRequest $request)
     {
         
-        // input validation
-        $this->validate($request, [
-            'qrcode' => 'required|image',
-        ]);
+        $file = $request->file('qrcode');
 
-        // qrcode analysis
-        $path = $request->file('qrcode')->store('qrcodes');
-        $qrcode = new QrReader(storage_path('app/' . $path));
-
-        $uri = urldecode($qrcode->text());
-
-        // delete uploaded file
-        Storage::delete($path);
-
-        return response()->json(['uri' => $uri], 200);
+        return response()->json(['data' => $this->qrcodeService->decode($file)], 200);
     }
     
 }
