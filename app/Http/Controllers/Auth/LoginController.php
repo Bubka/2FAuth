@@ -76,7 +76,11 @@ class LoginController extends Controller
 
         $this->authenticated($request, $this->guard()->user());
 
-        return response()->json(['message' => $success], Response::HTTP_OK);
+        return response()->json([
+            'message' => 'authenticated',
+            'token' => $success['token'],
+            'name' => $success['name']
+        ], Response::HTTP_OK);
     }
 
     /**

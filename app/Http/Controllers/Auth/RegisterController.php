@@ -58,13 +58,11 @@ class RegisterController extends Controller
 
         //$this->guard()->login($user);
 
-        $success['token'] = $user->createToken('MyApp')->accessToken;
-        $success['name'] = $user->name;
-
-        return response()->json(['message' => $success]);
-
-        // return $this->registered($request, $user)
-        //                 ?: redirect($this->redirectPath());
+        return response()->json([
+            'message' => 'account created',
+            'token' => $user->createToken('MyApp')->accessToken,
+            'name' => $user->name,
+        ]);
     }
 
     /**

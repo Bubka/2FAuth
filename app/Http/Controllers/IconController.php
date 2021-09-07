@@ -24,8 +24,9 @@ class IconController extends Controller
         ]);
         
         $path = $request->file('icon')->store('public/icons');
+        $response['filename'] = pathinfo($path)['basename'];
 
-        return response()->json(pathinfo($path)['basename'], 201);
+        return response()->json($response, 201);
     }
 
 

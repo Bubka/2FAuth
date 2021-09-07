@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use Throwable;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class Handler extends ExceptionHandler
 {
@@ -48,10 +49,15 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
+        if ($exception instanceof ModelNotFoundException) {
+            return response()->json([
+                'message' => str_replace('App\\', '', $exception->getModel()).' not found'], 404);
+        }
         if ($exception instanceof InvalidQrCodeException) {
             return response()->json([
                 'message' => 'not a valid QR code'], 400);
         }
+        
         return parent::render($request, $exception);
     }
 }
