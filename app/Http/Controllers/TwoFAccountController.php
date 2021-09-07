@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Group;
 use App\TwoFAccount;
 use App\Classes\Options;
+use App\Http\Requests\TwoFAccountReorderRequest;
+use App\Http\Requests\TwoFAccountStoreRequest;
+use App\Http\Requests\TwoFAccountEditRequest;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -25,27 +28,13 @@ class TwoFAccountController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\TwoFAccountStoreRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(TwoFAccountStoreRequest $request)
     {
 
-        // see https://github.com/google/google-authenticator/wiki/Key-Uri-Format
-        // for otpauth uri format validation
-
-        $this->validate($request, [
-            'service' => 'required|string',
-            'account' => 'required_without:uri|nullable|string|regex:/^[^:]+$/i',
-            'icon' => 'nullable|string',
-            'uri' => 'nullable|string|regex:/^otpauth:\/\/[h,t]otp\//i',
-            'otpType' => 'required_without:uri|in:totp,hotp',
-            'secret' => 'required_without:uri|string',
-            'digits' => 'nullable|integer|between:6,10',
-            'algorithm' => 'nullable|in:sha1,sha256,sha512,md5',
-            'totpPeriod' => 'nullable|integer|min:1',
-            'hotpCounter' => 'nullable|integer|min:0',
-        ]);
+        $validated = $request->validated();
 
         // Two possible cases :
         // - The most common case, the uri is provided by the QuickForm, thanks to a QR code live scan or file upload
@@ -53,9 +42,9 @@ class TwoFAccountController extends Controller
         // - The advanced form has been used and provide no uri but all individual parameters
         //     -> We use the parameters array to populate the account
         $twofaccount = new TwoFAccount;
-        $twofaccount->service = $request->service;
-        $twofaccount->account = $request->account;
-        $twofaccount->icon = $request->icon;
+        $twofaccount->service = $validated['service'];
+        $twofaccount->account = $validated['account'];
+        $twofaccount->icon = $validated['icon'];
 
         if( $request->uri ) {
             $twofaccount->uri = $request->uri;
@@ -109,12 +98,12 @@ class TwoFAccountController extends Controller
     /**
      * Save new order.
      *
-     * @param  \App\TwoFAccount  $twofaccount
+     * @param  App\Http\Requests\TwoFAccountReorderRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function reorder(Request $request)
+    public function reorder(TwoFAccountReorderRequest $request)
     {
-        TwoFAccount::setNewOrder($request->orderedIds);
+        $validated = $request->validated();
         return response()->json('order saved', 200);
     }
 
@@ -228,25 +217,14 @@ class TwoFAccountController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\TwoFAccountEditRequest  $request
      * @param  \App\TwoFAccount  $twofaccount
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(TwoFAccountEditRequest $request, $id)
     {
 
-        $this->validate($request, [
-            'service' => 'required|string',
-            'account' => 'required_without:uri|nullable|string|regex:/^[^:]+$/i',
-            'icon' => 'nullable|string',
-            'uri' => 'nullable|string|regex:/^otpauth:\/\/[h,t]otp\//i',
-            'otpType' => 'required_without:uri|in:totp,hotp',
-            'secret' => 'required_without:uri|string',
-            'digits' => 'nullable|integer|between:6,10',
-            'algorithm' => 'nullable|in:sha1,sha256,sha512,md5',
-            'totpPeriod' => 'required_if:otpType,totp|nullable|integer|min:1',
-            'hotpCounter' => 'required_if:otpType,hotp|nullable|integer|min:0',
-        ]);
+        $validated = $request->validated();
 
         // Here we catch a possible missing model exception in order to
         // delete orphan submited icon
@@ -256,14 +234,14 @@ class TwoFAccountController extends Controller
 
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
 
-            if( $request->icon ) {
-                Storage::delete('public/icons/' . $request->icon);
+            if( $validated['icon'] ) {
+                Storage::delete('public/icons/' . $validated['icon']);
             }
             
             throw $e;
         }
 
-        $twofaccount->populate($request->all());
+        $twofaccount->populate($validated);
         $twofaccount->save();
 
         return response()->json($twofaccount, 200);
