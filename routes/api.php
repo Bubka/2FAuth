@@ -15,9 +15,9 @@ use Illuminate\Http\Request;
 
 Route::group(['middleware' => 'guest:api'], function () {
 
-    Route::post('login', 'Auth\LoginController@login');
+    Route::post('auth/login', 'Auth\LoginController@login');
     Route::post('checkuser', 'Auth\RegisterController@checkUser');
-    Route::post('register', 'Auth\RegisterController@register');
+    Route::post('auth/register', 'Auth\RegisterController@register');
 
     Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->middleware('AvoidResetPassword');
     Route::post('password/reset', 'Auth\ResetPasswordController@reset')->name('password.reset');
@@ -26,7 +26,7 @@ Route::group(['middleware' => 'guest:api'], function () {
 
 Route::group(['middleware' => 'auth:api'], function() {
 
-    Route::post('logout', 'Auth\LoginController@logout');
+    Route::post('auth/logout', 'Auth\LoginController@logout');
 
     Route::prefix('settings')->group(function () {
         Route::get('account', 'Settings\AccountController@show');
@@ -37,17 +37,19 @@ Route::group(['middleware' => 'auth:api'], function() {
     });
 
     Route::delete('twofaccounts/batch', 'TwoFAccountController@batchDestroy');
-    Route::patch('twofaccounts/reorder', 'TwoFAccountController@reorder');
+    Route::patch('twofaccounts/sort-order', 'TwoFAccountController@reorder');
     Route::post('twofaccounts/preview', 'TwoFAccountController@preview');
-    Route::get('twofaccounts/{twofaccount}/withSensitive', 'TwoFAccountController@showWithSensitive');
+    Route::get('twofaccounts/{twofaccount}/qrcode', 'QrCodeController@show');
     Route::get('twofaccounts/count', 'TwoFAccountController@count');
-    Route::post('twofaccounts/token', 'TwoFAccountController@token');
+    Route::get('twofaccounts/{id}/otp', 'TwoFAccountController@otp')->where('id', '[0-9]+');;
+    Route::post('twofaccounts/otp', 'TwoFAccountController@otp');
     Route::apiResource('twofaccounts', 'TwoFAccountController');
     Route::patch('group/accounts', 'GroupController@associateAccounts');
     Route::apiResource('groups', 'GroupController');
+
+    // Done
     Route::post('qrcode/decode', 'QrCodeController@decode');
-    Route::get('qrcode/{twofaccount}', 'QrCodeController@show');
-    Route::post('icon/upload', 'IconController@upload');
-    Route::delete('icon/delete/{icon}', 'IconController@delete');
+    Route::post('icons', 'IconController@upload');
+    Route::delete('icons/{icon}', 'IconController@delete');
 
 });
