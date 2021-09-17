@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class TwoFAccountStoreRequest extends FormRequest
+class TwoFAccountUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,15 +24,15 @@ class TwoFAccountStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'service' => 'nullable|string|regex:/^[^:]+$/i',
+            'service' => 'required|nullable|string|regex:/^[^:]+$/i',
             'account' => 'required|string|regex:/^[^:]+$/i',
-            'icon' => 'nullable|string',
+            'icon' => 'required|nullable|string',
             'otp_type' => 'required|string|in:totp,hotp',
-            'secret' => ['string', 'bail', new \App\Rules\IsBase32Encoded],
-            'digits' => 'nullable|integer|between:6,10',
-            'algorithm' => 'nullable|string|in:sha1,sha256,sha512,md5',
-            'period' => 'nullable|integer|min:1',
-            'counter' => 'nullable|integer|min:0',
+            'secret' => ['required', 'string', 'bail', new \App\Rules\IsBase32Encoded],
+            'digits' => 'required|integer|between:6,10',
+            'algorithm' => 'required|string|in:sha1,sha256,sha512,md5',
+            'period' => 'required_if:otp_type,totp|integer|min:1',
+            'counter' => 'required_if:otp_type,hotp|integer|min:0',
         ];
     }
 }
