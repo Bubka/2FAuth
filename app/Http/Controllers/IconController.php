@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Http\File;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Filesystem\Filesystem;
 
 
 class IconController extends Controller
@@ -18,7 +16,6 @@ class IconController extends Controller
      */
     public function upload(Request $request)
     {
-
         $this->validate($request, [
             'icon' => 'required|image',
         ]);
@@ -38,7 +35,6 @@ class IconController extends Controller
      */
     public function delete($icon)
     {
-
         Storage::delete('public/icons/' . $icon); 
 
         return response()->json(null, 204);
