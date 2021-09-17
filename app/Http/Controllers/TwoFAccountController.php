@@ -7,53 +7,83 @@ use App\TwoFAccount;
 use App\Classes\Options;
 use App\Http\Requests\TwoFAccountReorderRequest;
 use App\Http\Requests\TwoFAccountStoreRequest;
-use App\Http\Requests\TwoFAccountEditRequest;
-use Illuminate\Support\Str;
+use App\Http\Requests\TwoFAccountUpdateRequest;
+use App\Http\Resources\TwoFAccountReadResource;
+use App\Http\Resources\TwoFAccountStoreResource;
+use App\Http\Requests\TwoFAccountDeleteRequest;
+use App\Http\Requests\TwoFAccountUriRequest;
+use App\Http\Requests\TwoFAccountDynamicRequest;
+use App\Services\TwoFAccountService;
+use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class TwoFAccountController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * The TwoFAccount Service instance.
      */
-    public function index()
+    protected $twofaccountService;
+
+
+    /**
+     * Create a new controller instance.
+     *
+     * @param  TwoFAccountService  $twofaccountService
+     * @return void
+     */
+    public function __construct(TwoFAccountService $twofaccountService)
     {
-        return response()->json(TwoFAccount::ordered()->get()->toArray());
+        $this->twofaccountService = $twofaccountService;
+    }
+
+
+    /**
+     * List all resources
+     *
+     * @return \App\Http\Resources\TwoFAccountReadResource
+     */
+    public function index(Request $request)
+    {
+        $request->merge(['withPosition' => true]);
+        $request->merge(['hideSecret' => true]);
+
+        return TwoFAccountReadResource::collection(TwoFAccount::ordered()->get());
+    }
+
+
+    /**
+     * Display a resource
+     *
+     * @param  \App\TwoFAccount  $twofaccount
+     * 
+     * @return \App\Http\Resources\TwoFAccountReadResource
+     */
+    public function show(TwoFAccount $twofaccount)
+    {
+        return new TwoFAccountReadResource($twofaccount);
     }
 
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\TwoFAccountStoreRequest  $request
-     * @return \Illuminate\Http\Response
+     * @param  \App\Http\Requests\TwoFAccountDynamicRequest  $request
+     * 
+     * @return \App\Http\Resources\TwoFAccountReadResource
      */
-    public function store(TwoFAccountStoreRequest $request)
+    public function store(TwoFAccountDynamicRequest $request)
     {
+        // Two possible cases :
+        // - The most common case, an URI is provided by the QuickForm, thanks to a QR code live scan or file upload
+        //     -> We use that URI to define the account
+        // - The advanced form has been used and all individual parameters
+        //     -> We use the parameters array to define the account
 
         $validated = $request->validated();
 
-        // Two possible cases :
-        // - The most common case, the uri is provided by the QuickForm, thanks to a QR code live scan or file upload
-        //     -> We use this uri to populate the account
-        // - The advanced form has been used and provide no uri but all individual parameters
-        //     -> We use the parameters array to populate the account
-        $twofaccount = new TwoFAccount;
-        $twofaccount->service = $validated['service'];
-        $twofaccount->account = $validated['account'];
-        $twofaccount->icon = $validated['icon'];
-
-        if( $request->uri ) {
-            $twofaccount->uri = $request->uri;
-        }
-        else {
-            $twofaccount->populate($request->all());
-        }
-
-        $twofaccount->save();
+        $twofaccount = Arr::has($validated, 'uri')
+            ? $this->twofaccountService->createFromUri($validated['uri'])
+            : $this->twofaccountService->createFromParameters($validated);
 
         // Possible group association
         $groupId = Options::get('defaultGroup') === '-1' ? (int) Options::get('activeGroup') : (int) Options::get('defaultGroup');
@@ -67,149 +97,9 @@ class TwoFAccountController extends Controller
             }
         }
 
-        return response()->json($twofaccount, 201);
-    }
-
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\TwoFAccount  $twofaccount
-     * @return \Illuminate\Http\Response
-     */
-    public function show(TwoFAccount $twofaccount)
-    {
-        return response()->json($twofaccount, 200);
-    }
-
-
-    /**
-     * Display the specified resource with all attributes.
-     *
-     * @param  \App\TwoFAccount  $twofaccount
-     * @return \Illuminate\Http\Response
-     */
-    public function showWithSensitive(TwoFAccount $twofaccount)
-    {
-        return response()->json($twofaccount->makeVisible(['uri', 'secret', 'algorithm']), 200);
-    }
-
-
-    /**
-     * Save new order.
-     *
-     * @param  App\Http\Requests\TwoFAccountReorderRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function reorder(TwoFAccountReorderRequest $request)
-    {
-        $validated = $request->validated();
-        return response()->json('order saved', 200);
-    }
-
-
-
-    /**
-     * Preview account using an uri, without any db moves
-     * 
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function preview(Request $request)
-    {
-
-        $this->validate($request, [
-            'uri' => 'required|string|regex:/^otpauth:\/\/[h,t]otp\//i',
-        ]);
-
-        $twofaccount = new TwoFAccount;
-        $twofaccount->uri = $request->uri;
-
-        // If present, use the imageLink parameter to prefill the icon field
-        if( $twofaccount->imageLink ) {
-
-            try {
-
-                $chunks = explode('.', $twofaccount->imageLink);
-                $hashFilename = Str::random(40) . '.' . end($chunks);
-
-                Storage::disk('local')->put('imagesLink/' . $hashFilename, file_get_contents($twofaccount->imageLink));
-
-                if( in_array(Storage::mimeType('imagesLink/' . $hashFilename), ['image/png', 'image/jpeg', 'image/webp', 'image/bmp']) ) {
-                    if( getimagesize(storage_path() . '/app/imagesLink/' . $hashFilename) ) {
-
-                        Storage::move('imagesLink/' . $hashFilename, 'public/icons/' . $hashFilename);
-                        $twofaccount->icon = $hashFilename;
-                    }
-                }
-            }
-            catch( \Exception $e ) {
-                // do nothing
-            }
-        }
-
-        return response()->json($twofaccount->makeVisible(['uri', 'secret', 'algorithm']), 200);
-    }
-
-
-    /**
-     * Generate an OTP token
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function token(Request $request)
-    {
-        // When the method is called during the process of creating/editing an HOTP account the 
-        // sensitive data have to be returned, because of the hotpCounter increment
-        $shouldResponseWithSensitiveData = false;
-
-        if( $request->id ) {
-
-            // The request data is the Id of an existing account
-            $twofaccount = TwoFAccount::FindOrFail($request->id);
-        }
-        else if( $request->otp['uri'] ) {
-
-            // The request data contain an uri
-            $twofaccount = new TwoFAccount;
-            $twofaccount->uri = $request->otp['uri'];
-            $shouldResponseWithSensitiveData = true;
-        }
-        else {
-
-            // The request data should contain all otp parameter
-            $twofaccount = new TwoFAccount;
-            $twofaccount->populate($request->otp);
-            $shouldResponseWithSensitiveData = true;
-        }
-
-        $response = [
-            'token' => $twofaccount->token,
-        ];
-
-        if( $twofaccount->otpType === 'hotp' ) {
-
-            // returned counter & uri will be updated
-            $twofaccount->increaseHotpCounter();
-
-            // and the db too
-            if( $request->id ) {
-                $twofaccount->save();
-            }
-
-            if( $shouldResponseWithSensitiveData ) {
-                $response['hotpCounter'] = $twofaccount->hotpCounter;
-                $response['uri'] = $twofaccount->uri;
-            }
-        }
-        else {
-
-            $response['totpPeriod'] = $twofaccount->totpPeriod;
-            $response['totpTimestamp'] = $twofaccount->totpTimestamp;
-        }
-
-        return response()->json($response, 200);
+        return (new TwoFAccountReadResource($twofaccount))
+                ->response()
+                ->setStatusCode(201);
     }
 
 
@@ -217,35 +107,87 @@ class TwoFAccountController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\TwoFAccountEditRequest  $request
+     * @param  \App\Http\TwoFAccountUpdateRequest  $request
      * @param  \App\TwoFAccount  $twofaccount
      * @return \Illuminate\Http\Response
      */
-    public function update(TwoFAccountEditRequest $request, $id)
+    public function update(TwoFAccountUpdateRequest $request, TwoFAccount $twofaccount)
     {
-
         $validated = $request->validated();
 
-        // Here we catch a possible missing model exception in order to
-        // delete orphan submited icon
-        try {
-
-            $twofaccount = TwoFAccount::FindOrFail($id);
-
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-
-            if( $validated['icon'] ) {
-                Storage::delete('public/icons/' . $validated['icon']);
-            }
-            
-            throw $e;
-        }
-
-        $twofaccount->populate($validated);
-        $twofaccount->save();
+        $this->twofaccountService->update($twofaccount, $validated);
 
         return response()->json($twofaccount, 200);
 
+    }
+
+
+    /**
+     * Set new order.
+     *
+     * @param  App\Http\Requests\TwoFAccountReorderRequest  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function reorder(TwoFAccountReorderRequest $request)
+    {
+        $validated = $request->validated();
+
+        TwoFAccount::setNewOrder($validated['orderedIds']);
+
+        return response()->json(['message' => 'order saved'], 200);
+    }
+
+
+    /**
+     * Preview account using an uri, without any db moves
+     * 
+     * @param  \App\Http\Requests\TwoFAccountUriRequest  $request
+     * 
+     * @return \App\Http\Resources\TwoFAccountStoreResource
+     */
+    public function preview(TwoFAccountUriRequest $request)
+    {
+        $twofaccount = $this->twofaccountService->createFromUri($request->uri, $saveToDB = false);
+
+        return new TwoFAccountStoreResource($twofaccount);
+    }
+
+
+    /**
+     * Get a One-Time Password
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function otp(Request $request, $id = null)
+    {
+        $inputs = $request->all();
+
+        // The request input is the ID of an existing account
+        if ( $id ) {
+            $otp = $this->twofaccountService->getOTP((int) $id);
+        }
+
+        // The request input is an uri
+        else if ( count($inputs) === 1 && $request->has('uri') ) {
+            $validatedData = $request->validate((new TwoFAccountUriRequest)->rules());
+            $otp = $this->twofaccountService->getOTP($validatedData['uri']);
+        }
+        
+        else if ( count($inputs) > 1 && $request->has('uri')) {
+            return response()->json([
+                'message' => 'bad request',
+                'reason' => ['uri' => __('validation.single', ['attribute' => 'uri'])]
+            ], 400);
+        }
+
+        // The request inputs should define an account
+        else {
+            $validatedData = $request->validate((new TwoFAccountStoreRequest)->rules());
+            $otp = $this->twofaccountService->getOTP($validatedData);
+        }
+
+        return response()->json($otp, 200);
     }
 
 
@@ -269,7 +211,7 @@ class TwoFAccountController extends Controller
      */
     public function destroy(TwoFAccount $twofaccount)
     {
-        $twofaccount->delete();
+        $this->twofaccountService->delete($twofaccount->id);
 
         return response()->json(null, 204);
     }
@@ -278,14 +220,12 @@ class TwoFAccountController extends Controller
     /**
      * Remove the specified resources from storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\TwoFAccountDeleteRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function batchDestroy(Request $request)
+    public function batchDestroy(TwoFAccountDeleteRequest $request)
     {
-        $ids = $request->all();
-        
-        TwoFAccount::destroy($ids);
+        $this->twofaccountService->delete($request->ids);
 
         return response()->json(null, 204);
     }

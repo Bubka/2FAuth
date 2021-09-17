@@ -118,6 +118,8 @@ return [
     'url' => 'The :attribute must be a valid url.',
     'uuid' => 'The :attribute must be a valid UUID.',
 
+    'single' => 'When using :attribute it must be the only parameter in this request body',
+
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Language Lines
@@ -131,26 +133,31 @@ return [
 
     'custom' => [
         'icon' => [
-            'image' => 'Supported format are jpeg, png, bmp, gif, svg, or webp',
+            'image' => 'Supported format are jpeg, png, bmp, gif, svg, or webp.',
         ],
         'qrcode' => [
-            'image' => 'Supported format are jpeg, png, bmp, gif, svg, or webp',
+            'image' => 'Supported format are jpeg, png, bmp, gif, svg, or webp.',
         ],
         'uri' => [
-            'starts_with' => 'Only valid OTP uri are supported',
+            'regex' => 'The :attribute is not a valid otpauth uri.',
+        ],
+        'otp_type' => [
+            'in' => 'The :attribute is not supported.',
         ],
         'email' => [
-            'exists' => 'No account found using this email',
-        ],
-        'otpType' => [
-            'required_without' => 'The :attribute field is required.',
+            'exists' => 'No account found using this email.',
         ],
         'secret' => [
-            'required_without' => 'The :attribute field is required.',
+            'isBase32Encoded' => 'The :attribute must be a base32 encoded string.',
         ],
         'account' => [
-            'required_without' => 'The :attribute field is required.',
-            'regex' => 'The :attribute field must not contain colon.',
+            'regex' => 'The :attribute must not contain colon.',
+        ],
+        'service' => [
+            'regex' => 'The :attribute must not contain colon.',
+        ],
+        'label' => [
+            'required' => 'The uri must have a label.',
         ],
     ],
 
