@@ -5,10 +5,10 @@ namespace App\Exceptions;
 use Exception;
 
 /**
- * Class InvalidQrCodeException.
+ * Class InvalidSecretException.
  *
  * @codeCoverageIgnore
  */
-class InvalidQrCodeException extends Exception
+class InvalidSecretException extends Exception
 {
 }

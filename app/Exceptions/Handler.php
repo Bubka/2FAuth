@@ -53,9 +53,19 @@ class Handler extends ExceptionHandler
             return response()->json([
                 'message' => str_replace('App\\', '', $exception->getModel()).' not found'], 404);
         }
+        if ($exception instanceof InvalidOtpParameterException) {
+            return response()->json([
+                'message' => 'invalid OTP parameters',
+                'reason' => [$exception->getMessage()]
+            ], 400);
+        }
         if ($exception instanceof InvalidQrCodeException) {
             return response()->json([
                 'message' => 'not a valid QR code'], 400);
+        }
+        if ($exception instanceof InvalidSecretException) {
+            return response()->json([
+                'message' => 'not a valid base32 encoded secret'], 400);
         }
         
         return parent::render($request, $exception);
