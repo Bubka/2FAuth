@@ -132,7 +132,7 @@ class TwoFAccountController extends Controller
     {
         $validated = $request->validated();
 
-        TwoFAccount::setNewOrder($validated['orderedIds']);
+        $this->twofaccountService->saveOrder($validated['orderedIds']);
 
         return response()->json(['message' => 'order saved'], 200);
     }
