@@ -37,7 +37,7 @@ Route::group(['middleware' => 'auth:api'], function() {
     });
 
     Route::delete('twofaccounts/batch', 'TwoFAccountController@batchDestroy');
-    Route::patch('twofaccounts/sort-order', 'TwoFAccountController@reorder');
+    Route::post('twofaccounts/reorder', 'TwoFAccountController@reorder');
     Route::post('twofaccounts/preview', 'TwoFAccountController@preview');
     Route::get('twofaccounts/{twofaccount}/qrcode', 'QrCodeController@show');
     Route::get('twofaccounts/count', 'TwoFAccountController@count');

@@ -44,7 +44,6 @@ class TwoFAccountController extends Controller
      */
     public function index(Request $request)
     {
-        $request->merge(['withPosition' => true]);
         $request->merge(['hideSecret' => true]);
 
         return TwoFAccountReadResource::collection(TwoFAccount::ordered()->get());

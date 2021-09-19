@@ -16,7 +16,6 @@ class TwoFAccountReadResource extends TwoFAccountStoreResource
             [
                 'id'            => $this->id,
                 'group_id'      => $this->group_id,
-                'position'      => $this->when($request->input('withPosition'), $this->order_column),
             ],
             parent::toArray($request)
         );
