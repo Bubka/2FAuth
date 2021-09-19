@@ -159,6 +159,9 @@ return [
         'label' => [
             'required' => 'The uri must have a label.',
         ],
+        'ids' => [
+            'regex' => 'IDs must be comma separated, without trailing comma.',
+        ],
     ],
 
     /*

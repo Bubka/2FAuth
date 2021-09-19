@@ -170,12 +170,14 @@ class TwoFAccountService
      * Delete one or more twofaccounts
      * 
      * @param int|array $ids twofaccount's ids to delete
+     * 
+     * @return int The number of deleted
      */
-    public function delete($ids)
+    public function delete($ids) : int
     {
-        TwoFAccount::destroy($ids);
+        $deleted = TwoFAccount::destroy($ids);
 
-        // TODO : log the returned value = total count of records deleted
+        return $deleted;
     }
 
 

@@ -10,7 +10,7 @@ use App\Http\Requests\TwoFAccountStoreRequest;
 use App\Http\Requests\TwoFAccountUpdateRequest;
 use App\Http\Resources\TwoFAccountReadResource;
 use App\Http\Resources\TwoFAccountStoreResource;
-use App\Http\Requests\TwoFAccountDeleteRequest;
+use App\Http\Requests\TwoFAccountBatchDestroyRequest;
 use App\Http\Requests\TwoFAccountUriRequest;
 use App\Http\Requests\TwoFAccountDynamicRequest;
 use App\Services\TwoFAccountService;
@@ -219,12 +219,23 @@ class TwoFAccountController extends Controller
     /**
      * Remove the specified resources from storage.
      *
-     * @param  \App\Http\Requests\TwoFAccountDeleteRequest  $request
+     * @param  \App\Http\Requests\TwoFAccountBatchDestroyRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function batchDestroy(TwoFAccountDeleteRequest $request)
+    public function batchDestroy(TwoFAccountBatchDestroyRequest $request)
     {
-        $this->twofaccountService->delete($request->ids);
+        $validated = $request->validated();
+
+        $ids = explode(',', $validated['ids'], 100);
+        $nb = count($ids);
+        if ($nb > 99) {
+            return response()->json([
+                'message' => 'bad request',
+                'reason' => [__('errors.too_many_ids')]
+            ], 400);
+        }
+
+        $this->twofaccountService->delete($ids);
 
         return response()->json(null, 204);
     }

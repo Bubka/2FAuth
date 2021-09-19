@@ -36,7 +36,7 @@ Route::group(['middleware' => 'auth:api'], function() {
         Route::post('options', 'Settings\OptionController@store');
     });
 
-    Route::delete('twofaccounts/batch', 'TwoFAccountController@batchDestroy');
+    Route::delete('twofaccounts', 'TwoFAccountController@batchDestroy');
     Route::post('twofaccounts/reorder', 'TwoFAccountController@reorder');
     Route::post('twofaccounts/preview', 'TwoFAccountController@preview');
     Route::get('twofaccounts/{twofaccount}/qrcode', 'QrCodeController@show');
