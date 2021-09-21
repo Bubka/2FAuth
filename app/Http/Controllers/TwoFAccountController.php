@@ -10,9 +10,10 @@ use App\Http\Requests\TwoFAccountStoreRequest;
 use App\Http\Requests\TwoFAccountUpdateRequest;
 use App\Http\Resources\TwoFAccountReadResource;
 use App\Http\Resources\TwoFAccountStoreResource;
-use App\Http\Requests\TwoFAccountBatchDestroyRequest;
+use App\Http\Requests\TwoFAccountBatchRequest;
 use App\Http\Requests\TwoFAccountUriRequest;
 use App\Http\Requests\TwoFAccountDynamicRequest;
+use App\Services\GroupService;
 use App\Services\TwoFAccountService;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
@@ -24,6 +25,11 @@ class TwoFAccountController extends Controller
      */
     protected $twofaccountService;
 
+    /**
+     * The Group Service instance.
+     */
+    protected $groupService;
+
 
     /**
      * Create a new controller instance.
@@ -31,9 +37,10 @@ class TwoFAccountController extends Controller
      * @param  TwoFAccountService  $twofaccountService
      * @return void
      */
-    public function __construct(TwoFAccountService $twofaccountService)
+    public function __construct(TwoFAccountService $twofaccountService, GroupService $groupService)
     {
         $this->twofaccountService = $twofaccountService;
+        $this->groupService = $groupService;
     }
 
 
@@ -85,16 +92,7 @@ class TwoFAccountController extends Controller
             : $this->twofaccountService->createFromParameters($validated);
 
         // Possible group association
-        $groupId = Options::get('defaultGroup') === '-1' ? (int) Options::get('activeGroup') : (int) Options::get('defaultGroup');
-        
-        // 0 is the pseudo group 'All', only groups with id > 0 are true user groups
-        if( $groupId > 0 ) {
-            $group = Group::find($groupId);
-
-            if($group) {
-                $group->twofaccounts()->save($twofaccount);
-            }
-        }
+        $this->groupService->assign($twofaccount->id);
 
         return (new TwoFAccountReadResource($twofaccount))
                 ->response()
@@ -131,7 +129,7 @@ class TwoFAccountController extends Controller
     {
         $validated = $request->validated();
 
-        $this->twofaccountService->saveOrder($validated['orderedIds']);
+        TwoFAccount::setNewOrder($validated['orderedIds']);
 
         return response()->json(['message' => 'order saved'], 200);
     }
@@ -146,7 +144,7 @@ class TwoFAccountController extends Controller
      */
     public function preview(TwoFAccountUriRequest $request)
     {
-        $twofaccount = $this->twofaccountService->createFromUri($request->uri, $saveToDB = false);
+        $twofaccount = $this->twofaccountService->createFromUri($request->uri, false);
 
         return new TwoFAccountStoreResource($twofaccount);
     }
@@ -203,6 +201,31 @@ class TwoFAccountController extends Controller
 
 
     /**
+     * 
+     * Withdraw one or more accounts from their group
+     * 
+     * @param \App\Http\Requests\TwoFAccountBatchRequest $request
+     * @param array $ids accounts ids to unassign
+     * @return \Illuminate\Http\Response
+     */
+    public function withdraw(TwoFAccountBatchRequest $request)
+    {       
+        $validated = $request->validated();
+        
+        if ($this->tooManyIds($validated['ids'])) {
+            return response()->json([
+                'message' => 'bad request',
+                'reason' => [__('errors.too_many_ids')]
+            ], 400);
+        }
+
+        $this->twofaccountService->withdraw($validated['ids']);
+        
+        return response()->json([ 'message' => 'accounts withdrawn' ], 200);
+    }
+
+
+    /**
      * Remove the specified resource from storage.
      *
      * @param  \App\TwoFAccount  $twofaccount
@@ -219,25 +242,35 @@ class TwoFAccountController extends Controller
     /**
      * Remove the specified resources from storage.
      *
-     * @param  \App\Http\Requests\TwoFAccountBatchDestroyRequest  $request
+     * @param  \App\Http\Requests\TwoFAccountBatchRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function batchDestroy(TwoFAccountBatchDestroyRequest $request)
+    public function batchDestroy(TwoFAccountBatchRequest $request)
     {
         $validated = $request->validated();
 
-        $ids = explode(',', $validated['ids'], 100);
-        $nb = count($ids);
-        if ($nb > 99) {
+        if ($this->tooManyIds($validated['ids'])) {
             return response()->json([
                 'message' => 'bad request',
                 'reason' => [__('errors.too_many_ids')]
             ], 400);
         }
 
-        $this->twofaccountService->delete($ids);
+        $this->twofaccountService->delete($validated['ids']);
 
         return response()->json(null, 204);
+    }
+
+
+    /**
+     * Checks ids length
+     */
+    private function tooManyIds(string $ids) : bool
+    {
+        $arIds = explode(',', $ids, 100);
+        $nb = count($arIds);
+
+        return $nb > 99 ? true : false;
     }
 
 }

@@ -95,7 +95,7 @@ class TwoFAccountService
      * @param TwoFAccount $twofaccount The account
      * @param array $data The parameters
      * 
-     * @return TwoFAccount The created account
+     * @return TwoFAccount The updated account
      */
     public function update(TwoFAccount $twofaccount, array $data) : TwoFAccount
     {
@@ -167,9 +167,27 @@ class TwoFAccountService
 
 
     /**
+     * Withdraw one or more twofaccounts from their group
+     * 
+     * @param int|array $ids twofaccount ids to free
+     */
+    public function withdraw($ids) : void
+    {
+        $arIds = explode(',', $ids);
+
+        if ($arIds) {
+            TwoFAccount::whereIn('id', $arIds)
+                        ->update(
+                            ['group_id' => NULL]
+                        );
+        }
+    }
+
+
+    /**
      * Delete one or more twofaccounts
      * 
-     * @param int|array $ids twofaccount's ids to delete
+     * @param int|array $ids twofaccount ids to delete
      * 
      * @return int The number of deleted
      */
@@ -178,15 +196,6 @@ class TwoFAccountService
         $deleted = TwoFAccount::destroy($ids);
 
         return $deleted;
-    }
-
-
-    /**
-     * Save TwoFAccounts order
-     */
-    public function saveOrder(array $ids)
-    {
-        TwoFAccount::setNewOrder($ids);
     }
 
 

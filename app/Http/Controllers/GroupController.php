@@ -4,10 +4,32 @@ namespace App\Http\Controllers;
 
 use App\Group;
 use App\TwoFAccount;
+use App\Services\GroupService;
+use App\Http\Requests\GroupStoreRequest;
+use App\Http\Requests\GroupAssignRequest;
+use App\Http\Resources\GroupResource;
 use Illuminate\Http\Request;
 
 class GroupController extends Controller
 {
+    /**
+     * The TwoFAccount Service instance.
+     */
+    protected $groupService;
+
+
+    /**
+     * Create a new controller instance.
+     *
+     * @param  GroupService  $groupService
+     * @return void
+     */
+    public function __construct(GroupService $groupService)
+    {
+        $this->groupService = $groupService;
+    }
+
+
     /**
      * Display a listing of the resource.
      *
@@ -15,45 +37,27 @@ class GroupController extends Controller
      */
     public function index()
     {
-        // The index method has to return the complete collection of groups
-        // stored in db plus a pseudo group corresponding to 'all'
-        
-        // Get the stored groups
-        $groups = Group::withCount('twofaccounts')->get();
+        $groups = $this->groupService->getAll();
 
-        // Create the pseudo group
-        $allGroup = new Group([
-            'name' => __('commons.all')
-        ]);
-
-        $allGroup->id = 0;
-        $allGroup->twofaccounts_count = TwoFAccount::count();
-
-        // Merge them all
-        $groups->prepend($allGroup);
-
-        return response()->json($groups->toArray());
+        return GroupResource::collection($groups);
     }
 
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  \App\Http\Requests\GroupRequest  $request
+     * @return \App\Http\Resources\GroupResource
      */
-    public function store(Request $request)
+    public function store(GroupStoreRequest $request)
     {
+        $validated = $request->validated();
 
-        $this->validate($request, [
-            'name' => 'required|string|max:32|unique:groups',
-        ]);
+        $group = $this->groupService->Create($validated);
 
-        $group = Group::create([
-            'name' => $request->name,
-        ]);
-
-        return response()->json($group, 201);
+        return (new GroupResource($group))
+            ->response()
+            ->setStatusCode(201);
     }
 
 
@@ -65,40 +69,24 @@ class GroupController extends Controller
      */
     public function show(Group $group)
     {
-        return response()->json($group, 200);
+        return new GroupResource($group);
     }
 
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Group  $twofaccount
-     * @return \Illuminate\Http\Response
+     * @param  \App\Http\Requests\GroupRequest  $request
+     * @param  \App\Group $group
+     * @return \App\Http\Resources\GroupResource
      */
-    public function update(Request $request, $id)
+    public function update(GroupStoreRequest $request, Group $group)
     {
+        $validated = $request->validated();
 
-        $this->validate($request, [
-            'name' => 'required|string|max:32|unique:groups',
-        ]);
+        $this->groupService->update($group, $validated);
 
-        // Here we catch a possible missing model exception in order to
-        // delete orphan submited icon
-        try {
-
-            $group = Group::FindOrFail($id);
-
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            
-            throw $e;
-        }
-
-        $group->update([
-            'name' => $request->name,
-        ]);
-
-        return response()->json($group, 200);
+        return new GroupResource($group);
 
     }
 
@@ -106,28 +94,17 @@ class GroupController extends Controller
     /**
      * Associate the specified accounts with the group
      *
+     * @param  \App\Http\Requests\GroupAssignRequest  $request
      * @param  \App\Group  $group
      * @return \Illuminate\Http\Response
      */
-    public function associateAccounts(Request $request)
+    public function assignAccounts(GroupAssignRequest $request, Group $group)
     {
-        if( $request->input('groupId') > 0 ) {
+        $validated = $request->validated();
 
-            $twofaccounts = TwoFAccount::find($request->input('accountsIds'));
-            $group = Group::FindOrFail($request->input('groupId'));
+        $this->groupService->assign($validated['ids'], $group);
             
-            $group->twofaccounts()->saveMany($twofaccounts);
-            
-            return response()->json($group, 200);
-        }
-        else {
-
-            TwoFAccount::whereIn('id', $request->input('accountsIds'))
-                        ->update(['group_id' => NULL]);
-            
-            return response()->json(['message' => 'moved to null'], 200);
-        }
-
+        return response()->json($group, 200);
 
     }
 
@@ -140,7 +117,7 @@ class GroupController extends Controller
      */
     public function destroy(Group $group)
     {
-        $group->delete();
+        $this->groupService->delete($group->id);
 
         return response()->json(null, 204);
     }
