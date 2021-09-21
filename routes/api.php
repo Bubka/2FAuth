@@ -37,6 +37,7 @@ Route::group(['middleware' => 'auth:api'], function() {
     });
 
     Route::delete('twofaccounts', 'TwoFAccountController@batchDestroy');
+    Route::patch('twofaccounts/withdraw', 'TwoFAccountController@withdraw');
     Route::post('twofaccounts/reorder', 'TwoFAccountController@reorder');
     Route::post('twofaccounts/preview', 'TwoFAccountController@preview');
     Route::get('twofaccounts/{twofaccount}/qrcode', 'QrCodeController@show');
@@ -44,7 +45,7 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::get('twofaccounts/{id}/otp', 'TwoFAccountController@otp')->where('id', '[0-9]+');;
     Route::post('twofaccounts/otp', 'TwoFAccountController@otp');
     Route::apiResource('twofaccounts', 'TwoFAccountController');
-    Route::patch('group/accounts', 'GroupController@associateAccounts');
+    Route::post('groups/{group}/assign', 'GroupController@assignAccounts');
     Route::apiResource('groups', 'GroupController');
 
     // Done
