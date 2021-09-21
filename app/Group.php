@@ -21,7 +21,7 @@ class Group extends Model
      *
      * @var array
      */
-    protected $appends = ['isActive'];
+    protected $appends = [];
 
 
     /**
@@ -49,19 +49,4 @@ class Group extends Model
     {
         return $this->hasMany('App\TwoFAccount');
     }
-
-
-
-    /**
-    * Get the group 
-    *
-    * @return integer
-    */
-    public function getIsActiveAttribute()
-    {
-        $activeGroupId = intval(Options::get('activeGroup'));
-        
-        return $this->id === $activeGroupId ? true : false;
-    }
-
 }
