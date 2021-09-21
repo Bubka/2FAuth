@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class TwoFAccountBatchDestroyRequest extends FormRequest
+class GroupAssignRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,8 @@ class TwoFAccountBatchDestroyRequest extends FormRequest
     public function rules()
     {
         return [
-            'ids' => 'required|string|regex:/^\d([\d,])+[\d]+$/i',
+            'ids' => 'required|array',
+            'ids.*' => 'integer'
         ];
     }
 }
