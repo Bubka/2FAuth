@@ -24,7 +24,8 @@ class QrCodeController extends Controller
     /**
      * Create a new controller instance.
      *
-     * @param  QrCodeService  $qrcodeService
+     * @param \App\Services\QrCodeService  $qrcodeService
+     * @param \App\Services\TwoFAccountService $twofaccountService
      * @return void
      */
     public function __construct(QrCodeService $qrcodeService, TwoFAccountService $twofaccountService)

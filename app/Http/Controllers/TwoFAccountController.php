@@ -73,7 +73,6 @@ class TwoFAccountController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \App\Http\Requests\TwoFAccountDynamicRequest  $request
-     * 
      * @return \App\Http\Resources\TwoFAccountReadResource
      */
     public function store(TwoFAccountDynamicRequest $request)
@@ -138,7 +137,6 @@ class TwoFAccountController extends Controller
      * Preview account using an uri, without any db moves
      * 
      * @param  \App\Http\Requests\TwoFAccountUriRequest  $request
-     * 
      * @return \App\Http\Resources\TwoFAccountStoreResource
      */
     public function preview(TwoFAccountUriRequest $request)
@@ -153,6 +151,7 @@ class TwoFAccountController extends Controller
      * Get a One-Time Password
      *
      * @param  \Illuminate\Http\Request  $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function otp(Request $request, $id = null)
@@ -190,7 +189,7 @@ class TwoFAccountController extends Controller
     /**
      * A simple and light method to get the account count.
      *
-     * @param  \App\TwoFAccount  $twofaccount
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function count(Request $request)
@@ -204,7 +203,6 @@ class TwoFAccountController extends Controller
      * Withdraw one or more accounts from their group
      * 
      * @param \App\Http\Requests\TwoFAccountBatchRequest $request
-     * @param array $ids accounts ids to unassign
      * @return \Illuminate\Http\Response
      */
     public function withdraw(TwoFAccountBatchRequest $request)
@@ -263,6 +261,9 @@ class TwoFAccountController extends Controller
 
     /**
      * Checks ids length
+     * 
+     * @param string $ids comma-separated ids
+     * @return bool whether or not the number of ids is acceptable
      */
     private function tooManyIds(string $ids) : bool
     {

@@ -12,6 +12,8 @@ class GroupService
 
     /**
      * Returns all existing groups
+     * 
+     * @return Collection
      */
     public function getAll() : Collection
     {
@@ -40,7 +42,6 @@ class GroupService
      * Creates a group
      * 
      * @param array $data
-     * 
      * @return Group The created group
      */
     public function create(array $data) : Group
@@ -60,7 +61,6 @@ class GroupService
      * 
      * @param Group $group The group
      * @param array $data The parameters
-     * 
      * @return Group The updated group
      */
     public function update(Group $group, array $data) : Group
@@ -77,7 +77,6 @@ class GroupService
      * Deletes one or more groups
      * 
      * @param int|array $ids group ids to delete
-     * 
      * @return int The number of deleted
      */
     public function delete($ids) : int
@@ -93,7 +92,6 @@ class GroupService
      * 
      * @param array|int $ids accounts ids to assign
      * @param Group $group The target group
-     * 
      * @return Group The updated group
      */
     public function assign(mixed $ids, Group $group = null) : Group
@@ -114,7 +112,6 @@ class GroupService
      * Finds twofaccounts assigned to the group
      * 
      * @param Group $group The group
-     * 
      * @return Collection The assigned accounts
      */
     public function getAccounts(Group $group) : Collection
@@ -128,7 +125,7 @@ class GroupService
     /**
      * Determines the destination group
      * 
-     * @return int The group ID
+     * @return Group The group
      */
     private function destinationGroup() : Group
     {
