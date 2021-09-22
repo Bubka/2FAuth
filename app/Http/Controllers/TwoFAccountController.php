@@ -8,11 +8,12 @@ use App\Classes\Options;
 use App\Http\Requests\TwoFAccountReorderRequest;
 use App\Http\Requests\TwoFAccountStoreRequest;
 use App\Http\Requests\TwoFAccountUpdateRequest;
-use App\Http\Resources\TwoFAccountReadResource;
-use App\Http\Resources\TwoFAccountStoreResource;
 use App\Http\Requests\TwoFAccountBatchRequest;
 use App\Http\Requests\TwoFAccountUriRequest;
 use App\Http\Requests\TwoFAccountDynamicRequest;
+use App\Http\Resources\TwoFAccountCollection;
+use App\Http\Resources\TwoFAccountReadResource;
+use App\Http\Resources\TwoFAccountStoreResource;
 use App\Services\GroupService;
 use App\Services\TwoFAccountService;
 use Illuminate\Support\Arr;
@@ -51,9 +52,7 @@ class TwoFAccountController extends Controller
      */
     public function index(Request $request)
     {
-        $request->merge(['hideSecret' => true]);
-
-        return TwoFAccountReadResource::collection(TwoFAccount::ordered()->get());
+        return new TwoFAccountCollection(TwoFAccount::ordered()->get());
     }
 
 

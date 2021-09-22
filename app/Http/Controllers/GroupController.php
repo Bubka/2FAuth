@@ -8,6 +8,7 @@ use App\Services\GroupService;
 use App\Http\Requests\GroupStoreRequest;
 use App\Http\Requests\GroupAssignRequest;
 use App\Http\Resources\GroupResource;
+use App\Http\Resources\TwoFAccountCollection;
 use Illuminate\Http\Request;
 
 class GroupController extends Controller
@@ -105,6 +106,21 @@ class GroupController extends Controller
         $this->groupService->assign($validated['ids'], $group);
             
         return response()->json($group, 200);
+
+    }
+
+
+    /**
+     * Get accounts assign to the group
+     *
+     * @param  \App\Group  $group
+     * @return \App\Http\Resources\TwoFAccountCollection
+     */
+    public function accounts(Group $group)
+    {
+        $groups = $this->groupService->getAccounts($group);
+            
+        return new TwoFAccountCollection($groups);
 
     }
 

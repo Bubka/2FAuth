@@ -110,6 +110,20 @@ class GroupService
         return $group;
     }
 
+    /**
+     * Finds twofaccounts assigned to the group
+     * 
+     * @param Group $group The group
+     * 
+     * @return Collection The assigned accounts
+     */
+    public function getAccounts(Group $group) : Collection
+    {
+        $twofaccounts = $group->twofaccounts()->where('group_id', $group->id)->get();
+
+        return $twofaccounts;
+    }
+
 
     /**
      * Determines the destination group

@@ -45,6 +45,7 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::get('twofaccounts/{id}/otp', 'TwoFAccountController@otp')->where('id', '[0-9]+');;
     Route::post('twofaccounts/otp', 'TwoFAccountController@otp');
     Route::apiResource('twofaccounts', 'TwoFAccountController');
+    Route::get('groups/{group}/twofaccounts', 'GroupController@accounts');
     Route::post('groups/{group}/assign', 'GroupController@assignAccounts');
     Route::apiResource('groups', 'GroupController');
 

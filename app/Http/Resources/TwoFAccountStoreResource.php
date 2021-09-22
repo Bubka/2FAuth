@@ -19,7 +19,10 @@ class TwoFAccountStoreResource extends JsonResource
             'account'       => $this->account,
             'service'       => $this->service,
             'icon'          => $this->icon,
-            'secret'        => $this->when((int) filter_var($request->input('hideSecret'), FILTER_VALIDATE_BOOLEAN) == 0, $this->secret),
+            'secret'        => $this->when(
+                                    !$request->has('withSecret') || (int) filter_var($request->input('withSecret'), FILTER_VALIDATE_BOOLEAN) == 1,
+                                    $this->secret
+                                ),
             'digits'        => $this->digits,
             'algorithm'     => $this->algorithm,
             'period'        => $this->period,
