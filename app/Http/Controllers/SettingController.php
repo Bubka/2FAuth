@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Classes\DbProtection;
 use App\Http\Requests\SettingStoreRequest;
 use App\Http\Requests\SettingUpdateRequest;
-use App\Services\SettingServiceInterface;
-use Illuminate\Http\Request;
-use App\Classes\DbProtection;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Collection;
+use App\Services\SettingServiceInterface;
 
 
 class SettingController extends Controller

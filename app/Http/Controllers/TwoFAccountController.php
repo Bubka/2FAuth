@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Group;
 use App\TwoFAccount;
 use App\Http\Requests\TwoFAccountReorderRequest;
 use App\Http\Requests\TwoFAccountStoreRequest;

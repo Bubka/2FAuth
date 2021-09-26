@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Services\SettingServiceInterface;
-use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 
 class SinglePageController extends Controller
 {

@@ -3,13 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Group;
-use App\TwoFAccount;
 use App\Services\GroupService;
 use App\Http\Requests\GroupStoreRequest;
 use App\Http\Requests\GroupAssignRequest;
 use App\Http\Resources\GroupResource;
 use App\Http\Resources\TwoFAccountCollection;
-use Illuminate\Http\Request;
 
 class GroupController extends Controller
 {

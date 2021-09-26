@@ -4,14 +4,9 @@ namespace App;
 
 use Exception;
 // use App\Services\SettingServiceInterface;
-use OTPHP\HOTP;
-use OTPHP\Factory;
-use App\Classes\Options;
-use ParagonIE\ConstantTime\Base32;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Crypt;
 
