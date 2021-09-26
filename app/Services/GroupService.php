@@ -4,11 +4,27 @@ namespace App\Services;
 
 use App\Group;
 use App\TwoFAccount;
-use App\Classes\Options;
+use App\Services\SettingServiceInterface;
 use Illuminate\Database\Eloquent\Collection;
 
 class GroupService
 {
+
+    /**
+     * The Settings Service instance.
+     */
+    protected SettingServiceInterface $settingService;
+
+
+    /**
+     * Create a new controller instance.
+     * 
+     */
+    public function __construct(SettingServiceInterface $SettingServiceInterface)
+    {
+        $this->settingService = $SettingServiceInterface;
+    }
+
 
     /**
      * Returns all existing groups
@@ -129,7 +145,7 @@ class GroupService
      */
     private function destinationGroup() : Group
     {
-        $id = Options::get('defaultGroup') === '-1' ? (int) Options::get('activeGroup') : (int) Options::get('defaultGroup');
+        $id = $this->settingService->get('defaultGroup') === '-1' ? (int) $this->settingService->get('activeGroup') : (int) $this->settingService->get('defaultGroup');
 
         return Group::find($id);
     }

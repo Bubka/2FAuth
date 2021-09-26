@@ -3,7 +3,7 @@
 namespace App;
 
 use Exception;
-use OTPHP\TOTP;
+// use App\Services\SettingServiceInterface;
 use OTPHP\HOTP;
 use OTPHP\Factory;
 use App\Classes\Options;
@@ -195,8 +195,10 @@ class TwoFAccount extends Model implements Sortable
      */
     private function decryptOrReturn($value)
     {
+        $settingService = resolve('App\Services\SettingServiceInterface');
+
         // Decipher when needed
-        if ( Options::get('useEncryption') )
+        if ( $settingService->get('useEncryption') )
         {
             try {
                 return Crypt::decryptString($value);
@@ -216,8 +218,10 @@ class TwoFAccount extends Model implements Sortable
      */
     private function encryptOrReturn($value)
     {
+        $settingService = resolve('App\Services\SettingServiceInterface');
+
         // should be replaced by laravel 8 attribute encryption casting
-        return Options::get('useEncryption') ? Crypt::encryptString($value) : $value;
+        return $settingService->get('useEncryption') ? Crypt::encryptString($value) : $value;
     }
 
 }

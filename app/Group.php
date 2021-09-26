@@ -2,7 +2,6 @@
 
 namespace App;
 
-use App\Classes\Options;
 use Illuminate\Database\Eloquent\Model;
 
 class Group extends Model

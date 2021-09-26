@@ -28,13 +28,20 @@ Route::group(['middleware' => 'auth:api'], function() {
 
     Route::post('auth/logout', 'Auth\LoginController@logout');
 
-    Route::prefix('settings')->group(function () {
-        Route::get('account', 'Settings\AccountController@show');
-        Route::patch('account', 'Settings\AccountController@update');
-        Route::patch('password', 'Settings\PasswordController@update');
-        Route::get('options', 'Settings\OptionController@index');
-        Route::post('options', 'Settings\OptionController@store');
-    });
+    Route::get('settings/{name}', 'SettingController@show');
+    Route::get('settings', 'SettingController@index');
+    Route::post('settings', 'SettingController@store');
+    Route::put('settings/{name}', 'SettingController@update');
+    Route::delete('settings/{name}', 'SettingController@destroy');
+
+    // Route::prefix('settings')->group(function () {
+        // Route::get('account', 'Settings\AccountController@show');
+        // Route::patch('account', 'Settings\AccountController@update');
+        // Route::patch('password', 'Settings\PasswordController@update');
+        // Route::post('options', 'Settings\OptionController@store');
+    // });
+
+
 
     Route::delete('twofaccounts', 'TwoFAccountController@batchDestroy');
     Route::patch('twofaccounts/withdraw', 'TwoFAccountController@withdraw');
@@ -42,7 +49,7 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::post('twofaccounts/preview', 'TwoFAccountController@preview');
     Route::get('twofaccounts/{twofaccount}/qrcode', 'QrCodeController@show');
     Route::get('twofaccounts/count', 'TwoFAccountController@count');
-    Route::get('twofaccounts/{id}/otp', 'TwoFAccountController@otp')->where('id', '[0-9]+');;
+    Route::get('twofaccounts/{id}/otp', 'TwoFAccountController@otp')->where('id', '[0-9]+');
     Route::post('twofaccounts/otp', 'TwoFAccountController@otp');
     Route::apiResource('twofaccounts', 'TwoFAccountController');
     Route::get('groups/{group}/twofaccounts', 'GroupController@accounts');

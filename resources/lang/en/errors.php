@@ -29,4 +29,5 @@ return [
     'error_during_decryption' => 'Decryption failed, your database is still protected. This is mainly caused by an integrity issue of encrypted data for one or more accounts.',
     'qrcode_cannot_be_read' => 'This QR code is unreadable',
     'too_many_ids' => 'too many ids were included in the query parameter, max 100 allowed',
+    'delete_user_setting_only' => 'Only user-created setting can be deleted'
 ];

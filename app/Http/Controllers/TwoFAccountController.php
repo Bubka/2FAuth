@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Group;
 use App\TwoFAccount;
-use App\Classes\Options;
 use App\Http\Requests\TwoFAccountReorderRequest;
 use App\Http\Requests\TwoFAccountStoreRequest;
 use App\Http\Requests\TwoFAccountUpdateRequest;

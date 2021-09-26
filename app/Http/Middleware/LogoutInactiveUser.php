@@ -5,7 +5,6 @@ namespace App\Http\Middleware;
 use Closure;
 use App\User;
 use Carbon\Carbon;
-use App\Classes\Options;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
@@ -32,7 +31,8 @@ class LogoutInactiveUser
         $inactiveFor = $now->diffInSeconds(Carbon::parse($user->last_seen_at));
 
         // Fetch all setting values
-        $settings = Options::get();
+        $settingService = resolve('App\Services\SettingServiceInterface');
+        $settings = $settingService->all();
 
         $kickUserAfterXSecond = intval($settings['kickUserAfter']) * 60;
 
