@@ -127,22 +127,6 @@ class LoginController extends Controller
 
 
     /**
-     * Validate the user login request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return void
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     */
-    protected function validateLogin(Request $request)
-    {
-        $request->validate([
-            $this->username() => 'required|email|exists:users,email',
-            'password' => 'required|string',
-        ]);
-    }
-
-    /**
      * The user has been authenticated.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -154,18 +138,4 @@ class LoginController extends Controller
         $user->last_seen_at = Carbon::now()->format('Y-m-d H:i:s');
         $user->save();
     }
-
-    /**
-     * log out current user
-     * @param  Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function logout(Request $request)
-    {
-        $accessToken = Auth::user()->token();
-        $accessToken->revoke();
-
-        return response()->json(['message' => 'signed out'], Response::HTTP_OK);
-    }
-
 }
