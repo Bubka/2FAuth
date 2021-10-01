@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Settings;
+namespace App\Http\Controllers\Auth;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\UserPatchPwdRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -13,23 +13,20 @@ class PasswordController extends Controller
     /**
      * Update the user's password.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Http\Requests\UserPatchPwdRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function update(UserPatchPwdRequest $request)
     {
-        $this->validate($request, [
-            'currentPassword' => 'required',
-            'password' => 'required|confirmed|min:8',
-        ]);
+        $validated = $request->validated();
 
-        if (!Hash::check( $request->currentPassword, Auth::user()->password) ) {
+        if (!Hash::check( $validated['currentPassword'], Auth::user()->password) ) {
             return response()->json(['message' => __('errors.wrong_current_password')], 400);
         }
 
-        if (!config('app.options.isDemoApp') ) {
+        if (!config('2fauth.config.isDemoApp') ) {
             $request->user()->update([
-                'password' => bcrypt($request->password),
+                'password' => bcrypt($validated['password']),
             ]);
         }
 

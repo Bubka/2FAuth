@@ -31,7 +31,7 @@ class LoginController extends Controller
     /**
      * Handle a login request to the application.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\CaseInsensitiveLogin  $request
      * @return \Illuminate\Http\JsonResponse
      *
      * @throws \Illuminate\Validation\ValidationException
@@ -61,6 +61,21 @@ class LoginController extends Controller
         return $this->sendFailedLoginResponse($request);
     }
 
+
+    /**
+     * log out current user
+     * @param  Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function logout(Request $request)
+    {
+        $accessToken = Auth::user()->token();
+        $accessToken->revoke();
+
+        return response()->json(['message' => 'signed out'], Response::HTTP_OK);
+    }
+
+
     /**
      * Send the response after the user was authenticated.
      *
@@ -83,6 +98,7 @@ class LoginController extends Controller
         ], Response::HTTP_OK);
     }
 
+
     /**
      * Get the failed login response instance.
      *
@@ -93,6 +109,7 @@ class LoginController extends Controller
     {
         return response()->json(['message' => 'unauthorised'], Response::HTTP_UNAUTHORIZED);
     }
+    
 
     /**
      * Redirect the user after determining they are locked out.
@@ -108,6 +125,7 @@ class LoginController extends Controller
 
         return response()->json(['message' => Lang::get('auth.throttle', ['seconds' => $seconds])], Response::HTTP_TOO_MANY_REQUESTS);
     }
+
 
     /**
      * Get the needed authorization credentials from the request.

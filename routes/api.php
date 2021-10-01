@@ -15,33 +15,34 @@ use Illuminate\Http\Request;
 
 Route::group(['middleware' => 'guest:api'], function () {
 
-    Route::post('auth/login', 'Auth\LoginController@login');
-    Route::post('checkuser', 'Auth\RegisterController@checkUser');
-    Route::post('auth/register', 'Auth\RegisterController@register');
+    Route::post('user', 'Auth\RegisterController@register');
 
-    Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->middleware('AvoidResetPassword');
-    Route::post('password/reset', 'Auth\ResetPasswordController@reset')->name('password.reset');
+    Route::post('login', 'Auth\LoginController@login');
+
+    Route::get('user/name', 'Auth\UserController@show');
+    Route::post('user/password/lost', 'Auth\ForgotPasswordController@sendResetLinkEmail')->middleware('AvoidResetPassword');
+    Route::post('user/password/reset', 'Auth\ResetPasswordController@reset')->name('password.reset');
 
 });
 
 Route::group(['middleware' => 'auth:api'], function() {
 
-    Route::post('auth/logout', 'Auth\LoginController@logout');
+    Route::get('user', 'Auth\UserController@show');
+    Route::put('user', 'Auth\UserController@update');
+    Route::patch('user/password', 'Auth\PasswordController@update');
+
+    Route::post('logout', 'Auth\LoginController@logout');
+
+    // Route::prefix('settings')->group(function () {
+        // Route::get('account', 'Settings\AccountController@show');
+        // Route::post('options', 'Settings\OptionController@store');
+    // });
 
     Route::get('settings/{name}', 'SettingController@show');
     Route::get('settings', 'SettingController@index');
     Route::post('settings', 'SettingController@store');
     Route::put('settings/{name}', 'SettingController@update');
     Route::delete('settings/{name}', 'SettingController@destroy');
-
-    // Route::prefix('settings')->group(function () {
-        // Route::get('account', 'Settings\AccountController@show');
-        // Route::patch('account', 'Settings\AccountController@update');
-        // Route::patch('password', 'Settings\PasswordController@update');
-        // Route::post('options', 'Settings\OptionController@store');
-    // });
-
-
 
     Route::delete('twofaccounts', 'TwoFAccountController@batchDestroy');
     Route::patch('twofaccounts/withdraw', 'TwoFAccountController@withdraw');
@@ -52,12 +53,13 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::get('twofaccounts/{id}/otp', 'TwoFAccountController@otp')->where('id', '[0-9]+');
     Route::post('twofaccounts/otp', 'TwoFAccountController@otp');
     Route::apiResource('twofaccounts', 'TwoFAccountController');
+
     Route::get('groups/{group}/twofaccounts', 'GroupController@accounts');
     Route::post('groups/{group}/assign', 'GroupController@assignAccounts');
     Route::apiResource('groups', 'GroupController');
 
-    // Done
     Route::post('qrcode/decode', 'QrCodeController@decode');
+
     Route::post('icons', 'IconController@upload');
     Route::delete('icons/{icon}', 'IconController@delete');
 

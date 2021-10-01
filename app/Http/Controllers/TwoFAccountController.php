@@ -46,7 +46,7 @@ class TwoFAccountController extends Controller
     /**
      * List all resources
      *
-     * @return \App\Http\Resources\TwoFAccountReadResource
+     * @return \App\Http\Resources\TwoFAccountCollection
      */
     public function index(Request $request)
     {
