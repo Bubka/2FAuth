@@ -39,7 +39,7 @@ class ResetDemo extends Command
      */
     public function handle()
     {
-        if( !config('app.options.isDemoApp') ) {
+        if( !config('2fauth.config.isDemoApp') ) {
             $this->comment('2fauth:reset-demo can only run when isDemoApp option is On');
             return;
         }

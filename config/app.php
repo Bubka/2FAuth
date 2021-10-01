@@ -32,7 +32,6 @@ return [
     */
 
     'options' => [
-        'isDemoApp' => env('IS_DEMO_APP', false),
         'showTokenAsDot' => false,
         'closeTokenOnCopy' => false,
         'useBasicQrcodeReader' => false,

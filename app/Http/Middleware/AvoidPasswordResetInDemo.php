@@ -17,7 +17,7 @@ class AvoidPasswordResetInDemo
     public function handle($request, Closure $next)
     {
 
-        if( config('app.options.isDemoApp') ) {
+        if( config('2fauth.config.isDemoApp') ) {
             return response()->json(['requestFailed' => __('auth.forms.no_reset_password_in_demo')], Response::HTTP_UNAUTHORIZED);
         }
 
