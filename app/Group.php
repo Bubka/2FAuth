@@ -42,6 +42,24 @@ class Group extends Model
 
 
     /**
+     * Override The "booting" method of the model
+     *
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+        
+        static::deleting(function ($model) {
+            TwoFAccount::where('group_id', $model->id)
+                        ->update(
+                            ['group_id' => NULL]
+                        );
+        });
+    }
+
+
+    /**
      * Get the TwoFAccounts of the group.
      */
     public function twofaccounts()
