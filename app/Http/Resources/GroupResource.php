@@ -17,7 +17,7 @@ class GroupResource extends JsonResource
         return [
             'id'                    => $this->id,
             'name'                  => $this->name,
-            'twofaccounts_count'    => $this->twofaccounts()->count(),
+            'twofaccounts_count'    => $this->twofaccounts_count,
         ];
     }
 }
