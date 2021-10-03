@@ -23,7 +23,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Route::pattern('settingName', '[a-zA-Z]+');
 
         parent::boot();
     }

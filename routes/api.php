@@ -38,11 +38,11 @@ Route::group(['middleware' => 'auth:api'], function() {
         // Route::post('options', 'Settings\OptionController@store');
     // });
 
-    Route::get('settings/{name}', 'SettingController@show');
+    Route::get('settings/{settingName}', 'SettingController@show');
     Route::get('settings', 'SettingController@index');
     Route::post('settings', 'SettingController@store');
-    Route::put('settings/{name}', 'SettingController@update');
-    Route::delete('settings/{name}', 'SettingController@destroy');
+    Route::put('settings/{settingName}', 'SettingController@update');
+    Route::delete('settings/{settingName}', 'SettingController@destroy');
 
     Route::delete('twofaccounts', 'TwoFAccountController@batchDestroy');
     Route::patch('twofaccounts/withdraw', 'TwoFAccountController@withdraw');

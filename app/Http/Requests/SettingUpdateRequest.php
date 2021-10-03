@@ -24,7 +24,7 @@ class SettingUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'data' => 'required',
+            'value' => 'required',
         ];
     }
 }

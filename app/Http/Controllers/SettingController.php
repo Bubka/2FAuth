@@ -39,8 +39,8 @@ class SettingController extends Controller
         $settingsResources = collect();
         $settings->each(function ($item, $key) use ($settingsResources) {
             $settingsResources->push([
-                'name' => $key,
-                'data' => $item
+                'key' => $key,
+                'value' => $item
             ]);
         });
 
@@ -52,21 +52,21 @@ class SettingController extends Controller
     /**
      * Display a resource
      *
-     * @param string $name
+     * @param string $settingName
      * 
      * @return \App\Http\Resources\TwoFAccountReadResource
      */
-    public function show($name)
+    public function show($settingName)
     {
-        $setting = $this->settingService->get($name);
+        $setting = $this->settingService->get($settingName);
 
         if (!$setting) {
             abort(404);
         }
 
         return response()->json([
-            'name' => $name,
-            'data' => $setting
+            'key' => $settingName,
+            'value' => $setting
         ], 200);
     }
 
@@ -79,11 +79,11 @@ class SettingController extends Controller
     {
         $validated = $request->validated();
 
-        $this->settingService->set($validated['name'], $validated['data']);
+        $this->settingService->set($validated['key'], $validated['value']);
 
         return response()->json([
-            'name' => $validated['name'],
-            'data' => $validated['data']
+            'key' => $validated['key'],
+            'value' => $validated['value']
         ], 201);
     }
 
@@ -92,21 +92,15 @@ class SettingController extends Controller
      * Save options
      * @return [type] [description]
      */
-    public function update(SettingUpdateRequest $request, $name)
+    public function update(SettingUpdateRequest $request, $settingName)
     {
         $validated = $request->validated();
 
-        $setting = $this->settingService->get($name);
-
-        if (is_null($setting)) {
-            abort(404);
-        }
-
-        $setting = $this->settingService->set($name, $validated['data']);
+        $this->settingService->set($settingName, $validated['value']);
 
         return response()->json([
-            'name' => $name,
-            'data' => $validated['data']
+            'key' => $settingName,
+            'value' => $validated['value']
         ], 200);
 
         // The useEncryption option impacts the [existing] content of the database.
@@ -138,23 +132,23 @@ class SettingController extends Controller
      * Save options
      * @return [type] [description]
      */
-    public function destroy($name)
+    public function destroy($settingName)
     {
-        $setting = $this->settingService->get($name);
+        $setting = $this->settingService->get($settingName);
 
         if (is_null($setting)) {
             abort(404);
         }
 
         $optionsConfig = config('app.options');
-        if(array_key_exists($name, $optionsConfig)) {
+        if(array_key_exists($settingName, $optionsConfig)) {
             return response()->json(
                 ['message' => 'bad request',
                 'reason' => [__('errors.delete_user_setting_only')]
             ], 400);
         }
 
-        $this->settingService->delete($name);
+        $this->settingService->delete($settingName);
 
         return response()->json(null, 204);
     }

@@ -110,7 +110,7 @@ class GroupService
      * @param Group $group The target group
      * @return Group The updated group
      */
-    public function assign(mixed $ids, Group $group = null) : Group
+    public function assign($ids, Group $group = null) : Group
     {
         if (!$group) {
             $group = $this->destinationGroup();
