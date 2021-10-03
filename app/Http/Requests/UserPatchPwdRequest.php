@@ -25,7 +25,7 @@ class UserPatchPwdRequest extends FormRequest
     {
         return [
             'currentPassword' => 'required',
-            'password' => 'required|string|min:8',
+            'password' => 'required|confirmed|string|min:8',
         ];
     }
 }
