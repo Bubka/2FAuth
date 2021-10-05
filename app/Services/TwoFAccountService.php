@@ -132,12 +132,14 @@ class TwoFAccountService
             if ( $this->tokenOtpType() === 'totp' ) {
 
                 $OtpDto->generated_at   = time();
+                $OtpDto->otp_type       = 'totp';
                 $OtpDto->password       = $this->token->at($OtpDto->generated_at);
                 $OtpDto->valid_for      = $this->token->getParameter('period');
             }
             else if ( $this->tokenOtpType() === 'hotp' ) {
 
                 $counter = $this->token->getCounter();
+                $OtpDto->otp_type   = 'hotp';
                 $OtpDto->password   = $this->token->at($counter);
                 $OtpDto->counter    = $counter + 1;
             }

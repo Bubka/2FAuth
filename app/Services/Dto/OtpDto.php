@@ -8,6 +8,9 @@ class OtpDto
     public string $password;
 
     /* @var integer */
+    public string $otp_type;
+
+    /* @var integer */
     public ?int $generated_at;
 
     /* @var integer */
