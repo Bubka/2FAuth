@@ -333,21 +333,22 @@ class TwoFAccountService
         try {
             if ( $dto->otp_type === 'totp' ) {
                 $this->token = TOTP::create(
-                    $dto->secret,
-                    $dto->period,
-                    $dto->algorithm,
-                    $dto->digits,
+                    $dto->secret
                 );
+
+                if ($dto->period) $this->token->setParameter('period', $dto->period);
             }
             else if ( $dto->otp_type === 'hotp' ) {
                 $this->token = HOTP::create(
-                    $dto->secret,
-                    $dto->counter,
-                    $dto->algorithm,
-                    $dto->digits,
+                    $dto->secret
                 );
+
+                if ($dto->counter) $this->token->setParameter('counter', $dto->counter);
             }
 
+            if ($dto->algorithm) $this->token->setParameter('digest', $dto->algorithm);
+            if ($dto->digits) $this->token->setParameter('digits', $dto->digits);
+            // if ($dto->epoch) $this->token->setParameter('epoch', $dto->epoch);
             if ($dto->service) $this->token->setIssuer($dto->service);
             if ($dto->account) $this->token->setLabel($dto->account);
         }
