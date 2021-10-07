@@ -14,7 +14,7 @@ class OtpDto
     public ?int $generated_at;
 
     /* @var integer */
-    public ?int $valid_for;
+    public ?int $period;
 
     /* @var integer */
     public ?int $counter;
