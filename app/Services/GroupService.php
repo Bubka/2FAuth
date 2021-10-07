@@ -116,6 +116,9 @@ class GroupService
             $group = $this->destinationGroup();
         }
 
+        if (!is_array($ids)) {
+            $ids = array($ids);
+        }
         $twofaccounts = TwoFAccount::find($ids);
 
         $group->twofaccounts()->saveMany($twofaccounts);
