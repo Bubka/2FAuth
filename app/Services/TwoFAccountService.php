@@ -346,7 +346,7 @@ class TwoFAccountService
                 if ($dto->counter) $this->token->setParameter('counter', $dto->counter);
             }
 
-            if ($dto->algorithm) $this->token->setParameter('digest', $dto->algorithm);
+            if ($dto->algorithm) $this->token->setParameter('algorithm', $dto->algorithm);
             if ($dto->digits) $this->token->setParameter('digits', $dto->digits);
             // if ($dto->epoch) $this->token->setParameter('epoch', $dto->epoch);
             if ($dto->service) $this->token->setIssuer($dto->service);
