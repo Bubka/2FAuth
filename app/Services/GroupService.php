@@ -108,24 +108,26 @@ class GroupService
      * 
      * @param array|int $ids accounts ids to assign
      * @param Group $group The target group
-     * @return Group The updated group
+     * @return void
      */
-    public function assign($ids, Group $group = null) : Group
+    public function assign($ids, Group $group = null) : void
     {
         if (!$group) {
-            $group = $this->destinationGroup();
+            $group = $this->defaultGroup();
         }
 
-        if (!is_array($ids)) {
-            $ids = array($ids);
+        if ($group) {
+            // saveMany() expect an iterable so we pass an array to
+            // find() to always obtain a list of TwoFAccount
+            if (!is_array($ids)) {
+                $ids = array($ids);
+            }
+            $twofaccounts = TwoFAccount::find($ids);
+
+            $group->twofaccounts()->saveMany($twofaccounts);
         }
-        $twofaccounts = TwoFAccount::find($ids);
-
-        $group->twofaccounts()->saveMany($twofaccounts);
-        $group->loadCount('twofaccounts');
-
-        return $group;
     }
+
 
     /**
      * Finds twofaccounts assigned to the group
@@ -144,9 +146,9 @@ class GroupService
     /**
      * Determines the destination group
      * 
-     * @return Group The group
+     * @return Group|null The group or null if it does not exist
      */
-    private function destinationGroup() : Group
+    private function defaultGroup()
     {
         $id = $this->settingService->get('defaultGroup') === '-1' ? (int) $this->settingService->get('activeGroup') : (int) $this->settingService->get('defaultGroup');
 
