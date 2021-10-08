@@ -110,7 +110,9 @@ class TwoFAccountController extends Controller
 
         $this->twofaccountService->update($twofaccount, $validated);
 
-        return response()->json($twofaccount, 200);
+        return (new TwoFAccountReadResource($twofaccount))
+                ->response()
+                ->setStatusCode(200);
 
     }
 
