@@ -406,9 +406,9 @@ class TwoFAccountService
     /**
      * Gets the image resource pointed by the token image parameter and store it as an icon
      * 
-     * @return string The filename of the stored icon
+     * @return string|null The filename of the stored icon or null if the operation fails
      */
-    private function storeTokenImageAsIcon() : string
+    private function storeTokenImageAsIcon()
     {
         try {
             $remoteImageURL = $this->token->getParameter('image');
@@ -433,7 +433,7 @@ class TwoFAccountService
             return $newFilename;
         }
         catch (\Assert\AssertionFailedException|\Assert\InvalidArgumentException|\Exception|\Throwable $ex) {
-            // TODO : log the error
+            return null;
         }
     }
 }
