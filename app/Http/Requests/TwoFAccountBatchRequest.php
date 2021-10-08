@@ -24,7 +24,7 @@ class TwoFAccountBatchRequest extends FormRequest
     public function rules()
     {
         return [
-            'ids' => 'required|string|regex:/^\d+([,][\d]+)*$/i',
+            'ids' => 'required|string|regex:/^\d+(,{1}\d+)*$/i',
         ];
     }
 }
