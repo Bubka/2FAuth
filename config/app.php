@@ -26,28 +26,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Application fallback for user options
-    |--------------------------------------------------------------------------
-    |
-    */
-
-    'options' => [
-        'showTokenAsDot' => false,
-        'closeTokenOnCopy' => false,
-        'useBasicQrcodeReader' => false,
-        'displayMode' => 'list',
-        'showAccountsIcons' => true,
-        'kickUserAfter' => '15',
-        'activeGroup' => 0,
-        'rememberActiveGroup' => true,
-        'defaultGroup' => 0,
-        'useEncryption' => false,
-        'defaultCaptureMode' => 'livescan',
-        'useDirectCapture' => false,
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
     | Application Environment
     |--------------------------------------------------------------------------
     |

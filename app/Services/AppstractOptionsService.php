@@ -12,7 +12,7 @@ class AppstractOptionsService implements SettingServiceInterface
      */
     public function get(string $setting)
     {
-        $value = option($setting, config('app.options' . $setting));
+        $value = option($setting, config('2fauth.options' . $setting));
         $value = $this->restoreType($value);
 
         return $value;
@@ -29,7 +29,7 @@ class AppstractOptionsService implements SettingServiceInterface
         $userOptions->transform(function ($item, $key) {
             return $this->restoreType($item);
         });
-        $userOptions = collect(config('app.options'))->merge($userOptions);
+        $userOptions = collect(config('2fauth.options'))->merge($userOptions);
 
         return $userOptions;
     }

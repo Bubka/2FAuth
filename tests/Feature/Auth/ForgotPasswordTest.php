@@ -91,7 +91,7 @@ class ForgotPasswordTest extends TestCase
      */
     public function testSubmitEmailPasswordRequestInDemoMode()
     {
-        Config::set('app.options.isDemoApp', true);
+        Config::set('2fauth.config.isDemoApp', true);
 
         $response = $this->json('POST', '/api/password/email', [
             'email' => ''

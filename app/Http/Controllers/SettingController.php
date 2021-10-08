@@ -140,7 +140,7 @@ class SettingController extends Controller
             abort(404);
         }
 
-        $optionsConfig = config('app.options');
+        $optionsConfig = config('2fauth.options');
         if(array_key_exists($settingName, $optionsConfig)) {
             return response()->json(
                 ['message' => 'bad request',

@@ -29,7 +29,7 @@ class ConsoleTest extends TestCase
      */
     public function test2fauthResetDemowithConfirmConsoleCommand()
     {
-        Config::set('app.options.isDemoApp', true);
+        Config::set('2fauth.config.isDemoApp', true);
 
         $this->artisan('2fauth:reset-demo')
              ->expectsOutput('This will reset the app in order to run a clean and fresh demo.')
@@ -119,7 +119,7 @@ class ConsoleTest extends TestCase
      */
     public function test2fauthResetDemowithBadConfirmationConsoleCommand()
     {
-        Config::set('app.options.isDemoApp', true);
+        Config::set('2fauth.config.isDemoApp', true);
 
         $this->artisan('2fauth:reset-demo')
              ->expectsQuestion('To prevent any mistake please type the word "demo" to go on', 'null')
@@ -135,7 +135,7 @@ class ConsoleTest extends TestCase
      */
     public function test2fauthResetDemowithoutConfirmationConsoleCommand()
     {
-        Config::set('app.options.isDemoApp', true);
+        Config::set('2fauth.config.isDemoApp', true);
 
         $this->artisan('2fauth:reset-demo --no-confirm')
              ->expectsOutput('Demo app refreshed')
