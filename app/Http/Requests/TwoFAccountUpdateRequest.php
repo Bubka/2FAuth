@@ -24,15 +24,15 @@ class TwoFAccountUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'service' => 'required|nullable|string|regex:/^[^:]+$/i',
+            'service' => 'present|nullable|string|regex:/^[^:]+$/i',
             'account' => 'required|string|regex:/^[^:]+$/i',
-            'icon' => 'required|nullable|string',
+            'icon' => 'present|nullable|string',
             'otp_type' => 'required|string|in:totp,hotp',
-            'secret' => ['required', 'string', 'bail', new \App\Rules\IsBase32Encoded],
-            'digits' => 'required|integer|between:6,10',
-            'algorithm' => 'required|string|in:sha1,sha256,sha512,md5',
-            'period' => 'required_if:otp_type,totp|nullable|integer|min:1',
-            'counter' => 'required_if:otp_type,hotp|nullable|integer|min:0',
+            'secret' => ['present', 'string', 'bail', new \App\Rules\IsBase32Encoded],
+            'digits' => 'present|integer|between:6,10',
+            'algorithm' => 'present|string|in:sha1,sha256,sha512,md5',
+            'period' => 'nullable|integer|min:1',
+            'counter' => 'nullable|integer|min:0',
         ];
     }
 }
