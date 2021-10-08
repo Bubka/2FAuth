@@ -31,8 +31,8 @@ class TwoFAccountUpdateRequest extends FormRequest
             'secret' => ['required', 'string', 'bail', new \App\Rules\IsBase32Encoded],
             'digits' => 'required|integer|between:6,10',
             'algorithm' => 'required|string|in:sha1,sha256,sha512,md5',
-            'period' => 'required_if:otp_type,totp|integer|min:1',
-            'counter' => 'required_if:otp_type,hotp|integer|min:0',
+            'period' => 'required_if:otp_type,totp|nullable|integer|min:1',
+            'counter' => 'required_if:otp_type,hotp|nullable|integer|min:0',
         ];
     }
 }
