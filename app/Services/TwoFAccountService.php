@@ -106,10 +106,6 @@ class TwoFAccountService
         $twofaccount->icon = Arr::get($data, 'icon', null);
         $twofaccount->save();
 
-        if (is_null($twofaccount->icon)) {
-            $this->deleteIcon($twofaccount->icon);
-        }
-
         return $twofaccount;
     }
 
@@ -420,15 +416,5 @@ class TwoFAccountService
         catch (\Assert\AssertionFailedException|\Assert\InvalidArgumentException|\Exception|\Throwable $ex) {
             // TODO : log the error
         }
-    }
-
-    /**
-     * Deletes an icon
-     * 
-     * @param string $filename The icon filename
-     */
-    private function deleteIcon(string $filename) : void
-    {
-        Storage::delete('public/icons/' . $filename);
     }
 }
