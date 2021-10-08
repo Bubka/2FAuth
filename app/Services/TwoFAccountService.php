@@ -167,14 +167,19 @@ class TwoFAccountService
     /**
      * Withdraw one or more twofaccounts from their group
      * 
-     * @param int|array $ids twofaccount ids to free
+     * @param int|array|string $ids twofaccount ids to free
      */
     public function withdraw($ids) : void
     {
-        $arIds = explode(',', $ids);
+        // $ids as string could be a comma-separated list of ids
+        // so in this case we explode the string to an array
+        $ids = $this->commaSeparatedToArray($ids);
 
-        if ($arIds) {
-            TwoFAccount::whereIn('id', $arIds)
+        // whereIn() expects an array
+        $ids = is_array($ids) ? $ids : func_get_args();
+
+        if ($ids) {
+            TwoFAccount::whereIn('id', $ids)
                         ->update(
                             ['group_id' => NULL]
                         );
@@ -185,12 +190,15 @@ class TwoFAccountService
     /**
      * Delete one or more twofaccounts
      * 
-     * @param int|array $ids twofaccount ids to delete
+     * @param int|array|string $ids twofaccount ids to delete
      * 
      * @return int The number of deleted
      */
     public function delete($ids) : int
     {
+        // $ids as string could be a comma-separated list of ids
+        // so in this case we explode the string to an array
+        $ids = $this->commaSeparatedToArray($ids);
         $deleted = TwoFAccount::destroy($ids);
 
         return $deleted;
@@ -202,6 +210,17 @@ class TwoFAccountService
 // ########################################################################################################################
 // ########################################################################################################################
 
+    /**
+     * 
+     */
+    private function commaSeparatedToArray($ids)
+    {
+        $regex = "/^\d+(,{1}\d+)*$/";
+        if (preg_match($regex, $ids)) {
+            $ids = explode(',', $ids);
+        }
+        return $ids;
+    }
 
     /**
      * Inits the Token
