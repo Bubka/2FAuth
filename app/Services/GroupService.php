@@ -97,6 +97,25 @@ class GroupService
      */
     public function delete($ids) : int
     {
+        $ids = is_array($ids) ? $ids : func_get_args();
+
+        // A group is possibly set as the default group in Settings.
+        // In this case we reset the setting to "No group" (groupId = 0)
+        $defaultGroupId = $this->settingService->get('defaultGroup');
+
+        if (in_array($defaultGroupId, $ids)) {
+            $this->settingService->set('defaultGroup', 0);
+        }
+
+        // A group is also possibly set as the active group if the user
+        // configured 2FAuth to memorize the active group.
+        // In this case we reset the setting to the pseudo "All" group (groupId = 0)
+        $activeGroupId = $this->settingService->get('activeGroup');
+
+        if (in_array($activeGroupId, $ids)) {
+            $this->settingService->set('activeGroup', 0);
+        }
+
         $deleted = Group::destroy($ids);
 
         return $deleted;
