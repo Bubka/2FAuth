@@ -67,18 +67,18 @@ return [
             'label' => 'Algorithmus',
             'help' => 'Der Algorithmus, der zur Sicherung Ihrer Sicherheitscodes verwendet wird'
         ],
-        'totpPeriod' => [
+        'period' => [
             'label' => 'Gültigkeitsdauer',
             'placeholder' => 'Standard ist 30',
             'help' => 'Die Gültigkeitsdauer der generierten Sicherheitscodes in Sekunden'
         ],
-        'hotpCounter' => [
+        'counter' => [
             'label' => 'Zähler',
             'placeholder' => 'Standard ist 0',
             'help' => 'Der Zählerwert am Anfang',
             'help_lock' => 'Es ist riskant, den Zähler zu bearbeiten, da Sie das Konto mit dem Verifizierungsserver des Dienstes desynchronisieren könnten. Verwenden Sie das Schloss-Symbol, um die Änderung zu aktivieren, wenn Sie sich sicher sind, was Sie tun'
         ],
-        'image_link' => [
+        'image' => [
             'label' => 'Bild',
             'placeholder' => 'http://...',
             'help' => 'Die URL eines externen Bildes, das als Kontosymbol benutzt wird'

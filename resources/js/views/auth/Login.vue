@@ -37,10 +37,10 @@
             handleSubmit(e) {
                 e.preventDefault()
 
-                this.form.post('/api/login', {returnError: true})
+                this.form.post('/api/user/login', {returnError: true})
                 .then(response => {
-                    localStorage.setItem('user',response.data.message.name)
-                    localStorage.setItem('jwt',response.data.message.token)
+                    localStorage.setItem('user',response.data.name)
+                    localStorage.setItem('jwt',response.data.token)
 
                     if (localStorage.getItem('jwt') != null){
                         this.$router.push({ name: 'accounts', params: { toRefresh: true } })
@@ -66,13 +66,13 @@
             }
 
             next(async vm => {
-                const { data } = await vm.axios.post('api/checkuser')
+                const { data } = await vm.axios.get('api/user/name')
 
-                if( !data.username ) {
-                    return next({ name: 'register' });
+                if( data.name ) {
+                    vm.username = data.name
                 }
                 else {
-                    vm.username = data.username
+                    return next({ name: 'register' });
                 }
             });
 

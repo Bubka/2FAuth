@@ -5,109 +5,118 @@
         </figure>
         <p class="is-size-4 has-text-grey-light has-ellipsis">{{ internal_service }}</p>
         <p class="is-size-6 has-text-grey has-ellipsis">{{ internal_account }}</p>
-        <p class="is-size-1 has-text-white is-clickable" :title="$t('commons.copy_to_clipboard')" v-clipboard="() => token.replace(/ /g, '')" v-clipboard:success="clipboardSuccessHandler">{{ displayedToken }}</p>
-        <ul class="dots" v-if="internal_otpType === 'totp'">
+        <p class="is-size-1 has-text-white is-clickable" :title="$t('commons.copy_to_clipboard')" v-clipboard="() => password.replace(/ /g, '')" v-clipboard:success="clipboardSuccessHandler">{{ displayedOtp }}</p>
+        <ul class="dots" v-show="internal_otp_type === 'totp'">
             <li v-for="n in 10"></li>
         </ul>
-        <ul v-else-if="internal_otpType === 'hotp'">
-            <li>counter: {{ internal_hotpCounter }}</li>
+        <ul v-show="internal_otp_type === 'hotp'">
+            <li>counter: {{ internal_counter }}</li>
         </ul>
     </div>
 </template>
 
 <script>
     export default {
-        name: 'TokenDisplayer',
+        name: 'OtpDisplayer',
 
         data() {
             return {
-                id: null,
-                token : '',
-                remainingTimeout: null,
-                firstDotToNextOneTimeout: null,
-                dotToDotInterval: null,
-                position: null,
-                totpTimestamp: null,
-                internal_otpType: '',
+                internal_id: null,
+                internal_otp_type: '',
                 internal_account: '',
                 internal_service: '',
                 internal_icon: '',
-                internal_hotpCounter: null,
+                internal_secret: null,
+                internal_digits: null,
+                internal_algorithm: null,
+                internal_period: null,
+                internal_counter: null,
+                internal_password : '',
+                internal_uri : '',
                 lastActiveDot: null,
-                dotToDotCounter: null,
+                remainingTimeout: null,
+                firstDotToNextOneTimeout: null,
+                dotToDotInterval: null
             }
         },
 
         props: {
+            otp_type : String,
             account : String,
-            algorithm : String,
-            digits : Number,
-            hotpCounter : null,
-            icon : String,
-            imageLink : String,
-            otpType : String,
-            qrcode : null,
-            secret : String,
-            secretIsBase32Encoded : Number,
             service : String,
-            totpPeriod : null,
+            icon : String,
+            secret : String,
+            digits : Number,
+            algorithm : String,
+            period : null,
+            counter : null,
+            image : String,
+            qrcode : null,
+            secretIsBase32Encoded : Number,
             uri : String
         },
 
         computed: {
-            displayedToken() {
-                return this.$root.appSettings.showTokenAsDot ? this.token.replace(/[0-9]/g, '●') : this.token
+            displayedOtp() {
+                const spacePosition = Math.ceil(this.internal_password.length / 2)
+                let pwd = this.internal_password.substr(0, spacePosition) + " " + this.internal_password.substr(spacePosition)
+                return this.$root.appSettings.showOtpAsDot ? pwd.replace(/[0-9]/g, '●') : pwd
             }
         },
 
         mounted: function() {
-            this.getToken()
+            this.show()
         },
 
         methods: {
 
-            async getToken(id) {
+            async show(id) {
 
                 // 3 possible cases :
-                //   - Trigger when user ask for a token of an existing account: the ID is provided so we fetch the account data
+                //   - Trigger when user ask for an otp of an existing account: the ID is provided so we fetch the account data
                 //     from db but without the uri.
                 //     This prevent the uri (a sensitive data) to transit via http request unnecessarily. In this
-                //     case this.otpType is sent by the backend.
+                //     case this.otp_type is sent by the backend.
                 //   - Trigger when user use the Quick Uploader and preview the account: No ID but we have an URI.
                 //   - Trigger when user use the Advanced form and preview the account: We should have all OTP parameter
-                //     to obtain a token, including Secret and otpType which are required
+                //     to obtain an otp, including Secret and otp_type which are required
 
-                this.internal_service = this.service
+                this.internal_otp_type = this.otp_type
                 this.internal_account = this.account
+                this.internal_service = this.service
                 this.internal_icon = this.icon
-                this.internal_otpType = this.otpType
-                this.internal_hotpCounter = this.hotpCounter
+                this.internal_secret = this.secret
+                this.internal_digits = this.digits
+                this.internal_algorithm = this.algorithm
+                this.internal_period = this.period
+                this.internal_counter = this.counter
 
                 if( id ) {
 
-                    this.id = id
-                    const { data } = await this.axios.get('api/twofaccounts/' + this.id)
+                    this.internal_id = id
+                    const { data } = await this.axios.get('api/twofaccounts/' + this.internal_id)
 
                     this.internal_service = data.service
                     this.internal_account = data.account
                     this.internal_icon = data.icon
-                    this.internal_otpType = data.otpType
+                    this.internal_otp_type = data.otp_type
                     
-                    if( data.otpType === 'hotp' && data.hotpCounter ) {
-                        this.internal_hotpCounter = data.hotpCounter
+                    if( data.otp_type === 'hotp' && data.counter ) {
+                        this.internal_counter = data.counter
                     }
                 }
 
-                // We force the otpType to be based on the uri
+                // We force the otp_type to be based on the uri
                 if( this.uri ) {
-                    this.internal_otpType = this.uri.slice(0, 15 ).toLowerCase() === "otpauth://totp/" ? 'totp' : 'hotp';
+                    this.internal_uri = this.uri
+                    this.internal_otp_type = this.uri.slice(0, 15 ).toLowerCase() === "otpauth://totp/" ? 'totp' : 'hotp';
                 }
 
-                if( this.id || this.uri || this.secret ) { // minimun required vars to get a token from the backend
+                if( this.internal_id || this.uri || this.secret ) { // minimun required vars to get an otp from the backend
                     
-                    switch(this.internal_otpType) {
+                    switch(this.internal_otp_type) {
                         case 'totp':
-                            await this.getTOTP()
+                            await this.startTotpLoop()
                             break;
                         case 'hotp':
                             await this.getHOTP()
@@ -120,94 +129,125 @@
                 }
             },
 
+            getOtp: async function() {
 
-            getTOTP: function() {
+                if(this.internal_id) {
+                    const { data } =  await this.axios.get('/api/twofaccounts/' + this.internal_id + '/otp')
+                    return data
+                }
+                else if(this.internal_uri) {
+                    const { data } =  await this.axios.post('/api/twofaccounts/otp', {
+                        uri: this.internal_uri
+                    })
+                    return data
+                }
+                else {
+                    const { data } =  await this.axios.post('/api/twofaccounts/otp', {
+                        service     : this.internal_service,
+                        account     : this.internal_account,
+                        icon        : this.internal_icon,
+                        otp_type    : this.internal_otp_type,
+                        secret      : this.internal_secret,
+                        digits      : this.internal_digits,
+                        algorithm   : this.internal_algorithm,
+                        period      : this.internal_period,
+                        counter     : this.internal_counter,
+                    })
+                    return data
+                }
+            },
 
-                this.dotToDotCounter = 0
+            startTotpLoop: async function() {
+                
+                let otp = await this.getOtp()
 
-                this.axios.post('/api/twofaccounts/token', { id: this.id, otp: this.$props }).then(response => {
+                this.internal_password = otp.password
+                this.internal_otp_type = otp.otp_type
+                let generated_at = otp.generated_at
+                let period = otp.period
 
-                    let spacePosition = Math.ceil(response.data.token.length / 2);
-                    
-                    this.token = response.data.token.substr(0, spacePosition) + " " + response.data.token.substr(spacePosition);
-                    this.totpTimestamp = response.data.totpTimestamp; // the timestamp used to generate the token
-                    this.position = this.totpTimestamp % response.data.totpPeriod // The position of the totp timestamp in the current period
+                let elapsedTimeInCurrentPeriod,
+                    remainingTimeBeforeEndOfPeriod,
+                    durationBetweenTwoDots,
+                    durationFromFirstToNextDot,
+                    dots
 
-                    // Hide all dots
-                    let dots = this.$el.querySelector('.dots');
+                //                              |<----period p----->|
+                //     |                        |                   |
+                //     |------- ··· ------------|--------|----------|---------->
+                //     |                        |        |          |
+                //  unix T0                 Tp.start   Tgen_at    Tp.end
+                //                              |        |          |
+                //  elapsedTimeInCurrentPeriod--|<------>|          |
+                //  (in ms)                     |        |          |
+                //                              ● ● ● ● ●|● ◌ ◌ ◌ ◌ |
+                //                              | |      ||         |
+                //                              | |      |<-------->|--remainingTimeBeforeEndOfPeriod (for remainingTimeout)
+                //     durationBetweenTwoDots-->|-|<     ||         
+                //     (for dotToDotInterval)   | |     >||<---durationFromFirstToNextDot (for firstDotToNextOneTimeout)
+                //                                        |
+                //                                        |
+                //                                     dotIndex
 
-                    while (dots.querySelector('[data-is-active]')) {
-                        dots.querySelector('[data-is-active]').removeAttribute('data-is-active');
+                // The elapsed time from the start of the period that contains the OTP generated_at timestamp and the OTP generated_at timestamp itself
+                elapsedTimeInCurrentPeriod = generated_at % period
+
+                // Switch off all dots
+                dots = this.$el.querySelector('.dots')
+                while (dots.querySelector('[data-is-active]')) {
+                    dots.querySelector('[data-is-active]').removeAttribute('data-is-active');
+                }
+
+                // We determine the position of the closest dot next to the generated_at timestamp
+                let relativePosition = (elapsedTimeInCurrentPeriod * 10) / period
+                let dotIndex = (Math.floor(relativePosition) +1)
+                
+                // We switch the dot on
+                this.lastActiveDot = dots.querySelector('li:nth-child(' + dotIndex + ')');
+                this.lastActiveDot.setAttribute('data-is-active', true);
+
+                // Main timeout that run until the end of the period
+                remainingTimeBeforeEndOfPeriod = period - elapsedTimeInCurrentPeriod
+                let self = this; // because of the setInterval/setTimeout closures
+
+                this.remainingTimeout = setTimeout(function() {
+                    self.stopLoop()
+                    self.startTotpLoop();
+                }, remainingTimeBeforeEndOfPeriod*1000);
+
+                // During the remainingTimeout countdown we have to show a next dot every durationBetweenTwoDots seconds
+                // except for the first next dot
+                durationBetweenTwoDots = period / 10 // we have 10 dots
+                durationFromFirstToNextDot = (Math.ceil(elapsedTimeInCurrentPeriod / durationBetweenTwoDots) * durationBetweenTwoDots) - elapsedTimeInCurrentPeriod
+
+                this.firstDotToNextOneTimeout = setTimeout(function() {
+                    if( durationFromFirstToNextDot > 0 ) {
+                        self.activateNextDot()
+                        dotIndex += 1
                     }
-
-                    // Activate the dot at the totp position
-                    let relativePosition = (this.position * 10) / response.data.totpPeriod
-                    let dotNumber = (Math.floor(relativePosition) +1)
-
-                    this.lastActiveDot = dots.querySelector('li:nth-child(' + dotNumber + ')');
-                    this.lastActiveDot.setAttribute('data-is-active', true);
-
-                    // Main timeout which run all over the totpPeriod.
-
-                    let remainingTimeBeforeEndOfPeriod = response.data.totpPeriod - this.position
-                    let self = this; // because of the setInterval/setTimeout closures
-
-                    this.remainingTimeout = setTimeout(function() {
-                        self.stopLoop()
-                        self.getTOTP();
-                    }, remainingTimeBeforeEndOfPeriod*1000);
-
-                    // During the remainingTimeout countdown we have to show a next dot every durationBetweenTwoDots seconds
-                    // except for the first next dot
-
-                    let durationBetweenTwoDots = response.data.totpPeriod / 10 // we have 10 dots
-                    let firstDotTimeout = (Math.ceil(this.position / durationBetweenTwoDots) * durationBetweenTwoDots) - this.position
-
-                    this.firstDotToNextOneTimeout = setTimeout(function() {
-
-                        if( firstDotTimeout > 0 ) {
-                            self.activeNextDot()
-                            dotNumber += 1
-                        }
-
-                        self.dotToDotInterval = setInterval(function() {
-
-                            self.dotToDotCounter += 1
-                            self.activeNextDot()
-                            dotNumber += 1
-
-                        }, durationBetweenTwoDots*1000)
-
-                    }, firstDotTimeout*1000)
-                })
-                .catch(error => {
-                    this.$router.push({ name: 'genericError', params: { err: error.response } });
-                });
+                    self.dotToDotInterval = setInterval(function() {
+                        self.activateNextDot()
+                        dotIndex += 1
+                    }, durationBetweenTwoDots*1000)
+                }, durationFromFirstToNextDot*1000)
             },
 
 
-            getHOTP: function() {
+            getHOTP: async function() {
 
-                this.axios.post('/api/twofaccounts/token', { id: this.id, otp: this.$props }).then(response => {
-                    let spacePosition = Math.ceil(response.data.token.length / 2);
-                    
-                    this.token = response.data.token.substr(0, spacePosition) + " " + response.data.token.substr(spacePosition)
+                let otp = await this.getOtp()
 
-                    // returned counter & uri are incremented
-                    this.$emit('increment-hotp', { nextHotpCounter: response.data.hotpCounter, nextUri: response.data.uri })
-
-                })
-                .catch(error => {
-                    this.$router.push({ name: 'genericError', params: { err: error.response } });
-                });
+                // returned counter & uri are incremented
+                this.$emit('increment-hotp', { nextHotpCounter: otp.counter, nextUri: otp.uri })
             },
 
 
             clearOTP: function() {
+
                 this.stopLoop()
-                this.id = this.remainingTimeout = this.dotToDotInterval = this.firstDotToNextOneTimeout = this.position = this.internal_hotpCounter = null
-                this.internal_service = this.internal_account = this.internal_icon = this.internal_otpType = ''
-                this.token = '... ...'
+                this.internal_id = this.remainingTimeout = this.dotToDotInterval = this.firstDotToNextOneTimeout = this.elapsedTimeInCurrentPeriod = this.internal_counter = null
+                this.internal_service = this.internal_account = this.internal_icon = this.internal_otp_type = ''
+                this.internal_password = '... ...'
 
                 try {
                     this.$el.querySelector('[data-is-active]').removeAttribute('data-is-active');
@@ -220,7 +260,7 @@
 
 
             stopLoop: function() {
-                if( this.internal_otpType === 'totp' ) {
+                if( this.internal_otp_type === 'totp' ) {
                     clearTimeout(this.remainingTimeout)
                     clearTimeout(this.firstDotToNextOneTimeout)
                     clearInterval(this.dotToDotInterval)
@@ -228,9 +268,8 @@
             },
 
 
-            activeNextDot: function() {
+            activateNextDot: function() {
                 if(this.lastActiveDot.nextSibling !== null) {
-
                     this.lastActiveDot.removeAttribute('data-is-active')
                     this.lastActiveDot.nextSibling.setAttribute('data-is-active', true)
                     this.lastActiveDot = this.lastActiveDot.nextSibling
@@ -243,7 +282,7 @@
                 if(this.$root.appSettings.kickUserAfter == -1) {
                     this.appLogout()
                 }
-                else if(this.$root.appSettings.closeTokenOnCopy) {
+                else if(this.$root.appSettings.closeOtpOnCopy) {
                     this.$parent.isActive = false
                     this.clearOTP()
                 }

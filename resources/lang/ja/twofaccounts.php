@@ -67,18 +67,18 @@ return [
             'label' => 'Algorithm',
             'help' => 'The algorithm used to secure your security codes'
         ],
-        'totpPeriod' => [
+        'period' => [
             'label' => 'Period',
             'placeholder' => 'Default is 30',
             'help' => 'The period of validity of the generated security codes in second'
         ],
-        'hotpCounter' => [
+        'counter' => [
             'label' => 'Counter',
             'placeholder' => 'Default is 0',
             'help' => 'The initial counter value',
             'help_lock' => 'It is risky to edit the counter as you can desynchronize the account with the verification server of the service. Use the lock icon to enable modification, but only if you know for you are doing'
         ],
-        'image_link' => [
+        'image' => [
             'label' => 'Image',
             'placeholder' => 'http://...',
             'help' => 'The url of an external image to use as the account icon'

@@ -26,8 +26,8 @@
             </div>
             <field-error :form="form" field="icon" class="help-for-file" />
             <!-- otp type -->
-            <form-toggle class="has-uppercased-button" :isDisabled="true" :form="form" :choices="otpTypes" fieldName="otpType" :label="$t('twofaccounts.forms.otp_type.label')" :help="$t('twofaccounts.forms.otp_type.help')" :hasOffset="true" />
-            <div v-if="form.otpType">
+            <form-toggle class="has-uppercased-button" :isDisabled="true" :form="form" :choices="otp_types" fieldName="otp_type" :label="$t('twofaccounts.forms.otp_type.label')" :help="$t('twofaccounts.forms.otp_type.help')" :hasOffset="true" />
+            <div v-if="form.otp_type">
                 <!-- secret -->
                 <label class="label" v-html="$t('twofaccounts.forms.secret.label')"></label>
                 <div class="field has-addons">
@@ -55,33 +55,33 @@
                 <!-- algorithm -->
                 <form-toggle :form="form" :choices="algorithms" fieldName="algorithm" :label="$t('twofaccounts.forms.algorithm.label')" :help="$t('twofaccounts.forms.algorithm.help')" />
                 <!-- TOTP period -->
-                <form-field v-if="form.otpType === 'totp'" :form="form" fieldName="totpPeriod" inputType="text" :label="$t('twofaccounts.forms.totpPeriod.label')" :placeholder="$t('twofaccounts.forms.totpPeriod.placeholder')" :help="$t('twofaccounts.forms.totpPeriod.help')" />
+                <form-field v-if="form.otp_type === 'totp'" :form="form" fieldName="period" inputType="text" :label="$t('twofaccounts.forms.period.label')" :placeholder="$t('twofaccounts.forms.period.placeholder')" :help="$t('twofaccounts.forms.period.help')" />
                 <!-- HOTP counter -->
-                <div v-if="form.otpType === 'hotp'">
+                <div v-if="form.otp_type === 'hotp'">
                     <div class="field" style="margin-bottom: 0.5rem;">
-                        <label class="label">{{ $t('twofaccounts.forms.hotpCounter.label') }}</label>
+                        <label class="label">{{ $t('twofaccounts.forms.counter.label') }}</label>
                     </div>
                     <div class="field has-addons">
                         <div class="control is-expanded">
-                            <input class="input" type="text" placeholder="" v-model="form.hotpCounter" :disabled="hotpCounterIsLocked" />
+                            <input class="input" type="text" placeholder="" v-model="form.counter" :disabled="counterIsLocked" />
                         </div>
-                        <div class="control" v-if="hotpCounterIsLocked">
-                            <a class="button is-dark field-lock" @click="hotpCounterIsLocked = false" :title="$t('twofaccounts.forms.unlock.title')">
+                        <div class="control" v-if="counterIsLocked">
+                            <a class="button is-dark field-lock" @click="counterIsLocked = false" :title="$t('twofaccounts.forms.unlock.title')">
                                 <span class="icon">
                                     <font-awesome-icon :icon="['fas', 'lock']" />
                                 </span>
                             </a>
                         </div>
                         <div class="control" v-else>
-                            <a class="button is-dark field-unlock"  @click="hotpCounterIsLocked = true" :title="$t('twofaccounts.forms.lock.title')">
+                            <a class="button is-dark field-unlock"  @click="counterIsLocked = true" :title="$t('twofaccounts.forms.lock.title')">
                                 <span class="icon has-text-danger">
                                     <font-awesome-icon :icon="['fas', 'lock-open']" />
                                 </span>
                             </a>
                         </div>
                     </div>
-                    <field-error :form="form" field="uri" class="help-for-file" />
-                    <p class="help" v-html="$t('twofaccounts.forms.hotpCounter.help_lock')"></p>
+                    <field-error :form="form" field="counter" />
+                    <p class="help" v-html="$t('twofaccounts.forms.counter.help_lock')"></p>
                 </div>
             </div>
             <!-- form buttons -->
@@ -89,7 +89,7 @@
                 <p class="control">
                     <v-button :isLoading="form.isBusy" class="is-rounded" >{{ $t('commons.save') }}</v-button>
                 </p>
-                <p class="control" v-if="form.otpType && form.secret">
+                <p class="control" v-if="form.otp_type && form.secret">
                     <button type="button" class="button is-success is-rounded" @click="previewAccount">{{ $t('twofaccounts.forms.test') }}</button>
                 </p>
                 <p class="control">
@@ -99,8 +99,8 @@
         </form>
         <!-- modal -->
         <modal v-model="ShowTwofaccountInModal">
-            <token-displayer ref="AdvancedFormTokenDisplayer" v-bind="form.data()" @increment-hotp="incrementHotp">
-            </token-displayer>
+            <otp-displayer ref="AdvancedFormOtpDisplayer" v-bind="form.data()" @increment-hotp="incrementHotp">
+            </otp-displayer>
         </modal>
     </form-wrapper>
 </template>
@@ -109,30 +109,30 @@
 
     import Modal from '../../components/Modal'
     import Form from './../../components/Form'
-    import TokenDisplayer from '../../components/TokenDisplayer'
+    import OtpDisplayer from '../../components/OtpDisplayer'
 
     export default {
         data() {
             return {
                 ShowTwofaccountInModal : false,
-                hotpCounterIsLocked: true,
+                counterIsLocked: true,
                 twofaccountExists: false,
                 tempIcon: '',
                 form: new Form({
                     service: '',
                     account: '',
-                    otpType: '',
+                    otp_type: '',
                     uri: '',
                     icon: '',
                     secret: '',
                     secretIsBase32Encoded: null,
                     algorithm: '',
                     digits: null,
-                    hotpCounter: null,
-                    totpPeriod: null,
-                    imageLink: '',
+                    counter: null,
+                    period: null,
+                    image: '',
                 }),
-                otpTypes: [
+                otp_types: [
                     { text: 'TOTP', value: 'totp' },
                     { text: 'HOTP', value: 'hotp' },
                 ],
@@ -161,7 +161,7 @@
             // stop TOTP generation on modal close
             this.$on('modalClose', function() {
 
-                this.$refs.AdvancedFormTokenDisplayer.stopLoop()
+                this.$refs.AdvancedFormOtpDisplayer.stopLoop()
             });
         },
 
@@ -171,18 +171,16 @@
 
         components: {
             Modal,
-            TokenDisplayer,
+            OtpDisplayer,
         },
 
         methods: {
             async getAccount () {
 
-                const { data } = await this.axios.get('/api/twofaccounts/' + this.$route.params.twofaccountId + '/withSensitive')
+                const { data } = await this.axios.get('/api/twofaccounts/' + this.$route.params.twofaccountId)
 
                 this.form.fill(data)
                 this.form.secretIsBase32Encoded = 1
-                this.form.uri = '' // we don't want the uri because the user can change any otp parameter in the form
-
                 this.twofaccountExists = true
 
                 // set account icon as temp icon
@@ -212,7 +210,7 @@
             },
 
             previewAccount() {
-                this.$refs.AdvancedFormTokenDisplayer.getToken()
+                this.$refs.AdvancedFormOtpDisplayer.show()
             },
 
             cancelCreation: function() {
@@ -230,7 +228,7 @@
                 let imgdata = new FormData();
                 imgdata.append('icon', this.$refs.iconInput.files[0]);
 
-                const { data } = await this.form.upload('/api/icon/upload', imgdata)
+                const { data } = await this.form.upload('/api/icons', imgdata)
 
                 this.tempIcon = data;
 
@@ -239,7 +237,7 @@
             deleteIcon(event) {
 
                 if( this.tempIcon && this.tempIcon !== this.form.icon ) {
-                    this.axios.delete('/api/icon/delete/' + this.tempIcon)
+                    this.axios.delete('/api/icons/' + this.tempIcon)
                 }
 
                 this.tempIcon = ''
@@ -250,7 +248,7 @@
                 // the component.
                 // This could desynchronized the HOTP verification server and our local counter if the user never verified the HOTP but this
                 // is acceptable (and HOTP counter can be edited by the way)
-                this.form.hotpCounter = payload.nextHotpCounter
+                this.form.counter = payload.nextHotpCounter
                 this.form.uri = payload.nextUri
             },
 

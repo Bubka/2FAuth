@@ -23,10 +23,10 @@
             handleSubmit(e) {
                 e.preventDefault()
 
-                this.form.post('/api/password/email', {returnError: true})
+                this.form.post('/api/user/password/lost', {returnError: true})
                 .then(response => {
                     
-                    this.$notify({ type: 'is-success', text: response.data.status, duration:-1 })
+                    this.$notify({ type: 'is-success', text: response.data.message, duration:-1 })
                 })
                 .catch(error => {
                     if( error.response.data.requestFailed ) {

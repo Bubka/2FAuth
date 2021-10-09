@@ -27,12 +27,12 @@ const router = new Router({
 
         { path: '/accounts', name: 'accounts', component: Accounts, meta: { requiresAuth: true }, alias: '/', props: true },
         { path: '/account/create', name: 'createAccount', component: CreateAccount, meta: { requiresAuth: true } },
-        { path: '/account/edit/:twofaccountId', name: 'editAccount', component: EditAccount, meta: { requiresAuth: true } },
-        { path: '/account/qrcode/:twofaccountId', name: 'showQRcode', component: QRcodeAccount, meta: { requiresAuth: true } },
+        { path: '/account/:twofaccountId/edit', name: 'editAccount', component: EditAccount, meta: { requiresAuth: true } },
+        { path: '/account/:twofaccountId/qrcode', name: 'showQRcode', component: QRcodeAccount, meta: { requiresAuth: true } },
 
         { path: '/groups', name: 'groups', component: Groups, meta: { requiresAuth: true }, props: true },
         { path: '/group/create', name: 'createGroup', component: CreateGroup, meta: { requiresAuth: true } },
-        { path: '/group/edit/:groupId', name: 'editGroup', component: EditGroup, meta: { requiresAuth: true }, props: true },
+        { path: '/group/:groupId/edit', name: 'editGroup', component: EditGroup, meta: { requiresAuth: true }, props: true },
 
         { path: '/settings', name: 'settings', component: Settings, meta: { requiresAuth: true } },
 

@@ -96,7 +96,8 @@
         methods: {
 
             /**
-             * Send the submitted QR code to the backend for decoding then push ser to the create form
+             * Upload the submitted QR code file to the backend for decoding, then route the user
+             * to the Create form with decoded URI to prefill the form
              */
             async submitQrCode() {
 
@@ -106,7 +107,7 @@
 
                 const { data } = await this.form.upload('/api/qrcode/decode', imgdata)
 
-                this.$router.push({ name: 'createAccount', params: { decodedUri: data.uri } });
+                this.$router.push({ name: 'createAccount', params: { decodedUri: data.data } });
             },
 
             /**

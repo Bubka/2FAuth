@@ -30,11 +30,11 @@ return [
             'label' => 'Idioma',
             'help' => 'Cambiar el idioma utilizado para traducir la interfaz de la aplicación.'
         ],
-        'show_token_as_dot' => [
+        'show_otp_as_dot' => [
             'label' => 'Mostrar tokens generados como punto',
             'help' => 'Sustituya los carácteres de token generados por *** para asegurar la confidencialidad. No afecta a la función de copiar/pegar.'
         ],
-        'close_token_on_copy' => [
+        'close_otp_on_copy' => [
             'label' => 'Cerrar token después de la copia',
             'help' => 'Cerrar automáticamente la ventana emergente mostrando el token generado después de que ha sido copiado'
         ],
@@ -77,7 +77,7 @@ return [
             'help' => 'Save the last group filter applied and restore it on your next visit',
         ],
         'never' => 'Never',
-        'on_token_copy' => 'On security code copy',
+        'on_otp_copy' => 'On security code copy',
         '1_minutes' => 'After 1 minute',
         '5_minutes' => 'After 5 minutes',
         '10_minutes' => 'After 10 minutes',

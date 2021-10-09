@@ -1,6 +1,6 @@
 <template>
     <div class="field">
-        <input :id="fieldName" type="checkbox" :name="fieldName" class="is-checkradio is-info" v-model="form[fieldName]">
+        <input :id="fieldName" type="checkbox" :name="fieldName" class="is-checkradio is-info" v-model="form[fieldName]" v-on:change="$emit(fieldName, form[fieldName])" >
         <label :for="fieldName" class="label" v-html="label"></label>
         <p class="help" v-html="help" v-if="help"></p>
     </div>

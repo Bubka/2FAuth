@@ -23,7 +23,7 @@
                     <router-link :to="{ name: 'editGroup', params: { id: group.id, name: group.name }}" class="tag is-dark">
                         {{ $t('commons.rename') }}
                     </router-link>
-                    <span class="is-family-primary is-size-6 is-size-7-mobile has-text-grey">{{ group.count }} {{ $t('twofaccounts.accounts') }}</span>
+                    <span class="is-family-primary is-size-6 is-size-7-mobile has-text-grey">{{ group.twofaccounts_count }} {{ $t('twofaccounts.accounts') }}</span>
                 </div>
                 <div class="mt-2 is-size-7 is-pulled-right" v-if="groups.length > 0">
                     {{ $t('groups.deleting_group_does_not_delete_accounts')}}
@@ -38,7 +38,7 @@
             <vue-footer :showButtons="true">
                 <!-- close button -->
                 <p class="control">
-                    <router-link  :to="{ name: 'accounts' }" class="button is-dark is-rounded" @click="">{{ $t('commons.close') }}</router-link>
+                    <router-link  :to="{ name: 'accounts', params: { toRefresh: true } }" class="button is-dark is-rounded">{{ $t('commons.close') }}</router-link>
                 </p>
             </vue-footer>
         </div>
@@ -72,6 +72,9 @@
 
         methods: {
 
+            /**
+             * Get all groups from backend
+             */
             async fetchGroups() {
 
                 this.isFetching = true
@@ -80,14 +83,11 @@
                     const groups = []
 
                     response.data.forEach((data) => {
-                        groups.push({
-                            id : data.id,
-                            name : data.name,
-                            count: data.twofaccounts_count
-                        })
+                        groups.push(data)
                     })
 
-                    // Remove the pseudo 'All' group
+                    // Remove the 'All' pseudo group from the collection
+                    // and push it the TheAllGroup
                     this.TheAllGroup = groups.shift()
 
                     this.groups = groups
@@ -96,6 +96,9 @@
                 this.isFetching = false
             },
 
+            /**
+             * Delete a group (after confirmation)
+             */
             deleteGroup(id) {
                 if(confirm(this.$t('groups.confirm.delete'))) {
                     this.axios.delete('/api/groups/' + id)
@@ -104,10 +107,9 @@
                     this.groups = this.groups.filter(a => a.id !== id)
 
                     // Reset persisted group filter to 'All' (groupId=0)
+                    // (backend will save to change automatically)
                     if( parseInt(this.$root.appSettings.activeGroup) === id ) {
-                        this.axios.post('/api/settings/options', { activeGroup: 0 }).then(response => {
-                            this.$root.appSettings.activeGroup = 0
-                        })
+                        this.$root.appSettings.activeGroup = 0
                     }
                 }
             }
@@ -115,8 +117,8 @@
         },
 
         beforeRouteLeave(to, from, next) {
+            // reinject the 'All' pseudo group before refreshing the localstorage
             this.groups.unshift(this.TheAllGroup)
-            // Refresh localstorage
             this.$storage.set('groups', this.groups)
 
             next()

@@ -142,7 +142,7 @@ return [
         'email' => [
             'exists' => 'Kein Konto mit dieser E-Mail gefunden',
         ],
-        'otpType' => [
+        'otp_type' => [
             'required_without' => 'Das Feld :attribute ist erforderlich.',
         ],
         'secret' => [

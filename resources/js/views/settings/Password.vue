@@ -28,7 +28,7 @@
             handleSubmit(e) {
                 e.preventDefault()
 
-                this.form.patch('/api/settings/password', {returnError: true})
+                this.form.patch('/api/user/password', {returnError: true})
                 .then(response => {
 
                     this.$notify({ type: 'is-success', text: response.data.message })

@@ -67,18 +67,18 @@ return [
             'label' => 'Algorítmo',
             'help' => 'El algoritmo usado para proteger sus códigos de seguridad'
         ],
-        'totpPeriod' => [
+        'period' => [
             'label' => 'Plazo',
             'placeholder' => 'Por defecto es 30',
             'help' => 'The period of validity of the generated security codes in second'
         ],
-        'hotpCounter' => [
+        'counter' => [
             'label' => 'Contador',
             'placeholder' => 'Default is 0',
             'help' => 'The initial counter value',
             'help_lock' => 'It is risky to edit the counter as you can desynchronize the account with the verification server of the service. Use the lock icon to enable modification, but only if you know for you are doing'
         ],
-        'image_link' => [
+        'image' => [
             'label' => 'Image',
             'placeholder' => 'http://...',
             'help' => 'The url of an external image to use as the account icon'

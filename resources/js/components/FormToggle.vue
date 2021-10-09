@@ -3,7 +3,7 @@
         <label class="label" v-html="label"></label>
         <div class="is-toggle buttons">
             <label class="button is-dark" :disabled="isDisabled" v-for="choice in choices" :class="{ 'is-link' : form[fieldName] === choice.value }">
-                <input type="radio" class="is-hidden" :checked="form[fieldName] === choice.value" :value="choice.value" v-model="form[fieldName]" :disabled="isDisabled" />
+                <input type="radio" class="is-hidden" :checked="form[fieldName] === choice.value" :value="choice.value" v-model="form[fieldName]" v-on:change="$emit(fieldName, form[fieldName])" :disabled="isDisabled" />
                 <font-awesome-icon :icon="['fas', choice.icon]" v-if="choice.icon" class="mr-3" /> {{ choice.text }}
             </label>
         </div>

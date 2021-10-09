@@ -30,11 +30,11 @@ return [
             'label' => 'Langue',
             'help' => 'Traduit l\'application dans la langue choisie'
         ],
-        'show_token_as_dot' => [
+        'show_otp_as_dot' => [
             'label' => 'Rendre illisibles les codes générés',
             'help' => 'Remplace les caractères des codes générés par des ●●● pour garantir leur confidentialité. N\'affecte pas la fonction de copier/coller qui reste utilisable.'
         ],
-        'close_token_on_copy' => [
+        'close_otp_on_copy' => [
             'label' => 'Ne plus afficher les codes copiés',
             'help' => 'Ferme automatiquement le popup affichant le code généré dès que ce dernier a été copié.'
         ],
@@ -77,7 +77,7 @@ return [
             'help' => 'Enregistre le dernier groupe affiché et le restaure lors de votre prochaine visite',
         ],
         'never' => 'Jamais',
-        'on_token_copy' => 'Après copie d\'un code de sécurité',
+        'on_otp_copy' => 'Après copie d\'un code de sécurité',
         '1_minutes' => 'Après 1 minute',
         '5_minutes' => 'Après 5 minutes',
         '10_minutes' => 'Après 10 minutes',

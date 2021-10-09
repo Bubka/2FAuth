@@ -30,11 +30,11 @@ return [
             'label' => 'භාෂාව',
             'help' => 'Change the language used to translate the app interface.'
         ],
-        'show_token_as_dot' => [
+        'show_otp_as_dot' => [
             'label' => 'Show generated tokens as dot',
             'help' => 'Replace generated token caracters with *** to ensure confidentiality. Do not affect the copy/paste feature.'
         ],
-        'close_token_on_copy' => [
+        'close_otp_on_copy' => [
             'label' => 'Close token after copy',
             'help' => 'Automatically close the popup showing the generated token after it has been copied'
         ],
@@ -77,7 +77,7 @@ return [
             'help' => 'Save the last group filter applied and restore it on your next visit',
         ],
         'never' => 'Never',
-        'on_token_copy' => 'On security code copy',
+        'on_otp_copy' => 'On security code copy',
         '1_minutes' => 'After 1 minute',
         '5_minutes' => 'After 5 minutes',
         '10_minutes' => 'After 10 minutes',

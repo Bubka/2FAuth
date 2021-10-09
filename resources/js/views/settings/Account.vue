@@ -25,7 +25,7 @@
         },
 
         async mounted() {
-            const { data } = await this.form.get('/api/settings/account')
+            const { data } = await this.form.get('/api/user')
 
             this.form.fill(data)
         },
@@ -34,10 +34,9 @@
             handleSubmit(e) {
                 e.preventDefault()
 
-                this.form.patch('/api/settings/account', {returnError: true})
+                this.form.put('/api/user', {returnError: true})
                 .then(response => {
-
-                    this.$notify({ type: 'is-success', text: response.data.message })
+                    this.$notify({ type: 'is-success', text: this.$t('auth.forms.profile_saved') })
                 })
                 .catch(error => {
                     if( error.response.status === 400 ) {

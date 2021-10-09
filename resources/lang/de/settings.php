@@ -30,11 +30,11 @@ return [
             'label' => 'Sprache',
             'help' => 'Ändern Sie die Sprache, in der die App-Oberfläche angezeigt wird.'
         ],
-        'show_token_as_dot' => [
+        'show_otp_as_dot' => [
             'label' => 'Generiertes Token als Punkte anzeigen',
             'help' => 'Tokenzeichen werden als *** angezeigt, um die Vertraulichkeit zu gewährleisten. Dies beeinflusst nicht die Kopieren/Einfügen Funktion.'
         ],
-        'close_token_on_copy' => [
+        'close_otp_on_copy' => [
             'label' => 'Token nach dem Kopieren schließen',
             'help' => 'Schließe automatisch das Popup-Fenster mit dem generierten Token nachdem es kopiert wurde'
         ],
@@ -77,7 +77,7 @@ return [
             'help' => 'Speichert den letzten Gruppenfilter und stellt ihn bei Ihrem nächsten Besuch wieder her',
         ],
         'never' => 'Niemals',
-        'on_token_copy' => 'Beim Kopieren des Tokens',
+        'on_otp_copy' => 'Beim Kopieren des Tokens',
         '1_minutes' => 'Nach 1 Minute',
         '5_minutes' => 'Nach 5 Minuten',
         '10_minutes' => 'Nach 10 Minuten',

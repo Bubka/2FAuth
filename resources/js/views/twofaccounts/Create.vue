@@ -10,8 +10,8 @@
                             <font-awesome-icon :icon="['fas', 'image']" size="2x" />
                         </label>
                         <button class="delete delete-icon-button is-medium" v-if="tempIcon" @click.prevent="deleteIcon"></button>
-                        <token-displayer ref="QuickFormTokenDisplayer" v-bind="form.data()" @increment-hotp="incrementHotp">
-                        </token-displayer>
+                        <otp-displayer ref="QuickFormOtpDisplayer" v-bind="form.data()" @increment-hotp="incrementHotp">
+                        </otp-displayer>
                     </div>
                 </div>
                 <div class="columns is-mobile" v-if="form.errors.any()">
@@ -80,8 +80,8 @@
                 </div>
                 <field-error :form="form" field="icon" class="help-for-file" />
                 <!-- otp type -->
-                <form-toggle class="has-uppercased-button" :form="form" :choices="otpTypes" fieldName="otpType" :label="$t('twofaccounts.forms.otp_type.label')" :help="$t('twofaccounts.forms.otp_type.help')" :hasOffset="true" />
-                <div v-if="form.otpType">
+                <form-toggle class="has-uppercased-button" :form="form" :choices="otp_types" fieldName="otp_type" :label="$t('twofaccounts.forms.otp_type.label')" :help="$t('twofaccounts.forms.otp_type.help')" :hasOffset="true" />
+                <div v-if="form.otp_type">
                     <!-- secret -->
                     <label class="label" v-html="$t('twofaccounts.forms.secret.label')"></label>
                     <div class="field has-addons">
@@ -109,15 +109,15 @@
                     <!-- algorithm -->
                     <form-toggle :form="form" :choices="algorithms" fieldName="algorithm" :label="$t('twofaccounts.forms.algorithm.label')" :help="$t('twofaccounts.forms.algorithm.help')" />
                     <!-- TOTP period -->
-                    <form-field v-if="form.otpType === 'totp'" :form="form" fieldName="totpPeriod" inputType="text" :label="$t('twofaccounts.forms.totpPeriod.label')" :placeholder="$t('twofaccounts.forms.totpPeriod.placeholder')" :help="$t('twofaccounts.forms.totpPeriod.help')" />
+                    <form-field v-if="form.otp_type === 'totp'" :form="form" fieldName="period" inputType="text" :label="$t('twofaccounts.forms.period.label')" :placeholder="$t('twofaccounts.forms.period.placeholder')" :help="$t('twofaccounts.forms.period.help')" />
                     <!-- HOTP counter -->
-                    <form-field v-if="form.otpType === 'hotp'" :form="form" fieldName="hotpCounter" inputType="text" :label="$t('twofaccounts.forms.hotpCounter.label')" :placeholder="$t('twofaccounts.forms.hotpCounter.placeholder')" :help="$t('twofaccounts.forms.hotpCounter.help')" />
+                    <form-field v-if="form.otp_type === 'hotp'" :form="form" fieldName="counter" inputType="text" :label="$t('twofaccounts.forms.counter.label')" :placeholder="$t('twofaccounts.forms.counter.placeholder')" :help="$t('twofaccounts.forms.counter.help')" />
                 </div>
                 <vue-footer :showButtons="true">
                     <p class="control">
                         <v-button :isLoading="form.isBusy" class="is-rounded" >{{ $t('commons.create') }}</v-button>
                     </p>
-                    <p class="control" v-if="form.otpType && form.secret">
+                    <p class="control" v-if="form.otp_type && form.secret">
                         <button type="button" class="button is-success is-rounded" @click="previewAccount">{{ $t('twofaccounts.forms.test') }}</button>
                     </p>
                     <p class="control">
@@ -127,8 +127,8 @@
             </form>
             <!-- modal -->
             <modal v-model="ShowTwofaccountInModal">
-                <token-displayer ref="AdvancedFormTokenDisplayer" v-bind="form.data()" @increment-hotp="incrementHotp">
-                </token-displayer>
+                <otp-displayer ref="AdvancedFormOtpDisplayer" v-bind="form.data()" @increment-hotp="incrementHotp">
+                </otp-displayer>
             </modal>
         </form-wrapper>
     </div>
@@ -147,7 +147,7 @@
      *    ~ A qrcode can be used to automatically fill the form
      *    ~ If an 'image' parameter is embeded in the qrcode, the remote image is downloaded and preset in the icon field
      *
-     *  Both design use the tokenDisplayer component to preview the account with a token rotation.
+     *  Both design use the otpDisplayer component to preview the account with an otp rotation.
      *
      *  input : [optional, for the Quick Form] an URI previously decoded by the Start view
      *  submit : post account data to php backend to create the account
@@ -155,7 +155,7 @@
 
     import Modal from '../../components/Modal'
     import Form from './../../components/Form'
-    import TokenDisplayer from '../../components/TokenDisplayer'
+    import OtpDisplayer from '../../components/OtpDisplayer'
 
     export default {
         data() {
@@ -167,19 +167,18 @@
                 form: new Form({
                     service: '',
                     account: '',
-                    otpType: '',
-                    uri: '',
+                    otp_type: '',
                     icon: '',
                     secret: '',
                     secretIsBase32Encoded: 0,
                     algorithm: '',
                     digits: null,
-                    hotpCounter: null,
-                    totpPeriod: null,
-                    imageLink: '',
+                    counter: null,
+                    period: null,
+                    image: '',
                     qrcode: null,
                 }),
-                otpTypes: [
+                otp_types: [
                     { text: 'TOTP', value: 'totp' },
                     { text: 'HOTP', value: 'hotp' },
                 ],
@@ -206,7 +205,7 @@
         watch: {
             tempIcon: function(val) {
                 if( this.showQuickForm ) {
-                    this.$refs.QuickFormTokenDisplayer.internal_icon = val
+                    this.$refs.QuickFormOtpDisplayer.internal_icon = val
                 }
             },
         },
@@ -235,13 +234,13 @@
             // stop TOTP generation on modal close
             this.$on('modalClose', function() {
 
-                this.$refs.AdvancedFormTokenDisplayer.stopLoop()
+                this.$refs.AdvancedFormOtpDisplayer.stopLoop()
             });
         },
 
         components: {
             Modal,
-            TokenDisplayer,
+            OtpDisplayer,
         },
 
         methods: {
@@ -259,12 +258,12 @@
             },
 
             previewAccount() {
-                this.$refs.AdvancedFormTokenDisplayer.getToken()
+                this.$refs.AdvancedFormOtpDisplayer.show()
             },
 
             cancelCreation: function() {
 
-                if( this.form.service && this.form.uri ) {
+                if( this.form.service ) {
                     if( confirm(this.$t('twofaccounts.confirm.cancel')) === false ) {
                         return
                     }
@@ -286,11 +285,10 @@
                 const { data } = await this.form.upload('/api/qrcode/decode', imgdata)
 
                 // Then the otp described by the uri
-                this.axios.post('/api/twofaccounts/preview', { uri: data.uri }).then(response => {
+                this.axios.post('/api/twofaccounts/preview', { uri: data.data }).then(response => {
                     this.form.fill(response.data)
                     this.form.secretIsBase32Encoded = 1
                     this.tempIcon = response.data.icon ? response.data.icon : null
-                    this.form.uri = '' // we don't want the uri because the user can change any otp parameter in the form
                 })
             },
 
@@ -302,15 +300,15 @@
                 let imgdata = new FormData();
                 imgdata.append('icon', this.$refs.iconInput.files[0]);
 
-                const { data } = await this.form.upload('/api/icon/upload', imgdata)
+                const { data } = await this.form.upload('/api/icons', imgdata)
 
-                this.tempIcon = data;
+                this.tempIcon = data.filename;
 
             },
 
             deleteIcon(event) {
                 if(this.tempIcon) {
-                    this.axios.delete('/api/icon/delete/' + this.tempIcon)
+                    this.axios.delete('/api/icons/' + this.tempIcon)
                     this.tempIcon = ''
                 }
             },
@@ -320,8 +318,7 @@
                 // the component.
                 // This could desynchronized the HOTP verification server and our local counter if the user never verified the HOTP but this
                 // is acceptable (and HOTP counter can be edited by the way)
-                this.form.hotpCounter = payload.nextHotpCounter
-                this.form.uri = payload.nextUri
+                this.form.counter = payload.nextHotpCounter
             },
             
         },

@@ -1,8 +1,6 @@
 import Vue      from 'vue'
 import Errors   from './FormErrors'
 
-// import { deepCopy } from './util'
-
 class Form {
     /**
      * Create a new form instance.
@@ -14,7 +12,7 @@ class Form {
         this.isDisabled = false
         // this.successful = false
         this.errors = new Errors()
-        // this.originalData = deepCopy(data)
+        this.originalData = this.deepCopy(data)
 
         Object.assign(this, data)
     }
@@ -27,6 +25,31 @@ class Form {
     fill (data) {
         this.keys().forEach(key => {
             this[key] = data[key]
+        })
+    }
+
+    /**
+     * Update original form data.
+     */
+    setOriginal () {
+      Object.keys(this)
+        .filter(key => !Form.ignore.includes(key))
+        .forEach(key => {
+            this.originalData[key] = this.deepCopy(this[key])
+        })
+    }
+
+    /**
+     * Fill form data.
+     *
+     * @param {Object} data
+     */
+    fillWithKeyValueObject (data) {
+        this.keys().forEach(key => {
+            const keyValueObject = data.find(s => s.key === key.toString())
+            if(keyValueObject != undefined) {
+                this[key] = keyValueObject.value
+            }
         })
     }
 
@@ -83,7 +106,7 @@ class Form {
       Object.keys(this)
         .filter(key => !Form.ignore.includes(key))
         .forEach(key => {
-          this[key] = deepCopy(this.originalData[key])
+          this[key] = this.deepCopy(this.originalData[key])
         })
     }
 
@@ -264,6 +287,26 @@ class Form {
         if (event.target.name) {
             this.errors.clear(event.target.name)
         }
+    }
+
+    /**
+     * Deep copy the given object.
+     *
+     * @param  {Object} obj
+     * @return {Object}
+     */
+    deepCopy (obj) {
+        if (obj === null || typeof obj !== 'object') {
+            return obj
+        }
+    
+        const copy = Array.isArray(obj) ? [] : {}
+    
+        Object.keys(obj).forEach(key => {
+            copy[key] = this.deepCopy(obj[key])
+        })
+    
+        return copy
     }
 }
 

@@ -90,6 +90,8 @@
             },
 
             /**
+             * Push a decoded URI to the Create form
+             * 
              * The basicQRcodeReader option is Off, so qrcode decoding has already be done by vue-qrcode-reader, whether
              * from livescan or file input.
              * We simply check the uri validity to prevent useless push to the Create form, but the form will check uri validity too.

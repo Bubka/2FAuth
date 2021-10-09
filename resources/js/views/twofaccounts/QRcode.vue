@@ -31,9 +31,12 @@
 
         methods: {
 
+            /**
+             * Get a QR code image resource from backend
+             */
             async getQRcode () {
 
-                const { data } = await this.axios.get('/api/qrcode/' + this.$route.params.twofaccountId)
+                const { data } = await this.axios.get('/api/twofaccounts/' + this.$route.params.twofaccountId + '/qrcode')
                 this.qrcode = data.qrcode
                 
             },

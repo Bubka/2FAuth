@@ -5,7 +5,7 @@
             <div class="columns is-centered">
                 <div class="column is-one-third-tablet is-one-quarter-desktop is-one-quarter-widescreen is-one-quarter-fullhd">
                     <div class="columns is-multiline">
-                        <div class="column is-full" v-for="group in groups" v-if="group.count > 0" :key="group.id">
+                        <div class="column is-full" v-for="group in groups" v-if="group.twofaccounts_count > 0" :key="group.id">
                             <button :disabled="group.id == $root.appSettings.activeGroup" class="button is-fullwidth is-dark has-text-light is-outlined" @click="setActiveGroup(group.id)">{{ group.name }}</button>
                         </div>
                     </div>
@@ -84,7 +84,7 @@
                                 <div class="tfa-cell tfa-content is-size-3 is-size-4-mobile" @click.stop="showAccount(account)">  
                                     <div class="tfa-text has-ellipsis">
                                         <img :src="'/storage/icons/' + account.icon" v-if="account.icon && $root.appSettings.showAccountsIcons">
-                                        {{ account.service }}<font-awesome-icon class="has-text-danger is-size-5 ml-2" v-if="$root.appSettings.useEncryption && account.isConsistent === false" :icon="['fas', 'exclamation-circle']" />
+                                        {{ displayService(account.service) }}<font-awesome-icon class="has-text-danger is-size-5 ml-2" v-if="$root.appSettings.useEncryption && account.isConsistent === false" :icon="['fas', 'exclamation-circle']" />
                                         <span class="is-family-primary is-size-6 is-size-7-mobile has-text-grey ">{{ account.account }}</span>
                                     </div>
                                 </div>
@@ -178,7 +178,7 @@
         </div>
         <!-- modal -->
         <modal v-model="showTwofaccountInModal">
-            <token-displayer ref="TokenDisplayer" ></token-displayer>
+            <otp-displayer ref="OtpDisplayer"></otp-displayer>
         </modal>
     </div>
 </template>
@@ -193,7 +193,7 @@
      *  
      *  The main view of 2FAuth that list all existing account recorded in DB.
      *  Available feature in this view :
-     *  - Token generation
+     *  - {{OTP}} generation
      *  - Account fetching :
      *    ~ Search
      *    ~ Filtering (by group)
@@ -219,7 +219,7 @@
      */
 
     import Modal from '../components/Modal'
-    import TokenDisplayer from '../components/TokenDisplayer'
+    import OtpDisplayer from '../components/OtpDisplayer'
     import draggable from 'vuedraggable'
     import Form from './../components/Form'
     import objectEquals from 'object-equals'
@@ -238,24 +238,27 @@
                 showGroupSelector: false,
                 moveAccountsTo: false,
                 form: new Form({
-                    activeGroup: this.$root.appSettings.activeGroup,
+                    value: this.$root.appSettings.activeGroup,
                 }),
             }
         },
 
         computed: {
+            /**
+             * The actual list of displayed accounts
+             */
             filteredAccounts: {
                 get: function() {
 
                     return this.accounts.filter(
                         item => {
                             if( parseInt(this.$root.appSettings.activeGroup) > 0 ) {
-                                return (item.service.toLowerCase().includes(this.search.toLowerCase()) || 
+                                return ((item.service ? item.service.toLowerCase().includes(this.search.toLowerCase()) : false) || 
                                     item.account.toLowerCase().includes(this.search.toLowerCase())) && 
                                     (item.group_id == parseInt(this.$root.appSettings.activeGroup))
                             }
                             else {
-                                return (item.service.toLowerCase().includes(this.search.toLowerCase()) || 
+                                return ((item.service ? item.service.toLowerCase().includes(this.search.toLowerCase()) : false) || 
                                     item.account.toLowerCase().includes(this.search.toLowerCase()))
                             }
                         }
@@ -266,10 +269,16 @@
                 }
             },
 
+            /**
+             * Returns whether or not the accounts should be displayed
+            */
             showAccounts() {
                 return this.accounts.length > 0 && !this.showGroupSwitch && !this.showGroupSelector ? true : false
             },
 
+            /**
+             * Returns the name of a group
+             */
             activeGroupName() {
                 let g = this.groups.find(el => el.id === parseInt(this.$root.appSettings.activeGroup))
 
@@ -303,14 +312,14 @@
             // stop OTP generation on modal close
             this.$on('modalClose', function() {
                 console.log('modalClose triggered')
-                this.$refs.TokenDisplayer.clearOTP()
+                this.$refs.OtpDisplayer.clearOTP()
             });
 
         },
 
         components: {
             Modal,
-            TokenDisplayer,
+            OtpDisplayer,
             draggable,
         },
 
@@ -340,14 +349,7 @@
 
                 this.axios.get('api/twofaccounts').then(response => {
                     response.data.forEach((data) => {
-                        accounts.push({
-                            id : data.id,
-                            service : data.service,
-                            account : data.account ? data.account : '-',
-                            icon : data.icon,
-                            isConsistent : data.isConsistent,
-                            group_id : data.group_id,
-                        })
+                        accounts.push(data)
                     })
 
                     if ( this.accounts.length > 0 && !objectEquals(accounts, this.accounts) && !forceRefresh ) {
@@ -366,10 +368,10 @@
             },
 
             /**
-             * Show account with a generated token rotation
+             * Show account with a generated {{OTP}} rotation
              */
             showAccount(account) {
-                // In Edit mode clicking an account do not show the tokenDisplayer but select the account
+                // In Edit mode clicking an account do not show the otpDisplayer but select the account
                 if(this.editMode) {
 
                     for (var i=0 ; i<this.selectedAccounts.length ; i++) {
@@ -382,7 +384,7 @@
                     this.selectedAccounts.push(account.id)
                 }
                 else {
-                    this.$refs.TokenDisplayer.getToken(account.id)
+                    this.$refs.OtpDisplayer.show(account.id)
                 }
             },
 
@@ -391,7 +393,7 @@
              */
             saveOrder() {
                 this.drag = false
-                this.axios.patch('/api/twofaccounts/reorder', {orderedIds: this.accounts.map(a => a.id)})
+                this.axios.post('/api/twofaccounts/reorder', {orderedIds: this.accounts.map(a => a.id)})
             },
 
             /**
@@ -404,7 +406,7 @@
                     this.selectedAccounts.forEach(id => ids.push(id))
 
                     // Backend will delete all accounts at the same time
-                    await this.axios.delete('/api/twofaccounts/batch', {data: ids} )
+                    await this.axios.delete('/api/twofaccounts?ids=' + ids.join())
 
                     // we fetch the accounts again to prevent the js collection being
                     // desynchronize from the backend php collection
@@ -413,7 +415,7 @@
             },
 
             /**
-             * Move accounts selected from the Edit mode to another group
+             * Move accounts selected from the Edit mode to another group or withdraw them
              */
             async moveAccounts() {
 
@@ -421,7 +423,11 @@
                 this.selectedAccounts.forEach(id => accountsIds.push(id))
 
                 // Backend will associate all accounts with the selected group in the same move
-                await this.axios.patch('/api/group/accounts', {accountsIds: accountsIds, groupId: this.moveAccountsTo} )
+                // or withdraw the accounts if destination is 'no group' (id = 0)
+                if(this.moveAccountsTo === 0) {
+                    await this.axios.patch('/api/twofaccounts/withdraw?ids=' + accountsIds.join() )
+                }
+                else await this.axios.post('/api/groups/' + this.moveAccountsTo + '/assign', {ids: accountsIds} )
 
                 // we fetch the accounts again to prevent the js collection being
                 // desynchronize from the backend php collection
@@ -439,12 +445,7 @@
 
                 this.axios.get('api/groups').then(response => {
                     response.data.forEach((data) => {
-                        groups.push({
-                            id : data.id,
-                            name : data.name,
-                            isActive: data.isActive,
-                            count: data.twofaccounts_count
-                        })
+                        groups.push(data)
                     })
 
                     if ( !objectEquals(groups, this.groups) ) {
@@ -460,10 +461,12 @@
              */
             setActiveGroup(id) {
 
-                this.form.activeGroup = this.$root.appSettings.activeGroup = id
+                // In memomry saving
+                this.form.value = this.$root.appSettings.activeGroup = id
 
+                // In db saving if the user set 2FAuth to memorize the active group
                 if( this.$root.appSettings.rememberActiveGroup ) {
-                    this.form.post('/api/settings/options', {returnError: true})
+                    this.form.put('/api/settings/activeGroup', {returnError: true})
                     .then(response => {
                         // everything's fine
                     })
@@ -515,6 +518,13 @@
 
                 this.editMode = state
                 this.$parent.showToolbar = state
+            },
+
+            /**
+             * 
+             */
+            displayService(service) {
+                return service ? service : this.$t('twofaccounts.no_service')
             }
         }
     };

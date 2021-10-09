@@ -67,18 +67,18 @@ return [
             'label' => 'Algorithme',
             'help' => 'L\'algorithme utilisé pour sécuriser vos codes de sécurité'
         ],
-        'totpPeriod' => [
+        'period' => [
             'label' => 'Durée de validité',
             'placeholder' => '30s par défaut',
             'help' => 'La durée de validité des codes de sécurité générés, en seconde'
         ],
-        'hotpCounter' => [
+        'counter' => [
             'label' => 'Compteur',
             'placeholder' => '0 par défaut',
             'help' => 'La valeur initiale du compteur',
             'help_lock' => 'Il est risqué de modifier le compteur car vous pouvez désynchroniser le compte avec le serveur de vérification du service. Utilisez l\'icône cadenas pour activer la modification, mais seulement si vous savez ce que vous faites'
         ],
-        'image_link' => [
+        'image' => [
             'label' => 'Image',
             'placeholder' => 'http://...',
             'help' => 'L\'url d\'une image externe à utiliser comme icône du compte'

@@ -3,7 +3,7 @@
         <label class="label" v-html="label"></label>
         <div class="control">
             <div class="select">
-                <select v-model="form[fieldName]">
+                <select v-model="form[fieldName]" v-on:change="$emit(fieldName, form[fieldName])">
                     <option v-for="option in options" :value="option.value">{{ option.text }}</option>
                 </select>
             </div>

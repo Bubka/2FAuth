@@ -31,10 +31,10 @@
             async handleSubmit(e) {
                 e.preventDefault()
 
-                this.form.post('/api/register', {returnError: true})
+                this.form.post('/api/user', {returnError: true})
                 .then(response => {
-                    localStorage.setItem('user',response.data.message.name)
-                    localStorage.setItem('jwt',response.data.message.token)
+                    localStorage.setItem('user',response.data.name)
+                    localStorage.setItem('jwt',response.data.token)
 
                     if (localStorage.getItem('jwt') != null){
                         this.$router.push({ name: 'accounts', params: { toRefresh: true } })
@@ -42,7 +42,7 @@
                 })
                 .catch(error => {
                     console.log(error.response)
-                    if( error.response.status === 422 && error.response.data.errors.taken ) {
+                    if( error.response.status === 422 && error.response.data.errors.name ) {
 
                         this.$notify({ type: 'is-danger', text: this.$t('errors.already_one_user_registered') + ' ' + this.$t('errors.cannot_register_more_user'), duration:-1 })
                     }
