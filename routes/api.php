@@ -15,11 +15,9 @@ use Illuminate\Http\Request;
 
 Route::group(['middleware' => 'guest:api'], function () {
 
-    Route::post('user', 'Auth\RegisterController@register');
-
-    Route::post('login', 'Auth\LoginController@login');
-
     Route::get('user/name', 'Auth\UserController@show');
+    Route::post('user/login', 'Auth\LoginController@login');
+    Route::post('user', 'Auth\RegisterController@register');
     Route::post('user/password/lost', 'Auth\ForgotPasswordController@sendResetLinkEmail')->middleware('AvoidResetPassword');
     Route::post('user/password/reset', 'Auth\ResetPasswordController@reset')->name('password.reset');
 
@@ -30,8 +28,7 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::get('user', 'Auth\UserController@show');
     Route::put('user', 'Auth\UserController@update');
     Route::patch('user/password', 'Auth\PasswordController@update');
-
-    Route::post('logout', 'Auth\LoginController@logout');
+    Route::post('user/logout', 'Auth\LoginController@logout');
 
     // Route::prefix('settings')->group(function () {
         // Route::get('account', 'Settings\AccountController@show');
