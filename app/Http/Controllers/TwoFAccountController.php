@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\TwoFAccount;
+use App\Exceptions\UndecipherableException;
 use App\Http\Requests\TwoFAccountReorderRequest;
 use App\Http\Requests\TwoFAccountStoreRequest;
 use App\Http\Requests\TwoFAccountUpdateRequest;
@@ -160,7 +161,14 @@ class TwoFAccountController extends Controller
 
         // The request input is the ID of an existing account
         if ( $id ) {
-            $otp = $this->twofaccountService->getOTP((int) $id);
+            try {
+                $otp = $this->twofaccountService->getOTP((int) $id);
+            }
+            catch (UndecipherableException $ex) {
+                return response()->json([
+                    'message' => __('errors.cannot_decipher_secret')
+                ], 400);
+            }
         }
 
         // The request input is an uri

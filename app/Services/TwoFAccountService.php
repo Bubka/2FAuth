@@ -5,6 +5,7 @@ namespace App\Services;
 use App\TwoFAccount;
 use App\Exceptions\InvalidSecretException;
 use App\Exceptions\InvalidOtpParameterException;
+use App\Exceptions\UndecipherableException;
 use App\Services\Dto\OtpDto;
 use App\Services\Dto\TwoFAccountDto;
 use OTPHP\TOTP;
@@ -118,11 +119,17 @@ class TwoFAccountService
      * @return OtpDto an OTP DTO
      * 
      * @throws InvalidSecretException The secret is not a valid base32 encoded string
+     * @throws UndecipherableException The secret cannot be deciphered
      */
     public function getOTP($data) : OtpDto
     {
         $this->initTokenWith($data);
         $OtpDto = new OtpDto();
+
+        // Early exit if the model returned an undecipherable secret
+        if (strtolower($this->token->getSecret()) === __('errors.indecipherable')) {
+            throw new UndecipherableException();
+        }
         
         try {
             if ( $this->tokenOtpType() === 'totp' ) {

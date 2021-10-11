@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Classes\DbProtection;
+use App\Exceptions\DbEncryptionException;
+use App\Services\DbEncryptionService;
+use App\Services\SettingServiceInterface;
 use App\Http\Requests\SettingStoreRequest;
 use App\Http\Requests\SettingUpdateRequest;
 use App\Http\Controllers\Controller;
-use App\Services\SettingServiceInterface;
 
 
 class SettingController extends Controller
@@ -17,14 +18,20 @@ class SettingController extends Controller
      */
     protected SettingServiceInterface $settingService;
 
+    /**
+     * The Settings Service instance.
+     */
+    protected DbEncryptionService $dbEncryptionService;
+
 
     /**
      * Create a new controller instance.
      * 
      */
-    public function __construct(SettingServiceInterface $SettingServiceInterface)
+    public function __construct(SettingServiceInterface $SettingServiceInterface, DbEncryptionService $dbEncryptionService)
     {
         $this->settingService = $SettingServiceInterface;
+        $this->dbEncryptionService = $dbEncryptionService;
     }
 
 
@@ -96,34 +103,25 @@ class SettingController extends Controller
     {
         $validated = $request->validated();
 
-        $this->settingService->set($settingName, $validated['value']);
+        // The useEncryption setting impacts records in DB so we delegate the work to the
+        // dedicated db encryption service
+        if( $settingName === 'useEncryption')
+        {
+            try {
+                $this->dbEncryptionService->setTo($validated['value']);
+            }
+            catch(DbEncryptionException $ex) {
+                return response()->json([
+                    'message' => $ex->getMessage()
+                ], 400);
+            }
+        }
+        else $this->settingService->set($settingName, $validated['value']);
 
         return response()->json([
             'key' => $settingName,
             'value' => $validated['value']
         ], 200);
-
-        // The useEncryption option impacts the [existing] content of the database.
-        // Encryption/Decryption of the data is done only if the user change the value of the option
-        // to prevent successive encryption
-
-        if( $request->has('useEncryption'))
-        {
-            if( $request->useEncryption && !$this->settingService->get('useEncryption') ) {
-
-                // user enabled the encryption
-                if( !DbProtection::enable() ) {
-                    return response()->json(['message' => __('errors.error_during_encryption')], 400);
-                }
-            }
-            else if( !$request->useEncryption && $this->settingService->get('useEncryption') ) {
-
-                // user disabled the encryption
-                if( !DbProtection::disable() ) {
-                    return response()->json(['message' => __('errors.error_during_decryption')], 400);
-                }
-            }
-        }
 
     }
 

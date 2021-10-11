@@ -15,11 +15,6 @@ class TwoFAccount extends Model implements Sortable
 
     use SortableTrait;
 
-    /**
-     * A human understandable value to return when attribute decryption fails
-     */
-    private const INDECIPHERABLE = '*indecipherable*';
-
 
     /**
      * model's array form.
@@ -199,7 +194,7 @@ class TwoFAccount extends Model implements Sortable
                 return Crypt::decryptString($value);
             }
             catch (Exception $e) {
-                return self::INDECIPHERABLE;
+                return __('errors.indecipherable');
             }
         }
         else {
