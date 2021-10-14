@@ -2,7 +2,7 @@
     <form-wrapper>
         <!-- <form @submit.prevent="handleSubmit" @change="handleSubmit" @keydown="form.onKeydown($event)"> -->
         <form>
-            <h4 class="title is-4">{{ $t('settings.general') }}</h4>
+            <h4 class="title is-4 has-text-grey-light">{{ $t('settings.general') }}</h4>
             <!-- Language -->
             <form-select v-on:lang="saveSetting('lang', $event)" :options="langs" :form="form" fieldName="lang" :label="$t('settings.forms.language.label')" :help="$t('settings.forms.language.help')" />
             <!-- display mode -->
@@ -10,13 +10,13 @@
             <!-- show icon -->
             <form-checkbox v-on:showAccountsIcons="saveSetting('showAccountsIcons', $event)" :form="form" fieldName="showAccountsIcons" :label="$t('settings.forms.show_accounts_icons.label')" :help="$t('settings.forms.show_accounts_icons.help')" />
 
-            <h4 class="title is-4 pt-4">{{ $t('groups.groups') }}</h4>
+            <h4 class="title is-4 pt-4 has-text-grey-light">{{ $t('groups.groups') }}</h4>
             <!-- default group -->
             <form-select v-on:defaultGroup="saveSetting('defaultGroup', $event)" :options="groups" :form="form" fieldName="defaultGroup" :label="$t('settings.forms.default_group.label')" :help="$t('settings.forms.default_group.help')" />
             <!-- retain active group -->
             <form-checkbox v-on:rememberActiveGroup="saveSetting('rememberActiveGroup', $event)" :form="form" fieldName="rememberActiveGroup" :label="$t('settings.forms.remember_active_group.label')" :help="$t('settings.forms.remember_active_group.help')" />
 
-            <h4 class="title is-4 pt-4">{{ $t('settings.security') }}</h4>
+            <h4 class="title is-4 pt-4 has-text-grey-light">{{ $t('settings.security') }}</h4>
             <!-- auto lock -->
             <form-select v-on:kickUserAfter="saveSetting('kickUserAfter', $event)" :options="kickUserAfters" :form="form" fieldName="kickUserAfter" :label="$t('settings.forms.auto_lock.label')"  :help="$t('settings.forms.auto_lock.help')" />
             <!-- protect db -->
@@ -26,7 +26,7 @@
             <!-- close otp on copy -->
             <form-checkbox v-on:closeOtpOnCopy="saveSetting('closeOtpOnCopy', $event)" :form="form" fieldName="closeOtpOnCopy" :label="$t('settings.forms.close_otp_on_copy.label')" :help="$t('settings.forms.close_otp_on_copy.help')" />
 
-            <h4 class="title is-4 pt-4">{{ $t('settings.data_input') }}</h4>
+            <h4 class="title is-4 pt-4 has-text-grey-light">{{ $t('settings.data_input') }}</h4>
             <!-- basic qrcode -->
             <form-checkbox v-on:useBasicQrcodeReader="saveSetting('useBasicQrcodeReader', $event)" :form="form" fieldName="useBasicQrcodeReader" :label="$t('settings.forms.use_basic_qrcode_reader.label')" :help="$t('settings.forms.use_basic_qrcode_reader.help')" />
             <!-- direct capture -->
