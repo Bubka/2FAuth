@@ -86,7 +86,7 @@ class AppstractOptionsService implements SettingServiceInterface
      */
     private function restoreType($value)
     {
-        $value = is_numeric($value) ? (float) $value : $value;
+        $value = is_numeric($value) ? (int) $value : $value;
 
         if( $value === '{{}}' ) {
             return false;
