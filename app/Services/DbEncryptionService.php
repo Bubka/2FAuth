@@ -4,12 +4,11 @@ namespace App\Services;
 
 use Throwable;
 use Exception;
-use App\TwoFAccount;
 use App\Exceptions\DbEncryptionException;
 use App\Services\SettingServiceInterface;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 
 class DbEncryptionService
 {
@@ -44,8 +43,14 @@ class DbEncryptionService
         if ($isInUse === !$state) {
             if ($this->updateRecords($state)) {
                 $this->settingService->set('useEncryption', $state);
+
+                if ($state) {
+                    Log::notice('Sensible data are now encrypted');
+                }
+                else Log::notice('Sensible data are now decrypted');
             }
             else {
+                Log::warning('Some data cannot be encrypted/decrypted, the useEncryption setting remain unchanged');
                 throw new DbEncryptionException($state === true ? __('errors.error_during_encryption') : __('errors.error_during_decryption'));
             }
         }
@@ -69,7 +74,7 @@ class DbEncryptionService
                 $item->account      = $encrypted ? Crypt::encryptString($item->account)     : Crypt::decryptString($item->account);
                 $item->secret       = $encrypted ? Crypt::encryptString($item->secret)      : Crypt::decryptString($item->secret);
             }
-            catch (Exception $e) {
+            catch (Exception $ex) {
                 $success = false;
                 // Exit the each iteration
                 return false;
@@ -97,9 +102,8 @@ class DbEncryptionService
             }
             // @codeCoverageIgnoreStart
             // Dont now how to fake that :(
-            catch (Throwable $e) {
+            catch (Throwable $ex) {
                 DB::rollBack();
-
                 return false;
             }
         }

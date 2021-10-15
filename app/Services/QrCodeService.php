@@ -5,6 +5,7 @@ namespace App\Services;
 use App\TwoFAccount;
 use Zxing\QrReader;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 use chillerlan\QRCode\{QRCode, QROptions};
 
 class QrCodeService
@@ -36,6 +37,8 @@ class QrCodeService
 
         $qrcode = new QRCode($options);
 
+        Log::info('data encoded to QR code');
+
         return $qrcode->render($data);
     }
 
@@ -53,6 +56,8 @@ class QrCodeService
         if(!$data) {
             throw new \App\Exceptions\InvalidQrCodeException;
         }
+        
+        Log::info('QR code decoded');
 
         return $data;
     }

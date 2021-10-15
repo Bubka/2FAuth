@@ -4,6 +4,7 @@ namespace App\Services;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class AppstractOptionsService implements SettingServiceInterface
 {
@@ -47,6 +48,10 @@ class AppstractOptionsService implements SettingServiceInterface
         }
 
         option($settings);
+
+        foreach ($settings as $setting => $value) {
+            Log::info(sprintf('Setting %s is now %s', var_export($setting, true), var_export($this->restoreType($value), true)));
+        }
     }
 
 
@@ -56,6 +61,8 @@ class AppstractOptionsService implements SettingServiceInterface
     public function delete(string $name) : void
     {
         option()->remove($name);
+        
+        Log::info(sprintf('Setting %s deleted', var_export($name, true)));
     }
     
 

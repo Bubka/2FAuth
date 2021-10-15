@@ -14,6 +14,7 @@ use OTPHP\Factory;
 use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 
 class TwoFAccountService
@@ -59,7 +60,11 @@ class TwoFAccountService
         $twofaccount->legacy_uri = $uri;
         $this->fillWithToken($twofaccount);
         
-        if ( $saveToDB ) $twofaccount->save();
+        if ( $saveToDB ) {
+            $twofaccount->save();
+
+            Log::info(sprintf('TwoFAccount #%d created (from URI)', $twofaccount->id));
+        }
 
         return $twofaccount;
     }
@@ -84,7 +89,11 @@ class TwoFAccountService
         $twofaccount->icon = Arr::get($data, 'icon', null);
         $this->fillWithToken($twofaccount);
         
-        if ( $saveToDB ) $twofaccount->save();
+        if ( $saveToDB ) {
+            $twofaccount->save();
+
+            Log::info(sprintf('TwoFAccount #%d created (from parameters)', $twofaccount->id));
+        }
 
         return $twofaccount;
     }
@@ -107,6 +116,8 @@ class TwoFAccountService
         $twofaccount->icon = Arr::get($data, 'icon', null);
         $twofaccount->save();
 
+        Log::info(sprintf('TwoFAccount #%d updated', $twofaccount->id));
+
         return $twofaccount;
     }
 
@@ -128,6 +139,8 @@ class TwoFAccountService
 
         // Early exit if the model returned an undecipherable secret
         if (strtolower($this->token->getSecret()) === __('errors.indecipherable')) {
+            Log::error('Secret cannot be deciphered, OTP generation aborted');
+
             throw new UndecipherableException();
         }
         
@@ -153,6 +166,8 @@ class TwoFAccountService
             // If the token package change it could be necessary to throw a more generic exception.
             throw new InvalidSecretException($ex->getMessage());
         }
+
+        Log::info(sprintf('New %s generated', $OtpDto->otp_type));
 
         return $OtpDto;
     }
@@ -190,7 +205,10 @@ class TwoFAccountService
                         ->update(
                             ['group_id' => NULL]
                         );
+            
+            Log::info(sprintf('TwoFAccounts #%s withdrawn', implode(',#', $ids)));
         }
+        else Log::info('No TwoFAccount to withdraw');
     }
 
 
@@ -321,7 +339,7 @@ class TwoFAccountService
         try {
             $this->token = Factory::loadFromProvisioningUri($uri);
         }
-        catch (\Assert\AssertionFailedException|\Assert\InvalidArgumentException|\Exception|\Throwable $e) {
+        catch (\Assert\AssertionFailedException|\Assert\InvalidArgumentException|\Exception|\Throwable $ex) {
             throw ValidationException::withMessages([
                 'uri' => __('validation.custom.uri.regex', ['attribute' => 'uri'])
             ]);
@@ -330,6 +348,8 @@ class TwoFAccountService
         // As loadFromProvisioningUri() accept URI without label (nor account nor service) we check
         // that the account is set
         if ( ! $this->token->getLabel() ) {
+            Log::error('URI passed to initTokenWithUri() must contain a label');
+
             throw ValidationException::withMessages([
                 'label' => __('validation.custom.label.required')
             ]);
@@ -347,6 +367,8 @@ class TwoFAccountService
     {
         // Check OTP type again to ensure the upcoming OTPHP instanciation
         if ( ! in_array($dto->otp_type, $this->supportedOtpTypes, true) ) {
+            Log::error(sprintf('%s is not an OTP type supported by the current token', $dto->otp_type));
+
             throw ValidationException::withMessages([
                 'otp_type' => __('validation.custom.otp_type.in', ['attribute' => 'otp type'])
             ]);
@@ -431,6 +453,8 @@ class TwoFAccountService
             {
                 // Should be a valid image
                 Storage::move($imageFile, $iconFile);
+
+                Log::info(sprintf('Icon file %s stored', $newFilename));
             }
             else {
                 Storage::delete($imageFile);

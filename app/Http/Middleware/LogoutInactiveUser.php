@@ -7,6 +7,7 @@ use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class LogoutInactiveUser
 {
@@ -50,6 +51,8 @@ class LogoutInactiveUser
                 $accessToken->revoke();
             }
             // @codeCoverageIgnoreEnd
+
+            Log::notice('Inactive user detected, access token revoked');
      
             return response()->json(['message' => 'unauthorised'], Response::HTTP_UNAUTHORIZED);
         }

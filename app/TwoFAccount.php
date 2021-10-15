@@ -9,6 +9,7 @@ use Spatie\EloquentSortable\SortableTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Log;
 
 class TwoFAccount extends Model implements Sortable
 {
@@ -66,6 +67,7 @@ class TwoFAccount extends Model implements Sortable
         parent::boot();
         
         static::deleted(function ($model) {
+            Log::info(sprintf('TwoFAccount #%d deleted', $model->id));
             Storage::delete('public/icons/' . $model->icon);
         });
     }
@@ -193,7 +195,7 @@ class TwoFAccount extends Model implements Sortable
             try {
                 return Crypt::decryptString($value);
             }
-            catch (Exception $e) {
+            catch (Exception $ex) {
                 return __('errors.indecipherable');
             }
         }

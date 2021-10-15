@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
 class Group extends Model
 {
@@ -55,6 +56,10 @@ class Group extends Model
                         ->update(
                             ['group_id' => NULL]
                         );
+        });
+
+        static::deleted(function ($model) {
+            Log::info(sprintf('Group %s deleted', var_export($model->name, true)));
         });
     }
 

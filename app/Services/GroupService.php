@@ -6,6 +6,7 @@ use App\Group;
 use App\TwoFAccount;
 use App\Services\SettingServiceInterface;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Log;
 
 class GroupService
 {
@@ -68,6 +69,8 @@ class GroupService
 
         $group->save();
 
+        Log::info(sprintf('Group %s created', var_export($group->name, true)));
+
         return $group;
     }
 
@@ -84,6 +87,8 @@ class GroupService
         $group->update([
             'name' => $data['name'],
         ]);
+
+        Log::info(sprintf('Group %s updated', var_export($group->name, true)));
 
         return $group;
     }
@@ -118,6 +123,8 @@ class GroupService
 
         $deleted = Group::destroy($ids);
 
+        Log::info(sprintf('Groups #%s deleted', implode(',#', $ids)));
+
         return $deleted;
     }
 
@@ -144,7 +151,10 @@ class GroupService
             $twofaccounts = TwoFAccount::find($ids);
 
             $group->twofaccounts()->saveMany($twofaccounts);
+
+            Log::info(sprintf('Twofaccounts #%s assigned to groups %s', implode(',#', $ids), var_export($group->name, true)));
         }
+        else Log::info('Cannot find a group to assign the TwoFAccounts to');
     }
 
 
