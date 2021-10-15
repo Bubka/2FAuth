@@ -1,6 +1,5 @@
 <?php
 
-use App\Classes\Options;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
@@ -31,17 +30,18 @@ class SplitTwofaccountsUriInMultipleColumns extends Migration
         
 
         $twofaccounts = DB::table('twofaccounts')->select('id', 'legacy_uri')->get();
+        $settingService = resolve('App\Services\SettingServiceInterface');
 
         foreach ($twofaccounts as $twofaccount) {
             try {
-                $legacy_uri = Options::get('useEncryption') ? Crypt::decryptString($twofaccount->legacy_uri) : $twofaccount->legacy_uri;
+                $legacy_uri = $settingService->get('useEncryption') ? Crypt::decryptString($twofaccount->legacy_uri) : $twofaccount->legacy_uri;
                 $token = \OTPHP\Factory::loadFromProvisioningUri($legacy_uri);
 
                 $affected = DB::table('twofaccounts')
                     ->where('id', $twofaccount->id)
                     ->update([
                         'otp_type'  => get_class($token) === 'OTPHP\TOTP' ? 'totp' : 'hotp',
-                        'secret'    => Options::get('useEncryption') ? Crypt::encryptString($token->getSecret()) : $token->getSecret(),
+                        'secret'    => $settingService->get('useEncryption') ? Crypt::encryptString($token->getSecret()) : $token->getSecret(),
                         'algorithm' => $token->getDigest(),
                         'digits'    => $token->getDigits(),
                         'period'    => $token->hasParameter('period') ? $token->getParameter('period') : null,

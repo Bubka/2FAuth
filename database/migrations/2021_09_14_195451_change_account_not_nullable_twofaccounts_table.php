@@ -26,9 +26,6 @@ class ChangeAccountNotNullableTwofaccountsTable extends Migration
      */
     public function down()
     {
-        Schema::table('twofaccounts', function (Blueprint $table) {
-            $table->text('account')->nullable()->change();
-            $table->string('service')->nullable(false)->change();
-        });
+        //
     }
 }
