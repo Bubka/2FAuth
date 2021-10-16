@@ -15,49 +15,44 @@ use Illuminate\Http\Request;
 
 Route::group(['middleware' => 'guest:api'], function () {
 
-    Route::get('user/name', 'Auth\UserController@show');
-    Route::post('user/login', 'Auth\LoginController@login');
-    Route::post('user', 'Auth\RegisterController@register');
-    Route::post('user/password/lost', 'Auth\ForgotPasswordController@sendResetLinkEmail')->middleware('AvoidResetPassword');
-    Route::post('user/password/reset', 'Auth\ResetPasswordController@reset')->name('password.reset');
+    Route::get('user/name', 'Auth\UserController@show')->name('user.show.name');
+    Route::post('user/login', 'Auth\LoginController@login')->name('user.login');
+    Route::post('user', 'Auth\RegisterController@register')->name('user.register');
+    Route::post('user/password/lost', 'Auth\ForgotPasswordController@sendResetLinkEmail')->middleware('AvoidResetPassword')->name('user.password.lost');;
+    Route::post('user/password/reset', 'Auth\ResetPasswordController@reset')->name('user.password.reset');
 
 });
 
 Route::group(['middleware' => 'auth:api'], function() {
 
-    Route::get('user', 'Auth\UserController@show');
-    Route::put('user', 'Auth\UserController@update');
-    Route::patch('user/password', 'Auth\PasswordController@update');
-    Route::post('user/logout', 'Auth\LoginController@logout');
+    Route::get('user', 'Auth\UserController@show')->name('user.show');
+    Route::put('user', 'Auth\UserController@update')->name('user.update');
+    Route::patch('user/password', 'Auth\PasswordController@update')->name('user.password.update');
+    Route::post('user/logout', 'Auth\LoginController@logout')->name('user.logout');
 
-    // Route::prefix('settings')->group(function () {
-        // Route::get('account', 'Settings\AccountController@show');
-        // Route::post('options', 'Settings\OptionController@store');
-    // });
+    Route::get('settings/{settingName}', 'SettingController@show')->name('settings.show');
+    Route::get('settings', 'SettingController@index')->name('settings.index');
+    Route::post('settings', 'SettingController@store')->name('settings.store');
+    Route::put('settings/{settingName}', 'SettingController@update')->name('settings.update');
+    Route::delete('settings/{settingName}', 'SettingController@destroy')->name('settings.destroy');
 
-    Route::get('settings/{settingName}', 'SettingController@show');
-    Route::get('settings', 'SettingController@index');
-    Route::post('settings', 'SettingController@store');
-    Route::put('settings/{settingName}', 'SettingController@update');
-    Route::delete('settings/{settingName}', 'SettingController@destroy');
-
-    Route::delete('twofaccounts', 'TwoFAccountController@batchDestroy');
-    Route::patch('twofaccounts/withdraw', 'TwoFAccountController@withdraw');
-    Route::post('twofaccounts/reorder', 'TwoFAccountController@reorder');
-    Route::post('twofaccounts/preview', 'TwoFAccountController@preview');
-    Route::get('twofaccounts/{twofaccount}/qrcode', 'QrCodeController@show');
-    Route::get('twofaccounts/count', 'TwoFAccountController@count');
-    Route::get('twofaccounts/{id}/otp', 'TwoFAccountController@otp')->where('id', '[0-9]+');
-    Route::post('twofaccounts/otp', 'TwoFAccountController@otp');
+    Route::delete('twofaccounts', 'TwoFAccountController@batchDestroy')->name('twofaccounts.batchDestroy');
+    Route::patch('twofaccounts/withdraw', 'TwoFAccountController@withdraw')->name('twofaccounts.withdraw');
+    Route::post('twofaccounts/reorder', 'TwoFAccountController@reorder')->name('twofaccounts.reorder');
+    Route::post('twofaccounts/preview', 'TwoFAccountController@preview')->name('twofaccounts.preview');
+    Route::get('twofaccounts/{twofaccount}/qrcode', 'QrCodeController@show')->name('twofaccounts.show.qrcode');
+    Route::get('twofaccounts/count', 'TwoFAccountController@count')->name('twofaccounts.count');
+    Route::get('twofaccounts/{id}/otp', 'TwoFAccountController@otp')->where('id', '[0-9]+')->name('twofaccounts.show.otp');
+    Route::post('twofaccounts/otp', 'TwoFAccountController@otp')->name('twofaccounts.otp');
     Route::apiResource('twofaccounts', 'TwoFAccountController');
 
-    Route::get('groups/{group}/twofaccounts', 'GroupController@accounts');
-    Route::post('groups/{group}/assign', 'GroupController@assignAccounts');
+    Route::get('groups/{group}/twofaccounts', 'GroupController@accounts')->name('groups.show.twofaccounts');
+    Route::post('groups/{group}/assign', 'GroupController@assignAccounts')->name('groups.assign.twofaccounts');
     Route::apiResource('groups', 'GroupController');
 
-    Route::post('qrcode/decode', 'QrCodeController@decode');
+    Route::post('qrcode/decode', 'QrCodeController@decode')->name('qrcode.decode');
 
-    Route::post('icons', 'IconController@upload');
-    Route::delete('icons/{icon}', 'IconController@delete');
+    Route::post('icons', 'IconController@upload')->name('icons.upload');
+    Route::delete('icons/{icon}', 'IconController@delete')->name('icons.delete');
 
 });
