@@ -56,21 +56,9 @@ router.beforeEach((to, from, next) => {
         to.params.isFirstLoad = isFirstLoad ? true : false
         isFirstLoad = false;
     }
-    
 
-    if (to.matched.some(record => record.meta.requiresAuth)) {
-        // Accesses to restricted pages without a jwt token are routed to the login page
-        if ( !localStorage.getItem('jwt') ) {
-            next({
-                name: 'login'
-            })
-        }
-        // If the jwt token is invalid, a 401 unauthorized is send by the php backend
-        else {
-            next()
-        }
-    }
-    else next()
+    next()
+
 });
 
 router.afterEach(to => {

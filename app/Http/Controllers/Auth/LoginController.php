@@ -69,8 +69,7 @@ class LoginController extends Controller
      */
     public function logout(Request $request)
     {
-        $accessToken = Auth::user()->token();
-        $accessToken->revoke();
+        Auth::logout();
 
         return response()->json(['message' => 'signed out'], Response::HTTP_OK);
     }
@@ -86,14 +85,12 @@ class LoginController extends Controller
     {
         $this->clearLoginAttempts($request);
 
-        $success['token'] = $this->guard()->user()->createToken('2FAuth')->accessToken;
         $success['name'] = $this->guard()->user()->name;
 
         $this->authenticated($request, $this->guard()->user());
 
         return response()->json([
             'message' => 'authenticated',
-            'token' => $success['token'],
             'name' => $success['name']
         ], Response::HTTP_OK);
     }

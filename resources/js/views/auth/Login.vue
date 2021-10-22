@@ -37,14 +37,9 @@
             handleSubmit(e) {
                 e.preventDefault()
 
-                this.form.post('/api/user/login', {returnError: true})
+                this.form.post('/user/login', {returnError: true})
                 .then(response => {
-                    localStorage.setItem('user',response.data.name)
-                    localStorage.setItem('jwt',response.data.token)
-
-                    if (localStorage.getItem('jwt') != null){
-                        this.$router.push({ name: 'accounts', params: { toRefresh: true } })
-                    }
+                    this.$router.push({ name: 'accounts', params: { toRefresh: true } })
                 })
                 .catch(error => {
                     if( error.response.status === 401 ) {
@@ -61,9 +56,9 @@
         },
 
         beforeRouteEnter (to, from, next) {
-            if (localStorage.getItem('jwt')) {
-                return next('/');
-            }
+            // if (localStorage.getItem('jwt')) {
+            //     return next('/');
+            // }
 
             next(async vm => {
                 const { data } = await vm.axios.get('api/user/name')

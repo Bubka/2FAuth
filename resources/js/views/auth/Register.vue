@@ -33,12 +33,7 @@
 
                 this.form.post('/api/user', {returnError: true})
                 .then(response => {
-                    localStorage.setItem('user',response.data.name)
-                    localStorage.setItem('jwt',response.data.token)
-
-                    if (localStorage.getItem('jwt') != null){
-                        this.$router.push({ name: 'accounts', params: { toRefresh: true } })
-                    }
+                    this.$router.push({ name: 'accounts', params: { toRefresh: true } })
                 })
                 .catch(error => {
                     console.log(error.response)

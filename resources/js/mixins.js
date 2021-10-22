@@ -12,7 +12,7 @@ Vue.mixin({
 
         async appLogout(evt) {
 
-            await this.axios.get('api/user/logout')
+            await this.axios.get('/user/logout')
 
             this.$storage.clear()
             delete this.axios.defaults.headers.common['Authorization']
