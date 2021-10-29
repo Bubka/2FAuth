@@ -13,14 +13,6 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::group(['middleware' => 'auth:api'], function () {
-
-    Route::get('oauth/personal-access-tokens', '\Laravel\Passport\Http\Controllers\PersonalAccessTokenController@forUser')->name('passport.personal.tokens.index');
-    Route::post('oauth/personal-access-tokens', '\Laravel\Passport\Http\Controllers\PersonalAccessTokenController@store')->name('passport.personal.tokens.store');
-    Route::delete('oauth/personal-access-tokens', '\Laravel\Passport\Http\Controllers\PersonalAccessTokenController@destroy')->name('passport.personal.tokens.destroy');
-
-});
-
 Route::group(['middleware' => 'guest:api'], function () {
 
     Route::get('user/name', 'Auth\UserController@show')->name('user.show.name');
@@ -31,6 +23,10 @@ Route::group(['middleware' => 'guest:api'], function () {
 });
 
 Route::group(['middleware' => 'auth:api'], function() {
+
+    Route::get('oauth/personal-access-tokens', '\Laravel\Passport\Http\Controllers\PersonalAccessTokenController@forUser')->name('passport.personal.tokens.index');
+    Route::post('oauth/personal-access-tokens', '\Laravel\Passport\Http\Controllers\PersonalAccessTokenController@store')->name('passport.personal.tokens.store');
+    Route::delete('oauth/personal-access-tokens/{token_id}', '\Laravel\Passport\Http\Controllers\PersonalAccessTokenController@destroy')->name('passport.personal.tokens.destroy');
 
     Route::get('user', 'Auth\UserController@show')->name('user.show');
     Route::put('user', 'Auth\UserController@update')->name('user.update');
