@@ -9,7 +9,7 @@
             </div>
             <div class="mt-3 mb-6">
                 <router-link class="is-link mt-5" :to="{ name: 'createGroup' }">
-                    <font-awesome-icon :icon="['fas', 'plus-circle']" /> Create new group
+                    <font-awesome-icon :icon="['fas', 'plus-circle']" /> {{ $t('groups.create_group') }}
                 </router-link>
             </div>
             <div v-if="groups.length > 0">

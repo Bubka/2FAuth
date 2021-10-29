@@ -14,6 +14,7 @@ return [
     */
 
     'groups' => 'Groups',
+    'create_group' => 'Create new group',
     'select_accounts_to_show' => 'Select accounts to show',
     'manage_groups' => 'Manage groups',
     'active_group' => 'Active group',
