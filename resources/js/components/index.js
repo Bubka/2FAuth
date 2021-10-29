@@ -11,6 +11,7 @@ import FormCheckbox     from './FormCheckbox'
 import FormButtons      from './FormButtons'
 import VueFooter        from './Footer'
 import Kicker           from './Kicker'
+import SettingTabs      from './SettingTabs'
 
 // Components that are registered globaly.
 [
@@ -25,7 +26,8 @@ import Kicker           from './Kicker'
     FormCheckbox,
     FormButtons,
     VueFooter,
-    Kicker
+    Kicker,
+    SettingTabs
 ].forEach(Component => {
 	Vue.component(Component.name, Component)
 })

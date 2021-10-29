@@ -15,6 +15,7 @@ return [
 
     'cancel' => 'Cancel',
     'update' => 'Update',
+    'copy' => 'Copy',
     'copy_to_clipboard' => 'Copy to clipboard',
     'copied_to_clipboard' => 'Copied to clipboard',
     'profile' => 'Profile',
@@ -35,5 +36,6 @@ return [
     'rename' => 'Rename',
     'options' => 'Options',
     'reload' => 'Reload',
-    'some_data_have_changed' => 'Some data have changed. You should'
+    'some_data_have_changed' => 'Some data have changed. You should',
+    'generate' => 'Generate',
 ];

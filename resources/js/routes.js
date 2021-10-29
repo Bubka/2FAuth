@@ -16,7 +16,10 @@ import Login            from './views/auth/Login'
 import Register         from './views/auth/Register'
 import PasswordRequest  from './views/auth/password/Request'
 import PasswordReset    from './views/auth/password/Reset'
-import Settings         from './views/settings/Index'
+import SettingsOptions  from './views/settings/Options'
+import SettingsAccount  from './views/settings/Account'
+import SettingsOAuth    from './views/settings/OAuth'
+import GeneratePAT      from './views/settings/PATokens/Create'
 import Errors           from './views/Error'
 
 const router = new Router({
@@ -34,7 +37,10 @@ const router = new Router({
         { path: '/group/create', name: 'createGroup', component: CreateGroup, meta: { requiresAuth: true } },
         { path: '/group/:groupId/edit', name: 'editGroup', component: EditGroup, meta: { requiresAuth: true }, props: true },
 
-        { path: '/settings', name: 'settings', component: Settings, meta: { requiresAuth: true } },
+        { path: '/settings/options', name: 'settings.options', component: SettingsOptions, meta: { requiresAuth: true } },
+        { path: '/settings/account', name: 'settings.account', component: SettingsAccount, meta: { requiresAuth: true } },
+        { path: '/settings/oauth', name: 'settings.oauth', component: SettingsOAuth, meta: { requiresAuth: true } },
+        { path: '/settings/oauth/pat/create', name: 'settings.oauth.generatePAT', component: GeneratePAT, meta: { requiresAuth: true } },
 
         { path: '/login', name: 'login', component: Login },
         { path: '/register', name: 'register', component: Register },

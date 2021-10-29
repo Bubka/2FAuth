@@ -15,17 +15,30 @@ return [
 
     'settings' => 'Settings',
     'account' => 'Account',
-    'password' => 'Password',
+    'oauth' => 'OAuth',
+    'tokens' => 'Tokens',
     'options' => 'Options',
     'confirm' => [
 
     ],
     'general' => 'General',
     'security' => 'Security',
+    'profile' => 'Profile',
+    'change_password' => 'Change password',
+    'personal_access_tokens' => 'Personal access tokens',
+    'token_legend' => 'Personal Access Tokens allow any app to authenticate to the 2Fauth API. You should specify the access token as a Bearer token in the authorization header of consumer apps requests.',
+    'generate_new_token' => 'Generate a new token',
+    'revoke' => 'Revoke',
+    'token_revoked' => 'Token successfully revoked',
+    'confirm' => [
+        'revoke' => 'Are you sure you want to revoke this token?',
+    ],
+    'make_sure_copy_token' => 'Make sure to copy your personal access token now. You won’t be able to see it again!',
     'data_input' => 'Data input',
     'forms' => [
         'edit_settings' => 'Edit settings',
         'setting_saved' => 'Settings saved',
+        'new_token' => 'New token',
         'language' => [
             'label' => 'Language',
             'help' => 'Change the language used to translate the app interface.'

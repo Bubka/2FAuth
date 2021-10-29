@@ -19,6 +19,13 @@ Vue.mixin({
 
             this.$router.push({ name: 'login' })
         },
+        
+        exitSettings: function(event) {
+            if (event) {
+                this.$notify({ clean: true })
+                this.$router.push({ name: 'accounts' })
+            }
+        }
     }
 
 })
