@@ -18,24 +18,20 @@ class LogoutInactiveUser
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle($request, Closure $next, $guard = null)
     {
-
-        // Not a logged in user
-        if (!Auth::guard('api')->check()) {
+        // We do not track activity of non-logged-in user or user authenticated against a bearer token
+        if (!Auth::guard('api')->check() || $request->bearerToken()) {
             return $next($request);
         }
      
-        $user = Auth::guard('api')->user();
-
+        $user = Auth::guard($guard)->user();
         $now = Carbon::now();
         $inactiveFor = $now->diffInSeconds(Carbon::parse($user->last_seen_at));
 
         // Fetch all setting values
         $settingService = resolve('App\Services\SettingServiceInterface');
-        $settings = $settingService->all();
-
-        $kickUserAfterXSecond = intval($settings['kickUserAfter']) * 60;
+        $kickUserAfterXSecond = intval($settingService->get('kickUserAfter')) * 60;
 
         // If user has been inactive longer than the allowed inactivity period
         if ($kickUserAfterXSecond > 0 && $inactiveFor > $kickUserAfterXSecond) {
@@ -43,16 +39,8 @@ class LogoutInactiveUser
             $user->last_seen_at = $now->format('Y-m-d H:i:s');
             $user->save();
 
-            $accessToken = $user->token();
-
-            // phpunit does not generate token during tests, so we revoke it only if it exists
-            // @codeCoverageIgnoreStart
-            if( $accessToken ) {
-                $accessToken->revoke();
-            }
-            // @codeCoverageIgnoreEnd
-
-            Log::notice('Inactive user detected, access token revoked');
+            Auth::logout();
+            Log::notice('Inactive user detected, authentication rejected');
      
             return response()->json(['message' => 'unauthorised'], Response::HTTP_UNAUTHORIZED);
         }

@@ -18,7 +18,7 @@ class LogUserLastSeen
     public function handle($request, Closure $next)
     {
 
-        if( Auth::guard('api')->check() ) {
+        if( Auth::guard('api')->check() && !$request->bearerToken()) {
             Auth::guard('api')->user()->last_seen_at = Carbon::now()->format('Y-m-d H:i:s');
             Auth::guard('api')->user()->save();
         }
