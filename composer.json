@@ -13,6 +13,7 @@
         "chillerlan/php-qrcode": "3.3",
         "doctrine/dbal": "^2.10",
         "fideloper/proxy": "^4.4.1",
+        "fruitcake/laravel-cors": "^2.0",
         "khanamiryan/qrcode-detector-decoder": "^1.0.4",
         "laravel/framework": "^7.0",
         "laravel/passport": "^9.3.2",
