@@ -41,7 +41,7 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\CustomCreateFreshApiToken::class,
         ],
 
-        'api' => [
+        'api.v1' => [
             'throttle:60,1',
             'bindings',
             \App\Http\Middleware\LogoutInactiveUser::class,
