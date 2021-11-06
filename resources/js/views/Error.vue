@@ -47,8 +47,8 @@
             },
 
             error: function() {
-                if( this.err === undefined ) {
-                    return null
+                if( this.err == null ) {
+                    return false
                 }
                 else
                 {
@@ -66,7 +66,7 @@
 
         },
 
-        props: ['err'], // error.response
+        props: ['err'], // on object (error.response) or a string
 
         components: {
             Modal
@@ -78,7 +78,18 @@
                 this.$router.push({name: 'accounts' });
             });
 
-        }
+        },
+
+        beforeRouteEnter (to, from, next) {
+
+            next(vm => {
+                if( !vm.err ) {
+                    next({ name: 'accounts' });
+                }
+            });
+
+            next();
+        },
     }
 
 </script>
