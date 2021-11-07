@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Api\v1\Controllers\Auth;
 
 use App\User;
-use App\Http\Requests\UserStoreRequest;
+use App\Api\v1\Requests\UserStoreRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\Registered;

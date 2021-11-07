@@ -79,7 +79,7 @@
 
                 this.isFetching = true
 
-                await this.axios.get('api/groups').then(response => {
+                await this.axios.get('api/v1/groups').then(response => {
                     const groups = []
 
                     response.data.forEach((data) => {
@@ -101,7 +101,7 @@
              */
             deleteGroup(id) {
                 if(confirm(this.$t('groups.confirm.delete'))) {
-                    this.axios.delete('/api/groups/' + id)
+                    this.axios.delete('/api/v1/groups/' + id)
 
                     // Remove the deleted group from the collection
                     this.groups = this.groups.filter(a => a.id !== id)

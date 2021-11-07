@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Api\v1\Resources;
 
 class TwoFAccountReadResource extends TwoFAccountStoreResource
 {

@@ -51,7 +51,7 @@
         },
 
         async mounted() {
-            const { data } = await this.formProfile.get('/api/user')
+            const { data } = await this.formProfile.get('/api/v1/user')
 
             this.formProfile.fill(data)
         },
@@ -60,7 +60,7 @@
             submitProfile(e) {
                 e.preventDefault()
 
-                this.formProfile.put('/api/user', {returnError: true})
+                this.formProfile.put('/api/v1/user', {returnError: true})
                 .then(response => {
                     this.$notify({ type: 'is-success', text: this.$t('auth.forms.profile_saved') })
                 })
@@ -78,7 +78,7 @@
             submitPassword(e) {
                 e.preventDefault()
 
-                this.formPassword.patch('/api/user/password', {returnError: true})
+                this.formPassword.patch('/api/v1/user/password', {returnError: true})
                 .then(response => {
 
                     this.$notify({ type: 'is-success', text: response.data.message })

@@ -1,22 +1,23 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Api\v1\Controllers;
 
 use App\TwoFAccount;
 use App\Exceptions\UndecipherableException;
-use App\Http\Requests\TwoFAccountReorderRequest;
-use App\Http\Requests\TwoFAccountStoreRequest;
-use App\Http\Requests\TwoFAccountUpdateRequest;
-use App\Http\Requests\TwoFAccountBatchRequest;
-use App\Http\Requests\TwoFAccountUriRequest;
-use App\Http\Requests\TwoFAccountDynamicRequest;
-use App\Http\Resources\TwoFAccountCollection;
-use App\Http\Resources\TwoFAccountReadResource;
-use App\Http\Resources\TwoFAccountStoreResource;
+use App\Api\v1\Requests\TwoFAccountReorderRequest;
+use App\Api\v1\Requests\TwoFAccountStoreRequest;
+use App\Api\v1\Requests\TwoFAccountUpdateRequest;
+use App\Api\v1\Requests\TwoFAccountBatchRequest;
+use App\Api\v1\Requests\TwoFAccountUriRequest;
+use App\Api\v1\Requests\TwoFAccountDynamicRequest;
+use App\Api\v1\Resources\TwoFAccountCollection;
+use App\Api\v1\Resources\TwoFAccountReadResource;
+use App\Api\v1\Resources\TwoFAccountStoreResource;
 use App\Services\GroupService;
 use App\Services\TwoFAccountService;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class TwoFAccountController extends Controller
 {

@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Api\v1\Controllers;
 
 use App\Group;
 use App\Services\GroupService;
-use App\Http\Requests\GroupStoreRequest;
-use App\Http\Requests\GroupAssignRequest;
-use App\Http\Resources\GroupResource;
-use App\Http\Resources\TwoFAccountCollection;
+use App\Api\v1\Requests\GroupStoreRequest;
+use App\Api\v1\Requests\GroupAssignRequest;
+use App\Api\v1\Resources\GroupResource;
+use App\Api\v1\Resources\TwoFAccountCollection;
+use App\Http\Controllers\Controller;
 
 class GroupController extends Controller
 {

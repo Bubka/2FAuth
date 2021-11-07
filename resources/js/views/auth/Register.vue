@@ -31,7 +31,7 @@
             async handleSubmit(e) {
                 e.preventDefault()
 
-                this.form.post('/api/user', {returnError: true})
+                this.form.post('/api/v1/user', {returnError: true})
                 .then(response => {
                     this.$router.push({ name: 'accounts', params: { toRefresh: true } })
                 })

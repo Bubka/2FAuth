@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Api\v1\Controllers\Auth;
 
-use App\Http\Requests\UserPatchPwdRequest;
+use App\Api\v1\Requests\UserPatchPwdRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;

@@ -74,7 +74,7 @@
 
                 this.isFetching = true
 
-                await this.axios.get('/api/oauth/personal-access-tokens').then(response => {
+                await this.axios.get('/api/v1/oauth/personal-access-tokens').then(response => {
                     const tokens = []
 
                     response.data.forEach((data) => {
@@ -108,7 +108,7 @@
             async revokeToken(tokenId) {
                 if(confirm(this.$t('settings.confirm.revoke'))) {
 
-                    await this.axios.delete('/api/oauth/personal-access-tokens/' + tokenId).then(response => {
+                    await this.axios.delete('/api/v1/oauth/personal-access-tokens/' + tokenId).then(response => {
                         // Remove the revoked token from the collection
                         this.tokens = this.tokens.filter(a => a.id !== tokenId)
                         this.$notify({ type: 'is-success', text: this.$t('settings.token_revoked') })

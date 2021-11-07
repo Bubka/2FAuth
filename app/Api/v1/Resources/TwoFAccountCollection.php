@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Api\v1\Resources;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
@@ -11,7 +11,7 @@ class TwoFAccountCollection extends ResourceCollection
      *
      * @var string
      */
-    public $collects = 'App\Http\Resources\TwoFAccountReadResource';
+    public $collects = 'App\Api\v1\Resources\TwoFAccountReadResource';
 
 
     /**

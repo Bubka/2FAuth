@@ -177,7 +177,7 @@
         methods: {
             async getAccount () {
 
-                const { data } = await this.axios.get('/api/twofaccounts/' + this.$route.params.twofaccountId)
+                const { data } = await this.axios.get('/api/v1/twofaccounts/' + this.$route.params.twofaccountId)
 
                 this.form.fill(data)
                 this.form.secretIsBase32Encoded = 1
@@ -201,7 +201,7 @@
                     this.deleteIcon()
                 }
 
-                await this.form.put('/api/twofaccounts/' + this.$route.params.twofaccountId)
+                await this.form.put('/api/v1/twofaccounts/' + this.$route.params.twofaccountId)
 
                 if( this.form.errors.any() === false ) {
                     this.$router.push({name: 'accounts', params: { InitialEditMode: true, toRefresh: true }})
@@ -228,7 +228,7 @@
                 let imgdata = new FormData();
                 imgdata.append('icon', this.$refs.iconInput.files[0]);
 
-                const { data } = await this.form.upload('/api/icons', imgdata)
+                const { data } = await this.form.upload('/api/v1/icons', imgdata)
 
                 this.tempIcon = data;
 
@@ -237,7 +237,7 @@
             deleteIcon(event) {
 
                 if( this.tempIcon && this.tempIcon !== this.form.icon ) {
-                    this.axios.delete('/api/icons/' + this.tempIcon)
+                    this.axios.delete('/api/v1/icons/' + this.tempIcon)
                 }
 
                 this.tempIcon = ''

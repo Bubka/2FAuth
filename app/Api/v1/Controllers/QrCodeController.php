@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Api\v1\Controllers;
 
 use App\TwoFAccount;
 use App\Services\QrCodeService;
 use App\Services\TwoFAccountService;
-use App\Http\Requests\QrCodeDecodeRequest;
+use App\Api\v1\Requests\QrCodeDecodeRequest;
+use App\Http\Controllers\Controller;
 
 
 class QrCodeController extends Controller

@@ -31,7 +31,7 @@
 
             async generatePAToken() {
 
-                const { data } = await this.form.post('/api/oauth/personal-access-tokens')
+                const { data } = await this.form.post('/api/v1/oauth/personal-access-tokens')
 
                 if( this.form.errors.any() === false ) {
                     this.$router.push({ name: 'settings.oauth', params: { accessToken: data.accessToken, token_id: data.token.id } });

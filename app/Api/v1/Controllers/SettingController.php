@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Api\v1\Controllers;
 
 use App\Exceptions\DbEncryptionException;
 use App\Services\DbEncryptionService;
 use App\Services\SettingServiceInterface;
-use App\Http\Requests\SettingStoreRequest;
-use App\Http\Requests\SettingUpdateRequest;
+use App\Api\v1\Requests\SettingStoreRequest;
+use App\Api\v1\Requests\SettingUpdateRequest;
 use App\Http\Controllers\Controller;
 
 

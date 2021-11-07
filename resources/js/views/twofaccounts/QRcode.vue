@@ -36,7 +36,7 @@
              */
             async getQRcode () {
 
-                const { data } = await this.axios.get('/api/twofaccounts/' + this.$route.params.twofaccountId + '/qrcode')
+                const { data } = await this.axios.get('/api/v1/twofaccounts/' + this.$route.params.twofaccountId + '/qrcode')
                 this.qrcode = data.qrcode
                 
             },

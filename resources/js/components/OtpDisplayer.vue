@@ -94,7 +94,7 @@
                 if( id ) {
 
                     this.internal_id = id
-                    const { data } = await this.axios.get('api/twofaccounts/' + this.internal_id)
+                    const { data } = await this.axios.get('api/v1/twofaccounts/' + this.internal_id)
 
                     this.internal_service = data.service
                     this.internal_account = data.account
@@ -132,17 +132,17 @@
             getOtp: async function() {
 
                 if(this.internal_id) {
-                    const { data } =  await this.axios.get('/api/twofaccounts/' + this.internal_id + '/otp')
+                    const { data } =  await this.axios.get('/api/v1/twofaccounts/' + this.internal_id + '/otp')
                     return data
                 }
                 else if(this.internal_uri) {
-                    const { data } =  await this.axios.post('/api/twofaccounts/otp', {
+                    const { data } =  await this.axios.post('/api/v1/twofaccounts/otp', {
                         uri: this.internal_uri
                     })
                     return data
                 }
                 else {
-                    const { data } =  await this.axios.post('/api/twofaccounts/otp', {
+                    const { data } =  await this.axios.post('/api/v1/twofaccounts/otp', {
                         service     : this.internal_service,
                         account     : this.internal_account,
                         icon        : this.internal_icon,

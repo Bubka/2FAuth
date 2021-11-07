@@ -120,7 +120,7 @@
         },
 
         async mounted() {
-            const { data } = await this.form.get('/api/settings')
+            const { data } = await this.form.get('/api/v1/settings')
 
             this.form.fillWithKeyValueObject(data)
             this.form.lang = this.$root.$i18n.locale
@@ -133,7 +133,7 @@
                 e.preventDefault()
                 console.log(e)
 
-                // this.form.post('/api/settings/options', {returnError: false})
+                // this.form.post('/api/v1/settings/options', {returnError: false})
                 // .then(response => {
 
                 //     this.$notify({ type: 'is-success', text: response.data.message })
@@ -149,7 +149,7 @@
 
             saveSetting(settingName, event) {
 
-                this.axios.put('/api/settings/' + settingName, { value: event }).then(response => {
+                this.axios.put('/api/v1/settings/' + settingName, { value: event }).then(response => {
                     this.$notify({ type: 'is-success', text: this.$t('settings.forms.setting_saved') })
 
                     if(settingName === 'lang' && response.data.value !== this.$root.$i18n.locale) {
@@ -163,7 +163,7 @@
 
             fetchGroups() {
 
-                this.axios.get('/api/groups').then(response => {
+                this.axios.get('/api/v1/groups').then(response => {
                     response.data.forEach((data) => {
                         if( data.id >0 ) {
                             this.groups.push({

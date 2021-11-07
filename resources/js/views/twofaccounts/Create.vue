@@ -214,7 +214,7 @@
             if( this.$route.params.decodedUri ) {
 
                 // the Start view provided an uri so we parse it and prefill the quick form
-                this.axios.post('/api/twofaccounts/preview', { uri: this.$route.params.decodedUri }).then(response => {
+                this.axios.post('/api/v1/twofaccounts/preview', { uri: this.$route.params.decodedUri }).then(response => {
 
                     this.form.fill(response.data)
                     this.tempIcon = response.data.icon ? response.data.icon : null
@@ -249,7 +249,7 @@
                 // set current temp icon as account icon
                 this.form.icon = this.tempIcon
 
-                await this.form.post('/api/twofaccounts')
+                await this.form.post('/api/v1/twofaccounts')
 
                 if( this.form.errors.any() === false ) {
                     this.$router.push({name: 'accounts', params: { toRefresh: true }});
@@ -282,10 +282,10 @@
                 imgdata.append('inputFormat', 'fileUpload');
 
                 // First we get the uri encoded in the qrcode
-                const { data } = await this.form.upload('/api/qrcode/decode', imgdata)
+                const { data } = await this.form.upload('/api/v1/qrcode/decode', imgdata)
 
                 // Then the otp described by the uri
-                this.axios.post('/api/twofaccounts/preview', { uri: data.data }).then(response => {
+                this.axios.post('/api/v1/twofaccounts/preview', { uri: data.data }).then(response => {
                     this.form.fill(response.data)
                     this.form.secretIsBase32Encoded = 1
                     this.tempIcon = response.data.icon ? response.data.icon : null
@@ -300,7 +300,7 @@
                 let imgdata = new FormData();
                 imgdata.append('icon', this.$refs.iconInput.files[0]);
 
-                const { data } = await this.form.upload('/api/icons', imgdata)
+                const { data } = await this.form.upload('/api/v1/icons', imgdata)
 
                 this.tempIcon = data.filename;
 
@@ -308,7 +308,7 @@
 
             deleteIcon(event) {
                 if(this.tempIcon) {
-                    this.axios.delete('/api/icons/' + this.tempIcon)
+                    this.axios.delete('/api/v1/icons/' + this.tempIcon)
                     this.tempIcon = ''
                 }
             },

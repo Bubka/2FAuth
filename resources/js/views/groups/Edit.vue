@@ -33,7 +33,7 @@
 
             async updateGroup() {
 
-                await this.form.put('/api/groups/' + this.id)
+                await this.form.put('/api/v1/groups/' + this.id)
 
                 if( this.form.errors.any() === false ) {
                     this.$router.push({ name: 'groups' })

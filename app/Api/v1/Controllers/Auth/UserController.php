@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Api\v1\Controllers;
+namespace App\Api\v1\Controllers\Auth;
 
 use App\User;
-use App\Http\Requests\UserUpdateRequest;
-use App\Http\Resources\UserResource;
+use App\Api\v1\Requests\UserUpdateRequest;
+use App\Api\v1\Resources\UserResource;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;

@@ -31,7 +31,7 @@
 
             async createGroup() {
 
-                await this.form.post('/api/groups')
+                await this.form.post('/api/v1/groups')
 
                 if( this.form.errors.any() === false ) {
                     this.$router.push({ name: 'groups' });

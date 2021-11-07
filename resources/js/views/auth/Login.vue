@@ -61,7 +61,7 @@
             // }
 
             next(async vm => {
-                const { data } = await vm.axios.get('api/user/name')
+                const { data } = await vm.axios.get('api/v1/user/name')
 
                 if( data.name ) {
                     vm.username = data.name

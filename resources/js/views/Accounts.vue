@@ -347,7 +347,7 @@
                 let accounts = []
                 this.selectedAccounts = []
 
-                this.axios.get('api/twofaccounts').then(response => {
+                this.axios.get('api/v1/twofaccounts').then(response => {
                     response.data.forEach((data) => {
                         accounts.push(data)
                     })
@@ -393,7 +393,7 @@
              */
             saveOrder() {
                 this.drag = false
-                this.axios.post('/api/twofaccounts/reorder', {orderedIds: this.accounts.map(a => a.id)})
+                this.axios.post('/api/v1/twofaccounts/reorder', {orderedIds: this.accounts.map(a => a.id)})
             },
 
             /**
@@ -406,7 +406,7 @@
                     this.selectedAccounts.forEach(id => ids.push(id))
 
                     // Backend will delete all accounts at the same time
-                    await this.axios.delete('/api/twofaccounts?ids=' + ids.join())
+                    await this.axios.delete('/api/v1/twofaccounts?ids=' + ids.join())
 
                     // we fetch the accounts again to prevent the js collection being
                     // desynchronize from the backend php collection
@@ -425,9 +425,9 @@
                 // Backend will associate all accounts with the selected group in the same move
                 // or withdraw the accounts if destination is 'no group' (id = 0)
                 if(this.moveAccountsTo === 0) {
-                    await this.axios.patch('/api/twofaccounts/withdraw?ids=' + accountsIds.join() )
+                    await this.axios.patch('/api/v1/twofaccounts/withdraw?ids=' + accountsIds.join() )
                 }
-                else await this.axios.post('/api/groups/' + this.moveAccountsTo + '/assign', {ids: accountsIds} )
+                else await this.axios.post('/api/v1/groups/' + this.moveAccountsTo + '/assign', {ids: accountsIds} )
 
                 // we fetch the accounts again to prevent the js collection being
                 // desynchronize from the backend php collection
@@ -443,7 +443,7 @@
             fetchGroups() {
                 let groups = []
 
-                this.axios.get('api/groups').then(response => {
+                this.axios.get('api/v1/groups').then(response => {
                     response.data.forEach((data) => {
                         groups.push(data)
                     })
@@ -466,7 +466,7 @@
 
                 // In db saving if the user set 2FAuth to memorize the active group
                 if( this.$root.appSettings.rememberActiveGroup ) {
-                    this.form.put('/api/settings/activeGroup', {returnError: true})
+                    this.form.put('/api/v1/settings/activeGroup', {returnError: true})
                     .then(response => {
                         // everything's fine
                     })
