@@ -22,7 +22,7 @@ return [
     'Unable_to_decrypt_uri' => 'Unable to decrypt uri',
     'not_a_supported_otp_type' => 'This OTP format is not currently supported',
     'cannot_create_otp_without_secret' => 'Cannot create an OTP without a secret',
-    'cannot_create_otp_with_those_parameters' => 'Cannot create an OTP with those parameters',
+    'data_of_qrcode_is_not_valid_URI' => 'The data of this QR code is not a valid OTP Auth URI:',
     'wrong_current_password' => 'Wrong current password, nothing has changed',
     'error_during_encryption' => 'Encryption failed, your database remains unprotected.',
     'error_during_decryption' => 'Decryption failed, your database is still protected. This is mainly caused by an integrity issue of encrypted data for one or more accounts.',

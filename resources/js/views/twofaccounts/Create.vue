@@ -131,6 +131,26 @@
                 </otp-displayer>
             </modal>
         </form-wrapper>
+        <!-- alternatives -->
+        <modal v-model="showAlternatives">
+            <div class="too-bad"></div>
+            <div class="block">
+                {{ $t('errors.data_of_qrcode_is_not_valid_URI') }}
+            </div>
+            <div class="block has-text-light mb-6" v-html="uri"></div>
+            <!-- Copy to clipboard -->
+            <div class="block has-text-link">
+                <label class="button is-link is-outlined is-rounded" v-clipboard="() => uri" v-clipboard:success="clipboardSuccessHandler">
+                    {{ $t('commons.copy_to_clipboard') }}
+                </label>
+            </div>
+            <!-- Open in browser -->
+            <div class="block has-text-link" v-if="isUrl(uri)" @click="openInBrowser(uri)">
+                <label class="button is-link is-outlined is-rounded">
+                    {{ $t('commons.open_in_browser') }}
+                </label>
+            </div>
+        </modal>
     </div>
 </template>
 
@@ -163,7 +183,9 @@
                 showQuickForm: false,
                 showAdvancedForm: false,
                 ShowTwofaccountInModal : false,
+                showAlternatives : false,
                 tempIcon: '',
+                uri: '',
                 form: new Form({
                     service: '',
                     account: '',
@@ -212,9 +234,10 @@
 
         mounted: function () {
             if( this.$route.params.decodedUri ) {
+                this.uri = this.$route.params.decodedUri
 
                 // the Start view provided an uri so we parse it and prefill the quick form
-                this.axios.post('/api/v1/twofaccounts/preview', { uri: this.$route.params.decodedUri }).then(response => {
+                this.axios.post('/api/v1/twofaccounts/preview', { uri: this.uri }).then(response => {
 
                     this.form.fill(response.data)
                     this.tempIcon = response.data.icon ? response.data.icon : null
@@ -222,19 +245,22 @@
                 })
                 .catch(error => {
                     if( error.response.status === 422 ) {
-
-                        this.$router.push({ name: 'genericError', params: { err: this.$t('errors.cannot_create_otp_with_those_parameters') } });
+                        if( error.response.data.errors.uri ) {
+                            this.showAlternatives = true
+                            this.showAdvancedForm = true
+                        }
                     }
                 });
-
             } else {
                 this.showAdvancedForm = true
             }
 
-            // stop TOTP generation on modal close
             this.$on('modalClose', function() {
+                this.showAlternatives = false;
 
-                this.$refs.AdvancedFormOtpDisplayer.stopLoop()
+                if( this.showAdvancedForm ) {
+                    this.$refs.AdvancedFormOtpDisplayer.stopLoop()
+                }
             });
         },
 
@@ -283,6 +309,7 @@
 
                 // First we get the uri encoded in the qrcode
                 const { data } = await this.form.upload('/api/v1/qrcode/decode', imgdata)
+                this.uri = data.data
 
                 // Then the otp described by the uri
                 this.axios.post('/api/v1/twofaccounts/preview', { uri: data.data }).then(response => {
@@ -290,6 +317,13 @@
                     this.form.secretIsBase32Encoded = 1
                     this.tempIcon = response.data.icon ? response.data.icon : null
                 })
+                .catch(error => {
+                    if( error.response.status === 422 ) {
+                        if( error.response.data.errors.uri ) {
+                            this.showAlternatives = true
+                        }
+                    }
+                });
             },
 
             async uploadIcon(event) {
@@ -320,6 +354,19 @@
                 // is acceptable (and HOTP counter can be edited by the way)
                 this.form.counter = payload.nextHotpCounter
             },
+
+            clipboardSuccessHandler ({ value, event }) {
+
+                if(this.$root.appSettings.kickUserAfter == -1) {
+                    this.appLogout()
+                }
+
+                this.$notify({ type: 'is-success', text: this.$t('commons.copied_to_clipboard') })
+            },
+
+            clipboardErrorHandler ({ value, event }) {
+                console.log('error', value)
+            }
             
         },
 

@@ -38,4 +38,5 @@ return [
     'reload' => 'Reload',
     'some_data_have_changed' => 'Some data have changed. You should',
     'generate' => 'Generate',
+    'open_in_browser' => 'Open in browser',
 ];

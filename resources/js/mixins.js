@@ -25,6 +25,19 @@ Vue.mixin({
                 this.$notify({ clean: true })
                 this.$router.push({ name: 'accounts' })
             }
+        },
+
+        isUrl: function (url) {
+            var strRegex = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/
+            var re = new RegExp(strRegex)
+
+            return re.test(url)
+        },
+
+        openInBrowser(uri) {
+            const a = document.createElement('a')
+            a.setAttribute('href', uri)
+            a.dispatchEvent(new MouseEvent("click", {'view': window, 'bubbles': true, 'cancelable': true}))
         }
     }
 
