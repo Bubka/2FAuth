@@ -4,7 +4,7 @@ This applies to Debian Buster, but similar instructions should apply for other D
 
 ## What we will do
 
-- We will use PHP 7.3
+- We will use PHP 7.4
 - We will use version v2.1.0 of 2fauth
 - We will setup to use an Sqlite database
 - We will use Nginx and PHP-FPM to serve our site on port `8000`
@@ -22,11 +22,11 @@ This applies to Debian Buster, but similar instructions should apply for other D
 
     ```bash
     apt-get install -y --no-install-recommends \
-    php7.3 \
-    php7.3-sqlite3 php7.3-mysql \
-    php-xml php7.3-gd php7.3-mbstring \
+    php7.4 \
+    php7.4-sqlite3 php7.4-mysql \
+    php-xml php7.4-gd php7.4-mbstring \
     unzip wget ca-certificates \
-    php7.3-fpm nginx
+    php7.4-fpm nginx
     ```
 
 ## Download the code
@@ -71,7 +71,7 @@ http {
       error_page 404 /index.php;
 
       location ~ \.php$ {
-          fastcgi_pass unix:/var/run/php/php7.3-fpm.sock;
+          fastcgi_pass unix:/var/run/php/php7.4-fpm.sock;
           fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
           include fastcgi_params;
       }
@@ -129,7 +129,7 @@ chmod 500 /usr/local/bin/composer
     startretries=0
 
     [program:php-fpm]
-    command=/usr/sbin/php-fpm7.3 -F
+    command=/usr/sbin/php-fpm7.4 -F
 
     [program:nginx]
     command=/usr/sbin/nginx -g 'daemon off;'
@@ -155,14 +155,14 @@ chmod 500 /usr/local/bin/composer
 
     ```bash
     mkdir -p /run/php /www/data/.composer
-    touch /run/nginx.pid /var/log/php7.3-fpm.log
+    touch /run/nginx.pid /var/log/php7.4-fpm.log
     chown -R www-data \
-      /var/log/php7.3-fpm.log \
+      /var/log/php7.4-fpm.log \
       /run/nginx.pid \
       /run/php \
       /www/data/.composer
     chmod 700 /run/php /www/data/.composer
-    chmod 600 /var/log/php7.3-fpm.log
+    chmod 600 /var/log/php7.4-fpm.log
     ```
 
 ## Change user

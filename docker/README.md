@@ -101,7 +101,7 @@ There are the following build arguments you can use to customize the image using
 | `UID` | 1000 | The UID of the user to run the container as |
 | `GID` | 1000 | The GID of the user to run the container as |
 | `DEBIAN_VERSION` | `buster-slim` | The Debian version to use |
-| `PHP_VERSION` | `7.3-buster` | The PHP version to use to get composer dependencies |
+| `PHP_VERSION` | `7.4-buster` | The PHP version to use to get composer dependencies |
 | `COMPOSER_VERSION` | `2.1` | The version of composer to use |
 | `SUPERVISORD_VERSION` | `v0.7.3` | The version of supervisord to use |
 | `VERSION` | `unknown` | The version of the image |
