@@ -10,7 +10,7 @@
     "require": {
         "php": "^7.4",
         "appstract/laravel-options": "^4.1.1",
-        "chillerlan/php-qrcode": "3.3",
+        "chillerlan/php-qrcode": "^4.3",
         "doctrine/dbal": "^2.10",
         "fideloper/proxy": "^4.4.1",
         "fruitcake/laravel-cors": "^2.0",
