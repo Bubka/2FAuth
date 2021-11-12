@@ -14,34 +14,54 @@ class TwoFAccountsTableSeeder extends Seeder
         $faker = \Faker\Factory::create();
 
         TwoFAccount::create([
+            'otp_type' => 'totp',
+            'account' => $faker->safeEmail,
             'service' => $faker->unique()->domainName,
-            'account' => $faker->email,
-            'uri' => 'otpauth://totp/test@test.com?secret=A4GRFTVVRBGY7UIW&issuer=test',
-            'icon' => 'https://fakeimg.pl/64x64/'
+            'secret' => 'A4GRFHZVRBGY7UIW',
+            'algorithm' => 'sha1',
+            'digits' => 6,
+            'period' => 30,
+            'icon' => 'https://fakeimg.pl/64x64/',
         ]);
         TwoFAccount::create([
+            'otp_type' => 'totp',
+            'account' => $faker->safeEmail,
             'service' => $faker->unique()->domainName,
-            'account' => $faker->email,
-            'uri' => 'otpauth://totp/test@test.com?secret=A4GRFHYVRBGY7UIW&issuer=test',
-            'icon' => 'https://fakeimg.pl/64x64/'
+            'secret' => 'A4GRFHZVRBGY7UIW',
+            'algorithm' => 'sha1',
+            'digits' => 6,
+            'period' => 30,
+            'icon' => 'https://fakeimg.pl/64x64/',
         ]);
         TwoFAccount::create([
+            'otp_type' => 'totp',
+            'account' => $faker->safeEmail,
             'service' => $faker->unique()->domainName,
-            'account' => $faker->email,
-            'uri' => 'otpauth://totp/test@test.com?secret=A4GRFHZVRBGY7UIW&issuer=test',
-            'icon' => 'https://fakeimg.pl/64x64/'
+            'secret' => 'A4GRFHZVRBGY7UIW',
+            'algorithm' => 'sha1',
+            'digits' => 6,
+            'period' => 30,
+            'icon' => 'https://fakeimg.pl/64x64/',
         ]);
         TwoFAccount::create([
+            'otp_type' => 'totp',
+            'account' => $faker->safeEmail,
             'service' => $faker->unique()->domainName,
-            'account' => $faker->email,
-            'uri' => 'otpauth://totp/test@test.com?secret=A4GRFHVIRBGY7UIW&issuer=test',
-            'icon' => 'https://fakeimg.pl/64x64/'
+            'secret' => 'A4GRFHZVRBGY7UIW',
+            'algorithm' => 'sha1',
+            'digits' => 6,
+            'period' => 30,
+            'icon' => 'https://fakeimg.pl/64x64/',
         ]);
         TwoFAccount::create([
+            'otp_type' => 'totp',
+            'account' => $faker->safeEmail,
             'service' => $faker->unique()->domainName,
-            'account' => $faker->email,
-            'uri' => 'otpauth://totp/test@test.com?secret=A4GRFHVVOBGY7UIW&issuer=test',
-            'icon' => 'https://fakeimg.pl/64x64/'
+            'secret' => 'A4GRFHZVRBGY7UIW',
+            'algorithm' => 'sha1',
+            'digits' => 6,
+            'period' => 30,
+            'icon' => 'https://fakeimg.pl/64x64/',
         ]);
     }
 }

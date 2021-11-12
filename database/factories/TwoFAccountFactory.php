@@ -20,13 +20,14 @@ use ParagonIE\ConstantTime\Base32;
 
 $factory->define(TwoFAccount::class, function (Faker $faker) {
 
-    $service = $faker->unique()->domainName;
-    $account = $faker->safeEmail;
-
     return [
-        'service' => $service,
-        'account' => $account,
-        'uri' => 'otpauth://totp/' . $service . ':' . $account . '?secret=' . Base32::encodeUpper($faker->regexify('[A-Z0-9]{8}')) . '&issuer=' . $service,
+        'otp_type' => 'totp',
+        'account' => $faker->safeEmail,
+        'service' => $faker->unique()->domainName,
+        'secret' => Base32::encodeUpper($faker->regexify('[A-Z0-9]{8}')),
+        'algorithm' => 'sha1',
+        'digits' => 6,
+        'period' => 30,
         'icon' => '',
     ];
 });

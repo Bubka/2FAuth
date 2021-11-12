@@ -20,65 +20,74 @@ class DemoSeeder extends Seeder
         ]);
 
         TwoFAccount::create([
-            'service' => 'Amazon',
+            'otp_type' => 'totp',
             'account' => 'johndoe',
-            'uri' => 'otpauth://totp/johndoe@amazon.com?secret=A7GRFTVVRBGY7UIW&issuer=amazon',
-            'icon' => 'amazon.png'
+            'service' => 'Amazon',
+            'secret' => 'A7GRFTVVRBGY7UIW',
+            'icon' => 'amazon.png',
         ]);
 
         TwoFAccount::create([
-            'service' => 'Apple',
+            'otp_type' => 'totp',
             'account' => 'john.doe@icloud.com',
-            'uri' => 'otpauth://totp/john@apple.com?secret=A2GRFTVVRBGY7UIW&issuer=apple',
-            'icon' => 'apple.png'
+            'service' => 'Apple',
+            'secret' => 'A2GRFTVVRBGY7UIW',
+            'icon' => 'apple.png',
         ]);
 
         TwoFAccount::create([
-            'service' => 'Dropbox',
+            'otp_type' => 'totp',
             'account' => 'john.doe',
-            'uri' => 'otpauth://totp/johndoe@dropbox.com?secret=A3GRFTVVRBGY7UIW&issuer=dropbox',
-            'icon' => 'dropbox.png'
+            'service' => 'Dropbox',
+            'secret' => 'A3GRFTVVRBGY7UIW',
+            'icon' => 'dropbox.png',
         ]);
 
         TwoFAccount::create([
-            'service' => 'Facebook',
+            'otp_type' => 'totp',
             'account' => 'johndoe@facebook.com',
-            'uri' => 'otpauth://totp/johndoe@facebook.com?secret=A4GRFTVVRBGY7UIW&issuer=facebook',
-            'icon' => 'facebook.png'
+            'service' => 'Facebook',
+            'secret' => 'A4GRFTVVRBGY7UIW',
+            'icon' => 'facebook.png',
         ]);
 
         TwoFAccount::create([
-            'service' => 'Github',
+            'otp_type' => 'totp',
             'account' => '@john',
-            'uri' => 'otpauth://totp/johndoe@github.com?secret=A2GRFTVVRBGY7UIW&issuer=github',
-            'icon' => 'github.png'
+            'service' => 'Github',
+            'secret' => 'A2GRFTVVRBGY7UIW',
+            'icon' => 'github.png',
         ]);
 
         TwoFAccount::create([
+            'otp_type' => 'totp',
             'service' => 'Google',
             'account' => 'john.doe@gmail.com',
-            'uri' => 'otpauth://totp/johndoe@google.com?secret=A5GRFTVVRBGY7UIW&issuer=google',
+            'secret' => 'A5GRFTVVRBGY7UIW',
             'icon' => 'google.png'
         ]);
 
         TwoFAccount::create([
+            'otp_type' => 'totp',
             'service' => 'Instagram',
             'account' => '@johndoe',
-            'uri' => 'otpauth://totp/johndoe@instagram.com?secret=A6GRFTVVRBGY7UIW&issuer=instagram',
+            'secret' => 'A6GRFTVVRBGY7UIW',
             'icon' => 'instagram.png'
         ]);
 
         TwoFAccount::create([
+            'otp_type' => 'totp',
             'service' => 'LinkedIn',
             'account' => '@johndoe',
-            'uri' => 'otpauth://totp/johndoe@linkedin.com?secret=A7GRFTVVRBGY7UIW&issuer=linkedin',
+            'secret' => 'A7GRFTVVRBGY7UIW',
             'icon' => 'linkedin.png'
         ]);
 
         TwoFAccount::create([
+            'otp_type' => 'totp',
             'service' => 'Twitter',
             'account' => '@john',
-            'uri' => 'otpauth://totp/johndoe@twitter.com?secret=A2GRFTVVRBGY7UIW&issuer=twitter',
+            'secret' => 'A2GRFTVVRBGY7UIW',
             'icon' => 'twitter.png'
         ]);
     }
