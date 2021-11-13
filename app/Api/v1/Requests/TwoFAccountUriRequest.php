@@ -3,6 +3,7 @@
 namespace App\Api\v1\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class TwoFAccountUriRequest extends FormRequest
 {
@@ -13,7 +14,7 @@ class TwoFAccountUriRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return Auth::check();
     }
 
     /**

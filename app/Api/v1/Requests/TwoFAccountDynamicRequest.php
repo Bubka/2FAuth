@@ -4,6 +4,7 @@ namespace App\Api\v1\Requests;
 
 use Illuminate\Support\Arr;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class TwoFAccountDynamicRequest extends FormRequest
 {
@@ -14,7 +15,7 @@ class TwoFAccountDynamicRequest extends FormRequest
     */
     public function authorize()
     {
-        return true;
+        return Auth::check();
     }
     
     /**
