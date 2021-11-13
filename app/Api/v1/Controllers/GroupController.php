@@ -104,7 +104,7 @@ class GroupController extends Controller
 
         $this->groupService->assign($validated['ids'], $group);
             
-        return response()->json($group, 200);
+        return new GroupResource($group);
 
     }
 
