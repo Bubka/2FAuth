@@ -17,7 +17,7 @@ class GroupResource extends JsonResource
         return [
             'id'                    => $this->id,
             'name'                  => $this->name,
-            'twofaccounts_count'    => $this->twofaccounts_count,
+            'twofaccounts_count'    => is_null($this->twofaccounts_count) ? 0 : $this->twofaccounts_count,
         ];
     }
 }
