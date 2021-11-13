@@ -151,6 +151,7 @@ class GroupService
             $twofaccounts = TwoFAccount::find($ids);
 
             $group->twofaccounts()->saveMany($twofaccounts);
+            $group->loadCount('twofaccounts');
 
             Log::info(sprintf('Twofaccounts #%s assigned to groups %s', implode(',#', $ids), var_export($group->name, true)));
         }
