@@ -47,6 +47,7 @@ class UserPatchPwdRequestTest extends TestCase
             [[
                 'currentPassword' => 'newPassword',
                 'password' => 'newPassword',
+                'password_confirmation' => 'newPassword',
             ]],
         ];
     }
@@ -71,26 +72,32 @@ class UserPatchPwdRequestTest extends TestCase
             [[
                 'currentPassword' => '', // required
                 'password' => 'newPassword',
+                'password_confirmation' => 'newPassword',
             ]],
             [[
                 'currentPassword' => 'currentPassword',
                 'password' => '', // required
+                'password_confirmation' => 'newPassword',
             ]],
             [[
                 'currentPassword' => 'newPassword',
                 'password' => 'anotherPassword', // confirmed
+                'password_confirmation' => 'newPassword',
             ]],
             [[
                 'currentPassword' => 'pwd',
                 'password' => 'pwd', // min:8
+                'password_confirmation' => 'newPassword',
             ]],
             [[
                 'currentPassword' => 'pwd',
                 'password' => true, // string
+                'password_confirmation' => 'newPassword',
             ]],
             [[
                 'currentPassword' => 'pwd',
                 'password' => 10, // string
+                'password_confirmation' => 'newPassword',
             ]],
         ];
     }

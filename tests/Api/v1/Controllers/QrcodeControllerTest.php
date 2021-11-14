@@ -93,11 +93,10 @@ class QrcodeControllerTest extends FeatureTestCase
      */
     public function test_decode_missing_qrcode_return_validation_error()
     {
-
         $response = $this->actingAs($this->user, 'api')
             ->json('POST', '/api/v1/qrcode/decode', [
-                    'qrcode' => '',
-                ])
+                'qrcode' => '',
+            ])
             ->assertStatus(422);
     }
 

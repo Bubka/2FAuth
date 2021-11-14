@@ -20,8 +20,8 @@ class IconControllerTest extends TestCase
         $file = UploadedFile::fake()->image('testIcon.jpg');
 
         $response = $this->json('POST', '/api/v1/icons', [
-                    'icon' => $file,
-                ])
+                'icon' => $file,
+            ])
             ->assertCreated()
             ->assertJsonStructure([
                 'filename'
@@ -35,8 +35,8 @@ class IconControllerTest extends TestCase
     public function test_upload_with_invalid_data_returns_validation_error()
     {
         $response = $this->json('POST', '/api/v1/icons', [
-                    'icon' => null,
-                ])
+                'icon' => null,
+            ])
             ->assertStatus(422);
     }
 

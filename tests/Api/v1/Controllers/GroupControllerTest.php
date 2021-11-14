@@ -126,8 +126,8 @@ class GroupControllerTest extends FeatureTestCase
 
         $response = $this->actingAs($this->user, 'api')
             ->json('PUT', '/api/v1/groups/' . $group->id, [
-                    'name' => 'name updated',
-                ])
+                'name' => 'name updated',
+            ])
             ->assertOk()
             ->assertExactJson([
                 'id' => 1,
@@ -144,8 +144,8 @@ class GroupControllerTest extends FeatureTestCase
     {
         $response = $this->actingAs($this->user, 'api')
             ->json('PUT', '/api/v1/groups/1000', [
-                    'name' => 'testUpdate',
-                ])
+                'name' => 'testUpdate',
+            ])
             ->assertNotFound()
             ->assertJsonStructure([
                 'message'
@@ -162,8 +162,8 @@ class GroupControllerTest extends FeatureTestCase
 
         $response = $this->actingAs($this->user, 'api')
             ->json('PUT', '/api/v1/groups/' . $group->id, [
-                    'name' => null,
-                ])
+                'name' => null,
+            ])
             ->assertStatus(422);
     }
 
@@ -178,8 +178,8 @@ class GroupControllerTest extends FeatureTestCase
 
         $response = $this->actingAs($this->user, 'api')
             ->json('POST', '/api/v1/groups/' . $group->id . '/assign', [
-                    'ids' => [1,2],
-                ])
+                'ids' => [1,2],
+            ])
             ->assertOk()
             ->assertExactJson([
                 'id' => $group->id,
@@ -198,8 +198,8 @@ class GroupControllerTest extends FeatureTestCase
 
         $response = $this->actingAs($this->user, 'api')
             ->json('POST', '/api/v1/groups/1000/assign', [
-                    'ids' => [1,2],
-                ])
+                'ids' => [1,2],
+            ])
             ->assertNotFound()
             ->assertJsonStructure([
                 'message'
@@ -217,8 +217,8 @@ class GroupControllerTest extends FeatureTestCase
 
         $response = $this->actingAs($this->user, 'api')
             ->json('POST', '/api/v1/groups/' . $group->id . '/assign', [
-                    'ids' => 1,
-                ])
+                'ids' => 1,
+            ])
             ->assertStatus(422);
     }
 
@@ -233,7 +233,7 @@ class GroupControllerTest extends FeatureTestCase
 
         $assign = $this->actingAs($this->user, 'api')
             ->json('POST', '/api/v1/groups/' . $group->id . '/assign', [
-                    'ids' => [1,2],
+                'ids' => [1,2],
             ]);
 
         $response = $this->actingAs($this->user, 'api')
@@ -266,7 +266,7 @@ class GroupControllerTest extends FeatureTestCase
 
         $assign = $this->actingAs($this->user, 'api')
             ->json('POST', '/api/v1/groups/' . $group->id . '/assign', [
-                    'ids' => [1,2],
+                'ids' => [1,2],
             ]);
 
         $response = $this->actingAs($this->user, 'api')
