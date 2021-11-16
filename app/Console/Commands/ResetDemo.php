@@ -75,9 +75,13 @@ class ResetDemo extends Command
             
             // Reset the db
             DB::table('users')->truncate();
+            DB::table('password_resets')->truncate();
             DB::table('oauth_access_tokens')->truncate();
+            DB::table('oauth_personal_access_clients')->truncate();
+            DB::table('oauth_refresh_tokens')->truncate();
             DB::table('twofaccounts')->truncate();
             DB::table('options')->truncate();
+            DB::table('groups')->truncate();
             
             // Seed the db
             $this->callSilent('db:seed', [
@@ -93,9 +97,6 @@ class ResetDemo extends Command
     }
 
     private static function generateIcon($serviceName, $base64icon) {
-        // $image = str_replace('data:image/png;base64,', '', $image);
-        // $image = str_replace(' ', '+', $image);
-
         Storage::put('public/icons/' . $serviceName . '.png', base64_decode($base64icon));
     }
 
