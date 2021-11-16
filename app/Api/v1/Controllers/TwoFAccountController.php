@@ -92,7 +92,7 @@ class TwoFAccountController extends Controller
         // Possible group association
         $this->groupService->assign($twofaccount->id);
 
-        return (new TwoFAccountReadResource($twofaccount))
+        return (new TwoFAccountReadResource($twofaccount->refresh()))
                 ->response()
                 ->setStatusCode(201);
     }
@@ -178,6 +178,7 @@ class TwoFAccountController extends Controller
             $otp = $this->twofaccountService->getOTP($validatedData['uri']);
         }
         
+        // return bad request if uri is provided with any other input
         else if ( count($inputs) > 1 && $request->has('uri')) {
             return response()->json([
                 'message' => 'bad request',

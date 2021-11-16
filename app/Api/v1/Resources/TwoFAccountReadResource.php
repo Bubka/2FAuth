@@ -15,7 +15,7 @@ class TwoFAccountReadResource extends TwoFAccountStoreResource
         return array_merge(
             [
                 'id'            => $this->id,
-                'group_id'      => $this->group_id,
+                'group_id'      => intval($this->group_id),
             ],
             parent::toArray($request)
         );
