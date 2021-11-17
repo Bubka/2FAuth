@@ -9,7 +9,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
-class LogoutInactiveUser
+class KickOutInactiveUser
 {
     /**
      * Handle an incoming request.
@@ -20,12 +20,12 @@ class LogoutInactiveUser
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        // We do not track activity of non-logged-in user or user authenticated against a bearer token
-        if (!Auth::guard('api')->check() || $request->bearerToken()) {
+        // We do not track activity of guest or user authenticated against a bearer token
+        if (Auth::guest() || $request->bearerToken()) {
             return $next($request);
         }
      
-        $user = Auth::guard($guard)->user();
+        $user = Auth::user();
         $now = Carbon::now();
         $inactiveFor = $now->diffInSeconds(Carbon::parse($user->last_seen_at));
 
@@ -38,8 +38,7 @@ class LogoutInactiveUser
      
             $user->last_seen_at = $now->format('Y-m-d H:i:s');
             $user->save();
-
-            Auth::logout();
+            
             Log::notice('Inactive user detected, authentication rejected');
      
             return response()->json(['message' => 'unauthorised'], Response::HTTP_UNAUTHORIZED);

@@ -44,7 +44,7 @@ class Kernel extends HttpKernel
         'api.v1' => [
             'throttle:60,1',
             'bindings',
-            \App\Http\Middleware\LogoutInactiveUser::class,
+            \App\Http\Middleware\KickOutInactiveUser::class,
             \App\Http\Middleware\LogUserLastSeen::class,
         ],
     ];
