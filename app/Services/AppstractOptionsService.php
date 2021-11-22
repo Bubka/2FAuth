@@ -13,8 +13,8 @@ class AppstractOptionsService implements SettingServiceInterface
      */
     public function get(string $setting)
     {
-        $value = option($setting, config('2fauth.options' . $setting));
-        $value = $this->restoreType($value);
+        $options = $this->all();
+        $value = $options->get($setting);
 
         return $value;
     }
