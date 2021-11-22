@@ -312,27 +312,22 @@ class TwoFAccountService
      * 
      * @param bool $usingUri Whether or not the token should be fed with the account uri
      */
-    private function initTokenWithTwoFAccount(TwoFAccount $twofaccount, bool $useLegacyUri = false) : void
+    private function initTokenWithTwoFAccount(TwoFAccount $twofaccount) : void
     {
-        if ( $useLegacyUri ) {
-            $this->initTokenWithUri($twofaccount->legacy_uri);
-        }
-        else {
-            $dto = new TwoFAccountDto();
+        $dto = new TwoFAccountDto();
 
-            $dto->otp_type              = $twofaccount->otp_type;
-            $dto->account               = $twofaccount->account;
-            $dto->service               = $twofaccount->service;
-            $dto->icon                  = $twofaccount->icon;
-            $dto->secret                = $twofaccount->secret;
-            $dto->algorithm             = $twofaccount->algorithm;
-            $dto->digits                = $twofaccount->digits;
+        $dto->otp_type              = $twofaccount->otp_type;
+        $dto->account               = $twofaccount->account;
+        $dto->service               = $twofaccount->service;
+        $dto->icon                  = $twofaccount->icon;
+        $dto->secret                = $twofaccount->secret;
+        $dto->algorithm             = $twofaccount->algorithm;
+        $dto->digits                = $twofaccount->digits;
 
-            if ( $twofaccount->period ) $dto->period    = $twofaccount->period;
-            if ( $twofaccount->counter ) $dto->counter  = $twofaccount->counter;
+        if ( $twofaccount->period ) $dto->period    = $twofaccount->period;
+        if ( $twofaccount->counter ) $dto->counter  = $twofaccount->counter;
 
-            $this->initTokenWithParameters($dto);
-        }
+        $this->initTokenWithParameters($dto);
     }
 
 
