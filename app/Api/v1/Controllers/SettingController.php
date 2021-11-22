@@ -67,7 +67,7 @@ class SettingController extends Controller
     {
         $setting = $this->settingService->get($settingName);
 
-        if (!$setting) {
+        if (is_null($setting)) {
             abort(404);
         }
 
