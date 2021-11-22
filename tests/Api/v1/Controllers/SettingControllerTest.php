@@ -7,6 +7,10 @@ use App\Group;
 use Tests\FeatureTestCase;
 use App\TwoFAccount;
 
+
+/**
+ * @covers \App\Api\v1\Controllers\SettingController
+ */
 class SettingControllerTest extends FeatureTestCase
 {
     /**

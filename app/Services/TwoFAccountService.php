@@ -208,7 +208,9 @@ class TwoFAccountService
             
             Log::info(sprintf('TwoFAccounts #%s withdrawn', implode(',#', $ids)));
         }
+        // @codeCoverageIgnoreStart
         else Log::info('No TwoFAccount to withdraw');
+        // @codeCoverageIgnoreEnd
     }
 
 
@@ -289,8 +291,13 @@ class TwoFAccountService
     {
         $dto = new TwoFAccountDto();
 
-        foreach ($array as $key => $value) {
-            $dto->$key = ! Arr::has($array, $key) ?: $value;
+        try {
+            foreach ($array as $key => $value) {
+                $dto->$key = ! Arr::has($array, $key) ?: $value;
+            }
+        }
+        catch (\TypeError $ex) {
+            throw new InvalidOtpParameterException($ex->getMessage());
         }
 
         return $dto;
@@ -457,8 +464,10 @@ class TwoFAccountService
                 Log::info(sprintf('Icon file %s stored', $newFilename));
             }
             else {
+                // @codeCoverageIgnoreStart
                 Storage::delete($imageFile);
                 throw new \Exception;
+                // @codeCoverageIgnoreEnd
             }
                 
             return $newFilename;

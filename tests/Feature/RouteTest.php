@@ -1,10 +1,10 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Feature;
 
-use Tests\TestCase;
+use Tests\FeatureTestCase;
 
-class RouteTest extends TestCase
+class RouteTest extends FeatureTestCase
 {
 
     /**
@@ -12,7 +12,7 @@ class RouteTest extends TestCase
      *
      * @test
      */
-    public function testLandingViewIsReturned()
+    public function test_landing_view_is_returned()
     {
         $response = $this->get(route('landing', ['any' => '/']));
 
@@ -25,7 +25,7 @@ class RouteTest extends TestCase
      *
      * @test
      */
-    public function testExceptionHandlerWithWebRoute()
+    public function test_exception_handler_with_web_route()
     {
         $response = $this->post('/');
 

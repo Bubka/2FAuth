@@ -3,18 +3,22 @@
 namespace Tests\Feature\Auth;
 
 use App\User;
-use Tests\TestCase;
+use Tests\FeatureTestCase;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\RequestGuard;
 use Illuminate\Support\Facades\Config;
 
-class LoginTest extends TestCase
+class LoginTest extends FeatureTestCase
 {
-    /** @var \App\User */
+    /**
+     * @var \App\User
+     */
     protected $user;
 
+    private const PASSWORD = 'password';
+    private const WRONG_PASSWORD = 'wrong_password';
 
     /**
      * @test
@@ -28,45 +32,38 @@ class LoginTest extends TestCase
 
 
     /**
-     * test User login via API
-     *
      * @test
      */
-    public function testUserLogin()
+    public function test_user_login_returns_success()
     {
-
-        $response = $this->json('POST', '/api/login', [
+        $response = $this->json('POST', '/user/login', [
             'email' => $this->user->email,
-            'password' => 'password'
+            'password' => self::PASSWORD
+        ])
+        ->assertOk()
+        ->assertExactJson([
+            'message' => 'authenticated',
+            'name' => $this->user->name,
         ]);
-
-        $response->assertStatus(200)
-            ->assertJsonStructure([
-                'message' => ['token']
-            ]);
     }
 
 
     /**
-     * test User login via API
-     *
      * @test
      */
-    public function testUserLoginAlreadyAuthenticated()
+    public function test_user_login_already_authenticated_returns_bad_request()
     {
-
-        $response = $this->json('POST', '/api/login', [
+        $response = $this->json('POST', '/user/login', [
             'email' => $this->user->email,
-            'password' => 'password'
+            'password' => self::PASSWORD
         ]);
 
         $response = $this->actingAs($this->user, 'api')
-            ->json('POST', '/api/login', [
+            ->json('POST', '/user/login', [
                 'email' => $this->user->email,
-                'password' => 'password'
-            ]);
-
-        $response->assertStatus(400)
+                'password' => self::PASSWORD
+            ])
+            ->assertStatus(400)
             ->assertJson([
                 'message' => __('auth.already_authenticated')
             ]);
@@ -74,79 +71,71 @@ class LoginTest extends TestCase
 
 
     /**
-     * test User login with missing values via API
-     *
      * @test
      */
-    public function testUserLoginWithMissingValues()
+    public function test_user_login_with_missing_data_returns_validation_error()
     {
-        $response = $this->json('POST', '/api/login', [
+        $response = $this->json('POST', '/user/login', [
             'email' => '',
             'password' => ''
+        ])
+        ->assertStatus(422)
+        ->assertJsonValidationErrors([
+            'email',
+            'password'
         ]);
-
-        $response->assertStatus(422)
-            ->assertJsonValidationErrors([
-                'email',
-                'password'
-            ]);
     }
 
 
     /**
-     * test User login with invalid credentials via API
-     *
      * @test
      */
-    public function testUserLoginWithInvalidCredential()
+    public function test_user_login_with_invalid_credentials_returns_validation_error()
     {
-        $response = $this->json('POST', '/api/login', [
+        $response = $this->json('POST', '/user/login', [
             'email' => $this->user->email,
-            'password' => 'badPassword'
+            'password' => self::WRONG_PASSWORD
+        ])
+        ->assertStatus(401)
+        ->assertJson([
+            'message' => 'unauthorised'
         ]);
-
-        $response->assertStatus(401)
-            ->assertJson([
-                'message' => 'unauthorised'
-            ]);
     }
 
 
     /**
-     * test User login with invalid credentials via API
-     *
      * @test
      */
-    public function testTooManyAttempsWithInvalidCredential()
+    public function test_too_many_login_attempts_with_invalid_credentials_returns_too_many_request_error()
     {
-        $response = $this->json('POST', '/api/login', [
+        $response = $this->json('POST', '/user/login', [
             'email' => $this->user->email,
-            'password' => 'badPassword'
+            'password' => self::WRONG_PASSWORD
         ]);
 
-        $response = $this->json('POST', '/api/login', [
+        $response = $this->json('POST', '/user/login', [
             'email' => $this->user->email,
-            'password' => 'badPassword'
+            'password' => self::WRONG_PASSWORD
         ]);
 
-        $response = $this->json('POST', '/api/login', [
+        $response = $this->json('POST', '/user/login', [
             'email' => $this->user->email,
-            'password' => 'badPassword'
+            'password' => self::WRONG_PASSWORD
         ]);
 
-        $response = $this->json('POST', '/api/login', [
+        $response = $this->json('POST', '/user/login', [
             'email' => $this->user->email,
-            'password' => 'badPassword'
+            'password' => self::WRONG_PASSWORD
         ]);
 
-        $response = $this->json('POST', '/api/login', [
+        $response = $this->json('POST', '/user/login', [
             'email' => $this->user->email,
-            'password' => 'badPassword'
+            'password' => self::WRONG_PASSWORD
         ]);
 
-        $response = $this->json('POST', '/api/login', [
+        $response = $this->json('POST', '/user/login', [
             'email' => $this->user->email,
-            'password' => 'badPassword'
+            'password' => self::WRONG_PASSWORD
         ]);
 
         $response->assertStatus(429);
@@ -154,46 +143,47 @@ class LoginTest extends TestCase
 
 
     /**
-     * test User logout via API
-     *
      * @test
      */
-    public function testUserLogout()
+    public function test_user_logout_returns_validation_success()
     {
-        $response = $this->json('POST', '/api/login', [
+        $response = $this->json('POST', '/user/login', [
             'email' => $this->user->email,
-            'password' => 'password'
+            'password' => self::PASSWORD
         ]);
 
-        $headers = ['Authorization' => "Bearer " . $response->original['message']['token']];
-
-        $response = $this->json('POST', '/api/logout', [], $headers)
-            ->assertStatus(200)
-            ->assertJson([
+        $response = $this->actingAs($this->user, 'api')
+            ->json('GET', '/user/logout')
+            ->assertOk()
+            ->assertExactJson([
                 'message' => 'signed out',
             ]);
     }
 
 
     /**
-     * test User logout after inactivity via API
-     *
      * @test
      */
-    public function testUserLogoutAfterInactivity()
+    public function test_user_logout_after_inactivity_returns_unauthorized()
     {
         // Set the autolock period to 1 minute
+        $settingService = resolve('App\Services\SettingServiceInterface');
+        $settingService->set('kickUserAfter', 1);
+
+        $response = $this->json('POST', '/user/login', [
+            'email' => $this->user->email,
+            'password' => self::PASSWORD
+        ]);
+
+        // Ping a protected endpoint to log last_seen_at time
         $response = $this->actingAs($this->user, 'api')
-            ->json('POST', '/api/settings/options', [
-                    'kickUserAfter' => '1'])
-            ->assertStatus(200);
+            ->json('GET', '/api/v1/twofaccounts');
 
         sleep(61);
 
-        // Ping a restricted endpoint to log last_seen_at time
         $response = $this->actingAs($this->user, 'api')
-            ->json('GET', '/api/settings/account')
-            ->assertStatus(401);
+            ->json('GET', '/api/v1/twofaccounts')
+            ->assertUnauthorized();
     }
 
 }

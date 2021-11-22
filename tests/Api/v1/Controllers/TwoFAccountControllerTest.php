@@ -3,17 +3,27 @@
 namespace Tests\Api\v1\Unit;
 
 use App\User;
+use App\Group;
 use Tests\FeatureTestCase;
 use App\TwoFAccount;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
+
+/**
+ * @covers \App\Api\v1\Controllers\TwoFAccountController
+ */
 class TwoFAccountControllerTest extends FeatureTestCase
 {
     /**
      * @var \App\User
     */
     protected $user;
+
+    /**
+     * @var \App\Group
+    */
+    protected $group;
 
     private const ACCOUNT = 'account';
     private const SERVICE = 'service';
@@ -156,6 +166,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         parent::setUp();
 
         $this->user = factory(User::class)->create();
+        $this->group = factory(Group::class)->create();
     }
 
 
@@ -416,6 +427,87 @@ class TwoFAccountControllerTest extends FeatureTestCase
                 'uri' => self::INVALID_OTPAUTH_URI,
             ])
             ->assertStatus(422);
+    }
+
+
+    /**
+     * @test
+     */
+    public function test_store_assigns_created_account_when_default_group_is_a_specific_one()
+    {
+        // Set the default group to a specific one
+        $settingService = resolve('App\Services\SettingServiceInterface');
+        $settingService->set('defaultGroup', $this->group->id);
+
+        $response = $this->actingAs($this->user, 'api')
+            ->json('POST', '/api/v1/twofaccounts', [
+                'uri' => self::TOTP_SHORT_URI,
+            ])
+            ->assertJsonFragment([
+                'group_id' => $this->group->id
+            ]);
+    }
+
+
+    /**
+     * @test
+     */
+    public function test_store_assigns_created_account_when_default_group_is_the_active_one()
+    {
+        $settingService = resolve('App\Services\SettingServiceInterface');
+
+        // Set the default group to be the active one
+        $settingService->set('defaultGroup', -1);
+        // Set the active group
+        $settingService->set('activeGroup', 1);
+
+        $response = $this->actingAs($this->user, 'api')
+            ->json('POST', '/api/v1/twofaccounts', [
+                'uri' => self::TOTP_SHORT_URI,
+            ])
+            ->assertJsonFragment([
+                'group_id' => 1
+            ]);
+    }
+
+
+    /**
+     * @test
+     */
+    public function test_store_assigns_created_account_when_default_group_is_no_group()
+    {
+        $settingService = resolve('App\Services\SettingServiceInterface');
+
+        // Set the default group to No group
+        $settingService->set('defaultGroup', 0);
+
+        $response = $this->actingAs($this->user, 'api')
+            ->json('POST', '/api/v1/twofaccounts', [
+                'uri' => self::TOTP_SHORT_URI,
+            ])
+            ->assertJsonFragment([
+                'group_id' => null
+            ]);
+    }
+
+
+    /**
+     * @test
+     */
+    public function test_store_assigns_created_account_when_default_group_does_not_exist()
+    {
+        $settingService = resolve('App\Services\SettingServiceInterface');
+
+        // Set the default group to a non-existing one
+        $settingService->set('defaultGroup', 1000);
+
+        $response = $this->actingAs($this->user, 'api')
+            ->json('POST', '/api/v1/twofaccounts', [
+                'uri' => self::TOTP_SHORT_URI,
+            ])
+            ->assertJsonFragment([
+                'group_id' => null
+            ]);
     }
 
 

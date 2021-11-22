@@ -7,7 +7,11 @@ use Tests\FeatureTestCase;
 use App\TwoFAccount;
 use Tests\Classes\LocalFile;
 
-class QrcodeControllerTest extends FeatureTestCase
+
+/**
+ * @covers \App\Api\v1\Controllers\QrCodeController
+ */
+class QrCodeControllerTest extends FeatureTestCase
 {
 
     /**

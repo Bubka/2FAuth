@@ -6,21 +6,22 @@ use App\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Notification;
-use Tests\TestCase;
+use Tests\FeatureTestCase;
 
-class ResetPasswordTest extends TestCase
+class ResetPasswordControllerTest extends FeatureTestCase
 {
-    /** @var \App\User */
+    /**
+     * @var \App\User
+     */
     protected $user;
 
 
     /**
-     * Testing submitting the reset password  without
-     * email address.
+     * @test
      */
-    public function testSubmitResetPasswordWithoutInput()
+    public function test_submit_reset_password_without_input_returns_validation_error()
     {
-        $response = $this->json('POST', '/api/password/reset', [
+        $response = $this->json('POST', '/api/v1/user/password/reset', [
             'email' => '',
             'password' => '',
             'password_confirmation' => '',
@@ -32,12 +33,11 @@ class ResetPasswordTest extends TestCase
     }
 
     /**
-     * Testing submitting the reset password with
-     * invalid input.
+     * @test
      */
-    public function testSubmitResetPasswordWithInvalidInput()
+    public function test_submit_reset_password_with_invalid_data_returns_validation_error()
     {
-        $response = $this->json('POST', '/api/password/reset', [
+        $response = $this->json('POST', '/api/v1/user/password/reset', [
             'email' => 'qsdqsdqsd',
             'password' => 'foofoofoo',
             'password_confirmation' => 'barbarbar',
@@ -49,12 +49,11 @@ class ResetPasswordTest extends TestCase
     }
 
     /**
-     * Testing submitting the reset password with
-     * invalid input.
+     * @test
      */
-    public function testSubmitResetPasswordWithTooShortPasswords()
+    public function test_submit_reset_password_with_too_short_pwd_returns_validation_error()
     {
-        $response = $this->json('POST', '/api/password/reset', [
+        $response = $this->json('POST', '/api/v1/user/password/reset', [
             'email' => 'foo@bar.com',
             'password' => 'foo',
             'password_confirmation' => 'foo',
@@ -66,23 +65,16 @@ class ResetPasswordTest extends TestCase
     }
 
     /**
-     * Testing submitting the rest password.
+     * @test
      */
-    public function testSubmitResetPassword()
+    public function test_submit_reset_password_returns_success()
     {
         Notification::fake();
 
-        $this->user = factory(User::class)->create([
-            'name' => 'user',
-            'email' => 'user@example.org',
-            'password' => bcrypt('password'),
-            'email_verified_at' => now(),
-            'remember_token' => \Illuminate\Support\Str::random(10)
-        ]);
-
+        $this->user = factory(User::class)->create();
         $token = Password::broker()->createToken($this->user);
 
-        $response = $this->json('POST', '/api/password/reset', [
+        $response = $this->json('POST', '/api/v1/user/password/reset', [
             'email' => $this->user->email,
             'password' => 'newpassword',
             'password_confirmation' => 'newpassword',
@@ -91,7 +83,7 @@ class ResetPasswordTest extends TestCase
 
         $this->user->refresh();
 
-        $response->assertStatus(200);
+        $response->assertOk();
         $this->assertTrue(Hash::check('newpassword', $this->user->password));
 
     }

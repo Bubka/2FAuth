@@ -69,6 +69,10 @@
         ],
         "test" : [
             "vendor/bin/phpunit"
+        ],
+        "test-coverage-html" : [
+            "@putenv XDEBUG_MODE=coverage",
+            "vendor/bin/phpunit --coverage-html tests/Coverage/"
         ]
     }
 }

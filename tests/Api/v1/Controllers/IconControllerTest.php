@@ -6,6 +6,10 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Tests\TestCase;
 
+
+/**
+ * @covers \App\Api\v1\Controllers\IconController
+ */
 class IconControllerTest extends TestCase
 {
 
