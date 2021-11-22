@@ -180,7 +180,7 @@ class GroupService
      */
     private function defaultGroup()
     {
-        $id = $this->settingService->get('defaultGroup') === '-1' ? (int) $this->settingService->get('activeGroup') : (int) $this->settingService->get('defaultGroup');
+        $id = $this->settingService->get('defaultGroup') === -1 ? (int) $this->settingService->get('activeGroup') : (int) $this->settingService->get('defaultGroup');
 
         return Group::find($id);
     }
