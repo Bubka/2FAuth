@@ -36,7 +36,7 @@ class RegisterController extends Controller
         $validated = $request->validated();
         event(new Registered($user = $this->create($validated)));
 
-        $this->attemptLogin($request);
+        $this->guard()->login($user);
 
         return response()->json([
             'message' => 'account created',
