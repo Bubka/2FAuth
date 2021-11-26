@@ -21,7 +21,7 @@ class GroupController extends Controller
     /**
      * Create a new controller instance.
      *
-     * @param  GroupService  $groupService
+     * @param  \App\Services\GroupService $groupService
      * @return void
      */
     public function __construct(GroupService $groupService)
@@ -33,7 +33,7 @@ class GroupController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \App\Api\v1\Resources\GroupResource
      */
     public function index()
     {
@@ -46,14 +46,14 @@ class GroupController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\GroupRequest  $request
-     * @return \App\Http\Resources\GroupResource
+     * @param  \App\Api\v1\Requests\GroupStoreRequest  $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(GroupStoreRequest $request)
     {
         $validated = $request->validated();
 
-        $group = $this->groupService->Create($validated);
+        $group = $this->groupService->create($validated);
 
         return (new GroupResource($group))
             ->response()
@@ -65,7 +65,7 @@ class GroupController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Group  $group
-     * @return \Illuminate\Http\Response
+     * @return \App\Api\v1\Resources\GroupResource
      */
     public function show(Group $group)
     {
@@ -76,9 +76,9 @@ class GroupController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\GroupRequest  $request
+     * @param  \App\Api\v1\Requests\GroupStoreRequest  $request
      * @param  \App\Group $group
-     * @return \App\Http\Resources\GroupResource
+     * @return \App\Api\v1\Resources\GroupResource
      */
     public function update(GroupStoreRequest $request, Group $group)
     {
@@ -94,9 +94,9 @@ class GroupController extends Controller
     /**
      * Associate the specified accounts with the group
      *
-     * @param  \App\Http\Requests\GroupAssignRequest  $request
+     * @param  \App\Api\v1\Requests\GroupAssignRequest  $request
      * @param  \App\Group  $group
-     * @return \Illuminate\Http\Response
+     * @return \App\Api\v1\Resources\GroupResource
      */
     public function assignAccounts(GroupAssignRequest $request, Group $group)
     {
@@ -113,7 +113,7 @@ class GroupController extends Controller
      * Get accounts assign to the group
      *
      * @param  \App\Group  $group
-     * @return \App\Http\Resources\TwoFAccountCollection
+     * @return \App\Api\v1\Resources\TwoFAccountCollection
      */
     public function accounts(Group $group)
     {
@@ -128,7 +128,7 @@ class GroupController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Group  $group
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Group $group)
     {

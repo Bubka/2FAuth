@@ -14,7 +14,7 @@ class UserController extends Controller
     /**
      * Get detailed information about a user
      * 
-     * @return \App\Http\Resources\UserResource
+     * @return \App\Api\v1\Resources\UserResource
      */
     public function show()
     {
@@ -30,8 +30,8 @@ class UserController extends Controller
     /**
      * Update the user's profile information.
      *
-     * @param  \App\Http\Requests\UserUpdateRequest $request
-     * @return \App\Http\Resources\UserResource
+     * @param  \App\Api\v1\Requests\UserUpdateRequest $request
+     * @return \App\Api\v1\Resources\UserResource
      */
     public function update(UserUpdateRequest $request)
     {

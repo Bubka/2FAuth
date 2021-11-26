@@ -35,7 +35,8 @@ class TwoFAccountController extends Controller
     /**
      * Create a new controller instance.
      *
-     * @param  TwoFAccountService  $twofaccountService
+     * @param  \App\Services\TwoFAccountService  $twofaccountService
+     * @param  \App\Services\GroupService  $groupService
      * @return void
      */
     public function __construct(TwoFAccountService $twofaccountService, GroupService $groupService)
@@ -48,7 +49,7 @@ class TwoFAccountController extends Controller
     /**
      * List all resources
      *
-     * @return \App\Http\Resources\TwoFAccountCollection
+     * @return \App\Api\v1\Resources\TwoFAccountCollection
      */
     public function index(Request $request)
     {
@@ -57,11 +58,11 @@ class TwoFAccountController extends Controller
 
 
     /**
-     * Display a resource
+     * Display a 2FA account
      *
      * @param  \App\TwoFAccount  $twofaccount
      * 
-     * @return \App\Http\Resources\TwoFAccountReadResource
+     * @return \App\Api\v1\Resources\TwoFAccountReadResource
      */
     public function show(TwoFAccount $twofaccount)
     {
@@ -70,10 +71,10 @@ class TwoFAccountController extends Controller
 
 
     /**
-     * Store a newly created resource in storage.
+     * Store a new 2FA account
      *
-     * @param  \App\Http\Requests\TwoFAccountDynamicRequest  $request
-     * @return \App\Http\Resources\TwoFAccountReadResource
+     * @param  \App\Api\v1\Requests\TwoFAccountDynamicRequest  $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(TwoFAccountDynamicRequest $request)
     {
@@ -100,11 +101,11 @@ class TwoFAccountController extends Controller
 
 
     /**
-     * Update the specified resource in storage.
+     * Update a 2FA account
      *
-     * @param  \App\Http\TwoFAccountUpdateRequest  $request
+     * @param  \App\Api\v1\Requests\TwoFAccountUpdateRequest  $request
      * @param  \App\TwoFAccount  $twofaccount
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(TwoFAccountUpdateRequest $request, TwoFAccount $twofaccount)
     {
@@ -120,10 +121,10 @@ class TwoFAccountController extends Controller
 
 
     /**
-     * Set new order.
+     * Save 2FA accounts order
      *
-     * @param  App\Http\Requests\TwoFAccountReorderRequest  $request
-     * @return \Illuminate\Http\Response
+     * @param  \App\Api\v1\Requests\TwoFAccountReorderRequest  $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function reorder(TwoFAccountReorderRequest $request)
     {
@@ -138,8 +139,8 @@ class TwoFAccountController extends Controller
     /**
      * Preview account using an uri, without any db moves
      * 
-     * @param  \App\Http\Requests\TwoFAccountUriRequest  $request
-     * @return \App\Http\Resources\TwoFAccountStoreResource
+     * @param  \App\Api\v1\Requests\TwoFAccountUriRequest  $request
+     * @return \App\Api\v1\Resources\TwoFAccountStoreResource
      */
     public function preview(TwoFAccountUriRequest $request)
     {
@@ -154,7 +155,7 @@ class TwoFAccountController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function otp(Request $request, $id = null)
     {
@@ -200,7 +201,7 @@ class TwoFAccountController extends Controller
      * A simple and light method to get the account count.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function count(Request $request)
     {
@@ -212,8 +213,8 @@ class TwoFAccountController extends Controller
      * 
      * Withdraw one or more accounts from their group
      * 
-     * @param \App\Http\Requests\TwoFAccountBatchRequest $request
-     * @return \Illuminate\Http\Response
+     * @param \App\Api\v1\Requests\TwoFAccountBatchRequest $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function withdraw(TwoFAccountBatchRequest $request)
     {       
@@ -236,7 +237,7 @@ class TwoFAccountController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\TwoFAccount  $twofaccount
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(TwoFAccount $twofaccount)
     {
@@ -249,8 +250,8 @@ class TwoFAccountController extends Controller
     /**
      * Remove the specified resources from storage.
      *
-     * @param  \App\Http\Requests\TwoFAccountBatchRequest  $request
-     * @return \Illuminate\Http\Response
+     * @param  \App\Api\v1\Requests\TwoFAccountBatchRequest  $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function batchDestroy(TwoFAccountBatchRequest $request)
     {

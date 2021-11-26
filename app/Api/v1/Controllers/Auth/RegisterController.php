@@ -28,7 +28,7 @@ class RegisterController extends Controller
     /**
      * Handle a registration request for the application.
      *
-     * @param  \App\Http\Requests\UserStoreRequest  $request
+     * @param  \App\Api\v1\Requests\UserStoreRequest  $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function register(UserStoreRequest $request)

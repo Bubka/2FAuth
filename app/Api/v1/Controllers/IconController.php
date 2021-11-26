@@ -13,7 +13,7 @@ class IconController extends Controller
      * Handle uploaded icon image
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function upload(Request $request)
     {
@@ -26,13 +26,13 @@ class IconController extends Controller
 
         return response()->json($response, 201);
     }
-
+    
 
    /**
      * delete an icon
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function delete($icon)
     {

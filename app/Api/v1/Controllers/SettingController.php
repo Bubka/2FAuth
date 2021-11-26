@@ -38,7 +38,7 @@ class SettingController extends Controller
     /**
      * List all settings
      * 
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index()
     {
@@ -57,11 +57,10 @@ class SettingController extends Controller
 
 
     /**
-     * Display a resource
+     * Display a setting
      *
      * @param string $settingName
-     * 
-     * @return \App\Http\Resources\TwoFAccountReadResource
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show($settingName)
     {
@@ -79,8 +78,10 @@ class SettingController extends Controller
 
 
     /**
-     * Save options
-     * @return [type] [description]
+     * Store a setting
+     * 
+     * @param \App\Api\v1\Requests\SettingStoreRequest $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(SettingStoreRequest $request)
     {
@@ -96,8 +97,10 @@ class SettingController extends Controller
 
 
     /**
-     * Save options
-     * @return [type] [description]
+     * Update a setting
+     * 
+     * @param \App\Api\v1\Requests\SettingUpdateRequest $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(SettingUpdateRequest $request, $settingName)
     {
@@ -127,8 +130,10 @@ class SettingController extends Controller
 
 
     /**
-     * Save options
-     * @return [type] [description]
+     * Delete a setting
+     * 
+     * @param \App\Api\v1\Requests\SettingUpdateRequest $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($settingName)
     {
