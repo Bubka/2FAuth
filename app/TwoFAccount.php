@@ -3,7 +3,7 @@
 namespace App;
 
 use Exception;
-// use App\Services\SettingServiceInterface;
+use Facades\App\Services\SettingServiceInterface;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 use Illuminate\Database\Eloquent\Model;
@@ -187,10 +187,8 @@ class TwoFAccount extends Model implements Sortable
      */
     private function decryptOrReturn($value)
     {
-        $settingService = resolve('App\Services\SettingServiceInterface');
-
         // Decipher when needed
-        if ( $settingService->get('useEncryption') )
+        if ( SettingServiceInterface::get('useEncryption') )
         {
             try {
                 return Crypt::decryptString($value);
@@ -210,10 +208,8 @@ class TwoFAccount extends Model implements Sortable
      */
     private function encryptOrReturn($value)
     {
-        $settingService = resolve('App\Services\SettingServiceInterface');
-
         // should be replaced by laravel 8 attribute encryption casting
-        return $settingService->get('useEncryption') ? Crypt::encryptString($value) : $value;
+        return SettingServiceInterface::get('useEncryption') ? Crypt::encryptString($value) : $value;
     }
 
 }
