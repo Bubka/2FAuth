@@ -18,20 +18,13 @@ class SettingController extends Controller
      */
     protected SettingServiceInterface $settingService;
 
-    /**
-     * The Settings Service instance.
-     */
-    protected DbEncryptionService $dbEncryptionService;
-
 
     /**
      * Create a new controller instance.
-     * 
      */
-    public function __construct(SettingServiceInterface $SettingServiceInterface, DbEncryptionService $dbEncryptionService)
+    public function __construct(SettingServiceInterface $SettingServiceInterface)
     {
         $this->settingService = $SettingServiceInterface;
-        $this->dbEncryptionService = $dbEncryptionService;
     }
 
 
@@ -106,20 +99,7 @@ class SettingController extends Controller
     {
         $validated = $request->validated();
 
-        // The useEncryption setting impacts records in DB so we delegate the work to the
-        // dedicated db encryption service
-        if( $settingName === 'useEncryption')
-        {
-            try {
-                $this->dbEncryptionService->setTo($validated['value']);
-            }
-            catch(DbEncryptionException $ex) {
-                return response()->json([
-                    'message' => $ex->getMessage()
-                ], 400);
-            }
-        }
-        else $this->settingService->set($settingName, $validated['value']);
+        $this->settingService->set($settingName, $validated['value']);
 
         return response()->json([
             'key' => $settingName,

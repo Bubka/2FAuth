@@ -71,6 +71,10 @@ class Handler extends ExceptionHandler
             return response()->json([
                 'message' => 'not a valid base32 encoded secret'], 400);
         }
+        if ($exception instanceof DbEncryptionException) {
+            return response()->json([
+                'message' => $exception->getMessage()], 400);
+        }
         
         return parent::render($request, $exception);
     }
