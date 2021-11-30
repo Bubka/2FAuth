@@ -10,6 +10,7 @@ use App\TwoFAccount;
 
 /**
  * @covers \App\Api\v1\Controllers\GroupController
+ * @covers \App\Api\v1\Resources\GroupResource
  */
 class GroupControllerTest extends FeatureTestCase
 {

@@ -200,17 +200,12 @@ class TwoFAccountService
         // whereIn() expects an array
         $ids = is_array($ids) ? $ids : func_get_args();
 
-        if ($ids) {
-            TwoFAccount::whereIn('id', $ids)
-                        ->update(
-                            ['group_id' => NULL]
-                        );
-            
-            Log::info(sprintf('TwoFAccounts #%s withdrawn', implode(',#', $ids)));
-        }
-        // @codeCoverageIgnoreStart
-        else Log::info('No TwoFAccount to withdraw');
-        // @codeCoverageIgnoreEnd
+        TwoFAccount::whereIn('id', $ids)
+                    ->update(
+                        ['group_id' => NULL]
+                    );
+        
+        Log::info(sprintf('TwoFAccounts #%s withdrawn', implode(',#', $ids)));
     }
 
 
@@ -242,10 +237,14 @@ class TwoFAccountService
      */
     private function commaSeparatedToArray($ids)
     {
-        $regex = "/^\d+(,{1}\d+)*$/";
-        if (preg_match($regex, $ids)) {
-            $ids = explode(',', $ids);
+        if(is_string($ids))
+        {
+            $regex = "/^\d+(,{1}\d+)*$/";
+            if (preg_match($regex, $ids)) {
+                $ids = explode(',', $ids);
+            }
         }
+        
         return $ids;
     }
 
@@ -467,8 +466,10 @@ class TwoFAccountService
                 
             return $newFilename;
         }
+        // @codeCoverageIgnoreStart
         catch (\Assert\AssertionFailedException|\Assert\InvalidArgumentException|\Exception|\Throwable $ex) {
             return null;
         }
+        // @codeCoverageIgnoreEnd
     }
 }

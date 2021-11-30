@@ -4,13 +4,14 @@ namespace Tests\Api\v1\Controllers;
 
 use Illuminate\Http\UploadedFile;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Tests\TestCase;
+use Tests\FeatureTestCase;
 
+use App\TwoFAccount;
 
 /**
  * @covers \App\Api\v1\Controllers\IconController
  */
-class IconControllerTest extends TestCase
+class IconControllerTest extends FeatureTestCase
 {
 
     use WithoutMiddleware;
@@ -52,7 +53,6 @@ class IconControllerTest extends TestCase
     {
         $response = $this->json('DELETE', '/api/v1/icons/testIcon.jpg')
             ->assertNoContent(204);
-
     }
 
 

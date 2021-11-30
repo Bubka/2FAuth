@@ -1,7 +1,8 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Services;
 
+use App\Group;
 use App\TwoFAccount;
 use Tests\FeatureTestCase;
 use Illuminate\Support\Facades\DB;
@@ -22,6 +23,12 @@ class TwoFAccountServiceTest extends FeatureTestCase
      * App\TwoFAccount $customTotpTwofaccount
      */
     protected $customTotpTwofaccount;
+
+
+    /**
+     * App\Group $group
+     */
+    protected $group;
 
 
     /**
@@ -126,6 +133,11 @@ class TwoFAccountServiceTest extends FeatureTestCase
         $this->customHotpTwofaccount->period = null;
         $this->customHotpTwofaccount->counter = self::COUNTER_CUSTOM;
         $this->customHotpTwofaccount->save();
+
+
+        $this->group = new Group;
+        $this->group->name = 'MyGroup';
+        $this->group->save();
     }
 
 
@@ -535,6 +547,20 @@ class TwoFAccountServiceTest extends FeatureTestCase
     /**
      * @test
      */
+    public function test_getOTP_for_totp_with_undecipherable_secret_returns_UndecipherableException()
+    {
+        $this->expectException(\App\Exceptions\UndecipherableException::class);
+        $otp_from_uri = $this->twofaccountService->getOTP([
+            'account'   => self::ACCOUNT,
+            'otp_type'  => 'totp',
+            'secret'    => __('errors.indecipherable'),
+        ]);
+    }
+
+
+    /**
+     * @test
+     */
     public function test_getURI_for_custom_totp_model_returns_uri()
     {
         $uri = $this->twofaccountService->getURI($this->customTotpTwofaccount);
@@ -616,6 +642,121 @@ class TwoFAccountServiceTest extends FeatureTestCase
         $this->assertStringContainsString('otpauth://totp/', $uri);
         $this->assertStringContainsString(self::ACCOUNT, $uri);
         $this->assertStringContainsString('secret='.self::SECRET, $uri);
+    }
+
+
+    /**
+     * @test
+     */
+    public function test_withdraw_comma_separated_ids_deletes_relation()
+    {
+        $twofaccounts = collect([$this->customHotpTwofaccount, $this->customTotpTwofaccount]);
+        $this->group->twofaccounts()->saveMany($twofaccounts);
+        
+        $this->twofaccountService->withdraw($this->customHotpTwofaccount->id.','.$this->customTotpTwofaccount->id);
+
+        $this->assertDatabaseHas('twofaccounts', [
+            'id'      => $this->customTotpTwofaccount->id,
+            'group_id'      => null,
+        ]);
+
+        $this->assertDatabaseHas('twofaccounts', [
+            'id'      => $this->customHotpTwofaccount->id,
+            'group_id'      => null,
+        ]);
+    }
+
+
+    /**
+     * @test
+     */
+    public function test_withdraw_array_of_model_ids_deletes_relation()
+    {
+        $twofaccounts = collect([$this->customHotpTwofaccount, $this->customTotpTwofaccount]);
+        $this->group->twofaccounts()->saveMany($twofaccounts);
+        
+        $this->twofaccountService->withdraw([$this->customHotpTwofaccount->id, $this->customTotpTwofaccount->id]);
+
+        $this->assertDatabaseHas('twofaccounts', [
+            'id'      => $this->customTotpTwofaccount->id,
+            'group_id'      => null,
+        ]);
+
+        $this->assertDatabaseHas('twofaccounts', [
+            'id'      => $this->customHotpTwofaccount->id,
+            'group_id'      => null,
+        ]);
+    }
+
+
+    /**
+     * @test
+     */
+    public function test_withdraw_single_id_deletes_relation()
+    {
+        $twofaccounts = collect([$this->customHotpTwofaccount, $this->customTotpTwofaccount]);
+        $this->group->twofaccounts()->saveMany($twofaccounts);
+        
+        $this->twofaccountService->withdraw($this->customTotpTwofaccount->id);
+
+        $this->assertDatabaseHas('twofaccounts', [
+            'id'      => $this->customTotpTwofaccount->id,
+            'group_id'      => null,
+        ]);
+    }
+
+
+    /**
+     * @test
+     */
+    public function test_withdraw_missing_ids_returns_void()
+    {
+        $this->assertNull($this->twofaccountService->withdraw(null));
+    }
+
+    
+    /**
+     * @test
+     */
+    public function test_delete_comma_separated_ids()
+    {        
+        $this->twofaccountService->delete($this->customHotpTwofaccount->id.','.$this->customTotpTwofaccount->id);
+
+        $this->assertDatabaseMissing('twofaccounts', [
+            'id'      => $this->customTotpTwofaccount->id,
+        ]);
+        $this->assertDatabaseMissing('twofaccounts', [
+            'id'      => $this->customHotpTwofaccount->id,
+        ]);
+    }
+
+
+    /**
+     * @test
+     */
+    public function test_delete_array_of_ids()
+    {        
+        $this->twofaccountService->delete([$this->customTotpTwofaccount->id, $this->customHotpTwofaccount->id]);
+
+        $this->assertDatabaseMissing('twofaccounts', [
+            'id'      => $this->customTotpTwofaccount->id,
+        ]);
+        $this->assertDatabaseMissing('twofaccounts', [
+            'id'      => $this->customHotpTwofaccount->id,
+        ]);
+    }
+
+
+    /**
+     * @test
+     */
+    public function test_delete_single_id()
+    {        
+        $this->twofaccountService->delete($this->customTotpTwofaccount->id);
+
+        $this->assertDatabaseMissing('twofaccounts', [
+            'id'      => $this->customTotpTwofaccount->id,
+        ]);
     }
 
 }

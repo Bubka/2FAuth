@@ -63,7 +63,9 @@ class Group extends Model
         parent::boot();
 
         static::deleted(function ($model) {
+            // @codeCoverageIgnoreStart
             Log::info(sprintf('Group %s deleted', var_export($model->name, true)));
+            // @codeCoverageIgnoreEnd
         });
     }
 

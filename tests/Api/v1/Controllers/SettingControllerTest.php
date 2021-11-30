@@ -172,7 +172,6 @@ class SettingControllerTest extends FeatureTestCase
     {
         $response = $this->actingAs($this->user, 'api')
             ->json('PUT', '/api/v1/settings/' . self::TWOFAUTH_NATIVE_SETTING, [
-                'key' => self::TWOFAUTH_NATIVE_SETTING,
                 'value' => self::TWOFAUTH_NATIVE_SETTING_CHANGED_VALUE,
             ])
             ->assertOk()
@@ -193,7 +192,6 @@ class SettingControllerTest extends FeatureTestCase
 
         $response = $this->actingAs($this->user, 'api')
             ->json('PUT', '/api/v1/settings/' . self::USER_DEFINED_SETTING, [
-                'key' => self::USER_DEFINED_SETTING,
                 'value' => self::USER_DEFINED_SETTING_CHANGED_VALUE,
             ])
             ->assertOk()
@@ -211,7 +209,6 @@ class SettingControllerTest extends FeatureTestCase
     {
         $response = $this->actingAs($this->user, 'api')
             ->json('PUT', '/api/v1/settings/' . self::USER_DEFINED_SETTING, [
-                'key' => self::USER_DEFINED_SETTING,
                 'value' => self::USER_DEFINED_SETTING_CHANGED_VALUE,
             ])
             ->assertOk()

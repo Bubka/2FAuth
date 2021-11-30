@@ -81,7 +81,7 @@ class ForgotPasswordControllerTest extends FeatureTestCase
     /**
      * @test
      */
-    public function test_submit_email_password_request__in_demo_mode_returns_unauthorized()
+    public function test_submit_email_password_request_in_demo_mode_returns_unauthorized()
     {
         Config::set('2fauth.config.isDemoApp', true);
 
