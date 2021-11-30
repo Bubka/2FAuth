@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Events\GroupDeleting;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 
@@ -43,6 +44,16 @@ class Group extends Model
 
 
     /**
+     * The event map for the model.
+     *
+     * @var array
+     */
+    protected $dispatchesEvents = [
+        'deleting' => GroupDeleting::class,
+    ];
+
+
+    /**
      * Override The "booting" method of the model
      *
      * @return void
@@ -50,13 +61,6 @@ class Group extends Model
     protected static function boot()
     {
         parent::boot();
-        
-        static::deleting(function ($model) {
-            TwoFAccount::where('group_id', $model->id)
-                        ->update(
-                            ['group_id' => NULL]
-                        );
-        });
 
         static::deleted(function ($model) {
             Log::info(sprintf('Group %s deleted', var_export($model->name, true)));

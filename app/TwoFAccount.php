@@ -3,11 +3,11 @@
 namespace App;
 
 use Exception;
+use App\Events\TwoFAccountDeleted;
 use Facades\App\Services\SettingServiceInterface;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Log;
 
@@ -58,6 +58,16 @@ class TwoFAccount extends Model implements Sortable
 
 
     /**
+     * The event map for the model.
+     *
+     * @var array
+     */
+    protected $dispatchesEvents = [
+        'deleted' => TwoFAccountDeleted::class,
+    ];
+
+
+    /**
      * Override The "booting" method of the model
      *
      * @return void
@@ -65,11 +75,10 @@ class TwoFAccount extends Model implements Sortable
     protected static function boot()
     {
         parent::boot();
-        
-        static::deleted(function ($model) {
-            Log::info(sprintf('TwoFAccount #%d deleted', $model->id));
-            Storage::delete('public/icons/' . $model->icon);
-        });
+
+        // static::deleted(function ($model) {
+        //     Log::info(sprintf('TwoFAccount #%d deleted', $model->id));
+        // });
     }
 
 
@@ -82,32 +91,6 @@ class TwoFAccount extends Model implements Sortable
         'order_column_name' => 'order_column',
         'sort_when_creating' => true,
     ];
-
-
-    /**
-     * Increment the hotp counter by 1
-     * @return void
-     */
-    // public function increaseHotpCounter() : void
-    // {
-    //     if( $this->otpType === 'hotp' ) {
-    //         $this->counter = $this->counter + 1;
-    //         $this->refreshUri();
-    //     }
-    // }
-
-
-    /**
-     * Get is_deciphered attribute
-     *
-     * @return bool
-     *
-     */
-    // public function getIsDecipheredAttribute()
-    // {
-    //     $this->attributes['is_deciphered'] = $this->legacy_uri === self::INDECIPHERABLE || $this->account === self::INDECIPHERABLE || $this->secret === self::INDECIPHERABLE ? false : true;
-    //     // $this->attributes['is_deciphered'] = 'toto';
-    // }
 
 
     /**

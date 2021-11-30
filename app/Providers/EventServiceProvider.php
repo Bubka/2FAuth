@@ -18,6 +18,12 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        'App\Events\TwoFAccountDeleted' => [
+            'App\Listeners\CleanIconStorage',
+        ],
+        'App\Events\GroupDeleting' => [
+            'App\Listeners\DissociateTwofaccountFromGroup',
+        ],
     ];
 
     /**
