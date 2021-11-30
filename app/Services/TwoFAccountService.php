@@ -48,7 +48,7 @@ class TwoFAccountService
      * @param string $uri
      * @param bool $saveToDB Whether or not the created account should be saved to DB
      * 
-     * @return TwoFAccount The created account
+     * @return \App\TwoFAccount The created account
      */
     public function createFromUri(string $uri, bool $saveToDB = true ) : TwoFAccount
     {
@@ -76,7 +76,7 @@ class TwoFAccountService
      * @param array $data
      * @param bool $saveToDB Whether or not the created account should be saved to DB
      * 
-     * @return TwoFAccount The created account
+     * @return \App\TwoFAccount The created account
      */
     public function createFromParameters(array $data, bool $saveToDB = true) : TwoFAccount
     {
@@ -102,10 +102,10 @@ class TwoFAccountService
     /**
      * Updates an account using a list of parameters
      * 
-     * @param TwoFAccount $twofaccount The account
+     * @param \App\TwoFAccount $twofaccount The account
      * @param array $data The parameters
      * 
-     * @return TwoFAccount The updated account
+     * @return \App\TwoFAccount The updated account
      */
     public function update(TwoFAccount $twofaccount, array $data) : TwoFAccount
     {
@@ -125,7 +125,7 @@ class TwoFAccountService
     /**
      * Returns a One-Time Password (with its parameters) for the specified account
      * 
-     * @param TwoFAccount|TwoFAccountDto|int|string $data Data defining an account
+     * @param \App\TwoFAccount|TwoFAccountDto|int|string $data Data defining an account
      * 
      * @return OtpDto an OTP DTO
      * 
@@ -176,7 +176,7 @@ class TwoFAccountService
     /**
      * Returns a generated otpauth URI for the specified account
      * 
-     * @param TwoFAccount|TwoFAccountDto|int $data Data defining an account
+     * @param \App\TwoFAccount|TwoFAccountDto|int $data Data defining an account
      */
     public function getURI($data) : string
     {
@@ -308,7 +308,7 @@ class TwoFAccountService
     /**
      * Instanciates the token with a TwoFAccount
      * 
-     * @param TwoFAccount $twofaccount
+     * @param \App\TwoFAccount $twofaccount
      * 
      * @param bool $usingUri Whether or not the token should be fed with the account uri
      */
