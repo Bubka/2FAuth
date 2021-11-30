@@ -117,9 +117,9 @@ class GroupController extends Controller
      */
     public function accounts(Group $group)
     {
-        $groups = $this->groupService->getAccounts($group);
+        $twofaccounts = $this->groupService->getAccounts($group);
             
-        return new TwoFAccountCollection($groups);
+        return new TwoFAccountCollection($twofaccounts);
 
     }
 

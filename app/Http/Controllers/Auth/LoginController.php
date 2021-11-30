@@ -7,7 +7,7 @@ use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
-use App\Http\Requests\CaseInsensitiveLogin;
+use App\Http\Requests\LoginRequest;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Carbon\Carbon;
@@ -31,12 +31,12 @@ class LoginController extends Controller
     /**
      * Handle a login request to the application.
      *
-     * @param  \App\Http\Requests\CaseInsensitiveLogin  $request
+     * @param  \App\Http\Requests\LoginRequest  $request
      * @return \Illuminate\Http\JsonResponse
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function login(CaseInsensitiveLogin $request)
+    public function login(LoginRequest $request)
     {
 
         // If the class is using the ThrottlesLogins trait, we can automatically throttle
