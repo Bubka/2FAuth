@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="has-background-black-ter" lang="{{ option('lang', 'en') }}">
+<html class="has-background-black-ter" lang="{!! $lang !!}">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">

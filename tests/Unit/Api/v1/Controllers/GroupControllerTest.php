@@ -151,7 +151,7 @@ class GroupControllerTest extends TestCase
     {
         $group = factory(Group::class)->make();
 
-        \Facades\App\Services\SettingServiceInterface::shouldReceive('get')
+        \Facades\App\Services\SettingService::shouldReceive('get')
             ->with('useEncryption')
             ->andReturn(false);
 

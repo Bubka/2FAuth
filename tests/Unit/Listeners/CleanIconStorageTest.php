@@ -16,7 +16,7 @@ class CleanIconStorageTest extends TestCase
 {
     public function test_it_stores_time_to_session()
     {
-        \Facades\App\Services\SettingServiceInterface::shouldReceive('get')
+        \Facades\App\Services\SettingService::shouldReceive('get')
             ->with('useEncryption')
             ->andReturn(false);
 

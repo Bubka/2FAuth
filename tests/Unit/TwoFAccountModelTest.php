@@ -44,7 +44,7 @@ class TwoFAccountModelTest extends ModelTestCase
      */
     public function test_sensitive_attributes_are_stored_encrypted(string $attribute)
     {
-        \Facades\App\Services\SettingServiceInterface::shouldReceive('get')
+        \Facades\App\Services\SettingService::shouldReceive('get')
             ->with('useEncryption')
             ->andReturn(true);
 
@@ -80,7 +80,7 @@ class TwoFAccountModelTest extends ModelTestCase
      */
     public function test_sensitive_attributes_are_returned_clear(string $attribute)
     {
-        \Facades\App\Services\SettingServiceInterface::shouldReceive('get')
+        \Facades\App\Services\SettingService::shouldReceive('get')
             ->with('useEncryption')
             ->andReturn(false);
 
@@ -97,7 +97,7 @@ class TwoFAccountModelTest extends ModelTestCase
      */
     public function test_indecipherable_attributes_returns_masked_value(string $attribute)
     {
-        \Facades\App\Services\SettingServiceInterface::shouldReceive('get')
+        \Facades\App\Services\SettingService::shouldReceive('get')
             ->with('useEncryption')
             ->andReturn(true);
 

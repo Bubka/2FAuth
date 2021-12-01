@@ -74,7 +74,7 @@ class SettingControllerTest extends FeatureTestCase
      */
     public function test_show_native_changed_setting_returns_consistent_value()
     {
-        $settingService = resolve('App\Services\SettingServiceInterface');
+        $settingService = resolve('App\Services\SettingService');
         $settingService->set(self::TWOFAUTH_NATIVE_SETTING, self::TWOFAUTH_NATIVE_SETTING_CHANGED_VALUE);
 
         $response = $this->actingAs($this->user, 'api')
@@ -92,7 +92,7 @@ class SettingControllerTest extends FeatureTestCase
      */
     public function test_show_custom_user_setting_returns_consistent_value()
     {
-        $settingService = resolve('App\Services\SettingServiceInterface');
+        $settingService = resolve('App\Services\SettingService');
         $settingService->set(self::USER_DEFINED_SETTING, self::USER_DEFINED_SETTING_VALUE);
 
         $response = $this->actingAs($this->user, 'api')
@@ -153,7 +153,7 @@ class SettingControllerTest extends FeatureTestCase
      */
     public function test_store_existing_custom_user_setting_returns_validation_error()
     {
-        $settingService = resolve('App\Services\SettingServiceInterface');
+        $settingService = resolve('App\Services\SettingService');
         $settingService->set(self::USER_DEFINED_SETTING, self::USER_DEFINED_SETTING_VALUE);
 
         $response = $this->actingAs($this->user, 'api')
@@ -187,7 +187,7 @@ class SettingControllerTest extends FeatureTestCase
      */
     public function test_update_custom_user_setting_returns_updated_setting()
     {
-        $settingService = resolve('App\Services\SettingServiceInterface');
+        $settingService = resolve('App\Services\SettingService');
         $settingService->set(self::USER_DEFINED_SETTING, self::USER_DEFINED_SETTING_VALUE);
 
         $response = $this->actingAs($this->user, 'api')
@@ -224,7 +224,7 @@ class SettingControllerTest extends FeatureTestCase
      */
     public function test_destroy_user_setting_returns_success()
     {
-        $settingService = resolve('App\Services\SettingServiceInterface');
+        $settingService = resolve('App\Services\SettingService');
         $settingService->set(self::USER_DEFINED_SETTING, self::USER_DEFINED_SETTING_VALUE);
 
         $response = $this->actingAs($this->user, 'api')

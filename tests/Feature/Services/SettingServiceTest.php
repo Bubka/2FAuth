@@ -9,12 +9,12 @@ use App\TwoFAccount;
 
 
 /**
- * @covers \App\Services\AppstractOptionsService
+ * @covers \App\Services\SettingService
  */
 class SettingServiceTest extends FeatureTestCase
 {
     /**
-     * App\Services\SettingServiceInterface $settingService
+     * App\Services\SettingService $settingService
      */
     protected $settingService;
 
@@ -50,7 +50,7 @@ class SettingServiceTest extends FeatureTestCase
     {
         parent::setUp();
 
-        $this->settingService = $this->app->make('App\Services\SettingServiceInterface');
+        $this->settingService = $this->app->make('App\Services\SettingService');
 
         $this->twofaccountOne = new TwoFAccount;
         $this->twofaccountOne->legacy_uri = self::TOTP_FULL_CUSTOM_URI;

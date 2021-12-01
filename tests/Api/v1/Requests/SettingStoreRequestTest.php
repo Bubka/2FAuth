@@ -69,7 +69,7 @@ class SettingStoreRequestTest extends FeatureTestCase
      */
     public function test_invalid_data(array $data) : void
     {
-        $settingService = resolve('App\Services\SettingServiceInterface');
+        $settingService = resolve('App\Services\SettingService');
         $settingService->set($this->uniqueKey, 'uniqueValue');
 
         $request = new SettingStoreRequest();

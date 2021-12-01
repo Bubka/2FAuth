@@ -31,7 +31,7 @@ class SplitTwofaccountsUriInMultipleColumns extends Migration
         
 
         $twofaccounts = DB::table('twofaccounts')->select('id', 'legacy_uri')->get();
-        $settingService = resolve('App\Services\SettingServiceInterface');
+        $settingService = resolve('App\Services\SettingService');
 
         foreach ($twofaccounts as $twofaccount) {
             try {

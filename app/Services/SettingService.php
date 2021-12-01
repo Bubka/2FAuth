@@ -4,17 +4,20 @@ namespace App\Services;
 
 use Throwable;
 use Exception;
+use App\Option;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Crypt;
 use App\Exceptions\DbEncryptionException;
 
-class AppstractOptionsService implements SettingServiceInterface
+class SettingService
 {
-
     /**
-     * @inheritDoc
+     * Get a setting
+     *
+     * @param string|array $setting A single setting name or an associative array of name:value settings
+     * @return mixed string|int|boolean|null
      */
     public function get(string $setting)
     {
@@ -26,7 +29,9 @@ class AppstractOptionsService implements SettingServiceInterface
 
 
     /**
-     * @inheritDoc
+     * Get all settings
+     *
+     * @return mixed Collection of settings
      */
     public function all() : Collection
     {
@@ -42,7 +47,10 @@ class AppstractOptionsService implements SettingServiceInterface
 
 
     /**
-     * @inheritDoc
+     * Set a setting
+     *
+     * @param string|array $setting A single setting name or an associative array of name:value settings
+     * @param string|int|boolean|null $value The value for single setting
      */
     public function set($setting, $value = null) : void
     {
@@ -57,21 +65,21 @@ class AppstractOptionsService implements SettingServiceInterface
             $settings[$setting] = $this->replaceBoolean($value);
         }
 
-        option($settings);
-
         foreach ($settings as $setting => $value) {
+            Option::updateOrCreate(['key' => $setting], ['value' => $value]);
             Log::info(sprintf('Setting %s is now %s', var_export($setting, true), var_export($this->restoreType($value), true)));
         }
     }
 
 
     /**
-     * @inheritDoc
+     * Delete a setting
+     *
+     * @param string $name The setting name
      */
     public function delete(string $name) : void
     {
-        option()->remove($name);
-        
+        Option::where('key', $name)->delete();
         Log::info(sprintf('Setting %s deleted', var_export($name, true)));
     }
     

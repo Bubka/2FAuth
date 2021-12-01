@@ -4,7 +4,7 @@ namespace App;
 
 use Exception;
 use App\Events\TwoFAccountDeleted;
-use Facades\App\Services\SettingServiceInterface;
+use Facades\App\Services\SettingService;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 use Illuminate\Database\Eloquent\Model;
@@ -171,7 +171,7 @@ class TwoFAccount extends Model implements Sortable
     private function decryptOrReturn($value)
     {
         // Decipher when needed
-        if ( SettingServiceInterface::get('useEncryption') )
+        if ( SettingService::get('useEncryption') )
         {
             try {
                 return Crypt::decryptString($value);
@@ -192,7 +192,7 @@ class TwoFAccount extends Model implements Sortable
     private function encryptOrReturn($value)
     {
         // should be replaced by laravel 8 attribute encryption casting
-        return SettingServiceInterface::get('useEncryption') ? Crypt::encryptString($value) : $value;
+        return SettingService::get('useEncryption') ? Crypt::encryptString($value) : $value;
     }
 
 }

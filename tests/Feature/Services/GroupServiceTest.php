@@ -21,7 +21,7 @@ class GroupServiceTest extends FeatureTestCase
 
 
     /**
-     * App\Services\SettingServiceInterface $settingService
+     * App\Services\SettingService $settingService
      */
     protected $settingService;
 
@@ -59,7 +59,7 @@ class GroupServiceTest extends FeatureTestCase
         parent::setUp();
 
         $this->groupService = $this->app->make('App\Services\GroupService');
-        $this->settingService = $this->app->make('App\Services\SettingServiceInterface');
+        $this->settingService = $this->app->make('App\Services\SettingService');
 
         $this->groupOne = new Group;
         $this->groupOne->name = 'MyGroupOne';

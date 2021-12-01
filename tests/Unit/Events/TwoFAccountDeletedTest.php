@@ -17,7 +17,7 @@ class TwoFAccountDeletedTest extends TestCase
      */
     public function test_event_constructor()
     {
-        \Facades\App\Services\SettingServiceInterface::shouldReceive('get')
+        \Facades\App\Services\SettingService::shouldReceive('get')
             ->with('useEncryption')
             ->andReturn(false);
 

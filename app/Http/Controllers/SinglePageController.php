@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\SettingServiceInterface;
+use App\Services\SettingService;
 
 class SinglePageController extends Controller
 {
@@ -10,16 +10,16 @@ class SinglePageController extends Controller
     /**
      * The Settings Service instance.
      */
-    protected SettingServiceInterface $settingService;
+    protected SettingService $settingService;
 
 
     /**
      * Create a new controller instance.
      * 
      */
-    public function __construct(SettingServiceInterface $SettingServiceInterface)
+    public function __construct(SettingService $settingService)
     {
-        $this->settingService = $SettingServiceInterface;
+        $this->settingService = $settingService;
     }
 
 
@@ -29,6 +29,9 @@ class SinglePageController extends Controller
      */
     public function index()
     {
-        return view('landing')->with('appSettings', $this->settingService->all()->toJson());
+        return view('landing')->with([
+            'appSettings' => $this->settingService->all()->toJson(),
+            'lang' => $this->settingService->get('lang')
+        ]);
     }
 }

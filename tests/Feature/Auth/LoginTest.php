@@ -167,7 +167,7 @@ class LoginTest extends FeatureTestCase
     public function test_user_logout_after_inactivity_returns_unauthorized()
     {
         // Set the autolock period to 1 minute
-        $settingService = resolve('App\Services\SettingServiceInterface');
+        $settingService = resolve('App\Services\SettingService');
         $settingService->set('kickUserAfter', 1);
 
         $response = $this->json('POST', '/user/login', [

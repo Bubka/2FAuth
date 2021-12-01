@@ -9,7 +9,6 @@
     "license": "MIT",
     "require": {
         "php": "^7.4",
-        "appstract/laravel-options": "^4.1.1",
         "chillerlan/php-qrcode": "^4.3",
         "doctrine/dbal": "^2.10",
         "fakerphp/faker": "^1.16",

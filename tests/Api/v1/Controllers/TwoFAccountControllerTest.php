@@ -438,7 +438,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
     public function test_store_assigns_created_account_when_default_group_is_a_specific_one()
     {
         // Set the default group to a specific one
-        $settingService = resolve('App\Services\SettingServiceInterface');
+        $settingService = resolve('App\Services\SettingService');
         $settingService->set('defaultGroup', $this->group->id);
 
         $response = $this->actingAs($this->user, 'api')
@@ -456,7 +456,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
      */
     public function test_store_assigns_created_account_when_default_group_is_the_active_one()
     {
-        $settingService = resolve('App\Services\SettingServiceInterface');
+        $settingService = resolve('App\Services\SettingService');
 
         // Set the default group to be the active one
         $settingService->set('defaultGroup', -1);
@@ -478,7 +478,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
      */
     public function test_store_assigns_created_account_when_default_group_is_no_group()
     {
-        $settingService = resolve('App\Services\SettingServiceInterface');
+        $settingService = resolve('App\Services\SettingService');
 
         // Set the default group to No group
         $settingService->set('defaultGroup', 0);
@@ -498,7 +498,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
      */
     public function test_store_assigns_created_account_when_default_group_does_not_exist()
     {
-        $settingService = resolve('App\Services\SettingServiceInterface');
+        $settingService = resolve('App\Services\SettingService');
 
         // Set the default group to a non-existing one
         $settingService->set('defaultGroup', 1000);
@@ -786,7 +786,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
      */
     public function test_get_otp_using_indecipherable_twofaccount_id_returns_bad_request()
     {
-        $settingService = resolve('App\Services\SettingServiceInterface');
+        $settingService = resolve('App\Services\SettingService');
         $settingService->set('useEncryption', true);
 
         $twofaccount = factory(TwoFAccount::class)->create();

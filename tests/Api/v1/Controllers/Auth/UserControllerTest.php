@@ -95,7 +95,7 @@ class UserControllerTest extends FeatureTestCase
      */
     public function test_update_user_in_demo_mode_returns_unchanged_user()
     {
-        $settingService = resolve('App\Services\SettingServiceInterface');
+        $settingService = resolve('App\Services\SettingService');
         $settingService->set('isDemoApp', true);
 
         $response = $this->actingAs($this->user, 'api')

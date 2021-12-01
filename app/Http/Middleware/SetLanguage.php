@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Facades\App\Services\SettingService;
 
 class SetLanguage
 {
@@ -15,7 +16,7 @@ class SetLanguage
      */
     public function handle($request, Closure $next)
     {
-        \App::setLocale(option('lang', 'en'));
+        \App::setLocale(SettingService::get('lang', 'en'));
 
         return $next($request);
     }

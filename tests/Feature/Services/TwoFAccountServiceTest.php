@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\DB;
 class TwoFAccountServiceTest extends FeatureTestCase
 {
     /**
-     * App\Services\SettingServiceInterface $settingService
+     * App\Services\SettingService $settingService
      */
     protected $twofaccountService;
 

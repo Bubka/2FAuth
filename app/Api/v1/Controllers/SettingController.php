@@ -4,7 +4,7 @@ namespace App\Api\v1\Controllers;
 
 use App\Exceptions\DbEncryptionException;
 use App\Services\DbEncryptionService;
-use App\Services\SettingServiceInterface;
+use App\Services\SettingService;
 use App\Api\v1\Requests\SettingStoreRequest;
 use App\Api\v1\Requests\SettingUpdateRequest;
 use App\Http\Controllers\Controller;
@@ -16,15 +16,15 @@ class SettingController extends Controller
     /**
      * The Settings Service instance.
      */
-    protected SettingServiceInterface $settingService;
+    protected SettingService $settingService;
 
 
     /**
      * Create a new controller instance.
      */
-    public function __construct(SettingServiceInterface $SettingServiceInterface)
+    public function __construct(SettingService $settingService)
     {
-        $this->settingService = $SettingServiceInterface;
+        $this->settingService = $settingService;
     }
 
 

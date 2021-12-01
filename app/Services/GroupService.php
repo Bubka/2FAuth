@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Group;
 use App\TwoFAccount;
-use App\Services\SettingServiceInterface;
+use App\Services\SettingService;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Log;
 
@@ -14,16 +14,16 @@ class GroupService
     /**
      * The Settings Service instance.
      */
-    protected SettingServiceInterface $settingService;
+    protected SettingService $settingService;
 
 
     /**
      * Create a new controller instance.
      * 
      */
-    public function __construct(SettingServiceInterface $SettingServiceInterface)
+    public function __construct(SettingService $settingService)
     {
-        $this->settingService = $SettingServiceInterface;
+        $this->settingService = $settingService;
     }
 
 
