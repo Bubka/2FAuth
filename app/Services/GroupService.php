@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\Group;
-use App\TwoFAccount;
+use App\Models\Group;
+use App\Models\TwoFAccount;
 use App\Services\SettingService;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Log;
@@ -59,7 +59,7 @@ class GroupService
      * Creates a group
      * 
      * @param array $data
-     * @return \App\Group The created group
+     * @return \App\Models\Group The created group
      */
     public function create(array $data) : Group
     {
@@ -78,9 +78,9 @@ class GroupService
     /**
      * Updates a group using a list of parameters
      * 
-     * @param \App\Group $group The group
+     * @param \App\Models\Group $group The group
      * @param array $data The parameters
-     * @return \App\Group The updated group
+     * @return \App\Models\Group The updated group
      */
     public function update(Group $group, array $data) : Group
     {
@@ -133,7 +133,7 @@ class GroupService
      * Assign one or more accounts to a group
      * 
      * @param array|int $ids accounts ids to assign
-     * @param \App\Group $group The target group
+     * @param \App\Models\Group $group The target group
      * @return void
      */
     public function assign($ids, Group $group = null) : void
@@ -162,7 +162,7 @@ class GroupService
     /**
      * Finds twofaccounts assigned to the group
      * 
-     * @param \App\Group $group The group
+     * @param \App\Models\Group $group The group
      * @return Collection The assigned accounts
      */
     public function getAccounts(Group $group) : Collection
@@ -176,7 +176,7 @@ class GroupService
     /**
      * Determines the destination group
      * 
-     * @return \App\Group|null The group or null if it does not exist
+     * @return \App\Models\Group|null The group or null if it does not exist
      */
     private function defaultGroup()
     {

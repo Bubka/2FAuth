@@ -2,10 +2,10 @@
 
 namespace Tests\Api\v1\Controllers;
 
-use App\User;
-use App\Group;
+use App\Models\User;
+use App\Models\Group;
 use Tests\FeatureTestCase;
-use App\TwoFAccount;
+use App\Models\TwoFAccount;
 
 
 /**
@@ -14,7 +14,7 @@ use App\TwoFAccount;
 class SettingControllerTest extends FeatureTestCase
 {
     /**
-     * @var \App\User
+     * @var \App\Models\User
     */
     protected $user;
 
@@ -36,7 +36,7 @@ class SettingControllerTest extends FeatureTestCase
     {
         parent::setUp();
 
-        $this->user = factory(User::class)->create();
+        $this->user = User::factory()->create();
     }
 
 

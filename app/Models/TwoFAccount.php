@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Exception;
 use App\Events\TwoFAccountDeleted;
@@ -10,11 +10,12 @@ use Spatie\EloquentSortable\SortableTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class TwoFAccount extends Model implements Sortable
 {
 
-    use SortableTrait;
+    use SortableTrait, HasFactory;
 
 
     /**

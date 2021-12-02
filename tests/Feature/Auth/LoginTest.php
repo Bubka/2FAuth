@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Auth;
 
-use App\User;
+use App\Models\User;
 use Tests\FeatureTestCase;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Support\Facades\Auth;
@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Config;
 class LoginTest extends FeatureTestCase
 {
     /**
-     * @var \App\User
+     * @var \App\Models\User
      */
     protected $user;
 
@@ -27,7 +27,7 @@ class LoginTest extends FeatureTestCase
     {
         parent::setUp();
 
-        $this->user = factory(User::class)->create();
+        $this->user = User::factory()->create();
     }
 
 

@@ -2,11 +2,11 @@
 
 namespace Tests\Unit;
 
-use App\User;
+use App\Models\User;
 use Tests\ModelTestCase;
 
 /**
- * @covers \App\User
+ * @covers \App\Models\User
  */
 class UserModelTest extends ModelTestCase
 {
@@ -30,7 +30,7 @@ class UserModelTest extends ModelTestCase
      */
     public function test_email_is_set_lowercased()
     {
-        $user = factory(User::class)->make([
+        $user = User::factory()->make([
             'email' => 'UPPERCASE@example.COM',
         ]);
 

@@ -6,7 +6,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Tests\FeatureTestCase;
 
-use App\TwoFAccount;
+use App\Models\TwoFAccount;
 
 /**
  * @covers \App\Api\v1\Controllers\IconController

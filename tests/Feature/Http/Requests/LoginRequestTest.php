@@ -1,7 +1,8 @@
 <?php
 
-namespace Tests\Api\v1\Requests;
+namespace Tests\Feature\Http\Requests;
 
+use App\Models\User;
 use App\Http\Requests\LoginRequest;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Auth;
@@ -33,7 +34,7 @@ class LoginRequestTest extends FeatureTestCase
      */
     public function test_valid_data(array $data) : void
     {
-        factory(\App\User::class)->create([
+        User::factory()->create([
             'email' => 'JOHN.DOE@example.com'
         ]);
 
@@ -67,7 +68,7 @@ class LoginRequestTest extends FeatureTestCase
      */
     public function test_invalid_data(array $data) : void
     {      
-        factory(\App\User::class)->create([
+        User::factory()->create([
             'email' => 'JOHN.DOE@example.com'
         ]);
 

@@ -53,7 +53,7 @@ class UserStoreRequestTest extends FeatureTestCase
      */
     public function test_invalid_data(array $data) : void
     {
-        $user = new \App\User(
+        $user = new \App\Models\User(
             [
                 'name'      => 'John',
                 'email'     => 'john@example.com',

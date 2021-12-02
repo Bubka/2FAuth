@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\TwoFAccount;
+use App\Models\TwoFAccount;
 use Zxing\QrReader;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;

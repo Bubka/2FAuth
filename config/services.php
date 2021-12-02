@@ -30,18 +30,18 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
-    'sparkpost' => [
-        'secret' => env('SPARKPOST_SECRET'),
-    ],
+    // 'sparkpost' => [
+    //     'secret' => env('SPARKPOST_SECRET'),
+    // ],
 
-    'stripe' => [
-        'model' => App\User::class,
-        'key' => env('STRIPE_KEY'),
-        'secret' => env('STRIPE_SECRET'),
-        'webhook' => [
-            'secret' => env('STRIPE_WEBHOOK_SECRET'),
-            'tolerance' => env('STRIPE_WEBHOOK_TOLERANCE', 300),
-        ],
-    ],
+    // 'stripe' => [
+    //     'model' => App\Models\User::class,
+    //     'key' => env('STRIPE_KEY'),
+    //     'secret' => env('STRIPE_SECRET'),
+    //     'webhook' => [
+    //         'secret' => env('STRIPE_WEBHOOK_SECRET'),
+    //         'tolerance' => env('STRIPE_WEBHOOK_TOLERANCE', 300),
+    //     ],
+    // ],
 
 ];

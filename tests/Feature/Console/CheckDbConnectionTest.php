@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Console;
 
-use App\User;
+use App\Models\User;
 use Tests\FeatureTestCase;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;

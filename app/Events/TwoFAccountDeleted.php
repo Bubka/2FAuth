@@ -2,7 +2,7 @@
 
 namespace App\Events;
 
-use App\TwoFAccount;
+use App\Models\TwoFAccount;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
@@ -16,7 +16,7 @@ class TwoFAccountDeleted
     /**
      * Create a new event instance.
      *
-     * @param  \App\TwoFAccount  $twofaccount
+     * @param  \App\Models\TwoFAccount  $twofaccount
      * @return void
      */
     public function __construct(TwoFAccount $twofaccount)

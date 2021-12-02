@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\Services;
 
-use App\Group;
-use App\TwoFAccount;
+use App\Models\Group;
+use App\Models\TwoFAccount;
 use Tests\FeatureTestCase;
 use Tests\Classes\LocalFile;
 use Illuminate\Support\Facades\DB;
@@ -27,13 +27,13 @@ class GroupServiceTest extends FeatureTestCase
 
 
     /**
-     * App\Group $groupOne, $groupTwo
+     * App\Models\Group $groupOne, $groupTwo
      */
     protected $groupOne, $groupTwo;
 
 
     /**
-     * App\Group $twofaccountOne, $twofaccountTwo
+     * App\Models\Group $twofaccountOne, $twofaccountTwo
      */
     protected $twofaccountOne, $twofaccountTwo;
 
@@ -137,7 +137,7 @@ class GroupServiceTest extends FeatureTestCase
         $newGroup = $this->groupService->create(['name' => self::NEW_GROUP_NAME]);
         
         $this->assertDatabaseHas('groups', ['name' => self::NEW_GROUP_NAME]);
-        $this->assertInstanceOf(\App\Group::class, $newGroup);
+        $this->assertInstanceOf(\App\Models\Group::class, $newGroup);
         $this->assertEquals(self::NEW_GROUP_NAME, $newGroup->name);
     }
 
@@ -150,7 +150,7 @@ class GroupServiceTest extends FeatureTestCase
         $this->groupOne = $this->groupService->update($this->groupOne, ['name' => self::NEW_GROUP_NAME]);
         
         $this->assertDatabaseHas('groups', ['name' => self::NEW_GROUP_NAME]);
-        $this->assertInstanceOf(\App\Group::class, $this->groupOne);
+        $this->assertInstanceOf(\App\Models\Group::class, $this->groupOne);
         $this->assertEquals(self::NEW_GROUP_NAME, $this->groupOne->name);
     }
 

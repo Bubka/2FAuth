@@ -1,8 +1,8 @@
 <?php
 
-namespace Tests\Feature\Auth;
+namespace Tests\Api\v1\Controllers\Auth;
 
-use App\User;
+use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Auth\Notifications\ResetPassword;
@@ -12,7 +12,7 @@ use Tests\FeatureTestCase;
 class ForgotPasswordControllerTest extends FeatureTestCase
 {
     /**
-     * @var \App\User
+     * @var \App\Models\User
      */
     protected $user;
 
@@ -62,7 +62,7 @@ class ForgotPasswordControllerTest extends FeatureTestCase
     {
         Notification::fake();
 
-        $this->user = factory(User::class)->create();
+        $this->user = User::factory()->create();
 
         $response = $this->json('POST', '/api/v1/user/password/lost', [
             'email' => $this->user->email

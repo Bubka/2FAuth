@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands\Maintenance;
 
-use App\TwoFAccount;
+use App\Models\TwoFAccount;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;

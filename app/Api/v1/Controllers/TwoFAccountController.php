@@ -2,7 +2,7 @@
 
 namespace App\Api\v1\Controllers;
 
-use App\TwoFAccount;
+use App\Models\TwoFAccount;
 use App\Exceptions\UndecipherableException;
 use App\Api\v1\Requests\TwoFAccountReorderRequest;
 use App\Api\v1\Requests\TwoFAccountStoreRequest;
@@ -60,7 +60,7 @@ class TwoFAccountController extends Controller
     /**
      * Display a 2FA account
      *
-     * @param  \App\TwoFAccount  $twofaccount
+     * @param  \App\Models\TwoFAccount  $twofaccount
      * 
      * @return \App\Api\v1\Resources\TwoFAccountReadResource
      */
@@ -104,7 +104,7 @@ class TwoFAccountController extends Controller
      * Update a 2FA account
      *
      * @param  \App\Api\v1\Requests\TwoFAccountUpdateRequest  $request
-     * @param  \App\TwoFAccount  $twofaccount
+     * @param  \App\Models\TwoFAccount  $twofaccount
      * @return \Illuminate\Http\JsonResponse
      */
     public function update(TwoFAccountUpdateRequest $request, TwoFAccount $twofaccount)
@@ -236,7 +236,7 @@ class TwoFAccountController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\TwoFAccount  $twofaccount
+     * @param  \App\Models\TwoFAccount  $twofaccount
      * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(TwoFAccount $twofaccount)

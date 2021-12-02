@@ -1,13 +1,16 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use App\Events\GroupDeleting;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Group extends Model
 {
+
+    use HasFactory;
 
     /**
      * model's array form.
@@ -75,6 +78,6 @@ class Group extends Model
      */
     public function twofaccounts()
     {
-        return $this->hasMany('App\TwoFAccount');
+        return $this->hasMany('App\Models\TwoFAccount');
     }
 }

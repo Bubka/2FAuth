@@ -1,8 +1,8 @@
 <?php
 
-namespace Tests\Feature\Auth;
+namespace Tests\Api\v1\Controllers\Auth;
 
-use App\User;
+use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Notification;
@@ -11,7 +11,7 @@ use Tests\FeatureTestCase;
 class ResetPasswordControllerTest extends FeatureTestCase
 {
     /**
-     * @var \App\User
+     * @var \App\Models\User
      */
     protected $user;
 
@@ -71,7 +71,7 @@ class ResetPasswordControllerTest extends FeatureTestCase
     {
         Notification::fake();
 
-        $this->user = factory(User::class)->create();
+        $this->user = User::factory()->create();
         $token = Password::broker()->createToken($this->user);
 
         $response = $this->json('POST', '/api/v1/user/password/reset', [

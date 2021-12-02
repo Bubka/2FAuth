@@ -1,7 +1,10 @@
 <?php
-use App\TwoFAccount;
+
+namespace Database\Seeders;
+
+use App\Models\TwoFAccount;
 use Illuminate\Database\Seeder;
-use Illuminate\Foundation\Testing\WithFaker;
+
 class TwoFAccountsTableSeeder extends Seeder
 {
     /**

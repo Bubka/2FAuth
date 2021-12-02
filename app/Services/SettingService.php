@@ -4,7 +4,7 @@ namespace App\Services;
 
 use Throwable;
 use Exception;
-use App\Option;
+use App\Models\Option;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;

@@ -2,10 +2,10 @@
 
 namespace Tests\Api\v1\Controllers;
 
-use App\User;
-use App\Group;
+use App\Models\User;
+use App\Models\Group;
 use Tests\FeatureTestCase;
-use App\TwoFAccount;
+use App\Models\TwoFAccount;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -18,12 +18,12 @@ use Illuminate\Support\Facades\Storage;
 class TwoFAccountControllerTest extends FeatureTestCase
 {
     /**
-     * @var \App\User
+     * @var \App\Models\User
     */
     protected $user;
 
     /**
-     * @var \App\Group
+     * @var \App\Models\Group
     */
     protected $group;
 
@@ -167,8 +167,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
     {
         parent::setUp();
 
-        $this->user = factory(User::class)->create();
-        $this->group = factory(Group::class)->create();
+        $this->user = User::factory()->create();
+        $this->group = Group::factory()->create();
     }
 
 
@@ -177,7 +177,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
      */
     public function test_index_returns_twofaccount_collection()
     {
-        factory(TwoFAccount::class, 3)->create();
+        TwoFAccount::factory()->count(3)->create();
 
         $response = $this->actingAs($this->user, 'api')
             ->json('GET', '/api/v1/twofaccounts')
@@ -194,7 +194,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
      */
     public function test_index_returns_twofaccount_collection_with_secret()
     {
-        factory(TwoFAccount::class, 3)->create();
+        TwoFAccount::factory()->count(3)->create();
 
         $response = $this->actingAs($this->user, 'api')
             ->json('GET', '/api/v1/twofaccounts?withSecret=1')
@@ -211,7 +211,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
      */
     public function test_show_twofaccount_returns_twofaccount_resource_with_secret()
     {
-        $twofaccount = factory(TwoFAccount::class)->create();
+        $twofaccount = TwoFAccount::factory()->create();
 
         $response = $this->actingAs($this->user, 'api')
             ->json('GET', '/api/v1/twofaccounts/' . $twofaccount->id)
@@ -225,7 +225,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
      */
     public function test_show_twofaccount_returns_twofaccount_resource_without_secret()
     {
-        $twofaccount = factory(TwoFAccount::class)->create();
+        $twofaccount = TwoFAccount::factory()->create();
 
         $response = $this->actingAs($this->user, 'api')
             ->json('GET', '/api/v1/twofaccounts/' . $twofaccount->id . '?withSecret=0')
@@ -242,7 +242,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
     //     $dbEncryptionService = resolve('App\Services\DbEncryptionService');
     //     $dbEncryptionService->setTo(true);
 
-    //     $twofaccount = factory(TwoFAccount::class)->create();
+    //     $twofaccount = TwoFAccount::factory()->create();
 
     //     DB::table('twofaccounts')
     //         ->where('id', $twofaccount->id)
@@ -518,7 +518,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
      */
     public function test_update_totp_returns_success_with_updated_resource()
     {
-        $twofaccount = factory(TwoFAccount::class)->create();
+        $twofaccount = TwoFAccount::factory()->create();
 
         $response = $this->actingAs($this->user, 'api')
             ->json('PUT', '/api/v1/twofaccounts/' . $twofaccount->id, self::ARRAY_OF_FULL_VALID_PARAMETERS_FOR_CUSTOM_TOTP)
@@ -532,7 +532,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
      */
     public function test_update_hotp_returns_success_with_updated_resource()
     {
-        $twofaccount = factory(TwoFAccount::class)->create();
+        $twofaccount = TwoFAccount::factory()->create();
 
         $response = $this->actingAs($this->user, 'api')
             ->json('PUT', '/api/v1/twofaccounts/' . $twofaccount->id, self::ARRAY_OF_FULL_VALID_PARAMETERS_FOR_CUSTOM_HOTP)
@@ -557,7 +557,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
      */
     public function test_update_twofaccount_with_invalid_data_returns_validation_error()
     {
-        $twofaccount = factory(TwoFAccount::class)->create();
+        $twofaccount = TwoFAccount::factory()->create();
 
         $response = $this->actingAs($this->user, 'api')
             ->json('PUT', '/api/v1/twofaccounts/' . $twofaccount->id, self::ARRAY_OF_INVALID_PARAMETERS)
@@ -570,7 +570,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
      */
     public function test_reorder_returns_success()
     {
-        factory(TwoFAccount::class, 3)->create();
+        TwoFAccount::factory()->count(3)->create();
 
         $response = $this->actingAs($this->user, 'api')
             ->json('POST', '/api/v1/twofaccounts/reorder', [
@@ -587,7 +587,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
      */
     public function test_reorder_with_invalid_data_returns_validation_error()
     {
-        factory(TwoFAccount::class, 3)->create();
+        TwoFAccount::factory()->count(3)->create();
 
         $response = $this->actingAs($this->user, 'api')
             ->json('POST', '/api/v1/twofaccounts/reorder', [
@@ -644,7 +644,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
      */
     public function test_get_otp_using_totp_twofaccount_id_returns_consistent_resource()
     {
-        $twofaccount = factory(TwoFAccount::class)->create([
+        $twofaccount = TwoFAccount::factory()->create([
             'otp_type' => 'totp',
             'account' => self::ACCOUNT,
             'service' => self::SERVICE,
@@ -706,7 +706,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
      */
     public function test_get_otp_using_hotp_twofaccount_id_returns_consistent_resource()
     {
-        $twofaccount = factory(TwoFAccount::class)->create([
+        $twofaccount = TwoFAccount::factory()->create([
             'otp_type' => 'hotp',
             'account' => self::ACCOUNT,
             'service' => self::SERVICE,
@@ -789,7 +789,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         $settingService = resolve('App\Services\SettingService');
         $settingService->set('useEncryption', true);
 
-        $twofaccount = factory(TwoFAccount::class)->create();
+        $twofaccount = TwoFAccount::factory()->create();
 
         DB::table('twofaccounts')
             ->where('id', $twofaccount->id)
@@ -846,7 +846,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
      */
     public function test_count_returns_right_number_of_twofaccount()
     {
-        factory(TwoFAccount::class, 3)->create();
+        TwoFAccount::factory()->count(3)->create();
 
         $response = $this->actingAs($this->user, 'api')
             ->json('GET', '/api/v1/twofaccounts/count')
@@ -862,7 +862,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
      */
     public function test_withdraw_returns_success()
     {
-        factory(TwoFAccount::class, 3)->create();
+        TwoFAccount::factory()->count(3)->create();
         $ids = DB::table('twofaccounts')->pluck('id')->implode(',');
 
         $response = $this->actingAs($this->user, 'api')
@@ -879,7 +879,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
      */
     public function test_withdraw_too_many_ids_returns_bad_request()
     {
-        factory(TwoFAccount::class, 102)->create();
+        TwoFAccount::factory()->count(102)->create();
         $ids = DB::table('twofaccounts')->pluck('id')->implode(',');
 
         $response = $this->actingAs($this->user, 'api')
@@ -897,7 +897,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
      */
     public function test_destroy_twofaccount_returns_success()
     {
-        $twofaccount = factory(TwoFAccount::class)->create();
+        $twofaccount = TwoFAccount::factory()->create();
 
         $response = $this->actingAs($this->user, 'api')
             ->json('DELETE', '/api/v1/twofaccounts/' . $twofaccount->id)
@@ -910,7 +910,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
      */
     public function test_destroy_missing_twofaccount_returns_not_found()
     {
-        $twofaccount = factory(TwoFAccount::class)->create();
+        $twofaccount = TwoFAccount::factory()->create();
 
         $response = $this->actingAs($this->user, 'api')
             ->json('DELETE', '/api/v1/twofaccounts/1000')
@@ -923,7 +923,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
      */
     public function test_batch_destroy_twofaccount_returns_success()
     {
-        factory(TwoFAccount::class, 3)->create();
+        TwoFAccount::factory()->count(3)->create();
         $ids = DB::table('twofaccounts')->pluck('id')->implode(',');
 
         $response = $this->actingAs($this->user, 'api')
@@ -937,7 +937,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
      */
     public function test_batch_destroy_too_many_twofaccounts_returns_bad_request()
     {
-        factory(TwoFAccount::class, 102)->create();
+        TwoFAccount::factory()->count(102)->create();
         $ids = DB::table('twofaccounts')->pluck('id')->implode(',');
 
         $response = $this->actingAs($this->user, 'api')

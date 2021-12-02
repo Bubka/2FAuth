@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Listeners;
 
-use App\TwoFAccount;
+use App\Models\TwoFAccount;
 use App\Events\TwoFAccountDeleted;
 use Tests\TestCase;
 use App\Listeners\CleanIconStorage;
@@ -20,7 +20,7 @@ class CleanIconStorageTest extends TestCase
             ->with('useEncryption')
             ->andReturn(false);
 
-        $twofaccount = factory(TwoFAccount::class)->make();
+        $twofaccount = TwoFAccount::factory()->make();
         $event = new TwoFAccountDeleted($twofaccount);
         $listener = new CleanIconStorage();
 

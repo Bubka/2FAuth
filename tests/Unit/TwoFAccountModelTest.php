@@ -2,7 +2,7 @@
 
 namespace Tests\Unit;
 
-use App\TwoFAccount;
+use App\Models\TwoFAccount;
 use App\Events\TwoFAccountDeleted;
 use Tests\ModelTestCase;
 use Illuminate\Support\Facades\Event;
@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Crypt;
 
 /**
- * @covers \App\TwoFAccount
+ * @covers \App\Models\TwoFAccount
  */
 class TwoFAccountModelTest extends ModelTestCase
 {
@@ -48,7 +48,7 @@ class TwoFAccountModelTest extends ModelTestCase
             ->with('useEncryption')
             ->andReturn(true);
 
-        $twofaccount = factory(TwoFAccount::class)->make([
+        $twofaccount = TwoFAccount::factory()->make([
             $attribute => 'string',
         ]);
 
@@ -84,7 +84,7 @@ class TwoFAccountModelTest extends ModelTestCase
             ->with('useEncryption')
             ->andReturn(false);
 
-        $twofaccount = factory(TwoFAccount::class)->make();
+        $twofaccount = TwoFAccount::factory()->make();
 
         $this->assertEquals($twofaccount->getAttributes()[$attribute], $twofaccount->$attribute);
     }
@@ -104,7 +104,7 @@ class TwoFAccountModelTest extends ModelTestCase
         Crypt::shouldReceive('encryptString')
             ->andReturn('indecipherableString');
 
-        $twofaccount = factory(TwoFAccount::class)->make();
+        $twofaccount = TwoFAccount::factory()->make();
 
         $this->assertEquals(__('errors.indecipherable'), $twofaccount->$attribute);
     }

@@ -2,7 +2,7 @@
 
 namespace App\Events;
 
-use App\Group;
+use App\Models\Group;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
@@ -16,7 +16,7 @@ class GroupDeleting
     /**
      * Create a new event instance.
      *
-     * @param  \App\Group  $group
+     * @param  \App\Models\Group  $group
      * @return void
      */
     public function __construct(Group $group)

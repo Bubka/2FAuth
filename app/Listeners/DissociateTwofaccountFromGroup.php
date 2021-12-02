@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use App\TwoFAccount;
+use App\Models\TwoFAccount;
 use App\Events\GroupDeleting;
 use Illuminate\Support\Facades\Log;
 

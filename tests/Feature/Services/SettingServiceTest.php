@@ -5,7 +5,7 @@ namespace Tests\Feature\Services;
 use Tests\FeatureTestCase;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
-use App\TwoFAccount;
+use App\Models\TwoFAccount;
 
 
 /**
@@ -20,7 +20,7 @@ class SettingServiceTest extends FeatureTestCase
 
 
     /**
-     * App\Group $groupOne, $groupTwo
+     * App\Models\Group $groupOne, $groupTwo
      */
     protected $twofaccountOne, $twofaccountTwo;
 

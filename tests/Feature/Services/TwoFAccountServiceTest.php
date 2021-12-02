@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\Services;
 
-use App\Group;
-use App\TwoFAccount;
+use App\Models\Group;
+use App\Models\TwoFAccount;
 use Tests\FeatureTestCase;
 use Illuminate\Support\Facades\DB;
 
@@ -20,19 +20,19 @@ class TwoFAccountServiceTest extends FeatureTestCase
 
 
     /**
-     * App\TwoFAccount $customTotpTwofaccount
+     * App\Models\TwoFAccount $customTotpTwofaccount
      */
     protected $customTotpTwofaccount;
 
 
     /**
-     * App\Group $group
+     * App\Models\Group $group
      */
     protected $group;
 
 
     /**
-     * App\TwoFAccount $customTotpTwofaccount
+     * App\Models\TwoFAccount $customTotpTwofaccount
      */
     protected $customHotpTwofaccount;
 

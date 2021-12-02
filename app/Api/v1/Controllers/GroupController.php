@@ -2,7 +2,7 @@
 
 namespace App\Api\v1\Controllers;
 
-use App\Group;
+use App\Models\Group;
 use App\Services\GroupService;
 use App\Api\v1\Requests\GroupStoreRequest;
 use App\Api\v1\Requests\GroupAssignRequest;
@@ -64,7 +64,7 @@ class GroupController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Group  $group
+     * @param  \App\Models\Group  $group
      * @return \App\Api\v1\Resources\GroupResource
      */
     public function show(Group $group)
@@ -77,7 +77,7 @@ class GroupController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \App\Api\v1\Requests\GroupStoreRequest  $request
-     * @param  \App\Group $group
+     * @param  \App\Models\Group $group
      * @return \App\Api\v1\Resources\GroupResource
      */
     public function update(GroupStoreRequest $request, Group $group)
@@ -95,7 +95,7 @@ class GroupController extends Controller
      * Associate the specified accounts with the group
      *
      * @param  \App\Api\v1\Requests\GroupAssignRequest  $request
-     * @param  \App\Group  $group
+     * @param  \App\Models\Group  $group
      * @return \App\Api\v1\Resources\GroupResource
      */
     public function assignAccounts(GroupAssignRequest $request, Group $group)
@@ -112,7 +112,7 @@ class GroupController extends Controller
     /**
      * Get accounts assign to the group
      *
-     * @param  \App\Group  $group
+     * @param  \App\Models\Group  $group
      * @return \App\Api\v1\Resources\TwoFAccountCollection
      */
     public function accounts(Group $group)
@@ -127,7 +127,7 @@ class GroupController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Group  $group
+     * @param  \App\Models\Group  $group
      * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Group $group)

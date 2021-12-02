@@ -2,7 +2,7 @@
 
 namespace App\Api\v1\Controllers;
 
-use App\TwoFAccount;
+use App\Models\TwoFAccount;
 use App\Services\QrCodeService;
 use App\Services\TwoFAccountService;
 use App\Api\v1\Requests\QrCodeDecodeRequest;
@@ -39,7 +39,7 @@ class QrCodeController extends Controller
     /**
      * Show a QR code image
      *
-     * @param  App\TwoFAccount  $twofaccount
+     * @param  App\Models\TwoFAccount  $twofaccount
      * @return \Illuminate\Http\JsonResponse
      */
     public function show(TwoFAccount $twofaccount)

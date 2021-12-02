@@ -2,7 +2,7 @@
 
 namespace Tests\Api\v1\Requests;
 
-use App\Group;
+use App\Models\Group;
 use App\Api\v1\Requests\GroupStoreRequest;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Validator;

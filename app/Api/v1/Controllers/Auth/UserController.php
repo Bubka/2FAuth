@@ -2,7 +2,7 @@
 
 namespace App\Api\v1\Controllers\Auth;
 
-use App\User;
+use App\Models\User;
 use App\Api\v1\Requests\UserUpdateRequest;
 use App\Api\v1\Resources\UserResource;
 use App\Http\Controllers\Controller;

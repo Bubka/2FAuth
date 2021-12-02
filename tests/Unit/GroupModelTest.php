@@ -2,14 +2,14 @@
 
 namespace Tests\Unit;
 
-use App\Group;
-use App\TwoFAccount;
+use App\Models\Group;
+use App\Models\TwoFAccount;
 use App\Events\GroupDeleting;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Tests\ModelTestCase;
 
 /**
- * @covers \App\Group
+ * @covers \App\Models\Group
  */
 class GroupModelTest extends ModelTestCase
 {

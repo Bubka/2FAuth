@@ -2,9 +2,9 @@
 
 namespace Tests\Api\v1\Controllers;
 
-use App\User;
+use App\Models\User;
 use Tests\FeatureTestCase;
-use App\TwoFAccount;
+use App\Models\TwoFAccount;
 use Tests\Classes\LocalFile;
 
 
@@ -15,7 +15,7 @@ class QrCodeControllerTest extends FeatureTestCase
 {
 
     /**
-     * @var \App\User
+     * @var \App\Models\User
     */
     protected $user;
 
@@ -27,7 +27,7 @@ class QrCodeControllerTest extends FeatureTestCase
     {
         parent::setUp();
 
-        $this->user = factory(User::class)->create();
+        $this->user = User::factory()->create();
     }
 
 
@@ -36,7 +36,7 @@ class QrCodeControllerTest extends FeatureTestCase
      */
     public function test_show_qrcode_returns_base64_image()
     {
-        $twofaccount = factory(TwoFAccount::class)->create([
+        $twofaccount = TwoFAccount::factory()->create([
             'otp_type' => 'totp',
             'account' => 'account',
             'service' => 'service',

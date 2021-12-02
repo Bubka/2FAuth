@@ -2,10 +2,10 @@
 
 namespace Tests\Unit\Api\v1\Controllers;
 
-use App\User;
-use App\Group;
+use App\Models\User;
+use App\Models\Group;
 use Tests\TestCase;
-use App\TwoFAccount;
+use App\Models\TwoFAccount;
 use App\Services\GroupService;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use App\Api\v1\Controllers\GroupController;
@@ -55,7 +55,7 @@ class GroupControllerTest extends TestCase
      */
     public function test_index_returns_api_resources_using_groupService()
     {
-        $groups = factory(Group::class, 3)->make();
+        $groups = Group::factory()->count(3)->make();
 
         $this->groupServiceMock->shouldReceive('getAll')
             ->once()
@@ -72,7 +72,7 @@ class GroupControllerTest extends TestCase
      */
     public function test_store_returns_api_resource_stored_using_groupService()
     {
-        $group = factory(Group::class)->make();
+        $group = Group::factory()->make();
 
         $this->groupStoreRequest->shouldReceive('validated')
             ->once()
@@ -84,7 +84,7 @@ class GroupControllerTest extends TestCase
 
         $response = $this->controller->store($this->groupStoreRequest);
 
-        $this->assertInstanceOf('App\Group', $response->original);
+        $this->assertInstanceOf('App\Models\Group', $response->original);
     }
 
 
@@ -93,7 +93,7 @@ class GroupControllerTest extends TestCase
      */
     public function test_show_returns_api_resource()
     {
-        $group = factory(Group::class)->make();
+        $group = Group::factory()->make();
 
         $response = $this->controller->show($group);
 
@@ -106,7 +106,7 @@ class GroupControllerTest extends TestCase
      */
     public function test_update_returns_api_resource_updated_using_groupService()
     {
-        $group = factory(Group::class)->make();
+        $group = Group::factory()->make();
 
         $this->groupStoreRequest->shouldReceive('validated')
             ->once()
@@ -127,7 +127,7 @@ class GroupControllerTest extends TestCase
      */
     public function test_assignAccounts_returns_api_resource_assigned_using_groupService()
     {
-        $group = factory(Group::class)->make();
+        $group = Group::factory()->make();
         $groupAssignRequest = Mockery::mock('App\Api\v1\Requests\GroupAssignRequest');
 
         $groupAssignRequest->shouldReceive('validated')
@@ -149,13 +149,13 @@ class GroupControllerTest extends TestCase
      */
     public function test_accounts_returns_api_resources_fetched_using_groupService()
     {
-        $group = factory(Group::class)->make();
+        $group = Group::factory()->make();
 
         \Facades\App\Services\SettingService::shouldReceive('get')
             ->with('useEncryption')
             ->andReturn(false);
 
-        $twofaccounts = factory(TwoFAccount::class, 3)->make();
+        $twofaccounts = TwoFAccount::factory()->count(3)->make();
 
         $this->groupServiceMock->shouldReceive('getAccounts')
             ->with($group)
@@ -173,7 +173,7 @@ class GroupControllerTest extends TestCase
      */
     public function test_destroy_uses_group_service()
     {
-        $group = factory(Group::class)->make();
+        $group = Group::factory()->make();
 
         $this->groupServiceMock->shouldReceive('delete')
             ->once()

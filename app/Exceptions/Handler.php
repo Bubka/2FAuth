@@ -11,7 +11,7 @@ class Handler extends ExceptionHandler
     /**
      * A list of the exception types that are not reported.
      *
-     * @var array
+     * @var string[]
      */
     protected $dontReport = [
         //
@@ -20,62 +20,50 @@ class Handler extends ExceptionHandler
     /**
      * A list of the inputs that are never flashed for validation exceptions.
      *
-     * @var array
+     * @var string[]
      */
     protected $dontFlash = [
+        'current_password',
         'password',
         'password_confirmation',
     ];
 
     /**
-     * Report or log an exception.
+     * Register the exception handling callbacks for the application.
      *
-     * @param  \Throwable  $exception
      * @return void
      */
-    public function report(Throwable $exception)
+    public function register()
     {
-        parent::report($exception);
-    }
+        // $this->reportable(function (Throwable $e) {
+            //
+        // });
 
-    /**
-     * Render an exception into an HTTP response.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Throwable  $exception
-     * @return \Symfony\Component\HttpFoundation\Response
-     *
-     * @throws \Throwable
-     */
-    public function render($request, Throwable $exception)
-    {
-        if ($exception instanceof ModelNotFoundException) {
-            return response()->json([
-                'message' => str_replace('App\\', '', $exception->getModel()).' not found'], 404);
-        }
-        if ($exception instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException) {
+        $this->renderable(function (\Symfony\Component\HttpKernel\Exception\NotFoundHttpException $exception, $request) {
             return response()->json([
                 'message' => 'not found'], 404);
-        }
-        if ($exception instanceof InvalidOtpParameterException) {
+        });
+
+        $this->renderable(function (InvalidOtpParameterException $exception, $request) {
             return response()->json([
                 'message' => 'invalid OTP parameters',
                 'reason' => [$exception->getMessage()]
             ], 400);
-        }
-        if ($exception instanceof InvalidQrCodeException) {
+        });
+
+        $this->renderable(function (InvalidQrCodeException $exception, $request) {
             return response()->json([
                 'message' => 'not a valid QR code'], 400);
-        }
-        if ($exception instanceof InvalidSecretException) {
+        });
+
+        $this->renderable(function (InvalidSecretException $exception, $request) {
             return response()->json([
                 'message' => 'not a valid base32 encoded secret'], 400);
-        }
-        if ($exception instanceof DbEncryptionException) {
+        });
+
+        $this->renderable(function (DbEncryptionException $exception, $request) {
             return response()->json([
                 'message' => $exception->getMessage()], 400);
-        }
-        
-        return parent::render($request, $exception);
+        });
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Events;
 
-use App\Group;
+use App\Models\Group;
 use App\Events\GroupDeleting;
 use Tests\TestCase;
 
@@ -17,7 +17,7 @@ class GroupDeletingTest extends TestCase
      */
     public function test_event_constructor()
     {
-        $group = factory(Group::class)->make();
+        $group = Group::factory()->make();
         $event = new GroupDeleting($group);
 
         $this->assertSame($group, $event->group);

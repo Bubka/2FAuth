@@ -1,8 +1,10 @@
 <?php
 
-use App\User;
-use App\Group;
-use App\TwoFAccount;
+namespace Database\Seeders;
+
+use App\Models\User;
+use App\Models\Group;
+use App\Models\TwoFAccount;
 use Illuminate\Database\Seeder;
 
 class DemoSeeder extends Seeder
@@ -75,7 +77,7 @@ class DemoSeeder extends Seeder
             'name' => 'eCommerce',
         ]);
 
-        $groupSocialNetwork->twofaccounts()->create([
+        $groupECommerce->twofaccounts()->create([
             'otp_type' => 'totp',
             'account' => 'johndoe',
             'service' => 'Amazon',
