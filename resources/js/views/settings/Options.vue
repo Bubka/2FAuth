@@ -8,6 +8,7 @@
                     <h4 class="title is-4 has-text-grey-light">{{ $t('settings.general') }}</h4>
                     <!-- Language -->
                     <form-select v-on:lang="saveSetting('lang', $event)" :options="langs" :form="form" fieldName="lang" :label="$t('settings.forms.language.label')" :help="$t('settings.forms.language.help')" />
+                    <div class="field help">{{ $t('settings.forms.some_translation_are_missing') }}<a class="ml-2" href="https://crowdin.com/project/2fauth">{{ $t('settings.forms.help_translate_2fauth') }}</a></div>
                     <!-- display mode -->
                     <form-toggle v-on:displayMode="saveSetting('displayMode', $event)" :choices="layouts" :form="form" fieldName="displayMode" :label="$t('settings.forms.display_mode.label')" :help="$t('settings.forms.display_mode.help')" />
                     <!-- show icon -->
@@ -74,7 +75,7 @@
         data(){
             return {
                 form: new Form({
-                    lang: '',
+                    lang: 'browser',
                     showOtpAsDot: null,
                     closeOtpOnCopy: null,
                     useBasicQrcodeReader: null,
@@ -87,11 +88,6 @@
                     defaultCaptureMode: '',
                     rememberActiveGroup: true,
                 }),
-                langs: [
-                    { text: this.$t('languages.en'), value: 'en' },
-                    { text: this.$t('languages.fr'), value: 'fr' },
-                    { text: this.$t('languages.de'), value: 'de' },
-                ],
                 layouts: [
                     { text: this.$t('settings.forms.grid'), value: 'grid', icon: 'th' },
                     { text: this.$t('settings.forms.list'), value: 'list', icon: 'list' },
@@ -119,11 +115,36 @@
             }
         },
 
+        computed : {
+            langs: function() {
+                let locales = [{
+                    text: this.$t('languages.browser_preference') + ' (' + this.$root.$i18n.locale + ')',
+                    value: 'browser'
+                }];
+
+                for (const locale of window.appLocales) {
+                    locales.push({
+                        text: this.$t('languages.' + locale),
+                        value: locale
+                    })
+                }
+                return locales
+            }
+        },
+
         async mounted() {
             const { data } = await this.form.get('/api/v1/settings')
 
             this.form.fillWithKeyValueObject(data)
-            this.form.lang = this.$root.$i18n.locale
+            let lang = data.filter(x => x.key === 'lang')
+
+            if (lang.value == 'browser') {
+                if(window.appLocales.includes(lang.value)) {
+                    this.form.lang = lang
+                }
+            }
+            // this.$root.$i18n.locale
+
             this.form.setOriginal()
             this.fetchGroups()
         },

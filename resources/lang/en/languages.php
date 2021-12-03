@@ -10,6 +10,7 @@ return [
     |
     */
 
+    'browser_preference' => 'Browser preference',
     'en' => 'English',
     'fr' => 'French',
     'de' => 'German',

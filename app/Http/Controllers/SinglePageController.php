@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\SettingService;
+use Illuminate\Support\Facades\App;
 
 class SinglePageController extends Controller
 {
@@ -31,7 +32,8 @@ class SinglePageController extends Controller
     {
         return view('landing')->with([
             'appSettings' => $this->settingService->all()->toJson(),
-            'lang' => $this->settingService->get('lang')
+            'lang' => App::currentLocale(),
+            'locales' => collect(config("2fauth.locales"))->toJson(),
         ]);
     }
 }

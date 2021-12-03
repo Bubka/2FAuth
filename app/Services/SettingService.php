@@ -5,14 +5,29 @@ namespace App\Services;
 use Throwable;
 use Exception;
 use App\Models\Option;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\App;
 use App\Exceptions\DbEncryptionException;
 
 class SettingService
 {
+
+    /**
+     * Determine if the given setting has been customized by the user
+     *
+     * @param  string  $key
+     * @return bool
+     */
+    public function isUserDefined($key) : bool
+    {
+        return DB::table('options')->where('key', $key)->exists();
+    }
+
+
     /**
      * Get a setting
      *
@@ -40,9 +55,15 @@ class SettingService
         $userOptions->transform(function ($item, $key) {
             return $this->restoreType($item);
         });
-        $userOptions = collect(config('2fauth.options'))->merge($userOptions);
 
-        return $userOptions;
+        // Merge 2fauth/app config values as fallback values
+        $settings = collect(config('2fauth.options'))->merge($userOptions);
+        
+        if(!Arr::has($settings, 'lang')) {
+            $settings['lang'] = 'browser';
+        }
+
+        return $settings;
     }
 
 

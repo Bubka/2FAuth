@@ -25,6 +25,7 @@
     <script type="text/javascript">
         var appSettings = {!! $appSettings !!};
         var appVersion = '{{ config("app.version") }}';
+        var appLocales = {!! $locales !!};
     </script>
     <script src="{{ mix('js/manifest.js') }}"></script>
     <script src="{{ mix('js/vendor.js') }}"></script>

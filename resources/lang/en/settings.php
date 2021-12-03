@@ -39,9 +39,11 @@ return [
         'edit_settings' => 'Edit settings',
         'setting_saved' => 'Settings saved',
         'new_token' => 'New token',
+        'some_translation_are_missing' => 'Some translations are missing using the browser preferred language?',
+        'help_translate_2fauth' => 'Help translate 2FAuth',
         'language' => [
             'label' => 'Language',
-            'help' => 'Change the language used to translate the app interface.'
+            'help' => 'Language used to translate the 2FAuth user interface. Named languages are complete, set the one of your choice to override your browser preference.'
         ],
         'show_otp_as_dot' => [
             'label' => 'Show generated one-time passwords as dot',
