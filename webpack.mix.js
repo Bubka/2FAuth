@@ -11,9 +11,10 @@ const mix = require('laravel-mix');
  |
  */
 
-//mix.sourceMaps(false, "source-map")
+// mix.sourceMaps(false, "source-map")
 mix
     .js('resources/js/app.js', 'public/js')
+    .vue({ version: 2 })
     .extract([
       'vue',
       'axios',
