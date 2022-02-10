@@ -44,7 +44,7 @@ RUN apk add --update --no-cache \
     # PHP SQLite driver
     php7-pdo_sqlite php7-sqlite3 \
     # PHP extensions
-    php7-xml php7-gd php7-mbstring php7-tokenizer php7-cli php7-fileinfo php7-bcmath php7-ctype \
+    php7-xml php7-gd php7-mbstring php7-tokenizer php7-cli php7-fileinfo php7-bcmath php7-ctype php7-dom \
     # Runtime dependencies
     php7-session php7-json php7-openssl \
     # Nginx and PHP FPM to serve over HTTP
