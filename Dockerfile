@@ -5,11 +5,16 @@ ARG PHP_VERSION=7.3-alpine${ALPINE_VERSION}
 ARG COMPOSER_VERSION=2.1
 ARG SUPERVISORD_VERSION=v0.7.3
 
+ARG UID=1000
+ARG GID=1000
+
 FROM --platform=${BUILDPLATFORM} composer:${COMPOSER_VERSION} AS build-composer
 FROM composer:${COMPOSER_VERSION} AS composer
 FROM qmcgaw/binpot:supervisord-${SUPERVISORD_VERSION} AS supervisord
 
 FROM --platform=${BUILDPLATFORM} php:${PHP_VERSION} AS vendor
+ARG UID=1000
+ARG GID=1000
 COPY --from=build-composer --chown=${UID}:${GID} /usr/bin/composer /usr/bin/composer
 RUN apk add --no-cache unzip
 WORKDIR /srv
@@ -26,7 +31,6 @@ RUN php artisan key:generate
 ENTRYPOINT [ "/srv/vendor/bin/phpunit" ]
 
 FROM alpine:${ALPINE_VERSION}
-
 ARG UID=1000
 ARG GID=1000
 
