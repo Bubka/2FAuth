@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Api\v1\Controllers\Auth;
+namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
-use App\Api\v1\Requests\UserStoreRequest;
+use App\Http\Requests\UserStoreRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+// use Illuminate\Support\Facades\Auth;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\RegistersUsers;
 
@@ -37,6 +38,8 @@ class RegisterController extends Controller
         event(new Registered($user = $this->create($validated)));
 
         $this->guard()->login($user);
+        // $this->guard()->loginUsingId($user->id);
+        // Auth::guard('admin')->attempt($credentials);
 
         return response()->json([
             'message' => 'account created',

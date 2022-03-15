@@ -46,6 +46,8 @@ return [
         'useEncryption' => false,
         'defaultCaptureMode' => 'livescan',
         'useDirectCapture' => false,
+        'useWebauthnAsDefault' => false,
+        'useWebauthnOnly' => false,
     ],
 
 ];

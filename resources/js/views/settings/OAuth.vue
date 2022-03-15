@@ -8,27 +8,37 @@
                     <div class="is-size-7-mobile">
                         {{ $t('settings.token_legend')}}
                     </div>
-                    <div class="mt-3 mb-6">
-                        <router-link class="is-link mt-5" :to="{ name: 'settings.oauth.generatePAT' }">
+                    <div class="mt-3">
+                        <router-link class="is-link" :to="{ name: 'settings.oauth.generatePAT' }">
                             <font-awesome-icon :icon="['fas', 'plus-circle']" /> {{ $t('settings.generate_new_token')}}
                         </router-link>
                     </div>
                     <div v-if="tokens.length > 0">
                         <div v-for="token in tokens" :key="token.id" class="group-item has-text-light is-size-5 is-size-6-mobile">
                             <font-awesome-icon v-if="token.value" class="has-text-success" :icon="['fas', 'check']" /> {{ token.name }}
+                            <!-- revoke link -->
                             <div class="tags is-pulled-right">
                                 <a v-if="token.value" class="tag" v-clipboard="() => token.value" v-clipboard:success="clipboardSuccessHandler">{{ $t('commons.copy') }}</a>
-                                <a class="tag is-dark " @click="revokeToken(token.id)">{{ $t('settings.revoke') }}</a>
+                                <a class="tag is-dark " @click="revokeToken(token.id)" :title="$t('settings.revoke')">{{ $t('settings.revoke') }}</a>
                             </div>
+                            <!-- edit link -->
+                            <!-- <router-link :to="{ name: 'settings.oauth.editPAT' }" class="has-text-grey pl-1" :title="$t('commons.edit')">
+                                <font-awesome-icon :icon="['fas', 'pen-square']" />
+                            </router-link> -->
+                            <!-- warning msg -->
                             <span v-if="token.value" class="is-size-7-mobile is-size-6 my-3">
                                 {{ $t('settings.make_sure_copy_token') }}
                             </span>
+                            <!-- token value -->
                             <span v-if="token.value" class="pat is-family-monospace is-size-6 is-size-7-mobile has-text-success">
                                 {{ token.value }}
                             </span>
                         </div>
+                        <div class="mt-2 is-size-7 is-pulled-right">
+                            {{ $t('settings.revoking_a_token_is_permanent')}}
+                        </div>
                     </div>
-                    <div v-if="isFetching && tokens.length === 0" class="has-text-centered">
+                    <div v-if="isFetching && tokens.length === 0" class="has-text-centered mt-6">
                         <span class="is-size-4">
                             <font-awesome-icon :icon="['fas', 'spinner']" spin />
                         </span>

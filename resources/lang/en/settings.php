@@ -16,6 +16,7 @@ return [
     'settings' => 'Settings',
     'account' => 'Account',
     'oauth' => 'OAuth',
+    'webauthn' => 'WebAuthn',
     'tokens' => 'Tokens',
     'options' => 'Options',
     'confirm' => [
@@ -30,6 +31,7 @@ return [
     'generate_new_token' => 'Generate a new token',
     'revoke' => 'Revoke',
     'token_revoked' => 'Token successfully revoked',
+    'revoking_a_token_is_permanent' => 'Revoking a token is permanent',
     'confirm' => [
         'revoke' => 'Are you sure you want to revoke this token?',
     ],

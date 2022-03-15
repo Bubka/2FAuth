@@ -34,6 +34,10 @@
                 		'name' : this.$t('settings.oauth'),
                         'view' : 'settings.oauth'
                 	},
+                	{
+                		'name' : this.$t('settings.webauthn'),
+                        'view' : 'settings.webauthn'
+                	},
             	]
             }
         },

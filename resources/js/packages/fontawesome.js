@@ -9,7 +9,6 @@ import {
     faQrcode,
     faImage,
     faTrash,
-    faEdit,
     faCheck,
     faLock,
     faLockOpen,
@@ -21,6 +20,7 @@ import {
     faLayerGroup,
     faMinusCircle,
     faExclamationCircle,
+    faPenSquare,
     faTh,
     faList,
 } from '@fortawesome/free-solid-svg-icons'
@@ -35,7 +35,6 @@ library.add(
     faQrcode,
     faImage,
     faTrash,
-    faEdit,
     faCheck,
     faLock,
     faLockOpen,
@@ -48,6 +47,7 @@ library.add(
     faLayerGroup,
     faMinusCircle,
     faExclamationCircle,
+    faPenSquare,
     faTh,
     faList,
 );

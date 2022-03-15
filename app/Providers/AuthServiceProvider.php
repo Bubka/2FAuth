@@ -4,7 +4,10 @@ namespace App\Providers;
 
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
-use Laravel\Passport\Passport;
+use Illuminate\Support\Facades\Auth;
+use App\Extensions\EloquentTwoFAuthProvider;
+use DarkGhostHunter\Larapass\WebAuthn\WebAuthnAssertValidator;
+use Illuminate\Contracts\Hashing\Hasher;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -25,6 +28,24 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
+
+        // We use our own user provider derived from the Larapass user provider.
+        // The only difference between the 2 providers is that the custom one sets
+        // the webauthn fallback setting with 2FAuth's 'useWebauthnOnly' option
+        // value instead of the 'larapass.fallback' config value.
+        // This way we can offer the user to change this setting from the 2FAuth UI
+        // rather than from the .env file.
+        Auth::provider(
+            'eloquent-2fauth',
+            static function ($app, $config) {
+                return new EloquentTwoFAuthProvider(
+                    $app['config'],
+                    $app[WebAuthnAssertValidator::class],
+                    $app[Hasher::class],
+                    $config['model']
+                );
+            });
+
 
         // Normally we should set the Passport routes here using Passport::routes().
         // If so the passport routes would be set for both 'web' and 'api' middlewares without

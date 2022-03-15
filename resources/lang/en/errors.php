@@ -31,4 +31,8 @@ return [
     'delete_user_setting_only' => 'Only user-created setting can be deleted',
     'indecipherable' => '*indecipherable*',
     'cannot_decipher_secret' => 'The secret cannot be deciphered. This is mainly caused by a wrong APP_KEY set in the .env configuration file of 2Fauth or a corrupted data stored in database.',
+    'https_required' => 'HTTPS context required',
+    'browser_does_not_support_webauthn' => 'Your device does not support webauthn. Try again later using a more modern browser',
+    'aborted_by_user' => 'Aborted by user',
+    'security_device_unsupported' => 'Security device unsupported',
 ];

@@ -14,12 +14,7 @@ use Illuminate\Http\Request;
 */
 
 Route::group(['middleware' => 'guest:api'], function () {
-
-    Route::get('user/name', 'Auth\UserController@show')->name('user.show.name');
-    Route::post('user', 'Auth\RegisterController@register')->name('user.register');
-    Route::post('user/password/lost', 'Auth\ForgotPasswordController@sendResetLinkEmail')->middleware('AvoidResetPassword')->name('user.password.lost');;
-    Route::post('user/password/reset', 'Auth\ResetPasswordController@reset')->name('user.password.reset');
-
+    Route::get('user/name', 'UserController@show')->name('user.show.name');
 });
 
 Route::group(['middleware' => 'auth:api'], function() {
@@ -28,9 +23,7 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::post('oauth/personal-access-tokens', '\Laravel\Passport\Http\Controllers\PersonalAccessTokenController@store')->name('passport.personal.tokens.store');
     Route::delete('oauth/personal-access-tokens/{token_id}', '\Laravel\Passport\Http\Controllers\PersonalAccessTokenController@destroy')->name('passport.personal.tokens.destroy');
 
-    Route::get('user', 'Auth\UserController@show')->name('user.show');
-    Route::put('user', 'Auth\UserController@update')->name('user.update');
-    Route::patch('user/password', 'Auth\PasswordController@update')->name('user.password.update');
+    Route::get('user', 'UserController@show')->name('user.show');
 
     Route::get('settings/{settingName}', 'SettingController@show')->name('settings.show');
     Route::get('settings', 'SettingController@index')->name('settings.index');
