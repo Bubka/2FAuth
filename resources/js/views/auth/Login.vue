@@ -129,6 +129,9 @@
                 const { data } = await vm.axios.get('api/v1/user/name')
 
                 if( data.name ) {
+                    if( data.email ) {
+                        return next({ name: 'accounts' });
+                    }
                     vm.username = data.name
                 }
                 else {

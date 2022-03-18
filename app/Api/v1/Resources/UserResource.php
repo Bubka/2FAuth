@@ -17,7 +17,7 @@ class UserResource extends JsonResource
     {
         return [
             'name'  => $this->name,
-            'email' => $this->when(Auth::guard('api')->user(), $this->email),
+            'email' => $this->when(Auth::guard()->check(), $this->email),
         ];
     }
 }

@@ -14,9 +14,11 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'web',
+        'guard' => env('AUTHENTICATION_GUARD', 'web'),
         'passwords' => 'users',
     ],
+    'guard_header' => env('AUTHENTICATION_GUARD_HEADER', 'REMOTE_USER'),
+    // 'guard_email'  => env('AUTHENTICATION_GUARD_EMAIL_HEADER', null),
 
     /*
     |--------------------------------------------------------------------------
@@ -46,6 +48,11 @@ return [
             'provider' => 'users',
             'hash' => false,
         ],
+
+        'reverse-proxy' => [
+            'driver'   => 'reverse-proxy',
+            'provider' => 'remote-user',
+        ],
     ],
 
     /*
@@ -69,6 +76,10 @@ return [
         'users' => [
             'driver' => 'eloquent-2fauth',
             'model' => App\Models\User::class,
+        ],
+        'remote-user' => [
+            'driver' => 'remote-user',
+            'model'  => App\Models\User::class,
         ],
     ],
 

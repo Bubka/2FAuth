@@ -1,6 +1,6 @@
 <?php
 
-// use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\WebAuthnManageController;
 use App\Http\Controllers\Auth\WebAuthnRegisterController;
 use App\Http\Controllers\Auth\WebAuthnLoginController;
@@ -18,22 +18,14 @@ use App\Http\Controllers\Auth\WebAuthnRecoveryController;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+Route::post('user', 'Auth\RegisterController@register')->name('user.register');
+Route::post('user/password/lost', 'Auth\ForgotPasswordController@sendResetLinkEmail')->middleware('AvoidResetPassword')->name('user.password.lost');;
+Route::post('user/password/reset', 'Auth\ResetPasswordController@reset')->name('user.password.reset');
+Route::post('webauthn/lost', [WebAuthnDeviceLostController::class, 'sendRecoveryEmail'])->name('webauthn.lost');
+Route::post('webauthn/recover/options', [WebAuthnRecoveryController::class, 'options'])->name('webauthn.recover.options');
+Route::post('webauthn/recover', [WebAuthnRecoveryController::class, 'recover'])->name('webauthn.recover');
 
-// Route::get('twofaccount/{TwoFAccount}', 'TwoFAccountController@show');
-
-Route::group(['middleware' => 'guest:web'], function () {
-    Route::post('user', 'Auth\RegisterController@register')->name('user.register');
-    Route::post('user/password/lost', 'Auth\ForgotPasswordController@sendResetLinkEmail')->middleware('AvoidResetPassword')->name('user.password.lost');;
-    Route::post('user/password/reset', 'Auth\ResetPasswordController@reset')->name('user.password.reset');
-    Route::post('webauthn/lost', [WebAuthnDeviceLostController::class, 'sendRecoveryEmail'])->name('webauthn.lost');
-    Route::post('webauthn/recover/options', [WebAuthnRecoveryController::class, 'options'])->name('webauthn.recover.options');
-    Route::post('webauthn/recover', [WebAuthnRecoveryController::class, 'recover'])->name('webauthn.recover');
-});
-
-Route::group(['middleware' => 'auth:web'], function () {
+Route::group(['middleware' => 'auth:reverse-proxy,web'], function () {
     Route::put('user', 'Auth\UserController@update')->name('user.update');
     Route::patch('user/password', 'Auth\PasswordController@update')->name('user.password.update');
     Route::get('user/logout', 'Auth\LoginController@logout')->name('user.logout');

@@ -13,11 +13,9 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::group(['middleware' => 'guest:api'], function () {
-    Route::get('user/name', 'UserController@show')->name('user.show.name');
-});
+Route::get('user/name', 'UserController@show')->name('user.show.name');
 
-Route::group(['middleware' => 'auth:api'], function() {
+Route::group(['middleware' => 'auth:reverse-proxy,api'], function() {
 
     Route::get('oauth/personal-access-tokens', '\Laravel\Passport\Http\Controllers\PersonalAccessTokenController@forUser')->name('passport.personal.tokens.index');
     Route::post('oauth/personal-access-tokens', '\Laravel\Passport\Http\Controllers\PersonalAccessTokenController@store')->name('passport.personal.tokens.store');

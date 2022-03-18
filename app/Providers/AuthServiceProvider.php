@@ -5,7 +5,9 @@ namespace App\Providers;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Auth;
+use App\Services\Auth\ReverseProxyGuard;
 use App\Extensions\EloquentTwoFAuthProvider;
+use App\Extensions\RemoteUserProvider;
 use DarkGhostHunter\Larapass\WebAuthn\WebAuthnAssertValidator;
 use Illuminate\Contracts\Hashing\Hasher;
 
@@ -45,6 +47,19 @@ class AuthServiceProvider extends ServiceProvider
                     $config['model']
                 );
             });
+
+        // 
+        Auth::provider('remote-user', function ($app, array $config) {
+            // Return an instance of Illuminate\Contracts\Auth\UserProvider...
+    
+            return new RemoteUserProvider;
+        });
+
+        Auth::extend('reverse-proxy', function ($app, string $name, array $config) {  
+            // Return an instance of Illuminate\Contracts\Auth\Guard...
+
+            return new ReverseProxyGuard(Auth::createUserProvider($config['provider']));
+        });
 
 
         // Normally we should set the Passport routes here using Passport::routes().
