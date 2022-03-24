@@ -113,7 +113,7 @@ return [
     |
     */
 
-    'login_verify' => env('WEBAUTHN_LOGIN_VERIFICATION', 'preferred'),
+    'login_verify' => env('WEBAUTHN_USER_VERIFICATION', 'preferred'),
 
 
     /*
