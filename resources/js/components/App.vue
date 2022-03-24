@@ -4,7 +4,7 @@
         <div v-if="$root.appSettings.isDemoApp" class="demo has-background-warning has-text-centered is-size-7-mobile">
             {{ $t('commons.demo_do_not_post_sensitive_data') }}
         </div>
-        <notifications width="100%" position="top" :duration="4000" :speed="0" :max="1" classes="notification" />
+        <notifications width="100%" position="top" :duration="4000" :speed="0" :max="1" classes="notification is-radiusless" />
         <main class="main-section">
             <router-view></router-view>
         </main>

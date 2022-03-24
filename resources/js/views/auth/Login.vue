@@ -13,7 +13,7 @@
         </form-wrapper>
         <!-- login/password legacy form -->
         <form-wrapper v-else :title="$t('auth.forms.login')" :punchline="punchline">
-            <div v-if="isDemo" class="notification is-info has-text-centered" v-html="$t('auth.forms.welcome_to_demo_app_use_those_credentials')" />
+            <div v-if="isDemo" class="notification is-info has-text-centered is-radiusless" v-html="$t('auth.forms.welcome_to_demo_app_use_those_credentials')" />
             <form @submit.prevent="handleSubmit" @keydown="form.onKeydown($event)">
                 <form-field :form="form" fieldName="email" inputType="email" :label="$t('auth.forms.email')" autofocus />
                 <form-field :form="form" fieldName="password" inputType="password" :label="$t('auth.forms.password')" />
