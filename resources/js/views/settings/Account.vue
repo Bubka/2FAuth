@@ -68,7 +68,7 @@
             submitProfile(e) {
                 e.preventDefault()
 
-                this.formProfile.put('/api/v1/user', {returnError: true})
+                this.formProfile.put('/user', {returnError: true})
                 .then(response => {
                     this.$notify({ type: 'is-success', text: this.$t('auth.forms.profile_saved') })
                 })
@@ -86,7 +86,7 @@
             submitPassword(e) {
                 e.preventDefault()
 
-                this.formPassword.patch('/api/v1/user/password', {returnError: true})
+                this.formPassword.patch('/user/password', {returnError: true})
                 .then(response => {
 
                     this.$notify({ type: 'is-success', text: response.data.message })

@@ -23,7 +23,7 @@
             handleSubmit(e) {
                 e.preventDefault()
 
-                this.form.post('/api/v1/user/password/lost', {returnError: true})
+                this.form.post('/user/password/lost', {returnError: true})
                 .then(response => {
                     
                     this.$notify({ type: 'is-success', text: response.data.message, duration:-1 })
