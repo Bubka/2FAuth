@@ -72,9 +72,7 @@
         },
 
         async mounted() {
-            // const { data } = await this.form.get('/api/v1/settings/useWebauthnAsDefault')
-
-            // this.form.useWebauthnAsDefault = data.value
+            
             const { data } = await this.form.get('/api/v1/settings')
 
             this.form.fillWithKeyValueObject(data)

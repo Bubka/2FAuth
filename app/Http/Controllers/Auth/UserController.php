@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Requests\UserUpdateRequest;
 use App\Api\v1\Resources\UserResource;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Exceptions\UnsupportedWithReverseProxyException;

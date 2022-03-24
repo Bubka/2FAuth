@@ -22,13 +22,11 @@ class WebAuthnManageController extends Controller
 
     /**
      * Create a new controller instance.
-     *
-     * @return void
      */
     public function __construct()
     {
-        
     }
+    
 
     /**
      * List all WebAuthn registered credentials
