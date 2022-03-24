@@ -9,6 +9,7 @@ use DarkGhostHunter\Larapass\Facades\WebAuthn;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use App\Exceptions\UnsupportedWithReverseProxyException;
 
 class WebAuthnRecoveryController extends Controller
 {
@@ -32,15 +33,17 @@ class WebAuthnRecoveryController extends Controller
      */
     protected $redirectTo = RouteServiceProvider::HOME;
 
+    
     /**
      * Create a new controller instance.
-     *
-     * @return void
      */
     public function __construct()
     {
-        // $this->middleware('guest');
-        // $this->middleware('throttle:10,1')->only('options', 'recover');
+        $authGuard = config('auth.defaults.guard');
+
+        if ($authGuard === 'reverse-proxy-guard') {
+            throw new UnsupportedWithReverseProxyException();
+        }
     }
 
     /**

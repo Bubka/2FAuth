@@ -1,7 +1,7 @@
 <template>
     <div>
         <!-- webauthn registration -->
-        <form-wrapper v-if="showWebauthnRegistration" :title="$t('auth.authentication')" :punchline="$t('auth.webauthn.enforce_security_using_webauthn')">
+        <form-wrapper v-if="showWebauthnRegistration" :title="$t('auth.authentication')" :punchline="$t('auth.webauthn.enhance_security_using_webauthn')">
             <div v-if="deviceRegistered" class="field">
                 <label class="label mb-5">{{ $t('auth.webauthn.device_successfully_registered') }}&nbsp;<font-awesome-icon :icon="['fas', 'check']" /></label>
                 <form @submit.prevent="handleDeviceSubmit" @keydown="deviceForm.onKeydown($event)">

@@ -14,11 +14,24 @@ return [
     */
 
     'defaults' => [
-        'guard' => env('AUTHENTICATION_GUARD', 'web'),
+        'guard' => env('AUTHENTICATION_GUARD', 'web-guard'),
         'passwords' => 'users',
     ],
-    'guard_header' => env('AUTHENTICATION_GUARD_HEADER', 'REMOTE_USER'),
-    // 'guard_email'  => env('AUTHENTICATION_GUARD_EMAIL_HEADER', null),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Authentication Proxy Headers
+    |--------------------------------------------------------------------------
+    |
+    | When using a reverse proxy for authentication this option controls the
+    | default name of the headers sent by the proxy.
+    |
+    */
+
+    'auth_proxy_headers' => [
+        'user' => env('AUTH_PROXY_HEADER_FOR_USER', 'REMOTE_USER'),
+        'email' => env('AUTH_PROXY_HEADER_FOR_EMAIL', null),
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -38,18 +51,18 @@ return [
     */
 
     'guards' => [
-        'web' => [
+        'web-guard' => [
             'driver' => 'session',
             'provider' => 'users',
         ],
 
-        'api' => [
+        'api-guard' => [
             'driver' => 'passport',
             'provider' => 'users',
             'hash' => false,
         ],
 
-        'reverse-proxy' => [
+        'reverse-proxy-guard' => [
             'driver'   => 'reverse-proxy',
             'provider' => 'remote-user',
         ],

@@ -8,9 +8,23 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Exceptions\UnsupportedWithReverseProxyException;
 
 class UserController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     */
+    public function __construct()
+    {
+        $authGuard = config('auth.defaults.guard');
+
+        if ($authGuard === 'reverse-proxy-guard') {
+            throw new UnsupportedWithReverseProxyException();
+        }
+    }
+
+    
     /**
      * Update the user's profile information.
      *

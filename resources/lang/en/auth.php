@@ -28,6 +28,8 @@ return [
     'already_authenticated' => 'Already authenticated',
     'authentication' => 'Authentication',
     'maybe_later' => 'Maybe later',
+    'user_account_controlled_by_proxy' => 'User account made available by an authentication proxy.<br />Manage the account at proxy level.',
+    'auth_handled_by_proxy' => 'Authentication handled by a reverse proxy, below settings are disabled.<br />Manage authentication at proxy level.',
     'confirm' => [
         'logout' => 'Are you sure you want to log out?',
         'revoke_device' => 'Are you sure you want to revoke this device?',
@@ -36,7 +38,7 @@ return [
         'security_device' => 'a security device',
         'security_devices' => 'Security devices',
         'security_devices_legend' => 'Authentication devices you can use to sign in 2FAuth, like security keys (i.e Yubikey) or smartphones with biometric capabilities (i.e. Apple FaceId/TouchId)',
-        'enforce_security_using_webauthn' => 'You can enforce the security of your 2FAuth account by enabling WebAuthn authentication.<br /><br />
+        'enhance_security_using_webauthn' => 'You can enhance the security of your 2FAuth account by enabling WebAuthn authentication.<br /><br />
             WebAuthn allows you to use trusted devices (like Yubikeys or smartphones with biometric capabilities) to sign in quickly and more securely.',
         'use_security_device_to_sign_in' => 'Get ready to authenticate yourself using (one of) your security devices. Plug your key in, remove face mask or gloves, etc.',
         'lost_your_device' => 'Lost your device?',
@@ -57,7 +59,7 @@ return [
         'unknown_device' => 'Unknown device',
         'use_webauthn_only' => [
             'label' => 'Use WebAuthn only (recommended)',
-            'help' => 'Make WebAuthn the only available method to sign in 2FAuth. This is the recommended setup to take advantage of the WebAuthn enforced security.<br />
+            'help' => 'Make WebAuthn the only available method to sign in 2FAuth. This is the recommended setup to take advantage of the WebAuthn enhanced security.<br />
                 In case of device lost you will always be able to register a new security device to recover your account.'
         ],
         'use_webauthn_as_default' => [

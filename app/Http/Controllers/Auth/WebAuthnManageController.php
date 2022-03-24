@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\WebauthnRenameRequest;
 use DarkGhostHunter\Larapass\Eloquent\WebAuthnCredential;
+use App\Exceptions\UnsupportedWithReverseProxyException;
 
 class WebAuthnManageController extends Controller
 {
@@ -34,6 +35,14 @@ class WebAuthnManageController extends Controller
      */
     public function index(Request $request)
     {
+        // WebAuthn is useless when authentication is handle by
+        // a reverse proxy so we return a 202 response to tell the
+        // client nothing more will happen
+        if (config('auth.defaults.guard') === 'reverse-proxy-guard') {
+            return response()->json([
+                'message' => 'no webauthn with reverse proxy'], 202);
+        }
+
         $user = $request->user();
         $allUserCredentials = $user->webAuthnCredentials()
                                     ->enabled()

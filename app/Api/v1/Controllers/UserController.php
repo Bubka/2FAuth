@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Api\v1\Requests\UserUpdateRequest;
 use App\Api\v1\Resources\UserResource;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
@@ -14,9 +15,12 @@ class UserController extends Controller
      * 
      * @return \App\Api\v1\Resources\UserResource
      */
-    public function show()
+    public function show(Request $request)
     {
-        $user = User::first();
+        // 2 cases:
+        // - The method is called from a protected route > we return the request's authenticated user
+        // - The method is called from a guest route > we fetch a possible registered user
+        $user = $request->user() ?: User::first();
 
         return $user
             ? new UserResource($user)

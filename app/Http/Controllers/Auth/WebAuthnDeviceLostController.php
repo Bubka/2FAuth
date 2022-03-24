@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use DarkGhostHunter\Larapass\Http\SendsWebAuthnRecoveryEmail;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use App\Exceptions\UnsupportedWithReverseProxyException;
 
 class WebAuthnDeviceLostController extends Controller
 {
@@ -22,9 +23,16 @@ class WebAuthnDeviceLostController extends Controller
     |
     */
 
+    /**
+     * Create a new controller instance.
+     */
     public function __construct()
     {
-        // $this->middleware('guest');
+        $authGuard = config('auth.defaults.guard');
+
+        if ($authGuard === 'reverse-proxy-guard') {
+            throw new UnsupportedWithReverseProxyException();
+        }
     }
 
 

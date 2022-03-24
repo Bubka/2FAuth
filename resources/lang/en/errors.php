@@ -35,4 +35,5 @@ return [
     'browser_does_not_support_webauthn' => 'Your device does not support webauthn. Try again later using a more modern browser',
     'aborted_by_user' => 'Aborted by user',
     'security_device_unsupported' => 'Security device unsupported',
+    'unsupported_with_reverseproxy' => 'Not applicable when using an auth proxy',
 ];

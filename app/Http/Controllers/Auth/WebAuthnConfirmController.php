@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use DarkGhostHunter\Larapass\Http\ConfirmsWebAuthn;
+use App\Exceptions\UnsupportedWithReverseProxyException;
 
 class WebAuthnConfirmController extends Controller
 {
@@ -35,7 +36,10 @@ class WebAuthnConfirmController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
-        $this->middleware('throttle:10,1')->only('options', 'confirm');
+        $authGuard = config('auth.defaults.guard');
+
+        if ($authGuard === 'reverse-proxy-guard') {
+            throw new UnsupportedWithReverseProxyException();
+        }
     }
 }

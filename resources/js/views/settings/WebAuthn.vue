@@ -3,6 +3,7 @@
         <setting-tabs :activeTab="'settings.webauthn'"></setting-tabs>
         <div class="options-tabs">
             <form-wrapper>
+                <div v-if="isRemoteUser" class="notification is-warning has-text-centered" v-html="$t('auth.auth_handled_by_proxy')" />
                 <h4 class="title is-4 has-text-grey-light">{{ $t('auth.webauthn.security_devices') }}</h4>
                 <div class="is-size-7-mobile">
                     {{ $t('auth.webauthn.security_devices_legend')}}
@@ -37,9 +38,9 @@
                 <h4 class="title is-4 pt-6 has-text-grey-light">{{ $t('settings.options') }}</h4>
                 <form>
                     <!-- use webauthn only -->
-                    <form-checkbox v-on:useWebauthnOnly="saveSetting('useWebauthnOnly', $event)" :form="form" fieldName="useWebauthnOnly" :label="$t('auth.webauthn.use_webauthn_only.label')" :help="$t('auth.webauthn.use_webauthn_only.help')" />
+                    <form-checkbox v-on:useWebauthnOnly="saveSetting('useWebauthnOnly', $event)" :form="form" fieldName="useWebauthnOnly" :label="$t('auth.webauthn.use_webauthn_only.label')" :help="$t('auth.webauthn.use_webauthn_only.help')" :disabled="isRemoteUser" />
                     <!-- default sign in method -->
-                    <form-checkbox v-on:useWebauthnAsDefault="saveSetting('useWebauthnAsDefault', $event)" :form="form" fieldName="useWebauthnAsDefault" :label="$t('auth.webauthn.use_webauthn_as_default.label')" :help="$t('auth.webauthn.use_webauthn_as_default.help')" />
+                    <form-checkbox v-on:useWebauthnAsDefault="saveSetting('useWebauthnAsDefault', $event)" :form="form" fieldName="useWebauthnAsDefault" :label="$t('auth.webauthn.use_webauthn_as_default.label')" :help="$t('auth.webauthn.use_webauthn_as_default.help')" :disabled="isRemoteUser" />
                 </form>
                 <!-- footer -->
                 <vue-footer :showButtons="true">
@@ -66,6 +67,7 @@
                 }),
                 credentials: [],
                 isFetching: false,
+                isRemoteUser: false,
             }
         },
 
@@ -102,7 +104,10 @@
                 this.isFetching = true
 
                 await this.axios.get('/webauthn/credentials').then(response => {
-                    this.credentials = response.data
+                    if (response.status === 202) {
+                        this.isRemoteUser = true
+                    }
+                    else this.credentials = response.data
                 })
 
                 this.isFetching = false
@@ -113,6 +118,12 @@
              * Register a new security device
              */
             async register() {
+
+                if (this.isRemoteUser) {
+                    this.$notify({ type: 'is-warning', text: this.$t('errors.unsupported_with_reverseproxy') })
+                    return false
+                }
+
                 // Check https context
                 if (!window.isSecureContext) {
                     this.$notify({ type: 'is-danger', text: this.$t('errors.https_required') })

@@ -1,6 +1,6 @@
 <?php
 
-// Part of Firefly III (https://github.com/firefly-iii)
+// Largely inspired by Firefly III remote user implementation (https://github.com/firefly-iii)
 // see https://github.com/firefly-iii/firefly-iii/blob/main/app/Support/Authentication/RemoteUserProvider.php
 
 namespace App\Extensions;
@@ -8,7 +8,7 @@ namespace App\Extensions;
 use App\Models\User;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\UserProvider;
-use Illuminate\Support\Str;
+use Illuminate\Support\Arr;
 use Exception;
 
 class RemoteUserProvider implements UserProvider
@@ -16,19 +16,20 @@ class RemoteUserProvider implements UserProvider
     /**
      * @inheritDoc
      */
-    public function retrieveById($identifier): User
+    public function retrieveById($identifier)
     {
-        $user = User::where('email', $identifier)->first();
+        // 2FAuth is single user by design and domain data are not coupled to the user model.
+        // So we provide a non-persisted user, dynamically instanciated using data
+        // from the auth proxy.
+        // This way no matter the user account used at proxy level, 2FAuth will always
+        // authenticate a request from the proxy and will return domain data without restriction.
+        //
+        // The downside of this approach is that we have to be sure that no change that needs
+        // to be persisted will be made to the user instance afterward (i.e through middlewares).
 
-        // if (null === $user) {
-        //     $user = User::create(
-        //         [
-        //             'name' => $identifier,
-        //             'email' => $identifier,
-        //             'password' => bcrypt(Str::random(64)),
-        //         ]
-        //     );
-        // }
+        $user = new User;
+        $user->name = $identifier['user'];
+        $user->email = Arr::has($identifier, 'email') ? $identifier['email'] : $identifier['user'];
 
         return $user;
     }

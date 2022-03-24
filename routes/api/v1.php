@@ -1,27 +1,24 @@
 <?php
 
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
 | API Routes
 |--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
 */
 
+/**
+ * Unprotected routes
+ */
 Route::get('user/name', 'UserController@show')->name('user.show.name');
 
-Route::group(['middleware' => 'auth:reverse-proxy,api'], function() {
 
-    Route::get('oauth/personal-access-tokens', '\Laravel\Passport\Http\Controllers\PersonalAccessTokenController@forUser')->name('passport.personal.tokens.index');
-    Route::post('oauth/personal-access-tokens', '\Laravel\Passport\Http\Controllers\PersonalAccessTokenController@store')->name('passport.personal.tokens.store');
-    Route::delete('oauth/personal-access-tokens/{token_id}', '\Laravel\Passport\Http\Controllers\PersonalAccessTokenController@destroy')->name('passport.personal.tokens.destroy');
-
-    Route::get('user', 'UserController@show')->name('user.show');
+/**
+ * Routes protected by the api authentication guard
+ */
+Route::group(['middleware' => 'auth:api-guard'], function () {
+    Route::get('user', 'UserController@show')->name('user.show'); // Returns email address in addition to the username
 
     Route::get('settings/{settingName}', 'SettingController@show')->name('settings.show');
     Route::get('settings', 'SettingController@index')->name('settings.index');
@@ -47,5 +44,4 @@ Route::group(['middleware' => 'auth:reverse-proxy,api'], function() {
 
     Route::post('icons', 'IconController@upload')->name('icons.upload');
     Route::delete('icons/{icon}', 'IconController@delete')->name('icons.delete');
-
 });

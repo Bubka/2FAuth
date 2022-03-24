@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use DarkGhostHunter\Larapass\Http\RegistersWebAuthn;
+use App\Exceptions\UnsupportedWithReverseProxyException;
 
 class WebAuthnRegisterController extends Controller
 {
@@ -22,11 +23,13 @@ class WebAuthnRegisterController extends Controller
 
     /**
      * Create a new controller instance.
-     *
-     * @return void
      */
     public function __construct()
     {
-        // $this->middleware('auth');
+        $authGuard = config('auth.defaults.guard');
+
+        if ($authGuard === 'reverse-proxy-guard') {
+            throw new UnsupportedWithReverseProxyException();
+        }
     }
 }

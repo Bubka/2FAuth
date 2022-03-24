@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
+use App\Exceptions\UnsupportedWithReverseProxyException;
 
 class ForgotPasswordController extends Controller
 {
@@ -20,6 +21,20 @@ class ForgotPasswordController extends Controller
     */
 
     use SendsPasswordResetEmails;
+
+
+    /**
+     * Create a new controller instance.
+     */
+    public function __construct()
+    {
+        $authGuard = config('auth.defaults.guard');
+
+        if ($authGuard === 'reverse-proxy-guard') {
+            throw new UnsupportedWithReverseProxyException();
+        }
+    }
+
 
     /**
      * Validate the email for the given request.

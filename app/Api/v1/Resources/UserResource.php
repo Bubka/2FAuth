@@ -16,8 +16,9 @@ class UserResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'id'    => $this->when($request->user(), $this->id),
             'name'  => $this->name,
-            'email' => $this->when(Auth::guard()->check(), $this->email),
+            'email' => $this->when($request->user(), $this->email),
         ];
     }
 }

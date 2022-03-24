@@ -18,10 +18,13 @@ class KickOutInactiveUser
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next, $guard = null)
+    public function handle($request, Closure $next, ...$quards)
     {
-        // We do not track activity of guest or user authenticated against a bearer token
-        if (Auth::guest() || $request->bearerToken()) {
+        // We do not track activity of:
+        // - Guest
+        // - User authenticated against a bearer token
+        // - User authenticated via a reverse-proxy
+        if (Auth::guest() || $request->bearerToken() || config('auth.defaults.guard') === 'reverse-proxy-guard') {
             return $next($request);
         }
      

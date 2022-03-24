@@ -129,6 +129,8 @@
                 const { data } = await vm.axios.get('api/v1/user/name')
 
                 if( data.name ) {
+                    // The email property is only sent when the user is logged in.
+                    // In this case we push the user to the index view.
                     if( data.email ) {
                         return next({ name: 'accounts' });
                     }

@@ -1,5 +1,8 @@
 <?php
 
+// Largely inspired by Firefly III remote user implementation (https://github.com/firefly-iii)
+// See https://github.com/firefly-iii/firefly-iii/blob/main/app/Support/Authentication/RemoteUserGuard.php
+
 namespace App\Services\Auth;
 
 use Exception;
@@ -66,16 +69,26 @@ class ReverseProxyGuard implements Guard
         $user = null;
 
         // Get the user identifier from $_SERVER or apache filtered headers
-        $header = config('auth.guard_header', 'REMOTE_USER');
-        $userID = request()->server($header) ?? apache_request_headers()[$header] ?? null;
+        $remoteUserHeader = config('auth.auth_proxy_headers.user', 'REMOTE_USER');
+        $identifier['user'] = request()->server($remoteUserHeader) ?? apache_request_headers()[$remoteUserHeader] ?? null;
 
-        if (null === $userID) {
-            Log::error(sprintf('No user in header "%s".', $header));
+        if ($identifier['user'] === null) {
+            Log::error(sprintf('No user in header "%s".', $remoteUserHeader));
             return $this->user = null;
-            // throw new Exception('The guard header was unexpectedly empty. See the logs.');
         }
 
-        $user = $this->provider->retrieveById($userID);
+        // Get the email identifier from $_SERVER
+        $remoteEmailHeader = config('auth.auth_proxy_headers.email');
+
+        if ($remoteEmailHeader) {
+            $remoteEmail = (string)(request()->server($remoteEmailHeader) ?? apache_request_headers()[$remoteEmailHeader] ?? null);
+
+            if ($remoteEmail) {
+                $identifier['email'] = $remoteEmail;
+            }
+        }
+
+        $user = $this->provider->retrieveById($identifier);
 
         return $this->user = $user;
     }

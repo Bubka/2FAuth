@@ -21,8 +21,11 @@ class LogUserLastSeen
         $guards = empty($guards) ? [null] : $guards;
 
         foreach ($guards as $guard) {
-            // Activity coming from a client authenticated with a personal access token is not logged
-            if( Auth::guard($guard)->check() && !$request->bearerToken()) {
+            // We do not track activity of:
+            // - Guest
+            // - User authenticated against a bearer token
+            // - User authenticated via a reverse-proxy
+            if (Auth::guard($guard)->check() && !$request->bearerToken() && config('auth.defaults.guard') !== 'reverse-proxy-guard') {
                 Auth::guard($guard)->user()->last_seen_at = Carbon::now()->format('Y-m-d H:i:s');
                 Auth::guard($guard)->user()->save();
                 break;

@@ -18,9 +18,9 @@ class AuthServiceProvider extends ServiceProvider
      *
      * @var array
      */
-    protected $policies = [
-        // 'App\Models\Model' => 'App\Policies\ModelPolicy',
-    ];
+    // protected $policies = [
+    //     'App\Models\Model' => 'App\Policies\ModelPolicy',
+    // ];
 
     /**
      * Register any authentication / authorization services.
@@ -46,15 +46,17 @@ class AuthServiceProvider extends ServiceProvider
                     $app[Hasher::class],
                     $config['model']
                 );
-            });
+            }
+        );
 
-        // 
+        // Register a custom provider for reverse-proxy authentication
         Auth::provider('remote-user', function ($app, array $config) {
             // Return an instance of Illuminate\Contracts\Auth\UserProvider...
     
             return new RemoteUserProvider;
         });
 
+        // Register a custom driver for reverse-proxy authentication
         Auth::extend('reverse-proxy', function ($app, string $name, array $config) {  
             // Return an instance of Illuminate\Contracts\Auth\Guard...
 

@@ -65,5 +65,10 @@ class Handler extends ExceptionHandler
             return response()->json([
                 'message' => $exception->getMessage()], 400);
         });
+
+        $this->renderable(function (UnsupportedWithReverseProxyException $exception, $request) {
+            return response()->json([
+                'message' => __('errors.unsupported_with_reverseproxy')], 400);
+        });
     }
 }
