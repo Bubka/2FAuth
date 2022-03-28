@@ -95,15 +95,14 @@ For SQLite, place the database `.sqlite` file in the `database/` folder of your 
 
 ### Set your variables
 
-In your installation directory make a copy of the `.env.example` file and rename the copy `.env`.
-Edit the `.env` file and adapt the settings to your running environment (see instructions in the file)
+In your installation directory, edit the `.env` file and adapt the settings to your running environment (see instructions in the file).
+If the file is missing simply make a copy of the `.env.example` file and rename the copy `.env`.
 
 ### Prepare some stuff
 
 ```sh
 php artisan migrate:refresh
 php artisan passport:install
-php artisan storage:link
 php artisan config:cache
 ```
 

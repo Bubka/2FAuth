@@ -59,11 +59,19 @@
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"
         ],
-        "post-root-package-install": [
-            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        "pre-install-cmd": [
+            
         ],
-        "post-create-project-cmd": [
-            "@php artisan key:generate --ansi"
+        "post-install-cmd": [
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
+            "@php artisan key:generate",
+            "@php artisan storage:link"
+        ],
+        "pre-update-cmd": [
+            
+        ],
+        "post-update-cmd": [
+          "@php artisan cache:clear"
         ],
         "test" : [
             "vendor/bin/phpunit"
