@@ -36,4 +36,5 @@ return [
     'aborted_by_user' => 'Aborted by user',
     'security_device_unsupported' => 'Security device unsupported',
     'unsupported_with_reverseproxy' => 'Not applicable when using an auth proxy',
+    'user_deletion_failed' => 'User account deletion failed, no data have been deleted',
 ];

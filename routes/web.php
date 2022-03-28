@@ -42,6 +42,7 @@ Route::group(['middleware' => 'behind-auth'], function () {
     Route::put('user', 'Auth\UserController@update')->name('user.update');
     Route::patch('user/password', 'Auth\PasswordController@update')->name('user.password.update');
     Route::get('user/logout', 'Auth\LoginController@logout')->name('user.logout');
+    Route::delete('user', 'Auth\UserController@delete')->name('user.delete')->middleware('disableInDemoMode');
 
     Route::get('oauth/personal-access-tokens', 'Auth\PersonalAccessTokenController@forUser')->name('passport.personal.tokens.index');
     Route::post('oauth/personal-access-tokens', 'Auth\PersonalAccessTokenController@store')->name('passport.personal.tokens.store');

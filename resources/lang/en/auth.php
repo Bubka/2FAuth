@@ -33,6 +33,7 @@ return [
     'confirm' => [
         'logout' => 'Are you sure you want to log out?',
         'revoke_device' => 'Are you sure you want to revoke this device?',
+        'delete_account' => 'Are you sure you want to delete your account?',
     ],
     'webauthn' => [
         'security_device' => 'a security device',
@@ -96,6 +97,10 @@ return [
         'register_punchline' => 'Welcome to 2FAuth.<br/>You need an account to go further. Fill this form to register yourself, and please, choose a strong password, 2FA data are sensitives.',
         'reset_punchline' => '2FAuth will send you a password reset link to this address. Click the link in the received email to set a new password.',
         'name_this_device' => 'Name this device',
+        'delete_account' => 'Delete account',
+        'delete_your_account' => 'Delete your account',
+        'delete_your_account_and_reset_all_data' => 'This will reset 2FAuth. Your user account will be deleted as well as all 2FA data. There is no going back.',
+        'user_account_successfully_deleted' => 'User account successfully deleted',
     ],
 
 ];

@@ -22,6 +22,16 @@
                         <form-buttons :isBusy="formPassword.isBusy" :caption="$t('auth.forms.change_password')" />
                     </fieldset>
                 </form>
+                <form @submit.prevent="submitDelete" @keydown="formDelete.onKeydown($event)">
+                    <h4 class="title is-4 pt-6 has-text-danger">{{ $t('auth.forms.delete_account') }}</h4>
+                    <div class="field is-size-7-mobile">
+                        {{ $t('auth.forms.delete_your_account_and_reset_all_data')}}
+                    </div>
+                    <fieldset :disabled="isRemoteUser">
+                        <form-field :form="formDelete" fieldName="password" inputType="password" :label="$t('auth.forms.current_password.label')" :help="$t('auth.forms.current_password.help')" />
+                        <form-buttons :isBusy="formDelete.isBusy" :caption="$t('auth.forms.delete_your_account')" :color="'is-danger'" />
+                    </fieldset>
+                </form>
             </form-wrapper>
         </div>
         <vue-footer :showButtons="true">
@@ -51,6 +61,9 @@
                     currentPassword : '',
                     password : '',
                     password_confirmation : '',
+                }),
+                formDelete: new Form({
+                    password : '',
                 }),
                 isRemoteUser: false,
             }
@@ -101,7 +114,31 @@
                         this.$router.push({ name: 'genericError', params: { err: error.response } });
                     }
                 });
-            }
+            },
+
+            submitDelete(e) {
+                e.preventDefault()
+
+                if(confirm(this.$t('auth.confirm.delete_account'))) {
+                    
+                    this.formDelete.delete('/user', {returnError: true})
+                    .then(response => {
+
+                        this.$notify({ type: 'is-success', text: this.$t('auth.forms.user_account_successfully_deleted') })
+                        this.$router.push({ name: 'register' });
+                    })
+                    .catch(error => {
+                        if( error.response.status === 400 ) {
+
+                            this.$notify({ type: 'is-danger', text: error.response.data.message })
+                        }
+                        else if( error.response.status !== 422 ) {
+                            
+                            this.$router.push({ name: 'genericError', params: { err: error.response } });
+                        }
+                    });
+                }
+            },
         },
     }
 </script>
