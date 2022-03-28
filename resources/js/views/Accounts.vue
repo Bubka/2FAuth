@@ -6,7 +6,7 @@
                 <div class="column is-one-third-tablet is-one-quarter-desktop is-one-quarter-widescreen is-one-quarter-fullhd">
                     <div class="columns is-multiline">
                         <div class="column is-full" v-for="group in groups" v-if="group.twofaccounts_count > 0" :key="group.id">
-                            <button :disabled="group.id == $root.appSettings.activeGroup" class="button is-fullwidth is-dark has-text-light is-outlined" @click="setActiveGroup(group.id)">{{ group.name }}</button>
+                            <button class="button is-fullwidth is-dark has-text-light is-outlined" @click="setActiveGroup(group.id)">{{ group.name }}</button>
                         </div>
                     </div>
                     <div class="columns is-centered">
