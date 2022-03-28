@@ -16,9 +16,9 @@ use App\Http\Controllers\Auth\WebAuthnRecoveryController;
 /**
  * Routes that only work for unauthenticated user (return an error otherwise)
  */
-Route::group(['middleware' => 'guest'], function () {
+Route::group(['middleware' => ['guest', 'disableInDemoMode']], function () {
     Route::post('user', 'Auth\RegisterController@register')->name('user.register');
-    Route::post('user/password/lost', 'Auth\ForgotPasswordController@sendResetLinkEmail')->middleware('AvoidResetPassword')->name('user.password.lost');;
+    Route::post('user/password/lost', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('user.password.lost');;
     Route::post('user/password/reset', 'Auth\ResetPasswordController@reset')->name('user.password.reset');
     Route::post('webauthn/login/options', [WebAuthnLoginController::class, 'options'])->name('webauthn.login.options');
     Route::post('webauthn/lost', [WebAuthnDeviceLostController::class, 'sendRecoveryEmail'])->name('webauthn.lost');
@@ -40,7 +40,7 @@ Route::group(['middleware' => ['guest', 'throttle:10,1']], function () {
  */
 Route::group(['middleware' => 'behind-auth'], function () {
     Route::put('user', 'Auth\UserController@update')->name('user.update');
-    Route::patch('user/password', 'Auth\PasswordController@update')->name('user.password.update');
+    Route::patch('user/password', 'Auth\PasswordController@update')->name('user.password.update')->middleware('disableInDemoMode');
     Route::get('user/logout', 'Auth\LoginController@logout')->name('user.logout');
     Route::delete('user', 'Auth\UserController@delete')->name('user.delete')->middleware('disableInDemoMode');
 

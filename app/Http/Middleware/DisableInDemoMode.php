@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 
-class AvoidPasswordResetInDemo
+class DisableInDemoMode
 {
     /**
      * Handle an incoming request.
@@ -21,7 +21,7 @@ class AvoidPasswordResetInDemo
         if( config('2fauth.config.isDemoApp') ) {
             Log::notice('Cannot request a password reset in Demo mode');
 
-            return response()->json(['message' => __('auth.forms.no_reset_password_in_demo')], Response::HTTP_UNAUTHORIZED);
+            return response()->json(['message' => __('auth.forms.disabled_in_demo')], Response::HTTP_UNAUTHORIZED);
         }
 
         return $next($request);
