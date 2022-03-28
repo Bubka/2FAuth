@@ -79,6 +79,8 @@ class ResetDemo extends Command
             DB::table('oauth_access_tokens')->truncate();
             DB::table('oauth_personal_access_clients')->truncate();
             DB::table('oauth_refresh_tokens')->truncate();
+            DB::table('web_authn_credentials')->truncate();
+            DB::table('web_authn_recoveries')->truncate();
             DB::table('twofaccounts')->truncate();
             DB::table('options')->truncate();
             DB::table('groups')->truncate();
