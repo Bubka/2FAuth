@@ -7,7 +7,7 @@
                 </div>
             </div>
         </div>
-        <div v-if="$route.name === 'settings'" class="content has-text-centered is-size-6">
+        <div v-if="$route.name.startsWith('settings.')" class="content has-text-centered is-size-6">
             <a class="has-text-grey" href="https://github.com/Bubka/2FAuth"><b>2FAuth</b> <font-awesome-icon :icon="['fab', 'github-alt']" /></a> - v{{ appVersion }}
         </div>
         <div v-else class="content has-text-centered">

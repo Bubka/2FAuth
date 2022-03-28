@@ -24,7 +24,7 @@
     </div>
     <script type="text/javascript">
         var appSettings = {!! $appSettings !!};
-        var appVersion = '{{ config("app.version") }}';
+        var appVersion = '{{ config("2fauth.version") }}';
         var appLocales = {!! $locales !!};
     </script>
     <script src="{{ mix('js/manifest.js') }}"></script>
