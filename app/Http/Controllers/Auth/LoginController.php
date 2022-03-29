@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Lang;
 use App\Http\Requests\LoginRequest;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Carbon\Carbon;
-use App\Exceptions\UnsupportedWithReverseProxyException;
 
 
 class LoginController extends Controller
@@ -27,19 +26,6 @@ class LoginController extends Controller
     */
 
     use AuthenticatesUsers;
-
-
-    /**
-     * Create a new controller instance.
-     */
-    public function __construct()
-    {
-        $authGuard = config('auth.defaults.guard');
-
-        if ($authGuard === 'reverse-proxy-guard') {
-            throw new UnsupportedWithReverseProxyException();
-        }
-    }
 
 
     /**

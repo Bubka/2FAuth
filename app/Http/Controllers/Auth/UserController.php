@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Artisan;
-use App\Exceptions\UnsupportedWithReverseProxyException;
 use Exception;
 
 class UserController extends Controller
@@ -32,11 +31,6 @@ class UserController extends Controller
     public function __construct(TwoFAccountService $twofaccountService)
     {
         $this->twofaccountService = $twofaccountService;
-        $authGuard = config('auth.defaults.guard');
-
-        if ($authGuard === 'reverse-proxy-guard') {
-            throw new UnsupportedWithReverseProxyException();
-        }
     }
 
     

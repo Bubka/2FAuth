@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use DarkGhostHunter\Larapass\Http\SendsWebAuthnRecoveryEmail;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
-use App\Exceptions\UnsupportedWithReverseProxyException;
 
 class WebAuthnDeviceLostController extends Controller
 {
@@ -22,19 +21,6 @@ class WebAuthnDeviceLostController extends Controller
     | will send him a link to his email to create new WebAuthn credentials.
     |
     */
-
-    /**
-     * Create a new controller instance.
-     */
-    public function __construct()
-    {
-        $authGuard = config('auth.defaults.guard');
-
-        if ($authGuard === 'reverse-proxy-guard') {
-            throw new UnsupportedWithReverseProxyException();
-        }
-    }
-
 
     /**
      * The recovery credentials to retrieve through validation rules.

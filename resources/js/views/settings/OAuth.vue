@@ -84,12 +84,8 @@
 
                 this.isFetching = true
 
-                await this.axios.get('/oauth/personal-access-tokens').then(response => {
-                    if (response.status === 202) {
-                        this.isRemoteUser = true
-                        return
-                    }
-
+                await this.axios.get('/oauth/personal-access-tokens')
+                .then(response => {
                     const tokens = []
 
                     response.data.forEach((data) => {
@@ -103,6 +99,16 @@
                     })
 
                     this.tokens = tokens
+                })
+                .catch(error => {
+                    if( error.response.status === 400 ) {
+
+                        this.isRemoteUser = true
+                    }
+                    else {
+
+                        this.$router.push({ name: 'genericError', params: { err: error.response } });
+                    }
                 })
 
                 this.isFetching = false

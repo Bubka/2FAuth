@@ -6,7 +6,6 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use DarkGhostHunter\Larapass\Http\AuthenticatesWebAuthn;
-use App\Exceptions\UnsupportedWithReverseProxyException;
 
 class WebAuthnLoginController extends Controller
 {
@@ -26,18 +25,6 @@ class WebAuthnLoginController extends Controller
     | by your Authentication Guard once the user is attempting to login.
     |
     */
-
-    /**
-     * Create a new controller instance.
-     */
-    public function __construct()
-    {
-        $authGuard = config('auth.defaults.guard');
-
-        if ($authGuard === 'reverse-proxy-guard') {
-            throw new UnsupportedWithReverseProxyException();
-        }
-    }
 
 
 	public function options(Request $request)

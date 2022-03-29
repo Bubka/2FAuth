@@ -8,7 +8,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\RegistersUsers;
-use App\Exceptions\UnsupportedWithReverseProxyException;
 
 class RegisterController extends Controller
 {
@@ -24,19 +23,6 @@ class RegisterController extends Controller
     */
 
     use RegistersUsers;
-
-
-    /**
-     * Create a new controller instance.
-     */
-    public function __construct()
-    {
-        $authGuard = config('auth.defaults.guard');
-
-        if ($authGuard === 'reverse-proxy-guard') {
-            throw new UnsupportedWithReverseProxyException();
-        }
-    }
 
 
     /**

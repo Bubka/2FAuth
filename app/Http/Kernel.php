@@ -71,7 +71,9 @@ class Kernel extends HttpKernel
         'auth' => \App\Http\Middleware\Authenticate::class,
         'guest' => \App\Http\Middleware\RejectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-        'disableInDemoMode' => \App\Http\Middleware\DisableInDemoMode::class,
+        'rejectIfDemoMode' => \App\Http\Middleware\RejectIfDemoMode::class,
+        'rejectIfReverseProxy' => \App\Http\Middleware\RejectIfReverseProxy::class,
+        
     ];
 
     /**

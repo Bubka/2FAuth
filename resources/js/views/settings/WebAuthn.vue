@@ -101,11 +101,19 @@
 
                 this.isFetching = true
 
-                await this.axios.get('/webauthn/credentials').then(response => {
-                    if (response.status === 202) {
+                await this.axios.get('/webauthn/credentials', {returnError: true})
+                .then(response => {
+                    this.credentials = response.data
+                })
+                .catch(error => {
+                    if( error.response.status === 400 ) {
+
                         this.isRemoteUser = true
                     }
-                    else this.credentials = response.data
+                    else {
+
+                        this.$router.push({ name: 'genericError', params: { err: error.response } });
+                    }
                 })
 
                 this.isFetching = false
