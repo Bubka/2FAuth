@@ -11,6 +11,7 @@ before_script:
   - travis_retry composer self-update
   - travis_retry composer install --no-interaction
   - cp .env.travis .env
+  - cat .env
   - php artisan key:generate
   - php artisan env
 
