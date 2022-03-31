@@ -1,3 +1,6 @@
+env:
+  - XDEBUG_MODE=coverage
+
 language: php
 
 php:
