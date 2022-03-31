@@ -1,6 +1,8 @@
 name: CI
 on:
   push:
+    branches:    
+      - master
     paths:
       - .github/workflows/ci.yml
       - app/**
@@ -22,6 +24,8 @@ on:
       - phpunit.xml
       - server.php
   pull_request:
+    branches:    
+      - master
     paths:
       - .github/workflows/ci.yml
       - app/**
