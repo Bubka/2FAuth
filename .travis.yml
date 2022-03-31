@@ -8,18 +8,13 @@ php:
   - 8.0
 
 before_script:
-  - cp .env.travis .env
   - travis_retry composer self-update
   - travis_retry composer install --no-interaction
+  - cp .env.travis .env
   - php artisan key:generate
-  - php artisan config:clear
   - php artisan env
-  - nvm install node --lts
-  - npm install npm@latest -g
-  - npm install
 
 script:
-  - npm run dev
   - vendor/bin/phpunit --coverage-clover=coverage.xml
 
 after_success:
