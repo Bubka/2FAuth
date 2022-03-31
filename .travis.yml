@@ -8,10 +8,9 @@ php:
   - 8.0
 
 before_script:
-  - cp .env.travis .env
   - travis_retry composer self-update
   - travis_retry composer install --no-interaction
-  - php artisan key:generate
+  - cp .env.travis .env
   - nvm install node --lts
   - npm install npm@latest -g
   - npm install
