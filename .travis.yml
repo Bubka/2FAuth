@@ -12,6 +12,8 @@ before_script:
   - travis_retry composer self-update
   - travis_retry composer install --no-interaction
   - php artisan key:generate
+  - php artisan config:clear
+  - php artisan env
   - nvm install node --lts
   - npm install npm@latest -g
   - npm install
