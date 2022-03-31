@@ -13,7 +13,7 @@ use App\Listeners\DissociateTwofaccountFromGroup;
  */
 class DissociateTwofaccountFromGroupTest extends FeatureTestCase
 {
-    public function test_it_stores_time_to_session()
+    public function test_twofaccount_is_released_on_group_deletion()
     {
         $group = Group::factory()->make();
         $event = new GroupDeleting($group);

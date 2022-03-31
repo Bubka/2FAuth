@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Storage;
  */
 class CleanIconStorageTest extends TestCase
 {
-    public function test_it_stores_time_to_session()
+    public function test_it_deletes_icon_file_on_twofaccount_deletion()
     {
         \Facades\App\Services\SettingService::shouldReceive('get')
             ->with('useEncryption')
