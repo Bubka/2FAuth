@@ -44,9 +44,9 @@ Route::group(['middleware' => ['behind-auth', 'rejectIfReverseProxy']], function
     Route::get('user/logout', 'Auth\LoginController@logout')->name('user.logout');
     Route::delete('user', 'Auth\UserController@delete')->name('user.delete')->middleware('rejectIfDemoMode');
 
-    Route::get('oauth/personal-access-tokens', 'Laravel\Passport\Http\Controllers\PersonalAccessTokenController@forUser')->name('passport.personal.tokens.index');
-    Route::post('oauth/personal-access-tokens', 'Laravel\Passport\Http\Controllers\PersonalAccessTokenController@store')->name('passport.personal.tokens.store');
-    Route::delete('oauth/personal-access-tokens/{token_id}', 'Laravel\Passport\Http\Controllers\PersonalAccessTokenController@destroy')->name('passport.personal.tokens.destroy');
+    Route::get('oauth/personal-access-tokens', '\Laravel\Passport\Http\Controllers\PersonalAccessTokenController@forUser')->name('passport.personal.tokens.index');
+    Route::post('oauth/personal-access-tokens', '\Laravel\Passport\Http\Controllers\PersonalAccessTokenController@store')->name('passport.personal.tokens.store');
+    Route::delete('oauth/personal-access-tokens/{token_id}', '\Laravel\Passport\Http\Controllers\PersonalAccessTokenController@destroy')->name('passport.personal.tokens.destroy');
     
     Route::post('webauthn/register/options', [WebAuthnRegisterController::class, 'options'])->name('webauthn.register.options');
     Route::post('webauthn/register', [WebAuthnRegisterController::class, 'register'])->name('webauthn.register');
