@@ -81,7 +81,7 @@ docker build -t 2fauth/2fauth https://github.com/Bubka/2FAuth.git
 You can build a [specific release](https://github.com/Bubka/2FAuth/releases) by appending the release tag with `#<release-tag>` to the command. For example:
 
 ```sh
-docker build -t 2fauth/2fauth https://github.com/Bubka/2FAuth.git#v2.1.0
+docker build -t 2fauth/2fauth https://github.com/Bubka/2FAuth.git#v3.0.0
 ```
 
 ### Build the image for a specific commit

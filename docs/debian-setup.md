@@ -5,7 +5,7 @@ This applies to Debian Buster, but similar instructions should apply for other D
 ## What we will do
 
 - We will use PHP 7.4
-- We will use version v2.1.0 of 2fauth
+- We will use version v3.0.0 of 2fauth
 - We will setup to use an Sqlite database
 - We will use Nginx and PHP-FPM to serve our site on port `8000`
 - We will run all this as user `www-data` without root
@@ -35,7 +35,7 @@ Let's place 2fauth's code in `/srv`:
 
 ```bash
 mkdir -p /srv
-VERSION=v2.1.0
+VERSION=v3.0.0
 wget -qO- "https://github.com/Bubka/2FAuth/archive/refs/tags/${VERSION}.tar.gz" | \
     tar -xz --strip-components=1 -C /srv
 ```
