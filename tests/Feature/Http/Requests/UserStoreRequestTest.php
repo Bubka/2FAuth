@@ -1,12 +1,15 @@
 <?php
 
-namespace Tests\Api\v1\Requests;
+namespace Tests\Feature\Http\Requests;
 
-use App\Api\v1\Requests\UserStoreRequest;
+use App\Http\Requests\UserStoreRequest;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Validator;
 use Tests\FeatureTestCase;
 
+/**
+ * @covers \App\Http\Requests\UserStoreRequest
+ */
 class UserStoreRequestTest extends FeatureTestCase
 {
 

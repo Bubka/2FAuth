@@ -45,7 +45,7 @@ class SettingControllerTest extends FeatureTestCase
      */
     public function test_index_returns_setting_collection()
     {
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('GET', '/api/v1/settings')
             ->assertOk()
             ->assertJsonStructure([
@@ -59,7 +59,7 @@ class SettingControllerTest extends FeatureTestCase
      */
     public function test_show_native_unchanged_setting_returns_consistent_value()
     {
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('GET', '/api/v1/settings/' . self::TWOFAUTH_NATIVE_SETTING)
             ->assertOk()
             ->assertExactJson([
@@ -77,7 +77,7 @@ class SettingControllerTest extends FeatureTestCase
         $settingService = resolve('App\Services\SettingService');
         $settingService->set(self::TWOFAUTH_NATIVE_SETTING, self::TWOFAUTH_NATIVE_SETTING_CHANGED_VALUE);
 
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('GET', '/api/v1/settings/' . self::TWOFAUTH_NATIVE_SETTING)
             ->assertOk()
             ->assertExactJson([
@@ -95,7 +95,7 @@ class SettingControllerTest extends FeatureTestCase
         $settingService = resolve('App\Services\SettingService');
         $settingService->set(self::USER_DEFINED_SETTING, self::USER_DEFINED_SETTING_VALUE);
 
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('GET', '/api/v1/settings/' . self::USER_DEFINED_SETTING)
             ->assertOk()
             ->assertExactJson([
@@ -110,7 +110,7 @@ class SettingControllerTest extends FeatureTestCase
      */
     public function test_show_missing_setting_returns_not_found()
     {
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('GET', '/api/v1/settings/missing')
             ->assertNotFound();
     }
@@ -121,7 +121,7 @@ class SettingControllerTest extends FeatureTestCase
      */
     public function test_store_custom_user_setting_returns_success()
     {
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/settings', [
                 'key' => self::USER_DEFINED_SETTING,
                 'value' => self::USER_DEFINED_SETTING_VALUE,
@@ -139,7 +139,7 @@ class SettingControllerTest extends FeatureTestCase
      */
     public function test_store_invalid_custom_user_setting_returns_validation_error()
     {
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/settings', [
                 'key' => null,
                 'value' => null,
@@ -156,7 +156,7 @@ class SettingControllerTest extends FeatureTestCase
         $settingService = resolve('App\Services\SettingService');
         $settingService->set(self::USER_DEFINED_SETTING, self::USER_DEFINED_SETTING_VALUE);
 
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/settings', [
                 'key' => self::USER_DEFINED_SETTING,
                 'value' => self::USER_DEFINED_SETTING_VALUE,
@@ -170,7 +170,7 @@ class SettingControllerTest extends FeatureTestCase
      */
     public function test_update_unchanged_native_setting_returns_updated_setting()
     {
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('PUT', '/api/v1/settings/' . self::TWOFAUTH_NATIVE_SETTING, [
                 'value' => self::TWOFAUTH_NATIVE_SETTING_CHANGED_VALUE,
             ])
@@ -190,7 +190,7 @@ class SettingControllerTest extends FeatureTestCase
         $settingService = resolve('App\Services\SettingService');
         $settingService->set(self::USER_DEFINED_SETTING, self::USER_DEFINED_SETTING_VALUE);
 
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('PUT', '/api/v1/settings/' . self::USER_DEFINED_SETTING, [
                 'value' => self::USER_DEFINED_SETTING_CHANGED_VALUE,
             ])
@@ -207,7 +207,7 @@ class SettingControllerTest extends FeatureTestCase
      */
     public function test_update_missing_user_setting_returns_created_setting()
     {
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('PUT', '/api/v1/settings/' . self::USER_DEFINED_SETTING, [
                 'value' => self::USER_DEFINED_SETTING_CHANGED_VALUE,
             ])
@@ -227,7 +227,7 @@ class SettingControllerTest extends FeatureTestCase
         $settingService = resolve('App\Services\SettingService');
         $settingService->set(self::USER_DEFINED_SETTING, self::USER_DEFINED_SETTING_VALUE);
 
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('DELETE', '/api/v1/settings/' . self::USER_DEFINED_SETTING)
             ->assertNoContent();
     }
@@ -238,7 +238,7 @@ class SettingControllerTest extends FeatureTestCase
      */
     public function test_destroy_native_setting_returns_bad_request()
     {
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('DELETE', '/api/v1/settings/' . self::TWOFAUTH_NATIVE_SETTING)
             ->assertStatus(400)
             ->assertJsonStructure([
@@ -253,7 +253,7 @@ class SettingControllerTest extends FeatureTestCase
      */
     public function test_destroy_missing_user_setting_returns_not_found()
     {
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('DELETE', '/api/v1/settings/' . self::USER_DEFINED_SETTING)
             ->assertNotFound();
     }

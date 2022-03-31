@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Api\v1\Controllers\Auth;
+namespace Tests\Feature\Auth;
 
 use Tests\FeatureTestCase;
 
@@ -25,7 +25,7 @@ class RegisterControllerTest extends FeatureTestCase
      */
     public function test_register_returns_success()
     {
-        $response = $this->json('POST', '/api/v1/user', [
+        $response = $this->json('POST', '/user', [
                 'name' => self::USERNAME,
                 'email' => self::EMAIL,
                 'password' => self::PASSWORD,
@@ -47,7 +47,7 @@ class RegisterControllerTest extends FeatureTestCase
      */
     public function test_register_with_invalid_data_returns_validation_error()
     {
-        $response = $this->json('POST', '/api/v1/user', [
+        $response = $this->json('POST', '/user', [
                 'name' => null,
                 'email' => self::EMAIL,
                 'password' => self::PASSWORD,

@@ -36,6 +36,8 @@ class RemoteUserProvider implements UserProvider
 
     /**
      * @inheritDoc
+     * 
+     * @codeCoverageIgnore
      */
     public function retrieveByToken($identifier, $token)
     {
@@ -44,6 +46,8 @@ class RemoteUserProvider implements UserProvider
 
     /**
      * @inheritDoc
+     * 
+     * @codeCoverageIgnore
      */
     public function updateRememberToken(Authenticatable $user, $token)
     {
@@ -52,6 +56,8 @@ class RemoteUserProvider implements UserProvider
 
     /**
      * @inheritDoc
+     * 
+     * @codeCoverageIgnore
      */
     public function retrieveByCredentials(array $credentials)
     {
@@ -60,6 +66,8 @@ class RemoteUserProvider implements UserProvider
 
     /**
      * @inheritDoc
+     * 
+     * @codeCoverageIgnore
      */
     public function validateCredentials(Authenticatable $user, array $credentials)
     {

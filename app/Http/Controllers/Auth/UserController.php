@@ -93,9 +93,11 @@ class UserController extends Controller
             Artisan::call('passport:install --force');
             Artisan::call('config:clear');
         }
+        // @codeCoverageIgnoreStart
         catch (\Throwable $e) {
             return response()->json(['message' => __('errors.user_deletion_failed')], 400);
         }
+        // @codeCoverageIgnoreEnd
 
         return response()->json(null, 204);
     }

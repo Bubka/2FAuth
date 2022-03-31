@@ -70,9 +70,15 @@ class ReverseProxyGuard implements Guard
 
         // Get the user identifier from $_SERVER or apache filtered headers
         $remoteUserHeader = config('auth.auth_proxy_headers.user', 'REMOTE_USER');
-        $identifier['user'] = request()->server($remoteUserHeader) ?? apache_request_headers()[$remoteUserHeader] ?? null;
 
-        if ($identifier['user'] === null) {
+        try {
+            $identifier['user'] = request()->server($remoteUserHeader) ?? apache_request_headers()[$remoteUserHeader] ?? null;
+        }
+        catch (\Throwable $e) {
+            $identifier['user'] = null;
+        }
+
+        if (! $identifier['user']) {
             Log::error(sprintf('No user in header "%s".', $remoteUserHeader));
             return $this->user = null;
         }
@@ -81,7 +87,12 @@ class ReverseProxyGuard implements Guard
         $remoteEmailHeader = config('auth.auth_proxy_headers.email');
 
         if ($remoteEmailHeader) {
-            $remoteEmail = (string)(request()->server($remoteEmailHeader) ?? apache_request_headers()[$remoteEmailHeader] ?? null);
+            try {
+                $remoteEmail = (string)(request()->server($remoteEmailHeader) ?? apache_request_headers()[$remoteEmailHeader] ?? null);
+            }
+            catch (\Throwable $e) {
+                $remoteEmail = null;
+            }
 
             if ($remoteEmail) {
                 $identifier['email'] = $remoteEmail;
@@ -95,6 +106,8 @@ class ReverseProxyGuard implements Guard
 
     /**
      * @inheritDoc
+     * 
+     * @codeCoverageIgnore
      */
     public function id()
     {
@@ -106,6 +119,8 @@ class ReverseProxyGuard implements Guard
      *
      * @param  array  $credentials
      * @return Exception
+     * 
+     * @codeCoverageIgnore
      */
     public function validate(array $credentials = [])
     {

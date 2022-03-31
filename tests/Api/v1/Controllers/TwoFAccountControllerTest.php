@@ -179,7 +179,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
     {
         TwoFAccount::factory()->count(3)->create();
 
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('GET', '/api/v1/twofaccounts')
             ->assertOk()
             ->assertJsonCount(3, $key = null)
@@ -196,7 +196,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
     {
         TwoFAccount::factory()->count(3)->create();
 
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('GET', '/api/v1/twofaccounts?withSecret=1')
             ->assertOk()
             ->assertJsonCount(3, $key = null)
@@ -213,7 +213,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
     {
         $twofaccount = TwoFAccount::factory()->create();
 
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('GET', '/api/v1/twofaccounts/' . $twofaccount->id)
             ->assertOk()
             ->assertJsonStructure(self::VALID_RESOURCE_STRUCTURE_WITH_SECRET);
@@ -227,7 +227,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
     {
         $twofaccount = TwoFAccount::factory()->create();
 
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('GET', '/api/v1/twofaccounts/' . $twofaccount->id . '?withSecret=0')
             ->assertOk()
             ->assertJsonStructure(self::VALID_RESOURCE_STRUCTURE_WITHOUT_SECRET);
@@ -251,7 +251,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
     //             'account' => '**encrypted**',
     //         ]);
 
-    //     $response = $this->actingAs($this->user, 'api')
+    //     $response = $this->actingAs($this->user, 'api-guard')
     //         ->json('GET', '/api/v1/twofaccounts/' . $twofaccount->id)
     //         ->assertJsonFragment([
     //             'secret' => '*indecipherable*',
@@ -265,7 +265,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
      */
     public function test_show_missing_twofaccount_returns_not_found()
     {
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('GET', '/api/v1/twofaccounts/1000')
             ->assertNotFound()
             ->assertJsonStructure([
@@ -282,7 +282,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
     {
         Storage::put('test.png', 'emptied to prevent missing resource replaced by null by the model getter');
 
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts', $data)
             ->assertCreated()
             ->assertJsonStructure(self::VALID_RESOURCE_STRUCTURE_WITH_SECRET);
@@ -328,7 +328,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
      */
     public function test_store_totp_using_fully_custom_uri_returns_consistent_resource()
     {
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts', [
                 'uri' => self::TOTP_FULL_CUSTOM_URI,
             ])
@@ -341,7 +341,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
      */
     public function test_store_totp_using_short_uri_returns_resource_with_default_otp_parameter()
     {
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts', [
                 'uri' => self::TOTP_SHORT_URI,
             ])
@@ -354,7 +354,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
      */
     public function test_store_totp_using_fully_custom_parameters_returns_consistent_resource()
     {
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts', self::ARRAY_OF_FULL_VALID_PARAMETERS_FOR_CUSTOM_TOTP)
             ->assertJsonFragment(self::JSON_FRAGMENTS_FOR_CUSTOM_TOTP);
     }
@@ -365,7 +365,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
      */
     public function test_store_totp_using_minimum_parameters_returns_consistent_resource()
     {
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts', self::ARRAY_OF_MINIMUM_VALID_PARAMETERS_FOR_TOTP)
             ->assertJsonFragment(self::JSON_FRAGMENTS_FOR_DEFAULT_TOTP);
     }
@@ -376,7 +376,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
      */
     public function test_store_hotp_using_fully_custom_uri_returns_consistent_resource()
     {
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts', [
                 'uri' => self::HOTP_FULL_CUSTOM_URI,
             ])
@@ -389,7 +389,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
      */
     public function test_store_hotp_using_short_uri_returns_resource_with_default_otp_parameter()
     {
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts', [
                 'uri' => self::HOTP_SHORT_URI,
             ])
@@ -402,7 +402,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
      */
     public function test_store_hotp_using_fully_custom_parameters_returns_consistent_resource()
     {
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts', self::ARRAY_OF_FULL_VALID_PARAMETERS_FOR_CUSTOM_HOTP)
             ->assertJsonFragment(self::JSON_FRAGMENTS_FOR_CUSTOM_HOTP);
     }
@@ -413,7 +413,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
      */
     public function test_store_hotp_using_minimum_parameters_returns_consistent_resource()
     {
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts', self::ARRAY_OF_MINIMUM_VALID_PARAMETERS_FOR_HOTP)
             ->assertJsonFragment(self::JSON_FRAGMENTS_FOR_DEFAULT_HOTP);
     }
@@ -424,7 +424,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
      */
     public function test_store_with_invalid_uri_returns_validation_error()
     {
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts', [
                 'uri' => self::INVALID_OTPAUTH_URI,
             ])
@@ -441,7 +441,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         $settingService = resolve('App\Services\SettingService');
         $settingService->set('defaultGroup', $this->group->id);
 
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts', [
                 'uri' => self::TOTP_SHORT_URI,
             ])
@@ -463,7 +463,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         // Set the active group
         $settingService->set('activeGroup', 1);
 
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts', [
                 'uri' => self::TOTP_SHORT_URI,
             ])
@@ -483,7 +483,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         // Set the default group to No group
         $settingService->set('defaultGroup', 0);
 
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts', [
                 'uri' => self::TOTP_SHORT_URI,
             ])
@@ -503,7 +503,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         // Set the default group to a non-existing one
         $settingService->set('defaultGroup', 1000);
 
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts', [
                 'uri' => self::TOTP_SHORT_URI,
             ])
@@ -520,7 +520,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
     {
         $twofaccount = TwoFAccount::factory()->create();
 
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('PUT', '/api/v1/twofaccounts/' . $twofaccount->id, self::ARRAY_OF_FULL_VALID_PARAMETERS_FOR_CUSTOM_TOTP)
             ->assertOk()
             ->assertJsonFragment(self::JSON_FRAGMENTS_FOR_CUSTOM_TOTP);
@@ -534,7 +534,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
     {
         $twofaccount = TwoFAccount::factory()->create();
 
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('PUT', '/api/v1/twofaccounts/' . $twofaccount->id, self::ARRAY_OF_FULL_VALID_PARAMETERS_FOR_CUSTOM_HOTP)
             ->assertOk()
             ->assertJsonFragment(self::JSON_FRAGMENTS_FOR_CUSTOM_HOTP);
@@ -546,7 +546,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
      */
     public function test_update_missing_twofaccount_returns_not_found()
     {
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('PUT', '/api/v1/twofaccounts/1000', self::ARRAY_OF_FULL_VALID_PARAMETERS_FOR_CUSTOM_TOTP)
             ->assertNotFound();
     }
@@ -559,7 +559,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
     {
         $twofaccount = TwoFAccount::factory()->create();
 
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('PUT', '/api/v1/twofaccounts/' . $twofaccount->id, self::ARRAY_OF_INVALID_PARAMETERS)
             ->assertStatus(422);
     }
@@ -572,7 +572,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
     {
         TwoFAccount::factory()->count(3)->create();
 
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts/reorder', [
                 'orderedIds' => [3,2,1]])
             ->assertStatus(200)
@@ -589,7 +589,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
     {
         TwoFAccount::factory()->count(3)->create();
 
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts/reorder', [
                 'orderedIds' => '3,2,1'])
             ->assertStatus(422);
@@ -601,7 +601,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
      */
     public function test_preview_returns_success_with_resource()
     {
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts/preview', [
                 'uri' => self::TOTP_FULL_CUSTOM_URI,
             ])
@@ -615,7 +615,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
      */
     public function test_preview_with_invalid_data_returns_validation_error()
     {
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts/preview', [
                 'uri' => self::INVALID_OTPAUTH_URI,
             ])
@@ -628,7 +628,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
      */
     public function test_preview_with_unreachable_image_returns_success()
     {
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts/preview', [
                 'uri' => self::TOTP_URI_WITH_UNREACHABLE_IMAGE,
             ])
@@ -656,7 +656,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             'icon' => '',
         ]);
 
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('GET', '/api/v1/twofaccounts/' . $twofaccount->id . '/otp')
             ->assertOk()
             ->assertJsonStructure(self::VALID_OTP_RESOURCE_STRUCTURE_FOR_TOTP)
@@ -672,7 +672,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
      */
     public function test_get_otp_by_posting_totp_uri_returns_consistent_resource()
     {
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts/otp', [
                 'uri' => self::TOTP_FULL_CUSTOM_URI,
             ])
@@ -690,7 +690,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
      */
     public function test_get_otp_by_posting_totp_parameters_returns_consistent_resource()
     {
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts/otp', self::ARRAY_OF_FULL_VALID_PARAMETERS_FOR_CUSTOM_TOTP)
             ->assertOk()
             ->assertJsonStructure(self::VALID_OTP_RESOURCE_STRUCTURE_FOR_TOTP)
@@ -718,7 +718,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             'icon' => '',
         ]);
 
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('GET', '/api/v1/twofaccounts/' . $twofaccount->id . '/otp')
             ->assertOk()
             ->assertJsonStructure(self::VALID_OTP_RESOURCE_STRUCTURE_FOR_HOTP)
@@ -734,7 +734,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
      */
     public function test_get_otp_by_posting_hotp_uri_returns_consistent_resource()
     {
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts/otp', [
                 'uri' => self::HOTP_FULL_CUSTOM_URI,
             ])
@@ -752,7 +752,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
      */
     public function test_get_otp_by_posting_hotp_parameters_returns_consistent_resource()
     {
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts/otp', self::ARRAY_OF_FULL_VALID_PARAMETERS_FOR_CUSTOM_HOTP)
             ->assertOk()
             ->assertJsonStructure(self::VALID_OTP_RESOURCE_STRUCTURE_FOR_HOTP)
@@ -768,7 +768,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
      */
     public function test_get_otp_by_posting_multiple_inputs_returns_bad_request()
     {
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts/otp', [
                 'uri' => self::HOTP_FULL_CUSTOM_URI,
                 'key' => 'value',
@@ -797,7 +797,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
                 'secret' => '**encrypted**',
             ]);
 
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('GET', '/api/v1/twofaccounts/' . $twofaccount->id . '/otp')
             ->assertStatus(400)
             ->assertJsonStructure([
@@ -811,7 +811,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
      */
     public function test_get_otp_using_missing_twofaccount_id_returns_not_found()
     {
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('GET', '/api/v1/twofaccounts/1000/otp')
             ->assertNotFound();
     }
@@ -822,7 +822,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
      */
     public function test_get_otp_by_posting_invalid_uri_returns_validation_error()
     {
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts/otp', [
                 'uri' => self::INVALID_OTPAUTH_URI,
             ])
@@ -835,7 +835,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
      */
     public function test_get_otp_by_posting_invalid_parameters_returns_validation_error()
     {
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts/otp', self::ARRAY_OF_INVALID_PARAMETERS)
             ->assertStatus(422);
     }
@@ -848,7 +848,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
     {
         TwoFAccount::factory()->count(3)->create();
 
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('GET', '/api/v1/twofaccounts/count')
             ->assertStatus(200)
             ->assertExactJson([
@@ -865,7 +865,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         TwoFAccount::factory()->count(3)->create();
         $ids = DB::table('twofaccounts')->pluck('id')->implode(',');
 
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('PATCH', '/api/v1/twofaccounts/withdraw?ids=1,2,3' . $ids)
             ->assertOk()
             ->assertJsonStructure([
@@ -882,7 +882,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         TwoFAccount::factory()->count(102)->create();
         $ids = DB::table('twofaccounts')->pluck('id')->implode(',');
 
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('PATCH', '/api/v1/twofaccounts/withdraw?ids=' . $ids)
             ->assertStatus(400)
             ->assertJsonStructure([
@@ -899,7 +899,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
     {
         $twofaccount = TwoFAccount::factory()->create();
 
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('DELETE', '/api/v1/twofaccounts/' . $twofaccount->id)
             ->assertNoContent();
     }
@@ -912,7 +912,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
     {
         $twofaccount = TwoFAccount::factory()->create();
 
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('DELETE', '/api/v1/twofaccounts/1000')
             ->assertNotFound();
     }
@@ -926,7 +926,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         TwoFAccount::factory()->count(3)->create();
         $ids = DB::table('twofaccounts')->pluck('id')->implode(',');
 
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('DELETE', '/api/v1/twofaccounts?ids=' . $ids)
             ->assertNoContent();
     }
@@ -940,7 +940,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         TwoFAccount::factory()->count(102)->create();
         $ids = DB::table('twofaccounts')->pluck('id')->implode(',');
 
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('DELETE', '/api/v1/twofaccounts?ids=' . $ids)
             ->assertStatus(400)
             ->assertJsonStructure([

@@ -59,6 +59,8 @@ class WebAuthnRecoveryController extends Controller
      * @param  string  $response
      *
      * @return \Illuminate\Http\JsonResponse
+     * 
+     * @codeCoverageIgnore - already covered by larapass test
      */
     protected function sendRecoveryResponse(Request $request, string $response): JsonResponse
     {
@@ -73,6 +75,8 @@ class WebAuthnRecoveryController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse|void
      * @throws \Illuminate\Validation\ValidationException
+     * 
+     * @codeCoverageIgnore - already covered by larapass test
      */
     protected function sendRecoveryFailedResponse(Request $request, string $response): JsonResponse
     {

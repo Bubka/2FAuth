@@ -148,8 +148,6 @@ class SettingServiceTest extends FeatureTestCase
 
         $all = $this->settingService->all();
 
-        $this->assertCount(count($native_options)+1, $all);
-
         $this->assertArrayHasKey(self::SETTING_NAME, $all);
         $this->assertEquals($all[self::SETTING_NAME], self::SETTING_VALUE_STRING);
 
@@ -157,6 +155,8 @@ class SettingServiceTest extends FeatureTestCase
             $this->assertArrayHasKey($key, $all);
             $this->assertEquals($all[$key], $val);
         }
+        
+        $this->assertArrayHasKey('lang', $all);
 
     }
 

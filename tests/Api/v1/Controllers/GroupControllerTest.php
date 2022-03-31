@@ -38,7 +38,7 @@ class GroupControllerTest extends FeatureTestCase
     {
         Group::factory()->count(3)->create();
 
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('GET', '/api/v1/groups')
             ->assertOk()
             ->assertJsonCount(4, $key = null)
@@ -62,7 +62,7 @@ class GroupControllerTest extends FeatureTestCase
      */
     public function test_store_returns_created_group_resource()
     {
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/groups', [
                 'name' => 'My second group',
             ])
@@ -80,7 +80,7 @@ class GroupControllerTest extends FeatureTestCase
      */
     public function test_store_invalid_data_returns_validation_error()
     {
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/groups', [
                 'name' => null,
             ])
@@ -97,7 +97,7 @@ class GroupControllerTest extends FeatureTestCase
             'name' => 'My group',
         ]);
 
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('GET', '/api/v1/groups/' . $group->id)
             ->assertOk()
             ->assertExactJson([
@@ -113,7 +113,7 @@ class GroupControllerTest extends FeatureTestCase
      */
     public function test_show_missing_group_returns_not_found()
     {
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('GET', '/api/v1/groups/1000')
             ->assertNotFound()
             ->assertJsonStructure([
@@ -129,7 +129,7 @@ class GroupControllerTest extends FeatureTestCase
     {
         $group = Group::factory()->create();
 
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('PUT', '/api/v1/groups/' . $group->id, [
                 'name' => 'name updated',
             ])
@@ -147,7 +147,7 @@ class GroupControllerTest extends FeatureTestCase
      */
     public function test_update_missing_group_returns_not_found()
     {
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('PUT', '/api/v1/groups/1000', [
                 'name' => 'testUpdate',
             ])
@@ -165,7 +165,7 @@ class GroupControllerTest extends FeatureTestCase
     {
         $group = Group::factory()->create();
 
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('PUT', '/api/v1/groups/' . $group->id, [
                 'name' => null,
             ])
@@ -181,7 +181,7 @@ class GroupControllerTest extends FeatureTestCase
         $group = Group::factory()->create();
         $accounts = TwoFAccount::factory()->count(2)->create();
 
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/groups/' . $group->id . '/assign', [
                 'ids' => [1,2],
             ])
@@ -201,7 +201,7 @@ class GroupControllerTest extends FeatureTestCase
     {
         $accounts = TwoFAccount::factory()->count(2)->create();
 
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/groups/1000/assign', [
                 'ids' => [1,2],
             ])
@@ -220,7 +220,7 @@ class GroupControllerTest extends FeatureTestCase
         $group = Group::factory()->create();
         $accounts = TwoFAccount::factory()->count(2)->create();
 
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/groups/' . $group->id . '/assign', [
                 'ids' => 1,
             ])
@@ -236,12 +236,12 @@ class GroupControllerTest extends FeatureTestCase
         $group = Group::factory()->create();
         $accounts = TwoFAccount::factory()->count(2)->create();
 
-        $assign = $this->actingAs($this->user, 'api')
+        $assign = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/groups/' . $group->id . '/assign', [
                 'ids' => [1,2],
             ]);
 
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('GET', '/api/v1/groups/' . $group->id . '/twofaccounts')
             ->assertOk()
             ->assertJsonCount(2)
@@ -269,12 +269,12 @@ class GroupControllerTest extends FeatureTestCase
         $group = Group::factory()->create();
         $accounts = TwoFAccount::factory()->count(2)->create();
 
-        $assign = $this->actingAs($this->user, 'api')
+        $assign = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/groups/' . $group->id . '/assign', [
                 'ids' => [1,2],
             ]);
 
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('GET', '/api/v1/groups/' . $group->id . '/twofaccounts?withSecret=1')
             ->assertOk()
             ->assertJsonCount(2)
@@ -300,7 +300,7 @@ class GroupControllerTest extends FeatureTestCase
      */
     public function test_get_assigned_accounts_of_missing_group_returns_not_found()
     {
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('GET', '/api/v1/groups/1000/twofaccounts')
             ->assertNotFound()
             ->assertJsonStructure([
@@ -318,7 +318,7 @@ class GroupControllerTest extends FeatureTestCase
     {
         $group = Group::factory()->create();
 
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('DELETE', '/api/v1/groups/' . $group->id)
             ->assertNoContent();
     }
@@ -331,7 +331,7 @@ class GroupControllerTest extends FeatureTestCase
      */
     public function test_destroy_missing_group_returns_not_found()
     {
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('DELETE', '/api/v1/groups/1000')
             ->assertNotFound()
             ->assertJsonStructure([

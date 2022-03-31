@@ -30,7 +30,7 @@ class WebAuthnLoginController extends Controller
 	public function options(Request $request)
 	{
         // Since 2FAuth is single user designed we fetch the user instance
-        // and merge its email address to the request. This let Larapass validated
+        // and merge its email address to the request. This let Larapass validate
         // the request against a user instance without the need to ask the visitor
         // for an email address.
         //
@@ -57,6 +57,8 @@ class WebAuthnLoginController extends Controller
      */
     public function login(Request $request)
     {
+        $request->validate($this->assertionRules());
+
         if ($request->has('response')) {
             $response = $request->response;
 

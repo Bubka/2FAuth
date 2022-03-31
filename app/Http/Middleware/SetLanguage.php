@@ -27,11 +27,12 @@ class SetLanguage
         $lang = SettingService::get('lang');
 
         if($lang === 'browser') {
+            $lang = config('app.fallback_locale');
+            
             if ($request->hasHeader("Accept-Language")) {
                 // We only keep the primary language passed via the header.
                 $lang = head(explode(',', $request->header("Accept-Language")));
             }
-            else $lang = config('app.fallback_locale');
         }
 
         // If the language is not available (or partial), strings will be translated using the fallback language.

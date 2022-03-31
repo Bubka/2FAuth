@@ -1,13 +1,16 @@
 <?php
 
-namespace Tests\Api\v1\Requests;
+namespace Tests\Feature\Http\Requests;
 
-use App\Api\v1\Requests\UserUpdateRequest;
+use App\Http\Requests\UserUpdateRequest;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Tests\TestCase;
 
+/**
+ * @covers \App\Http\Requests\UserUpdateRequest
+ */
 class UserUpdateRequestTest extends TestCase
 {
 

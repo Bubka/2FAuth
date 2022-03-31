@@ -47,19 +47,4 @@ class WebAuthnDeviceLostController extends Controller
     {
         return response()->json(['message' => __('auth.webauthn.account_recovery_email_sent')]);
     }
-
-
-    /**
-     * Get the response for a failed account recovery link.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  string  $response
-     *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\JsonResponse
-     * @throws \Illuminate\Validation\ValidationException
-     */
-    protected function sendRecoveryLinkFailedResponse(Request $request, string $response)
-    {
-        throw ValidationException::withMessages(['email' => [trans($response)]]);
-    }
 }

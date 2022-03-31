@@ -47,7 +47,7 @@ class QrCodeControllerTest extends FeatureTestCase
             'legacy_uri' => 'otpauth://hotp/service:account?secret=A4GRFHZVRBGY7UIW&issuer=service',
         ]);
 
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('GET', '/api/v1/twofaccounts/' . $twofaccount->id . '/qrcode')
             ->assertJsonStructure([
                 'qrcode',
@@ -63,7 +63,7 @@ class QrCodeControllerTest extends FeatureTestCase
      */
     public function test_show_missing_qrcode_returns_not_found()
     {
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('GET', '/api/v1/twofaccounts/1000/qrcode')
             ->assertNotFound()
             ->assertJsonStructure([
@@ -80,7 +80,7 @@ class QrCodeControllerTest extends FeatureTestCase
         $file = LocalFile::fake()->validQrcode();
 
         $response = $this->withHeaders(['Content-Type' => 'multipart/form-data'])
-            ->actingAs($this->user, 'api')
+            ->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/qrcode/decode', [
                 'qrcode' => $file,
                 'inputFormat' => 'fileUpload'
@@ -97,7 +97,7 @@ class QrCodeControllerTest extends FeatureTestCase
      */
     public function test_decode_missing_qrcode_return_validation_error()
     {
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/qrcode/decode', [
                 'qrcode' => '',
             ])
@@ -113,7 +113,7 @@ class QrCodeControllerTest extends FeatureTestCase
         $file = LocalFile::fake()->invalidQrcode();
 
         $response = $this->withHeaders(['Content-Type' => 'multipart/form-data'])
-            ->actingAs($this->user, 'api')
+            ->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/qrcode/decode', [
                 'qrcode' => $file,
                 'inputFormat' => 'fileUpload'

@@ -1,13 +1,16 @@
 <?php
 
-namespace Tests\Api\v1\Requests;
+namespace Tests\Feature\Http\Requests;
 
-use App\Api\v1\Requests\UserPatchPwdRequest;
+use App\Http\Requests\UserPatchPwdRequest;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
 
+/**
+ * @covers \App\Http\Requests\UserPatchPwdRequest
+ */
 class UserPatchPwdRequestTest extends TestCase
 {
 

@@ -2,7 +2,6 @@
 
 namespace Tests\Unit\Api\v1\Controllers;
 
-use App\Models\User;
 use App\Models\Group;
 use Tests\TestCase;
 use App\Models\TwoFAccount;
@@ -10,9 +9,6 @@ use App\Services\GroupService;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use App\Api\v1\Controllers\GroupController;
 use Mockery;
-use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use App\Api\v1\Requests\GroupStoreRequest;
 
 /**
  * @covers \App\Api\v1\Controllers\GroupController

@@ -4,11 +4,6 @@ namespace Tests\Feature\Auth;
 
 use App\Models\User;
 use Tests\FeatureTestCase;
-use Illuminate\Auth\Authenticatable;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Auth\RequestGuard;
-use Illuminate\Support\Facades\Config;
 
 class LoginTest extends FeatureTestCase
 {
@@ -58,7 +53,7 @@ class LoginTest extends FeatureTestCase
             'password' => self::PASSWORD
         ]);
 
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'web-guard')
             ->json('POST', '/user/login', [
                 'email' => $this->user->email,
                 'password' => self::PASSWORD
@@ -152,7 +147,7 @@ class LoginTest extends FeatureTestCase
             'password' => self::PASSWORD
         ]);
 
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'web-guard')
             ->json('GET', '/user/logout')
             ->assertOk()
             ->assertExactJson([
@@ -176,12 +171,12 @@ class LoginTest extends FeatureTestCase
         ]);
 
         // Ping a protected endpoint to log last_seen_at time
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('GET', '/api/v1/twofaccounts');
 
         sleep(61);
 
-        $response = $this->actingAs($this->user, 'api')
+        $response = $this->actingAs($this->user, 'api-guard')
             ->json('GET', '/api/v1/twofaccounts')
             ->assertUnauthorized();
     }

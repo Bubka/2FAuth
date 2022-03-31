@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Api\v1\Controllers\Auth;
+namespace Tests\Feature\Auth;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -21,7 +21,7 @@ class ForgotPasswordControllerTest extends FeatureTestCase
      */
     public function test_submit_email_password_request_without_email_returns_validation_error()
     {
-        $response = $this->json('POST', '/api/v1/user/password/lost', [
+        $response = $this->json('POST', '/user/password/lost', [
             'email' => ''
         ]);
 
@@ -34,7 +34,7 @@ class ForgotPasswordControllerTest extends FeatureTestCase
      */
     public function test_submit_email_password_request_with_invalid_email_returns_validation_error()
     {
-        $response = $this->json('POST', '/api/v1/user/password/lost', [
+        $response = $this->json('POST', '/user/password/lost', [
             'email' => 'nametest.com'
         ]);
 
@@ -47,7 +47,7 @@ class ForgotPasswordControllerTest extends FeatureTestCase
      */
     public function test_submit_email_password_request_with_unknown_email_returns_validation_error()
     {
-        $response = $this->json('POST', '/api/v1/user/password/lost', [
+        $response = $this->json('POST', '/user/password/lost', [
             'email' => 'name@test.com'
         ]);
 
@@ -64,7 +64,7 @@ class ForgotPasswordControllerTest extends FeatureTestCase
 
         $this->user = User::factory()->create();
 
-        $response = $this->json('POST', '/api/v1/user/password/lost', [
+        $response = $this->json('POST', '/user/password/lost', [
             'email' => $this->user->email
         ]);
 
@@ -85,7 +85,7 @@ class ForgotPasswordControllerTest extends FeatureTestCase
     {
         Config::set('2fauth.config.isDemoApp', true);
 
-        $response = $this->json('POST', '/api/v1/user/password/lost', [
+        $response = $this->json('POST', '/user/password/lost', [
             'email' => ''
         ]);
 
