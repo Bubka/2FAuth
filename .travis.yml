@@ -10,7 +10,6 @@ php:
 before_script:
   - travis_retry composer self-update
   - travis_retry composer install --no-interaction
-  - php artisan key:generate
   # no need to use a dedicated Travis .env file as phpunit
   # will use .env.testing by default
 
