@@ -30,6 +30,8 @@
     </testsuites>
     <php>
         <env name="APP_ENV" value="testing"/>
-        <!-- Use .env.testing to customize other testing vars -->
+        <!-- following values override .env.testing vars -->
+        <env name="DB_CONNECTION" value="sqlite"/>
+        <env name="DB_DATABASE" value=":memory:"/>
     </php>
 </phpunit>
