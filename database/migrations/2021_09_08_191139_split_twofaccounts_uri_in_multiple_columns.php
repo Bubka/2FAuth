@@ -23,16 +23,15 @@ class SplitTwofaccountsUriInMultipleColumns extends Migration
             $table->string('otp_type', 10)->nullable();
             $table->text('secret')->nullable();
             $table->string('algorithm', 20)->nullable();
-            $table->unsignedTinyInteger('digits')->nullable();
+            $table->unsignedTinyInteger('digits')->default(6);
             $table->unsignedInteger('period')->nullable();
             $table->unsignedBigInteger('counter')->nullable();
         });
         
         Schema::table('twofaccounts', function (Blueprint $table){
-            $table->string('otp_type')->nullable(false)->change();
-            $table->string('secret')->nullable(false)->change();
-            $table->string('algorithm')->nullable(false)->change();
-            $table->string('digits')->nullable(false)->change();
+            $table->string('otp_type', 10)->nullable(false)->change();
+            $table->text('secret')->nullable(false)->change();
+            $table->string('algorithm', 20)->nullable(false)->change();
         });
 
         Schema::table('twofaccounts', function (Blueprint $table) {
