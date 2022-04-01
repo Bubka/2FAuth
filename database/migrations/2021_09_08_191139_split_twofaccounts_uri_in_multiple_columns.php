@@ -16,11 +16,20 @@ class SplitTwofaccountsUriInMultipleColumns extends Migration
      */
     public function up()
     {
-        Schema::table('twofaccounts', function (Blueprint $table) {
-            $table->string('otp_type', 10);
-            $table->text('secret');
-            $table->string('algorithm', 20);
-            $table->unsignedTinyInteger('digits');
+        $driver = Schema::connection($this->getConnection())->getConnection()->getDriverName();
+
+        Schema::table('twofaccounts', function (Blueprint $table) use ($driver) {
+            if ('sqlite' === $driver) {
+                $table->string('otp_type', 10)->default('');
+                $table->text('secret')->default('');
+                $table->string('algorithm', 20)->default('');
+                $table->unsignedTinyInteger('digits')->default(6);
+            } else {
+                $table->string('otp_type', 10);
+                $table->text('secret');
+                $table->string('algorithm', 20);
+                $table->unsignedTinyInteger('digits');
+            }
             $table->unsignedInteger('period')->nullable();
             $table->unsignedBigInteger('counter')->nullable();
         });
