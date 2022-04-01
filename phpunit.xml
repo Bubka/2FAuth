@@ -31,7 +31,5 @@
     <php>
         <env name="APP_ENV" value="testing"/>
         <!-- following values override .env.testing vars -->
-        <env name="DB_CONNECTION" value="testing"/>
-        <env name="DB_DATABASE" value=":memory:"/>
     </php>
 </phpunit>
