@@ -74,16 +74,16 @@ class ResetDemo extends Command
             $this->line('Icons regenerated');
             
             // Reset the db
-            DB::table('users')->truncate();
-            DB::table('password_resets')->truncate();
-            DB::table('oauth_access_tokens')->truncate();
-            DB::table('oauth_personal_access_clients')->truncate();
-            DB::table('oauth_refresh_tokens')->truncate();
-            DB::table('web_authn_credentials')->truncate();
-            DB::table('web_authn_recoveries')->truncate();
-            DB::table('twofaccounts')->truncate();
-            DB::table('options')->truncate();
-            DB::table('groups')->truncate();
+            DB::table('users')->delete();
+            DB::table('password_resets')->delete();
+            DB::table('oauth_access_tokens')->delete();
+            DB::table('oauth_personal_access_clients')->delete();
+            DB::table('oauth_refresh_tokens')->delete();
+            DB::table('web_authn_credentials')->delete();
+            DB::table('web_authn_recoveries')->delete();
+            DB::table('twofaccounts')->delete();
+            DB::table('options')->delete();
+            DB::table('groups')->delete();
             
             // Seed the db
             $this->callSilent('db:seed', [

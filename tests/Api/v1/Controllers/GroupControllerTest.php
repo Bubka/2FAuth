@@ -67,8 +67,7 @@ class GroupControllerTest extends FeatureTestCase
                 'name' => 'My second group',
             ])
             ->assertCreated()
-            ->assertExactJson([
-                'id' => 1,
+            ->assertJsonFragment([
                 'name' => 'My second group',
                 'twofaccounts_count' => 0,
             ]);
@@ -100,8 +99,7 @@ class GroupControllerTest extends FeatureTestCase
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('GET', '/api/v1/groups/' . $group->id)
             ->assertOk()
-            ->assertExactJson([
-                'id' => 1,
+            ->assertJsonFragment([
                 'name' => 'My group',
                 'twofaccounts_count' => 0,
             ]);
@@ -134,8 +132,7 @@ class GroupControllerTest extends FeatureTestCase
                 'name' => 'name updated',
             ])
             ->assertOk()
-            ->assertExactJson([
-                'id' => 1,
+            ->assertJsonFragment([
                 'name' => 'name updated',
                 'twofaccounts_count' => 0,
             ]);
@@ -183,7 +180,7 @@ class GroupControllerTest extends FeatureTestCase
 
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/groups/' . $group->id . '/assign', [
-                'ids' => [1,2],
+                'ids' => [$accounts[0]->id, $accounts[1]->id],
             ])
             ->assertOk()
             ->assertExactJson([
@@ -203,7 +200,7 @@ class GroupControllerTest extends FeatureTestCase
 
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/groups/1000/assign', [
-                'ids' => [1,2],
+                'ids' => [$accounts[0]->id, $accounts[1]->id],
             ])
             ->assertNotFound()
             ->assertJsonStructure([
@@ -238,7 +235,7 @@ class GroupControllerTest extends FeatureTestCase
 
         $assign = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/groups/' . $group->id . '/assign', [
-                'ids' => [1,2],
+                'ids' => [$accounts[0]->id, $accounts[1]->id],
             ]);
 
         $response = $this->actingAs($this->user, 'api-guard')
@@ -271,7 +268,7 @@ class GroupControllerTest extends FeatureTestCase
 
         $assign = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/groups/' . $group->id . '/assign', [
-                'ids' => [1,2],
+                'ids' => [$accounts[0]->id, $accounts[1]->id],
             ]);
 
         $response = $this->actingAs($this->user, 'api-guard')

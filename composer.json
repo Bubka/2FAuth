@@ -66,7 +66,12 @@
             "@php artisan key:generate --ansi"
         ],
         "test" : [
+            "php artisan config:clear",
             "vendor/bin/phpunit"
+        ],
+        "test-mysql" : [
+            "php artisan config:clear",
+            "vendor/bin/phpunit -c phpunit-mysql.xml"
         ],
         "test-coverage-html" : [
             "@putenv XDEBUG_MODE=coverage",

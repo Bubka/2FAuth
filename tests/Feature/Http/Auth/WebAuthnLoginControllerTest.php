@@ -24,6 +24,8 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
     public function setUp(): void
     {
         parent::setUp();
+
+        DB::table('users')->delete();
     }
 
 
@@ -41,7 +43,7 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
 
         DB::table('web_authn_credentials')->insert([
             'id'               => 'dGVzdF9jcmVkZW50aWFsX2lk',
-            'user_id'          => 1,
+            'user_id'          => $this->user->id,
             'type'             => 'public_key',
             'transports'       => json_encode([]),
             'attestation_type' => 'none',
@@ -98,7 +100,7 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
 
         DB::table('web_authn_credentials')->insert([
             'id'               => 'dGVzdF9jcmVkZW50aWFsX2lk',
-            'user_id'          => 1,
+            'user_id'          => $this->user->id,
             'type'             => 'public_key',
             'transports'       => json_encode([]),
             'attestation_type' => 'none',

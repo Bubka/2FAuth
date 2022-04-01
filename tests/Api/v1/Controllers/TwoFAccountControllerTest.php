@@ -461,14 +461,14 @@ class TwoFAccountControllerTest extends FeatureTestCase
         // Set the default group to be the active one
         $settingService->set('defaultGroup', -1);
         // Set the active group
-        $settingService->set('activeGroup', 1);
+        $settingService->set('activeGroup', $this->group->id);
 
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts', [
                 'uri' => self::TOTP_SHORT_URI,
             ])
             ->assertJsonFragment([
-                'group_id' => 1
+                'group_id' => $this->group->id
             ]);
     }
 

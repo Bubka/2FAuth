@@ -2,7 +2,9 @@
 
 namespace Tests\Feature\Http\Auth;
 
+use \App\Models\User;
 use Tests\FeatureTestCase;
+use Illuminate\Support\Facades\DB;
 
 class RegisterControllerTest extends FeatureTestCase
 {
@@ -25,6 +27,8 @@ class RegisterControllerTest extends FeatureTestCase
      */
     public function test_register_returns_success()
     {
+        DB::table('users')->delete();
+
         $response = $this->json('POST', '/user', [
                 'name' => self::USERNAME,
                 'email' => self::EMAIL,
@@ -39,6 +43,24 @@ class RegisterControllerTest extends FeatureTestCase
         ->assertJsonFragment([
             'name' => self::USERNAME,
         ]);
+    }
+    
+
+    /**
+     * @test
+     */
+    public function test_register_returns_already_an_existing_user()
+    {
+        DB::table('users')->delete();
+        $user = User::factory()->create();
+
+        $response = $this->json('POST', '/user', [
+                'name' => self::USERNAME,
+                'email' => self::EMAIL,
+                'password' => self::PASSWORD,
+                'password_confirmation' => self::PASSWORD,
+        ])
+        ->assertJsonValidationErrorFor('name');
     }
 
 

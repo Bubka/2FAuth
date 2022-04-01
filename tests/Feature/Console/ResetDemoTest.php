@@ -32,8 +32,6 @@ class ResetDemoTest extends FeatureTestCase
              ->expectsOutput('Demo app refreshed')
              ->assertExitCode(0);
 
-        $user = User::find(1);
-
         $this->assertDatabaseCount('twofaccounts', 9);
 
         $this->assertDatabaseHas('twofaccounts', [
