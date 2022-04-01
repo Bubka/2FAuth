@@ -33,7 +33,8 @@ class AddGroupIdColumnToTwofaccountsTable extends Migration
     {
         Schema::table('twofaccounts', function (Blueprint $table) {
                 // cannot drop foreign keys in SQLite:
-                if ('sqlite' !== config('database.default')) {
+                $driver = Schema::connection($this->getConnection())->getConnection()->getDriverName();
+                if ('sqlite' !== $driver) {
                     $table->dropForeign(['group_id']);
                 }
             }
