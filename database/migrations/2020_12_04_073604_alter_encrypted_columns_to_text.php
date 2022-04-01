@@ -13,7 +13,9 @@ class AlterEncryptedColumnsToText extends Migration
      */
     public function up()
     {
-        if ('sqlite' !== config('database.default')) {
+        $driver = Schema::connection($this->getConnection())->getConnection()->getDriverName();
+
+        if ('sqlite' !== $driver) {
             
             Schema::table('twofaccounts', function (Blueprint $table) {
                 $table->text('account')->change();
