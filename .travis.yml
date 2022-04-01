@@ -10,10 +10,9 @@ php:
 before_script:
   - travis_retry composer self-update
   - travis_retry composer install --no-interaction
-  - cp .env.travis .env
-  - cat .env
   - php artisan key:generate
-  - php artisan env
+  # no need to use a dedicated Travis .env file as phpunit
+  # will use .env.testing by default
 
 script:
   - vendor/bin/phpunit --coverage-clover=coverage.xml
