@@ -25,21 +25,22 @@ on:
       - server.php
 
 jobs:
-  verify:
+  tests:
     runs-on: ubuntu-latest
-    env:
-      DOCKER_BUILDKIT: "1"
+
     steps:
-      - uses: actions/checkout@v2.3.4
+      - uses: actions/checkout@v2
 
-      - name: Build test image
-        run: docker build --target test -t test-container .
+      - name: Install dependencies
+      - uses: php-actions/composer@v6
+        with:
+          php_version: 7.4
+          dev: no
 
-      - name: Run tests in test container
-        run: |
-          touch coverage.txt
-          docker run --rm \
-          test-container
-
-      - name: Build final image
-        run: docker build .
+      - name: Run PHPUnit tests
+        uses: php-actions/phpunit@v3
+        with:
+          php_version: 7.4
+          version: 9.5
+          bootstrap: vendor/autoload.php
+          configuration: phpunit.xml
