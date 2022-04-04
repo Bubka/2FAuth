@@ -18,13 +18,23 @@ class SplitTwofaccountsUriInMultipleColumns extends Migration
     {
         $driver = Schema::connection($this->getConnection())->getConnection()->getDriverName();
 
+        // as SQLITE disallow to add a not nullable column without default
+        // value when altering a table we add all columns as nullable and
+        // change them right after to not nullable column
         Schema::table('twofaccounts', function (Blueprint $table) {
-            $table->string('otp_type', 10);
-            $table->text('secret');
-            $table->string('algorithm', 20);
-            $table->unsignedTinyInteger('digits');
+            $table->string('otp_type', 10)->nullable();
+            $table->text('secret')->nullable();
+            $table->string('algorithm', 20)->nullable();
+            $table->unsignedSmallInteger('digits')->nullable();
             $table->unsignedInteger('period')->nullable();
             $table->unsignedBigInteger('counter')->nullable();
+        });
+        
+        Schema::table('twofaccounts', function (Blueprint $table){
+            $table->string('otp_type', 10)->nullable(false)->change();
+            $table->text('secret')->nullable(false)->change();
+            $table->string('algorithm', 20)->nullable(false)->change();
+            $table->unsignedSmallInteger('digits')->nullable(false)->change();
         });
 
         // Apply previous migration 'AlterEncryptedColumnsToText' even to sqlite base
