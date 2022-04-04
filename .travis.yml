@@ -22,9 +22,10 @@ before_script:
 script:
   # - DATABASE=mysql vendor/bin/phpunit -c phpunit-mysql.xml
   - cp .env.travis .env
+  - touch database/database.sqlite
   - php artisan config:clear
   - php artisan key:generate
-  - DATABASE=sqlite vendor/bin/phpunit -c phpunit.xml  --coverage-clover=coverage.xml
+  - DATABASE=sqlite vendor/bin/phpunit -c phpunit-travis-sqlite.xml  --coverage-clover=coverage.xml
 
 after_success:
 # Submit coverage report to https://codecov.io
