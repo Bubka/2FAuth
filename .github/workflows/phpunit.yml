@@ -32,7 +32,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Install dependencies
-      - uses: php-actions/composer@v6
+        uses: php-actions/composer@v6
         with:
           php_version: 7.4
           dev: no
