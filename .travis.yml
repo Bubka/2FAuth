@@ -5,13 +5,13 @@ language: php
 
 php:
   - 7.4
-  - 8.0
+  # - 8.0
 
 services:
-  - mysql
+  # - mysql
 
 before_install:
-  - mysql -e 'CREATE DATABASE 2fauth_test;'
+  # - mysql -e 'CREATE DATABASE 2fauth_test;'
 
 before_script:
   - travis_retry composer self-update
@@ -20,15 +20,16 @@ before_script:
   # will use .env.testing by default
 
 script:
-  - DATABASE=mysql vendor/bin/phpunit -c phpunit-mysql.xml
+  # - DATABASE=mysql vendor/bin/phpunit -c phpunit-mysql.xml
   - cp .env.travis .env
   - php artisan config:clear
   - php artisan key:generate
+  - sqlite3 --version
   - DATABASE=sqlite vendor/bin/phpunit -c phpunit.xml  --coverage-clover=coverage.xml
 
 after_success:
 # Submit coverage report to https://codecov.io
-- bash <(curl -s https://codecov.io/bash)
+# - bash <(curl -s https://codecov.io/bash)
 
 # Monitor only these branches
 branches:
