@@ -16,7 +16,9 @@ class CreateWebAuthnTables extends Migration
     {
         Schema::create('web_authn_credentials', function (Blueprint $table) {
 
-            $table->string('id', 255);
+            // Limited to 191 to prevent index length issue with MyISAM and utf8mb4_unicode_ci
+            // when using WAMP (WAMP uses MyISAM as default engine in place of INNOdb)
+            $table->string('id', 191);
 
             // Change accordingly for your users table if you need to.
             $table->unsignedBigInteger('user_id');
