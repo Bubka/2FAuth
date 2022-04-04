@@ -1,0 +1,45 @@
+name: phpunit
+on:
+  push:
+    branches:    
+      - dev
+    paths:
+      - .github/workflows/phpunit.yml
+      - app/**
+      - bootstrap/**
+      - config/**
+      - database/**
+      - docker/**
+      - public/**
+      - resources/**
+      - routes/**
+      - storage/**
+      - tests/**
+      - .dockerignore
+      - .env.travis
+      - artisan
+      - composer.json
+      - composer.lock
+      - Dockerfile
+      - phpunit.xml
+      - server.php
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    env:
+      DOCKER_BUILDKIT: "1"
+    steps:
+      - uses: actions/checkout@v2.3.4
+
+      - name: Build test image
+        run: docker build --target test -t test-container .
+
+      - name: Run tests in test container
+        run: |
+          touch coverage.txt
+          docker run --rm \
+          test-container
+
+      - name: Build final image
+        run: docker build .
