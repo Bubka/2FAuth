@@ -19,6 +19,7 @@ class AlterEncryptedColumnsToTextForSqlite extends Migration
             
             Schema::table('twofaccounts', function (Blueprint $table) {
                 $table->text('account')->change();
+                $table->text('uri')->change();
             });
         }
     }
