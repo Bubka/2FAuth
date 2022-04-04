@@ -21,7 +21,9 @@ before_script:
 
 script:
   - DATABASE=mysql vendor/bin/phpunit -c phpunit-mysql.xml
+  - cp .env.travis .env
   - php artisan config:clear
+  - php artisan key:generate
   - DATABASE=sqlite vendor/bin/phpunit -c phpunit.xml  --coverage-clover=coverage.xml
 
 after_success:
