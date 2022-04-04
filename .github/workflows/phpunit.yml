@@ -1,46 +1,46 @@
-name: phpunit
-on:
-  push:
-    branches:    
-      - dev
-    paths:
-      - .github/workflows/phpunit.yml
-      - app/**
-      - bootstrap/**
-      - config/**
-      - database/**
-      - docker/**
-      - public/**
-      - resources/**
-      - routes/**
-      - storage/**
-      - tests/**
-      - .dockerignore
-      - .env.travis
-      - artisan
-      - composer.json
-      - composer.lock
-      - Dockerfile
-      - phpunit.xml
-      - server.php
+# name: phpunit
+# on:
+#   push:
+#     branches:    
+#       - dev
+#     paths:
+#       - .github/workflows/phpunit.yml
+#       - app/**
+#       - bootstrap/**
+#       - config/**
+#       - database/**
+#       - docker/**
+#       - public/**
+#       - resources/**
+#       - routes/**
+#       - storage/**
+#       - tests/**
+#       - .dockerignore
+#       - .env.travis
+#       - artisan
+#       - composer.json
+#       - composer.lock
+#       - Dockerfile
+#       - phpunit.xml
+#       - server.php
 
-jobs:
-  tests:
-    runs-on: ubuntu-latest
+# jobs:
+#   tests:
+#     runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v2
+#     steps:
+#       - uses: actions/checkout@v2
 
-      - name: Install dependencies
-        uses: php-actions/composer@v6
-        with:
-          php_version: 7.4
-          dev: no
+#       - name: Install dependencies
+#         uses: php-actions/composer@v6
+#         with:
+#           php_version: 7.4
+#           dev: no
 
-      - name: Run PHPUnit tests
-        uses: php-actions/phpunit@v3
-        with:
-          php_version: 7.4
-          version: 9.5
-          bootstrap: vendor/autoload.php
-          configuration: phpunit.xml
+#       - name: Run PHPUnit tests
+#         uses: php-actions/phpunit@v3
+#         with:
+#           php_version: 7.4
+#           version: 9.5
+#           bootstrap: vendor/autoload.php
+#           configuration: phpunit.xml

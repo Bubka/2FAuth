@@ -27,10 +27,6 @@ class SplitTwofaccountsUriInMultipleColumns extends Migration
             $table->unsignedInteger('period')->nullable();
             $table->unsignedBigInteger('counter')->nullable();
         });
-
-        Schema::table('twofaccounts', function (Blueprint $table) {
-            $table->renameColumn('uri', 'legacy_uri');
-        });
     }
 
     /**
@@ -62,10 +58,6 @@ class SplitTwofaccountsUriInMultipleColumns extends Migration
         
         Schema::table('twofaccounts', function (Blueprint $table) {
             $table->dropColumn('counter');
-        });
-
-        Schema::table('twofaccounts', function (Blueprint $table) {
-            $table->renameColumn('legacy_uri', 'uri');
         });
     }
 }

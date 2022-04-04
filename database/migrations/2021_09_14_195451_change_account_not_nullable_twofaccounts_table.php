@@ -16,7 +16,12 @@ class ChangeAccountNotNullableTwofaccountsTable extends Migration
      */
     public function up()
     {
+
         $driver = Schema::connection($this->getConnection())->getConnection()->getDriverName();
+
+        Schema::table('twofaccounts', function (Blueprint $table) {
+            $table->renameColumn('uri', 'legacy_uri');
+        });
 
         Schema::table('twofaccounts', function (Blueprint $table) {
             $table->text('account')->nullable(false)->change();
@@ -73,6 +78,8 @@ class ChangeAccountNotNullableTwofaccountsTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('twofaccounts', function (Blueprint $table) {
+            $table->renameColumn('legacy_uri', 'uri');
+        });
     }
 }
