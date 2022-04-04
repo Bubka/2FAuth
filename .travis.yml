@@ -24,7 +24,6 @@ script:
   - cp .env.travis .env
   - php artisan config:clear
   - php artisan key:generate
-  - sqlite3 --version
   - DATABASE=sqlite vendor/bin/phpunit -c phpunit.xml  --coverage-clover=coverage.xml
 
 after_success:
@@ -34,5 +33,5 @@ after_success:
 # Monitor only these branches
 branches:
   only:
-  - master
-  # - dev
+  # - master
+  - dev

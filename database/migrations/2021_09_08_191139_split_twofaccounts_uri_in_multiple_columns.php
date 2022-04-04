@@ -30,12 +30,12 @@ class SplitTwofaccountsUriInMultipleColumns extends Migration
             $table->unsignedBigInteger('counter')->nullable();
         });
         
-        Schema::table('twofaccounts', function (Blueprint $table){
-            $table->string('otp_type', 10)->nullable(false)->change();
-            $table->text('secret')->nullable(false)->change();
-            $table->string('algorithm', 20)->nullable(false)->change();
-            $table->unsignedSmallInteger('digits')->nullable(false)->change();
-        });
+        // Schema::table('twofaccounts', function (Blueprint $table){
+        //     $table->string('otp_type', 10)->nullable(false)->change();
+        //     $table->text('secret')->nullable(false)->change();
+        //     $table->string('algorithm', 20)->nullable(false)->change();
+        //     $table->unsignedSmallInteger('digits')->nullable(false)->change();
+        // });
 
         // Apply previous migration 'AlterEncryptedColumnsToText' even to sqlite base
         if ('sqlite' === $driver) {
