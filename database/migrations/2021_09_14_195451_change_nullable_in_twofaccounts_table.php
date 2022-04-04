@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Log;
 
-class ChangeAccountNotNullableTwofaccountsTable extends Migration
+class ChangeNullableInTwofaccountsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -16,13 +16,6 @@ class ChangeAccountNotNullableTwofaccountsTable extends Migration
      */
     public function up()
     {
-
-        $driver = Schema::connection($this->getConnection())->getConnection()->getDriverName();
-
-        Schema::table('twofaccounts', function (Blueprint $table) {
-            $table->renameColumn('uri', 'legacy_uri');
-        });
-
         Schema::table('twofaccounts', function (Blueprint $table) {
             $table->text('account')->nullable(false)->change();
             $table->string('service')->nullable()->change();
@@ -31,18 +24,6 @@ class ChangeAccountNotNullableTwofaccountsTable extends Migration
             $table->string('algorithm', 20)->nullable(false)->change();
             $table->unsignedSmallInteger('digits')->nullable(false)->change();
         });
-
-        // Apply migration 'AlterEncryptedColumnsToText' even to sqlite base
-        if ('sqlite' === $driver) {
-            
-            Schema::table('twofaccounts', function (Blueprint $table) {
-                $table->text('account')->change();
-            });
-
-            Schema::table('twofaccounts', function (Blueprint $table) {
-                $table->text('legacy_uri')->change();
-            });
-        }
         
 
         $twofaccounts = DB::table('twofaccounts')->select('id', 'legacy_uri')->get();
@@ -78,8 +59,5 @@ class ChangeAccountNotNullableTwofaccountsTable extends Migration
      */
     public function down()
     {
-        Schema::table('twofaccounts', function (Blueprint $table) {
-            $table->renameColumn('legacy_uri', 'uri');
-        });
     }
 }

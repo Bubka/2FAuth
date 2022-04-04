@@ -17,7 +17,7 @@ class CreateTwoFAccountsTable extends Migration
             $table->increments('id');
             $table->string('service');
             $table->string('uri');
-            $table->string('account')->nullable();;
+            $table->string('account')->nullable();
             $table->string('icon')->nullable();
             $table->timestamps();
         });
