@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AlterEncryptedColumnsToTextForSqlite extends Migration
+class RenameUriToLegacyUri extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,9 @@ class AlterEncryptedColumnsToTextForSqlite extends Migration
      */
     public function up()
     {
-        $driver = Schema::connection($this->getConnection())->getConnection()->getDriverName();
-
-        if ('sqlite' === $driver) {
-            
-            Schema::table('twofaccounts', function (Blueprint $table) {
-                $table->text('account')->change();
-            });
-        }
+        Schema::table('twofaccounts', function (Blueprint $table) {
+            $table->renameColumn('uri', 'legacy_uri');
+        });
     }
 
     /**
@@ -31,7 +26,7 @@ class AlterEncryptedColumnsToTextForSqlite extends Migration
     public function down()
     {
         Schema::table('twofaccounts', function (Blueprint $table) {
-            //
+            $table->renameColumn('legacy_uri', 'uri');
         });
     }
 }

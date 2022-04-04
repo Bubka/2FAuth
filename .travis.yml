@@ -10,7 +10,7 @@ php:
   # - 8.0
 
 services:
-  - mysql
+  # - mysql
 
 before_install:
   # - mysql -e 'CREATE DATABASE 2fauth_test;'
@@ -20,12 +20,10 @@ before_script:
   - travis_retry composer install --no-interaction
   # no need to use a dedicated Travis .env file as phpunit
   # will use .env.testing by default
-  - php artisan cache:clear
 
 script:
   # - DATABASE=mysql vendor/bin/phpunit -c phpunit-mysql.xml
   - cp .env.travis .env
-  - php artisan cache:clear
   - php artisan config:clear
   - php artisan key:generate
   - DATABASE=sqlite vendor/bin/phpunit -c phpunit.xml  --coverage-clover=coverage.xml

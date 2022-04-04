@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AlterEncryptedColumnsToTextForSqlite extends Migration
+class AlterEncryptedColumnsToTextForSqliteBis extends Migration
 {
     /**
      * Run the migrations.
@@ -18,7 +18,7 @@ class AlterEncryptedColumnsToTextForSqlite extends Migration
         if ('sqlite' === $driver) {
             
             Schema::table('twofaccounts', function (Blueprint $table) {
-                $table->text('account')->change();
+                $table->text('uri')->change();
             });
         }
     }
