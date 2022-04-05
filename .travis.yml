@@ -7,26 +7,24 @@ language: php
 
 php:
   - 7.4
-  # - 8.0
+  - 8.0
 
 services:
-  # - mysql
+  - mysql
 
 before_install:
-  # - mysql -e 'CREATE DATABASE 2fauth_test;'
+  - mysql -e 'CREATE DATABASE 2fauth_test;'
 
 before_script:
   - travis_retry composer self-update
   - travis_retry composer install --no-interaction
-  # no need to use a dedicated Travis .env file as phpunit
-  # will use .env.testing by default
+  - cp .env.travis .env
+  - php artisan key:generate
 
 script:
-  # - DATABASE=mysql vendor/bin/phpunit -c phpunit-mysql.xml
-  - cp .env.travis .env
+  - DATABASE=sqlite vendor/bin/phpunit --coverage-clover=coverage.xml
   - php artisan config:clear
-  - php artisan key:generate
-  - DATABASE=sqlite vendor/bin/phpunit -c phpunit.xml  --coverage-clover=coverage.xml
+  - DATABASE=mysql vendor/bin/phpunit -c phpunit-mysql.xml
 
 after_success:
 # Submit coverage report to https://codecov.io
