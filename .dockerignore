@@ -10,6 +10,7 @@ tests
 .styleci.yml
 .travis.yml
 changelog.md
+docker/README.md
 Dockerfile
 LICENSE
 README.md
