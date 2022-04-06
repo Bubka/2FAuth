@@ -59,10 +59,11 @@ return [
         'my_device' => 'My device',
         'unknown_device' => 'Unknown device',
         'use_webauthn_only' => [
-            'label' => 'Use WebAuthn only (recommended)',
+            'label' => 'Use WebAuthn only',
             'help' => 'Make WebAuthn the only available method to sign in 2FAuth. This is the recommended setup to take advantage of the WebAuthn enhanced security.<br />
                 In case of device lost you will always be able to register a new security device to recover your account.'
         ],
+        'need_a_security_device_to_enable_options' => 'Set at least one device to enable these options',
         'use_webauthn_as_default' => [
             'label' => 'Use WebAuthn as default sign in method',
             'help' => 'Set the 2FAuth sign in form to propose the WebAuthn authentication at first. The Login/password method is then available as an alternative/fallback solution.<br />

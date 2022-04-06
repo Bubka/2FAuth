@@ -36,11 +36,14 @@
                     </span>
                 </div>
                 <h4 class="title is-4 pt-6 has-text-grey-light">{{ $t('settings.options') }}</h4>
+                <div class="field is-size-7-mobile">
+                    {{ $t('auth.webauthn.need_a_security_device_to_enable_options')}}
+                </div>
                 <form>
                     <!-- use webauthn only -->
-                    <form-checkbox v-on:useWebauthnOnly="saveSetting('useWebauthnOnly', $event)" :form="form" fieldName="useWebauthnOnly" :label="$t('auth.webauthn.use_webauthn_only.label')" :help="$t('auth.webauthn.use_webauthn_only.help')" :disabled="isRemoteUser" />
+                    <form-checkbox v-on:useWebauthnOnly="saveSetting('useWebauthnOnly', $event)" :form="form" fieldName="useWebauthnOnly" :label="$t('auth.webauthn.use_webauthn_only.label')" :help="$t('auth.webauthn.use_webauthn_only.help')" :disabled="isRemoteUser || credentials.length === 0" />
                     <!-- default sign in method -->
-                    <form-checkbox v-on:useWebauthnAsDefault="saveSetting('useWebauthnAsDefault', $event)" :form="form" fieldName="useWebauthnAsDefault" :label="$t('auth.webauthn.use_webauthn_as_default.label')" :help="$t('auth.webauthn.use_webauthn_as_default.help')" :disabled="isRemoteUser" />
+                    <form-checkbox v-on:useWebauthnAsDefault="saveSetting('useWebauthnAsDefault', $event)" :form="form" fieldName="useWebauthnAsDefault" :label="$t('auth.webauthn.use_webauthn_as_default.label')" :help="$t('auth.webauthn.use_webauthn_as_default.help')" :disabled="isRemoteUser || credentials.length === 0" />
                 </form>
                 <!-- footer -->
                 <vue-footer :showButtons="true">
