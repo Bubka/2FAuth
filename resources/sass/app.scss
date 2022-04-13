@@ -129,12 +129,12 @@ a:hover {
     background-color: hsl(0, 0%, 14%); /*black-ter from Bulma*/
     margin: 0 1%;
     padding: 0.5rem 0.5rem 0.5rem 0.5rem;
-    width: 31.3%;
+    width: 31.3% !important;
 }
 
 @media screen and (max-width: 1217px) {
-  .tfa-list  {
-      width: 48%;
+  .tfa-list {
+      width: 48% !important;
   }
 }
 
@@ -147,7 +147,7 @@ a:hover {
       margin: 0;
       padding: 0.5rem 0.5rem 0.5rem 0.5rem;
       max-width: none;
-      width: auto;
+      width: auto !important;
   }
 }
 
