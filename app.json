@@ -15,7 +15,7 @@
     "repository": "https://github.com/Bubka/2FAuth",
     "success_url": "/register",
     "scripts": {
-      "postdeploy": "php artisan migrate:refresh;php artisan passport:install;php artisan storage:link"
+      "postdeploy": "php -r \"file_exists('.env') || copy('.env.heroku', '.env')\";php artisan migrate:refresh;php artisan passport:install;php artisan storage:link"
     },
     "env": {
       "APP_KEY": {
