@@ -1,0 +1,39 @@
+{
+    "name": "2FAuth",
+    "description": "A Web app to manage your Two-Factor Authentication (2FA) accounts and generate their security codes",
+    "keywords": [
+      "2fauth",
+      "2fa",
+      "2factor",
+      "Two-factor",
+      "Two-factor-authentication",
+      "otp",
+      "totp",
+      "hotp"
+    ],
+    "website": "https://docs.2fauth.app",
+    "repository": "https://github.com/Bubka/2FAuth",
+    "success_url": "/register",
+    "scripts": {
+      "postdeploy": "php artisan migrate:refresh;"
+    },
+    "env": {
+      "APP_KEY": {
+        "description": "The encryption key for your database and sessions.",
+        "value": "base64:OfTFROuxY2NHE321rcwz0N4UW/SSXWEjzxOGiQD7nCY="
+      }
+    },
+    "addons": [
+      {
+        "plan": "heroku-postgresql",
+        "options": {
+          "version": "13"
+        }
+      }
+    ],
+    "buildpacks": [
+      {
+        "url": "heroku/php"
+      }
+    ]
+  }
