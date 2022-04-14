@@ -91,6 +91,11 @@ services:
       #   'preferred' (default) : Will ask for user verification IF POSSIBLE
       #   'discouraged' : Will NOT ask for user verification (for example, to minimize disruption to the user interaction flow)
       - WEBAUTHN_USER_VERIFICATION=
+      # Use this setting to declare trusted proxied.
+      # Supported:
+      #   '*': to trust any proxy
+      #   A comma separated IP list: The list of proxies IP to trust
+      - TRUSTED_PROXIES=
       # Leave the following configuration vars as is.
       # Unless you like to tinker and know what you're doing.
       - BROADCAST_DRIVER=log

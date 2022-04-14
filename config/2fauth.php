@@ -20,6 +20,7 @@ return [
 
     'config' => [
         'isDemoApp' => env('IS_DEMO_APP', false),
+        'trustedProxies' => env('TRUSTED_PROXIES', null),
     ],
 
     /*
