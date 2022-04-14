@@ -32,7 +32,7 @@
         "APP_NAME": "2FAuth",
         "APP_ENV": "review",
         "APP_DEBUG": "false",
-        "LOG_CHANNEL": "errorlog",
+        "LOG_CHANNEL": "stderr",
         "DB_CONNECTION": "pgsql",
         "TRUSTED_PROXIES": "*"
     },
