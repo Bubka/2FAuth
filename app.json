@@ -15,10 +15,7 @@
     "repository": "https://github.com/Bubka/2FAuth",
     "success_url": "/register",
     "scripts": {
-      "postdeploy": [
-          "php artisan passport:install",
-          "php artisan storage:link"
-      ]
+      "postdeploy": "php artisan passport:install;php artisan storage:link"
     },
     "env": {
         "APP_KEY": {
