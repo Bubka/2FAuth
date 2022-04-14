@@ -15,21 +15,28 @@
     "repository": "https://github.com/Bubka/2FAuth",
     "success_url": "/register",
     "scripts": {
-      "postdeploy": "php -r \"file_exists('.env') || copy('.env.heroku', '.env')\";php artisan migrate:refresh;php artisan passport:install;php artisan storage:link"
+      "postdeploy": [
+          "php artisan passport:install",
+          "php artisan storage:link"
+      ]
     },
     "env": {
-      "APP_KEY": {
-        "description": "The encryption key for your database and sessions.",
-        "value": "base64:OfTFROuxY2NHE321rcwz0N4UW/SSXWEjzxOGiQD7nCY="
-      }
+        "APP_KEY": {
+            "generator": "secret"
+        },
+        "APP_NAME": "2FAuth",
+        "APP_ENV": "review",
+        "APP_DEBUG": "false",
+        "LOG_CHANNEL": "errorlog",
+        "DB_CONNECTION": "pgsql",
+        "CACHE_DRIVER": "redis",
+        "QUEUE_CONNECTION": "redis",
+        "SESSION_DRIVER": "redis",
+        "TRUSTED_PROXIES": "*"
     },
     "addons": [
-      {
-        "plan": "heroku-postgresql",
-        "options": {
-          "version": "13"
-        }
-      }
+        "heroku-postgresql",
+        "heroku-redis"
     ],
     "buildpacks": [
       {
