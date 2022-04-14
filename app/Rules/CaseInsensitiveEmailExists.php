@@ -27,7 +27,7 @@ class CaseInsensitiveEmailExists implements Rule
     public function passes($attribute, $value)
     {
         $user = DB::table('users')
-            ->whereRaw('email = "' . strtolower($value) . '"' . ('sqlite' === config('database.default') ? ' COLLATE NOCASE' : ''))
+            ->whereRaw('email = \'' . strtolower($value) . '\'' . ('sqlite' === config('database.default') ? ' COLLATE NOCASE' : ''))
             ->first();
 
         return !$user ? false : true;
