@@ -29,14 +29,10 @@
         "APP_DEBUG": "false",
         "LOG_CHANNEL": "errorlog",
         "DB_CONNECTION": "pgsql",
-        "CACHE_DRIVER": "redis",
-        "QUEUE_CONNECTION": "redis",
-        "SESSION_DRIVER": "redis",
         "TRUSTED_PROXIES": "*"
     },
     "addons": [
-        "heroku-postgresql",
-        "heroku-redis"
+        "heroku-postgresql"
     ],
     "buildpacks": [
       {
