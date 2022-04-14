@@ -230,7 +230,7 @@
 
                 const { data } = await this.form.upload('/api/v1/icons', imgdata)
 
-                this.tempIcon = data;
+                this.tempIcon = data.filename;
 
             },
 
