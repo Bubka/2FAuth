@@ -18,6 +18,14 @@
       "postdeploy": "php artisan passport:install;php artisan storage:link"
     },
     "env": {
+        "PASSPORT_PRIVATE_KEY": {
+            "description": "The RSA private key used to generate OAUTH security token",
+            "value": "secret"
+        },
+        "PASSPORT_PUBLIC_KEY": {
+            "description": "The public key derivated from your private key",
+            "value": "secret"
+        },
         "APP_KEY": {
             "generator": "secret"
         },
