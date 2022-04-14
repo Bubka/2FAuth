@@ -20,11 +20,11 @@
     "env": {
         "PASSPORT_PRIVATE_KEY": {
             "description": "The RSA private key used to generate OAUTH security token",
-            "value": "secret"
+            "value": ""
         },
         "PASSPORT_PUBLIC_KEY": {
             "description": "The public key derivated from your private key",
-            "value": "secret"
+            "value": ""
         },
         "APP_KEY": {
             "generator": "secret"
