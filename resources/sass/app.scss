@@ -98,13 +98,13 @@ a:hover {
   padding-top: 3rem;
 }
 
-.form-column > p {
-  margin-bottom: 0.75rem;
-  padding-top: 0.75rem;
+.form-column > div.nav-links {
+  padding-top: 1.5rem;
 }
 
-.form-column > p:first-of-type {
-  padding-top: 1.5rem !important;
+.form-column > div.nav-links p {
+  margin-bottom: 0.25rem;
+  padding-top: 0.25rem;
 }
 
 .modal-background {

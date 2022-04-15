@@ -41,7 +41,7 @@ return [
         'security_devices_legend' => 'Authentication devices you can use to sign in 2FAuth, like security keys (i.e Yubikey) or smartphones with biometric capabilities (i.e. Apple FaceId/TouchId)',
         'enhance_security_using_webauthn' => 'You can enhance the security of your 2FAuth account by enabling WebAuthn authentication.<br /><br />
             WebAuthn allows you to use trusted devices (like Yubikeys or smartphones with biometric capabilities) to sign in quickly and more securely.',
-        'use_security_device_to_sign_in' => 'Get ready to authenticate yourself using (one of) your security devices. Plug your key in, remove face mask or gloves, etc.',
+        'use_security_device_to_sign_in' => 'Get ready to authenticate using (one of) your security devices. Plug your key in, remove face mask or gloves, etc.',
         'lost_your_device' => 'Lost your device?',
         'recover_your_account' => 'Recover your account',
         'account_recovery' => 'Account recovery',
@@ -73,6 +73,7 @@ return [
     'forms' => [
         'name' => 'Name',
         'login' => 'Login',
+        'webauthn_login' => 'WebAuthn login',
         'email' => 'Email',
         'password' => 'Password',
         'confirm_password' => 'Confirm password',

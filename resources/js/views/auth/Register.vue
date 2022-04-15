@@ -29,7 +29,9 @@
                 <form-field :form="registerForm" fieldName="password_confirmation" inputType="password" :label="$t('auth.forms.confirm_password')" />
                 <form-buttons :isBusy="registerForm.isBusy" :isDisabled="registerForm.isDisabled" :caption="$t('auth.register')" />
             </form>
-            <p>{{ $t('auth.forms.already_register') }}&nbsp;<router-link :to="{ name: 'login' }" class="is-link">{{ $t('auth.sign_in') }}</router-link></p>
+            <div class="nav-links">
+                <p>{{ $t('auth.forms.already_register') }}&nbsp;<router-link :to="{ name: 'login' }" class="is-link">{{ $t('auth.sign_in') }}</router-link></p>
+            </div>
         </form-wrapper>
     </div>
 </template>
