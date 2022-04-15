@@ -19,7 +19,7 @@ use App\Http\Controllers\Auth\WebAuthnRecoveryController;
 Route::group(['middleware' => ['guest', 'rejectIfDemoMode']], function () {
     Route::post('user', 'Auth\RegisterController@register')->name('user.register');
     Route::post('user/password/lost', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('user.password.lost');;
-    Route::post('user/password/reset', 'Auth\ResetPasswordController@reset')->name('user.password.reset');
+    Route::post('user/password/reset', 'Auth\ResetPasswordController@reset')->name('password.reset');
     Route::post('webauthn/login/options', [WebAuthnLoginController::class, 'options'])->name('webauthn.login.options');
     Route::post('webauthn/lost', [WebAuthnDeviceLostController::class, 'sendRecoveryEmail'])->name('webauthn.lost');
     Route::post('webauthn/recover/options', [WebAuthnRecoveryController::class, 'options'])->name('webauthn.recover.options');
