@@ -18,14 +18,6 @@
       "postdeploy": "php artisan passport:install;php artisan storage:link"
     },
     "env": {
-        "PASSPORT_PRIVATE_KEY": {
-            "description": "The RSA private key used to generate OAUTH security token",
-            "value": ""
-        },
-        "PASSPORT_PUBLIC_KEY": {
-            "description": "The public key derivated from your private key",
-            "value": ""
-        },
         "APP_KEY": {
             "generator": "secret"
         },
@@ -34,7 +26,43 @@
         "APP_DEBUG": "false",
         "LOG_CHANNEL": "stderr",
         "DB_CONNECTION": "pgsql",
-        "TRUSTED_PROXIES": "*"
+        "TRUSTED_PROXIES": "*",
+        "PASSPORT_PRIVATE_KEY": {
+            "description": "The RSA private key used to generate OAUTH security token",
+            "value": ""
+        },
+        "PASSPORT_PUBLIC_KEY": {
+            "description": "The public key derivated from your private key",
+            "value": ""
+        },
+        "MAIL_HOST": {
+          "value": "",
+          "required": false
+        },
+        "MAIL_PORT": {
+          "value": "",
+          "required": false
+        },
+        "MAIL_USERNAME": {
+          "value": "",
+          "required": false
+        },
+        "MAIL_PASSWORD": {
+          "value": "",
+          "required": false
+        },
+        "MAIL_ENCRYPTION": {
+          "value": "",
+          "required": false
+        },
+        "MAIL_FROM_NAME": {
+          "value": "2FAuth",
+          "required": false
+        },
+        "MAIL_FROM_ADDRESS": {
+          "value": "no-reply@heroku.com",
+          "required": false
+        }
     },
     "addons": [
         "heroku-postgresql"
