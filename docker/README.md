@@ -44,7 +44,7 @@ We assume your current directory is `/yourpath`.
 You can stop it with `CTRL+C`.
 
 - You can also run it in the background by replacing `-it --rm` with `-d`.
-- You can set environment variables available (see the [.env.example](.env.example)) with `-e`, for example `-e APP_NAME=2FAuth`.
+- You can set environment variables available (see the [.env.example](https://github.com/Bubka/2FAuth/blob/master/.env.example)) with `-e`, for example `-e APP_NAME=2FAuth`.
 - You can also use the [docker-compose.yml](docker-compose.yml) with `docker-compose` and modify it as you wish.
 
 ### Use an existing SQLite file
