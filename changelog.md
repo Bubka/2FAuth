@@ -1,5 +1,43 @@
 # Change log
 
+## [3.0.0] - 2022-05-09
+
+Finally, here is version 3.0!
+
+This is a milestone in the 2FAuth development that greatly enhances 2FAuth under the hoods and comes with a [brand new documentation](https://docs.2fauth.app/).
+
+### New
+
+- 2FAuth now exposes a REST API following the OpenAPI 3.1 specification that allows connexion with third parties (see the [API doc](https://docs.2fauth.app/api/))
+- Support of the _Web Authentication_ standard, aka WebAuthn, to login using a security device like a Yubikey or FaceID
+- Support of authentication proxy to bypass the 2FAuth auth login
+- Heroku setup to deploy 2FAuth using the _Deploy to Heroku_ button
+
+#### Also added
+
+- Ability to delete the user account and reset 2FAuth
+- The content of any non-2FA QR code can be copied or followed (in case of an HTTP link)
+- PHP 8.0 support
+
+### Changed
+
+- 2Fauth now uses the browser language preference by default.
+- The current group is now clickable in the group selector
+- Upgrade to Laravel 8
+
+### Fixed
+
+- [issue #45](https://github.com/Bubka/2FAuth/issues/45) Account or Service field containing colon breaks the Test feature in the advanced form
+- [issue #47](https://github.com/Bubka/2FAuth/issues/47) Account creation fails when otpauth service parameter is missing
+- [issue #50](https://github.com/Bubka/2FAuth/issues/50) Email password reset does not work
+- [issue #51](https://github.com/Bubka/2FAuth/issues/51) Cannot delete a group with accounts (MySQL only)
+- [issue #52](https://github.com/Bubka/2FAuth/issues/52) null "Default group" setting after group delete
+- [issue #57](https://github.com/Bubka/2FAuth/issues/57) Can't save icons or upload QR codes - Docker installation
+
+### Removed
+
+- PHP 7.3 support
+
 ## [2.1.0] - 2021-03-04
 
 ### Added
