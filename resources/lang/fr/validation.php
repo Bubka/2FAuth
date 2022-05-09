@@ -14,6 +14,7 @@ return [
     */
 
     'accepted' => 'Le champ :attribute doit être accepté.',
+    'accepted_if' => 'Le champ :attribute doit être accepté quand :other a la valeur :value.',
     'active_url' => 'Le champ :attribute n\'est pas une URL valide.',
     'after' => 'Le champ :attribute doit être une date postérieure au :date.',
     'after_or_equal' => 'Le champ :attribute doit être une date postérieure ou égale au :date.',
@@ -31,9 +32,12 @@ return [
     ],
     'boolean' => 'Le champ :attribute doit être vrai ou faux.',
     'confirmed' => 'Le champ de confirmation :attribute ne correspond pas.',
+    'current_password' => 'Le mot de passe est incorrect.',
     'date' => 'Le champ :attribute n\'est pas une date valide.',
     'date_equals' => 'Le champ :attribute doit être une date égale à :date.',
     'date_format' => 'Le champ :attribute ne correspond pas au format :format.',
+    'declined' => 'Le champ :attribute doit être décliné.',
+    'declined_if' => 'Le champ :attribute doit être décliné quand :other a la valeur :value.',
     'different' => 'Les champs :attribute et :other doivent être différents.',
     'digits' => 'Le champ :attribute doit contenir :digits chiffres.',
     'digits_between' => 'Le champ :attribute doit contenir entre :min et :max chiffres.',
@@ -90,11 +94,16 @@ return [
         'string' => 'Le texte :attribute doit contenir au moins :min caractères.',
         'array' => 'Le tableau :attribute doit contenir au moins :min éléments.',
     ],
+    'multiple_of' => 'La valeur de :attribute doit être un multiple de :value.',
     'not_in' => 'Le champ :attribute sélectionné n\'est pas valide.',
     'not_regex' => 'Le format du champ :attribute n\'est pas valide.',
     'numeric' => 'Le champ :attribute doit contenir un nombre.',
     'password' => 'Le mot de passe est incorrect',
     'present' => 'Le champ :attribute doit être présent.',
+    'prohibited' => 'Le champ :attribute est interdit.',
+    'prohibited_if' => 'Le champ :attribute est interdit quand :other a la valeur :value.',
+    'prohibited_unless' => 'Le champ :attribute est interdit à moins que :other est l\'une des valeurs :values.',
+    'prohibits' => 'Le champ :attribute interdit :other d\'être présent.',
     'regex' => 'Le format du champ :attribute est invalide.',
     'required' => 'Le champ :attribute est obligatoire.',
     'required_if' => 'Le champ :attribute est obligatoire quand la valeur de :other est :value.',
@@ -118,6 +127,8 @@ return [
     'url' => 'Le champ :attribute doit être une url valide.',
     'uuid' => 'Le champ :attribute doit être un UUID valide',
 
+    'single' => 'Lors de l\'utilisation de :attribut, il doit être le seul paramètre dans le corps de la requête',
+
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Language Lines
@@ -131,27 +142,38 @@ return [
 
     'custom' => [
         'icon' => [
-            'image' => 'Les formats acceptés sont jpeg, png, bmp, gif, svg, or webp',
+            'image' => 'Les formats acceptés sont jpeg, png, bmp, gif, svg, or webp.',
         ],
         'qrcode' => [
-            'image' => 'Les formats acceptés sont jpeg, png, bmp, gif, svg, or webp',
+            'image' => 'Les formats acceptés sont jpeg, png, bmp, gif, svg, or webp.',
         ],
         'uri' => [
-            'starts_with' => 'La valeur n\'est pas une uri OTP valide',
-        ],
-        'email' => [
-            'exists' => 'Aucun compte utilisateur n\'utilise cette email',
+            'regex' => 'Le champ :attribute n\'est pas une URI otpauth valide.',
         ],
         'otp_type' => [
-            'required_without' => 'Le champ :attribute est obligatoire.',
+            'in' => 'Le champ :attribute n\'est pas supporté.',
+        ],
+        'email' => [
+            'exists' => 'Aucun compte utilisateur n\'utilise cet email.',
         ],
         'secret' => [
-            'required_without' => 'Le champ :attribute est obligatoire.',
+            'isBase32Encoded' => 'Le :attribute doit être une chaîne encodée en base32',
         ],
         'account' => [
-            'required_without' => 'Le champ :attribute est obligatoire.',
             'regex' => 'Le champ :attribute ne doit pas contenir de deux-points.',
         ],
+        'service' => [
+            'regex' => 'Le champ :attribute ne doit pas contenir de deux-points.',
+        ],
+        'label' => [
+            'required' => 'L\'URI doit avoir un label.',
+        ],
+        'ids' => [
+            'regex' => 'Les IDs doivent être séparés par des virgules, sans virgule en fin de chaîne.',
+        ],
+        'name' => [
+            'firstUser' => 'Un compte utilisateur existe déjà',
+        ]
     ],
 
     /*

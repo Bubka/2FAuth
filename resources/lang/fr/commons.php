@@ -15,11 +15,14 @@ return [
 
     'cancel' => 'Annuler',
     'update' => 'Mettre à jour',
+    'copy' => 'Copier',
     'copy_to_clipboard' => 'Copier',
     'copied_to_clipboard' => 'Copié dans le presse-papier',
     'profile' => 'Profil',
     'edit' => 'Modifier',
     'delete' => 'Supprimer',
+    'disable' => 'Désactiver',
+    'enable' => 'Activer',
     'create' => 'Créer',
     'save' => 'Enregistrer',
     'close' => 'Fermer',
@@ -33,7 +36,11 @@ return [
     'move' => 'Déplacer',
     'all' => 'Tous',
     'rename' => 'Renommer',
+    'new_name' => 'Nouveau nom',
     'options' => 'Options',
     'reload' => 'Actualiser',
-    'some_data_have_changed' => 'Certaines données ont été modifiées. Vous devriez'
+    'some_data_have_changed' => 'Certaines données ont été modifiées. Vous devriez',
+    'generate' => 'Générer',
+    'open_in_browser' => 'Ouvrir dans votre navigateur',
+    'continue' => 'Continuer',
 ];

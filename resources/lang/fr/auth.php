@@ -15,31 +15,76 @@ return [
    
     // Laravel
     'failed' => 'Ces identifiants ne correspondent pas à nos enregistrements',
+    'password' => 'Le mot de passe saisi est incorrect.',
     'throttle' => 'Tentatives de connexion trop nombreuses. Veuillez essayer de nouveau dans :seconds secondes.',
 
     // 2FAuth
     'sign_out' => 'Déconnexion',
     'sign_in' => 'Se connecter',
+    'sign_in_using' => 'Se connecter en utilisant',
+    'login_and_password' => 'login & mot de passe',
     'register' => 'Créer un compte',
     'welcome_back_x' => 'Bienvenue {0}',
     'already_authenticated' => 'Déjà authentifié',
+    'authentication' => 'Authentification',
+    'maybe_later' => 'Peut-être plus tard',
+    'user_account_controlled_by_proxy' => 'Compte utilisateur mis à disposition par un proxy d\'authentification.<br />Gérer le compte au niveau du proxy.',
+    'auth_handled_by_proxy' => 'Authentification gérée par un proxy inverse, les paramètres ci-dessous sont désactivés.<br />Gérer l\'authentification au niveau du proxy.',
     'confirm' => [
         'logout' => 'Etes-vous sûrs de vouloir vous déconnecter ?',
+        'revoke_device' => 'Voulez-vous vraiment supprimer cet appareil ?',
+        'delete_account' => 'Voulez-vous vraiment supprimer votre compte ?',
+    ],
+    'webauthn' => [
+        'security_device' => 'un périphérique de sécurité',
+        'security_devices' => 'Périphériques de sécurité',
+        'security_devices_legend' => 'Périphériques d\'authentification que vous pouvez utiliser pour vous connecter à 2FAuth, comme des clés de sécurité (ex : YubiKey) ou des smartphones dotés de capacités biométriques (ex : Apple FaceId/TouchId)',
+        'enhance_security_using_webauthn' => 'Vous pouvez améliorer la sécurité de votre compte 2FAuth en activant l\'authentification WebAuthn.<br /><br />
+            WebAuthn vous permet d\'utiliser des appareils de confiance (comme des Yubikeys ou des smartphones dotés de capacités biométriques) pour vous connecter rapidement et de manière plus sécurisée.',
+        'use_security_device_to_sign_in' => 'Préparez-vous à vous authentifier en utilisant un de vos dispositifs de sécurité. Branchez votre clé, retirez votre masque ou vos gants, etc.',
+        'lost_your_device' => 'Vous avez perdu votre appareil ?',
+        'recover_your_account' => 'Récupérer votre compte',
+        'account_recovery' => 'Récupération du compte',
+        'recovery_punchline' => '2FAuth vous enverra un lien de récupération à cette adresse e-mail. Cliquez sur le lien dans l\'e-mail reçu pour enregistrer un nouveau périphérique de sécurité.<br /><br />Assurez-vous d\'ouvrir l\'e-mail depuis un appareil qui vous appartient ou que vous considérez de confiance.',
+        'send_recovery_link' => 'Envoyer le lien de récupération',
+        'account_recovery_email_sent' => 'E-mail de récupération du compte envoyé !',
+        'disable_all_other_devices' => 'Désactiver tous les autres périphériques sauf celui-ci',
+        'register_a_new_device' => 'Ajouter un nouveau périphérique',
+        'device_successfully_registered' => 'Périphérique enregistré avec succès',
+        'device_revoked' => 'Périphérique révoqué avec succès',
+        'revoking_a_device_is_permanent' => 'La révocation d\'un périphérique est définitive',
+        'recover_account_instructions' => 'Cliquez sur le bouton ci-dessous pour enregistrer un nouveau périphérique de sécurité afin de récupérer votre compte. Suivez simplement les instructions de votre navigateur.',
+        'invalid_recovery_token' => 'Jeton de sécurité invalide',
+        'rename_device' => 'Renommer le périphérique',
+        'my_device' => 'Mon périphérique',
+        'unknown_device' => 'Périphérique inconnu',
+        'use_webauthn_only' => [
+            'label' => 'Utiliser uniquement WebAuthn',
+            'help' => 'Faire de WebAuthn la seule méthode disponible pour se connecter à 2FAuth. Ceci est la configuration recommandée pour profiter de la sécurité améliorée de WebAuthn.<br />
+                En cas de perte de votre périphérique, vous serez toujours en mesure d\'enregistrer un nouveau périphérique de sécurité pour récupérer votre compte.'
+        ],
+        'need_a_security_device_to_enable_options' => 'Définissez au moins un périphérique pour activer ces options',
+        'use_webauthn_as_default' => [
+            'label' => 'Utiliser WebAuthn comme méthode de connexion par défaut',
+            'help' => 'Proposer d\'abord d\'utiliser WebAuthn lors de l\'identification. L\'identification avec login et mot de passe reste disponible en tant que méthode secondaire.<br />
+                Ceci est sans effet si vous utilisez uniquement WebAuthn.'
+        ],
     ],
     'forms' => [
         'name' => 'Nom',
         'login' => 'Connexion',
+        'webauthn_login' => 'Connexion WebAuthn',
         'email' => 'Email',
         'password' => 'Mot de passe',
         'confirm_password' => 'Confirmez le mot de passe',
         'confirm_new_password' => 'Confirmez le nouveau mot de passe',
         'dont_have_account_yet' => 'Pas encore de compte ?',
         'already_register' => 'Déjà enregistré ?',
-        'password_do_not_match' => 'Le mot de passe ne correspond pas',
+        'authentication_failed' => 'Échec de l\'authentification',
         'forgot_your_password' => 'Mot de passe oublié ?',
         'request_password_reset' => 'Réinitialisez-le',
         'reset_password' => 'Mot de passe oublié',
-        'no_reset_password_in_demo' => 'Réinitialisation impossible en mode Démo',
+        'disabled_in_demo' => 'Fonctionnalité désactivée en mode Démo',
         'new_password' => 'Nouveau mot de passe',
         'current_password' => [
             'label' => 'Mot de passe actuel',
@@ -53,6 +98,11 @@ return [
         'welcome_to_demo_app_use_those_credentials' => 'bienvenue sur la démo de 2FAuth.<br><br>Vous pouvez vous connecter en utilisant l\'adresse email <strong>demo@2fauth.app</strong> et le mot de passe <strong>demo</demo>',
         'register_punchline' => 'Bienvenue sur 2FAuth.<br/>Vous avez besoin d\'un compte pour aller plus loin. Remplissez ce formulaire pour vous inscrire et, s\'il vous plaît, choisissez un mot de passe fort, les données 2FA sont sensibles.',
         'reset_punchline' => '2FAuth vous enverra un lien de réinitialisation de mot de passe à cette adresse. Cliquez sur le lien dans l\'e-mail reçu pour définir un nouveau mot de passe.',
+        'name_this_device' => 'Nommer ce périphérique',
+        'delete_account' => 'Supprimer le compte',
+        'delete_your_account' => 'Supprimer votre compte',
+        'delete_your_account_and_reset_all_data' => 'Cela réinitialisera 2FAuth. Votre compte utilisateur sera supprimé ainsi que toutes les données 2FA. Il est impossible de restaurer des données réinitialisées.',
+        'user_account_successfully_deleted' => 'Compte supprimé avec succès',
     ],
 
 ];

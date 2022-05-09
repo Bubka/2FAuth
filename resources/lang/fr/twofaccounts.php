@@ -22,6 +22,7 @@ return [
     'use_full_form' => 'Ou utiliser le formulaire détaillé',
     'add_one' => 'Add one',
     'show_qrcode' => 'Afficher le QR code',
+    'no_service' => '- aucun service -',
     'forms' => [
         'service' => [
             'placeholder' => 'example.com',
@@ -81,7 +82,7 @@ return [
         'image' => [
             'label' => 'Image',
             'placeholder' => 'http://...',
-            'help' => 'L\'url d\'une image externe à utiliser comme icône du compte'
+            'help' => 'L\'URL d\'une image externe à utiliser comme icône du compte'
         ],
         'options_help' => 'Vous pouvez laisser les options suivantes non renseignées si vous ne savez pas comment les définir. Les valeurs les plus couramment utilisées seront appliquées.',
         'alternative_methods' => 'Méthodes alternatives',
