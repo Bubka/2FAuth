@@ -19,7 +19,6 @@ on:
       - .env.travis
       - artisan
       - composer.json
-      - composer.lock
       - Dockerfile
       - phpunit.xml
       - server.php
@@ -42,7 +41,6 @@ on:
       - .env.travis
       - artisan
       - composer.json
-      - composer.lock
       - Dockerfile
       - phpunit.xml
       - server.php
