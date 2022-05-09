@@ -5,7 +5,7 @@
         </figure>
         <p class="is-size-4 has-text-grey-light has-ellipsis">{{ internal_service }}</p>
         <p class="is-size-6 has-text-grey has-ellipsis">{{ internal_account }}</p>
-        <p class="is-size-1 has-text-white is-clickable" :title="$t('commons.copy_to_clipboard')" v-clipboard="() => password.replace(/ /g, '')" v-clipboard:success="clipboardSuccessHandler">{{ displayedOtp }}</p>
+        <p class="is-size-1 has-text-white is-clickable" :title="$t('commons.copy_to_clipboard')" v-clipboard="() => internal_password.replace(/ /g, '')" v-clipboard:success="clipboardSuccessHandler">{{ displayedOtp }}</p>
         <ul class="dots" v-show="internal_otp_type === 'totp'">
             <li v-for="n in 10"></li>
         </ul>
