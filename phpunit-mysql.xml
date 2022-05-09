@@ -14,18 +14,18 @@
     xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
     <coverage processUncoveredFiles="true">
         <include>
-            <directory suffix=".php">./app</directory>
+            <directory suffix=".php">app</directory>
         </include>
     </coverage>
     <testsuites>
         <testsuite name="Unit">
-            <directory suffix="Test.php">./tests/Unit</directory>
+            <directory suffix="Test.php">tests/Unit</directory>
         </testsuite>
         <testsuite name="Feature">
-            <directory suffix="Test.php">./tests/Feature</directory>
+            <directory suffix="Test.php">tests/Feature</directory>
         </testsuite>
         <testsuite name="Api.v1">
-            <directory suffix="Test.php">./tests/Api/v1</directory>
+            <directory suffix="Test.php">tests/Api/v1</directory>
         </testsuite>
     </testsuites>
     <php>
