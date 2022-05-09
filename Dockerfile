@@ -17,6 +17,9 @@ ARG UID=1000
 ARG GID=1000
 COPY --from=build-composer --chown=${UID}:${GID} /usr/bin/composer /usr/bin/composer
 RUN apk add --no-cache unzip
+ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
+RUN chmod +x /usr/local/bin/install-php-extensions && \
+    install-php-extensions gd bcmath
 WORKDIR /srv
 COPY artisan composer.json ./
 COPY database ./database
