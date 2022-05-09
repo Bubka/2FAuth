@@ -18,6 +18,7 @@ ARG GID=1000
 COPY --from=build-composer --chown=${UID}:${GID} /usr/bin/composer /usr/bin/composer
 RUN apk add --no-cache unzip
 WORKDIR /srv
+COPY artisan composer.json ./
 COPY database ./database
 RUN composer install --prefer-dist --no-scripts --no-dev --no-autoloader
 RUN composer dump-autoload --no-scripts --no-dev --optimize
