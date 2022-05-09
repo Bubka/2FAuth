@@ -42,7 +42,9 @@ class KickOutInactiveUser
             $user->save();
             
             Log::notice('Inactive user detected, authentication rejected');
-            Auth::logout();
+            if (method_exists('Illuminate\Support\Facades\Auth', 'logout')) {
+                Auth::logout();
+            }
      
             return response()->json(['message' => 'unauthorised'], Response::HTTP_UNAUTHORIZED);
         }
