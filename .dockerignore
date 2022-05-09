@@ -1,10 +1,8 @@
 .git
 .github
-tests
 .dockerignore
 .editorconfig
 .env.example
-.env.testing
 .gitattributes
 .gitignore
 .styleci.yml

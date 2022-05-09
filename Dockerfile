@@ -28,7 +28,7 @@ RUN composer dump-autoload --no-scripts --no-dev --optimize
 
 FROM --platform=${BUILDPLATFORM} vendor AS test
 COPY . .
-RUN mv .env.travis .env
+RUN mv .env.testing .env
 RUN composer install
 RUN php artisan key:generate
 ENTRYPOINT [ "/srv/vendor/bin/phpunit" ]
