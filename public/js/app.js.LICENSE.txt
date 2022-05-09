@@ -1,17 +1,11 @@
-/*
-object-assign
-(c) Sindre Sorhus
-@license MIT
-*/
-
 /*!
- * Font Awesome Free 5.15.1 by @fontawesome - https://fontawesome.com
+ * Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com
  * License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
  */
 
 /*!
- * vue2-storage v5.0.0 
- * (c) 2019 Yarkov Aleksey
+ * vue2-storage v6.1.3 
+ * (c) 2021 Yarkov Aleksey
  * Released under the MIT License.
  */
 
