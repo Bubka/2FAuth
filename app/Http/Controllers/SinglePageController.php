@@ -33,6 +33,7 @@ class SinglePageController extends Controller
         return view('landing')->with([
             'appSettings' => $this->settingService->all()->toJson(),
             'lang' => App::currentLocale(),
+            'isDemoApp' => config("2fauth.config.isDemoApp") ? 'true' : 'false',
             'locales' => collect(config("2fauth.locales"))->toJson(),
         ]);
     }

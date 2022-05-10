@@ -42,7 +42,7 @@
         data(){
             return {
                 username: null,
-                isDemo: this.$root.appSettings.isDemoApp,
+                isDemo: this.$root.isDemoApp,
                 form: new Form({
                     email: '',
                     password: ''
