@@ -177,10 +177,10 @@ ENV \
     WEBAUTHN_NAME=2FAuth \
     # Relying Party ID. If null, the device will fill it internally.
     # See https://webauthn-doc.spomky-labs.com/pre-requisites/the-relying-party#how-to-determine-the-relying-party-id
-    WEBAUTHN_ID= \
+    WEBAUTHN_ID=null \
     # Optional image data in BASE64 (128 bytes maximum) or an image url
     # See https://webauthn-doc.spomky-labs.com/pre-requisites/the-relying-party#relying-party-icon
-    WEBAUTHN_ICON= \
+    WEBAUTHN_ICON=null \
     # Use this setting to control how user verification behave during the
     # WebAuthn authentication flow.
     #
@@ -198,7 +198,7 @@ ENV \
     # Supported:
     #   '*': to trust any proxy
     #   A comma separated IP list: The list of proxies IP to trust
-    TRUSTED_PROXIES= \
+    TRUSTED_PROXIES=null \
     # Leave the following configuration vars as is.
     # Unless you like to tinker and know what you're doing.
     BROADCAST_DRIVER=log \
