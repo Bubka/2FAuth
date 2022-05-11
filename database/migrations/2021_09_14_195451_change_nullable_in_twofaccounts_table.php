@@ -16,16 +16,6 @@ class ChangeNullableInTwofaccountsTable extends Migration
      */
     public function up()
     {
-        Schema::table('twofaccounts', function (Blueprint $table) {
-            $table->text('account')->nullable(false)->change();
-            $table->string('service')->nullable()->change();
-            $table->string('otp_type', 10)->nullable(false)->change();
-            $table->text('secret')->nullable(false)->change();
-            $table->string('algorithm', 20)->nullable(false)->change();
-            $table->unsignedSmallInteger('digits')->nullable(false)->change();
-        });
-        
-
         $twofaccounts = DB::table('twofaccounts')->select('id', 'legacy_uri')->get();
         $settingService = resolve('App\Services\SettingService');
 
@@ -48,8 +38,39 @@ class ChangeNullableInTwofaccountsTable extends Migration
             catch(Exception $ex)
             {
                 Log::error($ex->getMessage());
+                Log::error("TwoFAccount with id #" . $twofaccount->id . " could not be splited");
             }
         }
+
+        $twofaccounts = DB::table('twofaccounts')
+            ->whereNull('account')
+            ->orWhereNull('otp_type')
+            ->orWhereNull('secret')
+            ->orWhereNull('algorithm')
+            ->orWhereNull('digits')
+            ->get();
+
+        foreach ($twofaccounts as $twofaccount) {
+
+            $affected = DB::table('twofaccounts')
+            ->where('id', $twofaccount->id)
+            ->update([
+                'account'  => $twofaccount->account === null ? 'account (invalid)' : $twofaccount->account + ' (invalid)',
+                'otp_type'  => $twofaccount->otp_type === null ? 'totp' : $twofaccount->otp_type,
+                'secret'    => $twofaccount->secret === null ? 'secret' : $twofaccount->secret,
+                'algorithm' => $twofaccount->algorithm === null ? 'sha1' : $twofaccount->algorithm,
+                'digits'    => $twofaccount->digits === null ? 6 : $twofaccount->digits,
+            ]);
+        }
+
+        Schema::table('twofaccounts', function (Blueprint $table) {
+            $table->text('account')->nullable(false)->change();
+            $table->string('service')->nullable()->change();
+            $table->string('otp_type', 10)->nullable(false)->change();
+            $table->text('secret')->nullable(false)->change();
+            $table->string('algorithm', 20)->nullable(false)->change();
+            $table->unsignedSmallInteger('digits')->nullable(false)->change();
+        });
     }
 
     /**
