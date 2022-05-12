@@ -109,6 +109,27 @@ There are the following build arguments you can use to customize the image using
 | `CREATED` | `an unknown date` | The date of the image build time |
 | `COMMIT` | `unknown` | The commit hash of the Git commit used |
 
+### Mail settings ####
+
+| Build argument | Default | Description |
+| --- | --- | --- |
+| MAIL_HOST | smtp.mailtrap.io | The SMTP hostname |
+| MAIL_PORT | 2525 | The coresponding SMTP port |
+| MAIL_FROM | changeme@example.com | The sender adress |
+| MAIL_USERNAME | null | The SMTP username |
+| MAIL_PASSWORD | null | The SMTP password |
+
+Example:
+
+```
+...
+-e MAIL_HOST=smtp.example.com
+-e MAIL_PORT=587
+-e MAIL_FROM=2fauth@example.com
+-e MAIL_USERNAME=2fauth@example.com
+-e MAIL_PASSWORD=password1234
+```
+
 ## Implementation details
 
 - The final Docker image is based on `alpine:3.14` with minimal packages installed
