@@ -37,6 +37,7 @@ We assume your current directory is `/yourpath`.
     ```sh
     docker run -it --rm -p 8000:8000/tcp \
     -v /yourpath/2fauth:/2fauth 2fauth/2fauth
+    -e AUTHENTICATION_GUARD=web-guard #fix for issue #68
     ```
 
 1. Access it at [http://localhost:8000](http://localhost:8000)
