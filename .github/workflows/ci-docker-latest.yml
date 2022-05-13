@@ -1,4 +1,4 @@
-name: CI
+name: ci-docker-latest
 on:
   push:
     branches:    
@@ -86,33 +86,23 @@ jobs:
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
       - name: Set variables
-        id: vars
+        id: set_vars
         env:
           EVENT_NAME: ${{ github.event_name }}
         run: |
-          BRANCH=${GITHUB_REF#refs/heads/}
-          TAG=${GITHUB_REF#refs/tags/}
           echo ::set-output name=commit::$(git rev-parse --short HEAD)
           echo ::set-output name=created::$(date -u +%Y-%m-%dT%H:%M:%SZ)
-          if [ "$TAG" != "$GITHUB_REF" ]; then
-            echo ::set-output name=version::$TAG
-            echo ::set-output name=platforms::linux/amd64,linux/386,linux/arm64,linux/arm/v6,linux/arm/v7
-          elif [ "$BRANCH" = "master" ]; then
-            echo ::set-output name=version::latest
-            echo ::set-output name=platforms::linux/amd64,linux/386,linux/arm64,linux/arm/v6,linux/arm/v7
-          else
-            echo ::set-output name=version::$BRANCH
-            echo ::set-output name=platforms::linux/amd64
-          fi
+          echo ::set-output name=version::latest
+          echo ::set-output name=platforms::linux/amd64,linux/386,linux/arm64,linux/arm/v6,linux/arm/v7
 
-      - name: Build and push final image
+      - name: Build and push to docker Hub
         uses: docker/build-push-action@v2.6.1
         with:
-          platforms: ${{ steps.vars.outputs.platforms }}
+          platforms: ${{ steps.set_vars.outputs.platforms }}
           build-args: |
-            CREATED=${{ steps.vars.outputs.created }}
-            COMMIT=${{ steps.vars.outputs.commit }}
-            VERSION=${{ steps.vars.outputs.version }}
+            CREATED=${{ steps.set_vars.outputs.created }}
+            COMMIT=${{ steps.set_vars.outputs.commit }}
+            VERSION=${{ steps.set_vars.outputs.version }}
           tags: |
-            2fauth/2fauth:${{ steps.vars.outputs.version }}
+            2fauth/2fauth:${{ steps.set_vars.outputs.version }}
           push: true
