@@ -130,6 +130,8 @@
 
         beforeRouteEnter (to, from, next) {
             next(async vm => {
+                if( to.params.forceLogout ) await vm.axios.get('/user/logout')
+
                 const { data } = await vm.axios.get('api/v1/user/name')
 
                 if( data.name ) {

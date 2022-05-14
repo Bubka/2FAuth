@@ -159,7 +159,7 @@ class LoginTest extends FeatureTestCase
     /**
      * @test
      */
-    public function test_user_logout_after_inactivity_returns_unauthorized()
+    public function test_user_logout_after_inactivity_returns_teapot()
     {
         // Set the autolock period to 1 minute
         $settingService = resolve('App\Services\SettingService');
@@ -178,7 +178,7 @@ class LoginTest extends FeatureTestCase
 
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('GET', '/api/v1/twofaccounts')
-            ->assertUnauthorized();
+            ->assertStatus(418);
     }
 
 }

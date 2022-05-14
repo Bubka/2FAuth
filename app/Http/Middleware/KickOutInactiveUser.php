@@ -46,7 +46,7 @@ class KickOutInactiveUser
                 Auth::logout();
             }
      
-            return response()->json(['message' => 'unauthorised'], Response::HTTP_UNAUTHORIZED);
+            return response()->json(['message' => 'inactivity detected'], Response::HTTP_I_AM_A_TEAPOT);
         }
 
         return $next($request);
