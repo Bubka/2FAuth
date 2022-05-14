@@ -33,7 +33,7 @@
                 <div class="field has-addons">
                     <p class="control">
                         <span class="select">
-                            <select v-model="form.secretIsBase32Encoded">
+                            <select @change="form.secret=''" v-model="form.secretIsBase32Encoded">
                                 <option v-for="format in secretFormats" :value="format.value">{{ format.text }}</option>
                             </select>
                         </span>
@@ -110,6 +110,7 @@
     import Modal from '../../components/Modal'
     import Form from './../../components/Form'
     import OtpDisplayer from '../../components/OtpDisplayer'
+    import Base32 from "thirty-two"
 
     export default {
         data() {
@@ -200,6 +201,9 @@
                     this.tempIcon = oldIcon
                     this.deleteIcon()
                 }
+
+                // Secret to base32 if necessary
+                this.form.secret = this.form.secretIsBase32Encoded ? this.form.secret : Base32.encode(this.form.secret).toString();
 
                 await this.form.put('/api/v1/twofaccounts/' + this.$route.params.twofaccountId)
 

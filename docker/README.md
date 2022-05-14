@@ -37,6 +37,7 @@ We assume your current directory is `/yourpath`.
     ```sh
     docker run -it --rm -p 8000:8000/tcp \
     -v /yourpath/2fauth:/2fauth 2fauth/2fauth
+    -e AUTHENTICATION_GUARD=web-guard #fix for issue #68
     ```
 
 1. Access it at [http://localhost:8000](http://localhost:8000)
@@ -44,7 +45,7 @@ We assume your current directory is `/yourpath`.
 You can stop it with `CTRL+C`.
 
 - You can also run it in the background by replacing `-it --rm` with `-d`.
-- You can set environment variables available (see the [.env.example](https://github.com/Bubka/2FAuth/blob/master/.env.example)) with `-e`, for example `-e APP_NAME=2FAuth`.
+- You can set environment variables available (see the [.env.example](../.env.example)) with `-e`, for example `-e APP_NAME=2FAuth`.
 - You can also use the [docker-compose.yml](docker-compose.yml) with `docker-compose` and modify it as you wish.
 
 ### Use an existing SQLite file
@@ -107,6 +108,27 @@ There are the following build arguments you can use to customize the image using
 | `VERSION` | `unknown` | The version of the image |
 | `CREATED` | `an unknown date` | The date of the image build time |
 | `COMMIT` | `unknown` | The commit hash of the Git commit used |
+
+### Mail settings ####
+
+| Build argument | Default | Description |
+| --- | --- | --- |
+| MAIL_HOST | smtp.mailtrap.io | The SMTP hostname |
+| MAIL_PORT | 2525 | The coresponding SMTP port |
+| MAIL_FROM | changeme@example.com | The sender adress |
+| MAIL_USERNAME | null | The SMTP username |
+| MAIL_PASSWORD | null | The SMTP password |
+
+Example:
+
+```
+...
+-e MAIL_HOST=smtp.example.com
+-e MAIL_PORT=587
+-e MAIL_FROM=2fauth@example.com
+-e MAIL_USERNAME=2fauth@example.com
+-e MAIL_PASSWORD=password1234
+```
 
 ## Implementation details
 
