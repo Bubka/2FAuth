@@ -1,5 +1,17 @@
 # Change log
 
+## [3.0.2] - 2022-05-11
+
+### Added
+
+- Mail settings section in the docker readme by [@aronmal](https://github.com/aronmal)
+
+### Fixed
+
+- [issue #72](https://github.com/Bubka/2FAuth/issues/72) 2FA secret passed as plain text rejected by form validation
+- [issue #73](https://github.com/Bubka/2FAuth/issues/73) CSRF token mismatch
+- [issue #78](https://github.com/Bubka/2FAuth/issues/78) Add tags other then latest when pushing images to dockerhub
+
 ## [3.0.1] - 2022-05-11
 
 ### Fixed
