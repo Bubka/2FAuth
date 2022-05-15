@@ -110,7 +110,7 @@
     import Modal from '../../components/Modal'
     import Form from './../../components/Form'
     import OtpDisplayer from '../../components/OtpDisplayer'
-    import Base32 from "thirty-two"
+    import Base32 from "hi-base32"
 
     export default {
         data() {
