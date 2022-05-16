@@ -32,9 +32,13 @@ class SinglePageController extends Controller
     {
         return view('landing')->with([
             'appSettings' => $this->settingService->all()->toJson(),
+            'appConfig' => collect([
+                'proxyAuth' => config("auth.defaults.guard") === 'reverse-proxy-guard' ? true : false,
+                'proxyLogoutUrl' => config("2fauth.config.proxyLogoutUrl") ? config("2fauth.config.proxyLogoutUrl") : false,
+            ])->toJson(),
             'lang' => App::currentLocale(),
             'isDemoApp' => config("2fauth.config.isDemoApp") ? 'true' : 'false',
-            'locales' => collect(config("2fauth.locales"))->toJson(),
+            'locales' => collect(config("2fauth.locales"))->toJson()
         ]);
     }
 }

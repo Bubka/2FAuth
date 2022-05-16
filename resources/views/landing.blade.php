@@ -24,6 +24,7 @@
     </div>
     <script type="text/javascript">
         var appSettings = {!! $appSettings !!};
+        var appConfig = {!! $appConfig !!};
         var appVersion = '{{ config("2fauth.version") }}';
         var isDemoApp = {!! $isDemoApp !!};
         var appLocales = {!! $locales !!};

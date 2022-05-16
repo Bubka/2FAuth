@@ -11,10 +11,17 @@ Vue.mixin({
     methods: {
 
         async appLogout(evt) {
-
-            await this.axios.get('/user/logout')
-            this.$storage.clear()
-            location.reload()
+            if (this.$root.appConfig.proxyAuth) {
+                if (this.$root.appConfig.proxyLogoutUrl) {
+                    location.assign(this.$root.appConfig.proxyLogoutUrl)
+                }
+                else return false
+            }
+            else {
+                await this.axios.get('/user/logout')
+                this.$storage.clear()
+                location.reload()
+            }
         },
         
         exitSettings: function(event) {

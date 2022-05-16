@@ -16,6 +16,7 @@ const app = new Vue({
     el: '#app',
     data: {
         appSettings: window.appSettings,
+        appConfig: window.appConfig,
         isDemoApp: window.isDemoApp
     },
     i18n,
