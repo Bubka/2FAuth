@@ -71,7 +71,7 @@ return [
         ],
         'auto_lock' => [
             'label' => 'Auto lock',
-            'help' => 'Log out the user automatically in case of inactivity'
+            'help' => 'Log out the user automatically in case of inactivity. Has no effect when authentication is handled by a proxy and no custom logout url is specified.'
         ],
         'use_encryption' => [
             'label' => 'Protect sensible data',
