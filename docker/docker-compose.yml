@@ -69,6 +69,8 @@ services:
       # (only relevant when AUTHENTICATION_GUARD is set to 'reverse-proxy-guard')
       - AUTH_PROXY_HEADER_FOR_USER=null
       - AUTH_PROXY_HEADER_FOR_EMAIL=null
+      # Custom logout URL to open when using an auth proxy.
+      - PROXY_LOGOUT_URL=null
       # WebAuthn settings
       # Relying Party name, aka the name of the application. If null, defaults to APP_NAME
       - WEBAUTHN_NAME=2FAuth
