@@ -84,7 +84,7 @@
 
                 this.isFetching = true
 
-                await this.axios.get('/oauth/personal-access-tokens')
+                await this.axios.get('/oauth/personal-access-tokens', {returnError: true})
                 .then(response => {
                     const tokens = []
 
