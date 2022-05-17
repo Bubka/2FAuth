@@ -39,7 +39,21 @@
                         </span>
                     </p>
                     <p class="control is-expanded">
-                        <input class="input" type="text" v-model="form.secret">
+                        <input class="input" type="text" v-model="form.secret" :disabled="secretIsLocked">
+                    </p>
+                    <p class="control" v-if="secretIsLocked">
+                        <a class="button is-dark field-lock" @click="secretIsLocked = false" :title="$t('twofaccounts.forms.unlock.title')">
+                            <span class="icon">
+                                <font-awesome-icon :icon="['fas', 'lock']" />
+                            </span>
+                        </a>
+                    </p>
+                    <p class="control" v-else>
+                        <a class="button is-dark field-unlock"  @click="secretIsLocked = true" :title="$t('twofaccounts.forms.lock.title')">
+                            <span class="icon has-text-danger">
+                                <font-awesome-icon :icon="['fas', 'lock-open']" />
+                            </span>
+                        </a>
                     </p>
                 </div>
                 <div class="field">
@@ -154,6 +168,7 @@
                     { text: 'sha512', value: 'sha512' },
                     { text: 'md5', value: 'md5' },
                 ],
+                secretIsLocked: true,
             }
         },
 
