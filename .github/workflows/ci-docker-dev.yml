@@ -1,10 +1,10 @@
-name: ci-docker-latest
+name: ci-docker-dev
 on:
   push:
     branches:    
-      - master
+      - dev
     paths:
-      - .github/workflows/ci-docker-latest.yml
+      - .github/workflows/ci-docker-dev.yml
       - app/**
       - bootstrap/**
       - config/**
@@ -24,9 +24,9 @@ on:
       - server.php
   pull_request:
     branches:    
-      - master
+      - dev
     paths:
-      - .github/workflows/ci-docker-latest.yml
+      - .github/workflows/ci-docker-dev.yml
       - app/**
       - bootstrap/**
       - config/**
@@ -46,27 +46,7 @@ on:
       - server.php
 
 jobs:
-  verify:
-    runs-on: ubuntu-latest
-    env:
-      DOCKER_BUILDKIT: "1"
-    steps:
-      - uses: actions/checkout@v2.3.4
-
-      - name: Build test image
-        run: docker build --target test -t test-container .
-
-      - name: Run tests in test container
-        run: |
-          touch coverage.txt
-          docker run --rm \
-          test-container
-
-      - name: Build final image
-        run: docker build .
-
   publish:
-    needs: [verify]
     if: |
       (github.event_name == 'push' && github.repository == 'Bubka/2FAuth') ||
       (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == 'Bubka/2FAuth' && github.actor != 'dependabot[bot]')
@@ -92,8 +72,8 @@ jobs:
         run: |
           echo ::set-output name=commit::$(git rev-parse --short HEAD)
           echo ::set-output name=created::$(date -u +%Y-%m-%dT%H:%M:%SZ)
-          echo ::set-output name=version::latest
-          echo ::set-output name=platforms::linux/amd64,linux/386,linux/arm64,linux/arm/v6,linux/arm/v7
+          echo ::set-output name=version::dev
+          echo ::set-output name=platforms::linux/amd64,linux/386
 
       - name: Build and push to docker Hub
         uses: docker/build-push-action@v2.6.1
@@ -102,7 +82,7 @@ jobs:
           build-args: |
             CREATED=${{ steps.set_vars.outputs.created }}
             COMMIT=${{ steps.set_vars.outputs.commit }}
-            VERSION=${{ steps.set_vars.outputs.version }}
+            VERSION=${{ steps.set_version.outputs.version }}
           tags: |
-            2fauth/2fauth:${{ steps.set_vars.outputs.version }}
+            2fauth/2fauth:${{ steps.set_version.outputs.version }}
           push: true
