@@ -82,7 +82,7 @@ jobs:
           build-args: |
             CREATED=${{ steps.set_vars.outputs.created }}
             COMMIT=${{ steps.set_vars.outputs.commit }}
-            VERSION=${{ steps.set_version.outputs.version }}
+            VERSION=${{ steps.set_vars.outputs.version }}
           tags: |
-            2fauth/2fauth:${{ steps.set_version.outputs.version }}
+            2fauth/2fauth:${{ steps.set_vars.outputs.version }}
           push: true
