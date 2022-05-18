@@ -69,7 +69,8 @@ class ReverseProxyGuard implements Guard
         $user = null;
 
         // Get the user identifier from $_SERVER or apache filtered headers
-        $remoteUserHeader = config('auth.auth_proxy_headers.user', 'REMOTE_USER');
+        $remoteUserHeader = config('auth.auth_proxy_headers.user');
+        $remoteUserHeader = $remoteUserHeader ?: 'REMOTE_USER';
 
         try {
             $identifier['user'] = request()->server($remoteUserHeader) ?? apache_request_headers()[$remoteUserHeader] ?? null;
@@ -78,8 +79,8 @@ class ReverseProxyGuard implements Guard
             $identifier['user'] = null;
         }
 
-        if (! $identifier['user']) {
-            Log::error(sprintf('No user in header "%s".', $remoteUserHeader));
+        if (!$identifier['user'] || is_array($identifier['user'])) {
+            Log::error(sprintf('Proxy remote-user header "%s" is empty or missing.', $remoteUserHeader));
             return $this->user = null;
         }
 
