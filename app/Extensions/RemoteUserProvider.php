@@ -29,7 +29,7 @@ class RemoteUserProvider implements UserProvider
 
         $user = new User;
         $user->name = $identifier['user'];
-        $user->email = Arr::has($identifier, 'email') ? : 'user@auth.proxy';
+        $user->email = Arr::has($identifier, 'email') ? $identifier['email'] : 'fake.email@do.not.use';
 
         return $user;
     }
