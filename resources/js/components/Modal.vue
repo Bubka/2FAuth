@@ -12,7 +12,7 @@
                 </div>
             </section>
         </div>
-        <div class="fullscreen-footer">
+        <div v-if="this.showcloseButton" class="fullscreen-footer">
             <!-- Close button -->
             <label class="button is-dark is-rounded" @click.stop="closeModal">
                 {{ $t('commons.close') }}
@@ -25,8 +25,18 @@
 export default {
     name: 'Modal',
 
+    data(){
+        return {
+            showcloseButton: this.closable,
+        }
+    },
+
     props: {
         value: Boolean,
+        closable: {
+            type: Boolean,
+            default: true
+        },
     },
 
     computed: {
