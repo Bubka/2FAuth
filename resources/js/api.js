@@ -40,6 +40,11 @@ Vue.axios.interceptors.response.use(response => response, error => {
         routeName = 'login'
     }
 
+    if ( error.response.status === 407 ) {
+        router.push({ name: 'genericError', params: { err: error.response, closable: false } })
+        throw new Vue.axios.Cancel();
+    }
+
     // api calls are stateless so when user inactivity is detected
     // by the backend middleware it cannot logout the user directly
     // so it returns a 418 response.

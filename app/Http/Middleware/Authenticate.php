@@ -3,7 +3,6 @@
 namespace App\Http\Middleware;
 
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
-use Illuminate\Support\Arr;
 
 class Authenticate extends Middleware
 {
@@ -23,13 +22,11 @@ class Authenticate extends Middleware
             $guards = [null];
         }
         else {
-            // We inject the reserve-proxy guard to ensure it will be available for every routes
-            // besides their declared guards. This way we ensure priority to declared guards and
-            // a fallback to the reverse-proxy guard
+            // We replace routes guard by the reverse proxy guard if necessary 
             $proxyGuard = 'reverse-proxy-guard';
 
-            if (config('auth.defaults.guard') === $proxyGuard && !Arr::has($guards, $proxyGuard)) {
-                $guards[] = $proxyGuard;
+            if (config('auth.defaults.guard') === $proxyGuard) {
+                $guards = [$proxyGuard];
             }
         }
 

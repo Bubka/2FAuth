@@ -37,4 +37,6 @@ return [
     'security_device_unsupported' => 'Security device unsupported',
     'unsupported_with_reverseproxy' => 'Not applicable when using an auth proxy',
     'user_deletion_failed' => 'User account deletion failed, no data have been deleted',
+    'auth_proxy_failed' => 'Proxy authentication failed',
+    'auth_proxy_failed_legend' => '2Fauth is configured to run behind an authentication proxy but your proxy does not return the expected header. Check your configuration and try again.'
 ];

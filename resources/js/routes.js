@@ -48,12 +48,12 @@ const router = new Router({
         { path: '/settings/webauthn', name: 'settings.webauthn', component: SettingsWebAuthn, meta: { requiresAuth: true } },
         { path: '/settings/oauth/pat/create', name: 'settings.oauth.generatePAT', component: GeneratePAT, meta: { requiresAuth: true } },
 
-        { path: '/login', name: 'login', component: Login },
-        { path: '/register', name: 'register', component: Register },
-        { path: '/password/request', name: 'password.request', component: PasswordRequest },
-        { path: '/password/reset/:token', name: 'password.reset', component: PasswordReset },
-        { path: '/webauthn/lost', name: 'webauthn.lost', component: WebauthnLost },
-        { path: '/webauthn/recover', name: 'webauthn.recover', component: WebauthnRecover },
+        { path: '/login', name: 'login', component: Login, meta: { disabledWithAuthProxy: true } },
+        { path: '/register', name: 'register', component: Register, meta: { disabledWithAuthProxy: true } },
+        { path: '/password/request', name: 'password.request', component: PasswordRequest, meta: { disabledWithAuthProxy: true } },
+        { path: '/password/reset/:token', name: 'password.reset', component: PasswordReset, meta: { disabledWithAuthProxy: true } },
+        { path: '/webauthn/lost', name: 'webauthn.lost', component: WebauthnLost, meta: { disabledWithAuthProxy: true } },
+        { path: '/webauthn/recover', name: 'webauthn.recover', component: WebauthnRecover, meta: { disabledWithAuthProxy: true } },
         { path: '/flooded', name: 'flooded',component: Errors,props: true },
         { path: '/error', name: 'genericError',component: Errors,props: true },
         { path: '/404', name: '404',component: Errors,props: true },
@@ -63,15 +63,20 @@ const router = new Router({
 
 let isFirstLoad = true;
 
-router.beforeEach((to, from, next) => {   
+router.beforeEach((to, from, next) => {
 
     if( to.name === 'accounts') {
         to.params.isFirstLoad = isFirstLoad ? true : false
         isFirstLoad = false;
     }
 
-    next()
-
+    if (to.matched.some(record => record.meta.disabledWithAuthProxy)) {
+        if (window.appConfig.proxyAuth) {
+            next({ name: 'accounts' })
+        }
+        else next()
+    }
+    else next()
 });
 
 router.afterEach(to => {
