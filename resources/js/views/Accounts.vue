@@ -307,7 +307,6 @@
 
             // we fetch fresh data whatever. The user will be notified to reload the page if there are any data changes
             this.fetchAccounts()
-            this.fetchGroups()
 
             // stop OTP generation on modal close
             this.$on('modalClose', function() {
@@ -363,6 +362,7 @@
                     else {
                         this.accounts = accounts
                         this.$storage.set('accounts', this.accounts)
+                        this.fetchGroups()
                     }
                 })
             },
@@ -432,7 +432,6 @@
                 // we fetch the accounts again to prevent the js collection being
                 // desynchronize from the backend php collection
                 this.fetchAccounts(true)
-                this.fetchGroups()
                 this.showGroupSelector = false
 
             },
