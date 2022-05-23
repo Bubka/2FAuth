@@ -14,6 +14,7 @@ return [
     */
 
     'groups' => 'Gruppen',
+    'create_group' => 'Create new group',
     'select_accounts_to_show' => 'Konten zum Anzeigen auswählen',
     'manage_groups' => 'Gruppen verwalten',
     'active_group' => 'Aktive Gruppe',

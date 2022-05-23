@@ -71,7 +71,7 @@ return [
         ],
         'auto_lock' => [
             'label' => 'Verrouillage automatique',
-            'help' => 'Déconnecter automatiquement l\'utilisateur en cas d\'inactivité'
+            'help' => 'Déconnecte automatiquement l\'utilisateur en cas d\'inactivité. Est sans effet lorsque l\'authentification est gérée par un proxy et qu\'aucune URL de déconnexion personnalisée n\'est configurée.'
         ],
         'use_encryption' => [
             'label' => 'Protéger les données sensibles',

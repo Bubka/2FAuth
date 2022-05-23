@@ -70,7 +70,7 @@ return [
         ],
         'period' => [
             'label' => 'Durée de validité',
-            'placeholder' => '30s par défaut',
+            'placeholder' => '30 s par défaut',
             'help' => 'La durée de validité des codes de sécurité générés, en seconde'
         ],
         'counter' => [

@@ -22,6 +22,7 @@ return [
     'use_full_form' => 'Oder nutzen Sie das vollständige Formular',
     'add_one' => 'Konto hinzufügen',
     'show_qrcode' => 'QR-Code anzeigen',
+    'no_service' => '- no service -',
     'forms' => [
         'service' => [
             'placeholder' => 'beispiel.de',
@@ -68,20 +69,20 @@ return [
             'help' => 'Der Algorithmus, der zur Sicherung Ihrer Sicherheitscodes verwendet wird'
         ],
         'period' => [
-            'label' => 'Gültigkeitsdauer',
-            'placeholder' => 'Standard ist 30',
-            'help' => 'Die Gültigkeitsdauer der generierten Sicherheitscodes in Sekunden'
+            'label' => 'Period',
+            'placeholder' => 'Default is 30',
+            'help' => 'The period of validity of the generated security codes in second'
         ],
         'counter' => [
-            'label' => 'Zähler',
-            'placeholder' => 'Standard ist 0',
-            'help' => 'Der Zählerwert am Anfang',
-            'help_lock' => 'Es ist riskant, den Zähler zu bearbeiten, da Sie das Konto mit dem Verifizierungsserver des Dienstes desynchronisieren könnten. Verwenden Sie das Schloss-Symbol, um die Änderung zu aktivieren, wenn Sie sich sicher sind, was Sie tun'
+            'label' => 'Counter',
+            'placeholder' => 'Default is 0',
+            'help' => 'The initial counter value',
+            'help_lock' => 'It is risky to edit the counter as you can desynchronize the account with the verification server of the service. Use the lock icon to enable modification, but only if you know for you are doing'
         ],
         'image' => [
-            'label' => 'Bild',
+            'label' => 'Image',
             'placeholder' => 'http://...',
-            'help' => 'Die URL eines externen Bildes, das als Kontosymbol benutzt wird'
+            'help' => 'The url of an external image to use as the account icon'
         ],
         'options_help' => 'Sie können die folgenden Einstellungen leer lassen, wenn Sie nicht wissen, wie Sie sie einstellen. In dem Fall werden die Standardwerte verwendet.',
         'alternative_methods' => 'Alternative Methoden',

@@ -14,6 +14,7 @@ return [
     */
 
     'accepted' => ':attribute muss akzeptiert werden.',
+    'accepted_if' => 'The :attribute must be accepted when :other is :value.',
     'active_url' => ':attribute ist keine gültige Internet-Adresse.',
     'after' => ':attribute muss ein Datum nach dem :date sein.',
     'after_or_equal' => ':attribute muss ein Datum nach dem :date oder gleich dem :date sein.',
@@ -31,9 +32,12 @@ return [
     ],
     'boolean' => ':attribute muss entweder \'true\' oder \'false\' sein.',
     'confirmed' => ':attribute stimmt nicht mit der Bestätigung überein.',
+    'current_password' => 'The password is incorrect.',
     'date' => ':attribute muss ein gültiges Datum sein.',
     'date_equals' => ':attribute muss ein Datum gleich :date sein.',
     'date_format' => ':attribute entspricht nicht dem gültigen Format für :format.',
+    'declined' => 'The :attribute must be declined.',
+    'declined_if' => 'The :attribute must be declined when :other is :value.',
     'different' => ':attribute und :other müssen sich unterscheiden.',
     'digits' => ':attribute muss :digits Stellen haben.',
     'digits_between' => ':attribute muss zwischen :min und :max Stellen haben.',
@@ -90,11 +94,16 @@ return [
         'string' => ':attribute muss mindestens :min Zeichen lang sein.',
         'array' => ':attribute muss mindestens :min Elemente haben.',
     ],
+    'multiple_of' => 'The :attribute must be a multiple of :value.',
     'not_in' => 'Der gewählte Wert für :attribute ist ungültig.',
     'not_regex' => ':attribute hat ein ungültiges Format.',
     'numeric' => ':attribute muss eine Zahl sein.',
     'password' => 'Das Passwort ist falsch.',
     'present' => ':attribute muss vorhanden sein.',
+    'prohibited' => 'The :attribute field is prohibited.',
+    'prohibited_if' => 'The :attribute field is prohibited when :other is :value.',
+    'prohibited_unless' => 'The :attribute field is prohibited unless :other is in :values.',
+    'prohibits' => 'The :attribute field prohibits :other from being present.',
     'regex' => ':attribute Format ist ungültig.',
     'required' => ':attribute muss ausgefüllt werden.',
     'required_if' => ':attribute muss ausgefüllt werden, wenn :other den Wert :value hat.',
@@ -118,6 +127,8 @@ return [
     'url' => ':attribute muss eine gültige URL sein.',
     'uuid' => ':attribute muss ein UUID sein.',
 
+    'single' => 'When using :attribute it must be the only parameter in this request body',
+
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Language Lines
@@ -131,27 +142,38 @@ return [
 
     'custom' => [
         'icon' => [
-            'image' => 'Unterstützte Formate sind jpeg, png, bmp, gif, svg oder webp',
+            'image' => 'Supported format are jpeg, png, bmp, gif, svg, or webp.',
         ],
         'qrcode' => [
-            'image' => 'Unterstützte Formate sind jpeg, png, bmp, gif, svg oder webp',
+            'image' => 'Supported format are jpeg, png, bmp, gif, svg, or webp.',
         ],
         'uri' => [
-            'starts_with' => 'Nur gültige OTP Uri werden unterstützt',
-        ],
-        'email' => [
-            'exists' => 'Kein Konto mit dieser E-Mail gefunden',
+            'regex' => 'The :attribute is not a valid otpauth uri.',
         ],
         'otp_type' => [
-            'required_without' => 'Das Feld :attribute ist erforderlich.',
+            'in' => 'The :attribute is not supported.',
+        ],
+        'email' => [
+            'exists' => 'No account found using this email.',
         ],
         'secret' => [
-            'required_without' => 'Das Feld :attribute ist erforderlich.',
+            'isBase32Encoded' => 'The :attribute must be a base32 encoded string.',
         ],
         'account' => [
-            'required_without' => 'Das Feld :attribute ist erforderlich.',
-            'regex' => 'Das Feld :attribute darf keinen Doppelpunkt enthalten.',
+            'regex' => 'The :attribute must not contain colon.',
         ],
+        'service' => [
+            'regex' => 'The :attribute must not contain colon.',
+        ],
+        'label' => [
+            'required' => 'The uri must have a label.',
+        ],
+        'ids' => [
+            'regex' => 'IDs must be comma separated, without trailing comma.',
+        ],
+        'name' => [
+            'firstUser' => 'There is already a registered user',
+        ]
     ],
 
     /*
