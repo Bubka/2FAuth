@@ -1,16 +1,19 @@
 # Change log
 
-## [wip]
+## [3.1.0] - 2022-05-20
 
 ### Added
-- `PROXY_LOGOUT_URL` env var to customize the logout url when using an auth proxy
+
+- `PROXY_LOGOUT_URL` environment variable to specify a custom logout url when using an auth proxy
 - Locked/Unlocked state for the _Secret_ field in the 2FA account Edit form to prevent undesirable edit.
 
 ### Fixed
 
 - Fix OAuth setting view returning an error when auth is handled by a proxy
+- [issue #57](https://github.com/Bubka/2FAuth/issues/57) Can't save icons or upload QR codes - Docker installation
 - [issue #81](https://github.com/Bubka/2FAuth/issues/81) Unable to create configured logger. Using emergency logger
 - [issue #82](https://github.com/Bubka/2FAuth/issues/82) Autolock feature should be disabled while auth is handled by a proxy
+- [issue #84](https://github.com/Bubka/2FAuth/issues/84) Reverse-proxy-guard authenticates request without valid headers configuration
 
 ## [3.0.2] - 2022-05-14
 
