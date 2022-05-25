@@ -27,6 +27,7 @@ Route::group(['middleware' => 'auth:api-guard'], function () {
     Route::delete('settings/{settingName}', 'SettingController@destroy')->name('settings.destroy');
 
     Route::delete('twofaccounts', 'TwoFAccountController@batchDestroy')->name('twofaccounts.batchDestroy');
+    Route::post('twofaccounts/import', 'TwoFAccountController@import')->name('twofaccounts.import');
     Route::patch('twofaccounts/withdraw', 'TwoFAccountController@withdraw')->name('twofaccounts.withdraw');
     Route::post('twofaccounts/reorder', 'TwoFAccountController@reorder')->name('twofaccounts.reorder');
     Route::post('twofaccounts/preview', 'TwoFAccountController@preview')->name('twofaccounts.preview');
