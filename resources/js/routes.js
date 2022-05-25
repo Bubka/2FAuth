@@ -8,6 +8,7 @@ import Capture          from './views/Capture'
 import Accounts         from './views/Accounts'
 import CreateAccount    from './views/twofaccounts/Create'
 import EditAccount      from './views/twofaccounts/Edit'
+import ImportAccount    from './views/twofaccounts/Import'
 import QRcodeAccount    from './views/twofaccounts/QRcode'
 import Groups           from './views/Groups'
 import CreateGroup      from './views/groups/Create'
@@ -34,6 +35,7 @@ const router = new Router({
 
         { path: '/accounts', name: 'accounts', component: Accounts, meta: { requiresAuth: true }, alias: '/', props: true },
         { path: '/account/create', name: 'createAccount', component: CreateAccount, meta: { requiresAuth: true } },
+        { path: '/account/import', name: 'importAccounts', component: ImportAccount, meta: { requiresAuth: true } },
         { path: '/account/:twofaccountId/edit', name: 'editAccount', component: EditAccount, meta: { requiresAuth: true } },
         { path: '/account/:twofaccountId/qrcode', name: 'showQRcode', component: QRcodeAccount, meta: { requiresAuth: true } },
 

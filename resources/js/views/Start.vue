@@ -97,7 +97,7 @@
 
             /**
              * Upload the submitted QR code file to the backend for decoding, then route the user
-             * to the Create form with decoded URI to prefill the form
+             * to the Create or Import form with decoded URI to prefill the form
              */
             async submitQrCode() {
 
@@ -107,7 +107,10 @@
 
                 const { data } = await this.form.upload('/api/v1/qrcode/decode', imgdata)
 
-                this.$router.push({ name: 'createAccount', params: { decodedUri: data.data } });
+                if( data.data.slice(0, 33).toLowerCase() === "otpauth-migration://offline?data=" ) {
+                    this.$router.push({ name: 'importAccounts', params: { migrationUri: data.data } });
+                }
+                else this.$router.push({ name: 'createAccount', params: { decodedUri: data.data } });
             },
 
             /**

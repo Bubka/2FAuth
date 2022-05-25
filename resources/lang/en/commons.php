@@ -43,4 +43,5 @@ return [
     'generate' => 'Generate',
     'open_in_browser' => 'Open in browser',
     'continue' => 'Continue',
+    'discard' => 'Discard'
 ];

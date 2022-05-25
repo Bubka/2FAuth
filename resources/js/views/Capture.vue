@@ -90,11 +90,11 @@
             },
 
             /**
-             * Push a decoded URI to the Create form
+             * Push a decoded URI to the Create or Import form
              * 
              * The basicQRcodeReader option is Off, so qrcode decoding has already be done by vue-qrcode-reader, whether
              * from livescan or file input.
-             * We simply check the uri validity to prevent useless push to the Create form, but the form will check uri validity too.
+             * We simply check the uri validity to prevent useless push to the form, but the form will check uri validity too.
              */
             async submitUri(event) {
                 
@@ -103,7 +103,10 @@
                 if( !this.form.uri ) {
                     this.$notify({type: 'is-warning', text: this.$t('errors.qrcode_cannot_be_read') })
                 }
-                else if( this.form.uri.slice(0, 15 ).toLowerCase() !== "otpauth://totp/" && this.form.uri.slice(0, 15 ).toLowerCase() !== "otpauth://hotp/" ) {
+                else if( this.form.uri.slice(0, 33).toLowerCase() == "otpauth-migration://offline?data=" ) {
+                    this.pushUriToImportForm(this.form.uri)
+                }
+                else if( this.form.uri.slice(0, 15).toLowerCase() !== "otpauth://totp/" && this.form.uri.slice(0, 15).toLowerCase() !== "otpauth://hotp/" ) {
                     this.$notify({type: 'is-warning', text: this.$t('errors.no_valid_otp') })
                 }
                 else {
@@ -113,6 +116,10 @@
 
             pushUriToCreateForm(data) {
                 this.$router.push({ name: 'createAccount', params: { decodedUri: data } });
+            },
+
+            pushUriToImportForm(data) {
+                this.$router.push({ name: 'importAccounts', params: { migrationUri: data } });
             }
         }
     }

@@ -119,5 +119,11 @@ return [
         'delete' => 'Are you sure you want to delete this account?',
         'cancel' => 'The account will be lost. Are you sure?'
     ],
+    'import' => [
+        'import' => 'Import',
+        'import_legend' => 'Import your Google Authenticator accounts.',
+        'use_a_qr_code' => 'Use a QR code',
+        'issuer' => 'Issuer'
+    ],
 
 ];
