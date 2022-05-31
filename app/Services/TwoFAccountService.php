@@ -221,7 +221,7 @@ class TwoFAccountService
         // $ids as string could be a comma-separated list of ids
         // so in this case we explode the string to an array
         $ids = $this->commaSeparatedToArray($ids);
-        Log::info(sprintf('Deletion of TwoFAccounts #%s requested', implode(',#', $ids)));
+        Log::info(sprintf('Deletion of TwoFAccounts #%s requested', is_array($ids) ? implode(',#', $ids) : $ids ));
         $deleted = TwoFAccount::destroy($ids);
 
         return $deleted;
