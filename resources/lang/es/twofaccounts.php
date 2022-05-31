@@ -13,15 +13,16 @@ return [
     |
     */
 
-    'service' => 'Service',
-    'account' => 'Account',
-    'accounts' => 'Accounts',
-    'icon' => 'Icon',
-    'no_account_here' => 'No 2FA here!',
-    'add_first_account' => 'Add your first account',
-    'use_full_form' => 'Or use the full form',
-    'add_one' => 'Add one',
-    'show_qrcode' => 'Show QR code',
+    'service' => 'Servicio',
+    'account' => 'Cuenta',
+    'accounts' => 'Cuentas',
+    'icon' => 'Icono',
+    'no_account_here' => '¡No hay 2FA aquí!',
+    'add_first_account' => 'Agrega tu primera cuenta',
+    'use_full_form' => 'O usa el formulario completo',
+    'add_one' => 'Agregar uno',
+    'show_qrcode' => 'Muestra el código QR',
+    'no_service' => '- sin servicio -',
     'forms' => [
         'service' => [
             'placeholder' => 'example.com',
@@ -29,35 +30,35 @@ return [
         'account' => [
             'placeholder' => 'John DOE',
         ],
-        'new_account' => 'New account',
-        'edit_account' => 'Edit account',
+        'new_account' => 'Nueva cuenta',
+        'edit_account' => 'Editar cuenta',
         'otp_uri' => 'OTP Uri',
-        'scan_qrcode' => 'Scan a QR code',
-        'upload_qrcode' => 'Upload a QR code',
-        'use_advanced_form' => 'Use the advanced form',
-        'prefill_using_qrcode' => 'Prefill using a QR Code',
+        'scan_qrcode' => 'Escanear un código QR',
+        'upload_qrcode' => 'Subir un código QR',
+        'use_advanced_form' => 'Usar el formulario avanzado',
+        'prefill_using_qrcode' => 'Rellenar usando un código QR',
         'use_qrcode' => [
-            'val' => 'Use a qrcode',
-            'title' => 'Use a QR code to fill the form magically',
+            'val' => 'Usar un código QR',
+            'title' => 'Usa un código QR para rellenar mágicamente el formulario',
         ],
         'unlock' => [
-            'val' => 'Unlock',
-            'title' => 'Unlock it (at your own risk)',
+            'val' => 'Desbloquear',
+            'title' => 'Desbloquearlo (bajo su propio riesgo)',
         ],
         'lock' => [
-            'val' => 'Lock',
-            'title' => 'Lock it',
+            'val' => 'Bloquear',
+            'title' => 'Bloquearlo',
         ],
-        'choose_image' => 'Choose an image…',
+        'choose_image' => 'Seleccionar una imagen…',
         'test' => 'Test',
         'secret' => [
-            'label' => 'Secret',
+            'label' => 'Secreto',
             'help' => 'La clave utilizada para generar sus códigos de seguridad'
         ],
         'plain_text' => 'Texto plano',
         'otp_type' => [
             'label' => 'Elija el tipo de OTP a crear',
-            'help' => 'Time-based OTP or HMAC-based OTP'
+            'help' => 'OTP basado en tiempo, u OTP basado en HMAC'
         ],
         'digits' => [
             'label' => 'Dígitos',
@@ -68,55 +69,55 @@ return [
             'help' => 'El algoritmo usado para proteger sus códigos de seguridad'
         ],
         'period' => [
-            'label' => 'Plazo',
+            'label' => 'Periodo',
             'placeholder' => 'Por defecto es 30',
-            'help' => 'The period of validity of the generated security codes in second'
+            'help' => 'Periodo de validez de los códigos se seguridad generados, en segundos'
         ],
         'counter' => [
             'label' => 'Contador',
-            'placeholder' => 'Default is 0',
-            'help' => 'The initial counter value',
-            'help_lock' => 'It is risky to edit the counter as you can desynchronize the account with the verification server of the service. Use the lock icon to enable modification, but only if you know for you are doing'
+            'placeholder' => 'Por defecto es 0',
+            'help' => 'El valor inicial del contador',
+            'help_lock' => 'Es arriesgado editar el contador, ya que puede desincronizar la cuenta con el servidor de verificación del servicio. Utilice el icono de bloqueo para habilitar la modificación, pero solo si sabe lo que está haciendo'
         ],
         'image' => [
-            'label' => 'Image',
+            'label' => 'Imágen',
             'placeholder' => 'http://...',
-            'help' => 'The url of an external image to use as the account icon'
+            'help' => 'La url de una imagen externa a usar como icono de cuenta'
         ],
-        'options_help' => 'You can leave the following options blank if you don\'t know how to set them. The most commonly used values will be applied.',
-        'alternative_methods' => 'Alternative methods',
+        'options_help' => 'Puede dejar las siguientes opciones en blanco si no sabe cómo establecerlas. Los valores más utilizados se aplicarán.',
+        'alternative_methods' => 'Métodos alternativos',
     ],
     'stream' => [
-        'live_scan_cant_start' => 'Live scan can\'t start :(',
+        'live_scan_cant_start' => 'Live scan no puede comenzar :(',
         'need_grant_permission' => [
-            'reason' => '2FAuth does not have permission to access your camera',
-            'solution' => 'You need to grant permission to use your device camera. If you already denied and your browser do not prompt you again, please refers to the browser documentation to find out how to grant permission.'
+            'reason' => '2FAuth no tiene permiso para acceder a tu cámara',
+            'solution' => 'Necesitas conceder permiso para usar la cámara de tu dispositivo. Si ya lo ha denegado y su navegador no le preguntan de nuevo, por favor refiérase a la documentación del navegador para averiguar cómo conceder permisos.'
         ],
         'not_readable' => [
-            'reason' => 'Fail to load scanner',
-            'solution' => 'Is the camera already in use? Ensure that no other app use your camera and try again'
+            'reason' => 'Fallo al cargar el escáner',
+            'solution' => '¿La cámara ya está en uso? Asegúrate de que ninguna otra aplicación use tu cámara e inténtalo de nuevo'
         ],
         'no_cam_on_device' => [
-            'reason' => 'No camera on this device',
-            'solution' => 'Maybe your forget to plug in your webcam'
+            'reason' => 'No se encontraron cámaras en este dispositivo',
+            'solution' => 'Quizás hayas olvidado conectar la webcam'
         ],
         'secured_context_required' => [
-            'reason' => 'Secure context required',
-            'solution' => 'HTTPS is required for live scan. If you run 2FAuth from your computer, do not use virtual host other than localhost'
+            'reason' => 'Secure context requerido',
+            'solution' => 'HTTPS es necesario para escanear en vivo. Si ejecuta 2FAuth desde su computadora, no utilice un host virtual distinto de localhost'
         ],
-        'https_required' => 'HTTPS required for camera streaming',
+        'https_required' => 'HTTPS requerido para la transmisión de la cámara',
         'camera_not_suitable' => [
-            'reason' => 'Installed cameras are not suitable',
-            'solution' => 'Please use another device/camera'
+            'reason' => 'Las cámaras instaladas no son apropiadas',
+            'solution' => 'Por favor usa otro dispositivo/cámara'
         ],
         'stream_api_not_supported' => [
-            'reason' => 'Stream API is not supported in this browser',
-            'solution' => 'You should use a modern browser'
+            'reason' => 'Stream API no está soportado en este navegador',
+            'solution' => 'Deberías usar un navegador moderno'
         ],
     ],
     'confirm' => [
-        'delete' => 'Are you sure you want to delete this account?',
-        'cancel' => 'The account will be lost. Are you sure?'
+        'delete' => '¿Está seguro que desea eliminar esta cuenta?',
+        'cancel' => 'La cuenta será eliminada. ¿Estás seguro?'
     ],
 
 ];

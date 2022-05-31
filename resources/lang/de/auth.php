@@ -22,7 +22,7 @@ return [
     'sign_out' => 'Abmelden',
     'sign_in' => 'Anmelden',
     'sign_in_using' => 'Anmelden mit',
-    'login_and_password' => 'Benutzername & Passwort',
+    'login_and_password' => 'benutzername & passwort',
     'register' => 'Registrieren',
     'welcome_back_x' => 'Willkommen zurück, {0}',
     'already_authenticated' => 'Bereits angemeldet',

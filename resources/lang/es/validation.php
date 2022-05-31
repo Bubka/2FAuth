@@ -14,6 +14,7 @@ return [
     */
 
     'accepted' => ':attribute debe ser aceptado.',
+    'accepted_if' => ':attribute debe ser aceptado cuando :other sea :value.',
     'active_url' => ':attribute no es una URL válida.',
     'after' => ':attribute debe ser una fecha posterior a :date.',
     'after_or_equal' => ':attribute debe ser una fecha posterior o igual a :date.',
@@ -31,9 +32,12 @@ return [
     ],
     'boolean' => 'El campo :attribute debe tener un valor verdadero o falso.',
     'confirmed' => 'La confirmación de :attribute no coincide.',
+    'current_password' => 'La contraseña es incorrecta.',
     'date' => ':attribute no es una fecha válida.',
     'date_equals' => ':attribute debe ser una fecha igual a :date.',
     'date_format' => ':attribute no corresponde al formato :format.',
+    'declined' => ':attribute debe ser rechazado.',
+    'declined_if' => ':attribute debe ser rechazado cuando :other sea :value.',
     'different' => ':attribute y :other deben ser diferentes.',
     'digits' => ':attribute debe tener :digits dígitos.',
     'digits_between' => ':attribute debe tener entre :min y :max dígitos.',
@@ -90,11 +94,16 @@ return [
         'string' => ':attribute debe contener al menos :min caracteres.',
         'array' => ':attribute debe tener al menos :min elementos.',
     ],
+    'multiple_of' => ':attribute debe ser un múltiplo de :value.',
     'not_in' => ':attribute es inválido.',
     'not_regex' => 'El formato del campo :attribute no es válido.',
     'numeric' => ':attribute debe ser numérico.',
     'password' => 'La contraseña es incorrecta.',
     'present' => 'El campo :attribute debe estar presente.',
+    'prohibited' => 'El campo :attribute está prohibido.',
+    'prohibited_if' => 'El campo :attribute está prohibido cuando :other es :value.',
+    'prohibited_unless' => 'El campo :attribute está prohibido a menos que :other sea :values.',
+    'prohibits' => 'El campo :attribute prohíbe que :other esté presente.',
     'regex' => 'El formato de :attribute es inválido.',
     'required' => 'El campo :attribute es obligatorio.',
     'required_if' => 'El campo :attribute es obligatorio cuando :other es :value.',
@@ -115,8 +124,10 @@ return [
     'timezone' => 'El :attribute debe ser una zona válida.',
     'unique' => 'El campo :attribute ya ha sido registrado.',
     'uploaded' => 'Subir :attribute ha fallado.',
-    'url' => 'The :attribute must be a valid url.',
+    'url' => ':attribute debe ser una URL válida.',
     'uuid' => 'El campo :attribute debe ser un UUID válido.',
+
+    'single' => 'Cuando se usa :attribute, éste debe ser el único parámetro en este cuerpo de la solicitud',
 
     /*
     |--------------------------------------------------------------------------
@@ -131,27 +142,38 @@ return [
 
     'custom' => [
         'icon' => [
-            'image' => 'Supported format are jpeg, png, bmp, gif, svg, or webp',
+            'image' => 'Los formatos soportados, son: jpeg, png, bmp, gif, svg o webp.',
         ],
         'qrcode' => [
-            'image' => 'Supported format are jpeg, png, bmp, gif, svg, or webp',
+            'image' => 'Los formatos soportados, son: jpeg, png, bmp, gif, svg o webp.',
         ],
         'uri' => [
-            'starts_with' => 'Only valid OTP uri are supported',
-        ],
-        'email' => [
-            'exists' => 'No account found using this email',
+            'regex' => ':attribute no es una otpauth uri válida.',
         ],
         'otp_type' => [
-            'required_without' => 'The :attribute field is required.',
+            'in' => ':attribute no está soportado.',
+        ],
+        'email' => [
+            'exists' => 'No se ha encontrado ninguna cuenta con este correo electrónico.',
         ],
         'secret' => [
-            'required_without' => 'The :attribute field is required.',
+            'isBase32Encoded' => ':attribute debe ser una cadena codificada en base32.',
         ],
         'account' => [
-            'required_without' => 'The :attribute field is required.',
-            'regex' => 'The :attribute field must not contain colon.',
+            'regex' => ':attribute no debe contener dos puntos.',
         ],
+        'service' => [
+            'regex' => ':attribute no debe contener dos puntos.',
+        ],
+        'label' => [
+            'required' => 'La uri debe tener una etiqueta.',
+        ],
+        'ids' => [
+            'regex' => 'Los IDs deben estar separados por comas, sin comas finales.',
+        ],
+        'name' => [
+            'firstUser' => 'Ya hay un usuario registrado',
+        ]
     ],
 
     /*

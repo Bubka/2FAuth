@@ -13,34 +13,51 @@ return [
     |
     */
 
-    'settings' => 'Configuración',
+    'settings' => 'Ajustes',
     'account' => 'Cuenta',
-    'password' => 'Contraseña',
+    'oauth' => 'OAuth',
+    'webauthn' => 'WebAuthn',
+    'tokens' => 'Tokens',
     'options' => 'Opciones',
     'confirm' => [
 
     ],
     'general' => 'General',
     'security' => 'Seguridad',
-    'data_input' => 'Datos de entrada',
+    'profile' => 'Perfil',
+    'change_password' => 'Cambiar contraseña',
+    'personal_access_tokens' => 'Tokens de acceso personal',
+    'token_legend' => 'Los Tokens de Acceso Personal, permiten a cualquier aplicación autenticarse con la API de 2FAuth. Debe especificar el token de acceso como Bearer Token en la cabecera de autorización de aplicaciones de tercero.',
+    'generate_new_token' => 'Generar nuevo token',
+    'revoke' => 'Revocar',
+    'token_revoked' => 'Token revocado correctamente',
+    'revoking_a_token_is_permanent' => 'Revocar un token es permanente',
+    'confirm' => [
+        'revoke' => '¿Está seguro que desea revocar este token?',
+    ],
+    'make_sure_copy_token' => 'Asegúrese de copiar su token de acceso personal ahora. ¡No podrá volver a verlo!',
+    'data_input' => 'Introducción de datos',
     'forms' => [
-        'edit_settings' => 'Modificar configuración',
+        'edit_settings' => 'Modificar ajustes',
         'setting_saved' => 'Ajustes guardados',
+        'new_token' => 'Nuevo token',
+        'some_translation_are_missing' => '¿Faltan algunas traducciones utilizando el idioma preferido por el navegador?',
+        'help_translate_2fauth' => 'Ayude a traducir 2FAuth',
         'language' => [
             'label' => 'Idioma',
-            'help' => 'Cambiar el idioma utilizado para traducir la interfaz de la aplicación.'
+            'help' => 'Idioma utilizado para traducir la interfaz de usuario de 2FAuth. Los idiomas listados están completos, establezca el idioma de su elección para reemplazar las preferencias de su navegador.'
         ],
         'show_otp_as_dot' => [
-            'label' => 'Mostrar tokens generados como punto',
-            'help' => 'Sustituya los carácteres de token generados por *** para asegurar la confidencialidad. No afecta a la función de copiar/pegar.'
+            'label' => 'Mostrar contraseñas generadas de un solo uso como punto',
+            'help' => 'Sustituya los carácteres de la contraseña generados por *** para asegurar la confidencialidad. No afecta a la función de copiar/pegar.'
         ],
         'close_otp_on_copy' => [
-            'label' => 'Cerrar token después de la copia',
-            'help' => 'Cerrar automáticamente la ventana emergente mostrando el token generado después de que ha sido copiado'
+            'label' => 'Cerrar token después de copiarlo',
+            'help' => 'Cerrar automáticamente la ventana emergente mostrando el token generado después de haber sido copiado'
         ],
         'use_basic_qrcode_reader' => [
             'label' => 'Usar lector de código QR básico',
-            'help' => 'Si experimenta problemas al capturar códigos QR habilita esta opción para cambiar a un lector de código QR más básico pero más fiable'
+            'help' => 'Si experimenta problemas al capturar códigos QR habilite esta opción para cambiar a un lector de código QR más básico, pero más fiable'
         ],
         'display_mode' => [
             'label' => 'Modo de visualización',
@@ -54,40 +71,40 @@ return [
         ],
         'auto_lock' => [
             'label' => 'Bloqueo automático',
-            'help' => 'Log out the user automatically in case of inactivity'
+            'help' => 'Cerrar sesión del usuario automáticamente en caso de inactividad. No tiene efecto cuando la autenticación es manejada por un proxy, ni cuando ninguna url de cierre de sesión personalizada se especificada.'
         ],
         'use_encryption' => [
-            'label' => 'Protect sensible data',
-            'help' => 'Sensitive data, the 2FA secrets and emails, are stored encrypted in database. Be sure to backup the APP_KEY value of your .env file (or the whole file) as it serves as key encryption. There is no way to decypher encrypted data without this key.',
+            'label' => 'Proteger los datos confidenciales',
+            'help' => 'Los datos sensibles, las claves secretas y correos electrónicos de 2FA, se almacenan cifrados en la base de datos. Asegúrese de respaldar el valor de APP_KEY de su archivo .env (o el archivo entero), pues, sirve como clave de cifrado. No hay forma de descifrar datos encriptados sin esta clave.',
         ],
         'default_group' => [
-            'label' => 'Default group',
-            'help' => 'The group to which the newly created accounts are associated',
+            'label' => 'Grupo por defecto',
+            'help' => 'El grupo al que las cuentas recién creadas están asociadas',
         ],
         'useDirectCapture' => [
-            'label' => 'Direct input',
-            'help' => 'Choose whether you want to be prompted to choose an input mode among those available or if you want to directly use the default input mode',
+            'label' => 'Entrada directa',
+            'help' => 'Elija si desea que se le pida que elija un modo de entrada entre los disponibles o si desea utilizar directamente el modo de entrada por defecto',
         ],
         'defaultCaptureMode' => [
-            'label' => 'Default input mode',
-            'help' => 'Default input mode used when the Direct input option is On',
+            'label' => 'Modo de entrada de datos por defecto',
+            'help' => 'Modo de entrada predeterminado usado cuando la opción de entrada directa está encendida',
         ],
         'remember_active_group' => [
-            'label' => 'Remember group filter',
-            'help' => 'Save the last group filter applied and restore it on your next visit',
+            'label' => 'Recordar filtro de grupo',
+            'help' => 'Guardar el último filtro de grupo aplicado y restaurarlo en su próxima visita',
         ],
-        'never' => 'Never',
-        'on_otp_copy' => 'On security code copy',
-        '1_minutes' => 'After 1 minute',
-        '5_minutes' => 'After 5 minutes',
-        '10_minutes' => 'After 10 minutes',
-        '15_minutes' => 'After 15 minutes',
-        '30_minutes' => 'After 30 minutes',
-        '1_hour' => 'After 1 hour',
-        '1_day' => 'After 1 day',
-        'livescan' => 'QR code livescan',
-        'upload' => 'QR code upload',
-        'advanced_form' => 'Advanced form',
+        'never' => 'Nunca',
+        'on_otp_copy' => 'Al copiar código de seguridad',
+        '1_minutes' => 'Después de 1 minuto',
+        '5_minutes' => 'Después de 5 minutos',
+        '10_minutes' => 'Después de 10 minutos',
+        '15_minutes' => 'Después de 15 minutos',
+        '30_minutes' => 'Después de 30 minutos',
+        '1_hour' => 'Después de 1 hora',
+        '1_day' => 'Después de 1 día',
+        'livescan' => 'Escaneo código QR',
+        'upload' => 'Subida de código QR',
+        'advanced_form' => 'Formulario avanzado',
     ],
 
 ];
