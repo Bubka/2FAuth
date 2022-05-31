@@ -6,6 +6,7 @@ use App\Models\TwoFAccount;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class TwoFAccountDeleted
 {
@@ -22,5 +23,6 @@ class TwoFAccountDeleted
     public function __construct(TwoFAccount $twofaccount)
     {
         $this->twofaccount = $twofaccount;
+        Log::info(sprintf('TwoFAccount #%s deleted', $twofaccount->id));
     }
 }
