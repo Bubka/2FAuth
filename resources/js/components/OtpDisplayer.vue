@@ -52,7 +52,6 @@
             counter : null,
             image : String,
             qrcode : null,
-            secretIsBase32Encoded : Number,
             uri : String
         },
 

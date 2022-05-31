@@ -33,7 +33,7 @@
                 <div class="field has-addons">
                     <p class="control">
                         <span class="select">
-                            <select @change="form.secret=''" v-model="form.secretIsBase32Encoded">
+                            <select @change="form.secret=''" v-model="secretIsBase32Encoded">
                                 <option v-for="format in secretFormats" :value="format.value">{{ format.text }}</option>
                             </select>
                         </span>
@@ -133,6 +133,7 @@
                 counterIsLocked: true,
                 twofaccountExists: false,
                 tempIcon: '',
+                secretIsBase32Encoded: null,
                 form: new Form({
                     service: '',
                     account: '',
@@ -140,7 +141,6 @@
                     uri: '',
                     icon: '',
                     secret: '',
-                    secretIsBase32Encoded: null,
                     algorithm: '',
                     digits: null,
                     counter: null,
@@ -196,7 +196,7 @@
                 const { data } = await this.axios.get('/api/v1/twofaccounts/' + this.$route.params.twofaccountId)
 
                 this.form.fill(data)
-                this.form.secretIsBase32Encoded = 1
+                this.secretIsBase32Encoded = 1
                 this.twofaccountExists = true
 
                 // set account icon as temp icon
@@ -218,7 +218,7 @@
                 }
 
                 // Secret to base32 if necessary
-                this.form.secret = this.form.secretIsBase32Encoded ? this.form.secret : Base32.encode(this.form.secret).toString();
+                this.form.secret = this.secretIsBase32Encoded ? this.form.secret : Base32.encode(this.form.secret).toString();
 
                 await this.form.put('/api/v1/twofaccounts/' + this.$route.params.twofaccountId)
 

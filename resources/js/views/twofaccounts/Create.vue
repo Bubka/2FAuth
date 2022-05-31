@@ -87,7 +87,7 @@
                     <div class="field has-addons">
                         <p class="control">
                             <span class="select">
-                                <select @change="form.secret=''" v-model="form.secretIsBase32Encoded">
+                                <select @change="form.secret=''" v-model="secretIsBase32Encoded">
                                     <option v-for="format in secretFormats" :value="format.value">{{ format.text }}</option>
                                 </select>
                             </span>
@@ -187,13 +187,13 @@
                 showAlternatives : false,
                 tempIcon: '',
                 uri: '',
+                secretIsBase32Encoded: 0,
                 form: new Form({
                     service: '',
                     account: '',
                     otp_type: '',
                     icon: '',
                     secret: '',
-                    secretIsBase32Encoded: 0,
                     algorithm: '',
                     digits: null,
                     counter: null,
@@ -241,6 +241,7 @@
                 this.axios.post('/api/v1/twofaccounts/preview', { uri: this.uri }).then(response => {
 
                     this.form.fill(response.data)
+                    this.secretIsBase32Encoded = 1
                     this.tempIcon = response.data.icon ? response.data.icon : null
                     this.showQuickForm = true
                 })
@@ -277,7 +278,7 @@
                 this.form.icon = this.tempIcon
 
                 // Secret to base32 if necessary
-                this.form.secret = this.form.secretIsBase32Encoded ? this.form.secret : Base32.encode(this.form.secret).toString();
+                this.form.secret = this.secretIsBase32Encoded ? this.form.secret : Base32.encode(this.form.secret).toString();
 
                 await this.form.post('/api/v1/twofaccounts')
 
@@ -318,7 +319,7 @@
                 // Then the otp described by the uri
                 this.axios.post('/api/v1/twofaccounts/preview', { uri: data.data }).then(response => {
                     this.form.fill(response.data)
-                    this.form.secretIsBase32Encoded = 1
+                    this.secretIsBase32Encoded = 1
                     this.tempIcon = response.data.icon ? response.data.icon : null
                 })
                 .catch(error => {
