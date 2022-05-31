@@ -1,5 +1,11 @@
 # Change log
 
+## [3.1.1] - 2022-05-31
+
+### Fixed
+
+- [issue #85](https://github.com/Bubka/2FAuth/issues/57), [issue #86](https://github.com/Bubka/2FAuth/issues/86) Invalid OTP generated after the 2FA account has been saved to db
+
 ## [3.1.0] - 2022-05-20
 
 ### Added
