@@ -24,6 +24,7 @@
         "darkghosthunter/larapass": "^3.0.2",
         "doctrine/dbal": "^3.2",
         "fruitcake/laravel-cors": "^2.0",
+        "google/protobuf": "^3.21",
         "guzzlehttp/guzzle": "^7.0.1",
         "khanamiryan/qrcode-detector-decoder": "^1.0.5",
         "laravel/framework": "^8.0",
