@@ -405,9 +405,14 @@
                     let ids = []
                     this.selectedAccounts.forEach(id => ids.push(id))
 
-                    // Backend will delete all accounts at the same time
+                    let that = this
                     await this.axios.delete('/api/v1/twofaccounts?ids=' + ids.join())
-
+                        .then(response => {
+                            ids.forEach(function(id) {
+                                that.accounts = that.accounts.filter(a => a.id !== id)
+                            })
+                        })
+                        
                     // we fetch the accounts again to prevent the js collection being
                     // desynchronize from the backend php collection
                     this.fetchAccounts(true)
