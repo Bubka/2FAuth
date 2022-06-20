@@ -32,7 +32,7 @@
                     </label>
                 </div>
                 <!-- link to advanced form -->
-                <div class="block has-text-link">
+                <div v-if="showAdvancedFormButton" class="block has-text-link">
                     <router-link class="button is-link is-outlined is-rounded" :to="{ name: 'createAccount' }" >
                         {{ $t('twofaccounts.forms.use_advanced_form') }}
                     </router-link>
@@ -43,7 +43,7 @@
         <vue-footer :showButtons="true" >
             <!-- back button -->
             <p class="control" v-if="accountCount > 0">
-                <router-link class="button is-dark is-rounded" :to="{ name: 'accounts' }" >
+                <router-link class="button is-dark is-rounded" :to="{ name: returnToView }" >
                     {{ $t('commons.back') }}
                 </router-link>
             </p>
@@ -76,6 +76,17 @@
                 form: new Form(),
             }
         },
+
+        props: {
+            showAdvancedFormButton: {
+                type: Boolean,
+                default: true
+            },
+            returnToView: {
+                type: String,
+                default: 'accounts'
+            },
+        }, 
 
         mounted() {
 
