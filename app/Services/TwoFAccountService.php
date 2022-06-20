@@ -6,16 +6,25 @@ use App\Models\TwoFAccount;
 use App\Exceptions\InvalidSecretException;
 use App\Exceptions\InvalidOtpParameterException;
 use App\Exceptions\UndecipherableException;
+use App\Exceptions\InvalidGoogleAuthMigration;
 use App\Services\Dto\OtpDto;
 use App\Services\Dto\TwoFAccountDto;
+use Exception;
 use OTPHP\TOTP;
 use OTPHP\HOTP;
 use OTPHP\Factory;
 use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
+use ParagonIE\ConstantTime\Base32;
+use App\Protobuf\GAuthValueMapping;
+use App\Protobuf\GoogleAuth\Payload;
+use App\Protobuf\GoogleAuth\Payload\OtpType;
+use App\Protobuf\GoogleAuth\Payload\Algorithm;
+use App\Protobuf\GoogleAuth\Payload\DigitCount;
 
 class TwoFAccountService
 {
@@ -225,6 +234,66 @@ class TwoFAccountService
         $deleted = TwoFAccount::destroy($ids);
 
         return $deleted;
+    }
+
+
+    /**
+     * Convert Google Authenticator migration URI to a set of TwoFAccount objects
+     * 
+     * @param string $migrationUri migration uri provided by Google Authenticator export feature
+     * 
+     * @return \Illuminate\Support\Collection The converted accounts
+     */
+    public function convertMigrationFromGA($migrationUri) : Collection
+    {
+        try {
+            $migrationData = base64_decode(urldecode(Str::replace('otpauth-migration://offline?data=', '', $migrationUri)));
+            $protobuf = new Payload();
+            $protobuf->mergeFromString($migrationData);
+            $otpParameters = $protobuf->getOtpParameters();
+        }
+        catch (Exception $ex) {
+            Log::error("Protobuf failed to get OTP parameters from provided migration URI");
+            Log::error($ex->getMessage());
+
+            throw new InvalidGoogleAuthMigration();
+        }
+
+        foreach ($otpParameters->getIterator() as $key => $otp_parameters) {
+
+             try {
+                $parameters['otp_type']     = GAuthValueMapping::OTP_TYPE[OtpType::name($otp_parameters->getType())];
+                $parameters['account']      = $otp_parameters->getName();
+                $parameters['service']      = $otp_parameters->getIssuer();
+                $parameters['secret']       = Base32::encodeUpper($otp_parameters->getSecret());
+                $parameters['algorithm']    = GAuthValueMapping::ALGORITHM[Algorithm::name($otp_parameters->getAlgorithm())];
+                $parameters['digits']       = GAuthValueMapping::DIGIT_COUNT[DigitCount::name($otp_parameters->getDigits())];
+                $parameters['counter']      = $otp_parameters->getCounter();
+                // $parameters['period']       = $otp_parameters->getPeriod();
+
+                $twofaccounts[$key] = $this->createFromParameters($parameters, false);
+             }
+             catch (Exception $exception) {
+
+                Log::error(sprintf('Cannot instanciate a TwoFAccount object with OTP parameters from imported item #%s', $key));
+                Log::error($exception->getMessage());
+
+                // The token failed to generate a valid account so we create a fake account to be returned.
+                $fakeAccount = new TwoFAccount();
+                $fakeAccount->id = -2;
+                $fakeAccount->otp_type  = 'totp';
+                // Only basic fields are filled to limit the risk of another exception.
+                $fakeAccount->account   = $otp_parameters->getName();
+                $fakeAccount->service   = $otp_parameters->getIssuer();
+                // The secret field is used to pass the error, not very clean but will do the job for now.
+                $fakeAccount->secret    = $exception->getMessage();
+
+                $twofaccounts[$key] = $fakeAccount;
+             }
+        }
+
+        return $this->markAsDuplicate(collect($twofaccounts));
+
     }
 
 
@@ -472,5 +541,34 @@ class TwoFAccountService
             return null;
         }
         // @codeCoverageIgnoreEnd
+    }
+
+
+    /**
+     * Return the given collection with items marked as Duplicates (using id=-1) if a similar record exists in database
+     * 
+     * @param \Illuminate\Support\Collection
+     * @return \Illuminate\Support\Collection
+     */
+    private function markAsDuplicate($twofaccounts) : Collection
+    {
+        $storage = TwoFAccount::all();
+
+        $twofaccounts = $twofaccounts->map(function ($twofaccount, $key) use ($storage) {
+            if ($storage->contains(function ($value, $key) use ($twofaccount) {
+                return $value->secret == $twofaccount->secret
+                    && $value->service == $twofaccount->service
+                    && $value->account == $twofaccount->account
+                    && $value->otp_type == $twofaccount->otp_type
+                    && $value->digits == $twofaccount->digits
+                    && $value->algorithm == $twofaccount->algorithm;
+            })) {
+                $twofaccount->id = -1;
+            }
+
+            return $twofaccount;
+        });
+
+        return $twofaccounts;
     }
 }

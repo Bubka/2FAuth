@@ -129,50 +129,11 @@ class TwoFAccountController extends Controller
      * @return \App\Api\v1\Resources\TwoFAccountCollection
      */
     public function import(TwoFAccountImportRequest $request)
-    {
-        $ALGORITHM = [
-            '',
-            'sha1',
-            'sha256',
-            'sha512',
-            'md5'
-        ];
+    { 
+        $request->merge(['withSecret' => true]);
+        $twofaccounts = $this->twofaccountService->convertMigrationFromGA($request->uri);
 
-        $DIGIT_COUNT = [
-            '',
-            6,
-            8
-        ];
-
-        $OTP_TYPE = [
-            '',
-            'hotp',
-            'totp'
-        ];
-
-        // require_once base_path('protobuf/SearchRequest.php');
-        // $uri = 'otpauth-migration://offline?data=CjUKCi8gSXtDdoRpZEkSEWVkb3VhcmRAZ2FuZWF1Lm1lGg5iYW5rLmdhbmVhdS5tZSABKAEwAhABGAEgAA==';
-        // $uri = base64_decode(urldecode('CjUKCi8gSXtDdoRpZEkSEWVkb3VhcmRAZ2FuZWF1Lm1lGg5iYW5rLmdhbmVhdS5tZSABKAEwAhABGAEgAA=='));
-        // $uri = 'otpauth-migration://offline?data=CiQKCj1PS8k1EUgVI0ESB0BidWJrYV8aB1R3aXR0ZXIgASgBMAIKIQoK6/l62ezmsWvMNRIFQnVia2EaBkdpdEh1YiABKAEwAhABGAEgAA==';
-        // $uri = base64_decode(urldecode('CiQKCj1PS8k1EUgVI0ESB0BidWJrYV8aB1R3aXR0ZXIgASgBMAIKIQoK6/l62ezmsWvMNRIFQnVia2EaBkdpdEh1YiABKAEwAhABGAEgAA=='));
-
-        $data = base64_decode(urldecode(Str::replace('otpauth-migration://offline?data=', '', $request->uri)));
-
-        $proto = new \App\Protobuf\GoogleAuth\Payload();
-        $proto->mergeFromString($data);
-        $otpParameters = $proto->getOtpParameters();
-
-        foreach ($otpParameters->getIterator() as $key => $otp_parameters) {
-            $out[$key]['secret'] = \ParagonIE\ConstantTime\Base32::encodeUpper($otp_parameters->getSecret());
-            $out[$key]['account'] = $otp_parameters->getName();
-            $out[$key]['service'] = $otp_parameters->getIssuer();
-            $out[$key]['algorithm'] = $ALGORITHM[$otp_parameters->getalgorithm()];
-            $out[$key]['digits'] = $DIGIT_COUNT[$otp_parameters->getDigits()];
-            $out[$key]['otp_type'] = $OTP_TYPE[$otp_parameters->getType()];
-            $out[$key]['counter'] = $otp_parameters->getCounter();
-        }
-
-        return response()->json($out, 200);
+        return new TwoFAccountCollection($twofaccounts);
     }
 
 

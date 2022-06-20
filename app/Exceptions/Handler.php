@@ -60,6 +60,11 @@ class Handler extends ExceptionHandler
                 'message' => $exception->getMessage()], 400);
         });
 
+        $this->renderable(function (InvalidGoogleAuthMigration $exception, $request) {
+            return response()->json([
+                'message' => __('errors.invalid_google_auth_migration')], 400);
+        });
+
         $this->renderable(function (\Illuminate\Auth\AuthenticationException $exception, $request) {
             if ($exception->guards() === ['reverse-proxy-guard']) {
                 return response()->json([
