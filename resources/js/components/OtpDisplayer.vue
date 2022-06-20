@@ -245,7 +245,7 @@
 
                 this.stopLoop()
                 this.internal_id = this.remainingTimeout = this.dotToDotInterval = this.firstDotToNextOneTimeout = this.elapsedTimeInCurrentPeriod = this.internal_counter = null
-                this.internal_service = this.internal_account = this.internal_icon = this.internal_otp_type = ''
+                this.internal_service = this.internal_account = this.internal_icon = this.internal_otp_type = this.internal_secret = ''
                 this.internal_password = '... ...'
 
                 try {
