@@ -97,6 +97,8 @@ class TwoFAccountServiceTest extends FeatureTestCase
         'otp_type'  => 'hotp',
         'secret'    => self::SECRET,
     ];
+    private const GOOGLE_AUTH_MIGRATION_URI = 'otpauth-migration://offline?data=CiQKCgcNEp61iE2P0RYSB2FjY291bnQaB3NlcnZpY2UgASgBMAIKLAoKBw0SnrWITY/RFhILYWNjb3VudF9iaXMaC3NlcnZpY2VfYmlzIAEoATACEAEYASAA';
+    private const GOOGLE_AUTH_MIGRATION_URI_WITH_INVALID_DATA = 'otpauth-migration://offline?data=CiQKCgcNEp61iE2P0RYSB2FjY291bnQaB3NlcnZpY';
 
 
     /**
@@ -757,6 +759,73 @@ class TwoFAccountServiceTest extends FeatureTestCase
         $this->assertDatabaseMissing('twofaccounts', [
             'id'      => $this->customTotpTwofaccount->id,
         ]);
+    }
+
+
+    /**
+     * @test
+     */
+    public function test_convert_migration_from_gauth_returns_correct_accounts()
+    {        
+        $twofaccounts = $this->twofaccountService->convertMigrationFromGA(self::GOOGLE_AUTH_MIGRATION_URI);
+
+        $this->assertCount(2, $twofaccounts);
+
+        $this->assertEquals('totp', $twofaccounts->first()->otp_type);
+        $this->assertEquals(self::SERVICE, $twofaccounts->first()->service);
+        $this->assertEquals(self::ACCOUNT, $twofaccounts->first()->account);
+        $this->assertEquals(self::SECRET, $twofaccounts->first()->secret);
+        $this->assertEquals(self::DIGITS_DEFAULT, $twofaccounts->first()->digits);
+        $this->assertEquals(self::PERIOD_DEFAULT, $twofaccounts->first()->period);
+        $this->assertEquals(null, $twofaccounts->first()->counter);
+        $this->assertEquals(self::ALGORITHM_DEFAULT, $twofaccounts->first()->algorithm);
+
+        $this->assertEquals('totp', $twofaccounts->last()->otp_type);
+        $this->assertEquals(self::SERVICE.'_bis', $twofaccounts->last()->service);
+        $this->assertEquals(self::ACCOUNT.'_bis', $twofaccounts->last()->account);
+        $this->assertEquals(self::SECRET, $twofaccounts->last()->secret);
+        $this->assertEquals(self::DIGITS_DEFAULT, $twofaccounts->last()->digits);
+        $this->assertEquals(self::PERIOD_DEFAULT, $twofaccounts->last()->period);
+        $this->assertEquals(null, $twofaccounts->last()->counter);
+        $this->assertEquals(self::ALGORITHM_DEFAULT, $twofaccounts->last()->algorithm);
+    }
+
+
+    /**
+     * @test
+     */
+    public function test_convert_migration_from_gauth_returns_flagged_duplicates()
+    {
+        $parameters = [
+            'service'   => self::SERVICE,
+            'account'   => self::ACCOUNT,
+            'icon'      => self::ICON,
+            'otp_type'  => 'totp',
+            'secret'    => self::SECRET,
+            'digits'    => self::DIGITS_DEFAULT,
+            'algorithm' => self::ALGORITHM_DEFAULT,
+            'period'    => self::PERIOD_DEFAULT,
+        ];
+        $twofaccount = $this->twofaccountService->createFromParameters($parameters);
+
+        $parameters['service'] = self::SERVICE.'_bis';
+        $parameters['account'] = self::ACCOUNT.'_bis';
+        $twofaccount = $this->twofaccountService->createFromParameters($parameters);
+
+        $twofaccounts = $this->twofaccountService->convertMigrationFromGA(self::GOOGLE_AUTH_MIGRATION_URI);
+
+        $this->assertEquals(-1, $twofaccounts->first()->id);
+        $this->assertEquals(-1, $twofaccounts->last()->id);
+    }
+
+
+    /**
+     * @test
+     */
+    public function test_convert_invalid_migration_from_gauth_returns_InvalidGoogleAuthMigration_excpetion()
+    {
+        $this->expectException(\App\Exceptions\InvalidGoogleAuthMigration::class);
+        $twofaccounts = $this->twofaccountService->convertMigrationFromGA(self::GOOGLE_AUTH_MIGRATION_URI_WITH_INVALID_DATA);
     }
 
 }

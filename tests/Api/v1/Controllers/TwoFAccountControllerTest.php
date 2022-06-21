@@ -8,6 +8,7 @@ use Tests\FeatureTestCase;
 use App\Models\TwoFAccount;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\UploadedFile;
 
 
 /**
@@ -159,6 +160,10 @@ class TwoFAccountControllerTest extends FeatureTestCase
         'otp_type'  => 'totp',
         'secret'    => self::SECRET,
     ];
+    private const GOOGLE_AUTH_MIGRATION_URI = 'otpauth-migration://offline?data=CiQKCgcNEp61iE2P0RYSB2FjY291bnQaB3NlcnZpY2UgASgBMAIKLAoKBw0SnrWITY/RFhILYWNjb3VudF9iaXMaC3NlcnZpY2VfYmlzIAEoATACEAEYASAA';
+    private const INVALID_GOOGLE_AUTH_MIGRATION_URI = 'otpauthmigration://offline?data=CiQKCgcNEp61iE2P0RYSB2FjY291bnQaB3NlcnZpY2UgASgBMAIKLAoKBw0SnrWITY/RFhILYWNjb3VudF9iaXMaC3NlcnZpY2VfYmlzIAEoATACEAEYASAA';
+    private const GOOGLE_AUTH_MIGRATION_URI_WITH_INVALID_DATA = 'otpauth-migration://offline?data=CiQKCgcNEp61iE2P0RYSB2FjY291bnQaB3NlcnZpY';
+
 
     /**
      * @test
@@ -562,6 +567,101 @@ class TwoFAccountControllerTest extends FeatureTestCase
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('PUT', '/api/v1/twofaccounts/' . $twofaccount->id, self::ARRAY_OF_INVALID_PARAMETERS)
             ->assertStatus(422);
+    }
+
+
+    /**
+     * @test
+     */
+    public function test_import_valid_gauth_data_returns_success_with_consistent_resources()
+    {
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('POST', '/api/v1/twofaccounts/import', [
+                'uri' => self::GOOGLE_AUTH_MIGRATION_URI,
+            ])
+            ->assertOk()
+            ->assertJsonCount(2, $key = null)
+            ->assertJsonFragment([
+                'id'        => 0,
+                'service'   => self::SERVICE,
+                'account'   => self::ACCOUNT,
+                'otp_type'  => 'totp',
+                'secret'    => self::SECRET,
+                'digits'    => self::DIGITS_DEFAULT,
+                'algorithm' => self::ALGORITHM_DEFAULT,
+                'period'    => self::PERIOD_DEFAULT,
+                'counter'   => null
+            ])
+            ->assertJsonFragment([
+                'id'        => 0,
+                'service'   => self::SERVICE . '_bis',
+                'account'   => self::ACCOUNT . '_bis',
+                'otp_type'  => 'totp',
+                'secret'    => self::SECRET,
+                'digits'    => self::DIGITS_DEFAULT,
+                'algorithm' => self::ALGORITHM_DEFAULT,
+                'period'    => self::PERIOD_DEFAULT,
+                'counter'   => null
+            ]);
+    }
+
+
+    /**
+     * @test
+     */
+    public function test_import_with_invalid_uri_returns_validation_error()
+    {
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('POST', '/api/v1/twofaccounts', [
+                'uri' => self::INVALID_GOOGLE_AUTH_MIGRATION_URI,
+            ])
+            ->assertStatus(422);
+    }
+
+
+    /**
+     * @test
+     */
+    public function test_import_gauth_data_with_duplicates_returns_negative_ids()
+    {
+        $twofaccount = TwoFAccount::factory()->create([
+            'otp_type' => 'totp',
+            'account' => self::ACCOUNT,
+            'service' => self::SERVICE,
+            'secret' => self::SECRET,
+            'algorithm' => self::ALGORITHM_DEFAULT,
+            'digits' => self::DIGITS_DEFAULT,
+            'period' => self::PERIOD_DEFAULT,
+            'legacy_uri' => self::TOTP_SHORT_URI,
+            'icon' => '',
+        ]);
+
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('POST', '/api/v1/twofaccounts/import', [
+                'uri' => self::GOOGLE_AUTH_MIGRATION_URI,
+            ])
+            ->assertOk()
+            ->assertJsonFragment([
+                'id'        => -1,
+                'service'   => self::SERVICE,
+                'account'   => self::ACCOUNT,
+            ]);
+    }
+
+
+    /**
+     * @test
+     */
+    public function test_import_invalid_gauth_data_returns_bad_request()
+    {
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('POST', '/api/v1/twofaccounts/import', [
+                'uri' => self::GOOGLE_AUTH_MIGRATION_URI_WITH_INVALID_DATA,
+            ])
+            ->assertStatus(400)
+            ->assertJsonStructure([
+                'message'
+            ]);
     }
 
 

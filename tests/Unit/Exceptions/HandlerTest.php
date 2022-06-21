@@ -58,6 +58,9 @@ class HandlerTest extends TestCase
             [
                 '\App\Exceptions\DbEncryptionException'
             ],
+            [
+                '\App\Exceptions\InvalidGoogleAuthMigration'
+            ],
         ];
     }
 
