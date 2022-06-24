@@ -72,7 +72,7 @@
                 .catch(error => {
                     if( error.response.status === 422 && error.response.data.errors.name ) {
 
-                        this.$notify({ type: 'is-danger', text: this.$t('errors.already_one_user_registered') + ' ' + this.$t('errors.cannot_register_more_user'), duration:-1 })
+                        this.$notify({ type: 'is-danger', text: this.$t('errors.cannot_register_more_user'), duration:-1 })
                     }
                     else if( error.response.status !== 422 ) {
 
