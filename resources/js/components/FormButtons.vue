@@ -1,10 +1,10 @@
 <template>
     <div class="field is-grouped">
         <div class="control">
-            <v-button :color="color" :isLoading="isBusy" :disabled="isDisabled" >{{ caption }}</v-button>
+            <v-button :id="submitId" :color="color" :isLoading="isBusy" :disabled="isDisabled" >{{ caption }}</v-button>
         </div>
         <div class="control" v-if="showCancelButton">
-            <router-link :to="{ name: cancelLandingView }" class="button is-text">{{ $t('commons.cancel') }}</router-link>
+            <router-link :id="cancelId" :to="{ name: cancelLandingView }" class="button is-text">{{ $t('commons.cancel') }}</router-link>
         </div>
     </div>
 </template>
@@ -48,6 +48,16 @@
             color: {
                 type: String,
                 default: 'is-link'
+            },
+
+            submitId: {
+                type: String,
+                default: 'btnSubmit'
+            },
+
+            cancelId: {
+                type: String,
+                default: 'btnCancel'
             },
         }
     }

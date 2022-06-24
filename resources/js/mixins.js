@@ -154,6 +154,56 @@ Vue.mixin({
 
             return window.atob(input);
         },
+        
+        /**
+         * Encodes an array of bytes to a BASE64 URL string
+         *
+         * @param arrayBuffer {ArrayBuffer|Uint8Array}
+         * @returns {string}
+         */
+        inputId(fieldType, fieldName) {
+            let prefix
+
+            switch (fieldType) {
+                case 'button':
+                    prefix = 'txt'
+                    break
+                case 'button':
+                    prefix = 'btn'
+                    break
+                case 'email':
+                    prefix = 'eml'
+                    break
+                case 'password':
+                    prefix = 'pwd'
+                    break
+                default:
+                    prefix = 'txt'
+                    break
+            }
+
+            return prefix + fieldName[0].toUpperCase() + fieldName.toLowerCase().slice(1);
+            // button
+            // checkbox
+            // color
+            // date 
+            // datetime-local
+            // file
+            // hidden
+            // image
+            // month
+            // number
+            // radio
+            // range
+            // reset
+            // search
+            // submit
+            // tel
+            // text
+            // time
+            // url
+            // week
+        },
     }
 
 })

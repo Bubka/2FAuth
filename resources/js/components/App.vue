@@ -7,7 +7,7 @@
         <div v-if="this.$root.isTestingApp" class="demo has-background-warning has-text-centered is-size-7-mobile">
             {{ $t('commons.testing_do_not_post_sensitive_data') }}
         </div>
-        <notifications width="100%" position="top" :duration="4000" :speed="0" :max="1" classes="notification is-radiusless" />
+        <notifications id="vueNotification" width="100%" position="top" :duration="4000" :speed="0" :max="1" classes="notification is-radiusless" />
         <main class="main-section">
             <router-view></router-view>
         </main>

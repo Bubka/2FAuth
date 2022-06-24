@@ -5,7 +5,7 @@
                 <div class="tabs is-centered is-fullwidth">
                     <ul>
                         <li v-for="tab in tabs" :key="tab.view" :class="{ 'is-active': tab.view === activeTab }">
-                            <a @click="selectTab(tab.view)">{{ tab.name }}</a>
+                            <a :id="tab.id" @click="selectTab(tab.view)">{{ tab.name }}</a>
                         </li>
                     </ul>
                 </div>
@@ -24,19 +24,23 @@
                 tabs: [
                 	{
                 		'name' : this.$t('settings.options'),
-                        'view' : 'settings.options'
+                        'view' : 'settings.options',
+                        'id'   : 'lnkTabOptions'
                 	},
                 	{
                 		'name' : this.$t('settings.account'),
-                        'view' : 'settings.account'
+                        'view' : 'settings.account',
+                        'id'   : 'lnkTabAccount'
                 	},
                 	{
                 		'name' : this.$t('settings.oauth'),
-                        'view' : 'settings.oauth.tokens'
+                        'view' : 'settings.oauth.tokens',
+                        'id'   : 'lnkTabOAuth'
                 	},
                 	{
                 		'name' : this.$t('settings.webauthn'),
-                        'view' : 'settings.webauthn.devices'
+                        'view' : 'settings.webauthn.devices',
+                        'id'   : 'lnkTabWebauthn'
                 	},
             	]
             }
