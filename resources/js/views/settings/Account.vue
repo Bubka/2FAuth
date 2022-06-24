@@ -22,14 +22,14 @@
                         <form-buttons :isBusy="formPassword.isBusy" :caption="$t('auth.forms.change_password')" />
                     </fieldset>
                 </form>
-                <form @submit.prevent="submitDelete" @keydown="formDelete.onKeydown($event)">
+                <form id="frmDeleteAccount" @submit.prevent="submitDelete" @keydown="formDelete.onKeydown($event)">
                     <h4 class="title is-4 pt-6 has-text-danger">{{ $t('auth.forms.delete_account') }}</h4>
                     <div class="field is-size-7-mobile">
                         {{ $t('auth.forms.delete_your_account_and_reset_all_data')}}
                     </div>
                     <fieldset :disabled="isRemoteUser">
                         <form-field :form="formDelete" fieldName="password" inputType="password" :label="$t('auth.forms.current_password.label')" :help="$t('auth.forms.current_password.help')" />
-                        <form-buttons :isBusy="formDelete.isBusy" :caption="$t('auth.forms.delete_your_account')" :color="'is-danger'" />
+                        <form-buttons :isBusy="formDelete.isBusy" :caption="$t('auth.forms.delete_your_account')" :submitId="'btnDeleteAccount'" :color="'is-danger'" />
                     </fieldset>
                 </form>
             </form-wrapper>

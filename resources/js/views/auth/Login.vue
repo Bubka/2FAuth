@@ -6,29 +6,29 @@
                 {{ $t('auth.webauthn.use_security_device_to_sign_in') }}
             </div>
             <div class="control">
-                <button type="button" class="button is-link" @click="webauthnLogin">{{ $t('commons.continue') }}</button>
+                <button id="btnContinue" type="button" class="button is-link" @click="webauthnLogin">{{ $t('commons.continue') }}</button>
             </div>
             <div class="nav-links">
-                <p>{{ $t('auth.webauthn.lost_your_device') }}&nbsp;<router-link :to="{ name: 'webauthn.lost' }" class="is-link">{{ $t('auth.webauthn.recover_your_account') }}</router-link></p>
-                <p v-if="!this.$root.appSettings.useWebauthnOnly">{{ $t('auth.sign_in_using') }}&nbsp;<a class="is-link" @click="showWebauthn = false">{{ $t('auth.login_and_password') }}</a></p>
+                <p>{{ $t('auth.webauthn.lost_your_device') }}&nbsp;<router-link id="lnkRecoverAccount" :to="{ name: 'webauthn.lost' }" class="is-link">{{ $t('auth.webauthn.recover_your_account') }}</router-link></p>
+                <p v-if="!this.$root.appSettings.useWebauthnOnly">{{ $t('auth.sign_in_using') }}&nbsp;<a id="lnkSignWithLegacy" class="is-link" @click="showWebauthn = false">{{ $t('auth.login_and_password') }}</a></p>
             </div>
         </form-wrapper>
         <!-- login/password legacy form -->
         <form-wrapper v-else :title="$t('auth.forms.login')" :punchline="punchline">
             <div v-if="isDemo" class="notification is-info has-text-centered is-radiusless" v-html="$t('auth.forms.welcome_to_demo_app_use_those_credentials')" />
             <div v-if="isTesting" class="notification is-warning has-text-centered is-radiusless" v-html="$t('auth.forms.welcome_to_testing_app_use_those_credentials')" />
-            <form @submit.prevent="handleSubmit" @keydown="form.onKeydown($event)">
+            <form id="frmLegacyLogin" @submit.prevent="handleSubmit" @keydown="form.onKeydown($event)">
                 <form-field :form="form" fieldName="email" inputType="email" :label="$t('auth.forms.email')" autofocus />
                 <form-field :form="form" fieldName="password" inputType="password" :label="$t('auth.forms.password')" />
-                <form-buttons :isBusy="form.isBusy" :caption="$t('auth.sign_in')" />
+                <form-buttons :isBusy="form.isBusy" :caption="$t('auth.sign_in')" :submitId="'btnSignIn'"/>
             </form>
             <div class="nav-links">
                 <div v-if="!username">
-                    <p>{{ $t('auth.forms.dont_have_account_yet') }}&nbsp;<router-link :to="{ name: 'register' }" class="is-link">{{ $t('auth.register') }}</router-link></p>
+                    <p>{{ $t('auth.forms.dont_have_account_yet') }}&nbsp;<router-link id="lnkRegister" :to="{ name: 'register' }" class="is-link">{{ $t('auth.register') }}</router-link></p>
                 </div>
                 <div v-else>
-                    <p>{{ $t('auth.forms.forgot_your_password') }}&nbsp;<router-link :to="{ name: 'password.request' }" class="is-link">{{ $t('auth.forms.request_password_reset') }}</router-link></p>
-                    <p >{{ $t('auth.sign_in_using') }}&nbsp;<a class="is-link" @click="showWebauthn = true">{{ $t('auth.webauthn.security_device') }}</a></p>
+                    <p>{{ $t('auth.forms.forgot_your_password') }}&nbsp;<router-link id="lnkResetPwd" :to="{ name: 'password.request' }" class="is-link">{{ $t('auth.forms.request_password_reset') }}</router-link></p>
+                    <p >{{ $t('auth.sign_in_using') }}&nbsp;<a id="lnkSignWithWebauthn" class="is-link" @click="showWebauthn = true">{{ $t('auth.webauthn.security_device') }}</a></p>
                 </div>
             </div>
         </form-wrapper>

@@ -3,7 +3,7 @@
         <!-- webauthn registration -->
         <form-wrapper v-if="showWebauthnRegistration" :title="$t('auth.authentication')" :punchline="$t('auth.webauthn.enhance_security_using_webauthn')">
             <div v-if="deviceRegistered" class="field">
-                <label class="label mb-5">{{ $t('auth.webauthn.device_successfully_registered') }}&nbsp;<font-awesome-icon :icon="['fas', 'check']" /></label>
+                <label id="lblDeviceRegistrationSuccess" class="label mb-5">{{ $t('auth.webauthn.device_successfully_registered') }}&nbsp;<font-awesome-icon :icon="['fas', 'check']" /></label>
                 <form @submit.prevent="handleDeviceSubmit" @keydown="deviceForm.onKeydown($event)">
                     <form-field :form="deviceForm" fieldName="name" inputType="text" placeholder="iPhone 12, TouchID, Yubikey 5C" :label="$t('auth.forms.name_this_device')" />
                     <form-buttons :isBusy="deviceForm.isBusy" :isDisabled="deviceForm.isDisabled" :caption="$t('commons.continue')" />
@@ -12,11 +12,11 @@
             <div v-else class="field is-grouped">
                 <!-- register button -->
                 <div class="control">
-                    <button type="button" @click="registerWebauthnDevice()" class="button is-link">{{ $t('auth.webauthn.register_a_new_device') }}</button>
+                    <button type="button" id="btnRegisterNewDevice" @click="registerWebauthnDevice()" class="button is-link">{{ $t('auth.webauthn.register_a_new_device') }}</button>
                 </div>
                 <!-- dismiss button -->
                 <div class="control">
-                    <router-link :to="{ name: 'accounts', params: { toRefresh: true } }" class="button is-text">{{ $t('auth.maybe_later') }}</router-link>
+                    <router-link id="btnMaybeLater" :to="{ name: 'accounts', params: { toRefresh: true } }" class="button is-text">{{ $t('auth.maybe_later') }}</router-link>
                 </div>
             </div>
         </form-wrapper>
@@ -27,10 +27,10 @@
                 <form-field :form="registerForm" fieldName="email" inputType="email" :label="$t('auth.forms.email')" />
                 <form-field :form="registerForm" fieldName="password" inputType="password" :label="$t('auth.forms.password')" />
                 <form-field :form="registerForm" fieldName="password_confirmation" inputType="password" :label="$t('auth.forms.confirm_password')" />
-                <form-buttons :isBusy="registerForm.isBusy" :isDisabled="registerForm.isDisabled" :caption="$t('auth.register')" />
+                <form-buttons :isBusy="registerForm.isBusy" :isDisabled="registerForm.isDisabled" :caption="$t('auth.register')" :submitId="'btnRegister'" />
             </form>
             <div class="nav-links">
-                <p>{{ $t('auth.forms.already_register') }}&nbsp;<router-link :to="{ name: 'login' }" class="is-link">{{ $t('auth.sign_in') }}</router-link></p>
+                <p>{{ $t('auth.forms.already_register') }}&nbsp;<router-link id="lnkSignIn" :to="{ name: 'login' }" class="is-link">{{ $t('auth.sign_in') }}</router-link></p>
             </div>
         </form-wrapper>
         <!-- footer -->
