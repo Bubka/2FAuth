@@ -28,7 +28,7 @@ class TwoFAccountStoreRequest extends FormRequest
             'service' => 'nullable|string|regex:/^[^:]+$/i',
             'account' => 'required|string|regex:/^[^:]+$/i',
             'icon' => 'nullable|string',
-            'otp_type' => 'required|string|in:totp,hotp',
+            'otp_type' => 'required|string|in:totp,hotp,steamtotp',
             'secret' => ['string', 'bail', new \App\Rules\IsBase32Encoded],
             'digits' => 'nullable|integer|between:6,10',
             'algorithm' => 'nullable|string|in:sha1,sha256,sha512,md5',

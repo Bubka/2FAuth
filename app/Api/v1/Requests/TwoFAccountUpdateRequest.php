@@ -28,7 +28,7 @@ class TwoFAccountUpdateRequest extends FormRequest
             'service' => 'present|nullable|string|regex:/^[^:]+$/i',
             'account' => 'required|string|regex:/^[^:]+$/i',
             'icon' => 'present|nullable|string',
-            'otp_type' => 'required|string|in:totp,hotp',
+            'otp_type' => 'required|string|in:totp,hotp,steamtotp',
             'secret' => ['present', 'string', 'bail', new \App\Rules\IsBase32Encoded],
             'digits' => 'present|integer|between:6,10',
             'algorithm' => 'present|string|in:sha1,sha256,sha512,md5',
