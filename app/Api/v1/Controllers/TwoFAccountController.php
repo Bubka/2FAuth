@@ -87,10 +87,15 @@ class TwoFAccountController extends Controller
         //     -> We use the parameters array to define the account
 
         $validated = $request->validated();
+        $twofaccount = new TwoFAccount;
 
-        $twofaccount = Arr::has($validated, 'uri')
-            ? $this->twofaccountService->createFromUri($validated['uri'])
-            : $this->twofaccountService->createFromParameters($validated);
+        if (Arr::has($validated, 'uri')) {
+            $twofaccount->fillWithURI($validated['uri'], Arr::get($validated, 'custom_otp') === TwoFAccount::STEAM_TOTP);
+        }
+        else {
+            $twofaccount->fillWithOtpParameters($validated);
+        }
+        $twofaccount->save();
 
         // Possible group association
         $this->groupService->assign($twofaccount->id);
@@ -113,7 +118,8 @@ class TwoFAccountController extends Controller
     {
         $validated = $request->validated();
 
-        $this->twofaccountService->update($twofaccount, $validated);
+        $twofaccount->fillWithOtpParameters($validated);
+        $twofaccount->save();
 
         return (new TwoFAccountReadResource($twofaccount))
                 ->response()
@@ -161,7 +167,8 @@ class TwoFAccountController extends Controller
      */
     public function preview(TwoFAccountUriRequest $request)
     {
-        $twofaccount = $this->twofaccountService->createFromUri($request->uri, false);
+        $twofaccount = new TwoFAccount;
+        $twofaccount->fillWithURI($request->uri, $request->custom_otp === TwoFAccount::STEAM_TOTP);
 
         return new TwoFAccountStoreResource($twofaccount);
     }
@@ -179,38 +186,34 @@ class TwoFAccountController extends Controller
         $inputs = $request->all();
 
         // The request input is the ID of an existing account
-        if ( $id ) {
-            try {
-                $otp = $this->twofaccountService->getOTP((int) $id);
-            }
-            catch (UndecipherableException $ex) {
-                return response()->json([
-                    'message' => __('errors.cannot_decipher_secret')
-                ], 400);
-            }
+        if ($id) {
+            $twofaccount = TwoFAccount::findOrFail((int) $id);
         }
 
         // The request input is an uri
-        else if ( count($inputs) === 1 && $request->has('uri') ) {
-            $validatedData = $request->validate((new TwoFAccountUriRequest)->rules());
-            $otp = $this->twofaccountService->getOTP($validatedData['uri']);
-        }
-        
-        // return bad request if uri is provided with any other input
-        else if ( count($inputs) > 1 && $request->has('uri')) {
-            return response()->json([
-                'message' => 'bad request',
-                'reason' => ['uri' => __('validation.single', ['attribute' => 'uri'])]
-            ], 400);
+        else if ( $request->has('uri') ) {
+            // return 404 if uri is provided with any parameter other than otp_type
+            if ((count($inputs) == 2 && $request->missing('custom_otp')) || count($inputs) > 2) {
+                return response()->json([
+                    'message' => 'bad request',
+                    'reason' => ['uri' => __('validation.onlyCustomOtpWithUri')]
+                ], 400);
+            }
+            else {
+                $validatedData = $request->validate((new TwoFAccountUriRequest)->rules());
+                $twofaccount = new TwoFAccount;
+                $twofaccount->fillWithURI($validatedData['uri'], Arr::get($validatedData, 'custom_otp') === TwoFAccount::STEAM_TOTP);
+            }
         }
 
         // The request inputs should define an account
         else {
             $validatedData = $request->validate((new TwoFAccountStoreRequest)->rules());
-            $otp = $this->twofaccountService->getOTP($validatedData);
+            $twofaccount = new TwoFAccount();
+            $twofaccount->fillWithOtpParameters($validatedData);
         }
 
-        return response()->json($otp, 200);
+        return response()->json($twofaccount->getOTP(), 200);
     }
 
 

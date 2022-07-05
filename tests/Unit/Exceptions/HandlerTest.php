@@ -61,6 +61,12 @@ class HandlerTest extends TestCase
             [
                 '\App\Exceptions\InvalidGoogleAuthMigration'
             ],
+            [
+                '\App\Exceptions\UndecipherableException'
+            ],
+            [
+                '\App\Exceptions\UnsupportedOtpTypeException'
+            ],
         ];
     }
 
@@ -102,5 +108,31 @@ class HandlerTest extends TestCase
                 '\Symfony\Component\HttpKernel\Exception\NotFoundHttpException'
             ],
         ];
+    }
+
+    /**
+    * @test
+    */
+    public function test_authenticationException_returns_proxyAuthRequired_json_response_with_proxy_guard()
+    {
+        $request = $this->createMock(Request::class);
+        $instance = new Handler($this->createMock(Container::class));
+        $class = new \ReflectionClass(Handler::class);
+
+        $method = $class->getMethod('render');
+        $method->setAccessible(true);
+
+        $mockException = $this->createMock(\Illuminate\Auth\AuthenticationException::class);
+        $mockException->method("guards")->willReturn(['reverse-proxy-guard']);
+
+        $response = $method->invokeArgs($instance, [$request, $mockException]);
+
+        $this->assertInstanceOf(JsonResponse::class, $response);
+
+        $response = \Illuminate\Testing\TestResponse::fromBaseResponse($response);
+        $response->assertStatus(407)
+            ->assertJsonStructure([
+                'message'
+            ]);
     }
 }

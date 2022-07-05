@@ -44,7 +44,7 @@ class QrCodeController extends Controller
      */
     public function show(TwoFAccount $twofaccount)
     {
-        $uri = $this->twofaccountService->getURI($twofaccount);
+        $uri = $twofaccount->getURI();
 
         return response()->json(['qrcode' => $this->qrcodeService->encode($uri)], 200);
     }

@@ -5,7 +5,7 @@ namespace App\Exceptions;
 use Exception;
 
 /**
- * Class UndecipherableException.
+ * Class InvalidGoogleAuthMigration.
  *
  * @codeCoverageIgnore
  */

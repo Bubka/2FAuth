@@ -40,4 +40,5 @@ return [
     'auth_proxy_failed' => 'Proxy authentication failed',
     'auth_proxy_failed_legend' => '2Fauth is configured to run behind an authentication proxy but your proxy does not return the expected header. Check your configuration and try again.',
     'invalid_google_auth_migration' => 'Invalid or unreadable Google Authenticator data',
+    'unsupported_otp_type' => 'Unsupported OTP type',
 ];

@@ -4,14 +4,16 @@
 
 namespace App\Protobuf;
 
+use App\Models\TwoFAccount;
+
 class GAuthValueMapping
 {
     const ALGORITHM = [
         'ALGORITHM_UNSPECIFIED' => '',
-        'ALGORITHM_SHA1' => 'sha1',
-        'ALGORITHM_SHA256' => 'sha256',
-        'ALGORITHM_SHA512' => 'sha512',
-        'ALGORITHM_MD5' => 'md5'
+        'ALGORITHM_SHA1' => TwoFAccount::SHA1,
+        'ALGORITHM_SHA256' => TwoFAccount::SHA256,
+        'ALGORITHM_SHA512' => TwoFAccount::SHA512,
+        'ALGORITHM_MD5' => TwoFAccount::MD5
     ];
 
     const DIGIT_COUNT = [
@@ -22,8 +24,8 @@ class GAuthValueMapping
 
     const OTP_TYPE = [
         'OTP_TYPE_UNSPECIFIED' => '',
-        'OTP_TYPE_HOTP' => 'hotp',
-        'OTP_TYPE_TOTP' => 'totp'
+        'OTP_TYPE_HOTP' => TwoFAccount::HOTP,
+        'OTP_TYPE_TOTP' => TwoFAccount::TOTP
     ];
 
     private function __construct() {}

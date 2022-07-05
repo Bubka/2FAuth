@@ -50,6 +50,10 @@ class TwoFAccountUriRequestTest extends TestCase
             [[
                 'uri' => 'otpauth://hotp/test@test.com?secret=A4GRFHZVRBGY7UIW&issuer=test'
             ]],
+            [[
+                'uri' => 'otpauth://totp/test@test.com?secret=A4GRFHZVRBGY7UIW&issuer=test',
+                'custom_otp' => 'steamtotp'
+            ]],
         ];
     }
 
@@ -84,6 +88,18 @@ class TwoFAccountUriRequestTest extends TestCase
             ]],
             [[
                 'uri' => 'otpXauth://totp/test@test.com?secret=A4GRFHZVRBGY7UIW&issuer=test' // regex
+            ]],
+            [[
+                'uri' => 'otpauth://totp/test@test.com?secret=A4GRFHZVRBGY7UIW&issuer=test',
+                'custom_otp' => 'notSteam' // not in
+            ]],
+            [[
+                'uri' => 'otpauth://totp/test@test.com?secret=A4GRFHZVRBGY7UIW&issuer=test',
+                'custom_otp' => 0 // string
+            ]],
+            [[
+                'uri' => 'otpauth://totp/test@test.com?secret=A4GRFHZVRBGY7UIW&issuer=test',
+                'custom_otp' => true // string
             ]],
         ];
     }

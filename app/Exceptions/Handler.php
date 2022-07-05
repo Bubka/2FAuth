@@ -65,6 +65,16 @@ class Handler extends ExceptionHandler
                 'message' => __('errors.invalid_google_auth_migration')], 400);
         });
 
+        $this->renderable(function (UndecipherableException $exception, $request) {
+            return response()->json([
+                'message' => __('errors.cannot_decipher_secret')], 400);
+        });
+
+        $this->renderable(function (UnsupportedOtpTypeException $exception, $request) {
+            return response()->json([
+                'message' => __('errors.unsupported_otp_type')], 400);
+        });
+
         $this->renderable(function (\Illuminate\Auth\AuthenticationException $exception, $request) {
             if ($exception->guards() === ['reverse-proxy-guard']) {
                 return response()->json([

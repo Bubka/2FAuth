@@ -22,6 +22,7 @@
         "ext-xml": "*",
         "chillerlan/php-qrcode": "^4.3",
         "darkghosthunter/larapass": "^3.0.2",
+        "doctormckay/steam-totp": "^1.0",
         "doctrine/dbal": "^3.2",
         "fruitcake/laravel-cors": "^2.0",
         "google/protobuf": "^3.21",

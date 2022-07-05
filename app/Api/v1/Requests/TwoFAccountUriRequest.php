@@ -25,7 +25,8 @@ class TwoFAccountUriRequest extends FormRequest
     public function rules()
     {
         return [
-            'uri' => 'required|string|regex:/^otpauth:\/\/[h,t]otp\//i',
+            'uri'        => 'required|string|regex:/^otpauth:\/\/[h,t]otp\//i',
+            'custom_otp' => 'string|in:steamtotp',
         ];
     }
 }
