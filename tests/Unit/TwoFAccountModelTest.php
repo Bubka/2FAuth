@@ -22,17 +22,7 @@ class TwoFAccountModelTest extends ModelTestCase
     {
         $this->runConfigurationAssertions(
             new TwoFAccount(),
-            [
-                'service',
-                'account',
-                'otp_type',
-                'digits',
-                'secret',
-                'algorithm',
-                'counter',
-                'period',
-                'icon'
-            ],
+            [],
             [],
             ['*'],
             [],
