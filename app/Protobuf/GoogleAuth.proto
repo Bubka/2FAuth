@@ -28,6 +28,7 @@ message Payload {
     DigitCount digits = 5;
     OtpType type = 6;
     int64 counter = 7;
+    int64 period = 8;
   }
   repeated OtpParameters otp_parameters = 1;
   int32 version = 2;

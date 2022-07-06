@@ -41,6 +41,10 @@ class OtpParameters extends \Google\Protobuf\Internal\Message
      * Generated from protobuf field <code>int64 counter = 7;</code>
      */
     protected $counter = 0;
+    /**
+     * Generated from protobuf field <code>int64 period = 8;</code>
+     */
+    protected $period = 0;
 
     /**
      * Constructor.
@@ -212,6 +216,28 @@ class OtpParameters extends \Google\Protobuf\Internal\Message
     {
         GPBUtil::checkInt64($var);
         $this->counter = $var;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>int64 period = 8;</code>
+     * @return int|string
+     */
+    public function getPeriod()
+    {
+        return $this->period;
+    }
+
+    /**
+     * Generated from protobuf field <code>int64 period = 8;</code>
+     * @param int|string $var
+     * @return $this
+     */
+    public function setPeriod($var)
+    {
+        GPBUtil::checkInt64($var);
+        $this->period = $var;
 
         return $this;
     }
