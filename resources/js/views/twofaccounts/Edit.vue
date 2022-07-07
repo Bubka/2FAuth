@@ -31,7 +31,7 @@
                 <!-- secret -->
                 <label class="label" v-html="$t('twofaccounts.forms.secret.label')"></label>
                 <div class="field has-addons">
-                    <p class="control">
+                    <p v-if="!secretIsLocked" class="control">
                         <span class="select">
                             <select @change="form.secret=''" v-model="secretIsBase32Encoded">
                                 <option v-for="format in secretFormats" :value="format.value">{{ format.text }}</option>
