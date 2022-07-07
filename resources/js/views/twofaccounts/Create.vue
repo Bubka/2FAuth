@@ -56,7 +56,7 @@
                 </div>
                 <field-error :form="form" field="qrcode" class="help-for-file" />
                 <!-- service -->
-                <form-field :form="form" fieldName="service" inputType="text" :label="$t('twofaccounts.service')" :placeholder="$t('twofaccounts.forms.service.placeholder')" autofocus />
+                <form-field :form="form" :isDisabled="form.otp_type === 'steamtotp'" fieldName="service" inputType="text" :label="$t('twofaccounts.service')" :placeholder="$t('twofaccounts.forms.service.placeholder')" autofocus />
                 <!-- account -->
                 <form-field :form="form" fieldName="account" inputType="text" :label="$t('twofaccounts.account')" :placeholder="$t('twofaccounts.forms.account.placeholder')" />
                 <!-- icon upload -->
@@ -80,7 +80,7 @@
                 </div>
                 <field-error :form="form" field="icon" class="help-for-file" />
                 <!-- otp type -->
-                <form-toggle class="has-uppercased-button" :form="form" :choices="otp_types" fieldName="otp_type" :label="$t('twofaccounts.forms.otp_type.label')" :help="$t('twofaccounts.forms.otp_type.help')" :hasOffset="true" />
+                <form-toggle @otpTypeSelected="SetFormState" class="has-uppercased-button" :form="form" :choices="otp_types" fieldName="otp_type" :label="$t('twofaccounts.forms.otp_type.label')" :help="$t('twofaccounts.forms.otp_type.help')" :hasOffset="true" />
                 <div v-if="form.otp_type">
                     <!-- secret -->
                     <label class="label" v-html="$t('twofaccounts.forms.secret.label')"></label>
@@ -100,18 +100,20 @@
                         <field-error :form="form" field="secret" class="help-for-file" />
                         <p class="help" v-html="$t('twofaccounts.forms.secret.help')"></p>
                     </div>
-                    <h2 class="title is-4 mt-5 mb-2">{{ $t('commons.options') }}</h2>
-                    <p class="help mb-4">
-                        {{ $t('twofaccounts.forms.options_help') }}
-                    </p>
-                    <!-- digits -->
-                    <form-toggle :form="form" :choices="digitsChoices" fieldName="digits" :label="$t('twofaccounts.forms.digits.label')" :help="$t('twofaccounts.forms.digits.help')" />
-                    <!-- algorithm -->
-                    <form-toggle :form="form" :choices="algorithms" fieldName="algorithm" :label="$t('twofaccounts.forms.algorithm.label')" :help="$t('twofaccounts.forms.algorithm.help')" />
-                    <!-- TOTP period -->
-                    <form-field v-if="form.otp_type === 'totp'" :form="form" fieldName="period" inputType="text" :label="$t('twofaccounts.forms.period.label')" :placeholder="$t('twofaccounts.forms.period.placeholder')" :help="$t('twofaccounts.forms.period.help')" />
-                    <!-- HOTP counter -->
-                    <form-field v-if="form.otp_type === 'hotp'" :form="form" fieldName="counter" inputType="text" :label="$t('twofaccounts.forms.counter.label')" :placeholder="$t('twofaccounts.forms.counter.placeholder')" :help="$t('twofaccounts.forms.counter.help')" />
+                    <div v-if="form.otp_type !== 'steamtotp'">
+                        <h2 class="title is-4 mt-5 mb-2">{{ $t('commons.options') }}</h2>
+                        <p class="help mb-4">
+                            {{ $t('twofaccounts.forms.options_help') }}
+                        </p>
+                        <!-- digits -->
+                        <form-toggle :form="form" :choices="digitsChoices" fieldName="digits" :label="$t('twofaccounts.forms.digits.label')" :help="$t('twofaccounts.forms.digits.help')" />
+                        <!-- algorithm -->
+                        <form-toggle :form="form" :choices="algorithms" fieldName="algorithm" :label="$t('twofaccounts.forms.algorithm.label')" :help="$t('twofaccounts.forms.algorithm.help')" />
+                        <!-- TOTP period -->
+                        <form-field v-if="form.otp_type === 'totp'" :form="form" fieldName="period" inputType="text" :label="$t('twofaccounts.forms.period.label')" :placeholder="$t('twofaccounts.forms.period.placeholder')" :help="$t('twofaccounts.forms.period.help')" />
+                        <!-- HOTP counter -->
+                        <form-field v-if="form.otp_type === 'hotp'" :form="form" fieldName="counter" inputType="text" :label="$t('twofaccounts.forms.counter.label')" :placeholder="$t('twofaccounts.forms.counter.placeholder')" :help="$t('twofaccounts.forms.counter.help')" />
+                    </div>
                 </div>
                 <vue-footer :showButtons="true">
                     <p class="control">
@@ -204,6 +206,7 @@
                 otp_types: [
                     { text: 'TOTP', value: 'totp' },
                     { text: 'HOTP', value: 'hotp' },
+                    { text: 'STEAM', value: 'steamtotp' },
                 ],
                 digitsChoices: [
                     { text: 6, value: 6 },
@@ -371,7 +374,13 @@
 
             clipboardErrorHandler ({ value, event }) {
                 console.log('error', value)
-            }
+            },
+
+            SetFormState (event) {
+                this.form.otp_type = event
+                this.form.service = event === 'steamtotp' ? 'Steam' : ''
+                this.secretIsBase32Encoded = event === 'steamtotp' ? 1 : this.secretIsBase32Encoded
+            },
             
         },
 

@@ -2,7 +2,7 @@
     <form-wrapper :title="$t('twofaccounts.forms.edit_account')">
         <form @submit.prevent="updateAccount" @keydown="form.onKeydown($event)">
             <!-- service -->
-            <form-field :form="form" fieldName="service" inputType="text" :label="$t('twofaccounts.service')" :placeholder="$t('twofaccounts.forms.service.placeholder')" autofocus />
+            <form-field :isDisabled="form.otp_type === 'steamtotp'" :form="form" fieldName="service" inputType="text" :label="$t('twofaccounts.service')" :placeholder="$t('twofaccounts.forms.service.placeholder')" autofocus />
             <!-- account -->
             <form-field :form="form" fieldName="account" inputType="text" :label="$t('twofaccounts.account')" :placeholder="$t('twofaccounts.forms.account.placeholder')" />
             <!-- icon -->
@@ -60,42 +60,44 @@
                     <field-error :form="form" field="secret" class="help-for-file" />
                     <p class="help" v-html="$t('twofaccounts.forms.secret.help')"></p>
                 </div>
-                <h2 class="title is-4 mt-5 mb-2">{{ $t('commons.options') }}</h2>
-                <p class="help mb-4">
-                    {{ $t('twofaccounts.forms.options_help') }}
-                </p>
-                <!-- digits -->
-                <form-toggle :form="form" :choices="digitsChoices" fieldName="digits" :label="$t('twofaccounts.forms.digits.label')" :help="$t('twofaccounts.forms.digits.help')" />
-                <!-- algorithm -->
-                <form-toggle :form="form" :choices="algorithms" fieldName="algorithm" :label="$t('twofaccounts.forms.algorithm.label')" :help="$t('twofaccounts.forms.algorithm.help')" />
-                <!-- TOTP period -->
-                <form-field v-if="form.otp_type === 'totp'" :form="form" fieldName="period" inputType="text" :label="$t('twofaccounts.forms.period.label')" :placeholder="$t('twofaccounts.forms.period.placeholder')" :help="$t('twofaccounts.forms.period.help')" />
-                <!-- HOTP counter -->
-                <div v-if="form.otp_type === 'hotp'">
-                    <div class="field" style="margin-bottom: 0.5rem;">
-                        <label class="label">{{ $t('twofaccounts.forms.counter.label') }}</label>
+                <div v-if="form.otp_type !== 'steamtotp'">
+                    <h2 class="title is-4 mt-5 mb-2">{{ $t('commons.options') }}</h2>
+                    <p class="help mb-4">
+                        {{ $t('twofaccounts.forms.options_help') }}
+                    </p>
+                    <!-- digits -->
+                    <form-toggle :form="form" :choices="digitsChoices" fieldName="digits" :label="$t('twofaccounts.forms.digits.label')" :help="$t('twofaccounts.forms.digits.help')" />
+                    <!-- algorithm -->
+                    <form-toggle :form="form" :choices="algorithms" fieldName="algorithm" :label="$t('twofaccounts.forms.algorithm.label')" :help="$t('twofaccounts.forms.algorithm.help')" />
+                    <!-- TOTP period -->
+                    <form-field v-if="form.otp_type === 'totp'" :form="form" fieldName="period" inputType="text" :label="$t('twofaccounts.forms.period.label')" :placeholder="$t('twofaccounts.forms.period.placeholder')" :help="$t('twofaccounts.forms.period.help')" />
+                    <!-- HOTP counter -->
+                    <div v-if="form.otp_type === 'hotp'">
+                        <div class="field" style="margin-bottom: 0.5rem;">
+                            <label class="label">{{ $t('twofaccounts.forms.counter.label') }}</label>
+                        </div>
+                        <div class="field has-addons">
+                            <div class="control is-expanded">
+                                <input class="input" type="text" placeholder="" v-model="form.counter" :disabled="counterIsLocked" />
+                            </div>
+                            <div class="control" v-if="counterIsLocked">
+                                <a class="button is-dark field-lock" @click="counterIsLocked = false" :title="$t('twofaccounts.forms.unlock.title')">
+                                    <span class="icon">
+                                        <font-awesome-icon :icon="['fas', 'lock']" />
+                                    </span>
+                                </a>
+                            </div>
+                            <div class="control" v-else>
+                                <a class="button is-dark field-unlock"  @click="counterIsLocked = true" :title="$t('twofaccounts.forms.lock.title')">
+                                    <span class="icon has-text-danger">
+                                        <font-awesome-icon :icon="['fas', 'lock-open']" />
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                        <field-error :form="form" field="counter" />
+                        <p class="help" v-html="$t('twofaccounts.forms.counter.help_lock')"></p>
                     </div>
-                    <div class="field has-addons">
-                        <div class="control is-expanded">
-                            <input class="input" type="text" placeholder="" v-model="form.counter" :disabled="counterIsLocked" />
-                        </div>
-                        <div class="control" v-if="counterIsLocked">
-                            <a class="button is-dark field-lock" @click="counterIsLocked = false" :title="$t('twofaccounts.forms.unlock.title')">
-                                <span class="icon">
-                                    <font-awesome-icon :icon="['fas', 'lock']" />
-                                </span>
-                            </a>
-                        </div>
-                        <div class="control" v-else>
-                            <a class="button is-dark field-unlock"  @click="counterIsLocked = true" :title="$t('twofaccounts.forms.lock.title')">
-                                <span class="icon has-text-danger">
-                                    <font-awesome-icon :icon="['fas', 'lock-open']" />
-                                </span>
-                            </a>
-                        </div>
-                    </div>
-                    <field-error :form="form" field="counter" />
-                    <p class="help" v-html="$t('twofaccounts.forms.counter.help_lock')"></p>
                 </div>
             </div>
             <!-- form buttons -->
@@ -150,6 +152,7 @@
                 otp_types: [
                     { text: 'TOTP', value: 'totp' },
                     { text: 'HOTP', value: 'hotp' },
+                    { text: 'STEAM', value: 'steamtotp' },
                 ],
                 digitsChoices: [
                     { text: 6, value: 6 },
