@@ -57,8 +57,11 @@
 
         computed: {
             displayedOtp() {
-                const spacePosition = Math.ceil(this.internal_password.length / 2)
-                let pwd = this.internal_password.substr(0, spacePosition) + " " + this.internal_password.substr(spacePosition)
+                let pwd = this.internal_password
+                if (this.internal_otp_type !== 'steamtotp') {
+                    const spacePosition = Math.ceil(this.internal_password.length / 2)
+                    pwd = this.internal_password.substr(0, spacePosition) + " " + this.internal_password.substr(spacePosition)
+                }
                 return this.$root.appSettings.showOtpAsDot ? pwd.replace(/[0-9]/g, '●') : pwd
             },
         },
