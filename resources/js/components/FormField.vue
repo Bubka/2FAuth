@@ -2,7 +2,7 @@
     <div class="field" :class="{ 'with-offset' : hasOffset }">
         <label class="label" v-html="label"></label>
         <div class="control">
-            <input :id="fieldName" :type="inputType" class="input" v-model="form[fieldName]" :placeholder="placeholder" v-bind="$attrs" />
+            <input :disabled="isDisabled" :id="fieldName" :type="inputType" class="input" v-model="form[fieldName]" :placeholder="placeholder" v-bind="$attrs" />
         </div>
         <field-error :form="form" :field="fieldName" />
         <p class="help" v-html="help" v-if="help"></p>
@@ -53,6 +53,11 @@
             },
 
             hasOffset: {
+                type: Boolean,
+                default: false
+            },
+
+            isDisabled: {
                 type: Boolean,
                 default: false
             }
