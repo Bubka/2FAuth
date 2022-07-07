@@ -1,6 +1,6 @@
 <template>
     <div>
-        <setting-tabs :activeTab="'settings.webauthn'"></setting-tabs>
+        <setting-tabs :activeTab="'settings.webauthn.devices'"></setting-tabs>
         <div class="options-tabs">
             <form-wrapper>
                 <div v-if="isRemoteUser" class="notification is-warning has-text-centered" v-html="$t('auth.auth_handled_by_proxy')" />

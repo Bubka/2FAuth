@@ -32,11 +32,11 @@
                 	},
                 	{
                 		'name' : this.$t('settings.oauth'),
-                        'view' : 'settings.oauth'
+                        'view' : 'settings.oauth.tokens'
                 	},
                 	{
                 		'name' : this.$t('settings.webauthn'),
-                        'view' : 'settings.webauthn'
+                        'view' : 'settings.webauthn.devices'
                 	},
             	]
             }

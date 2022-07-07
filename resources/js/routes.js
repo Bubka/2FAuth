@@ -45,10 +45,10 @@ const router = new Router({
 
         { path: '/settings/options', name: 'settings.options', component: SettingsOptions, meta: { requiresAuth: true } },
         { path: '/settings/account', name: 'settings.account', component: SettingsAccount, meta: { requiresAuth: true } },
-        { path: '/settings/oauth', name: 'settings.oauth', component: SettingsOAuth, meta: { requiresAuth: true } },
-        { path: '/settings/webauthn/:credentialId/edit', name: 'settings.webauthn.editCredential', component: EditCredential, meta: { requiresAuth: true }, props: true },
-        { path: '/settings/webauthn', name: 'settings.webauthn', component: SettingsWebAuthn, meta: { requiresAuth: true } },
+        { path: '/settings/oauth', name: 'settings.oauth.tokens', component: SettingsOAuth, meta: { requiresAuth: true } },
         { path: '/settings/oauth/pat/create', name: 'settings.oauth.generatePAT', component: GeneratePAT, meta: { requiresAuth: true } },
+        { path: '/settings/webauthn/:credentialId/edit', name: 'settings.webauthn.editCredential', component: EditCredential, meta: { requiresAuth: true }, props: true },
+        { path: '/settings/webauthn', name: 'settings.webauthn.devices', component: SettingsWebAuthn, meta: { requiresAuth: true } },
 
         { path: '/login', name: 'login', component: Login, meta: { disabledWithAuthProxy: true } },
         { path: '/register', name: 'register', component: Register, meta: { disabledWithAuthProxy: true } },
@@ -66,7 +66,9 @@ const router = new Router({
 let isFirstLoad = true;
 
 router.beforeEach((to, from, next) => {
-
+    
+    document.title = router.app.$options.i18n.t('titles.' + to.name)
+    
     if( to.name === 'accounts') {
         to.params.isFirstLoad = isFirstLoad ? true : false
         isFirstLoad = false;

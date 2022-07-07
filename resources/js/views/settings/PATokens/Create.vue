@@ -34,14 +34,14 @@
                 const { data } = await this.form.post('/oauth/personal-access-tokens')
 
                 if( this.form.errors.any() === false ) {
-                    this.$router.push({ name: 'settings.oauth', params: { accessToken: data.accessToken, token_id: data.token.id } });
+                    this.$router.push({ name: 'settings.oauth.tokens', params: { accessToken: data.accessToken, token_id: data.token.id } });
                 }
 
             },
 
             cancelGeneration: function() {
 
-                this.$router.push({ name: 'settings.oauth' });
+                this.$router.push({ name: 'settings.oauth.tokens' });
             },
             
         },

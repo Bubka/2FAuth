@@ -36,14 +36,14 @@
                 await this.form.patch('/webauthn/credentials/' + this.id + '/name')
 
                 if( this.form.errors.any() === false ) {
-                    this.$router.push({name: 'settings.webauthn', params: { toRefresh: true }})
+                    this.$router.push({name: 'settings.webauthn.devices', params: { toRefresh: true }})
                 }
 
             },
 
             cancelCreation: function() {
 
-                this.$router.push({ name: 'settings.webauthn' });
+                this.$router.push({ name: 'settings.webauthn.devices' });
             },
 
         },
