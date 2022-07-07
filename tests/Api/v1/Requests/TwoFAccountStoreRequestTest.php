@@ -60,7 +60,7 @@ class TwoFAccountStoreRequestTest extends TestCase
                 'icon' => 'icon.png',
                 'otp_type' => 'hotp',
                 'secret' => 'A4GRFHZVRBGY7UIW',
-                'digits' => 6,
+                'digits' => 8,
                 'algorithm' => 'sha1',
                 'counter' => 10,
             ]],
@@ -143,7 +143,7 @@ class TwoFAccountStoreRequestTest extends TestCase
             [[
                 'account' => 'MyAccount',
                 'otp_type' => 'totp',
-                'digits' => 5,
+                'digits' => 4,
             ]],
             [[
                 'account' => 'MyAccount',
