@@ -30,7 +30,7 @@ class TwoFAccountStoreRequest extends FormRequest
             'icon' => 'nullable|string',
             'otp_type' => 'required|string|in:totp,hotp,steamtotp',
             'secret' => ['string', 'bail', new \App\Rules\IsBase32Encoded],
-            'digits' => 'nullable|integer|between:6,10',
+            'digits' => 'nullable|integer|between:5,10',
             'algorithm' => 'nullable|string|in:sha1,sha256,sha512,md5',
             'period' => 'nullable|integer|min:1',
             'counter' => 'nullable|integer|min:0',

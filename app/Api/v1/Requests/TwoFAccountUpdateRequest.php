@@ -30,7 +30,7 @@ class TwoFAccountUpdateRequest extends FormRequest
             'icon' => 'present|nullable|string',
             'otp_type' => 'required|string|in:totp,hotp,steamtotp',
             'secret' => ['present', 'string', 'bail', new \App\Rules\IsBase32Encoded],
-            'digits' => 'present|integer|between:6,10',
+            'digits' => 'present|integer|between:5,10',
             'algorithm' => 'present|string|in:sha1,sha256,sha512,md5',
             'period' => 'nullable|integer|min:1',
             'counter' => 'nullable|integer|min:0',
