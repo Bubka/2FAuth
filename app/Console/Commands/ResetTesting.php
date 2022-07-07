@@ -2,10 +2,10 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Console\Commands\Utils\ResetTrait;
+use Illuminate\Console\Command;
 
-class ResetDemo extends Command
+class ResetTesting extends Command
 {
     use ResetTrait;
 
@@ -14,14 +14,14 @@ class ResetDemo extends Command
      *
      * @var string
      */
-    protected $signature = '2fauth:reset-demo {--no-confirm}';
+    protected $signature = '2fauth:reset-testing {--no-confirm}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Reset 2FAuth with a fresh demo content';
+    protected $description = 'Reset 2FAuth with a fresh testing content';
 
     /**
      * Create a new command instance.
@@ -40,26 +40,28 @@ class ResetDemo extends Command
      */
     public function handle()
     {
-        if( !config('2fauth.config.isDemoApp') ) {
-            $this->comment('2fauth:reset-demo can only run when isDemoApp option is On');
+        if( !config('2fauth.config.isTestingApp') ) {
+            $this->comment('2fauth:reset-testing can only run when isTestingApp option is On');
             return;
         }
 
         if( $this->option('no-confirm') ) {
-            $demo = 'demo';
+            $testing = 'testing';
         }
         else {
-            $this->line('This will reset the app in order to run a clean and fresh demo.');
-            $demo = $this->ask('To prevent any mistake please type the word "demo" to go on');
+            $this->line('This will reset the app in order to run a clean and fresh testing app.');
+            $testing = $this->ask('To prevent any mistake please type the word "testing" to go on');
         }
 
-        if ($demo === 'demo') {
+        if ($testing === 'testing') {
             $this->resetIcons();
-            $this->resetDB('DemoSeeder');
-            $this->info('Demo app refreshed');
+            $this->resetDB('TestingSeeder');
+
+            $this->info('Testing app refreshed');
         }
         else {
             $this->comment('Bad confirmation word, nothing appened');
         }
     }
+
 }

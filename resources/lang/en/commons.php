@@ -27,6 +27,7 @@ return [
     'save' => 'Save',
     'close' => 'Close',
     'demo_do_not_post_sensitive_data' => 'This is a demo app, do not post any sensitive data',
+    'testing_do_not_post_sensitive_data' => 'This is a testing app, do not post any sensitive data',
     'selected' => 'selected',
     'name' => 'Name',
     'manage' => 'Manage',

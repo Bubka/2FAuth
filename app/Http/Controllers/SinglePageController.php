@@ -38,6 +38,7 @@ class SinglePageController extends Controller
             ])->toJson(),
             'lang' => App::currentLocale(),
             'isDemoApp' => config("2fauth.config.isDemoApp") ? 'true' : 'false',
+            'isTestingApp' => config("2fauth.config.isTestingApp") ? 'true' : 'false',
             'locales' => collect(config("2fauth.locales"))->toJson()
         ]);
     }

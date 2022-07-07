@@ -16,6 +16,7 @@
         <!-- login/password legacy form -->
         <form-wrapper v-else :title="$t('auth.forms.login')" :punchline="punchline">
             <div v-if="isDemo" class="notification is-info has-text-centered is-radiusless" v-html="$t('auth.forms.welcome_to_demo_app_use_those_credentials')" />
+            <div v-if="isTesting" class="notification is-warning has-text-centered is-radiusless" v-html="$t('auth.forms.welcome_to_testing_app_use_those_credentials')" />
             <form @submit.prevent="handleSubmit" @keydown="form.onKeydown($event)">
                 <form-field :form="form" fieldName="email" inputType="email" :label="$t('auth.forms.email')" autofocus />
                 <form-field :form="form" fieldName="password" inputType="password" :label="$t('auth.forms.password')" />
@@ -43,6 +44,7 @@
             return {
                 username: null,
                 isDemo: this.$root.isDemoApp,
+                isTesting: this.$root.isTestingApp,
                 form: new Form({
                     email: '',
                     password: ''

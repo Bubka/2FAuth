@@ -17,7 +17,8 @@ const app = new Vue({
     data: {
         appSettings: window.appSettings,
         appConfig: window.appConfig,
-        isDemoApp: window.isDemoApp
+        isDemoApp: window.isDemoApp,
+        isTestingApp: window.isTestingApp
     },
     i18n,
     router,

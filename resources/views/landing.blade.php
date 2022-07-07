@@ -27,6 +27,7 @@
         var appConfig = {!! $appConfig !!};
         var appVersion = '{{ config("2fauth.version") }}';
         var isDemoApp = {!! $isDemoApp !!};
+        var isTestingApp = {!! $isTestingApp !!};
         var appLocales = {!! $locales !!};
     </script>
     <script src="{{ mix('js/manifest.js') }}"></script>
