@@ -370,7 +370,7 @@ class TwoFAccount extends Model implements Sortable
      * 
      * @return $this
      */
-    public function fillWithOtpParameters(array $parameters, bool $isSteamTotp = false)
+    public function fillWithOtpParameters(array $parameters)
     {
         $this->otp_type     = Arr::get($parameters, 'otp_type');
         $this->account      = Arr::get($parameters, 'account');
@@ -384,7 +384,7 @@ class TwoFAccount extends Model implements Sortable
 
         $this->initGenerator();
         
-        if ($isSteamTotp) {
+        if ($this->otp_type === self::STEAM_TOTP || strtolower($this->service) === 'steam') {
             $this->enforceAsSteam();
         }
 
@@ -431,13 +431,12 @@ class TwoFAccount extends Model implements Sortable
         $this->counter      = $this->generator->hasParameter('counter') ? $this->generator->getParameter('counter') : null;
         $this->legacy_uri   = $uri;
         
-        if ($isSteamTotp) {
+        if ($isSteamTotp || strtolower($this->service) === 'steam') {
             $this->enforceAsSteam();
         }
-
-        if ( $this->generator->hasParameter('image') ) {
-            $this->icon     = $this->storeTokenImageAsIcon();
-        }
+        else if ($this->generator->hasParameter('image')) {
+            $this->icon = $this->storeImageAsIcon($this->generator->getParameter('image'));
+        }        
 
         Log::info(sprintf('TwoFAccount filled with an URI'));
 
@@ -454,6 +453,7 @@ class TwoFAccount extends Model implements Sortable
         $this->digits    = 5;
         $this->algorithm = self::SHA1;
         $this->period    = 30;
+        $this->icon = $this->storeImageAsIcon('https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Steam_icon_logo.svg/langfr-320px-Steam_icon_logo.svg.png');
     }
 
 
@@ -523,14 +523,14 @@ class TwoFAccount extends Model implements Sortable
     }
 
     /**
-     * Gets the image resource pointed by the generator image parameter and store it as an icon
+     * Gets the image resource pointed by the image url and store it as an icon
      * 
      * @return string|null The filename of the stored icon or null if the operation fails
      */
-    private function storeTokenImageAsIcon()
+    private function storeImageAsIcon(string $url)
     {
         try {
-            $remoteImageURL = $this->generator->getParameter('image');
+            $remoteImageURL = $url;
             $path_parts = pathinfo($remoteImageURL);
             $newFilename = Str::random(40) . '.' . $path_parts['extension'];
             $imageFile = self::IMAGELINK_STORAGE_PATH . $newFilename;
