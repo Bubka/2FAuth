@@ -31,7 +31,7 @@
                                     </a>
                                     <!-- import button -->
                                     <a v-if="account.id > -2" class="tag is-link" @click="createAccount(index)"  :title="$t('twofaccounts.import.import_this_account')">
-                                        {{ $t('twofaccounts.import.import') }}
+                                        {{ $t('twofaccounts.import.to_import') }}
                                     </a>
                                 </div>
                                 <!-- result label -->
