@@ -347,7 +347,6 @@ class TwoFAccount extends Model implements Sortable
                 $OtpDto->counter    = $this->counter = $counter + 1;
 
             }
-            else throw new UnsupportedOtpTypeException();
 
             Log::info(sprintf('New OTP generated for TwoFAccount #%s', $this->id));
     
@@ -507,7 +506,6 @@ class TwoFAccount extends Model implements Sortable
                 
                 default:
                     throw new UnsupportedOtpTypeException();
-                    break;
             }
 
             if ($this->service) $this->generator->setIssuer($this->service);
