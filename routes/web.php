@@ -30,7 +30,7 @@ Route::group(['middleware' => ['guest', 'rejectIfDemoMode']], function () {
  * Routes that only work for unauthenticated user (return an error otherwise)
  * that can be requested max 10 times per minute by the same IP
  */
-Route::group(['middleware' => ['guest', 'throttle:10,1']], function () {
+Route::group(['middleware' => ['SkipIfAuthenticated', 'throttle:10,1']], function () {
     Route::post('user/login', 'Auth\LoginController@login')->name('user.login');
     Route::post('webauthn/login', [WebAuthnLoginController::class, 'login'])->name('webauthn.login');
 });
