@@ -73,7 +73,7 @@ return [
     'forms' => [
         'name' => 'Nombre',
         'login' => 'Iniciar sesión',
-        'webauthn_login' => 'WebAuthn login',
+        'webauthn_login' => 'Inicio de sesión WebAuthn',
         'email' => 'E-mail',
         'password' => 'Contraseña',
         'confirm_password' => 'Confirmar contraseña',
@@ -95,7 +95,8 @@ return [
         'password_successfully_changed' => 'Contraseña cambiada correctamente',
         'edit_account' => 'Editar cuenta',
         'profile_saved' => '¡Perfil actualizado con éxito!',
-        'welcome_to_demo_app_use_those_credentials' => 'Bienvenido a la demostración de 2FAuth.<br><br>Puede conectarse usando la dirección de correo <strong>demo@2fauth.app</strong> y la contraseña <strong>demo</demo>',
+        'welcome_to_demo_app_use_those_credentials' => 'Welcome to the 2FAuth demo.<br><br>You can connect using the email address <strong>demo@2fauth.app</strong> and the password <strong>demo</strong>',
+        'welcome_to_testing_app_use_those_credentials' => 'Welcome to the 2FAuth testing instance.<br><br>Use email address <strong>testing@2fauth.app</strong> and password <strong>password</strong>',
         'register_punchline' => 'Bienvenido a 2FAuth.<br/>Necesita una cuenta para ir más allá. Rellene este formulario para registrarse y, por favor, elija una contraseña fuerte, los datos de 2FA son sensibles.',
         'reset_punchline' => '2FAuth le enviará un enlace para restablecer la contraseña a esta dirección. Haga clic en el enlace en el correo electrónico recibido para establecer una nueva contraseña.',
         'name_this_device' => 'Proporcione nombre al dispositivo',

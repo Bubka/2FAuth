@@ -27,6 +27,7 @@ return [
     'save' => 'Speichern',
     'close' => 'Schließen',
     'demo_do_not_post_sensitive_data' => 'Dies ist eine Demo-App, veröffentlichen Sie keine sensiblen Daten',
+    'testing_do_not_post_sensitive_data' => 'This is a testing app, do not post any sensitive data',
     'selected' => 'ausgewählt',
     'name' => 'Name',
     'manage' => 'Verwalten',
@@ -43,4 +44,5 @@ return [
     'generate' => 'Generate',
     'open_in_browser' => 'Open in browser',
     'continue' => 'Continue',
+    'discard' => 'Discard'
 ];

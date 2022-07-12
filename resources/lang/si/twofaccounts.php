@@ -16,21 +16,22 @@ return [
     'service' => 'සේවාව',
     'account' => 'ගිණුම',
     'accounts' => 'ගිණුම්',
-    'icon' => 'Icon',
+    'icon' => 'නිරූපකය',
     'no_account_here' => 'No 2FA here!',
-    'add_first_account' => 'Add your first account',
+    'add_first_account' => 'පළමු ගිණුම එකතුකරන්න',
     'use_full_form' => 'Or use the full form',
     'add_one' => 'Add one',
     'show_qrcode' => 'Show QR code',
+    'no_service' => '- no service -',
     'forms' => [
         'service' => [
-            'placeholder' => 'example.com',
+            'placeholder' => 'උදාහරණය.ලංකා',
         ],
         'account' => [
             'placeholder' => 'ජෝන් ඩොයි',
         ],
-        'new_account' => 'New account',
-        'edit_account' => 'Edit account',
+        'new_account' => 'නව ගිණුම',
+        'edit_account' => 'ගිණුම සංස්කරණය',
         'otp_uri' => 'OTP Uri',
         'scan_qrcode' => 'Scan a QR code',
         'upload_qrcode' => 'Upload a QR code',
@@ -46,12 +47,12 @@ return [
         ],
         'lock' => [
             'val' => 'Lock',
-            'title' => 'Lock it',
+            'title' => 'එය අගුළුලන්න',
         ],
         'choose_image' => 'Choose an image…',
-        'test' => 'Test',
+        'test' => 'අත්හදා බලන්න',
         'secret' => [
-            'label' => 'Secret',
+            'label' => 'රහස',
             'help' => 'The key used to generate your security codes'
         ],
         'plain_text' => 'Plain text',
@@ -116,7 +117,27 @@ return [
     ],
     'confirm' => [
         'delete' => 'Are you sure you want to delete this account?',
-        'cancel' => 'The account will be lost. Are you sure?'
+        'cancel' => 'The account will be lost. Are you sure?',
+        'discard' => 'Are you sure you want to discard this account?',
+        'discard_all' => 'Are you sure you want to discard all accounts?',
+        'discard_duplicates' => 'Are you sure you want to discard all duplicates?',
+    ],
+    'import' => [
+        'import' => 'Import',
+        'to_import' => 'Import',
+        'import_legend' => 'Import your Google Authenticator accounts.',
+        'use_the_gauth_qr_code' => 'Load a G-Auth QR code',
+        'issuer' => 'Issuer',
+        'imported' => 'Imported',
+        'failure' => 'Failure',
+        'x_valid_accounts_found' => '{count} valid accounts found',
+        'import_all' => 'Import all',
+        'import_this_account' => 'Import this account',
+        'discard_all' => 'Discard all',
+        'discard_duplicates' => 'Discard duplicates',
+        'discard_this_account' => 'Discard this account',
+        'generate_a_test_password' => 'Generate a test pasword',
+        'possible_duplicate' => 'An account with the exact same data already exists',
     ],
 
 ];

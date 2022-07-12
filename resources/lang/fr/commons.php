@@ -27,6 +27,7 @@ return [
     'save' => 'Enregistrer',
     'close' => 'Fermer',
     'demo_do_not_post_sensitive_data' => 'Site de démonstration, ne postez aucune donnée sensible',
+    'testing_do_not_post_sensitive_data' => 'Site de test, ne postez aucune donnée sensible',
     'selected' => 'selectionné(s)',
     'name' => 'Nom',
     'manage' => 'Gérer',
@@ -43,4 +44,5 @@ return [
     'generate' => 'Générer',
     'open_in_browser' => 'Ouvrir dans votre navigateur',
     'continue' => 'Continuer',
+    'discard' => 'Retirer'
 ];

@@ -13,15 +13,16 @@ return [
     |
     */
 
-    'service' => 'Service',
-    'account' => 'Account',
-    'accounts' => 'Accounts',
-    'icon' => 'Icon',
-    'no_account_here' => 'No 2FA here!',
-    'add_first_account' => 'Add your first account',
-    'use_full_form' => 'Or use the full form',
-    'add_one' => 'Add one',
-    'show_qrcode' => 'Show QR code',
+    'service' => '服务',
+    'account' => '账户',
+    'accounts' => '账户',
+    'icon' => '图标',
+    'no_account_here' => '这里没有两步验证！',
+    'add_first_account' => '添加您的第一个帐户',
+    'use_full_form' => '或者使用完整的表单',
+    'add_one' => '添加一个',
+    'show_qrcode' => '显示 QR 码',
+    'no_service' => '- 无服务 -',
     'forms' => [
         'service' => [
             'placeholder' => 'example.com',
@@ -29,52 +30,52 @@ return [
         'account' => [
             'placeholder' => 'John DOE',
         ],
-        'new_account' => 'New account',
-        'edit_account' => 'Edit account',
+        'new_account' => '新建账户',
+        'edit_account' => '编辑账户',
         'otp_uri' => 'OTP Uri',
-        'scan_qrcode' => 'Scan a QR code',
-        'upload_qrcode' => 'Upload a QR code',
-        'use_advanced_form' => 'Use the advanced form',
-        'prefill_using_qrcode' => 'Prefill using a QR Code',
+        'scan_qrcode' => '扫描QR码',
+        'upload_qrcode' => '上传一个QR码',
+        'use_advanced_form' => '使用高级表单',
+        'prefill_using_qrcode' => '使用QR码进行预填充',
         'use_qrcode' => [
-            'val' => 'Use a qrcode',
-            'title' => 'Use a QR code to fill the form magically',
+            'val' => '使用一个QR码',
+            'title' => '使用QR码来自动填充表单',
         ],
         'unlock' => [
-            'val' => 'Unlock',
-            'title' => 'Unlock it (at your own risk)',
+            'val' => '解锁',
+            'title' => '解锁它(风险自负)',
         ],
         'lock' => [
-            'val' => 'Lock',
-            'title' => 'Lock it',
+            'val' => '锁定',
+            'title' => '将其锁定',
         ],
-        'choose_image' => 'Choose an image…',
-        'test' => 'Test',
+        'choose_image' => '选择一张图片...',
+        'test' => '测试',
         'secret' => [
-            'label' => 'Secret',
-            'help' => 'The key used to generate your security codes'
+            'label' => '密钥',
+            'help' => '用于生成安全码的密钥'
         ],
-        'plain_text' => 'Plain text',
+        'plain_text' => '纯文本',
         'otp_type' => [
-            'label' => 'Choose the type of OTP to create',
-            'help' => 'Time-based OTP or HMAC-based OTP'
+            'label' => '选择要创建的 OTP 类型',
+            'help' => '基于时间的OTP或基于HMAC的OTP'
         ],
         'digits' => [
-            'label' => 'Digits',
-            'help' => 'The number of digits of the generated security codes'
+            'label' => '码长',
+            'help' => '生成的安全码位数'
         ],
         'algorithm' => [
-            'label' => 'Algorithm',
-            'help' => 'The algorithm used to secure your security codes'
+            'label' => '算法',
+            'help' => '用于保护您的安全代码的算法'
         ],
         'period' => [
-            'label' => 'Period',
-            'placeholder' => 'Default is 30',
-            'help' => 'The period of validity of the generated security codes in second'
+            'label' => '周期',
+            'placeholder' => '默认为30',
+            'help' => '生成的二维码的以秒为单位的有效期限'
         ],
         'counter' => [
-            'label' => 'Counter',
-            'placeholder' => 'Default is 0',
+            'label' => '计数器',
+            'placeholder' => '默认为0',
             'help' => 'The initial counter value',
             'help_lock' => 'It is risky to edit the counter as you can desynchronize the account with the verification server of the service. Use the lock icon to enable modification, but only if you know for you are doing'
         ],
@@ -116,7 +117,27 @@ return [
     ],
     'confirm' => [
         'delete' => 'Are you sure you want to delete this account?',
-        'cancel' => 'The account will be lost. Are you sure?'
+        'cancel' => 'The account will be lost. Are you sure?',
+        'discard' => 'Are you sure you want to discard this account?',
+        'discard_all' => 'Are you sure you want to discard all accounts?',
+        'discard_duplicates' => 'Are you sure you want to discard all duplicates?',
+    ],
+    'import' => [
+        'import' => 'Import',
+        'to_import' => 'Import',
+        'import_legend' => 'Import your Google Authenticator accounts.',
+        'use_the_gauth_qr_code' => 'Load a G-Auth QR code',
+        'issuer' => 'Issuer',
+        'imported' => 'Imported',
+        'failure' => 'Failure',
+        'x_valid_accounts_found' => '{count} valid accounts found',
+        'import_all' => 'Import all',
+        'import_this_account' => 'Import this account',
+        'discard_all' => 'Discard all',
+        'discard_duplicates' => 'Discard duplicates',
+        'discard_this_account' => 'Discard this account',
+        'generate_a_test_password' => 'Generate a test pasword',
+        'possible_duplicate' => 'An account with the exact same data already exists',
     ],
 
 ];

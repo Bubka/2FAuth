@@ -124,6 +124,7 @@ return [
     ],
     'import' => [
         'import' => 'Import',
+        'to_import' => 'Import',
         'import_legend' => 'Import your Google Authenticator accounts.',
         'use_the_gauth_qr_code' => 'Load a G-Auth QR code',
         'issuer' => 'Issuer',

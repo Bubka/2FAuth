@@ -128,6 +128,7 @@ return [
     'uuid' => 'El campo :attribute debe ser un UUID válido.',
 
     'single' => 'Cuando se usa :attribute, éste debe ser el único parámetro en este cuerpo de la solicitud',
+    'onlyCustomOtpWithUri' => 'The uri parameter must be provided alone or only in combination with the \'custom_otp\' parameter',
 
     /*
     |--------------------------------------------------------------------------
@@ -142,10 +143,10 @@ return [
 
     'custom' => [
         'icon' => [
-            'image' => 'Los formatos soportados, son: jpeg, png, bmp, gif, svg o webp.',
+            'image' => 'Los formatos soportados son: jpeg, png, bmp, gif, svg o webp.',
         ],
         'qrcode' => [
-            'image' => 'Los formatos soportados, son: jpeg, png, bmp, gif, svg o webp.',
+            'image' => 'Los formatos soportados son: jpeg, png, bmp, gif, svg o webp.',
         ],
         'uri' => [
             'regex' => ':attribute no es una otpauth uri válida.',

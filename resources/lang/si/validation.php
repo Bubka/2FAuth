@@ -14,6 +14,7 @@ return [
     */
 
     'accepted' => 'මෙම :attribute පිළිගත යුතුය.',
+    'accepted_if' => 'The :attribute must be accepted when :other is :value.',
     'active_url' => 'මෙම :attribute වලංගු සබැඳි එකක් නොවේ.',
     'after' => 'මෙම :attribute පසු දිනය විය යුතුය :date.',
     'after_or_equal' => 'මෙම :attribute පසුව හෝ ඊට සමාන දිනයකි :date.',
@@ -31,9 +32,12 @@ return [
     ],
     'boolean' => 'මෙම :attribute ක්ෂේත්ර සත්ය හෝ අසත්ය විය යුතුය.',
     'confirmed' => 'මෙම :attribute තහවුරු කිරීම නොගැලපේ.',
+    'current_password' => 'The password is incorrect.',
     'date' => 'මෙම :attribute වලංගු දිනය නොවේ.',
     'date_equals' => 'මෙම :attribute දිනකට සමාන විය යුතුය :date.',
     'date_format' => 'මෙම :attribute ආකෘතියට ගැළපෙන්නේ නැත :format.',
+    'declined' => 'The :attribute must be declined.',
+    'declined_if' => 'The :attribute must be declined when :other is :value.',
     'different' => 'මෙම :attribute සහ :other වෙනස් විය යුතුය.',
     'digits' => 'මෙම :attribute විය යුතුය :digits ඉලක්කම්.',
     'digits_between' => 'මෙම :attribute විය යුතුය අතර :min සහ :max ඉලක්කම්.',
@@ -90,11 +94,16 @@ return [
         'string' => 'මෙම :attribute අවම වශයෙන් විය යුතුය :min ප්රමාණය..',
         'array' => 'මෙම :attribute අවම වශයෙන් තිබිය යුතුය :min අයිතම.',
     ],
+    'multiple_of' => 'The :attribute must be a multiple of :value.',
     'not_in' => 'මෙම තෝරා ඇත :attribute අවලංගුයි.',
     'not_regex' => 'මෙම :attribute ආකෘතිය අවලංගුයි.',
     'numeric' => 'මෙම :attribute අංකයක් විය යුතුය.',
     'password' => 'The password is incorrect.',
     'present' => 'මෙම :attribute ක්ෂේත්රයයි තිබිය යුතුය.',
+    'prohibited' => 'The :attribute field is prohibited.',
+    'prohibited_if' => 'The :attribute field is prohibited when :other is :value.',
+    'prohibited_unless' => 'The :attribute field is prohibited unless :other is in :values.',
+    'prohibits' => 'The :attribute field prohibits :other from being present.',
     'regex' => 'මෙම :attribute ආකෘතිය අවලංගුයි.',
     'required' => 'මෙම :attribute ක්ෂේත්රයයි අවශ්යයි.',
     'required_if' => 'මෙම :attribute ක්ෂේත්රයයි අවශ්යයි එය :other මෙය :value.',
@@ -118,6 +127,9 @@ return [
     'url' => 'මෙම :attribute ආකෘතිය අවලංගුයි.',
     'uuid' => 'මෙම :attribute වලංගු UUID විය යුතුය.',
 
+    'single' => 'When using :attribute it must be the only parameter in this request body',
+    'onlyCustomOtpWithUri' => 'The uri parameter must be provided alone or only in combination with the \'custom_otp\' parameter',
+
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Language Lines
@@ -131,27 +143,38 @@ return [
 
     'custom' => [
         'icon' => [
-            'image' => 'Supported format are jpeg, png, bmp, gif, svg, or webp',
+            'image' => 'Supported format are jpeg, png, bmp, gif, svg, or webp.',
         ],
         'qrcode' => [
-            'image' => 'Supported format are jpeg, png, bmp, gif, svg, or webp',
+            'image' => 'Supported format are jpeg, png, bmp, gif, svg, or webp.',
         ],
         'uri' => [
-            'starts_with' => 'Only valid OTP uri are supported',
-        ],
-        'email' => [
-            'exists' => 'No account found using this email',
+            'regex' => 'The :attribute is not a valid otpauth uri.',
         ],
         'otp_type' => [
-            'required_without' => 'The :attribute field is required.',
+            'in' => 'The :attribute is not supported.',
+        ],
+        'email' => [
+            'exists' => 'No account found using this email.',
         ],
         'secret' => [
-            'required_without' => 'The :attribute field is required.',
+            'isBase32Encoded' => 'The :attribute must be a base32 encoded string.',
         ],
         'account' => [
-            'required_without' => 'The :attribute field is required.',
-            'regex' => 'The :attribute field must not contain colon.',
+            'regex' => 'The :attribute must not contain colon.',
         ],
+        'service' => [
+            'regex' => 'The :attribute must not contain colon.',
+        ],
+        'label' => [
+            'required' => 'The uri must have a label.',
+        ],
+        'ids' => [
+            'regex' => 'IDs must be comma separated, without trailing comma.',
+        ],
+        'name' => [
+            'firstUser' => 'There is already a registered user',
+        ]
     ],
 
     /*

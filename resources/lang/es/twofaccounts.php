@@ -102,7 +102,7 @@ return [
             'solution' => 'Quizás hayas olvidado conectar la webcam'
         ],
         'secured_context_required' => [
-            'reason' => 'Secure context requerido',
+            'reason' => 'Requiere contexto seguro',
             'solution' => 'HTTPS es necesario para escanear en vivo. Si ejecuta 2FAuth desde su computadora, no utilice un host virtual distinto de localhost'
         ],
         'https_required' => 'HTTPS requerido para la transmisión de la cámara',
@@ -117,7 +117,27 @@ return [
     ],
     'confirm' => [
         'delete' => '¿Está seguro que desea eliminar esta cuenta?',
-        'cancel' => 'La cuenta será eliminada. ¿Estás seguro?'
+        'cancel' => 'La cuenta será eliminada. ¿Estás seguro?',
+        'discard' => 'Are you sure you want to discard this account?',
+        'discard_all' => 'Are you sure you want to discard all accounts?',
+        'discard_duplicates' => 'Are you sure you want to discard all duplicates?',
+    ],
+    'import' => [
+        'import' => 'Import',
+        'to_import' => 'Import',
+        'import_legend' => 'Import your Google Authenticator accounts.',
+        'use_the_gauth_qr_code' => 'Load a G-Auth QR code',
+        'issuer' => 'Issuer',
+        'imported' => 'Imported',
+        'failure' => 'Failure',
+        'x_valid_accounts_found' => '{count} valid accounts found',
+        'import_all' => 'Import all',
+        'import_this_account' => 'Import this account',
+        'discard_all' => 'Discard all',
+        'discard_duplicates' => 'Discard duplicates',
+        'discard_this_account' => 'Discard this account',
+        'generate_a_test_password' => 'Generate a test pasword',
+        'possible_duplicate' => 'An account with the exact same data already exists',
     ],
 
 ];

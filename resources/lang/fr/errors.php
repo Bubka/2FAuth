@@ -38,5 +38,7 @@ return [
     'unsupported_with_reverseproxy' => 'Sans effet avec un proxy d\'authentification',
     'user_deletion_failed' => 'La suppression du compte utilisateur a échoué, aucune donnée n\'a été supprimée',
     'auth_proxy_failed' => 'Échec de l\'authentification par le proxy',
-    'auth_proxy_failed_legend' => '2Fauth est configuré pour fonctionner derrière un proxy d\'authentification, mais votre proxy ne retourne pas l\'en-tête attendu. Vérifiez votre configuration et réessayez.'
+    'auth_proxy_failed_legend' => '2Fauth est configuré pour fonctionner derrière un proxy d\'authentification, mais votre proxy ne retourne pas l\'en-tête attendu. Vérifiez votre configuration et réessayez.',
+    'invalid_google_auth_migration' => 'Données Google Authenticator invalides ou illisibles',
+    'unsupported_otp_type' => 'Type OTP non supporté',
 ];

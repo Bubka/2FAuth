@@ -117,7 +117,27 @@ return [
     ],
     'confirm' => [
         'delete' => 'Etes-vous sûrs de vouloir supprimer le compte ?',
-        'cancel' => 'Les données seront perdues, êtes-vous sûrs ?'
+        'cancel' => 'Les données seront perdues, êtes-vous sûrs ?',
+        'discard' => 'Êtes-vous sûrs de vouloir retirer ce compte ?',
+        'discard_all' => 'Êtes-vous sûrs de vouloir retirer tous les comptes ?',
+        'discard_duplicates' => 'Êtes-vous sûrs de vouloir retirer tous les doublons ?',
+    ],
+    'import' => [
+        'import' => 'Import',
+        'to_import' => 'Importer',
+        'import_legend' => 'Importez vos comptes Google Authenticator.',
+        'use_the_gauth_qr_code' => 'Charger un QR code G-Auth',
+        'issuer' => 'Émetteur',
+        'imported' => 'Importé',
+        'failure' => 'Échec',
+        'x_valid_accounts_found' => '{count} comptes valides trouvés',
+        'import_all' => 'Tout importer',
+        'import_this_account' => 'Importer ce compte',
+        'discard_all' => 'Tout retirer',
+        'discard_duplicates' => 'Retirer les doublons',
+        'discard_this_account' => 'Retirer ce compte',
+        'generate_a_test_password' => 'Générer un mot de passe de test',
+        'possible_duplicate' => 'Un compte avec les mêmes informations existe déjà',
     ],
 
 ];

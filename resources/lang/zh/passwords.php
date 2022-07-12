@@ -21,6 +21,6 @@ return [
     'user' => "找不到该邮箱对应的用户。",
 
     // 2FAuth
-    'password' => 'Passwords must be at least eight characters and match the confirmation.',
+    'password' => '密码必须包含至少8个字符，且两次输入的内容必须相同。',
     
 ];

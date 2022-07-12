@@ -128,6 +128,7 @@ return [
     'uuid' => 'Le champ :attribute doit être un UUID valide',
 
     'single' => 'Lors de l\'utilisation de :attribut, il doit être le seul paramètre dans le corps de la requête',
+    'onlyCustomOtpWithUri' => 'Le paramètre uri doit être fourni seul ou seulement avec le paramètre \'custom_otp\'',
 
     /*
     |--------------------------------------------------------------------------

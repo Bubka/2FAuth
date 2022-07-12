@@ -117,7 +117,27 @@ return [
     ],
     'confirm' => [
         'delete' => 'Sind Sie sicher, dass Sie dieses Konto löschen möchten?',
-        'cancel' => 'Das Konto wird gelöscht. Sind Sie sicher?'
+        'cancel' => 'Das Konto wird gelöscht. Sind Sie sicher?',
+        'discard' => 'Are you sure you want to discard this account?',
+        'discard_all' => 'Are you sure you want to discard all accounts?',
+        'discard_duplicates' => 'Are you sure you want to discard all duplicates?',
+    ],
+    'import' => [
+        'import' => 'Import',
+        'to_import' => 'Import',
+        'import_legend' => 'Import your Google Authenticator accounts.',
+        'use_the_gauth_qr_code' => 'Load a G-Auth QR code',
+        'issuer' => 'Issuer',
+        'imported' => 'Imported',
+        'failure' => 'Failure',
+        'x_valid_accounts_found' => '{count} valid accounts found',
+        'import_all' => 'Import all',
+        'import_this_account' => 'Import this account',
+        'discard_all' => 'Discard all',
+        'discard_duplicates' => 'Discard duplicates',
+        'discard_this_account' => 'Discard this account',
+        'generate_a_test_password' => 'Generate a test pasword',
+        'possible_duplicate' => 'An account with the exact same data already exists',
     ],
 
 ];

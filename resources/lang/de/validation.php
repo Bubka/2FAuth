@@ -128,6 +128,7 @@ return [
     'uuid' => ':attribute muss ein UUID sein.',
 
     'single' => 'When using :attribute it must be the only parameter in this request body',
+    'onlyCustomOtpWithUri' => 'The uri parameter must be provided alone or only in combination with the \'custom_otp\' parameter',
 
     /*
     |--------------------------------------------------------------------------

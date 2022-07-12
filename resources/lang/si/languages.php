@@ -10,7 +10,8 @@ return [
     |
     */
 
-    'en' => 'English',
-    'fr' => 'French',
-    'de' => 'German',
+    'browser_preference' => 'Browser preference',
+    'en' => 'ඉංග්‍රීසි',
+    'fr' => 'ප්‍රංශ',
+    'de' => 'ජර්මානු',
 ];

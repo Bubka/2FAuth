@@ -13,20 +13,21 @@ return [
     |
     */
 
-    'groups' => 'Groups',
-    'select_accounts_to_show' => 'Select accounts to show',
-    'manage_groups' => 'Manage groups',
-    'active_group' => 'Active group',
-    'manage_groups_legend' => 'You can create groups to organize your accounts the way you want. All accounts remain visible in the pseudo group named \'All\', regardless of the group they belong to.',
-    'deleting_group_does_not_delete_accounts' => 'Deleting a group does not delete accounts',
-    'move_selected_to' => 'Move selected to',
-    'no_group' => 'No group',
+    'groups' => '组',
+    'create_group' => '创建新组',
+    'select_accounts_to_show' => '选择要显示的帐户',
+    'manage_groups' => '管理组',
+    'active_group' => '活跃组',
+    'manage_groups_legend' => '您可以创建组以按照您想要的方式组织您的账户。 所有账户在名为“全部”的伪组中仍然可见，无论它们属于哪个组。',
+    'deleting_group_does_not_delete_accounts' => '删除组不会删除帐户',
+    'move_selected_to' => '移动选择到',
+    'no_group' => '没有分组',
     'forms' => [
-        'new_group' => 'New group',
-        'new_name' => 'New name',
-        'rename_group' => 'Rename group',
+        'new_group' => '新建组',
+        'new_name' => '新名称',
+        'rename_group' => '重命名组',
     ],
     'confirm' => [
-        'delete' => 'Are you sure you want to delete this group?',
+        'delete' => '您确定要删除此组吗？',
     ],
 ];
