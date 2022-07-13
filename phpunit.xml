@@ -16,6 +16,9 @@
         <include>
             <directory suffix=".php">app</directory>
         </include>
+        <exclude>
+            <directory suffix=".php">app/Protobuf</directory>
+        </exclude>
     </coverage>
     <testsuites>
         <testsuite name="Unit">

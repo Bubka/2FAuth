@@ -58,9 +58,10 @@ class LoginTest extends FeatureTestCase
                 'email' => $this->user->email,
                 'password' => self::PASSWORD
             ])
-            ->assertStatus(400)
+            ->assertStatus(200)
             ->assertJson([
-                'message' => __('auth.already_authenticated')
+                'message' => 'authenticated',
+                'name' => $this->user->name,
             ]);
     }
 

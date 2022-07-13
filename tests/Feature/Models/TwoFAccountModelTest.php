@@ -30,8 +30,6 @@ class TwoFAccountModelTest extends FeatureTestCase
     {
         parent::setUp();
 
-        // $this->twofaccountService = $this->app->make('App\Services\TwoFAccountService');
-
         $this->customTotpTwofaccount = new TwoFAccount;
         $this->customTotpTwofaccount->legacy_uri = OtpTestData::TOTP_FULL_CUSTOM_URI;
         $this->customTotpTwofaccount->service = OtpTestData::SERVICE;
@@ -58,10 +56,17 @@ class TwoFAccountModelTest extends FeatureTestCase
         $this->customHotpTwofaccount->counter = OtpTestData::COUNTER_CUSTOM;
         $this->customHotpTwofaccount->save();
 
-
-        // $this->group = new Group;
-        // $this->group->name = 'MyGroup';
-        // $this->group->save();
+        $this->customSteamTotpTwofaccount = new TwoFAccount;
+        $this->customSteamTotpTwofaccount->legacy_uri = OtpTestData::STEAM_TOTP_URI;
+        $this->customSteamTotpTwofaccount->service = OtpTestData::STEAM;
+        $this->customSteamTotpTwofaccount->account = OtpTestData::ACCOUNT;
+        $this->customSteamTotpTwofaccount->otp_type = 'steamtotp';
+        $this->customSteamTotpTwofaccount->secret = OtpTestData::STEAM_SECRET;
+        $this->customSteamTotpTwofaccount->digits = OtpTestData::DIGITS_STEAM;
+        $this->customSteamTotpTwofaccount->algorithm = OtpTestData::ALGORITHM_DEFAULT;
+        $this->customSteamTotpTwofaccount->period = OtpTestData::PERIOD_DEFAULT;
+        $this->customSteamTotpTwofaccount->counter = null;
+        $this->customSteamTotpTwofaccount->save();
     }
 
 
@@ -443,6 +448,29 @@ class TwoFAccountModelTest extends FeatureTestCase
         $otp_from_parameters = $twofaccount->fillWithOtpParameters(OtpTestData::ARRAY_OF_FULL_VALID_PARAMETERS_FOR_CUSTOM_HOTP)->getOTP();
 
         $this->assertEquals($otp_from_model, $otp_from_parameters);
+    }
+
+
+    /**
+     * @test
+     */
+    public function test_getOTP_for_steamtotp_returns_the_same_password()
+    {
+        $twofaccount = new TwoFAccount;
+
+        $otp_from_model = $this->customSteamTotpTwofaccount->getOTP();
+        $otp_from_uri = $twofaccount->fillWithURI(OtpTestData::STEAM_TOTP_URI)->getOTP();
+
+        if ($otp_from_model->generated_at === $otp_from_uri->generated_at) {
+            $this->assertEquals($otp_from_model, $otp_from_uri);
+        }
+
+        $otp_from_model = $this->customSteamTotpTwofaccount->getOTP();
+        $otp_from_parameters = $twofaccount->fillWithOtpParameters(OtpTestData::ARRAY_OF_FULL_VALID_PARAMETERS_FOR_STEAM_TOTP)->getOTP();
+
+        if ($otp_from_model->generated_at === $otp_from_parameters->generated_at) {
+            $this->assertEquals($otp_from_model, $otp_from_parameters);
+        }
     }
 
 
