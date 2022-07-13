@@ -15,6 +15,7 @@ import CreateGroup      from './views/groups/Create'
 import EditGroup        from './views/groups/Edit'
 import Login            from './views/auth/Login'
 import Register         from './views/auth/Register'
+import Autolock         from './views/auth/Autolock'
 import PasswordRequest  from './views/auth/password/Request'
 import PasswordReset    from './views/auth/password/Reset'
 import WebauthnLost     from './views/auth/webauthn/Lost'
@@ -52,13 +53,15 @@ const router = new Router({
 
         { path: '/login', name: 'login', component: Login, meta: { disabledWithAuthProxy: true } },
         { path: '/register', name: 'register', component: Register, meta: { disabledWithAuthProxy: true } },
+        { path: '/autolock', name: 'autolock',component: Autolock, meta: { disabledWithAuthProxy: true } },
         { path: '/password/request', name: 'password.request', component: PasswordRequest, meta: { disabledWithAuthProxy: true } },
         { path: '/password/reset/:token', name: 'password.reset', component: PasswordReset, meta: { disabledWithAuthProxy: true } },
         { path: '/webauthn/lost', name: 'webauthn.lost', component: WebauthnLost, meta: { disabledWithAuthProxy: true } },
         { path: '/webauthn/recover', name: 'webauthn.recover', component: WebauthnRecover, meta: { disabledWithAuthProxy: true } },
-        { path: '/flooded', name: 'flooded',component: Errors,props: true },
-        { path: '/error', name: 'genericError',component: Errors,props: true },
-        { path: '/404', name: '404',component: Errors,props: true },
+
+        { path: '/flooded', name: 'flooded',component: Errors, props: true },
+        { path: '/error', name: 'genericError',component: Errors, props: true },
+        { path: '/404', name: '404',component: Errors, props: true },
         { path: '*', redirect: { name: '404' } }
     ],
 });

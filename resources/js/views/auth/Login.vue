@@ -131,9 +131,12 @@
         },
 
         beforeRouteEnter (to, from, next) {
-            next(async vm => {
-                if( to.params.forceLogout ) await vm.axios.get('/user/logout')
+            if (to.params.forceRefresh && from.name !== null) {
+                window.location.href = to.path;
+                return;
+            }
 
+            next(async vm => {
                 const { data } = await vm.axios.get('api/v1/user/name')
 
                 if( data.name ) {

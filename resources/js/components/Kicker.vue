@@ -43,7 +43,7 @@
 
                 clearTimeout(this.logoutTimer)
 
-                this.appLogout()
+                this.$router.push({ name: 'autolock' })
             },
 
             resetTimer: function() {
