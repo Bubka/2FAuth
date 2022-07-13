@@ -33,6 +33,7 @@ return [
     ],
     'login' => 'Connexion',
     'register' => 'Inscription',
+    'autolock' => 'Verrouillage automatique',
     'password' => [
         'request' => 'Réinitialisation du mot de passe',
         'reset' => 'Nouveau mot de passe',

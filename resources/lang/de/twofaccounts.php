@@ -99,7 +99,7 @@ return [
         ],
         'no_cam_on_device' => [
             'reason' => 'Keine Kamera in diesem Gerät',
-            'solution' => 'Möglicherweise haben Sie vergessen, eine Webcam anzuschließen'
+            'solution' => 'Maybe you forgot to plug in your webcam'
         ],
         'secured_context_required' => [
             'reason' => 'Sichere Umgebung erforderlich',

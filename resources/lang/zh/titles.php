@@ -33,6 +33,7 @@ return [
     ],
     'login' => 'Login',
     'register' => 'Register',
+    'autolock' => 'Auto lock',
     'password' => [
         'request' => 'Reset password',
         'reset' => 'New password',

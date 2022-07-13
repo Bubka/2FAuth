@@ -99,7 +99,7 @@ return [
         ],
         'no_cam_on_device' => [
             'reason' => 'No camera on this device',
-            'solution' => 'Maybe your forget to plug in your webcam'
+            'solution' => 'Maybe you forgot to plug in your webcam'
         ],
         'secured_context_required' => [
             'reason' => 'Secure context required',
