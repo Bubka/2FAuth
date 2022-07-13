@@ -8,6 +8,7 @@ language: php
 php:
   - 7.4
   - 8.0
+  - 8.1
 
 services:
   - mysql
@@ -28,10 +29,10 @@ script:
 
 after_success:
 # Submit coverage report to https://codecov.io
-# - bash <(curl -s https://codecov.io/bash)
+- bash <(curl -s https://codecov.io/bash)
 
 # Monitor only these branches
 branches:
   only:
-  # - master
-  - dev
+  - master
+  # - dev
