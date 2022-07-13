@@ -313,8 +313,9 @@ class TwoFAccount extends Model implements Sortable
      * 
      * @throws InvalidSecretException The secret is not a valid base32 encoded string
      * @throws UndecipherableException The secret cannot be deciphered
+     * @return TotpDto|HotpDto 
      */
-    public function getOTP() : TotpDto|HotpDto
+    public function getOTP()
     {
         Log::info(sprintf('OTP requested for TwoFAccount #%s', $this->id));
 
@@ -461,7 +462,7 @@ class TwoFAccount extends Model implements Sortable
      */
     private function getGeneratorOtpType()
     {
-        return Arr::get($this->generatorClassMap, $this->generator::class);
+        return Arr::get($this->generatorClassMap, get_class($this->generator));
     }
 
     /**
