@@ -453,7 +453,9 @@ class TwoFAccount extends Model implements Sortable
         $this->digits    = 5;
         $this->algorithm = self::SHA1;
         $this->period    = 30;
-        $this->icon = $this->storeImageAsIcon('https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Steam_icon_logo.svg/langfr-320px-Steam_icon_logo.svg.png');
+        // if (!$this->icon) {
+        //     $this->icon = $this->storeImageAsIcon('https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Steam_icon_logo.svg/langfr-320px-Steam_icon_logo.svg.png');
+        // }
         
         Log::info(sprintf('TwoFAccount configured as Steam account'));
     }
