@@ -20,7 +20,7 @@ Vue.mixin({
             else {
                 await this.axios.get('/user/logout')
                 this.$storage.clear()
-                location.reload()
+                this.$router.push({ name: 'login', params: {forceRefresh: true} })
             }
         },
         
