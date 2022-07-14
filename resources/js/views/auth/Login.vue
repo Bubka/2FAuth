@@ -51,6 +51,7 @@
                 }),
                 isBusy: false,
                 showWebauthn: this.$root.appSettings.useWebauthnAsDefault || this.$root.appSettings.useWebauthnOnly,
+                csrfRefresher: null,
             }
         },
 
@@ -58,6 +59,10 @@
             punchline: function() {
                 return this.isDemo ? '' : this.$t('auth.welcome_back_x', [this.username])
             }
+        },
+
+        mounted: function() {
+            this.csrfRefresher = setInterval(this.refreshToken, 300000); // 5 min
         },
 
         methods : {
@@ -128,6 +133,10 @@
 
                 this.isBusy = false
             },
+
+            refreshToken(){
+                this.axios.get('/refresh-csrf')
+            }
         },
 
         beforeRouteEnter (to, from, next) {
@@ -159,7 +168,7 @@
             this.$notify({
                 clean: true
             })
-            
+            clearInterval(this.csrfRefresher);
             next()
         }
     }

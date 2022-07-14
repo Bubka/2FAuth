@@ -55,6 +55,10 @@ Route::group(['middleware' => ['behind-auth', 'rejectIfReverseProxy']], function
     Route::delete('webauthn/credentials/{credential}', [WebAuthnManageController::class, 'delete'])->name('webauthn.credentials.delete');
 });
 
+Route::get('refresh-csrf', function(){
+    return csrf_token();
+});
+
 /**
  * Route for the main landing view
  */
