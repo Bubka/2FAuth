@@ -17,8 +17,8 @@ class TestingSeeder extends Seeder
     public function run()
     {
         User::create([
-            'name' => 'tester',
-            'email' => 'tester@2fauth.app',
+            'name' => 'Tester',
+            'email' => 'testing@2fauth.app',
             'password' => bcrypt('password'),
         ]);
 
