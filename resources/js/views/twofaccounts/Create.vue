@@ -80,7 +80,7 @@
                 </div>
                 <field-error :form="form" field="icon" class="help-for-file" />
                 <!-- otp type -->
-                <form-toggle @otpTypeSelected="SetFormState" class="has-uppercased-button" :form="form" :choices="otp_types" fieldName="otp_type" :label="$t('twofaccounts.forms.otp_type.label')" :help="$t('twofaccounts.forms.otp_type.help')" :hasOffset="true" />
+                <form-toggle @otp_type="SetFormState" class="has-uppercased-button" :form="form" :choices="otp_types" fieldName="otp_type" :label="$t('twofaccounts.forms.otp_type.label')" :help="$t('twofaccounts.forms.otp_type.help')" :hasOffset="true" />
                 <div v-if="form.otp_type">
                     <!-- secret -->
                     <label class="label" v-html="$t('twofaccounts.forms.secret.label')"></label>
