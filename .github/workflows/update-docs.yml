@@ -1,0 +1,26 @@
+name: update-docs
+on:
+  push:
+    branches:    
+      - gatest
+    paths:
+      - docker/docker-compose.yml
+
+jobs:
+  copy-file:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Pushes docker-compose
+      uses: dmnemec/copy_file_to_another_repo_action@main
+      env:
+        API_TOKEN_GITHUB: ${{ secrets.ACTIONS_TOKEN }}
+      with:
+        source_file: 'docker/docker-compose.yml'
+        destination_repo: 'Bubka/2FAuth-Docs'
+        destination_folder: 'docs/static'
+        user_email: '858858+Bubka@users.noreply.github.com'
+        user_name: 'Bubka'
+        commit_message: '[Auto] Update docker-compose file'
