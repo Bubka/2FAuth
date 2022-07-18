@@ -204,7 +204,7 @@ ENV \
     # Unless you like to tinker and know what you're doing.
     BROADCAST_DRIVER=log \
     QUEUE_DRIVER=sync \
-    SESSION_LIFETIME=12 \
+    SESSION_LIFETIME=120 \
     REDIS_HOST=127.0.0.1 \
     REDIS_PASSWORD=null \
     REDIS_PORT=6379 \
