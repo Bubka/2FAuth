@@ -36,7 +36,7 @@
                     </span>
                 </div>
                 <h4 class="title is-4 pt-6 has-text-grey-light">{{ $t('settings.options') }}</h4>
-                <div class="field is-size-7-mobile">
+                <div class="field">
                     {{ $t('auth.webauthn.need_a_security_device_to_enable_options')}}
                 </div>
                 <form>
