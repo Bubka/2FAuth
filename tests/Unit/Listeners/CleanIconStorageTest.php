@@ -7,6 +7,7 @@ use App\Events\TwoFAccountDeleted;
 use Tests\TestCase;
 use App\Listeners\CleanIconStorage;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Event;
 
 
 /**
@@ -29,5 +30,16 @@ class CleanIconStorageTest extends TestCase
             ->andReturn(true);
 
         $this->assertNull($listener->handle($event));
+    }
+
+
+    public function test_CleanIconStorage_listen_to_TwoFAccountDeleted_event()
+    {
+        Event::fake();
+
+        Event::assertListening(
+            TwoFAccountDeleted::class,
+            CleanIconStorage::class
+        );
     }
 }
