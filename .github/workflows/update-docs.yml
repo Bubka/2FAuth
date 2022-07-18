@@ -2,7 +2,7 @@ name: update-docs
 on:
   push:
     branches:    
-      - gatest
+      - dev
     paths:
       - docker/docker-compose.yml
 
