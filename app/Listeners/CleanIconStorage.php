@@ -26,7 +26,7 @@ class CleanIconStorage
      */
     public function handle(TwoFAccountDeleted $event)
     {
-        Storage::delete('public/icons/' . $event->twofaccount->icon);
+        Storage::disk('icons')->delete($event->twofaccount->icon);
         Log::info(sprintf('Icon cleaned for deleted TwoFAccount #%d', $event->twofaccount->id));
     }
 }

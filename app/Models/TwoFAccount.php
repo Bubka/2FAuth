@@ -28,6 +28,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use ParagonIE\ConstantTime\Base32;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Http;
 
 class TwoFAccount extends Model implements Sortable
 {
@@ -535,25 +536,34 @@ class TwoFAccount extends Model implements Sortable
     private function storeImageAsIcon(string $url)
     {
         try {
-            $remoteImageURL = $url;
-            $path_parts = pathinfo($remoteImageURL);
-            $newFilename = Str::random(40) . '.' . $path_parts['extension'];
+            $path_parts = pathinfo($url);
+            $newFilename = Str::random(40).'.'.$path_parts['extension'];
             $imageFile = self::IMAGELINK_STORAGE_PATH . $newFilename;
-            $iconFile = self::ICON_STORAGE_PATH . $newFilename;
 
-            Storage::disk('local')->put($imageFile, file_get_contents($remoteImageURL));
+            try {
+                $response = Http::retry(3, 100)->get($url);
+                
+                if ($response->successful()) {
+                    Storage::disk('imagesLink')->put($newFilename, $response->body());
+                }
+            }
+            catch (\Exception $exception) {
+                Log::error(sprintf('Cannot fetch imageLink at "%s"', $url));
+            }
 
             if ( in_array(Storage::mimeType($imageFile), ['image/png', 'image/jpeg', 'image/webp', 'image/bmp']) 
                 && getimagesize(storage_path() . '/app/' . $imageFile) )
             {
-                // Should be a valid image
-                Storage::move($imageFile, $iconFile);
-
+                // Should be a valid image, we move it to the icons disk
+                if (Storage::disk('icons')->put($newFilename, Storage::disk('imagesLink')->get($newFilename))) {
+                    Storage::disk('imagesLink')->delete($newFilename);
+                }
+                
                 Log::info(sprintf('Icon file %s stored', $newFilename));
             }
             else {
                 // @codeCoverageIgnoreStart
-                Storage::delete($imageFile);
+                Storage::disk('imagesLink')->delete($newFilename);
                 throw new \Exception('Unsupported mimeType or missing image on storage');
                 // @codeCoverageIgnoreEnd
             }
@@ -561,7 +571,7 @@ class TwoFAccount extends Model implements Sortable
             return $newFilename;
         }
         // @codeCoverageIgnoreStart
-        catch (\Assert\AssertionFailedException|\Assert\InvalidArgumentException|\Exception|\Throwable $ex) {
+        catch (\Exception|\Throwable $ex) {
             Log::error(sprintf('Icon storage failed: %s', $ex->getMessage()));
             return null;
         }
