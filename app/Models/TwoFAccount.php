@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Exception;
+use App\Services\LogoService;
 use App\Models\Dto\TotpDto;
 use App\Models\Dto\HotpDto;
 use App\Events\TwoFAccountDeleted;
@@ -26,6 +27,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use ParagonIE\ConstantTime\Base32;
+use Illuminate\Support\Facades\App;
 
 class TwoFAccount extends Model implements Sortable
 {
@@ -434,9 +436,12 @@ class TwoFAccount extends Model implements Sortable
         if ($isSteamTotp || strtolower($this->service) === 'steam') {
             $this->enforceAsSteam();
         }
-        else if ($this->generator->hasParameter('image')) {
+        if ($this->generator->hasParameter('image')) {
             $this->icon = $this->storeImageAsIcon($this->generator->getParameter('image'));
-        }        
+        }
+        if (!$this->icon) {
+            $this->icon = $this->defaultLogo();
+        }    
 
         Log::info(sprintf('TwoFAccount filled with an URI'));
 
@@ -453,9 +458,6 @@ class TwoFAccount extends Model implements Sortable
         $this->digits    = 5;
         $this->algorithm = self::SHA1;
         $this->period    = 30;
-        // if (!$this->icon) {
-        //     $this->icon = $this->storeImageAsIcon('https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Steam_icon_logo.svg/langfr-320px-Steam_icon_logo.svg.png');
-        // }
         
         Log::info(sprintf('TwoFAccount configured as Steam account'));
     }
@@ -564,6 +566,24 @@ class TwoFAccount extends Model implements Sortable
             return null;
         }
         // @codeCoverageIgnoreEnd
+    }
+
+
+    /**
+     * Fetch a logo in the tfa directory and store it as a new stand alone icon
+     * 
+     * @return string|null The icon
+     */
+    private function defaultLogo()
+    {
+        $logoService = App::make(LogoService::class);
+        $logoFilename = $logoService->getLogo($this->service);
+
+        if ($logoFilename) {
+            $newFilename = Str::random(40).'.svg';
+            return Storage::disk('icons')->put($newFilename, Storage::disk('logos')->get($logoFilename)) ? $newFilename : null;
+        }
+        else return null;
     }
 
 

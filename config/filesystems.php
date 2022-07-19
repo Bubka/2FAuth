@@ -48,6 +48,23 @@ return [
             'root' => storage_path('app'),
         ],
 
+        'icons' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/icons'),
+            'url' => env('APP_URL').'/storage/icons',
+            'visibility' => 'public',
+        ],
+
+        'logos' => [
+            'driver' => 'local',
+            'root' => storage_path('app/logos'),
+        ],
+
+        'imagesLink' => [
+            'driver' => 'local',
+            'root' => storage_path('app/imagesLink'),
+        ],
+
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
