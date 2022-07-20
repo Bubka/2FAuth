@@ -60,27 +60,42 @@
                 <!-- account -->
                 <form-field :form="form" fieldName="account" inputType="text" :label="$t('twofaccounts.account')" :placeholder="$t('twofaccounts.forms.account.placeholder')" />
                 <!-- icon upload -->
-                <div class="field">
-                    <label class="label">{{ $t('twofaccounts.icon') }}</label>
-                    <div class="file is-dark">
-                        <label class="file-label">
-                            <input class="file-input" type="file" accept="image/*" v-on:change="uploadIcon" ref="iconInput">
-                            <span class="file-cta">
-                                <span class="file-icon">
-                                    <font-awesome-icon :icon="['fas', 'image']" />
-                                </span>
-                                <span class="file-label">{{ $t('twofaccounts.forms.choose_image') }}</span>
+                <label class="label">{{ $t('twofaccounts.icon') }}</label>
+                <div class="field is-grouped">
+                    <!-- i'm lucky button -->
+                    <div class="control">
+                        <v-button @click="fetchLogo" :color="'is-dark'" :nativeType="'button'" :isDisabled="form.service.length < 3">
+                            <span class="icon is-small">
+                                <font-awesome-icon :icon="['fas', 'globe']" />
                             </span>
-                        </label>
-                        <span class="tag is-black is-large" v-if="tempIcon">
-                            <img class="icon-preview" :src="'/storage/icons/' + tempIcon" >
-                            <button class="delete is-small" @click.prevent="deleteIcon"></button>
-                        </span>
+                            <span>{{ $t('twofaccounts.forms.i_m_lucky') }}</span>
+                        </v-button>
+                    </div>
+                    <!-- upload button -->
+                    <div class="control">
+                        <div class="file is-dark">
+                            <label class="file-label">
+                                <input class="file-input" type="file" accept="image/*" v-on:change="uploadIcon" ref="iconInput">
+                                <span class="file-cta">
+                                    <span class="file-icon">
+                                        <font-awesome-icon :icon="['fas', 'upload']" />
+                                    </span>
+                                    <span class="file-label">{{ $t('twofaccounts.forms.choose_image') }}</span>
+                                </span>
+                            </label>
+                            <span class="tag is-black is-large" v-if="tempIcon">
+                                <img class="icon-preview" :src="'/storage/icons/' + tempIcon" >
+                                <button class="delete is-small" @click.prevent="deleteIcon"></button>
+                            </span>
+                        </div>
                     </div>
                 </div>
-                <field-error :form="form" field="icon" class="help-for-file" />
+                <div class="field">
+                    <field-error :form="form" field="icon" class="help-for-file" />
+                    <p class="help" v-html="$t('twofaccounts.forms.i_m_lucky_legend')"></p>
+                </div>
                 <!-- otp type -->
-                <form-toggle @otp_type="SetFormState" class="has-uppercased-button" :form="form" :choices="otp_types" fieldName="otp_type" :label="$t('twofaccounts.forms.otp_type.label')" :help="$t('twofaccounts.forms.otp_type.help')" :hasOffset="true" />
+                <form-toggle @otp_type="setFormState" class="has-uppercased-button" :form="form" :choices="otp_types" fieldName="otp_type" :label="$t('twofaccounts.forms.otp_type.label')" :help="$t('twofaccounts.forms.otp_type.help')" :hasOffset="true" />
                 <div v-if="form.otp_type">
                     <!-- secret -->
                     <label class="label" v-html="$t('twofaccounts.forms.secret.label')"></label>
@@ -345,7 +360,21 @@
                 const { data } = await this.form.upload('/api/v1/icons', imgdata)
 
                 this.tempIcon = data.filename;
+            },
 
+            fetchLogo() {
+
+                this.axios.post('/api/v1/icons/default', {service: this.form.service}, {returnError: true}).then(response => {
+                    if (response.status === 201) {
+                        // clean possible already uploaded temp icon
+                        this.deleteIcon()
+                        this.tempIcon = response.data.filename;
+                    }
+                    else this.$notify({type: 'is-warning', text: this.$t('errors.no_logo_found_for_x', {service: this.form.service}) })
+                })
+                .catch(error => {
+                    this.$notify({type: 'is-warning', text: this.$t('errors.no_logo_found_for_x', {service: this.form.service}) })
+                });
             },
 
             deleteIcon(event) {
@@ -376,7 +405,7 @@
                 console.log('error', value)
             },
 
-            SetFormState (event) {
+            setFormState (event) {
                 this.form.otp_type = event
                 this.form.service = event === 'steamtotp' ? 'Steam' : ''
                 this.secretIsBase32Encoded = event === 'steamtotp' ? 1 : this.secretIsBase32Encoded

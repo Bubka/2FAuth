@@ -1,12 +1,13 @@
 <template>
     <button 
         :type="nativeType"
-        :disabled="isLoading"
+        :disabled="isLoading || isDisabled"
         :class="{
             'button': true,
             [`${color}`]: true,
             'is-loading': isLoading,
-          }">
+        }"
+        v-on:click="$emit('click')">
         <slot />
     </button>
 </template>
@@ -30,6 +31,11 @@
                 type: Boolean,
                 default: false
             },
+
+            isDisabled: {
+                type: Boolean,
+                default: false
+            }
         }
     }
 

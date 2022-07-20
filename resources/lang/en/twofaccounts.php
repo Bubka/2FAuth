@@ -25,7 +25,7 @@ return [
     'no_service' => '- no service -',
     'forms' => [
         'service' => [
-            'placeholder' => 'example.com',
+            'placeholder' => 'Google, Twitter, Apple',
         ],
         'account' => [
             'placeholder' => 'John DOE',
@@ -49,7 +49,9 @@ return [
             'val' => 'Lock',
             'title' => 'Lock it',
         ],
-        'choose_image' => 'Choose an image…',
+        'choose_image' => 'Upload',
+        'i_m_lucky' => 'I\'m lucky',
+        'i_m_lucky_legend' => 'The "I\'m lucky" button try to get the official icon of the given service. Enter actual service name without ".xyz" extension and try to avoid typo. (beta feature)',
         'test' => 'Test',
         'secret' => [
             'label' => 'Secret',

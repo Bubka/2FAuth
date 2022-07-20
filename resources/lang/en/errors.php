@@ -41,4 +41,5 @@ return [
     'auth_proxy_failed_legend' => '2Fauth is configured to run behind an authentication proxy but your proxy does not return the expected header. Check your configuration and try again.',
     'invalid_google_auth_migration' => 'Invalid or unreadable Google Authenticator data',
     'unsupported_otp_type' => 'Unsupported OTP type',
+    'no_logo_found_for_x' => 'No logo available for {service}'
 ];

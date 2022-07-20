@@ -1,5 +1,5 @@
 <template>
-    <div class="field" :class="{ 'with-offset' : hasOffset }">
+    <div class="field" :class="{ 'pt-3' : hasOffset }">
         <label class="label" v-html="label"></label>
         <div class="is-toggle buttons">
             <label class="button is-dark" :disabled="isDisabled" v-for="choice in choices" :class="{ 'is-link' : form[fieldName] === choice.value }">

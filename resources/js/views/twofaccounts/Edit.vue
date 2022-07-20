@@ -5,26 +5,41 @@
             <form-field :isDisabled="form.otp_type === 'steamtotp'" :form="form" fieldName="service" inputType="text" :label="$t('twofaccounts.service')" :placeholder="$t('twofaccounts.forms.service.placeholder')" autofocus />
             <!-- account -->
             <form-field :form="form" fieldName="account" inputType="text" :label="$t('twofaccounts.account')" :placeholder="$t('twofaccounts.forms.account.placeholder')" />
-            <!-- icon -->
-            <div class="field">
-                <label class="label">{{ $t('twofaccounts.icon') }}</label>
-                <div class="file is-dark">
-                    <label class="file-label">
-                        <input class="file-input" type="file" accept="image/*" v-on:change="uploadIcon" ref="iconInput">
-                        <span class="file-cta">
-                            <span class="file-icon">
-                                <font-awesome-icon :icon="['fas', 'image']" />
-                            </span>
-                            <span class="file-label">{{ $t('twofaccounts.forms.choose_image') }}</span>
+            <!-- icon upload -->
+            <label class="label">{{ $t('twofaccounts.icon') }}</label>
+            <div class="field is-grouped">
+                <!-- i'm lucky button -->
+                <div class="control">
+                    <v-button @click="fetchLogo" :color="'is-dark'" :nativeType="'button'" :isDisabled="form.service.length < 3">
+                        <span class="icon is-small">
+                            <font-awesome-icon :icon="['fas', 'globe']" />
                         </span>
-                    </label>
-                    <span class="tag is-black is-large" v-if="tempIcon">
-                        <img class="icon-preview" :src="'/storage/icons/' + tempIcon" >
-                        <button class="delete is-small" @click.prevent="deleteIcon"></button>
-                    </span>
+                        <span>{{ $t('twofaccounts.forms.i_m_lucky') }}</span>
+                    </v-button>
+                </div>
+                <!-- upload button -->
+                <div class="control">
+                    <div class="file is-dark">
+                        <label class="file-label">
+                            <input class="file-input" type="file" accept="image/*" v-on:change="uploadIcon" ref="iconInput">
+                            <span class="file-cta">
+                                <span class="file-icon">
+                                    <font-awesome-icon :icon="['fas', 'upload']" />
+                                </span>
+                                <span class="file-label">{{ $t('twofaccounts.forms.choose_image') }}</span>
+                            </span>
+                        </label>
+                        <span class="tag is-black is-large" v-if="tempIcon">
+                            <img class="icon-preview" :src="'/storage/icons/' + tempIcon" >
+                            <button class="delete is-small" @click.prevent="deleteIcon"></button>
+                        </span>
+                    </div>
                 </div>
             </div>
-            <field-error :form="form" field="icon" class="help-for-file" />
+            <div class="field">
+                <field-error :form="form" field="icon" class="help-for-file" />
+                <p class="help" v-html="$t('twofaccounts.forms.i_m_lucky_legend')"></p>
+            </div>
             <!-- otp type -->
             <form-toggle class="has-uppercased-button" :isDisabled="true" :form="form" :choices="otp_types" fieldName="otp_type" :label="$t('twofaccounts.forms.otp_type.label')" :help="$t('twofaccounts.forms.otp_type.help')" :hasOffset="true" />
             <div v-if="form.otp_type">
@@ -254,6 +269,21 @@
 
                 this.tempIcon = data.filename;
 
+            },
+
+            fetchLogo() {
+
+                this.axios.post('/api/v1/icons/default', {service: this.form.service}, {returnError: true}).then(response => {
+                    if (response.status === 201) {
+                        // clean possible already uploaded temp icon
+                        this.deleteIcon()
+                        this.tempIcon = response.data.filename;
+                    }
+                    else this.$notify({type: 'is-warning', text: this.$t('errors.no_logo_found_for_x', {service: this.form.service}) })
+                })
+                .catch(error => {
+                    this.$notify({type: 'is-warning', text: this.$t('errors.no_logo_found_for_x', {service: this.form.service}) })
+                });
             },
 
             deleteIcon(event) {

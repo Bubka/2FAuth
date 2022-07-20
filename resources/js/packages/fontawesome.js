@@ -25,6 +25,8 @@ import {
     faTh,
     faList,
     faTimesCircle,
+    faUpload,
+    faGlobe,
 } from '@fortawesome/free-solid-svg-icons'
 
 import {
@@ -54,6 +56,8 @@ library.add(
     faTh,
     faList,
     faTimesCircle,
+    faUpload,
+    faGlobe,
 );
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)

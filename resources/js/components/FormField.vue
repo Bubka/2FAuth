@@ -1,8 +1,8 @@
 <template>
-    <div class="field" :class="{ 'with-offset' : hasOffset }">
+    <div class="field" :class="{ 'pt-3' : hasOffset }">
         <label class="label" v-html="label"></label>
         <div class="control">
-            <input :disabled="isDisabled" :id="fieldName" :type="inputType" class="input" v-model="form[fieldName]" :placeholder="placeholder" v-bind="$attrs" />
+            <input :disabled="isDisabled" :id="fieldName" :type="inputType" class="input" v-model="form[fieldName]" :placeholder="placeholder" v-bind="$attrs" v-on:change="$emit('field-changed', form[fieldName])"/>
         </div>
         <field-error :form="form" :field="fieldName" />
         <p class="help" v-html="help" v-if="help"></p>
