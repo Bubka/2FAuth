@@ -5,6 +5,7 @@ namespace App\Services;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class LogoService
 {
@@ -27,21 +28,39 @@ class LogoService
 
 
     /**
+     * Fetch a logo for the given service and set it as an icon
+     * 
+     * @param string $serviceName Name of the service to fetch a logo for
+     * @return string|null The icon filename or null if no logo has been found
+     */
+    public function getIcon(string $serviceName)
+    {
+        $logoFilename = $this->getLogo($serviceName);
+
+        if ($logoFilename) {
+            $newFilename = Str::random(40).'.svg';
+            return Storage::disk('icons')->put($newFilename, Storage::disk('logos')->get($logoFilename)) ? $newFilename : null;
+        }
+        else return null;
+    }
+
+
+    /**
      * Return the logo's filename for a given service
      * 
      * @param string $serviceName Name of the service to fetch a logo for
      * @return string|null The logo filename or null if no logo has been found
      */
-    public function getLogo(string $serviceName) : string
+    public function getLogo(string $serviceName)
     {
-        $domain = $this->tfas->get(strtolower($serviceName));
+        $domain = $this->tfas->get($this->cleanDomain($serviceName));
         $logoFilename = $domain.'.svg';
 
         if ($domain && !Storage::disk('logos')->exists($logoFilename)) {
             $this->fetchLogo($logoFilename);
         }
 
-        return Storage::disk('logos')->exists($logoFilename) ? $logoFilename : '';
+        return Storage::disk('logos')->exists($logoFilename) ? $logoFilename : null;
     }
 
 
@@ -97,7 +116,7 @@ class LogoService
 
 
     /**
-     * Fetch a logo and store it to the disk
+     * Fetch and cache a logo from 2fa.Directory repository
      * 
      * @param string $logoFile Logo filename to fetch
      * @return void
@@ -117,5 +136,14 @@ class LogoService
         catch (\Exception $exception) {
             Log::error(sprintf('Fetching of logo "%s" failed.', $logoFile));
         }
+    }
+
+
+    /**
+     * 
+     */
+    protected function cleanDomain($domain) : string
+    {
+        return strtolower(str_replace(['+'], ['plus'], $domain));
     }
 }

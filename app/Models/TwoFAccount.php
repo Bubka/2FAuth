@@ -320,7 +320,7 @@ class TwoFAccount extends Model implements Sortable
      */
     public function getOTP()
     {
-        Log::info(sprintf('OTP requested for TwoFAccount #%s', $this->id));
+        Log::info(sprintf('OTP requested for TwoFAccount (%s)', $this->id ? 'id:'.$this->id: 'preview'));
 
         // Early exit if the model has an undecipherable secret
         if (strtolower($this->secret) === __('errors.indecipherable')) {
@@ -352,7 +352,7 @@ class TwoFAccount extends Model implements Sortable
 
             }
 
-            Log::info(sprintf('New OTP generated for TwoFAccount #%s', $this->id));
+            Log::info(sprintf('New OTP generated for TwoFAccount (%s)', $this->id ? 'id:'.$this->id: 'preview'));
     
             return $OtpDto;
 
@@ -441,7 +441,7 @@ class TwoFAccount extends Model implements Sortable
             $this->icon = $this->storeImageAsIcon($this->generator->getParameter('image'));
         }
         if (!$this->icon) {
-            $this->icon = $this->defaultLogo();
+            $this->icon = $this->getDefaultIcon();
         }    
 
         Log::info(sprintf('TwoFAccount filled with an URI'));
@@ -584,16 +584,11 @@ class TwoFAccount extends Model implements Sortable
      * 
      * @return string|null The icon
      */
-    private function defaultLogo()
+    private function getDefaultIcon()
     {
         $logoService = App::make(LogoService::class);
-        $logoFilename = $logoService->getLogo($this->service);
 
-        if ($logoFilename) {
-            $newFilename = Str::random(40).'.svg';
-            return Storage::disk('icons')->put($newFilename, Storage::disk('logos')->get($logoFilename)) ? $newFilename : null;
-        }
-        else return null;
+        return $logoService->getIcon($this->service);
     }
 
 
