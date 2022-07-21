@@ -27,6 +27,7 @@ import SettingsWebAuthn from './views/settings/WebAuthn'
 import EditCredential   from './views/settings/Credentials/Edit'
 import GeneratePAT      from './views/settings/PATokens/Create'
 import Errors           from './views/Error'
+import About            from './views/About'
 
 const router = new Router({
     mode: 'history',
@@ -59,6 +60,7 @@ const router = new Router({
         { path: '/webauthn/lost', name: 'webauthn.lost', component: WebauthnLost, meta: { disabledWithAuthProxy: true, showAbout: true } },
         { path: '/webauthn/recover', name: 'webauthn.recover', component: WebauthnRecover, meta: { disabledWithAuthProxy: true, showAbout: true } },
 
+        { path: '/about', name: 'about',component: About, meta: { showAbout: true } },
         { path: '/flooded', name: 'flooded',component: Errors, props: true },
         { path: '/error', name: 'genericError',component: Errors, props: true },
         { path: '/404', name: '404',component: Errors, props: true },

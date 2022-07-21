@@ -44,5 +44,9 @@ return [
     'generate' => 'Generate',
     'open_in_browser' => 'Open in browser',
     'continue' => 'Continue',
-    'discard' => 'Discard'
+    'discard' => 'Discard',
+    'about' => 'About',
+    'usefull_links' => 'Usefull links',
+    'environment' => 'Environment',
+    'credits' => 'Credits',
 ];

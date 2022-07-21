@@ -19,6 +19,7 @@ return [
     'webauthn' => 'WebAuthn',
     'tokens' => 'Tokens',
     'options' => 'Options',
+    'user_options' => 'User options',
     'confirm' => [
 
     ],

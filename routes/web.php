@@ -58,6 +58,7 @@ Route::group(['middleware' => ['behind-auth', 'rejectIfReverseProxy']], function
 Route::get('refresh-csrf', function(){
     return csrf_token();
 });
+Route::get('infos', 'SystemController@infos')->name('system.infos');
 
 /**
  * Route for the main landing view
