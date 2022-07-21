@@ -64,7 +64,7 @@
                 <div class="field is-grouped">
                     <!-- i'm lucky button -->
                     <div class="control">
-                        <v-button @click="fetchLogo" :color="'is-dark'" :nativeType="'button'" :isDisabled="form.service.length < 3">
+                        <v-button @click="fetchLogo" :color="'is-dark'" :nativeType="'button'" :isDisabled="form.service.length < 1">
                             <span class="icon is-small">
                                 <font-awesome-icon :icon="['fas', 'globe']" />
                             </span>
@@ -95,7 +95,7 @@
                     <p class="help" v-html="$t('twofaccounts.forms.i_m_lucky_legend')"></p>
                 </div>
                 <!-- otp type -->
-                <form-toggle @otp_type="setFormState" class="has-uppercased-button" :form="form" :choices="otp_types" fieldName="otp_type" :label="$t('twofaccounts.forms.otp_type.label')" :help="$t('twofaccounts.forms.otp_type.help')" :hasOffset="true" />
+                <form-toggle class="has-uppercased-button" :form="form" :choices="otp_types" fieldName="otp_type" :label="$t('twofaccounts.forms.otp_type.label')" :help="$t('twofaccounts.forms.otp_type.help')" :hasOffset="true" />
                 <div v-if="form.otp_type">
                     <!-- secret -->
                     <label class="label" v-html="$t('twofaccounts.forms.secret.label')"></label>
@@ -248,6 +248,10 @@
                 if( this.showQuickForm ) {
                     this.$refs.QuickFormOtpDisplayer.internal_icon = val
                 }
+            },
+
+            'form.otp_type' : function(to, from) {
+                this.setFormState(from, to) 
             },
         },
 
@@ -405,10 +409,19 @@
                 console.log('error', value)
             },
 
-            setFormState (event) {
-                this.form.otp_type = event
-                this.form.service = event === 'steamtotp' ? 'Steam' : ''
-                this.secretIsBase32Encoded = event === 'steamtotp' ? 1 : this.secretIsBase32Encoded
+            setFormState (from, to) {
+                this.form.otp_type = to
+
+                if (to === 'steamtotp') {
+                    this.secretIsBase32Encoded = 1
+                    this.form.service = 'Steam'
+                    this.form.secret = ''
+                    this.fetchLogo()
+                }
+                else if (from === 'steamtotp') {
+                    this.form.service = ''
+                    this.deleteIcon()
+                }
             },
             
         },
