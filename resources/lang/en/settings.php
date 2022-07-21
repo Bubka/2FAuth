@@ -70,6 +70,10 @@ return [
             'label' => 'Show icons',
             'help' => 'Show icons accounts in the main view'
         ],
+        'get_official_icons' => [
+            'label' => 'Get official icons',
+            'help' => '(Try to) Get the official icon of the 2FA issuer when adding an account'
+        ],
         'auto_lock' => [
             'label' => 'Auto lock',
             'help' => 'Log out the user automatically in case of inactivity. Has no effect when authentication is handled by a proxy and no custom logout url is specified.'

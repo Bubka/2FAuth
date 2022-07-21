@@ -13,6 +13,9 @@
                     <form-toggle v-on:displayMode="saveSetting('displayMode', $event)" :choices="layouts" :form="form" fieldName="displayMode" :label="$t('settings.forms.display_mode.label')" :help="$t('settings.forms.display_mode.help')" />
                     <!-- show icon -->
                     <form-checkbox v-on:showAccountsIcons="saveSetting('showAccountsIcons', $event)" :form="form" fieldName="showAccountsIcons" :label="$t('settings.forms.show_accounts_icons.label')" :help="$t('settings.forms.show_accounts_icons.help')" />
+                    <!-- Official icons -->
+                    <form-checkbox v-on:getOfficialIcons="saveSetting('getOfficialIcons', $event)" :form="form" fieldName="getOfficialIcons" :label="$t('settings.forms.get_official_icons.label')" :help="$t('settings.forms.get_official_icons.help')" />
+
 
                     <h4 class="title is-4 pt-4 has-text-grey-light">{{ $t('groups.groups') }}</h4>
                     <!-- default group -->
@@ -87,6 +90,7 @@
                     useDirectCapture: null,
                     defaultCaptureMode: '',
                     rememberActiveGroup: true,
+                    getOfficialIcons: null,
                 }),
                 layouts: [
                     { text: this.$t('settings.forms.grid'), value: 'grid', icon: 'th' },

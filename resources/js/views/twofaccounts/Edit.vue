@@ -272,18 +272,19 @@
             },
 
             fetchLogo() {
-
-                this.axios.post('/api/v1/icons/default', {service: this.form.service}, {returnError: true}).then(response => {
-                    if (response.status === 201) {
-                        // clean possible already uploaded temp icon
-                        this.deleteIcon()
-                        this.tempIcon = response.data.filename;
-                    }
-                    else this.$notify({type: 'is-warning', text: this.$t('errors.no_logo_found_for_x', {service: this.form.service}) })
-                })
-                .catch(error => {
-                    this.$notify({type: 'is-warning', text: this.$t('errors.no_logo_found_for_x', {service: this.form.service}) })
-                });
+                if ($root.appSettings.getOfficialIcons) {
+                    this.axios.post('/api/v1/icons/default', {service: this.form.service}, {returnError: true}).then(response => {
+                        if (response.status === 201) {
+                            // clean possible already uploaded temp icon
+                            this.deleteIcon()
+                            this.tempIcon = response.data.filename;
+                        }
+                        else this.$notify({type: 'is-warning', text: this.$t('errors.no_logo_found_for_x', {service: this.form.service}) })
+                    })
+                    .catch(error => {
+                        this.$notify({type: 'is-warning', text: this.$t('errors.no_logo_found_for_x', {service: this.form.service}) })
+                    });
+                }
             },
 
             deleteIcon(event) {

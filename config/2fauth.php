@@ -60,6 +60,7 @@ return [
         'useDirectCapture' => false,
         'useWebauthnAsDefault' => false,
         'useWebauthnOnly' => false,
+        'getOfficialIcons' => true,
     ],
 
 ];

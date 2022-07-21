@@ -588,7 +588,7 @@ class TwoFAccount extends Model implements Sortable
     {
         $logoService = App::make(LogoService::class);
 
-        return $logoService->getIcon($this->service);
+        return SettingService::get('getOfficialIcons') ? $logoService->getIcon($this->service) : null;
     }
 
 

@@ -63,7 +63,7 @@
                 <label class="label">{{ $t('twofaccounts.icon') }}</label>
                 <div class="field is-grouped">
                     <!-- i'm lucky button -->
-                    <div class="control">
+                    <div class="control" v-if="$root.appSettings.getOfficialIcons">
                         <v-button @click="fetchLogo" :color="'is-dark'" :nativeType="'button'" :isDisabled="form.service.length < 1">
                             <span class="icon is-small">
                                 <font-awesome-icon :icon="['fas', 'globe']" />
@@ -367,18 +367,19 @@
             },
 
             fetchLogo() {
-
-                this.axios.post('/api/v1/icons/default', {service: this.form.service}, {returnError: true}).then(response => {
-                    if (response.status === 201) {
-                        // clean possible already uploaded temp icon
-                        this.deleteIcon()
-                        this.tempIcon = response.data.filename;
-                    }
-                    else this.$notify({type: 'is-warning', text: this.$t('errors.no_logo_found_for_x', {service: this.form.service}) })
-                })
-                .catch(error => {
-                    this.$notify({type: 'is-warning', text: this.$t('errors.no_logo_found_for_x', {service: this.form.service}) })
-                });
+                if ($root.appSettings.getOfficialIcons) {
+                    this.axios.post('/api/v1/icons/default', {service: this.form.service}, {returnError: true}).then(response => {
+                        if (response.status === 201) {
+                            // clean possible already uploaded temp icon
+                            this.deleteIcon()
+                            this.tempIcon = response.data.filename;
+                        }
+                        else this.$notify({type: 'is-warning', text: this.$t('errors.no_logo_found_for_x', {service: this.form.service}) })
+                    })
+                    .catch(error => {
+                        this.$notify({type: 'is-warning', text: this.$t('errors.no_logo_found_for_x', {service: this.form.service}) })
+                    });
+                }
             },
 
             deleteIcon(event) {
