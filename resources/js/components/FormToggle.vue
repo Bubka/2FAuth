@@ -2,7 +2,7 @@
     <div class="field" :class="{ 'pt-3' : hasOffset }">
         <label class="label" v-html="label"></label>
         <div class="is-toggle buttons">
-            <label class="button is-dark" :disabled="isDisabled" v-for="choice in choices" :class="{ 'is-link' : form[fieldName] === choice.value }">
+            <label class="button is-dark" :disabled="isDisabled" v-for="(choice, index) in choices" :key="index" :class="{ 'is-link' : form[fieldName] === choice.value }">
                 <input type="radio" class="is-hidden" :checked="form[fieldName] === choice.value" :value="choice.value" v-model="form[fieldName]" v-on:change="$emit(fieldName, form[fieldName])" :disabled="isDisabled" />
                 <font-awesome-icon :icon="['fas', choice.icon]" v-if="choice.icon" class="mr-3" /> {{ choice.text }}
             </label>

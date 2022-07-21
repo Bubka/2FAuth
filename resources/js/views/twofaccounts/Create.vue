@@ -16,9 +16,9 @@
                 </div>
                 <div class="columns is-mobile" v-if="form.errors.any()">
                     <div class="column">
-                        <p v-for="field in form.errors.errors" class="help is-danger">
+                        <p v-for="(field, index) in form.errors.errors" :key="index" class="help is-danger">
                             <ul>
-                                <li v-for="(error, index) in field">{{ error }}</li>
+                                <li v-for="(error, index) in field" :key="index">{{ error }}</li>
                             </ul>
                         </p>
                     </div>
@@ -103,7 +103,7 @@
                         <p class="control">
                             <span class="select">
                                 <select @change="form.secret=''" v-model="secretIsBase32Encoded">
-                                    <option v-for="format in secretFormats" :value="format.value">{{ format.text }}</option>
+                                    <option v-for="(format, index) in secretFormats" :key="index" :value="format.value">{{ format.text }}</option>
                                 </select>
                             </span>
                         </p>
