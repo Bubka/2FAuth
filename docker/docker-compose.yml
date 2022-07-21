@@ -36,7 +36,7 @@ services:
       # debug, info, notice, warning, error, critical, alert, emergency
       # If you set it to debug your logs will grow large, and fast. If you set it to emergency probably
       # nothing will get logged, ever.
-      - APP_LOG_LEVEL=notice
+      - LOG_LEVEL=notice
       # Database config (can only be sqlite)
       - DB_DATABASE="/srv/database/database.sqlite"
       # If you're looking for performance improvements, you could install memcached.

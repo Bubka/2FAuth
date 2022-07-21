@@ -136,7 +136,7 @@ ENV \
     # debug, info, notice, warning, error, critical, alert, emergency
     # If you set it to debug your logs will grow large, and fast. If you set it to emergency probably
     # nothing will get logged, ever.
-    APP_LOG_LEVEL=notice \
+    LOG_LEVEL=notice \
     # Database config & credentials
     # DB_CONNECTION can only be sqlite
     DB_CONNECTION=sqlite \
