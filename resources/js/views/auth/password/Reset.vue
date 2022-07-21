@@ -6,6 +6,8 @@
             <form-field :form="form" fieldName="password_confirmation" inputType="password" :label="$t('auth.forms.confirm_password')" />
             <form-buttons :isBusy="form.isBusy" :caption="$t('auth.forms.change_password')" :showCancelButton="true" cancelLandingView="login" />
         </form>
+        <!-- footer -->
+        <vue-footer></vue-footer>
     </form-wrapper>
 </template>
 

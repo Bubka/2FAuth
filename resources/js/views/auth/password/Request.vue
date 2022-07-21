@@ -4,6 +4,8 @@
             <form-field :form="form" fieldName="email" inputType="email" :label="$t('auth.forms.email')" autofocus />
             <form-buttons :isBusy="form.isBusy" :caption="$t('auth.forms.send_password_reset_link')" :showCancelButton="true" cancelLandingView="login" />
         </form>
+        <!-- footer -->
+        <vue-footer></vue-footer>
     </form-wrapper>
 </template>
 

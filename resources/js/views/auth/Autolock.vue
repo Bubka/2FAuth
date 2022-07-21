@@ -4,6 +4,8 @@
         <div class="nav-links">
             <p><router-link :to="{ name: 'login', params: {forceRefresh : true} }" class="button is-link">{{ $t('auth.sign_in') }}</router-link></p>
         </div>
+        <!-- footer -->
+        <vue-footer></vue-footer>
     </form-wrapper>
 </template>
 

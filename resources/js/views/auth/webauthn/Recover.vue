@@ -21,6 +21,8 @@
                 </div>
             </div>
         </div>
+        <!-- footer -->
+        <vue-footer></vue-footer>
     </form-wrapper>
 </template>
 

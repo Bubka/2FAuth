@@ -7,8 +7,10 @@
                 </div>
             </div>
         </div>
-        <div v-if="$route.name.startsWith('settings.')" class="content has-text-centered is-size-6">
-            <a class="has-text-grey" href="https://github.com/Bubka/2FAuth"><b>2FAuth</b> <font-awesome-icon :icon="['fab', 'github-alt']" /></a> - v{{ appVersion }}
+        <div v-if="$route.meta.showAbout === true" class="content has-text-centered is-size-6">
+            <router-link :to="{ name: 'about' }" class="has-text-grey">
+                2FAuth – <span class="has-text-weight-bold">v{{ appVersion }}</span>
+            </router-link>
         </div>
         <div v-else class="content has-text-centered">
             <router-link :to="{ name: 'settings.options' }" class="has-text-grey">{{ $t('settings.settings') }}</router-link>

@@ -33,6 +33,8 @@
                 <p>{{ $t('auth.forms.already_register') }}&nbsp;<router-link :to="{ name: 'login' }" class="is-link">{{ $t('auth.sign_in') }}</router-link></p>
             </div>
         </form-wrapper>
+        <!-- footer -->
+        <vue-footer></vue-footer>
     </div>
 </template>
 
