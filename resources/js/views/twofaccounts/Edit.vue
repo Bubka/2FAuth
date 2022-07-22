@@ -130,7 +130,7 @@
         </form>
         <!-- modal -->
         <modal v-model="ShowTwofaccountInModal">
-            <otp-displayer ref="AdvancedFormOtpDisplayer" v-bind="form.data()" @increment-hotp="incrementHotp">
+            <otp-displayer ref="AdvancedFormOtpDisplayer" v-bind="form.data()" @increment-hotp="incrementHotp" @validation-error="mapDisplayerErrors">
             </otp-displayer>
         </modal>
     </form-wrapper>
@@ -304,6 +304,10 @@
                 this.form.counter = payload.nextHotpCounter
                 this.form.uri = payload.nextUri
             },
+
+            mapDisplayerErrors (event) {
+                this.form.errors.set(this.form.extractErrors(event))
+            }
 
         },
 

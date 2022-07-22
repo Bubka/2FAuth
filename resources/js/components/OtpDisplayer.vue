@@ -7,7 +7,7 @@
         <p class="is-size-6 has-text-grey has-ellipsis">{{ internal_account }}</p>
         <p class="is-size-1 has-text-white is-clickable" :title="$t('commons.copy_to_clipboard')" v-clipboard="() => internal_password.replace(/ /g, '')" v-clipboard:success="clipboardSuccessHandler">{{ displayedOtp }}</p>
         <ul class="dots" v-show="isTimeBased(internal_otp_type)">
-            <li v-for="n in 10"></li>
+            <li v-for="n in 10" :key="n"></li>
         </ul>
         <ul v-show="isHMacBased(internal_otp_type)">
             <li>counter: {{ internal_counter }}</li>
@@ -123,44 +123,56 @@
                 }
 
                 if( this.internal_id || this.uri || this.secret ) { // minimun required vars to get an otp from the backend
-                    
-                    if(this.isTimeBased(this.internal_otp_type)) {
-                        await this.startTotpLoop()
+                    try {
+                        if(this.isTimeBased(this.internal_otp_type)) {
+                            await this.startTotpLoop()
+                        }
+                        else if(this.isHMacBased(this.internal_otp_type)) {
+                            await this.getHOTP()
+                        }
+                        else this.$router.push({ name: 'genericError', params: { err: this.$t('errors.not_a_supported_otp_type') } });
+    
+                        this.$parent.isActive = true
                     }
-                    else if(this.isHMacBased(this.internal_otp_type)) {
-                        await this.getHOTP()
+                    catch(error) {
+                        this.clearOTP()
                     }
-                    else this.$router.push({ name: 'genericError', params: { err: this.$t('errors.not_a_supported_otp_type') } });
-
-                    this.$parent.isActive = true
                 }
             },
 
             getOtp: async function() {
 
-                if(this.internal_id) {
-                    const { data } =  await this.axios.get('/api/v1/twofaccounts/' + this.internal_id + '/otp')
-                    return data
+                try {
+                    if(this.internal_id) {
+                        const { data } =  await this.axios.get('/api/v1/twofaccounts/' + this.internal_id + '/otp')
+                        return data
+                    }
+                    else if(this.internal_uri) {
+                        const { data } =  await this.axios.post('/api/v1/twofaccounts/otp', {
+                            uri: this.internal_uri
+                        })
+                        return data
+                    }
+                    else {
+                        const { data } =  await this.axios.post('/api/v1/twofaccounts/otp', {
+                            service     : this.internal_service,
+                            account     : this.internal_account,
+                            icon        : this.internal_icon,
+                            otp_type    : this.internal_otp_type,
+                            secret      : this.internal_secret,
+                            digits      : this.internal_digits,
+                            algorithm   : this.internal_algorithm,
+                            period      : this.internal_period,
+                            counter     : this.internal_counter,
+                        })
+                        return data
+                    }
                 }
-                else if(this.internal_uri) {
-                    const { data } =  await this.axios.post('/api/v1/twofaccounts/otp', {
-                        uri: this.internal_uri
-                    })
-                    return data
-                }
-                else {
-                    const { data } =  await this.axios.post('/api/v1/twofaccounts/otp', {
-                        service     : this.internal_service,
-                        account     : this.internal_account,
-                        icon        : this.internal_icon,
-                        otp_type    : this.internal_otp_type,
-                        secret      : this.internal_secret,
-                        digits      : this.internal_digits,
-                        algorithm   : this.internal_algorithm,
-                        period      : this.internal_period,
-                        counter     : this.internal_counter,
-                    })
-                    return data
+                catch(error) {
+                    if (error.response.status === 422) {
+                        this.$emit('validation-error', error.response)
+                    }
+                    throw error
                 }
             },
 
