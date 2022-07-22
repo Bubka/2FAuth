@@ -33,9 +33,9 @@ class LogoService
      * @param string $serviceName Name of the service to fetch a logo for
      * @return string|null The icon filename or null if no logo has been found
      */
-    public function getIcon(string $serviceName)
+    public function getIcon($serviceName)
     {
-        $logoFilename = $this->getLogo($serviceName);
+        $logoFilename = $this->getLogo(strval($serviceName));
 
         if ($logoFilename) {
             $newFilename = Str::random(40).'.svg';
@@ -51,9 +51,9 @@ class LogoService
      * @param string $serviceName Name of the service to fetch a logo for
      * @return string|null The logo filename or null if no logo has been found
      */
-    public function getLogo(string $serviceName)
+    public function getLogo($serviceName)
     {
-        $domain = $this->tfas->get($this->cleanDomain($serviceName));
+        $domain = $this->tfas->get($this->cleanDomain(strval($serviceName)));
         $logoFilename = $domain.'.svg';
 
         if ($domain && !Storage::disk('logos')->exists($logoFilename)) {
@@ -140,9 +140,12 @@ class LogoService
 
 
     /**
+     * Prepare and make some replacement to optimize logo fetching
      * 
+     * @param string $str
+     * @return string Optimized domain name
      */
-    protected function cleanDomain($domain) : string
+    protected function cleanDomain(string $domain) : string
     {
         return strtolower(str_replace(['+'], ['plus'], $domain));
     }
