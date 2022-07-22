@@ -8,7 +8,7 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^7.4|^8.0",
+        "php": "^8.0.2",
         "ext-bcmath": "*",
         "ext-ctype": "*",
         "ext-dom": "*",
@@ -23,7 +23,7 @@
         "chillerlan/php-qrcode": "^4.3",
         "darkghosthunter/larapass": "^3.0.2",
         "doctormckay/steam-totp": "^1.0",
-        "doctrine/dbal": "^3.2",
+        "doctrine/dbal": "^3.3",
         "fruitcake/laravel-cors": "^2.0",
         "google/protobuf": "^3.21",
         "guzzlehttp/guzzle": "^7.0.1",
@@ -32,14 +32,14 @@
         "laravel/passport": "^10.0",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.0",
-        "paragonie/constant_time_encoding": "^2.4",
-        "spatie/eloquent-sortable": "^3.11",
+        "paragonie/constant_time_encoding": "^2.6",
+        "spatie/eloquent-sortable": "^4.0.1",
         "spomky-labs/otphp": "^10.0"
     },
     "require-dev": {
         "facade/ignition": "^2.3.6",
-        "fakerphp/faker": "^1.16",
-        "mockery/mockery": "^1.3",
+        "fakerphp/faker": "^1.20",
+        "mockery/mockery": "^1.5",
         "nunomaduro/collision": "^5.0",
         "phpunit/phpunit": "^9.5"
     },
