@@ -38,8 +38,8 @@ class LogoService
         $logoFilename = $this->getLogo(strval($serviceName));
 
         if ($logoFilename) {
-            $newFilename = Str::random(40).'.svg';
-            return Storage::disk('icons')->put($newFilename, Storage::disk('logos')->get($logoFilename)) ? $newFilename : null;
+            $iconFilename = Str::random(40).'.svg';
+            return $this->copyToIcons($logoFilename, $iconFilename) ? $iconFilename : null;
         }
         else return null;
     }
@@ -148,5 +148,18 @@ class LogoService
     protected function cleanDomain(string $domain) : string
     {
         return strtolower(str_replace(['+'], ['plus'], $domain));
+    }
+
+
+    /**
+     * Copy a logo file to the icons disk with a new name
+     * 
+     * @param string $logoFilename
+     * @param string $iconFilename
+     * @return bool Weither the copy succed or not
+     */
+    protected function copyToIcons($logoFilename, $iconFilename) : bool
+    {
+        return Storage::disk('icons')->put($iconFilename, Storage::disk('logos')->get($logoFilename));
     }
 }

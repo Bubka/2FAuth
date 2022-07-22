@@ -25,8 +25,8 @@ class CleanIconStorageTest extends TestCase
         $event = new TwoFAccountDeleted($twofaccount);
         $listener = new CleanIconStorage();
 
-        Storage::shouldReceive('delete')
-            ->with('public/icons/' . $event->twofaccount->icon)
+        Storage::shouldReceive('disk->delete')
+            ->with($event->twofaccount->icon)
             ->andReturn(true);
 
         $this->assertNull($listener->handle($event));
