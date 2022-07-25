@@ -86,8 +86,8 @@ class TwoFAccountService
 
              try {
                 $parameters['otp_type']     = GAuthValueMapping::OTP_TYPE[OtpType::name($otp_parameters->getType())];
-                $parameters['account']      = $otp_parameters->getName();
                 $parameters['service']      = $otp_parameters->getIssuer();
+                $parameters['account']      = str_replace($parameters['service'].':', '', $otp_parameters->getName());
                 $parameters['secret']       = Base32::encodeUpper($otp_parameters->getSecret());
                 $parameters['algorithm']    = GAuthValueMapping::ALGORITHM[Algorithm::name($otp_parameters->getAlgorithm())];
                 $parameters['digits']       = GAuthValueMapping::DIGIT_COUNT[DigitCount::name($otp_parameters->getDigits())];
