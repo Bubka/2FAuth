@@ -21,7 +21,7 @@ ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/do
 RUN chmod +x /usr/local/bin/install-php-extensions && \
     install-php-extensions gd bcmath
 WORKDIR /srv
-COPY artisan composer.json ./
+COPY artisan composer.json composer.lock ./
 COPY database ./database
 RUN composer install --prefer-dist --no-scripts --no-dev --no-autoloader
 RUN composer dump-autoload --no-scripts --no-dev --optimize
