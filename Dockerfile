@@ -1,7 +1,7 @@
 ARG BUILDPLATFORM=linux/amd64
 ARG TARGETPLATFORM
 ARG ALPINE_VERSION=3.16
-ARG PHP_VERSION=8.1-alpine${ALPINE_VERSION}
+ARG PHP_VERSION=8.0-alpine${ALPINE_VERSION}
 ARG COMPOSER_VERSION=2.3
 ARG SUPERVISORD_VERSION=v0.7.3
 
@@ -51,9 +51,9 @@ RUN apk add --update --no-cache \
     # PHP SQLite driver
     php8-pdo_sqlite php8-sqlite3 \
     # PHP extensions
-    php8-xml php8-gd php8-mbstring php8-tokenizer php8-cli php8-fileinfo php8-bcmath php8-ctype php8-dom \
+    php8-xml php8-gd php8-mbstring php8-tokenizer php8-fileinfo php8-bcmath php8-ctype php8-dom \
     # Runtime dependencies
-    php8-session php8-json php8-openssl \
+    php8-session php8-openssl \
     # Nginx and PHP FPM to serve over HTTP
     php8-fpm nginx
 
