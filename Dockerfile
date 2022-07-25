@@ -45,17 +45,17 @@ COPY --from=supervisord --chown=${UID}:${GID} /bin /usr/local/bin/supervisord
 # Install PHP and PHP system dependencies
 RUN apk add --update --no-cache \
     # PHP
-    php8.0 \
+    php8 \
     # Composer dependencies
-    php8.0-phar \
+    php8-phar \
     # PHP SQLite driver
-    php8.0-pdo_sqlite php8.0-sqlite3 \
+    php8-pdo_sqlite php8-sqlite3 \
     # PHP extensions
-    php8.0-xml php8.0-gd php8.0-mbstring php8.0-tokenizer php8.0-cli php8.0-fileinfo php8.0-bcmath php8.0-ctype php8.0-dom \
+    php8-xml php8-gd php8-mbstring php8-tokenizer php8-cli php8-fileinfo php8-bcmath php8-ctype php8-dom \
     # Runtime dependencies
-    php8.0-session php8.0-json php8.0-openssl \
+    php8-session php8-json php8-openssl \
     # Nginx and PHP FPM to serve over HTTP
-    php8.0-fpm nginx
+    php8-fpm nginx
 
 # PHP FPM configuration
 # Change username and ownership in php-fpm pool config
