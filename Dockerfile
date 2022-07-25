@@ -45,28 +45,28 @@ COPY --from=supervisord --chown=${UID}:${GID} /bin /usr/local/bin/supervisord
 # Install PHP and PHP system dependencies
 RUN apk add --update --no-cache \
     # PHP
-    php7 \
+    php8.0 \
     # Composer dependencies
-    php7-phar \
+    php8.0-phar \
     # PHP SQLite driver
-    php7-pdo_sqlite php7-sqlite3 \
+    php8.0-pdo_sqlite php8.0-sqlite3 \
     # PHP extensions
-    php7-xml php7-gd php7-mbstring php7-tokenizer php7-cli php7-fileinfo php7-bcmath php7-ctype php7-dom \
+    php8.0-xml php8.0-gd php8.0-mbstring php8.0-tokenizer php8.0-cli php8.0-fileinfo php8.0-bcmath php8.0-ctype php8.0-dom \
     # Runtime dependencies
-    php7-session php7-json php7-openssl \
+    php8.0-session php8.0-json php8.0-openssl \
     # Nginx and PHP FPM to serve over HTTP
-    php7-fpm nginx
+    php8.0-fpm nginx
 
 # PHP FPM configuration
 # Change username and ownership in php-fpm pool config
-RUN sed -i '/user = nobody/d' /etc/php7/php-fpm.d/www.conf && \
-    sed -i '/group = nobody/d' /etc/php7/php-fpm.d/www.conf && \
-    sed -i '/listen.owner/d' /etc/php7/php-fpm.d/www.conf && \
-    sed -i '/listen.group/d' /etc/php7/php-fpm.d/www.conf
+RUN sed -i '/user = nobody/d' /etc/php8/php-fpm.d/www.conf && \
+    sed -i '/group = nobody/d' /etc/php8/php-fpm.d/www.conf && \
+    sed -i '/listen.owner/d' /etc/php8/php-fpm.d/www.conf && \
+    sed -i '/listen.group/d' /etc/php8/php-fpm.d/www.conf
 # Pre-create files with the correct permissions
 RUN mkdir /run/php && \
-    chown ${UID}:${GID} /run/php /var/log/php7 && \
-    chmod 700 /run/php /var/log/php7
+    chown ${UID}:${GID} /run/php /var/log/php8 && \
+    chmod 700 /run/php /var/log/php8
 
 # NGINX
 # Clean up
