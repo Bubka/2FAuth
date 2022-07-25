@@ -6,7 +6,7 @@ echo "Running version ${VERSION} commit ${COMMIT} built on ${CREATED}"
 
 # Show versions
 echo "supervisord version: $(supervisord version)"
-php-fpm7 -v | head -n 1
+php-fpm8 -v | head -n 1
 nginx -v
 
 if [ "${DB_CONNECTION}" = "sqlite" ]; then
