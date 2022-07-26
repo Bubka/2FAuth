@@ -168,7 +168,7 @@ class TwoFAccountController extends Controller
     public function preview(TwoFAccountUriRequest $request)
     {
         $twofaccount = new TwoFAccount;
-        $twofaccount->fillWithURI($request->uri, $request->custom_otp === TwoFAccount::STEAM_TOTP);
+        $twofaccount->fillWithURI($request->uri, $request->custom_otp === TwoFAccount::STEAM_TOTP, true);
 
         return new TwoFAccountStoreResource($twofaccount);
     }
@@ -202,7 +202,7 @@ class TwoFAccountController extends Controller
             else {
                 $validatedData = $request->validate((new TwoFAccountUriRequest)->rules());
                 $twofaccount = new TwoFAccount;
-                $twofaccount->fillWithURI($validatedData['uri'], Arr::get($validatedData, 'custom_otp') === TwoFAccount::STEAM_TOTP);
+                $twofaccount->fillWithURI($validatedData['uri'], Arr::get($validatedData, 'custom_otp') === TwoFAccount::STEAM_TOTP, true);
             }
         }
 
@@ -210,7 +210,7 @@ class TwoFAccountController extends Controller
         else {
             $validatedData = $request->validate((new TwoFAccountStoreRequest)->rules());
             $twofaccount = new TwoFAccount();
-            $twofaccount->fillWithOtpParameters($validatedData);
+            $twofaccount->fillWithOtpParameters($validatedData, true);
         }
 
         return response()->json($twofaccount->getOTP(), 200);

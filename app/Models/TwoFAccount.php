@@ -373,7 +373,7 @@ class TwoFAccount extends Model implements Sortable
      * 
      * @return $this
      */
-    public function fillWithOtpParameters(array $parameters)
+    public function fillWithOtpParameters(array $parameters, bool $skipIconFetching = false)
     {
         $this->otp_type     = Arr::get($parameters, 'otp_type');
         $this->account      = Arr::get($parameters, 'account');
@@ -391,6 +391,13 @@ class TwoFAccount extends Model implements Sortable
             $this->enforceAsSteam();
         }
 
+        if (!$this->icon && $skipIconFetching) {
+            $this->icon = $this->getDefaultIcon();
+        } 
+        if (!$this->icon && SettingService::get('getOfficialIcons') && !$skipIconFetching) {
+            $this->icon = $this->getDefaultIcon();
+        } 
+
         Log::info(sprintf('TwoFAccount filled with OTP parameters'));
 
         return $this;
@@ -402,7 +409,7 @@ class TwoFAccount extends Model implements Sortable
      * 
      * @return $this
      */
-    public function fillWithURI(string $uri, bool $isSteamTotp = false)
+    public function fillWithURI(string $uri, bool $isSteamTotp = false, bool $skipIconFetching = false)
     {
         // First we instanciate the OTP generator
         try {
@@ -440,7 +447,7 @@ class TwoFAccount extends Model implements Sortable
         if ($this->generator->hasParameter('image')) {
             $this->icon = $this->storeImageAsIcon($this->generator->getParameter('image'));
         }
-        if (!$this->icon) {
+        if (!$this->icon && SettingService::get('getOfficialIcons') && !$skipIconFetching) {
             $this->icon = $this->getDefaultIcon();
         }    
 
