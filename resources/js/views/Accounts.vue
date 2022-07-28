@@ -138,21 +138,60 @@
         <!-- header -->
         <div class="header has-background-black-ter" v-if="this.showAccounts || this.showGroupSwitch">
             <div class="columns is-gapless is-mobile is-centered">
-                <div class="column is-three-quarters-mobile is-one-third-tablet is-one-quarter-desktop is-one-quarter-widescreen is-one-quarter-fullhd">
+                <div v-if="editMode" class="column">
                     <!-- toolbar -->
-                    <div class="toolbar has-text-centered" v-if="editMode">
-                        <div class="manage-buttons tags has-addons are-medium">
-                            <span class="tag is-dark">{{ selectedAccounts.length }}&nbsp;{{ $t('commons.selected') }}</span>
-                            <a class="tag is-link" v-if="selectedAccounts.length > 0" @click="showGroupSelector = true">
-                                {{ $t('commons.move') }}&nbsp;<font-awesome-icon :icon="['fas', 'layer-group']" />
-                            </a>
-                            <a class="tag is-danger" v-if="selectedAccounts.length > 0" @click="destroyAccounts">
-                                {{ $t('commons.delete') }}&nbsp;<font-awesome-icon :icon="['fas', 'trash']" />
-                            </a>
+                    <div class="toolbar has-text-centered">
+                        <div class="field is-grouped is-justify-content-center">
+                            <div class="control">
+                                <div class="tags has-addons are-medium">
+                                    <span class="tag is-dark has-background-black-ter has-text-grey">
+                                        {{ selectedAccounts.length }}&nbsp;{{ $t('commons.selected') }}
+                                        <button @click="clearSelected" :style="{visibility: selectedAccounts.length > 0 ? 'visible' : 'hidden'}" class="delete" :title="$t('commons.clear_selection')"></button>
+                                    </span>
+                                    <span @click="selectAll" class="tag is-dark is-clickable has-background-black-ter has-text-grey" :title="$t('commons.select_all')">
+                                        {{ $t('commons.all') }}
+                                        <font-awesome-icon class="ml-1" :icon="['fas', 'check-square']" />
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="control">
+                                <div class="tags has-addons are-medium">
+                                    <span @click="sortAsc" class="tag is-dark is-clickable has-background-black-ter has-text-grey" :title="$t('commons.sort_ascending')">
+                                        <font-awesome-icon :icon="['fas', 'sort-alpha-down']" />
+                                    </span>
+                                    <span @click="sortDesc" class="tag is-dark is-clickable has-background-black-ter has-text-grey" :title="$t('commons.sort_descending')">
+                                        <font-awesome-icon :icon="['fas', 'sort-alpha-up']" />
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field is-grouped is-justify-content-center pt-1">
+                            <div class="control">
+                                <div class="tags are-medium has-addons is-clickable" v-if="selectedAccounts.length > 0" @click="showGroupSelector = true">
+                                    <span class="tag is-dark">
+                                        {{ $t('groups.change_group') }}
+                                    </span>
+                                    <span class="tag is-link">
+                                        <font-awesome-icon :icon="['fas', 'layer-group']" />
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="control">
+                                <div class="tags are-medium has-addons is-clickable" v-if="selectedAccounts.length > 0" @click="destroyAccounts">
+                                    <span class="tag is-dark">
+                                        {{ $t('commons.delete') }}
+                                    </span>
+                                    <span class="tag is-danger">
+                                        <font-awesome-icon :icon="['fas', 'trash']" />
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                </div>
+                <div v-else class="column is-three-quarters-mobile is-one-third-tablet is-one-quarter-desktop is-one-quarter-widescreen is-one-quarter-fullhd">
                     <!-- search -->
-                    <div class="field" v-else>
+                    <div class="field">
                         <div class="control has-icons-right">
                             <input type="text" class="input is-rounded is-search" v-model="search">
                             <span class="icon is-small is-right">
@@ -162,7 +201,7 @@
                         </div>
                     </div>
                     <!-- group switch toggle -->
-                    <div class="is-clickable has-text-centered" v-if="!editMode">
+                    <div class="is-clickable has-text-centered">
                         <div class="columns" @click="toggleGroupSwitch">
                             <div class="column" v-if="!showGroupSwitch">
                                 {{ activeGroupName }} ({{ filteredAccounts.length }})
@@ -529,7 +568,44 @@
              */
             displayService(service) {
                 return service ? service : this.$t('twofaccounts.no_service')
-            }
+            },
+
+            /**
+             * 
+             */
+            clearSelected() {
+                this.selectedAccounts = []
+            },
+
+            /**
+             * 
+             */
+            selectAll() {
+                if(this.editMode) {
+                    let that = this
+                    this.accounts.forEach(function(account) {
+                        if ( !that.selectedAccounts.includes(account.id) ) {
+                            that.selectedAccounts.push(account.id)
+                        }
+                    })
+                }
+            },
+
+            /**
+             * 
+             */
+            sortAsc() {
+                this.accounts.sort((a, b) => a.service > b.service ? 1 : -1)
+                this.saveOrder()
+            },
+
+            /**
+             * 
+             */
+            sortDesc() {
+                this.accounts.sort((a, b) => a.service < b.service ? 1 : -1)
+                this.saveOrder()
+            },
         }
     };
 

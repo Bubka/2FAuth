@@ -10,6 +10,7 @@ import {
     faImage,
     faTrash,
     faCheck,
+    faCheckSquare,
     faTimes,
     faLock,
     faLockOpen,
@@ -31,6 +32,8 @@ import {
     faFlask,
     faCode,
     faCopy,
+    faSortAlphaDown,
+    faSortAlphaUp,
 } from '@fortawesome/free-solid-svg-icons'
 
 import {
@@ -44,6 +47,7 @@ library.add(
     faImage,
     faTrash,
     faCheck,
+    faCheckSquare,
     faTimes,
     faLock,
     faLockOpen,
@@ -66,6 +70,8 @@ library.add(
     faFlask,
     faCode,
     faCopy,
+    faSortAlphaDown,
+    faSortAlphaUp,
 );
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)

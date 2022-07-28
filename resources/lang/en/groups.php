@@ -22,6 +22,7 @@ return [
     'deleting_group_does_not_delete_accounts' => 'Deleting a group does not delete accounts',
     'move_selected_to' => 'Move selected to',
     'no_group' => 'No group',
+    'change_group' => 'Change group',
     'forms' => [
         'new_group' => 'New group',
         'new_name' => 'New name',
