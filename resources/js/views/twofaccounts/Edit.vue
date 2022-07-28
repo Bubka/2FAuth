@@ -9,7 +9,7 @@
             <label class="label">{{ $t('twofaccounts.icon') }}</label>
             <div class="field is-grouped">
                 <!-- i'm lucky button -->
-                <div class="control">
+                <div class="control" v-if="$root.appSettings.getOfficialIcons">
                     <v-button @click="fetchLogo" :color="'is-dark'" :nativeType="'button'" :isDisabled="form.service.length < 3">
                         <span class="icon is-small">
                             <font-awesome-icon :icon="['fas', 'globe']" />
@@ -49,7 +49,7 @@
                     <p v-if="!secretIsLocked" class="control">
                         <span class="select">
                             <select @change="form.secret=''" v-model="secretIsBase32Encoded">
-                                <option v-for="format in secretFormats" :value="format.value">{{ format.text }}</option>
+                                <option v-for="(format)  in secretFormats" :key="format.value" :value="format.value">{{ format.text }}</option>
                             </select>
                         </span>
                     </p>
@@ -272,7 +272,7 @@
             },
 
             fetchLogo() {
-                if ($root.appSettings.getOfficialIcons) {
+                if (this.$root.appSettings.getOfficialIcons) {
                     this.axios.post('/api/v1/icons/default', {service: this.form.service}, {returnError: true}).then(response => {
                         if (response.status === 201) {
                             // clean possible already uploaded temp icon
