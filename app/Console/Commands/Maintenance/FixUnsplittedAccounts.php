@@ -4,10 +4,7 @@ namespace App\Console\Commands\Maintenance;
 
 use App\Models\TwoFAccount;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\Log;
 
 /**
  * @codeCoverageIgnore
@@ -68,7 +65,6 @@ class FixUnsplittedAccounts extends Command
         }
 
         $this->line('Try to fix them...');
-        $twofaccountService = resolve('App\Services\TwoFAccountService');
         
         foreach ($twofaccounts as $twofaccount) {
             if ($twofaccount->legacy_uri === __('errors.indecipherable')) {
@@ -77,16 +73,9 @@ class FixUnsplittedAccounts extends Command
             else {
                 try {
                     // Get a consistent account
-                    $tempAccount = $twofaccountService->createFromUri($twofaccount->legacy_uri, false);
-
-                    $twofaccount->otp_type  = $tempAccount->otp_type;
-                    $twofaccount->secret    = $tempAccount->secret;
-                    $twofaccount->algorithm = $tempAccount->algorithm;
-                    $twofaccount->digits    = $tempAccount->digits;
-                    $twofaccount->period    = $tempAccount->period;
-                    $twofaccount->counter   = $tempAccount->counter;
-
+                    $twofaccount->fillWithURI($twofaccount->legacy_uri, false, true);
                     $twofaccount->save();
+
                     $this->info(sprintf('Account #%d fixed', $twofaccount->id));
                 }
                 catch (\Exception $ex) {
