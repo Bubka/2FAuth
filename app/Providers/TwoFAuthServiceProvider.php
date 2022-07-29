@@ -6,6 +6,7 @@ use App\Services\LogoService;
 use App\Services\QrCodeService;
 use App\Services\SettingService;
 use App\Services\GroupService;
+use App\Services\TwoFAccountService;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Support\DeferrableProvider;
 
@@ -33,6 +34,10 @@ class TwoFAuthServiceProvider extends ServiceProvider implements DeferrableProvi
         $this->app->singleton(QrCodeService::class, function () {
             return new QrCodeService();
         });
+
+        $this->app->singleton(TwoFAccountService::class, function () {
+            return new TwoFAccountService();
+        });
     }
 
     /**
@@ -54,8 +59,10 @@ class TwoFAuthServiceProvider extends ServiceProvider implements DeferrableProvi
     public function provides()
     {
         return [
+            GroupService::class,
             LogoService::class,
             QrCodeService::class,
+            TwoFAccountService::class,
         ];
     }
 }

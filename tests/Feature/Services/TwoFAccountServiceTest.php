@@ -6,6 +6,7 @@ use App\Models\Group;
 use App\Models\TwoFAccount;
 use Tests\FeatureTestCase;
 use Tests\Classes\OtpTestData;
+use App\Services\TwoFAccountService;
 
 
 /**
@@ -44,7 +45,7 @@ class TwoFAccountServiceTest extends FeatureTestCase
     {
         parent::setUp();
 
-        $this->twofaccountService = $this->app->make('App\Services\TwoFAccountService');
+        $this->twofaccountService = $this->app->make(TwoFAccountService::class);
 
         $this->customTotpTwofaccount = new TwoFAccount;
         $this->customTotpTwofaccount->legacy_uri = OtpTestData::TOTP_FULL_CUSTOM_URI;

@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Models\User;
-use App\Services\TwoFAccountService;
 use App\Http\Requests\UserUpdateRequest;
 use App\Http\Requests\UserDeleteRequest;
 use App\Api\v1\Resources\UserResource;
@@ -12,28 +10,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Artisan;
-use Exception;
 
 class UserController extends Controller
-{
-    /**
-     * The TwoFAccount Service instance.
-     */
-    protected $twofaccountService;
-
-
-    /**
-     * Create a new controller instance.
-     *
-     * @param  \App\Services\TwoFAccountService  $twofaccountService
-     * @return void
-     */
-    public function __construct(TwoFAccountService $twofaccountService)
-    {
-        $this->twofaccountService = $twofaccountService;
-    }
-
-    
+{    
     /**
      * Update the user's profile information.
      *
