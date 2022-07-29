@@ -9,6 +9,7 @@ use App\Api\v1\Requests\GroupAssignRequest;
 use App\Api\v1\Resources\GroupResource;
 use App\Api\v1\Resources\TwoFAccountCollection;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\App;
 
 class GroupController extends Controller
 {
@@ -21,12 +22,11 @@ class GroupController extends Controller
     /**
      * Create a new controller instance.
      *
-     * @param  \App\Services\GroupService $groupService
      * @return void
      */
-    public function __construct(GroupService $groupService)
+    public function __construct()
     {
-        $this->groupService = $groupService;
+        $this->groupService = App::make(GroupService::class);
     }
 
 

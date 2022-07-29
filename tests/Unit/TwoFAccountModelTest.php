@@ -5,9 +5,9 @@ namespace Tests\Unit;
 use App\Models\TwoFAccount;
 use App\Events\TwoFAccountDeleted;
 use Tests\ModelTestCase;
-use Illuminate\Support\Facades\Event;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Crypt;
+use Mockery\MockInterface;
+use App\Services\SettingService;
 
 /**
  * @covers \App\Models\TwoFAccount
@@ -44,9 +44,15 @@ class TwoFAccountModelTest extends ModelTestCase
      */
     public function test_sensitive_attributes_are_stored_encrypted(string $attribute)
     {
-        \Facades\App\Services\SettingService::shouldReceive('get')
-            ->with('useEncryption')
-            ->andReturn(true);
+        $settingService = $this->mock(SettingService::class, function (MockInterface $settingService) {
+            $settingService->shouldReceive('get')
+                ->with('useEncryption')
+                ->andReturn(true);
+        });
+
+        // \Facades\App\Services\SettingService::shouldReceive('get')
+        //     ->with('useEncryption')
+        //     ->andReturn(true);
 
         $twofaccount = TwoFAccount::factory()->make([
             $attribute => 'string',
@@ -80,9 +86,15 @@ class TwoFAccountModelTest extends ModelTestCase
      */
     public function test_sensitive_attributes_are_returned_clear(string $attribute)
     {
-        \Facades\App\Services\SettingService::shouldReceive('get')
-            ->with('useEncryption')
-            ->andReturn(false);
+        $settingService = $this->mock(SettingService::class, function (MockInterface $settingService) {
+            $settingService->shouldReceive('get')
+                ->with('useEncryption')
+                ->andReturn(false);
+        });
+
+        // \Facades\App\Services\SettingService::shouldReceive('get')
+        //     ->with('useEncryption')
+        //     ->andReturn(false);
 
         $twofaccount = TwoFAccount::factory()->make();
 
@@ -97,9 +109,15 @@ class TwoFAccountModelTest extends ModelTestCase
      */
     public function test_indecipherable_attributes_returns_masked_value(string $attribute)
     {
-        \Facades\App\Services\SettingService::shouldReceive('get')
-            ->with('useEncryption')
-            ->andReturn(true);
+        $settingService = $this->mock(SettingService::class, function (MockInterface $settingService) {
+            $settingService->shouldReceive('get')
+                ->with('useEncryption')
+                ->andReturn(true);
+        });
+
+        // \Facades\App\Services\SettingService::shouldReceive('get')
+        //     ->with('useEncryption')
+        //     ->andReturn(true);
 
         Crypt::shouldReceive('encryptString')
             ->andReturn('indecipherableString');

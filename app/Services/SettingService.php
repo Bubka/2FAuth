@@ -17,14 +17,19 @@ class SettingService
 {
 
     /**
-     * Determine if the given setting has been customized by the user
-     *
-     * @param  string  $key
-     * @return bool
+     * All user settings
+     * 
+     * @var Collection
      */
-    public function isUserDefined($key) : bool
+    private Collection $settings;
+
+
+    /**
+     * Constructor
+     */
+    public function __construct()
     {
-        return DB::table('options')->where('key', $key)->exists();
+        self::build();
     }
 
 
@@ -36,34 +41,18 @@ class SettingService
      */
     public function get(string $setting)
     {
-        $options = $this->all();
-        $value = $options->get($setting);
-
-        return $value;
+        return $this->settings->get($setting);
     }
 
 
     /**
      * Get all settings
-     *
-     * @return mixed Collection of settings
+     * 
+     * @return Collection the Settings collection
      */
     public function all() : Collection
     {
-        // Get a collection of user saved options
-        $userOptions = DB::table('options')->pluck('value', 'key');
-        $userOptions->transform(function ($item, $key) {
-            return $this->restoreType($item);
-        });
-
-        // Merge 2fauth/app config values as fallback values
-        $settings = collect(config('2fauth.options'))->merge($userOptions);
-        
-        if(!Arr::has($settings, 'lang')) {
-            $settings['lang'] = 'browser';
-        }
-
-        return $settings;
+        return $this->settings;
     }
 
 
@@ -90,6 +79,8 @@ class SettingService
             Option::updateOrCreate(['key' => $setting], ['value' => $value]);
             Log::info(sprintf('Setting %s is now %s', var_export($setting, true), var_export($this->restoreType($value), true)));
         }
+
+        self::build();
     }
 
 
@@ -102,6 +93,40 @@ class SettingService
     {
         Option::where('key', $name)->delete();
         Log::info(sprintf('Setting %s deleted', var_export($name, true)));
+    }
+
+    
+    /**
+     * Determine if the given setting has been customized by the user
+     *
+     * @param  string  $key
+     * @return bool
+     */
+    public function isUserDefined($key) : bool
+    {
+        return DB::table('options')->where('key', $key)->exists();
+    }
+
+
+    /**
+     * Set the settings collection
+     */
+    private function build()
+    {
+        // Get a collection of user saved options
+        $userOptions = DB::table('options')->pluck('value', 'key');
+        $userOptions->transform(function ($item, $key) {
+            return $this->restoreType($item);
+        });
+
+        // Merge 2fauth/app config values as fallback values
+        $settings = collect(config('2fauth.options'))->merge($userOptions);
+        
+        if(!Arr::has($settings, 'lang')) {
+            $settings['lang'] = 'browser';
+        }
+
+        $this->settings = $settings;
     }
     
 

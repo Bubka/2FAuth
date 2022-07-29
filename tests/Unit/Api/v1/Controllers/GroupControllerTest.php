@@ -6,9 +6,11 @@ use App\Models\Group;
 use Tests\TestCase;
 use App\Models\TwoFAccount;
 use App\Services\GroupService;
+use App\Services\SettingService;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use App\Api\v1\Controllers\GroupController;
 use Mockery;
+use Mockery\MockInterface;
 
 /**
  * @covers \App\Api\v1\Controllers\GroupController
@@ -24,7 +26,7 @@ class GroupControllerTest extends TestCase
 
 
     /**
-     * @var \App\Api\v1\Controllers\GroupController mocked controller
+     * @var \App\Api\v1\Controllers\GroupController tested controller
      */
     protected $controller;
 
@@ -39,10 +41,12 @@ class GroupControllerTest extends TestCase
     {
         parent::setUp();
 
-        $this->groupServiceMock = Mockery::mock($this->app->make(GroupService::class));
+        $this->groupServiceMock = $this->mock(GroupService::class);
+
+        // $this->groupServiceMock = Mockery::mock($this->app->make(GroupService::class));
         $this->groupStoreRequest = Mockery::mock('App\Api\v1\Requests\GroupStoreRequest');
 
-        $this->controller = new GroupController($this->groupServiceMock);
+        $this->controller = new GroupController();
     }
 
 
@@ -146,10 +150,12 @@ class GroupControllerTest extends TestCase
     public function test_accounts_returns_api_resources_fetched_using_groupService()
     {
         $group = Group::factory()->make();
-
-        \Facades\App\Services\SettingService::shouldReceive('get')
-            ->with('useEncryption')
-            ->andReturn(false);
+        
+        $this->mock(SettingService::class, function (MockInterface $mock) {
+            $mock->shouldReceive('get')
+                ->with('useEncryption')
+                ->andReturn(false);
+        });
 
         $twofaccounts = TwoFAccount::factory()->count(3)->make();
 

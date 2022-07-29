@@ -6,6 +6,7 @@ use Tests\FeatureTestCase;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use App\Models\TwoFAccount;
+use App\Services\SettingService;
 
 
 /**
@@ -50,7 +51,7 @@ class SettingServiceTest extends FeatureTestCase
     {
         parent::setUp();
 
-        $this->settingService = $this->app->make('App\Services\SettingService');
+        $this->settingService = $this->app->make(SettingService::class);
 
         $this->twofaccountOne = new TwoFAccount;
         $this->twofaccountOne->legacy_uri = self::TOTP_FULL_CUSTOM_URI;
@@ -85,9 +86,7 @@ class SettingServiceTest extends FeatureTestCase
      */
     public function test_get_string_setting_returns_correct_value()
     {
-        DB::table('options')->insert(
-            [self::KEY => self::SETTING_NAME, self::VALUE => strval(self::SETTING_VALUE_STRING)]
-        );
+        $this->settingService->set(self::SETTING_NAME, self::SETTING_VALUE_STRING);
 
         $this->assertEquals(self::SETTING_VALUE_STRING, $this->settingService->get(self::SETTING_NAME));
     }
@@ -98,9 +97,7 @@ class SettingServiceTest extends FeatureTestCase
      */
     public function test_get_boolean_setting_returns_true()
     {
-        DB::table('options')->insert(
-            [self::KEY => self::SETTING_NAME, self::VALUE => strval(self::SETTING_VALUE_TRUE_TRANSFORMED)]
-        );
+        $this->settingService->set(self::SETTING_NAME, self::SETTING_VALUE_TRUE_TRANSFORMED);
 
         $this->assertEquals(true, $this->settingService->get(self::SETTING_NAME));
     }
@@ -111,9 +108,7 @@ class SettingServiceTest extends FeatureTestCase
      */
     public function test_get_boolean_setting_returns_false()
     {
-        DB::table('options')->insert(
-            [self::KEY => self::SETTING_NAME, self::VALUE => strval(self::SETTING_VALUE_FALSE_TRANSFORMED)]
-        );
+        $this->settingService->set(self::SETTING_NAME, self::SETTING_VALUE_FALSE_TRANSFORMED);
 
         $this->assertEquals(false, $this->settingService->get(self::SETTING_NAME));
     }
@@ -124,9 +119,7 @@ class SettingServiceTest extends FeatureTestCase
      */
     public function test_get_int_setting_returns_int()
     {
-        DB::table('options')->insert(
-            [self::KEY => self::SETTING_NAME, self::VALUE => strval(self::SETTING_VALUE_INT)]
-        );
+        $this->settingService->set(self::SETTING_NAME, self::SETTING_VALUE_INT);
 
         $value = $this->settingService->get(self::SETTING_NAME);
 
@@ -142,9 +135,7 @@ class SettingServiceTest extends FeatureTestCase
     {
         $native_options = config('2fauth.options');
 
-        DB::table('options')->insert(
-            [self::KEY => self::SETTING_NAME, self::VALUE => strval(self::SETTING_VALUE_STRING)]
-        );
+        $this->settingService->set(self::SETTING_NAME, self::SETTING_VALUE_STRING);
 
         $all = $this->settingService->all();
 

@@ -5,8 +5,8 @@ namespace Tests\Feature\Services;
 use App\Models\Group;
 use App\Models\TwoFAccount;
 use Tests\FeatureTestCase;
-use Tests\Classes\LocalFile;
-use Illuminate\Support\Facades\DB;
+use App\Services\GroupService;
+use App\Services\SettingService;
 
 
 /**
@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\DB;
 class GroupServiceTest extends FeatureTestCase
 {
     /**
-     * App\Services\QrCodeService $groupService
+     * App\Services\GroupService $groupService
      */
     protected $groupService;
 
@@ -58,8 +58,8 @@ class GroupServiceTest extends FeatureTestCase
     {
         parent::setUp();
 
-        $this->groupService = $this->app->make('App\Services\GroupService');
-        $this->settingService = $this->app->make('App\Services\SettingService');
+        $this->groupService = $this->app->make(GroupService::class);
+        $this->settingService = $this->app->make(SettingService::class);
 
         $this->groupOne = new Group;
         $this->groupOne->name = 'MyGroupOne';
