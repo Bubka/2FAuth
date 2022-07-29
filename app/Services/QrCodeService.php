@@ -2,25 +2,12 @@
 
 namespace App\Services;
 
-use App\Models\TwoFAccount;
 use Zxing\QrReader;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use chillerlan\QRCode\{QRCode, QROptions};
 
 class QrCodeService
 {
-    /**
-     * 
-     */
-    //private $token;
-
-    public function __construct()
-    {
-        //$this->token = $otpType === TOTP::create($secret) : HOTP::create($secret);
-    }
-
-
     /**
      * Encode a string into a QR code image
      * 

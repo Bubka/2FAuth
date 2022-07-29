@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Services\LogoService;
+use App\Services\QrCodeService;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Support\DeferrableProvider;
 
@@ -17,6 +18,10 @@ class TwoFAuthServiceProvider extends ServiceProvider implements DeferrableProvi
     {
         $this->app->singleton(LogoService::class, function ($app) {
             return new LogoService();
+        });
+
+        $this->app->singleton(QrCodeService::class, function ($app) {
+            return new QrCodeService();
         });
     }
 
@@ -38,6 +43,9 @@ class TwoFAuthServiceProvider extends ServiceProvider implements DeferrableProvi
      */
     public function provides()
     {
-        return [LogoService::class];
+        return [
+            LogoService::class,
+            QrCodeService::class,
+        ];
     }
 }

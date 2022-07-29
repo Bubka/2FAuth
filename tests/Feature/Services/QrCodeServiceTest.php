@@ -4,7 +4,7 @@ namespace Tests\Feature\Services;
 
 use Tests\FeatureTestCase;
 use Tests\Classes\LocalFile;
-use Illuminate\Support\Facades\DB;
+use App\Services\QrCodeService;
 
 
 /**
@@ -29,7 +29,7 @@ class QrCodeServiceTest extends FeatureTestCase
     {
         parent::setUp();
 
-        $this->qrcodeService = $this->app->make('App\Services\QrCodeService');
+        $this->qrcodeService = $this->app->make(QrCodeService::class);
     }
 
 

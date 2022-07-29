@@ -4,7 +4,6 @@ namespace App\Api\v1\Controllers;
 
 use App\Models\TwoFAccount;
 use App\Services\QrCodeService;
-use App\Services\TwoFAccountService;
 use App\Api\v1\Requests\QrCodeDecodeRequest;
 use App\Http\Controllers\Controller;
 
@@ -16,23 +15,16 @@ class QrCodeController extends Controller
      */
     protected $qrcodeService;
 
-    /**
-     * The TwoFAccount Service instance.
-     */
-    protected $twofaccountService;
-
 
     /**
      * Create a new controller instance.
      *
      * @param \App\Services\QrCodeService  $qrcodeService
-     * @param \App\Services\TwoFAccountService $twofaccountService
      * @return void
      */
-    public function __construct(QrCodeService $qrcodeService, TwoFAccountService $twofaccountService)
+    public function __construct(QrCodeService $qrcodeService)
     {
         $this->qrcodeService = $qrcodeService;
-        $this->twofaccountService = $twofaccountService;
     }
 
 
