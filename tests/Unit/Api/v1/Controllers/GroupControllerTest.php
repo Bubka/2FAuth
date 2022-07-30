@@ -5,7 +5,7 @@ namespace Tests\Unit\Api\v1\Controllers;
 use App\Models\Group;
 use Tests\TestCase;
 use App\Models\TwoFAccount;
-use App\Services\GroupService;
+use App\Facades\Groups;
 use App\Services\SettingService;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use App\Api\v1\Controllers\GroupController;
@@ -18,12 +18,6 @@ use Mockery\MockInterface;
 class GroupControllerTest extends TestCase
 {
     use WithoutMiddleware;
-
-    /**
-     * @var \Mockery\Mock|\App\Services\GroupService
-     */
-    protected $groupServiceMock;
-
 
     /**
      * @var \App\Api\v1\Controllers\GroupController tested controller
@@ -41,9 +35,6 @@ class GroupControllerTest extends TestCase
     {
         parent::setUp();
 
-        $this->groupServiceMock = $this->mock(GroupService::class);
-
-        // $this->groupServiceMock = Mockery::mock($this->app->make(GroupService::class));
         $this->groupStoreRequest = Mockery::mock('App\Api\v1\Requests\GroupStoreRequest');
 
         $this->controller = new GroupController();
@@ -57,7 +48,7 @@ class GroupControllerTest extends TestCase
     {
         $groups = Group::factory()->count(3)->make();
 
-        $this->groupServiceMock->shouldReceive('getAll')
+        Groups::shouldReceive('getAll')
             ->once()
             ->andReturn($groups);
 
@@ -78,7 +69,7 @@ class GroupControllerTest extends TestCase
             ->once()
             ->andReturn(['name' => $group->name]);
 
-        $this->groupServiceMock->shouldReceive('create')
+        Groups::shouldReceive('create')
             ->once()
             ->andReturn($group);
 
@@ -112,7 +103,7 @@ class GroupControllerTest extends TestCase
             ->once()
             ->andReturn(['name' => $group->name]);
 
-        $this->groupServiceMock->shouldReceive('update')
+        Groups::shouldReceive('update')
             ->once()
             ->andReturn($group);
 
@@ -134,7 +125,7 @@ class GroupControllerTest extends TestCase
             ->once()
             ->andReturn(['ids' => $group->id]);
 
-        $this->groupServiceMock->shouldReceive('assign')
+        Groups::shouldReceive('assign')
             ->with($group->id, $group)
             ->once();
 
@@ -159,7 +150,7 @@ class GroupControllerTest extends TestCase
 
         $twofaccounts = TwoFAccount::factory()->count(3)->make();
 
-        $this->groupServiceMock->shouldReceive('getAccounts')
+        Groups::shouldReceive('getAccounts')
             ->with($group)
             ->once()
             ->andReturn($twofaccounts);
@@ -177,7 +168,7 @@ class GroupControllerTest extends TestCase
     {
         $group = Group::factory()->make();
 
-        $this->groupServiceMock->shouldReceive('delete')
+        Groups::shouldReceive('delete')
             ->once()
             ->with($group->id);
 

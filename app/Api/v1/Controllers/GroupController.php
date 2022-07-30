@@ -3,7 +3,7 @@
 namespace App\Api\v1\Controllers;
 
 use App\Models\Group;
-use App\Services\GroupService;
+use App\Facades\Groups;
 use App\Api\v1\Requests\GroupStoreRequest;
 use App\Api\v1\Requests\GroupAssignRequest;
 use App\Api\v1\Resources\GroupResource;
@@ -13,22 +13,6 @@ use Illuminate\Support\Facades\App;
 
 class GroupController extends Controller
 {
-    /**
-     * The TwoFAccount Service instance.
-     */
-    protected $groupService;
-
-
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->groupService = App::make(GroupService::class);
-    }
-
 
     /**
      * Display a listing of the resource.
@@ -37,7 +21,7 @@ class GroupController extends Controller
      */
     public function index()
     {
-        $groups = $this->groupService->getAll();
+        $groups = Groups::getAll();
 
         return GroupResource::collection($groups);
     }
@@ -53,7 +37,7 @@ class GroupController extends Controller
     {
         $validated = $request->validated();
 
-        $group = $this->groupService->create($validated);
+        $group = Groups::create($validated);
 
         return (new GroupResource($group))
             ->response()
@@ -84,7 +68,7 @@ class GroupController extends Controller
     {
         $validated = $request->validated();
 
-        $this->groupService->update($group, $validated);
+        Groups::update($group, $validated);
 
         return new GroupResource($group);
 
@@ -102,7 +86,7 @@ class GroupController extends Controller
     {
         $validated = $request->validated();
 
-        $this->groupService->assign($validated['ids'], $group);
+        Groups::assign($validated['ids'], $group);
             
         return new GroupResource($group);
 
@@ -117,7 +101,7 @@ class GroupController extends Controller
      */
     public function accounts(Group $group)
     {
-        $twofaccounts = $this->groupService->getAccounts($group);
+        $twofaccounts = Groups::getAccounts($group);
             
         return new TwoFAccountCollection($twofaccounts);
 
@@ -132,7 +116,7 @@ class GroupController extends Controller
      */
     public function destroy(Group $group)
     {
-        $this->groupService->delete($group->id);
+        Groups::delete($group->id);
 
         return response()->json(null, 204);
     }

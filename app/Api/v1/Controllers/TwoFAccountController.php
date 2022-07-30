@@ -13,7 +13,7 @@ use App\Api\v1\Requests\TwoFAccountDynamicRequest;
 use App\Api\v1\Resources\TwoFAccountCollection;
 use App\Api\v1\Resources\TwoFAccountReadResource;
 use App\Api\v1\Resources\TwoFAccountStoreResource;
-use App\Services\GroupService;
+use App\Facades\Groups;
 use App\Services\TwoFAccountService;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
@@ -26,23 +26,16 @@ class TwoFAccountController extends Controller
      */
     protected $twofaccountService;
 
-    /**
-     * The Group Service instance.
-     */
-    protected $groupService;
-
 
     /**
      * Create a new controller instance.
      *
      * @param  \App\Services\TwoFAccountService  $twofaccountService
-     * @param  \App\Services\GroupService  $groupService
      * @return void
      */
-    public function __construct(TwoFAccountService $twofaccountService, GroupService $groupService)
+    public function __construct(TwoFAccountService $twofaccountService)
     {
         $this->twofaccountService = $twofaccountService;
-        $this->groupService = $groupService;
     }
 
 
@@ -96,7 +89,7 @@ class TwoFAccountController extends Controller
         $twofaccount->save();
 
         // Possible group association
-        $this->groupService->assign($twofaccount->id);
+        Groups::assign($twofaccount->id);
 
         return (new TwoFAccountReadResource($twofaccount->refresh()))
                 ->response()
