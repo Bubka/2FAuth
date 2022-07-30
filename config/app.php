@@ -229,7 +229,10 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-
+        'QrCode' => App\Facades\QrCode::class,
+        'Groups' => App\Facades\Groups::class,
+        'TwoFAccounts' => App\Facades\TwoFAccounts::class,
+        
     ],
 
 ];

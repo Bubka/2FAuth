@@ -14,30 +14,13 @@ use App\Api\v1\Resources\TwoFAccountCollection;
 use App\Api\v1\Resources\TwoFAccountReadResource;
 use App\Api\v1\Resources\TwoFAccountStoreResource;
 use App\Facades\Groups;
-use App\Services\TwoFAccountService;
+use App\Facades\TwoFAccounts;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class TwoFAccountController extends Controller
 {
-    /**
-     * The TwoFAccount Service instance.
-     */
-    protected $twofaccountService;
-
-
-    /**
-     * Create a new controller instance.
-     *
-     * @param  \App\Services\TwoFAccountService  $twofaccountService
-     * @return void
-     */
-    public function __construct(TwoFAccountService $twofaccountService)
-    {
-        $this->twofaccountService = $twofaccountService;
-    }
-
 
     /**
      * List all resources
@@ -128,7 +111,7 @@ class TwoFAccountController extends Controller
     public function import(TwoFAccountImportRequest $request)
     { 
         $request->merge(['withSecret' => true]);
-        $twofaccounts = $this->twofaccountService->convertMigrationFromGA($request->uri);
+        $twofaccounts = TwoFAccounts::convertMigrationFromGA($request->uri);
 
         return new TwoFAccountCollection($twofaccounts);
     }
@@ -238,7 +221,7 @@ class TwoFAccountController extends Controller
             ], 400);
         }
 
-        $this->twofaccountService->withdraw($validated['ids']);
+        TwoFAccounts::withdraw($validated['ids']);
         
         return response()->json([ 'message' => 'accounts withdrawn' ], 200);
     }
@@ -252,7 +235,7 @@ class TwoFAccountController extends Controller
      */
     public function destroy(TwoFAccount $twofaccount)
     {
-        $this->twofaccountService->delete($twofaccount->id);
+        TwoFAccounts::delete($twofaccount->id);
 
         return response()->json(null, 204);
     }
@@ -275,7 +258,7 @@ class TwoFAccountController extends Controller
             ], 400);
         }
 
-        $this->twofaccountService->delete($validated['ids']);
+        TwoFAccounts::delete($validated['ids']);
 
         return response()->json(null, 204);
     }

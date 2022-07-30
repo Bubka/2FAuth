@@ -23,11 +23,11 @@ class TwoFAccountService
      * 
      * @param int|array|string $ids twofaccount ids to free
      */
-    public function withdraw($ids) : void
+    public static function withdraw($ids) : void
     {
         // $ids as string could be a comma-separated list of ids
         // so in this case we explode the string to an array
-        $ids = $this->commaSeparatedToArray($ids);
+        $ids = self::commaSeparatedToArray($ids);
 
         // whereIn() expects an array
         $ids = is_array($ids) ? $ids : func_get_args();
@@ -48,11 +48,11 @@ class TwoFAccountService
      * 
      * @return int The number of deleted
      */
-    public function delete($ids) : int
+    public static function delete($ids) : int
     {
         // $ids as string could be a comma-separated list of ids
         // so in this case we explode the string to an array
-        $ids = $this->commaSeparatedToArray($ids);
+        $ids = self::commaSeparatedToArray($ids);
         Log::info(sprintf('Deletion of TwoFAccounts #%s requested', is_array($ids) ? implode(',#', $ids) : $ids ));
         $deleted = TwoFAccount::destroy($ids);
 
@@ -67,7 +67,7 @@ class TwoFAccountService
      * 
      * @return \Illuminate\Support\Collection The converted accounts
      */
-    public function convertMigrationFromGA($migrationUri) : Collection
+    public static function convertMigrationFromGA($migrationUri) : Collection
     {
         try {
             $migrationData = base64_decode(urldecode(Str::replace('otpauth-migration://offline?data=', '', $migrationUri)));
@@ -116,7 +116,7 @@ class TwoFAccountService
              }
         }
 
-        return $this->markAsDuplicate(collect($twofaccounts));
+        return self::markAsDuplicate(collect($twofaccounts));
 
     }
 
@@ -124,7 +124,7 @@ class TwoFAccountService
     /**
      * 
      */
-    private function commaSeparatedToArray($ids)
+    private static function commaSeparatedToArray($ids)
     {
         if(is_string($ids))
         {
@@ -144,7 +144,7 @@ class TwoFAccountService
      * @param \Illuminate\Support\Collection
      * @return \Illuminate\Support\Collection
      */
-    private function markAsDuplicate($twofaccounts) : Collection
+    private static function markAsDuplicate($twofaccounts) : Collection
     {
         $storage = TwoFAccount::all();
 
