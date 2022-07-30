@@ -2,9 +2,7 @@
 
 namespace App\Api\v1\Controllers;
 
-use App\Exceptions\DbEncryptionException;
-use App\Services\DbEncryptionService;
-use App\Services\SettingService;
+use App\Facades\Settings;
 use App\Api\v1\Requests\SettingStoreRequest;
 use App\Api\v1\Requests\SettingUpdateRequest;
 use App\Http\Controllers\Controller;
@@ -12,22 +10,6 @@ use App\Http\Controllers\Controller;
 
 class SettingController extends Controller
 {
-
-    /**
-     * The Settings Service instance.
-     */
-    protected SettingService $settingService;
-
-
-    /**
-     * Create a new controller instance.
-     */
-    public function __construct(SettingService $settingService)
-    {
-        $this->settingService = $settingService;
-    }
-
-
     /**
      * List all settings
      * 
@@ -35,7 +17,7 @@ class SettingController extends Controller
      */
     public function index()
     {
-        $settings = $this->settingService->all();
+        $settings = Settings::all();
         $settingsResources = collect();
         $settings->each(function ($item, $key) use ($settingsResources) {
             $settingsResources->push([
@@ -57,7 +39,7 @@ class SettingController extends Controller
      */
     public function show($settingName)
     {
-        $setting = $this->settingService->get($settingName);
+        $setting = Settings::get($settingName);
 
         if (is_null($setting)) {
             abort(404);
@@ -80,7 +62,7 @@ class SettingController extends Controller
     {
         $validated = $request->validated();
 
-        $this->settingService->set($validated['key'], $validated['value']);
+        Settings::set($validated['key'], $validated['value']);
 
         return response()->json([
             'key' => $validated['key'],
@@ -99,7 +81,7 @@ class SettingController extends Controller
     {
         $validated = $request->validated();
 
-        $this->settingService->set($settingName, $validated['value']);
+        Settings::set($settingName, $validated['value']);
 
         return response()->json([
             'key' => $settingName,
@@ -117,7 +99,7 @@ class SettingController extends Controller
      */
     public function destroy($settingName)
     {
-        $setting = $this->settingService->get($settingName);
+        $setting = Settings::get($settingName);
 
         if (is_null($setting)) {
             abort(404);
@@ -131,7 +113,7 @@ class SettingController extends Controller
             ], 400);
         }
 
-        $this->settingService->delete($settingName);
+        Settings::delete($settingName);
 
         return response()->json(null, 204);
     }

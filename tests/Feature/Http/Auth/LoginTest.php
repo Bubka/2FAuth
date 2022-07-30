@@ -3,6 +3,7 @@
 namespace Tests\Feature\Http\Auth;
 
 use App\Models\User;
+use App\Facades\Settings;
 use Tests\FeatureTestCase;
 
 class LoginTest extends FeatureTestCase
@@ -163,8 +164,7 @@ class LoginTest extends FeatureTestCase
     public function test_user_logout_after_inactivity_returns_teapot()
     {
         // Set the autolock period to 1 minute
-        $settingService = resolve('App\Services\SettingService');
-        $settingService->set('kickUserAfter', 1);
+        Settings::set('kickUserAfter', 1);
 
         $response = $this->json('POST', '/user/login', [
             'email' => $this->user->email,

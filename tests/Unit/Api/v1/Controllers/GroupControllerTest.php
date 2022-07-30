@@ -142,9 +142,8 @@ class GroupControllerTest extends TestCase
     {
         $group = Group::factory()->make();
         
-        $this->mock(SettingService::class, function (MockInterface $mock) {
-            $mock->shouldReceive('get')
-                ->with('useEncryption')
+        $settingService = $this->mock(SettingService::class, function (MockInterface $settingService) {
+            $settingService->shouldReceive('get')
                 ->andReturn(false);
         });
 

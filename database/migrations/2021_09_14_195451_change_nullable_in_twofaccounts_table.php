@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Log;
+use App\Facades\Settings;
 
 class ChangeNullableInTwofaccountsTable extends Migration
 {
@@ -17,18 +18,17 @@ class ChangeNullableInTwofaccountsTable extends Migration
     public function up()
     {
         $twofaccounts = DB::table('twofaccounts')->select('id', 'legacy_uri')->get();
-        $settingService = resolve('App\Services\SettingService');
 
         foreach ($twofaccounts as $twofaccount) {
             try {
-                $legacy_uri = $settingService->get('useEncryption') ? Crypt::decryptString($twofaccount->legacy_uri) : $twofaccount->legacy_uri;
+                $legacy_uri = Settings::get('useEncryption') ? Crypt::decryptString($twofaccount->legacy_uri) : $twofaccount->legacy_uri;
                 $token = \OTPHP\Factory::loadFromProvisioningUri($legacy_uri);
 
                 $affected = DB::table('twofaccounts')
                     ->where('id', $twofaccount->id)
                     ->update([
                         'otp_type'  => get_class($token) === 'OTPHP\TOTP' ? 'totp' : 'hotp',
-                        'secret'    => $settingService->get('useEncryption') ? Crypt::encryptString($token->getSecret()) : $token->getSecret(),
+                        'secret'    => Settings::get('useEncryption') ? Crypt::encryptString($token->getSecret()) : $token->getSecret(),
                         'algorithm' => $token->getDigest(),
                         'digits'    => $token->getDigits(),
                         'period'    => $token->hasParameter('period') ? $token->getParameter('period') : null,

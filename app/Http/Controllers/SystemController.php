@@ -3,27 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Services\SettingService;
+use App\Facades\Settings;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class SystemController extends Controller
 {
-    /**
-     * The Settings Service instance.
-     */
-    protected SettingService $settingService;
-
-
-    /**
-     * Create a new controller instance.
-     */
-    public function __construct(SettingService $settingService)
-    {
-        $this->settingService = $settingService;
-    }
-
-
     /**
      * Get detailed information about the current installation
      * 
@@ -55,7 +40,7 @@ class SystemController extends Controller
         $infos['Trusted proxies']  = config('2fauth.trustedProxies') ?: 'none';
         // User info
         if ($request->user()) {
-            $infos['options']     = $this->settingService->all()->toArray();
+            $infos['options']     = Settings::all()->toArray();
         }
 
         return response()->json($infos);

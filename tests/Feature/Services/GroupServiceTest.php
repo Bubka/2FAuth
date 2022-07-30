@@ -6,7 +6,7 @@ use App\Models\Group;
 use App\Models\TwoFAccount;
 use Tests\FeatureTestCase;
 use App\Facades\Groups;
-use App\Services\SettingService;
+use App\Facades\Settings;
 
 
 /**
@@ -14,12 +14,6 @@ use App\Services\SettingService;
  */
 class GroupServiceTest extends FeatureTestCase
 {
-    /**
-     * App\Services\SettingService $settingService
-     */
-    protected $settingService;
-
-
     /**
      * App\Models\Group $groupOne, $groupTwo
      */
@@ -51,8 +45,6 @@ class GroupServiceTest extends FeatureTestCase
     public function setUp() : void
     {
         parent::setUp();
-
-        $this->settingService = $this->app->make(SettingService::class);
 
         $this->groupOne = new Group;
         $this->groupOne->name = 'MyGroupOne';
@@ -178,7 +170,7 @@ class GroupServiceTest extends FeatureTestCase
      */
     public function test_delete_default_group_reset_defaultGroup_setting()
     {
-        $this->settingService->set('defaultGroup', $this->groupOne->id);
+        Settings::set('defaultGroup', $this->groupOne->id);
 
         $deleted = Groups::delete($this->groupOne->id);
         
@@ -194,8 +186,8 @@ class GroupServiceTest extends FeatureTestCase
      */
     public function test_delete_active_group_reset_activeGroup_setting()
     {
-        $this->settingService->set('rememberActiveGroup', true);
-        $this->settingService->set('activeGroup', $this->groupOne->id);
+        Settings::set('rememberActiveGroup', true);
+        Settings::set('activeGroup', $this->groupOne->id);
         
         $deleted = Groups::delete($this->groupOne->id);
         
@@ -244,7 +236,7 @@ class GroupServiceTest extends FeatureTestCase
      */
     public function test_assign_a_twofaccountid_to_no_group_assigns_to_default_group()
     {
-        $this->settingService->set('defaultGroup', $this->groupTwo->id);
+        Settings::set('defaultGroup', $this->groupTwo->id);
         
         Groups::assign($this->twofaccountOne->id);
         
@@ -260,8 +252,8 @@ class GroupServiceTest extends FeatureTestCase
      */
     public function test_assign_a_twofaccountid_to_no_group_assigns_to_active_group()
     {
-        $this->settingService->set('defaultGroup', -1);
-        $this->settingService->set('activeGroup', $this->groupTwo->id);
+        Settings::set('defaultGroup', -1);
+        Settings::set('activeGroup', $this->groupTwo->id);
         
         Groups::assign($this->twofaccountOne->id);
         
@@ -277,8 +269,8 @@ class GroupServiceTest extends FeatureTestCase
      */
     public function test_assign_a_twofaccountid_to_missing_active_group_does_not_fails()
     {
-        $this->settingService->set('defaultGroup', -1);
-        $this->settingService->set('activeGroup', 100000);
+        Settings::set('defaultGroup', -1);
+        Settings::set('activeGroup', 100000);
         
         Groups::assign($this->twofaccountOne->id);
         

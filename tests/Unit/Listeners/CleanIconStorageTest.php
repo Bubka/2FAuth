@@ -21,13 +21,8 @@ class CleanIconStorageTest extends TestCase
     {
         $settingService = $this->mock(SettingService::class, function (MockInterface $settingService) {
             $settingService->shouldReceive('get')
-                ->with('useEncryption')
                 ->andReturn(false);
         });
-
-        // \Facades\App\Services\SettingService::shouldReceive('get')
-        //     ->with('useEncryption')
-        //     ->andReturn(false);
 
         $twofaccount = TwoFAccount::factory()->make();
         $event = new TwoFAccountDeleted($twofaccount);

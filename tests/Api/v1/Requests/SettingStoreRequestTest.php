@@ -7,6 +7,7 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Tests\FeatureTestCase;
+use App\Facades\Settings;
 
 class SettingStoreRequestTest extends FeatureTestCase
 {
@@ -69,8 +70,7 @@ class SettingStoreRequestTest extends FeatureTestCase
      */
     public function test_invalid_data(array $data) : void
     {
-        $settingService = resolve('App\Services\SettingService');
-        $settingService->set($this->uniqueKey, 'uniqueValue');
+        Settings::set($this->uniqueKey, 'uniqueValue');
 
         $request = new SettingStoreRequest();
         $validator = Validator::make($data, $request->rules());

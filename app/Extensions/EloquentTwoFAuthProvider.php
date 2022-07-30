@@ -6,7 +6,7 @@ use DarkGhostHunter\Larapass\Auth\EloquentWebAuthnProvider;
 use DarkGhostHunter\Larapass\WebAuthn\WebAuthnAssertValidator;
 use Illuminate\Contracts\Config\Repository as ConfigContract;
 use Illuminate\Contracts\Hashing\Hasher as HasherContract;
-use Facades\App\Services\SettingService;
+use App\Facades\Settings;
 
 class EloquentTwoFAuthProvider extends EloquentWebAuthnProvider
 {
@@ -26,6 +26,6 @@ class EloquentTwoFAuthProvider extends EloquentWebAuthnProvider
     ) {
         parent::__construct($config, $validator, $hasher, $model);
 
-        $this->fallback = !SettingService::get('useWebauthnOnly');
+        $this->fallback = !Settings::get('useWebauthnOnly');
     }
 }

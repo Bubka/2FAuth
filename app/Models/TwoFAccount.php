@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Exception;
 use App\Services\LogoService;
-use App\Services\SettingService;
+use App\Facades\Settings;
 use App\Models\Dto\TotpDto;
 use App\Models\Dto\HotpDto;
 use App\Events\TwoFAccountDeleted;
@@ -395,8 +395,7 @@ class TwoFAccount extends Model implements Sortable
             $this->icon = $this->getDefaultIcon();
         }
 
-        $settingService = App::make(SettingService::class);
-        if (!$this->icon && $settingService->get('getOfficialIcons') && !$skipIconFetching) {
+        if (!$this->icon && Settings::get('getOfficialIcons') && !$skipIconFetching) {
             $this->icon = $this->getDefaultIcon();
         } 
 
@@ -450,8 +449,7 @@ class TwoFAccount extends Model implements Sortable
             $this->icon = $this->storeImageAsIcon($this->generator->getParameter('image'));
         }
 
-        $settingService = App::make(SettingService::class);
-        if (!$this->icon && $settingService->get('getOfficialIcons') && !$skipIconFetching) {
+        if (!$this->icon && Settings::get('getOfficialIcons') && !$skipIconFetching) {
             $this->icon = $this->getDefaultIcon();
         }    
 
@@ -598,9 +596,8 @@ class TwoFAccount extends Model implements Sortable
     private function getDefaultIcon()
     {
         $logoService = App::make(LogoService::class);
-        $settingService = App::make(SettingService::class);
 
-        return $settingService->get('getOfficialIcons') ? $logoService->getIcon($this->service) : null;
+        return Settings::get('getOfficialIcons') ? $logoService->getIcon($this->service) : null;
     }
 
 
@@ -609,9 +606,8 @@ class TwoFAccount extends Model implements Sortable
      */
     private function decryptOrReturn($value)
     {
-        $settingService = App::make(SettingService::class);
         // Decipher when needed
-        if ( $settingService->get('useEncryption') )
+        if ( Settings::get('useEncryption') )
         {
             try {
                 return Crypt::decryptString($value);
@@ -631,9 +627,8 @@ class TwoFAccount extends Model implements Sortable
      */
     private function encryptOrReturn($value)
     {
-        $settingService = App::make(SettingService::class);
         // should be replaced by laravel 8 attribute encryption casting
-        return $settingService->get('useEncryption') ? Crypt::encryptString($value) : $value;
+        return Settings::get('useEncryption') ? Crypt::encryptString($value) : $value;
     }
 
 }

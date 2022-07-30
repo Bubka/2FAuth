@@ -50,10 +50,6 @@ class TwoFAccountModelTest extends ModelTestCase
                 ->andReturn(true);
         });
 
-        // \Facades\App\Services\SettingService::shouldReceive('get')
-        //     ->with('useEncryption')
-        //     ->andReturn(true);
-
         $twofaccount = TwoFAccount::factory()->make([
             $attribute => 'string',
         ]);
@@ -92,10 +88,6 @@ class TwoFAccountModelTest extends ModelTestCase
                 ->andReturn(false);
         });
 
-        // \Facades\App\Services\SettingService::shouldReceive('get')
-        //     ->with('useEncryption')
-        //     ->andReturn(false);
-
         $twofaccount = TwoFAccount::factory()->make();
 
         $this->assertEquals($twofaccount->getAttributes()[$attribute], $twofaccount->$attribute);
@@ -114,10 +106,6 @@ class TwoFAccountModelTest extends ModelTestCase
                 ->with('useEncryption')
                 ->andReturn(true);
         });
-
-        // \Facades\App\Services\SettingService::shouldReceive('get')
-        //     ->with('useEncryption')
-        //     ->andReturn(true);
 
         Crypt::shouldReceive('encryptString')
             ->andReturn('indecipherableString');

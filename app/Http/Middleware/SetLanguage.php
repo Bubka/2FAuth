@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Support\Facades\App;
-use Facades\App\Services\SettingService;
+use App\Facades\Settings;
 
 class SetLanguage
 {
@@ -23,8 +23,8 @@ class SetLanguage
         // - No language is passed from the client
         //
         // We prioritize the user defined one, then the request header one, and finally the fallback one.
-        // FI: SettingService::get() always returns a fallback value
-        $lang = SettingService::get('lang');
+        // FI: Settings::get() always returns a fallback value
+        $lang = Settings::get('lang');
 
         if($lang === 'browser') {
             $lang = config('app.fallback_locale');

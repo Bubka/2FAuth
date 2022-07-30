@@ -6,7 +6,7 @@ use Tests\FeatureTestCase;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use App\Models\TwoFAccount;
-use App\Services\SettingService;
+use App\Facades\Settings;
 
 
 /**
@@ -14,12 +14,6 @@ use App\Services\SettingService;
  */
 class SettingServiceTest extends FeatureTestCase
 {
-    /**
-     * App\Services\SettingService $settingService
-     */
-    protected $settingService;
-
-
     /**
      * App\Models\Group $groupOne, $groupTwo
      */
@@ -50,8 +44,6 @@ class SettingServiceTest extends FeatureTestCase
     public function setUp() : void
     {
         parent::setUp();
-
-        $this->settingService = $this->app->make(SettingService::class);
 
         $this->twofaccountOne = new TwoFAccount;
         $this->twofaccountOne->legacy_uri = self::TOTP_FULL_CUSTOM_URI;
@@ -86,9 +78,9 @@ class SettingServiceTest extends FeatureTestCase
      */
     public function test_get_string_setting_returns_correct_value()
     {
-        $this->settingService->set(self::SETTING_NAME, self::SETTING_VALUE_STRING);
+        Settings::set(self::SETTING_NAME, self::SETTING_VALUE_STRING);
 
-        $this->assertEquals(self::SETTING_VALUE_STRING, $this->settingService->get(self::SETTING_NAME));
+        $this->assertEquals(self::SETTING_VALUE_STRING, Settings::get(self::SETTING_NAME));
     }
 
 
@@ -97,9 +89,9 @@ class SettingServiceTest extends FeatureTestCase
      */
     public function test_get_boolean_setting_returns_true()
     {
-        $this->settingService->set(self::SETTING_NAME, self::SETTING_VALUE_TRUE_TRANSFORMED);
+        Settings::set(self::SETTING_NAME, self::SETTING_VALUE_TRUE_TRANSFORMED);
 
-        $this->assertEquals(true, $this->settingService->get(self::SETTING_NAME));
+        $this->assertEquals(true, Settings::get(self::SETTING_NAME));
     }
 
 
@@ -108,9 +100,9 @@ class SettingServiceTest extends FeatureTestCase
      */
     public function test_get_boolean_setting_returns_false()
     {
-        $this->settingService->set(self::SETTING_NAME, self::SETTING_VALUE_FALSE_TRANSFORMED);
+        Settings::set(self::SETTING_NAME, self::SETTING_VALUE_FALSE_TRANSFORMED);
 
-        $this->assertEquals(false, $this->settingService->get(self::SETTING_NAME));
+        $this->assertEquals(false, Settings::get(self::SETTING_NAME));
     }
 
 
@@ -119,9 +111,9 @@ class SettingServiceTest extends FeatureTestCase
      */
     public function test_get_int_setting_returns_int()
     {
-        $this->settingService->set(self::SETTING_NAME, self::SETTING_VALUE_INT);
+        Settings::set(self::SETTING_NAME, self::SETTING_VALUE_INT);
 
-        $value = $this->settingService->get(self::SETTING_NAME);
+        $value = Settings::get(self::SETTING_NAME);
 
         $this->assertEquals(self::SETTING_VALUE_INT, $value);
         $this->assertIsInt($value);
@@ -135,9 +127,9 @@ class SettingServiceTest extends FeatureTestCase
     {
         $native_options = config('2fauth.options');
 
-        $this->settingService->set(self::SETTING_NAME, self::SETTING_VALUE_STRING);
+        Settings::set(self::SETTING_NAME, self::SETTING_VALUE_STRING);
 
-        $all = $this->settingService->all();
+        $all = Settings::all();
 
         $this->assertArrayHasKey(self::SETTING_NAME, $all);
         $this->assertEquals($all[self::SETTING_NAME], self::SETTING_VALUE_STRING);
@@ -157,7 +149,7 @@ class SettingServiceTest extends FeatureTestCase
      */
     public function test_set_setting_persist_correct_value()
     {
-        $value = $this->settingService->set(self::SETTING_NAME, self::SETTING_VALUE_STRING);
+        $value = Settings::set(self::SETTING_NAME, self::SETTING_VALUE_STRING);
 
         $this->assertDatabaseHas('options', [
             self::KEY => self::SETTING_NAME,
@@ -171,7 +163,7 @@ class SettingServiceTest extends FeatureTestCase
      */
     public function test_set_useEncryption_on_encrypts_all_accounts()
     {
-        $this->settingService->set('useEncryption', true);
+        Settings::set('useEncryption', true);
 
         $twofaccounts = DB::table('twofaccounts')->get();
 
@@ -188,8 +180,8 @@ class SettingServiceTest extends FeatureTestCase
      */
     public function test_set_useEncryption_on_twice_prevents_successive_encryption()
     {
-        $this->settingService->set('useEncryption', true);
-        $this->settingService->set('useEncryption', true);
+        Settings::set('useEncryption', true);
+        Settings::set('useEncryption', true);
 
         $twofaccounts = DB::table('twofaccounts')->get();
 
@@ -206,8 +198,8 @@ class SettingServiceTest extends FeatureTestCase
      */
     public function test_set_useEncryption_off_decrypts_all_accounts()
     {
-        $this->settingService->set('useEncryption', true);
-        $this->settingService->set('useEncryption', false);
+        Settings::set('useEncryption', true);
+        Settings::set('useEncryption', false);
 
         $twofaccounts = DB::table('twofaccounts')->get();
 
@@ -227,13 +219,13 @@ class SettingServiceTest extends FeatureTestCase
     {
         $this->expectException(\App\Exceptions\DbEncryptionException::class);
 
-        $this->settingService->set('useEncryption', true);
+        Settings::set('useEncryption', true);
 
         $affected = DB::table('twofaccounts')
             ->where('id', $this->twofaccountOne->id)
             ->update($data);
 
-            $this->settingService->set('useEncryption', false);
+            Settings::set('useEncryption', false);
 
         $twofaccount = TwoFAccount::find($this->twofaccountOne->id);
     }
@@ -263,7 +255,7 @@ class SettingServiceTest extends FeatureTestCase
      */
     public function test_set_array_of_settings_persist_correct_values()
     {
-        $value = $this->settingService->set([
+        $value = Settings::set([
             self::SETTING_NAME => self::SETTING_VALUE_STRING,
             self::SETTING_NAME_ALT => self::SETTING_VALUE_INT,
         ]);
@@ -285,7 +277,7 @@ class SettingServiceTest extends FeatureTestCase
      */
     public function test_set_true_setting_persist_transformed_boolean()
     {
-        $value = $this->settingService->set(self::SETTING_NAME, true);
+        $value = Settings::set(self::SETTING_NAME, true);
 
         $this->assertDatabaseHas('options', [
             self::KEY => self::SETTING_NAME,
@@ -299,7 +291,7 @@ class SettingServiceTest extends FeatureTestCase
      */
     public function test_set_false_setting_persist_transformed_boolean()
     {
-        $value = $this->settingService->set(self::SETTING_NAME, false);
+        $value = Settings::set(self::SETTING_NAME, false);
 
         $this->assertDatabaseHas('options', [
             self::KEY => self::SETTING_NAME,
@@ -317,7 +309,7 @@ class SettingServiceTest extends FeatureTestCase
             [self::KEY => self::SETTING_NAME, self::VALUE => strval(self::SETTING_VALUE_STRING)]
         );
 
-        $value = $this->settingService->delete(self::SETTING_NAME);
+        $value = Settings::delete(self::SETTING_NAME);
 
         $this->assertDatabaseMissing('options', [
             self::KEY => self::SETTING_NAME,

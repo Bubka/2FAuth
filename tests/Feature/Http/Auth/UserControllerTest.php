@@ -3,6 +3,7 @@
 namespace Tests\Feature\Http\Auth;
 
 use App\Models\User;
+use App\Facades\Settings;
 use Tests\FeatureTestCase;
 use Illuminate\Support\Facades\Config;
 
@@ -53,8 +54,7 @@ class UserControllerTest extends FeatureTestCase
      */
     public function test_update_user_in_demo_mode_returns_unchanged_user()
     {
-        $settingService = resolve('App\Services\SettingService');
-        $settingService->set('isDemoApp', true);
+        Settings::set('isDemoApp', true);
 
         $response = $this->actingAs($this->user, 'web-guard')
             ->json('PUT', '/user', [
@@ -120,9 +120,7 @@ class UserControllerTest extends FeatureTestCase
     public function test_delete_user_in_demo_mode_returns_unauthorized()
     {
         Config::set('2fauth.config.isDemoApp', true);
-
-        $settingService = resolve('App\Services\SettingService');
-        $settingService->set('isDemoApp', true);
+        Settings::set('isDemoApp', true);
 
         $response = $this->actingAs($this->user, 'web-guard')
             ->json('DELETE', '/user', [

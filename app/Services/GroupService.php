@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Models\Group;
 use App\Models\TwoFAccount;
-use App\Services\SettingService;
+use App\Facades\Settings;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\App;
@@ -86,25 +86,23 @@ class GroupService
      */
     public static function delete($ids) : int
     {
-        $settingService = App::make(SettingService::class);
-
         $ids = is_array($ids) ? $ids : func_get_args();
 
         // A group is possibly set as the default group in Settings.
         // In this case we reset the setting to "No group" (groupId = 0)
-        $defaultGroupId = $settingService->get('defaultGroup');
+        $defaultGroupId = Settings::get('defaultGroup');
 
         if (in_array($defaultGroupId, $ids)) {
-            $settingService->set('defaultGroup', 0);
+            Settings::set('defaultGroup', 0);
         }
 
         // A group is also possibly set as the active group if the user
         // configured 2FAuth to memorize the active group.
         // In this case we reset the setting to the pseudo "All" group (groupId = 0)
-        $activeGroupId = $settingService->get('activeGroup');
+        $activeGroupId = Settings::get('activeGroup');
 
         if (in_array($activeGroupId, $ids)) {
-            $settingService->set('activeGroup', 0);
+            Settings::set('activeGroup', 0);
         }
 
         $deleted = Group::destroy($ids);
@@ -166,8 +164,7 @@ class GroupService
      */
     private static function defaultGroup()
     {
-        $settingService = App::make(SettingService::class);
-        $id = $settingService->get('defaultGroup') === -1 ? (int) $settingService->get('activeGroup') : (int) $settingService->get('defaultGroup');
+        $id = Settings::get('defaultGroup') === -1 ? (int) Settings::get('activeGroup') : (int) Settings::get('defaultGroup');
 
         return Group::find($id);
     }

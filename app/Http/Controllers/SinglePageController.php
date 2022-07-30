@@ -2,26 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\SettingService;
+use App\Facades\Settings;
 use Illuminate\Support\Facades\App;
 
 class SinglePageController extends Controller
 {
-
-    /**
-     * The Settings Service instance.
-     */
-    protected SettingService $settingService;
-
-
-    /**
-     * Create a new controller instance.
-     * 
-     */
-    public function __construct(SettingService $settingService)
-    {
-        $this->settingService = $settingService;
-    }
 
 
     /**
@@ -31,7 +16,7 @@ class SinglePageController extends Controller
     public function index()
     {
         return view('landing')->with([
-            'appSettings' => $this->settingService->all()->toJson(),
+            'appSettings' => Settings::all()->toJson(),
             'appConfig' => collect([
                 'proxyAuth' => config("auth.defaults.guard") === 'reverse-proxy-guard' ? true : false,
                 'proxyLogoutUrl' => config("2fauth.config.proxyLogoutUrl") ? config("2fauth.config.proxyLogoutUrl") : false,
