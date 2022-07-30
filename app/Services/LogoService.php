@@ -10,14 +10,18 @@ use Illuminate\Support\Str;
 class LogoService
 {
     /**
-     * \Illuminate\Support\Collection
+     * @var \Illuminate\Support\Collection
      */
     protected $tfas;
 
     /**
-     * 
+     * @var
      */
     const TFA_JSON = 'tfa.json';
+
+    /**
+     * @var
+     */
     const TFA_URL = 'https://2fa.directory/api/v3/tfa.json';
 
 
@@ -28,7 +32,7 @@ class LogoService
 
 
     /**
-     * Fetch a logo for the given service and set it as an icon
+     * Fetch a logo for the given service and save it as an icon
      * 
      * @param string $serviceName Name of the service to fetch a logo for
      * @return string|null The icon filename or null if no logo has been found
@@ -51,7 +55,7 @@ class LogoService
      * @param string $serviceName Name of the service to fetch a logo for
      * @return string|null The logo filename or null if no logo has been found
      */
-    public function getLogo($serviceName)
+    protected function getLogo($serviceName)
     {
         $domain = $this->tfas->get($this->cleanDomain(strval($serviceName)));
         $logoFilename = $domain.'.svg';

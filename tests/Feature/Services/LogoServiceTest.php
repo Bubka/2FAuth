@@ -48,7 +48,8 @@ class LogoServiceTest extends TestCase
     public function test_getIcon_returns_null_when_no_logo_exists()
     {
         $logoServiceMock = $this->partialMock(LogoService::class, function (MockInterface $mock) {
-            $mock->shouldReceive('getLogo')
+            $mock->shouldAllowMockingProtectedMethods()
+            ->shouldReceive('getLogo')
             ->once()
             ->andReturn(null);
         });
