@@ -15,7 +15,7 @@ class QrCodeService
      * 
      * @return mixed 
      */
-    public function encode(string $data)
+    public static function encode(string $data)
     {
         $options = new QROptions([
             'quietzoneSize' => 2,
@@ -35,7 +35,7 @@ class QrCodeService
      * 
      * @param \Illuminate\Http\UploadedFile $file
      */
-    public function decode(\Illuminate\Http\UploadedFile $file)
+    public static function decode(\Illuminate\Http\UploadedFile $file)
     {
         $qrcode = new QrReader($file->get(), QrReader::SOURCE_TYPE_BLOB);
         $data = urldecode($qrcode->text());
