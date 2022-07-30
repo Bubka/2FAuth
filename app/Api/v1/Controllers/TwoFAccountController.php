@@ -142,7 +142,7 @@ class TwoFAccountController extends Controller
     public function preview(TwoFAccountUriRequest $request)
     {
         $twofaccount = new TwoFAccount;
-        $twofaccount->fillWithURI($request->uri, $request->custom_otp === TwoFAccount::STEAM_TOTP, true);
+        $twofaccount->fillWithURI($request->uri, $request->custom_otp === TwoFAccount::STEAM_TOTP);
 
         return new TwoFAccountStoreResource($twofaccount);
     }
