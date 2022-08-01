@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Console;
 
-use App\Models\User;
 use Tests\FeatureTestCase;
 use Illuminate\Support\Facades\Config;
 
@@ -16,7 +15,7 @@ class ResetTestingTest extends FeatureTestCase
     {
         $this->artisan('2fauth:reset-testing')
              ->expectsOutput('2fauth:reset-testing can only run when isTestingApp option is On')
-             ->assertExitCode(0);
+             ->assertSuccessful();
     }
 
     /**
@@ -29,8 +28,7 @@ class ResetTestingTest extends FeatureTestCase
         $this->artisan('2fauth:reset-testing')
              ->expectsOutput('This will reset the app in order to run a clean and fresh testing app.')
              ->expectsQuestion('To prevent any mistake please type the word "testing" to go on', 'testing')
-             ->expectsOutput('Testing app refreshed')
-             ->assertExitCode(0);
+             ->assertSuccessful();
 
         $this->assertDatabaseCount('twofaccounts', 9);
 
@@ -147,7 +145,7 @@ class ResetTestingTest extends FeatureTestCase
         $this->artisan('2fauth:reset-testing')
              ->expectsQuestion('To prevent any mistake please type the word "testing" to go on', 'null')
              ->expectsOutput('Bad confirmation word, nothing appened')
-             ->assertExitCode(0);
+             ->assertSuccessful();
     }
 
 
@@ -159,8 +157,7 @@ class ResetTestingTest extends FeatureTestCase
         Config::set('2fauth.config.isTestingApp', true);
 
         $this->artisan('2fauth:reset-testing --no-confirm')
-             ->expectsOutput('Testing app refreshed')
-             ->assertExitCode(0);
+             ->assertSuccessful();
     }
 
 }

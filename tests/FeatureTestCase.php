@@ -3,22 +3,26 @@
 namespace Tests;
 
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
 abstract class FeatureTestCase extends BaseTestCase
 {
     use CreatesApplication;
 
-        /**
+    /**
      * Rollback and execute migrations for each test.
      */
-    use DatabaseTransactions;
+    use LazilyRefreshDatabase;
 
-    protected function setUp(): void
+
+    /**
+     * Perform any work that should take place once the database has finished refreshing.
+     *
+     * @return void
+     */
+    protected function afterRefreshingDatabase()
     {
-        parent::setUp();
-        Artisan::call('migrate');
         Artisan::call('passport:install',['--verbose' => 2]);
     }
 }
