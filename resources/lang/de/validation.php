@@ -32,7 +32,7 @@ return [
     ],
     'boolean' => ':attribute muss entweder \'true\' oder \'false\' sein.',
     'confirmed' => ':attribute stimmt nicht mit der Bestätigung überein.',
-    'current_password' => 'The password is incorrect.',
+    'current_password' => 'Das Passwort ist falsch.',
     'date' => ':attribute muss ein gültiges Datum sein.',
     'date_equals' => ':attribute muss ein Datum gleich :date sein.',
     'date_format' => ':attribute entspricht nicht dem gültigen Format für :format.',
@@ -155,7 +155,7 @@ return [
             'in' => 'The :attribute is not supported.',
         ],
         'email' => [
-            'exists' => 'No account found using this email.',
+            'exists' => 'Kein Konto mit dieser E-Mail gefunden.',
         ],
         'secret' => [
             'isBase32Encoded' => 'The :attribute must be a base32 encoded string.',
@@ -173,7 +173,7 @@ return [
             'regex' => 'IDs must be comma separated, without trailing comma.',
         ],
         'name' => [
-            'firstUser' => 'There is already a registered user',
+            'firstUser' => 'Es gibt schon einen registrierten Anwender',
         ]
     ],
 

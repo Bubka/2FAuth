@@ -36,6 +36,10 @@ return [
     'back' => 'Retour',
     'move' => 'Déplacer',
     'all' => 'Tous',
+    'select_all' => 'Tout sélectionner',
+    'clear_selection' => 'Effacer la sélection',
+    'sort_descending' => 'Trier par ordre décroissant',
+    'sort_ascending' => 'Trier par ordre croissant',
     'rename' => 'Renommer',
     'new_name' => 'Nouveau nom',
     'options' => 'Options',
@@ -44,5 +48,14 @@ return [
     'generate' => 'Générer',
     'open_in_browser' => 'Ouvrir dans votre navigateur',
     'continue' => 'Continuer',
-    'discard' => 'Retirer'
+    'discard' => 'Retirer',
+    'about' => 'À propos',
+    'usefull_links' => 'Liens utiles',
+    'environment' => 'Environnement',
+    'credits' => 'Crédits',
+    '2fauth_teaser' => 'Une web app pour gérer vos comptes avec double authentification (2FA) et générer leurs codes de sécurité',
+    'made_with' => 'Fabriqué avec',
+    'ui_icons_by' => 'Icônes par',
+    'logos_by' => 'Logos par',
+
 ];

@@ -36,6 +36,10 @@ return [
     'back' => 'ආපසු',
     'move' => 'Move',
     'all' => 'සියල්ල',
+    'select_all' => 'Select all',
+    'clear_selection' => 'Clear selection',
+    'sort_descending' => 'Sort descending',
+    'sort_ascending' => 'Sort ascending',
     'rename' => 'නැවත නම්කරන්න',
     'new_name' => 'New name',
     'options' => 'විකල්ප',
@@ -44,5 +48,14 @@ return [
     'generate' => 'Generate',
     'open_in_browser' => 'Open in browser',
     'continue' => 'Continue',
-    'discard' => 'Discard'
+    'discard' => 'Discard',
+    'about' => 'About',
+    'usefull_links' => 'Usefull links',
+    'environment' => 'Environment',
+    'credits' => 'Credits',
+    '2fauth_teaser' => 'A web app to manage your Two-Factor Authentication (2FA) accounts and generate their security codes',
+    'made_with' => 'Made with',
+    'ui_icons_by' => 'UI Icons by',
+    'logos_by' => 'Logos by',
+
 ];

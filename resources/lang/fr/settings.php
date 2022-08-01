@@ -19,6 +19,7 @@ return [
     'webauthn' => 'WebAuthn',
     'tokens' => 'Jetons',
     'options' => 'Options',
+    'user_options' => 'Options de l\'utilisateur',
     'confirm' => [
 
     ],
@@ -68,6 +69,10 @@ return [
         'show_accounts_icons' => [
             'label' => 'Afficher les icônes',
             'help' => 'Affiche les icônes des comptes dans la vue principale'
+        ],
+        'get_official_icons' => [
+            'label' => 'Récupérer les icônes officielles',
+            'help' => '(Essaie de) Récupère automatiquement l\'icône officielle du service émetteur du compte 2FA lors de son ajout à 2FAuth'
         ],
         'auto_lock' => [
             'label' => 'Verrouillage automatique',

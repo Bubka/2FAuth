@@ -53,4 +53,9 @@ return [
     'usefull_links' => 'Usefull links',
     'environment' => 'Environment',
     'credits' => 'Credits',
+    '2fauth_teaser' => 'A web app to manage your Two-Factor Authentication (2FA) accounts and generate their security codes',
+    'made_with' => 'Made with',
+    'ui_icons_by' => 'UI Icons by',
+    'logos_by' => 'Logos by',
+
 ];

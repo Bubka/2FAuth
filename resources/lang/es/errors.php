@@ -39,6 +39,7 @@ return [
     'user_deletion_failed' => 'Error al borrar la cuenta de usuario, no se han eliminado datos',
     'auth_proxy_failed' => 'La autenticación proxy falló',
     'auth_proxy_failed_legend' => '2FAuth está configurado para ejecutarse detrás de un proxy de autenticación, pero, su proxy no devuelve el encabezado esperado. Compruebe su configuración e intente de nuevo.',
-    'invalid_google_auth_migration' => 'Invalid or unreadable Google Authenticator data',
-    'unsupported_otp_type' => 'Unsupported OTP type',
+    'invalid_google_auth_migration' => 'Datos no válidos o ilegibles de Google Authenticator',
+    'unsupported_otp_type' => 'Tipo de OTP no soportada',
+    'no_logo_found_for_x' => 'No logo available for {service}'
 ];

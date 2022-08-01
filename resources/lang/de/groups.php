@@ -14,7 +14,7 @@ return [
     */
 
     'groups' => 'Gruppen',
-    'create_group' => 'Create new group',
+    'create_group' => 'Neue Gruppe erstellen',
     'select_accounts_to_show' => 'Konten zum Anzeigen auswählen',
     'manage_groups' => 'Gruppen verwalten',
     'active_group' => 'Aktive Gruppe',
@@ -22,6 +22,7 @@ return [
     'deleting_group_does_not_delete_accounts' => 'Konten bleiben beim Löschen der Gruppe erhalten',
     'move_selected_to' => 'Ausgewählte verschieben',
     'no_group' => 'Keine Gruppe',
+    'change_group' => 'Change group',
     'forms' => [
         'new_group' => 'Neue Gruppe',
         'new_name' => 'Neuer Name',

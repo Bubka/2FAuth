@@ -45,4 +45,5 @@ return [
     'flooded' => 'Trop de tentatives',
     'genericError' => 'Erreur',
     '404' => 'Élément non trouvé',
+    'about' => 'À propos',
 ];

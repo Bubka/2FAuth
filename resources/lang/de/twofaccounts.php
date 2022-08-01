@@ -22,10 +22,10 @@ return [
     'use_full_form' => 'Oder nutzen Sie das vollständige Formular',
     'add_one' => 'Konto hinzufügen',
     'show_qrcode' => 'QR-Code anzeigen',
-    'no_service' => '- no service -',
+    'no_service' => '- kein Service -',
     'forms' => [
         'service' => [
-            'placeholder' => 'beispiel.de',
+            'placeholder' => 'Google, Twitter, Apple',
         ],
         'account' => [
             'placeholder' => 'Max Mustermann',
@@ -49,7 +49,9 @@ return [
             'val' => 'Sperren',
             'title' => 'Sperren',
         ],
-        'choose_image' => 'Bild auswählen…',
+        'choose_image' => 'Upload',
+        'i_m_lucky' => 'I\'m lucky',
+        'i_m_lucky_legend' => 'The "I\'m lucky" button try to get the official icon of the given service. Enter actual service name without ".xyz" extension and try to avoid typo. (beta feature)',
         'test' => 'Test',
         'secret' => [
             'label' => 'Geheimnis',
@@ -69,18 +71,18 @@ return [
             'help' => 'Der Algorithmus, der zur Sicherung Ihrer Sicherheitscodes verwendet wird'
         ],
         'period' => [
-            'label' => 'Period',
-            'placeholder' => 'Default is 30',
-            'help' => 'The period of validity of the generated security codes in second'
+            'label' => 'Gültigkeitsdauer',
+            'placeholder' => 'Standard ist 30',
+            'help' => 'Die Gültigkeitsdauer der generierten Sicherheitscodes in Sekunden'
         ],
         'counter' => [
-            'label' => 'Counter',
-            'placeholder' => 'Default is 0',
-            'help' => 'The initial counter value',
+            'label' => 'Zähler',
+            'placeholder' => 'Standard ist 0',
+            'help' => 'Der Zählerwert am Anfang',
             'help_lock' => 'It is risky to edit the counter as you can desynchronize the account with the verification server of the service. Use the lock icon to enable modification, but only if you know for you are doing'
         ],
         'image' => [
-            'label' => 'Image',
+            'label' => 'Bild',
             'placeholder' => 'http://...',
             'help' => 'The url of an external image to use as the account icon'
         ],
@@ -120,24 +122,24 @@ return [
         'cancel' => 'Das Konto wird gelöscht. Sind Sie sicher?',
         'discard' => 'Are you sure you want to discard this account?',
         'discard_all' => 'Are you sure you want to discard all accounts?',
-        'discard_duplicates' => 'Are you sure you want to discard all duplicates?',
+        'discard_duplicates' => 'Möchten Sie wirklich alle Duplikate wegwerfen?',
     ],
     'import' => [
         'import' => 'Import',
         'to_import' => 'Import',
-        'import_legend' => 'Import your Google Authenticator accounts.',
-        'use_the_gauth_qr_code' => 'Load a G-Auth QR code',
-        'issuer' => 'Issuer',
-        'imported' => 'Imported',
-        'failure' => 'Failure',
-        'x_valid_accounts_found' => '{count} valid accounts found',
-        'import_all' => 'Import all',
-        'import_this_account' => 'Import this account',
-        'discard_all' => 'Discard all',
-        'discard_duplicates' => 'Discard duplicates',
-        'discard_this_account' => 'Discard this account',
-        'generate_a_test_password' => 'Generate a test pasword',
-        'possible_duplicate' => 'An account with the exact same data already exists',
+        'import_legend' => 'Importieren Sie Ihre Google Authenticator-Konten.',
+        'use_the_gauth_qr_code' => 'Laden ein G-Auth QR code',
+        'issuer' => 'Aussteller',
+        'imported' => 'Importiert',
+        'failure' => 'Fehler',
+        'x_valid_accounts_found' => '{count} gültige Konten gefunden',
+        'import_all' => 'Alle importieren',
+        'import_this_account' => 'Importiere dieses Konto',
+        'discard_all' => 'Alles wegwerfen',
+        'discard_duplicates' => 'Duplikate wegwerfen',
+        'discard_this_account' => 'Dieses Konto wegwerfen',
+        'generate_a_test_password' => 'Ein Testpasswort generieren',
+        'possible_duplicate' => 'Ein Konto mit der gleichen Daten ist bereits vorhanden',
     ],
 
 ];

@@ -22,6 +22,7 @@ return [
     'deleting_group_does_not_delete_accounts' => 'La suppression d\'un groupe ne supprime pas les comptes',
     'move_selected_to' => 'Déplacer la sélection vers',
     'no_group' => 'Aucun groupe',
+    'change_group' => 'Changer de groupe',
     'forms' => [
         'new_group' => 'Nouveau groupe',
         'new_name' => 'Nouveau nom',

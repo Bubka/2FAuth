@@ -19,6 +19,7 @@ return [
     'webauthn' => 'WebAuthn',
     'tokens' => 'Tokens',
     'options' => 'Opciones',
+    'user_options' => 'User options',
     'confirm' => [
 
     ],
@@ -68,6 +69,10 @@ return [
         'show_accounts_icons' => [
             'label' => 'Mostrar iconos',
             'help' => 'Mostar iconos de aplicaciones en la vista principal'
+        ],
+        'get_official_icons' => [
+            'label' => 'Get official icons',
+            'help' => '(Try to) Get the official icon of the 2FA issuer when adding an account'
         ],
         'auto_lock' => [
             'label' => 'Bloqueo automático',

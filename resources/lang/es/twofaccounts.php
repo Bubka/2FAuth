@@ -25,7 +25,7 @@ return [
     'no_service' => '- sin servicio -',
     'forms' => [
         'service' => [
-            'placeholder' => 'example.com',
+            'placeholder' => 'Google, Twitter, Apple',
         ],
         'account' => [
             'placeholder' => 'John DOE',
@@ -49,7 +49,9 @@ return [
             'val' => 'Bloquear',
             'title' => 'Bloquearlo',
         ],
-        'choose_image' => 'Seleccionar una imagen…',
+        'choose_image' => 'Upload',
+        'i_m_lucky' => 'I\'m lucky',
+        'i_m_lucky_legend' => 'The "I\'m lucky" button try to get the official icon of the given service. Enter actual service name without ".xyz" extension and try to avoid typo. (beta feature)',
         'test' => 'Test',
         'secret' => [
             'label' => 'Secreto',
@@ -99,7 +101,7 @@ return [
         ],
         'no_cam_on_device' => [
             'reason' => 'No se encontraron cámaras en este dispositivo',
-            'solution' => 'Maybe you forgot to plug in your webcam'
+            'solution' => 'Tal vez olvidaste conectar tu cámara web'
         ],
         'secured_context_required' => [
             'reason' => 'Requiere contexto seguro',
@@ -118,26 +120,26 @@ return [
     'confirm' => [
         'delete' => '¿Está seguro que desea eliminar esta cuenta?',
         'cancel' => 'La cuenta será eliminada. ¿Estás seguro?',
-        'discard' => 'Are you sure you want to discard this account?',
-        'discard_all' => 'Are you sure you want to discard all accounts?',
-        'discard_duplicates' => 'Are you sure you want to discard all duplicates?',
+        'discard' => '¿Está seguro que desea eliminar esta cuenta?',
+        'discard_all' => '¿Está seguro que desea eliminar todas las cuentas?',
+        'discard_duplicates' => '¿Está seguro que desea eliminar todos los duplicados?',
     ],
     'import' => [
         'import' => 'Import',
-        'to_import' => 'Import',
-        'import_legend' => 'Import your Google Authenticator accounts.',
-        'use_the_gauth_qr_code' => 'Load a G-Auth QR code',
-        'issuer' => 'Issuer',
-        'imported' => 'Imported',
-        'failure' => 'Failure',
-        'x_valid_accounts_found' => '{count} valid accounts found',
-        'import_all' => 'Import all',
-        'import_this_account' => 'Import this account',
-        'discard_all' => 'Discard all',
-        'discard_duplicates' => 'Discard duplicates',
-        'discard_this_account' => 'Discard this account',
-        'generate_a_test_password' => 'Generate a test pasword',
-        'possible_duplicate' => 'An account with the exact same data already exists',
+        'to_import' => 'Importar',
+        'import_legend' => 'Importe sus cuentas de Google Authenticator.',
+        'use_the_gauth_qr_code' => 'Carga un código QR de G-Auth',
+        'issuer' => 'Emisor',
+        'imported' => 'Importado',
+        'failure' => 'Fallo',
+        'x_valid_accounts_found' => '{count} cuentas válidos encontrados',
+        'import_all' => 'Importar todo',
+        'import_this_account' => 'Importar esta Cuenta',
+        'discard_all' => 'Descartar todo',
+        'discard_duplicates' => 'Descartar duplicados',
+        'discard_this_account' => 'Descartar esta cuenta',
+        'generate_a_test_password' => 'Generar una contraseña de prueba',
+        'possible_duplicate' => 'Ya existe una cuenta con exactamente los mismos datos',
     ],
 
 ];

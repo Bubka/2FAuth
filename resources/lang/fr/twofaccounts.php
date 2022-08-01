@@ -25,7 +25,7 @@ return [
     'no_service' => '- aucun service -',
     'forms' => [
         'service' => [
-            'placeholder' => 'example.com',
+            'placeholder' => 'Google, Twitter, Apple',
         ],
         'account' => [
             'placeholder' => 'Marc Dupont',
@@ -49,7 +49,9 @@ return [
             'val' => 'Vérouiller',
             'title' => 'Vérouiller le champ',
         ],
-        'choose_image' => 'Choisir une image…',
+        'choose_image' => 'Télécharger',
+        'i_m_lucky' => 'J\'ai de la chance',
+        'i_m_lucky_legend' => 'Le bouton "J\'ai de la chance" essaie d\'obtenir l\'icône officielle du service renseigné. Entrez le nom exact du service, sans l\'extension ".xyz" et avec la bonne orthographe. (fonctionnalité bêta)',
         'test' => 'Tester',
         'secret' => [
             'label' => 'Secret',

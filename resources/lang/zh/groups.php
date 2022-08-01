@@ -22,6 +22,7 @@ return [
     'deleting_group_does_not_delete_accounts' => '删除组不会删除帐户',
     'move_selected_to' => '移动选择到',
     'no_group' => '没有分组',
+    'change_group' => 'Change group',
     'forms' => [
         'new_group' => '新建组',
         'new_name' => '新名称',

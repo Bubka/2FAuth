@@ -17,19 +17,20 @@ return [
     'account' => 'Account',
     'oauth' => 'OAuth',
     'webauthn' => 'WebAuthn',
-    'tokens' => 'Tokens',
+    'tokens' => 'Token',
     'options' => 'Einstellungen',
+    'user_options' => 'User options',
     'confirm' => [
 
     ],
     'general' => 'Allgemein',
     'security' => 'Sicherheit',
-    'profile' => 'Profile',
-    'change_password' => 'Change password',
-    'personal_access_tokens' => 'Personal access tokens',
+    'profile' => 'Profil',
+    'change_password' => 'Passwort ändern',
+    'personal_access_tokens' => 'Persönliche Zugriffsstokens',
     'token_legend' => 'Personal Access Tokens allow any app to authenticate to the 2Fauth API. You should specify the access token as a Bearer token in the authorization header of consumer apps requests.',
-    'generate_new_token' => 'Generate a new token',
-    'revoke' => 'Revoke',
+    'generate_new_token' => 'Neuen Token generieren',
+    'revoke' => 'Zurückziehen',
     'token_revoked' => 'Token successfully revoked',
     'revoking_a_token_is_permanent' => 'Revoking a token is permanent',
     'confirm' => [
@@ -40,7 +41,7 @@ return [
     'forms' => [
         'edit_settings' => 'Einstellungen bearbeiten',
         'setting_saved' => 'Einstellungen gespeichert',
-        'new_token' => 'New token',
+        'new_token' => 'Neues Token',
         'some_translation_are_missing' => 'Some translations are missing using the browser preferred language?',
         'help_translate_2fauth' => 'Help translate 2FAuth',
         'language' => [
@@ -52,7 +53,7 @@ return [
             'help' => 'Replace generated password caracters with *** to ensure confidentiality. Do not affect the copy/paste feature.'
         ],
         'close_otp_on_copy' => [
-            'label' => 'Close OTP after copy',
+            'label' => 'OTP nach der Kopie schließen',
             'help' => 'Automatically close the popup showing the generated password after it has been copied'
         ],
         'use_basic_qrcode_reader' => [
@@ -68,6 +69,10 @@ return [
         'show_accounts_icons' => [
             'label' => 'Symbole anzeigen',
             'help' => 'Kontosymbole in der Hauptansicht anzeigen'
+        ],
+        'get_official_icons' => [
+            'label' => 'Get official icons',
+            'help' => '(Try to) Get the official icon of the 2FA issuer when adding an account'
         ],
         'auto_lock' => [
             'label' => 'Automatische Sperrung',
@@ -94,7 +99,7 @@ return [
             'help' => 'Speichert den letzten Gruppenfilter und stellt ihn bei Ihrem nächsten Besuch wieder her',
         ],
         'never' => 'Niemals',
-        'on_otp_copy' => 'On security code copy',
+        'on_otp_copy' => 'Beim Kopieren des Tokens',
         '1_minutes' => 'Nach 1 Minute',
         '5_minutes' => 'Nach 5 Minuten',
         '10_minutes' => 'Nach 10 Minuten',

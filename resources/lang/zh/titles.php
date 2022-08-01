@@ -45,4 +45,5 @@ return [
     'flooded' => 'Flood',
     'genericError' => 'Error',
     '404' => 'Item not found',
+    'about' => 'About',
 ];
