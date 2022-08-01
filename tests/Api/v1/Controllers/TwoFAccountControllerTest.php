@@ -114,7 +114,6 @@ class TwoFAccountControllerTest extends FeatureTestCase
     ];
 
 
-
     /**
      * @test
      */
@@ -129,35 +128,38 @@ class TwoFAccountControllerTest extends FeatureTestCase
 
     /**
      * @test
+     * 
+     * @dataProvider indexUrlParameterProvider
      */
-    public function test_index_returns_twofaccount_collection()
+    public function test_index_returns_twofaccount_collection($urlParameter, $expected)
     {
         TwoFAccount::factory()->count(3)->create();
 
         $response = $this->actingAs($this->user, 'api-guard')
-            ->json('GET', '/api/v1/twofaccounts')
+            ->json('GET', '/api/v1/twofaccounts'.$urlParameter)
             ->assertOk()
             ->assertJsonCount(3, $key = null)
             ->assertJsonStructure([
-                '*' => self::VALID_RESOURCE_STRUCTURE_WITHOUT_SECRET
+                '*' => $expected
             ]);
     }
 
 
     /**
-     * @test
+     * Provide data for index tests
      */
-    public function test_index_returns_twofaccount_collection_with_secret()
+    public function indexUrlParameterProvider()
     {
-        TwoFAccount::factory()->count(3)->create();
-
-        $response = $this->actingAs($this->user, 'api-guard')
-            ->json('GET', '/api/v1/twofaccounts?withSecret=1')
-            ->assertOk()
-            ->assertJsonCount(3, $key = null)
-            ->assertJsonStructure([
-                '*' => self::VALID_RESOURCE_STRUCTURE_WITH_SECRET
-            ]);
+        return [
+            'VALID_RESOURCE_STRUCTURE_WITHOUT_SECRET'  => [
+                '',
+                self::VALID_RESOURCE_STRUCTURE_WITHOUT_SECRET
+            ],
+            'VALID_RESOURCE_STRUCTURE_WITH_SECRET'  => [
+                '?withSecret=1',
+                self::VALID_RESOURCE_STRUCTURE_WITH_SECRET
+            ],
+        ];
     }
 
 
@@ -230,147 +232,86 @@ class TwoFAccountControllerTest extends FeatureTestCase
 
 
     /**
-     * @dataProvider provideDataForTestStoreStructure
+     * @dataProvider accountCreationProvider
      * @test
      */
-    public function test_store_returns_success_with_consistent_resource_structure(array $data)
+    public function test_store_without_encryption_returns_success_with_consistent_resource_structure($payload, $expected)
     {
+        Settings::set('useEncryption', false);
         Storage::put('test.png', 'emptied to prevent missing resource replaced by null by the model getter');
 
         $response = $this->actingAs($this->user, 'api-guard')
-            ->json('POST', '/api/v1/twofaccounts', $data)
+            ->json('POST', '/api/v1/twofaccounts', $payload)
             ->assertCreated()
-            ->assertJsonStructure(self::VALID_RESOURCE_STRUCTURE_WITH_SECRET);
+            ->assertJsonStructure(self::VALID_RESOURCE_STRUCTURE_WITH_SECRET)
+            ->assertJsonFragment($expected);
     }
 
 
     /**
-     * Provide data for TwoFAccount store test
+     * @dataProvider accountCreationProvider
+     * @test
      */
-    public function provideDataForTestStoreStructure() : array
+    public function test_store_with_encryption_returns_success_with_consistent_resource_structure($payload, $expected)
+    {
+        Settings::set('useEncryption', true);
+        Storage::put('test.png', 'emptied to prevent missing resource replaced by null by the model getter');
+
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('POST', '/api/v1/twofaccounts', $payload)
+            ->assertCreated()
+            ->assertJsonStructure(self::VALID_RESOURCE_STRUCTURE_WITH_SECRET)
+            ->assertJsonFragment($expected);
+    }
+
+
+    /**
+     * Provide data for TwoFAccount store tests
+     */
+    public function accountCreationProvider()
     {
         return [
-            [[
-                'uri' => OtpTestData::TOTP_FULL_CUSTOM_URI,
-            ]],
-            [[
-                'uri' => OtpTestData::TOTP_SHORT_URI,
-            ]],
-            [
-                OtpTestData::ARRAY_OF_FULL_VALID_PARAMETERS_FOR_CUSTOM_TOTP
+            'TOTP_FULL_CUSTOM_URI'  => [
+                [
+                    'uri' => OtpTestData::TOTP_FULL_CUSTOM_URI,
+                ],
+                self::JSON_FRAGMENTS_FOR_CUSTOM_TOTP
             ],
-            [
-                OtpTestData::ARRAY_OF_MINIMUM_VALID_PARAMETERS_FOR_TOTP
+            'TOTP_SHORT_URI'  => [
+                [
+                    'uri' => OtpTestData::TOTP_SHORT_URI,
+                ],
+                self::JSON_FRAGMENTS_FOR_DEFAULT_TOTP
             ],
-            [[
-                'uri' => OtpTestData::HOTP_FULL_CUSTOM_URI,
-            ]],
-            [[
-                'uri' => OtpTestData::HOTP_SHORT_URI,
-            ]],
-            [
-                OtpTestData::ARRAY_OF_FULL_VALID_PARAMETERS_FOR_CUSTOM_HOTP
+            'ARRAY_OF_FULL_VALID_PARAMETERS_FOR_CUSTOM_TOTP'  => [
+                OtpTestData::ARRAY_OF_FULL_VALID_PARAMETERS_FOR_CUSTOM_TOTP,
+                self::JSON_FRAGMENTS_FOR_CUSTOM_TOTP
             ],
-            [
-                OtpTestData::ARRAY_OF_MINIMUM_VALID_PARAMETERS_FOR_HOTP
+            'ARRAY_OF_MINIMUM_VALID_PARAMETERS_FOR_TOTP'  => [
+                OtpTestData::ARRAY_OF_MINIMUM_VALID_PARAMETERS_FOR_TOTP,
+                self::JSON_FRAGMENTS_FOR_DEFAULT_TOTP
+            ],
+            'HOTP_FULL_CUSTOM_URI'  => [
+                [
+                    'uri' => OtpTestData::HOTP_FULL_CUSTOM_URI,
+                ],
+                self::JSON_FRAGMENTS_FOR_CUSTOM_HOTP
+            ],
+            'HOTP_SHORT_URI'  => [
+                [
+                    'uri' => OtpTestData::HOTP_SHORT_URI,
+                ],
+                self::JSON_FRAGMENTS_FOR_DEFAULT_HOTP
+            ],
+            'ARRAY_OF_FULL_VALID_PARAMETERS_FOR_CUSTOM_HOTP'  => [
+                OtpTestData::ARRAY_OF_FULL_VALID_PARAMETERS_FOR_CUSTOM_HOTP,
+                self::JSON_FRAGMENTS_FOR_CUSTOM_HOTP
+            ],
+            'ARRAY_OF_MINIMUM_VALID_PARAMETERS_FOR_HOTP'  => [
+                OtpTestData::ARRAY_OF_MINIMUM_VALID_PARAMETERS_FOR_HOTP,
+                self::JSON_FRAGMENTS_FOR_DEFAULT_HOTP
             ],
         ];
-    }
-
-
-    /**
-     * @test
-     */
-    public function test_store_totp_using_fully_custom_uri_returns_consistent_resource()
-    {
-        $response = $this->actingAs($this->user, 'api-guard')
-            ->json('POST', '/api/v1/twofaccounts', [
-                'uri' => OtpTestData::TOTP_FULL_CUSTOM_URI,
-            ])
-            ->assertJsonFragment(self::JSON_FRAGMENTS_FOR_CUSTOM_TOTP);
-    }
-
-
-    /**
-     * @test
-     */
-    public function test_store_totp_using_short_uri_returns_resource_with_default_otp_parameter()
-    {
-        $response = $this->actingAs($this->user, 'api-guard')
-            ->json('POST', '/api/v1/twofaccounts', [
-                'uri' => OtpTestData::TOTP_SHORT_URI,
-            ])
-            ->assertJsonFragment(self::JSON_FRAGMENTS_FOR_DEFAULT_TOTP);
-    }
-
-
-    /**
-     * @test
-     */
-    public function test_store_totp_using_fully_custom_parameters_returns_consistent_resource()
-    {
-        $response = $this->actingAs($this->user, 'api-guard')
-            ->json('POST', '/api/v1/twofaccounts', OtpTestData::ARRAY_OF_FULL_VALID_PARAMETERS_FOR_CUSTOM_TOTP)
-            ->assertJsonFragment(self::JSON_FRAGMENTS_FOR_CUSTOM_TOTP);
-    }
-
-
-    /**
-     * @test
-     */
-    public function test_store_totp_using_minimum_parameters_returns_consistent_resource()
-    {
-        $response = $this->actingAs($this->user, 'api-guard')
-            ->json('POST', '/api/v1/twofaccounts', OtpTestData::ARRAY_OF_MINIMUM_VALID_PARAMETERS_FOR_TOTP)
-            ->assertJsonFragment(self::JSON_FRAGMENTS_FOR_DEFAULT_TOTP);
-    }
-
-
-    /**
-     * @test
-     */
-    public function test_store_hotp_using_fully_custom_uri_returns_consistent_resource()
-    {
-        $response = $this->actingAs($this->user, 'api-guard')
-            ->json('POST', '/api/v1/twofaccounts', [
-                'uri' => OtpTestData::HOTP_FULL_CUSTOM_URI,
-            ])
-            ->assertJsonFragment(self::JSON_FRAGMENTS_FOR_CUSTOM_HOTP);
-    }
-
-
-    /**
-     * @test
-     */
-    public function test_store_hotp_using_short_uri_returns_resource_with_default_otp_parameter()
-    {
-        $response = $this->actingAs($this->user, 'api-guard')
-            ->json('POST', '/api/v1/twofaccounts', [
-                'uri' => OtpTestData::HOTP_SHORT_URI,
-            ])
-            ->assertJsonFragment(self::JSON_FRAGMENTS_FOR_DEFAULT_HOTP);
-    }
-
-
-    /**
-     * @test
-     */
-    public function test_store_hotp_using_fully_custom_parameters_returns_consistent_resource()
-    {
-        $response = $this->actingAs($this->user, 'api-guard')
-            ->json('POST', '/api/v1/twofaccounts', OtpTestData::ARRAY_OF_FULL_VALID_PARAMETERS_FOR_CUSTOM_HOTP)
-            ->assertJsonFragment(self::JSON_FRAGMENTS_FOR_CUSTOM_HOTP);
-    }
-
-
-    /**
-     * @test
-     */
-    public function test_store_hotp_using_minimum_parameters_returns_consistent_resource()
-    {
-        $response = $this->actingAs($this->user, 'api-guard')
-            ->json('POST', '/api/v1/twofaccounts', OtpTestData::ARRAY_OF_MINIMUM_VALID_PARAMETERS_FOR_HOTP)
-            ->assertJsonFragment(self::JSON_FRAGMENTS_FOR_DEFAULT_HOTP);
     }
 
 

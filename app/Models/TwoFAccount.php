@@ -607,7 +607,7 @@ class TwoFAccount extends Model implements Sortable
     private function decryptOrReturn($value)
     {
         // Decipher when needed
-        if ( Settings::get('useEncryption') )
+        if ( Settings::get('useEncryption') && $value )
         {
             try {
                 return Crypt::decryptString($value);
