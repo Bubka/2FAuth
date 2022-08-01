@@ -1,5 +1,32 @@
 # Change log
 
+## [3.3] - 2022-08-01
+
+⚠️ This release drops PHP 7.4 support ⚠️
+
+The [docker image](https://hub.docker.com/r/2fauth/2fauth) has been upgraded as well.
+
+### Added
+
+- An option to fetch icons automatically from [2factorauth/twofactorauth](https://github.com/2factorauth/twofactorauth) ([#99](https://github.com/Bubka/2FAuth/issues/99))
+- An _About_ page, accessible from the footer ([#91](https://github.com/Bubka/2FAuth/issues/91))
+- Alphabetical sorting feature ([#95](https://github.com/Bubka/2FAuth/issues/95))
+
+### Changed
+
+- The footer is now visible everywhere to ease access to the _About_ page
+
+### Fixed
+
+- [issue #89](https://github.com/Bubka/2FAuth/issues/89) Deploy to Heroku fails without `composer.lock`
+- [issue #102](https://github.com/Bubka/2FAuth/issues/102) OTP generation from the Create/Edit form with invalid data should display errors
+- [issue #103](https://github.com/Bubka/2FAuth/issues/103) Google Authenticator import error: "Label contains a colon"
+- [issue #109](https://github.com/Bubka/2FAuth/issues/109) Account creation/import fails when encryption is On
+
+### Removed
+
+- PHP 7.4 support
+
 ## [3.2] - 2022-07-18
 
 ### Added
