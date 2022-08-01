@@ -4,7 +4,7 @@
             <h1 class="title">{{ $t('commons.about') }}</h1>
             <p class="block">
                 <span class="has-text-white"><span class="is-size-5">2FAuth</span> v{{ appVersion }}</span><br />
-                A web app to manage your Two-Factor Authentication (2FA) accounts and generate their security codes
+                {{ $t('commons.2fauth_teaser')}}
             </p>
             <img src="logo.svg" style="height: 32px" alt="logo" />
             <p class="block">
@@ -41,9 +41,9 @@
             </h2>
             <p class="block">
                 <ul>
-                    <li>Made with <a href="https://docs.2fauth.app/credits/">Laravel, Bulma CSS, Vue.js and more</a></li>
-                    <li>UI Icons by <a href="https://fontawesome.com/">Font Awesome</a>&nbsp;<a class="is-size-7" href="https://fontawesome.com/license/free">(CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)</a></li>
-                    <li>Logos by <a href="https://2fa.directory/">2FA Directory</a>&nbsp;<a class="is-size-7" href="https://github.com/2factorauth/twofactorauth/blob/master/LICENSE.md">(MIT License)</a></li>
+                    <li>{{ $t('commons.made_with')}}&nbsp;<a href="https://docs.2fauth.app/credits/">Laravel, Bulma CSS, Vue.js and more</a></li>
+                    <li>{{ $t('commons.ui_icons_by')}}&nbsp;<a href="https://fontawesome.com/">Font Awesome</a>&nbsp;<a class="is-size-7" href="https://fontawesome.com/license/free">(CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)</a></li>
+                    <li>{{ $t('commons.logos_by')}}&nbsp;<a href="https://2fa.directory/">2FA Directory</a>&nbsp;<a class="is-size-7" href="https://github.com/2factorauth/twofactorauth/blob/master/LICENSE.md">(MIT License)</a></li>
                 </ul>
             </p>
             <h2 class="title is-5 has-text-grey-light">
