@@ -1,5 +1,11 @@
 # Change log
 
+## [3.3.1] - 2022-08-02
+
+### Fixed
+
+- [issue #109](https://github.com/Bubka/2FAuth/issues/109) Timeout right after login
+
 ## [3.3] - 2022-08-01
 
 ⚠️ This release drops PHP 7.4 support ⚠️
