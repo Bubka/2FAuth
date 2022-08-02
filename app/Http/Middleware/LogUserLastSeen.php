@@ -16,7 +16,7 @@ class LogUserLastSeen
      * @param  string|null $guard
      * @return mixed
      */
-    public function handle($request, Closure $next, ...$quards)
+    public function handle($request, Closure $next, ...$guards)
     {
         $guards = empty($guards) ? [null] : $guards;
 
