@@ -48,6 +48,7 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\Authenticate::class,
+            \App\Http\Middleware\LogUserLastSeen::class,
             \App\Http\Middleware\KickOutInactiveUser::class,
             \App\Http\Middleware\CustomCreateFreshApiToken::class,
         ],
