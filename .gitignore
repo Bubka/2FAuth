@@ -3,6 +3,9 @@
 /public/storage
 /storage/*.key
 /tests/Coverage
+/tests/EndToEnd/**/*.html
+/tests/EndToEnd/**/output.xml
+/tests/EndToEnd/**/*.png
 /vendor
 /.vscode
 .env
