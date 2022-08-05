@@ -72,7 +72,7 @@
                     this.showWebauthnRegistration = true
                 })
                 .catch(error => {
-                    if( error.response.status === 422 && error.response.data.errors.name ) {
+                    if( error.response.status === 422 && error.response.data.errors.name.includes(this.$t('validation.custom.name.firstUser')) ) {
 
                         this.$notify({ type: 'is-danger', text: this.$t('errors.cannot_register_more_user'), duration:-1 })
                     }
