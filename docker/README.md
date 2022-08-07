@@ -111,23 +111,32 @@ There are the following build arguments you can use to customize the image using
 
 #### Mail settings
 
-| Build argument | Default | Description |
+> Refer your email provider documentation to configure your mail settings
+> 
+> Set a value for every available setting to avoid issue
+
+| Build argument | Recommendation | Description |
 | --- | --- | --- |
-| MAIL_HOST | smtp.mailtrap.io | The SMTP hostname |
-| MAIL_PORT | 2525 | The coresponding SMTP port |
-| MAIL_FROM | changeme@example.com | The sender adress |
-| MAIL_USERNAME | null | The SMTP username |
-| MAIL_PASSWORD | null | The SMTP password |
+| MAIL_DRIVER | SMTP | The driver type |
+| MAIL_HOST | smtp.yourdomain.com | The SMTP hostname |
+| MAIL_PORT | 587 | The corresponding SMTP port (587 with STARTTLS) or (465 with SSL recommended) |
+| MAIL_USERNAME | 2fauth@yourdomain.com | The SMTP username |
+| MAIL_PASSWORD | password1234 | The SMTP password |
+| MAIL_ENCRYPTION | TLS | The encrytion type (TLS -> STARTTLS) or SSL |
+| MAIL_FROM_NAME | 2FAuth | The sender name |
+| MAIL_FROM_ADDRESS | 2fauth@yourdomain.com | The sender adress |
 
 Example:
 
 ```text
-...
+-e MAIL_DRIVER=SMTP
 -e MAIL_HOST=smtp.example.com
--e MAIL_PORT=587
--e MAIL_FROM=2fauth@example.com
+-e MAIL_PORT=587 # STARTTLS
 -e MAIL_USERNAME=2fauth@example.com
 -e MAIL_PASSWORD=password1234
+-e MAIL_ENCRYPTION=TLS # STARTTLS
+-e MAIL_FROM_NAME=2FAuth
+-e MAIL_FROM_ADDRESS=2fauth@example.com
 ```
 
 ## Implementation details
