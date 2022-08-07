@@ -5,7 +5,7 @@ Library           SeleniumLibrary
 Resource          ../common.resource
 
 *** Variables ***
-&{LOGIN_PAGE}      url=http://${SERVER}/login    title=Login
+${LOGIN PAGE URL}    http://${SERVER}/login
 ${EMAIL FIELD}    emlEmail
 ${EMAIL FIELD ERROR}    valErrorEmail
 ${PASSWORD FIELD}    pwdPassword
@@ -17,19 +17,24 @@ ${SIGN IN WITH WEBAUTHN LINK}    lnkSignWithWebauthn
 ${SIGN IN WITH LOGIN PASSWORD LINK}    lnkSignWithLegacy
 ${RECOVER YOUR ACCOUNT LINK}    lnkRecoverAccount
 ${RESET PASSWORD LINK}    lnkResetPwd
+${PUNCHLINE TEXT}    punchline
 
 *** Keywords ***
-Open Browser To Legacy Login Page
-    Open Browser To Page    ${LOGIN_PAGE}
-    Show Legacy Form
 
 Go To Legacy Login Page
-    Go To Page    ${LOGIN_PAGE}
+    Go To    ${LOGIN PAGE URL}
     Show Legacy Form
 
+Go To Webauthn Login Page
+    Go To    ${LOGIN PAGE URL}
+    Show Webauthn Form
+
+Login Page Should Be Open
+    Location Should Be    ${LOGIN PAGE URL}
+
 Submit Credentials To Legacy Form Login
-    [Arguments]    ${username}    ${password}
-    Input Text    ${EMAIL FIELD}    ${username}
+    [Arguments]    ${email}    ${password}
+    Input Text    ${EMAIL FIELD}    ${email}
     Input Text    ${PASSWORD FIELD}     ${password}
     Click Button    ${SIGN IN BUTTON}
 
@@ -48,3 +53,6 @@ Show Webauthn Form
     ${is_not_visible}=  Run Keyword And Return Status    Element Should Be Visible   ${SIGN IN WITH WEBAUTHN LINK}
     Run Keyword If    ${is_not_visible}    Click Link    ${SIGN IN WITH WEBAUTHN LINK}
     Element Should Not Be Visible    ${LEGACY FORM}
+
+User Should Be Welcomed
+    Element Should Contain    ${PUNCHLINE TEXT}    ${USERNAME}

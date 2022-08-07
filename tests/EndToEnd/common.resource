@@ -1,34 +1,46 @@
 *** Settings ***
 Documentation     A resource file with reusable keywords and variables.
 Library           SeleniumLibrary
+# Library           RequestsLibrary
+Resource          workflows.resource
 
 *** Variables ***
 ${SERVER}         localhost
 ${BROWSER}        chrome
 ${DELAY}          0.1
 
+${USERNAME}     Tester
+${EMAIL}     testing@2fauth.app
+${PASSWORD}    password
+
+${HOME PAGE URL}    http://${SERVER}/
+${LOGOUT LINK}    lnkSignOut
 
 *** Keywords ***
-Open Browser To Page
-    [Arguments]    ${page}
+Open Blank Browser
     Set Selenium Speed    ${DELAY}
-    Open Browser    ${page.url}    ${BROWSER}
-    Page Should Be Open    ${page}
+    # ${options}=    Evaluate    sys.modules['selenium.webdriver'].ChromeOptions()    sys
+    # Call Method    ${options}    add_argument    --lang\=en,en-us
+    # Call Method    ${options}    add_argument    --disable-dev-shm-usage    # See https://stackoverflow.com/questions/50642308/org-openqa-selenium-webdriverexception-unknown-error-devtoolsactiveport-file-d
+    # ${prefs}=    Create Dictionary    intl.accept_languages=en,en-us
+    # Call Method    ${options}    add_experimental_option    prefs    ${prefs}
+    # Create Webdriver    Chrome    chrome_options=${options}
+    # Go To    ${HOME PAGE URL}
+    Open Browser    ${HOME PAGE URL}    Chrome
 
-An Error should be notified
-    Element Should Be Visible    id:vueNotification >> class:is-danger
+Go Authenticated To
+    [Arguments]    ${url}
+    Go To    ${url}
+    ${is_authenticated}=  Run Keyword And Return Status    Location Should Be    ${url}
+    IF    ${is_authenticated} == False
+        Play sign In Workflow
+        Go To    ${url}
+    END
 
-Go To Page
-    [Arguments]    ${page}
-    Go To    ${page.url}
-    Page Should Be Open    ${page}
-
-Page Should Be Open
-    [Arguments]    ${page}
-    Location Should Be    ${page.url}
-    Title Should Be    ${page.title}
+An Error Notification Should Appear
+    Element Should Be Visible    css:#vueNotification >> css:.is-danger
 
 Field Should Show An Error
     [Arguments]    ${field error}
     Element Should Be Visible   ${field error}
-    Should Not Be Empty    ${field error}
+    Should Not Be Empty    ${field error} 
