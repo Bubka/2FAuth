@@ -19,6 +19,7 @@ Go To Account Settings Page
     Go Authenticated To    ${ACCOUNT SETTINGS PAGE URL}
 
 Delete User Account
+    Scroll To Bottom
     Input Text    ${PASSWORD FIELD FOR DELETE}    ${PASSWORD}
     Click Button    ${DELETE YOUR ACCOUNT BUTTON}
     Handle Alert

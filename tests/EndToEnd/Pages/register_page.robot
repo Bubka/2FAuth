@@ -31,6 +31,7 @@ Submit Account Data To Registration Form
     Input Text    ${EMAIL FIELD}    ${email}
     Input Text    ${PASSWORD FIELD}     ${password}
     Input Text    ${PASSWORD CONFIRMATION FIELD}     ${password confirmation}
+    Scroll To Bottom
     Click Button    ${REGISTER BUTTON}
 
 Username Field Should Show An Error

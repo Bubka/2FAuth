@@ -36,6 +36,7 @@ Submit Credentials To Legacy Form Login
     [Arguments]    ${email}    ${password}
     Input Text    ${EMAIL FIELD}    ${email}
     Input Text    ${PASSWORD FIELD}     ${password}
+    Scroll To Bottom
     Click Button    ${SIGN IN BUTTON}
 
 Email Field Should Show An Error

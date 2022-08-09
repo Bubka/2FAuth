@@ -27,6 +27,7 @@ Open Blank Browser
     # Create Webdriver    Chrome    chrome_options=${options}
     # Go To    ${HOME PAGE URL}
     Open Browser    ${HOME PAGE URL}    Chrome
+    Maximize Browser Window
 
 Go Authenticated To
     [Arguments]    ${url}
@@ -43,4 +44,7 @@ An Error Notification Should Appear
 Field Should Show An Error
     [Arguments]    ${field error}
     Element Should Be Visible   ${field error}
-    Should Not Be Empty    ${field error} 
+    Should Not Be Empty    ${field error}
+
+Scroll To Bottom
+    Execute Javascript  window.scrollTo(0,document.body.scrollHeight)
