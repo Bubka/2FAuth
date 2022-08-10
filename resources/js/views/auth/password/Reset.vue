@@ -4,7 +4,8 @@
             <form-field :form="form" fieldName="email" inputType="email" :label="$t('auth.forms.email')" disabled readonly />
             <form-field :form="form" fieldName="password" inputType="password" :label="$t('auth.forms.new_password')" />
             <form-field :form="form" fieldName="password_confirmation" inputType="password" :label="$t('auth.forms.confirm_password')" />
-            <form-buttons :isBusy="form.isBusy" :caption="$t('auth.forms.change_password')" :showCancelButton="true" cancelLandingView="login" />
+            <form-buttons v-if="pending" :isBusy="form.isBusy" :caption="$t('auth.forms.change_password')" :showCancelButton="true" cancelLandingView="login" />
+            <router-link v-if="!pending" id="btnContinue" :to="{ name: 'accounts' }" class="button is-link">{{ $t('commons.continue') }}</router-link>
         </form>
         <!-- footer -->
         <vue-footer></vue-footer>
@@ -18,8 +19,7 @@
     export default {
         data(){
             return {
-                success: '',
-                fail: '',
+                pending: true,
                 form: new Form({
                     email : '',
                     password : '',
@@ -31,7 +31,7 @@
 
         created () {
             this.form.email = this.$route.query.email
-            this.form.token = this.$route.params.token
+            this.form.token = this.$route.query.token
         },
 
         methods : {
@@ -40,8 +40,9 @@
 
                 this.form.post('/user/password/reset', {returnError: true})
                 .then(response => {
-
+                    this.pending = false
                     this.$notify({ type: 'is-success', text: response.data.message, duration:-1 })
+
                 })
                 .catch(error => {
                     if( error.response.data.resetFailed ) {

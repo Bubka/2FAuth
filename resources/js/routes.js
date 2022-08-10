@@ -56,7 +56,7 @@ const router = new Router({
         { path: '/register', name: 'register', component: Register, meta: { disabledWithAuthProxy: true, showAbout: true } },
         { path: '/autolock', name: 'autolock',component: Autolock, meta: { disabledWithAuthProxy: true, showAbout: true } },
         { path: '/password/request', name: 'password.request', component: PasswordRequest, meta: { disabledWithAuthProxy: true, showAbout: true } },
-        { path: '/password/reset/:token', name: 'password.reset', component: PasswordReset, meta: { disabledWithAuthProxy: true, showAbout: true } },
+        { path: '/user/password/reset', name: 'password.reset', component: PasswordReset, meta: { disabledWithAuthProxy: true, showAbout: true } },
         { path: '/webauthn/lost', name: 'webauthn.lost', component: WebauthnLost, meta: { disabledWithAuthProxy: true, showAbout: true } },
         { path: '/webauthn/recover', name: 'webauthn.recover', component: WebauthnRecover, meta: { disabledWithAuthProxy: true, showAbout: true } },
 
