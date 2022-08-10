@@ -75,7 +75,7 @@
         },
 
         async mounted() {
-            
+
             const { data } = await this.form.get('/api/v1/settings')
 
             this.form.fillWithKeyValueObject(data)
@@ -180,6 +180,14 @@
                     await this.axios.delete('/webauthn/credentials/' + credentialId).then(response => {
                         // Remove the revoked credential from the collection
                         this.credentials = this.credentials.filter(a => a.id !== credentialId)
+
+                        if (this.credentials.length == 0) {
+                            this.form.useWebauthnOnly = false
+                            this.form.useWebauthnAsDefault = false
+                            this.$root.appSettings['useWebauthnOnly'] = false
+                            this.$root.appSettings['useWebauthnAsDefault'] = false
+                        }
+
                         this.$notify({ type: 'is-success', text: this.$t('auth.webauthn.device_revoked') })
                     });
                 }
