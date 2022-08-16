@@ -5,7 +5,7 @@ Library           SeleniumLibrary
 Resource          ../common.resource
 
 *** Variables ***
-${ACCOUNTS PAGE URL}    http://${SERVER}/accounts
+${ACCOUNTS PAGE URL}    ${ROOT URL}/accounts
 
 *** Keywords ***
 Accounts Page Should Be Open

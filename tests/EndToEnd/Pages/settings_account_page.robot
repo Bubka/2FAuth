@@ -6,7 +6,7 @@ Resource          ../common.resource
 Resource          login_page.robot
 
 *** Variables ***
-${ACCOUNT SETTINGS PAGE URL}    http://${SERVER}/settings/account
+${ACCOUNT SETTINGS PAGE URL}    ${ROOT URL}/settings/account
 ${PASSWORD FIELD FOR DELETE}    css:form#frmDeleteAccount >> css:input#pwdPassword
 ${DELETE YOUR ACCOUNT BUTTON}    btnDeleteAccount
 

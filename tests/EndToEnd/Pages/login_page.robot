@@ -5,7 +5,7 @@ Library           SeleniumLibrary
 Resource          ../common.resource
 
 *** Variables ***
-${LOGIN PAGE URL}    http://${SERVER}/login
+${LOGIN PAGE URL}    ${ROOT URL}/login
 ${EMAIL FIELD}    emlEmail
 ${EMAIL FIELD ERROR}    valErrorEmail
 ${PASSWORD FIELD}    pwdPassword
@@ -48,11 +48,15 @@ Password Field Should Show An Error
 Show Legacy Form
     ${is_not_visible}=  Run Keyword And Return Status    Element Should Be Visible   ${SIGN IN WITH LOGIN PASSWORD LINK}
     Run Keyword If    ${is_not_visible}    Click Link    ${SIGN IN WITH LOGIN PASSWORD LINK}
+
+Legacy Form Should Be Visible
     Element Should Be Visible    ${LEGACY FORM}
 
 Show Webauthn Form
     ${is_not_visible}=  Run Keyword And Return Status    Element Should Be Visible   ${SIGN IN WITH WEBAUTHN LINK}
     Run Keyword If    ${is_not_visible}    Click Link    ${SIGN IN WITH WEBAUTHN LINK}
+
+Webauthn Form Should Be Visible
     Element Should Not Be Visible    ${LEGACY FORM}
 
 User Should Be Welcomed

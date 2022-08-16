@@ -3,7 +3,6 @@ Documentation     Workflows execute recurrent tasks.
 ...               They don't assert anything.
 ...               They must be triggered while a browser is already opened.
 ...               They must not close the browser
-Library           SeleniumLibrary
 Resource          common.resource
 Resource          Pages/login_page.robot
 Resource          Pages/register_page.robot
@@ -21,15 +20,14 @@ Play Delete User Account Workflow
 Play sign In Workflow
     Delete All Cookies
     Go To Legacy Login Page
-    Login Page Should Be Open
     Submit Credentials To Legacy Form Login    ${EMAIL}    ${PASSWORD}
 
 Play Register New User Workflow
     Go To Register Page
-    Submit Account Data To Registration Form    ${USERNAME}    ${EMAIL}    ${PASSWORD}    ${PASSWORD}
+    Submit User Data To Registration Form    ${USERNAME}    ${EMAIL}    ${PASSWORD}    ${PASSWORD}
 
 Play Logout Workflow
-    Go To    http://${SERVER}/accounts
+    Go To    ${ROOT URL}/accounts
     ${is_authenticated}=  Run Keyword And Return Status    Page Should Contain Element    ${LOGOUT LINK}
     IF    ${is_authenticated} == True
         Click Element    ${LOGOUT LINK}

@@ -1,32 +1,29 @@
 *** Settings ***
 Documentation     A resource file with reusable keywords and variables.
 Library           SeleniumLibrary
-# Library           RequestsLibrary
 Resource          workflows.resource
 
 *** Variables ***
-${SERVER}         localhost
+${SERVER}         2fauth
 ${BROWSER}        chrome
-${DELAY}          0.1
+${DELAY}          0.5
 
 ${USERNAME}     Tester
 ${EMAIL}     testing@2fauth.app
 ${PASSWORD}    password
 
-${HOME PAGE URL}    http://${SERVER}/
+${ROOT URL}    https://${SERVER}
 ${LOGOUT LINK}    lnkSignOut
 
 *** Keywords ***
 Open Blank Browser
     Set Selenium Speed    ${DELAY}
-    # ${options}=    Evaluate    sys.modules['selenium.webdriver'].ChromeOptions()    sys
-    # Call Method    ${options}    add_argument    --lang\=en,en-us
-    # Call Method    ${options}    add_argument    --disable-dev-shm-usage    # See https://stackoverflow.com/questions/50642308/org-openqa-selenium-webdriverexception-unknown-error-devtoolsactiveport-file-d
-    # ${prefs}=    Create Dictionary    intl.accept_languages=en,en-us
-    # Call Method    ${options}    add_experimental_option    prefs    ${prefs}
-    # Create Webdriver    Chrome    chrome_options=${options}
-    # Go To    ${HOME PAGE URL}
-    Open Browser    ${HOME PAGE URL}    Chrome
+    ${options}=    Evaluate    sys.modules['selenium.webdriver'].ChromeOptions()    sys
+    Call Method    ${options}    add_argument    --lang\=en,en-us
+    Call Method    ${options}    add_argument    --disable-dev-shm-usage    # See https://stackoverflow.com/questions/50642308/org-openqa-selenium-webdriverexception-unknown-error-devtoolsactiveport-file-d
+    ${prefs}=    Create Dictionary    intl.accept_languages=en,en-us
+    Call Method    ${options}    add_experimental_option    prefs    ${prefs}
+    Open Browser    url=${ROOT URL}    browser=${BROWSER}    options=${options}
     Maximize Browser Window
 
 Go Authenticated To
@@ -39,7 +36,7 @@ Go Authenticated To
     END
 
 An Error Notification Should Appear
-    Element Should Be Visible    css:#vueNotification >> css:.is-danger
+    Wait Until Element Is Visible    css:#vueNotification .is-danger
 
 Field Should Show An Error
     [Arguments]    ${field error}

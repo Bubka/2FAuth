@@ -5,7 +5,7 @@ Library           SeleniumLibrary
 Resource          ../common.resource
 
 *** Variables ***
-${REGISTER PAGE URL}    http://${SERVER}/register
+${REGISTER PAGE URL}    ${ROOT URL}/register
 ${USERNAME FIELD}    txtName
 ${USERNAME FIELD ERROR}    valErrorName
 ${EMAIL FIELD}    emlEmail
@@ -25,7 +25,7 @@ Go To Register Page
 Register Page Should Be Open
     Location Should Be    ${REGISTER PAGE URL}
 
-Submit Account Data To Registration Form
+Submit User Data To Registration Form
     [Arguments]    ${username}    ${email}    ${password}    ${password confirmation}
     Input Text    ${USERNAME FIELD}    ${username}
     Input Text    ${EMAIL FIELD}    ${email}

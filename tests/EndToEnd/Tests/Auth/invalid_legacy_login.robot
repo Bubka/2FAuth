@@ -1,10 +1,11 @@
 *** Settings ***
 Documentation     A test suite containing tests related to invalid login.
 Suite Setup       Open Blank Browser
-Suite Teardown    Close Browser
+Suite Teardown    Close All Browsers
 Test Setup        Run keywords
 ...                   Go To Legacy Login Page
-...                   AND    Location Should Be    ${LOGIN PAGE URL}
+...                   AND    Login Page Should Be Open
+...                   AND    Legacy Form Should Be Visible
 Resource          ../../Pages/login_page.robot
 Resource          authentication.resource
 

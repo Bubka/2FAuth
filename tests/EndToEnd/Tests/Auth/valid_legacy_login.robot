@@ -1,11 +1,9 @@
 *** Settings ***
 Documentation     A test suite containing tests related to valid login.
 Suite Setup       Open Blank Browser
-Suite Teardown    Close Browser
+Suite Teardown    Close All Browsers
 Resource          ../../Pages/login_page.robot
-Resource          ../../Pages/accounts_page.robot
 Resource          authentication.resource
-Resource    invalid_registration.robot
 
 *** Test Cases ***
 Valid Login
