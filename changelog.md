@@ -1,6 +1,6 @@
 # Change log
 
-## [3.3.3] - 2022-08-11
+## [3.3.3] - 2022-08-16
 
 ### Fixed
 
@@ -8,7 +8,6 @@
 - [issue #111](https://github.com/Bubka/2FAuth/issues/111) Inappropriate notification about existing user during registration
 - [issue #113](https://github.com/Bubka/2FAuth/issues/113) Password reset does not work
 - [issue #115](https://github.com/Bubka/2FAuth/issues/115) WEBAUTHN_NAME .env variable set as null generates server error
-
 
 ## [3.3.1-3.3.2] - 2022-08-02
 
