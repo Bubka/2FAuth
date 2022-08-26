@@ -17,7 +17,7 @@ class GroupController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \App\Api\v1\Resources\GroupResource
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
     public function index()
     {

@@ -152,7 +152,7 @@ class TwoFAccountController extends Controller
      * Get a One-Time Password
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param int $id
+     * @param string|null $id
      * @return \Illuminate\Http\JsonResponse
      */
     public function otp(Request $request, $id = null)

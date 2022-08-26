@@ -12,7 +12,7 @@ class PasswordController extends Controller
     /**
      * Update the user's password.
      *
-     * @param  \App\Api\v1\Requests\UserPatchPwdRequest $request
+     * @param  \App\Http\Requests\UserPatchPwdRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function update(UserPatchPwdRequest $request)

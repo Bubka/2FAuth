@@ -39,7 +39,7 @@ class SettingService
      * @param string|array $setting A single setting name or an associative array of name:value settings
      * @return mixed string|int|boolean|null
      */
-    public function get(string $setting)
+    public function get($setting)
     {
         return $this->settings->get($setting);
     }
@@ -110,6 +110,8 @@ class SettingService
 
     /**
      * Set the settings collection
+     * 
+     * @return void
      */
     private function build()
     {
@@ -133,10 +135,10 @@ class SettingService
     /**
      * Replaces boolean by a patterned string as appstrack/laravel-options package does not support var type
      * 
-     * @param \Illuminate\Support\Collection $settings
-     * @return \Illuminate\Support\Collection
+     * @param mixed $settings
+     * @return string
      */
-    private function replaceBoolean($value)
+    private function replaceBoolean(mixed $value)
     {
         return is_bool($value) ? '{{' . $value . '}}' : $value;
     }
@@ -145,10 +147,10 @@ class SettingService
     /**
      * Replaces patterned string that represent booleans with real booleans
      * 
-     * @param \Illuminate\Support\Collection $settings
-     * @return \Illuminate\Support\Collection
+     * @param mixed $settings
+     * @return mixed
      */
-    private function restoreType($value)
+    private function restoreType(mixed $value)
     {
         $value = is_numeric($value) ? (int) $value : $value;
 

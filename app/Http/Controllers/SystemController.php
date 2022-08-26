@@ -16,6 +16,7 @@ class SystemController extends Controller
      */
     public function infos(Request $request)
     {
+        $infos = array();
         $infos['Date']               = date(DATE_RFC2822);
         $infos['userAgent']        = $request->header('user-agent');
         // App info

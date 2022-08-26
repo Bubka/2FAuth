@@ -36,7 +36,7 @@ class CaseInsensitiveEmailExists implements Rule
     /**
      * Get the validation error message.
      * @codeCoverageIgnore
-     * @return string
+     * @return array|string
      */
     public function message()
     {

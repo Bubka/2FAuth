@@ -85,6 +85,7 @@ class TwoFAccountService
         foreach ($otpParameters->getIterator() as $key => $otp_parameters) {
 
              try {
+                $parameters = array();
                 $parameters['otp_type']     = GAuthValueMapping::OTP_TYPE[OtpType::name($otp_parameters->getType())];
                 $parameters['service']      = $otp_parameters->getIssuer();
                 $parameters['account']      = str_replace($parameters['service'].':', '', $otp_parameters->getName());
@@ -96,8 +97,8 @@ class TwoFAccountService
 
                 $twofaccounts[$key] = new TwoFAccount;
                 $twofaccounts[$key]->fillWithOtpParameters($parameters);
-             }
-             catch (Exception $exception) {
+            }
+            catch (Exception $exception) {
 
                 Log::error(sprintf('Cannot instanciate a TwoFAccount object with OTP parameters from imported item #%s', $key));
                 Log::error($exception->getMessage());
@@ -113,7 +114,7 @@ class TwoFAccountService
                 $fakeAccount->secret    = $exception->getMessage();
 
                 $twofaccounts[$key] = $fakeAccount;
-             }
+            }
         }
 
         return self::markAsDuplicate(collect($twofaccounts));

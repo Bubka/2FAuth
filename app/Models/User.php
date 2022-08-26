@@ -62,7 +62,7 @@ class User extends Authenticatable implements WebAuthnAuthenticatable
      * set Email attribute
      * @param string $value
      */
-    public function setEmailAttribute($value)
+    public function setEmailAttribute($value) : void
     {
         $this->attributes['email'] = strtolower($value);
     }
@@ -79,7 +79,7 @@ class User extends Authenticatable implements WebAuthnAuthenticatable
         $accountRecoveryNotification = new AccountRecoveryNotification($token);
         $accountRecoveryNotification->toMailUsing(null);
 
-        $accountRecoveryNotification->createUrlUsing(function($notifiable, $token) {
+        $accountRecoveryNotification->createUrlUsing(function(mixed $notifiable, string $token) {
             $url = url(
                 route(
                     'webauthn.recover',

@@ -32,7 +32,7 @@ class FirstUser implements Rule
     /**
      * Get the validation error message.
      *
-     * @return string
+     * @return array|string
      */
     public function message()
     {

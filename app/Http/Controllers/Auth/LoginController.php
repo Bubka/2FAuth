@@ -85,13 +85,13 @@ class LoginController extends Controller
     {
         $this->clearLoginAttempts($request);
 
-        $success['name'] = $this->guard()->user()->name;
+        $name = $this->guard()->user()?->name;
 
         $this->authenticated($request, $this->guard()->user());
 
         return response()->json([
             'message' => 'authenticated',
-            'name' => $success['name']
+            'name' => $name
         ], Response::HTTP_OK);
     }
 
@@ -146,7 +146,7 @@ class LoginController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  mixed  $user
-     * @return mixed
+     * @return void
      */
     protected function authenticated(Request $request, $user)
     {

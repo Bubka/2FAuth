@@ -17,7 +17,7 @@ class UserController extends Controller
      * Update the user's profile information.
      *
      * @param  \App\Http\Requests\UserUpdateRequest $request
-     * @return \App\Api\v1\Resources\UserResource
+     * @return \App\Api\v1\Resources\UserResource|\Illuminate\Http\JsonResponse
      */
     public function update(UserUpdateRequest $request)
     {

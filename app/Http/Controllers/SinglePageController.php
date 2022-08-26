@@ -11,7 +11,7 @@ class SinglePageController extends Controller
 
     /**
      * return the main view
-     * @return view
+     * @return \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory
      */
     public function index()
     {

@@ -6,7 +6,8 @@ use Illuminate\Support\Facades\Storage;
 
 class IconGenerator
 {
-    public static function generateIcon($serviceName, $base64icon) {
+    public static function generateIcon(string $serviceName, string $base64icon) : void
+    {
         Storage::disk('icons')->put($serviceName . '.png', base64_decode($base64icon));
     }
 

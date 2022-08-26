@@ -60,7 +60,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @return string The Api namespace
      */
-    private function getApiNamespace($version)
+    private function getApiNamespace(string $version)
     {
         return 'App\Api\v' . $version . '\Controllers';
     }

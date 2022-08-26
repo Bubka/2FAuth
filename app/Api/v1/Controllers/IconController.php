@@ -24,7 +24,7 @@ class IconController extends Controller
         ]);
         
         $path = $request->file('icon')->store('', 'icons');
-        $response['filename'] = pathinfo($path)['basename'];
+        $response = array( "filename" => pathinfo($path)['basename']);
 
         return response()->json($response, 201);
     }
@@ -54,10 +54,10 @@ class IconController extends Controller
     /**
      * delete an icon
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  string $icon
      * @return \Illuminate\Http\JsonResponse
      */
-    public function delete($icon)
+    public function delete(string $icon)
     {
         Storage::disk('icons')->delete($icon); 
 

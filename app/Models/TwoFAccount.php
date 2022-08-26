@@ -64,7 +64,7 @@ class TwoFAccount extends Model implements Sortable
     /**
      * model's array form.
      *
-     * @var array
+     * @var string[]
      */
     protected $fillable = [
         // 'service',
@@ -141,7 +141,7 @@ class TwoFAccount extends Model implements Sortable
     {
         parent::boot();
 
-        static::saving(function ($twofaccount) {
+        static::saving(function (TwoFAccount $twofaccount) {
             if (!$twofaccount->legacy_uri) $twofaccount->legacy_uri = $twofaccount->getURI();
             if ($twofaccount->otp_type == TwoFAccount::TOTP && !$twofaccount->period) $twofaccount->period = TwoFAccount::DEFAULT_PERIOD;
             if ($twofaccount->otp_type == TwoFAccount::HOTP && !$twofaccount->counter) $twofaccount->counter = TwoFAccount::DEFAULT_COUNTER;
@@ -186,7 +186,7 @@ class TwoFAccount extends Model implements Sortable
      * The OTP generator.
      * Instanciated as null to keep the model light
      *
-     * @var
+     * @var \OTPHP\OTPInterface|null
      */
     protected $generator = null;
 
@@ -462,7 +462,7 @@ class TwoFAccount extends Model implements Sortable
     /**
      * Sets model attributes to STEAM values
      */
-    private function enforceAsSteam()
+    private function enforceAsSteam() : void
     {
         $this->otp_type  = self::STEAM_TOTP;
         $this->digits    = 5;
@@ -495,7 +495,7 @@ class TwoFAccount extends Model implements Sortable
     /**
      * Instanciates the OTP generator with model attribute values
      */
-    private function initGenerator()
+    private function initGenerator() : void
     {
         try {
             switch ($this->otp_type) {

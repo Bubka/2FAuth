@@ -12,7 +12,7 @@ class UserController extends Controller
     /**
      * Get detailed information about a user
      * 
-     * @return \App\Api\v1\Resources\UserResource
+     * @return \App\Api\v1\Resources\UserResource|\Illuminate\Http\JsonResponse
      */
     public function show(Request $request)
     {

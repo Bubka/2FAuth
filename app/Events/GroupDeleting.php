@@ -11,6 +11,9 @@ class GroupDeleting
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    /**
+     * @var \App\Models\Group
+     */
     public $group;
 
     /**

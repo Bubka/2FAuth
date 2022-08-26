@@ -28,6 +28,8 @@ class WebAuthnManageController extends Controller
 
     /**
      * List all WebAuthn registered credentials
+     * 
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index(Request $request)
     {

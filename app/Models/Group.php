@@ -15,7 +15,7 @@ class Group extends Model
     /**
      * model's array form.
      *
-     * @var array
+     * @var string[]
      */
     protected $fillable = ['name'];
 
@@ -65,7 +65,7 @@ class Group extends Model
     {
         parent::boot();
 
-        static::deleted(function ($model) {
+        static::deleted(function (object $model) {
             // @codeCoverageIgnoreStart
             Log::info(sprintf('Group %s deleted', var_export($model->name, true)));
             // @codeCoverageIgnoreEnd
@@ -75,9 +75,11 @@ class Group extends Model
 
     /**
      * Get the TwoFAccounts of the group.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function twofaccounts()
     {
-        return $this->hasMany('App\Models\TwoFAccount');
+        return $this->hasMany(\App\Models\TwoFAccount::class);
     }
 }

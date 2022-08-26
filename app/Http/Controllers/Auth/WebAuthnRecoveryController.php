@@ -73,7 +73,7 @@ class WebAuthnRecoveryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @param  string  $response
      *
-     * @return \Illuminate\Http\JsonResponse|void
+     * @return \Illuminate\Http\JsonResponse
      * @throws \Illuminate\Validation\ValidationException
      * 
      * @codeCoverageIgnore - already covered by larapass test

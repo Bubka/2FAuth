@@ -30,7 +30,7 @@ class ReverseProxyGuard implements Guard
     /**
      * Create a new authentication guard.
      *
-     * @param Illuminate\Contracts\Auth\UserProvider $provider
+     * @param \Illuminate\Contracts\Auth\UserProvider $provider
      * @return void
      */
     public function __construct(UserProvider $provider)
@@ -71,6 +71,7 @@ class ReverseProxyGuard implements Guard
         // Get the user identifier from $_SERVER or apache filtered headers
         $remoteUserHeader = config('auth.auth_proxy_headers.user');
         $remoteUserHeader = $remoteUserHeader ?: 'REMOTE_USER';
+        $identifier = array();
 
         try {
             $identifier['user'] = request()->server($remoteUserHeader) ?? apache_request_headers()[$remoteUserHeader] ?? null;

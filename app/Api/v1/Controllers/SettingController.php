@@ -77,7 +77,7 @@ class SettingController extends Controller
      * @param \App\Api\v1\Requests\SettingUpdateRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(SettingUpdateRequest $request, $settingName)
+    public function update(SettingUpdateRequest $request, string $settingName)
     {
         $validated = $request->validated();
 
@@ -94,10 +94,10 @@ class SettingController extends Controller
     /**
      * Delete a setting
      * 
-     * @param \App\Api\v1\Requests\SettingUpdateRequest $request
+     * @param string $settingName
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy($settingName)
+    public function destroy(string $settingName)
     {
         $setting = Settings::get($settingName);
 

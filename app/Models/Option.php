@@ -10,7 +10,7 @@ class Option extends Model
     /**
      * The attributes that are mass assignable.
      *
-     * @var [type]
+     * @var string[]
      */
     protected $fillable = [
         'key',

@@ -27,7 +27,9 @@ class WebAuthnLoginController extends Controller
     |
     */
 
-
+    /**
+     * @return \Illuminate\Http\JsonResponse|\Webauthn\PublicKeyCredentialRequestOptions
+     */
 	public function options(Request $request)
 	{
         // Since 2FAuth is single user designed we fetch the user instance
