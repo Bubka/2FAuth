@@ -41,7 +41,9 @@
         "fakerphp/faker": "^1.20",
         "mockery/mockery": "^1.5",
         "nunomaduro/collision": "^5.0",
-        "phpunit/phpunit": "^9.5"
+        "phpunit/phpunit": "^9.5",
+        "psalm/plugin-laravel": "1.6.2",
+        "vimeo/psalm": "^4.26"
     },
     "config": {
         "optimize-autoloader": true,
