@@ -22,11 +22,13 @@ class IconController extends Controller
         $this->validate($request, [
             'icon' => 'required|image',
         ]);
-        
-        $path = $request->file('icon')->store('', 'icons');
-        $response = array( "filename" => pathinfo($path)['basename']);
 
-        return response()->json($response, 201);
+        $icon = $request->file('icon');
+        $path = $icon instanceof \Illuminate\Http\UploadedFile ? $icon->store('', 'icons') : false;
+
+        return $path
+                ? response()->json(['filename' => pathinfo($path)['basename']], 201)
+                : response()->json(['message' => __('errors.file_upload_failed')], 500);
     }
 
 

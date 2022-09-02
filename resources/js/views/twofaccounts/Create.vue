@@ -340,32 +340,38 @@
                 this.$router.push({name: 'accounts'});
             },
 
-            async uploadQrcode(event) {
+            uploadQrcode(event) {
 
                 let imgdata = new FormData();
                 imgdata.append('qrcode', this.$refs.qrcodeInput.files[0]);
                 imgdata.append('inputFormat', 'fileUpload');
 
                 // First we get the uri encoded in the qrcode
-                const { data } = await this.form.upload('/api/v1/qrcode/decode', imgdata)
-                this.uri = data.data
-
-                // Then the otp described by the uri
-                this.axios.post('/api/v1/twofaccounts/preview', { uri: data.data }).then(response => {
-                    this.form.fill(response.data)
-                    this.secretIsBase32Encoded = 1
-                    this.tempIcon = response.data.icon ? response.data.icon : null
+                this.form.upload('/api/v1/qrcode/decode', imgdata, {returnError: true}).then(response => {
+                    this.uri = response.data.data
+                    
+                    // Then the otp described by the uri
+                    this.axios.post('/api/v1/twofaccounts/preview', { uri: this.uri }).then(response => {
+                        this.form.fill(response.data)
+                        this.secretIsBase32Encoded = 1
+                        this.tempIcon = response.data.icon ? response.data.icon : null
+                    })
+                    .catch(error => {
+                        if( error.response.status === 422 ) {
+                            if( error.response.data.errors.uri ) {
+                                this.showAlternatives = true
+                            }
+                        }
+                    });
                 })
                 .catch(error => {
-                    if( error.response.status === 422 ) {
-                        if( error.response.data.errors.uri ) {
-                            this.showAlternatives = true
-                        }
-                    }
+                    this.$notify({type: 'is-danger', text: this.$t(error.response.data.message) })
+                    return false
                 });
+
             },
 
-            async uploadIcon(event) {
+            uploadIcon(event) {
 
                 // clean possible already uploaded temp icon
                 this.deleteIcon()
@@ -373,9 +379,12 @@
                 let imgdata = new FormData();
                 imgdata.append('icon', this.$refs.iconInput.files[0]);
 
-                const { data } = await this.form.upload('/api/v1/icons', imgdata)
-
-                this.tempIcon = data.filename;
+                this.form.upload('/api/v1/icons', imgdata, {returnError: true}).then(response => {
+                    this.tempIcon = response.data.filename;
+                })
+                .catch(error => {
+                    this.$notify({type: 'is-danger', text: this.$t(error.response.data.message) })
+                });
             },
 
             fetchLogo() {

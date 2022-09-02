@@ -265,10 +265,12 @@
                 let imgdata = new FormData();
                 imgdata.append('icon', this.$refs.iconInput.files[0]);
 
-                const { data } = await this.form.upload('/api/v1/icons', imgdata)
-
-                this.tempIcon = data.filename;
-
+                this.form.upload('/api/v1/icons', imgdata, {returnError: true}).then(response => {
+                    this.tempIcon = response.data.filename;
+                })
+                .catch(error => {
+                    this.$notify({type: 'is-danger', text: this.$t(error.response.data.message) })
+                });
             },
 
             fetchLogo() {
