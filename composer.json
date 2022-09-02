@@ -45,6 +45,9 @@
         "psalm/plugin-laravel": "1.6.2",
         "vimeo/psalm": "^4.26"
     },
+    "conflict": {
+        "khanamiryan/qrcode-detector-decoder": "~1.0.6"
+    },
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
