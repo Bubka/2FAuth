@@ -32,13 +32,15 @@ class SystemController extends Controller
         $infos['Operating system']      = PHP_OS;
         $infos['interface']       = PHP_SAPI;
         // Auth info
-        $infos['Auth guard']        = config('auth.defaults.guard');
-        if ($infos['Auth guard'] === 'reverse-proxy-guard') {
-            $infos['Auth proxy header for user'] = config('auth.auth_proxy_headers.user');
-            $infos['Auth proxy header for email'] = config('auth.auth_proxy_headers.email');
+        if ($request->user()) {
+            $infos['Auth guard']        = config('auth.defaults.guard');
+            if ($infos['Auth guard'] === 'reverse-proxy-guard') {
+                $infos['Auth proxy header for user'] = config('auth.auth_proxy_headers.user');
+                $infos['Auth proxy header for email'] = config('auth.auth_proxy_headers.email');
+            }
+            $infos['webauthn user verification'] = config('larapass.login_verify');
+            $infos['Trusted proxies']  = config('2fauth.trustedProxies') ?: 'none';
         }
-        $infos['webauthn user verification'] = config('larapass.login_verify');
-        $infos['Trusted proxies']  = config('2fauth.trustedProxies') ?: 'none';
         // User info
         if ($request->user()) {
             $infos['options']     = Settings::all()->toArray();
