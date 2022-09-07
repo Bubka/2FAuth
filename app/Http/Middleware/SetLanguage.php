@@ -28,10 +28,23 @@ class SetLanguage
 
         if($lang === 'browser') {
             $lang = config('app.fallback_locale');
-            
-            if ($request->hasHeader("Accept-Language")) {
+            $accepted = $request->header("Accept-Language");
+
+            if ($accepted) {
+                $accepted = is_array($accepted) ? implode(',', $accepted) : $accepted;
+                $prefLocales = array_reduce(
+                    explode(',', $accepted),
+                    function ($res, $el) { 
+                        list($l, $q) = array_merge(explode(';q=', $el), [1]); 
+                        $res[$l] = (float) $q; 
+                        return $res;
+                    },
+                    []
+                );
+                arsort($prefLocales);
+
                 // We only keep the primary language passed via the header.
-                $lang = head(explode(',', $request->header("Accept-Language")));
+                $lang = array_key_first($prefLocales);
             }
         }
 
