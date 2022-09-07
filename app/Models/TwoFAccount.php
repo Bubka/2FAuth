@@ -50,8 +50,6 @@ class TwoFAccount extends Model implements Sortable
     const DEFAULT_ALGORITHM = self::SHA1;
 
     private const IMAGELINK_STORAGE_PATH = 'imagesLink/';
-    private const ICON_STORAGE_PATH      = 'public/icons/';
-
 
     /**
      * List of OTP types supported by 2FAuth
@@ -151,24 +149,6 @@ class TwoFAccount extends Model implements Sortable
         //     Log::info(sprintf('TwoFAccount #%d deleted', $model->id));
         // });
     }
-
-    /**
-     * Fill the model with an array of attributes.
-     *
-     * @param  array  $attributes
-     * @return $this
-     *
-     * @throws \Illuminate\Database\Eloquent\MassAssignmentException
-     */
-    // public function fill(array $attributes)
-    // {
-    //     parent::fill($attributes);
-
-    //     if ($this->otp_type == self::TOTP && !$this->period) $this->period = self::DEFAULT_PERIOD;
-    //     if ($this->otp_type == self::HOTP && !$this->counter) $this->counter = self::DEFAULT_COUNTER;
-
-    //     return $this;
-    // }
 
 
     /**
@@ -307,7 +287,7 @@ class TwoFAccount extends Model implements Sortable
      */
     public function setCounterAttribute($value)
     {
-        $this->attributes['counter'] = is_null($value) && $this->otp_type === self::HOTP ? self::DEFAULT_COUNTER : $value;
+        $this->attributes['counter'] = blank($value) && $this->otp_type === self::HOTP ? self::DEFAULT_COUNTER : $value;
     }
 
 
@@ -316,6 +296,8 @@ class TwoFAccount extends Model implements Sortable
      * 
      * @throws InvalidSecretException The secret is not a valid base32 encoded string
      * @throws UndecipherableException The secret cannot be deciphered
+     * @throws UnsupportedOtpTypeException The defined OTP type is not supported
+     * @throws InvalidOtpParameterException One OTP parameter is invalid
      * @return TotpDto|HotpDto 
      */
     public function getOTP()
@@ -332,7 +314,15 @@ class TwoFAccount extends Model implements Sortable
         $this->initGenerator();
         
         try {
-            if ( $this->otp_type === self::TOTP || $this->otp_type === self::STEAM_TOTP ) {
+            if ( $this->otp_type === self::HOTP ) {
+
+                $OtpDto = new HotpDto();
+                $OtpDto->otp_type   = $this->otp_type;
+                $counter = $this->generator->getParameter('counter');
+                $OtpDto->password   = $this->generator->at($counter);
+                $OtpDto->counter    = $this->counter = $counter + 1;
+            }
+            else {
 
                 $OtpDto = new TotpDto();
                 $OtpDto->otp_type   = $this->otp_type;
@@ -341,15 +331,6 @@ class TwoFAccount extends Model implements Sortable
                                             ? $this->generator->at($OtpDto->generated_at)
                                             : SteamTotp::getAuthCode(base64_encode(Base32::decodeUpper($this->secret)));
                 $OtpDto->period         = $this->period;
-            }
-            else if ( $this->otp_type === self::HOTP ) {
-
-                $OtpDto = new HotpDto();
-                $OtpDto->otp_type   = $this->otp_type;
-                $counter = $this->generator->getCounter();
-                $OtpDto->password   = $this->generator->at($counter);
-                $OtpDto->counter    = $this->counter = $counter + 1;
-
             }
 
             Log::info(sprintf('New OTP generated for TwoFAccount (%s)', $this->id ? 'id:'.$this->id: 'preview'));
@@ -475,11 +456,14 @@ class TwoFAccount extends Model implements Sortable
 
     /**
      * Returns the OTP type of the instanciated OTP generator
+     * 
+     * @return mixed
      */
     private function getGeneratorOtpType()
     {
         return Arr::get($this->generatorClassMap, get_class($this->generator));
     }
+
 
     /**
      * Returns an otpauth URI built with model attribute values
@@ -494,6 +478,8 @@ class TwoFAccount extends Model implements Sortable
 
     /**
      * Instanciates the OTP generator with model attribute values
+     * @throws UnsupportedOtpTypeException The defined OTP type is not supported
+     * @throws InvalidOtpParameterException One OTP parameter is invalid
      */
     private function initGenerator() : void
     {
@@ -604,7 +590,7 @@ class TwoFAccount extends Model implements Sortable
     /**
      * Returns an acceptable value
      */
-    private function decryptOrReturn($value)
+    private function decryptOrReturn(mixed $value) : mixed
     {
         // Decipher when needed
         if ( Settings::get('useEncryption') && $value )
@@ -625,7 +611,7 @@ class TwoFAccount extends Model implements Sortable
     /**
      * Encrypt a value
      */
-    private function encryptOrReturn($value)
+    private function encryptOrReturn(mixed $value) : mixed
     {
         // should be replaced by laravel 8 attribute encryption casting
         return Settings::get('useEncryption') ? Crypt::encryptString($value) : $value;

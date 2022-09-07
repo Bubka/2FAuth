@@ -35,7 +35,7 @@ class CheckDbConnection extends Command
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return int
      */
     public function handle() : int
     {

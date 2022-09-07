@@ -4,6 +4,17 @@ namespace App\Api\v1\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @property mixed $otp_type
+ * @property string $account
+ * @property string $service
+ * @property string $icon
+ * @property string $secret
+ * @property int $digits
+ * @property string $algorithm
+ * @property int|null $period
+ * @property int|null $counter
+ */
 class TwoFAccountStoreResource extends JsonResource
 {
     /**

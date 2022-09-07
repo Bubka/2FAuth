@@ -29,7 +29,7 @@ class UserController extends Controller
         }
 
         if (!config('2fauth.config.isDemoApp') ) {
-            tap($user)->update([
+            $user->update([
                 'name' => $validated['name'],
                 'email' => $validated['email'],
             ]);

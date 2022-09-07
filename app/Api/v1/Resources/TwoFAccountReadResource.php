@@ -2,6 +2,10 @@
 
 namespace App\Api\v1\Resources;
 
+/**
+ * @property mixed $id
+ * @property mixed $group_id
+ */
 class TwoFAccountReadResource extends TwoFAccountStoreResource
 {
     /**

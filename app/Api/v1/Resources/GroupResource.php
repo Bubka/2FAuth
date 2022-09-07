@@ -4,6 +4,11 @@ namespace App\Api\v1\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @property mixed $id
+ * @property string $name
+ * @property int|null $twofaccounts_count
+ */
 class GroupResource extends JsonResource
 {
     /**

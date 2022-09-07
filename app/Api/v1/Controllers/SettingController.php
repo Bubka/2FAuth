@@ -19,14 +19,13 @@ class SettingController extends Controller
     {
         $settings = Settings::all();
         $settingsResources = collect();
-        $settings->each(function ($item, $key) use ($settingsResources) {
+        $settings->each(function (mixed $item, string $key) use ($settingsResources) {
             $settingsResources->push([
                 'key' => $key,
                 'value' => $item
             ]);
         });
 
-        // return SettingResource::collection($tata);
         return response()->json($settingsResources->all(), 200);
     }
 

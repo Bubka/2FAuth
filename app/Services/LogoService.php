@@ -15,12 +15,12 @@ class LogoService
     protected $tfas;
 
     /**
-     * @var
+     * @var string
      */
     const TFA_JSON = 'tfa.json';
 
     /**
-     * @var
+     * @var string
      */
     const TFA_URL = 'https://2fa.directory/api/v3/tfa.json';
 
@@ -146,7 +146,7 @@ class LogoService
     /**
      * Prepare and make some replacement to optimize logo fetching
      * 
-     * @param string $str
+     * @param string $domain
      * @return string Optimized domain name
      */
     protected function cleanDomain(string $domain) : string

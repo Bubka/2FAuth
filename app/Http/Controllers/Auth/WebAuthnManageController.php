@@ -54,7 +54,7 @@ class WebAuthnManageController extends Controller
         $validated = $request->validated();
 
         $webAuthnCredential = WebAuthnCredential::where('id', $credential)->firstOrFail();
-        $webAuthnCredential->name = $validated['name'];
+        $webAuthnCredential->name = $validated['name']; // @phpstan-ignore-line
         $webAuthnCredential->save();
 
         return response()->json([

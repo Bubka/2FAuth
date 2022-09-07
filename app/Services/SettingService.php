@@ -36,7 +36,7 @@ class SettingService
     /**
      * Get a setting
      *
-     * @param string|array $setting A single setting name or an associative array of name:value settings
+     * @param string $setting A single setting name
      * @return mixed string|int|boolean|null
      */
     public function get($setting)
@@ -135,7 +135,7 @@ class SettingService
     /**
      * Replaces boolean by a patterned string as appstrack/laravel-options package does not support var type
      * 
-     * @param mixed $settings
+     * @param mixed $value
      * @return string
      */
     private function replaceBoolean(mixed $value)
@@ -147,7 +147,7 @@ class SettingService
     /**
      * Replaces patterned string that represent booleans with real booleans
      * 
-     * @param mixed $settings
+     * @param mixed $value
      * @return mixed
      */
     private function restoreType(mixed $value)

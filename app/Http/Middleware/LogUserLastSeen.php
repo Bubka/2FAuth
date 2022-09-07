@@ -13,7 +13,7 @@ class LogUserLastSeen
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
-     * @param  string|null $guards
+     * @param  string $guards
      * @return mixed
      */
     public function handle($request, Closure $next, ...$guards)

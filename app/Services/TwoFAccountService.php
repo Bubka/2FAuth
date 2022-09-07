@@ -82,6 +82,8 @@ class TwoFAccountService
             throw new InvalidGoogleAuthMigration();
         }
 
+        $twofaccounts = array();
+        
         foreach ($otpParameters->getIterator() as $key => $otp_parameters) {
 
              try {
@@ -123,9 +125,11 @@ class TwoFAccountService
 
 
     /**
+     * Explode a comma separated list of IDs to an array of IDs
      * 
+     * @param int|array|string $ids
      */
-    private static function commaSeparatedToArray($ids)
+    private static function commaSeparatedToArray($ids) : mixed
     {
         if(is_string($ids))
         {
@@ -142,10 +146,10 @@ class TwoFAccountService
     /**
      * Return the given collection with items marked as Duplicates (using id=-1) if a similar record exists in database
      * 
-     * @param \Illuminate\Support\Collection
+     * @param \Illuminate\Support\Collection $twofaccounts
      * @return \Illuminate\Support\Collection
      */
-    private static function markAsDuplicate($twofaccounts) : Collection
+    private static function markAsDuplicate(Collection $twofaccounts) : Collection
     {
         $storage = TwoFAccount::all();
 

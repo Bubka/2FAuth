@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+/**
+ * @property int $twofaccounts_count
+ */
 class Group extends Model
 {
 

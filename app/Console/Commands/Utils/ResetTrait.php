@@ -11,7 +11,7 @@ trait ResetTrait
     /**
      * Reset icons
      */
-    protected function resetIcons()
+    protected function resetIcons() : void
     {
         $this->deleteIcons();
         $this->generateIcons();
@@ -20,7 +20,7 @@ trait ResetTrait
     /**
      * Delete all icons
      */
-    protected function deleteIcons()
+    protected function deleteIcons() : void
     {
         $filesForDelete = \Illuminate\Support\Facades\File::glob('public/icons/*.png');
         Storage::delete($filesForDelete);
@@ -31,7 +31,7 @@ trait ResetTrait
     /**
      * Generate icons for seeded accounts
      */
-    protected function generateIcons()
+    protected function generateIcons() : void
     {
         IconGenerator::generateIcon('amazon', IconGenerator::AMAZON);
         IconGenerator::generateIcon('apple', IconGenerator::APPLE);
@@ -49,7 +49,7 @@ trait ResetTrait
     /**
      * Reset DB
      */
-    protected function resetDB(string $seeder)
+    protected function resetDB(string $seeder) : void
     {
         $this->flushDB();
         $this->seedDB($seeder);
@@ -58,7 +58,7 @@ trait ResetTrait
     /**
      * Delete all DB tables
      */
-    protected function flushDB()
+    protected function flushDB() : void
     {
         // Reset the db
         DB::table('users')->delete();
@@ -78,7 +78,7 @@ trait ResetTrait
     /**
      * Seed the DB
      */
-    protected function seedDB(string $seeder)
+    protected function seedDB(string $seeder) : void
     {
         $this->callSilent('db:seed', [
             '--class' => $seeder

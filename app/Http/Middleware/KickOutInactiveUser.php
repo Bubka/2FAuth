@@ -16,9 +16,10 @@ class KickOutInactiveUser
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
+     * @param  string $guards
      * @return mixed
      */
-    public function handle($request, Closure $next, ...$quards)
+    public function handle($request, Closure $next, ...$guards)
     {
         // We do not track activity of:
         // - Guest
