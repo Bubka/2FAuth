@@ -30,8 +30,8 @@
                             </span>
                         </label>
                         <span class="tag is-black is-large" v-if="tempIcon">
-                            <img class="icon-preview" :src="'/storage/icons/' + tempIcon" >
-                            <button class="delete is-small" @click.prevent="deleteIcon"></button>
+                            <img class="icon-preview" :src="'/storage/icons/' + tempIcon" :alt="$t('twofaccounts.x_icon', {service: form.service})">
+                            <button class="delete is-small" @click.prevent="deleteIcon" :aria-label="$t('twofaccounts.remove_icon')"></button>
                         </span>
                     </div>
                 </div>
@@ -44,7 +44,7 @@
             <form-toggle class="has-uppercased-button" :isDisabled="true" :form="form" :choices="otp_types" fieldName="otp_type" :label="$t('twofaccounts.forms.otp_type.label')" :help="$t('twofaccounts.forms.otp_type.help')" :hasOffset="true" />
             <div v-if="form.otp_type">
                 <!-- secret -->
-                <label class="label" v-html="$t('twofaccounts.forms.secret.label')"></label>
+                <label :for="this.inputId('text','secret')" class="label" v-html="$t('twofaccounts.forms.secret.label')"></label>
                 <div class="field has-addons">
                     <p v-if="!secretIsLocked" class="control">
                         <span class="select">
@@ -54,7 +54,7 @@
                         </span>
                     </p>
                     <p class="control is-expanded">
-                        <input class="input" type="text" v-model="form.secret" :disabled="secretIsLocked">
+                        <input :id="this.inputId('text','secret')" class="input" type="text" v-model="form.secret" :disabled="secretIsLocked">
                     </p>
                     <p class="control" v-if="secretIsLocked">
                         <a class="button is-dark field-lock" @click="secretIsLocked = false" :title="$t('twofaccounts.forms.unlock.title')">

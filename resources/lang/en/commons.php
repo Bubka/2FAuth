@@ -57,5 +57,5 @@ return [
     'made_with' => 'Made with',
     'ui_icons_by' => 'UI Icons by',
     'logos_by' => 'Logos by',
-
+    'search' => 'Search',
 ];

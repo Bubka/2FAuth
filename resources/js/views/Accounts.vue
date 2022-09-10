@@ -83,7 +83,7 @@
         	                    </transition>
                                 <div class="tfa-cell tfa-content is-size-3 is-size-4-mobile" @click.stop="showAccount(account)">  
                                     <div class="tfa-text has-ellipsis">
-                                        <img :src="'/storage/icons/' + account.icon" v-if="account.icon && $root.appSettings.showAccountsIcons">
+                                        <img :src="'/storage/icons/' + account.icon" v-if="account.icon && $root.appSettings.showAccountsIcons" :alt="$t('twofaccounts.x_icon', {service: account.service})">
                                         {{ displayService(account.service) }}<font-awesome-icon class="has-text-danger is-size-5 ml-2" v-if="$root.appSettings.useEncryption && account.account === $t('errors.indecipherable')" :icon="['fas', 'exclamation-circle']" />
                                         <span class="is-family-primary is-size-6 is-size-7-mobile has-text-grey ">{{ account.account }}</span>
                                     </div>
@@ -193,7 +193,7 @@
                     <!-- search -->
                     <div class="field">
                         <div class="control has-icons-right">
-                            <input type="text" class="input is-rounded is-search" v-model="search">
+                            <input type="text" :title="$t('commons.search')" class="input is-rounded is-search" v-model="search">
                             <span class="icon is-small is-right">
                                 <font-awesome-icon :icon="['fas', 'search']"  v-if="!search" />
                                 <a class="delete" v-if="search" @click="search = '' "></a>

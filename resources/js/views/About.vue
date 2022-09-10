@@ -6,7 +6,7 @@
                 <span class="has-text-white"><span class="is-size-5">2FAuth</span> v{{ appVersion }}</span><br />
                 {{ $t('commons.2fauth_teaser')}}
             </p>
-            <img src="logo.svg" style="height: 32px" alt="logo" />
+            <img src="logo.svg" style="height: 32px" alt="2FAuth logo" />
             <p class="block">
                 ©Bubka <a class="is-size-7" href="https://github.com/Bubka/2FAuth/blob/master/LICENSE">AGPL-3.0 license</a>
             </p>
