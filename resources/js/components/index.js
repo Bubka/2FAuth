@@ -4,6 +4,7 @@ import Button           from './Button'
 import FieldError       from './FieldError'
 import FormWrapper      from './FormWrapper'
 import FormField        from './FormField'
+import FormPasswordField        from './FormPasswordField'
 import FormSelect       from './FormSelect'
 import FormSwitch       from './FormSwitch'
 import FormToggle       from './FormToggle'
@@ -20,6 +21,7 @@ import SettingTabs      from './SettingTabs'
     FieldError,
     FormWrapper,
     FormField,
+    FormPasswordField,
     FormSelect,
     FormSwitch,
     FormToggle,

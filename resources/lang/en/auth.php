@@ -79,6 +79,8 @@ return [
         'webauthn_login' => 'WebAuthn login',
         'email' => 'Email',
         'password' => 'Password',
+        'reveal_password' => 'Reveal password',
+        'hide_password' => 'Hide password',
         'confirm_password' => 'Confirm password',
         'confirm_new_password' => 'Confirm new password',
         'dont_have_account_yet' => 'Don\'t have your account yet?',
