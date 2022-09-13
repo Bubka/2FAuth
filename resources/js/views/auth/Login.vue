@@ -19,7 +19,7 @@
             <div v-if="isTesting" class="notification is-warning has-text-centered is-radiusless" v-html="$t('auth.forms.welcome_to_testing_app_use_those_credentials')" />
             <form id="frmLegacyLogin" @submit.prevent="handleSubmit" @keydown="form.onKeydown($event)">
                 <form-field :form="form" fieldName="email" inputType="email" :label="$t('auth.forms.email')" autofocus />
-                <form-field :form="form" fieldName="password" inputType="password" :label="$t('auth.forms.password')" />
+                <form-password-field :form="form" fieldName="password" :label="$t('auth.forms.password')" />
                 <form-buttons :isBusy="form.isBusy" :caption="$t('auth.sign_in')" :submitId="'btnSignIn'"/>
             </form>
             <div class="nav-links">

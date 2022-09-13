@@ -16,7 +16,7 @@
                 <form @submit.prevent="submitPassword" @keydown="formPassword.onKeydown($event)">
                     <h4 class="title is-4 pt-6 has-text-grey-light">{{ $t('settings.change_password') }}</h4>
                     <fieldset :disabled="isRemoteUser">
-                        <form-field :form="formPassword" fieldName="password" inputType="password" :label="$t('auth.forms.new_password')" />
+                        <form-password-field :form="formPassword" fieldName="password" :showRules="true" :label="$t('auth.forms.new_password')" />
                         <form-field :form="formPassword" fieldName="password_confirmation" inputType="password" :label="$t('auth.forms.confirm_new_password')" />
                         <form-field :form="formPassword" fieldName="currentPassword" inputType="password" :label="$t('auth.forms.current_password.label')" :help="$t('auth.forms.current_password.help')" />
                         <form-buttons :isBusy="formPassword.isBusy" :caption="$t('auth.forms.change_password')" />

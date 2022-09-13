@@ -386,6 +386,19 @@ figure.no-icon {
   color: hsl(0, 0%, 48%);
 }
 
+.is-underscored {
+  border-bottom: 1px solid hsl(0, 0%, 29%);
+  height: 0.6rem;
+  width: 0.6rem;
+  display: inline-block;
+  margin-right: 5px;
+}
+
+  .is-underscored.is-dot {
+    border: none;
+    border-radius: 50%;
+  }
+
 .is-toggle.buttons,
 .is-toggle.buttons a.button {
   margin-bottom: 0 !important;

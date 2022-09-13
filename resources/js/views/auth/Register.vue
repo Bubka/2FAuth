@@ -25,8 +25,8 @@
             <form @submit.prevent="handleRegisterSubmit" @keydown="registerForm.onKeydown($event)">
                 <form-field :form="registerForm" fieldName="name" inputType="text" :label="$t('auth.forms.name')" autofocus />
                 <form-field :form="registerForm" fieldName="email" inputType="email" :label="$t('auth.forms.email')" />
-                <form-field :form="registerForm" fieldName="password" inputType="password" :label="$t('auth.forms.password')" />
-                <form-field :form="registerForm" fieldName="password_confirmation" inputType="password" :label="$t('auth.forms.confirm_password')" />
+                <form-password-field :form="registerForm" fieldName="password" :showRules="true" :label="$t('auth.forms.password')" />
+                <!-- <form-field :form="registerForm" fieldName="password_confirmation" inputType="password" :label="$t('auth.forms.confirm_password')" /> -->
                 <form-buttons :isBusy="registerForm.isBusy" :isDisabled="registerForm.isDisabled" :caption="$t('auth.register')" :submitId="'btnRegister'" />
             </form>
             <div class="nav-links">
@@ -66,6 +66,7 @@
              */
             async handleRegisterSubmit(e) {
                 e.preventDefault()
+                this.registerForm.password_confirmation = this.registerForm.password
 
                 this.registerForm.post('/user', {returnError: true})
                 .then(response => {
