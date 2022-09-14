@@ -116,6 +116,7 @@ return [
         'is_long_enough' => '8 characters min.',
         'mandatory_rules' => 'Mandatory rules',
         'optional_rules_you_should_follow' => 'Optional rules (highly recommanded)',
+        'caps_lock_is_on' => 'Caps lock is On',
     ],
 
 ];

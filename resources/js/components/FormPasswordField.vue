@@ -2,7 +2,17 @@
     <div class="field" :class="{ 'pt-3' : hasOffset }">
         <label :for="this.inputId('password',fieldName)" class="label" v-html="label"></label>
         <div class="control has-icons-right">
-            <input :disabled="isDisabled" :id="this.inputId('password',fieldName)" :type="currentType" class="input" v-model="form[fieldName]" :placeholder="placeholder" v-bind="$attrs" v-on:change="$emit('field-changed', form[fieldName])"/>
+            <input
+                :disabled="isDisabled"
+                :id="this.inputId('password',fieldName)"
+                :type="currentType" 
+                class="input" 
+                v-model="form[fieldName]" 
+                :placeholder="placeholder" 
+                v-bind="$attrs" 
+                v-on:change="$emit('field-changed', form[fieldName])"
+                v-on:keyup="checkCapsLock"
+            />
             <span v-if="currentType == 'password'" class="icon is-small is-right is-clickable" @click="currentType = 'text'" :title="$t('auth.forms.reveal_password')">
                 <font-awesome-icon :icon="['fas', 'eye-slash']" />
             </span>
@@ -10,6 +20,7 @@
                 <font-awesome-icon :icon="['fas', 'eye']" />
             </span>
         </div>
+        <p class="help is-warning" v-if="hasCapsLockOn" v-html="$t('auth.forms.caps_lock_is_on')" />
         <field-error :form="form" :field="fieldName" />
         <p class="help" v-html="help" v-if="help"></p>
         <div v-if="showRules" class="columns is-mobile is-size-7 mt-0">
@@ -35,7 +46,8 @@
         
         data() {
             return {
-                currentType: this.inputType
+                currentType: this.inputType,
+                hasCapsLockOn: false,
             }
         },
 
@@ -102,6 +114,12 @@
             showRules: {
                 type: Boolean,
                 default: false
+            },
+        },
+
+        methods: {
+            checkCapsLock(event) {
+                this.hasCapsLockOn = event.getModifierState('CapsLock') ? true : false
             },
         },
     }

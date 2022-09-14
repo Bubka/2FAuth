@@ -112,7 +112,7 @@
                         </p>
                     </div>
                     <div class="field">
-                        <field-error :form="form" field="secret" class="help-for-file" />
+                        <field-error :form="form" field="secret" />
                         <p class="help" v-html="$t('twofaccounts.forms.secret.help')"></p>
                     </div>
                     <div v-if="form.otp_type !== 'steamtotp'">
@@ -125,9 +125,9 @@
                         <!-- algorithm -->
                         <form-toggle :form="form" :choices="algorithms" fieldName="algorithm" :label="$t('twofaccounts.forms.algorithm.label')" :help="$t('twofaccounts.forms.algorithm.help')" />
                         <!-- TOTP period -->
-                        <form-field v-if="form.otp_type === 'totp'" :form="form" fieldName="period" inputType="text" :label="$t('twofaccounts.forms.period.label')" :placeholder="$t('twofaccounts.forms.period.placeholder')" :help="$t('twofaccounts.forms.period.help')" />
+                        <form-field v-if="form.otp_type === 'totp'" pattern="[0-9]" :class="'is-third-width-field'" :form="form" fieldName="period" inputType="text" :label="$t('twofaccounts.forms.period.label')" :placeholder="$t('twofaccounts.forms.period.placeholder')" :help="$t('twofaccounts.forms.period.help')" />
                         <!-- HOTP counter -->
-                        <form-field v-if="form.otp_type === 'hotp'" :form="form" fieldName="counter" inputType="text" :label="$t('twofaccounts.forms.counter.label')" :placeholder="$t('twofaccounts.forms.counter.placeholder')" :help="$t('twofaccounts.forms.counter.help')" />
+                        <form-field v-if="form.otp_type === 'hotp'" pattern="[0-9]" :class="'is-third-width-field'" :form="form" fieldName="counter" inputType="text" :label="$t('twofaccounts.forms.counter.label')" :placeholder="$t('twofaccounts.forms.counter.placeholder')" :help="$t('twofaccounts.forms.counter.help')" />
                     </div>
                 </div>
                 <vue-footer :showButtons="true">

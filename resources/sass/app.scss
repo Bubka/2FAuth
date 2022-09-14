@@ -399,6 +399,18 @@ figure.no-icon {
     border-radius: 50%;
   }
 
+.is-mid-width-field input {
+  width: 50% !important;
+}
+
+.is-half-width-field input {
+  width: 50% !important;
+}
+
+.is-third-width-field input {
+  width: 33% !important;
+}
+
 .is-toggle.buttons,
 .is-toggle.buttons a.button {
   margin-bottom: 0 !important;
