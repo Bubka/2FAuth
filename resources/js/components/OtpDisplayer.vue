@@ -255,6 +255,8 @@
             getHOTP: async function() {
 
                 let otp = await this.getOtp()
+                this.internal_password = otp.password
+                this.internal_counter = otp.counter
 
                 // returned counter & uri are incremented
                 this.$emit('increment-hotp', { nextHotpCounter: otp.counter, nextUri: otp.uri })

@@ -321,6 +321,11 @@ class TwoFAccount extends Model implements Sortable
                 $counter = $this->generator->getParameter('counter');
                 $OtpDto->password   = $this->generator->at($counter);
                 $OtpDto->counter    = $this->counter = $counter + 1;
+
+                // The updated HOTP counter must be saved to db for persisted account only
+                if ($this->id) {
+                    $this->save();
+                }
             }
             else {
 
