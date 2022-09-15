@@ -143,30 +143,50 @@
             getOtp: async function() {
 
                 try {
+                    let request, password
+
                     if(this.internal_id) {
-                        const { data } =  await this.axios.get('/api/v1/twofaccounts/' + this.internal_id + '/otp')
-                        return data
+                        request = {
+                            method: 'get',
+                            url: '/api/v1/twofaccounts/' + this.internal_id + '/otp'
+                        }
                     }
                     else if(this.internal_uri) {
-                        const { data } =  await this.axios.post('/api/v1/twofaccounts/otp', {
-                            uri: this.internal_uri
-                        })
-                        return data
+                        request = {
+                            method: 'post',
+                            url: '/api/v1/twofaccounts/otp',
+                            data: {
+                                uri: this.internal_uri
+                            }
+                        }
                     }
                     else {
-                        const { data } =  await this.axios.post('/api/v1/twofaccounts/otp', {
-                            service     : this.internal_service,
-                            account     : this.internal_account,
-                            icon        : this.internal_icon,
-                            otp_type    : this.internal_otp_type,
-                            secret      : this.internal_secret,
-                            digits      : this.internal_digits,
-                            algorithm   : this.internal_algorithm,
-                            period      : this.internal_period,
-                            counter     : this.internal_counter,
-                        })
-                        return data
+                        request = {
+                            method: 'post',
+                            url: '/api/v1/twofaccounts/otp',
+                            data: {
+                                service     : this.internal_service,
+                                account     : this.internal_account,
+                                icon        : this.internal_icon,
+                                otp_type    : this.internal_otp_type,
+                                secret      : this.internal_secret,
+                                digits      : this.internal_digits,
+                                algorithm   : this.internal_algorithm,
+                                period      : this.internal_period,
+                                counter     : this.internal_counter,
+                            }
+                        }
                     }
+
+                    await this.axios(request).then(response => {
+                        if(this.$root.appSettings.copyOtpOnDisplay) {
+                            this.copyAndNotify(response.data.password)
+                        }
+                        password = response.data
+                    })
+
+                    return password
+
                 }
                 catch(error) {
                     if (error.response.status === 422) {
@@ -182,6 +202,7 @@
 
                 this.internal_password = otp.password
                 this.internal_otp_type = otp.otp_type
+
                 let generated_at = otp.generated_at
                 let period = otp.period
 
@@ -314,7 +335,18 @@
 
             clipboardErrorHandler ({ value, event }) {
                 console.log('error', value)
-            }
+            },
+
+            copyAndNotify (strToCopy) {
+                // see https://web.dev/async-clipboard/ for futur Clipboard API usage.
+                // The API should allow to copy the password on each trip without user interaction.
+
+                // For now too many browsers don't support the clipboard-write permission
+                // (see https://developer.mozilla.org/en-US/docs/Web/API/Permissions#browser_support)
+
+                this.$clipboard(strToCopy)
+                this.$notify({ type: 'is-success', text: this.$t('commons.copied_to_clipboard') })
+            },
 
         },
 

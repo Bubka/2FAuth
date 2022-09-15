@@ -32,6 +32,9 @@
                     <form-checkbox v-on:showOtpAsDot="saveSetting('showOtpAsDot', $event)" :form="form" fieldName="showOtpAsDot" :label="$t('settings.forms.show_otp_as_dot.label')" :help="$t('settings.forms.show_otp_as_dot.help')" />
                     <!-- close otp on copy -->
                     <form-checkbox v-on:closeOtpOnCopy="saveSetting('closeOtpOnCopy', $event)" :form="form" fieldName="closeOtpOnCopy" :label="$t('settings.forms.close_otp_on_copy.label')" :help="$t('settings.forms.close_otp_on_copy.help')" />
+                    <!-- copy otp on get -->
+                    <form-checkbox v-on:copyOtpOnDisplay="saveSetting('copyOtpOnDisplay', $event)" :form="form" fieldName="copyOtpOnDisplay" :label="$t('settings.forms.copy_otp_on_display.label')" :help="$t('settings.forms.copy_otp_on_display.help')" />
+
 
                     <h4 class="title is-4 pt-4 has-text-grey-light">{{ $t('settings.data_input') }}</h4>
                     <!-- basic qrcode -->
@@ -81,6 +84,7 @@
                     lang: 'browser',
                     showOtpAsDot: null,
                     closeOtpOnCopy: null,
+                    copyOtpOnDisplay: null,
                     useBasicQrcodeReader: null,
                     showAccountsIcons: null,
                     displayMode: '',

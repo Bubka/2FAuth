@@ -48,6 +48,7 @@ return [
     'options' => [
         'showTokenAsDot' => false,
         'closeOtpOnCopy' => false,
+        'copyOtpOnDisplay' => false,
         'useBasicQrcodeReader' => false,
         'displayMode' => 'list',
         'showAccountsIcons' => true,
