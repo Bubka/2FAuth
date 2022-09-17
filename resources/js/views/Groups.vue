@@ -16,9 +16,9 @@
                 <div v-for="group in groups" :key="group.id" class="group-item has-text-light is-size-5 is-size-6-mobile">
                     {{ group.name }}
                     <!-- delete icon -->
-                    <a class="tag is-dark is-pulled-right" @click="deleteGroup(group.id)"  :title="$t('commons.delete')">
+                    <button class="button tag is-dark is-pulled-right" @click="deleteGroup(group.id)"  :title="$t('commons.delete')">
                         {{ $t('commons.delete') }}
-                    </a>
+                    </button>
                     <!-- edit link -->
                     <router-link :to="{ name: 'editGroup', params: { id: group.id, name: group.name }}" class="has-text-grey pl-1" :title="$t('commons.rename')">
                         <font-awesome-icon :icon="['fas', 'pen-square']" />

@@ -2,14 +2,12 @@
     <form-wrapper :title="$t('settings.forms.new_token')">
         <form @submit.prevent="generatePAToken" @keydown="form.onKeydown($event)">
             <form-field :form="form" fieldName="name" inputType="text" :label="$t('commons.name')" autofocus />
-            <div class="field is-grouped">
-                <div class="control">
-                    <v-button>{{ $t('commons.generate') }}</v-button>
-                </div>
-                <div class="control">
-                    <button type="button" class="button is-text" @click="cancelGeneration">{{ $t('commons.cancel') }}</button>
-                </div>
-            </div>
+            <form-buttons
+                :submitId="'btnGenerateToken'"
+                :isBusy="form.isBusy"
+                :caption="$t('commons.generate')"
+                :showCancelButton="true"
+                cancelLandingView="settings.oauth.tokens" />
         </form>
     </form-wrapper>
 </template>
@@ -37,11 +35,6 @@
                     this.$router.push({ name: 'settings.oauth.tokens', params: { accessToken: data.accessToken, token_id: data.token.id } });
                 }
 
-            },
-
-            cancelGeneration: function() {
-
-                this.$router.push({ name: 'settings.oauth.tokens' });
             },
             
         },

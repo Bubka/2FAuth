@@ -14,7 +14,7 @@
             </div>
             <div class="field is-grouped">
                 <div class="control">
-                    <a class="button is-link" @click="register()">{{ $t('auth.webauthn.register_a_new_device')}}</a>
+                    <button class="button is-link" @click="register()">{{ $t('auth.webauthn.register_a_new_device')}}</button>
                 </div>
                 <div class="control">
                     <router-link :to="{ name: 'login' }" class="button is-text">{{ $t('commons.cancel') }}</router-link>

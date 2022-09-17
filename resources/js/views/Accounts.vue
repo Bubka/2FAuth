@@ -52,7 +52,7 @@
             <vue-footer :showButtons="true">
                 <!-- Move to selected group button -->
                 <p class="control">
-                    <a class="button is-link is-rounded" @click="moveAccounts()">{{ $t('commons.move') }}</a>
+                    <button class="button is-link is-rounded" @click="moveAccounts()">{{ $t('commons.move') }}</button>
                 </p>
                 <!-- Cancel button -->
                 <p class="control">
@@ -113,25 +113,25 @@
             <vue-footer :showButtons="true">
                 <!-- New item buttons -->
                 <p class="control" v-if="!editMode">
-                    <a class="button is-link is-rounded is-focus" @click="start">
+                    <button class="button is-link is-rounded is-focus" @click="start">
                         <span>{{ $t('commons.new') }}</span>
                         <span class="icon is-small">
                             <font-awesome-icon :icon="['fas', 'qrcode']" />
                         </span>
-                    </a>
+                    </button>
                 </p>
                 <!-- Manage button -->
                 <p class="control" v-if="!editMode">
-                    <a class="button is-dark is-rounded" @click="setEditModeTo(true)">{{ $t('commons.manage') }}</a>
+                    <button class="button is-dark is-rounded" @click="setEditModeTo(true)">{{ $t('commons.manage') }}</button>
                 </p>
                 <!-- Done button -->
                 <p class="control" v-if="editMode">
-                    <a class="button is-success is-rounded" @click="setEditModeTo(false)">
+                    <button class="button is-success is-rounded" @click="setEditModeTo(false)">
                         <span>{{ $t('commons.done') }}</span>
                         <span class="icon is-small">
                             <font-awesome-icon :icon="['fas', 'check']" />
                         </span>
-                    </a>
+                    </button>
                 </p>
             </vue-footer>
         </div>

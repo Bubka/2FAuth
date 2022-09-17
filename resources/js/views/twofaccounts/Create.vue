@@ -157,15 +157,15 @@
             <div class="block has-text-light mb-6" v-html="uri"></div>
             <!-- Copy to clipboard -->
             <div class="block has-text-link">
-                <label class="button is-link is-outlined is-rounded" v-clipboard="() => uri" v-clipboard:success="clipboardSuccessHandler">
+                <button class="button is-link is-outlined is-rounded" v-clipboard="() => uri" v-clipboard:success="clipboardSuccessHandler">
                     {{ $t('commons.copy_to_clipboard') }}
-                </label>
+                </button>
             </div>
             <!-- Open in browser -->
             <div class="block has-text-link" v-if="isUrl(uri)" @click="openInBrowser(uri)">
-                <label class="button is-link is-outlined is-rounded">
+                <button class="button is-link is-outlined is-rounded">
                     {{ $t('commons.open_in_browser') }}
-                </label>
+                </button>
             </div>
         </modal>
     </div>
