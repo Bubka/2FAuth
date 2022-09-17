@@ -2,7 +2,7 @@
     <div>
         <div class="columns is-centered">
             <div class="form-column column is-two-thirds-tablet is-half-desktop is-one-third-widescreen is-one-third-fullhd">
-                <h1 class="title">
+                <h1 class="title has-text-grey-dark">
                     {{ $t('twofaccounts.import.import') }}
                 </h1>
                 <div class="is-size-7-mobile" v-html="$t('twofaccounts.import.import_legend')">

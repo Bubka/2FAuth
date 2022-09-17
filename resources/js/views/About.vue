@@ -1,7 +1,7 @@
 <template>
     <div class="columns is-centered">
         <div class="form-column column is-two-thirds-tablet is-half-desktop is-one-third-widescreen is-one-third-fullhd">
-            <h1 class="title">{{ $t('commons.about') }}</h1>
+            <h1 class="title has-text-grey-dark">{{ $t('commons.about') }}</h1>
             <p class="block">
                 <span class="has-text-white"><span class="is-size-5">2FAuth</span> v{{ appVersion }}</span><br />
                 {{ $t('commons.2fauth_teaser')}}
