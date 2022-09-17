@@ -253,7 +253,7 @@
      *    ~ 'appSettings.displayMode' change the account appearance
      *
      *  Input : 
-     *  - The 'InitialEditMode' props : allows to load the view directly in Edit mode
+     *  - The 'initialEditMode' props : allows to load the view directly in Edit mode
      *  
      */
 
@@ -270,7 +270,7 @@
                 groups : [],
                 selectedAccounts: [],
                 search: '',
-                editMode: this.InitialEditMode,
+                editMode: this.initialEditMode,
                 drag: false,
                 showTwofaccountInModal : false,
                 showGroupSwitch: false,

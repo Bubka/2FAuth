@@ -241,7 +241,7 @@
                 await this.form.put('/api/v1/twofaccounts/' + this.$route.params.twofaccountId)
 
                 if( this.form.errors.any() === false ) {
-                    this.$router.push({name: 'accounts', params: { InitialEditMode: true, toRefresh: true }})
+                    this.$router.push({name: 'accounts', params: { initialEditMode: true, toRefresh: true }})
                 }
 
             },
@@ -254,7 +254,7 @@
                 // clean new temp icon
                 this.deleteIcon()
 
-                this.$router.push({name: 'accounts', params: { InitialEditMode: true }});
+                this.$router.push({name: 'accounts', params: { initialEditMode: true }});
             },
 
             async uploadIcon(event) {
