@@ -11,6 +11,7 @@
                 :placeholder="placeholder" 
                 v-bind="$attrs" 
                 v-on:change="$emit('field-changed', form[fieldName])"
+                :maxlength="this.maxLength" 
             />
         </div>
         <field-error :form="form" :field="fieldName" />
@@ -69,6 +70,11 @@
             isDisabled: {
                 type: Boolean,
                 default: false
+            },
+
+            maxLength: {
+                type: Number,
+                default: null
             }
         }
     }

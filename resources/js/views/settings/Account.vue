@@ -7,8 +7,8 @@
                     <div v-if="isRemoteUser" class="notification is-warning has-text-centered" v-html="$t('auth.user_account_controlled_by_proxy')" />
                     <h4 class="title is-4 has-text-grey-light">{{ $t('settings.profile') }}</h4>
                     <fieldset :disabled="isRemoteUser">
-                        <form-field :form="formProfile" fieldName="name" :label="$t('auth.forms.name')" autofocus />
-                        <form-field :form="formProfile" fieldName="email" inputType="email" :label="$t('auth.forms.email')" />
+                        <form-field :form="formProfile" fieldName="name" :label="$t('auth.forms.name')" :maxLength="255" autofocus />
+                        <form-field :form="formProfile" fieldName="email" inputType="email" :label="$t('auth.forms.email')" :maxLength="255" />
                         <form-field :form="formProfile" fieldName="password" inputType="password" :label="$t('auth.forms.current_password.label')" :help="$t('auth.forms.current_password.help')" />
                         <form-buttons :isBusy="formProfile.isBusy" :caption="$t('commons.update')" />
                     </fieldset>

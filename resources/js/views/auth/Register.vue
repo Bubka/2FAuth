@@ -23,8 +23,8 @@
         <!-- User registration form -->
         <form-wrapper v-else :title="$t('auth.register')" :punchline="$t('auth.forms.register_punchline')">
             <form @submit.prevent="handleRegisterSubmit" @keydown="registerForm.onKeydown($event)">
-                <form-field :form="registerForm" fieldName="name" inputType="text" :label="$t('auth.forms.name')" autofocus />
-                <form-field :form="registerForm" fieldName="email" inputType="email" :label="$t('auth.forms.email')" />
+                <form-field :form="registerForm" fieldName="name" inputType="text" :label="$t('auth.forms.name')" :maxLength="255" autofocus />
+                <form-field :form="registerForm" fieldName="email" inputType="email" :label="$t('auth.forms.email')" :maxLength="255" />
                 <form-password-field :form="registerForm" fieldName="password" :showRules="true" :label="$t('auth.forms.password')" />
                 <!-- <form-field :form="registerForm" fieldName="password_confirmation" inputType="password" :label="$t('auth.forms.confirm_password')" /> -->
                 <form-buttons :isBusy="registerForm.isBusy" :isDisabled="registerForm.isDisabled" :caption="$t('auth.register')" :submitId="'btnRegister'" />
