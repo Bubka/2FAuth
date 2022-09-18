@@ -84,7 +84,7 @@
                                 </span>
                             </label>
                             <span class="tag is-black is-large" v-if="tempIcon">
-                                <img class="icon-preview" :src="'/storage/icons/' + tempIcon" :alt="$t('twofaccounts.x_icon', {service: form.service})">
+                                <img class="icon-preview" :src="'/storage/icons/' + tempIcon" :alt="$t('twofaccounts.icon_to_illustrate_the_account')">
                                 <button class="delete is-small" @click.prevent="deleteIcon" :aria-label="$t('twofaccounts.remove_icon')"></button>
                             </span>
                         </div>

@@ -3,7 +3,7 @@
         <div class="modal-background"></div>
         <div class="modal-content">
             <p class="has-text-centered m-5">
-                <img :src="qrcode" class="has-background-light">
+                <img :src="qrcode" class="has-background-light" :alt="$t('commons.image_of_qrcode_to_scan')">
             </p>
         </div>
         <div class="fullscreen-footer">

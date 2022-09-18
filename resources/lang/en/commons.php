@@ -59,4 +59,5 @@ return [
     'logos_by' => 'Logos by',
     'search' => 'Search',
     '2fauth_description' => 'A web app to manage your Two-Factor Authentication (2FA) accounts and generate their security codes',
+    'image_of_qrcode_to_scan' => 'Image of a QR code to scan',
 ];

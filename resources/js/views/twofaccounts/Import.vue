@@ -18,13 +18,9 @@
                     <div v-if="exportedAccounts.length > 0">
                         <div v-for="(account, index) in exportedAccounts" :key="account.name" class="group-item has-text-light is-size-5 is-size-6-mobile">
                             <div class="is-flex is-justify-content-space-between">
-                                <!-- icon -->
-                                <!-- <div v-if="account.icon && $root.appSettings.showAccountsIcons">
-                                    <img class="account-icon" :src="'/storage/icons/' + account.icon">
-                                </div> -->
                                 <!-- Account name -->
                                 <div v-if="account.id > -2 && account.imported !== 0" class="is-flex-grow-1 has-ellipsis is-clickable" @click="previewAccount(index)" :title="$t('twofaccounts.import.generate_a_test_password')">
-                                    <img v-if="account.icon && $root.appSettings.showAccountsIcons" class="import-icon" :src="'/storage/icons/' + account.icon">
+                                    <img v-if="account.icon && $root.appSettings.showAccountsIcons" class="import-icon" :src="'/storage/icons/' + account.icon" :alt="$t('twofaccounts.icon_for_account_x_at_service_y', {account: account.account, service: account.service})">
                                     {{ account.account }}
                                 </div>
                                 <div v-else class="is-flex-grow-1 has-ellipsis">{{ account.account }}</div>
