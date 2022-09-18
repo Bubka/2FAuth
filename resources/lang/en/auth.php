@@ -53,6 +53,7 @@ return [
         'account_recovery_email_sent' => 'Account recovery email sent!',
         'disable_all_other_devices' => 'Disable all other devices except this one',
         'register_a_new_device' => 'Register a new device',
+        'register_a_device' => 'Register a device',
         'device_successfully_registered' => 'Device successfully registered',
         'device_revoked' => 'Device successfully revoked',
         'revoking_a_device_is_permanent' => 'Revoking a device is permanent',

@@ -12,7 +12,7 @@
             <div v-else class="field is-grouped">
                 <!-- register button -->
                 <div class="control">
-                    <button type="button" id="btnRegisterNewDevice" @click="registerWebauthnDevice()" class="button is-link">{{ $t('auth.webauthn.register_a_new_device') }}</button>
+                    <button type="button" id="btnRegisterNewDevice" @click="registerWebauthnDevice()" class="button is-link">{{ $t('auth.webauthn.register_a_device') }}</button>
                 </div>
                 <!-- dismiss button -->
                 <div class="control">
