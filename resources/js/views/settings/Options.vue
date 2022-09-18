@@ -8,7 +8,13 @@
                     <h4 class="title is-4 has-text-grey-light">{{ $t('settings.general') }}</h4>
                     <!-- Language -->
                     <form-select v-on:lang="saveSetting('lang', $event)" :options="langs" :form="form" fieldName="lang" :label="$t('settings.forms.language.label')" :help="$t('settings.forms.language.help')" />
-                    <div class="field help">{{ $t('settings.forms.some_translation_are_missing') }}<a class="ml-2" href="https://crowdin.com/project/2fauth">{{ $t('settings.forms.help_translate_2fauth') }}</a></div>
+                    <div class="field help">
+                        {{ $t('settings.forms.some_translation_are_missing') }}
+                        <a class="ml-2" href="https://crowdin.com/project/2fauth">
+                            {{ $t('settings.forms.help_translate_2fauth') }}
+                            <font-awesome-icon :icon="['fas', 'external-link-alt']" />
+                        </a>
+                    </div>
                     <!-- display mode -->
                     <form-toggle v-on:displayMode="saveSetting('displayMode', $event)" :choices="layouts" :form="form" fieldName="displayMode" :label="$t('settings.forms.display_mode.label')" :help="$t('settings.forms.display_mode.help')" />
                     <!-- show icon -->

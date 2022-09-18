@@ -164,7 +164,10 @@
             <!-- Open in browser -->
             <div class="block has-text-link" v-if="isUrl(uri)" @click="openInBrowser(uri)">
                 <button class="button is-link is-outlined is-rounded">
-                    {{ $t('commons.open_in_browser') }}
+                    <span>{{ $t('commons.open_in_browser') }}</span>
+                    <span class="icon is-small">
+                        <font-awesome-icon :icon="['fas', 'external-link-alt']" />
+                    </span>
                 </button>
             </div>
         </modal>

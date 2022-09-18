@@ -36,6 +36,7 @@ import {
     faSortAlphaUp,
     faEye,
     faEyeSlash,
+    faExternalLinkAlt,
 } from '@fortawesome/free-solid-svg-icons'
 
 import {
@@ -76,6 +77,7 @@ library.add(
     faSortAlphaUp,
     faEye,
     faEyeSlash,
+    faExternalLinkAlt,
 );
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
