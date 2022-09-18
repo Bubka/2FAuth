@@ -31,13 +31,13 @@
                                 <!-- buttons -->
                                 <div v-if="account.imported === -1" class="tags is-flex-wrap-nowrap">
                                     <!-- discard button -->
-                                    <a class="tag is-dark has-text-grey-light" @click="discardAccount(index)"  :title="$t('twofaccounts.import.discard_this_account')">
+                                    <button class="button tag is-dark has-text-grey-light" @click="discardAccount(index)"  :title="$t('twofaccounts.import.discard_this_account')">
                                         <font-awesome-icon :icon="['fas', 'trash']" />
-                                    </a>
+                                    </button>
                                     <!-- import button -->
-                                    <a v-if="account.id > -2" class="tag is-link" @click="createAccount(index)"  :title="$t('twofaccounts.import.import_this_account')">
+                                    <button v-if="account.id > -2" class="button tag is-link" @click="createAccount(index)"  :title="$t('twofaccounts.import.import_this_account')">
                                         {{ $t('twofaccounts.import.to_import') }}
-                                    </a>
+                                    </button>
                                 </div>
                                 <!-- result label -->
                                 <div v-else class="has-nowrap">
@@ -68,10 +68,8 @@
                         </div>
                         <!-- discard links -->
                         <div v-if="importableCount > 0" class="mt-2 is-size-7 is-pulled-right">
-                            <span v-if="duplicateCount">
-                                <a @click="discardDuplicates()" class="has-text-grey">{{ $t('twofaccounts.import.discard_duplicates') }} ({{duplicateCount}})</a> - 
-                            </span>
-                            <a @click="discardAccounts()" class="has-text-grey">{{ $t('twofaccounts.import.discard_all') }}</a>
+                            <button v-if="duplicateCount" @click="discardDuplicates()" class="has-text-grey button is-small is-ghost">{{ $t('twofaccounts.import.discard_duplicates') }} ({{duplicateCount}})</button>
+                            <button @click="discardAccounts()" class="has-text-grey button is-small is-ghost">{{ $t('twofaccounts.import.discard_all') }}</button>
                         </div>
                     </div>
                     <div v-if="isFetching && exportedAccounts.length === 0" class="has-text-centered">

@@ -18,9 +18,9 @@
                     <div v-for="credential in credentials" :key="credential.id" class="group-item has-text-light is-size-5 is-size-6-mobile">
                         {{ displayName(credential) }}
                         <!-- revoke link -->
-                        <a class="tag is-dark is-pulled-right" @click="revokeCredential(credential.id)" :title="$t('settings.revoke')">
+                        <button class="button tag is-dark is-pulled-right" @click="revokeCredential(credential.id)" :title="$t('settings.revoke')">
                             {{ $t('settings.revoke') }}
-                        </a>
+                        </button>
                         <!-- edit link -->
                         <!-- <router-link :to="{ name: '' }" class="has-text-grey pl-1" :title="$t('commons.rename')">
                             <font-awesome-icon :icon="['fas', 'pen-square']" />
