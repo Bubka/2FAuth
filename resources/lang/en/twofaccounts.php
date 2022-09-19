@@ -26,6 +26,10 @@ return [
     'add_one' => 'Add one',
     'show_qrcode' => 'Show QR code',
     'no_service' => '- no service -',
+    'account_created' => 'Account successfully created',
+    'account_updated' => 'Account successfully updated',
+    'accounts_deleted' => 'Account(s) successfully deleted',
+    'accounts_moved' => 'Account(s) successfully moved',
     'forms' => [
         'service' => [
             'placeholder' => 'Google, Twitter, Apple',

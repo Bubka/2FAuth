@@ -319,6 +319,7 @@
                 await this.form.post('/api/v1/twofaccounts')
 
                 if( this.form.errors.any() === false ) {
+                    this.$notify({ type: 'is-success', text: this.$t('twofaccounts.account_created') })
                     this.$router.push({name: 'accounts', params: { toRefresh: true }});
                 }
 

@@ -241,6 +241,7 @@
                 await this.form.put('/api/v1/twofaccounts/' + this.$route.params.twofaccountId)
 
                 if( this.form.errors.any() === false ) {
+                    this.$notify({ type: 'is-success', text: this.$t('twofaccounts.account_updated') })
                     this.$router.push({name: 'accounts', params: { initialEditMode: true, toRefresh: true }})
                 }
 

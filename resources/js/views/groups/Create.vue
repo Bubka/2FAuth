@@ -32,6 +32,7 @@
                 await this.form.post('/api/v1/groups')
 
                 if( this.form.errors.any() === false ) {
+                    this.$notify({ type: 'is-success', text: this.$t('groups.group_successfully_created') })
                     this.$router.push({ name: 'groups' });
                 }
 

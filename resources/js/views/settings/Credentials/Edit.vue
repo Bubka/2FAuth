@@ -34,6 +34,7 @@
                 await this.form.patch('/webauthn/credentials/' + this.id + '/name')
 
                 if( this.form.errors.any() === false ) {
+                    this.$notify({ type: 'is-success', text: this.$t('auth.webauthn.device_successfully_registered') })
                     this.$router.push({name: 'settings.webauthn.devices', params: { toRefresh: true }})
                 }
 

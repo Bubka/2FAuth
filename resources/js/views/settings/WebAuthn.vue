@@ -165,7 +165,6 @@
                 const publicKeyCredential = this.parseOutgoingCredentials(bufferedCredentials);
 
                 this.axios.post('/webauthn/register', publicKeyCredential).then(response => {
-                    this.$notify({ type: 'is-success', text: this.$t('auth.webauthn.device_successfully_registered') })
                     this.$router.push({ name: 'settings.webauthn.editCredential', params: { id: publicKeyCredential.id, name: this.$t('auth.webauthn.my_device') } })
                 })
             },

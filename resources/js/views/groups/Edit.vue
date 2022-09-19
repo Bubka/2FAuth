@@ -34,6 +34,7 @@
                 await this.form.put('/api/v1/groups/' + this.id)
 
                 if( this.form.errors.any() === false ) {
+                    this.$notify({ type: 'is-success', text: this.$t('groups.group_name_saved') })
                     this.$router.push({ name: 'groups' })
                 }
 

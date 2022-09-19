@@ -105,6 +105,7 @@
 
                     // Remove the deleted group from the collection
                     this.groups = this.groups.filter(a => a.id !== id)
+                    this.$notify({ type: 'is-success', text: this.$t('groups.group_successfully_deleted') })
 
                     // Reset persisted group filter to 'All' (groupId=0)
                     // (backend will save to change automatically)

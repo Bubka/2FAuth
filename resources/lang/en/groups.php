@@ -23,6 +23,9 @@ return [
     'move_selected_to' => 'Move selected to',
     'no_group' => 'No group',
     'change_group' => 'Change group',
+    'group_successfully_created' => 'Group successfully created',
+    'group_name_saved' => 'Group name saved',
+    'group_successfully_deleted' => 'Group successfully deleted',
     'forms' => [
         'new_group' => 'New group',
         'new_name' => 'New name',

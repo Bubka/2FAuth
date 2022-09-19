@@ -450,6 +450,7 @@
                             ids.forEach(function(id) {
                                 that.accounts = that.accounts.filter(a => a.id !== id)
                             })
+                            this.$notify({ type: 'is-success', text: this.$t('twofaccounts.accounts_deleted') })
                         })
                         
                     // we fetch the accounts again to prevent the js collection being
@@ -477,6 +478,8 @@
                 // desynchronize from the backend php collection
                 this.fetchAccounts(true)
                 this.showGroupSelector = false
+
+                this.$notify({ type: 'is-success', text: this.$t('twofaccounts.accounts_moved') })
 
             },
 
