@@ -7,9 +7,25 @@
                 {{ $t('commons.2fauth_teaser')}}
             </p>
             <img src="logo.svg" style="height: 32px" alt="2FAuth logo" />
-            <p class="block">
+            <p class="block mb-6">
                 ©Bubka <a class="is-size-7" href="https://github.com/Bubka/2FAuth/blob/master/LICENSE">AGPL-3.0 license</a>
             </p>
+            <div v-if="showUserOptions" class="block">
+                <form>
+                    <form-checkbox 
+                        v-on:checkForUpdate="saveSetting('checkForUpdate', $event)" 
+                        :form="form" 
+                        fieldName="checkForUpdate" 
+                        :label="$t('commons.check_for_update')" 
+                        :help="$t('commons.check_for_update_help')"
+                        labelClass="has-text-weight-normal"
+                    />
+                </form>
+                <button type="button" class="button is-link" @click="getLatestRelease">{{ $t('commons.cancel') }}</button>
+            </div>
+            <h2 class="title is-5 has-text-grey-light">
+                {{ $t('commons.resources') }}
+            </h2>
             <div class="buttons">
                 <a class="button is-dark" href="https://github.com/Bubka/2FAuth">
                     <span class="icon is-small">
@@ -82,12 +98,17 @@
 </template>
 
 <script>
+    import Form from './../components/Form'
+
     export default {
         data() {
             return {
                 infos : null,
                 options : null,
                 showUserOptions: false,
+                form: new Form({
+                    checkForUpdate: null,
+                }),
             }
         },
 
@@ -101,12 +122,35 @@
                     this.showUserOptions = true
                 }
             })
+
+            await this.form.get('/api/v1/settings/checkForUpdate', {returnError: true}).then(response => {
+                if (response.status === 200) {
+                    this.form.fillWithKeyValueObject(response.data)
+                }
+            })
+            .catch(error => {
+                // do nothing
+            })
         },
 
         methods: {
 
-            clipboardSuccessHandler ({ value, event }) {
+            saveSetting(settingName, event) {
 
+                this.axios.put('/api/v1/settings/' + settingName, { value: event }).then(response => {
+                    this.$notify({ type: 'is-success', text: this.$t('settings.forms.setting_saved') })
+                    this.$root.appSettings[response.data.key] = response.data.value
+                })
+            },
+
+            async getLatestRelease() {
+
+                await this.axios.get('latestRelease').then(response => {
+                    console.log(response.data)
+                })
+            },
+
+            clipboardSuccessHandler ({ value, event }) {
                 this.$notify({ type: 'is-success', text: this.$t('commons.copied_to_clipboard') })
             },
 

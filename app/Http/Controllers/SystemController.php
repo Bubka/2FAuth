@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ReleaseRadarActivated;
+use App\Services\ReleaseRadarService;
+use Illuminate\Support\Facades\App;
 use App\Http\Controllers\Controller;
 use App\Facades\Settings;
 use Illuminate\Http\Request;
@@ -47,5 +50,19 @@ class SystemController extends Controller
         }
 
         return response()->json($infos);
+    }
+
+
+    /**
+     * Get latest release
+     * 
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function latestRelease(Request $request)
+    {
+        $releaseRadarService = App::make(ReleaseRadarService::class);
+        $release = $releaseRadarService->scanForRelease();
+
+        return response()->json($release);
     }
 }

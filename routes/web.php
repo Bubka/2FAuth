@@ -59,6 +59,7 @@ Route::get('refresh-csrf', function(){
     return csrf_token();
 });
 Route::get('infos', 'SystemController@infos')->name('system.infos');
+Route::get('latestRelease', 'SystemController@latestRelease')->name('system.latestRelease');
 
 /**
  * Route for the main landing view

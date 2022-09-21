@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Services\LogoService;
 use App\Services\SettingService;
+use App\Services\ReleaseRadarService;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Support\DeferrableProvider;
 
@@ -22,6 +23,10 @@ class TwoFAuthServiceProvider extends ServiceProvider implements DeferrableProvi
 
         $this->app->singleton(LogoService::class, function () {
             return new LogoService();
+        });
+
+        $this->app->singleton(ReleaseRadarService::class, function () {
+            return new ReleaseRadarService();
         });
     }
 
@@ -45,6 +50,7 @@ class TwoFAuthServiceProvider extends ServiceProvider implements DeferrableProvi
     {
         return [
             LogoService::class,
+            LogoSeReleaseRadarServicervice::class,
         ];
     }
 }

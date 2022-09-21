@@ -4,12 +4,15 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Application Version
+    | Application infos
     |--------------------------------------------------------------------------
     |
     */
 
     'version' => '3.3.3',
+    'repository' => 'https://github.com/Bubka/2FAuth',
+    'latestReleaseUrl' => 'https://api.github.com/repos/Bubka/2FAuth/releases/latest',
+
 
     /*
     |--------------------------------------------------------------------------
@@ -62,6 +65,9 @@ return [
         'useWebauthnAsDefault' => false,
         'useWebauthnOnly' => false,
         'getOfficialIcons' => true,
+        'checkForUpdate' => true,
+        'lastRadarScan' => 0,
+        'latestRelease' => '',
     ],
 
 ];

@@ -23,6 +23,11 @@
                 default: ''
             },
 
+            labelClass: {
+                type: String,
+                default: ''
+            },
+
             fieldName: {
                 type: String,
                 default: '',

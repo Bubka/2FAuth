@@ -2,6 +2,12 @@
 
 namespace App\Providers;
 
+use App\Events\GroupDeleting;
+use App\Events\TwoFAccountDeleted;
+use App\Events\ReleaseRadarActivated;
+use App\Listeners\ReleaseRadar;
+use App\Listeners\CleanIconStorage;
+use App\Listeners\DissociateTwofaccountFromGroup;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -17,11 +23,14 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
-        'App\Events\TwoFAccountDeleted' => [
-            'App\Listeners\CleanIconStorage',
+        TwoFAccountDeleted::class => [
+            CleanIconStorage::class,
         ],
-        'App\Events\GroupDeleting' => [
-            'App\Listeners\DissociateTwofaccountFromGroup',
+        GroupDeleting::class => [
+            DissociateTwofaccountFromGroup::class,
+        ],
+        ReleaseRadarActivated::class => [
+            ReleaseRadar::class,
         ],
     ];
 

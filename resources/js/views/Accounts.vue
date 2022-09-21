@@ -431,6 +431,17 @@
                 }
             },
 
+
+            /**
+             * Get a fresh OTP for the provided account
+             */
+            getOTP(accountId) {
+                this.axios.get('api/v1/twofaccounts/' + accountId + '/otp').then(response => {
+                    this.$notify({ type: 'is-success', text: this.$t('commons.copied_to_clipboard')+ ' '+response.data })
+                })
+            },
+
+
             /**
              * Save the account order in db
              */
