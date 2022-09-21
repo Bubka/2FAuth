@@ -177,6 +177,12 @@ Vue.mixin({
                 case 'password':
                     prefix = 'pwd'
                     break
+                case 'radio':
+                    prefix = 'rdo'
+                    break
+                case 'label':
+                    prefix = 'lbl'
+                    break
                 default:
                     prefix = 'txt'
                     break

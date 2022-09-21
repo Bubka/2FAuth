@@ -1,7 +1,7 @@
 <template>
     <div class="field">
         <input :id="fieldName" type="checkbox" :name="fieldName" class="is-checkradio is-info" v-model="form[fieldName]" v-on:change="$emit(fieldName, form[fieldName])" v-bind="$attrs">
-        <label :for="fieldName" class="label" v-html="label"></label>
+        <label tabindex="0" :for="fieldName" class="label" :class="labelClass" v-html="label" v-on:keypress.space.prevent="setCheckbox"></label>
         <p class="help" v-html="help" v-if="help"></p>
     </div>
 </template>
@@ -38,6 +38,15 @@
                 type: String,
                 default: ''
             },
+        },
+
+        methods: {
+            setCheckbox(event) {
+                if (this.$attrs.disabled == false) {
+                    this.form[this.fieldName] = !this.form[this.fieldName]
+                    this.$emit(this.fieldName, this.form[this.fieldName])
+                }
+            }
         }
     }
 </script>

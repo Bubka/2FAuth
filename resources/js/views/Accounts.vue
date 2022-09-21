@@ -19,7 +19,7 @@
             <vue-footer :showButtons="true">
                 <!-- Close Group switch button -->
                 <p class="control">
-                    <a class="button is-dark is-rounded" @click="closeGroupSwitch()">{{ $t('commons.close') }}</a>
+                    <button class="button is-dark is-rounded" @click="closeGroupSwitch()">{{ $t('commons.close') }}</button>
                 </p>
             </vue-footer>
         </div>
@@ -81,7 +81,7 @@
         	                            </div>
         	                        </div>
         	                    </transition>
-                                <div class="tfa-cell tfa-content is-size-3 is-size-4-mobile" @click.stop="showAccount(account)">  
+                                <div tabindex="0" class="tfa-cell tfa-content is-size-3 is-size-4-mobile" @click="showAccount(account)" @keyup.enter="showAccount(account)" role="button">  
                                     <div class="tfa-text has-ellipsis">
                                         <img :src="'/storage/icons/' + account.icon" v-if="account.icon && $root.appSettings.showAccountsIcons" :alt="$t('twofaccounts.icon_for_account_x_at_service_y', {account: account.account, service: account.service})">
                                         {{ displayService(account.service) }}<font-awesome-icon class="has-text-danger is-size-5 ml-2" v-if="$root.appSettings.useEncryption && account.account === $t('errors.indecipherable')" :icon="['fas', 'exclamation-circle']" />
@@ -148,7 +148,7 @@
                                         {{ selectedAccounts.length }}&nbsp;{{ $t('commons.selected') }}
                                         <button @click="clearSelected" :style="{visibility: selectedAccounts.length > 0 ? 'visible' : 'hidden'}" class="delete" :title="$t('commons.clear_selection')"></button>
                                     </span>
-                                    <span @click="selectAll" class="tag is-dark is-clickable has-background-black-ter has-text-grey" :title="$t('commons.select_all')">
+                                    <span role="button" @click="selectAll" class="tag is-dark is-clickable has-background-black-ter has-text-grey" :title="$t('commons.select_all')">
                                         {{ $t('commons.all') }}
                                         <font-awesome-icon class="ml-1" :icon="['fas', 'check-square']" />
                                     </span>
@@ -156,10 +156,10 @@
                             </div>
                             <div class="control">
                                 <div class="tags has-addons are-medium">
-                                    <span @click="sortAsc" class="tag is-dark is-clickable has-background-black-ter has-text-grey" :title="$t('commons.sort_ascending')">
+                                    <span role="button" @click="sortAsc" class="tag is-dark is-clickable has-background-black-ter has-text-grey" :title="$t('commons.sort_ascending')">
                                         <font-awesome-icon :icon="['fas', 'sort-alpha-down']" />
                                     </span>
-                                    <span @click="sortDesc" class="tag is-dark is-clickable has-background-black-ter has-text-grey" :title="$t('commons.sort_descending')">
+                                    <span role="button" @click="sortDesc" class="tag is-dark is-clickable has-background-black-ter has-text-grey" :title="$t('commons.sort_descending')">
                                         <font-awesome-icon :icon="['fas', 'sort-alpha-up']" />
                                     </span>
                                 </div>
@@ -167,7 +167,7 @@
                         </div>
                         <div class="field is-grouped is-justify-content-center pt-1">
                             <div class="control">
-                                <div class="tags are-medium has-addons is-clickable" v-if="selectedAccounts.length > 0" @click="showGroupSelector = true">
+                                <div role="button" class="tags are-medium has-addons is-clickable" v-if="selectedAccounts.length > 0" @click="showGroupSelector = true">
                                     <span class="tag is-dark">
                                         {{ $t('groups.change_group') }}
                                     </span>
@@ -177,7 +177,7 @@
                                 </div>
                             </div>
                             <div class="control">
-                                <div class="tags are-medium has-addons is-clickable" v-if="selectedAccounts.length > 0" @click="destroyAccounts">
+                                <div role="button" class="tags are-medium has-addons is-clickable" v-if="selectedAccounts.length > 0" @click="destroyAccounts">
                                     <span class="tag is-dark">
                                         {{ $t('commons.delete') }}
                                     </span>
@@ -193,7 +193,7 @@
                     <!-- search -->
                     <div class="field">
                         <div class="control has-icons-right">
-                            <input type="text" :title="$t('commons.search')" class="input is-rounded is-search" v-model="search">
+                            <input id="txtSearch" type="search" tabindex="1" :aria-label="$t('commons.search')" :title="$t('commons.search')" class="input is-rounded is-search" v-model="search">
                             <span class="icon is-small is-right">
                                 <font-awesome-icon :icon="['fas', 'search']"  v-if="!search" />
                                 <a class="delete" v-if="search" @click="search = '' "></a>
@@ -201,14 +201,18 @@
                         </div>
                     </div>
                     <!-- group switch toggle -->
-                    <div class="is-clickable has-text-centered">
-                        <div class="columns" @click="toggleGroupSwitch">
+                    <div class="has-text-centered">
+                        <div class="columns">
                             <div class="column" v-if="!showGroupSwitch">
-                                {{ activeGroupName }} ({{ filteredAccounts.length }})
-                                <font-awesome-icon  :icon="['fas', 'caret-down']" />
+                                <button :title="$t('groups.show_group_selector')" tabindex="1" class="button is-text is-like-text" @click.stop="toggleGroupSwitch">
+                                    {{ activeGroupName }} ({{ filteredAccounts.length }})&nbsp;
+                                    <font-awesome-icon  :icon="['fas', 'caret-down']" />
+                                </button>
                             </div>
                             <div class="column" v-else>
-                                {{ $t('groups.select_accounts_to_show') }}
+                                <button :title="$t('groups.hide_group_selector')" tabindex="1" class="button is-text is-like-text" @click.stop="toggleGroupSwitch">
+                                    {{ $t('groups.select_accounts_to_show') }}
+                                </button>
                             </div>
                         </div>
                     </div>

@@ -14,9 +14,9 @@
         </div>
         <div v-if="this.showcloseButton" class="fullscreen-footer">
             <!-- Close button -->
-            <label class="button is-dark is-rounded" @click.stop="closeModal">
+            <button class="button is-dark is-rounded" @click.stop="closeModal">
                 {{ $t('commons.close') }}
-            </label>
+            </button>
         </div>
     </div>
 </template>

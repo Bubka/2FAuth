@@ -205,9 +205,13 @@ a:hover {
     flex-grow: 1;
     overflow: hidden;
 }
-
-// .tfa-grid .tfa-content {
-// }
+.tfa-content:focus, .tfa-content:focus-visible
+{
+    outline: 2px solid $grey;
+    border: none;
+    outline-offset: 7px;
+    border-radius: 3px;
+}
 
 .tfa-list .tfa-content {
     padding-right: 1rem;
@@ -524,43 +528,24 @@ a.has-text-white-bis:focus, a.has-text-white-bis:focus-visible {
   box-shadow: $input-focus-box-shadow-size $input-focus-box-shadow-color;
 }
 
-// .button.is-dark:focus:not(:active), .button.is-dark.is-focused:not(:active),
-// .button.is-link:focus:not(:active), .button.is-link.is-focused:not(:active) {
-// 	box-shadow: 0 0 0 0.125em hsla(0, 0%, 96%, 0.25);
-// }
-// .button.copy-text:focus:not(:active), .button.copy-text.is-focused:not(:active) {
-// 	box-shadow: none;
-//   color: hsl(0, 0%, 86%);
-// }
-
-// a:focus,
-// .button:focus,
-// .control.has-icons-right > span.icon:focus {
-//   outline: none !important;
-// }
-// .button:focus {
-//   box-shadow: none;
-// }
-// a:focus-visible,
-// .control.has-icons-right > span.icon:focus {
-//   outline: 2px solid hsl(217, 71%, 53%) !important;
-//   outline-offset: 3px !important;
-// }
-
-// .button:focus-visible {
-//   box-shadow: none;
-//   outline: 2px solid hsl(217, 71%, 53%) !important;
-//   outline-offset: 3px !important;
-// }
-
-// @supports not selector(:focus-visible) {
-//   a:focus,
-//   button:focus,
-//   .control.has-icons-right > span.icon:focus {
-//     outline: 2px solid hsl(217, 71%, 53%);
-//     outline-offset: 3px;
-//   }
-// }
+.is-checkradio[type="checkbox"] + label:focus, 
+.is-checkradio[type="checkbox"] + label:focus-visible
+{
+  outline: none;
+  border: none;
+}
+.is-checkradio[type="checkbox"] + label:focus::before, 
+.is-checkradio[type="checkbox"] + label:focus-visible::before
+{
+  outline: none;
+  border: 1px solid $input-focus-border-color;
+  box-shadow: $input-focus-box-shadow-size $input-focus-box-shadow-color;
+}
+.is-checkradio[type="checkbox"] + label::before, 
+.is-checkradio[type="checkbox"] + label::before
+{
+  border-color: $grey;
+}
 
 
 .label {

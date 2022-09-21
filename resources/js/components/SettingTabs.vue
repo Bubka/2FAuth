@@ -5,7 +5,7 @@
                 <div class="tabs is-centered is-fullwidth">
                     <ul>
                         <li v-for="tab in tabs" :key="tab.view" :class="{ 'is-active': tab.view === activeTab }">
-                            <a :id="tab.id" @click="selectTab(tab.view)">{{ tab.name }}</a>
+                            <a :id="tab.id" tabindex="0" @click="selectTab(tab.view)">{{ tab.name }}</a>
                         </li>
                     </ul>
                 </div>

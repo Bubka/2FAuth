@@ -13,10 +13,10 @@
                 v-on:change="$emit('field-changed', form[fieldName])"
                 v-on:keyup="checkCapsLock"
             />
-            <span v-if="currentType == 'password'" class="icon is-small is-right is-clickable" @click="currentType = 'text'" :title="$t('auth.forms.reveal_password')">
+            <span v-if="currentType == 'password'" role="button" tabindex="0" class="icon is-small is-right is-clickable" @keyup.enter="setFieldType('text')" @click="setFieldType('text')" :title="$t('auth.forms.reveal_password')">
                 <font-awesome-icon :icon="['fas', 'eye-slash']" />
             </span>
-            <span v-else class="icon is-small is-right is-clickable" @click="currentType = 'password'" :title="$t('auth.forms.hide_password')">
+            <span v-else role="button" tabindex="0" class="icon is-small is-right is-clickable" @keyup.enter="setFieldType('password')" @click="setFieldType('password')" :title="$t('auth.forms.hide_password')">
                 <font-awesome-icon :icon="['fas', 'eye']" />
             </span>
         </div>
@@ -121,6 +121,12 @@
             checkCapsLock(event) {
                 this.hasCapsLockOn = event.getModifierState('CapsLock') ? true : false
             },
+
+            setFieldType(event) {
+                if (this.currentType != event) {
+                    this.currentType = event
+                }
+            }
         },
     }
 </script>

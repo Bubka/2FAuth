@@ -9,8 +9,8 @@
                     {{ $t('auth.webauthn.security_devices_legend')}}
                 </div>
                 <div class="mt-3">
-                    <a class="is-link" @click="register()">
-                        <font-awesome-icon :icon="['fas', 'plus-circle']" /> {{ $t('auth.webauthn.register_a_new_device')}}
+                    <a role="button" tabindex="0"  @click="register()">
+                        <font-awesome-icon :icon="['fas', 'plus-circle']" />&nbsp;{{ $t('auth.webauthn.register_a_new_device')}}
                     </a>
                 </div>
                 <!-- credentials list -->

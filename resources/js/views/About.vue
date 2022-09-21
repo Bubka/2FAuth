@@ -50,9 +50,9 @@
                 {{ $t('commons.environment') }}
             </h2>
             <div class="box has-background-black-bis is-family-monospace is-size-7">
-                <span class="is-pulled-right is-clickable" v-clipboard="() => this.$refs.listInfos.innerText" v-clipboard:success="clipboardSuccessHandler">
+                <button class="button copy-text is-pulled-right is-small is-text" v-clipboard="() => this.$refs.listInfos.innerText" v-clipboard:success="clipboardSuccessHandler">
                     <font-awesome-icon :icon="['fas', 'copy']" />
-                </span>
+                </button>
                 <ul ref="listInfos">
                     <li v-for="(value, key) in infos" :value="value" :key="key"><b>{{key}}</b>: {{value}}</li>
                 </ul>
@@ -62,9 +62,9 @@
                     {{ $t('settings.user_options') }}
                 </h2>
                 <div class="box has-background-black-bis is-family-monospace is-size-7">
-                    <span class="is-pulled-right is-clickable" v-clipboard="() => this.$refs.listUserOptions.innerText" v-clipboard:success="clipboardSuccessHandler">
+                    <button class="button copy-text is-pulled-right is-small is-text" v-clipboard="() => this.$refs.listUserOptions.innerText" v-clipboard:success="clipboardSuccessHandler">
                         <font-awesome-icon :icon="['fas', 'copy']" />
-                    </span>
+                    </button>
                     <ul ref="listUserOptions">
                         <li v-for="(value, option) in options" :value="value" :key="option"><b>{{option}}</b>: {{value}}</li>
                     </ul>

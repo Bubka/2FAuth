@@ -10,7 +10,9 @@
             </div>
             <div class="nav-links">
                 <p>{{ $t('auth.webauthn.lost_your_device') }}&nbsp;<router-link id="lnkRecoverAccount" :to="{ name: 'webauthn.lost' }" class="is-link">{{ $t('auth.webauthn.recover_your_account') }}</router-link></p>
-                <p v-if="!this.$root.appSettings.useWebauthnOnly">{{ $t('auth.sign_in_using') }}&nbsp;<a id="lnkSignWithLegacy" class="is-link" @click="showWebauthn = false">{{ $t('auth.login_and_password') }}</a></p>
+                <p v-if="!this.$root.appSettings.useWebauthnOnly">{{ $t('auth.sign_in_using') }}&nbsp;
+                    <a id="lnkSignWithLegacy" role="button" class="is-link" @keyup.enter="showWebauthn = false" @click="showWebauthn = false" tabindex="0">{{ $t('auth.login_and_password') }}</a>
+                </p>
             </div>
         </form-wrapper>
         <!-- login/password legacy form -->
@@ -28,7 +30,9 @@
                 </div>
                 <div v-else>
                     <p>{{ $t('auth.forms.forgot_your_password') }}&nbsp;<router-link id="lnkResetPwd" :to="{ name: 'password.request' }" class="is-link">{{ $t('auth.forms.request_password_reset') }}</router-link></p>
-                    <p >{{ $t('auth.sign_in_using') }}&nbsp;<a id="lnkSignWithWebauthn" class="is-link" @click="showWebauthn = true">{{ $t('auth.webauthn.security_device') }}</a></p>
+                    <p >{{ $t('auth.sign_in_using') }}&nbsp;
+                        <a id="lnkSignWithWebauthn" role="button" class="is-link" @keyup.enter="showWebauthn = true" @click="showWebauthn = true" tabindex="0">{{ $t('auth.webauthn.security_device') }}</a>
+                    </p>
                 </div>
             </div>
         </form-wrapper>

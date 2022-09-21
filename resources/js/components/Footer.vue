@@ -15,7 +15,7 @@
         <div v-else class="content has-text-centered">
             <router-link id="lnkSettings"  :to="{ name: 'settings.options' }" class="has-text-grey">{{ $t('settings.settings') }}</router-link>
             <span v-if="!this.$root.appConfig.proxyAuth || (this.$root.appConfig.proxyAuth && this.$root.appConfig.proxyLogoutUrl)">
-                 - <a id="lnkSignOut" class="has-text-grey" @click="logout">{{ $t('auth.sign_out') }}</a>
+                 - <button id="lnkSignOut" class="button is-text is-like-text has-text-grey" @click="logout">{{ $t('auth.sign_out') }}</button>
             </span>
         </div>
     </footer>
