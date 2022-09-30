@@ -47,7 +47,7 @@
 
         methods: {
             setCheckbox(event) {
-                if (this.$attrs.disabled == false) {
+                if (this.$attrs['disabled'] == undefined) {
                     this.form[this.fieldName] = !this.form[this.fieldName]
                     this.$emit(this.fieldName, this.form[this.fieldName])
                 }

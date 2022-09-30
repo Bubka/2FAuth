@@ -65,7 +65,7 @@ a:hover {
 }
 
 .accounts {
-  margin-top: 64px;
+  margin-top: 74px;
 }
 
 .groups {
@@ -82,7 +82,7 @@ a:hover {
 
 @media screen and (min-width: 769px) {
   .accounts {
-    margin-top: 84px;
+    margin-top: 98px;
   }
 }
 
@@ -413,10 +413,10 @@ figure.no-icon {
 
 .button:focus, .button:focus-visible, .button.is-focused {
   border-color: transparent;
-  outline-offset: 3px !important;
+  outline-offset: 3px;
 }
 a:focus, a:focus-visible {
-  outline-offset: 2px !important;
+  outline-offset: 2px;
 }
 .button:focus:not(:active), .button.is-focused:not(:active),
 .button.is-white:focus:not(:active), .button.is-white.is-focused:not(:active),
@@ -437,51 +437,51 @@ a:focus, a:focus-visible {
 
 .button.is-white:focus, .button.is-white:focus-visible, .button.is-white.is-focused
 {
-  outline: 2px solid $white !important;
+  outline: 2px solid $white;
 }
 .button.is-light:focus, .button.is-light:focus-visible, .button.is-light.is-focused
 {
-  outline: 2px solid $grey-lightest !important;
+  outline: 2px solid $grey-lightest;
 }
 .button.is-dark:focus, .button.is-dark:focus-visible, .button.is-dark.is-focused
 {
-  outline: 2px solid $dark !important;
+  outline: 2px solid $dark;
 }
 .button.is-black:focus, .button.is-black:focus-visible, .button.is-black.is-focused
 {
-  outline: 2px solid $black !important;
+  outline: 2px solid $black;
 }
 .button.is-text:focus, .button.is-text:focus-visible, .button.is-text.is-focused
 {
-  outline: 2px solid $text !important;
+  outline: 2px solid $text;
 }
 .button.is-ghost:focus, .button.is-ghost:focus-visible, .button.is-ghost.is-focused
 {
-  outline: 2px solid $text !important;
+  outline: 2px solid $text;
 }
 .button.is-primary:focus, .button.is-primary:focus-visible, .button.is-primary.is-focused
 {
-  outline: 2px solid $primary !important;
+  outline: 2px solid $primary;
 }
 .button.is-link:focus, .button.is-link:focus-visible, .button.is-link.is-focused
 {
-  outline: 2px solid $link !important;
+  outline: 2px solid $link;
 }
 .button.is-info:focus, .button.is-info:focus-visible, .button.is-info.is-focused
 {
-  outline: 2px solid $info !important;
+  outline: 2px solid $info;
 }
 .button.is-success:focus, .button.is-success:focus-visible, .button.is-success.is-focused
 {
-  outline: 2px solid $success !important;
+  outline: 2px solid $success;
 }
 .button.is-warning:focus, .button.is-warning:focus-visible, .button.is-warning.is-focused
 {
-  outline: 2px solid $warning !important;
+  outline: 2px solid $warning;
 }
 .button.is-danger:focus, .button.is-danger:focus-visible, .button.is-danger.is-focused
 {
-  outline: 2px solid $danger !important;
+  outline: 2px solid $danger;
 }
 
 a:focus, a:focus-visible
@@ -516,6 +516,10 @@ a.has-text-white-ter:focus, a.has-text-white-ter:focus-visible {
 }
 a.has-text-white-bis:focus, a.has-text-white-bis:focus-visible {
   outline-color: $white-bis;
+}
+
+.tabs a:focus, .tabs a:focus-visible {
+  outline-offset: -4px;
 }
 
 .control.has-icons-right > span.icon:focus-visible,

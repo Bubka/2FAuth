@@ -9,7 +9,7 @@
                     {{ $t('settings.token_legend')}}
                 </div>
                 <div class="mt-3">
-                    <a role="button" tabindex="0" class="is-link" @click="createToken()">
+                    <a tabindex="0" class="is-link" @click="createToken" @keyup.enter="createToken">
                         <font-awesome-icon :icon="['fas', 'plus-circle']" /> {{ $t('settings.generate_new_token')}}
                     </a>
                 </div>

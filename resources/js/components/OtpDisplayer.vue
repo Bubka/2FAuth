@@ -133,6 +133,7 @@
                         else this.$router.push({ name: 'genericError', params: { err: this.$t('errors.not_a_supported_otp_type') } });
     
                         this.$parent.isActive = true
+                        this.$parent.$refs.closeModalButton.focus()
                     }
                     catch(error) {
                         this.clearOTP()

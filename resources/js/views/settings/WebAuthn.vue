@@ -9,7 +9,7 @@
                     {{ $t('auth.webauthn.security_devices_legend')}}
                 </div>
                 <div class="mt-3">
-                    <a role="button" tabindex="0"  @click="register()">
+                    <a tabindex="0" @click="register" @keyup.enter="register">
                         <font-awesome-icon :icon="['fas', 'plus-circle']" />&nbsp;{{ $t('auth.webauthn.register_a_new_device')}}
                     </a>
                 </div>

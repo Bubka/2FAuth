@@ -5,7 +5,7 @@
                 <div class="tabs is-centered is-fullwidth">
                     <ul>
                         <li v-for="tab in tabs" :key="tab.view" :class="{ 'is-active': tab.view === activeTab }">
-                            <a :id="tab.id" tabindex="0" @click="selectTab(tab.view)">{{ tab.name }}</a>
+                            <router-link :id="tab.id" :to="{ name: tab.view }">{{ tab.name }}</router-link>
                         </li>
                     </ul>
                 </div>
@@ -52,12 +52,6 @@
                 default: ''
             },
         },
-
-        methods: {
-            selectTab(viewName) {
-                this.$router.push({ name: viewName })
-            },
-        }
     }
 
 </script>
