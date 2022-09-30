@@ -145,8 +145,8 @@
             if( this.$route.params.migrationUri ) {
                 this.migrationUri = this.$route.params.migrationUri
                 this.isFetching = true
-
-                await this.axios.post('/api/v1/twofaccounts/import', { uri: this.migrationUri }).then(response => {
+                
+                await this.axios.post('/api/v1/import/google-auth', { uri: this.migrationUri }).then(response => {
                     response.data.forEach((data) => {
                         data.imported = -1;
                         this.exportedAccounts.push(data)

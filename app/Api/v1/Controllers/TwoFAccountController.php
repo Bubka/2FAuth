@@ -103,21 +103,6 @@ class TwoFAccountController extends Controller
 
 
     /**
-     * Dry-import Google authenticator data
-     *
-     * @param  \App\Api\v1\Requests\TwoFAccountImportRequest  $request
-     * @return \App\Api\v1\Resources\TwoFAccountCollection
-     */
-    public function import(TwoFAccountImportRequest $request)
-    { 
-        $request->merge(['withSecret' => true]);
-        $twofaccounts = TwoFAccounts::convertMigrationFromGA($request->uri);
-
-        return new TwoFAccountCollection($twofaccounts);
-    }
-
-
-    /**
      * Save 2FA accounts order
      *
      * @param  \App\Api\v1\Requests\TwoFAccountReorderRequest  $request

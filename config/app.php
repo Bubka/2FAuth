@@ -175,6 +175,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\TwoFAuthServiceProvider::class,
+        App\Providers\MigrationServiceProvider::class,
 
     ],
 

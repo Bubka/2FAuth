@@ -27,7 +27,6 @@ Route::group(['middleware' => 'auth:api-guard'], function () {
     Route::delete('settings/{settingName}', 'SettingController@destroy')->name('settings.destroy');
 
     Route::delete('twofaccounts', 'TwoFAccountController@batchDestroy')->name('twofaccounts.batchDestroy');
-    Route::post('twofaccounts/import', 'TwoFAccountController@import')->name('twofaccounts.import');
     Route::patch('twofaccounts/withdraw', 'TwoFAccountController@withdraw')->name('twofaccounts.withdraw');
     Route::post('twofaccounts/reorder', 'TwoFAccountController@reorder')->name('twofaccounts.reorder');
     Route::post('twofaccounts/preview', 'TwoFAccountController@preview')->name('twofaccounts.preview');
@@ -36,6 +35,9 @@ Route::group(['middleware' => 'auth:api-guard'], function () {
     Route::get('twofaccounts/{id}/otp', 'TwoFAccountController@otp')->where('id', '[0-9]+')->name('twofaccounts.show.otp');
     Route::post('twofaccounts/otp', 'TwoFAccountController@otp')->name('twofaccounts.otp');
     Route::apiResource('twofaccounts', 'TwoFAccountController');
+
+    Route::post('import/google-auth', 'ImportController@googleAuth')->name('import.googleAuth');
+    Route::post('import/aegis', 'ImportController@aegis')->name('import.aegis');
 
     Route::get('groups/{group}/twofaccounts', 'GroupController@accounts')->name('groups.show.twofaccounts');
     Route::post('groups/{group}/assign', 'GroupController@assignAccounts')->name('groups.assign.twofaccounts');
