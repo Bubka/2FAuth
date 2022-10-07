@@ -39,8 +39,10 @@ return [
     'user_deletion_failed' => 'User account deletion failed, no data have been deleted',
     'auth_proxy_failed' => 'Proxy authentication failed',
     'auth_proxy_failed_legend' => '2Fauth is configured to run behind an authentication proxy but your proxy does not return the expected header. Check your configuration and try again.',
-    'invalid_google_auth_migration' => 'Invalid or unreadable Google Authenticator data',
+    'invalid_x_migration' => 'Invalid or unreadable :appname data',
+    'unsupported_migration' => 'Data do not match any supported format',
     'unsupported_otp_type' => 'Unsupported OTP type',
+    'encrypted_migration' => 'Unreadable, the data seem encrypted',
     'no_logo_found_for_x' => 'No logo available for {service}',
     'file_upload_failed' => 'File upload failed'
 ];

@@ -25,7 +25,8 @@ class TwoFAccountImportRequest extends FormRequest
     public function rules()
     {
         return [
-            'uri' => 'required|string|regex:/^otpauth-migration:\/\/offline\?data=/i',
+            'payload' => 'required_without:file|string',
+            'file' => 'required_without:payload|mimes:txt,json,csv',
         ];
     }
 }

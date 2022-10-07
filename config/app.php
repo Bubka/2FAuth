@@ -176,7 +176,6 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\TwoFAuthServiceProvider::class,
         App\Providers\MigrationServiceProvider::class,
-
     ],
 
     /*

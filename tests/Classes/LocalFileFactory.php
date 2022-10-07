@@ -3,6 +3,7 @@
 namespace Tests\Classes;
 
 use Illuminate\Http\Testing\File;
+use Tests\Classes\OtpTestData;
 
 class LocalFileFactory {
 
@@ -48,4 +49,181 @@ class LocalFileFactory {
             fwrite($temp, ob_get_clean());
         }));
     }
+
+
+    /**
+     * Create a new local valid Aegis JSON file.
+     *
+     * @return \Illuminate\Http\Testing\File
+     */
+    public function validAegisJsonFile()
+    {
+        return new File('validAegisMigration.json', tap(tmpfile(), function ($temp) {
+            ob_start();
+
+            echo OtpTestData::AEGIS_JSON_MIGRATION_PAYLOAD;
+
+            fwrite($temp, ob_get_clean());
+        }));
+    }
+
+
+    /**
+     * Create a new local invalid Aegis JSON file.
+     *
+     * @return \Illuminate\Http\Testing\File
+     */
+    public function invalidAegisJsonFile()
+    {
+        return new File('invalidAegisMigration.json', tap(tmpfile(), function ($temp) {
+            ob_start();
+
+            echo OtpTestData::INVALID_AEGIS_JSON_MIGRATION_PAYLOAD;
+
+            fwrite($temp, ob_get_clean());
+        }));
+    }
+
+
+    /**
+     * Create a new local encrypted Aegis JSON file.
+     *
+     * @return \Illuminate\Http\Testing\File
+     */
+    public function encryptedAegisJsonFile()
+    {
+        return new File('encryptedAegisJsonFile.txt', tap(tmpfile(), function ($temp) {
+            ob_start();
+
+            echo OtpTestData::ENCRYPTED_AEGIS_JSON_MIGRATION_PAYLOAD;
+
+            fwrite($temp, ob_get_clean());
+        }));
+    }
+
+
+    /**
+     * Create a new local valid Plain Text file.
+     *
+     * @return \Illuminate\Http\Testing\File
+     */
+    public function validPlainTextFile()
+    {
+        return new File('validPlainTextFile.txt', tap(tmpfile(), function ($temp) {
+            ob_start();
+
+            echo OtpTestData::TOTP_FULL_CUSTOM_URI;
+            echo PHP_EOL;
+            echo OtpTestData::HOTP_FULL_CUSTOM_URI;
+            echo PHP_EOL;
+            echo OtpTestData::STEAM_TOTP_URI;
+
+            fwrite($temp, ob_get_clean());
+        }));
+    }
+
+
+    /**
+     * Create a new local valid Plain Text file with new lines.
+     *
+     * @return \Illuminate\Http\Testing\File
+     */
+    public function validPlainTextFileWithNewLines()
+    {
+        return new File('validPlainTextFileWithNewLines.txt', tap(tmpfile(), function ($temp) {
+            ob_start();
+
+            echo PHP_EOL;
+            echo OtpTestData::TOTP_FULL_CUSTOM_URI;
+            echo PHP_EOL;
+            echo PHP_EOL;
+            echo OtpTestData::HOTP_FULL_CUSTOM_URI;
+            echo PHP_EOL;
+            echo PHP_EOL;
+            echo OtpTestData::STEAM_TOTP_URI;
+            echo PHP_EOL;
+
+            fwrite($temp, ob_get_clean());
+        }));
+    }
+
+
+    /**
+     * Create a new local invalid Plain Text file with no URI.
+     *
+     * @return \Illuminate\Http\Testing\File
+     */
+    public function invalidPlainTextFileNoUri()
+    {
+        return new File('invalidPlainTextFileNoUri.txt', tap(tmpfile(), function ($temp) {
+            ob_start();
+
+            echo 'lorem ipsum';
+            echo PHP_EOL;
+            echo 'lorem ipsum';
+
+            fwrite($temp, ob_get_clean());
+        }));
+    }
+
+
+    /**
+     * Create a new local invalid Plain Text file with invalid line.
+     *
+     * @return \Illuminate\Http\Testing\File
+     */
+    public function invalidPlainTextFileWithInvalidLine()
+    {
+        return new File('invalidPlainTextFileWithInvalidLine.txt', tap(tmpfile(), function ($temp) {
+            ob_start();
+
+            echo OtpTestData::TOTP_FULL_CUSTOM_URI;
+            echo PHP_EOL;
+            echo 'lorem ipsum';
+            echo PHP_EOL;
+            echo OtpTestData::HOTP_FULL_CUSTOM_URI;
+
+            fwrite($temp, ob_get_clean());
+        }));
+    }
+
+
+    /**
+     * Create a new local invalid Plain Text file with invalid URI.
+     *
+     * @return \Illuminate\Http\Testing\File
+     */
+    public function invalidPlainTextFileWithInvalidUri()
+    {
+        return new File('invalidPlainTextFileWithInvalidUri.txt', tap(tmpfile(), function ($temp) {
+            ob_start();
+
+            echo OtpTestData::TOTP_FULL_CUSTOM_URI;
+            echo PHP_EOL;
+            echo OtpTestData::INVALID_OTPAUTH_URI;
+            echo PHP_EOL;
+            echo OtpTestData::HOTP_FULL_CUSTOM_URI;
+
+            fwrite($temp, ob_get_clean());
+        }));
+    }
+
+
+    /**
+     * Create a new local empty Plain Text file.
+     *
+     * @return \Illuminate\Http\Testing\File
+     */
+    public function invalidPlainTextFileEmpty()
+    {
+        return new File('invalidPlainTextFileEmpty.txt', tap(tmpfile(), function ($temp) {
+            ob_start();
+
+            echo '';
+
+            fwrite($temp, ob_get_clean());
+        }));
+    }
+
+    
 }

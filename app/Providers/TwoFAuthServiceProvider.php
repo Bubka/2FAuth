@@ -5,6 +5,8 @@ namespace App\Providers;
 use App\Services\LogoService;
 use App\Services\SettingService;
 use App\Services\ReleaseRadarService;
+use App\Services\TwoFAccountService;
+use App\Factories\MigratorFactoryInterface;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Support\DeferrableProvider;
 
@@ -17,6 +19,10 @@ class TwoFAuthServiceProvider extends ServiceProvider implements DeferrableProvi
      */
     public function register()
     {
+        $this->app->singleton(TwoFAccountService::class, function ($app) {
+            return new TwoFAccountService($app->make(MigratorFactoryInterface::class));
+        });
+
         $this->app->singleton(SettingService::class, function () {
             return new SettingService();
         });

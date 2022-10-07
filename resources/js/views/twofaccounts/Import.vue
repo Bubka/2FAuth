@@ -5,17 +5,58 @@
                 <h1 class="title has-text-grey-dark">
                     {{ $t('twofaccounts.import.import') }}
                 </h1>
-                <div class="is-size-7-mobile" v-html="$t('twofaccounts.import.import_legend')">
-                </div>
-                <div class="mt-3 mb-6">
-                    <router-link class="is-link" :to="{ name: 'start', params: {showAdvancedFormButton: false, returnToView: 'importAccounts'} }">
-                        <span class="tag is-black">
-                            <font-awesome-icon :icon="['fas', 'qrcode']" size="lg" class="mr-1" />{{ $t('twofaccounts.import.use_the_gauth_qr_code') }}
-                        </span>
-                    </router-link>
-                </div>
                 <div>
-                    <div v-if="exportedAccounts.length > 0">
+                    <div v-if="exportedAccounts.length == 0">
+                        <div class="block is-size-7-mobile" v-html="$t('twofaccounts.import.import_legend')"></div>
+                        <!-- scan button that launch camera stream -->
+                        <div class="block">
+                            <button tabindex="0" class="button is-link is-rounded" @click="capture()">
+                                {{ $t('twofaccounts.forms.scan_qrcode') }}
+                            </button>
+                        </div>
+                        <!-- upload a qr code (with basic file field and backend decoding) -->
+                        <div class="block">
+                            <label role="button" tabindex="0" class="button is-link is-rounded is-outlined" ref="qrcodeInputLabel"  @keyup.enter="$refs.qrcodeInputLabel.click()">
+                                <input aria-hidden="true" tabindex="-1" class="file-input" type="file" accept="image/*" v-on:change="submitQrCode" ref="qrcodeInput">
+                                {{ $t('twofaccounts.forms.upload_qrcode') }}
+                            </label>
+                            <field-error :form="form" field="qrcode" />
+                            <p class="help">{{ $t('twofaccounts.import.supported_formats_for_qrcode_upload') }}</p>
+                        </div>
+                        <!-- upload a file -->
+                        <div class="block">
+                            <label role="button" tabindex="0" class="button is-link is-rounded is-outlined" ref="fileInputLabel" @keyup.enter="$refs.fileInputLabel.click()">
+                                <input aria-hidden="true" tabindex="-1" class="file-input" type="file" accept="text/plain,application/json,text/csv" v-on:change="submitFile" ref="fileInput">
+                                {{ $t('twofaccounts.import.upload_a_file') }}
+                            </label>
+                            <field-error :form="uploadForm" field="file" />
+                            <p class="help">{{ $t('twofaccounts.import.supported_formats_for_file_upload') }}</p>
+                        </div>
+
+                        <!-- Supported migration resources -->
+                        <h5 class="title is-5 mb-3">{{ $t('twofaccounts.import.supported_migration_formats') }}</h5>
+                        <div class="field is-grouped is-grouped-multiline pt-0">
+                            <div class="control">
+                                <div class="tags has-addons">
+                                <span class="tag is-dark">Google Auth</span>
+                                <span class="tag is-black">{{ $t('twofaccounts.import.qr_code') }}</span>
+                                </div>
+                            </div>
+                            <div class="control">
+                                <div class="tags has-addons">
+                                <span class="tag is-dark">Aegis Auth</span>
+                                <span class="tag is-black">JSON</span>
+                                </div>
+                            </div>
+                            <div class="control">
+                                <div class="tags has-addons">
+                                <span class="tag is-dark">Aegis Auth</span>
+                                <span class="tag is-black">{{ $t('twofaccounts.import.plain_text') }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-else>
                         <div v-for="(account, index) in exportedAccounts" :key="account.name" class="group-item has-text-light is-size-5 is-size-6-mobile">
                             <div class="is-flex is-justify-content-space-between">
                                 <!-- Account name -->
@@ -108,7 +149,7 @@
     export default {
         data() {
             return {
-                migrationUri: '',
+                migrationPayload: '',
                 exportedAccounts: [],
                 isFetching: false,
                 form: new Form({
@@ -125,6 +166,7 @@
                     image: '',
                     qrcode: null,
                 }),
+                uploadForm: new Form(),
                 ShowTwofaccountInModal : false,
             }
         },
@@ -143,18 +185,7 @@
             // A migration URI is provided as route parameter, we extract the accounts from the URI and
             // list them in the view
             if( this.$route.params.migrationUri ) {
-                this.migrationUri = this.$route.params.migrationUri
-                this.isFetching = true
-                
-                await this.axios.post('/api/v1/import/google-auth', { uri: this.migrationUri }).then(response => {
-                    response.data.forEach((data) => {
-                        data.imported = -1;
-                        this.exportedAccounts.push(data)
-                    })
-                });
-
-                this.$notify({type: 'is-success', text: this.$t('twofaccounts.import.x_valid_accounts_found', { count: this.importableCount }) })
-                this.isFetching = false
+                this.migrate(this.$route.params.migrationUri)
             }
 
             this.$on('modalClose', function() {
@@ -168,6 +199,28 @@
         },
 
         methods: {
+
+            /**
+             * Post the migration payload
+             */
+            async migrate(migrationPayload) {
+                this.migrationPayload = migrationPayload
+                this.isFetching = true
+
+                await this.axios.post('/api/v1/twofaccounts/migration', {payload: this.migrationPayload}, {returnError: true}).then(response => {
+                    response.data.forEach((data) => {
+                        data.imported = -1;
+                        this.exportedAccounts.push(data)
+                    })
+
+                    this.notifyValidAccountFound()
+                })
+                .catch(error => {
+                    this.$notify({type: 'is-danger', text: this.$t(error.response.data.message) })
+                });
+
+                this.isFetching = false
+            },
 
             /**
              * Remove all duplicates from the accounts list
@@ -258,6 +311,65 @@
                 this.form.counter = twofaccount.otp_type === 'hotp' ? twofaccount.counter : null
                 this.form.period = twofaccount.otp_type === 'totp' ? twofaccount.period : null
             },
+
+            /**
+             * Upload the submitted file to the backend for parsing
+             */
+            submitFile() {
+                this.isFetching = true
+
+                let filedata = new FormData();
+                filedata.append('file', this.$refs.fileInput.files[0]);
+
+                this.uploadForm.upload('/api/v1/twofaccounts/migration', filedata, {returnError: true}).then(response => {
+                    response.data.forEach((data) => {
+                        data.imported = -1;
+                        this.exportedAccounts.push(data)
+                    })
+
+                    this.notifyValidAccountFound()
+                })
+                .catch(error => {
+                    if( error.response.status !== 422 ) {
+                        this.$notify({type: 'is-danger', text: this.$t(error.response.data.message) })
+                    }
+                });
+                
+                this.isFetching = false
+            },
+
+            /**
+             * Upload the submitted QR code file to the backend for decoding
+             */
+            submitQrCode() {
+
+                let imgdata = new FormData();
+                imgdata.append('qrcode', this.$refs.qrcodeInput.files[0]);
+
+                this.form.upload('/api/v1/qrcode/decode', imgdata, {returnError: true}).then(response => {
+                    this.migrate(response.data.data)
+                })
+                .catch(error => {
+                    if( error.response.status !== 422 ) {
+                        this.$notify({type: 'is-danger', text: this.$t(error.response.data.message) })
+                    }
+                });
+            },
+
+
+            /**
+             * Push user to the dedicated capture view for live scan
+             */
+            capture() {
+                this.$router.push({ name: 'capture' });
+            },
+
+            /**
+             * Notify that valid account(s) have been found for import
+             */
+            notifyValidAccountFound() {
+                this.$notify({type: 'is-success', text: this.$t('twofaccounts.import.x_valid_accounts_found', { count: this.importableCount }) })
+            }
         }
     }
 

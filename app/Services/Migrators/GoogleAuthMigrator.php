@@ -4,19 +4,19 @@ namespace App\Services\Migrators;
 
 use Exception;
 use App\Models\TwoFAccount;
-use App\Contracts\MigrationService;
-use \Illuminate\Support\Collection;
+use App\Services\Migrators\Migrator;
+use Illuminate\Support\Collection;
 use ParagonIE\ConstantTime\Base32;
 use App\Protobuf\GAuthValueMapping;
 use App\Protobuf\GoogleAuth\Payload;
 use App\Protobuf\GoogleAuth\Payload\OtpType;
 use App\Protobuf\GoogleAuth\Payload\Algorithm;
 use App\Protobuf\GoogleAuth\Payload\DigitCount;
-use App\Exceptions\InvalidGoogleAuthMigration;
+use App\Exceptions\InvalidMigrationDataException;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
-class GoogleAuthMigrator extends Migrator implements MigrationService
+class GoogleAuthMigrator extends Migrator
 {
 
     /**
@@ -38,7 +38,7 @@ class GoogleAuthMigrator extends Migrator implements MigrationService
             Log::error("Protobuf failed to get OTP parameters from provided migration URI");
             Log::error($ex->getMessage());
 
-            throw new InvalidGoogleAuthMigration();
+            throw new InvalidMigrationDataException('Google Authenticator');
         }
 
         $twofaccounts = array();
@@ -78,6 +78,6 @@ class GoogleAuthMigrator extends Migrator implements MigrationService
             }
         }
 
-        return self::markAsDuplicate(collect($twofaccounts));
+        return collect($twofaccounts);
     }
 }

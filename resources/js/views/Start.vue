@@ -37,6 +37,12 @@
                         {{ $t('twofaccounts.forms.use_advanced_form') }}
                     </router-link>
                 </div>
+                <!-- link to import view -->
+                <div v-if="showImportButton" class="block has-text-link">
+                    <router-link class="button is-link is-outlined is-rounded" :to="{ name: 'importAccounts' }" >
+                        {{ $t('twofaccounts.import.import') }}
+                    </router-link>
+                </div>
             </div>
         </div>
         <!-- Footer -->
@@ -74,11 +80,16 @@
             return {
                 accountCount: null,
                 form: new Form(),
+                alternativeMethod: null,
             }
         },
 
         props: {
             showAdvancedFormButton: {
+                type: Boolean,
+                default: true
+            },
+            showImportButton: {
                 type: Boolean,
                 default: true
             },

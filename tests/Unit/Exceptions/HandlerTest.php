@@ -59,10 +59,13 @@ class HandlerTest extends TestCase
                 '\App\Exceptions\DbEncryptionException'
             ],
             [
-                '\App\Exceptions\InvalidGoogleAuthMigration'
+                '\App\Exceptions\InvalidMigrationDataException'
             ],
             [
                 '\App\Exceptions\UndecipherableException'
+            ],
+            [
+                '\App\Exceptions\UnsupportedMigrationException'
             ],
             [
                 '\App\Exceptions\UnsupportedOtpTypeException'

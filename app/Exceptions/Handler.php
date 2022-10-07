@@ -60,9 +60,19 @@ class Handler extends ExceptionHandler
                 'message' => $exception->getMessage()], 400);
         });
 
-        $this->renderable(function (InvalidGoogleAuthMigration $exception, $request) {
+        $this->renderable(function (InvalidMigrationDataException $exception, $request) {
             return response()->json([
-                'message' => __('errors.invalid_google_auth_migration')], 400);
+                'message' => __('errors.invalid_x_migration', ['appname' => $exception->getMessage()])], 400);
+        });
+
+        $this->renderable(function (UnsupportedMigrationException $exception, $request) {
+            return response()->json([
+                'message' => __('errors.unsupported_migration')], 400);
+        });
+
+        $this->renderable(function (EncryptedMigrationException $exception, $request) {
+            return response()->json([
+                'message' => __('errors.encrypted_migration')], 400);
         });
 
         $this->renderable(function (UndecipherableException $exception, $request) {

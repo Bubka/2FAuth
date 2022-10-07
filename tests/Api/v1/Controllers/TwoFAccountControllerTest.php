@@ -10,6 +10,7 @@ use Tests\Classes\OtpTestData;
 use App\Models\TwoFAccount;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Tests\Classes\LocalFile;
 
 
 /**
@@ -457,11 +458,11 @@ class TwoFAccountControllerTest extends FeatureTestCase
     /**
      * @test
      */
-    public function test_import_valid_gauth_data_returns_success_with_consistent_resources()
+    public function test_import_valid_gauth_payload_returns_success_with_consistent_resources()
     {
         $response = $this->actingAs($this->user, 'api-guard')
-            ->json('POST', '/api/v1/twofaccounts/import', [
-                'uri' => OtpTestData::GOOGLE_AUTH_MIGRATION_URI,
+            ->json('POST', '/api/v1/twofaccounts/migration', [
+                'payload' => OtpTestData::GOOGLE_AUTH_MIGRATION_URI,
             ])
             ->assertOk()
             ->assertJsonCount(2, $key = null)
@@ -493,10 +494,10 @@ class TwoFAccountControllerTest extends FeatureTestCase
     /**
      * @test
      */
-    public function test_import_with_invalid_uri_returns_validation_error()
+    public function test_import_with_invalid_gauth_payload_returns_validation_error()
     {
         $response = $this->actingAs($this->user, 'api-guard')
-            ->json('POST', '/api/v1/twofaccounts', [
+            ->json('POST', '/api/v1/twofaccounts/migration', [
                 'uri' => OtpTestData::INVALID_GOOGLE_AUTH_MIGRATION_URI,
             ])
             ->assertStatus(422);
@@ -506,7 +507,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
     /**
      * @test
      */
-    public function test_import_gauth_data_with_duplicates_returns_negative_ids()
+    public function test_import_gauth_payload_with_duplicates_returns_negative_ids()
     {
         $twofaccount = TwoFAccount::factory()->create([
             'otp_type' => 'totp',
@@ -521,8 +522,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
         ]);
 
         $response = $this->actingAs($this->user, 'api-guard')
-            ->json('POST', '/api/v1/twofaccounts/import', [
-                'uri' => OtpTestData::GOOGLE_AUTH_MIGRATION_URI,
+            ->json('POST', '/api/v1/twofaccounts/migration', [
+                'payload' => OtpTestData::GOOGLE_AUTH_MIGRATION_URI,
             ])
             ->assertOk()
             ->assertJsonFragment([
@@ -536,16 +537,225 @@ class TwoFAccountControllerTest extends FeatureTestCase
     /**
      * @test
      */
-    public function test_import_invalid_gauth_data_returns_bad_request()
+    public function test_import_invalid_gauth_payload_returns_bad_request()
     {
         $response = $this->actingAs($this->user, 'api-guard')
-            ->json('POST', '/api/v1/twofaccounts/import', [
-                'uri' => OtpTestData::GOOGLE_AUTH_MIGRATION_URI_WITH_INVALID_DATA,
+            ->json('POST', '/api/v1/twofaccounts/migration', [
+                'payload' => OtpTestData::GOOGLE_AUTH_MIGRATION_URI_WITH_INVALID_DATA,
             ])
             ->assertStatus(400)
             ->assertJsonStructure([
                 'message'
             ]);
+    }
+
+
+    /**
+     * @test
+     */
+    public function test_import_valid_aegis_json_file_returns_success()
+    {
+        $file = LocalFile::fake()->validAegisJsonFile();
+
+        $response = $this->withHeaders(['Content-Type' => 'multipart/form-data'])
+            ->actingAs($this->user, 'api-guard')
+            ->json('POST', '/api/v1/twofaccounts/migration', [
+                'file' => $file,
+            ])
+            ->assertOk()
+            ->assertJsonCount(5, $key = null)
+            ->assertJsonFragment([
+                'id'        => 0,
+                'service'   => OtpTestData::SERVICE . '_totp',
+                'account'   => OtpTestData::ACCOUNT . '_totp',
+                'otp_type'  => 'totp',
+                'secret'    => OtpTestData::SECRET,
+                'digits'    => OtpTestData::DIGITS_DEFAULT,
+                'algorithm' => OtpTestData::ALGORITHM_DEFAULT,
+                'period'    => OtpTestData::PERIOD_DEFAULT,
+                'counter'   => null
+            ])
+            ->assertJsonFragment([
+                'id'        => 0,
+                'service'   => OtpTestData::SERVICE . '_totp_custom',
+                'account'   => OtpTestData::ACCOUNT . '_totp_custom',
+                'otp_type'  => 'totp',
+                'secret'    => OtpTestData::SECRET,
+                'digits'    => OtpTestData::DIGITS_CUSTOM,
+                'algorithm' => OtpTestData::ALGORITHM_CUSTOM,
+                'period'    => OtpTestData::PERIOD_CUSTOM,
+                'counter'   => null
+            ])
+            ->assertJsonFragment([
+                'id'        => 0,
+                'service'   => OtpTestData::SERVICE . '_hotp',
+                'account'   => OtpTestData::ACCOUNT . '_hotp',
+                'otp_type'  => 'hotp',
+                'secret'    => OtpTestData::SECRET,
+                'digits'    => OtpTestData::DIGITS_DEFAULT,
+                'algorithm' => OtpTestData::ALGORITHM_DEFAULT,
+                'period'    => null,
+                'counter'   => OtpTestData::COUNTER_DEFAULT
+            ])
+            ->assertJsonFragment([
+                'id'        => 0,
+                'service'   => OtpTestData::SERVICE . '_hotp_custom',
+                'account'   => OtpTestData::ACCOUNT . '_hotp_custom',
+                'otp_type'  => 'totp',
+                'secret'    => OtpTestData::SECRET,
+                'digits'    => OtpTestData::DIGITS_CUSTOM,
+                'algorithm' => OtpTestData::ALGORITHM_CUSTOM,
+                'period'    => null,
+                'counter'   => OtpTestData::COUNTER_CUSTOM,
+            ])
+            ->assertJsonFragment([
+                'id'        => 0,
+                'service'   => OtpTestData::STEAM,
+                'account'   => OtpTestData::ACCOUNT . '_steam',
+                'otp_type'  => 'steamtotp',
+                'secret'    => OtpTestData::STEAM_SECRET,
+                'digits'    => OtpTestData::DIGITS_STEAM,
+                'algorithm' => OtpTestData::ALGORITHM_DEFAULT,
+                'period'    => OtpTestData::PERIOD_DEFAULT,
+                'counter'   => null
+            ]);
+    }
+
+
+    /**
+     * @test
+     * 
+     * @dataProvider invalidAegisJsonFileProvider
+     */
+    public function test_import_invalid_aegis_json_file_returns_bad_request($file)
+    {
+        $response = $this->withHeaders(['Content-Type' => 'multipart/form-data'])
+            ->actingAs($this->user, 'api-guard')
+            ->json('POST', '/api/v1/twofaccounts/migration', [
+                'file' => $file,
+            ])
+            ->assertStatus(400);
+    }
+
+
+    /**
+     * Provide invalid Aegis JSON files for import tests
+     */
+    public function invalidAegisJsonFileProvider()
+    {
+        return [
+            'validPlainTextFile' => [
+                LocalFile::fake()->encryptedAegisJsonFile()
+            ],
+            'validPlainTextFileWithNewLines' => [
+                LocalFile::fake()->invalidAegisJsonFile()
+            ],
+        ];
+    }
+
+
+    /**
+     * @test
+     * 
+     * @dataProvider validPlainTextFileProvider
+     */
+    public function test_import_valid_plain_text_file_returns_success($file)
+    {
+        $response = $this->withHeaders(['Content-Type' => 'multipart/form-data'])
+            ->actingAs($this->user, 'api-guard')
+            ->json('POST', '/api/v1/twofaccounts/migration', [
+                'file' => $file,
+            ])
+            ->assertOk()
+            ->assertJsonCount(3, $key = null)
+            ->assertJsonFragment([
+                'id'        => 0,
+                'service'   => OtpTestData::SERVICE,
+                'account'   => OtpTestData::ACCOUNT,
+                'otp_type'  => 'totp',
+                'secret'    => OtpTestData::SECRET,
+                'digits'    => OtpTestData::DIGITS_CUSTOM,
+                'algorithm' => OtpTestData::ALGORITHM_CUSTOM,
+                'period'    => OtpTestData::PERIOD_CUSTOM,
+                'counter'   => null
+            ])
+            ->assertJsonFragment([
+                'id'        => 0,
+                'service'   => OtpTestData::SERVICE,
+                'account'   => OtpTestData::ACCOUNT,
+                'otp_type'  => 'hotp',
+                'secret'    => OtpTestData::SECRET,
+                'digits'    => OtpTestData::DIGITS_CUSTOM,
+                'algorithm' => OtpTestData::ALGORITHM_CUSTOM,
+                'period'    => null,
+                'counter'   => OtpTestData::COUNTER_CUSTOM
+            ])
+            ->assertJsonFragment([
+                'id'        => 0,
+                'service'   => OtpTestData::STEAM,
+                'account'   => OtpTestData::ACCOUNT,
+                'otp_type'  => 'steamtotp',
+                'secret'    => OtpTestData::STEAM_SECRET,
+                'digits'    => OtpTestData::DIGITS_STEAM,
+                'algorithm' => OtpTestData::ALGORITHM_DEFAULT,
+                'period'    => OtpTestData::PERIOD_DEFAULT,
+                'counter'   => null
+            ]);
+    }
+
+
+    /**
+     * Provide valid Plain Text files for import tests
+     */
+    public function validPlainTextFileProvider()
+    {
+        return [
+            'validPlainTextFile' => [
+                LocalFile::fake()->validPlainTextFile()
+            ],
+            'validPlainTextFileWithNewLines' => [
+                LocalFile::fake()->validPlainTextFileWithNewLines()
+            ],
+        ];
+    }
+
+
+    /**
+     * @test
+     * 
+     * @dataProvider invalidPlainTextFileProvider
+     */
+    public function test_import_invalid_plain_text_file_returns_bad_request($file)
+    {
+
+        $response = $this->withHeaders(['Content-Type' => 'multipart/form-data'])
+            ->actingAs($this->user, 'api-guard')
+            ->json('POST', '/api/v1/twofaccounts/migration', [
+                'file' => $file,
+            ])
+            ->assertStatus(400);
+    }
+
+
+    /**
+     * Provide invalid Plain Text files for import tests
+     */
+    public function invalidPlainTextFileProvider()
+    {
+        return [
+            'validPlainTextFile' => [
+                LocalFile::fake()->invalidPlainTextFileEmpty()
+            ],
+            'validPlainTextFileWithNewLines' => [
+                LocalFile::fake()->invalidPlainTextFileNoUri()
+            ],
+            'validPlainTextFileWithNewLines' => [
+                LocalFile::fake()->invalidPlainTextFileWithInvalidUri()
+            ],
+            'validPlainTextFileWithNewLines' => [
+                LocalFile::fake()->invalidPlainTextFileWithInvalidLine()
+            ],
+        ];
     }
 
 

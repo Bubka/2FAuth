@@ -103,6 +103,30 @@ class TwoFAccountController extends Controller
 
 
     /**
+     * Convert a migration resource to a valid TwoFAccounts collection
+     *
+     * @param  \App\Api\v1\Requests\TwoFAccountImportRequest  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function migrate(TwoFAccountImportRequest $request)
+    {
+        $request->merge(['withSecret' => true]);
+        $validated = $request->validated();
+
+        if (Arr::has($validated, 'file')) {
+            $migrationResource = $request->file('file');
+            
+            return $migrationResource instanceof \Illuminate\Http\UploadedFile
+                ? new TwoFAccountCollection(TwoFAccounts::migrate($migrationResource->get()))
+                : response()->json(['message' => __('errors.file_upload_failed')], 500);
+        }
+        else {
+            return new TwoFAccountCollection(TwoFAccounts::migrate($request->payload));
+        }
+    }
+
+
+    /**
      * Save 2FA accounts order
      *
      * @param  \App\Api\v1\Requests\TwoFAccountReorderRequest  $request

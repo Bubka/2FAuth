@@ -45,7 +45,7 @@ class TwoFAccountImportRequestTest extends TestCase
     {
         return [
             [[
-                'uri' => 'otpauth-migration://offline?data=AEoATACEAEYASAA'
+                'payload' => 'otpauth-migration://offline?data=AEoATACEAEYASAA'
             ]],
         ];
     }
@@ -68,29 +68,17 @@ class TwoFAccountImportRequestTest extends TestCase
     {
         return [
             [[
-                'uri' => null // required
+                'payload' => null // required
             ]],
             [[
-                'uri' => '' // required
+                'payload' => '' // required
             ]],
             [[
-                'uri' => true // string
+                'payload' => true // string
             ]],
             [[
-                'uri' => 8 // string
-            ]],
-            [[
-                'uri' => 'otpXauth-migration://offline?data=fYmlzIAEoATACEAEYASAA' // regex
-            ]],
-            [[
-                'uri' => 'otpauth-migration:/offline?data=fYmlzIAEoATACEAEYASAA' // regex
-            ]],
-            [[
-                'uri' => 'otpauth-migration://offlinedata=fYmlzIAEoATACEAEYASAA' // regex
-            ]],
-            [[
-                'uri' => 'otpauth-migration://offline?dat=fYmlzIAEoATACEAEYASAA' // regex
-            ]],
+                'payload' => 8 // string
+            ]]
         ];
     }
 

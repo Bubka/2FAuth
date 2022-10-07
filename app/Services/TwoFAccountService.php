@@ -3,10 +3,26 @@
 namespace App\Services;
 
 use App\Models\TwoFAccount;
+use App\Factories\MigratorFactoryInterface;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Collection;
 
 class TwoFAccountService
 {
+    /**
+     * @var $migrator The Migration service
+     */
+    protected $migratorFactory;
+
+
+    /**
+     * Constructor
+     */
+    public function __construct(MigratorFactoryInterface $migratorFactory)
+    {
+        $this->migratorFactory = $migratorFactory;
+    }
+
 
     /**
      * Withdraw one or more twofaccounts from their group
@@ -32,6 +48,22 @@ class TwoFAccountService
 
 
     /**
+     * Convert a migration payload to a set of TwoFAccount objects
+     * 
+     * @param string $migrationUri migration uri provided by Google Authenticator export feature
+     * 
+     * @return \Illuminate\Support\Collection The converted accounts
+     */
+    public function migrate($migrationPayload) : Collection
+    {
+        $migrator = $this->migratorFactory->create($migrationPayload);
+        $twofaccounts = $migrator->migrate($migrationPayload);
+
+        return self::markAsDuplicate($twofaccounts);
+    }
+
+
+    /**
      * Delete one or more twofaccounts
      * 
      * @param int|array|string $ids twofaccount ids to delete
@@ -47,6 +79,35 @@ class TwoFAccountService
         $deleted = TwoFAccount::destroy($ids);
 
         return $deleted;
+    }
+
+
+    /**
+     * Return the given collection with items marked as Duplicates (using id=-1) if a similar record exists in database
+     * 
+     * @param \Illuminate\Support\Collection $twofaccounts
+     * @return \Illuminate\Support\Collection
+     */
+    private static function markAsDuplicate(Collection $twofaccounts) : Collection
+    {
+        $storage = TwoFAccount::all();
+
+        $twofaccounts = $twofaccounts->map(function ($twofaccount, $key) use ($storage) {
+            if ($storage->contains(function ($value, $key) use ($twofaccount) {
+                return $value->secret == $twofaccount->secret
+                    && $value->service == $twofaccount->service
+                    && $value->account == $twofaccount->account
+                    && $value->otp_type == $twofaccount->otp_type
+                    && $value->digits == $twofaccount->digits
+                    && $value->algorithm == $twofaccount->algorithm;
+            })) {
+                $twofaccount->id = -1;
+            }
+
+            return $twofaccount;
+        });
+
+        return $twofaccounts;
     }
 
 
