@@ -8,6 +8,8 @@ use App\Models\TwoFAccount;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Arr;
 use App\Exceptions\InvalidMigrationDataException;
+use Illuminate\Support\Facades\Storage;
+use App\Helpers\Helpers;
 
 class AegisMigrator extends Migrator
 {
@@ -47,7 +49,7 @@ class AegisMigrator extends Migrator
         }
 
         foreach ($json['db']['entries'] as $key => $otp_parameters) {
-            // Storage::put('file.jpg', $contents);
+
             $parameters = array();
             $parameters['otp_type']     = $otp_parameters['type'] == 'steam' ? TwoFAccount::STEAM_TOTP : $otp_parameters['type'];
             $parameters['service']      = $otp_parameters['issuer'];
@@ -57,6 +59,41 @@ class AegisMigrator extends Migrator
             $parameters['digits']       = $otp_parameters['info']['digits'];
             $parameters['counter']      = $otp_parameters['info']['counter'] ?? null;
             $parameters['period']       = $otp_parameters['info']['period'] ?? null;
+
+            try {
+                // Aegis supports 3 image extensions for icons
+                // (see https://github.com/beemdevelopment/Aegis/blob/3c10b234ea70715776a09e3d200cb6e806a43f83/docs/iconpacks.md)
+
+                if (Arr::has($otp_parameters, 'icon') && Arr::has($otp_parameters, 'icon_mime')) {
+                    switch ($otp_parameters['icon_mime']) {
+                        case 'image/svg+xml':
+                            $extension = 'svg';
+                            break;
+
+                        case 'image/png':
+                            $extension = 'png';
+                            break;
+
+                        case 'image/jpeg':
+                            $extension = 'jpg';
+                            break;
+                        
+                        default:
+                            throw new \Exception();
+                            break;
+                    }
+
+                    $filename = Helpers::getUniqueFilename($extension);
+
+                    if (Storage::disk('icons')->put($filename, base64_decode($otp_parameters['icon']))) {
+                        $parameters['icon'] = $filename;
+                        Log::info(sprintf('Image %s successfully stored for import', $filename));
+                    }
+                }
+            }
+            catch (\Exception) {
+                // we do nothing
+            }
 
             try {
                $twofaccounts[$key] = new TwoFAccount;
