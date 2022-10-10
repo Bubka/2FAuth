@@ -373,6 +373,10 @@ class TwoFAccount extends Model implements Sortable
         $this->counter      = Arr::get($parameters, 'counter', $this->otp_type == self::HOTP ? self::DEFAULT_COUNTER : null);
 
         $this->initGenerator();
+
+        // The generator could have been initialized without a secret, in that case it generates one on the fly.
+        // The secret attribute has thus to be updated
+        $this->secret = $this->secret ?: $this->generator->getSecret();
         
         if ($this->otp_type === self::STEAM_TOTP || strtolower($this->service) === 'steam') {
             $this->enforceAsSteam();
