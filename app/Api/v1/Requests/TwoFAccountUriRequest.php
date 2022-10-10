@@ -29,4 +29,17 @@ class TwoFAccountUriRequest extends FormRequest
             'custom_otp' => 'string|in:steamtotp',
         ];
     }
+
+
+    /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'custom_otp' => strtolower($this->custom_otp),
+        ]);
+    }
 }

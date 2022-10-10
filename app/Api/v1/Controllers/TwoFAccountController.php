@@ -110,7 +110,6 @@ class TwoFAccountController extends Controller
      */
     public function migrate(TwoFAccountImportRequest $request)
     {
-        $request->merge(['withSecret' => true]);
         $validated = $request->validated();
 
         if (Arr::has($validated, 'file')) {

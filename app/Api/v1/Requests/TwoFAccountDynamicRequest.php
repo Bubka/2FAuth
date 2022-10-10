@@ -31,4 +31,18 @@ class TwoFAccountDynamicRequest extends FormRequest
 
         return $rules;
     }
+
+
+    /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'otp_type' => strtolower($this->otp_type),
+            'algorithm' => strtolower($this->algorithm),
+        ]);
+    }
 }

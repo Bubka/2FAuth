@@ -36,4 +36,18 @@ class TwoFAccountStoreRequest extends FormRequest
             'counter' => 'nullable|integer|min:0',
         ];
     }
+
+
+    /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'otp_type' => strtolower($this->otp_type),
+            'algorithm' => strtolower($this->algorithm),
+        ]);
+    }
 }

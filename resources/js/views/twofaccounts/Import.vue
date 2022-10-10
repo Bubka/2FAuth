@@ -163,8 +163,6 @@
                     digits: null,
                     counter: null,
                     period: null,
-                    image: '',
-                    qrcode: null,
                 }),
                 uploadForm: new Form(),
                 ShowTwofaccountInModal : false,
@@ -207,7 +205,7 @@
                 this.migrationPayload = migrationPayload
                 this.isFetching = true
 
-                await this.axios.post('/api/v1/twofaccounts/migration', {payload: this.migrationPayload}, {returnError: true}).then(response => {
+                await this.axios.post('/api/v1/twofaccounts/migration', {payload: this.migrationPayload, withSecret: true}, {returnError: true}).then(response => {
                     response.data.forEach((data) => {
                         data.imported = -1;
                         this.exportedAccounts.push(data)
@@ -320,6 +318,7 @@
 
                 let filedata = new FormData();
                 filedata.append('file', this.$refs.fileInput.files[0]);
+                filedata.append('withSecret', true);
 
                 this.uploadForm.upload('/api/v1/twofaccounts/migration', filedata, {returnError: true}).then(response => {
                     response.data.forEach((data) => {
@@ -345,8 +344,9 @@
 
                 let imgdata = new FormData();
                 imgdata.append('qrcode', this.$refs.qrcodeInput.files[0]);
+                imgdata.append('withSecret', true);
 
-                this.form.upload('/api/v1/qrcode/decode', imgdata, {returnError: true}).then(response => {
+                this.uploadForm.upload('/api/v1/qrcode/decode', imgdata, {returnError: true}).then(response => {
                     this.migrate(response.data.data)
                 })
                 .catch(error => {
