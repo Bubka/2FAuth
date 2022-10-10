@@ -264,7 +264,7 @@ class TwoFAccount extends Model implements Sortable
      */
     public function setAlgorithmAttribute($value)
     {
-        $this->attributes['algorithm'] = !$value ? self::SHA1 : $value;
+        $this->attributes['algorithm'] = !$value ? self::SHA1 : strtolower($value);
     }
 
 
@@ -367,7 +367,7 @@ class TwoFAccount extends Model implements Sortable
         $this->service      = Arr::get($parameters, 'service');
         $this->icon         = Arr::get($parameters, 'icon');
         $this->secret       = Arr::get($parameters, 'secret');
-        $this->algorithm    = Arr::get($parameters, 'algorithm', self::SHA1);
+        $this->algorithm    = strtolower(Arr::get($parameters, 'algorithm', self::SHA1));
         $this->digits       = Arr::get($parameters, 'digits', self::DEFAULT_DIGITS);
         $this->period       = Arr::get($parameters, 'period', $this->otp_type == self::TOTP ? self::DEFAULT_PERIOD : null);
         $this->counter      = Arr::get($parameters, 'counter', $this->otp_type == self::HOTP ? self::DEFAULT_COUNTER : null);
