@@ -232,7 +232,7 @@ return [
         'QrCode' => App\Facades\QrCode::class,
         'Groups' => App\Facades\Groups::class,
         'TwoFAccounts' => App\Facades\TwoFAccounts::class,
-        
+        'Helpers' => App\Helpers\Helpers::class,
     ],
 
 ];

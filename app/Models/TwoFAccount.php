@@ -29,6 +29,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use ParagonIE\ConstantTime\Base32;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Http;
+use App\Helpers\Helpers;
 
 class TwoFAccount extends Model implements Sortable
 {
@@ -537,7 +538,7 @@ class TwoFAccount extends Model implements Sortable
     {
         try {
             $path_parts = pathinfo($url);
-            $newFilename = Str::random(40).'.'.$path_parts['extension'];
+            $newFilename = Helpers::getUniqueFilename($path_parts['extension']);  //Str::random(40).'.'.$path_parts['extension'];
             $imageFile = self::IMAGELINK_STORAGE_PATH . $newFilename;
 
             try {
