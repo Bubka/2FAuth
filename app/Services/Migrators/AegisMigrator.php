@@ -10,6 +10,7 @@ use Illuminate\Support\Arr;
 use App\Exceptions\InvalidMigrationDataException;
 use Illuminate\Support\Facades\Storage;
 use App\Helpers\Helpers;
+use App\Facades\TwoFAccounts;
 
 class AegisMigrator extends Migrator
 {
@@ -106,7 +107,7 @@ class AegisMigrator extends Migrator
 
                 // The token failed to generate a valid account so we create a fake account to be returned.
                 $fakeAccount = new TwoFAccount();
-                $fakeAccount->id = -2;
+                $fakeAccount->id = TwoFAccount::FAKE_ID;
                 $fakeAccount->otp_type  = $otp_parameters['type'];
                 // Only basic fields are filled to limit the risk of another exception.
                 $fakeAccount->account   = $otp_parameters['name'];

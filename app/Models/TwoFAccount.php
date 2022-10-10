@@ -50,6 +50,9 @@ class TwoFAccount extends Model implements Sortable
     const DEFAULT_DIGITS = 6;
     const DEFAULT_ALGORITHM = self::SHA1;
 
+    const DUPLICATE_ID = -1;
+    const FAKE_ID = -2;
+
     private const IMAGELINK_STORAGE_PATH = 'imagesLink/';
 
     /**

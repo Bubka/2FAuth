@@ -101,7 +101,7 @@ class TwoFAccountService
                     && $value->digits == $twofaccount->digits
                     && $value->algorithm == $twofaccount->algorithm;
             })) {
-                $twofaccount->id = -1;
+                $twofaccount->id = TwoFAccount::DUPLICATE_ID;
             }
 
             return $twofaccount;
