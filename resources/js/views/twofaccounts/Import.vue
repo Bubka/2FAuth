@@ -108,6 +108,9 @@
                             <button v-if="duplicateCount" @click="discardDuplicates()" class="has-text-grey button is-small is-ghost">{{ $t('twofaccounts.import.discard_duplicates') }} ({{duplicateCount}})</button>
                             <button @click="discardAccounts()" class="has-text-grey button is-small is-ghost">{{ $t('twofaccounts.import.discard_all') }}</button>
                         </div>
+                        <div v-if="importedCount == exportedAccounts.length"  class="mt-2 is-size-7 is-pulled-right">
+                            <button @click="exportedAccounts = []" class="has-text-grey button is-small is-ghost">{{ $t('commons.clear') }}</button>
+                        </div>
                     </div>
                     <div v-if="isFetching && exportedAccounts.length === 0" class="has-text-centered">
                         <span class="is-size-4">
@@ -177,6 +180,10 @@
             duplicateCount() {
                 return this.exportedAccounts.filter(account => account.id === -1 && account.imported === -1).length;
             },
+
+            importedCount() {
+                return this.exportedAccounts.filter(account => account.imported === 1).length;
+            }
         },
 
         mounted: async function() {
