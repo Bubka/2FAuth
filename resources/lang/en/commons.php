@@ -64,4 +64,6 @@ return [
     'check_for_update_help' => 'Automatically check (once a week) and warn when a new release of 2FAuth is published on Github',
     '2fauth_description' => 'A web app to manage your Two-Factor Authentication (2FA) accounts and generate their security codes',
     'image_of_qrcode_to_scan' => 'Image of a QR code to scan',
+    'file' => 'File',
+    'or' => 'OR',
 ];

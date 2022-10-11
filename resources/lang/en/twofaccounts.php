@@ -134,12 +134,13 @@ return [
     'import' => [
         'import' => 'Import',
         'to_import' => 'Import',
-        'import_legend' => '2FAuth can import data from various 2FA apps.<br />Use the Export feature of these apps to get a migration resource (a QR code or a file) and submit it using your preferred method below.',
-        'upload_a_file' => 'Upload a file',
+        'import_legend' => '2FAuth can import data from various 2FA apps.<br />Use the Export feature of these apps to get a migration resource (a QR code or a file) and load it using your preferred method below.',
+        'upload' => 'Upload',
+        'scan' => 'Scan',
         'supported_formats_for_qrcode_upload' => 'Accepted: jpg, jpeg, png, bmp, gif, svg, or webp',
         'supported_formats_for_file_upload' => 'Accepted: Plain text, json, 2fas',
         'supported_migration_formats' => 'Supported migration formats',
-        'qr_code' => 'QR code',
+        'qr_code' => 'QR Code',
         'plain_text' => 'Plain text',
         'issuer' => 'Issuer',
         'imported' => 'Imported',
@@ -154,6 +155,7 @@ return [
         'possible_duplicate' => 'An account with the exact same data already exists',
         'invalid_account' => '- invalid account -',
         'invalid_service' => '- invalid service -',
+        'do_not_set_password_or_encryption' => 'Do NOT set a password or encryption On when you export data from a 2FA app.',
     ],
 
 ];

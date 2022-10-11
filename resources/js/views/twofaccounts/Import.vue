@@ -5,124 +5,130 @@
                 <h1 class="title has-text-grey-dark">
                     {{ $t('twofaccounts.import.import') }}
                 </h1>
-                <div>
-                    <div v-if="exportedAccounts.length == 0">
-                        <div class="block is-size-7-mobile" v-html="$t('twofaccounts.import.import_legend')"></div>
-                        <!-- scan button that launch camera stream -->
-                        <div class="block">
-                            <button tabindex="0" class="button is-link is-rounded" @click="capture()">
-                                {{ $t('twofaccounts.forms.scan_qrcode') }}
+                <div v-if="exportedAccounts.length == 0">
+                    <div class="block is-size-7-mobile" v-html="$t('twofaccounts.import.import_legend')"></div>
+                    <h5 class="title is-5 mb-3 has-text-grey">{{ $t('twofaccounts.import.qr_code') }}</h5>
+                    <!-- scan button that launch camera stream -->
+                    <div class="block">
+                        <div class="buttons mb-0">
+                            <button tabindex="0" class="button is-link is-rounded mr-0" @click="capture()">
+                                <span class="icon">
+                                    <font-awesome-icon :icon="['fas', 'camera']" />
+                                </span>
+                                <span>{{ $t('twofaccounts.import.scan') }}</span>
                             </button>
-                        </div>
-                        <!-- upload a qr code (with basic file field and backend decoding) -->
-                        <div class="block">
+                            <span class="p-2 mb-2">{{ $t('commons.or') }}</span>
+                            <!-- </div> -->
+                            <!-- upload a qr code (with basic file field and backend decoding) -->
+                            <!-- <div class="block"> -->
                             <label role="button" tabindex="0" class="button is-link is-rounded is-outlined" ref="qrcodeInputLabel"  @keyup.enter="$refs.qrcodeInputLabel.click()">
+                                {{ $t('twofaccounts.import.upload') }}
                                 <input aria-hidden="true" tabindex="-1" class="file-input" type="file" accept="image/*" v-on:change="submitQrCode" ref="qrcodeInput">
-                                {{ $t('twofaccounts.forms.upload_qrcode') }}
                             </label>
-                            <field-error :form="form" field="qrcode" />
-                            <p class="help">{{ $t('twofaccounts.import.supported_formats_for_qrcode_upload') }}</p>
                         </div>
-                        <!-- upload a file -->
-                        <div class="block">
-                            <label role="button" tabindex="0" class="button is-link is-rounded is-outlined" ref="fileInputLabel" @keyup.enter="$refs.fileInputLabel.click()">
-                                <input aria-hidden="true" tabindex="-1" class="file-input" type="file" accept="text/plain,application/json,text/csv,.2fas" v-on:change="submitFile" ref="fileInput">
-                                {{ $t('twofaccounts.import.upload_a_file') }}
-                            </label>
-                            <field-error :form="uploadForm" field="file" />
-                            <p class="help">{{ $t('twofaccounts.import.supported_formats_for_file_upload') }}</p>
+                        <field-error :form="uploadForm" field="qrcode" />
+                        <p class="help">{{ $t('twofaccounts.import.supported_formats_for_qrcode_upload') }}</p>
+                    </div>
+                    <h5 class="title is-5 mb-3 has-text-grey">{{ $t('commons.file') }}</h5>
+                    <!-- upload a file -->
+                    <div class="block mb-6">
+                        <label role="button" tabindex="0" class="button is-link is-rounded is-outlined" ref="fileInputLabel" @keyup.enter="$refs.fileInputLabel.click()">
+                            <input aria-hidden="true" tabindex="-1" class="file-input" type="file" accept="text/plain,application/json,text/csv,.2fas" v-on:change="submitFile" ref="fileInput">
+                            {{ $t('twofaccounts.import.upload') }}
+                        </label>
+                        <field-error :form="uploadForm" field="file" />
+                        <p class="help">{{ $t('twofaccounts.import.supported_formats_for_file_upload') }}</p>
+                    </div>
+                    <!-- Supported migration resources -->
+                    <h5 class="title is-5 mb-3 has-text-grey-dark">{{ $t('twofaccounts.import.supported_migration_formats') }}</h5>
+                    <div class="field is-grouped is-grouped-multiline pt-0">
+                        <div class="control">
+                            <div class="tags has-addons">
+                            <span class="tag is-dark">Google Auth</span>
+                            <span class="tag is-black">{{ $t('twofaccounts.import.qr_code') }}</span>
+                            </div>
                         </div>
-
-                        <!-- Supported migration resources -->
-                        <h5 class="title is-5 mb-3">{{ $t('twofaccounts.import.supported_migration_formats') }}</h5>
-                        <div class="field is-grouped is-grouped-multiline pt-0">
-                            <div class="control">
-                                <div class="tags has-addons">
-                                <span class="tag is-dark">Google Auth</span>
-                                <span class="tag is-black">{{ $t('twofaccounts.import.qr_code') }}</span>
-                                </div>
+                        <div class="control">
+                            <div class="tags has-addons">
+                            <span class="tag is-dark">Aegis Auth</span>
+                            <span class="tag is-black">JSON</span>
                             </div>
-                            <div class="control">
-                                <div class="tags has-addons">
-                                <span class="tag is-dark">Aegis Auth</span>
-                                <span class="tag is-black">JSON</span>
-                                </div>
+                        </div>
+                        <div class="control">
+                            <div class="tags has-addons">
+                            <span class="tag is-dark">Aegis Auth</span>
+                            <span class="tag is-black">{{ $t('twofaccounts.import.plain_text') }}</span>
                             </div>
-                            <div class="control">
-                                <div class="tags has-addons">
-                                <span class="tag is-dark">Aegis Auth</span>
-                                <span class="tag is-black">{{ $t('twofaccounts.import.plain_text') }}</span>
-                                </div>
-                            </div>
-                            <div class="control">
-                                <div class="tags has-addons">
-                                <span class="tag is-dark">2FAS Auth</span>
-                                <span class="tag is-black">JSON</span>
-                                </div>
+                        </div>
+                        <div class="control">
+                            <div class="tags has-addons">
+                            <span class="tag is-dark">2FAS Auth</span>
+                            <span class="tag is-black">JSON</span>
                             </div>
                         </div>
                     </div>
-                    <div v-else>
-                        <div v-for="(account, index) in exportedAccounts" :key="account.name" class="group-item has-text-light is-size-5 is-size-6-mobile">
-                            <div class="is-flex is-justify-content-space-between">
-                                <!-- Account name -->
-                                <div v-if="account.id > -2 && account.imported !== 0" class="is-flex-grow-1 has-ellipsis is-clickable" @click="previewAccount(index)" :title="$t('twofaccounts.import.generate_a_test_password')">
-                                    <img v-if="account.icon && $root.appSettings.showAccountsIcons" class="import-icon" :src="'/storage/icons/' + account.icon" :alt="$t('twofaccounts.icon_for_account_x_at_service_y', {account: account.account, service: account.service})">
-                                    {{ account.account }}
-                                </div>
-                                <div v-else class="is-flex-grow-1 has-ellipsis">{{ account.account }}</div>
-                                <!-- buttons -->
-                                <div v-if="account.imported === -1" class="tags is-flex-wrap-nowrap">
-                                    <!-- discard button -->
-                                    <button class="button tag is-dark has-text-grey-light" @click="discardAccount(index)"  :title="$t('twofaccounts.import.discard_this_account')">
-                                        <font-awesome-icon :icon="['fas', 'trash']" />
-                                    </button>
-                                    <!-- import button -->
-                                    <button v-if="account.id > -2" class="button tag is-link" @click="createAccount(index)"  :title="$t('twofaccounts.import.import_this_account')">
-                                        {{ $t('twofaccounts.import.to_import') }}
-                                    </button>
-                                </div>
-                                <!-- result label -->
-                                <div v-else class="has-nowrap">
-                                    <span v-if="account.imported === 1" class="has-text-success">
-                                        {{ $t('twofaccounts.import.imported') }} <font-awesome-icon :icon="['fas', 'check']" />
-                                    </span>
-                                    <span v-else class="has-text-danger">
-                                        {{ $t('twofaccounts.import.failure') }} <font-awesome-icon :icon="['fas', 'times']" />
-                                    </span>
-                                </div>
+                    <span class="is-size-7" v-html="$t('twofaccounts.import.do_not_set_password_or_encryption')"></span>
+                </div>
+                <div v-else>
+                    <div v-for="(account, index) in exportedAccounts" :key="account.name" class="group-item has-text-light is-size-5 is-size-6-mobile">
+                        <div class="is-flex is-justify-content-space-between">
+                            <!-- Account name -->
+                            <div v-if="account.id > -2 && account.imported !== 0" class="is-flex-grow-1 has-ellipsis is-clickable" @click="previewAccount(index)" :title="$t('twofaccounts.import.generate_a_test_password')">
+                                <img v-if="account.icon && $root.appSettings.showAccountsIcons" class="import-icon" :src="'/storage/icons/' + account.icon" :alt="$t('twofaccounts.icon_for_account_x_at_service_y', {account: account.account, service: account.service})">
+                                {{ account.account }}
                             </div>
-                            <div class="is-size-6 is-size-7-mobile">
-                                <!-- service name -->
-                                <div class="is-family-primary has-text-grey">{{ $t('twofaccounts.import.issuer') }}: {{ account.service }}</div>
-                                <!-- reasons to invalid G-Auth data -->
-                                <div v-if="account.id === -2" class="has-text-danger">
-                                    <font-awesome-icon class="mr-1" :icon="['fas', 'times-circle']" />{{ account.secret }}
-                                </div>
-                                <!-- possible duplicates -->
-                                <div v-if="account.id === -1 && account.imported !== 1 && !account.errors" class="has-text-warning">
-                                    <font-awesome-icon class="mr-1" :icon="['fas', 'exclamation-circle']" />{{ $t('twofaccounts.import.possible_duplicate') }}
-                                </div>
-                                <!-- errors during account creation -->
-                                <ul v-if="account.errors">
-                                    <li v-for="(error) in account.errors" :key="error" class="has-text-danger">{{ error }}</li>
-                                </ul>
+                            <div v-else class="is-flex-grow-1 has-ellipsis">{{ account.account }}</div>
+                            <!-- buttons -->
+                            <div v-if="account.imported === -1" class="tags is-flex-wrap-nowrap">
+                                <!-- discard button -->
+                                <button class="button tag is-dark has-text-grey-light" @click="discardAccount(index)"  :title="$t('twofaccounts.import.discard_this_account')">
+                                    <font-awesome-icon :icon="['fas', 'trash']" />
+                                </button>
+                                <!-- import button -->
+                                <button v-if="account.id > -2" class="button tag is-link" @click="createAccount(index)"  :title="$t('twofaccounts.import.import_this_account')">
+                                    {{ $t('twofaccounts.import.to_import') }}
+                                </button>
+                            </div>
+                            <!-- result label -->
+                            <div v-else class="has-nowrap">
+                                <span v-if="account.imported === 1" class="has-text-success">
+                                    {{ $t('twofaccounts.import.imported') }} <font-awesome-icon :icon="['fas', 'check']" />
+                                </span>
+                                <span v-else class="has-text-danger">
+                                    {{ $t('twofaccounts.import.failure') }} <font-awesome-icon :icon="['fas', 'times']" />
+                                </span>
                             </div>
                         </div>
-                        <!-- discard links -->
-                        <div v-if="importableCount > 0" class="mt-2 is-size-7 is-pulled-right">
-                            <button v-if="duplicateCount" @click="discardDuplicates()" class="has-text-grey button is-small is-ghost">{{ $t('twofaccounts.import.discard_duplicates') }} ({{duplicateCount}})</button>
-                            <button @click="discardAccounts()" class="has-text-grey button is-small is-ghost">{{ $t('twofaccounts.import.discard_all') }}</button>
-                        </div>
-                        <div v-if="importedCount == exportedAccounts.length"  class="mt-2 is-size-7 is-pulled-right">
-                            <button @click="exportedAccounts = []" class="has-text-grey button is-small is-ghost">{{ $t('commons.clear') }}</button>
+                        <div class="is-size-6 is-size-7-mobile">
+                            <!-- service name -->
+                            <div class="is-family-primary has-text-grey">{{ $t('twofaccounts.import.issuer') }}: {{ account.service }}</div>
+                            <!-- reasons to invalid G-Auth data -->
+                            <div v-if="account.id === -2" class="has-text-danger">
+                                <font-awesome-icon class="mr-1" :icon="['fas', 'times-circle']" />{{ account.secret }}
+                            </div>
+                            <!-- possible duplicates -->
+                            <div v-if="account.id === -1 && account.imported !== 1 && !account.errors" class="has-text-warning">
+                                <font-awesome-icon class="mr-1" :icon="['fas', 'exclamation-circle']" />{{ $t('twofaccounts.import.possible_duplicate') }}
+                            </div>
+                            <!-- errors during account creation -->
+                            <ul v-if="account.errors">
+                                <li v-for="(error) in account.errors" :key="error" class="has-text-danger">{{ error }}</li>
+                            </ul>
                         </div>
                     </div>
-                    <div v-if="isFetching && exportedAccounts.length === 0" class="has-text-centered">
-                        <span class="is-size-4">
-                            <font-awesome-icon :icon="['fas', 'spinner']" spin />
-                        </span>
+                    <!-- discard links -->
+                    <div v-if="importableCount > 0" class="mt-2 is-size-7 is-pulled-right">
+                        <button v-if="duplicateCount" @click="discardDuplicates()" class="has-text-grey button is-small is-ghost">{{ $t('twofaccounts.import.discard_duplicates') }} ({{duplicateCount}})</button>
+                        <button @click="discardAccounts()" class="has-text-grey button is-small is-ghost">{{ $t('twofaccounts.import.discard_all') }}</button>
                     </div>
+                    <div v-if="importedCount == exportedAccounts.length"  class="mt-2 is-size-7 is-pulled-right">
+                        <button @click="exportedAccounts = []" class="has-text-grey button is-small is-ghost">{{ $t('commons.clear') }}</button>
+                    </div>
+                </div>
+                <div v-if="isFetching && exportedAccounts.length === 0" class="has-text-centered">
+                    <span class="is-size-4">
+                        <font-awesome-icon :icon="['fas', 'spinner']" spin />
+                    </span>
                 </div>
                 <!-- footer -->
                 <vue-footer :showButtons="true">
@@ -342,9 +348,12 @@
                     this.notifyValidAccountFound()
                 })
                 .catch(error => {
-                    if( error.response.status !== 422 ) {
-                        this.$notify({type: 'is-danger', text: this.$t(error.response.data.message) })
+                    if( error.response.status === 422 ) {
+                        if (error.response.data.errors.file == undefined) {
+                            this.$notify({type: 'is-danger', text: this.$t('errors.invalid_2fa_data') })
+                        }
                     }
+                    else this.$notify({type: 'is-danger', text: error.response.data.message})
                 });
                 
                 this.isFetching = false
@@ -363,9 +372,16 @@
                     this.migrate(response.data.data)
                 })
                 .catch(error => {
-                    if( error.response.status !== 422 ) {
-                        this.$notify({type: 'is-danger', text: this.$t(error.response.data.message) })
+                    if( error.response.status === 422 ) {
+                        if (error.response.data.errors.qrcode == undefined) {
+                            this.$notify({type: 'is-danger', text: this.$t('errors.invalid_2fa_data') })
+                        }
                     }
+                    else this.$notify({type: 'is-danger', text: error.response.data.message})
+
+                    // if( error.response.status !== 422 ) {
+                    //     this.$notify({type: 'is-danger', text: this.$t(error.response.data.message) })
+                    // }
                 });
             },
 
