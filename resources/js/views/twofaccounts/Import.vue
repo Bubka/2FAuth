@@ -26,7 +26,7 @@
                         <!-- upload a file -->
                         <div class="block">
                             <label role="button" tabindex="0" class="button is-link is-rounded is-outlined" ref="fileInputLabel" @keyup.enter="$refs.fileInputLabel.click()">
-                                <input aria-hidden="true" tabindex="-1" class="file-input" type="file" accept="text/plain,application/json,text/csv" v-on:change="submitFile" ref="fileInput">
+                                <input aria-hidden="true" tabindex="-1" class="file-input" type="file" accept="text/plain,application/json,text/csv,.2fas" v-on:change="submitFile" ref="fileInput">
                                 {{ $t('twofaccounts.import.upload_a_file') }}
                             </label>
                             <field-error :form="uploadForm" field="file" />
@@ -52,6 +52,12 @@
                                 <div class="tags has-addons">
                                 <span class="tag is-dark">Aegis Auth</span>
                                 <span class="tag is-black">{{ $t('twofaccounts.import.plain_text') }}</span>
+                                </div>
+                            </div>
+                            <div class="control">
+                                <div class="tags has-addons">
+                                <span class="tag is-dark">2FAS Auth</span>
+                                <span class="tag is-black">JSON</span>
                                 </div>
                             </div>
                         </div>

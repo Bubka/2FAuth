@@ -55,7 +55,7 @@ class AegisMigrator extends Migrator
             $parameters['otp_type']     = $otp_parameters['type'] == 'steam' ? TwoFAccount::STEAM_TOTP : $otp_parameters['type'];
             $parameters['service']      = $otp_parameters['issuer'];
             $parameters['account']      = $otp_parameters['name'];
-            $parameters['secret']       = $otp_parameters['info']['secret'];
+            $parameters['secret']       = $this->padToValidBase32Secret($otp_parameters['info']['secret']);
             $parameters['algorithm']    = $otp_parameters['info']['algo'];
             $parameters['digits']       = $otp_parameters['info']['digits'];
             $parameters['counter']      = $otp_parameters['info']['counter'] ?? null;
@@ -108,10 +108,10 @@ class AegisMigrator extends Migrator
                 // The token failed to generate a valid account so we create a fake account to be returned.
                 $fakeAccount = new TwoFAccount();
                 $fakeAccount->id = TwoFAccount::FAKE_ID;
-                $fakeAccount->otp_type  = $otp_parameters['type'];
+                $fakeAccount->otp_type  = $otp_parameters['type'] ?? TwoFAccount::TOTP;
                 // Only basic fields are filled to limit the risk of another exception.
-                $fakeAccount->account   = $otp_parameters['name'];
-                $fakeAccount->service   = $otp_parameters['issuer'];
+                $fakeAccount->account   = $otp_parameters['name'] ?? __('twofaccounts.import.invalid_account');
+                $fakeAccount->service   = $otp_parameters['issuer'] ?? __('twofaccounts.import.invalid_service');
                 // The secret field is used to pass the error, not very clean but will do the job for now.
                 $fakeAccount->secret    = $exception->getMessage();
 

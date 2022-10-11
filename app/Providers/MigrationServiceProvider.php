@@ -7,6 +7,7 @@ use App\Factories\MigratorFactoryInterface;
 use App\Services\Migrators\GoogleAuthMigrator;
 use App\Services\Migrators\AegisMigrator;
 use App\Services\Migrators\PlainTextMigrator;
+use App\Services\Migrators\TwoFASMigrator;
 use Illuminate\Support\ServiceProvider;
 
 class MigrationServiceProvider extends ServiceProvider
@@ -26,6 +27,10 @@ class MigrationServiceProvider extends ServiceProvider
 
         $this->app->singleton(AegisMigrator::class, function () {
             return new AegisMigrator();
+        });
+
+        $this->app->singleton(TwoFASMigrator::class, function () {
+            return new TwoFASMigrator();
         });
 
         $this->app->singleton(PlainTextMigrator::class, function () {

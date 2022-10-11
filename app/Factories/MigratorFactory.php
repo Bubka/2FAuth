@@ -6,6 +6,7 @@ use App\Services\Migrators\GoogleAuthMigrator;
 use App\Services\Migrators\AegisMigrator;
 use App\Services\Migrators\Migrator;
 use App\Services\Migrators\PlainTextMigrator;
+use App\Services\Migrators\TwoFASMigrator;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
@@ -24,6 +25,9 @@ class MigratorFactory implements MigratorFactoryInterface
     {
         if ($this->isAegisJSON($migrationPayload)) {
             return App::make(AegisMigrator::class);
+        }
+        else if ($this->is2FASv2($migrationPayload)) {
+            return App::make(TwoFASMigrator::class);
         }
         else if ($this->isGoogleAuth($migrationPayload)) {
             return App::make(GoogleAuthMigrator::class);
@@ -103,6 +107,54 @@ class MigratorFactory implements MigratorFactoryInterface
                         'db.entries.*.name' => 'required',
                         'db.entries.*.issuer' => 'required',
                         'db.entries.*.info' => 'required'
+                    ]
+                ));
+            }
+        }
+
+        return false;
+    }
+
+
+    /**
+     * 
+     */
+    private function is2FASv2($migrationPayload) : mixed
+    {
+        // - 2FAS JSON : is a JSON object with the key 'schemaVersion' == 2 and a key 'services' full of objects like
+        // {
+        //     "secret": "A4GRFTVVRBGY7UIW",
+        //     ...
+        //     "otp":
+        //     {
+        //         "account": "John DOE",
+        //         "digits": 6,
+        //         "counter": 0,
+        //         "period": 30,
+        //         "algorithm": "SHA1",
+        //         "tokenType": "TOTP"
+        //     },
+        //     "type": "ManuallyAdded",
+        //     "name": "Facebook",
+        //     "icon":
+        //     {
+        //         ...
+        //     }
+        // }
+
+        $json = json_decode($migrationPayload, true);
+        
+        if (Arr::get($json, 'schemaVersion') == 2 && (Arr::has($json, 'services') || Arr::has($json, 'servicesEncrypted'))) {
+            if (Arr::has($json, 'servicesEncrypted')) {
+                throw new EncryptedMigrationException();
+            }
+            else {
+                return count(Validator::validate(
+                    $json,
+                    [
+                        'services.*.secret' => 'required',
+                        'services.*.name' => 'required',
+                        'services.*.otp' => 'required'
                     ]
                 ));
             }

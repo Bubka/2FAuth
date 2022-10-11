@@ -365,7 +365,7 @@ class TwoFAccount extends Model implements Sortable
      */
     public function fillWithOtpParameters(array $parameters, bool $skipIconFetching = false)
     {
-        $this->otp_type     = Arr::get($parameters, 'otp_type');
+        $this->otp_type     = strtolower(Arr::get($parameters, 'otp_type'));
         $this->account      = Arr::get($parameters, 'account');
         $this->service      = Arr::get($parameters, 'service');
         $this->icon         = Arr::get($parameters, 'icon');

@@ -137,7 +137,7 @@ return [
         'import_legend' => '2FAuth can import data from various 2FA apps.<br />Use the Export feature of these apps to get a migration resource (a QR code or a file) and submit it using your preferred method below.',
         'upload_a_file' => 'Upload a file',
         'supported_formats_for_qrcode_upload' => 'Accepted: jpg, jpeg, png, bmp, gif, svg, or webp',
-        'supported_formats_for_file_upload' => 'Accepted: Plain text, json, csv',
+        'supported_formats_for_file_upload' => 'Accepted: Plain text, json, 2fas',
         'supported_migration_formats' => 'Supported migration formats',
         'qr_code' => 'QR code',
         'plain_text' => 'Plain text',
@@ -152,6 +152,8 @@ return [
         'discard_this_account' => 'Discard this account',
         'generate_a_test_password' => 'Generate a test pasword',
         'possible_duplicate' => 'An account with the exact same data already exists',
+        'invalid_account' => '- invalid account -',
+        'invalid_service' => '- invalid service -',
     ],
 
 ];
