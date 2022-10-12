@@ -5,7 +5,11 @@
         </figure>
         <p class="is-size-4 has-text-grey-light has-ellipsis">{{ internal_service }}</p>
         <p class="is-size-6 has-text-grey has-ellipsis">{{ internal_account }}</p>
-        <p tabindex="0" class="is-size-1 has-text-white is-clickable" :title="$t('commons.copy_to_clipboard')" v-clipboard="() => internal_password.replace(/ /g, '')" v-clipboard:success="clipboardSuccessHandler">{{ displayedOtp }}</p>
+        <p>
+            <span role="log" ref="otp" tabindex="0" class="otp is-size-1 has-text-white is-clickable px-3" @click="copyOTP(internal_password)" @keyup.enter="copyOTP(internal_password)" :title="$t('commons.copy_to_clipboard')">
+                {{ displayedOtp }}
+            </span>
+        </p>
         <ul class="dots" v-show="isTimeBased(internal_otp_type)">
             <li v-for="n in 10" :key="n"></li>
         </ul>
@@ -70,7 +74,33 @@
             this.show()
         },
 
+        // created() {
+        // },
+
         methods: {
+
+            copyOTP (otp) {
+                // see https://web.dev/async-clipboard/ for futur Clipboard API usage.
+                // The API should allow to copy the password on each trip without user interaction.
+
+                // For now too many browsers don't support the clipboard-write permission
+                // (see https://developer.mozilla.org/en-US/docs/Web/API/Permissions#browser_support)
+
+                const rawOTP = otp.replace(/ /g, '')
+                const success = this.$clipboard(rawOTP)
+
+                if (success == true) {
+                    if(this.$root.appSettings.kickUserAfter == -1) {
+                        this.appLogout()
+                    }
+                    else if(this.$root.appSettings.closeOtpOnCopy) {
+                        this.$parent.isActive = false
+                        this.clearOTP()
+                    }
+
+                    this.$notify({ type: 'is-success', text: this.$t('commons.copied_to_clipboard') })
+                }
+            },
 
             isTimeBased: function(otp_type) {
                 return (otp_type === 'totp' || otp_type === 'steamtotp')
@@ -133,7 +163,7 @@
                         else this.$router.push({ name: 'genericError', params: { err: this.$t('errors.not_a_supported_otp_type') } });
     
                         this.$parent.isActive = true
-                        this.$parent.$refs.closeModalButton.focus()
+                        this.focusOnOTP()
                     }
                     catch(error) {
                         this.clearOTP()
@@ -181,7 +211,7 @@
 
                     await this.axios(request).then(response => {
                         if(this.$root.appSettings.copyOtpOnDisplay) {
-                            this.copyAndNotify(response.data.password)
+                            this.copyOTP(response.data.password)
                         }
                         password = response.data
                     })
@@ -319,35 +349,11 @@
                 }
             },
 
-
-            clipboardSuccessHandler ({ value, event }) {
-
-                if(this.$root.appSettings.kickUserAfter == -1) {
-                    this.appLogout()
-                }
-                else if(this.$root.appSettings.closeOtpOnCopy) {
-                    this.$parent.isActive = false
-                    this.clearOTP()
-                }
-
-                this.$notify({ type: 'is-success', text: this.$t('commons.copied_to_clipboard') })
-            },
-
-
-            clipboardErrorHandler ({ value, event }) {
-                console.log('error', value)
-            },
-
-            copyAndNotify (strToCopy) {
-                // see https://web.dev/async-clipboard/ for futur Clipboard API usage.
-                // The API should allow to copy the password on each trip without user interaction.
-
-                // For now too many browsers don't support the clipboard-write permission
-                // (see https://developer.mozilla.org/en-US/docs/Web/API/Permissions#browser_support)
-
-                this.$clipboard(strToCopy)
-                this.$notify({ type: 'is-success', text: this.$t('commons.copied_to_clipboard') })
-            },
+            focusOnOTP() {
+                this.$nextTick(() => {
+                    this.$refs.otp.focus()
+                })
+            }
 
         },
 

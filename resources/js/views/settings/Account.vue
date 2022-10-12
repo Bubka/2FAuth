@@ -37,9 +37,9 @@
         <vue-footer :showButtons="true">
             <!-- Cancel button -->
             <p class="control">
-                <a role="button" tabindex="0" class="button is-dark is-rounded" @click.stop="exitSettings">
+                <button class="button is-dark is-rounded" @click.stop="exitSettings">
                     {{ $t('commons.close') }}
-                </a>
+                </button>
             </p>
         </vue-footer>
     </div>

@@ -27,6 +27,7 @@ return [
     'save' => 'Save',
     'close' => 'Close',
     'clear' => 'Clear',
+    'clear_search' => 'Clear search',
     'demo_do_not_post_sensitive_data' => 'This is a demo app, do not post any sensitive data',
     'testing_do_not_post_sensitive_data' => 'This is a testing app, do not post any sensitive data',
     'selected' => 'selected',
@@ -67,4 +68,5 @@ return [
     'image_of_qrcode_to_scan' => 'Image of a QR code to scan',
     'file' => 'File',
     'or' => 'OR',
+    'close_the_x_page' => 'Close the {pagetitle} page',
 ];

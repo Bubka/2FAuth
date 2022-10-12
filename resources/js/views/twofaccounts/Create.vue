@@ -14,8 +14,8 @@
                         </otp-displayer>
                     </div>
                 </div>
-                <div class="columns is-mobile" v-if="form.errors.any()">
-                    <div class="column">
+                <div class="columns is-mobile" role="alert">
+                    <div v-if="form.errors.any()" class="column">
                         <p v-for="(field, index) in form.errors.errors" :key="index" class="help is-danger">
                             <ul>
                                 <li v-for="(error, index) in field" :key="index">{{ error }}</li>
@@ -41,17 +41,19 @@
         <form-wrapper :title="$t('twofaccounts.forms.new_account')" v-if="showAdvancedForm">
             <form @submit.prevent="createAccount" @keydown="form.onKeydown($event)">
                 <!-- qcode fileupload -->
-                <div class="field">
-                    <div class="file is-black is-small">
-                        <label class="file-label" :title="$t('twofaccounts.forms.use_qrcode.title')">
-                            <input class="file-input" type="file" accept="image/*" v-on:change="uploadQrcode" ref="qrcodeInput">
-                            <span class="file-cta">
-                                <span class="file-icon">
-                                    <font-awesome-icon :icon="['fas', 'qrcode']" size="lg" />
+                <div class="field is-grouped">
+                    <div class="control">
+                        <div role="button" tabindex="0" class="file is-black is-small" @keyup.enter="$refs.qrcodeInputLabel.click()">
+                            <label class="file-label" :title="$t('twofaccounts.forms.use_qrcode.title')" ref="qrcodeInputLabel">
+                                <input aria-hidden="true" tabindex="-1" class="file-input" type="file" accept="image/*" v-on:change="uploadQrcode" ref="qrcodeInput">
+                                <span class="file-cta">
+                                    <span class="file-icon">
+                                        <font-awesome-icon :icon="['fas', 'qrcode']" size="lg" />
+                                    </span>
+                                    <span class="file-label">{{ $t('twofaccounts.forms.prefill_using_qrcode') }}</span>
                                 </span>
-                                <span class="file-label">{{ $t('twofaccounts.forms.prefill_using_qrcode') }}</span>
-                            </span>
-                        </label>
+                            </label>
+                        </div>
                     </div>
                 </div>
                 <field-error :form="form" field="qrcode" class="help-for-file" />
@@ -73,9 +75,9 @@
                     </div>
                     <!-- upload button -->
                     <div class="control">
-                        <div class="file is-dark">
-                            <label class="file-label">
-                                <input class="file-input" type="file" accept="image/*" v-on:change="uploadIcon" ref="iconInput">
+                        <div role="button" tabindex="0" class="file is-dark" @keyup.enter="$refs.iconInputLabel.click()">
+                            <label class="file-label" ref="iconInputLabel">
+                                <input aria-hidden="true" tabindex="-1" class="file-input" type="file" accept="image/*" v-on:change="uploadIcon" ref="iconInput">
                                 <span class="file-cta">
                                     <span class="file-icon">
                                         <font-awesome-icon :icon="['fas', 'upload']" />
@@ -85,7 +87,7 @@
                             </label>
                             <span class="tag is-black is-large" v-if="tempIcon">
                                 <img class="icon-preview" :src="'/storage/icons/' + tempIcon" :alt="$t('twofaccounts.icon_to_illustrate_the_account')">
-                                <button class="delete is-small" @click.prevent="deleteIcon" :aria-label="$t('twofaccounts.remove_icon')"></button>
+                                <button class="clear-selection delete is-small" @click.prevent="deleteIcon" :aria-label="$t('twofaccounts.remove_icon')"></button>
                             </span>
                         </div>
                     </div>

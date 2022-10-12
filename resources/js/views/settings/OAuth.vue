@@ -47,7 +47,7 @@
                 <vue-footer :showButtons="true">
                     <!-- close button -->
                     <p class="control">
-                        <router-link :to="{ name: 'accounts', params: { toRefresh: false } }" class="button is-dark is-rounded">{{ $t('commons.close') }}</router-link>
+                        <router-link :to="{ name: 'accounts', params: { toRefresh: false } }" class="button is-dark is-rounded" tabindex="0">{{ $t('commons.close') }}</router-link>
                     </p>
                 </vue-footer>
             </form-wrapper>

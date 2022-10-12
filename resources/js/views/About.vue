@@ -1,6 +1,6 @@
 <template>
     <responsive-width-wrapper>
-        <h1 class="title has-text-grey-dark">{{ $t('commons.about') }}</h1>
+        <h1 class="title has-text-grey-dark">{{ pagetitle }}</h1>
         <p class="block">
             <span class="has-text-white"><span class="is-size-5">2FAuth</span> v{{ appVersion }}</span><br />
             {{ $t('commons.2fauth_teaser')}}
@@ -13,25 +13,25 @@
             {{ $t('commons.resources') }}
         </h2>
         <div class="buttons">
-            <a class="button is-dark" href="https://github.com/Bubka/2FAuth">
+            <a class="button is-dark" href="https://github.com/Bubka/2FAuth" target="_blank">
                 <span class="icon is-small">
                     <font-awesome-icon :icon="['fab', 'github-alt']" />
                 </span>
                 <span>Github</span>
             </a>
-            <a class="button is-dark" href="https://docs.2fauth.app/">
+            <a class="button is-dark" href="https://docs.2fauth.app/" target="_blank">
                 <span class="icon is-small">
                     <font-awesome-icon :icon="['fas', 'book']" />
                 </span>
                 <span>Docs</span>
             </a>
-            <a class="button is-dark" href="https://demo.2fauth.app/">
+            <a class="button is-dark" href="https://demo.2fauth.app/" target="_blank">
                 <span class="icon is-small">
                     <font-awesome-icon :icon="['fas', 'flask']" />
                 </span>
                 <span>Demo</span>
             </a>
-            <a class="button is-dark" href="https://docs.2fauth.app/resources/rapidoc.html">
+            <a class="button is-dark" href="https://docs.2fauth.app/resources/rapidoc.html" target="_blank">
                 <span class="icon is-small">
                     <font-awesome-icon :icon="['fas', 'code']" />
                 </span>
@@ -52,7 +52,7 @@
             {{ $t('commons.environment') }}
         </h2>
         <div class="box has-background-black-bis is-family-monospace is-size-7">
-            <button class="button is-like-text is-pulled-right is-small is-text" v-clipboard="() => this.$refs.listInfos.innerText" v-clipboard:success="clipboardSuccessHandler">
+            <button :aria-label="$t('commons.copy_to_clipboard')" class="button is-like-text is-pulled-right is-small is-text" v-clipboard="() => this.$refs.listInfos.innerText" v-clipboard:success="clipboardSuccessHandler">
                 <font-awesome-icon :icon="['fas', 'copy']" />
             </button>
             <ul ref="listInfos">
@@ -64,7 +64,7 @@
                 {{ $t('settings.user_options') }}
             </h2>
             <div class="box has-background-black-bis is-family-monospace is-size-7">
-                <button class="button is-like-text is-pulled-right is-small is-text" v-clipboard="() => this.$refs.listUserOptions.innerText" v-clipboard:success="clipboardSuccessHandler">
+                <button :aria-label="$t('commons.copy_to_clipboard')" class="button is-like-text is-pulled-right is-small is-text" v-clipboard="() => this.$refs.listUserOptions.innerText" v-clipboard:success="clipboardSuccessHandler">
                     <font-awesome-icon :icon="['fas', 'copy']" />
                 </button>
                 <ul ref="listUserOptions">
@@ -76,7 +76,7 @@
         <vue-footer :showButtons="true">
             <!-- close button -->
             <p class="control">
-                <router-link  :to="{ name: 'accounts', params: { toRefresh: true } }" class="button is-dark is-rounded">{{ $t('commons.close') }}</router-link>
+                <router-link :to="{ name: 'accounts', params: { toRefresh: true } }" role="button" :aria-label="$t('commons.close_the_x_page', {pagetitle: pagetitle})" class="button is-dark is-rounded">{{ $t('commons.close') }}</router-link>
             </p>
         </vue-footer>
     </responsive-width-wrapper>
@@ -86,6 +86,7 @@
     export default {
         data() {
             return {
+                pagetitle: this.$t('commons.about'),
                 infos : null,
                 options : null,
                 showUserOptions: false,

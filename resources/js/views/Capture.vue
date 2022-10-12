@@ -24,9 +24,9 @@
         </div>
         <div class="fullscreen-footer">
             <!-- Cancel button -->
-            <label class="button is-large is-warning is-rounded" @click="exitStream()">
+            <button class="button is-large is-warning is-rounded" @click="exitStream()">
                 {{ $t('commons.cancel') }}
-            </label>
+            </button>
         </div>
     </div>
 </template>

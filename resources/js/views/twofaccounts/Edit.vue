@@ -19,9 +19,9 @@
                 </div>
                 <!-- upload button -->
                 <div class="control">
-                    <div class="file is-dark">
-                        <label class="file-label">
-                            <input class="file-input" type="file" accept="image/*" v-on:change="uploadIcon" ref="iconInput">
+                    <div role="button" tabindex="0" class="file is-dark" @keyup.enter="$refs.iconInputLabel.click()">
+                        <label class="file-label" ref="iconInputLabel">
+                            <input aria-hidden="true" tabindex="-1" class="file-input" type="file" accept="image/*" v-on:change="uploadIcon" ref="iconInput">
                             <span class="file-cta">
                                 <span class="file-icon">
                                     <font-awesome-icon :icon="['fas', 'upload']" />
@@ -31,7 +31,7 @@
                         </label>
                         <span class="tag is-black is-large" v-if="tempIcon">
                             <img class="icon-preview" :src="'/storage/icons/' + tempIcon" :alt="$t('twofaccounts.icon_to_illustrate_the_account')">
-                            <button class="delete is-small" @click.prevent="deleteIcon" :aria-label="$t('twofaccounts.remove_icon')"></button>
+                            <button class="clear-selection delete is-small" @click.prevent="deleteIcon" :aria-label="$t('twofaccounts.remove_icon')"></button>
                         </span>
                     </div>
                 </div>
@@ -57,18 +57,18 @@
                         <input :id="this.inputId('text','secret')" class="input" type="text" v-model="form.secret" :disabled="secretIsLocked">
                     </p>
                     <p class="control" v-if="secretIsLocked">
-                        <a class="button is-dark field-lock" @click="secretIsLocked = false" :title="$t('twofaccounts.forms.unlock.title')">
+                        <button type="button" class="button is-dark field-lock" @click.stop="secretIsLocked = false" :title="$t('twofaccounts.forms.unlock.title')">
                             <span class="icon">
                                 <font-awesome-icon :icon="['fas', 'lock']" />
                             </span>
-                        </a>
+                        </button>
                     </p>
                     <p class="control" v-else>
-                        <a class="button is-dark field-unlock"  @click="secretIsLocked = true" :title="$t('twofaccounts.forms.lock.title')">
+                        <button type="button" class="button is-dark field-unlock"  @click.stop="secretIsLocked = true" :title="$t('twofaccounts.forms.lock.title')">
                             <span class="icon has-text-danger">
                                 <font-awesome-icon :icon="['fas', 'lock-open']" />
                             </span>
-                        </a>
+                        </button>
                     </p>
                 </div>
                 <div class="field">
@@ -96,18 +96,18 @@
                                 <input class="input" type="text" placeholder="" v-model="form.counter" :disabled="counterIsLocked" />
                             </div>
                             <div class="control" v-if="counterIsLocked">
-                                <a class="button is-dark field-lock" @click="counterIsLocked = false" :title="$t('twofaccounts.forms.unlock.title')">
+                                <button type="button" class="button is-dark field-lock" @click="counterIsLocked = false" :title="$t('twofaccounts.forms.unlock.title')">
                                     <span class="icon">
                                         <font-awesome-icon :icon="['fas', 'lock']" />
                                     </span>
-                                </a>
+                                </button>
                             </div>
                             <div class="control" v-else>
-                                <a class="button is-dark field-unlock"  @click="counterIsLocked = true" :title="$t('twofaccounts.forms.lock.title')">
+                                <button type="button" class="button is-dark field-unlock"  @click="counterIsLocked = true" :title="$t('twofaccounts.forms.lock.title')">
                                     <span class="icon has-text-danger">
                                         <font-awesome-icon :icon="['fas', 'lock-open']" />
                                     </span>
-                                </a>
+                                </button>
                             </div>
                         </div>
                         <field-error :form="form" field="counter" />

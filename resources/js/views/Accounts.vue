@@ -56,12 +56,106 @@
                 </p>
                 <!-- Cancel button -->
                 <p class="control">
-                    <a class="button is-dark is-rounded" @click="showGroupSelector = false">{{ $t('commons.cancel') }}</a>
+                    <button class="button is-dark is-rounded" @click="showGroupSelector = false">{{ $t('commons.cancel') }}</button>
                 </p>
             </vue-footer>
         </div>
+        <!-- header -->
+        <div class="header has-background-black-ter" v-if="this.showAccounts || this.showGroupSwitch">
+            <div class="columns is-gapless is-mobile is-centered">
+                <div v-if="editMode" class="column">
+                    <!-- toolbar -->
+                    <div class="toolbar has-text-centered">
+                        <div class="field is-grouped is-justify-content-center has-text-grey mb-2">
+                            <!-- selected label -->
+                            <p class="control mr-1">
+                                {{ selectedAccounts.length }}&nbsp;{{ $t('commons.selected') }}
+                            </p>
+                            <!-- deselect all -->
+                            <p class="control mr-4">
+                                <button @click="clearSelected" class="clear-selection delete" :style="{visibility: selectedAccounts.length > 0 ? 'visible' : 'hidden'}" :title="$t('commons.clear_selection')"></button>
+                            </p>
+                            <!-- select all button -->
+                            <p class="control mr-5">
+                                <button @click="selectAll" class="button has-line-height p-1 is-ghost has-background-black-ter has-text-grey" :title="$t('commons.select_all')">
+                                    <span>{{ $t('commons.all') }}</span>
+                                    <font-awesome-icon class="ml-1" :icon="['fas', 'check-square']" />
+                                </button>
+                            </p>
+                            <!-- sort asc/desc buttons -->
+                            <p class="control">
+                                <button @click="sortAsc" class="button has-line-height p-1 is-ghost has-background-black-ter has-text-grey" :title="$t('commons.sort_ascending')">
+                                    <font-awesome-icon :icon="['fas', 'sort-alpha-down']" />
+                                </button>
+                            </p>
+                            <p class="control">
+                                <button @click="sortDesc" class="button has-line-height p-1 is-ghost has-background-black-ter has-text-grey" :title="$t('commons.sort_descending')">
+                                    <font-awesome-icon :icon="['fas', 'sort-alpha-up']" />
+                                </button>
+                            </p>
+                        </div>
+                        <div class="field is-grouped is-justify-content-center pb-2">
+                            <!-- Change group button -->
+                            <div v-if="selectedAccounts.length > 0" class="control">
+                                <div tabindex="0" role="button" class="tag-button tag-button-link tags are-medium has-addons is-clickable" @click="showGroupSelector = true" @keyup.enter="showGroupSelector = true">
+                                    <span class="tag is-dark mb-0">
+                                        {{ $t('groups.change_group') }}
+                                    </span>
+                                    <span class="tag is-link mb-0">
+                                        <font-awesome-icon :icon="['fas', 'layer-group']" />
+                                    </span>
+                                </div>
+                            </div>
+                            <!-- delete selected button -->
+                            <div v-if="selectedAccounts.length > 0" class="control">
+                                <div tabindex="0" role="button" class="tag-button tag-button-danger tags are-medium has-addons is-clickable" @click="destroyAccounts" @keyup.enter="destroyAccounts">
+                                    <span class="tag is-dark mb-0">
+                                        {{ $t('commons.delete') }}
+                                    </span>
+                                    <span class="tag is-danger mb-0">
+                                        <font-awesome-icon :icon="['fas', 'trash']" />
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div v-else class="column is-three-quarters-mobile is-one-third-tablet is-one-quarter-desktop is-one-quarter-widescreen is-one-quarter-fullhd">
+                    <!-- search -->
+                    <div role="search" class="field">
+                        <div class="control has-icons-right">
+                            <input id="txtSearch" type="search" tabindex="1" :aria-label="$t('commons.search')" :title="$t('commons.search')" class="input is-rounded is-search" v-model="search">
+                            <span class="icon is-small is-right">
+                                <font-awesome-icon :icon="['fas', 'search']"  v-if="!search" />
+                                <button tabindex="1" :title="$t('commons.clear_search')" class="clear-selection delete" v-if="search" @click="search = '' "></button>
+                            </span>
+                        </div>
+                    </div>
+                    <!-- group switch toggle -->
+                    <div class="has-text-centered">
+                        <div class="columns">
+                            <div class="column" v-if="!showGroupSwitch">
+                                <button :title="$t('groups.show_group_selector')" tabindex="1" class="button is-text is-like-text" @click.stop="toggleGroupSwitch">
+                                    {{ activeGroupName }} ({{ filteredAccounts.length }})&nbsp;
+                                    <font-awesome-icon  :icon="['fas', 'caret-down']" />
+                                </button>
+                            </div>
+                            <div class="column" v-else>
+                                <button :title="$t('groups.hide_group_selector')" tabindex="1" class="button is-text is-like-text" @click.stop="toggleGroupSwitch">
+                                    {{ $t('groups.select_accounts_to_show') }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- modal -->
+        <modal v-model="showTwofaccountInModal">
+            <otp-displayer ref="OtpDisplayer"></otp-displayer>
+        </modal>
         <!-- show accounts list -->
-        <div class="container" v-if="this.showAccounts">
+        <div class="container" v-if="this.showAccounts" :class="editMode ? 'is-edit-mode' : ''">
             <!-- accounts -->
             <!-- <vue-pull-refresh :on-refresh="onRefresh" :config="{
                 errorLabel: 'error',
@@ -77,7 +171,7 @@
         	                        <div class="tfa-cell tfa-checkbox" v-if="editMode">
         	                            <div class="field">
         	                                <input class="is-checkradio is-small is-white" :id="'ckb_' + account.id" :value="account.id" type="checkbox" :name="'ckb_' + account.id" v-model="selectedAccounts">
-        	                                <label :for="'ckb_' + account.id"></label>
+        	                                <label tabindex="0" :for="'ckb_' + account.id" v-on:keypress.space.prevent="selectAccount(account.id)"></label>
         	                            </div>
         	                        </div>
         	                    </transition>
@@ -135,94 +229,6 @@
                 </p>
             </vue-footer>
         </div>
-        <!-- header -->
-        <div class="header has-background-black-ter" v-if="this.showAccounts || this.showGroupSwitch">
-            <div class="columns is-gapless is-mobile is-centered">
-                <div v-if="editMode" class="column">
-                    <!-- toolbar -->
-                    <div class="toolbar has-text-centered">
-                        <div class="field is-grouped is-justify-content-center">
-                            <div class="control">
-                                <div class="tags has-addons are-medium">
-                                    <span class="tag is-dark has-background-black-ter has-text-grey">
-                                        {{ selectedAccounts.length }}&nbsp;{{ $t('commons.selected') }}
-                                        <button @click="clearSelected" :style="{visibility: selectedAccounts.length > 0 ? 'visible' : 'hidden'}" class="delete" :title="$t('commons.clear_selection')"></button>
-                                    </span>
-                                    <span role="button" @click="selectAll" class="tag is-dark is-clickable has-background-black-ter has-text-grey" :title="$t('commons.select_all')">
-                                        {{ $t('commons.all') }}
-                                        <font-awesome-icon class="ml-1" :icon="['fas', 'check-square']" />
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="control">
-                                <div class="tags has-addons are-medium">
-                                    <span role="button" @click="sortAsc" class="tag is-dark is-clickable has-background-black-ter has-text-grey" :title="$t('commons.sort_ascending')">
-                                        <font-awesome-icon :icon="['fas', 'sort-alpha-down']" />
-                                    </span>
-                                    <span role="button" @click="sortDesc" class="tag is-dark is-clickable has-background-black-ter has-text-grey" :title="$t('commons.sort_descending')">
-                                        <font-awesome-icon :icon="['fas', 'sort-alpha-up']" />
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="field is-grouped is-justify-content-center pt-1">
-                            <div class="control">
-                                <div role="button" class="tags are-medium has-addons is-clickable" v-if="selectedAccounts.length > 0" @click="showGroupSelector = true">
-                                    <span class="tag is-dark">
-                                        {{ $t('groups.change_group') }}
-                                    </span>
-                                    <span class="tag is-link">
-                                        <font-awesome-icon :icon="['fas', 'layer-group']" />
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="control">
-                                <div role="button" class="tags are-medium has-addons is-clickable" v-if="selectedAccounts.length > 0" @click="destroyAccounts">
-                                    <span class="tag is-dark">
-                                        {{ $t('commons.delete') }}
-                                    </span>
-                                    <span class="tag is-danger">
-                                        <font-awesome-icon :icon="['fas', 'trash']" />
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div v-else class="column is-three-quarters-mobile is-one-third-tablet is-one-quarter-desktop is-one-quarter-widescreen is-one-quarter-fullhd">
-                    <!-- search -->
-                    <div class="field">
-                        <div class="control has-icons-right">
-                            <input id="txtSearch" type="search" tabindex="1" :aria-label="$t('commons.search')" :title="$t('commons.search')" class="input is-rounded is-search" v-model="search">
-                            <span class="icon is-small is-right">
-                                <font-awesome-icon :icon="['fas', 'search']"  v-if="!search" />
-                                <a class="delete" v-if="search" @click="search = '' "></a>
-                            </span>
-                        </div>
-                    </div>
-                    <!-- group switch toggle -->
-                    <div class="has-text-centered">
-                        <div class="columns">
-                            <div class="column" v-if="!showGroupSwitch">
-                                <button :title="$t('groups.show_group_selector')" tabindex="1" class="button is-text is-like-text" @click.stop="toggleGroupSwitch">
-                                    {{ activeGroupName }} ({{ filteredAccounts.length }})&nbsp;
-                                    <font-awesome-icon  :icon="['fas', 'caret-down']" />
-                                </button>
-                            </div>
-                            <div class="column" v-else>
-                                <button :title="$t('groups.hide_group_selector')" tabindex="1" class="button is-text is-like-text" @click.stop="toggleGroupSwitch">
-                                    {{ $t('groups.select_accounts_to_show') }}
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- modal -->
-        <modal v-model="showTwofaccountInModal">
-            <otp-displayer ref="OtpDisplayer"></otp-displayer>
-        </modal>
     </div>
 </template>
 
@@ -353,7 +359,6 @@
 
             // stop OTP generation on modal close
             this.$on('modalClose', function() {
-                console.log('modalClose triggered')
                 this.$refs.OtpDisplayer.clearOTP()
             });
 
@@ -416,21 +421,27 @@
             showAccount(account) {
                 // In Edit mode clicking an account do not show the otpDisplayer but select the account
                 if(this.editMode) {
-
-                    for (var i=0 ; i<this.selectedAccounts.length ; i++) {
-                        if ( this.selectedAccounts[i] === account.id ) {
-                            this.selectedAccounts.splice(i,1);
-                            return
-                        }
-                    }
-
-                    this.selectedAccounts.push(account.id)
+                    selectAccount(account.id)
                 }
                 else {
                     this.$refs.OtpDisplayer.show(account.id)
                 }
             },
 
+
+            /**
+             * Select an account while in edit mode
+             */
+            selectAccount(accountId) {
+                for (var i=0 ; i<this.selectedAccounts.length ; i++) {
+                    if ( this.selectedAccounts[i] === accountId ) {
+                        this.selectedAccounts.splice(i,1);
+                        return
+                    }
+                }
+
+                this.selectedAccounts.push(accountId)
+            },
 
             /**
              * Get a fresh OTP for the provided account

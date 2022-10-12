@@ -11,14 +11,14 @@
             <div class="column is-full quick-uploader-button" >
                 <div class="quick-uploader-centerer">
                     <!-- upload a qr code (with basic file field and backend decoding) -->
-                    <label v-if="$root.appSettings.useBasicQrcodeReader" class="button is-link is-medium is-rounded is-focused" ref="qrcodeInputLabel">
-                        <input class="file-input" type="file" accept="image/*" v-on:change="submitQrCode" ref="qrcodeInput">
+                    <label role="button" tabindex="0" v-if="$root.appSettings.useBasicQrcodeReader" class="button is-link is-medium is-rounded is-focused" ref="qrcodeInputLabel" @keyup.enter="$refs.qrcodeInputLabel.click()">
+                        <input aria-hidden="true" tabindex="-1" class="file-input" type="file" accept="image/*" v-on:change="submitQrCode" ref="qrcodeInput">
                         {{ $t('twofaccounts.forms.upload_qrcode') }}
                     </label>
                     <!-- scan button that launch camera stream -->
-                    <label v-else class="button is-link is-medium is-rounded is-focused" @click="capture()">
+                    <button v-else class="button is-link is-medium is-rounded is-focused is-double-focused" @click="capture()">
                         {{ $t('twofaccounts.forms.scan_qrcode') }}
-                    </label>
+                    </button>
                 </div>
             </div>
             <!-- alternative methods -->
@@ -26,8 +26,8 @@
                 <div class="block has-text-light">{{ $t('twofaccounts.forms.alternative_methods') }}</div>
                 <!-- upload a qr code -->
                 <div class="block has-text-link" v-if="!$root.appSettings.useBasicQrcodeReader">
-                    <label class="button is-link is-outlined is-rounded" ref="qrcodeInputLabel">
-                        <input class="file-input" type="file" accept="image/*" v-on:change="submitQrCode" ref="qrcodeInput">
+                    <label role="button" tabindex="0" class="button is-link is-outlined is-rounded" ref="qrcodeInputLabel" @keyup.enter="$refs.qrcodeInputLabel.click()">
+                        <input aria-hidden="true" tabindex="-1" class="file-input" type="file" accept="image/*" v-on:change="submitQrCode" ref="qrcodeInput">
                         {{ $t('twofaccounts.forms.upload_qrcode') }}
                     </label>
                 </div>

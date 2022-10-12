@@ -19,7 +19,7 @@
                     {{ $t('commons.delete') }}
                 </button>
                 <!-- edit link -->
-                <router-link :to="{ name: 'editGroup', params: { id: group.id, name: group.name }}" class="has-text-grey pl-1" :title="$t('commons.rename')">
+                <router-link :to="{ name: 'editGroup', params: { id: group.id, name: group.name }}" class="has-text-grey px-1" :title="$t('commons.rename')">
                     <font-awesome-icon :icon="['fas', 'pen-square']" />
                 </router-link>
                 <span class="is-family-primary is-size-6 is-size-7-mobile has-text-grey">{{ group.twofaccounts_count }} {{ $t('twofaccounts.accounts') }}</span>
