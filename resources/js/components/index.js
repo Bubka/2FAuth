@@ -13,6 +13,7 @@ import FormButtons      from './FormButtons'
 import VueFooter        from './Footer'
 import Kicker           from './Kicker'
 import SettingTabs      from './SettingTabs'
+import ResponsiveWidthWrapper from './ResponsiveWidthWrapper'
 
 // Components that are registered globaly.
 [
@@ -29,7 +30,8 @@ import SettingTabs      from './SettingTabs'
     FormButtons,
     VueFooter,
     Kicker,
-    SettingTabs
+    SettingTabs,
+    ResponsiveWidthWrapper
 ].forEach(Component => {
 	Vue.component(Component.name, Component)
 })
