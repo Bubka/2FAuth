@@ -9,8 +9,7 @@ class Helpers
     /**
      * Generate a unique filename
      * 
-     * @param string $ids twofaccount ids to delete
-     * 
+     * @param string $extension
      * @return string The filename
      */
     public static function getUniqueFilename(string $extension): string

@@ -21,7 +21,7 @@ class MigratorFactory implements MigratorFactoryInterface
      * @param string $migrationPayload The migration payload used to infer the migrator type
      * @return Migrator
      */
-    public function create($migrationPayload) : Migrator
+    public function create(string $migrationPayload) : Migrator
     {
         if ($this->isAegisJSON($migrationPayload)) {
             return App::make(AegisMigrator::class);
@@ -41,9 +41,12 @@ class MigratorFactory implements MigratorFactoryInterface
 
 
     /**
+     * Determine if a payload comes from Google Authenticator
      * 
+     * @param string $migrationPayload The payload to analyse
+     * @return bool
      */
-    private function isGoogleAuth($migrationPayload) : bool
+    private function isGoogleAuth(string $migrationPayload) : bool
     {
         // - Google Auth migration URI : a string starting with otpauth-migration://offline?data= on a single line
 
@@ -57,9 +60,12 @@ class MigratorFactory implements MigratorFactoryInterface
 
 
     /**
+     * Determine if a payload is a plain text content
      * 
+     * @param string $migrationPayload The payload to analyse
+     * @return bool
      */
-    private function isPlainText($migrationPayload) : bool
+    private function isPlainText(string $migrationPayload) : bool
     {
         // - Plain text : one or more otpauth URIs (otpauth://[t|h]otp/...), one per line
 
@@ -73,9 +79,12 @@ class MigratorFactory implements MigratorFactoryInterface
 
 
     /**
+     * Determine if a payload comes from Aegis Authenticator in JSON format
      * 
+     * @param string $migrationPayload The payload to analyse
+     * @return bool
      */
-    private function isAegisJSON($migrationPayload) : mixed
+    private function isAegisJSON(string $migrationPayload) : mixed
     {
         // - Aegis JSON : is a JSON object with the key db.entries full of objects like
         //      {
@@ -108,7 +117,7 @@ class MigratorFactory implements MigratorFactoryInterface
                         'db.entries.*.issuer' => 'required',
                         'db.entries.*.info' => 'required'
                     ]
-                ));
+                )) > 0;
             }
         }
 
@@ -117,9 +126,12 @@ class MigratorFactory implements MigratorFactoryInterface
 
 
     /**
+     * Determine if a payload comes from 2FAS Authenticator
      * 
+     * @param string $migrationPayload The payload to analyse
+     * @return bool
      */
-    private function is2FASv2($migrationPayload) : mixed
+    private function is2FASv2(string $migrationPayload) : mixed
     {
         // - 2FAS JSON : is a JSON object with the key 'schemaVersion' == 2 and a key 'services' full of objects like
         // {
@@ -156,7 +168,7 @@ class MigratorFactory implements MigratorFactoryInterface
                         'services.*.name' => 'required',
                         'services.*.otp' => 'required'
                     ]
-                ));
+                )) > 0;
             }
         }
 

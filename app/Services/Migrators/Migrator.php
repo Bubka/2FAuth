@@ -12,11 +12,14 @@ abstract class Migrator
      * @param  mixed  $migrationPayload
      * @return \Illuminate\Support\Collection The converted accounts
      */
-    abstract protected function migrate(mixed $migrationPayload) : Collection;
+    abstract public function migrate(mixed $migrationPayload) : Collection;
 
 
     /**
      * Pad a string to 8 chars min
+     * 
+     * @param string $string
+     * @return string The padded string
      */
     protected function padToValidBase32Secret(string $string)
     {

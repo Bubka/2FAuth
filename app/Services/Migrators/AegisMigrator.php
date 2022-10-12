@@ -49,6 +49,8 @@ class AegisMigrator extends Migrator
             throw new InvalidMigrationDataException('Aegis');
         }
 
+        $twofaccounts = array();
+
         foreach ($json['db']['entries'] as $key => $otp_parameters) {
 
             $parameters = array();
@@ -81,7 +83,6 @@ class AegisMigrator extends Migrator
                         
                         default:
                             throw new \Exception();
-                            break;
                     }
 
                     $filename = Helpers::getUniqueFilename($extension);

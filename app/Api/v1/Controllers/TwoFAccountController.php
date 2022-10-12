@@ -106,7 +106,7 @@ class TwoFAccountController extends Controller
      * Convert a migration resource to a valid TwoFAccounts collection
      *
      * @param  \App\Api\v1\Requests\TwoFAccountImportRequest  $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse|\App\Api\v1\Resources\TwoFAccountCollection
      */
     public function migrate(TwoFAccountImportRequest $request)
     {

@@ -80,6 +80,8 @@ class TwoFASMigrator extends Migrator
             Log::error('Aegis JSON migration data cannot be read');
             throw new InvalidMigrationDataException('2FAS Auth');
         }
+        
+        $twofaccounts = array();
 
         foreach ($json['services'] as $key => $otp_parameters) {
 

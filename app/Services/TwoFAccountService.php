@@ -10,7 +10,7 @@ use Illuminate\Support\Collection;
 class TwoFAccountService
 {
     /**
-     * @var $migrator The Migration service
+     * @var MigratorFactoryInterface $migratorFactory The Migration service
      */
     protected $migratorFactory;
 
@@ -50,11 +50,10 @@ class TwoFAccountService
     /**
      * Convert a migration payload to a set of TwoFAccount objects
      * 
-     * @param string $migrationUri migration uri provided by Google Authenticator export feature
-     * 
+     * @param string $migrationPayload Migration payload from 2FA apps export feature
      * @return \Illuminate\Support\Collection The converted accounts
      */
-    public function migrate($migrationPayload) : Collection
+    public function migrate(string $migrationPayload) : Collection
     {
         $migrator = $this->migratorFactory->create($migrationPayload);
         $twofaccounts = $migrator->migrate($migrationPayload);
@@ -67,7 +66,6 @@ class TwoFAccountService
      * Delete one or more twofaccounts
      * 
      * @param int|array|string $ids twofaccount ids to delete
-     * 
      * @return int The number of deleted
      */
     public static function delete($ids) : int
