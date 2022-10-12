@@ -5,24 +5,19 @@ namespace App\Events;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
-class ReleaseRadarActivated
+class ScanForNewReleaseCalled
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
-     * @var \App\Models\Group
-     */
-    // public $group;
-
-    /**
      * Create a new event instance.
      *
-     * @param  \App\Models\Group  $group
      * @return void
      */
     public function __construct()
     {
-        // $this->group = $group;
+        Log::info('ReleaseRadarActivated event dispatched');
     }
 }

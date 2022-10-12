@@ -4,7 +4,7 @@ namespace App\Providers;
 
 use App\Events\GroupDeleting;
 use App\Events\TwoFAccountDeleted;
-use App\Events\ReleaseRadarActivated;
+use App\Events\ScanForNewReleaseCalled;
 use App\Listeners\ReleaseRadar;
 use App\Listeners\CleanIconStorage;
 use App\Listeners\DissociateTwofaccountFromGroup;
@@ -29,7 +29,7 @@ class EventServiceProvider extends ServiceProvider
         GroupDeleting::class => [
             DissociateTwofaccountFromGroup::class,
         ],
-        ReleaseRadarActivated::class => [
+        ScanForNewReleaseCalled::class => [
             ReleaseRadar::class,
         ],
     ];

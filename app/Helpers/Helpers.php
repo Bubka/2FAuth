@@ -17,4 +17,10 @@ class Helpers
     {
         return Str::random(40).'.'.$extension;
     }
+
+
+    public static function cleanVersionNumber(?string $release): string|false
+    {
+        return preg_match('/([[0-9][0-9\.]*[0-9])/', $release, $version) ? $version[0] : false;
+    }
 }

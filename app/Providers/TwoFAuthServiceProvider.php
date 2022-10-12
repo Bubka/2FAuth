@@ -56,7 +56,7 @@ class TwoFAuthServiceProvider extends ServiceProvider implements DeferrableProvi
     {
         return [
             LogoService::class,
-            LogoSeReleaseRadarServicervice::class,
+            ReleaseRadarService::class,
         ];
     }
 }

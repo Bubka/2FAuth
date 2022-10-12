@@ -67,7 +67,7 @@ return [
         'getOfficialIcons' => true,
         'checkForUpdate' => true,
         'lastRadarScan' => 0,
-        'latestRelease' => '',
+        'latestRelease' => false,
     ],
 
 ];

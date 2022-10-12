@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Facades\Settings;
 use Illuminate\Support\Facades\App;
+use App\Events\ScanForNewReleaseCalled;
 
 class SinglePageController extends Controller
 {
@@ -15,6 +16,8 @@ class SinglePageController extends Controller
      */
     public function index()
     {
+        event(new ScanForNewReleaseCalled());
+
         return view('landing')->with([
             'appSettings' => Settings::all()->toJson(),
             'appConfig' => collect([

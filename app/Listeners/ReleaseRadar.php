@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Events\ReleaseRadarActivated;
+use App\Events\ScanForNewReleaseCalled;
 use App\Services\ReleaseRadarService;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
@@ -10,26 +10,33 @@ use Illuminate\Support\Facades\Log;
 class ReleaseRadar
 {
     /**
+     * @var ReleaseRadarService $releaseRadar
+     */
+    protected $releaseRadar;
+
+
+    /**
      * Create the event listener.
+     * 
+     * @param  \App\Services\ReleaseRadarService  $releaseRadar
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(ReleaseRadarService $releaseRadar)
     {
-        //
+        $this->releaseRadar = $releaseRadar;
     }
+
 
     /**
      * Handle the event.
      *
-     * @param  \App\Events\ReleaseRadarActivated  $event
+     * @param  \App\Events\ScanForNewReleaseCalled  $event
      * @return void
      */
-    public function handle(ReleaseRadarActivated $event)
+    public function handle(ScanForNewReleaseCalled $event)
     {
-        Log::info('Release radar activated');
-
-        $releaseRadarService = App::make(ReleaseRadarService::class);
-        $releaseRadarService->scanForNewRelease();
+        $this->releaseRadar->scheduledScan();
+        Log::info('Scheduled release scan complete');
     }
 }

@@ -762,6 +762,17 @@ footer .field.is-grouped {
   overflow-wrap: break-word;
 }
 
+.release-flag {
+  height: 0.5rem;
+  width: 0.5rem;
+  display: inline-block;
+  border: none;
+  border-radius: 50%;
+  background-color: $warning;
+  vertical-align: middle;
+  margin: 0 5px;
+}
+
 
 .fadeInOut-enter-active {
     animation: fadeIn 500ms

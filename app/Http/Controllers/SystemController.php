@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\ReleaseRadarActivated;
 use App\Services\ReleaseRadarService;
-use Illuminate\Support\Facades\App;
 use App\Http\Controllers\Controller;
 use App\Facades\Settings;
 use Illuminate\Http\Request;
@@ -20,23 +18,23 @@ class SystemController extends Controller
     public function infos(Request $request)
     {
         $infos = array();
-        $infos['Date']               = date(DATE_RFC2822);
-        $infos['userAgent']        = $request->header('user-agent');
+        $infos['Date']              = date(DATE_RFC2822);
+        $infos['userAgent']         = $request->header('user-agent');
         // App info
-        $infos['Version']          = config('2fauth.version');
-        $infos['Environment']          = config('app.env');
-        $infos['Debug']        = var_export(config('app.debug'), true);
-        $infos['Cache driver']     = config('cache.default');
-        $infos['Log channel']      = config('logging.default');
-        $infos['Log level']     = env('LOG_LEVEL');
-        $infos['DB driver']    = DB::getDriverName();
+        $infos['Version']           = config('2fauth.version');
+        $infos['Environment']       = config('app.env');
+        $infos['Debug']             = var_export(config('app.debug'), true);
+        $infos['Cache driver']      = config('cache.default');
+        $infos['Log channel']       = config('logging.default');
+        $infos['Log level']         = env('LOG_LEVEL');
+        $infos['DB driver']         = DB::getDriverName();
         // PHP info
-        $infos['PHP version'] = PHP_VERSION;
-        $infos['Operating system']      = PHP_OS;
-        $infos['interface']       = PHP_SAPI;
+        $infos['PHP version']       = PHP_VERSION;
+        $infos['Operating system']  = PHP_OS;
+        $infos['interface']         = PHP_SAPI;
         // Auth info
         if ($request->user()) {
-            $infos['Auth guard']        = config('auth.defaults.guard');
+            $infos['Auth guard']    = config('auth.defaults.guard');
             if ($infos['Auth guard'] === 'reverse-proxy-guard') {
                 $infos['Auth proxy header for user'] = config('auth.auth_proxy_headers.user');
                 $infos['Auth proxy header for email'] = config('auth.auth_proxy_headers.email');
@@ -46,7 +44,7 @@ class SystemController extends Controller
         }
         // User info
         if ($request->user()) {
-            $infos['options']     = Settings::all()->toArray();
+            $infos['options'] = Settings::all()->toArray();
         }
 
         return response()->json($infos);
@@ -58,11 +56,10 @@ class SystemController extends Controller
      * 
      * @return \Illuminate\Http\JsonResponse
      */
-    public function latestRelease(Request $request)
+    public function latestRelease(Request $request, ReleaseRadarService $releaseRadar)
     {
-        $releaseRadarService = App::make(ReleaseRadarService::class);
-        $release = $releaseRadarService->scanForRelease();
+        $release = $releaseRadar->manualScan();
 
-        return response()->json($release);
+        return response()->json(['newRelease' => $release]);
     }
 }

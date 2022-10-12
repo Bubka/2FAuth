@@ -3,33 +3,60 @@
 namespace App\Services;
 
 use App\Facades\Settings;
+use App\Helpers\Helpers;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class ReleaseRadarService
 {
     /**
+     * Run a scheduled release scan
      * 
+     * @return void
      */
-    public function scanForNewRelease() : void
+    public function scheduledScan() : void
     {
-        // Only if the last check is old enough
-        // if ((Settings::get('lastRadarScan') + 604800) < time()) {
-            if ($latestReleaseData = json_decode($this->GetLatestReleaseData()))
-            {
-                if ($latestReleaseData->prerelease == false && $latestReleaseData->draft == false) {
+        if ((Settings::get('lastRadarScan') + 604800) < time()) {
+            $this->newRelease();
+        }
+    }
 
-                    Settings::set('lastRadarScan', time());
-                    Settings::set('lastRadarScan', time());
-                }
+
+    /**
+     * Run a manual release scan
+     * 
+     * @return false|string False if no new release, the new release number otherwise
+     */
+    public function manualScan() : false|string
+    {
+        return $this->newRelease();
+    }
+
+    /**
+     * Run a release scan
+     * 
+     * @return false|string False if no new release, the new release number otherwise
+     */
+    protected function newRelease() : false|string
+    {
+        if ($latestReleaseData = json_decode($this->getLatestReleaseData()))
+        {
+            $githubVersion = Helpers::cleanVersionNumber($latestReleaseData->tag_name);
+            $installedVersion = Helpers::cleanVersionNumber(config('2fauth.version'));
+
+            if ($githubVersion > $installedVersion && $latestReleaseData->prerelease == false && $latestReleaseData->draft == false) {
+                Settings::set('latestRelease', $latestReleaseData->tag_name);
+                
+                return $latestReleaseData->tag_name;
+            }
+            else {
+                Settings::delete('latestRelease');
             }
 
-            return $latestReleaseData;
-        // }
+            Settings::set('lastRadarScan', time());
+        }
 
-        // tag_name
-        // prerelease
-        // draft
+        return false;
     }
 
 
@@ -38,9 +65,8 @@ class ReleaseRadarService
      * 
      * @return string|null
      */
-    protected function GetLatestReleaseData() : string|null
+    protected function getLatestReleaseData() : string|null
     {
-        return null;
         try {
             $response = Http::retry(3, 100)
                 ->get(config('2fauth.latestReleaseUrl'));
