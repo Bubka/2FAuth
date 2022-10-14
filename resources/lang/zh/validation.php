@@ -14,7 +14,7 @@ return [
     */
 
     'accepted' => '您必须接受 :attribute。',
-    'accepted_if' => ':attribute 只有在 :other 为 :value 时才可用',
+    'accepted_if' => ':attribute 只有在 :other 为 :value 时才有效',
     'active_url' => ':attribute 不是一个有效的网址。',
     'after' => ':attribute 必须要晚于 :date。',
     'after_or_equal' => ':attribute 必须要等于 :date 或更晚。',
@@ -37,7 +37,7 @@ return [
     'date_equals' => ':attribute 必须要等于 :date。',
     'date_format' => ':attribute 的格式必须为 :format。',
     'declined' => '您必须同意 :attribute.',
-    'declined_if' => ':attribute 在 :other 是 :value 时不可用.',
+    'declined_if' => ':attribute 在 :other 是 :value 时无效.',
     'different' => ':attribute 和 :other 必须不同。',
     'digits' => ':attribute 必须是 :digits 位数字。',
     'digits_between' => ':attribute 必须是介于 :min 和 :max 位的数字。',
@@ -128,7 +128,7 @@ return [
     'uuid' => ':attribute 必须是有效的 UUID。',
 
     'single' => '当使用 :attribute 时，它必须是此请求主体中的唯一参数',
-    'onlyCustomOtpWithUri' => 'The uri parameter must be provided alone or only in combination with the \'custom_otp\' parameter',
+    'onlyCustomOtpWithUri' => '"uri"参数仅应单独提供，或与"custom_otp"参数结合提供',
 
     /*
     |--------------------------------------------------------------------------

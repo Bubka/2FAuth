@@ -19,7 +19,7 @@ return [
     'webauthn' => 'WebAuthn',
     'tokens' => 'Tokens',
     'options' => 'Opciones',
-    'user_options' => 'User options',
+    'user_options' => 'Opciones de usuario',
     'confirm' => [
 
     ],
@@ -50,11 +50,15 @@ return [
         ],
         'show_otp_as_dot' => [
             'label' => 'Mostrar contraseñas generadas de un solo uso como punto',
-            'help' => 'Sustituya los carácteres de la contraseña generados por *** para asegurar la confidencialidad. No afecta a la función de copiar/pegar.'
+            'help' => 'Replace generated password caracters with *** to ensure confidentiality. Do not affect the copy/paste feature'
         ],
         'close_otp_on_copy' => [
-            'label' => 'Cerrar token después de copiarlo',
-            'help' => 'Cerrar automáticamente la ventana emergente mostrando el token generado después de haber sido copiado'
+            'label' => 'Close <abbr title="One-Time Password">OTP</abbr> after copy',
+            'help' => 'Clicking a generated password to copy it automatically hide it from the screen'
+        ],
+        'copy_otp_on_display' => [
+            'label' => 'Copy <abbr title="One-Time Password">OTP</abbr> on display',
+            'help' => 'Automatically copy a generated password right after it appears on screen. Due to browsers limitations, only the first <abbr title="Time-based One-Time Password">TOTP</abbr> password will be copied, not the rotating ones'
         ],
         'use_basic_qrcode_reader' => [
             'label' => 'Usar lector de código QR básico',
@@ -71,8 +75,8 @@ return [
             'help' => 'Mostar iconos de aplicaciones en la vista principal'
         ],
         'get_official_icons' => [
-            'label' => 'Get official icons',
-            'help' => '(Try to) Get the official icon of the 2FA issuer when adding an account'
+            'label' => 'Obtener iconos oficiales',
+            'help' => '(Intentar) Obtener el icono oficial del emisor 2FA al añadir una cuenta'
         ],
         'auto_lock' => [
             'label' => 'Bloqueo automático',

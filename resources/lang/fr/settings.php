@@ -46,19 +46,19 @@ return [
         'help_translate_2fauth' => 'Aidez à traduire 2FAuth',
         'language' => [
             'label' => 'Langue',
-            'help' => 'Langue utilisée pour traduire l\'interface utilisateur de 2FAuth. Les langues proposées sont complètes, vous pouvez les utiliser pour remplacer la langue de référence de votre navigateur'
+            'help' => 'Langue utilisée pour traduire l\'interface utilisateur de 2FAuth. Les langues proposées sont complètes, vous pouvez les utiliser pour remplacer la langue de référence de votre navigateur.'
         ],
         'show_otp_as_dot' => [
-            'label' => 'Masquer les mots de passe',
-            'help' => 'Remplace les caractères des mots de passe générés par des ●●● pour garantir leur confidentialité. N\'affecte pas la fonction de copier/coller qui reste utilisable'
+            'label' => 'Afficher les mots de passe générés sous forme de point',
+            'help' => 'Remplace les caractères des mots de passe générés par des ●●● pour garantir leur confidentialité. N\'affecte pas la fonction de copier/coller qui reste utilisable.'
         ],
         'close_otp_on_copy' => [
-            'label' => 'Cacher les mots de passe copiés',
-            'help' => 'Les mots de passe qui viennent d\'être copiés via un click ne restent pas visibles à l\'écran'
+            'label' => 'Cacher les mots de passe <abbr title="One-Time Password">OTP</abbr> copiés',
+            'help' => 'Les mots de passe qui viennent d\'être copiés ne restent pas visibles à l\'écran'
         ],
         'copy_otp_on_display' => [
-            'label' => 'Copier le mot de passe dès qu\'il s\'affiche',
-            'help' => 'Copie automatiquement dans le presse-papier un mot de passe qui vient de s\'afficher à l\'écran. A cause de restrictions des navigateurs, seul le premier mot de passe TOTP à s\'afficher est copié, pas les mots de passe successifs.'
+            'label' => 'Copier le mot de passe <abbr title="One-Time Password">OTP</abbr> dès qu\'il s\'affiche',
+            'help' => 'Copie automatiquement dans le presse-papier un mot de passe qui vient de s\'afficher à l\'écran. A cause de restrictions des navigateurs, seul le premier mot de passe <abbr title="Time-based One-Time Password">TOTP</abbr> à s\'afficher est copié, pas les mots de passe successifs'
         ],
         'use_basic_qrcode_reader' => [
             'label' => 'Utiliser le lecteur de QR code basique',

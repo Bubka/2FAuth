@@ -17,12 +17,19 @@ return [
     'account' => 'Compte',
     'accounts' => 'Comptes',
     'icon' => 'Icône',
+    'icon_for_account_x_at_service_y' => 'Icône du compte {account} sur {service}',
+    'icon_to_illustrate_the_account' => 'Icône qui illustre le compte',
+    'remove_icon' => 'Supprimer l\'icône',
     'no_account_here' => 'Aucun compte 2FA !',
-    'add_first_account' => 'Ajouter votre premier compte',
+    'add_first_account' => 'Choisissez une méthode et ajoutez votre premier compte',
     'use_full_form' => 'Ou utiliser le formulaire détaillé',
     'add_one' => 'Add one',
     'show_qrcode' => 'Afficher le QR code',
     'no_service' => '- aucun service -',
+    'account_created' => 'Compte créé avec succès',
+    'account_updated' => 'Compte mis à jour avec succès',
+    'accounts_deleted' => 'Compte·s supprimé·s avec succès',
+    'accounts_moved' => 'Compte·s déplacé·s avec succès',
     'forms' => [
         'service' => [
             'placeholder' => 'Google, Twitter, Apple',
@@ -59,8 +66,8 @@ return [
         ],
         'plain_text' => 'Texte brut',
         'otp_type' => [
-            'label' => 'Choisissez le type d\'OTP à créer',
-            'help' => 'Time-based OTP ou HMAC-based OTP'
+            'label' => 'Choisissez le type d\'<abbr title="One-Time Password">OTP</abbr> à créer',
+            'help' => 'Time-based OTP ou HMAC-based OTP ou Steam OTP'
         ],
         'digits' => [
             'label' => 'Nombre de chiffres',
@@ -127,8 +134,14 @@ return [
     'import' => [
         'import' => 'Import',
         'to_import' => 'Importer',
-        'import_legend' => 'Importez vos comptes Google Authenticator.',
-        'use_the_gauth_qr_code' => 'Charger un QR code G-Auth',
+        'import_legend' => '2FAuth peut importer les données de diverses applications 2FA.<br />Utilisez la fonction d\'exportation de ces applications pour obtenir une ressource de migration (un code QR ou un fichier) et chargez-la via une de ces méthodes.',
+        'upload' => 'Upload',
+        'scan' => 'Scan',
+        'supported_formats_for_qrcode_upload' => 'Accepté : jpg, jpeg, png, bmp, gif, svg, ou webp',
+        'supported_formats_for_file_upload' => 'Accepté : Texte brut, json, 2fas',
+        'supported_migration_formats' => 'Formats de migration supportés',
+        'qr_code' => 'QR Code',
+        'plain_text' => 'Texte brut',
         'issuer' => 'Émetteur',
         'imported' => 'Importé',
         'failure' => 'Échec',
@@ -140,6 +153,9 @@ return [
         'discard_this_account' => 'Retirer ce compte',
         'generate_a_test_password' => 'Générer un mot de passe de test',
         'possible_duplicate' => 'Un compte avec les mêmes informations existe déjà',
+        'invalid_account' => '- compte non valide -',
+        'invalid_service' => '- service non valide -',
+        'do_not_set_password_or_encryption' => 'Ne définissez PAS de mot de passe ou de chiffrement lorsque vous exportez des données à partir d\'une application 2FA.',
     ],
 
 ];

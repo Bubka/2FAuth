@@ -38,7 +38,9 @@ return [
     'locales' => [
         'en',
         'fr',
-        'de'
+        'de',
+        'zh',
+        'es'
     ],
 
     /*

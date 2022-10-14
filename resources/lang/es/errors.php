@@ -22,7 +22,7 @@ return [
     'Unable_to_decrypt_uri' => 'No se puede descifrar uri',
     'not_a_supported_otp_type' => 'Este formato OTP no está soportado actualmente',
     'cannot_create_otp_without_secret' => 'No se puede crear un OTP sin una clave secreta',
-    'data_of_qrcode_is_not_valid_URI' => 'Los datos de este código QR no son una URI OTP de autenticación válida:',
+    'data_of_qrcode_is_not_valid_URI' => 'The data of this QR code is not a valid OTP Auth URI. The QR code contains:',
     'wrong_current_password' => 'Contraseña actual incorrecta, no ha cambiado nada',
     'error_during_encryption' => 'El cifrado falló, la base de datos permanece sin protección.',
     'error_during_decryption' => 'El descifrado falló, su base de datos todavía está protegida. Esto se debe, principalmente, a un problema de integridad de datos cifrados para una o más cuentas.',
@@ -31,7 +31,7 @@ return [
     'delete_user_setting_only' => 'Sólo los ajustes creados por el usuario pueden ser eliminados',
     'indecipherable' => '*indescifrable*',
     'cannot_decipher_secret' => 'The clave secreta no puede ser descifrada. Esto es, principalmente, causado por una APP_KEY inválida en el archivo de configuración .env de 2FAuth, o datos corruptos almacenados en la base de datos.',
-    'https_required' => 'Requerido HTTPS Contexto',
+    'https_required' => 'Contexto HTTPS requerido',
     'browser_does_not_support_webauthn' => 'Su dispositivo no soporta WebAuthn. Intente de nuevo más tarde en un navegador más moderno',
     'aborted_by_user' => 'Abortado por el usuario',
     'security_device_unsupported' => 'Dispositivo de seguridad no soportado',
@@ -39,7 +39,11 @@ return [
     'user_deletion_failed' => 'Error al borrar la cuenta de usuario, no se han eliminado datos',
     'auth_proxy_failed' => 'La autenticación proxy falló',
     'auth_proxy_failed_legend' => '2FAuth está configurado para ejecutarse detrás de un proxy de autenticación, pero, su proxy no devuelve el encabezado esperado. Compruebe su configuración e intente de nuevo.',
-    'invalid_google_auth_migration' => 'Datos no válidos o ilegibles de Google Authenticator',
+    'invalid_x_migration' => 'Invalid or unreadable :appname data',
+    'invalid_2fa_data' => 'Invalid 2FA data',
+    'unsupported_migration' => 'Data do not match any supported format',
     'unsupported_otp_type' => 'Tipo de OTP no soportada',
-    'no_logo_found_for_x' => 'No logo available for {service}'
+    'encrypted_migration' => 'Unreadable, the data seem encrypted',
+    'no_logo_found_for_x' => 'Logo no disponible para {service}',
+    'file_upload_failed' => 'File upload failed'
 ];

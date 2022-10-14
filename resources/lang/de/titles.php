@@ -45,5 +45,5 @@ return [
     'flooded' => 'Überschwemmung',
     'genericError' => 'Fehler',
     '404' => 'Artikel nicht gefunden',
-    'about' => 'About',
+    'about' => 'Über',
 ];

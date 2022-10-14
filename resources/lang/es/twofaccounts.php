@@ -17,12 +17,19 @@ return [
     'account' => 'Cuenta',
     'accounts' => 'Cuentas',
     'icon' => 'Icono',
+    'icon_for_account_x_at_service_y' => 'Icon of the {account} account at {service}',
+    'icon_to_illustrate_the_account' => 'Icon that illustrates the account',
+    'remove_icon' => 'Remove icon',
     'no_account_here' => '¡No hay 2FA aquí!',
-    'add_first_account' => 'Agrega tu primera cuenta',
+    'add_first_account' => 'Pick a method and add your first account',
     'use_full_form' => 'O usa el formulario completo',
     'add_one' => 'Agregar uno',
     'show_qrcode' => 'Muestra el código QR',
     'no_service' => '- sin servicio -',
+    'account_created' => 'Account successfully created',
+    'account_updated' => 'Account successfully updated',
+    'accounts_deleted' => 'Account(s) successfully deleted',
+    'accounts_moved' => 'Account(s) successfully moved',
     'forms' => [
         'service' => [
             'placeholder' => 'Google, Twitter, Apple',
@@ -49,9 +56,9 @@ return [
             'val' => 'Bloquear',
             'title' => 'Bloquearlo',
         ],
-        'choose_image' => 'Upload',
-        'i_m_lucky' => 'I\'m lucky',
-        'i_m_lucky_legend' => 'The "I\'m lucky" button try to get the official icon of the given service. Enter actual service name without ".xyz" extension and try to avoid typo. (beta feature)',
+        'choose_image' => 'Subir',
+        'i_m_lucky' => 'Tengo suerte',
+        'i_m_lucky_legend' => 'El botón "Tengo suerte" intenta obtener el icono oficial del servicio dado. Introduzca el nombre del servicio sin la extensión ".xyz" e intente evitar errores tipográficos. (función beta)',
         'test' => 'Test',
         'secret' => [
             'label' => 'Secreto',
@@ -59,8 +66,8 @@ return [
         ],
         'plain_text' => 'Texto plano',
         'otp_type' => [
-            'label' => 'Elija el tipo de OTP a crear',
-            'help' => 'OTP basado en tiempo, u OTP basado en HMAC'
+            'label' => 'Choose the type of <abbr title="One-Time Password">OTP</abbr> to create',
+            'help' => 'Time-based OTP or HMAC-based OTP or Steam OTP'
         ],
         'digits' => [
             'label' => 'Dígitos',
@@ -127,8 +134,14 @@ return [
     'import' => [
         'import' => 'Import',
         'to_import' => 'Importar',
-        'import_legend' => 'Importe sus cuentas de Google Authenticator.',
-        'use_the_gauth_qr_code' => 'Carga un código QR de G-Auth',
+        'import_legend' => '2FAuth can import data from various 2FA apps.<br />Use the Export feature of these apps to get a migration resource (a QR code or a file) and load it using your preferred method below.',
+        'upload' => 'Upload',
+        'scan' => 'Scan',
+        'supported_formats_for_qrcode_upload' => 'Accepted: jpg, jpeg, png, bmp, gif, svg, or webp',
+        'supported_formats_for_file_upload' => 'Accepted: Plain text, json, 2fas',
+        'supported_migration_formats' => 'Supported migration formats',
+        'qr_code' => 'QR Code',
+        'plain_text' => 'Plain text',
         'issuer' => 'Emisor',
         'imported' => 'Importado',
         'failure' => 'Fallo',
@@ -140,6 +153,9 @@ return [
         'discard_this_account' => 'Descartar esta cuenta',
         'generate_a_test_password' => 'Generar una contraseña de prueba',
         'possible_duplicate' => 'Ya existe una cuenta con exactamente los mismos datos',
+        'invalid_account' => '- invalid account -',
+        'invalid_service' => '- invalid service -',
+        'do_not_set_password_or_encryption' => 'Do NOT set a password or encryption On when you export data from a 2FA app.',
     ],
 
 ];

@@ -14,7 +14,7 @@ return [
     */
 
     'accepted' => ':attribute muss akzeptiert werden.',
-    'accepted_if' => 'The :attribute must be accepted when :other is :value.',
+    'accepted_if' => 'Das :attribute muss akzeptiert werden, wenn :other :value ist.',
     'active_url' => ':attribute ist keine gültige Internet-Adresse.',
     'after' => ':attribute muss ein Datum nach dem :date sein.',
     'after_or_equal' => ':attribute muss ein Datum nach dem :date oder gleich dem :date sein.',
@@ -36,7 +36,7 @@ return [
     'date' => ':attribute muss ein gültiges Datum sein.',
     'date_equals' => ':attribute muss ein Datum gleich :date sein.',
     'date_format' => ':attribute entspricht nicht dem gültigen Format für :format.',
-    'declined' => 'The :attribute must be declined.',
+    'declined' => 'Das :attribute muss abgelehnt werden.',
     'declined_if' => 'The :attribute must be declined when :other is :value.',
     'different' => ':attribute und :other müssen sich unterscheiden.',
     'digits' => ':attribute muss :digits Stellen haben.',
@@ -143,10 +143,10 @@ return [
 
     'custom' => [
         'icon' => [
-            'image' => 'Supported format are jpeg, png, bmp, gif, svg, or webp.',
+            'image' => 'Unterstützte Formate sind jpeg, png, bmp, gif, svg oder webp.',
         ],
         'qrcode' => [
-            'image' => 'Supported format are jpeg, png, bmp, gif, svg, or webp.',
+            'image' => 'Unterstützte Formate sind jpeg, png, bmp, gif, svg oder webp.',
         ],
         'uri' => [
             'regex' => 'The :attribute is not a valid otpauth uri.',

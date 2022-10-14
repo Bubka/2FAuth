@@ -19,7 +19,7 @@ return [
     'webauthn' => 'WebAuthn',
     'tokens' => 'Token',
     'options' => 'Einstellungen',
-    'user_options' => 'User options',
+    'user_options' => 'Benutzeroptionen',
     'confirm' => [
 
     ],
@@ -28,33 +28,37 @@ return [
     'profile' => 'Profil',
     'change_password' => 'Passwort ändern',
     'personal_access_tokens' => 'Persönliche Zugriffsstokens',
-    'token_legend' => 'Personal Access Tokens allow any app to authenticate to the 2Fauth API. You should specify the access token as a Bearer token in the authorization header of consumer apps requests.',
+    'token_legend' => 'Persönliche Zugriffstoken ermöglichen es jeder Anwendung, sich bei der 2Fauth-API zu authentifizieren. Sie sollten das Zugriffs-Token als Bearer-Token im Autorisierungs-Header der Anfragen von Verbraucher-Apps angeben.',
     'generate_new_token' => 'Neuen Token generieren',
     'revoke' => 'Zurückziehen',
-    'token_revoked' => 'Token successfully revoked',
-    'revoking_a_token_is_permanent' => 'Revoking a token is permanent',
+    'token_revoked' => 'Token erfolgreich widerrufen',
+    'revoking_a_token_is_permanent' => 'Widerruf eines Token ist dauerhaft',
     'confirm' => [
-        'revoke' => 'Are you sure you want to revoke this token?',
+        'revoke' => 'Sind Sie sicher, dass Sie diesen Token widerrufen möchten?',
     ],
-    'make_sure_copy_token' => 'Make sure to copy your personal access token now. You won’t be able to see it again!',
+    'make_sure_copy_token' => 'Kopieren Sie Ihren persönlichen Zugangs-Token jetzt. Sie werden ihn nicht mehr sehen können!',
     'data_input' => 'Daten-Eingabe',
     'forms' => [
         'edit_settings' => 'Einstellungen bearbeiten',
         'setting_saved' => 'Einstellungen gespeichert',
         'new_token' => 'Neues Token',
-        'some_translation_are_missing' => 'Some translations are missing using the browser preferred language?',
-        'help_translate_2fauth' => 'Help translate 2FAuth',
+        'some_translation_are_missing' => 'Einige Übersetzungen fehlen bei Verwendung der bevorzugten Sprache des Browsers?',
+        'help_translate_2fauth' => 'Hilf 2FAuth zu übersetzen',
         'language' => [
             'label' => 'Sprache',
-            'help' => 'Language used to translate the 2FAuth user interface. Named languages are complete, set the one of your choice to override your browser preference.'
+            'help' => 'Sprache, die zur Übersetzung der 2FAuth-Benutzeroberfläche verwendet wird. Benannte Sprachen sind vollständig, stellen Sie die Sprache Ihrer Wahl ein, um Ihre Browserpräferenz zu überschreiben.'
         ],
         'show_otp_as_dot' => [
-            'label' => 'Show generated one-time passwords as dot',
-            'help' => 'Replace generated password caracters with *** to ensure confidentiality. Do not affect the copy/paste feature.'
+            'label' => 'Generierte Einmalpasswörter als Punkte anzeigen',
+            'help' => 'Replace generated password caracters with *** to ensure confidentiality. Do not affect the copy/paste feature'
         ],
         'close_otp_on_copy' => [
-            'label' => 'OTP nach der Kopie schließen',
-            'help' => 'Automatically close the popup showing the generated password after it has been copied'
+            'label' => 'Close <abbr title="One-Time Password">OTP</abbr> after copy',
+            'help' => 'Clicking a generated password to copy it automatically hide it from the screen'
+        ],
+        'copy_otp_on_display' => [
+            'label' => 'Copy <abbr title="One-Time Password">OTP</abbr> on display',
+            'help' => 'Automatically copy a generated password right after it appears on screen. Due to browsers limitations, only the first <abbr title="Time-based One-Time Password">TOTP</abbr> password will be copied, not the rotating ones'
         ],
         'use_basic_qrcode_reader' => [
             'label' => 'Benutze den einfachen QR-Codeleser',
@@ -71,12 +75,12 @@ return [
             'help' => 'Kontosymbole in der Hauptansicht anzeigen'
         ],
         'get_official_icons' => [
-            'label' => 'Get official icons',
-            'help' => '(Try to) Get the official icon of the 2FA issuer when adding an account'
+            'label' => 'Offizielle Icons erhalten',
+            'help' => '(Versuch) Das offizielle Symbol des 2FA-Ausstellers beim Hinzufügen eines Kontos zu erhalten'
         ],
         'auto_lock' => [
             'label' => 'Automatische Sperrung',
-            'help' => 'Log out the user automatically in case of inactivity. Has no effect when authentication is handled by a proxy and no custom logout url is specified.'
+            'help' => 'Meldet den Benutzer bei Inaktivität automatisch ab. Hat keine Auswirkung, wenn die Authentifizierung über einen Proxy erfolgt und keine benutzerdefinierte Logout-URL angegeben ist.'
         ],
         'use_encryption' => [
             'label' => 'Sensible Daten schützen',

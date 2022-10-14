@@ -17,12 +17,19 @@ return [
     'account' => 'Benutzerkonto',
     'accounts' => 'Benutzerkonten',
     'icon' => 'Symbol',
+    'icon_for_account_x_at_service_y' => 'Icon of the {account} account at {service}',
+    'icon_to_illustrate_the_account' => 'Icon that illustrates the account',
+    'remove_icon' => 'Remove icon',
     'no_account_here' => 'Noch keine 2FA!',
-    'add_first_account' => 'Erstes Konto hinzufügen',
+    'add_first_account' => 'Pick a method and add your first account',
     'use_full_form' => 'Oder nutzen Sie das vollständige Formular',
     'add_one' => 'Konto hinzufügen',
     'show_qrcode' => 'QR-Code anzeigen',
     'no_service' => '- kein Service -',
+    'account_created' => 'Account successfully created',
+    'account_updated' => 'Account successfully updated',
+    'accounts_deleted' => 'Account(s) successfully deleted',
+    'accounts_moved' => 'Account(s) successfully moved',
     'forms' => [
         'service' => [
             'placeholder' => 'Google, Twitter, Apple',
@@ -49,9 +56,9 @@ return [
             'val' => 'Sperren',
             'title' => 'Sperren',
         ],
-        'choose_image' => 'Upload',
-        'i_m_lucky' => 'I\'m lucky',
-        'i_m_lucky_legend' => 'The "I\'m lucky" button try to get the official icon of the given service. Enter actual service name without ".xyz" extension and try to avoid typo. (beta feature)',
+        'choose_image' => 'Hochladen',
+        'i_m_lucky' => 'Ich habe Glück',
+        'i_m_lucky_legend' => 'Mit der Schaltfläche "Ich habe Glück" wird versucht, das offizielle Symbol des jeweiligen Dienstes zu erhalten. Geben Sie den tatsächlichen Namen des Dienstes ohne die Erweiterung ".xyz" ein und versuchen Sie, Tippfehler zu vermeiden (Beta-Funktion).',
         'test' => 'Test',
         'secret' => [
             'label' => 'Geheimnis',
@@ -59,8 +66,8 @@ return [
         ],
         'plain_text' => 'Klartext',
         'otp_type' => [
-            'label' => 'Wählen Sie die Art des zu erstellenden OTP',
-            'help' => 'Zeit- oder HMAC-basiertes OTP'
+            'label' => 'Choose the type of <abbr title="One-Time Password">OTP</abbr> to create',
+            'help' => 'Time-based OTP or HMAC-based OTP or Steam OTP'
         ],
         'digits' => [
             'label' => 'Ziffern',
@@ -79,12 +86,12 @@ return [
             'label' => 'Zähler',
             'placeholder' => 'Standard ist 0',
             'help' => 'Der Zählerwert am Anfang',
-            'help_lock' => 'It is risky to edit the counter as you can desynchronize the account with the verification server of the service. Use the lock icon to enable modification, but only if you know for you are doing'
+            'help_lock' => 'Es ist riskant, den Zähler zu ändern, da Sie das Konto mit dem Verifizierungsserver des Dienstes desynchronisieren können. Verwenden Sie das Schlosssymbol, um Änderungen zu ermöglichen, aber nur, wenn Sie wissen, was Sie tun'
         ],
         'image' => [
             'label' => 'Bild',
             'placeholder' => 'http://...',
-            'help' => 'The url of an external image to use as the account icon'
+            'help' => 'Die Url eines externen Bildes, das als Kontosymbol verwendet werden soll'
         ],
         'options_help' => 'Sie können die folgenden Einstellungen leer lassen, wenn Sie nicht wissen, wie Sie sie einstellen. In dem Fall werden die Standardwerte verwendet.',
         'alternative_methods' => 'Alternative Methoden',
@@ -101,7 +108,7 @@ return [
         ],
         'no_cam_on_device' => [
             'reason' => 'Keine Kamera in diesem Gerät',
-            'solution' => 'Maybe you forgot to plug in your webcam'
+            'solution' => 'Vielleicht haben Sie vergessen, Ihre Webcam anzuschließen'
         ],
         'secured_context_required' => [
             'reason' => 'Sichere Umgebung erforderlich',
@@ -120,15 +127,21 @@ return [
     'confirm' => [
         'delete' => 'Sind Sie sicher, dass Sie dieses Konto löschen möchten?',
         'cancel' => 'Das Konto wird gelöscht. Sind Sie sicher?',
-        'discard' => 'Are you sure you want to discard this account?',
-        'discard_all' => 'Are you sure you want to discard all accounts?',
+        'discard' => 'Sind Sie sicher, dass Sie dieses Konto auflösen wollen?',
+        'discard_all' => 'Sind Sie sicher, dass Sie alle Konten verwerfen wollen?',
         'discard_duplicates' => 'Möchten Sie wirklich alle Duplikate wegwerfen?',
     ],
     'import' => [
         'import' => 'Import',
         'to_import' => 'Import',
-        'import_legend' => 'Importieren Sie Ihre Google Authenticator-Konten.',
-        'use_the_gauth_qr_code' => 'Laden ein G-Auth QR code',
+        'import_legend' => '2FAuth can import data from various 2FA apps.<br />Use the Export feature of these apps to get a migration resource (a QR code or a file) and load it using your preferred method below.',
+        'upload' => 'Upload',
+        'scan' => 'Scan',
+        'supported_formats_for_qrcode_upload' => 'Accepted: jpg, jpeg, png, bmp, gif, svg, or webp',
+        'supported_formats_for_file_upload' => 'Accepted: Plain text, json, 2fas',
+        'supported_migration_formats' => 'Supported migration formats',
+        'qr_code' => 'QR Code',
+        'plain_text' => 'Plain text',
         'issuer' => 'Aussteller',
         'imported' => 'Importiert',
         'failure' => 'Fehler',
@@ -140,6 +153,9 @@ return [
         'discard_this_account' => 'Dieses Konto wegwerfen',
         'generate_a_test_password' => 'Ein Testpasswort generieren',
         'possible_duplicate' => 'Ein Konto mit der gleichen Daten ist bereits vorhanden',
+        'invalid_account' => '- invalid account -',
+        'invalid_service' => '- invalid service -',
+        'do_not_set_password_or_encryption' => 'Do NOT set a password or encryption On when you export data from a 2FA app.',
     ],
 
 ];

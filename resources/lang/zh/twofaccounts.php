@@ -17,18 +17,25 @@ return [
     'account' => '账户',
     'accounts' => '账户',
     'icon' => '图标',
+    'icon_for_account_x_at_service_y' => '{account} 在 {service} 的帐户图标',
+    'icon_to_illustrate_the_account' => '说明账户的图标',
+    'remove_icon' => '移除图标',
     'no_account_here' => '这里没有两步验证！',
-    'add_first_account' => '添加您的第一个帐户',
+    'add_first_account' => '选择一个方法并添加您的第一个帐户',
     'use_full_form' => '或者使用完整的表单',
     'add_one' => '添加一个',
     'show_qrcode' => '显示 QR 码',
     'no_service' => '- 无服务 -',
+    'account_created' => '帐户成功创建',
+    'account_updated' => '账户成功更新',
+    'accounts_deleted' => '帐户成功删除',
+    'accounts_moved' => '帐户成功移动',
     'forms' => [
         'service' => [
-            'placeholder' => 'Google, Twitter, Apple',
+            'placeholder' => '谷歌, 推特, 苹果',
         ],
         'account' => [
-            'placeholder' => 'John DOE',
+            'placeholder' => '李华',
         ],
         'new_account' => '新建账户',
         'edit_account' => '编辑账户',
@@ -49,9 +56,9 @@ return [
             'val' => '锁定',
             'title' => '将其锁定',
         ],
-        'choose_image' => 'Upload',
-        'i_m_lucky' => 'I\'m lucky',
-        'i_m_lucky_legend' => 'The "I\'m lucky" button try to get the official icon of the given service. Enter actual service name without ".xyz" extension and try to avoid typo. (beta feature)',
+        'choose_image' => '上传',
+        'i_m_lucky' => '手气不错',
+        'i_m_lucky_legend' => '"手气不错"按钮会尝试获取指定服务的官方图标。输入实际的英文服务名（不带后缀）并避免输入错误。(测试中的功能)',
         'test' => '测试',
         'secret' => [
             'label' => '密钥',
@@ -59,8 +66,8 @@ return [
         ],
         'plain_text' => '纯文本',
         'otp_type' => [
-            'label' => '选择要创建的 OTP 类型',
-            'help' => '基于时间的OTP或基于HMAC的OTP'
+            'label' => '选择要创建的 <abbr title="One-Time Password">OTP</abbr> 类型',
+            'help' => '基于 时间的OTP(TOTP) 或 基于HMAC的OTP(HMAC-based OTP) 或 Steam OTP'
         ],
         'digits' => [
             'label' => '码长',
@@ -78,68 +85,77 @@ return [
         'counter' => [
             'label' => '计数器',
             'placeholder' => '默认为0',
-            'help' => 'The initial counter value',
-            'help_lock' => 'It is risky to edit the counter as you can desynchronize the account with the verification server of the service. Use the lock icon to enable modification, but only if you know for you are doing'
+            'help' => '初始计数器值',
+            'help_lock' => '编辑计数器是危险的，因为您可能使帐户与服务的验证服务器失去同步。点击锁的图标可启用更改，但只应在您知道您在做什么时使用'
         ],
         'image' => [
-            'label' => 'Image',
+            'label' => '图像',
             'placeholder' => 'http://...',
-            'help' => 'The url of an external image to use as the account icon'
+            'help' => '作为帐户图标的 URL'
         ],
-        'options_help' => 'You can leave the following options blank if you don\'t know how to set them. The most commonly used values will be applied.',
-        'alternative_methods' => 'Alternative methods',
+        'options_help' => '如果您不知道如何填写，您可以将下列选项留空。将会应用最常见的设置。',
+        'alternative_methods' => '备选方法',
     ],
     'stream' => [
-        'live_scan_cant_start' => 'Live scan can\'t start :(',
+        'live_scan_cant_start' => '扫描无法开始 :(',
         'need_grant_permission' => [
-            'reason' => '2FAuth does not have permission to access your camera',
-            'solution' => 'You need to grant permission to use your device camera. If you already denied and your browser do not prompt you again, please refers to the browser documentation to find out how to grant permission.'
+            'reason' => '2FAuth 没有权限访问您的相机',
+            'solution' => '您需要授予权限才能使用您的设备相机。 如果您已经拒绝，且您的浏览器不会再次提示您，请参考浏览器文档以了解如何授予权限。'
         ],
         'not_readable' => [
-            'reason' => 'Fail to load scanner',
-            'solution' => 'Is the camera already in use? Ensure that no other app use your camera and try again'
+            'reason' => '载入扫描仪失败',
+            'solution' => '摄像头是否已在使用？请确保没有其他应用使用您的摄像头并重试'
         ],
         'no_cam_on_device' => [
-            'reason' => 'No camera on this device',
-            'solution' => 'Maybe you forgot to plug in your webcam'
+            'reason' => '此设备上没有摄像头',
+            'solution' => '也许你忘了插上你的摄像头'
         ],
         'secured_context_required' => [
-            'reason' => 'Secure context required',
-            'solution' => 'HTTPS is required for live scan. If you run 2FAuth from your computer, do not use virtual host other than localhost'
+            'reason' => '需要安全上下文',
+            'solution' => '实时扫描需要HTTPS。如果您从计算机运行2FAuth，请不要使用localhost以外的虚拟主机'
         ],
-        'https_required' => 'HTTPS required for camera streaming',
+        'https_required' => '摄像机需要 HTTPS',
         'camera_not_suitable' => [
-            'reason' => 'Installed cameras are not suitable',
-            'solution' => 'Please use another device/camera'
+            'reason' => '已安装的摄像头不合适。',
+            'solution' => '请使用其他摄像头或更换设备'
         ],
         'stream_api_not_supported' => [
-            'reason' => 'Stream API is not supported in this browser',
-            'solution' => 'You should use a modern browser'
+            'reason' => '此浏览器不支持 Stream API',
+            'solution' => '您应该使用一个现代浏览器'
         ],
     ],
     'confirm' => [
-        'delete' => 'Are you sure you want to delete this account?',
-        'cancel' => 'The account will be lost. Are you sure?',
-        'discard' => 'Are you sure you want to discard this account?',
-        'discard_all' => 'Are you sure you want to discard all accounts?',
-        'discard_duplicates' => 'Are you sure you want to discard all duplicates?',
+        'delete' => '你确定要删除这个账户吗？',
+        'cancel' => '帐户将丢失。您确定吗？',
+        'discard' => '您确定要放弃此账户吗？',
+        'discard_all' => '您确定要放弃所有账户吗？',
+        'discard_duplicates' => '您确定要放弃所有重复账户吗？',
     ],
     'import' => [
-        'import' => 'Import',
-        'to_import' => 'Import',
-        'import_legend' => 'Import your Google Authenticator accounts.',
-        'use_the_gauth_qr_code' => 'Load a G-Auth QR code',
-        'issuer' => 'Issuer',
-        'imported' => 'Imported',
-        'failure' => 'Failure',
-        'x_valid_accounts_found' => '{count} valid accounts found',
-        'import_all' => 'Import all',
-        'import_this_account' => 'Import this account',
-        'discard_all' => 'Discard all',
-        'discard_duplicates' => 'Discard duplicates',
-        'discard_this_account' => 'Discard this account',
-        'generate_a_test_password' => 'Generate a test pasword',
-        'possible_duplicate' => 'An account with the exact same data already exists',
+        'import' => '导入',
+        'to_import' => '导入',
+        'import_legend' => '2FAuth 可以从各种2FA 应用程序导入数据。<br />使用这些应用的导出功能来获取迁移资源(QR码或文件)，并在下方加载它。',
+        'upload' => '上传',
+        'scan' => '扫描',
+        'supported_formats_for_qrcode_upload' => '接受：jpg、jpeg、png、bmp、gif、svg或webp',
+        'supported_formats_for_file_upload' => '接受：纯文本，json，2fas',
+        'supported_migration_formats' => '支持的迁移格式',
+        'qr_code' => '二维码',
+        'plain_text' => '纯文本',
+        'issuer' => '发行商',
+        'imported' => '已导入',
+        'failure' => '失败',
+        'x_valid_accounts_found' => '找到 {count} 个有效账户',
+        'import_all' => '全部导入',
+        'import_this_account' => '导入此账户',
+        'discard_all' => '全部丢弃',
+        'discard_duplicates' => '丢弃重复项',
+        'discard_this_account' => '丢弃此帐户',
+        'generate_a_test_password' => '生成一个测试密码',
+        'possible_duplicate' => '完全相同的帐户已经存在',
+        'invalid_account' => '- 无效账户 -',
+        'invalid_service' => '- 无效服务 -',
+        'do_not_set_password_or_encryption' => '当您从 2FA 应用程序导出数据时，不要设置密码或加密。',
     ],
 
 ];

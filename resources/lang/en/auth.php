@@ -117,8 +117,8 @@ return [
         'has_special_char' => 'Has special char',
         'has_number' => 'Has number',
         'is_long_enough' => '8 characters min.',
-        'mandatory_rules' => 'Mandatory rules',
-        'optional_rules_you_should_follow' => 'Optional rules (highly recommanded)',
+        'mandatory_rules' => 'Mandatory',
+        'optional_rules_you_should_follow' => 'Recommanded (highly)',
         'caps_lock_is_on' => 'Caps lock is On',
     ],
 

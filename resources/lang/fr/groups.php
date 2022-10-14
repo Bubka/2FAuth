@@ -15,6 +15,8 @@ return [
 
     'groups' => 'Groupes',
     'create_group' => 'Créer un nouveau groupe',
+    'show_group_selector' => 'Afficher le sélecteur de groupe',
+    'hide_group_selector' => 'Masquer le sélecteur de groupe',
     'select_accounts_to_show' => 'Sélectionnez les comptes à afficher',
     'manage_groups' => 'Gérer les groupes',
     'active_group' => 'Groupe actif',
@@ -23,6 +25,9 @@ return [
     'move_selected_to' => 'Déplacer la sélection vers',
     'no_group' => 'Aucun groupe',
     'change_group' => 'Changer de groupe',
+    'group_successfully_created' => 'Groupe créé avec succès',
+    'group_name_saved' => 'Nom du groupe enregistré',
+    'group_successfully_deleted' => 'Groupe supprimé avec succès',
     'forms' => [
         'new_group' => 'Nouveau groupe',
         'new_name' => 'Nouveau nom',
