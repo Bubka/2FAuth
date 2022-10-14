@@ -463,6 +463,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts/migration', [
                 'payload' => OtpTestData::GOOGLE_AUTH_MIGRATION_URI,
+                'withSecret' => 1,
             ])
             ->assertOk()
             ->assertJsonCount(2, $key = null)
@@ -561,6 +562,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts/migration', [
                 'file' => $file,
+                'withSecret' => 1,
             ])
             ->assertOk()
             ->assertJsonCount(5, $key = null)
@@ -665,6 +667,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts/migration', [
                 'file' => $file,
+                'withSecret' => 1,
             ])
             ->assertOk()
             ->assertJsonCount(3, $key = null)
