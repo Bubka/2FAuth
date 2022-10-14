@@ -38,7 +38,7 @@
             </div>
             <div class="field">
                 <field-error :form="form" field="icon" class="help-for-file" />
-                <p class="help" v-html="$t('twofaccounts.forms.i_m_lucky_legend')"></p>
+                <p v-if="$root.appSettings.getOfficialIcons" class="help" v-html="$t('twofaccounts.forms.i_m_lucky_legend')"></p>
             </div>
             <!-- otp type -->
             <form-toggle class="has-uppercased-button" :isDisabled="true" :form="form" :choices="otp_types" fieldName="otp_type" :label="$t('twofaccounts.forms.otp_type.label')" :help="$t('twofaccounts.forms.otp_type.help')" :hasOffset="true" />
