@@ -421,7 +421,7 @@
             showAccount(account) {
                 // In Edit mode clicking an account do not show the otpDisplayer but select the account
                 if(this.editMode) {
-                    selectAccount(account.id)
+                    this.selectAccount(account.id)
                 }
                 else {
                     this.$refs.OtpDisplayer.show(account.id)
