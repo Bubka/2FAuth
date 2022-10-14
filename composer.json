@@ -37,6 +37,7 @@
         "spomky-labs/otphp": "^10.0"
     },
     "require-dev": {
+        "barryvdh/laravel-ide-helper": "^2.12",
         "facade/ignition": "^2.3.6",
         "fakerphp/faker": "^1.20",
         "mockery/mockery": "^1.5",
