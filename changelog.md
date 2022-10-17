@@ -1,5 +1,28 @@
 # Change log
 
+## [3.4.0] - 2022-10-18
+
+This release is a big step towards more accessibility. Keyboard navigation is now fully supported, with clean and consistent focus, and several UI components have received relevant ARIA properties to support assistive technologies.
+
+It also provides a rewritten Import feature that supports new export formats (Aegis and 2FAS Authenticators) and more to come.
+
+⚠️ This release should be the last that supports PHP 8.0
+
+### Added
+
+- An option to check for new release on Github ([#127](https://github.com/Bubka/2FAuth/issues/127))
+- An option to automatically copy One-Time Passwords when they are displayed ([#125](https://github.com/Bubka/2FAuth/issues/125))
+- [Aegis](https://github.com/beemdevelopment/Aegis) and [2FAS](https://2fas.com/) export formats are now supported by the Import feature ([#128](https://github.com/Bubka/2FAuth/issues/128))
+- (Partial) Spanish and Chinese (simplified) localizations
+
+### Changed
+
+- Password fields can reveal the password and inform about the password strength ([#124](https://github.com/Bubka/2FAuth/issues/124))
+
+### Fixed
+
+- [issue #126](https://github.com/Bubka/2FAuth/issues/126) HOTP counters are not updated after OTP generation
+
 ## [3.3.3] - 2022-08-16
 
 ### Fixed
