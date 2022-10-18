@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\WebauthnRenameRequest;
 use DarkGhostHunter\Larapass\Eloquent\WebAuthnCredential;
+use Illuminate\Support\Facades\Log;
 
 class WebAuthnManageController extends Controller
 {
@@ -72,6 +73,8 @@ class WebAuthnManageController extends Controller
      */
     public function delete(Request $request, $credential)
     {
+        Log::info('Deletion of security device requested');
+
         $user = $request->user();
         $user->removeCredential($credential);
 
@@ -81,6 +84,8 @@ class WebAuthnManageController extends Controller
             Settings::delete('useWebauthnAsDefault');
             Settings::delete('useWebauthnOnly');
         }
+
+        Log::info('Security device deleted');
 
         return response()->json(null, 204);
     }

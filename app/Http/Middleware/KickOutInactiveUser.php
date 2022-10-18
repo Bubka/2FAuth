@@ -42,7 +42,7 @@ class KickOutInactiveUser
             $user->last_seen_at = $now->format('Y-m-d H:i:s');
             $user->save();
             
-            Log::notice('Inactive user detected, authentication rejected');
+            Log::info('Inactive user detected, authentication rejected');
             if (method_exists('Illuminate\Support\Facades\Auth', 'logout')) {
                 Auth::logout();
             }

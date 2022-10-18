@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use DarkGhostHunter\Larapass\Http\AuthenticatesWebAuthn;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class WebAuthnLoginController extends Controller
 {
@@ -60,6 +61,7 @@ class WebAuthnLoginController extends Controller
      */
     public function login(Request $request)
     {
+        Log::info('User login via webauthn requested');
         $request->validate($this->assertionRules());
 
         if ($request->has('response')) {
@@ -90,5 +92,7 @@ class WebAuthnLoginController extends Controller
     {
         $user->last_seen_at = Carbon::now()->format('Y-m-d H:i:s');
         $user->save();
+
+        Log::info('User authenticated via webauthn');
     }
 }

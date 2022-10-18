@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Lang;
 use App\Http\Requests\LoginRequest;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 
 class LoginController extends Controller
@@ -38,6 +39,7 @@ class LoginController extends Controller
      */
     public function login(LoginRequest $request)
     {
+        Log::info('User login requested');
 
         // If the class is using the ThrottlesLogins trait, we can automatically throttle
         // the login attempts for this application. We'll key this by the username and
@@ -70,6 +72,7 @@ class LoginController extends Controller
     public function logout(Request $request)
     {
         Auth::logout();
+        Log::info('User logged out');
 
         return response()->json(['message' => 'signed out'], Response::HTTP_OK);
     }
@@ -152,5 +155,7 @@ class LoginController extends Controller
     {
         $user->last_seen_at = Carbon::now()->format('Y-m-d H:i:s');
         $user->save();
+
+        Log::info('User authenticated');
     }
 }

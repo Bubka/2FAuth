@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {    
@@ -25,6 +26,7 @@ class UserController extends Controller
         $validated = $request->validated();
 
         if (!Hash::check( $request->password, Auth::user()->password) ) {
+            Log::notice('Account update failed: wrong password provided');
             return response()->json(['message' => __('errors.wrong_current_password')], 400);
         }
 
@@ -33,7 +35,8 @@ class UserController extends Controller
                 'name' => $validated['name'],
                 'email' => $validated['email'],
             ]);
-        }        
+        }
+        Log::info('User account updated');
 
         return new UserResource($user);
     }
@@ -47,6 +50,7 @@ class UserController extends Controller
      */
     public function delete(UserDeleteRequest $request)
     {
+        Log::info('User deletion requested');
         $validated = $request->validated();
 
         if (!Hash::check( $validated['password'], Auth::user()->password) ) {
@@ -74,9 +78,11 @@ class UserController extends Controller
         }
         // @codeCoverageIgnoreStart
         catch (\Throwable $e) {
+            Log::error('User deletion failed');
             return response()->json(['message' => __('errors.user_deletion_failed')], 400);
         }
         // @codeCoverageIgnoreEnd
+        Log::info('User deleted');
 
         return response()->json(null, 204);
     }

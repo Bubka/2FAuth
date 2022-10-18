@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Support\Facades\Log;
 
 class RegisterController extends Controller
 {
@@ -35,6 +36,7 @@ class RegisterController extends Controller
     {
         $validated = $request->validated();
         event(new Registered($user = $this->create($validated)));
+        Log::info('User created');
 
         $this->guard()->login($user);
         // $this->guard()->loginUsingId($user->id);
