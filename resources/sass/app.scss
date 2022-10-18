@@ -430,9 +430,7 @@ figure.no-icon {
 .button.is-like-text:focus-within {
   background: inherit;
   color: inherit;
-  // box-shadow: inherit;
 }
-
 
 .button:focus-visible, .button.is-focused,
 .file[role=button]:focus-visible {
@@ -513,14 +511,9 @@ figure.no-icon {
   outline-color: $danger;
 }
 
-button.is-double-focused:focus-visible
+button.is-main
 {
-  outline-style: double !important;
-  outline-width: 6px !important;
-}
-button.is-double-focused:focus:not(:focus-visible)
-{
-  outline: none;
+  box-shadow: $button-focus-box-shadow-size $button-focus-box-shadow-color;
 }
 
 .file[role=button]:focus-visible {

@@ -11,12 +11,12 @@
             <div class="column is-full quick-uploader-button" >
                 <div class="quick-uploader-centerer">
                     <!-- upload a qr code (with basic file field and backend decoding) -->
-                    <label role="button" tabindex="0" v-if="$root.appSettings.useBasicQrcodeReader" class="button is-link is-medium is-rounded is-focused" ref="qrcodeInputLabel" @keyup.enter="$refs.qrcodeInputLabel.click()">
+                    <label role="button" tabindex="0" v-if="$root.appSettings.useBasicQrcodeReader" class="button is-link is-medium is-rounded is-main" ref="qrcodeInputLabel" @keyup.enter="$refs.qrcodeInputLabel.click()">
                         <input aria-hidden="true" tabindex="-1" class="file-input" type="file" accept="image/*" v-on:change="submitQrCode" ref="qrcodeInput">
                         {{ $t('twofaccounts.forms.upload_qrcode') }}
                     </label>
                     <!-- scan button that launch camera stream -->
-                    <button v-else class="button is-link is-medium is-rounded is-focused is-double-focused" @click="capture()">
+                    <button v-else class="button is-link is-medium is-rounded is-main" @click="capture()">
                         {{ $t('twofaccounts.forms.scan_qrcode') }}
                     </button>
                 </div>
