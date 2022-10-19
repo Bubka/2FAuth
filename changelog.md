@@ -1,6 +1,6 @@
 # Change log
 
-## [3.4.0] - 2022-10-18
+## [3.4.0] - 2022-10-20
 
 This release is a big step towards more accessibility. Keyboard navigation is now fully supported, with clean and consistent focus, and several UI components have received relevant ARIA properties to support assistive technologies.
 
@@ -22,6 +22,7 @@ It also provides a rewritten Import feature that supports new export formats (Ae
 ### Fixed
 
 - [issue #126](https://github.com/Bubka/2FAuth/issues/126) HOTP counters are not updated after OTP generation
+- Autolock setup ignored when session lifetime was shorter, causing CSRF token mismatch errors
 
 ## [3.3.3] - 2022-08-16
 
