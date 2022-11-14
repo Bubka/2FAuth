@@ -14,8 +14,10 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $middleware = [
+        // \App\Http\Middleware\TrustHosts::class,
         \App\Http\Middleware\TrustProxies::class,
-        \Fruitcake\Cors\HandleCors::class,
+        // \Fruitcake\Cors\HandleCors::class,
+        \Illuminate\Http\Middleware\HandleCors::class,
         // \App\Http\Middleware\CheckForMaintenanceMode::class,
         \App\Http\Middleware\PreventRequestsDuringMaintenance::class,
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
@@ -75,7 +77,9 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'rejectIfDemoMode' => \App\Http\Middleware\RejectIfDemoMode::class,
         'rejectIfReverseProxy' => \App\Http\Middleware\RejectIfReverseProxy::class,
-        
+        'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
+        // 'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
+        // 'signed' => \App\Http\Middleware\ValidateSignature::class,
     ];
 
     /**

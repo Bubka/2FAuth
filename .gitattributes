@@ -1,5 +1,15 @@
 * text=auto
-*.css linguist-vendored
+
+*.php diff=php
+*.md diff=markdown
+*.html diff=html
+*.css diff=css linguist-vendored
 *.scss linguist-vendored
 *.js linguist-vendored
+*.sh linguist-vendored
+*.blade.php linguist-vendored
+Dockerfile linguist-vendored
+
+/.github export-ignore
 CHANGELOG.md export-ignore
+.styleci.yml export-ignore
