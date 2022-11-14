@@ -39,8 +39,6 @@ class RegisterController extends Controller
         Log::info('User created');
 
         $this->guard()->login($user);
-        // $this->guard()->loginUsingId($user->id);
-        // Auth::guard('admin')->attempt($credentials);
 
         return response()->json([
             'message' => 'account created',

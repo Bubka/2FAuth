@@ -36,7 +36,7 @@ class WebAuthnDeviceLostControllerTest extends FeatureTestCase
             'email' => $this->user->email,
         ]);
 
-        Notification::assertSentTo($this->user, \DarkGhostHunter\Larapass\Notifications\AccountRecoveryNotification::class);
+        Notification::assertSentTo($this->user, \App\Notifications\WebauthnRecoveryNotification::class);
 
         $response->assertStatus(200)
         ->assertJsonStructure([

@@ -62,8 +62,8 @@ class UserController extends Controller
                 DB::table('twofaccounts')->delete();
                 DB::table('groups')->delete();
                 DB::table('options')->delete();
-                DB::table('web_authn_credentials')->delete();
-                DB::table('web_authn_recoveries')->delete();
+                DB::table('webauthn_credentials')->delete();
+                DB::table('webauthn_recoveries')->delete();
                 DB::table('oauth_access_tokens')->delete();
                 DB::table('oauth_auth_codes')->delete();
                 DB::table('oauth_clients')->delete();

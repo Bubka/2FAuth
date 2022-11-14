@@ -21,7 +21,7 @@
         "ext-tokenizer": "*",
         "ext-xml": "*",
         "chillerlan/php-qrcode": "^4.3",
-        "darkghosthunter/larapass": "^3.0.2",
+        "laragear/webauthn": "^1.1.0",
         "doctormckay/steam-totp": "^1.0",
         "doctrine/dbal": "^3.4",
         "fruitcake/laravel-cors": "^2.0",

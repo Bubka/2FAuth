@@ -49,24 +49,27 @@ return [
         'lost_your_device' => 'Lost your device?',
         'recover_your_account' => 'Recover your account',
         'account_recovery' => 'Account recovery',
-        'recovery_punchline' => '2FAuth will send you a recovery link to this email address. Click the link in the received email to register a new security device.<br /><br />Ensure you open the email on a device you fully own.',
+        'recovery_punchline' => '2FAuth will send you a recovery link to this email address. Click the link in the received email and follow the instructions.<br /><br />Ensure you open the email on a device you fully own.',
         'send_recovery_link' => 'Send recovery link',
         'account_recovery_email_sent' => 'Account recovery email sent!',
-        'disable_all_other_devices' => 'Disable all other devices except this one',
+        'disable_all_security_devices' => 'Disable all security devices',
+        'disable_all_security_devices_help' => 'All your security devices will be revoked. Use this option if you have lost one or its security has been compromised.',
         'register_a_new_device' => 'Register a new device',
         'register_a_device' => 'Register a device',
         'device_successfully_registered' => 'Device successfully registered',
         'device_revoked' => 'Device successfully revoked',
         'revoking_a_device_is_permanent' => 'Revoking a device is permanent',
-        'recover_account_instructions' => 'Click the button below to register a new security device to recover your account. Just follow your browser instructions.',
+        'recover_account_instructions' => 'To recover your account, 2FAuth resets some Webauthn settings so you will be able to sign in using your email and password.',
         'invalid_recovery_token' => 'Invalid recovery token',
+        'webauthn_login_disabled' => 'Webauthn login disabled',
+        'invalid_reset_token' => 'This reset token is invalid.',
         'rename_device' => 'Rename device',
         'my_device' => 'My device',
         'unknown_device' => 'Unknown device',
         'use_webauthn_only' => [
             'label' => 'Use WebAuthn only',
             'help' => 'Make WebAuthn the only available method to sign in 2FAuth. This is the recommended setup to take advantage of the WebAuthn enhanced security.<br />
-                In case of device lost you will always be able to register a new security device to recover your account.'
+                In case of device lost, you will be able to recover your account by resetting this option and signing in using your email and password.'
         ],
         'need_a_security_device_to_enable_options' => 'Set at least one device to enable these options',
         'use_webauthn_as_default' => [

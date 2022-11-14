@@ -1,27 +1,14 @@
 <template>
-    <form-wrapper :title="$t('auth.webauthn.register_a_new_device')" :punchline="$t('auth.webauthn.recover_account_instructions')" >
-        <div v-if="deviceRegistered" class="field">
-            <label class="label mb-5">{{ $t('auth.webauthn.device_successfully_registered') }}&nbsp;<font-awesome-icon :icon="['fas', 'check']" /></label>
-            <form @submit.prevent="handleSubmit" @keydown="form.onKeydown($event)">
-                <form-field :form="form" fieldName="name" inputType="text" placeholder="iPhone 12, TouchID, Yubikey 5C" :label="$t('auth.forms.name_this_device')" />
-                <form-buttons :isBusy="form.isBusy" :isDisabled="form.isDisabled" :caption="$t('commons.continue')" />
+    <form-wrapper :title="$t('auth.webauthn.account_recovery')" :punchline="$t('auth.webauthn.recover_account_instructions')" >
+        <div>
+            <form @submit.prevent="recover" @keydown="form.onKeydown($event)">
+                <form-checkbox :form="form" fieldName="revokeAll" :label="$t('auth.webauthn.disable_all_security_devices')" :help="$t('auth.webauthn.disable_all_security_devices_help')" />
+                <form-password-field :form="form" :autocomplete="'current-password'" fieldName="password" :label="$t('auth.forms.current_password.label')" :help="$t('auth.forms.current_password.help')" />
+                <div class="field">
+                    <p>{{ $t('auth.forms.forgot_your_password') }}&nbsp;<router-link id="lnkResetPwd" :to="{ name: 'password.request' }" class="is-link" :aria-label="$t('auth.forms.reset_your_password')">{{ $t('auth.forms.request_password_reset') }}</router-link></p>
+                </div>
+                <form-buttons :caption="$t('commons.continue')" :cancelLandingView="'login'" :showCancelButton="true" :isBusy="form.isBusy" :isDisabled="form.isDisabled" :submitId="'btnRecover'" />
             </form>
-        </div>
-        <div v-else>
-            <div class="field">
-                <input id="unique" name="unique" type="checkbox" class="is-checkradio is-info" v-model="unique" >
-                <label tabindex="0" for="unique" class="label" ref="uniqueLabel" v-on:keypress.space.prevent="unique = true">
-                    {{ $t('auth.webauthn.disable_all_other_devices') }}
-                </label>
-            </div>
-            <div class="field is-grouped">
-                <div class="control">
-                    <button class="button is-link" @click="register()">{{ $t('auth.webauthn.register_a_new_device')}}</button>
-                </div>
-                <div class="control">
-                    <router-link :to="{ name: 'login' }" class="button is-text">{{ $t('commons.cancel') }}</router-link>
-                </div>
-            </div>
         </div>
         <!-- footer -->
         <vue-footer></vue-footer>
@@ -35,20 +22,21 @@
     export default {
         data(){
             return {
-                email : '',
-                token: '',
-                unique: false,
+                currentPassword: '',
                 deviceRegistered: false,
                 deviceId : null,
                 form: new Form({
-                    name : '',
+                    email: '',
+                    password: '',
+                    token: '',
+                    revokeAll: false,
                 }),
             }
         },
 
         created () {
-            this.email = this.$route.query.email
-            this.token = this.$route.query.token
+            this.form.email = this.$route.query.email
+            this.form.token = this.$route.query.token
         },
 
         methods : {
@@ -56,73 +44,24 @@
             /**
              * Register a new security device
              */
-            async register() {
-                // Check https context
-                if (!window.isSecureContext) {
-                    this.$notify({ type: 'is-danger', text: this.$t('errors.https_required') })
-                    return false
-                }
-
-                // Check browser support
-                if (!window.PublicKeyCredential) {
-                    this.$notify({ type: 'is-danger', text: this.$t('errors.browser_does_not_support_webauthn') })
-                    return false
-                }
-
-                const registerOptions = await this.axios.post('/webauthn/recover/options',
-                    {
-                        email : this.email,
-                        token: this.token
-                    },
-                    { returnError: true })
-                .then(res => res.data)
-                .catch(error => {
-                    this.$notify({ type: 'is-danger', text: error.response.data.message })
-                });
-
-                const publicKey = this.parseIncomingServerOptions(registerOptions)
-                let bufferedCredentials
-
-                try {
-                    bufferedCredentials = await navigator.credentials.create({ publicKey })
-                }
-                catch (error) {
-                    if (error.name == 'AbortError') {
-                        this.$notify({ type: 'is-warning', text: this.$t('errors.aborted_by_user') })
-                    }
-                    else if (error.name == 'NotAllowedError' || 'InvalidStateError') {
-                        this.$notify({ type: 'is-danger', text: this.$t('errors.security_device_unsupported') })
-                    }
-                    return false
-                }
-
-                const publicKeyCredential = this.parseOutgoingCredentials(bufferedCredentials);
-
-                this.axios.post('/webauthn/recover', publicKeyCredential, {
-                    headers: {
-                        email : this.email,
-                        token: this.token,
-                        unique: this.unique,
-                    }
-                }).then(response => {
-                    this.$notify({ type: 'is-success', text: this.$t('auth.webauthn.device_successfully_registered') })
-                    this.deviceId = publicKeyCredential.id
-                    this.deviceRegistered = true
+            recover() {
+                this.form.post('/webauthn/recover', {returnError: true})
+                .then(response => {
+                    this.$router.push({ name: 'login', params: { forceRefresh: true } })
                 })
-            },
+                .catch(error => {
+                    if( error.response.status === 401 ) {
 
-
-            /**
-             * Rename the registered device
-             */
-            async handleSubmit(e) {
-
-                await this.form.patch('/webauthn/credentials/' + this.deviceId + '/name')
-
-                if( this.form.errors.any() === false ) {
-                    this.$router.push({name: 'accounts', params: { toRefresh: true }})
-                }
-            },
+                        this.$notify({ type: 'is-danger', text: this.$t('auth.forms.authentication_failed'), duration:-1 })
+                    }
+                    else if (error.response.status === 422) {
+                        this.$notify({ type: 'is-danger', text: error.response.data.message })
+                    }
+                    else {
+                        this.$router.push({ name: 'genericError', params: { err: error.response } });
+                    }
+                });
+            }
         },
 
         beforeRouteLeave (to, from, next) {

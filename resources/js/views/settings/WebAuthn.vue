@@ -60,6 +60,7 @@
 <script>
 
     import Form from './../../components/Form'
+    import WebAuthn from './../../components/WebAuthn'
 
     export default {
         data(){
@@ -71,6 +72,7 @@
                 credentials: [],
                 isFetching: false,
                 isRemoteUser: false,
+                webauthn: new WebAuthn()
             }
         },
 
@@ -140,13 +142,13 @@
                 }
 
                 // Check browser support
-                if (!window.PublicKeyCredential) {
+                if (this.webauthn.doesntSupportWebAuthn) {
                     this.$notify({ type: 'is-danger', text: this.$t('errors.browser_does_not_support_webauthn') })
                     return false
                 }
 
                 const registerOptions = await this.axios.post('/webauthn/register/options').then(res => res.data)
-                const publicKey = this.parseIncomingServerOptions(registerOptions)
+                const publicKey = this.webauthn.parseIncomingServerOptions(registerOptions)
                 let bufferedCredentials
 
                 try {
@@ -156,13 +158,19 @@
                     if (error.name == 'AbortError') {
                         this.$notify({ type: 'is-warning', text: this.$t('errors.aborted_by_user') })
                     }
-                    else if (error.name == 'NotAllowedError' || 'InvalidStateError') {
+                    else if (error.name == 'SecurityError') {
+                        this.$notify({ type: 'is-danger', text: this.$t('errors.security_error_check_rpid') })
+                    }
+                    else if (error.name == 'InvalidStateError') {
                         this.$notify({ type: 'is-danger', text: this.$t('errors.security_device_unsupported') })
+                    }
+                    else if (error.name == 'NotAllowedError') {
+                        this.$notify({ type: 'is-danger', text: this.$t('errors.not_allowed_operation') })
                     }
                     return false
                 }
 
-                const publicKeyCredential = this.parseOutgoingCredentials(bufferedCredentials);
+                const publicKeyCredential = this.webauthn.parseOutgoingCredentials(bufferedCredentials);
 
                 this.axios.post('/webauthn/register', publicKeyCredential).then(response => {
                     this.$router.push({ name: 'settings.webauthn.editCredential', params: { id: publicKeyCredential.id, name: this.$t('auth.webauthn.my_device') } })
@@ -196,7 +204,7 @@
              * Always display a printable name
              */
             displayName(credential) {
-                return credential.name ? credential.name : this.$t('auth.webauthn.my_device') + ' (#' + credential.id.substring(0, 10) + ')'
+                return credential.alias ? credential.alias : this.$t('auth.webauthn.my_device') + ' (#' + credential.id.substring(0, 10) + ')'
             },
 
         },

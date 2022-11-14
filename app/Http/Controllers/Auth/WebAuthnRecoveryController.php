@@ -3,54 +3,82 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
-use DarkGhostHunter\Larapass\Http\RecoversWebAuthn;
-use DarkGhostHunter\Larapass\Facades\WebAuthn;
+use App\Http\Requests\WebauthnRecoveryRequest;
+use App\Extensions\WebauthnCredentialBroker;
+use App\Facades\Settings;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\Auth\ResetsPasswords;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\App;
 
 class WebAuthnRecoveryController extends Controller
 {
-    use RecoversWebAuthn;
-
-    /*
-    |--------------------------------------------------------------------------
-    | WebAuthn Recovery Controller
-    |--------------------------------------------------------------------------
-    |
-    | When an user loses his device he will reach this controller to attach a
-    | new device. The user will attach a new device, and optionally, disable
-    | all others. Then he will be authenticated and redirected to your app.
-    |
-    */
+    use ResetsPasswords;  
 
     /**
-     * Where to redirect users after resetting their password.
+     * Let the user regain access to his account using email+password by resetting
+     * the "use webauthn only" setting.
      *
-     * @var string
+     * @param  \App\Http\Requests\WebauthnRecoveryRequest  $request
+     * @param  \App\Extensions\WebauthnCredentialBroker  $broker
+     *
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
-    
-
-    /**
-     * Returns the credential creation options to the user.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function options(Request $request): JsonResponse
+    public function recover(WebauthnRecoveryRequest $request, WebauthnCredentialBroker $broker)
     {
-        $user = WebAuthn::getUser($request->validate($this->rules()));
+        $credentials = $request->validated();
 
-        // We will proceed only if the broker can find the user and the token is valid.
-        // If the user doesn't exists or the token is invalid, we will bail out with a
-        // HTTP 401 code because the user doing the request is not authorized for it.
-        abort_unless(WebAuthn::tokenExists($user, $request->input('token')), 401, __('auth.webauthn.invalid_recovery_token'));
+        $response = $broker->reset(
+            $credentials,
+            function ($user) use ($request) {
+                // At this time, the WebAuthnUserProvider is already registered in the Laravel Service Container,
+                // with a password_fallback value set using the useWebauthnOnly user setting (see AuthServiceProvider.php).
+                // To ensure user login with email+pwd credentials, we replace the registered WebAuthnUserProvider instance
+                // with a new instance configured with password_fallback On.
+                $provider = new \Laragear\WebAuthn\Auth\WebAuthnUserProvider(
+                    app()->make('hash'),
+                    \App\Models\User::class,
+                    app()->make(\Laragear\WebAuthn\Assertion\Validator\AssertionValidator::class),
+                    true,
+                );
 
-        return response()->json(WebAuthn::generateAttestation($user));
+                Auth::guard()->setProvider($provider);
+
+                if (Auth::attempt($request->only('email', 'password'))) {
+                    if ($this->shouldRevokeAllCredentials($request)) {
+                        $user->flushCredentials();
+                    }
+                    Settings::delete('useWebauthnOnly');
+                }
+                else throw new AuthenticationException();
+            }
+        );
+        
+        return $response === Password::PASSWORD_RESET
+            ? $this->sendRecoveryResponse($request, $response)
+            : $this->sendRecoveryFailedResponse($request, $response);
+
     }
+
+
+    /**
+     * Check if the user has set to revoke all credentials.
+     *
+     * @param  \App\Http\Requests\WebauthnRecoveryRequest  $request
+     *
+     * @return bool|mixed
+     */
+    protected function shouldRevokeAllCredentials(WebauthnRecoveryRequest $request): mixed
+    {
+        return filter_var($request->header('WebAuthn-Unique'), FILTER_VALIDATE_BOOLEAN)
+            ?: $request->input('revokeAll', true);
+    }
+
 
     /**
      * Get the response for a successful account recovery.
@@ -60,12 +88,12 @@ class WebAuthnRecoveryController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      * 
-     * @codeCoverageIgnore - already covered by larapass test
      */
     protected function sendRecoveryResponse(Request $request, string $response): JsonResponse
     {
-        return response()->json(['message' => __('auth.webauthn.device_successfully_registered')]);
+        return response()->json(['message' => __('auth.webauthn.webauthn_login_disabled')]);
     }
+
 
     /**
      * Get the response for a failed account recovery.
@@ -76,10 +104,16 @@ class WebAuthnRecoveryController extends Controller
      * @return \Illuminate\Http\JsonResponse
      * @throws \Illuminate\Validation\ValidationException
      * 
-     * @codeCoverageIgnore - already covered by larapass test
      */
     protected function sendRecoveryFailedResponse(Request $request, string $response): JsonResponse
     {
-        throw ValidationException::withMessages(['email' => [trans($response)]]);
+        switch ($response) {
+            case Password::INVALID_TOKEN:
+                throw ValidationException::withMessages(['token' => [__('auth.webauthn.invalid_reset_token')]]);
+
+            default:
+                throw ValidationException::withMessages(['email' => [trans($response)]]);
+        }
+        
     }
 }

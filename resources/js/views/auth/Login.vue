@@ -44,6 +44,7 @@
 <script>
 
     import Form from './../../components/Form'
+    import WebAuthn from './../../components/WebAuthn'
 
     export default {
         data(){
@@ -58,6 +59,7 @@
                 isBusy: false,
                 showWebauthn: this.$root.appSettings.useWebauthnAsDefault || this.$root.appSettings.useWebauthnOnly,
                 csrfRefresher: null,
+                webauthn: new WebAuthn()
             }
         },
 
@@ -107,13 +109,13 @@
                 }
 
                 // Check browser support
-                if (!window.PublicKeyCredential) {
+                if (this.webauthn.doesntSupportWebAuthn) {
                     this.$notify({ type: 'is-danger', text: this.$t('errors.browser_does_not_support_webauthn') })
                     return false
                 }
 
                 const loginOptions = await this.axios.post('/webauthn/login/options').then(res => res.data)
-                const publicKey = this.parseIncomingServerOptions(loginOptions)
+                const publicKey = this.webauthn.parseIncomingServerOptions(loginOptions)
                 const credentials = await navigator.credentials.get({ publicKey: publicKey })
                 .catch(error => {
                     this.$notify({ type: 'is-danger', text: this.$t('auth.webauthn.unknown_device') })
@@ -121,7 +123,7 @@
 
                 if (!credentials) return false
 
-                const publicKeyCredential = this.parseOutgoingCredentials(credentials)
+                const publicKeyCredential = this.webauthn.parseOutgoingCredentials(credentials)
 
                 this.axios.post('/webauthn/login', publicKeyCredential, {returnError: true}).then(response => {
                     this.$router.push({ name: 'accounts', params: { toRefresh: true } })

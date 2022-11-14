@@ -4,18 +4,16 @@ namespace App\Models;
 
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use DarkGhostHunter\Larapass\Contracts\WebAuthnAuthenticatable;
-use DarkGhostHunter\Larapass\WebAuthnAuthentication;
-use DarkGhostHunter\Larapass\Notifications\AccountRecoveryNotification;
+use Laragear\WebAuthn\WebAuthnAuthentication;
+use App\Models\Traits\WebAuthnManageCredentials;
 
 class User extends Authenticatable implements WebAuthnAuthenticatable
 {
-    use WebAuthnAuthentication;
+    use WebAuthnAuthentication, WebAuthnManageCredentials;
     use HasApiTokens, HasFactory, Notifiable;
 
     /**
@@ -30,16 +28,17 @@ class User extends Authenticatable implements WebAuthnAuthenticatable
     /**
      * The attributes that should be hidden for serialization.
      *
-     * @var array
+     * @var array<int,string>
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
+        'remember_token',
     ];
 
     /**
      * The attributes that should be cast.
      *
-     * @var array
+     * @var array<string,string>
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
@@ -67,33 +66,20 @@ class User extends Authenticatable implements WebAuthnAuthenticatable
         $this->attributes['email'] = strtolower($value);
     }
 
+
     /**
-     * Sends a credential recovery email to the user.
+     * Returns an WebAuthnAuthenticatable user from a given Credential ID.
      *
-     * @param  string  $token
-     *
-     * @return void
+     * @param  string  $id
+     * @return WebAuthnAuthenticatable|null
      */
-    public function sendCredentialRecoveryNotification(string $token): void
+    public static function getFromCredentialId(string $id): ?WebAuthnAuthenticatable
     {
-        $accountRecoveryNotification = new AccountRecoveryNotification($token);
-        $accountRecoveryNotification->toMailUsing(null);
-
-        $accountRecoveryNotification->createUrlUsing(function(mixed $notifiable, string $token) {
-            $url = url(
-                route(
-                    'webauthn.recover',
-                    [
-                        'token' => $token,
-                        'email' => $notifiable->getEmailForPasswordReset(),
-                    ],
-                    false
-                )
-            );
-
-            return $url;
-        });
-
-        $this->notify($accountRecoveryNotification);
+        return static::whereHas(
+            'webauthnCredentials',
+            static function ($query) use ($id) {
+                return $query->whereKey($id);
+            }
+        )->first();
     }
 }

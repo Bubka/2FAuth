@@ -22,7 +22,12 @@ Route::group(['middleware' => ['guest', 'rejectIfDemoMode']], function () {
     Route::post('user/password/reset', 'Auth\ResetPasswordController@reset')->name('password.reset');
     Route::post('webauthn/login/options', [WebAuthnLoginController::class, 'options'])->name('webauthn.login.options');
     Route::post('webauthn/lost', [WebAuthnDeviceLostController::class, 'sendRecoveryEmail'])->name('webauthn.lost');
-    Route::post('webauthn/recover/options', [WebAuthnRecoveryController::class, 'options'])->name('webauthn.recover.options');
+});
+
+/**
+ * Routes that can be requested max 10 times per minute by the same IP
+ */
+Route::group(['middleware' => ['rejectIfDemoMode', 'throttle:10,1']], function () {
     Route::post('webauthn/recover', [WebAuthnRecoveryController::class, 'recover'])->name('webauthn.recover');
 });
 

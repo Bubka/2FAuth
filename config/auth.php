@@ -87,8 +87,9 @@ return [
 
     'providers' => [
         'users' => [
-            'driver' => 'eloquent-2fauth',
+            'driver' => 'eloquent-webauthn',
             'model' => App\Models\User::class,
+            // 'password_fallback' => true,
         ],
         'remote-user' => [
             'driver' => 'remote-user',
@@ -122,7 +123,7 @@ return [
         // for WebAuthn
         'webauthn' => [
             'provider' => 'users', // The user provider using WebAuthn.
-            'table' => 'web_authn_recoveries', // The table to store the recoveries.
+            'table' => 'webauthn_recoveries', // The table to store the recoveries.
             'expire' => 60,
             'throttle' => 60,
         ],

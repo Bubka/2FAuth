@@ -3,20 +3,17 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
-use DarkGhostHunter\Larapass\Http\AuthenticatesWebAuthn;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
+use Laragear\WebAuthn\Http\Requests\AssertionRequest;
+use Laragear\WebAuthn\Http\Requests\AssertedRequest;
+use Illuminate\Contracts\Support\Responsable;
+use Laragear\WebAuthn\WebAuthn;
 
 class WebAuthnLoginController extends Controller
 {
-    // use AuthenticatesWebAuthn;
-    use AuthenticatesWebAuthn {
-		options as traitOptions;
-		login as traitLogin;
-	}
-
     /*
     |--------------------------------------------------------------------------
     | WebAuthn Login Controller
@@ -29,66 +26,75 @@ class WebAuthnLoginController extends Controller
     */
 
     /**
-     * @return \Illuminate\Http\JsonResponse|\Webauthn\PublicKeyCredentialRequestOptions
+     * Returns the challenge to assertion.
+     *
+     * @param  \Laragear\WebAuthn\Http\Requests\AssertionRequest  $request
+     * @return \Illuminate\Contracts\Support\Responsable|\Illuminate\Http\JsonResponse
      */
-	public function options(Request $request)
-	{
-        // Since 2FAuth is single user designed we fetch the user instance
-        // and merge its email address to the request. This let Larapass validate
-        // the request against a user instance without the need to ask the visitor
-        // for an email address.
-        //
-        // This approach override the Larapass 'userless' config value that seems buggy.
+    public function options(AssertionRequest $request): Responsable|JsonResponse
+    {
+        switch (env('WEBAUTHN_USER_VERIFICATION')) {
+            case WebAuthn::USER_VERIFICATION_DISCOURAGED:
+                $request = $request->fastLogin();    // Makes the authenticator to only check for user presence on registration
+                break;
+            case WebAuthn::USER_VERIFICATION_REQUIRED: 
+                $request = $request->secureLogin();  // Makes the authenticator to always verify the user thoroughly on registration
+                break;
+        }
+
+        // Since 2FAuth is single user designed we fetch the user instance.
+        // This lets Larapass validate the request without the need to ask
+        // the visitor for an email address.
         $user = User::first();
 
-        if (!$user) {
-            return response()->json([
+        return $user
+            ? $request->toVerify($user)
+            : response()->json([
                 'message' => 'no registered user'
             ], 400);
-        }
-        else $request->merge(['email' => $user->email]);
-
-		return $this->traitOptions($request);
-	}
-
+    }
+    
 
     /**
      * Log the user in.
      *
-     * @param  \Illuminate\Http\Request  $request
-     *
+     * @param  \Laragear\WebAuthn\Http\Requests\AssertedRequest  $request
      * @return \Illuminate\Http\Response|\Illuminate\Http\JsonResponse
      */
-    public function login(Request $request)
+    public function login(AssertedRequest $request)
     {
         Log::info('User login via webauthn requested');
-        $request->validate($this->assertionRules());
 
         if ($request->has('response')) {
             $response = $request->response;
 
             // Some authenticators do not send a userHandle so we hack the response to be compliant
-            // with Larapass/webauthn-lib implementation that wait for a userHandle
+            // with Larapass/webauthn-lib implementation that waits for a userHandle
             if(!$response['userHandle']) {
-                $user = User::getFromCredentialId($request->id);
-                $response['userHandle'] = base64_encode($user->userHandle());
+                $response['userHandle'] = User::getFromCredentialId($request->id)?->userHandle();
                 $request->merge(['response' => $response]);
             }
         }
+        
+        $user = $request->login();
 
-        return $this->traitLogin($request);
+        if ($user) {
+            $this->authenticated($user);
+            return response()->noContent();
+        }
+
+        return response()->noContent(422);
     }
 
 
     /**
      * The user has been authenticated.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  mixed  $user
      *
      * @return void|\Illuminate\Http\JsonResponse
      */
-    protected function authenticated(Request $request, $user)
+    protected function authenticated($user)
     {
         $user->last_seen_at = Carbon::now()->format('Y-m-d H:i:s');
         $user->save();

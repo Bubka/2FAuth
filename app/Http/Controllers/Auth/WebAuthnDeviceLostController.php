@@ -3,35 +3,57 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use DarkGhostHunter\Larapass\Http\SendsWebAuthnRecoveryEmail;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use App\Extensions\WebauthnCredentialBroker;
+use Illuminate\Foundation\Auth\ResetsPasswords;
+use Illuminate\Support\Facades\Password;
+use App\Http\Requests\WebauthnDeviceLostRequest;
 
 class WebAuthnDeviceLostController extends Controller
 {
-    use SendsWebAuthnRecoveryEmail;
+    use ResetsPasswords;
 
-    /*
-    |--------------------------------------------------------------------------
-    | WebAuthn Device Lost Controller
-    |--------------------------------------------------------------------------
-    |
-    | This is a convenience controller that will allow your users who have lost
-    | their WebAuthn device to register another without using passwords. This
-    | will send him a link to his email to create new WebAuthn credentials.
-    |
-    */
 
     /**
-     * The recovery credentials to retrieve through validation rules.
+     * Send a recovery email to the user.
      *
-     * @return array|string[]
+     * @param \App\Http\Requests\WebauthnDeviceLostRequest  $request
+     * @param  \App\Extensions\WebauthnCredentialBroker  $broker
+     *
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Validation\ValidationException
      */
-    protected function recoveryRules(): array
+    public function sendRecoveryEmail(WebauthnDeviceLostRequest $request, WebauthnCredentialBroker $broker)
     {
-        return [
-            'email' => 'required|exists:users,email',
-        ];
+        $credentials = $request->validated();
+
+        $response = $broker->sendResetLink($credentials);
+
+        return $response === Password::RESET_LINK_SENT
+            ? $this->sendRecoveryLinkResponse($request, $response)
+            : $this->sendRecoveryLinkFailedResponse($request, $response);
+    }
+
+
+    /**
+     * Get the response for a failed account recovery link.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  string  $response
+     *
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    protected function sendRecoveryLinkFailedResponse(Request $request, string $response)
+    {
+        if ($request->wantsJson()) {
+            throw ValidationException::withMessages(['email' => [trans($response)]]);
+        }
+
+        return back()
+            ->withInput($request->only('email'))
+            ->withErrors(['email' => trans($response)]);
     }
 
 
