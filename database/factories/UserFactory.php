@@ -7,6 +7,9 @@ use Illuminate\Support\Str;
 
 class UserFactory extends Factory
 {
+
+    const USER_PASSWORD = 'password';
+
     /**
      * Define the model's default state.
      *
@@ -18,7 +21,7 @@ class UserFactory extends Factory
             'name' => $this->faker->name(),
             'email' => $this->faker->unique()->safeEmail(),
             'email_verified_at' => now(),
-            'password' => bcrypt('password'),
+            'password' => bcrypt(self::USER_PASSWORD),
             'remember_token' => Str::random(10),
         ];
     }

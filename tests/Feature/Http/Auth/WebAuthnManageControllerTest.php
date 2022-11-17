@@ -7,13 +7,20 @@ use Tests\FeatureTestCase;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Webauthn\TrustPath\EmptyTrustPath;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
 
 class WebAuthnManageControllerTest extends FeatureTestCase
 {
+    // use WithoutMiddleware;
+
     /**
      * @var \App\Models\User
     */
     protected $user;
+
+
+    public const CREDENTIAL_ID = '-VOLFKPY-_FuMI_sJ7gMllK76L3VoRUINj6lL_Z3qDg';
+    public const CREDENTIAL_ID_RAW = '+VOLFKPY+/FuMI/sJ7gMllK76L3VoRUINj6lL/Z3qDg=';
 
 
     /**
@@ -32,20 +39,19 @@ class WebAuthnManageControllerTest extends FeatureTestCase
      */
     public function test_index_returns_success_with_credentials()
     {
-        DB::table('web_authn_credentials')->insert([
-            'id'               => 'test_credential_id',
-            'user_id'          => $this->user->id,
-            'type'             => 'public_key',
-            'transports'       => json_encode([]),
-            'attestation_type' => 'none',
-            'trust_path'       => json_encode(['type' => EmptyTrustPath::class]),
-            'aaguid'           => Str::uuid(),
-            'public_key'       => 'public_key_bar',
-            'counter'          => 0,
-            'user_handle'      => 'test_id',
-            'created_at'       => now()->toDateTimeString(),
-            'updated_at'       => now()->toDateTimeString(),
-            'disabled_at'      => null,
+        DB::table('webauthn_credentials')->insert([
+            'id' => self::CREDENTIAL_ID,
+            'authenticatable_type' => \App\Models\User::class,
+            'authenticatable_id' => $this->user->id,
+            'user_id' => 'e8af6f703f8042aa91c30cf72289aa07',
+            'counter' => 0,
+            'rp_id' => 'http://localhost',
+            'origin' => 'http://localhost',
+            'aaguid' => '00000000-0000-0000-0000-000000000000',
+            'attestation_format' => 'none',
+            'public_key' => 'eyJpdiI6Imp0U0NVeFNNbW45KzEvMXpad2p2SUE9PSIsInZhbHVlIjoic0VxZ2I1WnlHM2lJakhkWHVkK2kzMWtibk1IN2ZlaExGT01qOElXMDdRTjhnVlR0TDgwOHk1S0xQUy9BQ1JCWHRLNzRtenNsMml1dVQydWtERjFEU0h0bkJGT2RwUXE1M1JCcVpablE2Y2VGV2YvVEE2RGFIRUE5L0x1K0JIQXhLVE1aNVNmN3AxeHdjRUo2V0hwREZSRTJYaThNNnB1VnozMlVXZEVPajhBL3d3ODlkTVN3bW54RTEwSG0ybzRQZFFNNEFrVytUYThub2IvMFRtUlBZamoyZElWKzR1bStZQ1IwU3FXbkYvSm1FU2FlMTFXYUo0SG9kc1BDME9CNUNKeE9IelE5d2dmNFNJRXBKNUdlVzJ3VHUrQWJZRFluK0hib0xvVTdWQ0ZISjZmOWF3by83aVJES1dxbU9Zd1lhRTlLVmhZSUdlWmlBOUFtcTM2ZVBaRWNKNEFSQUhENk5EaC9hN3REdnVFbm16WkRxekRWOXd4cVcvZFdKa2tlWWJqZWlmZnZLS0F1VEVCZEZQcXJkTExiNWRyQmxsZWtaSDRlT3VVS0ZBSXFBRG1JMjRUMnBKRXZxOUFUa2xxMjg2TEplUzdscVo2UytoVU5SdXk1OE1lcFN6aU05ZkVXTkdIM2tKM3Q5bmx1TGtYb1F5bGxxQVR3K3BVUVlia1VybDFKRm9lZDViNzYraGJRdmtUb2FNTEVGZmZYZ3lYRDRiOUVjRnJpcTVvWVExOHJHSTJpMnVBZ3E0TmljbUlKUUtXY2lSWDh1dE5MVDNRUzVRSkQrTjVJUU8rSGhpeFhRRjJvSEdQYjBoVT0iLCJtYWMiOiI5MTdmNWRkZGE5OTEwNzQ3MjhkYWVhYjRlNjk0MWZlMmI5OTQ4YzlmZWI1M2I4OGVkMjE1MjMxNjUwOWRmZTU2IiwidGFnIjoiIn0=',
+            'updated_at' => now(),
+            'created_at' => now(),
         ]);
 
         $response = $this->actingAs($this->user, 'web-guard')
@@ -54,9 +60,7 @@ class WebAuthnManageControllerTest extends FeatureTestCase
             ->assertJsonStructure([
                 '*' => [
                     'id',
-                    'name',
-                    'type',
-                    'transports'
+                    'alias',
                 ]
             ]);
     }
@@ -67,25 +71,24 @@ class WebAuthnManageControllerTest extends FeatureTestCase
      */
     public function test_rename_returns_success_with_new_name()
     {
-        DB::table('web_authn_credentials')->insert([
-            'id'               => 'test_credential_id',
-            'name'             => 'MyCredential',
-            'user_id'          => $this->user->id,
-            'type'             => 'public_key',
-            'transports'       => json_encode([]),
-            'attestation_type' => 'none',
-            'trust_path'       => json_encode(['type' => EmptyTrustPath::class]),
-            'aaguid'           => Str::uuid(),
-            'public_key'       => 'public_key_bar',
-            'counter'          => 0,
-            'user_handle'      => 'test_id',
-            'created_at'       => now()->toDateTimeString(),
-            'updated_at'       => now()->toDateTimeString(),
-            'disabled_at'      => null,
+        DB::table('webauthn_credentials')->insert([
+            'id' => self::CREDENTIAL_ID,
+            'authenticatable_type' => \App\Models\User::class,
+            'authenticatable_id' => $this->user->id,
+            'user_id' => 'e8af6f703f8042aa91c30cf72289aa07',
+            'alias' => 'MyNewCredential',
+            'counter' => 0,
+            'rp_id' => 'http://localhost',
+            'origin' => 'http://localhost',
+            'aaguid' => '00000000-0000-0000-0000-000000000000',
+            'attestation_format' => 'none',
+            'public_key' => 'eyJpdiI6Imp0U0NVeFNNbW45KzEvMXpad2p2SUE9PSIsInZhbHVlIjoic0VxZ2I1WnlHM2lJakhkWHVkK2kzMWtibk1IN2ZlaExGT01qOElXMDdRTjhnVlR0TDgwOHk1S0xQUy9BQ1JCWHRLNzRtenNsMml1dVQydWtERjFEU0h0bkJGT2RwUXE1M1JCcVpablE2Y2VGV2YvVEE2RGFIRUE5L0x1K0JIQXhLVE1aNVNmN3AxeHdjRUo2V0hwREZSRTJYaThNNnB1VnozMlVXZEVPajhBL3d3ODlkTVN3bW54RTEwSG0ybzRQZFFNNEFrVytUYThub2IvMFRtUlBZamoyZElWKzR1bStZQ1IwU3FXbkYvSm1FU2FlMTFXYUo0SG9kc1BDME9CNUNKeE9IelE5d2dmNFNJRXBKNUdlVzJ3VHUrQWJZRFluK0hib0xvVTdWQ0ZISjZmOWF3by83aVJES1dxbU9Zd1lhRTlLVmhZSUdlWmlBOUFtcTM2ZVBaRWNKNEFSQUhENk5EaC9hN3REdnVFbm16WkRxekRWOXd4cVcvZFdKa2tlWWJqZWlmZnZLS0F1VEVCZEZQcXJkTExiNWRyQmxsZWtaSDRlT3VVS0ZBSXFBRG1JMjRUMnBKRXZxOUFUa2xxMjg2TEplUzdscVo2UytoVU5SdXk1OE1lcFN6aU05ZkVXTkdIM2tKM3Q5bmx1TGtYb1F5bGxxQVR3K3BVUVlia1VybDFKRm9lZDViNzYraGJRdmtUb2FNTEVGZmZYZ3lYRDRiOUVjRnJpcTVvWVExOHJHSTJpMnVBZ3E0TmljbUlKUUtXY2lSWDh1dE5MVDNRUzVRSkQrTjVJUU8rSGhpeFhRRjJvSEdQYjBoVT0iLCJtYWMiOiI5MTdmNWRkZGE5OTEwNzQ3MjhkYWVhYjRlNjk0MWZlMmI5OTQ4YzlmZWI1M2I4OGVkMjE1MjMxNjUwOWRmZTU2IiwidGFnIjoiIn0=',
+            'updated_at' => now(),
+            'created_at' => now(),
         ]);
 
         $response = $this->actingAs($this->user, 'web-guard')
-            ->json('PATCH', '/webauthn/credentials/test_credential_id/name',[
+            ->json('PATCH', '/webauthn/credentials/'.self::CREDENTIAL_ID.'/name',[
                 'name' => 'MyNewCredential',
             ])
             ->assertStatus(200)
@@ -101,7 +104,7 @@ class WebAuthnManageControllerTest extends FeatureTestCase
     public function test_rename_invalid_data_returns_validation_error()
     {
         $response = $this->actingAs($this->user, 'web-guard')
-            ->json('PATCH', '/webauthn/credentials/test_credential_id/name', [
+            ->json('PATCH', '/webauthn/credentials/'.self::CREDENTIAL_ID.'/name', [
                 'name' => null,
             ])
             ->assertStatus(422);

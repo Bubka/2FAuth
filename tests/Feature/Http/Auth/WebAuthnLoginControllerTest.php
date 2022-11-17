@@ -5,10 +5,7 @@ namespace Tests\Feature\Http\Auth;
 use App\Models\User;
 use Tests\FeatureTestCase;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
-use Webauthn\TrustPath\EmptyTrustPath;
-use DarkGhostHunter\Larapass\Eloquent\WebAuthnCredential;
-use DarkGhostHunter\Larapass\WebAuthn\WebAuthnAssertValidator;
+use Laragear\WebAuthn\Http\Requests\AssertedRequest;
 
 class WebAuthnLoginControllerTest extends FeatureTestCase
 {
@@ -17,6 +14,9 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
     */
     protected $user;
 
+    const CREDENTIAL_ID = 's06aG41wsIYh5X1YUhB-SlH8y3F2RzdJZVse8iXRXOCd3oqQdEyCOsBawzxrYBtJRQA2azAMEN_q19TUp6iMgg';
+    const PUBLIC_KEY = 'eyJpdiI6ImYyUHlJOEJML0pwTXJ2UDkveTQwZFE9PSIsInZhbHVlIjoiQWFSYi9LVEszazlBRUZsWHp0cGNRNktGeEQ3aTBsbU9zZ1g5MEgrWFJJNmgraElsNU9hV0VsRVlWc3NoUVVHUjRRdlcxTS9pVklnOWtVYWY5TFJQTTFhR1Rxb1ZzTFkxTWE4VUVvK1lyU3pYQ1M3VlBMWWxZcDVaYWFnK25iaXVyWGR6ZFRmMFVoSmdPZ3UvSnptbVZER0FYdEEyYmNYcW43RkV5aTVqSjNwZEFsUjhUYSs0YjU2Z2V2bUJXa0E0aVB1VC8xSjdJZ2llRGlHY2RwOGk3MmNPTyt6eDFDWUs1dVBOSWp1ZUFSeUlkclgwRW16RE9sUUpDSWV6Sk50TSIsIm1hYyI6IjI3ODQ5NzcxZGY1MzMwYTNiZjAwZmEwMDJkZjYzMGU4N2UzZjZlOGM0ZWE3NDkyYWMxMThhNmE5NWZiMTVjNGEiLCJ0YWciOiIifQ==';
+    const USER_ID = '3b758ac868b74307a7e96e69ae187339';
 
     /**
      * @test
@@ -32,137 +32,45 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
     /**
      * @test
      */
-    public function test_user_login_returns_success()
+    public function test_webauthn_login_uses_login_and_returns_no_content()
     {
-        $this->user = User::factory()->create([
-            'name'     => 'john',
-            'email'    => 'john.doe@mail.com',
-            'password' => '$2y$10$FLIykVJWDsYSVMJyaFZZfe4tF5uBTnGsosJBL.ZfAAHsYgc27FSdi',
-        ]);
-        $uuid = Str::uuid();
+        $this->user = User::factory()->create();
 
-        DB::table('web_authn_credentials')->insert([
-            'id'               => 'dGVzdF9jcmVkZW50aWFsX2lk',
-            'user_id'          => $this->user->id,
-            'type'             => 'public_key',
-            'transports'       => json_encode([]),
-            'attestation_type' => 'none',
-            'trust_path'       => json_encode(['type' => EmptyTrustPath::class]),
-            'aaguid'           => $uuid->toString(),
-            'public_key'       => 'public_key',
-            'counter'          => 0,
-            'user_handle'      => 'test_user_handle',
-            'created_at'       => now()->toDateTimeString(),
-            'updated_at'       => now()->toDateTimeString(),
+        $mock = $this->mock(AssertedRequest::class)->makePartial()->shouldIgnoreMissing();
+        $mock->shouldReceive([
+            'has' => false,
+            'login' => $this->user,
         ]);
 
-        $data = [
-            'id'       => 'dGVzdF9jcmVkZW50aWFsX2lk',
-            'rawId'    => 'ZEdWemRGOWpjbVZrWlc1MGFXRnNYMmxr',
-            'type'     => 'test_type',
-            'response' => [
-                'authenticatorData' => 'test',
-                'clientDataJSON' => 'test',
-                'signature' => 'test',
-                'userHandle' => 'test',
-            ],
-        ];
-
-        $this->mock(WebAuthnAssertValidator::class)
-            ->shouldReceive('validate')
-            ->with($data)
-            ->andReturnUsing(function ($data) {
-                $credentials = WebAuthnCredential::find($data['id']);
-
-                $credentials->setAttribute('counter', 1)->save();
-
-                return $credentials->toCredentialSource();
-            });
-
-        $this->json('POST', '/webauthn/login', $data)
+        $this->json('POST', '/webauthn/login')
             ->assertNoContent();
-
-        $this->assertAuthenticatedAs($this->user);
     }
 
 
     /**
      * @test
      */
-    public function test_user_login_without_userhandle_returns_success()
+    public function test_webauthn_invalid_login_returns_error()
     {
-        $this->user = User::factory()->create([
-            'name'     => 'john',
-            'email'    => 'john.doe@mail.com',
-            'password' => '$2y$10$FLIykVJWDsYSVMJyaFZZfe4tF5uBTnGsosJBL.ZfAAHsYgc27FSdi',
-        ]);
-        $uuid = Str::uuid();
+        $this->user = User::factory()->create();
 
-        DB::table('web_authn_credentials')->insert([
-            'id'               => 'dGVzdF9jcmVkZW50aWFsX2lk',
-            'user_id'          => $this->user->id,
-            'type'             => 'public_key',
-            'transports'       => json_encode([]),
-            'attestation_type' => 'none',
-            'trust_path'       => json_encode(['type' => EmptyTrustPath::class]),
-            'aaguid'           => $uuid->toString(),
-            'public_key'       => 'public_key',
-            'counter'          => 0,
-            'user_handle'      => 'test_user_handle',
-            'created_at'       => now()->toDateTimeString(),
-            'updated_at'       => now()->toDateTimeString(),
+        $mock = $this->mock(AssertedRequest::class)->makePartial()->shouldIgnoreMissing();
+        $mock->shouldReceive([
+            'has' => false,
+            'login' => null,
         ]);
 
-        $data = [
-            'id'       => 'dGVzdF9jcmVkZW50aWFsX2lk',
-            'rawId'    => 'ZEdWemRGOWpjbVZrWlc1MGFXRnNYMmxr',
-            'type'     => 'test_type',
-            'response' => [
-                'authenticatorData' => 'test',
-                'clientDataJSON' => 'test',
-                'signature' => 'test',
-                'userHandle' => '',
-            ],
-        ];
-
-        $this->mock(WebAuthnAssertValidator::class)
-            ->shouldReceive('validate')
-            ->with([
-                'id'       => 'dGVzdF9jcmVkZW50aWFsX2lk',
-                'rawId'    => 'ZEdWemRGOWpjbVZrWlc1MGFXRnNYMmxr',
-                'type'     => 'test_type',
-                'response' => [
-                    'authenticatorData' => 'test',
-                    'clientDataJSON' => 'test',
-                    'signature' => 'test',
-                    'userHandle' => 'dGVzdF91c2VyX2hhbmRsZQ==',
-                ],
-            ])
-            ->andReturnUsing(function ($data) {
-                $credentials = WebAuthnCredential::find($data['id']);
-
-                $credentials->setAttribute('counter', 1)->save();
-
-                return $credentials->toCredentialSource();
-            });
-
-        $this->json('POST', '/webauthn/login', $data)
-            ->assertNoContent();
-
-        $this->assertAuthenticatedAs($this->user);
+        $this->json('POST', '/webauthn/login')
+            ->assertNoContent(422);
     }
 
 
     /**
      * @test
      */
-    public function test_user_login_with_missing_data_returns_validation_error()
+    public function test_webauthn_login_with_missing_data_returns_validation_error()
     {
-        $this->user = User::factory()->create([
-            'name'     => 'john',
-            'email'    => 'john.doe@mail.com',
-            'password' => '$2y$10$FLIykVJWDsYSVMJyaFZZfe4tF5uBTnGsosJBL.ZfAAHsYgc27FSdi',
-        ]);
+        $this->user = User::factory()->create();
 
         $data = [
             'id'       => '',
@@ -194,19 +102,35 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
      */
     public function test_get_options_returns_success()
     {
-        $this->user = User::factory()->create([
-            'name'     => 'john',
-            'email'    => 'john.doe@mail.com',
-            'password' => '$2y$10$FLIykVJWDsYSVMJyaFZZfe4tF5uBTnGsosJBL.ZfAAHsYgc27FSdi',
+        $this->user = User::factory()->create();
+
+        DB::table('webauthn_credentials')->insert([
+            'id' => self::CREDENTIAL_ID,
+            'authenticatable_type' => \App\Models\User::class,
+            'authenticatable_id' => $this->user->id,
+            'user_id' => self::USER_ID,
+            'counter' => 0,
+            'rp_id' => 'http://localhost',
+            'origin' => 'http://localhost',
+            'aaguid' => '00000000-0000-0000-0000-000000000000',
+            'attestation_format' => 'none',
+            'public_key' => self::PUBLIC_KEY,
+            'updated_at' => now(),
+            'created_at' => now(),
         ]);
 
-        $response = $this->json('POST', '/webauthn/login/options', [])
+        $response = $this->json('POST', '/webauthn/login/options')
         ->assertOk()
         ->assertJsonStructure([
             'challenge',
-            'rpId',
             'userVerification',
             'timeout',
+        ])
+        ->assertJsonFragment([
+            'allowCredentials' => [[
+                'id' => self::CREDENTIAL_ID,
+                'type' => 'public-key'
+            ]],
         ]);
     }
 
@@ -216,7 +140,7 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
      */
     public function test_get_options_with_no_registred_user_returns_error()
     {
-        $this->json('POST', '/webauthn/login/options', [])
+        $this->json('POST', '/webauthn/login/options')
         ->assertStatus(400)
         ->assertJsonStructure([
             'message',
