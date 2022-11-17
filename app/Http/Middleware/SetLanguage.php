@@ -28,12 +28,11 @@ class SetLanguage
 
         if($lang === 'browser') {
             $lang = config('app.fallback_locale');
-            $accepted = $request->header("Accept-Language");
+            $accepted = str_replace(' ', '', $request->header("Accept-Language"));
 
-            if ($accepted) {
-                $accepted = is_array($accepted) ? implode(',', $accepted) : $accepted;
+            if ($accepted && $accepted !== '*') {
                 $prefLocales = array_reduce(
-                    explode(',', $accepted),
+                    array_diff(explode(',', $accepted), ['*']),
                     function ($res, $el) { 
                         list($l, $q) = array_merge(explode(';q=', $el), [1]); 
                         $res[$l] = (float) $q; 

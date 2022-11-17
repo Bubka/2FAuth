@@ -34,7 +34,7 @@ class Group extends Model
     /**
      * The attributes that should be hidden for arrays.
      *
-     * @var array
+     * @var array<int, string>
      */
     protected $hidden = ['created_at', 'updated_at'];
 
@@ -42,7 +42,7 @@ class Group extends Model
     /**
      * The attributes that should be cast.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'twofaccounts_count' => 'integer',

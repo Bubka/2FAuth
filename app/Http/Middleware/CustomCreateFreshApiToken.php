@@ -15,6 +15,6 @@ class CustomCreateFreshApiToken extends CreateFreshApiToken
      */
     protected function requestShouldReceiveFreshToken($request)
     {
-        return $request->user($this->guard);
+        return !is_null($request->user($this->guard));
     }
 }

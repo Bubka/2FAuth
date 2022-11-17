@@ -29,7 +29,7 @@ class Option extends Model
     /**
      * Casts.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [];
 

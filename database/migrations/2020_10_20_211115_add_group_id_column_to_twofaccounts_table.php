@@ -16,11 +16,9 @@ class AddGroupIdColumnToTwofaccountsTable extends Migration
         Schema::table('twofaccounts', function (Blueprint $table) {
             $table->unsignedInteger('group_id')
                   ->after('id')
-                  ->nullable()
-                  ->constrained()
-                  ->onDelete('set null');
+                  ->nullable();
 
-            $table->foreign('group_id')->references('id')->on('groups');
+            $table->foreign('group_id')->references('id')->on('groups')->onDelete('set null');
         });
     }
 

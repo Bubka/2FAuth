@@ -111,7 +111,7 @@ class TwoFAccount extends Model implements Sortable
     /**
      * The attributes that should be hidden for arrays.
      *
-     * @var array
+     * @var array<int, string>
      */
     protected $hidden = [];
 
@@ -119,7 +119,7 @@ class TwoFAccount extends Model implements Sortable
     /**
      * The attributes that should be cast.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [];
 
