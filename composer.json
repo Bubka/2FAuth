@@ -38,13 +38,14 @@
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.12",
-        "spatie/laravel-ignition": "^1.0",
         "fakerphp/faker": "^1.20",
+        "laravel/pint": "^1.2",
         "mockery/mockery": "^1.5",
         "nunomaduro/collision": "^6.1",
         "nunomaduro/larastan": "^2.0",
         "phpstan/phpstan": "^1.8",
-        "phpunit/phpunit": "^9.5"
+        "phpunit/phpunit": "^9.5",
+        "spatie/laravel-ignition": "^1.0"
     },
     "conflict": {
         "khanamiryan/qrcode-detector-decoder": "~1.0.6"
