@@ -51,7 +51,7 @@ class TwoFAccountService
      * Convert a migration payload to a set of TwoFAccount objects
      * 
      * @param string $migrationPayload Migration payload from 2FA apps export feature
-     * @return \Illuminate\Support\Collection The converted accounts
+     * @return \Illuminate\Support\Collection<int|string, TwoFAccount> The converted accounts
      */
     public function migrate(string $migrationPayload) : Collection
     {
@@ -83,8 +83,8 @@ class TwoFAccountService
     /**
      * Return the given collection with items marked as Duplicates (using id=-1) if a similar record exists in database
      * 
-     * @param \Illuminate\Support\Collection $twofaccounts
-     * @return \Illuminate\Support\Collection
+     * @param \Illuminate\Support\Collection<int|string, TwoFAccount> $twofaccounts
+     * @return \Illuminate\Support\Collection<int|string, TwoFAccount>
      */
     private static function markAsDuplicate(Collection $twofaccounts) : Collection
     {

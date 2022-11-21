@@ -19,7 +19,7 @@ class SettingService
     /**
      * All user settings
      * 
-     * @var Collection
+     * @var Collection<string, mixed>
      */
     private Collection $settings;
 
@@ -48,7 +48,7 @@ class SettingService
     /**
      * Get all settings
      * 
-     * @return Collection the Settings collection
+     * @return Collection<string, mixed> the Settings collection
      */
     public function all() : Collection
     {
@@ -122,7 +122,7 @@ class SettingService
         });
 
         // Merge 2fauth/app config values as fallback values
-        $settings = collect(config('2fauth.options'))->merge($userOptions);
+        $settings = collect(config('2fauth.options'))->merge($userOptions); /** @phpstan-ignore-line */
         
         if(!Arr::has($settings, 'lang')) {
             $settings['lang'] = 'browser';

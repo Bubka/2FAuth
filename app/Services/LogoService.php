@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
@@ -10,7 +11,7 @@ use Illuminate\Support\Str;
 class LogoService
 {
     /**
-     * @var \Illuminate\Support\Collection
+     * @var \Illuminate\Support\Collection<string, string>
      */
     protected $tfas;
 
@@ -85,8 +86,8 @@ class LogoService
         }
 
         $this->tfas = Storage::disk('logos')->exists(self::TFA_JSON)
-            ? collect(json_decode(Storage::disk('logos')->get(self::TFA_JSON)))
-            : collect();
+            ? new Collection(json_decode(Storage::disk('logos')->get(self::TFA_JSON)))
+            : collect([]);
     }
 
 
@@ -100,7 +101,7 @@ class LogoService
         try {
             $response = Http::retry(3, 100)->get(self::TFA_URL);
 
-            $coll = collect(json_decode(htmlspecialchars_decode($response->body()), true))
+            $coll = collect(json_decode(htmlspecialchars_decode($response->body()), true)) /** @phpstan-ignore-line */
                     ->mapWithKeys(function ($item, $key) {
                         return [
                             strtolower(head($item)) => $item[1]["domain"]

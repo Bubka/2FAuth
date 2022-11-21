@@ -18,7 +18,7 @@ class SettingController extends Controller
     public function index()
     {
         $settings = Settings::all();
-        $settingsResources = collect();
+        $settingsResources = collect([]);
         $settings->each(function (mixed $item, string $key) use ($settingsResources) {
             $settingsResources->push([
                 'key' => $key,

@@ -79,7 +79,7 @@ class Group extends Model
     /**
      * Get the TwoFAccounts of the group.
      * 
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<TwoFAccount>
      */
     public function twofaccounts()
     {

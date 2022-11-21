@@ -38,7 +38,7 @@ class AegisMigrator extends Migrator
      * Convert migration data to a TwoFAccounts collection.
      *
      * @param  mixed  $migrationPayload
-     * @return \Illuminate\Support\Collection The converted accounts
+     * @return \Illuminate\Support\Collection<int|string, \App\Models\TwoFAccount> The converted accounts
      */
     public function migrate(mixed $migrationPayload) : Collection
     {

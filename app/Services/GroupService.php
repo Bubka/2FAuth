@@ -14,7 +14,7 @@ class GroupService
     /**
      * Returns all existing groups
      * 
-     * @return Collection
+     * @return Collection<int, Group>
      */
     public static function getAll() : Collection
     {
@@ -147,7 +147,7 @@ class GroupService
      * Finds twofaccounts assigned to the group
      * 
      * @param \App\Models\Group $group The group
-     * @return Collection The assigned accounts
+     * @return Collection<int, TwoFAccount> The assigned accounts
      */
     public static function getAccounts(Group $group) : Collection
     {
