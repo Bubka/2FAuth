@@ -2,32 +2,33 @@
 
 namespace Tests\Feature\Http\Auth;
 
-use App\Models\User;
 use App\Facades\Settings;
-use Tests\FeatureTestCase;
+use App\Models\User;
 use Illuminate\Support\Facades\Config;
+use Tests\FeatureTestCase;
 
 class UserControllerTest extends FeatureTestCase
 {
     /**
      * @var \App\Models\User
-    */
+     */
     protected $user;
 
     private const NEW_USERNAME = 'Jane DOE';
+
     private const NEW_EMAIL = 'janedoe@example.org';
-    private const PASSWORD =  'password';
+
+    private const PASSWORD = 'password';
 
     /**
      * @test
      */
-    public function setUp(): void
+    public function setUp() : void
     {
         parent::setUp();
 
         $this->user = User::factory()->create();
     }
-    
 
     /**
      * @test
@@ -36,18 +37,17 @@ class UserControllerTest extends FeatureTestCase
     {
         $response = $this->actingAs($this->user, 'web-guard')
             ->json('PUT', '/user', [
-                'name' => self::NEW_USERNAME,
-                'email' => self::NEW_EMAIL,
+                'name'     => self::NEW_USERNAME,
+                'email'    => self::NEW_EMAIL,
                 'password' => self::PASSWORD,
             ])
             ->assertOk()
             ->assertExactJson([
-                'name' => self::NEW_USERNAME,
+                'name'  => self::NEW_USERNAME,
                 'id'    => $this->user->id,
                 'email' => self::NEW_EMAIL,
             ]);
     }
-    
 
     /**
      * @test
@@ -58,18 +58,17 @@ class UserControllerTest extends FeatureTestCase
 
         $response = $this->actingAs($this->user, 'web-guard')
             ->json('PUT', '/user', [
-                'name' => self::NEW_USERNAME,
-                'email' => self::NEW_EMAIL,
+                'name'     => self::NEW_USERNAME,
+                'email'    => self::NEW_EMAIL,
                 'password' => self::PASSWORD,
             ])
             ->assertOk()
             ->assertExactJson([
-                'name' => $this->user->name,
+                'name'  => $this->user->name,
                 'id'    => $this->user->id,
                 'email' => $this->user->email,
             ]);
     }
-    
 
     /**
      * @test
@@ -78,13 +77,12 @@ class UserControllerTest extends FeatureTestCase
     {
         $response = $this->actingAs($this->user, 'web-guard')
             ->json('PUT', '/user', [
-                'name' => self::NEW_USERNAME,
-                'email' => self::NEW_EMAIL,
+                'name'     => self::NEW_USERNAME,
+                'email'    => self::NEW_EMAIL,
                 'password' => 'wrongPassword',
             ])
             ->assertStatus(400);
     }
-    
 
     /**
      * @test
@@ -93,13 +91,12 @@ class UserControllerTest extends FeatureTestCase
     {
         $response = $this->actingAs($this->user, 'web-guard')
             ->json('PUT', '/user', [
-                'name' => '',
-                'email' => '',
+                'name'     => '',
+                'email'    => '',
                 'password' => self::PASSWORD,
             ])
             ->assertStatus(422);
     }
-    
 
     /**
      * @test
@@ -112,7 +109,6 @@ class UserControllerTest extends FeatureTestCase
             ])
             ->assertNoContent();
     }
-    
 
     /**
      * @test
@@ -128,10 +124,9 @@ class UserControllerTest extends FeatureTestCase
             ])
             ->assertUnauthorized()
             ->assertJsonStructure([
-                'message'
+                'message',
             ]);
     }
-    
 
     /**
      * @test
@@ -144,5 +139,4 @@ class UserControllerTest extends FeatureTestCase
             ])
             ->assertStatus(400);
     }
-
 }

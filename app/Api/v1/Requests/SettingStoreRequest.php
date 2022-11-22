@@ -25,7 +25,7 @@ class SettingStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'key' => 'required|alpha|max:128|unique:options,key',
+            'key'   => 'required|alpha|max:128|unique:options,key',
             'value' => 'required',
         ];
     }

@@ -20,7 +20,8 @@ class RejectIfReverseProxy
             Log::info('Cannot request this action in Demo mode');
 
             return response()->json([
-                'message' => __('errors.unsupported_with_reverseproxy')], 400);
+                'message' => __('errors.unsupported_with_reverseproxy'),
+            ], 400);
         }
 
         return $next($request);

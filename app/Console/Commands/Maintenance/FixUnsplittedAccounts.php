@@ -42,12 +42,13 @@ class FixUnsplittedAccounts extends Command
      */
     public function handle()
     {
-
-        if (!Schema::hasColumn('twofaccounts', 'legacy_uri')) {
+        if (! Schema::hasColumn('twofaccounts', 'legacy_uri')) {
             $this->comment('2fauth:fix-unsplitted-accounts is useful only after SplitTwofaccountsUriInMultipleColumns migration ran');
+
             return;
+        } else {
+            $this->line('Fetching accounts...');
         }
-        else $this->line('Fetching accounts...');
 
         $twofaccounts = TwoFAccount::where('otp_type', '')
                         ->where('secret', '')
@@ -61,24 +62,23 @@ class FixUnsplittedAccounts extends Command
 
         if ($twofaccounts->count() == 0) {
             $this->info('Nothing to fix');
+
             return;
         }
 
         $this->line('Try to fix them...');
-        
+
         foreach ($twofaccounts as $twofaccount) {
             if ($twofaccount->legacy_uri === __('errors.indecipherable')) {
                 $this->error(sprintf('Account #%d cannot be deciphered', $twofaccount->id));
-            }
-            else {
+            } else {
                 try {
                     // Get a consistent account
                     $twofaccount->fillWithURI($twofaccount->legacy_uri, false, true);
                     $twofaccount->save();
 
                     $this->info(sprintf('Account #%d fixed', $twofaccount->id));
-                }
-                catch (\Exception $ex) {
+                } catch (\Exception $ex) {
                     $this->error(sprintf('Error while updating account #%d', $twofaccount->id));
                 }
             }

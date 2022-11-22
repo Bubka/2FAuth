@@ -13,7 +13,6 @@ use Tests\TestCase;
  */
 class WebauthnRenameRequestTest extends TestCase
 {
-
     use WithoutMiddleware;
 
     /**
@@ -26,7 +25,7 @@ class WebauthnRenameRequestTest extends TestCase
         ->andReturn(true);
 
         $request = new WebauthnRenameRequest();
-    
+
         $this->assertTrue($request->authorize());
     }
 
@@ -35,7 +34,7 @@ class WebauthnRenameRequestTest extends TestCase
      */
     public function test_valid_data(array $data) : void
     {
-        $request = new WebauthnRenameRequest();
+        $request   = new WebauthnRenameRequest();
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->fails());
@@ -48,7 +47,7 @@ class WebauthnRenameRequestTest extends TestCase
     {
         return [
             [[
-                'name'  => 'Yubikey',
+                'name' => 'Yubikey',
             ]],
         ];
     }
@@ -57,8 +56,8 @@ class WebauthnRenameRequestTest extends TestCase
      * @dataProvider provideInvalidData
      */
     public function test_invalid_data(array $data) : void
-    {        
-        $request = new WebauthnRenameRequest();
+    {
+        $request   = new WebauthnRenameRequest();
         $validator = Validator::make($data, $request->rules());
 
         $this->assertTrue($validator->fails());
@@ -71,15 +70,14 @@ class WebauthnRenameRequestTest extends TestCase
     {
         return [
             [[
-                'name'  => '', // required
+                'name' => '', // required
             ]],
             [[
-                'name'  => true, // string
+                'name' => true, // string
             ]],
             [[
-                'name'  => 0, // string
+                'name' => 0, // string
             ]],
         ];
     }
-
 }

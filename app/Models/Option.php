@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-
 class Option extends Model
 {
     /**
@@ -17,7 +16,6 @@ class Option extends Model
         'value',
     ];
 
-
     /**
      * Indicates if the model should be timestamped.
      *
@@ -25,12 +23,10 @@ class Option extends Model
      */
     public $timestamps = false;
 
-
     /**
      * Casts.
      *
      * @var array<string, string>
      */
     protected $casts = [];
-
 }

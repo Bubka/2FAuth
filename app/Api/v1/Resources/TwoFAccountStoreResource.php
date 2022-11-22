@@ -26,18 +26,18 @@ class TwoFAccountStoreResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'otp_type'      => $this->otp_type,
-            'account'       => $this->account,
-            'service'       => $this->service,
-            'icon'          => $this->icon,
-            'secret'        => $this->when(
-                                    !$request->has('withSecret') || (int) filter_var($request->input('withSecret'), FILTER_VALIDATE_BOOLEAN) == 1,
-                                    $this->secret
-                                ),
-            'digits'        => (int) $this->digits,
-            'algorithm'     => $this->algorithm,
-            'period'        => is_null($this->period) ? null : (int)$this->period,
-            'counter'       => is_null($this->counter) ? null : (int)$this->counter
+            'otp_type' => $this->otp_type,
+            'account'  => $this->account,
+            'service'  => $this->service,
+            'icon'     => $this->icon,
+            'secret'   => $this->when(
+                ! $request->has('withSecret') || (int) filter_var($request->input('withSecret'), FILTER_VALIDATE_BOOLEAN) == 1,
+                $this->secret
+            ),
+            'digits'    => (int) $this->digits,
+            'algorithm' => $this->algorithm,
+            'period'    => is_null($this->period) ? null : (int) $this->period,
+            'counter'   => is_null($this->counter) ? null : (int) $this->counter,
         ];
     }
 }

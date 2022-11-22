@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Console\Commands\Utils\ResetTrait;
+use Illuminate\Console\Command;
 
 class ResetDemo extends Command
 {
@@ -40,15 +40,15 @@ class ResetDemo extends Command
      */
     public function handle()
     {
-        if( !config('2fauth.config.isDemoApp') ) {
+        if (! config('2fauth.config.isDemoApp')) {
             $this->comment('2fauth:reset-demo can only run when isDemoApp option is On');
+
             return;
         }
 
-        if( $this->option('no-confirm') ) {
+        if ($this->option('no-confirm')) {
             $demo = 'demo';
-        }
-        else {
+        } else {
             $this->line('This will reset the app in order to run a clean and fresh demo.');
             $demo = $this->ask('To prevent any mistake please type the word "demo" to go on');
         }
@@ -57,8 +57,7 @@ class ResetDemo extends Command
             $this->resetIcons();
             $this->resetDB('DemoSeeder');
             $this->info('Demo app refreshed');
-        }
-        else {
+        } else {
             $this->comment('Bad confirmation word, nothing appened');
         }
     }

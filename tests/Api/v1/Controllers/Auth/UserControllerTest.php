@@ -9,20 +9,18 @@ class UserControllerTest extends FeatureTestCase
 {
     /**
      * @var \App\Models\User
-    */
+     */
     protected $user;
-
 
     /**
      * @test
      */
-    public function setUp(): void
+    public function setUp() : void
     {
         parent::setUp();
 
         $this->user = User::factory()->create();
     }
-
 
     /**
      * @test
@@ -39,7 +37,6 @@ class UserControllerTest extends FeatureTestCase
             ]);
     }
 
-
     /**
      * @test
      */
@@ -48,10 +45,9 @@ class UserControllerTest extends FeatureTestCase
         $response = $this->json('GET', '/api/v1/user/name')
             ->assertOk()
             ->assertExactJson([
-                'name'  => $this->user->name,
+                'name' => $this->user->name,
             ]);
     }
-
 
     /**
      * @test
@@ -69,5 +65,4 @@ class UserControllerTest extends FeatureTestCase
                 'email' => $this->user->email,
             ]);
     }
-
 }

@@ -8,17 +8,22 @@ class Helpers
 {
     /**
      * Generate a unique filename
-     * 
-     * @param string $extension
+     *
+     * @param  string  $extension
      * @return string The filename
      */
-    public static function getUniqueFilename(string $extension): string
+    public static function getUniqueFilename(string $extension) : string
     {
-        return Str::random(40).'.'.$extension;
+        return Str::random(40) . '.' . $extension;
     }
 
-
-    public static function cleanVersionNumber(?string $release): string|false
+    /**
+     * Clean a version number string
+     *
+     * @param  string|null  $release
+     * @return string|false
+     */
+    public static function cleanVersionNumber(?string $release) : string|false
     {
         return preg_match('/([[0-9][0-9\.]*[0-9])/', $release, $version) ? $version[0] : false;
     }

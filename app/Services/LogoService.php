@@ -4,8 +4,8 @@ namespace App\Services;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class LogoService
@@ -25,17 +25,15 @@ class LogoService
      */
     const TFA_URL = 'https://2fa.directory/api/v3/tfa.json';
 
-
     public function __construct()
     {
         $this->setTfaCollection();
     }
 
-
     /**
      * Fetch a logo for the given service and save it as an icon
-     * 
-     * @param string $serviceName Name of the service to fetch a logo for
+     *
+     * @param  string  $serviceName Name of the service to fetch a logo for
      * @return string|null The icon filename or null if no logo has been found
      */
     public function getIcon($serviceName)
@@ -43,35 +41,35 @@ class LogoService
         $logoFilename = $this->getLogo(strval($serviceName));
 
         if ($logoFilename) {
-            $iconFilename = Str::random(40).'.svg';
-            return $this->copyToIcons($logoFilename, $iconFilename) ? $iconFilename : null;
-        }
-        else return null;
-    }
+            $iconFilename = Str::random(40) . '.svg';
 
+            return $this->copyToIcons($logoFilename, $iconFilename) ? $iconFilename : null;
+        } else {
+            return null;
+        }
+    }
 
     /**
      * Return the logo's filename for a given service
-     * 
-     * @param string $serviceName Name of the service to fetch a logo for
+     *
+     * @param  string  $serviceName Name of the service to fetch a logo for
      * @return string|null The logo filename or null if no logo has been found
      */
     protected function getLogo($serviceName)
     {
-        $domain = $this->tfas->get($this->cleanDomain(strval($serviceName)));
-        $logoFilename = $domain.'.svg';
+        $domain       = $this->tfas->get($this->cleanDomain(strval($serviceName)));
+        $logoFilename = $domain . '.svg';
 
-        if ($domain && !Storage::disk('logos')->exists($logoFilename)) {
+        if ($domain && ! Storage::disk('logos')->exists($logoFilename)) {
             $this->fetchLogo($logoFilename);
         }
 
         return Storage::disk('logos')->exists($logoFilename) ? $logoFilename : null;
     }
 
-
     /**
      * Build and set the TFA directoy collection
-     * 
+     *
      * @return void
      */
     protected function setTfaCollection() : void
@@ -82,7 +80,7 @@ class LogoService
                 $this->cacheTfaDirectorySource();
             }
         } else {
-            $this->cacheTfaDirectorySource();            
+            $this->cacheTfaDirectorySource();
         }
 
         $this->tfas = Storage::disk('logos')->exists(self::TFA_JSON)
@@ -90,10 +88,9 @@ class LogoService
             : collect([]);
     }
 
-
     /**
      * Fetch and cache fresh TFA.Directory data using the https://2fa.directory API
-     * 
+     *
      * @return void
      */
     protected function cacheTfaDirectorySource() : void
@@ -104,50 +101,44 @@ class LogoService
             $coll = collect(json_decode(htmlspecialchars_decode($response->body()), true)) /** @phpstan-ignore-line */
                     ->mapWithKeys(function ($item, $key) {
                         return [
-                            strtolower(head($item)) => $item[1]["domain"]
+                            strtolower(head($item)) => $item[1]['domain'],
                         ];
                     });
 
             Storage::disk('logos')->put(self::TFA_JSON, $coll->toJson())
                 ? Log::info('Fresh tfa.json saved to logos dir')
                 : Log::notice('Cannot save tfa.json to logos dir');
-
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             Log::error('Caching of tfa.json failed');
         }
-
     }
-
 
     /**
      * Fetch and cache a logo from 2fa.Directory repository
-     * 
-     * @param string $logoFile Logo filename to fetch
+     *
+     * @param  string  $logoFile Logo filename to fetch
      * @return void
      */
     protected function fetchLogo(string $logoFile) : void
     {
         try {
             $response = Http::retry(3, 100)
-                ->get('https://raw.githubusercontent.com/2factorauth/twofactorauth/master/img/'.$logoFile[0].'/'.$logoFile);
-            
+                ->get('https://raw.githubusercontent.com/2factorauth/twofactorauth/master/img/' . $logoFile[0] . '/' . $logoFile);
+
             if ($response->successful()) {
                 Storage::disk('logos')->put($logoFile, $response->body())
                     ? Log::info(sprintf('Logo "%s" saved to logos dir.', $logoFile))
                     : Log::notice(sprintf('Cannot save logo "%s" to logos dir', $logoFile));
             }
-        }
-        catch (\Exception $exception) {
+        } catch (\Exception $exception) {
             Log::error(sprintf('Fetching of logo "%s" failed.', $logoFile));
         }
     }
 
-
     /**
      * Prepare and make some replacement to optimize logo fetching
-     * 
-     * @param string $domain
+     *
+     * @param  string  $domain
      * @return string Optimized domain name
      */
     protected function cleanDomain(string $domain) : string
@@ -155,12 +146,11 @@ class LogoService
         return strtolower(str_replace(['+'], ['plus'], $domain));
     }
 
-
     /**
      * Copy a logo file to the icons disk with a new name
-     * 
-     * @param string $logoFilename
-     * @param string $iconFilename
+     *
+     * @param  string  $logoFilename
+     * @param  string  $iconFilename
      * @return bool Weither the copy succed or not
      */
     protected function copyToIcons($logoFilename, $iconFilename) : bool

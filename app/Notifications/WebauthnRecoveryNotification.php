@@ -66,16 +66,16 @@ class WebauthnRecoveryNotification extends Notification
         // if (static::$createUrlCallback) {
         //     $url = call_user_func(static::$createUrlCallback, $notifiable, $this->token);
         // } else {
-            $url = url(
-                route(
-                    'webauthn.recover',
-                    [
-                        'token' => $this->token,
-                        'email' => $notifiable->getEmailForPasswordReset(),
-                    ],
-                    false
-                )
-            );
+        $url = url(
+            route(
+                'webauthn.recover',
+                [
+                    'token' => $this->token,
+                    'email' => $notifiable->getEmailForPasswordReset(),
+                ],
+                false
+            )
+        );
         // }
 
         return (new MailMessage)

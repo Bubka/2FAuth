@@ -30,12 +30,14 @@ class CaseInsensitiveEmailExists implements Rule
             ->whereRaw('email = \'' . strtolower($value) . '\'' . ('sqlite' === config('database.default') ? ' COLLATE NOCASE' : ''))
             ->first();
 
-        return !$user ? false : true;
+        return ! $user ? false : true;
     }
 
     /**
      * Get the validation error message.
+     *
      * @codeCoverageIgnore
+     *
      * @return array|string
      */
     public function message()

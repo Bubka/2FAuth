@@ -2,12 +2,11 @@
 
 namespace Tests\Unit\Listeners;
 
-use App\Models\Group;
 use App\Events\GroupDeleting;
-use Tests\TestCase;
 use App\Listeners\DissociateTwofaccountFromGroup;
+use App\Models\Group;
 use Illuminate\Support\Facades\Event;
-
+use Tests\TestCase;
 
 /**
  * @covers \App\Listeners\DissociateTwofaccountFromGroup
@@ -22,7 +21,6 @@ class DissociateTwofaccountFromGroupTest extends TestCase
 
     //     $this->assertNull($listener->handle($event));
     // }
-
 
     public function test_DissociateTwofaccountFromGroup_listen_to_groupDeleting_event()
     {

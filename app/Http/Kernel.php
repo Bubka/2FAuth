@@ -71,13 +71,13 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
-        'auth' => \App\Http\Middleware\Authenticate::class,
-        'guest' => \App\Http\Middleware\RejectIfAuthenticated::class,
-        'SkipIfAuthenticated' => \App\Http\Middleware\SkipIfAuthenticated::class,
-        'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-        'rejectIfDemoMode' => \App\Http\Middleware\RejectIfDemoMode::class,
+        'auth'                 => \App\Http\Middleware\Authenticate::class,
+        'guest'                => \App\Http\Middleware\RejectIfAuthenticated::class,
+        'SkipIfAuthenticated'  => \App\Http\Middleware\SkipIfAuthenticated::class,
+        'throttle'             => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        'rejectIfDemoMode'     => \App\Http\Middleware\RejectIfDemoMode::class,
         'rejectIfReverseProxy' => \App\Http\Middleware\RejectIfReverseProxy::class,
-        'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
+        'cache.headers'        => \Illuminate\Http\Middleware\SetCacheHeaders::class,
         // 'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
         // 'signed' => \App\Http\Middleware\ValidateSignature::class,
     ];

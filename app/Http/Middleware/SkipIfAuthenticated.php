@@ -26,7 +26,7 @@ class SkipIfAuthenticated
 
                 return response()->json([
                     'message' => 'authenticated',
-                    'name' => $user
+                    'name'    => $user,
                 ], 200);
             }
         }

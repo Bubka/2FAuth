@@ -18,8 +18,8 @@ class TwoFAccountReadResource extends TwoFAccountStoreResource
     {
         return array_merge(
             [
-                'id'            => (int) $this->id,
-                'group_id'      => is_null($this->group_id) ? null : (int) $this->group_id,
+                'id'       => (int) $this->id,
+                'group_id' => is_null($this->group_id) ? null : (int) $this->group_id,
             ],
             parent::toArray($request)
         );

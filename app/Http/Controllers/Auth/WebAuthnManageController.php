@@ -4,16 +4,15 @@ namespace App\Http\Controllers\Auth;
 
 use App\Facades\Settings;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Http\Requests\WebauthnRenameRequest;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class WebAuthnManageController extends Controller
-{    
-
+{
     /**
      * List all WebAuthn registered credentials
-     * 
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function index(Request $request)
@@ -23,12 +22,11 @@ class WebAuthnManageController extends Controller
         return response()->json($allUserCredentials, 200);
     }
 
-
     /**
      * Rename a WebAuthn credential
-     * 
-     * @param \App\Http\Requests\WebauthnRenameRequest $request
-     * @param string $credential
+     *
+     * @param  \App\Http\Requests\WebauthnRenameRequest  $request
+     * @param  string  $credential
      * @return \Illuminate\Http\JsonResponse
      */
     public function rename(WebauthnRenameRequest $request, string $credential)
@@ -38,17 +36,15 @@ class WebAuthnManageController extends Controller
         abort_if(! $request->user()->renameCredential($credential, $validated['name']), 404);
 
         return response()->json([
-                    'name' => $validated['name'],
-                ], 200);
+            'name' => $validated['name'],
+        ], 200);
     }
-    
 
     /**
      * Remove the specified credential from storage.
-     * 
+     *
      * @param  \Illuminate\Http\Request  $request
      * @param  string|array  $credential
-     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function delete(Request $request, $credential)

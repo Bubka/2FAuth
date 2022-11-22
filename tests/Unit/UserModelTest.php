@@ -10,7 +10,6 @@ use Tests\ModelTestCase;
  */
 class UserModelTest extends ModelTestCase
 {
-
     /**
      * @test
      */

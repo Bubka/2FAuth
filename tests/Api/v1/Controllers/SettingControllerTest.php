@@ -2,10 +2,9 @@
 
 namespace Tests\Api\v1\Controllers;
 
+use App\Facades\Settings;
 use App\Models\User;
 use Tests\FeatureTestCase;
-use App\Facades\Settings;
-
 
 /**
  * @covers \App\Api\v1\Controllers\SettingController
@@ -14,30 +13,35 @@ class SettingControllerTest extends FeatureTestCase
 {
     /**
      * @var \App\Models\User
-    */
+     */
     protected $user;
 
     private const SETTING_JSON_STRUCTURE = [
         'key',
-        'value'
+        'value',
     ];
+
     private const TWOFAUTH_NATIVE_SETTING = 'showTokenAsDot';
+
     private const TWOFAUTH_NATIVE_SETTING_DEFAULT_VALUE = false;
+
     private const TWOFAUTH_NATIVE_SETTING_CHANGED_VALUE = true;
+
     private const USER_DEFINED_SETTING = 'mySetting';
+
     private const USER_DEFINED_SETTING_VALUE = 'mySetting';
+
     private const USER_DEFINED_SETTING_CHANGED_VALUE = 'mySetting';
 
     /**
      * @test
      */
-    public function setUp(): void
+    public function setUp() : void
     {
         parent::setUp();
 
         $this->user = User::factory()->create();
     }
-
 
     /**
      * @test
@@ -48,10 +52,9 @@ class SettingControllerTest extends FeatureTestCase
             ->json('GET', '/api/v1/settings')
             ->assertOk()
             ->assertJsonStructure([
-                '*' => self::SETTING_JSON_STRUCTURE
+                '*' => self::SETTING_JSON_STRUCTURE,
             ]);
     }
-
 
     /**
      * @test
@@ -62,11 +65,10 @@ class SettingControllerTest extends FeatureTestCase
             ->json('GET', '/api/v1/settings/' . self::TWOFAUTH_NATIVE_SETTING)
             ->assertOk()
             ->assertExactJson([
-                'key' => self::TWOFAUTH_NATIVE_SETTING,
+                'key'   => self::TWOFAUTH_NATIVE_SETTING,
                 'value' => self::TWOFAUTH_NATIVE_SETTING_DEFAULT_VALUE,
             ]);
     }
-
 
     /**
      * @test
@@ -79,11 +81,10 @@ class SettingControllerTest extends FeatureTestCase
             ->json('GET', '/api/v1/settings/' . self::TWOFAUTH_NATIVE_SETTING)
             ->assertOk()
             ->assertExactJson([
-                'key' => self::TWOFAUTH_NATIVE_SETTING,
+                'key'   => self::TWOFAUTH_NATIVE_SETTING,
                 'value' => self::TWOFAUTH_NATIVE_SETTING_CHANGED_VALUE,
             ]);
     }
-
 
     /**
      * @test
@@ -96,11 +97,10 @@ class SettingControllerTest extends FeatureTestCase
             ->json('GET', '/api/v1/settings/' . self::USER_DEFINED_SETTING)
             ->assertOk()
             ->assertExactJson([
-                'key' => self::USER_DEFINED_SETTING,
+                'key'   => self::USER_DEFINED_SETTING,
                 'value' => self::USER_DEFINED_SETTING_VALUE,
             ]);
     }
-
 
     /**
      * @test
@@ -112,7 +112,6 @@ class SettingControllerTest extends FeatureTestCase
             ->assertNotFound();
     }
 
-
     /**
      * @test
      */
@@ -120,16 +119,15 @@ class SettingControllerTest extends FeatureTestCase
     {
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/settings', [
-                'key' => self::USER_DEFINED_SETTING,
+                'key'   => self::USER_DEFINED_SETTING,
                 'value' => self::USER_DEFINED_SETTING_VALUE,
             ])
             ->assertCreated()
             ->assertExactJson([
-                'key' => self::USER_DEFINED_SETTING,
+                'key'   => self::USER_DEFINED_SETTING,
                 'value' => self::USER_DEFINED_SETTING_VALUE,
             ]);
     }
-
 
     /**
      * @test
@@ -138,12 +136,11 @@ class SettingControllerTest extends FeatureTestCase
     {
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/settings', [
-                'key' => null,
+                'key'   => null,
                 'value' => null,
             ])
             ->assertStatus(422);
     }
-
 
     /**
      * @test
@@ -154,12 +151,11 @@ class SettingControllerTest extends FeatureTestCase
 
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/settings', [
-                'key' => self::USER_DEFINED_SETTING,
+                'key'   => self::USER_DEFINED_SETTING,
                 'value' => self::USER_DEFINED_SETTING_VALUE,
             ])
             ->assertStatus(422);
     }
-
 
     /**
      * @test
@@ -172,11 +168,10 @@ class SettingControllerTest extends FeatureTestCase
             ])
             ->assertOk()
             ->assertExactJson([
-                'key' => self::TWOFAUTH_NATIVE_SETTING,
+                'key'   => self::TWOFAUTH_NATIVE_SETTING,
                 'value' => self::TWOFAUTH_NATIVE_SETTING_CHANGED_VALUE,
             ]);
     }
-
 
     /**
      * @test
@@ -191,11 +186,10 @@ class SettingControllerTest extends FeatureTestCase
             ])
             ->assertOk()
             ->assertExactJson([
-                'key' => self::USER_DEFINED_SETTING,
+                'key'   => self::USER_DEFINED_SETTING,
                 'value' => self::USER_DEFINED_SETTING_CHANGED_VALUE,
             ]);
     }
-
 
     /**
      * @test
@@ -208,11 +202,10 @@ class SettingControllerTest extends FeatureTestCase
             ])
             ->assertOk()
             ->assertExactJson([
-                'key' => self::USER_DEFINED_SETTING,
+                'key'   => self::USER_DEFINED_SETTING,
                 'value' => self::USER_DEFINED_SETTING_CHANGED_VALUE,
             ]);
     }
-
 
     /**
      * @test
@@ -225,7 +218,6 @@ class SettingControllerTest extends FeatureTestCase
             ->json('DELETE', '/api/v1/settings/' . self::USER_DEFINED_SETTING)
             ->assertNoContent();
     }
-
 
     /**
      * @test
@@ -241,7 +233,6 @@ class SettingControllerTest extends FeatureTestCase
             ]);
     }
 
-
     /**
      * @test
      */
@@ -251,6 +242,4 @@ class SettingControllerTest extends FeatureTestCase
             ->json('DELETE', '/api/v1/settings/' . self::USER_DEFINED_SETTING)
             ->assertNotFound();
     }
-
-
 }

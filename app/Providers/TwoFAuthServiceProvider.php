@@ -2,13 +2,13 @@
 
 namespace App\Providers;
 
-use App\Services\LogoService;
-use App\Services\SettingService;
-use App\Services\ReleaseRadarService;
-use App\Services\TwoFAccountService;
 use App\Factories\MigratorFactoryInterface;
-use Illuminate\Support\ServiceProvider;
+use App\Services\LogoService;
+use App\Services\ReleaseRadarService;
+use App\Services\SettingService;
+use App\Services\TwoFAccountService;
 use Illuminate\Contracts\Support\DeferrableProvider;
+use Illuminate\Support\ServiceProvider;
 
 class TwoFAuthServiceProvider extends ServiceProvider implements DeferrableProvider
 {
@@ -44,8 +44,7 @@ class TwoFAuthServiceProvider extends ServiceProvider implements DeferrableProvi
     public function boot()
     {
         //
-    } 
-
+    }
 
     /**
      * Get the services provided by the provider.

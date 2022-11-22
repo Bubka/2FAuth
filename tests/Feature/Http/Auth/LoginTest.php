@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\Http\Auth;
 
-use App\Models\User;
 use App\Facades\Settings;
+use App\Models\User;
 use Tests\FeatureTestCase;
 
 class LoginTest extends FeatureTestCase
@@ -14,18 +14,18 @@ class LoginTest extends FeatureTestCase
     protected $user;
 
     private const PASSWORD = 'password';
+
     private const WRONG_PASSWORD = 'wrong_password';
 
     /**
      * @test
      */
-    public function setUp(): void
+    public function setUp() : void
     {
         parent::setUp();
 
         $this->user = User::factory()->create();
     }
-
 
     /**
      * @test
@@ -33,16 +33,15 @@ class LoginTest extends FeatureTestCase
     public function test_user_login_returns_success()
     {
         $response = $this->json('POST', '/user/login', [
-            'email' => $this->user->email,
-            'password' => self::PASSWORD
+            'email'    => $this->user->email,
+            'password' => self::PASSWORD,
         ])
         ->assertOk()
         ->assertExactJson([
             'message' => 'authenticated',
-            'name' => $this->user->name,
+            'name'    => $this->user->name,
         ]);
     }
-
 
     /**
      * @test
@@ -50,22 +49,21 @@ class LoginTest extends FeatureTestCase
     public function test_user_login_already_authenticated_returns_bad_request()
     {
         $response = $this->json('POST', '/user/login', [
-            'email' => $this->user->email,
-            'password' => self::PASSWORD
+            'email'    => $this->user->email,
+            'password' => self::PASSWORD,
         ]);
 
         $response = $this->actingAs($this->user, 'web-guard')
             ->json('POST', '/user/login', [
-                'email' => $this->user->email,
-                'password' => self::PASSWORD
+                'email'    => $this->user->email,
+                'password' => self::PASSWORD,
             ])
             ->assertStatus(200)
             ->assertJson([
                 'message' => 'authenticated',
-                'name' => $this->user->name,
+                'name'    => $this->user->name,
             ]);
     }
-
 
     /**
      * @test
@@ -73,16 +71,15 @@ class LoginTest extends FeatureTestCase
     public function test_user_login_with_missing_data_returns_validation_error()
     {
         $response = $this->json('POST', '/user/login', [
-            'email' => '',
-            'password' => ''
+            'email'    => '',
+            'password' => '',
         ])
         ->assertStatus(422)
         ->assertJsonValidationErrors([
             'email',
-            'password'
+            'password',
         ]);
     }
-
 
     /**
      * @test
@@ -90,15 +87,14 @@ class LoginTest extends FeatureTestCase
     public function test_user_login_with_invalid_credentials_returns_validation_error()
     {
         $response = $this->json('POST', '/user/login', [
-            'email' => $this->user->email,
-            'password' => self::WRONG_PASSWORD
+            'email'    => $this->user->email,
+            'password' => self::WRONG_PASSWORD,
         ])
         ->assertStatus(401)
         ->assertJson([
-            'message' => 'unauthorised'
+            'message' => 'unauthorised',
         ]);
     }
-
 
     /**
      * @test
@@ -106,38 +102,37 @@ class LoginTest extends FeatureTestCase
     public function test_too_many_login_attempts_with_invalid_credentials_returns_too_many_request_error()
     {
         $response = $this->json('POST', '/user/login', [
-            'email' => $this->user->email,
-            'password' => self::WRONG_PASSWORD
+            'email'    => $this->user->email,
+            'password' => self::WRONG_PASSWORD,
         ]);
 
         $response = $this->json('POST', '/user/login', [
-            'email' => $this->user->email,
-            'password' => self::WRONG_PASSWORD
+            'email'    => $this->user->email,
+            'password' => self::WRONG_PASSWORD,
         ]);
 
         $response = $this->json('POST', '/user/login', [
-            'email' => $this->user->email,
-            'password' => self::WRONG_PASSWORD
+            'email'    => $this->user->email,
+            'password' => self::WRONG_PASSWORD,
         ]);
 
         $response = $this->json('POST', '/user/login', [
-            'email' => $this->user->email,
-            'password' => self::WRONG_PASSWORD
+            'email'    => $this->user->email,
+            'password' => self::WRONG_PASSWORD,
         ]);
 
         $response = $this->json('POST', '/user/login', [
-            'email' => $this->user->email,
-            'password' => self::WRONG_PASSWORD
+            'email'    => $this->user->email,
+            'password' => self::WRONG_PASSWORD,
         ]);
 
         $response = $this->json('POST', '/user/login', [
-            'email' => $this->user->email,
-            'password' => self::WRONG_PASSWORD
+            'email'    => $this->user->email,
+            'password' => self::WRONG_PASSWORD,
         ]);
 
         $response->assertStatus(429);
     }
-
 
     /**
      * @test
@@ -145,8 +140,8 @@ class LoginTest extends FeatureTestCase
     public function test_user_logout_returns_validation_success()
     {
         $response = $this->json('POST', '/user/login', [
-            'email' => $this->user->email,
-            'password' => self::PASSWORD
+            'email'    => $this->user->email,
+            'password' => self::PASSWORD,
         ]);
 
         $response = $this->actingAs($this->user, 'web-guard')
@@ -157,7 +152,6 @@ class LoginTest extends FeatureTestCase
             ]);
     }
 
-
     /**
      * @test
      */
@@ -167,8 +161,8 @@ class LoginTest extends FeatureTestCase
         Settings::set('kickUserAfter', 1);
 
         $response = $this->json('POST', '/user/login', [
-            'email' => $this->user->email,
-            'password' => self::PASSWORD
+            'email'    => $this->user->email,
+            'password' => self::PASSWORD,
         ]);
 
         // Ping a protected endpoint to log last_seen_at time
@@ -181,5 +175,4 @@ class LoginTest extends FeatureTestCase
             ->json('GET', '/api/v1/twofaccounts')
             ->assertStatus(418);
     }
-
 }

@@ -26,7 +26,7 @@ class TwoFAccountImportRequest extends FormRequest
     {
         return [
             'payload' => 'required_without:file|string',
-            'file' => 'required_without:payload|mimes:txt,json,csv',
+            'file'    => 'required_without:payload|mimes:txt,json,csv',
         ];
     }
 }

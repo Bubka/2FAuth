@@ -11,7 +11,7 @@ class ReleaseRadarService
 {
     /**
      * Run a scheduled release scan
-     * 
+     *
      * @return void
      */
     public function scheduledScan() : void
@@ -21,10 +21,9 @@ class ReleaseRadarService
         }
     }
 
-
     /**
      * Run a manual release scan
-     * 
+     *
      * @return false|string False if no new release, the new release number otherwise
      */
     public function manualScan() : false|string
@@ -34,22 +33,20 @@ class ReleaseRadarService
 
     /**
      * Run a release scan
-     * 
+     *
      * @return false|string False if no new release, the new release number otherwise
      */
     protected function newRelease() : false|string
     {
-        if ($latestReleaseData = json_decode($this->getLatestReleaseData()))
-        {
-            $githubVersion = Helpers::cleanVersionNumber($latestReleaseData->tag_name);
+        if ($latestReleaseData = json_decode($this->getLatestReleaseData())) {
+            $githubVersion    = Helpers::cleanVersionNumber($latestReleaseData->tag_name);
             $installedVersion = Helpers::cleanVersionNumber(config('2fauth.version'));
 
             if ($githubVersion > $installedVersion && $latestReleaseData->prerelease == false && $latestReleaseData->draft == false) {
                 Settings::set('latestRelease', $latestReleaseData->tag_name);
-                
+
                 return $latestReleaseData->tag_name;
-            }
-            else {
+            } else {
                 Settings::delete('latestRelease');
             }
 
@@ -59,10 +56,9 @@ class ReleaseRadarService
         return false;
     }
 
-
     /**
      * Fetch releases on Github
-     * 
+     *
      * @return string|null
      */
     protected function getLatestReleaseData() : string|null
@@ -70,12 +66,11 @@ class ReleaseRadarService
         try {
             $response = Http::retry(3, 100)
                 ->get(config('2fauth.latestReleaseUrl'));
-            
+
             if ($response->successful()) {
                 return $response->body();
             }
-        }
-        catch (\Exception $exception) {
+        } catch (\Exception $exception) {
             Log::error('cannot reach latestReleaseUrl endpoint');
         }
 

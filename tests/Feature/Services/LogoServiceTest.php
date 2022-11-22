@@ -3,10 +3,9 @@
 namespace Tests\Feature\Services;
 
 use App\Services\LogoService;
-use Tests\FeatureTestCase;
-use Tests\TestCase;
-use Mockery\MockInterface;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Mockery\MockInterface;
+use Tests\TestCase;
 
 /**
  * @covers \App\Services\LogoService
@@ -23,7 +22,6 @@ class LogoServiceTest extends TestCase
         parent::setUp();
     }
 
-
     /**
      * @test
      */
@@ -37,10 +35,9 @@ class LogoServiceTest extends TestCase
         });
 
         $icon = $logoServiceMock->getIcon('service');
-        
+
         $this->assertNotNull($icon);
     }
-
 
     /**
      * @test
@@ -55,8 +52,7 @@ class LogoServiceTest extends TestCase
         });
 
         $icon = $logoServiceMock->getIcon('no_logo_should_exists_with_this_name');
-        
+
         $this->assertEquals(null, $icon);
     }
-
 }

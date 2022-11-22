@@ -2,12 +2,11 @@
 
 namespace App\Api\v1\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use App\Services\LogoService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
-
+use Illuminate\Support\Facades\Storage;
 
 class IconController extends Controller
 {
@@ -31,7 +30,6 @@ class IconController extends Controller
                 : response()->json(['message' => __('errors.file_upload_failed')], 500);
     }
 
-
     /**
      * Fetch a logo
      *
@@ -43,25 +41,24 @@ class IconController extends Controller
         $this->validate($request, [
             'service' => 'string|regex:/^[^:]+$/i',
         ]);
-        
+
         $logoService = App::make(LogoService::class);
-        $icon = $logoService->getIcon($request->service);
+        $icon        = $logoService->getIcon($request->service);
 
         return $icon
             ? response()->json(['filename' => $icon], 201)
             : response()->json(null, 204);
     }
-    
 
     /**
      * delete an icon
      *
-     * @param  string $icon
+     * @param  string  $icon
      * @return \Illuminate\Http\JsonResponse
      */
     public function delete(string $icon)
     {
-        Storage::disk('icons')->delete($icon); 
+        Storage::disk('icons')->delete($icon);
 
         return response()->json(null, 204);
     }

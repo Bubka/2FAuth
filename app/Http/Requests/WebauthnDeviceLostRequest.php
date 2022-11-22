@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
 
 class WebauthnDeviceLostRequest extends FormRequest
 {
@@ -28,7 +27,7 @@ class WebauthnDeviceLostRequest extends FormRequest
             'email' => [
                 'required',
                 'email',
-                new \App\Rules\CaseInsensitiveEmailExists
+                new \App\Rules\CaseInsensitiveEmailExists,
             ],
         ];
     }

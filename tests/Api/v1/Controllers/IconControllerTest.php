@@ -2,20 +2,16 @@
 
 namespace Tests\Api\v1\Controllers;
 
-use Illuminate\Http\UploadedFile;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Illuminate\Http\UploadedFile;
 use Tests\FeatureTestCase;
-
-use App\Models\TwoFAccount;
 
 /**
  * @covers \App\Api\v1\Controllers\IconController
  */
 class IconControllerTest extends FeatureTestCase
 {
-
     use WithoutMiddleware;
-
 
     /**
      * @test
@@ -25,14 +21,13 @@ class IconControllerTest extends FeatureTestCase
         $file = UploadedFile::fake()->image('testIcon.jpg');
 
         $response = $this->json('POST', '/api/v1/icons', [
-                'icon' => $file,
-            ])
+            'icon' => $file,
+        ])
             ->assertCreated()
             ->assertJsonStructure([
-                'filename'
+                'filename',
             ]);
     }
-
 
     /**
      * @test
@@ -40,11 +35,10 @@ class IconControllerTest extends FeatureTestCase
     public function test_upload_with_invalid_data_returns_validation_error()
     {
         $response = $this->json('POST', '/api/v1/icons', [
-                'icon' => null,
-            ])
+            'icon' => null,
+        ])
             ->assertStatus(422);
     }
-
 
     /**
      * @test
@@ -55,7 +49,6 @@ class IconControllerTest extends FeatureTestCase
             ->assertNoContent(204);
     }
 
-
     /**
      * @test
      */
@@ -63,7 +56,5 @@ class IconControllerTest extends FeatureTestCase
     {
         $response = $this->json('DELETE', '/api/v1/icons/null')
             ->assertNoContent(204);
-
     }
-
 }

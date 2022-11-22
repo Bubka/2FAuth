@@ -2,27 +2,27 @@
 
 namespace App\Api\v1\Requests;
 
-use Illuminate\Support\Arr;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 
 class TwoFAccountDynamicRequest extends FormRequest
 {
     /**
-    * Determine if the user is authorized to make this request.
-    *
-    * @return bool
-    */
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
     public function authorize()
     {
         return Auth::check();
     }
-    
+
     /**
-    * Get the validation rules that apply to the request.
-    *
-    * @return array
-    */
+     * Get the validation rules that apply to the request.
+     *
+     * @return array
+     */
     public function rules()
     {
         $rules = Arr::has($this->validationData(), 'uri')
@@ -32,7 +32,6 @@ class TwoFAccountDynamicRequest extends FormRequest
         return $rules;
     }
 
-
     /**
      * Prepare the data for validation.
      *
@@ -41,7 +40,7 @@ class TwoFAccountDynamicRequest extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge([
-            'otp_type' => strtolower($this->otp_type),
+            'otp_type'  => strtolower($this->otp_type),
             'algorithm' => strtolower($this->algorithm),
         ]);
     }

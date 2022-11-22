@@ -2,9 +2,9 @@
 
 namespace App\Http\Middleware;
 
+use App\Facades\Settings;
 use Closure;
 use Illuminate\Support\Facades\App;
-use App\Facades\Settings;
 
 class SetLanguage
 {
@@ -26,16 +26,17 @@ class SetLanguage
         // FI: Settings::get() always returns a fallback value
         $lang = Settings::get('lang');
 
-        if($lang === 'browser') {
-            $lang = config('app.fallback_locale');
-            $accepted = str_replace(' ', '', $request->header("Accept-Language"));
+        if ($lang === 'browser') {
+            $lang     = config('app.fallback_locale');
+            $accepted = str_replace(' ', '', $request->header('Accept-Language'));
 
             if ($accepted && $accepted !== '*') {
                 $prefLocales = array_reduce(
                     array_diff(explode(',', $accepted), ['*']),
-                    function ($res, $el) { 
-                        list($l, $q) = array_merge(explode(';q=', $el), [1]); 
-                        $res[$l] = (float) $q; 
+                    function ($res, $el) {
+                        [$l, $q] = array_merge(explode(';q=', $el), [1]);
+                        $res[$l] = (float) $q;
+
                         return $res;
                     },
                     []

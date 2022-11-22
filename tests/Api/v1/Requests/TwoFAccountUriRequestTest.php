@@ -4,26 +4,25 @@ namespace Tests\Api\v1\Requests;
 
 use App\Api\v1\Requests\TwoFAccountUriRequest;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Tests\TestCase;
 
 class TwoFAccountUriRequestTest extends TestCase
 {
-
     use WithoutMiddleware;
 
     /**
      * @test
      */
     public function test_user_is_authorized()
-    {   
+    {
         Auth::shouldReceive('check')
         ->once()
         ->andReturn(true);
 
         $request = new TwoFAccountUriRequest();
-    
+
         $this->assertTrue($request->authorize());
     }
 
@@ -32,7 +31,7 @@ class TwoFAccountUriRequestTest extends TestCase
      */
     public function test_valid_data(array $data) : void
     {
-        $request = new TwoFAccountUriRequest();
+        $request   = new TwoFAccountUriRequest();
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->fails());
@@ -45,14 +44,14 @@ class TwoFAccountUriRequestTest extends TestCase
     {
         return [
             [[
-                'uri' => 'otpauth://totp/test@test.com?secret=A4GRFHZVRBGY7UIW&issuer=test'
-            ]],
-            [[
-                'uri' => 'otpauth://hotp/test@test.com?secret=A4GRFHZVRBGY7UIW&issuer=test'
-            ]],
-            [[
                 'uri' => 'otpauth://totp/test@test.com?secret=A4GRFHZVRBGY7UIW&issuer=test',
-                'custom_otp' => 'steamtotp'
+            ]],
+            [[
+                'uri' => 'otpauth://hotp/test@test.com?secret=A4GRFHZVRBGY7UIW&issuer=test',
+            ]],
+            [[
+                'uri'        => 'otpauth://totp/test@test.com?secret=A4GRFHZVRBGY7UIW&issuer=test',
+                'custom_otp' => 'steamtotp',
             ]],
         ];
     }
@@ -62,7 +61,7 @@ class TwoFAccountUriRequestTest extends TestCase
      */
     public function test_invalid_data(array $data) : void
     {
-        $request = new TwoFAccountUriRequest();
+        $request   = new TwoFAccountUriRequest();
         $validator = Validator::make($data, $request->rules());
 
         $this->assertTrue($validator->fails());
@@ -75,33 +74,32 @@ class TwoFAccountUriRequestTest extends TestCase
     {
         return [
             [[
-                'uri' => null // required
+                'uri' => null, // required
             ]],
             [[
-                'uri' => '' // required
+                'uri' => '', // required
             ]],
             [[
-                'uri' => true // string
+                'uri' => true, // string
             ]],
             [[
-                'uri' => 8 // string
+                'uri' => 8, // string
             ]],
             [[
-                'uri' => 'otpXauth://totp/test@test.com?secret=A4GRFHZVRBGY7UIW&issuer=test' // regex
+                'uri' => 'otpXauth://totp/test@test.com?secret=A4GRFHZVRBGY7UIW&issuer=test', // regex
             ]],
             [[
-                'uri' => 'otpauth://totp/test@test.com?secret=A4GRFHZVRBGY7UIW&issuer=test',
-                'custom_otp' => 'notSteam' // not in
+                'uri'        => 'otpauth://totp/test@test.com?secret=A4GRFHZVRBGY7UIW&issuer=test',
+                'custom_otp' => 'notSteam', // not in
             ]],
             [[
-                'uri' => 'otpauth://totp/test@test.com?secret=A4GRFHZVRBGY7UIW&issuer=test',
-                'custom_otp' => 0 // string
+                'uri'        => 'otpauth://totp/test@test.com?secret=A4GRFHZVRBGY7UIW&issuer=test',
+                'custom_otp' => 0, // string
             ]],
             [[
-                'uri' => 'otpauth://totp/test@test.com?secret=A4GRFHZVRBGY7UIW&issuer=test',
-                'custom_otp' => true // string
+                'uri'        => 'otpauth://totp/test@test.com?secret=A4GRFHZVRBGY7UIW&issuer=test',
+                'custom_otp' => true, // string
             ]],
         ];
     }
-
 }

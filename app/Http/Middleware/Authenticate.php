@@ -20,9 +20,8 @@ class Authenticate extends Middleware
         if (empty($guards)) {
             // Will retreive the default guard
             $guards = [null];
-        }
-        else {
-            // We replace routes guard by the reverse proxy guard if necessary 
+        } else {
+            // We replace routes guard by the reverse proxy guard if necessary
             $proxyGuard = 'reverse-proxy-guard';
 
             if (config('auth.defaults.guard') === $proxyGuard) {
@@ -33,11 +32,11 @@ class Authenticate extends Middleware
         foreach ($guards as $guard) {
             if ($this->auth->guard($guard)->check()) {
                 $this->auth->shouldUse($guard);
+
                 return;
             }
         }
 
         $this->unauthenticated($request, $guards);
     }
-
 }

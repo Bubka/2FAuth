@@ -1,3 +1,26 @@
 {
-    "preset": "laravel"
+    "preset": "laravel",
+    "exclude": [
+        "app/Protobuf",
+        "bootstrap",
+        "config",
+        "database",
+        "public",
+        "resources"
+    ],
+    "rules": {
+        "binary_operator_spaces": {
+            "default": "single_space",
+            "operators": {
+                "=>": "align_single_space_minimal",
+                "=": "align_single_space_minimal"
+            }
+        },
+        "concat_space": {
+            "spacing": "one"
+        },
+        "return_type_declaration": {
+            "space_before": "one"
+        }
+    }
 }

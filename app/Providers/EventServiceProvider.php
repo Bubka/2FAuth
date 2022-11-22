@@ -3,11 +3,11 @@
 namespace App\Providers;
 
 use App\Events\GroupDeleting;
-use App\Events\TwoFAccountDeleted;
 use App\Events\ScanForNewReleaseCalled;
-use App\Listeners\ReleaseRadar;
+use App\Events\TwoFAccountDeleted;
 use App\Listeners\CleanIconStorage;
 use App\Listeners\DissociateTwofaccountFromGroup;
+use App\Listeners\ReleaseRadar;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;

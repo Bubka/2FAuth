@@ -6,7 +6,6 @@ use Tests\FeatureTestCase;
 
 class RouteTest extends FeatureTestCase
 {
-
     /**
      * test return main web view
      *
@@ -31,5 +30,4 @@ class RouteTest extends FeatureTestCase
 
         $response->assertStatus(405);
     }
-
 }

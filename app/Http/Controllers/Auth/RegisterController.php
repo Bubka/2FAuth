@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Models\User;
-use App\Http\Requests\UserStoreRequest;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\UserStoreRequest;
+use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 
 class RegisterController extends Controller
@@ -25,7 +25,6 @@ class RegisterController extends Controller
 
     use RegistersUsers;
 
-
     /**
      * Handle a registration request for the application.
      *
@@ -42,10 +41,9 @@ class RegisterController extends Controller
 
         return response()->json([
             'message' => 'account created',
-            'name' => $user->name,
+            'name'    => $user->name,
         ], 201);
     }
-
 
     /**
      * Create a new user instance after a valid registration.
@@ -56,8 +54,8 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
+            'name'     => $data['name'],
+            'email'    => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
     }

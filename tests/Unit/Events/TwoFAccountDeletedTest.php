@@ -2,11 +2,11 @@
 
 namespace Tests\Unit\Events;
 
-use App\Models\TwoFAccount;
 use App\Events\TwoFAccountDeleted;
-use Tests\TestCase;
-use Mockery\MockInterface;
+use App\Models\TwoFAccount;
 use App\Services\SettingService;
+use Mockery\MockInterface;
+use Tests\TestCase;
 
 /**
  * @covers \App\Events\TwoFAccountDeleted
@@ -24,7 +24,7 @@ class TwoFAccountDeletedTest extends TestCase
         });
 
         $twofaccount = TwoFAccount::factory()->make();
-        $event = new TwoFAccountDeleted($twofaccount);
+        $event       = new TwoFAccountDeleted($twofaccount);
 
         $this->assertSame($twofaccount, $event->twofaccount);
     }

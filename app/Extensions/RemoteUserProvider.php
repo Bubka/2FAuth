@@ -6,10 +6,10 @@
 namespace App\Extensions;
 
 use App\Models\User;
+use Exception;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Support\Arr;
-use Exception;
 
 class RemoteUserProvider implements UserProvider
 {
@@ -23,7 +23,6 @@ class RemoteUserProvider implements UserProvider
     // The downside of this approach is that we have to be sure that no change that needs
     // to be persisted will be made to the user instance afterward (i.e through middlewares).
 
-
     /**
      * The currently authenticated user.
      *
@@ -31,26 +30,24 @@ class RemoteUserProvider implements UserProvider
      */
     protected $user;
 
-
     /**
      * Get the In-memory user
-     * 
+     *
      * @return \App\Models\User
      */
     protected function getInMemoryUser()
     {
         if (is_null($this->user)) {
-            $this->user = new User;
-            $this->user->name = 'Remote User';
+            $this->user        = new User;
+            $this->user->name  = 'Remote User';
             $this->user->email = 'fake.email@do.not.use';
         }
-        
+
         return $this->user;
     }
 
-
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function retrieveById($identifier)
     {
@@ -67,8 +64,8 @@ class RemoteUserProvider implements UserProvider
     }
 
     /**
-     * @inheritDoc
-     * 
+     * {@inheritDoc}
+     *
      * @codeCoverageIgnore
      */
     public function retrieveByToken($identifier, $token)
@@ -77,8 +74,8 @@ class RemoteUserProvider implements UserProvider
     }
 
     /**
-     * @inheritDoc
-     * 
+     * {@inheritDoc}
+     *
      * @codeCoverageIgnore
      */
     public function updateRememberToken(Authenticatable $user, $token)
@@ -87,8 +84,8 @@ class RemoteUserProvider implements UserProvider
     }
 
     /**
-     * @inheritDoc
-     * 
+     * {@inheritDoc}
+     *
      * @codeCoverageIgnore
      */
     public function retrieveByCredentials(array $credentials)
@@ -97,8 +94,8 @@ class RemoteUserProvider implements UserProvider
     }
 
     /**
-     * @inheritDoc
-     * 
+     * {@inheritDoc}
+     *
      * @codeCoverageIgnore
      */
     public function validateCredentials(Authenticatable $user, array $credentials)

@@ -3,9 +3,9 @@
 namespace Tests\Feature\Http\Auth;
 
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
 use Tests\FeatureTestCase;
 
@@ -22,7 +22,7 @@ class ForgotPasswordControllerTest extends FeatureTestCase
     public function test_submit_email_password_request_without_email_returns_validation_error()
     {
         $response = $this->json('POST', '/user/password/lost', [
-            'email' => ''
+            'email' => '',
         ]);
 
         $response->assertStatus(422)
@@ -35,7 +35,7 @@ class ForgotPasswordControllerTest extends FeatureTestCase
     public function test_submit_email_password_request_with_invalid_email_returns_validation_error()
     {
         $response = $this->json('POST', '/user/password/lost', [
-            'email' => 'nametest.com'
+            'email' => 'nametest.com',
         ]);
 
         $response->assertStatus(422)
@@ -48,7 +48,7 @@ class ForgotPasswordControllerTest extends FeatureTestCase
     public function test_submit_email_password_request_with_unknown_email_returns_validation_error()
     {
         $response = $this->json('POST', '/user/password/lost', [
-            'email' => 'name@test.com'
+            'email' => 'name@test.com',
         ]);
 
         $response->assertStatus(422)
@@ -65,7 +65,7 @@ class ForgotPasswordControllerTest extends FeatureTestCase
         $this->user = User::factory()->create();
 
         $response = $this->json('POST', '/user/password/lost', [
-            'email' => $this->user->email
+            'email' => $this->user->email,
         ]);
 
         $response->assertStatus(200);
@@ -86,10 +86,9 @@ class ForgotPasswordControllerTest extends FeatureTestCase
         Config::set('2fauth.config.isDemoApp', true);
 
         $response = $this->json('POST', '/user/password/lost', [
-            'email' => ''
+            'email' => '',
         ]);
 
         $response->assertStatus(401);
     }
-
 }

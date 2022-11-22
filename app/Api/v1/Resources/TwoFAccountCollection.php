@@ -3,7 +3,6 @@
 namespace App\Api\v1\Resources;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
-use App\Api\v1\Resources\TwoFAccountReadResource;
 
 class TwoFAccountCollection extends ResourceCollection
 {
@@ -13,7 +12,6 @@ class TwoFAccountCollection extends ResourceCollection
      * @var string
      */
     public $collects = TwoFAccountReadResource::class;
-
 
     /**
      * Transform the resource collection into an array.
@@ -27,7 +25,7 @@ class TwoFAccountCollection extends ResourceCollection
         // The underlying TwoFAccountReadResource hides the secret only when withSecret == false.
         // When withSecret is provided the underlying resource will return secret according to the parameter value
         // If no withSecret is set we force it to false to ensure the secret will not being returned.
-        if (!$request->has('withSecret')) {
+        if (! $request->has('withSecret')) {
             $request->merge(['withSecret' => false]);
         }
 

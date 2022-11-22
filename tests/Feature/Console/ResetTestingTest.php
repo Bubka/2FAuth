@@ -2,12 +2,11 @@
 
 namespace Tests\Feature\Console;
 
-use Tests\FeatureTestCase;
 use Illuminate\Support\Facades\Config;
+use Tests\FeatureTestCase;
 
 class ResetTestingTest extends FeatureTestCase
 {
-
     /**
      * @test
      */
@@ -33,107 +32,105 @@ class ResetTestingTest extends FeatureTestCase
         $this->assertDatabaseCount('twofaccounts', 9);
 
         $this->assertDatabaseHas('twofaccounts', [
-            'otp_type' => 'totp',
-            'account' => 'johndoe@facebook.com',
-            'service' => 'Facebook',
-            'secret' => 'A4GRFTVVRBGY7UIW',
-            'algorithm' => 'sha1',
-            'digits' => 6,
-            'period' => 30,
-            'icon' => 'facebook.png',
+            'otp_type'   => 'totp',
+            'account'    => 'johndoe@facebook.com',
+            'service'    => 'Facebook',
+            'secret'     => 'A4GRFTVVRBGY7UIW',
+            'algorithm'  => 'sha1',
+            'digits'     => 6,
+            'period'     => 30,
+            'icon'       => 'facebook.png',
             'legacy_uri' => 'otpauth://totp/Facebook:johndoe@facebook.com?secret=A4GRFTVVRBGY7UIW',
         ]);
         $this->assertDatabaseHas('twofaccounts', [
-            'otp_type' => 'totp',
-            'service' => 'Twitter',
-            'account' => '@john',
-            'secret' => 'A2GRFTVVRBGY7UIW',
-            'algorithm' => 'sha1',
-            'digits' => 6,
-            'period' => 30,
-            'icon' => 'twitter.png',
+            'otp_type'   => 'totp',
+            'service'    => 'Twitter',
+            'account'    => '@john',
+            'secret'     => 'A2GRFTVVRBGY7UIW',
+            'algorithm'  => 'sha1',
+            'digits'     => 6,
+            'period'     => 30,
+            'icon'       => 'twitter.png',
             'legacy_uri' => 'otpauth://totp/Twitter:@john?secret=A2GRFTVVRBGY7UIW',
         ]);
         $this->assertDatabaseHas('twofaccounts', [
-            'otp_type' => 'totp',
-            'service' => 'Instagram',
-            'account' => '@johndoe',
-            'secret' => 'A6GRFTVVRBGY7UIW',
-            'algorithm' => 'sha1',
-            'digits' => 6,
-            'period' => 30,
-            'icon' => 'instagram.png',
+            'otp_type'   => 'totp',
+            'service'    => 'Instagram',
+            'account'    => '@johndoe',
+            'secret'     => 'A6GRFTVVRBGY7UIW',
+            'algorithm'  => 'sha1',
+            'digits'     => 6,
+            'period'     => 30,
+            'icon'       => 'instagram.png',
             'legacy_uri' => 'otpauth://totp/Instagram:@johndoe?secret=A6GRFTVVRBGY7UIW',
         ]);
         $this->assertDatabaseHas('twofaccounts', [
-            'otp_type' => 'totp',
-            'service' => 'LinkedIn',
-            'account' => '@johndoe',
-            'secret' => 'A7GRFTVVRBGY7UIW',
-            'algorithm' => 'sha1',
-            'digits' => 6,
-            'period' => 30,
-            'icon' => 'linkedin.png',
+            'otp_type'   => 'totp',
+            'service'    => 'LinkedIn',
+            'account'    => '@johndoe',
+            'secret'     => 'A7GRFTVVRBGY7UIW',
+            'algorithm'  => 'sha1',
+            'digits'     => 6,
+            'period'     => 30,
+            'icon'       => 'linkedin.png',
             'legacy_uri' => 'otpauth://totp/LinkedIn:@johndoe?secret=A7GRFTVVRBGY7UIW',
         ]);
         $this->assertDatabaseHas('twofaccounts', [
-            'otp_type' => 'totp',
-            'account' => 'johndoe',
-            'service' => 'Amazon',
-            'secret' => 'A7GRFTVVRBGY7UIW',
-            'algorithm' => 'sha1',
-            'digits' => 6,
-            'period' => 30,
-            'icon' => 'amazon.png',
+            'otp_type'   => 'totp',
+            'account'    => 'johndoe',
+            'service'    => 'Amazon',
+            'secret'     => 'A7GRFTVVRBGY7UIW',
+            'algorithm'  => 'sha1',
+            'digits'     => 6,
+            'period'     => 30,
+            'icon'       => 'amazon.png',
             'legacy_uri' => 'otpauth://totp/Amazon:johndoe?secret=A7GRFTVVRBGY7UIW',
         ]);
         $this->assertDatabaseHas('twofaccounts', [
-            'otp_type' => 'totp',
-            'account' => 'john.doe@icloud.com',
-            'service' => 'Apple',
-            'secret' => 'A2GRFTVVRBGY7UIW',
-            'algorithm' => 'sha1',
-            'digits' => 6,
-            'period' => 30,
-            'icon' => 'apple.png',
+            'otp_type'   => 'totp',
+            'account'    => 'john.doe@icloud.com',
+            'service'    => 'Apple',
+            'secret'     => 'A2GRFTVVRBGY7UIW',
+            'algorithm'  => 'sha1',
+            'digits'     => 6,
+            'period'     => 30,
+            'icon'       => 'apple.png',
             'legacy_uri' => 'otpauth://totp/Apple:john.doe@icloud.com?secret=A2GRFTVVRBGY7UIW',
         ]);
         $this->assertDatabaseHas('twofaccounts', [
-            'otp_type' => 'totp',
-            'account' => 'john.doe',
-            'service' => 'Dropbox',
-            'secret' => 'A3GRFTVVRBGY7UIW',
-            'algorithm' => 'sha1',
-            'digits' => 6,
-            'period' => 30,
-            'icon' => 'dropbox.png',
+            'otp_type'   => 'totp',
+            'account'    => 'john.doe',
+            'service'    => 'Dropbox',
+            'secret'     => 'A3GRFTVVRBGY7UIW',
+            'algorithm'  => 'sha1',
+            'digits'     => 6,
+            'period'     => 30,
+            'icon'       => 'dropbox.png',
             'legacy_uri' => 'otpauth://totp/Dropbox:john.doe?secret=A3GRFTVVRBGY7UIW',
         ]);
         $this->assertDatabaseHas('twofaccounts', [
-            'otp_type' => 'totp',
-            'account' => '@john',
-            'service' => 'Github',
-            'secret' => 'A2GRFTVVRBGY7UIW',
-            'algorithm' => 'sha1',
-            'digits' => 6,
-            'period' => 30,
-            'icon' => 'github.png',
+            'otp_type'   => 'totp',
+            'account'    => '@john',
+            'service'    => 'Github',
+            'secret'     => 'A2GRFTVVRBGY7UIW',
+            'algorithm'  => 'sha1',
+            'digits'     => 6,
+            'period'     => 30,
+            'icon'       => 'github.png',
             'legacy_uri' => 'otpauth://totp/Github:@john?secret=A2GRFTVVRBGY7UIW',
         ]);
         $this->assertDatabaseHas('twofaccounts', [
-            'otp_type' => 'totp',
-            'service' => 'Google',
-            'account' => 'john.doe@gmail.com',
-            'secret' => 'A5GRFTVVRBGY7UIW',
-            'algorithm' => 'sha1',
-            'digits' => 6,
-            'period' => 30,
-            'icon' => 'google.png',
+            'otp_type'   => 'totp',
+            'service'    => 'Google',
+            'account'    => 'john.doe@gmail.com',
+            'secret'     => 'A5GRFTVVRBGY7UIW',
+            'algorithm'  => 'sha1',
+            'digits'     => 6,
+            'period'     => 30,
+            'icon'       => 'google.png',
             'legacy_uri' => 'otpauth://totp/Google:john.doe@gmail.com?secret=A5GRFTVVRBGY7UIW',
         ]);
-
     }
-
 
     /**
      * @test
@@ -148,7 +145,6 @@ class ResetTestingTest extends FeatureTestCase
              ->assertSuccessful();
     }
 
-
     /**
      * @test
      */
@@ -159,5 +155,4 @@ class ResetTestingTest extends FeatureTestCase
         $this->artisan('2fauth:reset-testing --no-confirm')
              ->assertSuccessful();
     }
-
 }

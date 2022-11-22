@@ -2,16 +2,15 @@
 
 namespace App\Providers;
 
+use App\Extensions\RemoteUserProvider;
+use App\Extensions\WebauthnCredentialBroker;
+use App\Facades\Settings;
+use App\Services\Auth\ReverseProxyGuard;
+use Illuminate\Auth\Passwords\DatabaseTokenRepository;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Auth;
-use App\Services\Auth\ReverseProxyGuard;
-use App\Extensions\RemoteUserProvider;
-use App\Facades\Settings;
-use Illuminate\Support\Facades\Config;
-use RuntimeException;
-use App\Extensions\WebauthnCredentialBroker;
-use Illuminate\Auth\Passwords\DatabaseTokenRepository;
 use Illuminate\Support\Str;
+use RuntimeException;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -24,20 +23,19 @@ class AuthServiceProvider extends ServiceProvider
         // 'App\Models\Model' => 'App\Policies\ModelPolicy',
     ];
 
-
     /**
      * Register the service provider.
      *
      * @return void
+     *
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    public function register(): void
+    public function register() : void
     {
-
         $this->app->singleton(
             WebauthnCredentialBroker::class,
             static function ($app) {
-                if (!$config = $app['config']['auth.passwords.webauthn']) {
+                if (! $config = $app['config']['auth.passwords.webauthn']) {
                     throw new RuntimeException('You must set the [webauthn] key broker in [auth] config.');
                 }
 
@@ -62,7 +60,6 @@ class AuthServiceProvider extends ServiceProvider
         );
     }
 
-
     /**
      * Register any authentication / authorization services.
      *
@@ -75,17 +72,16 @@ class AuthServiceProvider extends ServiceProvider
         // Register a custom provider for reverse-proxy authentication
         Auth::provider('remote-user', function ($app, array $config) {
             // Return an instance of Illuminate\Contracts\Auth\UserProvider...
-    
+
             return new RemoteUserProvider;
         });
 
         // Register a custom driver for reverse-proxy authentication
-        Auth::extend('reverse-proxy', function ($app, string $name, array $config) {  
+        Auth::extend('reverse-proxy', function ($app, string $name, array $config) {
             // Return an instance of Illuminate\Contracts\Auth\Guard...
 
             return new ReverseProxyGuard(Auth::createUserProvider($config['provider']));
         });
-
 
         // Previously we were using a custom user provider derived from the Larapass user provider
         // in order to honor the "useWebauthnOnly" user option.
@@ -94,7 +90,7 @@ class AuthServiceProvider extends ServiceProvider
         // with a custom closure that uses the "useWebauthnOnly" user option
         Auth::provider(
             'eloquent-webauthn',
-            static function (\Illuminate\Contracts\Foundation\Application $app, array $config): \Laragear\WebAuthn\Auth\WebAuthnUserProvider {
+            static function (\Illuminate\Contracts\Foundation\Application $app, array $config) : \Laragear\WebAuthn\Auth\WebAuthnUserProvider {
                 return new \Laragear\WebAuthn\Auth\WebAuthnUserProvider(
                     $app->make('hash'),
                     $config['model'],
@@ -104,11 +100,10 @@ class AuthServiceProvider extends ServiceProvider
             }
         );
 
-
         // Normally we should set the Passport routes here using Passport::routes().
         // If so the passport routes would be set for both 'web' and 'api' middlewares without
         // possibility to exclude the web middleware (we can only pass additional middlewares to Passport::routes())
-        // 
+        //
         // The problem is that 2Fauth front-end uses the Laravel FreshApiToken to consum its API as a first party app.
         // So we have a laravel_token cookie added to each response to perform the authentication.
         //

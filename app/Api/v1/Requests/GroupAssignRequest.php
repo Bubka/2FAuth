@@ -25,8 +25,8 @@ class GroupAssignRequest extends FormRequest
     public function rules()
     {
         return [
-            'ids' => 'required|array',
-            'ids.*' => 'integer'
+            'ids'   => 'required|array',
+            'ids.*' => 'integer',
         ];
     }
 }

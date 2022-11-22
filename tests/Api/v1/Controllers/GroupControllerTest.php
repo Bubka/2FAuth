@@ -2,11 +2,10 @@
 
 namespace Tests\Api\v1\Controllers;
 
-use App\Models\User;
 use App\Models\Group;
-use Tests\FeatureTestCase;
 use App\Models\TwoFAccount;
-
+use App\Models\User;
+use Tests\FeatureTestCase;
 
 /**
  * @covers \App\Api\v1\Controllers\GroupController
@@ -16,20 +15,18 @@ class GroupControllerTest extends FeatureTestCase
 {
     /**
      * @var \App\Models\User
-    */
+     */
     protected $user;
-
 
     /**
      * @test
      */
-    public function setUp(): void
+    public function setUp() : void
     {
         parent::setUp();
 
         $this->user = User::factory()->create();
     }
-
 
     /**
      * @test
@@ -47,15 +44,14 @@ class GroupControllerTest extends FeatureTestCase
                     'id',
                     'name',
                     'twofaccounts_count',
-                ]
+                ],
             ])
             ->assertJsonFragment([
-                'id' => 0,
-                'name' => 'All',
+                'id'                 => 0,
+                'name'               => 'All',
                 'twofaccounts_count' => 0,
             ]);
     }
-
 
     /**
      * @test
@@ -68,11 +64,10 @@ class GroupControllerTest extends FeatureTestCase
             ])
             ->assertCreated()
             ->assertJsonFragment([
-                'name' => 'My second group',
+                'name'               => 'My second group',
                 'twofaccounts_count' => 0,
             ]);
     }
-
 
     /**
      * @test
@@ -85,7 +80,6 @@ class GroupControllerTest extends FeatureTestCase
             ])
             ->assertStatus(422);
     }
-
 
     /**
      * @test
@@ -100,11 +94,10 @@ class GroupControllerTest extends FeatureTestCase
             ->json('GET', '/api/v1/groups/' . $group->id)
             ->assertOk()
             ->assertJsonFragment([
-                'name' => 'My group',
+                'name'               => 'My group',
                 'twofaccounts_count' => 0,
             ]);
     }
-
 
     /**
      * @test
@@ -115,10 +108,9 @@ class GroupControllerTest extends FeatureTestCase
             ->json('GET', '/api/v1/groups/1000')
             ->assertNotFound()
             ->assertJsonStructure([
-                'message'
+                'message',
             ]);
     }
-
 
     /**
      * @test
@@ -133,11 +125,10 @@ class GroupControllerTest extends FeatureTestCase
             ])
             ->assertOk()
             ->assertJsonFragment([
-                'name' => 'name updated',
+                'name'               => 'name updated',
                 'twofaccounts_count' => 0,
             ]);
     }
-
 
     /**
      * @test
@@ -150,10 +141,9 @@ class GroupControllerTest extends FeatureTestCase
             ])
             ->assertNotFound()
             ->assertJsonStructure([
-                'message'
+                'message',
             ]);
     }
-
 
     /**
      * @test
@@ -169,13 +159,12 @@ class GroupControllerTest extends FeatureTestCase
             ->assertStatus(422);
     }
 
-
     /**
      * @test
      */
     public function test_assign_accounts_returns_updated_group_resource()
     {
-        $group = Group::factory()->create();
+        $group    = Group::factory()->create();
         $accounts = TwoFAccount::factory()->count(2)->create();
 
         $response = $this->actingAs($this->user, 'api-guard')
@@ -184,12 +173,11 @@ class GroupControllerTest extends FeatureTestCase
             ])
             ->assertOk()
             ->assertExactJson([
-                'id' => $group->id,
-                'name' => $group->name,
+                'id'                 => $group->id,
+                'name'               => $group->name,
                 'twofaccounts_count' => 2,
             ]);
     }
-
 
     /**
      * @test
@@ -204,17 +192,16 @@ class GroupControllerTest extends FeatureTestCase
             ])
             ->assertNotFound()
             ->assertJsonStructure([
-                'message'
+                'message',
             ]);
     }
-
 
     /**
      * @test
      */
     public function test_assign_invalid_accounts_returns_validation_error()
     {
-        $group = Group::factory()->create();
+        $group    = Group::factory()->create();
         $accounts = TwoFAccount::factory()->count(2)->create();
 
         $response = $this->actingAs($this->user, 'api-guard')
@@ -224,13 +211,12 @@ class GroupControllerTest extends FeatureTestCase
             ->assertStatus(422);
     }
 
-
     /**
      * @test
      */
     public function test_get_assigned_accounts_returns_twofaccounts_collection()
     {
-        $group = Group::factory()->create();
+        $group    = Group::factory()->create();
         $accounts = TwoFAccount::factory()->count(2)->create();
 
         $assign = $this->actingAs($this->user, 'api-guard')
@@ -252,18 +238,17 @@ class GroupControllerTest extends FeatureTestCase
                     'digits',
                     'algorithm',
                     'period',
-                    'counter'
-                ]
+                    'counter',
+                ],
             ]);
     }
-
 
     /**
      * @test
      */
     public function test_get_assigned_accounts_returns_twofaccounts_collection_with_secret()
     {
-        $group = Group::factory()->create();
+        $group    = Group::factory()->create();
         $accounts = TwoFAccount::factory()->count(2)->create();
 
         $assign = $this->actingAs($this->user, 'api-guard')
@@ -286,11 +271,10 @@ class GroupControllerTest extends FeatureTestCase
                     'digits',
                     'algorithm',
                     'period',
-                    'counter'
-                ]
+                    'counter',
+                ],
             ]);
     }
-
 
     /**
      * @test
@@ -301,10 +285,9 @@ class GroupControllerTest extends FeatureTestCase
             ->json('GET', '/api/v1/groups/1000/twofaccounts')
             ->assertNotFound()
             ->assertJsonStructure([
-                'message'
+                'message',
             ]);
     }
-
 
     /**
      * test Group deletion via API
@@ -320,7 +303,6 @@ class GroupControllerTest extends FeatureTestCase
             ->assertNoContent();
     }
 
-
     /**
      * test Group deletion via API
      *
@@ -332,7 +314,7 @@ class GroupControllerTest extends FeatureTestCase
             ->json('DELETE', '/api/v1/groups/1000')
             ->assertNotFound()
             ->assertJsonStructure([
-                'message'
+                'message',
             ]);
     }
 }

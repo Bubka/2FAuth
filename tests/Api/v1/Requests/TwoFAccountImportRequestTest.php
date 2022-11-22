@@ -4,26 +4,25 @@ namespace Tests\Api\v1\Requests;
 
 use App\Api\v1\Requests\TwoFAccountImportRequest;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Tests\TestCase;
 
 class TwoFAccountImportRequestTest extends TestCase
 {
-
     use WithoutMiddleware;
 
     /**
      * @test
      */
     public function test_user_is_authorized()
-    {   
+    {
         Auth::shouldReceive('check')
         ->once()
         ->andReturn(true);
 
         $request = new TwoFAccountImportRequest();
-    
+
         $this->assertTrue($request->authorize());
     }
 
@@ -32,7 +31,7 @@ class TwoFAccountImportRequestTest extends TestCase
      */
     public function test_valid_data(array $data) : void
     {
-        $request = new TwoFAccountImportRequest();
+        $request   = new TwoFAccountImportRequest();
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->fails());
@@ -45,7 +44,7 @@ class TwoFAccountImportRequestTest extends TestCase
     {
         return [
             [[
-                'payload' => 'otpauth-migration://offline?data=AEoATACEAEYASAA'
+                'payload' => 'otpauth-migration://offline?data=AEoATACEAEYASAA',
             ]],
         ];
     }
@@ -55,7 +54,7 @@ class TwoFAccountImportRequestTest extends TestCase
      */
     public function test_invalid_data(array $data) : void
     {
-        $request = new TwoFAccountImportRequest();
+        $request   = new TwoFAccountImportRequest();
         $validator = Validator::make($data, $request->rules());
 
         $this->assertTrue($validator->fails());
@@ -68,18 +67,17 @@ class TwoFAccountImportRequestTest extends TestCase
     {
         return [
             [[
-                'payload' => null // required
+                'payload' => null, // required
             ]],
             [[
-                'payload' => '' // required
+                'payload' => '', // required
             ]],
             [[
-                'payload' => true // string
+                'payload' => true, // string
             ]],
             [[
-                'payload' => 8 // string
-            ]]
+                'payload' => 8, // string
+            ]],
         ];
     }
-
 }

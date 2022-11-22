@@ -3,28 +3,26 @@
 namespace Tests\Unit\Exceptions;
 
 use App\Exceptions\Handler;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Contracts\Container\Container;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Tests\TestCase;
-
 
 /**
  * @covers \App\Exceptions\Handler
  */
 class HandlerTest extends TestCase
 {
-
     /**
-    * @test
-    *
-    * @dataProvider provideExceptionsforBadRequest
-    */
+     * @test
+     *
+     * @dataProvider provideExceptionsforBadRequest
+     */
     public function test_exceptions_returns_badRequest_json_response($exception)
     {
-        $request = $this->createMock(Request::class);
+        $request  = $this->createMock(Request::class);
         $instance = new Handler($this->createMock(Container::class));
-        $class = new \ReflectionClass(Handler::class);
+        $class    = new \ReflectionClass(Handler::class);
 
         $method = $class->getMethod('render');
         $method->setAccessible(true);
@@ -36,7 +34,7 @@ class HandlerTest extends TestCase
         $response = \Illuminate\Testing\TestResponse::fromBaseResponse($response);
         $response->assertStatus(400)
             ->assertJsonStructure([
-                'message'
+                'message',
             ]);
     }
 
@@ -47,42 +45,42 @@ class HandlerTest extends TestCase
     {
         return [
             [
-                '\App\Exceptions\InvalidOtpParameterException'
+                '\App\Exceptions\InvalidOtpParameterException',
             ],
             [
-                '\App\Exceptions\InvalidQrCodeException'
+                '\App\Exceptions\InvalidQrCodeException',
             ],
             [
-                '\App\Exceptions\InvalidSecretException'
+                '\App\Exceptions\InvalidSecretException',
             ],
             [
-                '\App\Exceptions\DbEncryptionException'
+                '\App\Exceptions\DbEncryptionException',
             ],
             [
-                '\App\Exceptions\InvalidMigrationDataException'
+                '\App\Exceptions\InvalidMigrationDataException',
             ],
             [
-                '\App\Exceptions\UndecipherableException'
+                '\App\Exceptions\UndecipherableException',
             ],
             [
-                '\App\Exceptions\UnsupportedMigrationException'
+                '\App\Exceptions\UnsupportedMigrationException',
             ],
             [
-                '\App\Exceptions\UnsupportedOtpTypeException'
+                '\App\Exceptions\UnsupportedOtpTypeException',
             ],
         ];
     }
 
     /**
-    * @test
-    *
-    * @dataProvider provideExceptionsforNotFound
-    */
+     * @test
+     *
+     * @dataProvider provideExceptionsforNotFound
+     */
     public function test_exceptions_returns_notFound_json_response($exception)
     {
-        $request = $this->createMock(Request::class);
+        $request  = $this->createMock(Request::class);
         $instance = new Handler($this->createMock(Container::class));
-        $class = new \ReflectionClass(Handler::class);
+        $class    = new \ReflectionClass(Handler::class);
 
         $method = $class->getMethod('render');
         $method->setAccessible(true);
@@ -94,7 +92,7 @@ class HandlerTest extends TestCase
         $response = \Illuminate\Testing\TestResponse::fromBaseResponse($response);
         $response->assertStatus(404)
             ->assertJsonStructure([
-                'message'
+                'message',
             ]);
     }
 
@@ -105,28 +103,28 @@ class HandlerTest extends TestCase
     {
         return [
             [
-                '\Illuminate\Database\Eloquent\ModelNotFoundException'
+                '\Illuminate\Database\Eloquent\ModelNotFoundException',
             ],
             [
-                '\Symfony\Component\HttpKernel\Exception\NotFoundHttpException'
+                '\Symfony\Component\HttpKernel\Exception\NotFoundHttpException',
             ],
         ];
     }
 
     /**
-    * @test
-    */
+     * @test
+     */
     public function test_authenticationException_returns_proxyAuthRequired_json_response_with_proxy_guard()
     {
-        $request = $this->createMock(Request::class);
+        $request  = $this->createMock(Request::class);
         $instance = new Handler($this->createMock(Container::class));
-        $class = new \ReflectionClass(Handler::class);
+        $class    = new \ReflectionClass(Handler::class);
 
         $method = $class->getMethod('render');
         $method->setAccessible(true);
 
         $mockException = $this->createMock(\Illuminate\Auth\AuthenticationException::class);
-        $mockException->method("guards")->willReturn(['reverse-proxy-guard']);
+        $mockException->method('guards')->willReturn(['reverse-proxy-guard']);
 
         $response = $method->invokeArgs($instance, [$request, $mockException]);
 
@@ -135,7 +133,7 @@ class HandlerTest extends TestCase
         $response = \Illuminate\Testing\TestResponse::fromBaseResponse($response);
         $response->assertStatus(407)
             ->assertJsonStructure([
-                'message'
+                'message',
             ]);
     }
 }

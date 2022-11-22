@@ -2,16 +2,15 @@
 
 namespace Tests\Api\v1\Controllers;
 
-use App\Models\User;
-use App\Models\Group;
 use App\Facades\Settings;
-use Tests\FeatureTestCase;
-use Tests\Classes\OtpTestData;
+use App\Models\Group;
 use App\Models\TwoFAccount;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Tests\Classes\LocalFile;
-
+use Tests\Classes\OtpTestData;
+use Tests\FeatureTestCase;
 
 /**
  * @covers \App\Api\v1\Controllers\TwoFAccountController
@@ -22,15 +21,13 @@ class TwoFAccountControllerTest extends FeatureTestCase
 {
     /**
      * @var \App\Models\User
-    */
+     */
     protected $user;
 
     /**
      * @var \App\Models\Group
-    */
+     */
     protected $group;
-
-
 
     private const VALID_RESOURCE_STRUCTURE_WITHOUT_SECRET = [
         'id',
@@ -42,8 +39,9 @@ class TwoFAccountControllerTest extends FeatureTestCase
         'digits',
         'algorithm',
         'period',
-        'counter'
+        'counter',
     ];
+
     private const VALID_RESOURCE_STRUCTURE_WITH_SECRET = [
         'id',
         'group_id',
@@ -55,19 +53,22 @@ class TwoFAccountControllerTest extends FeatureTestCase
         'digits',
         'algorithm',
         'period',
-        'counter'
+        'counter',
     ];
+
     private const VALID_OTP_RESOURCE_STRUCTURE_FOR_TOTP = [
         'generated_at',
         'otp_type',
         'password',
         'period',
     ];
+
     private const VALID_OTP_RESOURCE_STRUCTURE_FOR_HOTP = [
         'otp_type',
         'password',
         'counter',
     ];
+
     private const JSON_FRAGMENTS_FOR_CUSTOM_TOTP = [
         'service'   => OtpTestData::SERVICE,
         'account'   => OtpTestData::ACCOUNT,
@@ -78,6 +79,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         'period'    => OtpTestData::PERIOD_CUSTOM,
         'counter'   => null,
     ];
+
     private const JSON_FRAGMENTS_FOR_DEFAULT_TOTP = [
         'service'   => null,
         'account'   => OtpTestData::ACCOUNT,
@@ -88,6 +90,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         'period'    => OtpTestData::PERIOD_DEFAULT,
         'counter'   => null,
     ];
+
     private const JSON_FRAGMENTS_FOR_CUSTOM_HOTP = [
         'service'   => OtpTestData::SERVICE,
         'account'   => OtpTestData::ACCOUNT,
@@ -98,8 +101,9 @@ class TwoFAccountControllerTest extends FeatureTestCase
         'period'    => null,
         'counter'   => OtpTestData::COUNTER_CUSTOM,
     ];
+
     private const JSON_FRAGMENTS_FOR_DEFAULT_HOTP = [
-        'service' => null,
+        'service'   => null,
         'account'   => OtpTestData::ACCOUNT,
         'otp_type'  => 'hotp',
         'secret'    => OtpTestData::SECRET,
@@ -108,28 +112,27 @@ class TwoFAccountControllerTest extends FeatureTestCase
         'period'    => null,
         'counter'   => OtpTestData::COUNTER_DEFAULT,
     ];
-    private const ARRAY_OF_INVALID_PARAMETERS = [
-        'account'   => null,
-        'otp_type'  => 'totp',
-        'secret'    => OtpTestData::SECRET,
-    ];
 
+    private const ARRAY_OF_INVALID_PARAMETERS = [
+        'account'  => null,
+        'otp_type' => 'totp',
+        'secret'   => OtpTestData::SECRET,
+    ];
 
     /**
      * @test
      */
-    public function setUp(): void
+    public function setUp() : void
     {
         parent::setUp();
 
-        $this->user = User::factory()->create();
+        $this->user  = User::factory()->create();
         $this->group = Group::factory()->create();
     }
 
-
     /**
      * @test
-     * 
+     *
      * @dataProvider indexUrlParameterProvider
      */
     public function test_index_returns_twofaccount_collection($urlParameter, $expected)
@@ -137,14 +140,13 @@ class TwoFAccountControllerTest extends FeatureTestCase
         TwoFAccount::factory()->count(3)->create();
 
         $response = $this->actingAs($this->user, 'api-guard')
-            ->json('GET', '/api/v1/twofaccounts'.$urlParameter)
+            ->json('GET', '/api/v1/twofaccounts' . $urlParameter)
             ->assertOk()
             ->assertJsonCount(3, $key = null)
             ->assertJsonStructure([
-                '*' => $expected
+                '*' => $expected,
             ]);
     }
-
 
     /**
      * Provide data for index tests
@@ -152,17 +154,16 @@ class TwoFAccountControllerTest extends FeatureTestCase
     public function indexUrlParameterProvider()
     {
         return [
-            'VALID_RESOURCE_STRUCTURE_WITHOUT_SECRET'  => [
+            'VALID_RESOURCE_STRUCTURE_WITHOUT_SECRET' => [
                 '',
-                self::VALID_RESOURCE_STRUCTURE_WITHOUT_SECRET
+                self::VALID_RESOURCE_STRUCTURE_WITHOUT_SECRET,
             ],
-            'VALID_RESOURCE_STRUCTURE_WITH_SECRET'  => [
+            'VALID_RESOURCE_STRUCTURE_WITH_SECRET' => [
                 '?withSecret=1',
-                self::VALID_RESOURCE_STRUCTURE_WITH_SECRET
+                self::VALID_RESOURCE_STRUCTURE_WITH_SECRET,
             ],
         ];
     }
-
 
     /**
      * @test
@@ -177,7 +178,6 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->assertJsonStructure(self::VALID_RESOURCE_STRUCTURE_WITH_SECRET);
     }
 
-
     /**
      * @test
      */
@@ -190,7 +190,6 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->assertOk()
             ->assertJsonStructure(self::VALID_RESOURCE_STRUCTURE_WITHOUT_SECRET);
     }
-
 
     /**
      * @test
@@ -217,7 +216,6 @@ class TwoFAccountControllerTest extends FeatureTestCase
     //         ]);
     // }
 
-
     /**
      * @test
      */
@@ -227,10 +225,9 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->json('GET', '/api/v1/twofaccounts/1000')
             ->assertNotFound()
             ->assertJsonStructure([
-                'message'
+                'message',
             ]);
     }
-
 
     /**
      * @dataProvider accountCreationProvider
@@ -248,7 +245,6 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->assertJsonFragment($expected);
     }
 
-
     /**
      * @dataProvider accountCreationProvider
      * @test
@@ -265,56 +261,54 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->assertJsonFragment($expected);
     }
 
-
     /**
      * Provide data for TwoFAccount store tests
      */
     public function accountCreationProvider()
     {
         return [
-            'TOTP_FULL_CUSTOM_URI'  => [
+            'TOTP_FULL_CUSTOM_URI' => [
                 [
                     'uri' => OtpTestData::TOTP_FULL_CUSTOM_URI,
                 ],
-                self::JSON_FRAGMENTS_FOR_CUSTOM_TOTP
+                self::JSON_FRAGMENTS_FOR_CUSTOM_TOTP,
             ],
-            'TOTP_SHORT_URI'  => [
+            'TOTP_SHORT_URI' => [
                 [
                     'uri' => OtpTestData::TOTP_SHORT_URI,
                 ],
-                self::JSON_FRAGMENTS_FOR_DEFAULT_TOTP
+                self::JSON_FRAGMENTS_FOR_DEFAULT_TOTP,
             ],
-            'ARRAY_OF_FULL_VALID_PARAMETERS_FOR_CUSTOM_TOTP'  => [
+            'ARRAY_OF_FULL_VALID_PARAMETERS_FOR_CUSTOM_TOTP' => [
                 OtpTestData::ARRAY_OF_FULL_VALID_PARAMETERS_FOR_CUSTOM_TOTP,
-                self::JSON_FRAGMENTS_FOR_CUSTOM_TOTP
+                self::JSON_FRAGMENTS_FOR_CUSTOM_TOTP,
             ],
-            'ARRAY_OF_MINIMUM_VALID_PARAMETERS_FOR_TOTP'  => [
+            'ARRAY_OF_MINIMUM_VALID_PARAMETERS_FOR_TOTP' => [
                 OtpTestData::ARRAY_OF_MINIMUM_VALID_PARAMETERS_FOR_TOTP,
-                self::JSON_FRAGMENTS_FOR_DEFAULT_TOTP
+                self::JSON_FRAGMENTS_FOR_DEFAULT_TOTP,
             ],
-            'HOTP_FULL_CUSTOM_URI'  => [
+            'HOTP_FULL_CUSTOM_URI' => [
                 [
                     'uri' => OtpTestData::HOTP_FULL_CUSTOM_URI,
                 ],
-                self::JSON_FRAGMENTS_FOR_CUSTOM_HOTP
+                self::JSON_FRAGMENTS_FOR_CUSTOM_HOTP,
             ],
-            'HOTP_SHORT_URI'  => [
+            'HOTP_SHORT_URI' => [
                 [
                     'uri' => OtpTestData::HOTP_SHORT_URI,
                 ],
-                self::JSON_FRAGMENTS_FOR_DEFAULT_HOTP
+                self::JSON_FRAGMENTS_FOR_DEFAULT_HOTP,
             ],
-            'ARRAY_OF_FULL_VALID_PARAMETERS_FOR_CUSTOM_HOTP'  => [
+            'ARRAY_OF_FULL_VALID_PARAMETERS_FOR_CUSTOM_HOTP' => [
                 OtpTestData::ARRAY_OF_FULL_VALID_PARAMETERS_FOR_CUSTOM_HOTP,
-                self::JSON_FRAGMENTS_FOR_CUSTOM_HOTP
+                self::JSON_FRAGMENTS_FOR_CUSTOM_HOTP,
             ],
-            'ARRAY_OF_MINIMUM_VALID_PARAMETERS_FOR_HOTP'  => [
+            'ARRAY_OF_MINIMUM_VALID_PARAMETERS_FOR_HOTP' => [
                 OtpTestData::ARRAY_OF_MINIMUM_VALID_PARAMETERS_FOR_HOTP,
-                self::JSON_FRAGMENTS_FOR_DEFAULT_HOTP
+                self::JSON_FRAGMENTS_FOR_DEFAULT_HOTP,
             ],
         ];
     }
-
 
     /**
      * @test
@@ -327,7 +321,6 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ])
             ->assertStatus(422);
     }
-
 
     /**
      * @test
@@ -342,10 +335,9 @@ class TwoFAccountControllerTest extends FeatureTestCase
                 'uri' => OtpTestData::TOTP_SHORT_URI,
             ])
             ->assertJsonFragment([
-                'group_id' => $this->group->id
+                'group_id' => $this->group->id,
             ]);
     }
-
 
     /**
      * @test
@@ -362,10 +354,9 @@ class TwoFAccountControllerTest extends FeatureTestCase
                 'uri' => OtpTestData::TOTP_SHORT_URI,
             ])
             ->assertJsonFragment([
-                'group_id' => $this->group->id
+                'group_id' => $this->group->id,
             ]);
     }
-
 
     /**
      * @test
@@ -380,10 +371,9 @@ class TwoFAccountControllerTest extends FeatureTestCase
                 'uri' => OtpTestData::TOTP_SHORT_URI,
             ])
             ->assertJsonFragment([
-                'group_id' => null
+                'group_id' => null,
             ]);
     }
-
 
     /**
      * @test
@@ -398,10 +388,9 @@ class TwoFAccountControllerTest extends FeatureTestCase
                 'uri' => OtpTestData::TOTP_SHORT_URI,
             ])
             ->assertJsonFragment([
-                'group_id' => null
+                'group_id' => null,
             ]);
     }
-
 
     /**
      * @test
@@ -416,7 +405,6 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->assertJsonFragment(self::JSON_FRAGMENTS_FOR_CUSTOM_TOTP);
     }
 
-
     /**
      * @test
      */
@@ -430,7 +418,6 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->assertJsonFragment(self::JSON_FRAGMENTS_FOR_CUSTOM_HOTP);
     }
 
-
     /**
      * @test
      */
@@ -440,7 +427,6 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->json('PUT', '/api/v1/twofaccounts/1000', OtpTestData::ARRAY_OF_FULL_VALID_PARAMETERS_FOR_CUSTOM_TOTP)
             ->assertNotFound();
     }
-
 
     /**
      * @test
@@ -454,7 +440,6 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->assertStatus(422);
     }
 
-
     /**
      * @test
      */
@@ -462,7 +447,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
     {
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts/migration', [
-                'payload' => OtpTestData::GOOGLE_AUTH_MIGRATION_URI,
+                'payload'    => OtpTestData::GOOGLE_AUTH_MIGRATION_URI,
                 'withSecret' => 1,
             ])
             ->assertOk()
@@ -476,7 +461,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
                 'digits'    => OtpTestData::DIGITS_DEFAULT,
                 'algorithm' => OtpTestData::ALGORITHM_DEFAULT,
                 'period'    => OtpTestData::PERIOD_DEFAULT,
-                'counter'   => null
+                'counter'   => null,
             ])
             ->assertJsonFragment([
                 'id'        => 0,
@@ -487,10 +472,9 @@ class TwoFAccountControllerTest extends FeatureTestCase
                 'digits'    => OtpTestData::DIGITS_DEFAULT,
                 'algorithm' => OtpTestData::ALGORITHM_DEFAULT,
                 'period'    => OtpTestData::PERIOD_DEFAULT,
-                'counter'   => null
+                'counter'   => null,
             ]);
     }
-
 
     /**
      * @test
@@ -504,22 +488,21 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->assertStatus(422);
     }
 
-
     /**
      * @test
      */
     public function test_import_gauth_payload_with_duplicates_returns_negative_ids()
     {
         $twofaccount = TwoFAccount::factory()->create([
-            'otp_type' => 'totp',
-            'account' => OtpTestData::ACCOUNT,
-            'service' => OtpTestData::SERVICE,
-            'secret' => OtpTestData::SECRET,
-            'algorithm' => OtpTestData::ALGORITHM_DEFAULT,
-            'digits' => OtpTestData::DIGITS_DEFAULT,
-            'period' => OtpTestData::PERIOD_DEFAULT,
+            'otp_type'   => 'totp',
+            'account'    => OtpTestData::ACCOUNT,
+            'service'    => OtpTestData::SERVICE,
+            'secret'     => OtpTestData::SECRET,
+            'algorithm'  => OtpTestData::ALGORITHM_DEFAULT,
+            'digits'     => OtpTestData::DIGITS_DEFAULT,
+            'period'     => OtpTestData::PERIOD_DEFAULT,
             'legacy_uri' => OtpTestData::TOTP_SHORT_URI,
-            'icon' => '',
+            'icon'       => '',
         ]);
 
         $response = $this->actingAs($this->user, 'api-guard')
@@ -528,12 +511,11 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ])
             ->assertOk()
             ->assertJsonFragment([
-                'id'        => -1,
-                'service'   => OtpTestData::SERVICE,
-                'account'   => OtpTestData::ACCOUNT,
+                'id'      => -1,
+                'service' => OtpTestData::SERVICE,
+                'account' => OtpTestData::ACCOUNT,
             ]);
     }
-
 
     /**
      * @test
@@ -546,10 +528,9 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ])
             ->assertStatus(400)
             ->assertJsonStructure([
-                'message'
+                'message',
             ]);
     }
-
 
     /**
      * @test
@@ -561,7 +542,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         $response = $this->withHeaders(['Content-Type' => 'multipart/form-data'])
             ->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts/migration', [
-                'file' => $file,
+                'file'       => $file,
                 'withSecret' => 1,
             ])
             ->assertOk()
@@ -575,7 +556,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
                 'digits'    => OtpTestData::DIGITS_DEFAULT,
                 'algorithm' => OtpTestData::ALGORITHM_DEFAULT,
                 'period'    => OtpTestData::PERIOD_DEFAULT,
-                'counter'   => null
+                'counter'   => null,
             ])
             ->assertJsonFragment([
                 'id'        => 0,
@@ -586,7 +567,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
                 'digits'    => OtpTestData::DIGITS_CUSTOM,
                 'algorithm' => OtpTestData::ALGORITHM_CUSTOM,
                 'period'    => OtpTestData::PERIOD_CUSTOM,
-                'counter'   => null
+                'counter'   => null,
             ])
             ->assertJsonFragment([
                 'id'        => 0,
@@ -597,7 +578,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
                 'digits'    => OtpTestData::DIGITS_DEFAULT,
                 'algorithm' => OtpTestData::ALGORITHM_DEFAULT,
                 'period'    => null,
-                'counter'   => OtpTestData::COUNTER_DEFAULT
+                'counter'   => OtpTestData::COUNTER_DEFAULT,
             ])
             ->assertJsonFragment([
                 'id'        => 0,
@@ -619,14 +600,13 @@ class TwoFAccountControllerTest extends FeatureTestCase
                 'digits'    => OtpTestData::DIGITS_STEAM,
                 'algorithm' => OtpTestData::ALGORITHM_DEFAULT,
                 'period'    => OtpTestData::PERIOD_DEFAULT,
-                'counter'   => null
+                'counter'   => null,
             ]);
     }
 
-
     /**
      * @test
-     * 
+     *
      * @dataProvider invalidAegisJsonFileProvider
      */
     public function test_import_invalid_aegis_json_file_returns_bad_request($file)
@@ -639,7 +619,6 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->assertStatus(400);
     }
 
-
     /**
      * Provide invalid Aegis JSON files for import tests
      */
@@ -647,18 +626,17 @@ class TwoFAccountControllerTest extends FeatureTestCase
     {
         return [
             'validPlainTextFile' => [
-                LocalFile::fake()->encryptedAegisJsonFile()
+                LocalFile::fake()->encryptedAegisJsonFile(),
             ],
             'validPlainTextFileWithNewLines' => [
-                LocalFile::fake()->invalidAegisJsonFile()
+                LocalFile::fake()->invalidAegisJsonFile(),
             ],
         ];
     }
 
-
     /**
      * @test
-     * 
+     *
      * @dataProvider validPlainTextFileProvider
      */
     public function test_import_valid_plain_text_file_returns_success($file)
@@ -666,7 +644,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         $response = $this->withHeaders(['Content-Type' => 'multipart/form-data'])
             ->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts/migration', [
-                'file' => $file,
+                'file'       => $file,
                 'withSecret' => 1,
             ])
             ->assertOk()
@@ -680,7 +658,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
                 'digits'    => OtpTestData::DIGITS_CUSTOM,
                 'algorithm' => OtpTestData::ALGORITHM_CUSTOM,
                 'period'    => OtpTestData::PERIOD_CUSTOM,
-                'counter'   => null
+                'counter'   => null,
             ])
             ->assertJsonFragment([
                 'id'        => 0,
@@ -691,7 +669,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
                 'digits'    => OtpTestData::DIGITS_CUSTOM,
                 'algorithm' => OtpTestData::ALGORITHM_CUSTOM,
                 'period'    => null,
-                'counter'   => OtpTestData::COUNTER_CUSTOM
+                'counter'   => OtpTestData::COUNTER_CUSTOM,
             ])
             ->assertJsonFragment([
                 'id'        => 0,
@@ -702,10 +680,9 @@ class TwoFAccountControllerTest extends FeatureTestCase
                 'digits'    => OtpTestData::DIGITS_STEAM,
                 'algorithm' => OtpTestData::ALGORITHM_DEFAULT,
                 'period'    => OtpTestData::PERIOD_DEFAULT,
-                'counter'   => null
+                'counter'   => null,
             ]);
     }
-
 
     /**
      * Provide valid Plain Text files for import tests
@@ -714,23 +691,21 @@ class TwoFAccountControllerTest extends FeatureTestCase
     {
         return [
             'validPlainTextFile' => [
-                LocalFile::fake()->validPlainTextFile()
+                LocalFile::fake()->validPlainTextFile(),
             ],
             'validPlainTextFileWithNewLines' => [
-                LocalFile::fake()->validPlainTextFileWithNewLines()
+                LocalFile::fake()->validPlainTextFileWithNewLines(),
             ],
         ];
     }
 
-
     /**
      * @test
-     * 
+     *
      * @dataProvider invalidPlainTextFileProvider
      */
     public function test_import_invalid_plain_text_file_returns_bad_request($file)
     {
-
         $response = $this->withHeaders(['Content-Type' => 'multipart/form-data'])
             ->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts/migration', [
@@ -739,7 +714,6 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->assertStatus(400);
     }
 
-
     /**
      * Provide invalid Plain Text files for import tests
      */
@@ -747,20 +721,19 @@ class TwoFAccountControllerTest extends FeatureTestCase
     {
         return [
             'validPlainTextFile' => [
-                LocalFile::fake()->invalidPlainTextFileEmpty()
+                LocalFile::fake()->invalidPlainTextFileEmpty(),
             ],
             'validPlainTextFileWithNewLines' => [
-                LocalFile::fake()->invalidPlainTextFileNoUri()
+                LocalFile::fake()->invalidPlainTextFileNoUri(),
             ],
             'validPlainTextFileWithNewLines' => [
-                LocalFile::fake()->invalidPlainTextFileWithInvalidUri()
+                LocalFile::fake()->invalidPlainTextFileWithInvalidUri(),
             ],
             'validPlainTextFileWithNewLines' => [
-                LocalFile::fake()->invalidPlainTextFileWithInvalidLine()
+                LocalFile::fake()->invalidPlainTextFileWithInvalidLine(),
             ],
         ];
     }
-
 
     /**
      * @test
@@ -771,13 +744,12 @@ class TwoFAccountControllerTest extends FeatureTestCase
 
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts/reorder', [
-                'orderedIds' => [3,2,1]])
+                'orderedIds' => [3, 2, 1], ])
             ->assertStatus(200)
             ->assertJsonStructure([
-                'message'
+                'message',
             ]);
     }
-
 
     /**
      * @test
@@ -788,10 +760,9 @@ class TwoFAccountControllerTest extends FeatureTestCase
 
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts/reorder', [
-                'orderedIds' => '3,2,1'])
+                'orderedIds' => '3,2,1', ])
             ->assertStatus(422);
     }
-
 
     /**
      * @test
@@ -806,7 +777,6 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->assertJsonFragment(self::JSON_FRAGMENTS_FOR_CUSTOM_TOTP);
     }
 
-
     /**
      * @test
      */
@@ -819,7 +789,6 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->assertStatus(422);
     }
 
-
     /**
      * @test
      */
@@ -831,10 +800,9 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ])
             ->assertOk()
             ->assertJsonFragment([
-                'icon' => null
+                'icon' => null,
             ]);
     }
-
 
     /**
      * @test
@@ -842,15 +810,15 @@ class TwoFAccountControllerTest extends FeatureTestCase
     public function test_get_otp_using_totp_twofaccount_id_returns_consistent_resource()
     {
         $twofaccount = TwoFAccount::factory()->create([
-            'otp_type' => 'totp',
-            'account' => OtpTestData::ACCOUNT,
-            'service' => OtpTestData::SERVICE,
-            'secret' => OtpTestData::SECRET,
-            'algorithm' => OtpTestData::ALGORITHM_DEFAULT,
-            'digits' => OtpTestData::DIGITS_DEFAULT,
-            'period' => OtpTestData::PERIOD_DEFAULT,
+            'otp_type'   => 'totp',
+            'account'    => OtpTestData::ACCOUNT,
+            'service'    => OtpTestData::SERVICE,
+            'secret'     => OtpTestData::SECRET,
+            'algorithm'  => OtpTestData::ALGORITHM_DEFAULT,
+            'digits'     => OtpTestData::DIGITS_DEFAULT,
+            'period'     => OtpTestData::PERIOD_DEFAULT,
             'legacy_uri' => OtpTestData::TOTP_SHORT_URI,
-            'icon' => '',
+            'icon'       => '',
         ]);
 
         $response = $this->actingAs($this->user, 'api-guard')
@@ -859,10 +827,9 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->assertJsonStructure(self::VALID_OTP_RESOURCE_STRUCTURE_FOR_TOTP)
             ->assertJsonFragment([
                 'otp_type' => 'totp',
-                'period' => OtpTestData::PERIOD_DEFAULT,
+                'period'   => OtpTestData::PERIOD_DEFAULT,
             ]);
     }
-
 
     /**
      * @test
@@ -877,10 +844,9 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->assertJsonStructure(self::VALID_OTP_RESOURCE_STRUCTURE_FOR_TOTP)
             ->assertJsonFragment([
                 'otp_type' => 'totp',
-                'period' => OtpTestData::PERIOD_CUSTOM,
+                'period'   => OtpTestData::PERIOD_CUSTOM,
             ]);
     }
-
 
     /**
      * @test
@@ -893,10 +859,9 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->assertJsonStructure(self::VALID_OTP_RESOURCE_STRUCTURE_FOR_TOTP)
             ->assertJsonFragment([
                 'otp_type' => 'totp',
-                'period' => OtpTestData::PERIOD_CUSTOM,
+                'period'   => OtpTestData::PERIOD_CUSTOM,
             ]);
     }
-
 
     /**
      * @test
@@ -904,15 +869,15 @@ class TwoFAccountControllerTest extends FeatureTestCase
     public function test_get_otp_using_hotp_twofaccount_id_returns_consistent_resource()
     {
         $twofaccount = TwoFAccount::factory()->create([
-            'otp_type' => 'hotp',
-            'account' => OtpTestData::ACCOUNT,
-            'service' => OtpTestData::SERVICE,
-            'secret' => OtpTestData::SECRET,
-            'algorithm' => OtpTestData::ALGORITHM_DEFAULT,
-            'digits' => OtpTestData::DIGITS_DEFAULT,
-            'period' => null,
+            'otp_type'   => 'hotp',
+            'account'    => OtpTestData::ACCOUNT,
+            'service'    => OtpTestData::SERVICE,
+            'secret'     => OtpTestData::SECRET,
+            'algorithm'  => OtpTestData::ALGORITHM_DEFAULT,
+            'digits'     => OtpTestData::DIGITS_DEFAULT,
+            'period'     => null,
             'legacy_uri' => OtpTestData::HOTP_SHORT_URI,
-            'icon' => '',
+            'icon'       => '',
         ]);
 
         $response = $this->actingAs($this->user, 'api-guard')
@@ -921,10 +886,9 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->assertJsonStructure(self::VALID_OTP_RESOURCE_STRUCTURE_FOR_HOTP)
             ->assertJsonFragment([
                 'otp_type' => 'hotp',
-                'counter' => OtpTestData::COUNTER_DEFAULT + 1,
+                'counter'  => OtpTestData::COUNTER_DEFAULT + 1,
             ]);
     }
-
 
     /**
      * @test
@@ -939,10 +903,9 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->assertJsonStructure(self::VALID_OTP_RESOURCE_STRUCTURE_FOR_HOTP)
             ->assertJsonFragment([
                 'otp_type' => 'hotp',
-                'counter' => OtpTestData::COUNTER_CUSTOM + 1,
+                'counter'  => OtpTestData::COUNTER_CUSTOM + 1,
             ]);
     }
-
 
     /**
      * @test
@@ -955,10 +918,9 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->assertJsonStructure(self::VALID_OTP_RESOURCE_STRUCTURE_FOR_HOTP)
             ->assertJsonFragment([
                 'otp_type' => 'hotp',
-                'counter' => OtpTestData::COUNTER_CUSTOM + 1,
+                'counter'  => OtpTestData::COUNTER_CUSTOM + 1,
             ]);
     }
-
 
     /**
      * @test
@@ -976,7 +938,6 @@ class TwoFAccountControllerTest extends FeatureTestCase
                 'reason',
             ]);
     }
-
 
     /**
      * @test
@@ -1001,7 +962,6 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ]);
     }
 
-
     /**
      * @test
      */
@@ -1011,7 +971,6 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->json('GET', '/api/v1/twofaccounts/1000/otp')
             ->assertNotFound();
     }
-
 
     /**
      * @test
@@ -1025,7 +984,6 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->assertStatus(422);
     }
 
-
     /**
      * @test
      */
@@ -1035,7 +993,6 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->json('POST', '/api/v1/twofaccounts/otp', self::ARRAY_OF_INVALID_PARAMETERS)
             ->assertStatus(422);
     }
-
 
     /**
      * @test
@@ -1048,10 +1005,9 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->json('GET', '/api/v1/twofaccounts/count')
             ->assertStatus(200)
             ->assertExactJson([
-                'count' => 3
+                'count' => 3,
             ]);
     }
-
 
     /**
      * @test
@@ -1068,7 +1024,6 @@ class TwoFAccountControllerTest extends FeatureTestCase
                 'message',
             ]);
     }
-
 
     /**
      * @test
@@ -1087,7 +1042,6 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ]);
     }
 
-
     /**
      * @test
      */
@@ -1099,7 +1053,6 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->json('DELETE', '/api/v1/twofaccounts/' . $twofaccount->id)
             ->assertNoContent();
     }
-
 
     /**
      * @test
@@ -1113,7 +1066,6 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->assertNotFound();
     }
 
-
     /**
      * @test
      */
@@ -1126,7 +1078,6 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->json('DELETE', '/api/v1/twofaccounts?ids=' . $ids)
             ->assertNoContent();
     }
-
 
     /**
      * @test
@@ -1144,5 +1095,4 @@ class TwoFAccountControllerTest extends FeatureTestCase
                 'reason',
             ]);
     }
-
 }

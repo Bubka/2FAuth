@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands\Utils;
 
-use App\Console\Commands\Utils\IconGenerator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -45,7 +44,7 @@ trait ResetTrait
 
         $this->line('Icons regenerated');
     }
-    
+
     /**
      * Reset DB
      */
@@ -81,10 +80,9 @@ trait ResetTrait
     protected function seedDB(string $seeder) : void
     {
         $this->callSilent('db:seed', [
-            '--class' => $seeder
+            '--class' => $seeder,
         ]);
 
         $this->line('Database seeded');
     }
-
 }

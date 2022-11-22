@@ -9,22 +9,22 @@ class PasswordControllerTest extends FeatureTestCase
 {
     /**
      * @var \App\Models\User
-    */
+     */
     protected $user;
 
-    private const PASSWORD =  'password';
-    private const NEW_PASSWORD =  'newPassword';
+    private const PASSWORD = 'password';
+
+    private const NEW_PASSWORD = 'newPassword';
 
     /**
      * @test
      */
-    public function setUp(): void
+    public function setUp() : void
     {
         parent::setUp();
 
         $this->user = User::factory()->create();
     }
-
 
     /**
      * @test
@@ -33,8 +33,8 @@ class PasswordControllerTest extends FeatureTestCase
     {
         $response = $this->actingAs($this->user, 'web-guard')
             ->json('PATCH', '/user/password', [
-                'currentPassword' => self::PASSWORD,
-                'password' => self::NEW_PASSWORD,
+                'currentPassword'       => self::PASSWORD,
+                'password'              => self::NEW_PASSWORD,
                 'password_confirmation' => self::NEW_PASSWORD,
             ])
             ->assertOk()
@@ -43,7 +43,6 @@ class PasswordControllerTest extends FeatureTestCase
             ]);
     }
 
-
     /**
      * @test
      */
@@ -51,8 +50,8 @@ class PasswordControllerTest extends FeatureTestCase
     {
         $response = $this->actingAs($this->user, 'web-guard')
             ->json('PATCH', '/user/password', [
-                'currentPassword' => self::NEW_PASSWORD,
-                'password' => self::NEW_PASSWORD,
+                'currentPassword'       => self::NEW_PASSWORD,
+                'password'              => self::NEW_PASSWORD,
                 'password_confirmation' => self::NEW_PASSWORD,
             ])
             ->assertStatus(400)
@@ -61,7 +60,6 @@ class PasswordControllerTest extends FeatureTestCase
             ]);
     }
 
-
     /**
      * @test
      */
@@ -69,11 +67,10 @@ class PasswordControllerTest extends FeatureTestCase
     {
         $response = $this->actingAs($this->user, 'web-guard')
             ->json('PATCH', '/user/password', [
-                'currentPassword' => self::PASSWORD,
-                'password' => null,
+                'currentPassword'       => self::PASSWORD,
+                'password'              => null,
                 'password_confirmation' => self::NEW_PASSWORD,
             ])
             ->assertStatus(422);
     }
-
 }

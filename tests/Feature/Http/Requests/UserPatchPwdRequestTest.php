@@ -4,8 +4,8 @@ namespace Tests\Feature\Http\Requests;
 
 use App\Http\Requests\UserPatchPwdRequest;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Tests\TestCase;
 
 /**
@@ -13,20 +13,19 @@ use Tests\TestCase;
  */
 class UserPatchPwdRequestTest extends TestCase
 {
-
     use WithoutMiddleware;
 
     /**
      * @test
      */
     public function test_user_is_authorized()
-    {   
+    {
         Auth::shouldReceive('check')
         ->once()
         ->andReturn(true);
 
         $request = new UserPatchPwdRequest();
-    
+
         $this->assertTrue($request->authorize());
     }
 
@@ -35,7 +34,7 @@ class UserPatchPwdRequestTest extends TestCase
      */
     public function test_valid_data(array $data) : void
     {
-        $request = new UserPatchPwdRequest();
+        $request   = new UserPatchPwdRequest();
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->fails());
@@ -48,8 +47,8 @@ class UserPatchPwdRequestTest extends TestCase
     {
         return [
             [[
-                'currentPassword' => 'newPassword',
-                'password' => 'newPassword',
+                'currentPassword'       => 'newPassword',
+                'password'              => 'newPassword',
                 'password_confirmation' => 'newPassword',
             ]],
         ];
@@ -60,7 +59,7 @@ class UserPatchPwdRequestTest extends TestCase
      */
     public function test_invalid_data(array $data) : void
     {
-        $request = new UserPatchPwdRequest();
+        $request   = new UserPatchPwdRequest();
         $validator = Validator::make($data, $request->rules());
 
         $this->assertTrue($validator->fails());
@@ -73,36 +72,35 @@ class UserPatchPwdRequestTest extends TestCase
     {
         return [
             [[
-                'currentPassword' => '', // required
-                'password' => 'newPassword',
+                'currentPassword'       => '', // required
+                'password'              => 'newPassword',
                 'password_confirmation' => 'newPassword',
             ]],
             [[
-                'currentPassword' => 'currentPassword',
-                'password' => '', // required
+                'currentPassword'       => 'currentPassword',
+                'password'              => '', // required
                 'password_confirmation' => 'newPassword',
             ]],
             [[
-                'currentPassword' => 'newPassword',
-                'password' => 'anotherPassword', // confirmed
+                'currentPassword'       => 'newPassword',
+                'password'              => 'anotherPassword', // confirmed
                 'password_confirmation' => 'newPassword',
             ]],
             [[
-                'currentPassword' => 'pwd',
-                'password' => 'pwd', // min:8
+                'currentPassword'       => 'pwd',
+                'password'              => 'pwd', // min:8
                 'password_confirmation' => 'newPassword',
             ]],
             [[
-                'currentPassword' => 'pwd',
-                'password' => true, // string
+                'currentPassword'       => 'pwd',
+                'password'              => true, // string
                 'password_confirmation' => 'newPassword',
             ]],
             [[
-                'currentPassword' => 'pwd',
-                'password' => 10, // string
+                'currentPassword'       => 'pwd',
+                'password'              => 10, // string
                 'password_confirmation' => 'newPassword',
             ]],
         ];
     }
-
 }

@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Models\User;
-use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Log;
-use Laragear\WebAuthn\Http\Requests\AssertionRequest;
-use Laragear\WebAuthn\Http\Requests\AssertedRequest;
 use Illuminate\Contracts\Support\Responsable;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
+use Laragear\WebAuthn\Http\Requests\AssertedRequest;
+use Laragear\WebAuthn\Http\Requests\AssertionRequest;
 use Laragear\WebAuthn\WebAuthn;
 
 class WebAuthnLoginController extends Controller
@@ -31,13 +31,13 @@ class WebAuthnLoginController extends Controller
      * @param  \Laragear\WebAuthn\Http\Requests\AssertionRequest  $request
      * @return \Illuminate\Contracts\Support\Responsable|\Illuminate\Http\JsonResponse
      */
-    public function options(AssertionRequest $request): Responsable|JsonResponse
+    public function options(AssertionRequest $request) : Responsable|JsonResponse
     {
         switch (env('WEBAUTHN_USER_VERIFICATION')) {
             case WebAuthn::USER_VERIFICATION_DISCOURAGED:
                 $request = $request->fastLogin();    // Makes the authenticator to only check for user presence on registration
                 break;
-            case WebAuthn::USER_VERIFICATION_REQUIRED: 
+            case WebAuthn::USER_VERIFICATION_REQUIRED:
                 $request = $request->secureLogin();  // Makes the authenticator to always verify the user thoroughly on registration
                 break;
         }
@@ -50,10 +50,9 @@ class WebAuthnLoginController extends Controller
         return $user
             ? $request->toVerify($user)
             : response()->json([
-                'message' => 'no registered user'
+                'message' => 'no registered user',
             ], 400);
     }
-    
 
     /**
      * Log the user in.
@@ -70,28 +69,27 @@ class WebAuthnLoginController extends Controller
 
             // Some authenticators do not send a userHandle so we hack the response to be compliant
             // with Larapass/webauthn-lib implementation that waits for a userHandle
-            if(!$response['userHandle']) {
+            if (! $response['userHandle']) {
                 $response['userHandle'] = User::getFromCredentialId($request->id)?->userHandle();
                 $request->merge(['response' => $response]);
             }
         }
-        
+
         $user = $request->login();
 
         if ($user) {
             $this->authenticated($user);
+
             return response()->noContent();
         }
 
         return response()->noContent(422);
     }
 
-
     /**
      * The user has been authenticated.
      *
      * @param  mixed  $user
-     *
      * @return void|\Illuminate\Http\JsonResponse
      */
     protected function authenticated($user)

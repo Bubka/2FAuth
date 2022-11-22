@@ -2,25 +2,25 @@
 
 namespace Tests\Feature\Http\Auth;
 
-use \App\Models\User;
-use Tests\FeatureTestCase;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Tests\FeatureTestCase;
 
 class RegisterControllerTest extends FeatureTestCase
 {
     private const USERNAME = 'john doe';
-    private const EMAIL = 'johndoe@example.org';
-    private const PASSWORD =  'password';
 
+    private const EMAIL = 'johndoe@example.org';
+
+    private const PASSWORD = 'password';
 
     /**
      * @test
      */
-    public function setUp(): void
+    public function setUp() : void
     {
         parent::setUp();
     }
-    
 
     /**
      * @test
@@ -30,10 +30,10 @@ class RegisterControllerTest extends FeatureTestCase
         DB::table('users')->delete();
 
         $response = $this->json('POST', '/user', [
-                'name' => self::USERNAME,
-                'email' => self::EMAIL,
-                'password' => self::PASSWORD,
-                'password_confirmation' => self::PASSWORD,
+            'name'                  => self::USERNAME,
+            'email'                 => self::EMAIL,
+            'password'              => self::PASSWORD,
+            'password_confirmation' => self::PASSWORD,
         ])
         ->assertCreated()
         ->assertJsonStructure([
@@ -44,7 +44,6 @@ class RegisterControllerTest extends FeatureTestCase
             'name' => self::USERNAME,
         ]);
     }
-    
 
     /**
      * @test
@@ -55,14 +54,13 @@ class RegisterControllerTest extends FeatureTestCase
         $user = User::factory()->create();
 
         $response = $this->json('POST', '/user', [
-                'name' => self::USERNAME,
-                'email' => self::EMAIL,
-                'password' => self::PASSWORD,
-                'password_confirmation' => self::PASSWORD,
+            'name'                  => self::USERNAME,
+            'email'                 => self::EMAIL,
+            'password'              => self::PASSWORD,
+            'password_confirmation' => self::PASSWORD,
         ])
         ->assertJsonValidationErrorFor('name');
     }
-
 
     /**
      * @test
@@ -70,12 +68,11 @@ class RegisterControllerTest extends FeatureTestCase
     public function test_register_with_invalid_data_returns_validation_error()
     {
         $response = $this->json('POST', '/user', [
-                'name' => null,
-                'email' => self::EMAIL,
-                'password' => self::PASSWORD,
-                'password_confirmation' => self::PASSWORD,
-            ])
+            'name'                  => null,
+            'email'                 => self::EMAIL,
+            'password'              => self::PASSWORD,
+            'password_confirmation' => self::PASSWORD,
+        ])
             ->assertStatus(422);
     }
-
 }

@@ -2,9 +2,9 @@
 
 namespace App\Models\Traits;
 
-use Illuminate\Support\Str;
 use App\Notifications\WebauthnRecoveryNotification;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Str;
 
 /**
  * @see \App\Models\WebAuthnAuthenticatable
@@ -17,30 +17,28 @@ trait WebAuthnManageCredentials
      *
      * @return string
      */
-    public function userHandle(): string
+    public function userHandle() : string
     {
         // Laragear\WebAuthn uses Ramsey\Uuid\Uuid::fromString()->getHex()->toString()
         // to obtain a UUID v4 with dashes removed and uses it as user_id (aka userHandle)
         // see https://github.com/ramsey/uuid/blob/4.x/src/Uuid.php#L379
         // and Laragear\WebAuthn\Assertion\Validator\Pipes\CheckCredentialIsForUser::validateId()
-        
+
         return $this->webAuthnCredentials()->value('user_id')
             ?? str_replace('-', '', Str::uuid()->toString());
     }
 
-
     /**
      * Saves a new alias for a given WebAuthn credential.
      *
-     * @param  string $id
-     * @param  string $alias
+     * @param  string  $id
+     * @param  string  $alias
      * @return bool
      */
-    public function renameCredential(string $id, string $alias): bool
+    public function renameCredential(string $id, string $alias) : bool
     {
         return boolval($this->webAuthnCredentials()->whereKey($id)->update(['alias' => $alias]));
     }
-
 
     /**
      * Removes one or more credentials previously registered.
@@ -48,7 +46,7 @@ trait WebAuthnManageCredentials
      * @param  string|array  $id
      * @return void
      */
-    public function flushCredential($id): void
+    public function flushCredential($id) : void
     {
         if (! $this->relationLoaded('webAuthnCredentials')) {
             $this->webAuthnCredentials()->whereKey($id)->delete();
@@ -63,15 +61,13 @@ trait WebAuthnManageCredentials
         }
     }
 
-
     /**
      * Sends a webauthn recovery email to the user.
      *
      * @param  string  $token
-     *
      * @return void
      */
-    public function sendWebauthnRecoveryNotification(string $token): void
+    public function sendWebauthnRecoveryNotification(string $token) : void
     {
         // $accountRecoveryNotification = new WebauthnRecoveryNotification($token);
         // $accountRecoveryNotification->toMailUsing(null);
@@ -92,6 +88,5 @@ trait WebAuthnManageCredentials
         // });
 
         $this->notify(new WebauthnRecoveryNotification($token));
-        
     }
 }

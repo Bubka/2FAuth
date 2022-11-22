@@ -2,15 +2,13 @@
 
 namespace App\Api\v1\Controllers;
 
-use App\Models\TwoFAccount;
-use App\Facades\QrCode;
 use App\Api\v1\Requests\QrCodeDecodeRequest;
+use App\Facades\QrCode;
 use App\Http\Controllers\Controller;
-
+use App\Models\TwoFAccount;
 
 class QrCodeController extends Controller
 {
-
     /**
      * Show a QR code image
      *
@@ -23,7 +21,6 @@ class QrCodeController extends Controller
 
         return response()->json(['qrcode' => QrCode::encode($uri)], 200);
     }
-
 
     /**
      * Decode an uploaded QR Code image
@@ -39,5 +36,4 @@ class QrCodeController extends Controller
             ? response()->json(['data' => QrCode::decode($file)], 200)
             : response()->json(['message' => __('errors.file_upload_failed')], 500);
     }
-    
 }

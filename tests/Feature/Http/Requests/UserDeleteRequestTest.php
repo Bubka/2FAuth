@@ -13,7 +13,6 @@ use Tests\FeatureTestCase;
  */
 class UserDeleteRequestTest extends FeatureTestCase
 {
-
     use WithoutMiddleware;
 
     /**
@@ -26,7 +25,7 @@ class UserDeleteRequestTest extends FeatureTestCase
         ->andReturn(true);
 
         $request = new UserDeleteRequest();
-    
+
         $this->assertTrue($request->authorize());
     }
 
@@ -35,7 +34,7 @@ class UserDeleteRequestTest extends FeatureTestCase
      */
     public function test_valid_data(array $data) : void
     {
-        $request = new UserDeleteRequest();
+        $request   = new UserDeleteRequest();
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->fails());
@@ -48,7 +47,7 @@ class UserDeleteRequestTest extends FeatureTestCase
     {
         return [
             [[
-                'password'  => 'Yubikey',
+                'password' => 'Yubikey',
             ]],
         ];
     }
@@ -57,8 +56,8 @@ class UserDeleteRequestTest extends FeatureTestCase
      * @dataProvider provideInvalidData
      */
     public function test_invalid_data(array $data) : void
-    {        
-        $request = new UserDeleteRequest();
+    {
+        $request   = new UserDeleteRequest();
         $validator = Validator::make($data, $request->rules());
 
         $this->assertTrue($validator->fails());
@@ -71,15 +70,14 @@ class UserDeleteRequestTest extends FeatureTestCase
     {
         return [
             [[
-                'password'  => '', // required
+                'password' => '', // required
             ]],
             [[
-                'password'  => true, // string
+                'password' => true, // string
             ]],
             [[
-                'password'  => 0, // string
+                'password' => 0, // string
             ]],
         ];
     }
-
 }

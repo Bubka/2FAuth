@@ -2,12 +2,11 @@
 
 namespace Tests\Feature\Services;
 
-use Tests\FeatureTestCase;
+use App\Facades\Settings;
+use App\Models\TwoFAccount;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
-use App\Models\TwoFAccount;
-use App\Facades\Settings;
-
+use Tests\FeatureTestCase;
 
 /**
  * @covers \App\Services\SettingService
@@ -17,26 +16,43 @@ class SettingServiceTest extends FeatureTestCase
     /**
      * App\Models\Group $groupOne, $groupTwo
      */
-    protected $twofaccountOne, $twofaccountTwo;
+    protected $twofaccountOne;
+
+    protected $twofaccountTwo;
 
     private const KEY = 'key';
+
     private const VALUE = 'value';
+
     private const SETTING_NAME = 'MySetting';
+
     private const SETTING_NAME_ALT = 'MySettingAlt';
+
     private const SETTING_VALUE_STRING = 'MyValue';
+
     private const SETTING_VALUE_TRUE_TRANSFORMED = '{{1}}';
+
     private const SETTING_VALUE_FALSE_TRANSFORMED = '{{}}';
+
     private const SETTING_VALUE_INT = 10;
 
     private const ACCOUNT = 'account';
+
     private const SERVICE = 'service';
+
     private const SECRET = 'A4GRFHVVRBGY7UIW';
+
     private const ALGORITHM_CUSTOM = 'sha256';
+
     private const DIGITS_CUSTOM = 7;
+
     private const PERIOD_CUSTOM = 40;
+
     private const IMAGE = 'https%3A%2F%2Fen.opensuse.org%2Fimages%2F4%2F44%2FButton-filled-colour.png';
+
     private const ICON = 'test.png';
-    private const TOTP_FULL_CUSTOM_URI = 'otpauth://totp/'.self::SERVICE.':'.self::ACCOUNT.'?secret='.self::SECRET.'&issuer='.self::SERVICE.'&digits='.self::DIGITS_CUSTOM.'&period='.self::PERIOD_CUSTOM.'&algorithm='.self::ALGORITHM_CUSTOM.'&image='.self::IMAGE;
+
+    private const TOTP_FULL_CUSTOM_URI = 'otpauth://totp/' . self::SERVICE . ':' . self::ACCOUNT . '?secret=' . self::SECRET . '&issuer=' . self::SERVICE . '&digits=' . self::DIGITS_CUSTOM . '&period=' . self::PERIOD_CUSTOM . '&algorithm=' . self::ALGORITHM_CUSTOM . '&image=' . self::IMAGE;
 
     /**
      * @test
@@ -45,33 +61,32 @@ class SettingServiceTest extends FeatureTestCase
     {
         parent::setUp();
 
-        $this->twofaccountOne = new TwoFAccount;
+        $this->twofaccountOne             = new TwoFAccount;
         $this->twofaccountOne->legacy_uri = self::TOTP_FULL_CUSTOM_URI;
-        $this->twofaccountOne->service = self::SERVICE;
-        $this->twofaccountOne->account = self::ACCOUNT;
-        $this->twofaccountOne->icon = self::ICON;
-        $this->twofaccountOne->otp_type = 'totp';
-        $this->twofaccountOne->secret = self::SECRET;
-        $this->twofaccountOne->digits = self::DIGITS_CUSTOM;
-        $this->twofaccountOne->algorithm = self::ALGORITHM_CUSTOM;
-        $this->twofaccountOne->period = self::PERIOD_CUSTOM;
-        $this->twofaccountOne->counter = null;
+        $this->twofaccountOne->service    = self::SERVICE;
+        $this->twofaccountOne->account    = self::ACCOUNT;
+        $this->twofaccountOne->icon       = self::ICON;
+        $this->twofaccountOne->otp_type   = 'totp';
+        $this->twofaccountOne->secret     = self::SECRET;
+        $this->twofaccountOne->digits     = self::DIGITS_CUSTOM;
+        $this->twofaccountOne->algorithm  = self::ALGORITHM_CUSTOM;
+        $this->twofaccountOne->period     = self::PERIOD_CUSTOM;
+        $this->twofaccountOne->counter    = null;
         $this->twofaccountOne->save();
 
-        $this->twofaccountTwo = new TwoFAccount;
+        $this->twofaccountTwo             = new TwoFAccount;
         $this->twofaccountTwo->legacy_uri = self::TOTP_FULL_CUSTOM_URI;
-        $this->twofaccountTwo->service = self::SERVICE;
-        $this->twofaccountTwo->account = self::ACCOUNT;
-        $this->twofaccountTwo->icon = self::ICON;
-        $this->twofaccountTwo->otp_type = 'totp';
-        $this->twofaccountTwo->secret = self::SECRET;
-        $this->twofaccountTwo->digits = self::DIGITS_CUSTOM;
-        $this->twofaccountTwo->algorithm = self::ALGORITHM_CUSTOM;
-        $this->twofaccountTwo->period = self::PERIOD_CUSTOM;
-        $this->twofaccountTwo->counter = null;
+        $this->twofaccountTwo->service    = self::SERVICE;
+        $this->twofaccountTwo->account    = self::ACCOUNT;
+        $this->twofaccountTwo->icon       = self::ICON;
+        $this->twofaccountTwo->otp_type   = 'totp';
+        $this->twofaccountTwo->secret     = self::SECRET;
+        $this->twofaccountTwo->digits     = self::DIGITS_CUSTOM;
+        $this->twofaccountTwo->algorithm  = self::ALGORITHM_CUSTOM;
+        $this->twofaccountTwo->period     = self::PERIOD_CUSTOM;
+        $this->twofaccountTwo->counter    = null;
         $this->twofaccountTwo->save();
     }
-
 
     /**
      * @test
@@ -83,7 +98,6 @@ class SettingServiceTest extends FeatureTestCase
         $this->assertEquals(self::SETTING_VALUE_STRING, Settings::get(self::SETTING_NAME));
     }
 
-
     /**
      * @test
      */
@@ -94,7 +108,6 @@ class SettingServiceTest extends FeatureTestCase
         $this->assertEquals(true, Settings::get(self::SETTING_NAME));
     }
 
-
     /**
      * @test
      */
@@ -104,7 +117,6 @@ class SettingServiceTest extends FeatureTestCase
 
         $this->assertEquals(false, Settings::get(self::SETTING_NAME));
     }
-
 
     /**
      * @test
@@ -118,7 +130,6 @@ class SettingServiceTest extends FeatureTestCase
         $this->assertEquals(self::SETTING_VALUE_INT, $value);
         $this->assertIsInt($value);
     }
-
 
     /**
      * @test
@@ -138,11 +149,9 @@ class SettingServiceTest extends FeatureTestCase
             $this->assertArrayHasKey($key, $all);
             $this->assertEquals($all[$key], $val);
         }
-        
+
         $this->assertArrayHasKey('lang', $all);
-
     }
-
 
     /**
      * @test
@@ -152,11 +161,10 @@ class SettingServiceTest extends FeatureTestCase
         $value = Settings::set(self::SETTING_NAME, self::SETTING_VALUE_STRING);
 
         $this->assertDatabaseHas('options', [
-            self::KEY => self::SETTING_NAME,
-            self::VALUE => self::SETTING_VALUE_STRING
+            self::KEY   => self::SETTING_NAME,
+            self::VALUE => self::SETTING_VALUE_STRING,
         ]);
     }
-    
 
     /**
      * @test
@@ -173,7 +181,6 @@ class SettingServiceTest extends FeatureTestCase
             $this->assertEquals(self::TOTP_FULL_CUSTOM_URI, Crypt::decryptString($item->legacy_uri));
         });
     }
-
 
     /**
      * @test
@@ -192,7 +199,6 @@ class SettingServiceTest extends FeatureTestCase
         });
     }
 
-
     /**
      * @test
      */
@@ -210,7 +216,6 @@ class SettingServiceTest extends FeatureTestCase
         });
     }
 
-
     /**
      * @test
      * @dataProvider provideUndecipherableData
@@ -225,11 +230,10 @@ class SettingServiceTest extends FeatureTestCase
             ->where('id', $this->twofaccountOne->id)
             ->update($data);
 
-            Settings::set('useEncryption', false);
+        Settings::set('useEncryption', false);
 
         $twofaccount = TwoFAccount::find($this->twofaccountOne->id);
     }
-
 
     /**
      * Provide invalid data for validation test
@@ -238,17 +242,16 @@ class SettingServiceTest extends FeatureTestCase
     {
         return [
             [[
-                'account' => 'undecipherableString'
+                'account' => 'undecipherableString',
             ]],
             [[
-                'secret' => 'undecipherableString'
+                'secret' => 'undecipherableString',
             ]],
             [[
-                'legacy_uri' => 'undecipherableString'
+                'legacy_uri' => 'undecipherableString',
             ]],
         ];
     }
-
 
     /**
      * @test
@@ -256,21 +259,20 @@ class SettingServiceTest extends FeatureTestCase
     public function test_set_array_of_settings_persist_correct_values()
     {
         $value = Settings::set([
-            self::SETTING_NAME => self::SETTING_VALUE_STRING,
+            self::SETTING_NAME     => self::SETTING_VALUE_STRING,
             self::SETTING_NAME_ALT => self::SETTING_VALUE_INT,
         ]);
 
         $this->assertDatabaseHas('options', [
-            self::KEY => self::SETTING_NAME,
-            self::VALUE => self::SETTING_VALUE_STRING
+            self::KEY   => self::SETTING_NAME,
+            self::VALUE => self::SETTING_VALUE_STRING,
         ]);
 
         $this->assertDatabaseHas('options', [
-            self::KEY => self::SETTING_NAME_ALT,
-            self::VALUE => self::SETTING_VALUE_INT
+            self::KEY   => self::SETTING_NAME_ALT,
+            self::VALUE => self::SETTING_VALUE_INT,
         ]);
     }
-
 
     /**
      * @test
@@ -280,11 +282,10 @@ class SettingServiceTest extends FeatureTestCase
         $value = Settings::set(self::SETTING_NAME, true);
 
         $this->assertDatabaseHas('options', [
-            self::KEY => self::SETTING_NAME,
-            self::VALUE => self::SETTING_VALUE_TRUE_TRANSFORMED
+            self::KEY   => self::SETTING_NAME,
+            self::VALUE => self::SETTING_VALUE_TRUE_TRANSFORMED,
         ]);
     }
-
 
     /**
      * @test
@@ -294,11 +295,10 @@ class SettingServiceTest extends FeatureTestCase
         $value = Settings::set(self::SETTING_NAME, false);
 
         $this->assertDatabaseHas('options', [
-            self::KEY => self::SETTING_NAME,
-            self::VALUE => self::SETTING_VALUE_FALSE_TRANSFORMED
+            self::KEY   => self::SETTING_NAME,
+            self::VALUE => self::SETTING_VALUE_FALSE_TRANSFORMED,
         ]);
     }
-
 
     /**
      * @test
@@ -312,8 +312,8 @@ class SettingServiceTest extends FeatureTestCase
         $value = Settings::delete(self::SETTING_NAME);
 
         $this->assertDatabaseMissing('options', [
-            self::KEY => self::SETTING_NAME,
-            self::VALUE => self::SETTING_VALUE_STRING
+            self::KEY   => self::SETTING_NAME,
+            self::VALUE => self::SETTING_VALUE_STRING,
         ]);
     }
 }

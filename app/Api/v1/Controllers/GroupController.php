@@ -2,18 +2,16 @@
 
 namespace App\Api\v1\Controllers;
 
-use App\Models\Group;
-use App\Facades\Groups;
-use App\Api\v1\Requests\GroupStoreRequest;
 use App\Api\v1\Requests\GroupAssignRequest;
+use App\Api\v1\Requests\GroupStoreRequest;
 use App\Api\v1\Resources\GroupResource;
 use App\Api\v1\Resources\TwoFAccountCollection;
+use App\Facades\Groups;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\App;
+use App\Models\Group;
 
 class GroupController extends Controller
 {
-
     /**
      * Display a listing of the resource.
      *
@@ -25,7 +23,6 @@ class GroupController extends Controller
 
         return GroupResource::collection($groups);
     }
-
 
     /**
      * Store a newly created resource in storage.
@@ -44,7 +41,6 @@ class GroupController extends Controller
             ->setStatusCode(201);
     }
 
-
     /**
      * Display the specified resource.
      *
@@ -56,12 +52,11 @@ class GroupController extends Controller
         return new GroupResource($group);
     }
 
-
     /**
      * Update the specified resource in storage.
      *
      * @param  \App\Api\v1\Requests\GroupStoreRequest  $request
-     * @param  \App\Models\Group $group
+     * @param  \App\Models\Group  $group
      * @return \App\Api\v1\Resources\GroupResource
      */
     public function update(GroupStoreRequest $request, Group $group)
@@ -71,9 +66,7 @@ class GroupController extends Controller
         Groups::update($group, $validated);
 
         return new GroupResource($group);
-
     }
-
 
     /**
      * Associate the specified accounts with the group
@@ -87,11 +80,9 @@ class GroupController extends Controller
         $validated = $request->validated();
 
         Groups::assign($validated['ids'], $group);
-            
+
         return new GroupResource($group);
-
     }
-
 
     /**
      * Get accounts assign to the group
@@ -102,11 +93,9 @@ class GroupController extends Controller
     public function accounts(Group $group)
     {
         $twofaccounts = Groups::getAccounts($group);
-            
+
         return new TwoFAccountCollection($twofaccounts);
-
     }
-
 
     /**
      * Remove the specified resource from storage.
@@ -120,5 +109,4 @@ class GroupController extends Controller
 
         return response()->json(null, 204);
     }
-
 }

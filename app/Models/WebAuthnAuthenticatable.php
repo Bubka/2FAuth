@@ -11,18 +11,16 @@ interface WebAuthnAuthenticatable extends Authenticatable
      *
      * @return string
      */
-    public function userHandle(): string;
-
+    public function userHandle() : string;
 
     /**
      * Saves a new alias for a given WebAuthn credential.
      *
-     * @param  string $id
-     * @param  string $alias
+     * @param  string  $id
+     * @param  string  $alias
      * @return bool
      */
-    public function renameCredential(string $id, string $alias): bool;
-
+    public function renameCredential(string $id, string $alias) : bool;
 
     /**
      * Removes one or more credentials previously registered.
@@ -30,14 +28,13 @@ interface WebAuthnAuthenticatable extends Authenticatable
      * @param  string|array  $id
      * @return void
      */
-    public function flushCredential($id): void;
+    public function flushCredential($id) : void;
 
-    
     /**
      * Sends a webauthn recovery email to the user.
      *
      * @param  string  $token
      * @return void
      */
-    public function sendWebauthnRecoveryNotification(string $token): void;
+    public function sendWebauthnRecoveryNotification(string $token) : void;
 }

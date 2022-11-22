@@ -2,38 +2,36 @@
 
 namespace App\Api\v1\Controllers;
 
-use App\Facades\Settings;
 use App\Api\v1\Requests\SettingStoreRequest;
 use App\Api\v1\Requests\SettingUpdateRequest;
+use App\Facades\Settings;
 use App\Http\Controllers\Controller;
-
 
 class SettingController extends Controller
 {
     /**
      * List all settings
-     * 
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function index()
     {
-        $settings = Settings::all();
+        $settings          = Settings::all();
         $settingsResources = collect([]);
         $settings->each(function (mixed $item, string $key) use ($settingsResources) {
             $settingsResources->push([
-                'key' => $key,
-                'value' => $item
+                'key'   => $key,
+                'value' => $item,
             ]);
         });
 
         return response()->json($settingsResources->all(), 200);
     }
 
-
     /**
      * Display a setting
      *
-     * @param string $settingName
+     * @param  string  $settingName
      * @return \Illuminate\Http\JsonResponse
      */
     public function show($settingName)
@@ -45,16 +43,15 @@ class SettingController extends Controller
         }
 
         return response()->json([
-            'key' => $settingName,
-            'value' => $setting
+            'key'   => $settingName,
+            'value' => $setting,
         ], 200);
     }
 
-
     /**
      * Store a setting
-     * 
-     * @param \App\Api\v1\Requests\SettingStoreRequest $request
+     *
+     * @param  \App\Api\v1\Requests\SettingStoreRequest  $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function store(SettingStoreRequest $request)
@@ -64,16 +61,15 @@ class SettingController extends Controller
         Settings::set($validated['key'], $validated['value']);
 
         return response()->json([
-            'key' => $validated['key'],
-            'value' => $validated['value']
+            'key'   => $validated['key'],
+            'value' => $validated['value'],
         ], 201);
     }
 
-
     /**
      * Update a setting
-     * 
-     * @param \App\Api\v1\Requests\SettingUpdateRequest $request
+     *
+     * @param  \App\Api\v1\Requests\SettingUpdateRequest  $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function update(SettingUpdateRequest $request, string $settingName)
@@ -83,17 +79,15 @@ class SettingController extends Controller
         Settings::set($settingName, $validated['value']);
 
         return response()->json([
-            'key' => $settingName,
-            'value' => $validated['value']
+            'key'   => $settingName,
+            'value' => $validated['value'],
         ], 200);
-
     }
-
 
     /**
      * Delete a setting
-     * 
-     * @param string $settingName
+     *
+     * @param  string  $settingName
      * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(string $settingName)
@@ -105,16 +99,15 @@ class SettingController extends Controller
         }
 
         $optionsConfig = config('2fauth.options');
-        if(array_key_exists($settingName, $optionsConfig)) {
+        if (array_key_exists($settingName, $optionsConfig)) {
             return response()->json(
-                ['message' => 'bad request',
-                'reason' => [__('errors.delete_user_setting_only')]
-            ], 400);
+                ['message'   => 'bad request',
+                    'reason' => [__('errors.delete_user_setting_only')],
+                ], 400);
         }
 
         Settings::delete($settingName);
 
         return response()->json(null, 204);
     }
-
 }

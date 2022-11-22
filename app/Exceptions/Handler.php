@@ -14,7 +14,7 @@ class Handler extends ExceptionHandler
     protected $levels = [
         //
     ];
-    
+
     /**
      * A list of the exception types that are not reported.
      *
@@ -44,64 +44,71 @@ class Handler extends ExceptionHandler
     {
         $this->renderable(function (\Symfony\Component\HttpKernel\Exception\NotFoundHttpException $exception, $request) {
             return response()->json([
-                'message' => 'not found'], 404);
+                'message' => 'not found',
+            ], 404);
         });
 
         $this->renderable(function (InvalidOtpParameterException $exception, $request) {
             return response()->json([
                 'message' => 'invalid OTP parameters',
-                'reason' => [$exception->getMessage()]
+                'reason'  => [$exception->getMessage()],
             ], 400);
         });
 
         $this->renderable(function (InvalidQrCodeException $exception, $request) {
             return response()->json([
-                'message' => 'not a valid QR code'], 400);
+                'message' => 'not a valid QR code', ], 400);
         });
 
         $this->renderable(function (InvalidSecretException $exception, $request) {
             return response()->json([
-                'message' => 'not a valid base32 encoded secret'], 400);
+                'message' => 'not a valid base32 encoded secret', ], 400);
         });
 
         $this->renderable(function (DbEncryptionException $exception, $request) {
             return response()->json([
-                'message' => $exception->getMessage()], 400);
+                'message' => $exception->getMessage(), ], 400);
         });
 
         $this->renderable(function (InvalidMigrationDataException $exception, $request) {
             return response()->json([
-                'message' => __('errors.invalid_x_migration', ['appname' => $exception->getMessage()])], 400);
+                'message' => __('errors.invalid_x_migration', ['appname' => $exception->getMessage()]),
+            ], 400);
         });
 
         $this->renderable(function (UnsupportedMigrationException $exception, $request) {
             return response()->json([
-                'message' => __('errors.unsupported_migration')], 400);
+                'message' => __('errors.unsupported_migration'),
+            ], 400);
         });
 
         $this->renderable(function (EncryptedMigrationException $exception, $request) {
             return response()->json([
-                'message' => __('errors.encrypted_migration')], 400);
+                'message' => __('errors.encrypted_migration'),
+            ], 400);
         });
 
         $this->renderable(function (UndecipherableException $exception, $request) {
             return response()->json([
-                'message' => __('errors.cannot_decipher_secret')], 400);
+                'message' => __('errors.cannot_decipher_secret'),
+            ], 400);
         });
 
         $this->renderable(function (UnsupportedOtpTypeException $exception, $request) {
             return response()->json([
-                'message' => __('errors.unsupported_otp_type')], 400);
+                'message' => __('errors.unsupported_otp_type'),
+            ], 400);
         });
 
         $this->renderable(function (\Illuminate\Auth\AuthenticationException $exception, $request) {
             if ($exception->guards() === ['reverse-proxy-guard']) {
                 return response()->json([
-                    'message' => $exception->getMessage()], 407);
-            }
-            else {
+                    'message' => $exception->getMessage(),
+                ], 407);
+            } else {
                 return response()->json([
-                    'message' => $exception->getMessage()], 401);
+                    'message' => $exception->getMessage(),
+                ], 401);
             }
         });
     }

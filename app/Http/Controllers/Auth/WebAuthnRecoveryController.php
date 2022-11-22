@@ -2,22 +2,21 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\WebauthnRecoveryRequest;
 use App\Extensions\WebauthnCredentialBroker;
 use App\Facades\Settings;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\WebauthnRecoveryRequest;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Foundation\Auth\ResetsPasswords;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Auth\ResetsPasswords;
 use Illuminate\Support\Facades\Password;
-use Illuminate\Support\Facades\App;
+use Illuminate\Validation\ValidationException;
 
 class WebAuthnRecoveryController extends Controller
 {
-    use ResetsPasswords;  
+    use ResetsPasswords;
 
     /**
      * Let the user regain access to his account using email+password by resetting
@@ -25,8 +24,8 @@ class WebAuthnRecoveryController extends Controller
      *
      * @param  \App\Http\Requests\WebauthnRecoveryRequest  $request
      * @param  \App\Extensions\WebauthnCredentialBroker  $broker
-     *
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\JsonResponse
+     *
      * @throws \Illuminate\Validation\ValidationException
      */
     public function recover(WebauthnRecoveryRequest $request, WebauthnCredentialBroker $broker)
@@ -54,66 +53,57 @@ class WebAuthnRecoveryController extends Controller
                         $user->flushCredentials();
                     }
                     Settings::delete('useWebauthnOnly');
+                } else {
+                    throw new AuthenticationException();
                 }
-                else throw new AuthenticationException();
             }
         );
-        
+
         return $response === Password::PASSWORD_RESET
             ? $this->sendRecoveryResponse($request, $response)
             : $this->sendRecoveryFailedResponse($request, $response);
-
     }
-
 
     /**
      * Check if the user has set to revoke all credentials.
      *
      * @param  \App\Http\Requests\WebauthnRecoveryRequest  $request
-     *
      * @return bool|mixed
      */
-    protected function shouldRevokeAllCredentials(WebauthnRecoveryRequest $request): mixed
+    protected function shouldRevokeAllCredentials(WebauthnRecoveryRequest $request) : mixed
     {
         return filter_var($request->header('WebAuthn-Unique'), FILTER_VALIDATE_BOOLEAN)
             ?: $request->input('revokeAll', true);
     }
-
 
     /**
      * Get the response for a successful account recovery.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  string  $response
-     *
      * @return \Illuminate\Http\JsonResponse
-     * 
      */
-    protected function sendRecoveryResponse(Request $request, string $response): JsonResponse
+    protected function sendRecoveryResponse(Request $request, string $response) : JsonResponse
     {
         return response()->json(['message' => __('auth.webauthn.webauthn_login_disabled')]);
     }
-
 
     /**
      * Get the response for a failed account recovery.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  string  $response
-     *
      * @return \Illuminate\Http\JsonResponse
+     *
      * @throws \Illuminate\Validation\ValidationException
-     * 
      */
-    protected function sendRecoveryFailedResponse(Request $request, string $response): JsonResponse
+    protected function sendRecoveryFailedResponse(Request $request, string $response) : JsonResponse
     {
         switch ($response) {
             case Password::INVALID_TOKEN:
                 throw ValidationException::withMessages(['token' => [__('auth.webauthn.invalid_reset_token')]]);
-
             default:
                 throw ValidationException::withMessages(['email' => [trans($response)]]);
         }
-        
     }
 }

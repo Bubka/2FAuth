@@ -3,16 +3,15 @@
 namespace App\Models;
 
 use App\Events\GroupDeleting;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * @property int $twofaccounts_count
  */
 class Group extends Model
 {
-
     use HasFactory;
 
     /**
@@ -22,7 +21,6 @@ class Group extends Model
      */
     protected $fillable = ['name'];
 
-
     /**
      * The accessors to append to the model's array form.
      *
@@ -30,14 +28,12 @@ class Group extends Model
      */
     protected $appends = [];
 
-
     /**
      * The attributes that should be hidden for arrays.
      *
      * @var array<int, string>
      */
     protected $hidden = ['created_at', 'updated_at'];
-
 
     /**
      * The attributes that should be cast.
@@ -48,7 +44,6 @@ class Group extends Model
         'twofaccounts_count' => 'integer',
     ];
 
-
     /**
      * The event map for the model.
      *
@@ -57,7 +52,6 @@ class Group extends Model
     protected $dispatchesEvents = [
         'deleting' => GroupDeleting::class,
     ];
-
 
     /**
      * Override The "booting" method of the model
@@ -75,10 +69,9 @@ class Group extends Model
         });
     }
 
-
     /**
      * Get the TwoFAccounts of the group.
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany<TwoFAccount>
      */
     public function twofaccounts()

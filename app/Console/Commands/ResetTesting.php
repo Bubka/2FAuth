@@ -40,15 +40,15 @@ class ResetTesting extends Command
      */
     public function handle()
     {
-        if( !config('2fauth.config.isTestingApp') ) {
+        if (! config('2fauth.config.isTestingApp')) {
             $this->comment('2fauth:reset-testing can only run when isTestingApp option is On');
+
             return;
         }
 
-        if( $this->option('no-confirm') ) {
+        if ($this->option('no-confirm')) {
             $testing = 'testing';
-        }
-        else {
+        } else {
             $this->line('This will reset the app in order to run a clean and fresh testing app.');
             $testing = $this->ask('To prevent any mistake please type the word "testing" to go on');
         }
@@ -58,10 +58,8 @@ class ResetTesting extends Command
             $this->resetDB('TestingSeeder');
 
             $this->info('Testing app refreshed');
-        }
-        else {
+        } else {
             $this->comment('Bad confirmation word, nothing appened');
         }
     }
-
 }

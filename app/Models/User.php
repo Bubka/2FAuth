@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Auth\Notifications\ResetPassword;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Laravel\Passport\HasApiTokens;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Laragear\WebAuthn\WebAuthnAuthentication;
 use App\Models\Traits\WebAuthnManageCredentials;
+use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Log;
+use Laragear\WebAuthn\WebAuthnAuthentication;
+use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable implements WebAuthnAuthenticatable
 {
@@ -53,19 +53,19 @@ class User extends Authenticatable implements WebAuthnAuthenticatable
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new ResetPassword($token));
-        
+
         Log::info('Password reset token sent');
     }
 
     /**
      * set Email attribute
-     * @param string $value
+     *
+     * @param  string  $value
      */
     public function setEmailAttribute($value) : void
     {
         $this->attributes['email'] = strtolower($value);
     }
-
 
     /**
      * Returns an WebAuthnAuthenticatable user from a given Credential ID.
@@ -73,7 +73,7 @@ class User extends Authenticatable implements WebAuthnAuthenticatable
      * @param  string  $id
      * @return WebAuthnAuthenticatable|null
      */
-    public static function getFromCredentialId(string $id): ?WebAuthnAuthenticatable
+    public static function getFromCredentialId(string $id) : ?WebAuthnAuthenticatable
     {
         return static::whereHas(
             'webauthnCredentials',

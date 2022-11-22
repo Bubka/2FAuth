@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
 
 class WebauthnRecoveryRequest extends FormRequest
 {
@@ -25,8 +24,8 @@ class WebauthnRecoveryRequest extends FormRequest
     public function rules()
     {
         return [
-            'token' => 'required',
-            'email' => 'required|email',
+            'token'    => 'required',
+            'email'    => 'required|email',
             'password' => 'required',
         ];
     }

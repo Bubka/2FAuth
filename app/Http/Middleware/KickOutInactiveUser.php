@@ -2,12 +2,12 @@
 
 namespace App\Http\Middleware;
 
-use Closure;
+use App\Facades\Settings;
 use Carbon\Carbon;
+use Closure;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-use App\Facades\Settings;
 
 class KickOutInactiveUser
 {
@@ -16,7 +16,7 @@ class KickOutInactiveUser
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
-     * @param  string $guards
+     * @param  string  $guards
      * @return mixed
      */
     public function handle($request, Closure $next, ...$guards)
@@ -28,9 +28,9 @@ class KickOutInactiveUser
         if (Auth::guest() || $request->bearerToken() || config('auth.defaults.guard') === 'reverse-proxy-guard') {
             return $next($request);
         }
-     
-        $user = Auth::user();
-        $now = Carbon::now();
+
+        $user        = Auth::user();
+        $now         = Carbon::now();
         $inactiveFor = $now->diffInSeconds(Carbon::parse($user->last_seen_at));
 
         // Fetch all setting values
@@ -38,15 +38,14 @@ class KickOutInactiveUser
 
         // If user has been inactive longer than the allowed inactivity period
         if ($kickUserAfterXSecond > 0 && $inactiveFor > $kickUserAfterXSecond) {
-     
             $user->last_seen_at = $now->format('Y-m-d H:i:s');
             $user->save();
-            
+
             Log::info('Inactive user detected, authentication rejected');
             if (method_exists('Illuminate\Support\Facades\Auth', 'logout')) {
                 Auth::logout();
             }
-     
+
             return response()->json(['message' => 'inactivity detected'], Response::HTTP_I_AM_A_TEAPOT);
         }
 

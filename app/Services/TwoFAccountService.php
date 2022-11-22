@@ -2,18 +2,17 @@
 
 namespace App\Services;
 
-use App\Models\TwoFAccount;
 use App\Factories\MigratorFactoryInterface;
-use Illuminate\Support\Facades\Log;
+use App\Models\TwoFAccount;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 
 class TwoFAccountService
 {
     /**
-     * @var MigratorFactoryInterface $migratorFactory The Migration service
+     * @var MigratorFactoryInterface The Migration service
      */
     protected $migratorFactory;
-
 
     /**
      * Constructor
@@ -23,11 +22,10 @@ class TwoFAccountService
         $this->migratorFactory = $migratorFactory;
     }
 
-
     /**
      * Withdraw one or more twofaccounts from their group
-     * 
-     * @param int|array|string $ids twofaccount ids to free
+     *
+     * @param  int|array|string  $ids twofaccount ids to free
      */
     public static function withdraw($ids) : void
     {
@@ -40,32 +38,30 @@ class TwoFAccountService
 
         TwoFAccount::whereIn('id', $ids)
                     ->update(
-                        ['group_id' => NULL]
+                        ['group_id' => null]
                     );
-        
+
         Log::info(sprintf('TwoFAccounts #%s withdrawn', implode(',#', $ids)));
     }
 
-
     /**
      * Convert a migration payload to a set of TwoFAccount objects
-     * 
-     * @param string $migrationPayload Migration payload from 2FA apps export feature
+     *
+     * @param  string  $migrationPayload Migration payload from 2FA apps export feature
      * @return \Illuminate\Support\Collection<int|string, TwoFAccount> The converted accounts
      */
     public function migrate(string $migrationPayload) : Collection
     {
-        $migrator = $this->migratorFactory->create($migrationPayload);
+        $migrator     = $this->migratorFactory->create($migrationPayload);
         $twofaccounts = $migrator->migrate($migrationPayload);
 
         return self::markAsDuplicate($twofaccounts);
     }
 
-
     /**
      * Delete one or more twofaccounts
-     * 
-     * @param int|array|string $ids twofaccount ids to delete
+     *
+     * @param  int|array|string  $ids twofaccount ids to delete
      * @return int The number of deleted
      */
     public static function delete($ids) : int
@@ -73,17 +69,16 @@ class TwoFAccountService
         // $ids as string could be a comma-separated list of ids
         // so in this case we explode the string to an array
         $ids = self::commaSeparatedToArray($ids);
-        Log::info(sprintf('Deletion of TwoFAccounts #%s requested', is_array($ids) ? implode(',#', $ids) : $ids ));
+        Log::info(sprintf('Deletion of TwoFAccounts #%s requested', is_array($ids) ? implode(',#', $ids) : $ids));
         $deleted = TwoFAccount::destroy($ids);
 
         return $deleted;
     }
 
-
     /**
      * Return the given collection with items marked as Duplicates (using id=-1) if a similar record exists in database
-     * 
-     * @param \Illuminate\Support\Collection<int|string, TwoFAccount> $twofaccounts
+     *
+     * @param  \Illuminate\Support\Collection<int|string, TwoFAccount>  $twofaccounts
      * @return \Illuminate\Support\Collection<int|string, TwoFAccount>
      */
     private static function markAsDuplicate(Collection $twofaccounts) : Collection
@@ -108,22 +103,20 @@ class TwoFAccountService
         return $twofaccounts;
     }
 
-
     /**
      * Explode a comma separated list of IDs to an array of IDs
-     * 
-     * @param int|array|string $ids
+     *
+     * @param  int|array|string  $ids
      */
     private static function commaSeparatedToArray($ids) : mixed
     {
-        if(is_string($ids))
-        {
+        if (is_string($ids)) {
             $regex = "/^\d+(,{1}\d+)*$/";
             if (preg_match($regex, $ids)) {
                 $ids = explode(',', $ids);
             }
         }
-        
+
         return $ids;
     }
 }

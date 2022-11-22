@@ -2,67 +2,63 @@
 
 namespace App\Factories;
 
-use App\Services\Migrators\GoogleAuthMigrator;
+use App\Exceptions\EncryptedMigrationException;
+use App\Exceptions\UnsupportedMigrationException;
 use App\Services\Migrators\AegisMigrator;
+use App\Services\Migrators\GoogleAuthMigrator;
 use App\Services\Migrators\Migrator;
 use App\Services\Migrators\PlainTextMigrator;
 use App\Services\Migrators\TwoFASMigrator;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Validator;
-use App\Exceptions\UnsupportedMigrationException;
-use App\Exceptions\EncryptedMigrationException;
 
 class MigratorFactory implements MigratorFactoryInterface
 {
     /**
      * Infer the type of migrator needed from a payload and create the migrator
-     * 
-     * @param string $migrationPayload The migration payload used to infer the migrator type
+     *
+     * @param  string  $migrationPayload The migration payload used to infer the migrator type
      * @return Migrator
      */
     public function create(string $migrationPayload) : Migrator
     {
         if ($this->isAegisJSON($migrationPayload)) {
             return App::make(AegisMigrator::class);
-        }
-        else if ($this->is2FASv2($migrationPayload)) {
+        } elseif ($this->is2FASv2($migrationPayload)) {
             return App::make(TwoFASMigrator::class);
-        }
-        else if ($this->isGoogleAuth($migrationPayload)) {
+        } elseif ($this->isGoogleAuth($migrationPayload)) {
             return App::make(GoogleAuthMigrator::class);
-        }
-        else if ($this->isPlainText($migrationPayload)) {
+        } elseif ($this->isPlainText($migrationPayload)) {
             return App::make(PlainTextMigrator::class);
+        } else {
+            throw new UnsupportedMigrationException();
         }
-        else throw new UnsupportedMigrationException();
-
     }
-
 
     /**
      * Determine if a payload comes from Google Authenticator
-     * 
-     * @param string $migrationPayload The payload to analyse
+     *
+     * @param  string  $migrationPayload The payload to analyse
      * @return bool
      */
     private function isGoogleAuth(string $migrationPayload) : bool
     {
         // - Google Auth migration URI : a string starting with otpauth-migration://offline?data= on a single line
 
-        $lines = preg_split('~\R~', $migrationPayload, -1 , PREG_SPLIT_NO_EMPTY);
+        $lines = preg_split('~\R~', $migrationPayload, -1, PREG_SPLIT_NO_EMPTY);
 
-        if (!$lines || count($lines) != 1)
+        if (! $lines || count($lines) != 1) {
             return false;
+        }
 
         return preg_match('/^otpauth-migration:\/\/offline\?data=.+$/', $lines[0]) == 1;
     }
 
-
     /**
      * Determine if a payload is a plain text content
-     * 
-     * @param string $migrationPayload The payload to analyse
+     *
+     * @param  string  $migrationPayload The payload to analyse
      * @return bool
      */
     private function isPlainText(string $migrationPayload) : bool
@@ -70,18 +66,17 @@ class MigratorFactory implements MigratorFactoryInterface
         // - Plain text : one or more otpauth URIs (otpauth://[t|h]otp/...), one per line
 
         return Validator::make(
-            preg_split('~\R~', $migrationPayload, -1 , PREG_SPLIT_NO_EMPTY),
+            preg_split('~\R~', $migrationPayload, -1, PREG_SPLIT_NO_EMPTY),
             [
                 '*' => 'regex:/^otpauth:\/\/[h,t]otp\//i',
             ]
         )->passes();
     }
 
-
     /**
      * Determine if a payload comes from Aegis Authenticator in JSON format
-     * 
-     * @param string $migrationPayload The payload to analyse
+     *
+     * @param  string  $migrationPayload The payload to analyse
      * @return bool
      */
     private function isAegisJSON(string $migrationPayload) : mixed
@@ -107,15 +102,14 @@ class MigratorFactory implements MigratorFactoryInterface
         if (Arr::has($json, 'db')) {
             if (is_string($json['db']) && is_array(Arr::get($json, 'header.slots'))) {
                 throw new EncryptedMigrationException();
-            }
-            else {
+            } else {
                 return count(Validator::validate(
                     $json,
                     [
-                        'db.entries.*.type' => 'required',
-                        'db.entries.*.name' => 'required',
+                        'db.entries.*.type'   => 'required',
+                        'db.entries.*.name'   => 'required',
                         'db.entries.*.issuer' => 'required',
-                        'db.entries.*.info' => 'required'
+                        'db.entries.*.info'   => 'required',
                     ]
                 )) > 0;
             }
@@ -124,11 +118,10 @@ class MigratorFactory implements MigratorFactoryInterface
         return false;
     }
 
-
     /**
      * Determine if a payload comes from 2FAS Authenticator
-     * 
-     * @param string $migrationPayload The payload to analyse
+     *
+     * @param  string  $migrationPayload The payload to analyse
      * @return bool
      */
     private function is2FASv2(string $migrationPayload) : mixed
@@ -155,18 +148,17 @@ class MigratorFactory implements MigratorFactoryInterface
         // }
 
         $json = json_decode($migrationPayload, true);
-        
+
         if (Arr::get($json, 'schemaVersion') == 2 && (Arr::has($json, 'services') || Arr::has($json, 'servicesEncrypted'))) {
             if (Arr::has($json, 'servicesEncrypted')) {
                 throw new EncryptedMigrationException();
-            }
-            else {
+            } else {
                 return count(Validator::validate(
                     $json,
                     [
                         'services.*.secret' => 'required',
-                        'services.*.name' => 'required',
-                        'services.*.otp' => 'required'
+                        'services.*.name'   => 'required',
+                        'services.*.otp'    => 'required',
                     ]
                 )) > 0;
             }
@@ -174,5 +166,4 @@ class MigratorFactory implements MigratorFactoryInterface
 
         return false;
     }
-
 }

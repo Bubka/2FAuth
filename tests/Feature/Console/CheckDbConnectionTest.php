@@ -2,18 +2,14 @@
 
 namespace Tests\Feature\Console;
 
-use App\Models\User;
-use Tests\FeatureTestCase;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
-
+use Tests\FeatureTestCase;
 
 /**
  * @covers \App\Console\Commands\CheckDbConnection
  */
 class CheckDbConnectionTest extends FeatureTestCase
 {
-
     /**
      * @test
      */
@@ -33,7 +29,7 @@ class CheckDbConnectionTest extends FeatureTestCase
         DB::shouldReceive('connection', 'getPDO')
             ->andThrow(new \Exception());
 
-        $this->artisan('2fauth:check-db-connection')          
+        $this->artisan('2fauth:check-db-connection')
             ->assertExitCode(0);
     }
 }

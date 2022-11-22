@@ -19,5 +19,4 @@ class ResetPasswordController extends Controller
     */
 
     use ResetsPasswords;
-
 }

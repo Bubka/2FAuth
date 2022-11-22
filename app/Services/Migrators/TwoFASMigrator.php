@@ -2,12 +2,11 @@
 
 namespace App\Services\Migrators;
 
-use App\Services\Migrators\Migrator;
-use Illuminate\Support\Collection;
-use App\Models\TwoFAccount;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Arr;
 use App\Exceptions\InvalidMigrationDataException;
+use App\Models\TwoFAccount;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 
 class TwoFASMigrator extends Migrator
 {
@@ -65,7 +64,6 @@ class TwoFASMigrator extends Migrator
     //     "appVersionName": "3.20.1"
     // }
 
-
     /**
      * Convert migration data to a TwoFAccounts collection.
      *
@@ -80,39 +78,36 @@ class TwoFASMigrator extends Migrator
             Log::error('Aegis JSON migration data cannot be read');
             throw new InvalidMigrationDataException('2FAS Auth');
         }
-        
-        $twofaccounts = array();
+
+        $twofaccounts = [];
 
         foreach ($json['services'] as $key => $otp_parameters) {
-
-            $parameters = array();
-            $parameters['otp_type']     = $otp_parameters['otp']['tokenType'];
-            $parameters['service']      = $otp_parameters['name'];
-            $parameters['account']      = $otp_parameters['otp']['account'] ?? $parameters['service'];
-            $parameters['secret']       = $this->padToValidBase32Secret($otp_parameters['secret']);
-            $parameters['algorithm']    = $otp_parameters['otp']['algorithm'];
-            $parameters['digits']       = $otp_parameters['otp']['digits'];
-            $parameters['counter']      = $otp_parameters['otp']['counter'] ?? null;
-            $parameters['period']       = $otp_parameters['otp']['period'] ?? null;
+            $parameters              = [];
+            $parameters['otp_type']  = $otp_parameters['otp']['tokenType'];
+            $parameters['service']   = $otp_parameters['name'];
+            $parameters['account']   = $otp_parameters['otp']['account'] ?? $parameters['service'];
+            $parameters['secret']    = $this->padToValidBase32Secret($otp_parameters['secret']);
+            $parameters['algorithm'] = $otp_parameters['otp']['algorithm'];
+            $parameters['digits']    = $otp_parameters['otp']['digits'];
+            $parameters['counter']   = $otp_parameters['otp']['counter'] ?? null;
+            $parameters['period']    = $otp_parameters['otp']['period'] ?? null;
 
             try {
-               $twofaccounts[$key] = new TwoFAccount;
-               $twofaccounts[$key]->fillWithOtpParameters($parameters);
-            }
-            catch (\Exception $exception) {
-
+                $twofaccounts[$key] = new TwoFAccount;
+                $twofaccounts[$key]->fillWithOtpParameters($parameters);
+            } catch (\Exception $exception) {
                 Log::error(sprintf('Cannot instanciate a TwoFAccount object with 2FAS imported item #%s', $key));
                 Log::error($exception->getMessage());
 
                 // The token failed to generate a valid account so we create a fake account to be returned.
-                $fakeAccount = new TwoFAccount();
-                $fakeAccount->id = TwoFAccount::FAKE_ID;
-                $fakeAccount->otp_type  = $otp_parameters['otp']['tokenType'] ?? TwoFAccount::TOTP;
+                $fakeAccount           = new TwoFAccount();
+                $fakeAccount->id       = TwoFAccount::FAKE_ID;
+                $fakeAccount->otp_type = $otp_parameters['otp']['tokenType'] ?? TwoFAccount::TOTP;
                 // Only basic fields are filled to limit the risk of another exception.
-                $fakeAccount->account   = $otp_parameters['otp']['account'] ?? __('twofaccounts.import.invalid_account');
-                $fakeAccount->service   = $otp_parameters['name'] ?? __('twofaccounts.import.invalid_service');
+                $fakeAccount->account = $otp_parameters['otp']['account'] ?? __('twofaccounts.import.invalid_account');
+                $fakeAccount->service = $otp_parameters['name'] ?? __('twofaccounts.import.invalid_service');
                 // The secret field is used to pass the error, not very clean but will do the job for now.
-                $fakeAccount->secret    = $exception->getMessage();
+                $fakeAccount->secret = $exception->getMessage();
 
                 $twofaccounts[$key] = $fakeAccount;
             }

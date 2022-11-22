@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Http\Controllers\Controller;
+use App\Http\Requests\LoginRequest;
+use Carbon\Carbon;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
-use App\Http\Requests\LoginRequest;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
-
 
 class LoginController extends Controller
 {
@@ -27,7 +26,6 @@ class LoginController extends Controller
     */
 
     use AuthenticatesUsers;
-
 
     /**
      * Handle a login request to the application.
@@ -65,10 +63,10 @@ class LoginController extends Controller
         return $this->sendFailedLoginResponse($request);
     }
 
-
     /**
      * log out current user
-     * @param  Request $request
+     *
+     * @param  Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function logout(Request $request)
@@ -78,7 +76,6 @@ class LoginController extends Controller
 
         return response()->json(['message' => 'signed out'], Response::HTTP_OK);
     }
-
 
     /**
      * Send the response after the user was authenticated.
@@ -96,10 +93,9 @@ class LoginController extends Controller
 
         return response()->json([
             'message' => 'authenticated',
-            'name' => $name
+            'name'    => $name,
         ], Response::HTTP_OK);
     }
-
 
     /**
      * Get the failed login response instance.
@@ -111,7 +107,6 @@ class LoginController extends Controller
     {
         return response()->json(['message' => 'unauthorised'], Response::HTTP_UNAUTHORIZED);
     }
-    
 
     /**
      * Redirect the user after determining they are locked out.
@@ -128,7 +123,6 @@ class LoginController extends Controller
         return response()->json(['message' => Lang::get('auth.throttle', ['seconds' => $seconds])], Response::HTTP_TOO_MANY_REQUESTS);
     }
 
-
     /**
      * Get the needed authorization credentials from the request.
      *
@@ -139,12 +133,11 @@ class LoginController extends Controller
     {
         $credentials = [
             $this->username() => strtolower($request->input($this->username())),
-            'password' => $request->get('password'),
+            'password'        => $request->get('password'),
         ];
 
         return $credentials;
     }
-
 
     /**
      * The user has been authenticated.

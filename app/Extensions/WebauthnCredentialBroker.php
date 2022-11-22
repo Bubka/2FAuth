@@ -2,8 +2,8 @@
 
 namespace App\Extensions;
 
-use Closure;
 use App\Models\WebAuthnAuthenticatable;
+use Closure;
 use Illuminate\Auth\Passwords\PasswordBroker;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
@@ -14,14 +14,13 @@ class WebauthnCredentialBroker extends PasswordBroker
      *
      * @param  array  $credentials
      * @param  \Closure|null  $callback
-     *
      * @return string
      */
-    public function sendResetLink(array $credentials, Closure $callback = null): string
+    public function sendResetLink(array $credentials, Closure $callback = null) : string
     {
         $user = $this->getUser($credentials);
 
-        if (!$user instanceof WebAuthnAuthenticatable) {
+        if (! $user instanceof WebAuthnAuthenticatable) {
             return static::INVALID_USER;
         }
 
@@ -40,20 +39,18 @@ class WebauthnCredentialBroker extends PasswordBroker
         return static::RESET_LINK_SENT;
     }
 
-    
     /**
      * Reset the password for the given token.
      *
      * @param  array  $credentials
      * @param  \Closure  $callback
-     *
      * @return \Illuminate\Contracts\Auth\CanResetPassword|string
      */
     public function reset(array $credentials, Closure $callback)
     {
         $user = $this->validateReset($credentials);
 
-        if (!$user instanceof CanResetPasswordContract || !$user instanceof WebAuthnAuthenticatable) {
+        if (! $user instanceof CanResetPasswordContract || ! $user instanceof WebAuthnAuthenticatable) {
             return $user;
         }
 

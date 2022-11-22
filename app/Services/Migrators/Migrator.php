@@ -14,16 +14,14 @@ abstract class Migrator
      */
     abstract public function migrate(mixed $migrationPayload) : Collection;
 
-
     /**
      * Pad a string to 8 chars min
-     * 
-     * @param string $string
+     *
+     * @param  string  $string
      * @return string The padded string
      */
     protected function padToValidBase32Secret(string $string)
     {
         return str_pad($string, 8, '=');
     }
-
 }

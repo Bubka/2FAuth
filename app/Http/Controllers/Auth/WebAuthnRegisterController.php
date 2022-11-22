@@ -17,13 +17,13 @@ class WebAuthnRegisterController extends Controller
      * @param  \Laragear\WebAuthn\Http\Requests\AttestationRequest  $request
      * @return \Illuminate\Contracts\Support\Responsable
      */
-    public function options(AttestationRequest $request): Responsable
+    public function options(AttestationRequest $request) : Responsable
     {
         switch (env('WEBAUTHN_USER_VERIFICATION')) {
             case WebAuthn::USER_VERIFICATION_DISCOURAGED:
                 $request = $request->fastRegistration();    // Makes the authenticator to only check for user presence on registration
                 break;
-            case WebAuthn::USER_VERIFICATION_REQUIRED: 
+            case WebAuthn::USER_VERIFICATION_REQUIRED:
                 $request = $request->secureRegistration();  // Makes the authenticator to always verify the user thoroughly on registration
                 break;
         }
@@ -34,14 +34,13 @@ class WebAuthnRegisterController extends Controller
             ->toCreate();
     }
 
-    
     /**
      * Registers a device for further WebAuthn authentication.
      *
      * @param  \Laragear\WebAuthn\Http\Requests\AttestedRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function register(AttestedRequest $request): Response
+    public function register(AttestedRequest $request) : Response
     {
         $request->save();
 

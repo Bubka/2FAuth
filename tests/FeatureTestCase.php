@@ -2,9 +2,9 @@
 
 namespace Tests;
 
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use Illuminate\Support\Facades\Artisan;
 
 abstract class FeatureTestCase extends BaseTestCase
 {
@@ -15,7 +15,6 @@ abstract class FeatureTestCase extends BaseTestCase
      */
     use LazilyRefreshDatabase;
 
-
     /**
      * Perform any work that should take place once the database has finished refreshing.
      *
@@ -23,6 +22,6 @@ abstract class FeatureTestCase extends BaseTestCase
      */
     protected function afterRefreshingDatabase()
     {
-        Artisan::call('passport:install',['--verbose' => 2]);
+        Artisan::call('passport:install', ['--verbose' => 2]);
     }
 }

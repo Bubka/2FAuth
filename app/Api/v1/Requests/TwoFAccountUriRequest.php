@@ -30,7 +30,6 @@ class TwoFAccountUriRequest extends FormRequest
         ];
     }
 
-
     /**
      * Prepare the data for validation.
      *

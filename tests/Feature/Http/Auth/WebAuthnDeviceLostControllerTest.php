@@ -3,27 +3,25 @@
 namespace Tests\Feature\Http\Auth;
 
 use App\Models\User;
-use Tests\FeatureTestCase;
 use Illuminate\Support\Facades\Notification;
+use Tests\FeatureTestCase;
 
 class WebAuthnDeviceLostControllerTest extends FeatureTestCase
 {
     /**
      * @var \App\Models\User
-    */
+     */
     protected $user;
-
 
     /**
      * @test
      */
-    public function setUp(): void
+    public function setUp() : void
     {
         parent::setUp();
 
         $this->user = User::factory()->create();
     }
-
 
     /**
      * @test
@@ -40,10 +38,9 @@ class WebAuthnDeviceLostControllerTest extends FeatureTestCase
 
         $response->assertStatus(200)
         ->assertJsonStructure([
-            'message'
+            'message',
         ]);
     }
-
 
     /**
      * @test
@@ -60,8 +57,7 @@ class WebAuthnDeviceLostControllerTest extends FeatureTestCase
 
         $response->assertStatus(422)
         ->assertJsonValidationErrors([
-            'email'
+            'email',
         ]);
     }
-
 }

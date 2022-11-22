@@ -2,8 +2,8 @@
 
 namespace App\Listeners;
 
-use App\Models\TwoFAccount;
 use App\Events\GroupDeleting;
+use App\Models\TwoFAccount;
 use Illuminate\Support\Facades\Log;
 
 class DissociateTwofaccountFromGroup
@@ -28,9 +28,9 @@ class DissociateTwofaccountFromGroup
     {
         TwoFAccount::where('group_id', $event->group->id)
             ->update(
-                ['group_id' => NULL]
+                ['group_id' => null]
             );
-        
+
         Log::info(sprintf('TwoFAccounts dissociated from group #%d', $event->group->id));
     }
 }

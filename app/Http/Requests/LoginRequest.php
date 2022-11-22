@@ -2,10 +2,7 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
-
 
 class LoginRequest extends FormRequest
 {
@@ -30,7 +27,7 @@ class LoginRequest extends FormRequest
             'email' => [
                 'required',
                 'email',
-                new \App\Rules\CaseInsensitiveEmailExists
+                new \App\Rules\CaseInsensitiveEmailExists,
             ],
             'password' => 'required|string',
         ];

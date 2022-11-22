@@ -4,29 +4,25 @@ namespace App\Listeners;
 
 use App\Events\ScanForNewReleaseCalled;
 use App\Services\ReleaseRadarService;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
 
 class ReleaseRadar
 {
     /**
-     * @var ReleaseRadarService $releaseRadar
+     * @var ReleaseRadarService
      */
     protected $releaseRadar;
 
-
     /**
      * Create the event listener.
-     * 
-     * @param  \App\Services\ReleaseRadarService  $releaseRadar
      *
+     * @param  \App\Services\ReleaseRadarService  $releaseRadar
      * @return void
      */
     public function __construct(ReleaseRadarService $releaseRadar)
     {
         $this->releaseRadar = $releaseRadar;
     }
-
 
     /**
      * Handle the event.

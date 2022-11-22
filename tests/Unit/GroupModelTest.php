@@ -2,10 +2,9 @@
 
 namespace Tests\Unit;
 
+use App\Events\GroupDeleting;
 use App\Models\Group;
 use App\Models\TwoFAccount;
-use App\Events\GroupDeleting;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Tests\ModelTestCase;
 
 /**
@@ -13,7 +12,6 @@ use Tests\ModelTestCase;
  */
 class GroupModelTest extends ModelTestCase
 {
-
     /**
      * @test
      */
@@ -25,18 +23,17 @@ class GroupModelTest extends ModelTestCase
             ['created_at', 'updated_at'],
             ['*'],
             [],
-            ['id' => 'int', 'twofaccounts_count' => 'integer',],
+            ['id'       => 'int', 'twofaccounts_count' => 'integer'],
             ['deleting' => GroupDeleting::class]
         );
     }
-
 
     /**
      * @test
      */
     public function test_groups_relation()
     {
-        $group = new Group();
+        $group    = new Group();
         $accounts = $group->twofaccounts();
         $this->assertHasManyRelation($accounts, $group, new TwoFAccount());
     }

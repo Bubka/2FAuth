@@ -2,15 +2,15 @@
 
 namespace Tests\Unit\Api\v1\Controllers;
 
-use App\Models\Group;
-use Tests\TestCase;
-use App\Models\TwoFAccount;
+use App\Api\v1\Controllers\GroupController;
 use App\Facades\Groups;
+use App\Models\Group;
+use App\Models\TwoFAccount;
 use App\Services\SettingService;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
-use App\Api\v1\Controllers\GroupController;
 use Mockery;
 use Mockery\MockInterface;
+use Tests\TestCase;
 
 /**
  * @covers \App\Api\v1\Controllers\GroupController
@@ -24,12 +24,10 @@ class GroupControllerTest extends TestCase
      */
     protected $controller;
 
-
     /**
      * @var \App\Api\v1\Requests\GroupStoreRequest mocked request
      */
     protected $groupStoreRequest;
-
 
     public function setUp() : void
     {
@@ -39,7 +37,6 @@ class GroupControllerTest extends TestCase
 
         $this->controller = new GroupController();
     }
-
 
     /**
      * @test
@@ -56,7 +53,6 @@ class GroupControllerTest extends TestCase
 
         $this->assertContainsOnlyInstancesOf('App\Api\v1\Resources\GroupResource', $response->collection);
     }
-
 
     /**
      * @test
@@ -78,7 +74,6 @@ class GroupControllerTest extends TestCase
         $this->assertInstanceOf('App\Models\Group', $response->original);
     }
 
-
     /**
      * @test
      */
@@ -90,7 +85,6 @@ class GroupControllerTest extends TestCase
 
         $this->assertInstanceOf('App\Api\v1\Resources\GroupResource', $response);
     }
-
 
     /**
      * @test
@@ -112,13 +106,12 @@ class GroupControllerTest extends TestCase
         $this->assertInstanceOf('App\Api\v1\Resources\GroupResource', $response);
     }
 
-
     /**
      * @test
      */
     public function test_assignAccounts_returns_api_resource_assigned_using_groupService()
     {
-        $group = Group::factory()->make();
+        $group              = Group::factory()->make();
         $groupAssignRequest = Mockery::mock('App\Api\v1\Requests\GroupAssignRequest');
 
         $groupAssignRequest->shouldReceive('validated')
@@ -134,14 +127,13 @@ class GroupControllerTest extends TestCase
         $this->assertInstanceOf('App\Api\v1\Resources\GroupResource', $response);
     }
 
-
     /**
      * @test
      */
     public function test_accounts_returns_api_resources_fetched_using_groupService()
     {
         $group = Group::factory()->make();
-        
+
         $settingService = $this->mock(SettingService::class, function (MockInterface $settingService) {
             $settingService->shouldReceive('get')
                 ->andReturn(false);
@@ -158,7 +150,6 @@ class GroupControllerTest extends TestCase
         // TwoFAccountCollection
         $this->assertContainsOnlyInstancesOf('App\Api\v1\Resources\TwoFAccountReadResource', $response->collection);
     }
-
 
     /**
      * @test

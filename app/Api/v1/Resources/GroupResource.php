@@ -20,9 +20,9 @@ class GroupResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id'                    => $this->id,
-            'name'                  => $this->name,
-            'twofaccounts_count'    => is_null($this->twofaccounts_count) ? 0 : $this->twofaccounts_count,
+            'id'                 => $this->id,
+            'name'               => $this->name,
+            'twofaccounts_count' => is_null($this->twofaccounts_count) ? 0 : $this->twofaccounts_count,
         ];
     }
 }

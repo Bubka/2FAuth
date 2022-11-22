@@ -3,33 +3,29 @@
 namespace Tests\Api\v1\Requests;
 
 use App\Api\v1\Requests\SettingStoreRequest;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Auth;
-use Tests\FeatureTestCase;
 use App\Facades\Settings;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use Tests\FeatureTestCase;
 
 class SettingStoreRequestTest extends FeatureTestCase
 {
-
     use WithoutMiddleware;
 
-    /**
-     * 
-     */
     protected String $uniqueKey = 'UniqueKey';
 
     /**
      * @test
      */
     public function test_user_is_authorized()
-    {   
+    {
         Auth::shouldReceive('check')
         ->once()
         ->andReturn(true);
 
         $request = new SettingStoreRequest();
-    
+
         $this->assertTrue($request->authorize());
     }
 
@@ -38,7 +34,7 @@ class SettingStoreRequestTest extends FeatureTestCase
      */
     public function test_valid_data(array $data) : void
     {
-        $request = new SettingStoreRequest();
+        $request   = new SettingStoreRequest();
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->fails());
@@ -51,16 +47,16 @@ class SettingStoreRequestTest extends FeatureTestCase
     {
         return [
             [[
-                'key' => 'MyKey',
-                'value' => true
+                'key'   => 'MyKey',
+                'value' => true,
             ]],
             [[
-                'key' => 'MyKey',
-                'value' => 'MyValue'
+                'key'   => 'MyKey',
+                'value' => 'MyValue',
             ]],
             [[
-                'key' => 'MyKey',
-                'value' => 10
+                'key'   => 'MyKey',
+                'value' => 10,
             ]],
         ];
     }
@@ -72,7 +68,7 @@ class SettingStoreRequestTest extends FeatureTestCase
     {
         Settings::set($this->uniqueKey, 'uniqueValue');
 
-        $request = new SettingStoreRequest();
+        $request   = new SettingStoreRequest();
         $validator = Validator::make($data, $request->rules());
 
         $this->assertTrue($validator->fails());
@@ -85,26 +81,25 @@ class SettingStoreRequestTest extends FeatureTestCase
     {
         return [
             [[
-                'key' => null, // required
-                'value' => ''
+                'key'   => null, // required
+                'value' => '',
             ]],
             [[
-                'key' => 'my-key', // alpha
-                'value' => 'MyValue'
+                'key'   => 'my-key', // alpha
+                'value' => 'MyValue',
             ]],
             [[
-                'key' => 10, // alpha
-                'value' => 'MyValue'
+                'key'   => 10, // alpha
+                'value' => 'MyValue',
             ]],
             [[
-                'key' => 'mmmmmmoooooorrrrrreeeeeeettttttthhhhhhaaaaaaannnnnn128cccccchhhhhaaaaaarrrrrraaaaaaaccccccttttttttteeeeeeeeerrrrrrrrsssssss', // max:128
-                'value' => 'MyValue'
+                'key'   => 'mmmmmmoooooorrrrrreeeeeeettttttthhhhhhaaaaaaannnnnn128cccccchhhhhaaaaaarrrrrraaaaaaaccccccttttttttteeeeeeeeerrrrrrrrsssssss', // max:128
+                'value' => 'MyValue',
             ]],
             [[
-                'key' => $this->uniqueKey, // unique
-                'value' => 'MyValue'
+                'key'   => $this->uniqueKey, // unique
+                'value' => 'MyValue',
             ]],
         ];
     }
-
 }

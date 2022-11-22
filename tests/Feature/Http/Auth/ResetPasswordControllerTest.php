@@ -4,8 +4,8 @@ namespace Tests\Feature\Http\Auth;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Password;
 use Tests\FeatureTestCase;
 
 class ResetPasswordControllerTest extends FeatureTestCase
@@ -15,17 +15,16 @@ class ResetPasswordControllerTest extends FeatureTestCase
      */
     protected $user;
 
-
     /**
      * @test
      */
     public function test_submit_reset_password_without_input_returns_validation_error()
     {
         $response = $this->json('POST', '/user/password/reset', [
-            'email' => '',
-            'password' => '',
+            'email'                 => '',
+            'password'              => '',
             'password_confirmation' => '',
-            'token' => ''
+            'token'                 => '',
         ]);
 
         $response->assertStatus(422)
@@ -38,10 +37,10 @@ class ResetPasswordControllerTest extends FeatureTestCase
     public function test_submit_reset_password_with_invalid_data_returns_validation_error()
     {
         $response = $this->json('POST', '/user/password/reset', [
-            'email' => 'qsdqsdqsd',
-            'password' => 'foofoofoo',
+            'email'                 => 'qsdqsdqsd',
+            'password'              => 'foofoofoo',
             'password_confirmation' => 'barbarbar',
-            'token' => 'token'
+            'token'                 => 'token',
         ]);
 
         $response->assertStatus(422)
@@ -54,10 +53,10 @@ class ResetPasswordControllerTest extends FeatureTestCase
     public function test_submit_reset_password_with_too_short_pwd_returns_validation_error()
     {
         $response = $this->json('POST', '/user/password/reset', [
-            'email' => 'foo@bar.com',
-            'password' => 'foo',
+            'email'                 => 'foo@bar.com',
+            'password'              => 'foo',
             'password_confirmation' => 'foo',
-            'token' => 'token'
+            'token'                 => 'token',
         ]);
 
         $response->assertStatus(422)
@@ -72,20 +71,18 @@ class ResetPasswordControllerTest extends FeatureTestCase
         Notification::fake();
 
         $this->user = User::factory()->create();
-        $token = Password::broker()->createToken($this->user);
+        $token      = Password::broker()->createToken($this->user);
 
         $response = $this->json('POST', '/user/password/reset', [
-            'email' => $this->user->email,
-            'password' => 'newpassword',
+            'email'                 => $this->user->email,
+            'password'              => 'newpassword',
             'password_confirmation' => 'newpassword',
-            'token' =>  $token
+            'token'                 => $token,
         ]);
 
         $this->user->refresh();
 
         $response->assertOk();
         $this->assertTrue(Hash::check('newpassword', $this->user->password));
-
     }
-
 }

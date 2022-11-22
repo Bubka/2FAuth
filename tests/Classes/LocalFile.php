@@ -6,7 +6,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile as SymfonyUploadedFile;
 
 class LocalFile extends SymfonyUploadedFile
 {
-
     /**
      * Begin creating a new local file fake.
      *
@@ -16,5 +15,4 @@ class LocalFile extends SymfonyUploadedFile
     {
         return new LocalFileFactory;
     }
-
 }

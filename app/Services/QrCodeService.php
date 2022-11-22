@@ -2,18 +2,18 @@
 
 namespace App\Services;
 
-use Zxing\QrReader;
+use chillerlan\QRCode\QRCode;
+use chillerlan\QRCode\QROptions;
 use Illuminate\Support\Facades\Log;
-use chillerlan\QRCode\{QRCode, QROptions};
+use Zxing\QrReader;
 
 class QrCodeService
 {
     /**
      * Encode a string into a QR code image
-     * 
-     * @param string $data The string to encode
-     * 
-     * @return mixed 
+     *
+     * @param  string  $data The string to encode
+     * @return mixed
      */
     public static function encode(string $data)
     {
@@ -29,22 +29,21 @@ class QrCodeService
         return $qrcode->render($data);
     }
 
-
     /**
      * Decode an uploaded QR code image
-     * 
-     * @param \Illuminate\Http\UploadedFile $file
+     *
+     * @param  \Illuminate\Http\UploadedFile  $file
      * @return string
      */
     public static function decode(\Illuminate\Http\UploadedFile $file)
     {
         $qrcode = new QrReader($file->get(), QrReader::SOURCE_TYPE_BLOB);
-        $data = urldecode($qrcode->text());
+        $data   = urldecode($qrcode->text());
 
-        if(!$data) {
+        if (! $data) {
             throw new \App\Exceptions\InvalidQrCodeException;
         }
-        
+
         Log::info('QR code decoded');
 
         return $data;

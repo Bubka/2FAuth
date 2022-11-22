@@ -2,10 +2,9 @@
 
 namespace Tests\Unit\Events;
 
-use App\Models\Group;
 use App\Events\GroupDeleting;
+use App\Models\Group;
 use Tests\TestCase;
-
 
 /**
  * @covers \App\Events\GroupDeleting
