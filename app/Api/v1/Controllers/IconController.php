@@ -5,7 +5,6 @@ namespace App\Api\v1\Controllers;
 use App\Http\Controllers\Controller;
 use App\Services\LogoService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Storage;
 
 class IconController extends Controller
@@ -34,16 +33,16 @@ class IconController extends Controller
      * Fetch a logo
      *
      * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Services\LogoService  $logoService
      * @return \Illuminate\Http\JsonResponse
      */
-    public function fetch(Request $request)
+    public function fetch(Request $request, LogoService $logoService)
     {
         $this->validate($request, [
             'service' => 'string|regex:/^[^:]+$/i',
         ]);
 
-        $logoService = App::make(LogoService::class);
-        $icon        = $logoService->getIcon($request->service);
+        $icon = $logoService->getIcon($request->service);
 
         return $icon
             ? response()->json(['filename' => $icon], 201)
