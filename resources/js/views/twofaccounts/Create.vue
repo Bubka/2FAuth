@@ -127,9 +127,9 @@
                         <!-- algorithm -->
                         <form-toggle :form="form" :choices="algorithms" fieldName="algorithm" :label="$t('twofaccounts.forms.algorithm.label')" :help="$t('twofaccounts.forms.algorithm.help')" />
                         <!-- TOTP period -->
-                        <form-field v-if="form.otp_type === 'totp'" pattern="[0-9]" :class="'is-third-width-field'" :form="form" fieldName="period" inputType="text" :label="$t('twofaccounts.forms.period.label')" :placeholder="$t('twofaccounts.forms.period.placeholder')" :help="$t('twofaccounts.forms.period.help')" />
+                        <form-field v-if="form.otp_type === 'totp'" pattern="[0-9]{1,4}" :class="'is-third-width-field'" :form="form" fieldName="period" inputType="text" :label="$t('twofaccounts.forms.period.label')" :placeholder="$t('twofaccounts.forms.period.placeholder')" :help="$t('twofaccounts.forms.period.help')" />
                         <!-- HOTP counter -->
-                        <form-field v-if="form.otp_type === 'hotp'" pattern="[0-9]" :class="'is-third-width-field'" :form="form" fieldName="counter" inputType="text" :label="$t('twofaccounts.forms.counter.label')" :placeholder="$t('twofaccounts.forms.counter.placeholder')" :help="$t('twofaccounts.forms.counter.help')" />
+                        <form-field v-if="form.otp_type === 'hotp'" pattern="[0-9]{1,4}" :class="'is-third-width-field'" :form="form" fieldName="counter" inputType="text" :label="$t('twofaccounts.forms.counter.label')" :placeholder="$t('twofaccounts.forms.counter.placeholder')" :help="$t('twofaccounts.forms.counter.help')" />
                     </div>
                 </div>
                 <vue-footer :showButtons="true">
