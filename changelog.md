@@ -1,5 +1,12 @@
 # Change log
 
+## [3.4.1] - 2022-11-25
+
+### Fixed
+
+- [issue #140](https://github.com/Bubka/2FAuth/issues/140) Bad regex for Period field (advanced form)
+- [issue #141](https://github.com/Bubka/2FAuth/issues/141) Digits field is missing in advanced form
+
 ## [3.4.0] - 2022-10-20
 
 This release is a big step towards more accessibility. Keyboard navigation is now fully supported, with clean and consistent focus, and several UI components have received relevant ARIA properties to support assistive technologies.
