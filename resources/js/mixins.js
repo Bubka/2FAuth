@@ -20,11 +20,11 @@ Vue.mixin({
             else {
                 await this.axios.get('/user/logout')
                 this.$storage.clear()
-                this.$router.push({ name: 'login', params: {forceRefresh: true} })
+                this.$router.push({ name: 'login', params: { forceRefresh: true } })
             }
         },
-        
-        exitSettings: function(event) {
+
+        exitSettings: function (event) {
             if (event) {
                 this.$notify({ clean: true })
                 this.$router.push({ name: 'accounts' })
@@ -41,7 +41,7 @@ Vue.mixin({
         openInBrowser(uri) {
             const a = document.createElement('a')
             a.setAttribute('href', uri)
-            a.dispatchEvent(new MouseEvent("click", {'view': window, 'bubbles': true, 'cancelable': true}))
+            a.dispatchEvent(new MouseEvent("click", { 'view': window, 'bubbles': true, 'cancelable': true }))
         },
 
         /**
@@ -93,8 +93,7 @@ Vue.mixin({
             ]
                 .filter((key) => credentials.response[key] !== undefined)
                 .forEach((key) => {
-                    if( credentials.response[key] === null )
-                    {
+                    if (credentials.response[key] === null) {
                         parseCredentials.response[key] = null
                     }
                     else {
@@ -103,7 +102,7 @@ Vue.mixin({
                         );
                     }
                 });
-                
+
             return parseCredentials;
         },
 
@@ -120,7 +119,7 @@ Vue.mixin({
                 (c) => c.charCodeAt(0)
             );
         },
-        
+
         /**
          * Encodes an array of bytes to a BASE64 URL string
          *
@@ -154,7 +153,7 @@ Vue.mixin({
 
             return window.atob(input);
         },
-        
+
         /**
          * Encodes an array of bytes to a BASE64 URL string
          *
@@ -163,6 +162,7 @@ Vue.mixin({
          */
         inputId(fieldType, fieldName) {
             let prefix
+            fieldName = fieldName.toString()
 
             switch (fieldType) {
                 case 'button':
