@@ -98,7 +98,7 @@ class AegisMigrator extends Migrator
                 $twofaccounts[$key]->fillWithOtpParameters($parameters);
             } catch (\Exception $exception) {
                 Log::error(sprintf('Cannot instanciate a TwoFAccount object with OTP parameters from imported item #%s', $key));
-                Log::error($exception->getMessage());
+                Log::debug($exception->getMessage());
 
                 // The token failed to generate a valid account so we create a fake account to be returned.
                 $fakeAccount           = new TwoFAccount();
