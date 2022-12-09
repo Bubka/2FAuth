@@ -7,6 +7,11 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\DB;
 use Tests\FeatureTestCase;
 
+/**
+ * @covers  \App\Http\Controllers\Auth\WebAuthnManageController
+ * @covers  \App\Http\Middleware\RejectIfReverseProxy
+ * @covers  \App\Models\Traits\WebAuthnManageCredentials
+ */
 class WebAuthnManageControllerTest extends FeatureTestCase
 {
     // use WithoutMiddleware;
@@ -23,7 +28,7 @@ class WebAuthnManageControllerTest extends FeatureTestCase
     /**
      * @test
      */
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 

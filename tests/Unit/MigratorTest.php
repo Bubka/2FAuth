@@ -1,0 +1,484 @@
+<?php
+
+namespace Tests\Unit;
+
+use App\Exceptions\EncryptedMigrationException;
+use App\Factories\MigratorFactory;
+use App\Exceptions\InvalidMigrationDataException;
+use App\Models\TwoFAccount;
+use App\Services\Migrators\AegisMigrator;
+use App\Services\Migrators\TwoFASMigrator;
+use App\Services\Migrators\Migrator;
+use App\Services\Migrators\PlainTextMigrator;
+use App\Services\Migrators\GoogleAuthMigrator;
+use App\Services\SettingService;
+use Illuminate\Support\Facades\Storage;
+use Mockery;
+use Mockery\Mock;
+use Mockery\MockInterface;
+use Tests\Data\MigrationTestData;
+use Tests\Data\OtpTestData;
+use Tests\TestCase;
+use ParagonIE\ConstantTime\Base32;
+use App\Protobuf\GoogleAuth\Payload\Algorithm;
+use App\Exceptions\UnsupportedMigrationException;
+
+
+/**
+ * @covers \App\Providers\MigrationServiceProvider
+ * @covers \App\Factories\MigratorFactory
+ * @covers \App\Services\Migrators\Migrator
+ * @covers \App\Services\Migrators\AegisMigrator
+ * @covers \App\Services\Migrators\TwoFASMigrator
+ * @covers \App\Services\Migrators\PlainTextMigrator
+ * @covers \App\Services\Migrators\GoogleAuthMigrator
+ * @uses \App\Models\TwoFAccount
+ */
+class MigratorTest extends TestCase
+{
+    /**
+     * App\Models\TwoFAccount $totpTwofaccount
+     */
+    protected $totpTwofaccount;
+
+    /**
+     * App\Models\TwoFAccount $totpTwofaccount
+     */
+    protected $hotpTwofaccount;
+
+    /**
+     * App\Models\TwoFAccount $steamTwofaccount
+     */
+    protected $steamTwofaccount;
+
+    /**
+     * App\Models\TwoFAccount $GAuthTotpTwofaccount
+     */
+    protected $GAuthTotpTwofaccount;
+
+    /**
+     * App\Models\TwoFAccount $GAuthTotpBisTwofaccount
+     */
+    protected $GAuthTotpBisTwofaccount;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->mock(SettingService::class, function (MockInterface $settingService) {
+            $settingService->allows()
+                ->get('useEncryption')
+                ->andReturn(false);
+
+            $settingService->allows()
+                ->get('getOfficialIcons')
+                ->andReturn(false);
+        });
+
+        $this->totpTwofaccount             = new TwoFAccount;
+        $this->totpTwofaccount->legacy_uri = OtpTestData::TOTP_FULL_CUSTOM_URI_NO_IMG;
+        $this->totpTwofaccount->service    = OtpTestData::SERVICE;
+        $this->totpTwofaccount->account    = OtpTestData::ACCOUNT;
+        $this->totpTwofaccount->icon       = null;
+        $this->totpTwofaccount->otp_type   = 'totp';
+        $this->totpTwofaccount->secret     = OtpTestData::SECRET;
+        $this->totpTwofaccount->digits     = OtpTestData::DIGITS_CUSTOM;
+        $this->totpTwofaccount->algorithm  = OtpTestData::ALGORITHM_CUSTOM;
+        $this->totpTwofaccount->period     = OtpTestData::PERIOD_CUSTOM;
+        $this->totpTwofaccount->counter    = null;
+
+        $this->hotpTwofaccount             = new TwoFAccount;
+        $this->hotpTwofaccount->legacy_uri = OtpTestData::HOTP_FULL_CUSTOM_URI_NO_IMG;
+        $this->hotpTwofaccount->service    = OtpTestData::SERVICE;
+        $this->hotpTwofaccount->account    = OtpTestData::ACCOUNT;
+        $this->hotpTwofaccount->icon       = null;
+        $this->hotpTwofaccount->otp_type   = 'hotp';
+        $this->hotpTwofaccount->secret     = OtpTestData::SECRET;
+        $this->hotpTwofaccount->digits     = OtpTestData::DIGITS_CUSTOM;
+        $this->hotpTwofaccount->algorithm  = OtpTestData::ALGORITHM_CUSTOM;
+        $this->hotpTwofaccount->period     = null;
+        $this->hotpTwofaccount->counter    = OtpTestData::COUNTER_CUSTOM;
+
+        $this->steamTwofaccount             = new TwoFAccount;
+        $this->steamTwofaccount->legacy_uri = OtpTestData::STEAM_TOTP_URI;
+        $this->steamTwofaccount->service    = OtpTestData::STEAM;
+        $this->steamTwofaccount->account    = OtpTestData::ACCOUNT;
+        $this->steamTwofaccount->icon       = null;
+        $this->steamTwofaccount->otp_type   = 'steamtotp';
+        $this->steamTwofaccount->secret     = OtpTestData::STEAM_SECRET;
+        $this->steamTwofaccount->digits     = OtpTestData::DIGITS_STEAM;
+        $this->steamTwofaccount->algorithm  = OtpTestData::ALGORITHM_DEFAULT;
+        $this->steamTwofaccount->period     = OtpTestData::PERIOD_DEFAULT;
+        $this->steamTwofaccount->counter    = null;
+
+        $this->GAuthTotpTwofaccount             = new TwoFAccount;
+        $this->GAuthTotpTwofaccount->service    = OtpTestData::SERVICE;
+        $this->GAuthTotpTwofaccount->account    = OtpTestData::ACCOUNT;
+        $this->GAuthTotpTwofaccount->icon       = null;
+        $this->GAuthTotpTwofaccount->otp_type   = 'totp';
+        $this->GAuthTotpTwofaccount->secret     = OtpTestData::SECRET;
+        $this->GAuthTotpTwofaccount->digits     = OtpTestData::DIGITS_DEFAULT;
+        $this->GAuthTotpTwofaccount->algorithm  = OtpTestData::ALGORITHM_DEFAULT;
+        $this->GAuthTotpTwofaccount->period     = OtpTestData::PERIOD_DEFAULT;
+        $this->GAuthTotpTwofaccount->counter    = null;
+
+        $this->GAuthTotpBisTwofaccount             = new TwoFAccount;
+        $this->GAuthTotpBisTwofaccount->service    = OtpTestData::SERVICE . '_bis';
+        $this->GAuthTotpBisTwofaccount->account    = OtpTestData::ACCOUNT . '_bis';
+        $this->GAuthTotpBisTwofaccount->icon       = null;
+        $this->GAuthTotpBisTwofaccount->otp_type   = 'totp';
+        $this->GAuthTotpBisTwofaccount->secret     = OtpTestData::SECRET;
+        $this->GAuthTotpBisTwofaccount->digits     = OtpTestData::DIGITS_DEFAULT;
+        $this->GAuthTotpBisTwofaccount->algorithm  = OtpTestData::ALGORITHM_DEFAULT;
+        $this->GAuthTotpBisTwofaccount->period     = OtpTestData::PERIOD_DEFAULT;
+        $this->GAuthTotpBisTwofaccount->counter    = null;
+
+        $this->fakeTwofaccount             = new TwoFAccount;
+        $this->fakeTwofaccount->id         = TwoFAccount::FAKE_ID;
+    }
+
+    /**
+     * @test
+     *
+     * @dataProvider validMigrationsProvider
+     */
+    public function test_migrate_returns_consistent_accounts(Migrator $migrator, mixed $payload, string $expected, bool $hasSteam)
+    {
+        $accounts = $migrator->migrate($payload);
+
+        if ($expected === 'gauth') {
+            $totp = $this->GAuthTotpTwofaccount;
+            $hotp = $this->GAuthTotpBisTwofaccount;
+        } else {
+            $totp = $this->totpTwofaccount;
+            $hotp = $this->hotpTwofaccount;
+            if ($hasSteam) {
+                $steam = $this->steamTwofaccount;
+            }
+        }
+
+        $this->assertContainsOnlyInstancesOf(TwoFAccount::class, $accounts);
+        $this->assertCount($hasSteam ? 3 : 2, $accounts);
+
+        // The returned collection could have non-linear index (because of possible blank lines
+        // in the migration payload) so we do not use get() to retrieve items
+        $this->assertObjectEquals($totp, $accounts->first());
+        $this->assertObjectEquals($hotp, $accounts->slice(1, 1)->first());
+        if ($hasSteam) {
+            $this->assertObjectEquals($steam, $accounts->last());
+        }
+    }
+
+    /**
+     * Provide data for TwoFAccount store tests
+     */
+    public function validMigrationsProvider()
+    {
+        return [
+            'PLAIN_TEXT_PAYLOAD' => [
+                new PlainTextMigrator(),
+                MigrationTestData::VALID_PLAIN_TEXT_PAYLOAD,
+                'custom',
+                $hasSteam = true
+            ],
+            'PLAIN_TEXT_PAYLOAD_WITH_INTRUDER' => [
+                new PlainTextMigrator(),
+                MigrationTestData::VALID_PLAIN_TEXT_PAYLOAD_WITH_INTRUDER,
+                'custom',
+                $hasSteam = true
+            ],
+            'AEGIS_JSON_MIGRATION_PAYLOAD' => [
+                new AegisMigrator(),
+                MigrationTestData::VALID_AEGIS_JSON_MIGRATION_PAYLOAD,
+                'custom',
+                $hasSteam = true
+            ],
+            '2FAS_MIGRATION_PAYLOAD' => [
+                new TwoFASMigrator(),
+                MigrationTestData::VALID_2FAS_MIGRATION_PAYLOAD,
+                'custom',
+                $hasSteam = false
+            ],
+            'GOOGLE_AUTH_MIGRATION_PAYLOAD' => [
+                new GoogleAuthMigrator(),
+                MigrationTestData::GOOGLE_AUTH_MIGRATION_URI,
+                'gauth',
+                $hasSteam = false,
+            ],
+        ];
+    }
+
+    /**
+     * @test
+     *
+     * @dataProvider invalidMigrationsProvider
+     */
+    public function test_migrate_with_invalid_payload_returns_InvalidMigrationDataException(Migrator $migrator, mixed $payload)
+    {
+        $this->expectException(InvalidMigrationDataException::class);
+
+        $accounts = $migrator->migrate($payload);
+    }
+
+    /**
+     * Provide data for TwoFAccount store tests
+     */
+    public function invalidMigrationsProvider()
+    {
+        return [
+            'INVALID_PLAIN_TEXT_NO_URI' => [
+                new PlainTextMigrator(),
+                MigrationTestData::INVALID_PLAIN_TEXT_NO_URI,
+            ],
+            'INVALID_PLAIN_TEXT_ONLY_EMPTY_LINES' => [
+                new PlainTextMigrator(),
+                MigrationTestData::INVALID_PLAIN_TEXT_ONLY_EMPTY_LINES,
+            ],
+            'INVALID_PLAIN_TEXT_NULL' => [
+                new PlainTextMigrator(),
+                null,
+            ],
+            'INVALID_PLAIN_TEXT_EMPTY_STRING' => [
+                new PlainTextMigrator(),
+                '',
+            ],
+            'INVALID_PLAIN_TEXT_INT' => [
+                new PlainTextMigrator(),
+                10,
+            ],
+            'INVALID_PLAIN_TEXT_BOOL' => [
+                new PlainTextMigrator(),
+                true,
+            ],
+            'INVALID_AEGIS_JSON_MIGRATION_PAYLOAD' => [
+                new AegisMigrator(),
+                MigrationTestData::INVALID_AEGIS_JSON_MIGRATION_PAYLOAD,
+            ],
+            'ENCRYPTED_AEGIS_JSON_MIGRATION_PAYLOAD' => [
+                new AegisMigrator(),
+                MigrationTestData::ENCRYPTED_AEGIS_JSON_MIGRATION_PAYLOAD,
+            ],
+            'INVALID_2FAS_MIGRATION_PAYLOAD' => [
+                new TwoFASMigrator(),
+                MigrationTestData::INVALID_2FAS_MIGRATION_PAYLOAD,
+            ],
+            'INVALID_GOOGLE_AUTH_MIGRATION_URI' => [
+                new GoogleAuthMigrator(),
+                MigrationTestData::INVALID_GOOGLE_AUTH_MIGRATION_URI,
+            ],
+            'GOOGLE_AUTH_MIGRATION_URI_WITH_INVALID_DATA' => [
+                new GoogleAuthMigrator(),
+                MigrationTestData::GOOGLE_AUTH_MIGRATION_URI_WITH_INVALID_DATA,
+            ],
+
+        ];
+    }
+
+    /**
+     * @test
+     *
+     * @dataProvider migrationWithInvalidAccountsProvider
+     */
+    public function test_migrate_returns_fake_accounts(Migrator $migrator, mixed $payload)
+    {
+        $accounts = $migrator->migrate($payload);
+
+        $this->assertContainsOnlyInstancesOf(TwoFAccount::class, $accounts);
+        $this->assertCount(2, $accounts);
+
+        // The returned collection could have non-linear index (because of possible blank lines
+        // in the migration payload) so we do not use get() to retrieve items
+        $this->assertObjectEquals($this->totpTwofaccount, $accounts->first());
+        $this->assertEquals($this->fakeTwofaccount->id, $accounts->last()->id);
+    }
+
+    /**
+     * Provide data for TwoFAccount store tests
+     */
+    public function migrationWithInvalidAccountsProvider()
+    {
+        return [
+            'PLAIN_TEXT_PAYLOAD_WITH_INVALID_URI' => [
+                new PlainTextMigrator(),
+                MigrationTestData::PLAIN_TEXT_PAYLOAD_WITH_INVALID_URI,
+            ],
+            'VALID_AEGIS_JSON_MIGRATION_PAYLOAD_WITH_UNSUPPORTED_OTP_TYPE' => [
+                new AegisMigrator(),
+                MigrationTestData::VALID_AEGIS_JSON_MIGRATION_PAYLOAD_WITH_UNSUPPORTED_OTP_TYPE,
+            ],
+            'VALID_2FAS_MIGRATION_PAYLOAD_WITH_UNSUPPORTED_OTP_TYPE' => [
+                new TwoFASMigrator(),
+                MigrationTestData::VALID_2FAS_MIGRATION_PAYLOAD_WITH_UNSUPPORTED_OTP_TYPE,
+            ],
+        ];
+    }
+
+    /**
+     * @test
+     * 
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     */
+    public function test_migrate_gauth_returns_fake_accounts()
+    {
+        $this->mock('alias:' . Base32::class, function (MockInterface $baseEncoder) {
+            $baseEncoder->shouldReceive('encodeUpper')
+                ->andThrow(new \Exception());
+        });
+
+        $migrator = new GoogleAuthMigrator();
+        $accounts = $migrator->migrate(MigrationTestData::GOOGLE_AUTH_MIGRATION_URI);
+
+        $this->assertContainsOnlyInstancesOf(TwoFAccount::class, $accounts);
+        $this->assertCount(2, $accounts);
+
+        // The returned collection could have non-linear index (because of possible blank lines
+        // in the migration payload) so we do not use get() to retrieve items
+        $this->assertEquals($this->fakeTwofaccount->id, $accounts->first()->id);
+        $this->assertEquals($this->fakeTwofaccount->id, $accounts->last()->id);
+    }
+
+    /**
+     * @test
+     *
+     * @dataProvider AegisWithIconMigrationProvider
+     */
+    public function test_migrate_aegis_payload_with_icon_sets_and_stores_the_icon($migration)
+    {
+        Storage::fake('icons');
+
+        $migrator = new AegisMigrator();
+        $accounts = $migrator->migrate($migration);
+
+        $this->assertContainsOnlyInstancesOf(TwoFAccount::class, $accounts);
+        $this->assertCount(1, $accounts);
+
+        Storage::disk('icons')->assertExists($accounts->first()->icon);
+    }
+
+    /**
+     * Provide data for TwoFAccount store tests
+     */
+    public function AegisWithIconMigrationProvider()
+    {
+        return [
+            'SVG' => [
+                MigrationTestData::VALID_AEGIS_JSON_MIGRATION_PAYLOAD_WITH_SVG_ICON,
+            ],
+            'PNG' => [
+                MigrationTestData::VALID_AEGIS_JSON_MIGRATION_PAYLOAD_WITH_PNG_ICON,
+            ],
+            'JPG' => [
+                MigrationTestData::VALID_AEGIS_JSON_MIGRATION_PAYLOAD_WITH_JPG_ICON,
+            ],
+        ];
+    }
+
+    /**
+     * @test
+     */
+    public function test_migrate_aegis_payload_with_unsupported_icon_does_not_fail()
+    {
+        Storage::fake('icons');
+
+        $migrator = new AegisMigrator();
+        $accounts = $migrator->migrate(MigrationTestData::VALID_AEGIS_JSON_MIGRATION_PAYLOAD_WITH_UNSUPPORTED_ICON);
+
+        $this->assertContainsOnlyInstancesOf(TwoFAccount::class, $accounts);
+        $this->assertCount(1, $accounts);
+
+        $this->assertNull($this->fakeTwofaccount->icon);
+        Storage::disk('icons')->assertDirectoryEmpty('/');
+    }
+
+    /**
+     * @test
+     *
+     * @dataProvider factoryProvider
+     */
+    public function test_factory_returns_plain_text_migrator($payload, $migratorClass)
+    {
+        $factory = new MigratorFactory();
+
+        $migrator = $factory->create($payload);
+
+        $this->assertInstanceOf($migratorClass, $migrator);
+    }
+
+    /**
+     * Provide data for TwoFAccount store tests
+     */
+    public function factoryProvider()
+    {
+        return [
+            'VALID_PLAIN_TEXT_PAYLOAD' => [
+                MigrationTestData::VALID_PLAIN_TEXT_PAYLOAD,
+                PlainTextMigrator::class,
+            ],
+            'VALID_AEGIS_JSON_MIGRATION_PAYLOAD' => [
+                MigrationTestData::VALID_AEGIS_JSON_MIGRATION_PAYLOAD,
+                AegisMigrator::class,
+            ],
+            'VALID_AEGIS_JSON_MIGRATION_PAYLOAD_WITH_UNSUPPORTED_ICON' => [
+                MigrationTestData::VALID_AEGIS_JSON_MIGRATION_PAYLOAD_WITH_UNSUPPORTED_ICON,
+                AegisMigrator::class,
+            ],
+            'VALID_2FAS_MIGRATION_PAYLOAD' => [
+                MigrationTestData::VALID_2FAS_MIGRATION_PAYLOAD,
+                TwoFASMigrator::class,
+            ],
+            'GOOGLE_AUTH_MIGRATION_URI' => [
+                MigrationTestData::GOOGLE_AUTH_MIGRATION_URI,
+                GoogleAuthMigrator::class,
+            ],
+        ];
+    }
+
+    /**
+     * @test
+     */
+    public function test_factory_throw_UnsupportedMigrationException()
+    {
+        $this->expectException(UnsupportedMigrationException::class);
+        $factory = new MigratorFactory();
+
+        $migrator = $factory->create('not_a_valid_payload');
+    }
+
+    /**
+     * @test
+     *
+     * @dataProvider encryptedMigrationDataProvider
+     */
+    public function test_factory_throw_EncryptedMigrationException($payload)
+    {
+        $this->expectException(EncryptedMigrationException::class);
+
+        $factory = new MigratorFactory();
+
+        $migrator = $factory->create($payload);
+    }
+
+    /**
+     * Provide data for TwoFAccount store tests
+     */
+    public function encryptedMigrationDataProvider()
+    {
+        return [
+            'ENCRYPTED_AEGIS_JSON_MIGRATION_PAYLOAD' => [
+                MigrationTestData::ENCRYPTED_AEGIS_JSON_MIGRATION_PAYLOAD
+            ],
+            'ENCRYPTED_2FAS_MIGRATION_PAYLOAD' => [
+                MigrationTestData::ENCRYPTED_2FAS_MIGRATION_PAYLOAD
+            ],
+        ];
+    }
+
+    /**
+     * 
+     */
+    protected function tearDown(): void
+    {
+        Mockery::close();
+    }
+}

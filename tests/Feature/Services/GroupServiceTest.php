@@ -10,6 +10,7 @@ use Tests\FeatureTestCase;
 
 /**
  * @covers \App\Services\GroupService
+ * @covers \App\Facades\Groups
  */
 class GroupServiceTest extends FeatureTestCase
 {
@@ -52,7 +53,7 @@ class GroupServiceTest extends FeatureTestCase
     /**
      * @test
      */
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 

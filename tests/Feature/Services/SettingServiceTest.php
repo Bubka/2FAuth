@@ -10,6 +10,7 @@ use Tests\FeatureTestCase;
 
 /**
  * @covers \App\Services\SettingService
+ * @covers \App\Facades\Settings
  */
 class SettingServiceTest extends FeatureTestCase
 {
@@ -57,7 +58,7 @@ class SettingServiceTest extends FeatureTestCase
     /**
      * @test
      */
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -238,7 +239,7 @@ class SettingServiceTest extends FeatureTestCase
     /**
      * Provide invalid data for validation test
      */
-    public function provideUndecipherableData() : array
+    public function provideUndecipherableData(): array
     {
         return [
             [[
@@ -315,5 +316,27 @@ class SettingServiceTest extends FeatureTestCase
             self::KEY   => self::SETTING_NAME,
             self::VALUE => self::SETTING_VALUE_STRING,
         ]);
+    }
+
+    /**
+     * @test
+     */
+    public function test_isUserDefined_returns_true()
+    {
+        DB::table('options')->insert(
+            [self::KEY => 'showTokenAsDot', self::VALUE => strval(self::SETTING_VALUE_TRUE_TRANSFORMED)]
+        );
+
+        $this->assertTrue(Settings::isUserDefined('showTokenAsDot'));
+    }
+
+    /**
+     * @test
+     */
+    public function test_isUserDefined_returns_false()
+    {
+        DB::table('options')->where(self::KEY, 'showTokenAsDot')->delete();
+
+        $this->assertFalse(Settings::isUserDefined('showTokenAsDot'));
     }
 }

@@ -5,6 +5,9 @@ namespace Tests\Feature\Http\Auth;
 use App\Models\User;
 use Tests\FeatureTestCase;
 
+/**
+ * @covers  \App\Http\Controllers\Auth\PasswordController
+ */
 class PasswordControllerTest extends FeatureTestCase
 {
     /**
@@ -19,7 +22,7 @@ class PasswordControllerTest extends FeatureTestCase
     /**
      * @test
      */
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 

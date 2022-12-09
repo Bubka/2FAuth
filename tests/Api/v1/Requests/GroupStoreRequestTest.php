@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Tests\FeatureTestCase;
 
+/**
+ * @covers \App\Api\v1\Requests\GroupStoreRequest
+ */
 class GroupStoreRequestTest extends FeatureTestCase
 {
     use WithoutMiddleware;
@@ -21,8 +24,8 @@ class GroupStoreRequestTest extends FeatureTestCase
     public function test_user_is_authorized()
     {
         Auth::shouldReceive('check')
-        ->once()
-        ->andReturn(true);
+            ->once()
+            ->andReturn(true);
 
         $request = new GroupStoreRequest();
 
@@ -32,7 +35,7 @@ class GroupStoreRequestTest extends FeatureTestCase
     /**
      * @dataProvider provideValidData
      */
-    public function test_valid_data(array $data) : void
+    public function test_valid_data(array $data): void
     {
         $request   = new GroupStoreRequest();
         $validator = Validator::make($data, $request->rules());
@@ -43,7 +46,7 @@ class GroupStoreRequestTest extends FeatureTestCase
     /**
      * Provide Valid data for validation test
      */
-    public function provideValidData() : array
+    public function provideValidData(): array
     {
         return [
             [[
@@ -55,7 +58,7 @@ class GroupStoreRequestTest extends FeatureTestCase
     /**
      * @dataProvider provideInvalidData
      */
-    public function test_invalid_data(array $data) : void
+    public function test_invalid_data(array $data): void
     {
         $group = new Group([
             'name' => $this->uniqueGroupName,
@@ -72,7 +75,7 @@ class GroupStoreRequestTest extends FeatureTestCase
     /**
      * Provide invalid data for validation test
      */
-    public function provideInvalidData() : array
+    public function provideInvalidData(): array
     {
         return [
             [[

@@ -25,6 +25,7 @@ class Helpers
      */
     public static function cleanVersionNumber(?string $release) : string|false
     {
-        return preg_match('/([[0-9][0-9\.]*[0-9])/', $release, $version) ? $version[0] : false;
+        // We use the regex for semver detection (see https://semver.org/)
+        return preg_match('/(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?/', $release, $version) ? $version[0] : false;
     }
 }

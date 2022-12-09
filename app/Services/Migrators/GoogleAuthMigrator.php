@@ -59,7 +59,7 @@ class GoogleAuthMigrator extends Migrator
 
                 // The token failed to generate a valid account so we create a fake account to be returned.
                 $fakeAccount           = new TwoFAccount();
-                $fakeAccount->id       = -2;
+                $fakeAccount->id       = TwoFAccount::FAKE_ID;
                 $fakeAccount->otp_type = $fakeAccount::TOTP;
                 // Only basic fields are filled to limit the risk of another exception.
                 $fakeAccount->account = $otp_parameters->getName() ?? __('twofaccounts.import.invalid_account');

@@ -7,6 +7,10 @@ use App\Models\User;
 use Illuminate\Support\Facades\Config;
 use Tests\FeatureTestCase;
 
+/**
+ * @covers  \App\Http\Controllers\Auth\UserController
+ * @covers  \App\Http\Middleware\RejectIfDemoMode
+ */
 class UserControllerTest extends FeatureTestCase
 {
     /**
@@ -23,7 +27,7 @@ class UserControllerTest extends FeatureTestCase
     /**
      * @test
      */
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 

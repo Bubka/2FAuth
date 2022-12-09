@@ -40,6 +40,8 @@ class TwoFAccountStoreRequest extends FormRequest
     /**
      * Prepare the data for validation.
      *
+     * @codeCoverageIgnore
+     *
      * @return void
      */
     protected function prepareForValidation()

@@ -16,7 +16,7 @@ class ReleaseRadarService
      */
     public function scheduledScan() : void
     {
-        if ((Settings::get('lastRadarScan') + 604800) < time()) {
+        if ((Settings::get('lastRadarScan') + (60 * 60 * 24 * 7)) < time()) {
             $this->newRelease();
         }
     }
@@ -39,18 +39,19 @@ class ReleaseRadarService
     protected function newRelease() : false|string
     {
         if ($latestReleaseData = json_decode($this->getLatestReleaseData())) {
+
             $githubVersion    = Helpers::cleanVersionNumber($latestReleaseData->tag_name);
             $installedVersion = Helpers::cleanVersionNumber(config('2fauth.version'));
 
-            if ($githubVersion > $installedVersion && $latestReleaseData->prerelease == false && $latestReleaseData->draft == false) {
-                Settings::set('latestRelease', $latestReleaseData->tag_name);
+            if ($githubVersion && $installedVersion) {
+                if ($githubVersion > $installedVersion && $latestReleaseData->prerelease == false && $latestReleaseData->draft == false) {
+                    Settings::set('latestRelease', $latestReleaseData->tag_name);
 
-                return $latestReleaseData->tag_name;
-            } else {
-                Settings::delete('latestRelease');
+                    return $latestReleaseData->tag_name;
+                } else {
+                    Settings::delete('latestRelease');
+                }
             }
-
-            Settings::set('lastRadarScan', time());
         }
 
         return false;
@@ -68,6 +69,8 @@ class ReleaseRadarService
                 ->get(config('2fauth.latestReleaseUrl'));
 
             if ($response->successful()) {
+                Settings::set('lastRadarScan', time());
+
                 return $response->body();
             }
         } catch (\Exception $exception) {

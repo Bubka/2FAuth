@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Tests\TestCase;
 
+/**
+ * @covers \App\Api\v1\Requests\TwoFAccountUpdateRequest
+ * @covers \App\Rules\IsBase32Encoded
+ */
 class TwoFAccountUpdateRequestTest extends TestCase
 {
     use WithoutMiddleware;
@@ -18,8 +22,8 @@ class TwoFAccountUpdateRequestTest extends TestCase
     public function test_user_is_authorized()
     {
         Auth::shouldReceive('check')
-        ->once()
-        ->andReturn(true);
+            ->once()
+            ->andReturn(true);
 
         $request = new TwoFAccountUpdateRequest();
 
@@ -29,7 +33,7 @@ class TwoFAccountUpdateRequestTest extends TestCase
     /**
      * @dataProvider provideValidData
      */
-    public function test_valid_data(array $data) : void
+    public function test_valid_data(array $data): void
     {
         $request   = new TwoFAccountUpdateRequest();
         $validator = Validator::make($data, $request->rules());
@@ -40,7 +44,7 @@ class TwoFAccountUpdateRequestTest extends TestCase
     /**
      * Provide Valid data for validation test
      */
-    public function provideValidData() : array
+    public function provideValidData(): array
     {
         return [
             [[
@@ -80,7 +84,7 @@ class TwoFAccountUpdateRequestTest extends TestCase
     /**
      * @dataProvider provideInvalidData
      */
-    public function test_invalid_data(array $data) : void
+    public function test_invalid_data(array $data): void
     {
         $request   = new TwoFAccountUpdateRequest();
         $validator = Validator::make($data, $request->rules());
@@ -91,7 +95,7 @@ class TwoFAccountUpdateRequestTest extends TestCase
     /**
      * Provide invalid data for validation test
      */
-    public function provideInvalidData() : array
+    public function provideInvalidData(): array
     {
         return [
             [[

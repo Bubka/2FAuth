@@ -8,6 +8,7 @@ use Tests\FeatureTestCase;
 
 /**
  * @covers \App\Services\QrCodeService
+ * @covers \App\Facades\QrCode
  */
 class QrCodeServiceTest extends FeatureTestCase
 {
@@ -20,7 +21,7 @@ class QrCodeServiceTest extends FeatureTestCase
     /**
      * @test
      */
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
     }

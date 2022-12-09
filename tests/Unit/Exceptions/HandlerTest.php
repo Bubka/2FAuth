@@ -7,6 +7,15 @@ use Illuminate\Contracts\Container\Container;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Tests\TestCase;
+use App\Exceptions\InvalidOtpParameterException;
+use \App\Exceptions\InvalidQrCodeException;
+use App\Exceptions\InvalidSecretException;
+use App\Exceptions\DbEncryptionException;
+use App\Exceptions\InvalidMigrationDataException;
+use App\Exceptions\UndecipherableException;
+use App\Exceptions\UnsupportedMigrationException;
+use App\Exceptions\UnsupportedOtpTypeException;
+use App\Exceptions\EncryptedMigrationException;
 
 /**
  * @covers \App\Exceptions\Handler
@@ -41,32 +50,35 @@ class HandlerTest extends TestCase
     /**
      * Provide Valid data for validation test
      */
-    public function provideExceptionsforBadRequest() : array
+    public function provideExceptionsforBadRequest(): array
     {
         return [
             [
-                '\App\Exceptions\InvalidOtpParameterException',
+                InvalidOtpParameterException::class,
             ],
             [
-                '\App\Exceptions\InvalidQrCodeException',
+                InvalidQrCodeException::class,
             ],
             [
-                '\App\Exceptions\InvalidSecretException',
+                InvalidSecretException::class,
             ],
             [
-                '\App\Exceptions\DbEncryptionException',
+                DbEncryptionException::class,
             ],
             [
-                '\App\Exceptions\InvalidMigrationDataException',
+                InvalidMigrationDataException::class,
             ],
             [
-                '\App\Exceptions\UndecipherableException',
+                UndecipherableException::class,
             ],
             [
-                '\App\Exceptions\UnsupportedMigrationException',
+                UnsupportedMigrationException::class,
             ],
             [
-                '\App\Exceptions\UnsupportedOtpTypeException',
+                UnsupportedOtpTypeException::class,
+            ],
+            [
+                EncryptedMigrationException::class,
             ],
         ];
     }
@@ -99,7 +111,7 @@ class HandlerTest extends TestCase
     /**
      * Provide Valid data for validation test
      */
-    public function provideExceptionsforNotFound() : array
+    public function provideExceptionsforNotFound(): array
     {
         return [
             [
@@ -109,6 +121,32 @@ class HandlerTest extends TestCase
                 '\Symfony\Component\HttpKernel\Exception\NotFoundHttpException',
             ],
         ];
+    }
+
+    /**
+     * @test
+     */
+    public function test_authenticationException_returns_unauthorized_json_response()
+    {
+        $request  = $this->createMock(Request::class);
+        $instance = new Handler($this->createMock(Container::class));
+        $class    = new \ReflectionClass(Handler::class);
+
+        $method = $class->getMethod('render');
+        $method->setAccessible(true);
+
+        $mockException = $this->createMock(\Illuminate\Auth\AuthenticationException::class);
+        $mockException->method('guards')->willReturn(['web-guard']);
+
+        $response = $method->invokeArgs($instance, [$request, $mockException]);
+
+        $this->assertInstanceOf(JsonResponse::class, $response);
+
+        $response = \Illuminate\Testing\TestResponse::fromBaseResponse($response);
+        $response->assertStatus(401)
+            ->assertJsonStructure([
+                'message',
+            ]);
     }
 
     /**

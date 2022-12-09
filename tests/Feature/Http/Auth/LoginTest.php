@@ -5,7 +5,15 @@ namespace Tests\Feature\Http\Auth;
 use App\Facades\Settings;
 use App\Models\User;
 use Tests\FeatureTestCase;
+use Illuminate\Support\Carbon;
 
+/**
+ * @covers  \App\Http\Controllers\Auth\LoginController
+ * @covers  \App\Http\Middleware\RejectIfAuthenticated
+ * @covers  \App\Http\Middleware\RejectIfReverseProxy
+ * @covers  \App\Http\Middleware\RejectIfDemoMode
+ * @covers  \App\Http\Middleware\SkipIfAuthenticated
+ */
 class LoginTest extends FeatureTestCase
 {
     /**
@@ -20,7 +28,7 @@ class LoginTest extends FeatureTestCase
     /**
      * @test
      */
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -36,15 +44,35 @@ class LoginTest extends FeatureTestCase
             'email'    => $this->user->email,
             'password' => self::PASSWORD,
         ])
-        ->assertOk()
-        ->assertExactJson([
-            'message' => 'authenticated',
-            'name'    => $this->user->name,
-        ]);
+            ->assertOk()
+            ->assertExactJson([
+                'message' => 'authenticated',
+                'name'    => $this->user->name,
+            ]);
     }
 
     /**
      * @test
+     * 
+     * @covers  \App\Rules\CaseInsensitiveEmailExists
+     */
+    public function test_user_login_with_uppercased_email_returns_success()
+    {
+        $response = $this->json('POST', '/user/login', [
+            'email'    => strtoupper($this->user->email),
+            'password' => self::PASSWORD,
+        ])
+            ->assertOk()
+            ->assertExactJson([
+                'message' => 'authenticated',
+                'name'    => $this->user->name,
+            ]);
+    }
+
+    /**
+     * @test
+     * 
+     * @covers  \App\Http\Middleware\SkipIfAuthenticated
      */
     public function test_user_login_already_authenticated_returns_bad_request()
     {
@@ -74,26 +102,28 @@ class LoginTest extends FeatureTestCase
             'email'    => '',
             'password' => '',
         ])
-        ->assertStatus(422)
-        ->assertJsonValidationErrors([
-            'email',
-            'password',
-        ]);
+            ->assertStatus(422)
+            ->assertJsonValidationErrors([
+                'email',
+                'password',
+            ]);
     }
 
     /**
      * @test
+     * 
+     * @covers  \App\Exceptions\Handler
      */
-    public function test_user_login_with_invalid_credentials_returns_validation_error()
+    public function test_user_login_with_invalid_credentials_returns_authentication_error()
     {
         $response = $this->json('POST', '/user/login', [
             'email'    => $this->user->email,
             'password' => self::WRONG_PASSWORD,
         ])
-        ->assertStatus(401)
-        ->assertJson([
-            'message' => 'unauthorised',
-        ]);
+            ->assertStatus(401)
+            ->assertJson([
+                'message' => 'unauthorised',
+            ]);
     }
 
     /**
@@ -154,6 +184,9 @@ class LoginTest extends FeatureTestCase
 
     /**
      * @test
+     * 
+     * @covers  \App\Http\Middleware\KickOutInactiveUser
+     * @covers  \App\Http\Middleware\LogUserLastSeen
      */
     public function test_user_logout_after_inactivity_returns_teapot()
     {
@@ -169,7 +202,7 @@ class LoginTest extends FeatureTestCase
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('GET', '/api/v1/twofaccounts');
 
-        sleep(61);
+        $this->travelTo(Carbon::now()->addMinutes(2));
 
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('GET', '/api/v1/twofaccounts')

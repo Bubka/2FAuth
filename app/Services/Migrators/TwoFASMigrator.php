@@ -89,8 +89,12 @@ class TwoFASMigrator extends Migrator
             $parameters['secret']    = $this->padToValidBase32Secret($otp_parameters['secret']);
             $parameters['algorithm'] = $otp_parameters['otp']['algorithm'];
             $parameters['digits']    = $otp_parameters['otp']['digits'];
-            $parameters['counter']   = $otp_parameters['otp']['counter'] ?? null;
-            $parameters['period']    = $otp_parameters['otp']['period'] ?? null;
+            $parameters['counter']   = strtolower($parameters['otp_type']) === 'hotp' && $otp_parameters['otp']['counter'] > 0
+                ? $otp_parameters['otp']['counter']
+                : null;
+            $parameters['period']    = strtolower($parameters['otp_type']) === 'totp' && $otp_parameters['otp']['period'] > 0
+                ? $otp_parameters['otp']['period']
+                : null;
 
             try {
                 $twofaccounts[$key] = new TwoFAccount;

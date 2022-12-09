@@ -39,7 +39,7 @@ class PlainTextMigrator extends Migrator
 
                 // The token failed to generate a valid account so we create a fake account to be returned.
                 $fakeAccount           = new TwoFAccount();
-                $fakeAccount->id       = -2;
+                $fakeAccount->id       = TwoFAccount::FAKE_ID;
                 $fakeAccount->otp_type = substr($uri, 10, 4);
                 // Only basic fields are filled to limit the risk of another exception.
                 $fakeAccount->account = __('twofaccounts.import.invalid_account');

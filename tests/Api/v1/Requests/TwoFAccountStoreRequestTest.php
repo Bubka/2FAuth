@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Tests\TestCase;
 
+/**
+ * @covers \App\Api\v1\Requests\TwoFAccountStoreRequest
+ * @covers \App\Rules\IsBase32Encoded
+ */
 class TwoFAccountStoreRequestTest extends TestCase
 {
     use WithoutMiddleware;
@@ -18,8 +22,8 @@ class TwoFAccountStoreRequestTest extends TestCase
     public function test_user_is_authorized()
     {
         Auth::shouldReceive('check')
-        ->once()
-        ->andReturn(true);
+            ->once()
+            ->andReturn(true);
 
         $request = new TwoFAccountStoreRequest();
 
@@ -29,7 +33,7 @@ class TwoFAccountStoreRequestTest extends TestCase
     /**
      * @dataProvider provideValidData
      */
-    public function test_valid_data(array $data) : void
+    public function test_valid_data(array $data): void
     {
         $request   = new TwoFAccountStoreRequest();
         $validator = Validator::make($data, $request->rules());
@@ -40,7 +44,7 @@ class TwoFAccountStoreRequestTest extends TestCase
     /**
      * Provide Valid data for validation test
      */
-    public function provideValidData() : array
+    public function provideValidData(): array
     {
         return [
             [[
@@ -98,7 +102,7 @@ class TwoFAccountStoreRequestTest extends TestCase
     /**
      * @dataProvider provideInvalidData
      */
-    public function test_invalid_data(array $data) : void
+    public function test_invalid_data(array $data): void
     {
         $request   = new TwoFAccountStoreRequest();
         $validator = Validator::make($data, $request->rules());
@@ -109,7 +113,7 @@ class TwoFAccountStoreRequestTest extends TestCase
     /**
      * Provide invalid data for validation test
      */
-    public function provideInvalidData() : array
+    public function provideInvalidData(): array
     {
         return [
             [[

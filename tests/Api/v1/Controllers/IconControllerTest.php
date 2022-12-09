@@ -43,6 +43,31 @@ class IconControllerTest extends FeatureTestCase
     /**
      * @test
      */
+    public function test_fetch_logo_returns_filename()
+    {
+        $response = $this->json('POST', '/api/v1/icons/default', [
+            'service' => 'twitter',
+        ])
+            ->assertStatus(201)
+            ->assertJsonStructure([
+                'filename',
+            ]);
+    }
+
+    /**
+     * @test
+     */
+    public function test_fetch_unknown_logo_returns_nothing()
+    {
+        $response = $this->json('POST', '/api/v1/icons/default', [
+            'service' => 'unknown_company',
+        ])
+            ->assertNoContent();
+    }
+
+    /**
+     * @test
+     */
     public function test_delete_icon_returns_success()
     {
         $response = $this->json('DELETE', '/api/v1/icons/testIcon.jpg')

@@ -5,6 +5,10 @@ namespace Tests\Api\v1\Controllers\Auth;
 use App\Models\User;
 use Tests\FeatureTestCase;
 
+/**
+ * @covers \App\Api\v1\Controllers\UserController
+ * @covers \App\Api\v1\Resources\UserResource
+ */
 class UserControllerTest extends FeatureTestCase
 {
     /**
@@ -15,7 +19,7 @@ class UserControllerTest extends FeatureTestCase
     /**
      * @test
      */
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 

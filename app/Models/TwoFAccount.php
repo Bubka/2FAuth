@@ -60,8 +60,6 @@ class TwoFAccount extends Model implements Sortable
 
     const FAKE_ID = -2;
 
-    private const IMAGELINK_STORAGE_PATH = 'imagesLink/';
-
     /**
      * List of OTP types supported by 2FAuth
      */
@@ -376,10 +374,6 @@ class TwoFAccount extends Model implements Sortable
             $this->enforceAsSteam();
         }
 
-        if (! $this->icon && $skipIconFetching) {
-            $this->icon = $this->getDefaultIcon();
-        }
-
         if (! $this->icon && Settings::get('getOfficialIcons') && ! $skipIconFetching) {
             $this->icon = $this->getDefaultIcon();
         }
@@ -439,6 +433,22 @@ class TwoFAccount extends Model implements Sortable
         Log::info(sprintf('TwoFAccount filled with an URI'));
 
         return $this;
+    }
+
+    /**
+     * Compare 2 TwoFAccounts
+     */
+    public function equals(self $other): bool
+    {
+        return $this->service === $other->service &&
+            $this->account === $other->account &&
+            $this->icon === $other->icon &&
+            $this->otp_type === $other->otp_type &&
+            $this->secret === $other->secret &&
+            $this->digits === $other->digits &&
+            $this->algorithm === $other->algorithm &&
+            $this->period === $other->period &&
+            $this->counter === $other->counter;
     }
 
     /**
@@ -534,7 +544,6 @@ class TwoFAccount extends Model implements Sortable
         try {
             $path_parts  = pathinfo($url);
             $newFilename = Helpers::getUniqueFilename($path_parts['extension']);
-            $imageFile   = self::IMAGELINK_STORAGE_PATH . $newFilename;
 
             try {
                 $response = Http::retry(3, 100)->get($url);
@@ -546,8 +555,10 @@ class TwoFAccount extends Model implements Sortable
                 Log::error(sprintf('Cannot fetch imageLink at "%s"', $url));
             }
 
-            if (in_array(Storage::mimeType($imageFile), ['image/png', 'image/jpeg', 'image/webp', 'image/bmp'])
-                && getimagesize(storage_path() . '/app/' . $imageFile)) {
+            if (
+                in_array(Storage::disk('imagesLink')->mimeType($newFilename), ['image/png', 'image/jpeg', 'image/webp', 'image/bmp'])
+                && getimagesize(Storage::disk('imagesLink')->path($newFilename))
+            ) {
                 // Should be a valid image, we move it to the icons disk
                 if (Storage::disk('icons')->put($newFilename, Storage::disk('imagesLink')->get($newFilename))) {
                     Storage::disk('imagesLink')->delete($newFilename);
@@ -555,10 +566,8 @@ class TwoFAccount extends Model implements Sortable
 
                 Log::info(sprintf('Icon file %s stored', $newFilename));
             } else {
-                // @codeCoverageIgnoreStart
                 Storage::disk('imagesLink')->delete($newFilename);
                 throw new \Exception('Unsupported mimeType or missing image on storage');
-                // @codeCoverageIgnoreEnd
             }
 
             return $newFilename;

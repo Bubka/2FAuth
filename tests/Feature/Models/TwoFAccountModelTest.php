@@ -3,8 +3,14 @@
 namespace Tests\Feature\Models;
 
 use App\Models\TwoFAccount;
-use Tests\Classes\OtpTestData;
+use Tests\Data\OtpTestData;
 use Tests\FeatureTestCase;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\Testing\FileFactory;
+use Illuminate\Support\Facades\Http;
+use App\Helpers\Helpers;
+use Mockery\MockInterface;
+use Tests\Data\HttpRequestTestData;
 
 /**
  * @covers \App\Models\TwoFAccount
@@ -22,9 +28,14 @@ class TwoFAccountModelTest extends FeatureTestCase
     protected $customHotpTwofaccount;
 
     /**
+     * 
+     */
+    const ICON_NAME = 'oDBngpjQaQAgLtHqGuYiPRqftCXv6Sj4hSAXARpA.png';
+
+    /**
      * @test
      */
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -69,11 +80,35 @@ class TwoFAccountModelTest extends FeatureTestCase
 
     /**
      * @test
+     * 
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
      */
     public function test_fill_with_custom_totp_uri_returns_correct_value()
     {
+        $this->mock('alias:' . Helpers::class, function (MockInterface $helper) {
+            $helper->shouldReceive('getUniqueFilename')
+                ->andReturn(self::ICON_NAME);
+
+            $helper->shouldReceive('isValidImage')
+                ->andReturn(true);
+        });
+
+        $file = (new FileFactory)->image(self::ICON_NAME, 10, 10);
+
+        Http::preventStrayRequests();
+        Http::fake([
+            'https://en.opensuse.org/images/4/44/Button-filled-colour.png' => Http::response($file->tempFile, 200),
+        ]);
+
+        Storage::fake('imagesLink');
+        Storage::fake('icons');
+
         $twofaccount = new TwoFAccount;
         $twofaccount->fillWithURI(OtpTestData::TOTP_FULL_CUSTOM_URI);
+
+        Storage::disk('icons')->assertExists(self::ICON_NAME);
+        Storage::disk('imagesLink')->assertMissing(self::ICON_NAME);
 
         $this->assertEquals('totp', $twofaccount->otp_type);
         $this->assertEquals(OtpTestData::TOTP_FULL_CUSTOM_URI, $twofaccount->legacy_uri);
@@ -84,7 +119,7 @@ class TwoFAccountModelTest extends FeatureTestCase
         $this->assertEquals(OtpTestData::PERIOD_CUSTOM, $twofaccount->period);
         $this->assertEquals(null, $twofaccount->counter);
         $this->assertEquals(OtpTestData::ALGORITHM_CUSTOM, $twofaccount->algorithm);
-        $this->assertStringEndsWith('.png', $twofaccount->icon);
+        $this->assertEquals(self::ICON_NAME, $twofaccount->icon);
     }
 
     /**
@@ -109,11 +144,35 @@ class TwoFAccountModelTest extends FeatureTestCase
 
     /**
      * @test
+     * 
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
      */
     public function test_fill_with_custom_hotp_uri_returns_correct_value()
     {
+        $this->mock('alias:' . Helpers::class, function (MockInterface $helper) {
+            $helper->shouldReceive('getUniqueFilename')
+                ->andReturn(self::ICON_NAME);
+
+            $helper->shouldReceive('isValidImage')
+                ->andReturn(true);
+        });
+
+        $file = (new FileFactory)->image(self::ICON_NAME, 10, 10);
+
+        Http::preventStrayRequests();
+        Http::fake([
+            'https://en.opensuse.org/images/4/44/Button-filled-colour.png' => Http::response($file->tempFile, 200),
+        ]);
+
+        Storage::fake('imagesLink');
+        Storage::fake('icons');
+
         $twofaccount = new TwoFAccount;
         $twofaccount->fillWithURI(OtpTestData::HOTP_FULL_CUSTOM_URI);
+
+        Storage::disk('icons')->assertExists(self::ICON_NAME);
+        Storage::disk('imagesLink')->assertMissing(self::ICON_NAME);
 
         $this->assertEquals('hotp', $twofaccount->otp_type);
         $this->assertEquals(OtpTestData::HOTP_FULL_CUSTOM_URI, $twofaccount->legacy_uri);
@@ -124,7 +183,7 @@ class TwoFAccountModelTest extends FeatureTestCase
         $this->assertEquals(null, $twofaccount->period);
         $this->assertEquals(OtpTestData::COUNTER_CUSTOM, $twofaccount->counter);
         $this->assertEquals(OtpTestData::ALGORITHM_CUSTOM, $twofaccount->algorithm);
-        $this->assertStringEndsWith('.png', $twofaccount->icon);
+        $this->assertEquals(self::ICON_NAME, $twofaccount->icon);
     }
 
     /**
@@ -391,9 +450,28 @@ class TwoFAccountModelTest extends FeatureTestCase
 
     /**
      * @test
+     * 
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
      */
     public function test_getOTP_for_totp_returns_the_same_password()
     {
+        $this->mock('alias:' . Helpers::class, function (MockInterface $helper) {
+            $helper->shouldReceive('getUniqueFilename')
+                ->andReturn(self::ICON_NAME);
+
+            $helper->shouldReceive('isValidImage')
+                ->andReturn(true);
+        });
+
+        Http::preventStrayRequests();
+        Http::fake([
+            'https://en.opensuse.org/images/4/44/Button-filled-colour.png' => Http::response(HttpRequestTestData::ICON_PNG, 200),
+        ]);
+
+        Storage::fake('imagesLink');
+        Storage::fake('icons');
+
         $twofaccount = new TwoFAccount;
 
         $otp_from_model = $this->customTotpTwofaccount->getOTP();
@@ -413,9 +491,28 @@ class TwoFAccountModelTest extends FeatureTestCase
 
     /**
      * @test
+     * 
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
      */
     public function test_getOTP_for_hotp_returns_the_same_password()
     {
+        $this->mock('alias:' . Helpers::class, function (MockInterface $helper) {
+            $helper->shouldReceive('getUniqueFilename')
+                ->andReturn(self::ICON_NAME);
+
+            $helper->shouldReceive('isValidImage')
+                ->andReturn(true);
+        });
+
+        Http::preventStrayRequests();
+        Http::fake([
+            'https://en.opensuse.org/images/4/44/Button-filled-colour.png' => Http::response(HttpRequestTestData::ICON_PNG, 200),
+        ]);
+
+        Storage::fake('imagesLink');
+        Storage::fake('icons');
+
         $twofaccount = new TwoFAccount;
 
         $otp_from_model = $this->customHotpTwofaccount->getOTP();
@@ -506,5 +603,108 @@ class TwoFAccountModelTest extends FeatureTestCase
         $this->assertStringContainsString('digits=' . OtpTestData::DIGITS_CUSTOM, $uri);
         $this->assertStringContainsString('counter=' . OtpTestData::COUNTER_CUSTOM, $uri);
         $this->assertStringContainsString('algorithm=' . OtpTestData::ALGORITHM_CUSTOM, $uri);
+    }
+
+    /**
+     * @test
+     * 
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     */
+    public function test_fill_succeed_when_image_fetching_fails()
+    {
+        $this->mock('alias:' . Helpers::class, function (MockInterface $helper) {
+            $helper->shouldReceive('getUniqueFilename')
+                ->andReturn(self::ICON_NAME);
+        });
+
+        Http::preventStrayRequests();
+
+        Storage::fake('imagesLink');
+        Storage::fake('icons');
+
+        $twofaccount = new TwoFAccount;
+        $twofaccount->fillWithURI(OtpTestData::TOTP_FULL_CUSTOM_URI);
+
+        Storage::disk('icons')->assertMissing(self::ICON_NAME);
+        Storage::disk('imagesLink')->assertMissing(self::ICON_NAME);
+    }
+
+    /**
+     * @test
+     */
+    public function test_saving_totp_without_period_set_default_one()
+    {
+        $twofaccount = new TwoFAccount;
+        $twofaccount->service = OtpTestData::SERVICE;
+        $twofaccount->account = OtpTestData::ACCOUNT;
+        $twofaccount->otp_type = TwoFAccount::TOTP;
+        $twofaccount->secret = OtpTestData::SECRET;
+
+        $twofaccount->save();
+
+        $account = TwoFAccount::find($twofaccount->id);
+
+        $this->assertEquals(TwoFAccount::DEFAULT_PERIOD, $account->period);
+    }
+
+    /**
+     * @test
+     */
+    public function test_saving_hotp_without_counter_set_default_one()
+    {
+        $twofaccount = new TwoFAccount;
+        $twofaccount->service = OtpTestData::SERVICE;
+        $twofaccount->account = OtpTestData::ACCOUNT;
+        $twofaccount->otp_type = TwoFAccount::HOTP;
+        $twofaccount->secret = OtpTestData::SECRET;
+
+        $twofaccount->save();
+
+        $account = TwoFAccount::find($twofaccount->id);
+
+        $this->assertEquals(TwoFAccount::DEFAULT_COUNTER, $account->counter);
+    }
+
+    /**
+     * @test
+     */
+    public function test_equals_returns_true()
+    {
+        $twofaccount             = new TwoFAccount;
+        $twofaccount->legacy_uri = OtpTestData::TOTP_FULL_CUSTOM_URI;
+        $twofaccount->service    = OtpTestData::SERVICE;
+        $twofaccount->account    = OtpTestData::ACCOUNT;
+        $twofaccount->icon       = OtpTestData::ICON;
+        $twofaccount->otp_type   = 'totp';
+        $twofaccount->secret     = OtpTestData::SECRET;
+        $twofaccount->digits     = OtpTestData::DIGITS_CUSTOM;
+        $twofaccount->algorithm  = OtpTestData::ALGORITHM_CUSTOM;
+        $twofaccount->period     = OtpTestData::PERIOD_CUSTOM;
+        $twofaccount->counter    = null;
+        $twofaccount->save();
+
+        $this->assertTrue($twofaccount->equals($this->customTotpTwofaccount));
+    }
+
+    /**
+     * @test
+     */
+    public function test_equals_returns_false()
+    {
+        $twofaccount             = new TwoFAccount;
+        $twofaccount->legacy_uri = OtpTestData::TOTP_FULL_CUSTOM_URI;
+        $twofaccount->service    = OtpTestData::SERVICE;
+        $twofaccount->account    = OtpTestData::ACCOUNT;
+        $twofaccount->icon       = OtpTestData::ICON;
+        $twofaccount->otp_type   = 'totp';
+        $twofaccount->secret     = OtpTestData::SECRET;
+        $twofaccount->digits     = OtpTestData::DIGITS_CUSTOM;
+        $twofaccount->algorithm  = OtpTestData::ALGORITHM_CUSTOM;
+        $twofaccount->period     = OtpTestData::PERIOD_CUSTOM;
+        $twofaccount->counter    = null;
+        $twofaccount->save();
+
+        $this->assertFalse($twofaccount->equals($this->customHotpTwofaccount));
     }
 }

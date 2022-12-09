@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Password;
 use Tests\FeatureTestCase;
 
+/**
+ * @covers  \App\Http\Controllers\Auth\ResetPasswordController
+ * @covers  \App\Models\User
+ */
 class ResetPasswordControllerTest extends FeatureTestCase
 {
     /**
@@ -28,7 +32,7 @@ class ResetPasswordControllerTest extends FeatureTestCase
         ]);
 
         $response->assertStatus(422)
-                 ->assertJsonValidationErrors(['email', 'password', 'token']);
+            ->assertJsonValidationErrors(['email', 'password', 'token']);
     }
 
     /**
@@ -44,7 +48,7 @@ class ResetPasswordControllerTest extends FeatureTestCase
         ]);
 
         $response->assertStatus(422)
-                 ->assertJsonValidationErrors(['email', 'password']);
+            ->assertJsonValidationErrors(['email', 'password']);
     }
 
     /**
@@ -60,7 +64,7 @@ class ResetPasswordControllerTest extends FeatureTestCase
         ]);
 
         $response->assertStatus(422)
-                 ->assertJsonValidationErrors(['password']);
+            ->assertJsonValidationErrors(['password']);
     }
 
     /**

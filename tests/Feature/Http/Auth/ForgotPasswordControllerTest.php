@@ -9,6 +9,12 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
 use Tests\FeatureTestCase;
 
+/**
+ * @covers  \App\Http\Controllers\Auth\ForgotPasswordController
+ * @covers  \App\Models\User
+ * @covers  \App\Http\Middleware\RejectIfDemoMode
+ * @covers  \App\Http\Middleware\RejectIfAuthenticated
+ */
 class ForgotPasswordControllerTest extends FeatureTestCase
 {
     /**
@@ -26,7 +32,7 @@ class ForgotPasswordControllerTest extends FeatureTestCase
         ]);
 
         $response->assertStatus(422)
-                 ->assertJsonValidationErrors(['email']);
+            ->assertJsonValidationErrors(['email']);
     }
 
     /**
@@ -39,7 +45,7 @@ class ForgotPasswordControllerTest extends FeatureTestCase
         ]);
 
         $response->assertStatus(422)
-                 ->assertJsonValidationErrors(['email']);
+            ->assertJsonValidationErrors(['email']);
     }
 
     /**
@@ -52,7 +58,7 @@ class ForgotPasswordControllerTest extends FeatureTestCase
         ]);
 
         $response->assertStatus(422)
-                 ->assertJsonValidationErrors(['email']);
+            ->assertJsonValidationErrors(['email']);
     }
 
     /**
@@ -90,5 +96,22 @@ class ForgotPasswordControllerTest extends FeatureTestCase
         ]);
 
         $response->assertStatus(401);
+    }
+
+    /**
+     * @test
+     */
+    public function test_submit_email_password_request_when_authenticated_returns_bad_request()
+    {
+        $user = User::factory()->create();
+
+        $this->actingAs($user, 'web-guard')
+            ->json('POST', '/user/password/lost', [
+                'email' => $user->email,
+            ])
+            ->assertStatus(400)
+            ->assertJsonStructure([
+                'message',
+            ]);
     }
 }

@@ -16,6 +16,9 @@ use Tests\TestCase;
  */
 class CleanIconStorageTest extends TestCase
 {
+    /**
+     * @test
+     */
     public function test_it_deletes_icon_file_on_twofaccount_deletion()
     {
         $settingService = $this->mock(SettingService::class, function (MockInterface $settingService) {
@@ -34,6 +37,9 @@ class CleanIconStorageTest extends TestCase
         $this->assertNull($listener->handle($event));
     }
 
+    /**
+     * @test
+     */
     public function test_CleanIconStorage_listen_to_TwoFAccountDeleted_event()
     {
         Event::fake();

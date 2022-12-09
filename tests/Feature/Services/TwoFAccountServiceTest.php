@@ -5,11 +5,13 @@ namespace Tests\Feature\Services;
 use App\Facades\TwoFAccounts;
 use App\Models\Group;
 use App\Models\TwoFAccount;
-use Tests\Classes\OtpTestData;
+use Tests\Data\OtpTestData;
 use Tests\FeatureTestCase;
+use Tests\Data\MigrationTestData;
 
 /**
  * @covers \App\Services\TwoFAccountService
+ * @covers \App\Facades\TwoFAccounts
  */
 class TwoFAccountServiceTest extends FeatureTestCase
 {
@@ -31,7 +33,7 @@ class TwoFAccountServiceTest extends FeatureTestCase
     /**
      * @test
      */
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -179,7 +181,7 @@ class TwoFAccountServiceTest extends FeatureTestCase
      */
     public function test_convert_migration_from_gauth_returns_correct_accounts()
     {
-        $twofaccounts = TwoFAccounts::migrate(OtpTestData::GOOGLE_AUTH_MIGRATION_URI);
+        $twofaccounts = TwoFAccounts::migrate(MigrationTestData::GOOGLE_AUTH_MIGRATION_URI);
 
         $this->assertCount(2, $twofaccounts);
 
@@ -226,7 +228,7 @@ class TwoFAccountServiceTest extends FeatureTestCase
         $twofaccount = new TwoFAccount;
         $twofaccount->fillWithOtpParameters($parameters)->save();
 
-        $twofaccounts = TwoFAccounts::migrate(OtpTestData::GOOGLE_AUTH_MIGRATION_URI);
+        $twofaccounts = TwoFAccounts::migrate(MigrationTestData::GOOGLE_AUTH_MIGRATION_URI);
 
         $this->assertEquals(-1, $twofaccounts->first()->id);
         $this->assertEquals(-1, $twofaccounts->last()->id);
@@ -238,6 +240,6 @@ class TwoFAccountServiceTest extends FeatureTestCase
     public function test_convert_invalid_migration_from_gauth_returns_InvalidMigrationData_exception()
     {
         $this->expectException(\App\Exceptions\InvalidMigrationDataException::class);
-        $twofaccounts = TwoFAccounts::migrate(OtpTestData::GOOGLE_AUTH_MIGRATION_URI_WITH_INVALID_DATA);
+        $twofaccounts = TwoFAccounts::migrate(MigrationTestData::GOOGLE_AUTH_MIGRATION_URI_WITH_INVALID_DATA);
     }
 }

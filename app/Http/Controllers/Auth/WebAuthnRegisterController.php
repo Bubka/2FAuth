@@ -19,7 +19,7 @@ class WebAuthnRegisterController extends Controller
      */
     public function options(AttestationRequest $request) : Responsable
     {
-        switch (env('WEBAUTHN_USER_VERIFICATION')) {
+        switch (config('webauthn.user_verification')) {
             case WebAuthn::USER_VERIFICATION_DISCOURAGED:
                 $request = $request->fastRegistration();    // Makes the authenticator to only check for user presence on registration
                 break;

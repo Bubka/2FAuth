@@ -31,7 +31,7 @@ class WebauthnCredentialBroker extends PasswordBroker
         $token = $this->tokens->create($user);
 
         if ($callback) {
-            $callback($user, $token);
+            $callback($user, $token); // @codeCoverageIgnore
         } else {
             $user->sendWebauthnRecoveryNotification($token);
         }

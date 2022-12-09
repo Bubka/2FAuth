@@ -6,6 +6,9 @@ use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Tests\FeatureTestCase;
 
+/**
+ * @covers  \App\Http\Controllers\Auth\RegisterController
+ */
 class RegisterControllerTest extends FeatureTestCase
 {
     private const USERNAME = 'john doe';
@@ -17,7 +20,7 @@ class RegisterControllerTest extends FeatureTestCase
     /**
      * @test
      */
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
     }
@@ -35,18 +38,20 @@ class RegisterControllerTest extends FeatureTestCase
             'password'              => self::PASSWORD,
             'password_confirmation' => self::PASSWORD,
         ])
-        ->assertCreated()
-        ->assertJsonStructure([
-            'message',
-            'name',
-        ])
-        ->assertJsonFragment([
-            'name' => self::USERNAME,
-        ]);
+            ->assertCreated()
+            ->assertJsonStructure([
+                'message',
+                'name',
+            ])
+            ->assertJsonFragment([
+                'name' => self::USERNAME,
+            ]);
     }
 
     /**
      * @test
+     * 
+     * @covers  \App\Rules\FirstUser
      */
     public function test_register_returns_already_an_existing_user()
     {
@@ -59,7 +64,7 @@ class RegisterControllerTest extends FeatureTestCase
             'password'              => self::PASSWORD,
             'password_confirmation' => self::PASSWORD,
         ])
-        ->assertJsonValidationErrorFor('name');
+            ->assertJsonValidationErrorFor('name');
     }
 
     /**

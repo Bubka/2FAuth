@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 use Laragear\WebAuthn\Http\Requests\AssertedRequest;
 use Laragear\WebAuthn\Http\Requests\AssertionRequest;
 use Laragear\WebAuthn\WebAuthn;
+use Illuminate\Support\Arr;
 
 class WebAuthnLoginController extends Controller
 {
@@ -33,7 +34,7 @@ class WebAuthnLoginController extends Controller
      */
     public function options(AssertionRequest $request) : Responsable|JsonResponse
     {
-        switch (env('WEBAUTHN_USER_VERIFICATION')) {
+        switch (config('webauthn.user_verification')) {
             case WebAuthn::USER_VERIFICATION_DISCOURAGED:
                 $request = $request->fastLogin();    // Makes the authenticator to only check for user presence on registration
                 break;
@@ -69,7 +70,7 @@ class WebAuthnLoginController extends Controller
 
             // Some authenticators do not send a userHandle so we hack the response to be compliant
             // with Larapass/webauthn-lib implementation that waits for a userHandle
-            if (! $response['userHandle']) {
+            if (!Arr::exists($response, 'userHandle') || blank($response['userHandle'])) {
                 $response['userHandle'] = User::getFromCredentialId($request->id)?->userHandle();
                 $request->merge(['response' => $response]);
             }

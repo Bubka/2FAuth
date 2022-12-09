@@ -8,6 +8,12 @@ use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Tests\FeatureTestCase;
 
+/**
+ * @covers  \App\Http\Controllers\Auth\WebAuthnRecoveryController
+ * @covers  \App\Extensions\WebauthnCredentialBroker
+ * @covers  \App\Http\Requests\WebauthnRecoveryRequest
+ * @covers  \App\Providers\AuthServiceProvider
+ */
 class WebAuthnRecoveryControllerTest extends FeatureTestCase
 {
     /**
@@ -29,7 +35,7 @@ class WebAuthnRecoveryControllerTest extends FeatureTestCase
     /**
      * @test
      */
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -47,16 +53,55 @@ class WebAuthnRecoveryControllerTest extends FeatureTestCase
     /**
      * @test
      */
-    public function test_recover_with_invalid_token_returns_validation_error()
+    public function test_recover_fails_if_no_recovery_is_set()
     {
-        $response = $this->json('POST', '/webauthn/recover', [
-            'token'    => 'bad_token',
+        DB::table('webauthn_recoveries')->delete();
+
+        $this->json('POST', '/webauthn/recover', [
+            'token'    => self::ACTUAL_TOKEN_VALUE,
             'email'    => $this->user->email,
             'password' => UserFactory::USER_PASSWORD,
         ])
-        ->assertStatus(422)
-        ->assertJsonMissingValidationErrors('email')
-        ->assertJsonValidationErrors('token');
+            ->assertStatus(422)
+            ->assertJsonValidationErrors('token');
+    }
+
+    /**
+     * @test
+     */
+    public function test_recover_with_wrong_token_returns_validation_error()
+    {
+        $response = $this->json('POST', '/webauthn/recover', [
+            'token'    => 'wrong_token',
+            'email'    => $this->user->email,
+            'password' => UserFactory::USER_PASSWORD,
+        ])
+            ->assertStatus(422)
+            ->assertJsonMissingValidationErrors('email')
+            ->assertJsonValidationErrors('token');
+    }
+
+    /**
+     * @test
+     */
+    public function test_recover_with_expired_token_returns_validation_error()
+    {
+        Date::setTestNow($now = Date::create(2020, 01, 01, 16, 30));
+
+        DB::table('webauthn_recoveries')->delete();
+        DB::table('webauthn_recoveries')->insert([
+            'token'      => self::STORED_TOKEN_VALUE,
+            'email'      => $this->user->email,
+            'created_at' => $now->clone()->subHour()->subSecond()->toDateTimeString(),
+        ]);
+
+        $this->json('POST', '/webauthn/recover', [
+            'token' => self::ACTUAL_TOKEN_VALUE,
+            'email' => $this->user->email,
+            'password' => UserFactory::USER_PASSWORD,
+        ])
+            ->assertStatus(422)
+            ->assertJsonValidationErrors('token');
     }
 
     /**
@@ -64,12 +109,28 @@ class WebAuthnRecoveryControllerTest extends FeatureTestCase
      */
     public function test_recover_with_invalid_password_returns_authentication_error()
     {
-        $response = $this->json('POST', '/webauthn/recover', [
+        $this->json('POST', '/webauthn/recover', [
             'token'    => self::ACTUAL_TOKEN_VALUE,
             'email'    => $this->user->email,
             'password' => 'bad_password',
         ])
-        ->assertStatus(401);
+            ->assertStatus(401);
+    }
+
+    /**
+     * @test
+     */
+    public function test_recover_returns_validation_error_when_no_user_exists()
+    {
+        $this->json('POST', '/webauthn/recover', [
+            'token'    => self::ACTUAL_TOKEN_VALUE,
+            'email'    => 'no@user.com',
+            'password' => UserFactory::USER_PASSWORD,
+        ])
+            ->assertStatus(422)
+            ->assertJsonMissingValidationErrors('password')
+            ->assertJsonMissingValidationErrors('token')
+            ->assertJsonValidationErrors('email');
     }
 
     /**
@@ -82,7 +143,7 @@ class WebAuthnRecoveryControllerTest extends FeatureTestCase
             'email'    => $this->user->email,
             'password' => UserFactory::USER_PASSWORD,
         ])
-        ->assertStatus(200);
+            ->assertStatus(200);
 
         $this->assertDatabaseMissing('webauthn_recoveries', [
             'token' => self::STORED_TOKEN_VALUE,
@@ -119,7 +180,7 @@ class WebAuthnRecoveryControllerTest extends FeatureTestCase
             'password'  => UserFactory::USER_PASSWORD,
             'revokeAll' => true,
         ])
-        ->assertStatus(200);
+            ->assertStatus(200);
 
         $this->assertDatabaseMissing('webauthn_credentials', [
             'authenticatable_id' => $this->user->id,

@@ -9,6 +9,9 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
 
+/**
+ * @covers \App\Api\v1\Requests\TwoFAccountDynamicRequest
+ */
 class TwoFAccountDynamicRequestTest extends TestCase
 {
     use WithoutMiddleware;
@@ -19,8 +22,8 @@ class TwoFAccountDynamicRequestTest extends TestCase
     public function test_user_is_authorized()
     {
         Auth::shouldReceive('check')
-        ->once()
-        ->andReturn(true);
+            ->once()
+            ->andReturn(true);
 
         $request = new TwoFAccountDynamicRequest();
 

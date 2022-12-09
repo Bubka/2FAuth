@@ -2,6 +2,8 @@
 
 return [
 
+    'user_verification' => env('WEBAUTHN_USER_VERIFICATION', 'discouraged'),
+
     /*
     |--------------------------------------------------------------------------
     | Relaying Party
