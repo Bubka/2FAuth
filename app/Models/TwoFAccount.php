@@ -142,13 +142,13 @@ class TwoFAccount extends Model implements Sortable
         parent::boot();
 
         static::saving(function (TwoFAccount $twofaccount) {
-            if (! $twofaccount->legacy_uri) {
+            if (!$twofaccount->legacy_uri) {
                 $twofaccount->legacy_uri = $twofaccount->getURI();
             }
-            if ($twofaccount->otp_type == TwoFAccount::TOTP && ! $twofaccount->period) {
+            if ($twofaccount->otp_type == TwoFAccount::TOTP && !$twofaccount->period) {
                 $twofaccount->period = TwoFAccount::DEFAULT_PERIOD;
             }
-            if ($twofaccount->otp_type == TwoFAccount::HOTP && ! $twofaccount->counter) {
+            if ($twofaccount->otp_type == TwoFAccount::HOTP && !$twofaccount->counter) {
                 $twofaccount->counter = TwoFAccount::DEFAULT_COUNTER;
             }
         });
@@ -253,7 +253,7 @@ class TwoFAccount extends Model implements Sortable
      */
     public function setDigitsAttribute($value)
     {
-        $this->attributes['digits'] = ! $value ? 6 : $value;
+        $this->attributes['digits'] = !$value ? 6 : $value;
     }
 
     /**
@@ -264,7 +264,7 @@ class TwoFAccount extends Model implements Sortable
      */
     public function setAlgorithmAttribute($value)
     {
-        $this->attributes['algorithm'] = ! $value ? self::SHA1 : strtolower($value);
+        $this->attributes['algorithm'] = !$value ? self::SHA1 : strtolower($value);
     }
 
     /**
@@ -275,7 +275,7 @@ class TwoFAccount extends Model implements Sortable
      */
     public function setPeriodAttribute($value)
     {
-        $this->attributes['period'] = ! $value && $this->otp_type === self::TOTP ? self::DEFAULT_PERIOD : $value;
+        $this->attributes['period'] = !$value && $this->otp_type === self::TOTP ? self::DEFAULT_PERIOD : $value;
     }
 
     /**
@@ -329,15 +329,15 @@ class TwoFAccount extends Model implements Sortable
                 $OtpDto->otp_type     = $this->otp_type;
                 $OtpDto->generated_at = time();
                 $OtpDto->password     = $this->otp_type === self::TOTP
-                                            ? $this->generator->at($OtpDto->generated_at)
-                                            : SteamTotp::getAuthCode(base64_encode(Base32::decodeUpper($this->secret)));
+                    ? $this->generator->at($OtpDto->generated_at)
+                    : SteamTotp::getAuthCode(base64_encode(Base32::decodeUpper($this->secret)));
                 $OtpDto->period = $this->period;
             }
 
             Log::info(sprintf('New OTP generated for TwoFAccount (%s)', $this->id ? 'id:' . $this->id : 'preview'));
 
             return $OtpDto;
-        } catch (\Exception|\Throwable $ex) {
+        } catch (\Exception | \Throwable $ex) {
             Log::error('An error occured, OTP generation aborted');
             // Currently a secret issue is the only possible exception thrown by OTPHP for this stack
             // so it is Ok to send the corresponding 2FAuth exception.
@@ -374,7 +374,7 @@ class TwoFAccount extends Model implements Sortable
             $this->enforceAsSteam();
         }
 
-        if (! $this->icon && Settings::get('getOfficialIcons') && ! $skipIconFetching) {
+        if (!$this->icon && Settings::get('getOfficialIcons') && !$skipIconFetching) {
             $this->icon = $this->getDefaultIcon();
         }
 
@@ -393,7 +393,7 @@ class TwoFAccount extends Model implements Sortable
         // First we instanciate the OTP generator
         try {
             $this->generator = Factory::loadFromProvisioningUri($uri);
-        } catch (\Assert\AssertionFailedException|\Assert\InvalidArgumentException|\Exception|\Throwable $ex) {
+        } catch (\Assert\AssertionFailedException | \Assert\InvalidArgumentException | \Exception | \Throwable $ex) {
             throw ValidationException::withMessages([
                 'uri' => __('validation.custom.uri.regex', ['attribute' => 'uri']),
             ]);
@@ -401,7 +401,7 @@ class TwoFAccount extends Model implements Sortable
 
         // As loadFromProvisioningUri() accept URI without label (nor account nor service) we check
         // that the account is set
-        if (! $this->generator->getLabel()) {
+        if (!$this->generator->getLabel()) {
             Log::error('URI passed to fillWithURI() must contain a label');
 
             throw ValidationException::withMessages([
@@ -426,7 +426,7 @@ class TwoFAccount extends Model implements Sortable
             $this->icon = $this->storeImageAsIcon($this->generator->getParameter('image'));
         }
 
-        if (! $this->icon && Settings::get('getOfficialIcons') && ! $skipIconFetching) {
+        if (!$this->icon && Settings::get('getOfficialIcons') && !$skipIconFetching) {
             $this->icon = $this->getDefaultIcon();
         }
 
@@ -454,7 +454,7 @@ class TwoFAccount extends Model implements Sortable
     /**
      * Sets model attributes to STEAM values
      */
-    private function enforceAsSteam() : void
+    private function enforceAsSteam(): void
     {
         $this->otp_type  = self::STEAM_TOTP;
         $this->digits    = 5;
@@ -477,7 +477,7 @@ class TwoFAccount extends Model implements Sortable
     /**
      * Returns an otpauth URI built with model attribute values
      */
-    public function getURI() : string
+    public function getURI(): string
     {
         $this->initGenerator();
 
@@ -490,7 +490,7 @@ class TwoFAccount extends Model implements Sortable
      * @throws UnsupportedOtpTypeException The defined OTP type is not supported
      * @throws InvalidOtpParameterException One OTP parameter is invalid
      */
-    private function initGenerator() : void
+    private function initGenerator(): void
     {
         try {
             switch ($this->otp_type) {
@@ -529,7 +529,7 @@ class TwoFAccount extends Model implements Sortable
         } catch (UnsupportedOtpTypeException $exception) {
             Log::error(sprintf('%s is not an OTP type supported by the current generator', $this->otp_type));
             throw $exception;
-        } catch (\Exception|\Throwable $exception) {
+        } catch (\Exception | \Throwable $exception) {
             throw new InvalidOtpParameterException($exception->getMessage());
         }
     }
@@ -573,7 +573,7 @@ class TwoFAccount extends Model implements Sortable
             return $newFilename;
         }
         // @codeCoverageIgnoreStart
-        catch (\Exception|\Throwable $ex) {
+        catch (\Exception | \Throwable $ex) {
             Log::error(sprintf('Icon storage failed: %s', $ex->getMessage()));
 
             return null;
@@ -596,7 +596,7 @@ class TwoFAccount extends Model implements Sortable
     /**
      * Returns an acceptable value
      */
-    private function decryptOrReturn(mixed $value) : mixed
+    private function decryptOrReturn(mixed $value): mixed
     {
         // Decipher when needed
         if (Settings::get('useEncryption') && $value) {
@@ -613,7 +613,7 @@ class TwoFAccount extends Model implements Sortable
     /**
      * Encrypt a value
      */
-    private function encryptOrReturn(mixed $value) : mixed
+    private function encryptOrReturn(mixed $value): mixed
     {
         // should be replaced by laravel 8 attribute encryption casting
         return Settings::get('useEncryption') ? Crypt::encryptString($value) : $value;

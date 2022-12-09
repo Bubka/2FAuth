@@ -39,19 +39,13 @@ class WebAuthnDeviceLostController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  string  $response
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse
      *
      * @throws \Illuminate\Validation\ValidationException
      */
     protected function sendRecoveryLinkFailedResponse(Request $request, string $response)
     {
-        if ($request->wantsJson()) {
-            throw ValidationException::withMessages(['email' => [trans($response)]]);
-        }
-
-        return back()
-            ->withInput($request->only('email'))
-            ->withErrors(['email' => trans($response)]);
+        throw ValidationException::withMessages(['email' => [trans($response)]]);
     }
 
     /**
@@ -59,7 +53,7 @@ class WebAuthnDeviceLostController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  string  $response
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse
      */
     protected function sendRecoveryLinkResponse(Request $request, string $response)
     {

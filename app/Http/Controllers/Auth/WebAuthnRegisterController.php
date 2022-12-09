@@ -17,7 +17,7 @@ class WebAuthnRegisterController extends Controller
      * @param  \Laragear\WebAuthn\Http\Requests\AttestationRequest  $request
      * @return \Illuminate\Contracts\Support\Responsable
      */
-    public function options(AttestationRequest $request) : Responsable
+    public function options(AttestationRequest $request): Responsable
     {
         switch (config('webauthn.user_verification')) {
             case WebAuthn::USER_VERIFICATION_DISCOURAGED:
@@ -40,7 +40,7 @@ class WebAuthnRegisterController extends Controller
      * @param  \Laragear\WebAuthn\Http\Requests\AttestedRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function register(AttestedRequest $request) : Response
+    public function register(AttestedRequest $request): Response
     {
         $request->save();
 

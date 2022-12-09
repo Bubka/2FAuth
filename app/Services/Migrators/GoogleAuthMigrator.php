@@ -23,7 +23,7 @@ class GoogleAuthMigrator extends Migrator
      * @param  mixed  $migrationPayload migration uri provided by Google Authenticator export feature
      * @return \Illuminate\Support\Collection<int|string, \App\Models\TwoFAccount> The converted accounts
      */
-    public function migrate(mixed $migrationPayload) : Collection
+    public function migrate(mixed $migrationPayload): Collection
     {
         try {
             $migrationData = base64_decode(urldecode(Str::replace('otpauth-migration://offline?data=', '', $migrationPayload)));

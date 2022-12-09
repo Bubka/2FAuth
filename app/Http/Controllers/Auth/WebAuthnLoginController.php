@@ -32,7 +32,7 @@ class WebAuthnLoginController extends Controller
      * @param  \Laragear\WebAuthn\Http\Requests\AssertionRequest  $request
      * @return \Illuminate\Contracts\Support\Responsable|\Illuminate\Http\JsonResponse
      */
-    public function options(AssertionRequest $request) : Responsable|JsonResponse
+    public function options(AssertionRequest $request): Responsable|JsonResponse
     {
         switch (config('webauthn.user_verification')) {
             case WebAuthn::USER_VERIFICATION_DISCOURAGED:

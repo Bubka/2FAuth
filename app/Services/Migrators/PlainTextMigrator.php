@@ -17,7 +17,7 @@ class PlainTextMigrator extends Migrator
      * @param  mixed  $migrationPayload
      * @return \Illuminate\Support\Collection<int|string, \App\Models\TwoFAccount> The converted accounts
      */
-    public function migrate(mixed $migrationPayload) : Collection
+    public function migrate(mixed $migrationPayload): Collection
     {
         $otpauthURIs = preg_split('~\R~', $migrationPayload);
         $otpauthURIs = Arr::where($otpauthURIs, function ($value, $key) {

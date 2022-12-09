@@ -60,7 +60,7 @@ class LogoService
         $domain       = $this->tfas->get($this->cleanDomain(strval($serviceName)));
         $logoFilename = $domain . '.svg';
 
-        if ($domain && ! Storage::disk('logos')->exists($logoFilename)) {
+        if ($domain && !Storage::disk('logos')->exists($logoFilename)) {
             $this->fetchLogo($logoFilename);
         }
 
@@ -72,7 +72,7 @@ class LogoService
      *
      * @return void
      */
-    protected function setTfaCollection() : void
+    protected function setTfaCollection(): void
     {
         // We fetch a fresh tfaDirectory if necessary to prevent too many API calls
         if (Storage::disk('logos')->exists(self::TFA_JSON)) {
@@ -93,17 +93,18 @@ class LogoService
      *
      * @return void
      */
-    protected function cacheTfaDirectorySource() : void
+    protected function cacheTfaDirectorySource(): void
     {
         try {
             $response = Http::retry(3, 100)->get(self::TFA_URL);
 
-            $coll = collect(json_decode(htmlspecialchars_decode($response->body()), true)) /** @phpstan-ignore-line */
-                    ->mapWithKeys(function ($item, $key) {
-                        return [
-                            strtolower(head($item)) => $item[1]['domain'],
-                        ];
-                    });
+            $coll = collect(json_decode(htmlspecialchars_decode($response->body()), true))
+                /** @phpstan-ignore-line */
+                ->mapWithKeys(function ($item, $key) {
+                    return [
+                        strtolower(head($item)) => $item[1]['domain'],
+                    ];
+                });
 
             Storage::disk('logos')->put(self::TFA_JSON, $coll->toJson())
                 ? Log::info('Fresh tfa.json saved to logos dir')
@@ -119,7 +120,7 @@ class LogoService
      * @param  string  $logoFile Logo filename to fetch
      * @return void
      */
-    protected function fetchLogo(string $logoFile) : void
+    protected function fetchLogo(string $logoFile): void
     {
         try {
             $response = Http::retry(3, 100)
@@ -141,7 +142,7 @@ class LogoService
      * @param  string  $domain
      * @return string Optimized domain name
      */
-    protected function cleanDomain(string $domain) : string
+    protected function cleanDomain(string $domain): string
     {
         return strtolower(str_replace(['+'], ['plus'], $domain));
     }
@@ -153,7 +154,7 @@ class LogoService
      * @param  string  $iconFilename
      * @return bool Weither the copy succed or not
      */
-    protected function copyToIcons($logoFilename, $iconFilename) : bool
+    protected function copyToIcons($logoFilename, $iconFilename): bool
     {
         return Storage::disk('icons')->put($iconFilename, Storage::disk('logos')->get($logoFilename));
     }
