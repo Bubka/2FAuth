@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use OTPHP\Factory;
 use OTPHP\HOTP;
@@ -29,6 +30,7 @@ use ParagonIE\ConstantTime\Base32;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 use SteamTotp\SteamTotp;
+use Illuminate\Support\Str;
 
 class TwoFAccount extends Model implements Sortable
 {
@@ -423,7 +425,7 @@ class TwoFAccount extends Model implements Sortable
             $this->enforceAsSteam();
         }
         if ($this->generator->hasParameter('image')) {
-            $this->icon = $this->storeImageAsIcon($this->generator->getParameter('image'));
+            self::setIcon($this->generator->getParameter('image'));
         }
 
         if (!$this->icon && Settings::get('getOfficialIcons') && !$skipIconFetching) {
@@ -535,15 +537,92 @@ class TwoFAccount extends Model implements Sortable
     }
 
     /**
+     * Store and set the provided icon
+     * 
+     * @param  \Psr\Http\Message\StreamInterface|\Illuminate\Http\File|\Illuminate\Http\UploadedFile|string|resource  $data
+     * @param  string|null  $extension The resource extension, without the dot
+     */
+    public function setIcon($data, $extension = null): void
+    {
+        $isRemoteData = Str::startsWith($data, ['http://', 'https://']) && Validator::make(
+            [$data],
+            ['url']
+        )->passes();
+
+        if ($isRemoteData) {
+            $icon = $this->storeRemoteImageAsIcon($data);
+        } else {
+            $icon = $extension ? $this->storeFileDataAsIcon($data, $extension) : null;
+        }
+
+        $this->icon = $icon ?: $this->icon;
+    }
+
+    /**
+     * Store img data as an icon file.
+     *
+     * @param  \Psr\Http\Message\StreamInterface|\Illuminate\Http\File|\Illuminate\Http\UploadedFile|string|resource  $content
+     * @param  string  $extension The file extension, without the dot
+     * @return string|null The filename of the stored icon or null if the operation fails
+     */
+    private function storeFileDataAsIcon($content, $extension): string|null
+    {
+        $filename = self::getUniqueFilename($extension);
+
+        if (Storage::disk('icons')->put($filename, $content)) {
+            if (self::isValidIcon($filename, 'icons')) {
+                Log::info(sprintf('Image %s successfully stored for import', $filename));
+
+                return $filename;
+            } else {
+                Storage::disk('icons')->delete($filename);
+            }
+        }
+
+        return null;
+    }
+
+
+    /**
+     * Generate a unique filename
+     *
+     * @param  string  $extension
+     * @return string The filename
+     */
+    private function getUniqueFilename(string $extension): string
+    {
+        return Str::random(40) . '.' . $extension;
+    }
+
+    /**
+     * Validate a file is a valid image
+     *
+     * @param  string  $filename
+     * @param  string  $disk
+     * @return  bool
+     */
+    private function isValidIcon($filename, $disk): bool
+    {
+        return in_array(Storage::disk($disk)->mimeType($filename), [
+            'image/png',
+            'image/jpeg',
+            'image/webp',
+            'image/bmp',
+            'image/x-ms-bmp',
+            'image/svg+xml'
+        ]) && (Storage::disk($disk)->mimeType($filename) !== 'image/svg+xml' ? getimagesize(Storage::disk($disk)->path($filename)) : true);
+    }
+
+    /**
      * Gets the image resource pointed by the image url and store it as an icon
      *
      * @return string|null The filename of the stored icon or null if the operation fails
      */
-    private function storeImageAsIcon(string $url)
+    private function storeRemoteImageAsIcon(string $url): string|null
     {
         try {
             $path_parts  = pathinfo($url);
-            $newFilename = Helpers::getUniqueFilename($path_parts['extension']);
+            $newFilename = self::getUniqueFilename($path_parts['extension']);
 
             try {
                 $response = Http::retry(3, 100)->get($url);
@@ -555,10 +634,7 @@ class TwoFAccount extends Model implements Sortable
                 Log::error(sprintf('Cannot fetch imageLink at "%s"', $url));
             }
 
-            if (
-                in_array(Storage::disk('imagesLink')->mimeType($newFilename), ['image/png', 'image/jpeg', 'image/webp', 'image/bmp'])
-                && getimagesize(Storage::disk('imagesLink')->path($newFilename))
-            ) {
+            if (self::isValidIcon($newFilename, 'imagesLink')) {
                 // Should be a valid image, we move it to the icons disk
                 if (Storage::disk('icons')->put($newFilename, Storage::disk('imagesLink')->get($newFilename))) {
                     Storage::disk('imagesLink')->delete($newFilename);
@@ -570,7 +646,7 @@ class TwoFAccount extends Model implements Sortable
                 throw new \Exception('Unsupported mimeType or missing image on storage');
             }
 
-            return $newFilename;
+            return Storage::disk('icons')->exists($newFilename) ? $newFilename : null;
         }
         // @codeCoverageIgnoreStart
         catch (\Exception | \Throwable $ex) {

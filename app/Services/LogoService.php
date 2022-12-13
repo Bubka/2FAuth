@@ -98,8 +98,7 @@ class LogoService
         try {
             $response = Http::retry(3, 100)->get(self::TFA_URL);
 
-            $coll = collect(json_decode(htmlspecialchars_decode($response->body()), true))
-                /** @phpstan-ignore-line */
+            $coll = collect(json_decode(htmlspecialchars_decode($response->body()), true)) /* @phpstan-ignore-line */
                 ->mapWithKeys(function ($item, $key) {
                     return [
                         strtolower(head($item)) => $item[1]['domain'],

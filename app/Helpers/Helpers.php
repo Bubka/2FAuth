@@ -7,17 +7,6 @@ use Illuminate\Support\Str;
 class Helpers
 {
     /**
-     * Generate a unique filename
-     *
-     * @param  string  $extension
-     * @return string The filename
-     */
-    public static function getUniqueFilename(string $extension): string
-    {
-        return Str::random(40) . '.' . $extension;
-    }
-
-    /**
      * Clean a version number string
      *
      * @param  string|null  $release

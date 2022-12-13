@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\Events\TwoFAccountDeleted;
+use App\Helpers\Helpers;
 use App\Models\TwoFAccount;
 use App\Services\SettingService;
 use Illuminate\Support\Facades\Crypt;
@@ -49,16 +50,16 @@ class TwoFAccountModelTest extends ModelTestCase
         });
 
         $twofaccount = TwoFAccount::factory()->make([
-            $attribute => 'string',
+            $attribute => 'STRING==',
         ]);
 
-        $this->assertEquals('string', Crypt::decryptString($twofaccount->getAttributes()[$attribute]));
+        $this->assertEquals('STRING==', Crypt::decryptString($twofaccount->getAttributes()[$attribute]));
     }
 
     /**
      * Provide attributes to test for encryption
      */
-    public function provideSensitiveAttributes() : array
+    public function provideSensitiveAttributes(): array
     {
         return [
             [
@@ -110,5 +111,31 @@ class TwoFAccountModelTest extends ModelTestCase
         $twofaccount = TwoFAccount::factory()->make();
 
         $this->assertEquals(__('errors.indecipherable'), $twofaccount->$attribute);
+    }
+
+    /**
+     * @test
+     * 
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     */
+    public function test_secret_is_uppercased_and_padded_at_setup()
+    {
+        $settingService = $this->mock(SettingService::class, function (MockInterface $settingService) {
+            $settingService->shouldReceive('get')
+                ->with('useEncryption')
+                ->andReturn(false);
+        });
+
+        $helpers = $this->mock('alias:' . Helpers::class, function (MockInterface $helpers) {
+            $helpers->shouldReceive('PadToBase32Format')
+                ->andReturn('YYYY====');
+        });
+
+        $twofaccount = TwoFAccount::factory()->make([
+            'secret' => 'yyyy',
+        ]);
+
+        $this->assertEquals('YYYY====', $twofaccount->secret);
     }
 }

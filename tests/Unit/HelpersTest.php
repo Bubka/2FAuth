@@ -12,19 +12,6 @@ class HelpersTest extends TestCase
 {
     /**
      * @test
-     */
-    public function test_getUniqueFilename_returns_filename()
-    {
-        $ext = 'jpg';
-        $filename = Helpers::getUniqueFilename($ext);
-
-        $this->assertIsString($filename);
-        $this->assertStringEndsWith('.' . $ext, $filename);
-        $this->assertEquals(41 + strlen($ext), strlen($filename));
-    }
-
-    /**
-     * @test
      * 
      * @dataProvider  versionNumberProvider
      */
@@ -92,6 +79,59 @@ class HelpersTest extends TestCase
             ],
             [
                 '3.00.1 alpha+001',
+            ],
+        ];
+    }
+
+    /**
+     * @test
+     * 
+     * @dataProvider  toBase32PaddedStringProvider
+     */
+    public function test_toBase32Format_returns_base32_formated_string($str, $expected)
+    {
+        $base32str = Helpers::PadToBase32Format($str);
+
+        $this->assertEquals($expected, $base32str);
+    }
+
+    /**
+     * Provide data for cleanVersionNumber() tests
+     */
+    public function toBase32PaddedStringProvider()
+    {
+        return [
+            'SHORT_STRING' => [
+                'eeee',
+                'EEEE====',
+            ],
+            'LONG_STRING' => [
+                'eeeezzzztt',
+                'EEEEZZZZTT======',
+            ],
+            'EXACT_LENGTH_STRING' => [
+                'eeeezzzz',
+                'EEEEZZZZ',
+            ],
+            'EXACT_LONG_LENGTH_STRING' => [
+                'eeeezzzzeeeezzzzeeeezzzz',
+                'EEEEZZZZEEEEZZZZEEEEZZZZ',
+            ],
+            'NO_STRING' => [
+                '',
+                '',
+            ],
+            'BOOL_STRING' => [
+                true,
+                '1=======',
+            ],
+            'INT_STRING' => [
+                10,
+                '10======',
+            ],
+            'FLOAT_STRING' => [
+                0.1,
+                '0.1=====',
             ],
         ];
     }

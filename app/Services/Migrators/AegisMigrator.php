@@ -38,7 +38,7 @@ class AegisMigrator extends Migrator
      * @param  mixed  $migrationPayload
      * @return \Illuminate\Support\Collection<int|string, \App\Models\TwoFAccount> The converted accounts
      */
-    public function migrate(mixed $migrationPayload) : Collection
+    public function migrate(mixed $migrationPayload): Collection
     {
         $json = json_decode(htmlspecialchars_decode($migrationPayload), true);
 
@@ -67,27 +67,21 @@ class AegisMigrator extends Migrator
                 if (Arr::has($otp_parameters, 'icon') && Arr::has($otp_parameters, 'icon_mime')) {
                     switch ($otp_parameters['icon_mime']) {
                         case 'image/svg+xml':
-                            $extension = 'svg';
+                            $parameters['iconExt'] = 'svg';
                             break;
 
                         case 'image/png':
-                            $extension = 'png';
+                            $parameters['iconExt'] = 'png';
                             break;
 
                         case 'image/jpeg':
-                            $extension = 'jpg';
+                            $parameters['iconExt'] = 'jpg';
                             break;
 
                         default:
                             throw new \Exception();
                     }
-
-                    $filename = Helpers::getUniqueFilename($extension);
-
-                    if (Storage::disk('icons')->put($filename, base64_decode($otp_parameters['icon']))) {
-                        $parameters['icon'] = $filename;
-                        Log::info(sprintf('Image %s successfully stored for import', $filename));
-                    }
+                    $parameters['iconData'] = base64_decode($otp_parameters['icon']);
                 }
             } catch (\Exception) {
                 // we do nothing
@@ -96,6 +90,9 @@ class AegisMigrator extends Migrator
             try {
                 $twofaccounts[$key] = new TwoFAccount;
                 $twofaccounts[$key]->fillWithOtpParameters($parameters);
+                if (Arr::has($parameters, 'iconExt') && Arr::has($parameters, 'iconData')) {
+                    $twofaccounts[$key]->setIcon($parameters['iconData'], $parameters['iconExt']);
+                }
             } catch (\Exception $exception) {
                 Log::error(sprintf('Cannot instanciate a TwoFAccount object with OTP parameters from imported item #%s', $key));
                 Log::debug($exception->getMessage());

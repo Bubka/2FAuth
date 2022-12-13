@@ -96,6 +96,12 @@ class TwoFAccountStoreRequestTest extends TestCase
                 'otp_type'  => 'totp',
                 'algorithm' => 'md5',
             ]],
+            [[
+                'account'   => 'MyAccount',
+                'otp_type'  => 'totp',
+                'algorithm' => 'md5',
+                'secret'    => 'eee',
+            ]],
         ];
     }
 
@@ -136,12 +142,17 @@ class TwoFAccountStoreRequestTest extends TestCase
             [[
                 'account'  => 'MyAccount',
                 'otp_type' => 'totp',
-                'secret'   => 'notaBase32String',
+                'secret'   => true,
             ]],
             [[
                 'account'  => 'MyAccount',
                 'otp_type' => 'totp',
                 'secret'   => 123456,
+            ]],
+            [[
+                'account'  => 'MyAccount',
+                'otp_type' => 'totp',
+                'secret'   => '1.0',
             ]],
             [[
                 'account'  => 'MyAccount',

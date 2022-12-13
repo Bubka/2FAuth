@@ -7,9 +7,8 @@ use Tests\Data\OtpTestData;
 use Tests\FeatureTestCase;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Testing\FileFactory;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Http;
-use App\Helpers\Helpers;
-use Mockery\MockInterface;
 use Tests\Data\HttpRequestTestData;
 
 /**
@@ -28,9 +27,10 @@ class TwoFAccountModelTest extends FeatureTestCase
     protected $customHotpTwofaccount;
 
     /**
-     * 
+     * Helpers $helpers;
+
      */
-    const ICON_NAME = 'oDBngpjQaQAgLtHqGuYiPRqftCXv6Sj4hSAXARpA.png';
+    protected $helpers;
 
     /**
      * @test
@@ -43,7 +43,7 @@ class TwoFAccountModelTest extends FeatureTestCase
         $this->customTotpTwofaccount->legacy_uri = OtpTestData::TOTP_FULL_CUSTOM_URI;
         $this->customTotpTwofaccount->service    = OtpTestData::SERVICE;
         $this->customTotpTwofaccount->account    = OtpTestData::ACCOUNT;
-        $this->customTotpTwofaccount->icon       = OtpTestData::ICON;
+        $this->customTotpTwofaccount->icon       = OtpTestData::ICON_PNG;
         $this->customTotpTwofaccount->otp_type   = 'totp';
         $this->customTotpTwofaccount->secret     = OtpTestData::SECRET;
         $this->customTotpTwofaccount->digits     = OtpTestData::DIGITS_CUSTOM;
@@ -56,7 +56,7 @@ class TwoFAccountModelTest extends FeatureTestCase
         $this->customHotpTwofaccount->legacy_uri = OtpTestData::HOTP_FULL_CUSTOM_URI;
         $this->customHotpTwofaccount->service    = OtpTestData::SERVICE;
         $this->customHotpTwofaccount->account    = OtpTestData::ACCOUNT;
-        $this->customHotpTwofaccount->icon       = OtpTestData::ICON;
+        $this->customHotpTwofaccount->icon       = OtpTestData::ICON_PNG;
         $this->customHotpTwofaccount->otp_type   = 'hotp';
         $this->customHotpTwofaccount->secret     = OtpTestData::SECRET;
         $this->customHotpTwofaccount->digits     = OtpTestData::DIGITS_CUSTOM;
@@ -80,21 +80,10 @@ class TwoFAccountModelTest extends FeatureTestCase
 
     /**
      * @test
-     * 
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
      */
     public function test_fill_with_custom_totp_uri_returns_correct_value()
     {
-        $this->mock('alias:' . Helpers::class, function (MockInterface $helper) {
-            $helper->shouldReceive('getUniqueFilename')
-                ->andReturn(self::ICON_NAME);
-
-            $helper->shouldReceive('isValidImage')
-                ->andReturn(true);
-        });
-
-        $file = (new FileFactory)->image(self::ICON_NAME, 10, 10);
+        $file = (new FileFactory)->image('file.png', 10, 10);
 
         Http::preventStrayRequests();
         Http::fake([
@@ -107,9 +96,6 @@ class TwoFAccountModelTest extends FeatureTestCase
         $twofaccount = new TwoFAccount;
         $twofaccount->fillWithURI(OtpTestData::TOTP_FULL_CUSTOM_URI);
 
-        Storage::disk('icons')->assertExists(self::ICON_NAME);
-        Storage::disk('imagesLink')->assertMissing(self::ICON_NAME);
-
         $this->assertEquals('totp', $twofaccount->otp_type);
         $this->assertEquals(OtpTestData::TOTP_FULL_CUSTOM_URI, $twofaccount->legacy_uri);
         $this->assertEquals(OtpTestData::SERVICE, $twofaccount->service);
@@ -119,7 +105,10 @@ class TwoFAccountModelTest extends FeatureTestCase
         $this->assertEquals(OtpTestData::PERIOD_CUSTOM, $twofaccount->period);
         $this->assertEquals(null, $twofaccount->counter);
         $this->assertEquals(OtpTestData::ALGORITHM_CUSTOM, $twofaccount->algorithm);
-        $this->assertEquals(self::ICON_NAME, $twofaccount->icon);
+        $this->assertNotNull($twofaccount->icon);
+
+        Storage::disk('icons')->assertExists($twofaccount->icon);
+        Storage::disk('imagesLink')->assertMissing($twofaccount->icon);
     }
 
     /**
@@ -144,21 +133,10 @@ class TwoFAccountModelTest extends FeatureTestCase
 
     /**
      * @test
-     * 
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
      */
     public function test_fill_with_custom_hotp_uri_returns_correct_value()
     {
-        $this->mock('alias:' . Helpers::class, function (MockInterface $helper) {
-            $helper->shouldReceive('getUniqueFilename')
-                ->andReturn(self::ICON_NAME);
-
-            $helper->shouldReceive('isValidImage')
-                ->andReturn(true);
-        });
-
-        $file = (new FileFactory)->image(self::ICON_NAME, 10, 10);
+        $file = (new FileFactory)->image('file.png', 10, 10);
 
         Http::preventStrayRequests();
         Http::fake([
@@ -171,9 +149,6 @@ class TwoFAccountModelTest extends FeatureTestCase
         $twofaccount = new TwoFAccount;
         $twofaccount->fillWithURI(OtpTestData::HOTP_FULL_CUSTOM_URI);
 
-        Storage::disk('icons')->assertExists(self::ICON_NAME);
-        Storage::disk('imagesLink')->assertMissing(self::ICON_NAME);
-
         $this->assertEquals('hotp', $twofaccount->otp_type);
         $this->assertEquals(OtpTestData::HOTP_FULL_CUSTOM_URI, $twofaccount->legacy_uri);
         $this->assertEquals(OtpTestData::SERVICE, $twofaccount->service);
@@ -183,7 +158,10 @@ class TwoFAccountModelTest extends FeatureTestCase
         $this->assertEquals(null, $twofaccount->period);
         $this->assertEquals(OtpTestData::COUNTER_CUSTOM, $twofaccount->counter);
         $this->assertEquals(OtpTestData::ALGORITHM_CUSTOM, $twofaccount->algorithm);
-        $this->assertEquals(self::ICON_NAME, $twofaccount->icon);
+        $this->assertNotNull($twofaccount->icon);
+
+        Storage::disk('icons')->assertExists($twofaccount->icon);
+        Storage::disk('imagesLink')->assertMissing($twofaccount->icon);
     }
 
     /**
@@ -450,20 +428,9 @@ class TwoFAccountModelTest extends FeatureTestCase
 
     /**
      * @test
-     * 
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
      */
     public function test_getOTP_for_totp_returns_the_same_password()
     {
-        $this->mock('alias:' . Helpers::class, function (MockInterface $helper) {
-            $helper->shouldReceive('getUniqueFilename')
-                ->andReturn(self::ICON_NAME);
-
-            $helper->shouldReceive('isValidImage')
-                ->andReturn(true);
-        });
-
         Http::preventStrayRequests();
         Http::fake([
             'https://en.opensuse.org/images/4/44/Button-filled-colour.png' => Http::response(HttpRequestTestData::ICON_PNG, 200),
@@ -491,19 +458,9 @@ class TwoFAccountModelTest extends FeatureTestCase
 
     /**
      * @test
-     * 
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
      */
     public function test_getOTP_for_hotp_returns_the_same_password()
     {
-        $this->mock('alias:' . Helpers::class, function (MockInterface $helper) {
-            $helper->shouldReceive('getUniqueFilename')
-                ->andReturn(self::ICON_NAME);
-
-            $helper->shouldReceive('isValidImage')
-                ->andReturn(true);
-        });
 
         Http::preventStrayRequests();
         Http::fake([
@@ -555,7 +512,7 @@ class TwoFAccountModelTest extends FeatureTestCase
         $twofaccount = new TwoFAccount;
 
         $this->expectException(\App\Exceptions\InvalidSecretException::class);
-        $otp_from_uri = $twofaccount->fillWithURI('otpauth://totp/' . OtpTestData::ACCOUNT . '?secret=0')->getOTP();
+        $otp_from_uri = $twofaccount->fillWithURI('otpauth://totp/' . OtpTestData::ACCOUNT . '?secret=1.0')->getOTP();
     }
 
     /**
@@ -607,16 +564,9 @@ class TwoFAccountModelTest extends FeatureTestCase
 
     /**
      * @test
-     * 
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
      */
     public function test_fill_succeed_when_image_fetching_fails()
     {
-        $this->mock('alias:' . Helpers::class, function (MockInterface $helper) {
-            $helper->shouldReceive('getUniqueFilename')
-                ->andReturn(self::ICON_NAME);
-        });
 
         Http::preventStrayRequests();
 
@@ -626,8 +576,8 @@ class TwoFAccountModelTest extends FeatureTestCase
         $twofaccount = new TwoFAccount;
         $twofaccount->fillWithURI(OtpTestData::TOTP_FULL_CUSTOM_URI);
 
-        Storage::disk('icons')->assertMissing(self::ICON_NAME);
-        Storage::disk('imagesLink')->assertMissing(self::ICON_NAME);
+        Storage::disk('icons')->assertDirectoryEmpty('/');
+        Storage::disk('imagesLink')->assertDirectoryEmpty('/');
     }
 
     /**
@@ -675,7 +625,7 @@ class TwoFAccountModelTest extends FeatureTestCase
         $twofaccount->legacy_uri = OtpTestData::TOTP_FULL_CUSTOM_URI;
         $twofaccount->service    = OtpTestData::SERVICE;
         $twofaccount->account    = OtpTestData::ACCOUNT;
-        $twofaccount->icon       = OtpTestData::ICON;
+        $twofaccount->icon       = OtpTestData::ICON_PNG;
         $twofaccount->otp_type   = 'totp';
         $twofaccount->secret     = OtpTestData::SECRET;
         $twofaccount->digits     = OtpTestData::DIGITS_CUSTOM;
@@ -696,7 +646,7 @@ class TwoFAccountModelTest extends FeatureTestCase
         $twofaccount->legacy_uri = OtpTestData::TOTP_FULL_CUSTOM_URI;
         $twofaccount->service    = OtpTestData::SERVICE;
         $twofaccount->account    = OtpTestData::ACCOUNT;
-        $twofaccount->icon       = OtpTestData::ICON;
+        $twofaccount->icon       = OtpTestData::ICON_PNG;
         $twofaccount->otp_type   = 'totp';
         $twofaccount->secret     = OtpTestData::SECRET;
         $twofaccount->digits     = OtpTestData::DIGITS_CUSTOM;
@@ -706,5 +656,85 @@ class TwoFAccountModelTest extends FeatureTestCase
         $twofaccount->save();
 
         $this->assertFalse($twofaccount->equals($this->customHotpTwofaccount));
+    }
+
+    /**
+     * @test
+     * 
+     * @dataProvider iconResourceProvider
+     */
+    public function test_set_icon_stores_and_set_the_icon($res, $ext)
+    {
+        Storage::fake('imagesLink');
+        Storage::fake('icons');
+
+        $previousIcon = $this->customTotpTwofaccount->icon;
+        $this->customTotpTwofaccount->setIcon($res, $ext);
+
+        $this->assertNotEquals($previousIcon, $this->customTotpTwofaccount->icon);
+
+        Storage::disk('icons')->assertExists($this->customTotpTwofaccount->icon);
+        Storage::disk('imagesLink')->assertMissing($this->customTotpTwofaccount->icon);
+    }
+
+    /**
+     * Provide data for Icon store tests
+     */
+    public function iconResourceProvider()
+    {
+        return [
+            'PNG' => [
+                base64_decode(OtpTestData::ICON_PNG_DATA),
+                'png',
+            ],
+            'JPG' => [
+                base64_decode(OtpTestData::ICON_JPEG_DATA),
+                'jpg',
+            ],
+            'WEBP' => [
+                base64_decode(OtpTestData::ICON_WEBP_DATA),
+                'webp',
+            ],
+            'BMP' => [
+                base64_decode(OtpTestData::ICON_BMP_DATA),
+                'bmp',
+            ],
+            'SVG' => [
+                OtpTestData::ICON_SVG_DATA,
+                'svg',
+            ],
+        ];
+    }
+
+    /**
+     * @test
+     * 
+     * @dataProvider invalidIconResourceProvider
+     */
+    public function test_set_invalid_icon_ends_without_error($res, $ext)
+    {
+        Storage::fake('imagesLink');
+        Storage::fake('icons');
+
+        $previousIcon = $this->customTotpTwofaccount->icon;
+        $this->customTotpTwofaccount->setIcon($res, $ext);
+
+        $this->assertEquals($previousIcon, $this->customTotpTwofaccount->icon);
+
+        Storage::disk('icons')->assertMissing($this->customTotpTwofaccount->icon);
+        Storage::disk('imagesLink')->assertMissing($this->customTotpTwofaccount->icon);
+    }
+
+    /**
+     * Provide data for Icon store tests
+     */
+    public function invalidIconResourceProvider()
+    {
+        return [
+            'INVALID_PNG' => [
+                'lkjdslfkjslkdfjlskdjflksjf',
+                'png',
+            ],
+        ];
     }
 }

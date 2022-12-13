@@ -41,7 +41,7 @@ class TwoFAccountServiceTest extends FeatureTestCase
         $this->customTotpTwofaccount->legacy_uri = OtpTestData::TOTP_FULL_CUSTOM_URI;
         $this->customTotpTwofaccount->service    = OtpTestData::SERVICE;
         $this->customTotpTwofaccount->account    = OtpTestData::ACCOUNT;
-        $this->customTotpTwofaccount->icon       = OtpTestData::ICON;
+        $this->customTotpTwofaccount->icon       = OtpTestData::ICON_PNG;
         $this->customTotpTwofaccount->otp_type   = 'totp';
         $this->customTotpTwofaccount->secret     = OtpTestData::SECRET;
         $this->customTotpTwofaccount->digits     = OtpTestData::DIGITS_CUSTOM;
@@ -54,7 +54,7 @@ class TwoFAccountServiceTest extends FeatureTestCase
         $this->customHotpTwofaccount->legacy_uri = OtpTestData::HOTP_FULL_CUSTOM_URI;
         $this->customHotpTwofaccount->service    = OtpTestData::SERVICE;
         $this->customHotpTwofaccount->account    = OtpTestData::ACCOUNT;
-        $this->customHotpTwofaccount->icon       = OtpTestData::ICON;
+        $this->customHotpTwofaccount->icon       = OtpTestData::ICON_PNG;
         $this->customHotpTwofaccount->otp_type   = 'hotp';
         $this->customHotpTwofaccount->secret     = OtpTestData::SECRET;
         $this->customHotpTwofaccount->digits     = OtpTestData::DIGITS_CUSTOM;
@@ -212,7 +212,7 @@ class TwoFAccountServiceTest extends FeatureTestCase
         $parameters = [
             'service'   => OtpTestData::SERVICE,
             'account'   => OtpTestData::ACCOUNT,
-            'icon'      => OtpTestData::ICON,
+            'icon'      => OtpTestData::ICON_PNG,
             'otp_type'  => 'totp',
             'secret'    => OtpTestData::SECRET,
             'digits'    => OtpTestData::DIGITS_DEFAULT,
