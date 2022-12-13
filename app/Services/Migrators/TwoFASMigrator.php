@@ -92,7 +92,7 @@ class TwoFASMigrator extends Migrator
             $parameters['counter']   = strtolower($parameters['otp_type']) === 'hotp' && $otp_parameters['otp']['counter'] > 0
                 ? $otp_parameters['otp']['counter']
                 : null;
-            $parameters['period']    = strtolower($parameters['otp_type']) === 'totp' && $otp_parameters['otp']['period'] > 0
+            $parameters['period'] = strtolower($parameters['otp_type']) === 'totp' && $otp_parameters['otp']['period'] > 0
                 ? $otp_parameters['otp']['period']
                 : null;
 

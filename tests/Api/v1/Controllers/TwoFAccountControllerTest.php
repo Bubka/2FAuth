@@ -9,9 +9,9 @@ use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Tests\Classes\LocalFile;
+use Tests\Data\MigrationTestData;
 use Tests\Data\OtpTestData;
 use Tests\FeatureTestCase;
-use Tests\Data\MigrationTestData;
 
 /**
  * @covers \App\Api\v1\Controllers\TwoFAccountController
@@ -125,7 +125,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
     /**
      * @test
      */
-    public function setUp(): void
+    public function setUp() : void
     {
         parent::setUp();
 

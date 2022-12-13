@@ -35,7 +35,7 @@ class SettingStoreRequestTest extends FeatureTestCase
     /**
      * @dataProvider provideValidData
      */
-    public function test_valid_data(array $data): void
+    public function test_valid_data(array $data) : void
     {
         $request   = new SettingStoreRequest();
         $validator = Validator::make($data, $request->rules());
@@ -46,7 +46,7 @@ class SettingStoreRequestTest extends FeatureTestCase
     /**
      * Provide Valid data for validation test
      */
-    public function provideValidData(): array
+    public function provideValidData() : array
     {
         return [
             [[
@@ -67,7 +67,7 @@ class SettingStoreRequestTest extends FeatureTestCase
     /**
      * @dataProvider provideInvalidData
      */
-    public function test_invalid_data(array $data): void
+    public function test_invalid_data(array $data) : void
     {
         Settings::set($this->uniqueKey, 'uniqueValue');
 
@@ -80,7 +80,7 @@ class SettingStoreRequestTest extends FeatureTestCase
     /**
      * Provide invalid data for validation test
      */
-    public function provideInvalidData(): array
+    public function provideInvalidData() : array
     {
         return [
             [[

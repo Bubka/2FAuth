@@ -20,7 +20,7 @@ class RegisterControllerTest extends FeatureTestCase
     /**
      * @test
      */
-    public function setUp(): void
+    public function setUp() : void
     {
         parent::setUp();
     }
@@ -50,7 +50,7 @@ class RegisterControllerTest extends FeatureTestCase
 
     /**
      * @test
-     * 
+     *
      * @covers  \App\Rules\FirstUser
      */
     public function test_register_returns_already_an_existing_user()

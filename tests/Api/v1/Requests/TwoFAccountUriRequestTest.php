@@ -32,7 +32,7 @@ class TwoFAccountUriRequestTest extends TestCase
     /**
      * @dataProvider provideValidData
      */
-    public function test_valid_data(array $data): void
+    public function test_valid_data(array $data) : void
     {
         $request   = new TwoFAccountUriRequest();
         $validator = Validator::make($data, $request->rules());
@@ -43,7 +43,7 @@ class TwoFAccountUriRequestTest extends TestCase
     /**
      * Provide Valid data for validation test
      */
-    public function provideValidData(): array
+    public function provideValidData() : array
     {
         return [
             [[
@@ -62,7 +62,7 @@ class TwoFAccountUriRequestTest extends TestCase
     /**
      * @dataProvider provideInvalidData
      */
-    public function test_invalid_data(array $data): void
+    public function test_invalid_data(array $data) : void
     {
         $request   = new TwoFAccountUriRequest();
         $validator = Validator::make($data, $request->rules());
@@ -73,7 +73,7 @@ class TwoFAccountUriRequestTest extends TestCase
     /**
      * Provide invalid data for validation test
      */
-    public function provideInvalidData(): array
+    public function provideInvalidData() : array
     {
         return [
             [[

@@ -3,8 +3,8 @@
 namespace Tests\Feature\Http;
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
 use App\Services\ReleaseRadarService;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Tests\FeatureTestCase;
 
 /**
@@ -22,7 +22,7 @@ class SystemControllerTest extends FeatureTestCase
     /**
      * @test
      */
-    public function setUp(): void
+    public function setUp() : void
     {
         parent::setUp();
 

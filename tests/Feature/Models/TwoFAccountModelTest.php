@@ -3,13 +3,12 @@
 namespace Tests\Feature\Models;
 
 use App\Models\TwoFAccount;
+use Illuminate\Http\Testing\FileFactory;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
+use Tests\Data\HttpRequestTestData;
 use Tests\Data\OtpTestData;
 use Tests\FeatureTestCase;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Http\Testing\FileFactory;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Http;
-use Tests\Data\HttpRequestTestData;
 
 /**
  * @covers \App\Models\TwoFAccount
@@ -28,14 +27,13 @@ class TwoFAccountModelTest extends FeatureTestCase
 
     /**
      * Helpers $helpers;
-
      */
     protected $helpers;
 
     /**
      * @test
      */
-    public function setUp(): void
+    public function setUp() : void
     {
         parent::setUp();
 
@@ -461,7 +459,6 @@ class TwoFAccountModelTest extends FeatureTestCase
      */
     public function test_getOTP_for_hotp_returns_the_same_password()
     {
-
         Http::preventStrayRequests();
         Http::fake([
             'https://en.opensuse.org/images/4/44/Button-filled-colour.png' => Http::response(HttpRequestTestData::ICON_PNG, 200),
@@ -567,7 +564,6 @@ class TwoFAccountModelTest extends FeatureTestCase
      */
     public function test_fill_succeed_when_image_fetching_fails()
     {
-
         Http::preventStrayRequests();
 
         Storage::fake('imagesLink');
@@ -585,11 +581,11 @@ class TwoFAccountModelTest extends FeatureTestCase
      */
     public function test_saving_totp_without_period_set_default_one()
     {
-        $twofaccount = new TwoFAccount;
-        $twofaccount->service = OtpTestData::SERVICE;
-        $twofaccount->account = OtpTestData::ACCOUNT;
+        $twofaccount           = new TwoFAccount;
+        $twofaccount->service  = OtpTestData::SERVICE;
+        $twofaccount->account  = OtpTestData::ACCOUNT;
         $twofaccount->otp_type = TwoFAccount::TOTP;
-        $twofaccount->secret = OtpTestData::SECRET;
+        $twofaccount->secret   = OtpTestData::SECRET;
 
         $twofaccount->save();
 
@@ -603,11 +599,11 @@ class TwoFAccountModelTest extends FeatureTestCase
      */
     public function test_saving_hotp_without_counter_set_default_one()
     {
-        $twofaccount = new TwoFAccount;
-        $twofaccount->service = OtpTestData::SERVICE;
-        $twofaccount->account = OtpTestData::ACCOUNT;
+        $twofaccount           = new TwoFAccount;
+        $twofaccount->service  = OtpTestData::SERVICE;
+        $twofaccount->account  = OtpTestData::ACCOUNT;
         $twofaccount->otp_type = TwoFAccount::HOTP;
-        $twofaccount->secret = OtpTestData::SECRET;
+        $twofaccount->secret   = OtpTestData::SECRET;
 
         $twofaccount->save();
 
@@ -660,7 +656,7 @@ class TwoFAccountModelTest extends FeatureTestCase
 
     /**
      * @test
-     * 
+     *
      * @dataProvider iconResourceProvider
      */
     public function test_set_icon_stores_and_set_the_icon($res, $ext)
@@ -708,7 +704,7 @@ class TwoFAccountModelTest extends FeatureTestCase
 
     /**
      * @test
-     * 
+     *
      * @dataProvider invalidIconResourceProvider
      */
     public function test_set_invalid_icon_ends_without_error($res, $ext)

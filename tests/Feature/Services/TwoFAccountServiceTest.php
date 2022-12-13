@@ -5,9 +5,9 @@ namespace Tests\Feature\Services;
 use App\Facades\TwoFAccounts;
 use App\Models\Group;
 use App\Models\TwoFAccount;
+use Tests\Data\MigrationTestData;
 use Tests\Data\OtpTestData;
 use Tests\FeatureTestCase;
-use Tests\Data\MigrationTestData;
 
 /**
  * @covers \App\Services\TwoFAccountService
@@ -33,7 +33,7 @@ class TwoFAccountServiceTest extends FeatureTestCase
     /**
      * @test
      */
-    public function setUp(): void
+    public function setUp() : void
     {
         parent::setUp();
 

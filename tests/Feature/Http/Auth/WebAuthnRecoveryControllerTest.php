@@ -35,7 +35,7 @@ class WebAuthnRecoveryControllerTest extends FeatureTestCase
     /**
      * @test
      */
-    public function setUp(): void
+    public function setUp() : void
     {
         parent::setUp();
 
@@ -96,8 +96,8 @@ class WebAuthnRecoveryControllerTest extends FeatureTestCase
         ]);
 
         $this->json('POST', '/webauthn/recover', [
-            'token' => self::ACTUAL_TOKEN_VALUE,
-            'email' => $this->user->email,
+            'token'    => self::ACTUAL_TOKEN_VALUE,
+            'email'    => $this->user->email,
             'password' => UserFactory::USER_PASSWORD,
         ])
             ->assertStatus(422)

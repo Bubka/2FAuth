@@ -58,7 +58,7 @@ class SettingServiceTest extends FeatureTestCase
     /**
      * @test
      */
-    public function setUp(): void
+    public function setUp() : void
     {
         parent::setUp();
 
@@ -239,7 +239,7 @@ class SettingServiceTest extends FeatureTestCase
     /**
      * Provide invalid data for validation test
      */
-    public function provideUndecipherableData(): array
+    public function provideUndecipherableData() : array
     {
         return [
             [[

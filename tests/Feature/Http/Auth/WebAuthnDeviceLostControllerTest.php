@@ -3,10 +3,10 @@
 namespace Tests\Feature\Http\Auth;
 
 use App\Models\User;
-use Illuminate\Support\Facades\Notification;
-use Tests\FeatureTestCase;
 use App\Notifications\WebauthnRecoveryNotification;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Notification;
+use Tests\FeatureTestCase;
 
 /**
  * @covers  \App\Http\Controllers\Auth\WebAuthnDeviceLostController
@@ -25,7 +25,7 @@ class WebAuthnDeviceLostControllerTest extends FeatureTestCase
     /**
      * @test
      */
-    public function setUp(): void
+    public function setUp() : void
     {
         parent::setUp();
 
@@ -52,7 +52,7 @@ class WebAuthnDeviceLostControllerTest extends FeatureTestCase
             ]);
 
         $this->assertDatabaseHas('webauthn_recoveries', [
-            'email' => $this->user->email
+            'email' => $this->user->email,
         ]);
     }
 
@@ -113,7 +113,7 @@ class WebAuthnDeviceLostControllerTest extends FeatureTestCase
             ]);
 
         $this->assertDatabaseMissing('webauthn_recoveries', [
-            'email' => 'bad@email.com'
+            'email' => 'bad@email.com',
         ]);
     }
 
@@ -136,7 +136,7 @@ class WebAuthnDeviceLostControllerTest extends FeatureTestCase
             ]);
 
         $this->assertDatabaseMissing('webauthn_recoveries', [
-            'email' => 'bad@email.com'
+            'email' => 'bad@email.com',
         ]);
     }
 
@@ -182,7 +182,7 @@ class WebAuthnDeviceLostControllerTest extends FeatureTestCase
             ]);
 
         $this->assertDatabaseHas('webauthn_recoveries', [
-            'email' => $this->user->email
+            'email' => $this->user->email,
         ]);
 
         $this->json('POST', '/webauthn/lost', [
@@ -191,7 +191,7 @@ class WebAuthnDeviceLostControllerTest extends FeatureTestCase
             ->assertStatus(422)
             ->assertJsonValidationErrorfor('email')
             ->assertJsonFragment([
-                'message' => __('passwords.throttled')
+                'message' => __('passwords.throttled'),
             ]);
     }
 
@@ -203,7 +203,7 @@ class WebAuthnDeviceLostControllerTest extends FeatureTestCase
         $this->app['config']->set('auth.passwords.webauthn', null);
 
         $this->json('POST', '/webauthn/lost', [
-            'email' => $this->user->email
+            'email' => $this->user->email,
         ])
             ->assertStatus(500);
     }

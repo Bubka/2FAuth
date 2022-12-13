@@ -50,6 +50,7 @@ class TwoFAuthServiceProvider extends ServiceProvider implements DeferrableProvi
      * Get the services provided by the provider.
      *
      * @codeCoverageIgnore
+     *
      * @return array
      */
     public function provides()

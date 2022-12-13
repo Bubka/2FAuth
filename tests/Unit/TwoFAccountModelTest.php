@@ -59,7 +59,7 @@ class TwoFAccountModelTest extends ModelTestCase
     /**
      * Provide attributes to test for encryption
      */
-    public function provideSensitiveAttributes(): array
+    public function provideSensitiveAttributes() : array
     {
         return [
             [
@@ -115,7 +115,7 @@ class TwoFAccountModelTest extends ModelTestCase
 
     /**
      * @test
-     * 
+     *
      * @runInSeparateProcess
      * @preserveGlobalState disabled
      */

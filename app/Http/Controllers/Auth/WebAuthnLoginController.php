@@ -7,11 +7,11 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 use Laragear\WebAuthn\Http\Requests\AssertedRequest;
 use Laragear\WebAuthn\Http\Requests\AssertionRequest;
 use Laragear\WebAuthn\WebAuthn;
-use Illuminate\Support\Arr;
 
 class WebAuthnLoginController extends Controller
 {
@@ -32,7 +32,7 @@ class WebAuthnLoginController extends Controller
      * @param  \Laragear\WebAuthn\Http\Requests\AssertionRequest  $request
      * @return \Illuminate\Contracts\Support\Responsable|\Illuminate\Http\JsonResponse
      */
-    public function options(AssertionRequest $request): Responsable|JsonResponse
+    public function options(AssertionRequest $request) : Responsable|JsonResponse
     {
         switch (config('webauthn.user_verification')) {
             case WebAuthn::USER_VERIFICATION_DISCOURAGED:
@@ -70,7 +70,7 @@ class WebAuthnLoginController extends Controller
 
             // Some authenticators do not send a userHandle so we hack the response to be compliant
             // with Larapass/webauthn-lib implementation that waits for a userHandle
-            if (!Arr::exists($response, 'userHandle') || blank($response['userHandle'])) {
+            if (! Arr::exists($response, 'userHandle') || blank($response['userHandle'])) {
                 $response['userHandle'] = User::getFromCredentialId($request->id)?->userHandle();
                 $request->merge(['response' => $response]);
             }

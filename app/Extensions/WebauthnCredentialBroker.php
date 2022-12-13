@@ -16,11 +16,11 @@ class WebauthnCredentialBroker extends PasswordBroker
      * @param  \Closure|null  $callback
      * @return string
      */
-    public function sendResetLink(array $credentials, Closure $callback = null): string
+    public function sendResetLink(array $credentials, Closure $callback = null) : string
     {
         $user = $this->getUser($credentials);
 
-        if (!$user instanceof WebAuthnAuthenticatable) {
+        if (! $user instanceof WebAuthnAuthenticatable) {
             return static::INVALID_USER;
         }
 
@@ -50,7 +50,7 @@ class WebauthnCredentialBroker extends PasswordBroker
     {
         $user = $this->validateReset($credentials);
 
-        if (!$user instanceof CanResetPasswordContract || !$user instanceof WebAuthnAuthenticatable) {
+        if (! $user instanceof CanResetPasswordContract || ! $user instanceof WebAuthnAuthenticatable) {
             return $user;
         }
 

@@ -3,19 +3,18 @@
 namespace Tests\Feature\Http\Auth;
 
 use App\Models\User;
-use Tests\FeatureTestCase;
-use Laragear\WebAuthn\Http\Requests\AttestedRequest;
-use Laragear\WebAuthn\Http\Requests\AttestationRequest;
 use Illuminate\Support\Facades\Config;
-use Laragear\WebAuthn\WebAuthn;
+use Laragear\WebAuthn\Http\Requests\AttestationRequest;
+use Laragear\WebAuthn\Http\Requests\AttestedRequest;
 use Laragear\WebAuthn\JsonTransport;
+use Laragear\WebAuthn\WebAuthn;
+use Tests\FeatureTestCase;
 
 /**
  * @covers  \App\Http\Controllers\Auth\WebAuthnRegisterController
  */
 class WebAuthnRegisterControllerTest extends FeatureTestCase
 {
-
     /**
      * @var \App\Models\User
      */
@@ -24,7 +23,7 @@ class WebAuthnRegisterControllerTest extends FeatureTestCase
     /**
      * @test
      */
-    public function setUp(): void
+    public function setUp() : void
     {
         parent::setUp();
 
@@ -34,7 +33,7 @@ class WebAuthnRegisterControllerTest extends FeatureTestCase
     /**
      * @test
      */
-    public function test_uses_attestation_with_fastRegistration_request(): void
+    public function test_uses_attestation_with_fastRegistration_request() : void
     {
         Config::set('webauthn.user_verification', WebAuthn::USER_VERIFICATION_DISCOURAGED);
 
@@ -51,7 +50,7 @@ class WebAuthnRegisterControllerTest extends FeatureTestCase
     /**
      * @test
      */
-    public function test_uses_attestation_with_secureRegistration_request(): void
+    public function test_uses_attestation_with_secureRegistration_request() : void
     {
         Config::set('webauthn.user_verification', WebAuthn::USER_VERIFICATION_REQUIRED);
 
@@ -68,7 +67,7 @@ class WebAuthnRegisterControllerTest extends FeatureTestCase
     /**
      * @test
      */
-    public function test_register_uses_attested_request(): void
+    public function test_register_uses_attested_request() : void
     {
         $this->mock(AttestedRequest::class)->expects('save')->andReturn();
 

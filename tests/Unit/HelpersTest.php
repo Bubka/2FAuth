@@ -12,7 +12,7 @@ class HelpersTest extends TestCase
 {
     /**
      * @test
-     * 
+     *
      * @dataProvider  versionNumberProvider
      */
     public function test_cleanVersionNumber_returns_cleaned_version($dirtyVersion, $expected)
@@ -49,7 +49,7 @@ class HelpersTest extends TestCase
 
     /**
      * @test
-     * 
+     *
      * @dataProvider  invalidVersionNumberProvider
      */
     public function test_cleanVersionNumber_returns_false_with_invalid_semver($dirtyVersion)
@@ -85,7 +85,7 @@ class HelpersTest extends TestCase
 
     /**
      * @test
-     * 
+     *
      * @dataProvider  toBase32PaddedStringProvider
      */
     public function test_toBase32Format_returns_base32_formated_string($str, $expected)

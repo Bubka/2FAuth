@@ -7,8 +7,8 @@ use App\Listeners\DissociateTwofaccountFromGroup;
 use App\Models\Group;
 use App\Models\TwoFAccount;
 use Illuminate\Support\Facades\Event;
-use Tests\TestCase;
 use Mockery\MockInterface;
+use Tests\TestCase;
 
 /**
  * @covers \App\Listeners\DissociateTwofaccountFromGroup
@@ -17,21 +17,20 @@ class DissociateTwofaccountFromGroupTest extends TestCase
 {
     /**
      * @test
-     * 
+     *
      * @runInSeparateProcess
      * @preserveGlobalState disabled
      */
     public function test_twofaccount_is_released_on_group_deletion()
     {
-
         $this->mock('alias:' . TwoFAccount::class, function (MockInterface $twoFAccount) {
             $twoFAccount->shouldReceive('where->update')
                 ->once()
                 ->andReturn(1);
         });
 
-        $group = Group::factory()->make();
-        $event = new GroupDeleting($group);
+        $group    = Group::factory()->make();
+        $event    = new GroupDeleting($group);
         $listener = new DissociateTwofaccountFromGroup();
 
         $this->assertNull($listener->handle($event));

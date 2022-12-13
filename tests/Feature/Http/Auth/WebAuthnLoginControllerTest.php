@@ -3,12 +3,12 @@
 namespace Tests\Feature\Http\Auth;
 
 use App\Models\User;
-use Illuminate\Support\Facades\DB;
-use Laragear\WebAuthn\Http\Requests\AssertedRequest;
-use Tests\FeatureTestCase;
-use Laragear\WebAuthn\WebAuthn;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
 use Laragear\WebAuthn\Assertion\Validator\AssertionValidator;
+use Laragear\WebAuthn\Http\Requests\AssertedRequest;
+use Laragear\WebAuthn\WebAuthn;
+use Tests\FeatureTestCase;
 
 /**
  * @covers  \App\Http\Controllers\Auth\WebAuthnLoginController
@@ -22,36 +22,39 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
     protected $user;
 
     const CREDENTIAL_ID = 's06aG41wsIYh5X1YUhB-SlH8y3F2RzdJZVse8iXRXOCd3oqQdEyCOsBawzxrYBtJRQA2azAMEN_q19TUp6iMgg';
+
     const CREDENTIAL_ID_ALT = '-VOLFKPY-_FuMI_sJ7gMllK76L3VoRUINj6lL_Z3qDg';
+
     const CREDENTIAL_ID_ALT_RAW = '+VOLFKPY+/FuMI/sJ7gMllK76L3VoRUINj6lL/Z3qDg=';
 
     const PUBLIC_KEY = 'eyJpdiI6ImYyUHlJOEJML0pwTXJ2UDkveTQwZFE9PSIsInZhbHVlIjoiQWFSYi9LVEszazlBRUZsWHp0cGNRNktGeEQ3aTBsbU9zZ1g5MEgrWFJJNmgraElsNU9hV0VsRVlWc3NoUVVHUjRRdlcxTS9pVklnOWtVYWY5TFJQTTFhR1Rxb1ZzTFkxTWE4VUVvK1lyU3pYQ1M3VlBMWWxZcDVaYWFnK25iaXVyWGR6ZFRmMFVoSmdPZ3UvSnptbVZER0FYdEEyYmNYcW43RkV5aTVqSjNwZEFsUjhUYSs0YjU2Z2V2bUJXa0E0aVB1VC8xSjdJZ2llRGlHY2RwOGk3MmNPTyt6eDFDWUs1dVBOSWp1ZUFSeUlkclgwRW16RE9sUUpDSWV6Sk50TSIsIm1hYyI6IjI3ODQ5NzcxZGY1MzMwYTNiZjAwZmEwMDJkZjYzMGU4N2UzZjZlOGM0ZWE3NDkyYWMxMThhNmE5NWZiMTVjNGEiLCJ0YWciOiIifQ==';
 
     const USER_ID = '3b758ac868b74307a7e96e69ae187339';
+
     const USER_ID_ALT = 'e8af6f703f8042aa91c30cf72289aa07';
 
     const ASSERTION_RESPONSE = [
-        'id' => self::CREDENTIAL_ID_ALT,
-        'rawId' => self::CREDENTIAL_ID_ALT_RAW,
-        'type' => 'public-key',
+        'id'       => self::CREDENTIAL_ID_ALT,
+        'rawId'    => self::CREDENTIAL_ID_ALT_RAW,
+        'type'     => 'public-key',
         'response' => [
-            'clientDataJSON' => 'eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiaVhvem15bktpLVlEMmlSdktOYlNQQSIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3QiLCJjcm9zc09yaWdpbiI6ZmFsc2V9',
+            'clientDataJSON'    => 'eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiaVhvem15bktpLVlEMmlSdktOYlNQQSIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3QiLCJjcm9zc09yaWdpbiI6ZmFsc2V9',
             'authenticatorData' => 'SZYN5YgOjGh0NBcPZHZgW4/krrmihjLHmVzzuoMdl2MFAAAAAQ==',
-            'signature' => 'ca4IJ9h8bZnjMbEFuHX1zfX5LcbiPyDVz6sD1/ppR4t8++1DxKa5EdBIrfNlo8FSOv/JSzMrGGUCQvc/Ngj1KnZpO3s9OdTb54/gMDewH/K8EG4wSvxzHdL6sMbP7UUc5Wq1pcdu9MgXY8V+1gftXpzcoaae0X+mLEETgU7eB8jG0mZhVWvE4yQKuDnZA1i9r8oQhqsvG4nUw1BxvR8wAGiRR+R287LaL41k+xum5mS8zEojUmuLSH50miyVxZ4Y+/oyfxG7i+wSYGNSXlW5iNPB+2WupGS7ce4TuOgaFeMmP2a9rzP4m2IBSQoJ2FyrdzR7HwBEewqqrUVbGQw3Aw==',
-            'userHandle' => self::USER_ID_ALT,
-        ]
+            'signature'         => 'ca4IJ9h8bZnjMbEFuHX1zfX5LcbiPyDVz6sD1/ppR4t8++1DxKa5EdBIrfNlo8FSOv/JSzMrGGUCQvc/Ngj1KnZpO3s9OdTb54/gMDewH/K8EG4wSvxzHdL6sMbP7UUc5Wq1pcdu9MgXY8V+1gftXpzcoaae0X+mLEETgU7eB8jG0mZhVWvE4yQKuDnZA1i9r8oQhqsvG4nUw1BxvR8wAGiRR+R287LaL41k+xum5mS8zEojUmuLSH50miyVxZ4Y+/oyfxG7i+wSYGNSXlW5iNPB+2WupGS7ce4TuOgaFeMmP2a9rzP4m2IBSQoJ2FyrdzR7HwBEewqqrUVbGQw3Aw==',
+            'userHandle'        => self::USER_ID_ALT,
+        ],
     ];
 
     const ASSERTION_RESPONSE_NO_HANDLE = [
-        'id' => self::CREDENTIAL_ID_ALT,
-        'rawId' => self::CREDENTIAL_ID_ALT_RAW,
-        'type' => 'public-key',
+        'id'       => self::CREDENTIAL_ID_ALT,
+        'rawId'    => self::CREDENTIAL_ID_ALT_RAW,
+        'type'     => 'public-key',
         'response' => [
-            'clientDataJSON' => 'eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiaVhvem15bktpLVlEMmlSdktOYlNQQSIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3QiLCJjcm9zc09yaWdpbiI6ZmFsc2V9',
+            'clientDataJSON'    => 'eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiaVhvem15bktpLVlEMmlSdktOYlNQQSIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3QiLCJjcm9zc09yaWdpbiI6ZmFsc2V9',
             'authenticatorData' => 'SZYN5YgOjGh0NBcPZHZgW4/krrmihjLHmVzzuoMdl2MFAAAAAQ==',
-            'signature' => 'ca4IJ9h8bZnjMbEFuHX1zfX5LcbiPyDVz6sD1/ppR4t8++1DxKa5EdBIrfNlo8FSOv/JSzMrGGUCQvc/Ngj1KnZpO3s9OdTb54/gMDewH/K8EG4wSvxzHdL6sMbP7UUc5Wq1pcdu9MgXY8V+1gftXpzcoaae0X+mLEETgU7eB8jG0mZhVWvE4yQKuDnZA1i9r8oQhqsvG4nUw1BxvR8wAGiRR+R287LaL41k+xum5mS8zEojUmuLSH50miyVxZ4Y+/oyfxG7i+wSYGNSXlW5iNPB+2WupGS7ce4TuOgaFeMmP2a9rzP4m2IBSQoJ2FyrdzR7HwBEewqqrUVbGQw3Aw==',
-            'userHandle' => null,
-        ]
+            'signature'         => 'ca4IJ9h8bZnjMbEFuHX1zfX5LcbiPyDVz6sD1/ppR4t8++1DxKa5EdBIrfNlo8FSOv/JSzMrGGUCQvc/Ngj1KnZpO3s9OdTb54/gMDewH/K8EG4wSvxzHdL6sMbP7UUc5Wq1pcdu9MgXY8V+1gftXpzcoaae0X+mLEETgU7eB8jG0mZhVWvE4yQKuDnZA1i9r8oQhqsvG4nUw1BxvR8wAGiRR+R287LaL41k+xum5mS8zEojUmuLSH50miyVxZ4Y+/oyfxG7i+wSYGNSXlW5iNPB+2WupGS7ce4TuOgaFeMmP2a9rzP4m2IBSQoJ2FyrdzR7HwBEewqqrUVbGQw3Aw==',
+            'userHandle'        => null,
+        ],
     ];
 
     const ASSERTION_CHALLENGE = 'iXozmynKi+YD2iRvKNbSPA==';
@@ -59,7 +62,7 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
     /**
      * @test
      */
-    public function setUp(): void
+    public function setUp() : void
     {
         parent::setUp();
 

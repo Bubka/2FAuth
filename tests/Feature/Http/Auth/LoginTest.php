@@ -4,8 +4,8 @@ namespace Tests\Feature\Http\Auth;
 
 use App\Facades\Settings;
 use App\Models\User;
-use Tests\FeatureTestCase;
 use Illuminate\Support\Carbon;
+use Tests\FeatureTestCase;
 
 /**
  * @covers  \App\Http\Controllers\Auth\LoginController
@@ -28,7 +28,7 @@ class LoginTest extends FeatureTestCase
     /**
      * @test
      */
-    public function setUp(): void
+    public function setUp() : void
     {
         parent::setUp();
 
@@ -53,7 +53,7 @@ class LoginTest extends FeatureTestCase
 
     /**
      * @test
-     * 
+     *
      * @covers  \App\Rules\CaseInsensitiveEmailExists
      */
     public function test_user_login_with_uppercased_email_returns_success()
@@ -71,7 +71,7 @@ class LoginTest extends FeatureTestCase
 
     /**
      * @test
-     * 
+     *
      * @covers  \App\Http\Middleware\SkipIfAuthenticated
      */
     public function test_user_login_already_authenticated_returns_bad_request()
@@ -111,7 +111,7 @@ class LoginTest extends FeatureTestCase
 
     /**
      * @test
-     * 
+     *
      * @covers  \App\Exceptions\Handler
      */
     public function test_user_login_with_invalid_credentials_returns_authentication_error()
@@ -184,7 +184,7 @@ class LoginTest extends FeatureTestCase
 
     /**
      * @test
-     * 
+     *
      * @covers  \App\Http\Middleware\KickOutInactiveUser
      * @covers  \App\Http\Middleware\LogUserLastSeen
      */

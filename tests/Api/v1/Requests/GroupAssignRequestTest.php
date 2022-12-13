@@ -32,7 +32,7 @@ class GroupAssignRequestTest extends TestCase
     /**
      * @dataProvider provideValidData
      */
-    public function test_valid_data(array $data): void
+    public function test_valid_data(array $data) : void
     {
         $request   = new GroupAssignRequest();
         $validator = Validator::make($data, $request->rules());
@@ -43,7 +43,7 @@ class GroupAssignRequestTest extends TestCase
     /**
      * Provide Valid data for validation test
      */
-    public function provideValidData(): array
+    public function provideValidData() : array
     {
         return [
             [[
@@ -57,7 +57,7 @@ class GroupAssignRequestTest extends TestCase
     /**
      * @dataProvider provideInvalidData
      */
-    public function test_invalid_data(array $data): void
+    public function test_invalid_data(array $data) : void
     {
         $request   = new GroupAssignRequest();
         $validator = Validator::make($data, $request->rules());
@@ -68,7 +68,7 @@ class GroupAssignRequestTest extends TestCase
     /**
      * Provide invalid data for validation test
      */
-    public function provideInvalidData(): array
+    public function provideInvalidData() : array
     {
         return [
             [[

@@ -2,20 +2,20 @@
 
 namespace Tests\Unit\Exceptions;
 
+use App\Exceptions\DbEncryptionException;
+use App\Exceptions\EncryptedMigrationException;
 use App\Exceptions\Handler;
+use App\Exceptions\InvalidMigrationDataException;
+use App\Exceptions\InvalidOtpParameterException;
+use App\Exceptions\InvalidQrCodeException;
+use App\Exceptions\InvalidSecretException;
+use App\Exceptions\UndecipherableException;
+use App\Exceptions\UnsupportedMigrationException;
+use App\Exceptions\UnsupportedOtpTypeException;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Tests\TestCase;
-use App\Exceptions\InvalidOtpParameterException;
-use \App\Exceptions\InvalidQrCodeException;
-use App\Exceptions\InvalidSecretException;
-use App\Exceptions\DbEncryptionException;
-use App\Exceptions\InvalidMigrationDataException;
-use App\Exceptions\UndecipherableException;
-use App\Exceptions\UnsupportedMigrationException;
-use App\Exceptions\UnsupportedOtpTypeException;
-use App\Exceptions\EncryptedMigrationException;
 
 /**
  * @covers \App\Exceptions\Handler
@@ -50,7 +50,7 @@ class HandlerTest extends TestCase
     /**
      * Provide Valid data for validation test
      */
-    public function provideExceptionsforBadRequest(): array
+    public function provideExceptionsforBadRequest() : array
     {
         return [
             [
@@ -111,7 +111,7 @@ class HandlerTest extends TestCase
     /**
      * Provide Valid data for validation test
      */
-    public function provideExceptionsforNotFound(): array
+    public function provideExceptionsforNotFound() : array
     {
         return [
             [

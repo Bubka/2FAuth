@@ -4,12 +4,10 @@ namespace App\Services\Migrators;
 
 use App\Exceptions\InvalidMigrationDataException;
 use App\Facades\TwoFAccounts;
-use App\Helpers\Helpers;
 use App\Models\TwoFAccount;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 
 class AegisMigrator extends Migrator
 {
@@ -38,7 +36,7 @@ class AegisMigrator extends Migrator
      * @param  mixed  $migrationPayload
      * @return \Illuminate\Support\Collection<int|string, \App\Models\TwoFAccount> The converted accounts
      */
-    public function migrate(mixed $migrationPayload): Collection
+    public function migrate(mixed $migrationPayload) : Collection
     {
         $json = json_decode(htmlspecialchars_decode($migrationPayload), true);
 

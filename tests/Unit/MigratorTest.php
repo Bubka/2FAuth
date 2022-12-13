@@ -3,26 +3,23 @@
 namespace Tests\Unit;
 
 use App\Exceptions\EncryptedMigrationException;
-use App\Factories\MigratorFactory;
 use App\Exceptions\InvalidMigrationDataException;
+use App\Exceptions\UnsupportedMigrationException;
+use App\Factories\MigratorFactory;
 use App\Models\TwoFAccount;
 use App\Services\Migrators\AegisMigrator;
-use App\Services\Migrators\TwoFASMigrator;
+use App\Services\Migrators\GoogleAuthMigrator;
 use App\Services\Migrators\Migrator;
 use App\Services\Migrators\PlainTextMigrator;
-use App\Services\Migrators\GoogleAuthMigrator;
+use App\Services\Migrators\TwoFASMigrator;
 use App\Services\SettingService;
 use Illuminate\Support\Facades\Storage;
 use Mockery;
-use Mockery\Mock;
 use Mockery\MockInterface;
+use ParagonIE\ConstantTime\Base32;
 use Tests\Data\MigrationTestData;
 use Tests\Data\OtpTestData;
 use Tests\TestCase;
-use ParagonIE\ConstantTime\Base32;
-use App\Protobuf\GoogleAuth\Payload\Algorithm;
-use App\Exceptions\UnsupportedMigrationException;
-
 
 /**
  * @covers \App\Providers\MigrationServiceProvider
@@ -32,6 +29,7 @@ use App\Exceptions\UnsupportedMigrationException;
  * @covers \App\Services\Migrators\TwoFASMigrator
  * @covers \App\Services\Migrators\PlainTextMigrator
  * @covers \App\Services\Migrators\GoogleAuthMigrator
+ *
  * @uses \App\Models\TwoFAccount
  */
 class MigratorTest extends TestCase
@@ -61,7 +59,7 @@ class MigratorTest extends TestCase
      */
     protected $GAuthTotpBisTwofaccount;
 
-    public function setUp(): void
+    public function setUp() : void
     {
         parent::setUp();
 
@@ -111,30 +109,30 @@ class MigratorTest extends TestCase
         $this->steamTwofaccount->period     = OtpTestData::PERIOD_DEFAULT;
         $this->steamTwofaccount->counter    = null;
 
-        $this->GAuthTotpTwofaccount             = new TwoFAccount;
-        $this->GAuthTotpTwofaccount->service    = OtpTestData::SERVICE;
-        $this->GAuthTotpTwofaccount->account    = OtpTestData::ACCOUNT;
-        $this->GAuthTotpTwofaccount->icon       = null;
-        $this->GAuthTotpTwofaccount->otp_type   = 'totp';
-        $this->GAuthTotpTwofaccount->secret     = OtpTestData::SECRET;
-        $this->GAuthTotpTwofaccount->digits     = OtpTestData::DIGITS_DEFAULT;
-        $this->GAuthTotpTwofaccount->algorithm  = OtpTestData::ALGORITHM_DEFAULT;
-        $this->GAuthTotpTwofaccount->period     = OtpTestData::PERIOD_DEFAULT;
-        $this->GAuthTotpTwofaccount->counter    = null;
+        $this->GAuthTotpTwofaccount            = new TwoFAccount;
+        $this->GAuthTotpTwofaccount->service   = OtpTestData::SERVICE;
+        $this->GAuthTotpTwofaccount->account   = OtpTestData::ACCOUNT;
+        $this->GAuthTotpTwofaccount->icon      = null;
+        $this->GAuthTotpTwofaccount->otp_type  = 'totp';
+        $this->GAuthTotpTwofaccount->secret    = OtpTestData::SECRET;
+        $this->GAuthTotpTwofaccount->digits    = OtpTestData::DIGITS_DEFAULT;
+        $this->GAuthTotpTwofaccount->algorithm = OtpTestData::ALGORITHM_DEFAULT;
+        $this->GAuthTotpTwofaccount->period    = OtpTestData::PERIOD_DEFAULT;
+        $this->GAuthTotpTwofaccount->counter   = null;
 
-        $this->GAuthTotpBisTwofaccount             = new TwoFAccount;
-        $this->GAuthTotpBisTwofaccount->service    = OtpTestData::SERVICE . '_bis';
-        $this->GAuthTotpBisTwofaccount->account    = OtpTestData::ACCOUNT . '_bis';
-        $this->GAuthTotpBisTwofaccount->icon       = null;
-        $this->GAuthTotpBisTwofaccount->otp_type   = 'totp';
-        $this->GAuthTotpBisTwofaccount->secret     = OtpTestData::SECRET;
-        $this->GAuthTotpBisTwofaccount->digits     = OtpTestData::DIGITS_DEFAULT;
-        $this->GAuthTotpBisTwofaccount->algorithm  = OtpTestData::ALGORITHM_DEFAULT;
-        $this->GAuthTotpBisTwofaccount->period     = OtpTestData::PERIOD_DEFAULT;
-        $this->GAuthTotpBisTwofaccount->counter    = null;
+        $this->GAuthTotpBisTwofaccount            = new TwoFAccount;
+        $this->GAuthTotpBisTwofaccount->service   = OtpTestData::SERVICE . '_bis';
+        $this->GAuthTotpBisTwofaccount->account   = OtpTestData::ACCOUNT . '_bis';
+        $this->GAuthTotpBisTwofaccount->icon      = null;
+        $this->GAuthTotpBisTwofaccount->otp_type  = 'totp';
+        $this->GAuthTotpBisTwofaccount->secret    = OtpTestData::SECRET;
+        $this->GAuthTotpBisTwofaccount->digits    = OtpTestData::DIGITS_DEFAULT;
+        $this->GAuthTotpBisTwofaccount->algorithm = OtpTestData::ALGORITHM_DEFAULT;
+        $this->GAuthTotpBisTwofaccount->period    = OtpTestData::PERIOD_DEFAULT;
+        $this->GAuthTotpBisTwofaccount->counter   = null;
 
-        $this->fakeTwofaccount             = new TwoFAccount;
-        $this->fakeTwofaccount->id         = TwoFAccount::FAKE_ID;
+        $this->fakeTwofaccount     = new TwoFAccount;
+        $this->fakeTwofaccount->id = TwoFAccount::FAKE_ID;
     }
 
     /**
@@ -179,25 +177,25 @@ class MigratorTest extends TestCase
                 new PlainTextMigrator(),
                 MigrationTestData::VALID_PLAIN_TEXT_PAYLOAD,
                 'custom',
-                $hasSteam = true
+                $hasSteam = true,
             ],
             'PLAIN_TEXT_PAYLOAD_WITH_INTRUDER' => [
                 new PlainTextMigrator(),
                 MigrationTestData::VALID_PLAIN_TEXT_PAYLOAD_WITH_INTRUDER,
                 'custom',
-                $hasSteam = true
+                $hasSteam = true,
             ],
             'AEGIS_JSON_MIGRATION_PAYLOAD' => [
                 new AegisMigrator(),
                 MigrationTestData::VALID_AEGIS_JSON_MIGRATION_PAYLOAD,
                 'custom',
-                $hasSteam = true
+                $hasSteam = true,
             ],
             '2FAS_MIGRATION_PAYLOAD' => [
                 new TwoFASMigrator(),
                 MigrationTestData::VALID_2FAS_MIGRATION_PAYLOAD,
                 'custom',
-                $hasSteam = false
+                $hasSteam = false,
             ],
             'GOOGLE_AUTH_MIGRATION_PAYLOAD' => [
                 new GoogleAuthMigrator(),
@@ -315,7 +313,7 @@ class MigratorTest extends TestCase
 
     /**
      * @test
-     * 
+     *
      * @runInSeparateProcess
      * @preserveGlobalState disabled
      */
@@ -466,18 +464,15 @@ class MigratorTest extends TestCase
     {
         return [
             'ENCRYPTED_AEGIS_JSON_MIGRATION_PAYLOAD' => [
-                MigrationTestData::ENCRYPTED_AEGIS_JSON_MIGRATION_PAYLOAD
+                MigrationTestData::ENCRYPTED_AEGIS_JSON_MIGRATION_PAYLOAD,
             ],
             'ENCRYPTED_2FAS_MIGRATION_PAYLOAD' => [
-                MigrationTestData::ENCRYPTED_2FAS_MIGRATION_PAYLOAD
+                MigrationTestData::ENCRYPTED_2FAS_MIGRATION_PAYLOAD,
             ],
         ];
     }
 
-    /**
-     * 
-     */
-    protected function tearDown(): void
+    protected function tearDown() : void
     {
         Mockery::close();
     }

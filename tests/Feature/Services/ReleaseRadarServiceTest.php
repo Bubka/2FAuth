@@ -5,9 +5,9 @@ namespace Tests\Feature\Services;
 use App\Facades\Settings;
 use App\Services\ReleaseRadarService;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Tests\FeatureTestCase;
 use Illuminate\Support\Facades\Http;
 use Tests\Data\HttpRequestTestData;
+use Tests\FeatureTestCase;
 
 /**
  * @covers \App\Services\ReleaseRadarService
@@ -29,15 +29,15 @@ class ReleaseRadarServiceTest extends FeatureTestCase
         ]);
 
         $releaseRadarService = new ReleaseRadarService();
-        $release = $releaseRadarService->manualScan();
+        $release             = $releaseRadarService->manualScan();
 
         $this->assertFalse($release);
         $this->assertDatabaseHas('options', [
-            'key'   => 'lastRadarScan',
+            'key' => 'lastRadarScan',
         ]);
         $this->assertDatabaseMissing('options', [
-            'key' => 'latestRelease',
-            'value' => HttpRequestTestData::TAG_NAME
+            'key'   => 'latestRelease',
+            'value' => HttpRequestTestData::TAG_NAME,
         ]);
     }
 
@@ -54,15 +54,15 @@ class ReleaseRadarServiceTest extends FeatureTestCase
         ]);
 
         $releaseRadarService = new ReleaseRadarService();
-        $release = $releaseRadarService->manualScan();
+        $release             = $releaseRadarService->manualScan();
 
         $this->assertEquals(HttpRequestTestData::NEW_TAG_NAME, $release);
         $this->assertDatabaseHas('options', [
             'key'   => 'latestRelease',
-            'value' => HttpRequestTestData::NEW_TAG_NAME
+            'value' => HttpRequestTestData::NEW_TAG_NAME,
         ]);
         $this->assertDatabaseHas('options', [
-            'key'   => 'lastRadarScan',
+            'key' => 'lastRadarScan',
         ]);
     }
 
@@ -77,7 +77,7 @@ class ReleaseRadarServiceTest extends FeatureTestCase
         Http::preventStrayRequests();
 
         $releaseRadarService = new ReleaseRadarService();
-        $release = $releaseRadarService->manualScan();
+        $release             = $releaseRadarService->manualScan();
 
         $this->assertFalse($release);
     }
@@ -95,7 +95,7 @@ class ReleaseRadarServiceTest extends FeatureTestCase
         ]);
 
         $releaseRadarService = new ReleaseRadarService();
-        $release = $releaseRadarService->manualScan();
+        $release             = $releaseRadarService->manualScan();
 
         $this->assertFalse($release);
     }
