@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Api\v1\Controllers;
+namespace Tests\Feature\Http;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
