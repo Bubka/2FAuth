@@ -99,10 +99,16 @@
                             <div v-if="selectedAccounts.length > 0" class="control">
                                 <div tabindex="0" role="button" class="tag-button tag-button-link tags are-medium has-addons is-clickable" @click="showGroupSelector = true" @keyup.enter="showGroupSelector = true">
                                     <span class="tag is-dark mb-0">
-                                        {{ $t('groups.change_group') }}
-                                    </span>
-                                    <span class="tag is-link mb-0">
+                                        {{ $t('groups.change_group') }}&nbsp;&nbsp;
                                         <font-awesome-icon :icon="['fas', 'layer-group']" />
+                                    </span>
+                                </div>
+                            </div>
+                            <!-- export selected button -->
+                            <div v-if="selectedAccounts.length > 0" class="control">
+                                <div tabindex="0" role="button" class="tag-button tags are-medium has-addons is-clickable" @click="exportAccounts" @keyup.enter="exportAccounts">
+                                    <span class="tag is-dark mb-0">
+                                        <font-awesome-icon :icon="['fas', 'file-download']" />
                                     </span>
                                 </div>
                             </div>
@@ -110,9 +116,6 @@
                             <div v-if="selectedAccounts.length > 0" class="control">
                                 <div tabindex="0" role="button" class="tag-button tag-button-danger tags are-medium has-addons is-clickable" @click="destroyAccounts" @keyup.enter="destroyAccounts">
                                     <span class="tag is-dark mb-0">
-                                        {{ $t('commons.delete') }}
-                                    </span>
-                                    <span class="tag is-danger mb-0">
                                         <font-awesome-icon :icon="['fas', 'trash']" />
                                     </span>
                                 </div>
@@ -272,6 +275,7 @@
     import draggable from 'vuedraggable'
     import Form from './../components/Form'
     import objectEquals from 'object-equals'
+    import { saveAs } from 'file-saver';
 
     export default {
         data(){
@@ -483,6 +487,20 @@
                     // desynchronize from the backend php collection
                     this.fetchAccounts(true)
                 }
+            },
+
+            /**
+             * Export selected accounts
+             */
+            exportAccounts() {
+                let ids = []
+                this.selectedAccounts.forEach(id => ids.push(id))
+
+                this.axios.get('/api/v1/twofaccounts/export?ids=' + ids.join(), {responseType: 'blob'})
+                    .then((response) => {
+                        var blob = new Blob([response.data], {type: "application/json;charset=utf-8"});
+                        saveAs.saveAs(blob, "2fauth_export.json");
+                    })
             },
 
             /**

@@ -36,6 +36,7 @@ Route::group(['middleware' => 'auth:api-guard'], function () {
     Route::post('twofaccounts/reorder', [TwoFAccountController::class, 'reorder'])->name('twofaccounts.reorder');
     Route::post('twofaccounts/migration', [TwoFAccountController::class, 'migrate'])->name('twofaccounts.migrate');
     Route::post('twofaccounts/preview', [TwoFAccountController::class, 'preview'])->name('twofaccounts.preview');
+    Route::get('twofaccounts/export', [TwoFAccountController::class, 'export'])->name('twofaccounts.export');
     Route::get('twofaccounts/{twofaccount}/qrcode', [QrCodeController::class, 'show'])->name('twofaccounts.show.qrcode');
     Route::get('twofaccounts/count', [TwoFAccountController::class, 'count'])->name('twofaccounts.count');
     Route::get('twofaccounts/{id}/otp', [TwoFAccountController::class, 'otp'])->where('id', '[0-9]+')->name('twofaccounts.show.otp');

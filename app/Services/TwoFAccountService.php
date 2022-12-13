@@ -59,6 +59,20 @@ class TwoFAccountService
     }
 
     /**
+     * Export one or more twofaccounts
+     *
+     * @param  int|array|string  $ids twofaccount ids to delete
+     * @return \Illuminate\Support\Collection<int, TwoFAccount> The converted accounts
+     */
+    public static function export($ids) : Collection
+    {
+        $ids          = self::commaSeparatedToArray($ids);
+        $twofaccounts = TwoFAccount::whereIn('id', $ids)->get();
+
+        return $twofaccounts;
+    }
+
+    /**
      * Delete one or more twofaccounts
      *
      * @param  int|array|string  $ids twofaccount ids to delete

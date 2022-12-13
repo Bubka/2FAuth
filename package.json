@@ -30,6 +30,7 @@
         "bulma": "^0.9.3",
         "bulma-checkradio": "^2.1.2",
         "bulma-switch": "^2.0.0",
+        "file-saver": "^2.0.5",
         "object-equals": "^0.3.0",
         "v-clipboard": "^2.2.3",
         "vue": "^2.6.14",

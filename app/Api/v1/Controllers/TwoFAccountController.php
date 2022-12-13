@@ -10,6 +10,7 @@ use App\Api\v1\Requests\TwoFAccountStoreRequest;
 use App\Api\v1\Requests\TwoFAccountUpdateRequest;
 use App\Api\v1\Requests\TwoFAccountUriRequest;
 use App\Api\v1\Resources\TwoFAccountCollection;
+use App\Api\v1\Resources\TwoFAccountExportCollection;
 use App\Api\v1\Resources\TwoFAccountReadResource;
 use App\Api\v1\Resources\TwoFAccountStoreResource;
 use App\Facades\Groups;
@@ -70,8 +71,8 @@ class TwoFAccountController extends Controller
         Groups::assign($twofaccount->id);
 
         return (new TwoFAccountReadResource($twofaccount->refresh()))
-                ->response()
-                ->setStatusCode(201);
+            ->response()
+            ->setStatusCode(201);
     }
 
     /**
@@ -89,8 +90,8 @@ class TwoFAccountController extends Controller
         $twofaccount->save();
 
         return (new TwoFAccountReadResource($twofaccount))
-                ->response()
-                ->setStatusCode(200);
+            ->response()
+            ->setStatusCode(200);
     }
 
     /**
@@ -141,6 +142,26 @@ class TwoFAccountController extends Controller
         $twofaccount->fillWithURI($request->uri, $request->custom_otp === TwoFAccount::STEAM_TOTP);
 
         return new TwoFAccountStoreResource($twofaccount);
+    }
+
+    /**
+     * Export accounts
+     *
+     * @param  \App\Api\v1\Requests\TwoFAccountBatchRequest  $request
+     * @return TwoFAccountExportCollection|\Illuminate\Http\JsonResponse
+     */
+    public function export(TwoFAccountBatchRequest $request)
+    {
+        $validated = $request->validated();
+
+        if ($this->tooManyIds($validated['ids'])) {
+            return response()->json([
+                'message' => 'bad request',
+                'reason'  => [__('errors.too_many_ids')],
+            ], 400);
+        }
+
+        return new TwoFAccountExportCollection(TwoFAccounts::export($validated['ids']));
     }
 
     /**
