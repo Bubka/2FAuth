@@ -242,7 +242,7 @@ class TwoFAccount extends Model implements Sortable
     public function setSecretAttribute($value)
     {
         // Encrypt when needed
-        $this->attributes['secret'] = $this->encryptOrReturn($value);
+        $this->attributes['secret'] = $this->encryptOrReturn(Helpers::PadToBase32Format($value));
     }
 
     /**

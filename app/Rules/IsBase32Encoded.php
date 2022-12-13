@@ -2,6 +2,7 @@
 
 namespace App\Rules;
 
+use App\Helpers\Helpers;
 use Illuminate\Contracts\Validation\Rule;
 use ParagonIE\ConstantTime\Base32;
 
@@ -27,7 +28,7 @@ class IsBase32Encoded implements Rule
     public function passes($attribute, $value)
     {
         try {
-            $secret = Base32::decodeUpper($value);
+            $secret = Base32::decodeUpper(Helpers::PadToBase32Format($value));
         } catch (\Exception $e) {
             return false;
         }

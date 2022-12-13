@@ -28,4 +28,15 @@ class Helpers
         // We use the regex for semver detection (see https://semver.org/)
         return preg_match('/(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?/', $release, $version) ? $version[0] : false;
     }
+
+    /**
+     * Format a string to comply with Base32 format
+     *
+     * @param  string  $str
+     * @return string The filename
+     */
+    public static function PadToBase32Format(?string $str): string
+    {
+        return blank($str) ? '' : strtoupper(str_pad($str, (int) ceil(strlen($str) / 8) * 8, '='));
+    }
 }

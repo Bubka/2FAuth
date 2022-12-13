@@ -101,14 +101,7 @@
                 <div v-if="form.otp_type">
                     <!-- secret -->
                     <label :for="this.inputId('text','secret')" class="label" v-html="$t('twofaccounts.forms.secret.label')"></label>
-                    <div class="field has-addons">
-                        <p class="control">
-                            <span class="select">
-                                <select @change="form.secret=''" v-model="secretIsBase32Encoded">
-                                    <option v-for="(format) in secretFormats" :key="format.value" :value="format.value">{{ format.text }}</option>
-                                </select>
-                            </span>
-                        </p>
+                    <div class="field">
                         <p class="control is-expanded">
                             <input :id="this.inputId('text','secret')" class="input" type="text" v-model="form.secret">
                         </p>
@@ -146,7 +139,7 @@
             </form>
             <!-- modal -->
             <modal v-model="ShowTwofaccountInModal">
-                <otp-displayer ref="AdvancedFormOtpDisplayer" v-bind="otpdisplayerData" @increment-hotp="incrementHotp" @validation-error="mapDisplayerErrors">
+                <otp-displayer ref="AdvancedFormOtpDisplayer" v-bind="form.data()" @increment-hotp="incrementHotp" @validation-error="mapDisplayerErrors">
                 </otp-displayer>
             </modal>
         </form-wrapper>
@@ -198,7 +191,6 @@
     import Modal from '../../components/Modal'
     import Form from './../../components/Form'
     import OtpDisplayer from '../../components/OtpDisplayer'
-    import Base32 from "hi-base32"
 
     export default {
         data() {
@@ -209,7 +201,6 @@
                 showAlternatives : false,
                 tempIcon: '',
                 uri: '',
-                secretIsBase32Encoded: 0,
                 form: new Form({
                     service: '',
                     account: '',
@@ -235,10 +226,6 @@
                     { text: 9, value: 9 },
                     { text: 10, value: 10 },
                 ],
-                secretFormats: [
-                    { text: this.$t('twofaccounts.forms.plain_text'), value: 0 },
-                    { text: 'Base32', value: 1 }
-                ],
                 algorithms: [
                     { text: 'sha1', value: 'sha1' },
                     { text: 'sha256', value: 'sha256' },
@@ -260,17 +247,6 @@
             },
         },
 
-        computed: {
-            otpdisplayerData: function() {
-                let o = this.form.data()
-                o.secret = this.secretIsBase32Encoded
-                    ? o.secret
-                    : Base32.encode(o.secret).toString();
-
-                    return o
-            }
-        },
-
         mounted: function () {
             if( this.$route.params.decodedUri ) {
                 this.uri = this.$route.params.decodedUri
@@ -279,7 +255,6 @@
                 this.axios.post('/api/v1/twofaccounts/preview', { uri: this.uri }).then(response => {
 
                     this.form.fill(response.data)
-                    this.secretIsBase32Encoded = 1
                     this.tempIcon = response.data.icon ? response.data.icon : null
                     this.showQuickForm = true
                 })
@@ -314,9 +289,6 @@
             async createAccount() {
                 // set current temp icon as account icon
                 this.form.icon = this.tempIcon
-
-                // Secret to base32 if necessary
-                this.form.secret = this.secretIsBase32Encoded ? this.form.secret : Base32.encode(this.form.secret).toString();
 
                 await this.form.post('/api/v1/twofaccounts')
 
@@ -359,7 +331,6 @@
                     // Then the otp described by the uri
                     this.axios.post('/api/v1/twofaccounts/preview', { uri: this.uri }).then(response => {
                         this.form.fill(response.data)
-                        this.secretIsBase32Encoded = 1
                         this.tempIcon = response.data.icon ? response.data.icon : null
                     })
                     .catch(error => {
@@ -441,9 +412,7 @@
                 this.form.otp_type = to
 
                 if (to === 'steamtotp') {
-                    this.secretIsBase32Encoded = 1
                     this.form.service = 'Steam'
-                    this.form.secret = ''
                     this.fetchLogo()
                 }
                 else if (from === 'steamtotp') {

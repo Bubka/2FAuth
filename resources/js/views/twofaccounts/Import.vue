@@ -171,7 +171,6 @@
                     otp_type: '',
                     icon: '',
                     secret: '',
-                    secretIsBase32Encoded: 1,
                     algorithm: '',
                     digits: null,
                     counter: null,
