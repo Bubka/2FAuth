@@ -37,6 +37,7 @@ return [
     'new' => 'New',
     'back' => 'Back',
     'move' => 'Move',
+    'export' => 'Export',
     'all' => 'All',
     'select_all' => 'Select all',
     'clear_selection' => 'Clear selection',

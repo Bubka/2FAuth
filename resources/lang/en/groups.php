@@ -23,6 +23,7 @@ return [
     'manage_groups_legend' => 'You can create groups to organize your accounts the way you want. All accounts remain visible in the pseudo group named \'All\', regardless of the group they belong to.',
     'deleting_group_does_not_delete_accounts' => 'Deleting a group does not delete accounts',
     'move_selected_to' => 'Move selected to',
+    'move_selected_to_group' => 'Move selected into a group',
     'no_group' => 'No group',
     'change_group' => 'Change group',
     'group_successfully_created' => 'Group successfully created',

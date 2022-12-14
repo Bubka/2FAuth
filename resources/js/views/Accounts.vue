@@ -63,67 +63,7 @@
         <!-- header -->
         <div class="header has-background-black-ter" v-if="this.showAccounts || this.showGroupSwitch">
             <div class="columns is-gapless is-mobile is-centered">
-                <div v-if="editMode" class="column">
-                    <!-- toolbar -->
-                    <div class="toolbar has-text-centered">
-                        <div class="field is-grouped is-justify-content-center has-text-grey mb-2">
-                            <!-- selected label -->
-                            <p class="control mr-1">
-                                {{ selectedAccounts.length }}&nbsp;{{ $t('commons.selected') }}
-                            </p>
-                            <!-- deselect all -->
-                            <p class="control mr-4">
-                                <button @click="clearSelected" class="clear-selection delete" :style="{visibility: selectedAccounts.length > 0 ? 'visible' : 'hidden'}" :title="$t('commons.clear_selection')"></button>
-                            </p>
-                            <!-- select all button -->
-                            <p class="control mr-5">
-                                <button @click="selectAll" class="button has-line-height p-1 is-ghost has-background-black-ter has-text-grey" :title="$t('commons.select_all')">
-                                    <span>{{ $t('commons.all') }}</span>
-                                    <font-awesome-icon class="ml-1" :icon="['fas', 'check-square']" />
-                                </button>
-                            </p>
-                            <!-- sort asc/desc buttons -->
-                            <p class="control">
-                                <button @click="sortAsc" class="button has-line-height p-1 is-ghost has-background-black-ter has-text-grey" :title="$t('commons.sort_ascending')">
-                                    <font-awesome-icon :icon="['fas', 'sort-alpha-down']" />
-                                </button>
-                            </p>
-                            <p class="control">
-                                <button @click="sortDesc" class="button has-line-height p-1 is-ghost has-background-black-ter has-text-grey" :title="$t('commons.sort_descending')">
-                                    <font-awesome-icon :icon="['fas', 'sort-alpha-up']" />
-                                </button>
-                            </p>
-                        </div>
-                        <div class="field is-grouped is-justify-content-center pb-2">
-                            <!-- Change group button -->
-                            <div v-if="selectedAccounts.length > 0" class="control">
-                                <div tabindex="0" role="button" class="tag-button tag-button-link tags are-medium has-addons is-clickable" @click="showGroupSelector = true" @keyup.enter="showGroupSelector = true">
-                                    <span class="tag is-dark mb-0">
-                                        {{ $t('groups.change_group') }}&nbsp;&nbsp;
-                                        <font-awesome-icon :icon="['fas', 'layer-group']" />
-                                    </span>
-                                </div>
-                            </div>
-                            <!-- export selected button -->
-                            <div v-if="selectedAccounts.length > 0" class="control">
-                                <div tabindex="0" role="button" class="tag-button tags are-medium has-addons is-clickable" @click="exportAccounts" @keyup.enter="exportAccounts">
-                                    <span class="tag is-dark mb-0">
-                                        <font-awesome-icon :icon="['fas', 'file-download']" />
-                                    </span>
-                                </div>
-                            </div>
-                            <!-- delete selected button -->
-                            <div v-if="selectedAccounts.length > 0" class="control">
-                                <div tabindex="0" role="button" class="tag-button tag-button-danger tags are-medium has-addons is-clickable" @click="destroyAccounts" @keyup.enter="destroyAccounts">
-                                    <span class="tag is-dark mb-0">
-                                        <font-awesome-icon :icon="['fas', 'trash']" />
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div v-else class="column is-three-quarters-mobile is-one-third-tablet is-one-quarter-desktop is-one-quarter-widescreen is-one-quarter-fullhd">
+                <div class="column is-three-quarters-mobile is-one-third-tablet is-one-quarter-desktop is-one-quarter-widescreen is-one-quarter-fullhd">
                     <!-- search -->
                     <div role="search" class="field">
                         <div class="control has-icons-right">
@@ -134,8 +74,31 @@
                             </span>
                         </div>
                     </div>
+                    <!-- toolbar -->
+                    <div v-if="editMode" class="toolbar has-text-centered">
+                        <div class="columns">
+                            <div class="column">
+                                <!-- selected label -->
+                                <span class="mr-1">{{ selectedAccounts.length }}&nbsp;{{ $t('commons.selected') }}</span>
+                                <!-- deselect all -->
+                                <button @click="clearSelected" class="clear-selection delete mr-4" :style="{visibility: selectedAccounts.length > 0 ? 'visible' : 'hidden'}" :title="$t('commons.clear_selection')"></button>
+                                <!-- select all button -->
+                                <button @click="selectAll" class="button mr-5 has-line-height p-1 is-ghost has-background-black-ter has-text-grey" :title="$t('commons.select_all')">
+                                    <span>{{ $t('commons.all') }}</span>
+                                    <font-awesome-icon class="ml-1" :icon="['fas', 'check-square']" />
+                                </button>
+                                <!-- sort asc/desc buttons -->
+                                <button @click="sortAsc" class="button has-line-height p-1 is-ghost has-background-black-ter has-text-grey" :title="$t('commons.sort_ascending')">
+                                    <font-awesome-icon :icon="['fas', 'sort-alpha-down']" />
+                                </button>
+                                <button @click="sortDesc" class="button has-line-height p-1 is-ghost has-background-black-ter has-text-grey" :title="$t('commons.sort_descending')">
+                                    <font-awesome-icon :icon="['fas', 'sort-alpha-up']" />
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                     <!-- group switch toggle -->
-                    <div class="has-text-centered">
+                    <div v-else class="has-text-centered">
                         <div class="columns">
                             <div class="column" v-if="!showGroupSwitch">
                                 <button :title="$t('groups.show_group_selector')" tabindex="1" class="button is-text is-like-text" @click.stop="toggleGroupSwitch">
@@ -207,7 +170,7 @@
                     </transition-group>
                 </draggable>
             <!-- </vue-pull-refresh> -->
-            <vue-footer :showButtons="true">
+            <vue-footer :showButtons="true" :editMode="editMode" v-on:exit-edit="setEditModeTo(false)">
                 <!-- New item buttons -->
                 <p class="control" v-if="!editMode">
                     <button class="button is-link is-rounded is-focus" @click="start">
@@ -221,13 +184,33 @@
                 <p class="control" v-if="!editMode">
                     <button class="button is-dark is-rounded" @click="setEditModeTo(true)">{{ $t('commons.manage') }}</button>
                 </p>
-                <!-- Done button -->
+                <!-- move button -->
                 <p class="control" v-if="editMode">
-                    <button class="button is-success is-rounded" @click="setEditModeTo(false)">
-                        <span>{{ $t('commons.done') }}</span>
-                        <span class="icon is-small">
-                            <font-awesome-icon :icon="['fas', 'check']" />
-                        </span>
+                    <button 
+                        :disabled='selectedAccounts.length == 0' class="button is-outlined is-rounded" 
+                        :class="selectedAccounts.length > 0 ? 'is-link' : 'is-dark'" 
+                        @click="showGroupSelector = true"
+                        :title="$t('groups.move_selected_to_group')" >
+                            {{ $t('commons.move') }}
+                    </button>
+                </p>
+                <!-- delete button -->
+                <p class="control" v-if="editMode">
+                    <button 
+                        :disabled='selectedAccounts.length == 0' class="button is-outlined is-rounded" 
+                        :class="selectedAccounts.length > 0 ? 'is-link' : 'is-dark'" 
+                        @click="destroyAccounts" >
+                            {{ $t('commons.delete') }}
+                    </button>
+                </p>
+                <!-- export button -->
+                <p class="control" v-if="editMode">
+                    <button 
+                        :disabled='selectedAccounts.length == 0' class="button is-outlined is-rounded" 
+                        :class="selectedAccounts.length > 0 ? 'is-link' : 'is-dark'" 
+                        @click="exportAccounts" 
+                        :title="$t('twofaccounts.export_selected_to_json')" >
+                            {{ $t('commons.export') }}
                     </button>
                 </p>
             </vue-footer>
@@ -599,15 +582,8 @@
              * Toggle the accounts list between View mode and Edit mode
              */
             setEditModeTo(state) {
-                if( state === false ) {
-                    this.selectedAccounts = []
-                }
-                else {
-                    this.search = '';
-                }
-
+                this.selectedAccounts = []
                 this.editMode = state
-                this.$parent.showToolbar = state
             },
 
             /**

@@ -61,6 +61,7 @@ a:hover {
   outline: 2px dotted $dark;
   border-radius: $radius-large;
 }
+
 .otp:focus:not(:focus-visible) {
   outline: none;
 }
@@ -112,11 +113,11 @@ a:hover {
   padding-top: 3rem;
 }
 
-.form-column > div.nav-links {
+.form-column>div.nav-links {
   padding-top: 1.5rem;
 }
 
-.form-column > div.nav-links p {
+.form-column>div.nav-links p {
   margin-bottom: 0.25rem;
   padding-top: 0.25rem;
 }
@@ -126,42 +127,45 @@ a:hover {
 }
 
 .pull-down-header {
-    background-color: hsl(0, 0%, 21%) !important;
+  background-color: hsl(0, 0%, 21%) !important;
 }
 
 .tfa-grid {
-    border-radius: 6px;
-    text-align: center;
-    background-color: hsl(0, 0%, 10%); /*black-bis from Bulma*/
-    padding: 0.75rem 3rem;
-    margin: 0.5rem;
+  border-radius: 6px;
+  text-align: center;
+  background-color: hsl(0, 0%, 10%);
+  /*black-bis from Bulma*/
+  padding: 0.75rem 3rem;
+  margin: 0.5rem;
 }
 
 .tfa-list {
-    text-align: inherit;
-    border-bottom: 1px solid hsl(0, 0%, 21%);
-    background-color: hsl(0, 0%, 14%); /*black-ter from Bulma*/
-    margin: 0 1%;
-    padding: 0.5rem 0.5rem 0.5rem 0.5rem;
-    width: 31.3% !important;
+  text-align: inherit;
+  border-bottom: 1px solid hsl(0, 0%, 21%);
+  background-color: hsl(0, 0%, 14%);
+  /*black-ter from Bulma*/
+  margin: 0 1%;
+  padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+  width: 31.3% !important;
 }
 
 @media screen and (max-width: 1217px) {
   .tfa-list {
-      width: 48% !important;
+    width: 48% !important;
   }
 }
 
 @media screen and (max-width: 769px) {
   .tfa-list {
-      border-radius: unset;
-      text-align: inherit;
-      border-bottom: 1px solid hsl(0, 0%, 21%);
-      background-color: hsl(0, 0%, 14%); /*black-ter from Bulma*/
-      margin: 0;
-      padding: 0.5rem 0.5rem 0.5rem 0.5rem;
-      max-width: none;
-      width: auto !important;
+    border-radius: unset;
+    text-align: inherit;
+    border-bottom: 1px solid hsl(0, 0%, 21%);
+    background-color: hsl(0, 0%, 14%);
+    /*black-ter from Bulma*/
+    margin: 0;
+    padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+    max-width: none;
+    width: auto !important;
   }
 }
 
@@ -208,7 +212,7 @@ a:hover {
 .tfa-list .tfa-dots,
 .tfa-list .tfa-edit {
   align-items: center;
-    padding: 0
+  padding: 0
 }
 
 .tfa-list .tfa-dots {
@@ -216,51 +220,53 @@ a:hover {
 }
 
 .tfa-content {
-    flex-grow: 1;
-    overflow: hidden;
+  flex-grow: 1;
+  overflow: hidden;
 }
-.tfa-content:focus-visible
-{
-    outline: 1px solid $grey;
-    border: none;
-    outline-offset: 7px;
-    border-radius: 3px;
+
+.tfa-content:focus-visible {
+  outline: 1px solid $grey;
+  border: none;
+  outline-offset: 7px;
+  border-radius: 3px;
 }
+
 .tfa-content:focus:not(:focus-visible) {
   outline: none;
 }
 
 .is-edit-mode .tfa-list .tfa-content {
-    margin-right: 1rem;
+  margin-right: 1rem;
 }
 
 .tfa-dots {
   cursor: grab;
 }
 
-.tfa-grid .is-checkradio[type="checkbox"] + label, .tfa-grid .is-checkradio[type="radio"] + label {
-    padding-left: 0 !important;
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
-  }
+.tfa-grid .is-checkradio[type="checkbox"]+label,
+.tfa-grid .is-checkradio[type="radio"]+label {
+  padding-left: 0 !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
 
 .tfa-text {
-    display: block;
-    // max-width: 300px;
-    cursor: pointer;
+  display: block;
+  // max-width: 300px;
+  cursor: pointer;
 }
 
 .tfa-container img {
-    height: 0.75em;
-    width: 0.75em;
-    margin-right: .1em;
+  height: 0.75em;
+  width: 0.75em;
+  margin-right: .1em;
 }
 
 .import-icon {
-    height: 1em;
-    width: 1em;
-    margin-right: 0.2em;
-    vertical-align: sub;
+  height: 1em;
+  width: 1em;
+  margin-right: 0.2em;
+  vertical-align: sub;
 }
 
 .tfa-container span {
@@ -302,7 +308,7 @@ a:hover {
 
 .fullscreen-footer {
   position: fixed;
-  top: calc(100vh - 8rem );
+  top: calc(100vh - 8rem);
   left: 0;
   width: 100%;
   text-align: center;
@@ -340,7 +346,8 @@ figure.no-icon {
   cursor: pointer;
 }
 
-.add-icon-button, .add-icon-button:hover {
+.add-icon-button,
+.add-icon-button:hover {
   color: hsl(0, 0%, 7%);
 }
 
@@ -355,54 +362,77 @@ figure.no-icon {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: hsl(348, 100%, 61%); /* red */
+  background: hsl(348, 100%, 61%);
+  /* red */
 }
-.dots li[data-is-active] ~ li {
-  background: hsl(0, 0%, 7%);  /* grey */
+
+.dots li[data-is-active]~li {
+  background: hsl(0, 0%, 7%);
+  /* grey */
 }
 
 .dots li:nth-child(-n+9) {
-  background: hsl(48, 100%, 67%); /* yellow */
+  background: hsl(48, 100%, 67%);
+  /* yellow */
 }
 
 .dots li:nth-child(-n+6) {
-  background: hsl(141, 71%, 48%); /* green */
+  background: hsl(141, 71%, 48%);
+  /* green */
 }
 
 // .dots li:nth-child(3n+2), .dots li:nth-child(3n+3) {
 //     display:none;
 // }
 
-.input, .select select, .textarea {
+.input,
+.select select,
+.textarea {
   background-color: hsl(0, 0%, 21%);
   border-color: hsl(0, 0%, 29%);
   color: hsl(0, 0%, 100%);
 }
 
-.select select::placeholder, .textarea::placeholder, .input::placeholder {
-    color: hsl(0, 0%, 48%);
+.select select::placeholder,
+.textarea::placeholder,
+.input::placeholder {
+  color: hsl(0, 0%, 48%);
 }
 
-.select select[disabled], [disabled].textarea, [disabled].input, fieldset[disabled] .select select, .select fieldset[disabled] select, fieldset[disabled] .textarea, fieldset[disabled] .input {
+.select select[disabled],
+[disabled].textarea,
+[disabled].input,
+fieldset[disabled] .select select,
+.select fieldset[disabled] select,
+fieldset[disabled] .textarea,
+fieldset[disabled] .input {
   background-color: hsl(0, 0%, 10%);
   border-color: hsl(0, 0%, 21%);
   box-shadow: none;
   color: hsl(0, 0%, 21%);
 }
 
-.select select[disabled]::placeholder, [disabled].textarea::placeholder, [disabled].input::placeholder, fieldset[disabled] .select select::placeholder, .select fieldset[disabled] select::placeholder, fieldset[disabled] .textarea::placeholder, fieldset[disabled] .input::placeholder {
+.select select[disabled]::placeholder,
+[disabled].textarea::placeholder,
+[disabled].input::placeholder,
+fieldset[disabled] .select select::placeholder,
+.select fieldset[disabled] select::placeholder,
+fieldset[disabled] .textarea::placeholder,
+fieldset[disabled] .input::placeholder {
   color: hsl(0, 0%, 21%);
 }
 
 .button.has-line-height {
   height: inherit !important;
 }
-  .button.has-line-height span {
-    display: inline-block;
-    line-height: 1rem;
-  }
 
-.button.is-dark.field-lock, .button.is-dark.field-unlock {
+.button.has-line-height span {
+  display: inline-block;
+  line-height: 1rem;
+}
+
+.button.is-dark.field-lock,
+.button.is-dark.field-unlock {
   color: hsl(0, 0%, 48%);
 }
 
@@ -418,232 +448,286 @@ figure.no-icon {
   height: auto;
   text-decoration: none;
 }
+
 .button.copy-text:hover,
 .button.copy-text:active,
 .button.copy-text:focus,
 .button.copy-text:focus-visible,
 .button.copy-text:focus-within,
 .button.is-like-text:hover,
-.button.is-like-text:active, 
-.button.is-like-text:focus, 
-.button.is-like-text:focus-visible, 
+.button.is-like-text:active,
+.button.is-like-text:focus,
+.button.is-like-text:focus-visible,
 .button.is-like-text:focus-within {
   background: inherit;
   color: inherit;
 }
 
-.button:focus-visible, .button.is-focused,
+.button:focus-visible,
+.button.is-focused,
 .file[role=button]:focus-visible {
   border-color: transparent;
   outline-offset: 3px;
   outline-style: solid;
   outline-width: 2px;
 }
+
 .button:focus:not(:focus-visible),
-.file[role=button]:focus:not(:focus-visible)
-{
+.file[role=button]:focus:not(:focus-visible) {
   outline: none;
 }
-.button:focus:not(:active), .button.is-focused:not(:active),
-.button.is-white:focus:not(:active), .button.is-white.is-focused:not(:active),
-.button.is-light:focus:not(:active), .button.is-light.is-focused:not(:active),
-.button.is-dark:focus:not(:active), .button.is-dark.is-focused:not(:active),
-.button.is-black:focus:not(:active), .button.is-black.is-focused:not(:active),
-.button.is-text:focus:not(:active), .button.is-text.is-focused:not(:active),
-.button.is-ghost:focus:not(:active), .button.is-ghost.is-focused:not(:active),
-.button.is-primary:focus:not(:active), .button.is-primary.is-focused:not(:active),
-.button.is-link:focus:not(:active), .button.is-link.is-focused:not(:active),
-.button.is-info:focus:not(:active), .button.is-info.is-focused:not(:active),
-.button.is-success:focus:not(:active), .button.is-success.is-focused:not(:active),
-.button.is-warning:focus:not(:active), .button.is-warning.is-focused:not(:active),
-.button.is-danger:focus:not(:active), .button.is-danger.is-focused:not(:active)
-{
-	box-shadow: none;
+
+.button:focus:not(:active),
+.button.is-focused:not(:active),
+.button.is-white:focus:not(:active),
+.button.is-white.is-focused:not(:active),
+.button.is-light:focus:not(:active),
+.button.is-light.is-focused:not(:active),
+.button.is-dark:focus:not(:active),
+.button.is-dark.is-focused:not(:active),
+.button.is-black:focus:not(:active),
+.button.is-black.is-focused:not(:active),
+.button.is-text:focus:not(:active),
+.button.is-text.is-focused:not(:active),
+.button.is-ghost:focus:not(:active),
+.button.is-ghost.is-focused:not(:active),
+.button.is-primary:focus:not(:active),
+.button.is-primary.is-focused:not(:active),
+.button.is-link:focus:not(:active),
+.button.is-link.is-focused:not(:active),
+.button.is-info:focus:not(:active),
+.button.is-info.is-focused:not(:active),
+.button.is-success:focus:not(:active),
+.button.is-success.is-focused:not(:active),
+.button.is-warning:focus:not(:active),
+.button.is-warning.is-focused:not(:active),
+.button.is-danger:focus:not(:active),
+.button.is-danger.is-focused:not(:active) {
+  box-shadow: none;
 }
-.button.is-white:focus, .button.is-white:focus-visible, .button.is-white.is-focused
-{
+
+.button.is-white:focus,
+.button.is-white:focus-visible,
+.button.is-white.is-focused {
   outline-color: $white;
 }
-.button.is-light:focus, .button.is-light:focus-visible, .button.is-light.is-focused
-{
+
+.button.is-light:focus,
+.button.is-light:focus-visible,
+.button.is-light.is-focused {
   outline-color: $grey-lightest;
 }
-.button.is-dark:focus, .button.is-dark:focus-visible, .button.is-dark.is-focused,
-.file[role=button].is-dark:focus, .file[role=button].is-dark:focus-visible
-{
+
+.button.is-dark:focus,
+.button.is-dark:focus-visible,
+.button.is-dark.is-focused,
+.file[role=button].is-dark:focus,
+.file[role=button].is-dark:focus-visible {
   outline-color: $dark;
 }
-.button.is-black:focus, .button.is-black:focus-visible, .button.is-black.is-focused,
-.file[role=button].is-black:focus, .file[role=button].is-black:focus-visible
-{
+
+.button.is-black:focus,
+.button.is-black:focus-visible,
+.button.is-black.is-focused,
+.file[role=button].is-black:focus,
+.file[role=button].is-black:focus-visible {
   outline-color: $black;
 }
-.button.is-text:focus, .button.is-text:focus-visible, .button.is-text.is-focused
-{
+
+.button.is-text:focus,
+.button.is-text:focus-visible,
+.button.is-text.is-focused {
   outline-color: $text;
 }
-.button.is-ghost:focus, .button.is-ghost:focus-visible, .button.is-ghost.is-focused
-{
+
+.button.is-ghost:focus,
+.button.is-ghost:focus-visible,
+.button.is-ghost.is-focused {
   outline-color: $text;
 }
-.button.is-primary:focus, .button.is-primary:focus-visible, .button.is-primary.is-focused
-{
+
+.button.is-primary:focus,
+.button.is-primary:focus-visible,
+.button.is-primary.is-focused {
   outline-color: $primary;
 }
-.button.is-link:focus, .button.is-link:focus-visible, .button.is-link.is-focused
-{
+
+.button.is-link:focus,
+.button.is-link:focus-visible,
+.button.is-link.is-focused {
   outline-color: $link;
 }
-.button.is-info:focus, .button.is-info:focus-visible, .button.is-info.is-focused
-{
+
+.button.is-info:focus,
+.button.is-info:focus-visible,
+.button.is-info.is-focused {
   outline-color: $info;
 }
-.button.is-success:focus, .button.is-success:focus-visible, .button.is-success.is-focused
-{
+
+.button.is-success:focus,
+.button.is-success:focus-visible,
+.button.is-success.is-focused {
   outline-color: $success;
 }
-.button.is-warning:focus, .button.is-warning:focus-visible, .button.is-warning.is-focused
-{
+
+.button.is-warning:focus,
+.button.is-warning:focus-visible,
+.button.is-warning.is-focused {
   outline-color: $warning;
 }
-.button.is-danger:focus, .button.is-danger:focus-visible, .button.is-danger.is-focused
-{
+
+.button.is-danger:focus,
+.button.is-danger:focus-visible,
+.button.is-danger.is-focused {
   outline-color: $danger;
 }
 
-button.is-main
-{
+button.is-main {
   box-shadow: $button-focus-box-shadow-size $button-focus-box-shadow-color;
 }
 
 .file[role=button]:focus-visible {
   border-radius: $radius;
 }
+
 .file[role=button].is-small:focus-visible {
   border-radius: $radius-small;
 }
 
-.tag-button:focus-visible
-{
+.tag-button:focus-visible {
   border-color: transparent;
   border-radius: 3px;
   outline-width: 1px;
   outline-style: solid;
   outline-offset: 3px;
 }
-.tag-button:focus:not(:focus-visible)
-{
+
+.tag-button:focus:not(:focus-visible) {
   outline: none;
 }
-.tag-button-link:focus-visible
-{
+
+.tag-button-link:focus-visible {
   outline-color: $link;
 }
-.tag-button-danger:focus-visible
-{
+
+.tag-button-danger:focus-visible {
   outline-color: $danger;
 }
 
-.clear-selection
-{
-  vertical-align: bottom;
+.clear-selection {
+  vertical-align: text-bottom;
+  ;
 }
-.clear-selection:focus-visible
-{
+
+.clear-selection:focus-visible {
   border-color: transparent;
   outline-offset: 1px;
   outline: 2px solid $text;
 }
-.clear-selection:focus:not(:focus-visible)
-{
+
+.clear-selection:focus:not(:focus-visible) {
   outline: none;
 }
 
-a:focus-visible
-{
+a:focus-visible {
   outline-offset: 2px;
   border-radius: 3px;
   outline: 1px dashed $link;
 }
-a:focus:not(:focus-visible)
-{
+
+a:focus:not(:focus-visible) {
   outline: none;
 }
-a.has-text-black-bis:focus, a.has-text-black-bis:focus-visible {
+
+a.has-text-black-bis:focus,
+a.has-text-black-bis:focus-visible {
   outline-color: $black-bis;
 }
-a.has-text-black-ter:focus, a.has-text-black-ter:focus-visible {
+
+a.has-text-black-ter:focus,
+a.has-text-black-ter:focus-visible {
   outline-color: $black-ter;
 }
-a.has-text-grey-darker:focus, a.has-text-grey-darker:focus-visible {
+
+a.has-text-grey-darker:focus,
+a.has-text-grey-darker:focus-visible {
   outline-color: $grey-darker;
 }
-a.has-text-grey-dark:focus, a.has-text-grey-dark:focus-visible {
+
+a.has-text-grey-dark:focus,
+a.has-text-grey-dark:focus-visible {
   outline-color: $grey-dark;
 }
-a.has-text-grey:focus, a.has-text-grey:focus-visible {
+
+a.has-text-grey:focus,
+a.has-text-grey:focus-visible {
   outline-color: $grey;
 }
-a.has-text-grey-light:focus, a.has-text-grey-light:focus-visible {
+
+a.has-text-grey-light:focus,
+a.has-text-grey-light:focus-visible {
   outline-color: $grey-light;
 }
-a.has-text-grey-lighter:focus, a.has-text-grey-lighter:focus-visible {
+
+a.has-text-grey-lighter:focus,
+a.has-text-grey-lighter:focus-visible {
   outline-color: $grey-lighter;
 }
-a.has-text-white-ter:focus, a.has-text-white-ter:focus-visible {
+
+a.has-text-white-ter:focus,
+a.has-text-white-ter:focus-visible {
   outline-color: $white-ter;
 }
-a.has-text-white-bis:focus, a.has-text-white-bis:focus-visible {
+
+a.has-text-white-bis:focus,
+a.has-text-white-bis:focus-visible {
   outline-color: $white-bis;
 }
 
-a.tag.is-dark.is-rounded:focus-visible
-{
+a.tag.is-dark.is-rounded:focus-visible {
   outline-offset: 1px;
   outline: 1px solid $grey;
 }
-a.tag.is-dark.is-rounded:focus:not(:focus-visible)
-{
+
+a.tag.is-dark.is-rounded:focus:not(:focus-visible) {
   outline: none;
 }
 
 .tabs a:focus-visible {
   outline-offset: -4px;
 }
-.tabs a:focus:not(:focus-visible)
-{
+
+.tabs a:focus:not(:focus-visible) {
   outline: none;
 }
 
-.control.has-icons-right > span.icon:focus-visible,
-.control.has-icons-left > span.icon:focus-visible
-{
+.control.has-icons-right>span.icon:focus-visible,
+.control.has-icons-left>span.icon:focus-visible {
   outline: none;
   border: 1px solid $input-focus-border-color;
   box-shadow: $input-focus-box-shadow-size $input-focus-box-shadow-color;
 }
-.control.has-icons-right > span.icon:focus:not(:focus-visible),
-.control.has-icons-left > span.icon:focus:not(:focus-visible)
-{
+
+.control.has-icons-right>span.icon:focus:not(:focus-visible),
+.control.has-icons-left>span.icon:focus:not(:focus-visible) {
   outline: none;
 }
 
-.is-checkradio[type="checkbox"] + label:focus, 
-.is-checkradio[type="checkbox"] + label:focus-visible
-{
+.is-checkradio[type="checkbox"]+label:focus,
+.is-checkradio[type="checkbox"]+label:focus-visible {
   outline: none;
   border: none;
 }
-.is-checkradio[type="checkbox"] + label:focus::before, 
-.is-checkradio[type="checkbox"] + label:focus-visible::before
-{
+
+.is-checkradio[type="checkbox"]+label:focus::before,
+.is-checkradio[type="checkbox"]+label:focus-visible::before {
   outline: none;
   border: 1px solid $input-focus-border-color;
   box-shadow: $input-focus-box-shadow-size $input-focus-box-shadow-color;
 }
-.is-checkradio[type="checkbox"] + label::before, 
-.is-checkradio[type="checkbox"] + label::before
-{
+
+.is-checkradio[type="checkbox"]+label::before,
+.is-checkradio[type="checkbox"]+label::before {
   border-color: $grey;
 }
 
@@ -660,10 +744,10 @@ a.tag.is-dark.is-rounded:focus:not(:focus-visible)
   margin-right: 5px;
 }
 
-  .is-underscored.is-dot {
-    border: none;
-    border-radius: 50%;
-  }
+.is-underscored.is-dot {
+  border: none;
+  border-radius: 50%;
+}
 
 .is-mid-width-field input {
   width: 50% !important;
@@ -686,7 +770,8 @@ a.tag.is-dark.is-rounded:focus:not(:focus-visible)
   text-transform: uppercase !important;
 }
 
-.control.has-icons-left .icon, .control.has-icons-right .icon {
+.control.has-icons-left .icon,
+.control.has-icons-right .icon {
   color: inherit;
 }
 
@@ -818,7 +903,7 @@ footer .field.is-grouped {
   content: "";
   position: absolute;
   left: 0;
-  width: 100%; 
+  width: 100%;
   opacity: 0.05;
   height: 256px;
   background-repeat: no-repeat;
@@ -826,7 +911,9 @@ footer .field.is-grouped {
   background-image: url('data:image/png;base64,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');
 }
 
-.error-404, .error-generic, .too-bad {
+.error-404,
+.error-generic,
+.too-bad {
   display: block;
   margin-bottom: 1rem;
   opacity: 0.1;
@@ -835,7 +922,8 @@ footer .field.is-grouped {
   background-position: top left 50%;
 }
 
-.error-generic, .too-bad {
+.error-generic,
+.too-bad {
   background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQAAAAEACAYAAABccqhmAAAACXBIWXMAAAsTAAALEwEAmpwYAAAUh0lEQVR4nO3de5CX1X3H8TcsLLjIRUB0UAkoSsao0IkaiU5JvDu5yUxGJe2MGmv/MLWJTlNNnGqj/aPGIGqcNBobm0xN0wQbJ5PWtN5aRUSMRqE6sYgSFQzLVUGQ5bL947srCLiwu8/nnOfyec2c4Q9mvr/f+Z3vc/Y8z3MuYGZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmSQ3I/QWscMOA8cDBwNiuMgYYDQwFhgCtu/wLsKWrdHT9uxlYC6zuKmuAVcBy4L1E9bAE3AFU03DgOOB4YDIwEZjU9e9Y4ed2Au3Aa8CyrrIEWAz8L9FxWIW4Ayi/kcD0rjIVOIG40MvWdjuApcAi4HlgPvA08G7OL2U9K1sSGRwKnAmcBpwKHAsMzPqN+m4b8ALwJDAPeIS4tbCScAeQ3yDir/t5XWUq9W2X7cAzwINd5TfEbYVZo7QCnwV+DKwnLoImlpXAXcAZQEu/flGzkmsBzgXuBdaR/+IrW1kJ/AMwg/qOgKyBJgDfAt4g/0VWlbIEuAY4pA+/t1l2A4HPA/9B3PfmvqCqWjqAucRDUbPSawO+QvwFy33x1K0sAi5h5+Qls9I4BPg7YsZc7gul7mUFcB1w0H61jJnQWODbxGSX3BdG08p64AZgxD5byaxgo4CbgHfIfyE0vawBvkGsgTCTagGuxK/xylhWApfiV4gmcgrwHPkT3aXnMo9YL2FWiDHAD4jFLrmT22X/ylZgDrFq0qxPBgB/RqyHz53QLn0ry4GLdm9Ys32ZBjxF/gR2KaY8DEzBbB+GEkPHbeRPWpdiyxbgRmL1pdkejiE2ssidqC7a8iRwBGa7mIXf6TeprCaWYzde09+ZDgXuAC7P/UWEthG78KwD3gY2EHv3dRAXA0QetAIHEE/ORxJTbUdT3yFzJ3ArMYloa+bvkk2TO4ApwM+oxzvj5cBLwO+IffleBV4n5s13v8XoiwHEdOfxxLLmI4GjgI8SW5Ud1q9vXQ4LgAuJ38sa4kvEX8LcQ9G+lE3EU+3rgNOJv9K5jO76Dtd1fadN5P99+lLWEsu3reZagbvJn3C9KR3AE8SmIjOI/fzLagjwKeK7PsHO24yqlFvx1mS1NZz4K5U7yfanrABmA2cTewxUVRtRh9lEnXL/rvtTHiCeDVmNjGPnDrRlLe8C/wycQz3/CrUQdbuP8i+ffpxY8Wk1MIny7tCzA3iU2OmmSfPWhxN1fpTyrrFYRDz8tAqbSjmHnuuI/QQm6KpeGROI36KMS6yX4SnElTWD8u25vxK4Fu9iszcjiN+mnfzttGtZBZwsrLcJzCQmu+ROnu7yBvCXxEQb61kb8FXgTfK3W3fZSDy/sAq4lPIs5llKzDL0Tra910r8dkvJ346dxCvNC6Q1tn6bSTku/o3A14HB2uo2wmDit9xI/nbtwCOB0poBvEf+JPk5cLi4rk10BHFISO723YifCZTOVPI/8FuC/zqkcA75X+uuwm8HSmMS8Bb5kmEz8DeUe4pu3QwBrifvg97fU4/FUJU2jrx/DRYSq+Msj6OINsjV/ovxCUXZDAeeJV/j34af7pdBK3A7+fJgHn69m1wr+Rb2rAXO11fRemkm+WYT/pL6bpxSSveQp6EXAB9JUD/rm4nA0+TJjdv01TOAPyVPA9+K3+tXwWCirXLkiEeGYlNIv5PPFmLTUKuWWaTfkGQtHiHKDAVeIG2DbgDOSlE5kziL9H8wFuCRosRdpG3IduDEJDUzpZOIiTspc2d2kpo1yEWkbcDXiINCrB6OIdb2p8yhz6WoWBMcTdpDO7wTTD2NJ9o2VR6twRu+9NsQ4Leka7Qn8V5wdTYKmE+6fJqP5wf0S8rXOYvwxd8Eo4gpvKny6qY01aqfaaRb2/8aHvY3yXjSPRPYglcO9toA0g3V2vEDvyaaQrq3Aw8nqlNtXEaahtmAX/U12UmkmyfgyWT7aQw7D7RUD808ycfOIs2MwRV4N+j9kursPvfI1m0WaXKudAuGynY8+CeAp9B/rznA1eLPyGk6xe9Ws5xom7qaA3xN/BnbgY8TU9ptNy3Ac+h74SbM1VZsnjk3aQ3SG0yapcTzKdEf3oG5v8AurgD+SPwZ64lpxVvFn2PVsxW4kMgRpenEQ27bxUhiKaW6923Kem2PAPrufPR52A4cmKpCPSnLCOBq9Jsr3k6c/W7WkweAO8SfcTBwpfgzKmM08DbaHnchzdrA0yOA/mkFnkGbk2sowWvBMowA/grtD/EeO3eHMdsfHUTOvCf8jNHAVcL4lTAW/Uys65PVpjw8AijGDWhzcz2ZzxXIPQL4C7QPQ14BbhbGt3q7mcghlZHE269GOoB4GqrsYZt6Vp9HAMU5F22OvkXGY+VyjgAuJp6GqtwP/KcwvjXDr4F/E8Y/lNjqvlEGAi+j61U30Owjuj0CKNYRxLHgqnx9kUyzA3ONAD6Ddg3+jcCbwvjWLG8QOaVyLHGr0Ri/QtebLqX+c/33xSOA4g0mckuVt79IV5WdcowADkfb2/09nutvxduK9o3SZ4nnAUnl6AC+TKz8U3gT+JEottk/EcuiFQYBl4pif6jUHcBAogNQuQXP+DOdDiLHVC6jREuFFc5Adw+1kphbYH4GoNSGdv7KjHRVST8CuEgYew6wWRjfDGATkWsqymskq0HoNvtcRwlWVpWIRwBaI4icU+RyO7pnZHtIOQI4k9jxV+FO4vxAsxTeIXJO4WDgdFHsPaTsAC4Qxe0kdhI2S+kHRO4pXCiKu4dUHUAL8AVR7P8mZmqZpfQ68D+i2DNJdBuQqgP4BLEBgsKPRXHN9kWVe6OBk0WxPyBVB3CeKO4m/HDK8pmL7s2T6pr5gFQdgGrq7wPEKi2zHDag22g2yeKgFB3AOOI0FAUP/y03VQ6eiHa/DCBNB3AGmumNK/Cxy5bfQ8SuPkUbQLw6l0rRAZwmivtT4qw1s5y2A/8iin2qKO77UnQAqkp4uy8ri/8Sxa18BzAcOF4QtwOYJ4hr1hfz0OxBcTxxDcmoO4BTRJ+xkHgFaFYG7xI5WbQWYg6NjLoDmC6K+6gorllfqXLyk6K4gL4DmCaK+5gorllfqXJyqiguoO8AThDE3Aw8JYhr1h/z0ZwlqLiG3qfsAIYBRwrizge2COKa9ccWIjeLdiRxLUkoO4Dj0EwA8vDfykrxHGAg8DFB3PeDqyhe/4GH/1ZeqtxUXUvSDuBoUdznRXHN+kuVm6prSdoBTBTEXA6sFcQ1K8JaNOcGTBTEBKrXAbwkiGlWJEWOThTEBKrXAfxOENOsSC8LYk4UxAR0HcABxD4ARVsqiGlWpFcEMQ9BdOiNqgM4TBT3VVFcs6KocnS8IqiqAxgrivu6KK5ZUVQ5KrmmqtYBrBDFNSuKKkcb3wFsI44WMyuz1USuFq3xHcBadCexmBWlE81clUp1AIpDQNYJYpopKHJVcrCO8jVg0d4WxDRTUORqpV4DtgpibhDENFNQ5KrimpJ1AEMEMVVHMJkVTZGrimuqUiOADkFMMwVFrjZ+BOA3AFYVilyt1AjAzCpA1QEo9uxTbC9mpqDIVck+mKoOoDL3QGYClXkGVqURgOQ9qJmAIlcbPwKQnpFmViBFrlZqBKB4DzpSENNMQZGrknkwqg5AsRjiIEFMMwVFrko2w1V1AIplu6PxmwArvwFoFu5IlsJXqQMYhG6jEbOijCVytWiN7wBAtC+aWYFUOSq5phQ9Feg6gAnAC6LYdbKgIjHraIIobqU6AMXpKKA5bbiOvpP7CzSYKkclew0qXwO2C+IeJYhpVqTJgpgrqdhrQIBlgpgfFcQ0K9IUQcxlgphA9TqAYwUxzYqkyNFlgphA9TqAwxBtjmhWgNFoTsVaJogJaDuAJaK400RxzfpLlZuqa0naASwWxZ0uimvWX6rcVF1LUsOAHcT2SEWWh1NWwqwXHqH4fN9OXEuV9ArF/yCbEO2PZtYPQ4hXdUXnu2z4D/o9ARcJYh6AbwOsfD4JDBXEVVxD71N3AM+L4n5aFNesr1Q5KZ36ru4AnhLFPV0U16yvVDk5XxQ3ieHEQ4yi74u2AG0J62HWk2HEll1F5/k2xFvhqUcAG9C8wmgFThPENeuL04DBgriLEZ+JmeJgkCdFcc8RxTXrrbNFcVXXTlKzKH5o1Eksj2xJWA+zvWkhclGR47MS1kNmHJoJQZ14FGD5nYsmt3cAByesh9QzaH6k+1JWwmwvfoImtxem+PKpDgf9tSju+cCBothm+zKcyEEF1TXzAak6gAdFcduAL4pim+3LF9EdWae6ZrJoAdagGSo9mrAeZrt6DE1Or6GGD7h/iO5hiWon1qqaS/G/89ykNSi/Cegebt+TqhKpbgEAfiaKOwC4XBTb7MNcju6kqn8Vxc1qELG3uaLHXAeMSFeV0vMIQGsEkXOKXG4n4fA/5QhgG/ALUexRwBWi2Ga7+wqRcwr3E+tnkkjZAQD8VBj7KnRPZM26tRG5pqK8RvaQugN4DPi9KPY4/CzA9C5HN0NvKfC4KPZepe4AdhBvA1S+TqwUNFNoJXJM5R+J5wDJpO4AIDoA1T3O4cDFothml6DZ9x/iGdm9otgfKkcH8CbaaY7Xolmbbc02GLhGGP9XwB+E8fcqRwcAcJcw9pHA14TxrZmuQns69d3C2KUzEHgZzXvUTmAjcTvQVJ4HUKwjiJxS5euL6CYV9SjXCGAHMEcYfxhwmzC+NcttaA/nuJXED//K4ABi1pOqV+2kuRuGeARQHNWGH93lLTIedJNrBABxisr3xJ9xJz5FyPpuKJFDSncSu1xnkbMDAPgucW+lMhntk1urt2uAo4Tx30b/R7BHuTuANUQnoPQNtI1o9TSZeKWsNIdYVNRoo4meUHmftZBmzRD0M4D+aUW3j2V3WUMJVrDmHgEArEX/xP4k4Nviz7D6uAU4UfwZ3wHeEX9GZYwkOgJlj9uJbgPHsvEIoO9mos/DdkqymW0ZRgAQtwA3JPice4GJCT7Hqmki2sVq3b6J9uF3JbUAz6LvfZ+m/msFPALovcFEbqjzbz6ZZv3tTWm+SJeTiSPF1SOTOcDV4s/IaTrFr1pbju649zKYg34NyXbg48AL4s+ptLvQ98Kd1OTcNSuE6vzK3Yunp++H0cAq9I2xBTgrUZ2svM4GOtDn2wpK8NqvKr5Mmh55A/GK0JrpJCIHPOIsmQHAPNI0zCrgmDTVshKZQpqRZifwcKI61crxwFbSNNAyYHySWlkZHEa0eYrc2kJ0NtYHt5CmkTqBRej2erfyGAUsJl1e3ZSmWvU0hDRzA7rLfNwJ1Nkooo1T5tOgJDWrsaPQLxbafSTg24H6GU/av/xriK3ErAAXkq7hOon7Qz8YrI8ppLvn7y6fS1GxJvk+aRuwHf2KMNM7iXRP+7vL7CQ1a5ihwPOkbcgNeLJQlZ1Nuvf83WUB9V9rks0xpG/QDjyJo4pmkWaG365lLfCRFJVrsj8hbaN2lzm4Z6+CwURb5ciRLySonwH3kKeBn8b7CZTZRNIs6d1b8UKfhFqJ6ZU5GnodzdlZqEpmEm2TIyd+SexnYQkNB35DngbvBG6nWRuNllUrcAf58uAJ4pAby2AcsIR8jf8M3nI8p8nod+/tqSzGM0ezm0Qcr5QrCTYD1+MTiFIaQuwhuZl87b4MzxgtjanAevIlQycxEjlXXVHjXPKO+jqJiUVe4VcyM8j7F6G7zKXZR5OrHAHcT/723UjsXWklNBPYRjmS5K/xvIEiDCZ+y43kb9cOYnahldgllKMT6ASWAn+O3xb0RSvx2y0lfzt2X/wXSGtshZlJOW4HussbwFeBNmWla6KN2J77TfK3W3fZCJyjrLQV74/J/2Bw99JOnFbs3WH3NIL4bdrJ3067llX4nr+yTiC2Y86dRLuXdcRWURN0Va+MCcRvkWsWX09lGd4XovImAf9H/mTaW9kBPAZcSsxsbIrhRJ0fI36D3O2wt+KdoWpkHHmnDe9PeRe4j3jPXcd55S1E3X4CbCL/791TeRzP8Kud4cBD5E+u/SkriF1lzqHaDw7biDrMppy3YnsrDxCbz1gNtQJ3kz/JelM6iENSbgQ+RbmnHA8BPk1813mk35Cjv2U29Rx92W6+RPqdhYoqm4FHgOuA04mzFHMZ3fUdruv6TmV69dqbshb4fMG/TSWU7XjwlI4Bfk68Kai65cBLwMvAK8CrwOvEsHs1keR9MQAYSzwMmwAcSazAmwIcS/FHkOewgNh1+vXcXySHJncAEPd6txMzzupqG/EXbh1xvsIG4i919/AcIg9aiXXtw4GRwEHEX/i6HmzRPeT/JnEEnTXYRcA75B+KuqQpq4HPYLaLo4Hfkj85XbRlHl6taR9iKLGjbFkWE7kUV7YA36K+tzRWoGmkPUTSRVsewlN6rZcGAJex8ym6S/XKcuIJv1mfjSEmD5V1zrrLnmUrcCvNWl9hYqcAz5E/uV16Lk8Ax39IG5r1SwtwJeVcutr0spLYDarpc1ssgVHEfHfPHchf1gDXAsN6bDEzgTHAzcRS3twXQtPKeuI8Bu+uZNkdQuxq4zcG+rKCmL570H61jFlCbcAV5D+4oo5lEXAx3mHZKmAgsbz034Ht5L94qlo6iBWbZ/bu5zcrjwnA3xJbg+e+oKpSlhCHgYzr/c9tVk4txPZYPySW5+a+yMpW/gB8j9jO3a/yrNZaieWoP6LZcwpWAt8ndhXyVlwZuKfNbxAxy/C8rjKN+rbLdmAh8GBXeZboCCyTuiZalR1KPPQ6tat8jHioWEXbgOeBJ7vKI8Ttj5WEO4DyG0mMEKYDU4k9DCdRvrbbQexHuIi46OcTf+3fzfmlrGdlSyLbPwcCxxGLXiYDE4lOYSJwsPBzu+/bXyOOzVpGPLFfDLxI7DVoFeIOoH7aiN16x+5SxhAbfA4l9u5v3eVfiN1yOrr+3QK8R8yxX91V1hCHZK7o+j8zMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzPri/8HlebCuRQTbPoAAAAASUVORK5CYII=');
 }
 
@@ -866,46 +954,47 @@ footer .field.is-grouped {
 }
 
 .fadeInOut-enter-active {
-    animation: fadeIn 500ms
+  animation: fadeIn 500ms
 }
 
 .fadeInOut-leave-active {
-    animation: fadeOut 500ms
+  animation: fadeOut 500ms
 }
 
 
 .tfa-grid .slideCheckbox-enter-active {
-    animation: enterFromTop 500ms
+  animation: enterFromTop 500ms
 }
 
-.tfa-grid .slideCheckbox-enter-active + .tfa-content {
-    animation: addTopOffset 500ms
+.tfa-grid .slideCheckbox-enter-active+.tfa-content {
+  animation: addTopOffset 500ms
 }
 
 .tfa-grid .slideCheckbox-leave-active {
-    animation: leaveToTop 500ms
+  animation: leaveToTop 500ms
 }
 
-.tfa-grid .slideCheckbox-leave-active + .tfa-content {
-    animation: removeTopOffset 500ms
+.tfa-grid .slideCheckbox-leave-active+.tfa-content {
+  animation: removeTopOffset 500ms
 }
 
 // @media screen and (max-width: 768px) {
-  .tfa-list .slideCheckbox-enter-active {
-      animation: enterFromLeft 500ms
-  }
+.tfa-list .slideCheckbox-enter-active {
+  animation: enterFromLeft 500ms
+}
 
-  .tfa-list .slideCheckbox-enter-active + .tfa-content {
-      animation: addLeftOffset 500ms
-  }
+.tfa-list .slideCheckbox-enter-active+.tfa-content {
+  animation: addLeftOffset 500ms
+}
 
-  .tfa-list .slideCheckbox-leave-active {
-      animation: leaveToLeft 500ms
-  }
+.tfa-list .slideCheckbox-leave-active {
+  animation: leaveToLeft 500ms
+}
 
-  .tfa-list .slideCheckbox-leave-active + .tfa-content {
-      animation: removeLeftOffset 500ms
-  }
+.tfa-list .slideCheckbox-leave-active+.tfa-content {
+  animation: removeLeftOffset 500ms
+}
+
 // }
 
 /*FadeInOut*/
@@ -914,6 +1003,7 @@ footer .field.is-grouped {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -924,9 +1014,11 @@ footer .field.is-grouped {
     from {
       opacity: 0;
     }
+
     75% {
       opacity: 0;
     }
+
     to {
       opacity: 1;
     }
@@ -937,6 +1029,7 @@ footer .field.is-grouped {
   from {
     opacity: 1;
   }
+
   to {
     opacity: 0;
   }
@@ -948,6 +1041,7 @@ footer .field.is-grouped {
     transform: translateX(-100%);
     opacity: 0;
   }
+
   to {
     transform: translateX(0);
     opacity: 1;
@@ -958,6 +1052,7 @@ footer .field.is-grouped {
   from {
     transform: translateX(-2.375rem);
   }
+
   to {
     transform: translateX(0);
   }
@@ -969,6 +1064,7 @@ footer .field.is-grouped {
     transform: translateY(-50%);
     opacity: 0;
   }
+
   to {
     transform: translateY(0);
     opacity: 1;
@@ -979,6 +1075,7 @@ footer .field.is-grouped {
   from {
     transform: translateY(-2rem);
   }
+
   to {
     transform: translateY(0);
   }
@@ -989,6 +1086,7 @@ footer .field.is-grouped {
   from {
     transform: translateX(0);
   }
+
   to {
     transform: translateX(-100%);
     opacity: 0;
@@ -999,6 +1097,7 @@ footer .field.is-grouped {
   from {
     transform: translateX(0);
   }
+
   to {
     transform: translateX(-2.375rem);
   }
@@ -1009,6 +1108,7 @@ footer .field.is-grouped {
   from {
     transform: translateY(0);
   }
+
   to {
     transform: translateY(-50%);
     opacity: 0;
@@ -1019,6 +1119,7 @@ footer .field.is-grouped {
   from {
     transform: translateY(0);
   }
+
   to {
     transform: translateY(-2rem);
   }
