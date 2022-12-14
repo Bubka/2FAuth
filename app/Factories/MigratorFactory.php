@@ -9,6 +9,7 @@ use App\Services\Migrators\GoogleAuthMigrator;
 use App\Services\Migrators\Migrator;
 use App\Services\Migrators\PlainTextMigrator;
 use App\Services\Migrators\TwoFASMigrator;
+use App\Services\Migrators\TwoFAuthMigrator;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Validator;
@@ -23,7 +24,9 @@ class MigratorFactory implements MigratorFactoryInterface
      */
     public function create(string $migrationPayload) : Migrator
     {
-        if ($this->isAegisJSON($migrationPayload)) {
+        if ($this->isTwoFAuthJSON($migrationPayload)) {
+            return App::make(TwoFAuthMigrator::class);
+        } elseif ($this->isAegisJSON($migrationPayload)) {
             return App::make(AegisMigrator::class);
         } elseif ($this->is2FASv2($migrationPayload)) {
             return App::make(TwoFASMigrator::class);
@@ -71,6 +74,35 @@ class MigratorFactory implements MigratorFactoryInterface
                 '*' => 'regex:/^otpauth:\/\/[h,t]otp\//i',
             ]
         )->passes();
+    }
+
+    /**
+     * Determine if a payload comes from 2FAuth in JSON format
+     *
+     * @param  string  $migrationPayload The payload to analyse
+     * @return bool
+     */
+    private function isTwoFAuthJSON(string $migrationPayload) : bool
+    {
+        $json = json_decode($migrationPayload, true);
+
+        if (Arr::has($json, 'schema') && (strpos(Arr::get($json, 'app'), '2fauth_') === 0)) {
+            return count(Validator::validate(
+                $json,
+                [
+                    'data.*.otp_type'  => 'required',
+                    'data.*.service'   => 'required',
+                    'data.*.account'   => 'required',
+                    'data.*.secret'    => 'required',
+                    'data.*.digits'    => 'required',
+                    'data.*.algorithm' => 'required',
+                    'data.*.period'    => 'present',
+                    'data.*.counter'   => 'present',
+                ]
+            )) > 0;
+        }
+
+        return false;
     }
 
     /**

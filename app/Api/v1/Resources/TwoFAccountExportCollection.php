@@ -17,10 +17,15 @@ class TwoFAccountExportCollection extends ResourceCollection
      * Transform the resource collection into an array.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Support\Collection<int|string, TwoFAccountExportResource>
+     * @return array
      */
     public function toArray($request)
     {
-        return $this->collection;
+        return [
+            'app'      => '2fauth_v' . config('2fauth.version'),
+            'schema'   => 1,
+            'datetime' => now(),
+            'data'     => $this->collection,
+        ];
     }
 }

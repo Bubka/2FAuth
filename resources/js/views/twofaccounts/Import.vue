@@ -43,6 +43,12 @@
                 <div class="field is-grouped is-grouped-multiline pt-0">
                     <div class="control">
                         <div class="tags has-addons">
+                        <span class="tag is-dark">2FAuth</span>
+                        <span class="tag is-black">JSON</span>
+                        </div>
+                    </div>
+                    <div class="control">
+                        <div class="tags has-addons">
                         <span class="tag is-dark">Google Auth</span>
                         <span class="tag is-black">{{ $t('twofaccounts.import.qr_code') }}</span>
                         </div>
