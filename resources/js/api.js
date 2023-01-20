@@ -8,6 +8,10 @@ Vue.use(VueAxios, axios)
 Vue.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 Vue.axios.defaults.headers.common['Content-Type'] = 'application/json'
 
+if (window.appConfig.APP_SUBDIRECTORY) {
+    Vue.axios.defaults.baseURL = window.appConfig.subdirectory;
+}
+
 Vue.axios.interceptors.response.use(response => response, error => {
 
     // Return the error when we need to handle it at component level

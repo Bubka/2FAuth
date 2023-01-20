@@ -22,6 +22,7 @@ class SinglePageController extends Controller
             'appConfig'   => collect([
                 'proxyAuth'      => config('auth.defaults.guard') === 'reverse-proxy-guard' ? true : false,
                 'proxyLogoutUrl' => config('2fauth.config.proxyLogoutUrl') ? config('2fauth.config.proxyLogoutUrl') : false,
+                'subdirectory'    => '/' . config('2fauth.config.appSubdirectory') . '/',
             ])->toJson(),
             'lang'         => App::currentLocale(),
             'isDemoApp'    => config('2fauth.config.isDemoApp') ? 'true' : 'false',

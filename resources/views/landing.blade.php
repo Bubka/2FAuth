@@ -16,8 +16,8 @@
     <link rel="apple-touch-icon" href="{{ asset('favicon_lg.png') }}" />
     <link rel="apple-touch-icon-precomposed" href="{{ asset('favicon_lg.png') }}" />
     <link rel="manifest" href="/manifest.json">
-    
-    <link href=" {{ mix('css/app.css') }}" rel="stylesheet">
+
+    <link href=".{{ mix('css/app.css') }}" rel="stylesheet">
 </head>
 <body class="has-text-lighter">
     <div id="app">
@@ -31,8 +31,8 @@
         var isTestingApp = {!! $isTestingApp !!};
         var appLocales = {!! $locales !!};
     </script>
-    <script src="{{ mix('js/manifest.js') }}"></script>
-    <script src="{{ mix('js/vendor.js') }}"></script>
-    <script src="{{ mix('js/app.js') }}"></script>
+    <script src=".{{ mix('js/manifest.js') }}"></script>
+    <script src=".{{ mix('js/vendor.js') }}"></script>
+    <script src=".{{ mix('js/app.js') }}"></script>
 </body>
 </html>

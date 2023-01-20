@@ -31,6 +31,7 @@ import About            from './views/About'
 
 const router = new Router({
     mode: 'history',
+    base: window.appConfig.subdirectory ? window.appConfig.subdirectory : '/',
     routes: [
         { path: '/start', name: 'start', component: Start, meta: { requiresAuth: true }, props: true },
         { path: '/capture', name: 'capture', component: Capture, meta: { requiresAuth: true }, props: true },

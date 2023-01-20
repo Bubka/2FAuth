@@ -149,7 +149,7 @@
 
         beforeRouteEnter (to, from, next) {
             if (to.params.forceRefresh && from.name !== null) {
-                window.location.href = to.path;
+                window.location.href = "." + to.path;
                 return;
             }
 
