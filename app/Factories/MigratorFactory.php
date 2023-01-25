@@ -66,12 +66,13 @@ class MigratorFactory implements MigratorFactoryInterface
      */
     private function isPlainText(string $migrationPayload) : bool
     {
-        // - Plain text : one or more otpauth URIs (otpauth://[t|h]otp/...), one per line
+        // - Plain text : one or more otpauth URIs (otpauth://(hotp|totp|steam)/...), one per line
 
         return Validator::make(
             preg_split('~\R~', $migrationPayload, -1, PREG_SPLIT_NO_EMPTY),
             [
-                '*' => 'regex:/^otpauth:\/\/[h,t]otp\//i',
+                // The regex rule must be embraced with brackets when it cointains a pipe
+                '*' => ['regex:/^otpauth:\/\/(?:steam|totp|hotp)\//i'],
             ]
         )->passes();
     }

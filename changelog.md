@@ -1,5 +1,11 @@
 # Change log
 
+## [3.4.2] - 2023-01-25
+
+### Fixed
+
+- [issue #160](https://github.com/Bubka/2FAuth/issues/160) Steam otpauth URI from Aegis are rejected by the Import feature
+
 ## [3.4.1] - 2022-11-25
 
 ### Fixed

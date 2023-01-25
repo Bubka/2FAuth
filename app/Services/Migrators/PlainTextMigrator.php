@@ -21,7 +21,7 @@ class PlainTextMigrator extends Migrator
     {
         $otpauthURIs = preg_split('~\R~', $migrationPayload);
         $otpauthURIs = Arr::where($otpauthURIs, function ($value, $key) {
-            return Str::startsWith($value, ['otpauth://totp/', 'otpauth://hotp/']);
+            return Str::startsWith($value, ['otpauth://totp/', 'otpauth://hotp/', 'otpauth://steam/']);
         });
 
         if (count($otpauthURIs) < 1) {
@@ -31,9 +31,11 @@ class PlainTextMigrator extends Migrator
 
         foreach ($otpauthURIs as $key => $uri) {
             try {
-                $twofaccounts[$key] = new TwoFAccount;
-                $twofaccounts[$key]->fillWithURI($uri);
-            } catch (\Exception $exception) {
+               $twofaccounts[$key] = new TwoFAccount;
+               $twofaccounts[$key]->fillWithURI($uri, str_starts_with($uri, 'otpauth://steam/'));
+            }
+            catch (\Exception $exception) {
+
                 Log::error(sprintf('Cannot instanciate a TwoFAccount object with OTP parameters from imported item #%s', $key));
                 Log::debug($exception->getMessage());
 
