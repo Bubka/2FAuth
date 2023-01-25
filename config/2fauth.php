@@ -9,7 +9,7 @@ return [
     |
     */
 
-    'version' => '3.4.1',
+    'version' => '3.4.2',
     'repository' => 'https://github.com/Bubka/2FAuth',
     'latestReleaseUrl' => 'https://api.github.com/repos/Bubka/2FAuth/releases/latest',
 
