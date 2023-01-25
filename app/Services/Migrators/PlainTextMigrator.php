@@ -23,7 +23,7 @@ class PlainTextMigrator extends Migrator
     {
         $otpauthURIs = preg_split('~\R~', $migrationPayload);
         $otpauthURIs = Arr::where($otpauthURIs, function ($value, $key) {
-            return Str::startsWith($value, ['otpauth://totp/', 'otpauth://hotp/']);
+            return Str::startsWith($value, ['otpauth://totp/', 'otpauth://hotp/', 'otpauth://steam/']);
         });
 
         if (count($otpauthURIs) < 1) {
@@ -35,7 +35,7 @@ class PlainTextMigrator extends Migrator
 
             try {
                $twofaccounts[$key] = new TwoFAccount;
-               $twofaccounts[$key]->fillWithURI($uri);
+               $twofaccounts[$key]->fillWithURI($uri, str_starts_with($uri, 'otpauth://steam/'));
             }
             catch (\Exception $exception) {
 

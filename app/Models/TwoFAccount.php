@@ -408,7 +408,7 @@ class TwoFAccount extends Model implements Sortable
     {
         // First we instanciate the OTP generator
         try {
-            $this->generator = Factory::loadFromProvisioningUri($uri);
+            $this->generator = Factory::loadFromProvisioningUri($isSteamTotp ? str_replace('otpauth://steam', 'otpauth://totp', $uri) : $uri);
         }
         catch (\Assert\AssertionFailedException|\Assert\InvalidArgumentException|\Exception|\Throwable $ex) {
             throw ValidationException::withMessages([
@@ -459,6 +459,7 @@ class TwoFAccount extends Model implements Sortable
     private function enforceAsSteam() : void
     {
         $this->otp_type  = self::STEAM_TOTP;
+        $this->service   = 'Steam';
         $this->digits    = 5;
         $this->algorithm = self::SHA1;
         $this->period    = 30;
