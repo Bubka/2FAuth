@@ -8,7 +8,7 @@ Vue.use(VueAxios, axios)
 Vue.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 Vue.axios.defaults.headers.common['Content-Type'] = 'application/json'
 
-if (window.appConfig.APP_SUBDIRECTORY) {
+if (window.appConfig.subdirectory) {
     Vue.axios.defaults.baseURL = window.appConfig.subdirectory;
 }
 

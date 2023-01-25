@@ -17,13 +17,16 @@ class SinglePageController extends Controller
     {
         event(new ScanForNewReleaseCalled());
 
+        $subdir = config('2fauth.config.appSubdirectory') ? '/' . config('2fauth.config.appSubdirectory') : '';
+
         return view('landing')->with([
             'appSettings' => Settings::all()->toJson(),
             'appConfig'   => collect([
                 'proxyAuth'      => config('auth.defaults.guard') === 'reverse-proxy-guard' ? true : false,
                 'proxyLogoutUrl' => config('2fauth.config.proxyLogoutUrl') ? config('2fauth.config.proxyLogoutUrl') : false,
-                'subdirectory'    => '/' . config('2fauth.config.appSubdirectory') . '/',
+                'subdirectory'   => $subdir,
             ])->toJson(),
+            'subdirectory' => $subdir,
             'lang'         => App::currentLocale(),
             'isDemoApp'    => config('2fauth.config.isDemoApp') ? 'true' : 'false',
             'isTestingApp' => config('2fauth.config.isTestingApp') ? 'true' : 'false',
