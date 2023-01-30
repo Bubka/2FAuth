@@ -1,7 +1,7 @@
 <template>
     <div>
         <figure class="image is-64x64" :class="{ 'no-icon': !internal_icon }" style="display: inline-block">
-            <img :src="'/storage/icons/' + internal_icon" v-if="internal_icon" :alt="$t('twofaccounts.icon_to_illustrate_the_account')">
+            <img :src="$root.appConfig.subdirectory + '/storage/icons/' + internal_icon" v-if="internal_icon" :alt="$t('twofaccounts.icon_to_illustrate_the_account')">
         </figure>
         <p class="is-size-4 has-text-grey-light has-ellipsis">{{ internal_service }}</p>
         <p class="is-size-6 has-text-grey has-ellipsis">{{ internal_account }}</p>

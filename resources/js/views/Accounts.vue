@@ -143,7 +143,7 @@
         	                    </transition>
                                 <div tabindex="0" class="tfa-cell tfa-content is-size-3 is-size-4-mobile" @click="showAccount(account)" @keyup.enter="showAccount(account)" role="button">  
                                     <div class="tfa-text has-ellipsis">
-                                        <img :src="'/storage/icons/' + account.icon" v-if="account.icon && $root.appSettings.showAccountsIcons" :alt="$t('twofaccounts.icon_for_account_x_at_service_y', {account: account.account, service: account.service})">
+                                        <img :src="$root.appConfig.subdirectory + '/storage/icons/' + account.icon" v-if="account.icon && $root.appSettings.showAccountsIcons" :alt="$t('twofaccounts.icon_for_account_x_at_service_y', {account: account.account, service: account.service})">
                                         {{ displayService(account.service) }}<font-awesome-icon class="has-text-danger is-size-5 ml-2" v-if="$root.appSettings.useEncryption && account.account === $t('errors.indecipherable')" :icon="['fas', 'exclamation-circle']" />
                                         <span class="is-family-primary is-size-6 is-size-7-mobile has-text-grey ">{{ account.account }}</span>
                                     </div>
