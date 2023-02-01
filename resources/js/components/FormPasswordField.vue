@@ -26,14 +26,14 @@
         <div v-if="showRules" class="columns is-mobile is-size-7 mt-0">
             <div class="column is-one-third">
                 <span class="has-text-weight-semibold">{{ $t("auth.forms.mandatory_rules") }}</span><br />
-                <span class="is-underscored" :class="{'has-background-success-dark is-dot' : IsLongEnough}"></span>{{ $t('auth.forms.is_long_enough') }}<br/>
+                <span class="is-underscored" :class="{'is-dot' : IsLongEnough}"></span>{{ $t('auth.forms.is_long_enough') }}<br/>
             </div>
             <div class="column">
                 <span class="has-text-weight-semibold">{{ $t("auth.forms.optional_rules_you_should_follow") }}</span><br />
-                <span class="is-underscored" :class="{'has-background-success-dark is-dot' : hasLowerCase}"></span>{{ $t('auth.forms.has_lower_case') }}<br/>
-                <span class="is-underscored" :class="{'has-background-success-dark is-dot' : hasUpperCase}"></span>{{ $t('auth.forms.has_upper_case') }}<br/>
-                <span class="is-underscored" :class="{'has-background-success-dark is-dot' : hasSpecialChar}"></span>{{ $t('auth.forms.has_special_char') }}<br/>
-                <span class="is-underscored" :class="{'has-background-success-dark is-dot' : hasNumber}"></span>{{ $t('auth.forms.has_number') }}
+                <span class="is-underscored" :class="{'is-dot' : hasLowerCase}"></span>{{ $t('auth.forms.has_lower_case') }}<br/>
+                <span class="is-underscored" :class="{'is-dot' : hasUpperCase}"></span>{{ $t('auth.forms.has_upper_case') }}<br/>
+                <span class="is-underscored" :class="{'is-dot' : hasSpecialChar}"></span>{{ $t('auth.forms.has_special_char') }}<br/>
+                <span class="is-underscored" :class="{'is-dot' : hasNumber}"></span>{{ $t('auth.forms.has_number') }}
             </div>
         </div>
     </div> 

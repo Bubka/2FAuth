@@ -38,7 +38,10 @@ import {
     faEyeSlash,
     faExternalLinkAlt,
     faCamera,
-    faFileDownload
+    faFileDownload,
+    faSun,
+    faMoon,
+    faDesktop
 } from '@fortawesome/free-solid-svg-icons'
 
 import {
@@ -81,7 +84,10 @@ library.add(
     faEyeSlash,
     faExternalLinkAlt,
     faCamera,
-    faFileDownload
+    faFileDownload,
+    faSun,
+    faMoon,
+    faDesktop
 );
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)

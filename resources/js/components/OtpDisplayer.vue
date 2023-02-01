@@ -3,10 +3,10 @@
         <figure class="image is-64x64" :class="{ 'no-icon': !internal_icon }" style="display: inline-block">
             <img :src="$root.appConfig.subdirectory + '/storage/icons/' + internal_icon" v-if="internal_icon" :alt="$t('twofaccounts.icon_to_illustrate_the_account')">
         </figure>
-        <p class="is-size-4 has-text-grey-light has-ellipsis">{{ internal_service }}</p>
-        <p class="is-size-6 has-text-grey has-ellipsis">{{ internal_account }}</p>
+        <p class="is-size-4 has-ellipsis" :class="$root.showDarkMode ? 'has-text-grey-light' : 'has-text-grey'">{{ internal_service }}</p>
+        <p class="is-size-6 has-ellipsis" :class="$root.showDarkMode ? 'has-text-grey' : 'has-text-grey-light'">{{ internal_account }}</p>
         <p>
-            <span role="log" ref="otp" tabindex="0" class="otp is-size-1 has-text-white is-clickable px-3" @click="copyOTP(internal_password)" @keyup.enter="copyOTP(internal_password)" :title="$t('commons.copy_to_clipboard')">
+            <span role="log" ref="otp" tabindex="0" class="otp is-size-1 is-clickable px-3" :class="$root.showDarkMode ? 'has-text-white' : 'has-text-grey-dark'" @click="copyOTP(internal_password)" @keyup.enter="copyOTP(internal_password)" :title="$t('commons.copy_to_clipboard')">
                 {{ displayedOtp }}
             </span>
         </p>

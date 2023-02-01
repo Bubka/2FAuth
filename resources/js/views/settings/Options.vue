@@ -20,6 +20,8 @@
                     </div>
                     <!-- display mode -->
                     <form-toggle v-on:displayMode="saveSetting('displayMode', $event)" :choices="layouts" :form="form" fieldName="displayMode" :label="$t('settings.forms.display_mode.label')" :help="$t('settings.forms.display_mode.help')" />
+                    <!-- theme -->
+                    <form-toggle v-on:theme="saveSetting('theme', $event)" :choices="themes" :form="form" fieldName="theme" :label="$t('settings.forms.theme.label')" :help="$t('settings.forms.theme.help')" />
                     <!-- show icon -->
                     <form-checkbox v-on:showAccountsIcons="saveSetting('showAccountsIcons', $event)" :form="form" fieldName="showAccountsIcons" :label="$t('settings.forms.show_accounts_icons.label')" :help="$t('settings.forms.show_accounts_icons.help')" />
                     <!-- Official icons -->
@@ -56,7 +58,7 @@
         <vue-footer :showButtons="true">
             <!-- Cancel button -->
             <p class="control">
-                <button class="button is-dark is-rounded" @click.stop="exitSettings">
+                <button class="button is-rounded" :class="{'is-dark' : $root.showDarkMode}" @click.stop="exitSettings">
                     {{ $t('commons.close') }}
                 </button>
             </p>
@@ -104,10 +106,16 @@
                     rememberActiveGroup: true,
                     getOfficialIcons: null,
                     checkForUpdate: null,
+                    theme: 'dark',
                 }),
                 layouts: [
                     { text: this.$t('settings.forms.grid'), value: 'grid', icon: 'th' },
                     { text: this.$t('settings.forms.list'), value: 'list', icon: 'list' },
+                ],
+                themes: [
+                    { text: this.$t('settings.forms.light'), value: 'light', icon: 'sun' },
+                    { text: this.$t('settings.forms.dark'), value: 'dark', icon: 'moon' },
+                    { text: this.$t('settings.forms.automatic'), value: 'system', icon: 'desktop' },
                 ],
                 kickUserAfters: [
                     { text: this.$t('settings.forms.never'), value: '0' },
@@ -199,6 +207,10 @@
                     }
                     else {
                         this.$root.appSettings[response.data.key] = response.data.value
+
+                        if(settingName === 'theme') {
+                            this.setTheme(response.data.value)
+                        }
                     }
                 })
             },

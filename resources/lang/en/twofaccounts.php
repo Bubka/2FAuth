@@ -156,7 +156,7 @@ return [
         'possible_duplicate' => 'An account with the exact same data already exists',
         'invalid_account' => '- invalid account -',
         'invalid_service' => '- invalid service -',
-        'do_not_set_password_or_encryption' => 'Do NOT set a password or encryption On when you export data from a 2FA app.',
+        'do_not_set_password_or_encryption' => 'Do NOT enable Password protection or Encryption when you export data (from a 2FA app) you want to import into 2FAuth.',
     ],
 
 ];

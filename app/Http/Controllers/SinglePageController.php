@@ -20,6 +20,7 @@ class SinglePageController extends Controller
         $subdir = config('2fauth.config.appSubdirectory') ? '/' . config('2fauth.config.appSubdirectory') : '';
 
         return view('landing')->with([
+            'theme'       => Settings::get('theme'),
             'appSettings' => Settings::all()->toJson(),
             'appConfig'   => collect([
                 'proxyAuth'      => config('auth.defaults.guard') === 'reverse-proxy-guard' ? true : false,

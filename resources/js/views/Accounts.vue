@@ -6,7 +6,7 @@
                 <div class="column is-one-third-tablet is-one-quarter-desktop is-one-quarter-widescreen is-one-quarter-fullhd">
                     <div class="columns is-multiline">
                         <div class="column is-full" v-for="group in groups" v-if="group.twofaccounts_count > 0" :key="group.id">
-                            <button class="button is-fullwidth is-dark has-text-light is-outlined" @click="setActiveGroup(group.id)">{{ group.name }}</button>
+                            <button class="button is-fullwidth" :class="{'is-dark has-text-light is-outlined':$root.showDarkMode}" @click="setActiveGroup(group.id)">{{ group.name }}</button>
                         </div>
                     </div>
                     <div class="columns is-centered">
@@ -19,7 +19,7 @@
             <vue-footer :showButtons="true">
                 <!-- Close Group switch button -->
                 <p class="control">
-                    <button class="button is-dark is-rounded" @click="closeGroupSwitch()">{{ $t('commons.close') }}</button>
+                    <button class="button is-rounded" :class="{'is-dark' : $root.showDarkMode}" @click="closeGroupSwitch()">{{ $t('commons.close') }}</button>
                 </p>
             </vue-footer>
         </div>
@@ -32,7 +32,7 @@
                 <div class="column is-one-third-tablet is-one-quarter-desktop is-one-quarter-widescreen is-one-quarter-fullhd">
                     <div class="columns is-multiline">
                         <div class="column is-full" v-for="group in groups" :key="group.id">
-                            <button class="button is-fullwidth is-dark has-text-light is-outlined" :class="{ 'is-link' : moveAccountsTo === group.id}" @click="moveAccountsTo = group.id">
+                            <button class="button is-fullwidth" :class="{'is-link' : moveAccountsTo === group.id, 'is-dark has-text-light is-outlined':$root.showDarkMode}" @click="moveAccountsTo = group.id">
                                 <span v-if="group.id === 0" class="is-italic">
                                     {{ $t('groups.no_group') }}
                                 </span>
@@ -56,12 +56,12 @@
                 </p>
                 <!-- Cancel button -->
                 <p class="control">
-                    <button class="button is-dark is-rounded" @click="showGroupSelector = false">{{ $t('commons.cancel') }}</button>
+                    <button class="button is-rounded" :class="{'is-dark' : $root.showDarkMode}" @click="showGroupSelector = false">{{ $t('commons.cancel') }}</button>
                 </p>
             </vue-footer>
         </div>
         <!-- header -->
-        <div class="header has-background-black-ter" v-if="this.showAccounts || this.showGroupSwitch">
+        <div class="header" v-if="this.showAccounts || this.showGroupSwitch">
             <div class="columns is-gapless is-mobile is-centered">
                 <div class="column is-three-quarters-mobile is-one-third-tablet is-one-quarter-desktop is-one-quarter-widescreen is-one-quarter-fullhd">
                     <!-- search -->
@@ -79,19 +79,19 @@
                         <div class="columns">
                             <div class="column">
                                 <!-- selected label -->
-                                <span class="mr-1">{{ selectedAccounts.length }}&nbsp;{{ $t('commons.selected') }}</span>
+                                <span class="has-text-grey mr-1">{{ selectedAccounts.length }}&nbsp;{{ $t('commons.selected') }}</span>
                                 <!-- deselect all -->
                                 <button @click="clearSelected" class="clear-selection delete mr-4" :style="{visibility: selectedAccounts.length > 0 ? 'visible' : 'hidden'}" :title="$t('commons.clear_selection')"></button>
                                 <!-- select all button -->
-                                <button @click="selectAll" class="button mr-5 has-line-height p-1 is-ghost has-background-black-ter has-text-grey" :title="$t('commons.select_all')">
+                                <button @click="selectAll" class="button mr-5 has-line-height p-1 is-ghost has-text-grey" :title="$t('commons.select_all')">
                                     <span>{{ $t('commons.all') }}</span>
                                     <font-awesome-icon class="ml-1" :icon="['fas', 'check-square']" />
                                 </button>
                                 <!-- sort asc/desc buttons -->
-                                <button @click="sortAsc" class="button has-line-height p-1 is-ghost has-background-black-ter has-text-grey" :title="$t('commons.sort_ascending')">
+                                <button @click="sortAsc" class="button has-line-height p-1 is-ghost has-text-grey" :title="$t('commons.sort_ascending')">
                                     <font-awesome-icon :icon="['fas', 'sort-alpha-down']" />
                                 </button>
-                                <button @click="sortDesc" class="button has-line-height p-1 is-ghost has-background-black-ter has-text-grey" :title="$t('commons.sort_descending')">
+                                <button @click="sortDesc" class="button has-line-height p-1 is-ghost has-text-grey" :title="$t('commons.sort_descending')">
                                     <font-awesome-icon :icon="['fas', 'sort-alpha-up']" />
                                 </button>
                             </div>
@@ -101,13 +101,13 @@
                     <div v-else class="has-text-centered">
                         <div class="columns">
                             <div class="column" v-if="!showGroupSwitch">
-                                <button :title="$t('groups.show_group_selector')" tabindex="1" class="button is-text is-like-text" @click.stop="toggleGroupSwitch">
+                                <button :title="$t('groups.show_group_selector')" tabindex="1" class="button is-text is-like-text" :class="{'has-text-grey' : !$root.showDarkMode}" @click.stop="toggleGroupSwitch">
                                     {{ activeGroupName }} ({{ filteredAccounts.length }})&nbsp;
                                     <font-awesome-icon  :icon="['fas', 'caret-down']" />
                                 </button>
                             </div>
                             <div class="column" v-else>
-                                <button :title="$t('groups.hide_group_selector')" tabindex="1" class="button is-text is-like-text" @click.stop="toggleGroupSwitch">
+                                <button :title="$t('groups.hide_group_selector')" tabindex="1" class="button is-text is-like-text" :class="{'has-text-grey' : !$root.showDarkMode}" @click.stop="toggleGroupSwitch">
                                     {{ $t('groups.select_accounts_to_show') }}
                                 </button>
                             </div>
@@ -131,12 +131,12 @@
                 }" > -->
                 <draggable v-model="filteredAccounts" @start="drag = true" @end="saveOrder" ghost-class="ghost" handle=".tfa-dots" animation="200" class="accounts">
                     <transition-group class="columns is-multiline" :class="{ 'is-centered': $root.appSettings.displayMode === 'grid' }" type="transition" :name="!drag ? 'flip-list' : null">
-                        <div :class="[$root.appSettings.displayMode === 'grid' ? 'tfa-grid' : 'tfa-list']" class="column is-narrow has-text-white" v-for="account in filteredAccounts" :key="account.id">
+                        <div :class="[$root.appSettings.displayMode === 'grid' ? 'tfa-grid' : 'tfa-list']" class="column is-narrow" v-for="account in filteredAccounts" :key="account.id">
                             <div class="tfa-container">
         	                    <transition name="slideCheckbox">
         	                        <div class="tfa-cell tfa-checkbox" v-if="editMode">
         	                            <div class="field">
-        	                                <input class="is-checkradio is-small is-white" :id="'ckb_' + account.id" :value="account.id" type="checkbox" :name="'ckb_' + account.id" v-model="selectedAccounts">
+        	                                <input class="is-checkradio is-small" :class="$root.showDarkMode ? 'is-white':'is-info'" :id="'ckb_' + account.id" :value="account.id" type="checkbox" :name="'ckb_' + account.id" v-model="selectedAccounts">
         	                                <label tabindex="0" :for="'ckb_' + account.id" v-on:keypress.space.prevent="selectAccount(account.id)"></label>
         	                            </div>
         	                        </div>
@@ -151,10 +151,10 @@
         	                    <transition name="fadeInOut">
         	                        <div class="tfa-cell tfa-edit has-text-grey" v-if="editMode">
                                         <!-- <div class="tags has-addons"> -->
-                                            <router-link :to="{ name: 'editAccount', params: { twofaccountId: account.id }}" class="tag is-dark is-rounded mr-1">
+                                            <router-link :to="{ name: 'editAccount', params: { twofaccountId: account.id }}" class="tag is-rounded mr-1" :class="$root.showDarkMode ? 'is-dark' : 'is-white'">
                                             {{ $t('commons.edit') }}
                                             </router-link>
-                                            <router-link :to="{ name: 'showQRcode', params: { twofaccountId: account.id }}" class="tag is-dark is-rounded" :title="$t('twofaccounts.show_qrcode')">
+                                            <router-link :to="{ name: 'showQRcode', params: { twofaccountId: account.id }}" class="tag is-rounded" :class="$root.showDarkMode ? 'is-dark' : 'is-white'" :title="$t('twofaccounts.show_qrcode')">
                                                 <font-awesome-icon :icon="['fas', 'qrcode']" />
                                             </router-link>
                                        <!-- </div> -->
@@ -182,13 +182,13 @@
                 </p>
                 <!-- Manage button -->
                 <p class="control" v-if="!editMode">
-                    <button class="button is-dark is-rounded" @click="setEditModeTo(true)">{{ $t('commons.manage') }}</button>
+                    <button class="button is-rounded" :class="{'is-dark' : $root.showDarkMode}" @click="setEditModeTo(true)">{{ $t('commons.manage') }}</button>
                 </p>
                 <!-- move button -->
                 <p class="control" v-if="editMode">
                     <button 
-                        :disabled='selectedAccounts.length == 0' class="button is-outlined is-rounded" 
-                        :class="selectedAccounts.length > 0 ? 'is-link' : 'is-dark'" 
+                        :disabled='selectedAccounts.length == 0' class="button is-rounded" 
+                        :class="[{'is-outlined': $root.showDarkMode||selectedAccounts.length == 0}, selectedAccounts.length == 0 ? 'is-dark': 'is-link']" 
                         @click="showGroupSelector = true"
                         :title="$t('groups.move_selected_to_group')" >
                             {{ $t('commons.move') }}
@@ -197,8 +197,8 @@
                 <!-- delete button -->
                 <p class="control" v-if="editMode">
                     <button 
-                        :disabled='selectedAccounts.length == 0' class="button is-outlined is-rounded" 
-                        :class="selectedAccounts.length > 0 ? 'is-link' : 'is-dark'" 
+                        :disabled='selectedAccounts.length == 0' class="button is-rounded" 
+                        :class="[{'is-outlined': $root.showDarkMode||selectedAccounts.length == 0}, selectedAccounts.length == 0 ? 'is-dark': 'is-link']" 
                         @click="destroyAccounts" >
                             {{ $t('commons.delete') }}
                     </button>
@@ -206,8 +206,8 @@
                 <!-- export button -->
                 <p class="control" v-if="editMode">
                     <button 
-                        :disabled='selectedAccounts.length == 0' class="button is-outlined is-rounded" 
-                        :class="selectedAccounts.length > 0 ? 'is-link' : 'is-dark'" 
+                        :disabled='selectedAccounts.length == 0' class="button is-rounded" 
+                        :class="[{'is-outlined': $root.showDarkMode||selectedAccounts.length == 0}, selectedAccounts.length == 0 ? 'is-dark': 'is-link']" 
                         @click="exportAccounts" 
                         :title="$t('twofaccounts.export_selected_to_json')" >
                             {{ $t('commons.export') }}

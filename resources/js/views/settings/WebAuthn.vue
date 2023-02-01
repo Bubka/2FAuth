@@ -15,10 +15,10 @@
                 </div>
                 <!-- credentials list -->
                 <div v-if="credentials.length > 0" class="field">
-                    <div v-for="credential in credentials" :key="credential.id" class="group-item has-text-light is-size-5 is-size-6-mobile">
+                    <div v-for="credential in credentials" :key="credential.id" class="group-item is-size-5 is-size-6-mobile">
                         {{ displayName(credential) }}
                         <!-- revoke link -->
-                        <button class="button tag is-dark is-pulled-right" @click="revokeCredential(credential.id)" :title="$t('settings.revoke')">
+                        <button class="button tag is-pulled-right" :class="$root.showDarkMode ? 'is-dark':'is-white'" @click="revokeCredential(credential.id)" :title="$t('settings.revoke')">
                             {{ $t('settings.revoke') }}
                         </button>
                         <!-- edit link -->
@@ -49,7 +49,7 @@
                 <vue-footer :showButtons="true">
                     <!-- close button -->
                     <p class="control">
-                        <router-link :to="{ name: 'accounts', params: { toRefresh: false } }" class="button is-dark is-rounded">{{ $t('commons.close') }}</router-link>
+                        <router-link :to="{ name: 'accounts', params: { toRefresh: false } }" class="button is-rounded" :class="{'is-dark' : $root.showDarkMode}">{{ $t('commons.close') }}</router-link>
                     </p>
                 </vue-footer>
             </form-wrapper>

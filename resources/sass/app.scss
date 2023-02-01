@@ -2,6 +2,43 @@
 @import '~bulma-checkradio';
 @import '~bulma-switch';
 
+:root,
+footer,
+.header,
+.modal-background,
+.modal-slot,
+.options-header {
+  background-color: $white-ter;
+}
+
+:root[data-theme="dark"],
+:root[data-theme="dark"] footer,
+:root[data-theme="dark"] .header,
+:root[data-theme="dark"] .modal-background,
+:root[data-theme="dark"] .modal-background,
+:root[data-theme="dark"] .options-header {
+  background-color: $black-ter;
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="system"],
+  :root[data-theme="system"] footer,
+  :root[data-theme="system"] .header,
+  :root[data-theme="system"] .modal-background,
+  :root[data-theme="system"] .modal-background,
+  :root[data-theme="system"] .options-header {
+    background-color: $black-ter;
+  }
+}
+
+:root[data-theme="dark"] .about-debug {
+  background-color: $black-bis;
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="system"] .about-debug {
+    background-color: $black-bis;
+  }
+}
+
 a:hover {
   color: hsl(204, 86%, 53%);
 }
@@ -52,6 +89,40 @@ a:hover {
   }
 }
 
+.toolbar button {
+  background-color: $white-ter;
+}
+
+:root[data-theme="dark"] .toolbar button {
+  background-color: $black-ter;
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="system"] .toolbar button {
+    background-color: $black-ter;
+  }
+}
+
+.toolbar button.delete {
+  background-color: $grey;
+}
+.toolbar button.delete::before, .toolbar button.delete::after {
+  background-color: $white;
+}
+.toolbar button.delete:hover, .toolbar button.delete:focus {
+  background-color: $grey;
+}
+:root[data-theme="dark"] .toolbar button.delete::before, :root[data-theme="dark"] .toolbar button.delete::after {
+  background-color: $white;
+}
+:root[data-theme="dark"] .toolbar button.delete:hover, :root[data-theme="dark"] .toolbar button.delete:focus {
+  background-color: rgba(10, 10, 10, 0.3);
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="dark"] .toolbar button.delete::before, :root[data-theme="dark"] .toolbar button.delete::after {
+    background-color: $white;
+  }
+}
+
 .modal-otp {
   z-index: 2000;
 }
@@ -66,9 +137,20 @@ a:hover {
   outline: none;
 }
 
+// has-text-weight-semibold / $weight-semibold
 .group-item {
-  border-bottom: 1px solid hsl(0, 0%, 21%);
+  border-bottom: 1px solid $grey-lighter;
   padding: 0.75rem;
+}
+:root[data-theme="dark"] .group-item {
+  border-color: $grey-darker;
+  color: $light;
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="system"] .group-item {
+    border-color: $grey-darker;
+    color: $light;
+  }
 }
 
 .group-item:first-of-type {
@@ -122,31 +204,42 @@ a:hover {
   padding-top: 0.25rem;
 }
 
-.modal-background {
-  background-color: hsl(0, 0%, 14%) !important;
-}
-
 .pull-down-header {
-  background-color: hsl(0, 0%, 21%) !important;
+  background-color: $grey-darker !important;
 }
 
 .tfa-grid {
   border-radius: 6px;
   text-align: center;
-  background-color: hsl(0, 0%, 10%);
-  /*black-bis from Bulma*/
+  background-color: $white;
   padding: 0.75rem 3rem;
   margin: 0.5rem;
+}
+:root[data-theme="dark"] .tfa-grid {
+  background-color: hsl(0, 0%, 10%);
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="system"] .tfa-grid {
+    background-color: hsl(0, 0%, 10%);
+  }
 }
 
 .tfa-list {
   text-align: inherit;
-  border-bottom: 1px solid hsl(0, 0%, 21%);
-  background-color: hsl(0, 0%, 14%);
-  /*black-ter from Bulma*/
+  border-bottom: 1px solid $grey-lighter;
   margin: 0 1%;
   padding: 0.5rem 0.5rem 0.5rem 0.5rem;
   width: 31.3% !important;
+}
+:root[data-theme="dark"] .tfa-list {
+  background-color: $black-ter;
+  border-bottom: 1px solid $grey-darker;
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="system"] .tfa-list {
+    background-color: $black-ter;
+    border-bottom: 1px solid $grey-darker;
+  }
 }
 
 @media screen and (max-width: 1217px) {
@@ -159,11 +252,7 @@ a:hover {
   .tfa-list {
     border-radius: unset;
     text-align: inherit;
-    border-bottom: 1px solid hsl(0, 0%, 21%);
-    background-color: hsl(0, 0%, 14%);
-    /*black-ter from Bulma*/
     margin: 0;
-    padding: 0.5rem 0.5rem 0.5rem 0.5rem;
     max-width: none;
     width: auto !important;
   }
@@ -255,6 +344,14 @@ a:hover {
   // max-width: 300px;
   cursor: pointer;
 }
+:root[data-theme="dark"] .tfa-text {
+  color: $white;
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="system"] .tfa-text {
+    color: $white;
+  }
+}
 
 .tfa-container img {
   height: 0.75em;
@@ -339,16 +436,22 @@ a:hover {
 }
 
 figure.no-icon {
-  border: 1px dashed hsl(0, 0%, 7%);
+  border: 1px dashed $black-bis;
 }
 
 .file-input {
   cursor: pointer;
 }
 
-.add-icon-button,
-.add-icon-button:hover {
-  color: hsl(0, 0%, 7%);
+:root[data-theme="dark"] .add-icon-button,
+:root[data-theme="dark"] .add-icon-button:hover {
+    color: $black-bis;
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="system"] .add-icon-button,
+  :root[data-theme="system"] .add-icon-button:hover {
+      color: $black-bis;
+  }
 }
 
 .dots {
@@ -367,8 +470,15 @@ figure.no-icon {
 }
 
 .dots li[data-is-active]~li {
-  background: hsl(0, 0%, 7%);
-  /* grey */
+  background: $grey;
+}
+:root[data-theme="dark"] .dots li[data-is-active]~li {
+  background: $black-bis;
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="system"] .dots li[data-is-active]~li {
+    background: $black-bis;
+  }
 }
 
 .dots li:nth-child(-n+9) {
@@ -385,18 +495,34 @@ figure.no-icon {
 //     display:none;
 // }
 
-.input,
-.select select,
-.textarea {
-  background-color: hsl(0, 0%, 21%);
+:root[data-theme="dark"] .input,
+:root[data-theme="dark"] .select select,
+:root[data-theme="dark"] .textarea {
+  background-color: $grey-darker;
   border-color: hsl(0, 0%, 29%);
   color: hsl(0, 0%, 100%);
 }
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="system"] .input,
+  :root[data-theme="system"] .select select,
+  :root[data-theme="system"] .textarea {
+    background-color: $grey-darker;
+    border-color: hsl(0, 0%, 29%);
+    color: hsl(0, 0%, 100%);
+  }
+}
 
-.select select::placeholder,
-.textarea::placeholder,
-.input::placeholder {
+:root[data-theme="dark"] .select select::placeholder,
+:root[data-theme="dark"] .textarea::placeholder,
+:root[data-theme="dark"] .input::placeholder {
   color: hsl(0, 0%, 48%);
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="system"] .select select::placeholder,
+  :root[data-theme="system"] .textarea::placeholder,
+  :root[data-theme="system"] .input::placeholder {
+    color: hsl(0, 0%, 48%);
+  }
 }
 
 .select select[disabled],
@@ -406,20 +532,56 @@ fieldset[disabled] .select select,
 .select fieldset[disabled] select,
 fieldset[disabled] .textarea,
 fieldset[disabled] .input {
+  border-color: $grey-lighter;
+  background-color: $white;
+  opacity: 0.5;
+}
+:root[data-theme="dark"] .select select[disabled],
+:root[data-theme="dark"] [disabled].textarea,
+:root[data-theme="dark"] [disabled].input,
+:root[data-theme="dark"] fieldset[disabled] .select select,
+:root[data-theme="dark"] .select fieldset[disabled] select,
+:root[data-theme="dark"] fieldset[disabled] .textarea,
+:root[data-theme="dark"] fieldset[disabled] .input {
   background-color: hsl(0, 0%, 10%);
-  border-color: hsl(0, 0%, 21%);
+  border-color: $grey-darker;
   box-shadow: none;
-  color: hsl(0, 0%, 21%);
+  color: $grey-darker;
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="system"] .select select[disabled],
+  :root[data-theme="system"] [disabled].textarea,
+  :root[data-theme="system"] [disabled].input,
+  :root[data-theme="system"] fieldset[disabled] .select select,
+  :root[data-theme="system"] .select fieldset[disabled] select,
+  :root[data-theme="system"] fieldset[disabled] .textarea,
+  :root[data-theme="system"] fieldset[disabled] .input {
+    background-color: hsl(0, 0%, 10%);
+    border-color: $grey-darker;
+    box-shadow: none;
+    color: $grey-darker;
+  }
 }
 
-.select select[disabled]::placeholder,
-[disabled].textarea::placeholder,
-[disabled].input::placeholder,
-fieldset[disabled] .select select::placeholder,
-.select fieldset[disabled] select::placeholder,
-fieldset[disabled] .textarea::placeholder,
-fieldset[disabled] .input::placeholder {
-  color: hsl(0, 0%, 21%);
+:root[data-theme="dark"] .select select[disabled]::placeholder,
+:root[data-theme="dark"] [disabled].textarea::placeholder,
+:root[data-theme="dark"] [disabled].input::placeholder,
+:root[data-theme="dark"] fieldset[disabled] .select select::placeholder,
+:root[data-theme="dark"] .select fieldset[disabled] select::placeholder,
+:root[data-theme="dark"] fieldset[disabled] .textarea::placeholder,
+:root[data-theme="dark"] fieldset[disabled] .input::placeholder {
+  color: $grey-darker;
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="system"] .select select[disabled]::placeholder,
+  :root[data-theme="system"] [disabled].textarea::placeholder,
+  :root[data-theme="system"] [disabled].input::placeholder,
+  :root[data-theme="system"] fieldset[disabled] .select select::placeholder,
+  :root[data-theme="system"] .select fieldset[disabled] select::placeholder,
+  :root[data-theme="system"] fieldset[disabled] .textarea::placeholder,
+  :root[data-theme="system"] fieldset[disabled] .input::placeholder {
+    color: $grey-darker;
+  }
 }
 
 .button.has-line-height {
@@ -693,6 +855,15 @@ a.tag.is-dark.is-rounded:focus:not(:focus-visible) {
   outline: none;
 }
 
+button.button.tag.is-white,
+.tfa-cell .tag.is-white {
+  border-color: $input-border-color;
+}
+.tfa-cell .tag.is-white {
+  border-style: solid;
+  border-width: $control-border-width;
+}
+
 .tabs a:focus-visible {
   outline-offset: -4px;
 }
@@ -726,11 +897,36 @@ a.tag.is-dark.is-rounded:focus:not(:focus-visible) {
   box-shadow: $input-focus-box-shadow-size $input-focus-box-shadow-color;
 }
 
-.is-checkradio[type="checkbox"]+label::before,
 .is-checkradio[type="checkbox"]+label::before {
+  border-color: $grey-light;
+  border-width: 1px !important;
+  background-color: $white;
+}
+.tfa-checkbox .is-checkradio[type="checkbox"]+label::before {
   border-color: $grey;
 }
+:root[data-theme="dark"] .is-checkradio[type="checkbox"]+label::before {
+  border-color: $grey;
+  background: none;
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="system"] .is-checkradio[type="checkbox"]+label::before {
+    border-color: $grey;
+    background: none;
+  }
+}
 
+.is-checkradio[type="checkbox"]:checked + label::before {
+  border-color: $grey;
+}
+:root[data-theme="dark"] .is-checkradio[type="checkbox"]:checked + label::before {
+  border-color: $grey-lighter;
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="system"] .is-checkradio[type="checkbox"]:checked + label::before {
+    border-color: $grey-lighter;
+  }
+}
 
 .label {
   color: hsl(0, 0%, 48%);
@@ -747,6 +943,16 @@ a.tag.is-dark.is-rounded:focus:not(:focus-visible) {
 .is-underscored.is-dot {
   border: none;
   border-radius: 50%;
+  background-color: $success;
+}
+
+:root[data-theme="dark"] .is-underscored.is-dot {
+  background-color: $success-dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="system"] .is-underscored.is-dot {
+    background-color: $success-dark;
+  }
 }
 
 .is-mid-width-field input {
@@ -770,13 +976,24 @@ a.tag.is-dark.is-rounded:focus:not(:focus-visible) {
   text-transform: uppercase !important;
 }
 
-.control.has-icons-left .icon,
-.control.has-icons-right .icon {
+:root[data-theme="dark"] .control.has-icons-left .icon,
+:root[data-theme="dark"] .control.has-icons-right .icon {
   color: inherit;
 }
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="system"] .control.has-icons-left .icon,
+  :root[data-theme="system"] .control.has-icons-right .icon {
+    color: inherit;
+  }
+}
 
-.is-search {
-  border-color: hsl(0, 0%, 21%);
+:root[data-theme="dark"].is-search {
+  border-color: $grey-darker;
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="system"].is-search {
+    border-color: $grey-darker;
+  }
 }
 
 .modal .field.is-grouped:last-child {
@@ -904,11 +1121,19 @@ footer .field.is-grouped {
   position: absolute;
   left: 0;
   width: 100%;
-  opacity: 0.05;
+  opacity: 0.1;
   height: 256px;
   background-repeat: no-repeat;
   background-position: top left 50%;
   background-image: url('data:image/png;base64,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');
+}
+:root[data-theme="dark"] quick-uploader-button::before {
+  opacity: 0.05;
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="system"] quick-uploader-button::before {
+    opacity: 0.05;
+  }
 }
 
 .error-404,
@@ -951,6 +1176,19 @@ footer .field.is-grouped {
   background-color: $warning;
   vertical-align: middle;
   margin: 0 5px;
+}
+
+.about-logo {
+  height: 32px;
+  filter: invert(1);
+}
+:root[data-theme="dark"] .about-logo {
+  filter: none;
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="system"] .about-logo {
+    filter: none;
+  }
 }
 
 .fadeInOut-enter-active {

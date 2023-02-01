@@ -37,7 +37,7 @@
         <vue-footer :showButtons="true">
             <!-- Cancel button -->
             <p class="control">
-                <button class="button is-dark is-rounded" @click.stop="exitSettings">
+                <button class="button is-rounded" :class="{'is-dark' : $root.showDarkMode}" @click.stop="exitSettings">
                     {{ $t('commons.close') }}
                 </button>
             </p>

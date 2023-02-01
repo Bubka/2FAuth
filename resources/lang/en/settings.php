@@ -70,6 +70,13 @@ return [
         ],
         'grid' => 'Grid',
         'list' => 'List',
+        'theme' => [
+            'label' => 'Theme',
+            'help' => 'Force a specific theme or apply the theme defined in your system/browser preferences'
+        ],
+        'light' => 'Light',
+        'dark' => 'Dark',
+        'automatic' => 'Auto',
         'show_accounts_icons' => [
             'label' => 'Show icons',
             'help' => 'Show icons accounts in the main view'

@@ -1,5 +1,5 @@
 <template>
-    <div class="options-header has-background-black-ter">
+    <div class="options-header">
         <responsive-width-wrapper>
             <div class="tabs is-centered is-fullwidth">
                 <ul>

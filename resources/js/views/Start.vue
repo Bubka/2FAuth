@@ -23,7 +23,7 @@
             </div>
             <!-- alternative methods -->
             <div class="column is-full">
-                <div class="block has-text-light">{{ $t('twofaccounts.forms.alternative_methods') }}</div>
+                <div class="block" :class="$root.showDarkMode ? 'has-text-light':'has-text-grey-dark'">{{ $t('twofaccounts.forms.alternative_methods') }}</div>
                 <!-- upload a qr code -->
                 <div class="block has-text-link" v-if="!$root.appSettings.useBasicQrcodeReader">
                     <label role="button" tabindex="0" class="button is-link is-outlined is-rounded" ref="qrcodeInputLabel" @keyup.enter="$refs.qrcodeInputLabel.click()">
@@ -49,7 +49,7 @@
         <vue-footer :showButtons="true" >
             <!-- back button -->
             <p class="control" v-if="accountCount > 0">
-                <router-link class="button is-dark is-rounded" :to="{ name: returnToView }" >
+                <router-link class="button is-rounded" :class="{'is-dark' : $root.showDarkMode}" :to="{ name: returnToView }" >
                     {{ $t('commons.back') }}
                 </router-link>
             </p>

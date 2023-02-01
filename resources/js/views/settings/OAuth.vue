@@ -14,12 +14,12 @@
                     </a>
                 </div>
                 <div v-if="tokens.length > 0">
-                    <div v-for="token in tokens" :key="token.id" class="group-item has-text-light is-size-5 is-size-6-mobile">
+                    <div v-for="token in tokens" :key="token.id" class="group-item is-size-5 is-size-6-mobile">
                         <font-awesome-icon v-if="token.value" class="has-text-success" :icon="['fas', 'check']" /> {{ token.name }}
                         <!-- revoke link -->
                         <div class="tags is-pulled-right">
-                            <button v-if="token.value" class="button tag" v-clipboard="() => token.value" v-clipboard:success="clipboardSuccessHandler">{{ $t('commons.copy') }}</button>
-                            <button class="button tag is-dark " @click="revokeToken(token.id)" :title="$t('settings.revoke')">{{ $t('settings.revoke') }}</button>
+                            <button v-if="token.value" class="button tag" :class="{'is-link': !$root.showDarkMode}" v-clipboard="() => token.value" v-clipboard:success="clipboardSuccessHandler">{{ $t('commons.copy') }}</button>
+                            <button class="button tag" :class="$root.showDarkMode ? 'is-dark':'is-white'" @click="revokeToken(token.id)" :title="$t('settings.revoke')">{{ $t('settings.revoke') }}</button>
                         </div>
                         <!-- edit link -->
                         <!-- <router-link :to="{ name: 'settings.oauth.editPAT' }" class="has-text-grey pl-1" :title="$t('commons.edit')">
@@ -47,7 +47,7 @@
                 <vue-footer :showButtons="true">
                     <!-- close button -->
                     <p class="control">
-                        <router-link :to="{ name: 'accounts', params: { toRefresh: false } }" class="button is-dark is-rounded" tabindex="0">{{ $t('commons.close') }}</router-link>
+                        <router-link :to="{ name: 'accounts', params: { toRefresh: false } }" class="button is-rounded" :class="{'is-dark' : $root.showDarkMode}" tabindex="0">{{ $t('commons.close') }}</router-link>
                     </p>
                 </vue-footer>
             </form-wrapper>

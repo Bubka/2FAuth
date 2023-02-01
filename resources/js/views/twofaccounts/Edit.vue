@@ -10,7 +10,7 @@
             <div class="field is-grouped">
                 <!-- i'm lucky button -->
                 <div class="control" v-if="$root.appSettings.getOfficialIcons">
-                    <v-button @click="fetchLogo" :color="'is-dark'" :nativeType="'button'" :isDisabled="form.service.length < 3">
+                    <v-button @click="fetchLogo" :color="$root.showDarkMode ? 'is-dark' : ''" :nativeType="'button'" :isDisabled="form.service.length < 3">
                         <span class="icon is-small">
                             <font-awesome-icon :icon="['fas', 'globe']" />
                         </span>
@@ -19,7 +19,7 @@
                 </div>
                 <!-- upload button -->
                 <div class="control">
-                    <div role="button" tabindex="0" class="file is-dark" @keyup.enter="$refs.iconInputLabel.click()">
+                    <div role="button" tabindex="0" class="file" :class="$root.showDarkMode ? 'is-dark' : 'is-white'" @keyup.enter="$refs.iconInputLabel.click()">
                         <label class="file-label" ref="iconInputLabel">
                             <input aria-hidden="true" tabindex="-1" class="file-input" type="file" accept="image/*" v-on:change="uploadIcon" ref="iconInput">
                             <span class="file-cta">
@@ -29,7 +29,7 @@
                                 <span class="file-label">{{ $t('twofaccounts.forms.choose_image') }}</span>
                             </span>
                         </label>
-                        <span class="tag is-black is-large" v-if="tempIcon">
+                        <span class="tag is-large" :class="$root.showDarkMode ? 'is-dark' : 'is-white'" v-if="tempIcon">
                             <img class="icon-preview" :src="$root.appConfig.subdirectory + '/storage/icons/' + tempIcon" :alt="$t('twofaccounts.icon_to_illustrate_the_account')">
                             <button class="clear-selection delete is-small" @click.prevent="deleteIcon" :aria-label="$t('twofaccounts.remove_icon')"></button>
                         </span>
@@ -50,14 +50,14 @@
                         <input :id="this.inputId('text','secret')" class="input" type="text" v-model="form.secret" :disabled="secretIsLocked">
                     </p>
                     <p class="control" v-if="secretIsLocked">
-                        <button type="button" class="button is-dark field-lock" @click.stop="secretIsLocked = false" :title="$t('twofaccounts.forms.unlock.title')">
+                        <button type="button" class="button field-lock" :class="{'is-dark' : $root.showDarkMode}" @click.stop="secretIsLocked = false" :title="$t('twofaccounts.forms.unlock.title')">
                             <span class="icon">
                                 <font-awesome-icon :icon="['fas', 'lock']" />
                             </span>
                         </button>
                     </p>
                     <p class="control" v-else>
-                        <button type="button" class="button is-dark field-unlock"  @click.stop="secretIsLocked = true" :title="$t('twofaccounts.forms.lock.title')">
+                        <button type="button" class="button field-unlock" :class="{'is-dark' : $root.showDarkMode}" @click.stop="secretIsLocked = true" :title="$t('twofaccounts.forms.lock.title')">
                             <span class="icon has-text-danger">
                                 <font-awesome-icon :icon="['fas', 'lock-open']" />
                             </span>
@@ -89,14 +89,14 @@
                                 <input class="input" type="text" placeholder="" v-model="form.counter" :disabled="counterIsLocked" />
                             </div>
                             <div class="control" v-if="counterIsLocked">
-                                <button type="button" class="button is-dark field-lock" @click="counterIsLocked = false" :title="$t('twofaccounts.forms.unlock.title')">
+                                <button type="button" class="button field-lock" :class="{'is-dark' : $root.showDarkMode}" @click="counterIsLocked = false" :title="$t('twofaccounts.forms.unlock.title')">
                                     <span class="icon">
                                         <font-awesome-icon :icon="['fas', 'lock']" />
                                     </span>
                                 </button>
                             </div>
                             <div class="control" v-else>
-                                <button type="button" class="button is-dark field-unlock"  @click="counterIsLocked = true" :title="$t('twofaccounts.forms.lock.title')">
+                                <button type="button" class="button field-unlock" :class="{'is-dark' : $root.showDarkMode}" @click="counterIsLocked = true" :title="$t('twofaccounts.forms.lock.title')">
                                     <span class="icon has-text-danger">
                                         <font-awesome-icon :icon="['fas', 'lock-open']" />
                                     </span>

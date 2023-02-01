@@ -39,43 +39,19 @@
                     <p class="help">{{ $t('twofaccounts.import.supported_formats_for_file_upload') }}</p>
                 </div>
                 <!-- Supported migration resources -->
-                <h5 class="title is-5 mb-3 has-text-grey-dark">{{ $t('twofaccounts.import.supported_migration_formats') }}</h5>
+                <h5 class="title is-6 mb-3 has-text-grey-dark">{{ $t('twofaccounts.import.supported_migration_formats') }}</h5>
                 <div class="field is-grouped is-grouped-multiline pt-0">
-                    <div class="control">
+                    <div v-for="(source, index) in supportedSources" :key="index" class="control">
                         <div class="tags has-addons">
-                        <span class="tag is-dark">2FAuth</span>
-                        <span class="tag is-black">JSON</span>
-                        </div>
-                    </div>
-                    <div class="control">
-                        <div class="tags has-addons">
-                        <span class="tag is-dark">Google Auth</span>
-                        <span class="tag is-black">{{ $t('twofaccounts.import.qr_code') }}</span>
-                        </div>
-                    </div>
-                    <div class="control">
-                        <div class="tags has-addons">
-                        <span class="tag is-dark">Aegis Auth</span>
-                        <span class="tag is-black">JSON</span>
-                        </div>
-                    </div>
-                    <div class="control">
-                        <div class="tags has-addons">
-                        <span class="tag is-dark">Aegis Auth</span>
-                        <span class="tag is-black">{{ $t('twofaccounts.import.plain_text') }}</span>
-                        </div>
-                    </div>
-                    <div class="control">
-                        <div class="tags has-addons">
-                        <span class="tag is-dark">2FAS Auth</span>
-                        <span class="tag is-black">JSON</span>
+                        <span class="tag" :class="$root.showDarkMode ? 'is-dark' : 'is-white'">{{ source.app }}</span>
+                        <span class="tag" :class="$root.showDarkMode ? 'is-black' : 'has-background-grey-lighter has-text-black'">{{ source.format }}</span>
                         </div>
                     </div>
                 </div>
                 <span class="is-size-7" v-html="$t('twofaccounts.import.do_not_set_password_or_encryption')"></span>
             </div>
             <div v-else>
-                <div v-for="(account, index) in exportedAccounts" :key="account.name" class="group-item has-text-light is-size-5 is-size-6-mobile">
+                <div v-for="(account, index) in exportedAccounts" :key="account.name" class="group-item is-size-5 is-size-6-mobile">
                     <div class="is-flex is-justify-content-space-between">
                         <!-- Account name -->
                         <div v-if="account.id > -2 && account.imported !== 0" class="is-flex-grow-1 has-ellipsis is-clickable" @click="previewAccount(index)" :title="$t('twofaccounts.import.generate_a_test_password')">
@@ -86,7 +62,7 @@
                         <!-- buttons -->
                         <div v-if="account.imported === -1" class="tags is-flex-wrap-nowrap">
                             <!-- discard button -->
-                            <button class="button tag is-dark has-text-grey-light" @click="discardAccount(index)"  :title="$t('twofaccounts.import.discard_this_account')">
+                            <button class="button tag" :class="{'is-dark has-text-grey-light' : $root.showDarkMode}" @click="discardAccount(index)"  :title="$t('twofaccounts.import.discard_this_account')">
                                 <font-awesome-icon :icon="['fas', 'trash']" />
                             </button>
                             <!-- import button -->
@@ -148,7 +124,7 @@
                 </p>
                 <!-- close button -->
                 <p class="control">
-                    <router-link  :to="{ name: 'accounts', params: { toRefresh: true } }" class="button is-dark is-rounded" v-html="importableCount > 0 ? $t('commons.cancel') : $t('commons.close')"></router-link>
+                    <router-link  :to="{ name: 'accounts', params: { toRefresh: true } }" class="button is-rounded" :class="{'is-dark' : $root.showDarkMode}" v-html="importableCount > 0 ? $t('commons.cancel') : $t('commons.close')"></router-link>
                 </p>
             </vue-footer>
         </responsive-width-wrapper>
@@ -184,6 +160,13 @@
                 }),
                 uploadForm: new Form(),
                 ShowTwofaccountInModal : false,
+                supportedSources: [
+                    {app: '2FAuth', format: 'JSON'},
+                    {app: 'Google Auth', format: this.$t('twofaccounts.import.qr_code')},
+                    {app: 'Aegis Auth', format: 'JSON'},
+                    {app: 'Aegis Auth', format: this.$t('twofaccounts.import.plain_text')},
+                    {app: '2FAS auth', format: 'JSON'},
+                ]
             }
         },
 

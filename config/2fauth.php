@@ -71,6 +71,7 @@ return [
         'checkForUpdate' => true,
         'lastRadarScan' => 0,
         'latestRelease' => false,
+        'theme' => 'dark',
     ],
 
 ];

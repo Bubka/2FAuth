@@ -5,12 +5,15 @@
             <button 
                 role="radio" 
                 type="button"
-                class="button is-dark" 
+                class="button" 
                 :aria-checked="form[fieldName] === choice.value"
                 :disabled="isDisabled" 
                 v-for="(choice, index) in choices" 
                 :key="index" 
-                :class="{ 'is-link' : form[fieldName] === choice.value }" 
+                :class="{
+                    'is-link' : form[fieldName] === choice.value,
+                    'is-dark' : $root.showDarkMode
+                }" 
                 v-on:click.stop="setRadio(choice.value)"
             >
                 <input 

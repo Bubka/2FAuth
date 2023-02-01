@@ -12,10 +12,10 @@
             </router-link>
         </div>
         <div v-if="groups.length > 0">
-            <div v-for="group in groups" :key="group.id" class="group-item has-text-light is-size-5 is-size-6-mobile">
+            <div v-for="group in groups" :key="group.id" class="group-item is-size-5 is-size-6-mobile">
                 {{ group.name }}
                 <!-- delete icon -->
-                <button class="button tag is-dark is-pulled-right" @click="deleteGroup(group.id)"  :title="$t('commons.delete')">
+                <button class="button tag is-pulled-right" :class="$root.showDarkMode ? 'is-dark' : 'is-white'" @click="deleteGroup(group.id)"  :title="$t('commons.delete')">
                     {{ $t('commons.delete') }}
                 </button>
                 <!-- edit link -->
@@ -37,7 +37,7 @@
         <vue-footer :showButtons="true">
             <!-- close button -->
             <p class="control">
-                <router-link  :to="{ name: 'accounts', params: { toRefresh: true } }" class="button is-dark is-rounded">{{ $t('commons.close') }}</router-link>
+                <router-link  :to="{ name: 'accounts', params: { toRefresh: true } }" class="button is-rounded" :class="{'is-dark' : $root.showDarkMode}">{{ $t('commons.close') }}</router-link>
             </p>
         </vue-footer>
     </responsive-width-wrapper>

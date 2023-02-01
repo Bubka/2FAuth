@@ -66,7 +66,7 @@
                 <div class="field is-grouped">
                     <!-- i'm lucky button -->
                     <div class="control" v-if="$root.appSettings.getOfficialIcons">
-                        <v-button @click="fetchLogo" :color="'is-dark'" :nativeType="'button'" :isDisabled="form.service.length < 1">
+                        <v-button @click="fetchLogo" :color="$root.showDarkMode ? 'is-dark' : ''" :nativeType="'button'" :isDisabled="form.service.length < 1">
                             <span class="icon is-small">
                                 <font-awesome-icon :icon="['fas', 'globe']" />
                             </span>
@@ -75,7 +75,7 @@
                     </div>
                     <!-- upload button -->
                     <div class="control">
-                        <div role="button" tabindex="0" class="file is-dark" @keyup.enter="$refs.iconInputLabel.click()">
+                        <div role="button" tabindex="0" class="file" :class="$root.showDarkMode ? 'is-dark' : 'is-white'" @keyup.enter="$refs.iconInputLabel.click()">
                             <label class="file-label" ref="iconInputLabel">
                                 <input aria-hidden="true" tabindex="-1" class="file-input" type="file" accept="image/*" v-on:change="uploadIcon" ref="iconInput">
                                 <span class="file-cta">
@@ -85,7 +85,7 @@
                                     <span class="file-label">{{ $t('twofaccounts.forms.choose_image') }}</span>
                                 </span>
                             </label>
-                            <span class="tag is-black is-large" v-if="tempIcon">
+                            <span class="tag is-large" :class="$root.showDarkMode ? 'is-dark' : 'is-white'" v-if="tempIcon">
                                 <img class="icon-preview" :src="$root.appConfig.subdirectory + '/storage/icons/' + tempIcon" :alt="$t('twofaccounts.icon_to_illustrate_the_account')">
                                 <button class="clear-selection delete is-small" @click.prevent="deleteIcon" :aria-label="$t('twofaccounts.remove_icon')"></button>
                             </span>
@@ -149,7 +149,7 @@
             <div class="block">
                 {{ $t('errors.data_of_qrcode_is_not_valid_URI') }}
             </div>
-            <div class="block has-text-light mb-6" v-html="uri"></div>
+            <div class="block mb-6" :class="$root.showDarkMode ? 'has-text-light':'has-text-grey-dark'" v-html="uri"></div>
             <!-- Copy to clipboard -->
             <div class="block has-text-link">
                 <button class="button is-link is-outlined is-rounded" v-clipboard="() => uri" v-clipboard:success="clipboardSuccessHandler">

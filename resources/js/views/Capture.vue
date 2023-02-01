@@ -5,13 +5,13 @@
             <section class="section">
                 <div class="columns is-centered">
                     <div class="column is-three-quarters">
-                        <div class="box has-text-centered has-background-black-ter is-shadowless">
+                        <div class="modal-slot box has-text-centered is-shadowless">
                             <div v-if="errorText">
                                 <p class="block is-size-5">{{ $t('twofaccounts.stream.live_scan_cant_start') }}</p>
-                                <p class="has-text-light block">{{ $t('twofaccounts.stream.' + errorText + '.reason') }}</p>
+                                <p class="block" :class="{'has-text-light': $root.showDarkMode}">{{ $t('twofaccounts.stream.' + errorText + '.reason') }}</p>
                                 <p class="is-size-7">{{ $t('twofaccounts.stream.' + errorText + '.solution') }}</p>
                             </div>
-                            <span v-else class="is-size-4 has-text-light">
+                            <span v-else class="is-size-4" :class="$root.showDarkMode ? 'has-text-light':'has-text-grey-dark'">
                                 <font-awesome-icon :icon="['fas', 'spinner']" size="2x" spin />
                             </span>
                         </div>

@@ -2,10 +2,10 @@
     <responsive-width-wrapper>
         <h1 class="title has-text-grey-dark">{{ pagetitle }}</h1>
         <p class="block">
-            <span class="has-text-white"><span class="is-size-5">2FAuth</span> v{{ appVersion }}</span><br />
+            <span :class="$root.showDarkMode ? 'has-text-white':'has-text-black'"><span class="is-size-5">2FAuth</span> v{{ appVersion }}</span><br />
             {{ $t('commons.2fauth_teaser')}}
         </p>
-        <img src="logo.svg" style="height: 32px" alt="2FAuth logo" />
+        <img class="about-logo" src="logo.svg" alt="2FAuth logo" />
         <p class="block" :class="showUserOptions ? 'mb-5' : '' ">
             ©Bubka <a class="is-size-7" href="https://github.com/Bubka/2FAuth/blob/master/LICENSE">AGPL-3.0 license</a>
         </p>
@@ -13,25 +13,25 @@
             {{ $t('commons.resources') }}
         </h2>
         <div class="buttons">
-            <a class="button is-dark" href="https://github.com/Bubka/2FAuth" target="_blank">
+            <a class="button" :class="{'is-dark' : $root.showDarkMode}" href="https://github.com/Bubka/2FAuth" target="_blank">
                 <span class="icon is-small">
                     <font-awesome-icon :icon="['fab', 'github-alt']" />
                 </span>
                 <span>Github</span>
             </a>
-            <a class="button is-dark" href="https://docs.2fauth.app/" target="_blank">
+            <a class="button" :class="{'is-dark' : $root.showDarkMode}" href="https://docs.2fauth.app/" target="_blank">
                 <span class="icon is-small">
                     <font-awesome-icon :icon="['fas', 'book']" />
                 </span>
                 <span>Docs</span>
             </a>
-            <a class="button is-dark" href="https://demo.2fauth.app/" target="_blank">
+            <a class="button" :class="{'is-dark' : $root.showDarkMode}" href="https://demo.2fauth.app/" target="_blank">
                 <span class="icon is-small">
                     <font-awesome-icon :icon="['fas', 'flask']" />
                 </span>
                 <span>Demo</span>
             </a>
-            <a class="button is-dark" href="https://docs.2fauth.app/resources/rapidoc.html" target="_blank">
+            <a class="button" :class="{'is-dark' : $root.showDarkMode}" href="https://docs.2fauth.app/resources/rapidoc.html" target="_blank">
                 <span class="icon is-small">
                     <font-awesome-icon :icon="['fas', 'code']" />
                 </span>
@@ -51,7 +51,7 @@
         <h2 class="title is-5 has-text-grey-light">
             {{ $t('commons.environment') }}
         </h2>
-        <div class="box has-background-black-bis is-family-monospace is-size-7">
+        <div class="about-debug box is-family-monospace is-size-7">
             <button :aria-label="$t('commons.copy_to_clipboard')" class="button is-like-text is-pulled-right is-small is-text" v-clipboard="() => this.$refs.listInfos.innerText" v-clipboard:success="clipboardSuccessHandler">
                 <font-awesome-icon :icon="['fas', 'copy']" />
             </button>
@@ -63,7 +63,7 @@
             <h2 class="title is-5 has-text-grey-light">
                 {{ $t('settings.user_options') }}
             </h2>
-            <div class="box has-background-black-bis is-family-monospace is-size-7">
+            <div class="about-debug box is-family-monospace is-size-7">
                 <button :aria-label="$t('commons.copy_to_clipboard')" class="button is-like-text is-pulled-right is-small is-text" v-clipboard="() => this.$refs.listUserOptions.innerText" v-clipboard:success="clipboardSuccessHandler">
                     <font-awesome-icon :icon="['fas', 'copy']" />
                 </button>
@@ -76,7 +76,7 @@
         <vue-footer :showButtons="true">
             <!-- close button -->
             <p class="control">
-                <router-link :to="{ name: 'accounts', params: { toRefresh: true } }" role="button" :aria-label="$t('commons.close_the_x_page', {pagetitle: pagetitle})" class="button is-dark is-rounded">{{ $t('commons.close') }}</router-link>
+                <router-link :to="{ name: 'accounts', params: { toRefresh: true } }" role="button" :aria-label="$t('commons.close_the_x_page', {pagetitle: pagetitle})" class="button is-rounded" :class="{'is-dark' : $root.showDarkMode}">{{ $t('commons.close') }}</router-link>
             </p>
         </vue-footer>
     </responsive-width-wrapper>

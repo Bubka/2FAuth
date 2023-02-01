@@ -18,7 +18,32 @@ const app = new Vue({
         appSettings: window.appSettings,
         appConfig: window.appConfig,
         isDemoApp: window.isDemoApp,
-        isTestingApp: window.isTestingApp
+        isTestingApp: window.isTestingApp,
+        prefersDarkScheme: window.matchMedia('(prefers-color-scheme: dark)').matches
+    },
+
+    computed: {
+        showDarkMode: function() {
+            return this.appSettings.theme == 'dark' ||
+                (this.appSettings.theme == 'system' && this.prefersDarkScheme)
+        }
+    },
+
+    mounted () {
+        this.mediaQueryList = window.matchMedia('(prefers-color-scheme: dark)')
+        this.$nextTick(() => {
+            this.mediaQueryList.addEventListener('change', this.setDarkScheme)
+        })
+    },
+
+    beforeDestroy () {
+        this.mediaQueryList.removeEventListener('change', this.setDarkScheme)
+    },
+
+    methods: {
+        setDarkScheme ({ matches }) {
+            this.prefersDarkScheme = matches
+        }
     },
     i18n,
     router,

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="has-background-black-ter" lang="{!! $lang !!}">
+<html data-theme='{{ $theme }}' lang="{!! $lang !!}">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -19,7 +19,7 @@
 
     <link href="{!! $subdirectory !!}{{ mix('css/app.css') }}" rel="stylesheet">
 </head>
-<body class="has-text-lighter">
+<body>
     <div id="app">
         <app></app>
     </div>

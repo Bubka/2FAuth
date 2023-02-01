@@ -5,7 +5,7 @@
             <section class="section">
                 <div class="columns is-centered">
                     <div class="column is-three-quarters">
-                        <div class="box has-text-centered has-background-black-ter is-shadowless">
+                        <div class="modal-slot box has-text-centered is-shadowless">
                             <slot></slot>
                         </div>
                     </div>
@@ -14,7 +14,7 @@
         </div>
         <div v-if="this.showcloseButton" class="fullscreen-footer">
             <!-- Close button -->
-            <button ref="closeModalButton" class="button is-dark is-rounded" @click.stop="closeModal">
+            <button ref="closeModalButton" class="button is-rounded" :class="{'is-dark' : $root.showDarkMode}" @click.stop="closeModal">
                 {{ $t('commons.close') }}
             </button>
         </div>

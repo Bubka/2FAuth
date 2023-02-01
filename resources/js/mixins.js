@@ -97,6 +97,10 @@ Vue.mixin({
             // url
             // week
         },
+
+        setTheme(theme) {
+            document.documentElement.dataset.theme = theme;
+        }
     }
 
 })
