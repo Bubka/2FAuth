@@ -43,7 +43,7 @@ class ReleaseRadarService
             $installedVersion = Helpers::cleanVersionNumber(config('2fauth.version'));
 
             if ($githubVersion && $installedVersion) {
-                if ($githubVersion > $installedVersion && $latestReleaseData->prerelease == false && $latestReleaseData->draft == false) {
+                if (version_compare($githubVersion, $installedVersion) > 0 && $latestReleaseData->prerelease == false && $latestReleaseData->draft == false) {
                     Settings::set('latestRelease', $latestReleaseData->tag_name);
 
                     return $latestReleaseData->tag_name;
