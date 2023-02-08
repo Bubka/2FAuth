@@ -140,7 +140,9 @@ class SettingService
      */
     private function restoreType(mixed $value)
     {
-        $value = is_numeric($value) ? (int) $value : $value;
+        if (is_numeric($value)) {
+            $value = is_float($value + 0) ? (float) $value : (int) $value;
+        }
 
         if ($value === '{{}}') {
             return false;

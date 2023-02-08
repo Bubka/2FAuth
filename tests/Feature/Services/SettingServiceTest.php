@@ -37,6 +37,8 @@ class SettingServiceTest extends FeatureTestCase
 
     private const SETTING_VALUE_INT = 10;
 
+    private const SETTING_VALUE_FLOAT = 10.5;
+
     private const ACCOUNT = 'account';
 
     private const SERVICE = 'service';
@@ -130,6 +132,19 @@ class SettingServiceTest extends FeatureTestCase
 
         $this->assertEquals(self::SETTING_VALUE_INT, $value);
         $this->assertIsInt($value);
+    }
+
+    /**
+     * @test
+     */
+    public function test_get_float_setting_returns_float()
+    {
+        Settings::set(self::SETTING_NAME, self::SETTING_VALUE_FLOAT);
+
+        $value = Settings::get(self::SETTING_NAME);
+
+        $this->assertEquals(self::SETTING_VALUE_FLOAT, $value);
+        $this->assertIsFloat($value);
     }
 
     /**
