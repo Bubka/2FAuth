@@ -67,7 +67,7 @@
                     <!-- search -->
                     <div role="search" class="field">
                         <div class="control has-icons-right">
-                            <input id="txtSearch" type="search" tabindex="1" :aria-label="$t('commons.search')" :title="$t('commons.search')" class="input is-rounded is-search" v-model="search">
+                            <input ref="searchBox" id="txtSearch" type="search" tabindex="1" :aria-label="$t('commons.search')" :title="$t('commons.search')" class="input is-rounded is-search" v-model="search">
                             <span class="icon is-small is-right">
                                 <font-awesome-icon :icon="['fas', 'search']"  v-if="!search" />
                                 <button tabindex="1" :title="$t('commons.clear_search')" class="clear-selection delete" v-if="search" @click="search = '' "></button>
@@ -332,6 +332,8 @@
 
         mounted() {
 
+            document.addEventListener('keydown', this.keyListener)
+
             // we don't have to fetch fresh data so we try to load them from localstorage to avoid display latency
             if( !this.toRefresh && !this.$route.params.isFirstLoad ) {
                 const accounts = this.$storage.get('accounts', null) // use null as fallback if localstorage is empty
@@ -349,6 +351,10 @@
                 this.$refs.OtpDisplayer.clearOTP()
             });
 
+        },
+
+        destroyed () {
+            document.removeEventListener('keydown', this.keyListener)
         },
 
         components: {
@@ -628,6 +634,19 @@
             sortDesc() {
                 this.accounts.sort((a, b) => a.service < b.service ? 1 : -1)
                 this.saveOrder()
+            },
+
+            /**
+             * 
+             */
+            keyListener : function(e) {
+                if (e.key === "f" && (e.ctrlKey || e.metaKey)) {
+                    e.preventDefault();
+                    const searchBox = document.getElementById('txtSearch');
+                    if (searchBox != undefined) {
+                        searchBox.focus()
+                    }
+                }
             },
         }
     };
