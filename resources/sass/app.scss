@@ -15,7 +15,7 @@ footer,
 :root[data-theme="dark"] footer,
 :root[data-theme="dark"] .header,
 :root[data-theme="dark"] .modal-background,
-:root[data-theme="dark"] .modal-background,
+:root[data-theme="dark"] .modal-slot,
 :root[data-theme="dark"] .options-header {
   background-color: $black-ter;
 }
@@ -24,7 +24,7 @@ footer,
   :root[data-theme="system"] footer,
   :root[data-theme="system"] .header,
   :root[data-theme="system"] .modal-background,
-  :root[data-theme="system"] .modal-background,
+  :root[data-theme="system"] .modal-slot,
   :root[data-theme="system"] .options-header {
     background-color: $black-ter;
   }
