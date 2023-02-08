@@ -1,6 +1,6 @@
 <template>
     <div class="field" :class="{ 'pt-3' : hasOffset }" role="radiogroup" :aria-labelledby="inputId('label', fieldName)">
-        <label :id="inputId('label', fieldName)" class="label" v-html="label"></label>
+        <label v-if="label" :id="inputId('label', fieldName)" class="label" v-html="label"></label>
         <div class="is-toggle buttons">
             <button 
                 role="radio" 
@@ -12,9 +12,11 @@
                 :key="index" 
                 :class="{
                     'is-link' : form[fieldName] === choice.value,
-                    'is-dark' : $root.showDarkMode
+                    'is-dark' : $root.showDarkMode,
+                    'is-multiline' : choice.legend,
                 }" 
-                v-on:click.stop="setRadio(choice.value)"
+                v-on:click.stop="setRadio(choice.value)" 
+                :title="choice.title ? choice.title : ''"
             >
                 <input 
                     :id="inputId(inputType, choice.value)" 
@@ -25,6 +27,7 @@
                     v-model="form[fieldName]" 
                     :disabled="isDisabled" 
                 />
+                <span v-if="choice.legend" v-html="choice.legend" class="is-block is-size-7"></span>
                 <font-awesome-icon :icon="['fas', choice.icon]" v-if="choice.icon" class="mr-3" /> {{ choice.text }}
             </button>
         </div>
