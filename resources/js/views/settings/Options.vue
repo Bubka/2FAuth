@@ -26,6 +26,9 @@
                     <form-checkbox v-on:showAccountsIcons="saveSetting('showAccountsIcons', $event)" :form="form" fieldName="showAccountsIcons" :label="$t('settings.forms.show_accounts_icons.label')" :help="$t('settings.forms.show_accounts_icons.help')" />
                     <!-- Official icons -->
                     <form-checkbox v-on:getOfficialIcons="saveSetting('getOfficialIcons', $event)" :form="form" fieldName="getOfficialIcons" :label="$t('settings.forms.get_official_icons.label')" :help="$t('settings.forms.get_official_icons.help')" />
+                    <!-- password format -->
+                    <form-checkbox v-on:formatPassword="saveSetting('formatPassword', $event)" :form="form" fieldName="formatPassword" :label="$t('settings.forms.password_format.label')" :help="$t('settings.forms.password_format.help')" />
+                    <form-toggle v-if="form.formatPassword" v-on:formatPasswordBy="saveSetting('formatPasswordBy', $event)" :choices="passwordFormats" :form="form" fieldName="formatPasswordBy" />
 
                     <h4 class="title is-4 pt-4 has-text-grey-light">{{ $t('groups.groups') }}</h4>
                     <!-- default group -->
@@ -107,6 +110,8 @@
                     getOfficialIcons: null,
                     checkForUpdate: null,
                     theme: 'dark',
+                    formatPassword: null,
+                    formatPasswordBy: '',
                 }),
                 layouts: [
                     { text: this.$t('settings.forms.grid'), value: 'grid', icon: 'th' },
@@ -116,6 +121,11 @@
                     { text: this.$t('settings.forms.light'), value: 'light', icon: 'sun' },
                     { text: this.$t('settings.forms.dark'), value: 'dark', icon: 'moon' },
                     { text: this.$t('settings.forms.automatic'), value: 'system', icon: 'desktop' },
+                ],
+                passwordFormats: [
+                    { text: '12 34 56', value: 2, legend: this.$t('settings.forms.pair'), title: this.$t('settings.forms.pair_legend') },
+                    { text: '123 456', value: 3, legend: this.$t('settings.forms.trio'), title: this.$t('settings.forms.trio_legend') },
+                    { text: '1234 5678', value: 0.5, legend: this.$t('settings.forms.half'), title: this.$t('settings.forms.half_legend') },
                 ],
                 kickUserAfters: [
                     { text: this.$t('settings.forms.never'), value: '0' },

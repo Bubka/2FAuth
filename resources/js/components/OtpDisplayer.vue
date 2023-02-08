@@ -60,11 +60,15 @@
         },
 
         computed: {
+
             displayedOtp() {
                 let pwd = this.internal_password
-                if (this.internal_otp_type !== 'steamtotp') {
-                    const spacePosition = Math.ceil(this.internal_password.length / 2)
-                    pwd = this.internal_password.substr(0, spacePosition) + " " + this.internal_password.substr(spacePosition)
+                if (this.$root.appSettings.formatPassword && pwd.length > 0) {
+                    const x = Math.ceil(this.$root.appSettings.formatPasswordBy < 1 ? pwd.length * this.$root.appSettings.formatPasswordBy : this.$root.appSettings.formatPasswordBy)
+                    const chunks = pwd.match(new RegExp(`.{1,${x}}`, 'g'));
+                    if (chunks) {
+                        pwd = chunks.join(' ')
+                    }
                 }
                 return this.$root.appSettings.showOtpAsDot ? pwd.replace(/[0-9]/g, '●') : pwd
             },

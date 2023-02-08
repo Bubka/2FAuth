@@ -72,6 +72,8 @@ return [
         'lastRadarScan' => 0,
         'latestRelease' => false,
         'theme' => 'dark',
+        'formatPassword' => true,
+        'formatPasswordBy' => 0.5,
     ],
 
 ];

@@ -68,6 +68,16 @@ return [
             'label' => 'Display mode',
             'help' => 'Choose whether you want accounts to be displayed as a list or as a grid'
         ],
+        'password_format' => [
+            'label' => 'Password formatting',
+            'help' => 'Change how the passwords are displayed by grouping digits to ease readability and memorization'
+        ],
+        'pair' => 'by Pair',
+        'pair_legend' => 'Group digits two by two',
+        'trio_legend' => 'Group digits three by three',
+        'half_legend' => 'Split digits into two equals groups',
+        'trio' => 'by Trio',
+        'half' => 'by Half',
         'grid' => 'Grid',
         'list' => 'List',
         'theme' => [
