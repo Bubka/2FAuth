@@ -7,10 +7,10 @@ use App\Models\Option;
 use Exception;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
 use Throwable;
 
 class SettingService
@@ -23,11 +23,26 @@ class SettingService
     private Collection $settings;
 
     /**
+     * Cache duration
+     *
+     * @var int $minutes
+     */
+    private int $minutes = 10;
+
+    /**
+     * Name of the cache item where options are persisted
+     */
+    public const CACHE_ITEM_NAME = 'userOptions';
+
+    /**
      * Constructor
      */
     public function __construct()
     {
-        self::build();
+        $this->settings = Cache::remember(self::CACHE_ITEM_NAME, now()->addMinutes($this->minutes), function () {
+            self::build();
+            return $this->settings;
+        });
     }
 
     /**
@@ -74,7 +89,7 @@ class SettingService
             Log::info(sprintf('Setting %s is now %s', var_export($setting, true), var_export($this->restoreType($value), true)));
         }
 
-        self::build();
+        self::buildAndCache();
     }
 
     /**
@@ -86,6 +101,8 @@ class SettingService
     {
         Option::where('key', $name)->delete();
         Log::info(sprintf('Setting %s deleted', var_export($name, true)));
+
+        self::buildAndCache();
     }
 
     /**
@@ -119,6 +136,17 @@ class SettingService
         }
 
         $this->settings = $settings;
+    }
+
+    /**
+     * Build and cache the options collection
+     * 
+     * @return void
+     */
+    private function buildAndCache()
+    {
+        self::build();
+        Cache::put(self::CACHE_ITEM_NAME, $this->settings, now()->addMinutes($this->minutes));
     }
 
     /**

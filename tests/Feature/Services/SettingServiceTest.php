@@ -3,8 +3,10 @@
 namespace Tests\Feature\Services;
 
 use App\Facades\Settings;
+use App\Services\SettingService;
 use App\Models\TwoFAccount;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Tests\FeatureTestCase;
 
@@ -172,14 +174,17 @@ class SettingServiceTest extends FeatureTestCase
     /**
      * @test
      */
-    public function test_set_setting_persist_correct_value()
+    public function test_set_setting_persist_correct_value_in_db_and_cache()
     {
         $value = Settings::set(self::SETTING_NAME, self::SETTING_VALUE_STRING);
+        $cached = Cache::get(SettingService::CACHE_ITEM_NAME); // returns a Collection
 
         $this->assertDatabaseHas('options', [
             self::KEY   => self::SETTING_NAME,
             self::VALUE => self::SETTING_VALUE_STRING,
         ]);
+
+        $this->assertEquals($cached->get(self::SETTING_NAME), self::SETTING_VALUE_STRING);
     }
 
     /**
@@ -278,6 +283,7 @@ class SettingServiceTest extends FeatureTestCase
             self::SETTING_NAME     => self::SETTING_VALUE_STRING,
             self::SETTING_NAME_ALT => self::SETTING_VALUE_INT,
         ]);
+        $cached = Cache::get(SettingService::CACHE_ITEM_NAME); // returns a Collection
 
         $this->assertDatabaseHas('options', [
             self::KEY   => self::SETTING_NAME,
@@ -288,6 +294,9 @@ class SettingServiceTest extends FeatureTestCase
             self::KEY   => self::SETTING_NAME_ALT,
             self::VALUE => self::SETTING_VALUE_INT,
         ]);
+
+        $this->assertEquals($cached->get(self::SETTING_NAME), self::SETTING_VALUE_STRING);
+        $this->assertEquals($cached->get(self::SETTING_NAME_ALT), self::SETTING_VALUE_INT);
     }
 
     /**
@@ -319,18 +328,20 @@ class SettingServiceTest extends FeatureTestCase
     /**
      * @test
      */
-    public function test_del_remove_setting_from_db()
+    public function test_del_remove_setting_from_db_and_cache()
     {
         DB::table('options')->insert(
             [self::KEY => self::SETTING_NAME, self::VALUE => strval(self::SETTING_VALUE_STRING)]
         );
 
-        $value = Settings::delete(self::SETTING_NAME);
+        Settings::delete(self::SETTING_NAME);
+        $cached = Cache::get(SettingService::CACHE_ITEM_NAME); // returns a Collection
 
         $this->assertDatabaseMissing('options', [
             self::KEY   => self::SETTING_NAME,
             self::VALUE => self::SETTING_VALUE_STRING,
         ]);
+        $this->assertFalse($cached->has(self::SETTING_NAME));
     }
 
     /**
@@ -353,5 +364,46 @@ class SettingServiceTest extends FeatureTestCase
         DB::table('options')->where(self::KEY, 'showTokenAsDot')->delete();
 
         $this->assertFalse(Settings::isUserDefined('showTokenAsDot'));
+    }
+
+    /**
+     * @test
+     */
+    public function test_cache_is_requested_at_instanciation()
+    {
+        Cache::shouldReceive('remember')
+                    ->andReturn(collect([]));
+
+        $settingService = new SettingService();
+
+        Cache::shouldHaveReceived('remember');
+    }
+
+    /**
+     * 
+     */
+    public function test_cache_is_updated_when_setting_is_set()
+    {
+        Cache::shouldReceive('remember', 'put')
+                    ->andReturn(collect([]), true);
+
+        $settingService = new SettingService();
+        $settingService->set(self::SETTING_NAME, self::SETTING_VALUE_STRING);
+
+        Cache::shouldHaveReceived('put');
+    }
+
+    /**
+     * 
+     */
+    public function test_cache_is_updated_when_setting_is_deleted()
+    {
+        Cache::shouldReceive('remember', 'put')
+                    ->andReturn(collect([]), true);
+
+        $settingService = new SettingService();
+        $settingService->delete(self::SETTING_NAME);
+
+        Cache::shouldHaveReceived('put');
     }
 }
