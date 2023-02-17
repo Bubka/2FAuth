@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\ScanForNewReleaseCalled;
 use App\Facades\Settings;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\App;
 
 class SinglePageController extends Controller
@@ -20,18 +21,17 @@ class SinglePageController extends Controller
         $subdir = config('2fauth.config.appSubdirectory') ? '/' . config('2fauth.config.appSubdirectory') : '';
 
         return view('landing')->with([
-            'theme'       => Settings::get('theme'),
             'appSettings' => Settings::all()->toJson(),
             'appConfig'   => collect([
                 'proxyAuth'      => config('auth.defaults.guard') === 'reverse-proxy-guard' ? true : false,
                 'proxyLogoutUrl' => config('2fauth.config.proxyLogoutUrl') ? config('2fauth.config.proxyLogoutUrl') : false,
                 'subdirectory'   => $subdir,
             ])->toJson(),
-            'subdirectory' => $subdir,
-            'lang'         => App::currentLocale(),
-            'isDemoApp'    => config('2fauth.config.isDemoApp') ? 'true' : 'false',
-            'isTestingApp' => config('2fauth.config.isTestingApp') ? 'true' : 'false',
-            'locales'      => collect(config('2fauth.locales'))->toJson(), /** @phpstan-ignore-line */
+            'userPreferences' => Auth::user()->preferences ?? collect(config('2fauth.preferences')),
+            'subdirectory'    => $subdir,
+            'isDemoApp'       => config('2fauth.config.isDemoApp') ? 'true' : 'false',
+            'isTestingApp'    => config('2fauth.config.isTestingApp') ? 'true' : 'false',
+            'locales'         => collect(config('2fauth.locales'))->toJson(), /** @phpstan-ignore-line */
         ]);
     }
 }

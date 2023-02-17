@@ -130,8 +130,8 @@
                 loadingLabel: 'refreshing'
                 }" > -->
                 <draggable v-model="filteredAccounts" @start="drag = true" @end="saveOrder" ghost-class="ghost" handle=".tfa-dots" animation="200" class="accounts">
-                    <transition-group class="columns is-multiline" :class="{ 'is-centered': $root.appSettings.displayMode === 'grid' }" type="transition" :name="!drag ? 'flip-list' : null">
-                        <div :class="[$root.appSettings.displayMode === 'grid' ? 'tfa-grid' : 'tfa-list']" class="column is-narrow" v-for="account in filteredAccounts" :key="account.id">
+                    <transition-group class="columns is-multiline" :class="{ 'is-centered': $root.userPreferences.displayMode === 'grid' }" type="transition" :name="!drag ? 'flip-list' : null">
+                        <div :class="[$root.userPreferences.displayMode === 'grid' ? 'tfa-grid' : 'tfa-list']" class="column is-narrow" v-for="account in filteredAccounts" :key="account.id">
                             <div class="tfa-container">
         	                    <transition name="slideCheckbox">
         	                        <div class="tfa-cell tfa-checkbox" v-if="editMode">
@@ -143,7 +143,7 @@
         	                    </transition>
                                 <div tabindex="0" class="tfa-cell tfa-content is-size-3 is-size-4-mobile" @click="showAccount(account)" @keyup.enter="showAccount(account)" role="button">  
                                     <div class="tfa-text has-ellipsis">
-                                        <img :src="$root.appConfig.subdirectory + '/storage/icons/' + account.icon" v-if="account.icon && $root.appSettings.showAccountsIcons" :alt="$t('twofaccounts.icon_for_account_x_at_service_y', {account: account.account, service: account.service})">
+                                        <img :src="$root.appConfig.subdirectory + '/storage/icons/' + account.icon" v-if="account.icon && $root.userPreferences.showAccountsIcons" :alt="$t('twofaccounts.icon_for_account_x_at_service_y', {account: account.account, service: account.service})">
                                         {{ displayService(account.service) }}<font-awesome-icon class="has-text-danger is-size-5 ml-2" v-if="$root.appSettings.useEncryption && account.account === $t('errors.indecipherable')" :icon="['fas', 'exclamation-circle']" />
                                         <span class="is-family-primary is-size-6 is-size-7-mobile has-text-grey ">{{ account.account }}</span>
                                     </div>
@@ -245,8 +245,8 @@
      *    ~ The Edit mode
      *  - User are automatically pushed to the start view if there is no account to list.
      *  - The view is affected by :
-     *    ~ 'appSettings.showAccountsIcons' toggle the icon visibility
-     *    ~ 'appSettings.displayMode' change the account appearance
+     *    ~ 'userPreferences.showAccountsIcons' toggle the icon visibility
+     *    ~ 'userPreferences.displayMode' change the account appearance
      *
      *  Input : 
      *  - The 'initialEditMode' props : allows to load the view directly in Edit mode
@@ -274,7 +274,7 @@
                 showGroupSelector: false,
                 moveAccountsTo: false,
                 form: new Form({
-                    value: this.$root.appSettings.activeGroup,
+                    value: this.$root.userPreferences.activeGroup,
                 }),
             }
         },
@@ -288,10 +288,10 @@
 
                     return this.accounts.filter(
                         item => {
-                            if( parseInt(this.$root.appSettings.activeGroup) > 0 ) {
+                            if( parseInt(this.$root.userPreferences.activeGroup) > 0 ) {
                                 return ((item.service ? item.service.toLowerCase().includes(this.search.toLowerCase()) : false) || 
                                     item.account.toLowerCase().includes(this.search.toLowerCase())) && 
-                                    (item.group_id == parseInt(this.$root.appSettings.activeGroup))
+                                    (item.group_id == parseInt(this.$root.userPreferences.activeGroup))
                             }
                             else {
                                 return ((item.service ? item.service.toLowerCase().includes(this.search.toLowerCase()) : false) || 
@@ -316,7 +316,7 @@
              * Returns the name of a group
              */
             activeGroupName() {
-                let g = this.groups.find(el => el.id === parseInt(this.$root.appSettings.activeGroup))
+                let g = this.groups.find(el => el.id === parseInt(this.$root.userPreferences.activeGroup))
 
                 if(g) {
                     return g.name
@@ -369,10 +369,10 @@
              * Route user to the appropriate submitting view
              */
             start() {
-                if( this.$root.appSettings.useDirectCapture && this.$root.appSettings.defaultCaptureMode === 'advancedForm' ) {
+                if( this.$root.userPreferences.useDirectCapture && this.$root.userPreferences.defaultCaptureMode === 'advancedForm' ) {
                     this.$router.push({ name: 'createAccount' })
                 }
-                else if( this.$root.appSettings.useDirectCapture && this.$root.appSettings.defaultCaptureMode === 'livescan' ) {
+                else if( this.$root.userPreferences.useDirectCapture && this.$root.userPreferences.defaultCaptureMode === 'livescan' ) {
                     this.$router.push({ name: 'capture' })
                 }
                 else {
@@ -541,10 +541,10 @@
             setActiveGroup(id) {
 
                 // In memomry saving
-                this.form.value = this.$root.appSettings.activeGroup = id
+                this.form.value = this.$root.userPreferences.activeGroup = id
 
                 // In db saving if the user set 2FAuth to memorize the active group
-                if( this.$root.appSettings.rememberActiveGroup ) {
+                if( this.$root.userPreferences.rememberActiveGroup ) {
                     this.form.put('/api/v1/settings/activeGroup', {returnError: true})
                     .then(response => {
                         // everything's fine

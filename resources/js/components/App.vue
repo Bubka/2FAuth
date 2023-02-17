@@ -26,7 +26,7 @@
         computed: {
 
             kickInactiveUser: function () {
-                return parseInt(this.$root.appSettings.kickUserAfter) > 0 && this.$route.meta.requiresAuth
+                return parseInt(this.$root.userPreferences.kickUserAfter) > 0 && this.$route.meta.requiresAuth
             }
 
         }

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html data-theme='{{ $theme }}' lang="{!! $lang !!}">
+<html data-theme="{{ $userPreferences['theme'] }}" lang="{{ $userPreferences['lang'] }}">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="{{ __('commons.2fauth_description') }}" lang="{!! $lang !!}">
+    <meta name="description" content="{{ __('commons.2fauth_description') }}" lang="{{ $userPreferences['lang'] }}">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, shrink-to-fit=no, viewport-fit=cover">
     <meta name="csrf-token" content="{{csrf_token()}}">
     <meta name="robots" content="noindex, nofollow">
@@ -26,6 +26,7 @@
     <script type="text/javascript">
         var appSettings = {!! $appSettings !!};
         var appConfig = {!! $appConfig !!};
+        var userPreferences = {!! $userPreferences->toJson() !!};
         var appVersion = '{{ config("2fauth.version") }}';
         var isDemoApp = {!! $isDemoApp !!};
         var isTestingApp = {!! $isTestingApp !!};

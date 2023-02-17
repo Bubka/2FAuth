@@ -17,6 +17,7 @@ const app = new Vue({
     data: {
         appSettings: window.appSettings,
         appConfig: window.appConfig,
+        userPreferences: window.userPreferences,
         isDemoApp: window.isDemoApp,
         isTestingApp: window.isTestingApp,
         prefersDarkScheme: window.matchMedia('(prefers-color-scheme: dark)').matches
@@ -24,8 +25,8 @@ const app = new Vue({
 
     computed: {
         showDarkMode: function() {
-            return this.appSettings.theme == 'dark' ||
-                (this.appSettings.theme == 'system' && this.prefersDarkScheme)
+            return this.userPreferences.theme == 'dark' ||
+                (this.userPreferences.theme == 'system' && this.prefersDarkScheme)
         }
     },
 

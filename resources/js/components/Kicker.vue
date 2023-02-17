@@ -36,7 +36,7 @@
 
             setTimer: function() {
 
-                this.logoutTimer = setTimeout(this.logoutUser, this.$root.appSettings.kickUserAfter * 60 * 1000)
+                this.logoutTimer = setTimeout(this.logoutUser, this.$root.userPreferences.kickUserAfter * 60 * 1000)
             },
 
             logoutUser: function() {

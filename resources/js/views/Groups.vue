@@ -107,8 +107,8 @@
 
                     // Reset persisted group filter to 'All' (groupId=0)
                     // (backend will save to change automatically)
-                    if( parseInt(this.$root.appSettings.activeGroup) === id ) {
-                        this.$root.appSettings.activeGroup = 0
+                    if( parseInt(this.$root.userPreferences.activeGroup) === id ) {
+                        this.$root.userPreferences.activeGroup = 0
                     }
                 }
             }

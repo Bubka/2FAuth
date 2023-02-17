@@ -10,6 +10,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Log;
 use Laragear\WebAuthn\WebAuthnAuthentication;
 use Laravel\Passport\HasApiTokens;
+use Illuminate\Support\Arr;
 
 class User extends Authenticatable implements WebAuthnAuthenticatable
 {
@@ -42,6 +43,7 @@ class User extends Authenticatable implements WebAuthnAuthenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'is_admin'          => 'boolean',
     ];
 
     /**
@@ -55,6 +57,19 @@ class User extends Authenticatable implements WebAuthnAuthenticatable
         $this->notify(new ResetPassword($token));
 
         Log::info('Password reset token sent');
+    }
+
+    /**
+     * Get Preferences attribute
+     * 
+     * @param  string  $value
+     * @return \Illuminate\Support\Collection<array-key, mixed>
+     */
+    public function getPreferencesAttribute($value)
+    {
+        $preferences = collect(config('2fauth.preferences'))->merge(json_decode($value));  /** @phpstan-ignore-line */
+
+        return $preferences;
     }
 
     /**

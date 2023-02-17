@@ -65,7 +65,7 @@
                 <label class="label">{{ $t('twofaccounts.icon') }}</label>
                 <div class="field is-grouped">
                     <!-- i'm lucky button -->
-                    <div class="control" v-if="$root.appSettings.getOfficialIcons">
+                    <div class="control" v-if="$root.userPreferences.getOfficialIcons">
                         <v-button @click="fetchLogo" :color="$root.showDarkMode ? 'is-dark' : ''" :nativeType="'button'" :isDisabled="form.service.length < 1">
                             <span class="icon is-small">
                                 <font-awesome-icon :icon="['fas', 'globe']" />
@@ -94,7 +94,7 @@
                 </div>
                 <div class="field">
                     <field-error :form="form" field="icon" class="help-for-file" />
-                    <p v-if="$root.appSettings.getOfficialIcons" class="help" v-html="$t('twofaccounts.forms.i_m_lucky_legend')"></p>
+                    <p v-if="$root.userPreferences.getOfficialIcons" class="help" v-html="$t('twofaccounts.forms.i_m_lucky_legend')"></p>
                 </div>
                 <!-- otp type -->
                 <form-toggle class="has-uppercased-button" :form="form" :choices="otp_types" fieldName="otp_type" :label="$t('twofaccounts.forms.otp_type.label')" :help="$t('twofaccounts.forms.otp_type.help')" :hasOffset="true" />
@@ -365,7 +365,7 @@
             },
 
             fetchLogo() {
-                if (this.$root.appSettings.getOfficialIcons) {
+                if (this.$root.userPreferences.getOfficialIcons) {
                     this.axios.post('/api/v1/icons/default', {service: this.form.service}, {returnError: true}).then(response => {
                         if (response.status === 201) {
                             // clean possible already uploaded temp icon
@@ -397,7 +397,7 @@
 
             clipboardSuccessHandler ({ value, event }) {
 
-                if(this.$root.appSettings.kickUserAfter == -1) {
+                if(this.$root.appSettings.userPreferences == -1) {
                     this.appLogout()
                 }
 

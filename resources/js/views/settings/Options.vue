@@ -3,58 +3,65 @@
         <setting-tabs :activeTab="'settings.options'"></setting-tabs>
         <div class="options-tabs">
             <form-wrapper>
-                <!-- <form @submit.prevent="handleSubmit" @change="handleSubmit" @keydown="form.onKeydown($event)"> -->
                 <form>
-                    <h4 class="title is-4 has-text-grey-light">{{ $t('settings.general') }}</h4>
-                    <!-- Check for update -->
-                    <form-checkbox v-on:checkForUpdate="saveSetting('checkForUpdate', $event)" :form="form" fieldName="checkForUpdate" :label="$t('commons.check_for_update')" :help="$t('commons.check_for_update_help')" />
-                    <version-checker></version-checker>
-                    <!-- Language -->
-                    <form-select v-on:lang="saveSetting('lang', $event)" :options="langs" :form="form" fieldName="lang" :label="$t('settings.forms.language.label')" :help="$t('settings.forms.language.help')" />
-                    <div class="field help">
-                        {{ $t('settings.forms.some_translation_are_missing') }}
-                        <a class="ml-2" href="https://crowdin.com/project/2fauth">
-                            {{ $t('settings.forms.help_translate_2fauth') }}
-                            <font-awesome-icon :icon="['fas', 'external-link-alt']" />
-                        </a>
+                    <!-- user preferences -->
+                    <div class="block">
+                        <h4 class="title is-4 has-text-grey-light">{{ $t('settings.general') }}</h4>
+                        <!-- Language -->
+                        <form-select v-on:lang="savePreference('lang', $event)" :options="langs" :form="preferencesForm" fieldName="lang" :label="$t('settings.forms.language.label')" :help="$t('settings.forms.language.help')" />
+                        <div class="field help">
+                            {{ $t('settings.forms.some_translation_are_missing') }}
+                            <a class="ml-2" href="https://crowdin.com/project/2fauth">
+                                {{ $t('settings.forms.help_translate_2fauth') }}
+                                <font-awesome-icon :icon="['fas', 'external-link-alt']" />
+                            </a>
+                        </div>
+                        <!-- display mode -->
+                        <form-toggle v-on:displayMode="savePreference('displayMode', $event)" :choices="layouts" :form="preferencesForm" fieldName="displayMode" :label="$t('settings.forms.display_mode.label')" :help="$t('settings.forms.display_mode.help')" />
+                        <!-- theme -->
+                        <form-toggle v-on:theme="savePreference('theme', $event)" :choices="themes" :form="preferencesForm" fieldName="theme" :label="$t('settings.forms.theme.label')" :help="$t('settings.forms.theme.help')" />
+                        <!-- show icon -->
+                        <form-checkbox v-on:showAccountsIcons="savePreference('showAccountsIcons', $event)" :form="preferencesForm" fieldName="showAccountsIcons" :label="$t('settings.forms.show_accounts_icons.label')" :help="$t('settings.forms.show_accounts_icons.help')" />
+                        <!-- Official icons -->
+                        <form-checkbox v-on:getOfficialIcons="savePreference('getOfficialIcons', $event)" :form="preferencesForm" fieldName="getOfficialIcons" :label="$t('settings.forms.get_official_icons.label')" :help="$t('settings.forms.get_official_icons.help')" />
+                        <!-- password format -->
+                        <form-checkbox v-on:formatPassword="savePreference('formatPassword', $event)" :form="preferencesForm" fieldName="formatPassword" :label="$t('settings.forms.password_format.label')" :help="$t('settings.forms.password_format.help')" />
+                        <form-toggle v-if="preferencesForm.formatPassword" v-on:formatPasswordBy="savePreference('formatPasswordBy', $event)" :choices="passwordFormats" :form="preferencesForm" fieldName="formatPasswordBy" />
+
+                        <h4 class="title is-4 pt-4 has-text-grey-light">{{ $t('groups.groups') }}</h4>
+                        <!-- default group -->
+                        <form-select v-on:defaultGroup="savePreference('defaultGroup', $event)" :options="groups" :form="preferencesForm" fieldName="defaultGroup" :label="$t('settings.forms.default_group.label')" :help="$t('settings.forms.default_group.help')" />
+                        <!-- retain active group -->
+                        <form-checkbox v-on:rememberActiveGroup="savePreference('rememberActiveGroup', $event)" :form="preferencesForm" fieldName="rememberActiveGroup" :label="$t('settings.forms.remember_active_group.label')" :help="$t('settings.forms.remember_active_group.help')" />
+
+                        <h4 class="title is-4 pt-4 has-text-grey-light">{{ $t('settings.security') }}</h4>
+                        <!-- auto lock -->
+                        <form-select v-on:kickUserAfter="savePreference('kickUserAfter', $event)" :options="kickUserAfters" :form="preferencesForm" fieldName="kickUserAfter" :label="$t('settings.forms.auto_lock.label')"  :help="$t('settings.forms.auto_lock.help')" />
+                        <!-- otp as dot -->
+                        <form-checkbox v-on:showOtpAsDot="savePreference('showOtpAsDot', $event)" :form="preferencesForm" fieldName="showOtpAsDot" :label="$t('settings.forms.show_otp_as_dot.label')" :help="$t('settings.forms.show_otp_as_dot.help')" />
+                        <!-- close otp on copy -->
+                        <form-checkbox v-on:closeOtpOnCopy="savePreference('closeOtpOnCopy', $event)" :form="preferencesForm" fieldName="closeOtpOnCopy" :label="$t('settings.forms.close_otp_on_copy.label')" :help="$t('settings.forms.close_otp_on_copy.help')" />
+                        <!-- copy otp on get -->
+                        <form-checkbox v-on:copyOtpOnDisplay="savePreference('copyOtpOnDisplay', $event)" :form="preferencesForm" fieldName="copyOtpOnDisplay" :label="$t('settings.forms.copy_otp_on_display.label')" :help="$t('settings.forms.copy_otp_on_display.help')" />
+
+                        <h4 class="title is-4 pt-4 has-text-grey-light">{{ $t('settings.data_input') }}</h4>
+                        <!-- basic qrcode -->
+                        <form-checkbox v-on:useBasicQrcodeReader="savePreference('useBasicQrcodeReader', $event)" :form="preferencesForm" fieldName="useBasicQrcodeReader" :label="$t('settings.forms.use_basic_qrcode_reader.label')" :help="$t('settings.forms.use_basic_qrcode_reader.help')" />
+                        <!-- direct capture -->
+                        <form-checkbox v-on:useDirectCapture="savePreference('useDirectCapture', $event)" :form="preferencesForm" fieldName="useDirectCapture" :label="$t('settings.forms.useDirectCapture.label')" :help="$t('settings.forms.useDirectCapture.help')" />
+                        <!-- default capture mode -->
+                        <form-select v-on:defaultCaptureMode="savePreference('defaultCaptureMode', $event)" :options="captureModes" :form="preferencesForm" fieldName="defaultCaptureMode" :label="$t('settings.forms.defaultCaptureMode.label')" :help="$t('settings.forms.defaultCaptureMode.help')" />
                     </div>
-                    <!-- display mode -->
-                    <form-toggle v-on:displayMode="saveSetting('displayMode', $event)" :choices="layouts" :form="form" fieldName="displayMode" :label="$t('settings.forms.display_mode.label')" :help="$t('settings.forms.display_mode.help')" />
-                    <!-- theme -->
-                    <form-toggle v-on:theme="saveSetting('theme', $event)" :choices="themes" :form="form" fieldName="theme" :label="$t('settings.forms.theme.label')" :help="$t('settings.forms.theme.help')" />
-                    <!-- show icon -->
-                    <form-checkbox v-on:showAccountsIcons="saveSetting('showAccountsIcons', $event)" :form="form" fieldName="showAccountsIcons" :label="$t('settings.forms.show_accounts_icons.label')" :help="$t('settings.forms.show_accounts_icons.help')" />
-                    <!-- Official icons -->
-                    <form-checkbox v-on:getOfficialIcons="saveSetting('getOfficialIcons', $event)" :form="form" fieldName="getOfficialIcons" :label="$t('settings.forms.get_official_icons.label')" :help="$t('settings.forms.get_official_icons.help')" />
-                    <!-- password format -->
-                    <form-checkbox v-on:formatPassword="saveSetting('formatPassword', $event)" :form="form" fieldName="formatPassword" :label="$t('settings.forms.password_format.label')" :help="$t('settings.forms.password_format.help')" />
-                    <form-toggle v-if="form.formatPassword" v-on:formatPasswordBy="saveSetting('formatPasswordBy', $event)" :choices="passwordFormats" :form="form" fieldName="formatPasswordBy" />
-
-                    <h4 class="title is-4 pt-4 has-text-grey-light">{{ $t('groups.groups') }}</h4>
-                    <!-- default group -->
-                    <form-select v-on:defaultGroup="saveSetting('defaultGroup', $event)" :options="groups" :form="form" fieldName="defaultGroup" :label="$t('settings.forms.default_group.label')" :help="$t('settings.forms.default_group.help')" />
-                    <!-- retain active group -->
-                    <form-checkbox v-on:rememberActiveGroup="saveSetting('rememberActiveGroup', $event)" :form="form" fieldName="rememberActiveGroup" :label="$t('settings.forms.remember_active_group.label')" :help="$t('settings.forms.remember_active_group.help')" />
-
-                    <h4 class="title is-4 pt-4 has-text-grey-light">{{ $t('settings.security') }}</h4>
-                    <!-- auto lock -->
-                    <form-select v-on:kickUserAfter="saveSetting('kickUserAfter', $event)" :options="kickUserAfters" :form="form" fieldName="kickUserAfter" :label="$t('settings.forms.auto_lock.label')"  :help="$t('settings.forms.auto_lock.help')" />
-                    <!-- protect db -->
-                    <form-checkbox v-on:useEncryption="saveSetting('useEncryption', $event)" :form="form" fieldName="useEncryption" :label="$t('settings.forms.use_encryption.label')" :help="$t('settings.forms.use_encryption.help')" />
-                    <!-- otp as dot -->
-                    <form-checkbox v-on:showOtpAsDot="saveSetting('showOtpAsDot', $event)" :form="form" fieldName="showOtpAsDot" :label="$t('settings.forms.show_otp_as_dot.label')" :help="$t('settings.forms.show_otp_as_dot.help')" />
-                    <!-- close otp on copy -->
-                    <form-checkbox v-on:closeOtpOnCopy="saveSetting('closeOtpOnCopy', $event)" :form="form" fieldName="closeOtpOnCopy" :label="$t('settings.forms.close_otp_on_copy.label')" :help="$t('settings.forms.close_otp_on_copy.help')" />
-                    <!-- copy otp on get -->
-                    <form-checkbox v-on:copyOtpOnDisplay="saveSetting('copyOtpOnDisplay', $event)" :form="form" fieldName="copyOtpOnDisplay" :label="$t('settings.forms.copy_otp_on_display.label')" :help="$t('settings.forms.copy_otp_on_display.help')" />
-
-                    <h4 class="title is-4 pt-4 has-text-grey-light">{{ $t('settings.data_input') }}</h4>
-                    <!-- basic qrcode -->
-                    <form-checkbox v-on:useBasicQrcodeReader="saveSetting('useBasicQrcodeReader', $event)" :form="form" fieldName="useBasicQrcodeReader" :label="$t('settings.forms.use_basic_qrcode_reader.label')" :help="$t('settings.forms.use_basic_qrcode_reader.help')" />
-                    <!-- direct capture -->
-                    <form-checkbox v-on:useDirectCapture="saveSetting('useDirectCapture', $event)" :form="form" fieldName="useDirectCapture" :label="$t('settings.forms.useDirectCapture.label')" :help="$t('settings.forms.useDirectCapture.help')" />
-                    <!-- default capture mode -->
-                    <form-select v-on:defaultCaptureMode="saveSetting('defaultCaptureMode', $event)" :options="captureModes" :form="form" fieldName="defaultCaptureMode" :label="$t('settings.forms.defaultCaptureMode.label')" :help="$t('settings.forms.defaultCaptureMode.help')" />
+                    <!-- Admin settings -->
+                    <div v-if="settingsForm">
+                        <h4 class="title is-4 pt-4 has-text-grey-light">{{ $t('settings.administration') }}</h4>
+                        <div class="is-size-7-mobile block" v-html="$t('settings.administration_legend')"></div>
+                        <!-- Check for update -->
+                        <form-checkbox v-on:checkForUpdate="saveSetting('checkForUpdate', $event)" :form="settingsForm" fieldName="checkForUpdate" :label="$t('commons.check_for_update')" :help="$t('commons.check_for_update_help')" />
+                        <version-checker></version-checker>
+                        <!-- protect db -->
+                        <form-checkbox v-on:useEncryption="saveSetting('useEncryption', $event)" :form="settingsForm" fieldName="useEncryption" :label="$t('settings.forms.use_encryption.label')" :help="$t('settings.forms.use_encryption.help')" />
+                    </div>
                 </form>
             </form-wrapper>
         </div>
@@ -93,26 +100,29 @@
     export default {
         data(){
             return {
-                form: new Form({
-                    lang: 'browser',
+                preferencesForm: new Form({
+                    lang: '',
                     showOtpAsDot: null,
                     closeOtpOnCopy: null,
                     copyOtpOnDisplay: null,
                     useBasicQrcodeReader: null,
                     showAccountsIcons: null,
                     displayMode: '',
-                    kickUserAfter: '',
-                    useEncryption: null,
+                    kickUserAfter: null,
                     defaultGroup: '',
                     useDirectCapture: null,
                     defaultCaptureMode: '',
-                    rememberActiveGroup: true,
+                    rememberActiveGroup: null,
                     getOfficialIcons: null,
-                    checkForUpdate: null,
-                    theme: 'dark',
+                    theme: '',
                     formatPassword: null,
                     formatPasswordBy: '',
                 }),
+                settingsForm: null,
+                settings: {
+                    useEncryption: null,
+                    checkForUpdate: null,
+                },
                 layouts: [
                     { text: this.$t('settings.forms.grid'), value: 'grid', icon: 'th' },
                     { text: this.$t('settings.forms.list'), value: 'list', icon: 'list' },
@@ -128,15 +138,15 @@
                     { text: '1234 5678', value: 0.5, legend: this.$t('settings.forms.half'), title: this.$t('settings.forms.half_legend') },
                 ],
                 kickUserAfters: [
-                    { text: this.$t('settings.forms.never'), value: '0' },
-                    { text: this.$t('settings.forms.on_otp_copy'), value: '-1' },
-                    { text: this.$t('settings.forms.1_minutes'), value: '1' },
-                    { text: this.$t('settings.forms.5_minutes'), value: '5' },
-                    { text: this.$t('settings.forms.10_minutes'), value: '10' },
-                    { text: this.$t('settings.forms.15_minutes'), value: '15' },
-                    { text: this.$t('settings.forms.30_minutes'), value: '30' },
-                    { text: this.$t('settings.forms.1_hour'), value: '60' },
-                    { text: this.$t('settings.forms.1_day'), value: '1440' }, 
+                    { text: this.$t('settings.forms.never'), value: 0 },
+                    { text: this.$t('settings.forms.on_otp_copy'), value: -1 },
+                    { text: this.$t('settings.forms.1_minutes'), value: 1 },
+                    { text: this.$t('settings.forms.5_minutes'), value: 5 },
+                    { text: this.$t('settings.forms.10_minutes'), value: 10 },
+                    { text: this.$t('settings.forms.15_minutes'), value: 15 },
+                    { text: this.$t('settings.forms.30_minutes'), value: 30 },
+                    { text: this.$t('settings.forms.1_hour'), value: 60 },
+                    { text: this.$t('settings.forms.1_day'), value: 1440 }, 
                 ],
                 groups: [
                     { text: this.$t('groups.no_group'), value: 0 },
@@ -157,7 +167,7 @@
         computed : {
             langs: function() {
                 let locales = [{
-                    text: this.$t('languages.browser_preference') + ' (' + this.$root.$i18n.locale + ')',
+                    text: this.$t('languages.browser_preference'),
                     value: 'browser'
                 }];
 
@@ -172,39 +182,41 @@
         },
 
         async mounted() {
-            const { data } = await this.form.get('/api/v1/settings')
 
-            this.form.fillWithKeyValueObject(data)
-            let lang = data.filter(x => x.key === 'lang')
+            const preferences = await this.preferencesForm.get('/api/v1/user/preferences')
+            this.preferencesForm.fillWithKeyValueObject(preferences.data)
+            this.preferencesForm.setOriginal()
 
-            if (lang.value == 'browser') {
-                if(window.appLocales.includes(lang.value)) {
-                    this.form.lang = lang
-                }
-            }
-            // this.$root.$i18n.locale
+            this.axios.get('/api/v1/settings', {returnError: true}).then(response => {
+                this.settingsForm = new Form(this.settings)
+                this.settingsForm.fillWithKeyValueObject(response.data)
+                this.settingsForm.setOriginal()
+            })
+            .catch(error => {
+                // no admin rights, we do not set the Settings form
+            })
 
-            this.form.setOriginal()
             this.fetchGroups()
         },
 
         methods : {
-            handleSubmit(e) {
-                e.preventDefault()
-                console.log(e)
 
-                // this.form.post('/api/v1/settings/options', {returnError: false})
-                // .then(response => {
+            savePreference(preferenceName, event) {
 
-                //     this.$notify({ type: 'is-success', text: response.data.message })
+                this.axios.put('/api/v1/user/preferences/' + preferenceName, { value: event }).then(response => {
+                    this.$notify({ type: 'is-success', text: this.$t('settings.forms.setting_saved') })
 
-                //     if(response.data.settings.lang !== this.$root.$i18n.locale) {
-                //         this.$router.go()
-                //     }
-                //     else {
-                //         this.$root.appSettings = response.data.settings
-                //     }
-                // });
+                    if(preferenceName === 'lang' && response.data.value !== this.$root.$i18n.locale) {
+                        this.$router.go()
+                    }
+                    else {
+                        this.$root.userPreferences[response.data.key] = response.data.value
+
+                        if(preferenceName === 'theme') {
+                            this.setTheme(response.data.value)
+                        }
+                    }
+                })
             },
 
             saveSetting(settingName, event) {
@@ -212,16 +224,7 @@
                 this.axios.put('/api/v1/settings/' + settingName, { value: event }).then(response => {
                     this.$notify({ type: 'is-success', text: this.$t('settings.forms.setting_saved') })
 
-                    if(settingName === 'lang' && response.data.value !== this.$root.$i18n.locale) {
-                        this.$router.go()
-                    }
-                    else {
-                        this.$root.appSettings[response.data.key] = response.data.value
-
-                        if(settingName === 'theme') {
-                            this.setTheme(response.data.value)
-                        }
-                    }
+                    this.$root.appSettings[response.data.key] = response.data.value
                 })
             },
 

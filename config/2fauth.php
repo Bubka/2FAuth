@@ -46,34 +46,47 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Application fallback for user options
+    | Default values for app (global) settings
+    | These settings can be overloaded and persisted using the SettingService
     |--------------------------------------------------------------------------
     |
     */
 
-    'options' => [
+    'settings' => [
+        'useEncryption' => false,
+        'checkForUpdate' => true,
+        'lastRadarScan' => 0,
+        'latestRelease' => false,
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Default values for user preferences
+    | These settings can be overloaded and persisted by each user
+    |--------------------------------------------------------------------------
+    |
+    */
+
+    'preferences' => [
         'showTokenAsDot' => false,
         'closeOtpOnCopy' => false,
         'copyOtpOnDisplay' => false,
         'useBasicQrcodeReader' => false,
         'displayMode' => 'list',
         'showAccountsIcons' => true,
-        'kickUserAfter' => '15',
+        'kickUserAfter' => 15,
         'activeGroup' => 0,
         'rememberActiveGroup' => true,
         'defaultGroup' => 0,
-        'useEncryption' => false,
         'defaultCaptureMode' => 'livescan',
         'useDirectCapture' => false,
         'useWebauthnAsDefault' => false,
         'useWebauthnOnly' => false,
         'getOfficialIcons' => true,
-        'checkForUpdate' => true,
-        'lastRadarScan' => 0,
-        'latestRelease' => false,
-        'theme' => 'dark',
+        'theme' => 'system',
         'formatPassword' => true,
         'formatPasswordBy' => 0.5,
+        'lang' => 'browser',
     ],
 
 ];

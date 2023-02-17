@@ -20,9 +20,10 @@ class UserResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id'    => $this->when(! is_null($request->user()), $this->id),
-            'name'  => $this->name,
-            'email' => $this->when(! is_null($request->user()), $this->email),
+            'id'       => $this->when(! is_null($request->user()), $this->id),
+            'name'     => $this->name,
+            'email'    => $this->when(! is_null($request->user()), $this->email),
+            'is_admin' => $this->when(! is_null($request->user()), $this->is_admin),
         ];
     }
 }

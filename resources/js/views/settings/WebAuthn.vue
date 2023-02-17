@@ -92,9 +92,9 @@
              * Save a setting
              */
             saveSetting(settingName, event) {
-                this.axios.put('/api/v1/settings/' + settingName, { value: event }).then(response => {
+                this.axios.put('/api/v1/user/preferences/' + settingName, { value: event }).then(response => {
                     this.$notify({ type: 'is-success', text: this.$t('settings.forms.setting_saved') })
-                    this.$root.appSettings[response.data.key] = response.data.value
+                    this.$root.userPreferences[response.data.key] = response.data.value
                 })
             },
 
@@ -191,8 +191,8 @@
                         if (this.credentials.length == 0) {
                             this.form.useWebauthnOnly = false
                             this.form.useWebauthnAsDefault = false
-                            this.$root.appSettings['useWebauthnOnly'] = false
-                            this.$root.appSettings['useWebauthnAsDefault'] = false
+                            this.$root.userPreferences['useWebauthnOnly'] = false
+                            this.$root.userPreferences['useWebauthnAsDefault'] = false
                         }
 
                         this.$notify({ type: 'is-success', text: this.$t('auth.webauthn.device_revoked') })

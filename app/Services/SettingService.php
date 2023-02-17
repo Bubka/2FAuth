@@ -16,7 +16,7 @@ use Throwable;
 class SettingService
 {
     /**
-     * All user settings
+     * All settings
      *
      * @var Collection<string, mixed>
      */
@@ -32,7 +32,7 @@ class SettingService
     /**
      * Name of the cache item where options are persisted
      */
-    public const CACHE_ITEM_NAME = 'userOptions';
+    public const CACHE_ITEM_NAME = 'adminOptions';
 
     /**
      * Constructor
@@ -106,12 +106,12 @@ class SettingService
     }
 
     /**
-     * Determine if the given setting has been customized by the user
+     * Determine if the given setting has been edited
      *
      * @param  string  $key
      * @return bool
      */
-    public function isUserDefined($key) : bool
+    public function isEdited($key) : bool
     {
         return DB::table('options')->where('key', $key)->exists();
     }
@@ -123,17 +123,14 @@ class SettingService
      */
     private function build()
     {
-        // Get a collection of user saved options
-        $userOptions = DB::table('options')->pluck('value', 'key');
-        $userOptions->transform(function ($item, $key) {
+        // Get a collection of saved options
+        $options = DB::table('options')->pluck('value', 'key');
+        $options->transform(function ($item, $key) {
             return $this->restoreType($item);
         });
 
-        // Merge 2fauth/app config values as fallback values
-        $settings = collect(config('2fauth.options'))->merge($userOptions); /** @phpstan-ignore-line */
-        if (! Arr::has($settings, 'lang')) {
-            $settings['lang'] = 'browser';
-        }
+        // Merge customized values with app default values
+        $settings = collect(config('2fauth.settings'))->merge($options); /** @phpstan-ignore-line */
 
         $this->settings = $settings;
     }

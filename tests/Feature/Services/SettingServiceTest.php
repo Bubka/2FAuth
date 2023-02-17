@@ -152,9 +152,9 @@ class SettingServiceTest extends FeatureTestCase
     /**
      * @test
      */
-    public function test_all_returns_native_and_user_settings()
+    public function test_all_returns_default_and_overloaded_settings()
     {
-        $native_options = config('2fauth.options');
+        $default_options = config('2fauth.settings');
 
         Settings::set(self::SETTING_NAME, self::SETTING_VALUE_STRING);
 
@@ -163,12 +163,10 @@ class SettingServiceTest extends FeatureTestCase
         $this->assertArrayHasKey(self::SETTING_NAME, $all);
         $this->assertEquals($all[self::SETTING_NAME], self::SETTING_VALUE_STRING);
 
-        foreach ($native_options as $key => $val) {
+        foreach ($default_options as $key => $val) {
             $this->assertArrayHasKey($key, $all);
             $this->assertEquals($all[$key], $val);
         }
-
-        $this->assertArrayHasKey('lang', $all);
     }
 
     /**
@@ -347,23 +345,23 @@ class SettingServiceTest extends FeatureTestCase
     /**
      * @test
      */
-    public function test_isUserDefined_returns_true()
+    public function test_isEdited_returns_true()
     {
         DB::table('options')->insert(
             [self::KEY => 'showTokenAsDot', self::VALUE => strval(self::SETTING_VALUE_TRUE_TRANSFORMED)]
         );
 
-        $this->assertTrue(Settings::isUserDefined('showTokenAsDot'));
+        $this->assertTrue(Settings::isEdited('showTokenAsDot'));
     }
 
     /**
      * @test
      */
-    public function test_isUserDefined_returns_false()
+    public function test_isEdited_returns_false()
     {
         DB::table('options')->where(self::KEY, 'showTokenAsDot')->delete();
 
-        $this->assertFalse(Settings::isUserDefined('showTokenAsDot'));
+        $this->assertFalse(Settings::isEdited('showTokenAsDot'));
     }
 
     /**

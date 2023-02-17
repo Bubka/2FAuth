@@ -14,6 +14,7 @@ return [
     */
 
     'settings' => 'Settings',
+    'preferences' => 'Preferences',
     'account' => 'Account',
     'oauth' => 'OAuth',
     'webauthn' => 'WebAuthn',
@@ -23,6 +24,9 @@ return [
     'confirm' => [
 
     ],
+    'administration' => 'Administration',
+    'administration_legend' => 'While previous settings are user settings (every user can set its own preferences), following settings are global and apply to all users. Only an administrator can view and edit those settings.',
+    'you_are_administrator' => 'You are an administrator',
     'general' => 'General',
     'security' => 'Security',
     'profile' => 'Profile',

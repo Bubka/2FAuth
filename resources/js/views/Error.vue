@@ -59,6 +59,12 @@
                             'originalMessage' : this.$t('errors.auth_proxy_failed_legend')
                         }
                     }
+                    else if (this.err.status === 403) {
+                        return {
+                            'message' : this.$t('errors.unauthorized'),
+                            'originalMessage' : this.$t('errors.unauthorized_legend')
+                        }
+                    }
                     else if(this.err.data) {
                         return this.err.data
                     }

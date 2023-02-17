@@ -98,8 +98,8 @@ class SettingController extends Controller
             abort(404);
         }
 
-        $optionsConfig = config('2fauth.options');
-        if (array_key_exists($settingName, $optionsConfig)) {
+        $appSettings = config('2fauth.settings');
+        if (array_key_exists($settingName, $appSettings)) {
             return response()->json(
                 ['message'   => 'bad request',
                     'reason' => [__('errors.delete_user_setting_only')],

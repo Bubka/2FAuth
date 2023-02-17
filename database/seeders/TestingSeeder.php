@@ -20,6 +20,7 @@ class TestingSeeder extends Seeder
             'name' => 'Tester',
             'email' => 'testing@2fauth.app',
             'password' => bcrypt('password'),
+            'is_admin' => 1,
         ]);
 
         $groupSocialNetwork = Group::create([

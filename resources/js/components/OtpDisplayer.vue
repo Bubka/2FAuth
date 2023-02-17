@@ -63,14 +63,14 @@
 
             displayedOtp() {
                 let pwd = this.internal_password
-                if (this.$root.appSettings.formatPassword && pwd.length > 0) {
-                    const x = Math.ceil(this.$root.appSettings.formatPasswordBy < 1 ? pwd.length * this.$root.appSettings.formatPasswordBy : this.$root.appSettings.formatPasswordBy)
+                if (this.$root.userPreferences.formatPassword && pwd.length > 0) {
+                    const x = Math.ceil(this.$root.userPreferences.formatPasswordBy < 1 ? pwd.length * this.$root.userPreferences.formatPasswordBy : this.$root.userPreferences.formatPasswordBy)
                     const chunks = pwd.match(new RegExp(`.{1,${x}}`, 'g'));
                     if (chunks) {
                         pwd = chunks.join(' ')
                     }
                 }
-                return this.$root.appSettings.showOtpAsDot ? pwd.replace(/[0-9]/g, '●') : pwd
+                return this.$root.userPreferences.showOtpAsDot ? pwd.replace(/[0-9]/g, '●') : pwd
             },
         },
 
@@ -94,10 +94,10 @@
                 const success = this.$clipboard(rawOTP)
 
                 if (success == true) {
-                    if(this.$root.appSettings.kickUserAfter == -1) {
+                    if(this.$root.userPreferences.kickUserAfter == -1) {
                         this.appLogout()
                     }
-                    else if(this.$root.appSettings.closeOtpOnCopy) {
+                    else if(this.$root.userPreferences.closeOtpOnCopy) {
                         this.$parent.isActive = false
                         this.clearOTP()
                     }
@@ -214,7 +214,7 @@
                     }
 
                     await this.axios(request).then(response => {
-                        if(this.$root.appSettings.copyOtpOnDisplay) {
+                        if(this.$root.userPreferences.copyOtpOnDisplay) {
                             this.copyOTP(response.data.password)
                         }
                         password = response.data

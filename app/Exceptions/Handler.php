@@ -48,6 +48,12 @@ class Handler extends ExceptionHandler
             ], 404);
         });
 
+        $this->renderable(function (\Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException $exception, $request) {
+            return response()->json([
+                'message' => 'unauthorized',
+            ], 403);
+        });
+
         $this->renderable(function (InvalidOtpParameterException $exception, $request) {
             return response()->json([
                 'message' => 'invalid OTP parameters',

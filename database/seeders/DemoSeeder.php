@@ -20,6 +20,7 @@ class DemoSeeder extends Seeder
             'name' => 'demo',
             'email' => 'demo@2fauth.app',
             'password' => bcrypt('demo'),
+            'is_admin' => 1,
         ]);
 
         $groupSocialNetwork = Group::create([

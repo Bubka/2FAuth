@@ -34,7 +34,7 @@ class KickOutInactiveUser
         $inactiveFor = $now->diffInSeconds(Carbon::parse($user->last_seen_at));
 
         // Fetch all setting values
-        $kickUserAfterXSecond = intval(Settings::get('kickUserAfter')) * 60;
+        $kickUserAfterXSecond = intval($user->preferences['kickUserAfter']) * 60;
 
         // If user has been inactive longer than the allowed inactivity period
         if ($kickUserAfterXSecond > 0 && $inactiveFor > $kickUserAfterXSecond) {

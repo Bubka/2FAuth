@@ -10,7 +10,7 @@
             </div>
             <div class="nav-links">
                 <p>{{ $t('auth.webauthn.lost_your_device') }}&nbsp;<router-link id="lnkRecoverAccount" :to="{ name: 'webauthn.lost' }" class="is-link">{{ $t('auth.webauthn.recover_your_account') }}</router-link></p>
-                <p v-if="!this.$root.appSettings.useWebauthnOnly">{{ $t('auth.sign_in_using') }}&nbsp;
+                <p v-if="!this.$root.userPreferences.useWebauthnOnly">{{ $t('auth.sign_in_using') }}&nbsp;
                     <a id="lnkSignWithLegacy" role="button" class="is-link" @keyup.enter="showWebauthn = false" @click="showWebauthn = false" tabindex="0">{{ $t('auth.login_and_password') }}</a>
                 </p>
             </div>
@@ -57,7 +57,7 @@
                     password: ''
                 }),
                 isBusy: false,
-                showWebauthn: this.$root.appSettings.useWebauthnAsDefault || this.$root.appSettings.useWebauthnOnly,
+                showWebauthn: this.$root.userPreferences.useWebauthnAsDefault || this.$root.userPreferences.useWebauthnOnly,
                 csrfRefresher: null,
                 webauthn: new WebAuthn()
             }

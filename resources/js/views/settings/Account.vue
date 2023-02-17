@@ -3,6 +3,9 @@
         <setting-tabs :activeTab="'settings.account'"></setting-tabs>
         <div class="options-tabs">
             <form-wrapper>
+                <div v-if="isAdmin" class="notification is-warning">
+                    {{ $t('settings.you_are_administrator') }}
+                </div>
                 <form @submit.prevent="submitProfile" @keydown="formProfile.onKeydown($event)">
                     <div v-if="isRemoteUser" class="notification is-warning has-text-centered" v-html="$t('auth.user_account_controlled_by_proxy')" />
                     <h4 class="title is-4 has-text-grey-light">{{ $t('settings.profile') }}</h4>
@@ -66,12 +69,14 @@
                     password : '',
                 }),
                 isRemoteUser: false,
+                isAdmin: false,
             }
         },
 
         async mounted() {
             const { data } = await this.formProfile.get('/api/v1/user')
 
+            if( data.is_admin === true ) this.isAdmin = true
             if( data.id === null ) this.isRemoteUser = true
 
             this.formProfile.fill(data)
