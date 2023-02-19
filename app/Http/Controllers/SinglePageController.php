@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Events\ScanForNewReleaseCalled;
 use App\Facades\Settings;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 
 class SinglePageController extends Controller
 {
@@ -31,6 +31,7 @@ class SinglePageController extends Controller
             'subdirectory'    => $subdir,
             'isDemoApp'       => config('2fauth.config.isDemoApp') ? 'true' : 'false',
             'isTestingApp'    => config('2fauth.config.isTestingApp') ? 'true' : 'false',
+            'lang'            => App::getLocale(),
             'locales'         => collect(config('2fauth.locales'))->toJson(), /** @phpstan-ignore-line */
         ]);
     }
