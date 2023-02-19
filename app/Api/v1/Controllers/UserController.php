@@ -2,8 +2,8 @@
 
 namespace App\Api\v1\Controllers;
 
-use App\Api\v1\Resources\UserResource;
 use App\Api\v1\Requests\SettingUpdateRequest;
+use App\Api\v1\Resources\UserResource;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -12,20 +12,13 @@ use Illuminate\Support\Arr;
 class UserController extends Controller
 {
     /**
-     * Get detailed information about a user
+     * Get detailed information about the authenticated user
      *
      * @return \App\Api\v1\Resources\UserResource|\Illuminate\Http\JsonResponse
      */
     public function show(Request $request)
     {
-        // 2 cases:
-        // - The method is called from a protected route > we return the request's authenticated user
-        // - The method is called from a guest route > we fetch a possible registered user
-        $user = $request->user() ?: User::first();
-
-        return $user
-            ? new UserResource($user)
-            : response()->json(['name' => null], 200);
+        return new UserResource($request->user());
     }
 
     /**
@@ -81,8 +74,8 @@ class UserController extends Controller
         }
 
         $validated = $request->validated();
-        
-        $request->user()['preferences->'.$preferenceName] = $validated['value'];
+
+        $request->user()['preferences->' . $preferenceName] = $validated['value'];
         $request->user()->save();
 
         return response()->json([

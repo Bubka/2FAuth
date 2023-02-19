@@ -25,7 +25,7 @@ return [
     'sign_in_using_security_device' => 'Sign in using a security device',
     'login_and_password' => 'login & password',
     'register' => 'Register',
-    'welcome_back_x' => 'Welcome back {0}',
+    'welcome_to_2fauth' => 'Welcome to 2FAuth',
     'autolock_triggered' => 'Auto lock triggered',
     'autolock_triggered_punchline' => 'The event watched by the Auto Lock feature has fired. You\'ve been automatically disconnected.',
     'change_autolock_in_settings' => 'You can change the behavior of the Autolock feature in Settings > Options tab.',

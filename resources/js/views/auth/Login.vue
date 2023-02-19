@@ -1,7 +1,7 @@
 <template>
-    <div v-if="username">
+    <div>
         <!-- webauthn authentication -->
-        <form-wrapper v-if="showWebauthn" :title="$t('auth.forms.webauthn_login')" :punchline="punchline">
+        <form-wrapper v-if="showWebauthn" :title="$t('auth.forms.webauthn_login')" :punchline="$t('auth.welcome_to_2fauth')">
             <div class="field">
                 {{ $t('auth.webauthn.use_security_device_to_sign_in') }}
             </div>
@@ -16,7 +16,7 @@
             </div>
         </form-wrapper>
         <!-- login/password legacy form -->
-        <form-wrapper v-else :title="$t('auth.forms.login')" :punchline="punchline">
+        <form-wrapper v-else :title="$t('auth.forms.login')" :punchline="$t('auth.welcome_to_2fauth')">
             <div v-if="isDemo" class="notification is-info has-text-centered is-radiusless" v-html="$t('auth.forms.welcome_to_demo_app_use_those_credentials')" />
             <div v-if="isTesting" class="notification is-warning has-text-centered is-radiusless" v-html="$t('auth.forms.welcome_to_testing_app_use_those_credentials')" />
             <form id="frmLegacyLogin" @submit.prevent="handleSubmit" @keydown="form.onKeydown($event)">
@@ -25,15 +25,11 @@
                 <form-buttons :isBusy="form.isBusy" :caption="$t('auth.sign_in')" :submitId="'btnSignIn'"/>
             </form>
             <div class="nav-links">
-                <div v-if="!username">
-                    <p>{{ $t('auth.forms.dont_have_account_yet') }}&nbsp;<router-link id="lnkRegister" :to="{ name: 'register' }" class="is-link">{{ $t('auth.register') }}</router-link></p>
-                </div>
-                <div v-else>
-                    <p>{{ $t('auth.forms.forgot_your_password') }}&nbsp;<router-link id="lnkResetPwd" :to="{ name: 'password.request' }" class="is-link" :aria-label="$t('auth.forms.reset_your_password')">{{ $t('auth.forms.request_password_reset') }}</router-link></p>
-                    <p >{{ $t('auth.sign_in_using') }}&nbsp;
-                        <a id="lnkSignWithWebauthn" role="button" class="is-link" @keyup.enter="showWebauthn = true" @click="showWebauthn = true" tabindex="0" :aria-label="$t('auth.sign_in_using_security_device')">{{ $t('auth.webauthn.security_device') }}</a>
-                    </p>
-                </div>
+                <p>{{ $t('auth.forms.forgot_your_password') }}&nbsp;<router-link id="lnkResetPwd" :to="{ name: 'password.request' }" class="is-link" :aria-label="$t('auth.forms.reset_your_password')">{{ $t('auth.forms.request_password_reset') }}</router-link></p>
+                <p >{{ $t('auth.sign_in_using') }}&nbsp;
+                    <a id="lnkSignWithWebauthn" role="button" class="is-link" @keyup.enter="showWebauthn = true" @click="showWebauthn = true" tabindex="0" :aria-label="$t('auth.sign_in_using_security_device')">{{ $t('auth.webauthn.security_device') }}</a>
+                </p>
+                <p class="mt-4">{{ $t('auth.forms.dont_have_account_yet') }}&nbsp;<router-link id="lnkRegister" :to="{ name: 'register' }" class="is-link">{{ $t('auth.register') }}</router-link></p>
             </div>
         </form-wrapper>
         <!-- footer -->
@@ -49,7 +45,6 @@
     export default {
         data(){
             return {
-                username: null,
                 isDemo: this.$root.isDemoApp,
                 isTesting: this.$root.isTestingApp,
                 form: new Form({
@@ -60,12 +55,6 @@
                 showWebauthn: this.$root.userPreferences.useWebauthnAsDefault || this.$root.userPreferences.useWebauthnOnly,
                 csrfRefresher: null,
                 webauthn: new WebAuthn()
-            }
-        },
-
-        computed : {
-            punchline: function() {
-                return this.isDemo ? '' : this.$t('auth.welcome_back_x', [this.username])
             }
         },
 
@@ -152,22 +141,6 @@
                 window.location.href = "." + to.path;
                 return;
             }
-
-            next(async vm => {
-                const { data } = await vm.axios.get('api/v1/user/name')
-
-                if( data.name ) {
-                    // The email property is only sent when the user is logged in.
-                    // In this case we push the user to the index view.
-                    if( data.email ) {
-                        return next({ name: 'accounts' });
-                    }
-                    vm.username = data.name
-                }
-                else {
-                    return next({ name: 'register' });
-                }
-            });
 
             next();
         },

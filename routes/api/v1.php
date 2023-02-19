@@ -15,11 +15,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 /**
- * Unprotected routes
- */
-Route::get('user/name', [UserController::class, 'show'])->name('user.show.name');
-
-/**
  * Routes protected by the api authentication guard
  */
 Route::group(['middleware' => 'auth:api-guard'], function () {
@@ -61,5 +56,4 @@ Route::group(['middleware' => ['auth:api-guard', 'admin']], function () {
     Route::post('settings', [SettingController::class, 'store'])->name('settings.store');
     Route::put('settings/{settingName}', [SettingController::class, 'update'])->name('settings.update');
     Route::delete('settings/{settingName}', [SettingController::class, 'destroy'])->name('settings.destroy');
-
 });
