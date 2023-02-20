@@ -50,25 +50,6 @@ class RegisterControllerTest extends FeatureTestCase
 
     /**
      * @test
-     *
-     * @covers  \App\Rules\FirstUser
-     */
-    public function test_register_returns_already_an_existing_user()
-    {
-        DB::table('users')->delete();
-        $user = User::factory()->create();
-
-        $response = $this->json('POST', '/user', [
-            'name'                  => self::USERNAME,
-            'email'                 => self::EMAIL,
-            'password'              => self::PASSWORD,
-            'password_confirmation' => self::PASSWORD,
-        ])
-            ->assertJsonValidationErrorFor('name');
-    }
-
-    /**
-     * @test
      */
     public function test_register_with_invalid_data_returns_validation_error()
     {

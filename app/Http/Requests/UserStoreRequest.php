@@ -24,7 +24,7 @@ class UserStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'     => [new \App\Rules\FirstUser, 'required', 'string', 'max:255'],
+            'name'     => 'required|string|max:255',
             'email'    => 'required|string|email|max:255',
             'password' => 'required|string|min:8|confirmed',
         ];

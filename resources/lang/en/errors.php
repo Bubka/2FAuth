@@ -15,7 +15,6 @@ return [
 
     'resource_not_found' => 'Resource not found',
     'error_occured' => 'An error occured:',
-    'cannot_register_more_user' => 'You cannot register more than one user.',
     'refresh' => 'Refresh',
     'no_valid_otp' => 'No valid OTP resource in this QR code',
     'something_wrong_with_server' => 'Something is wrong with your server',

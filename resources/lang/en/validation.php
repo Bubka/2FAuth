@@ -185,9 +185,6 @@ return [
         ],
         'ids' => [
             'regex' => 'IDs must be comma separated, without trailing comma.',
-        ],
-        'name' => [
-            'firstUser' => 'There is already a registered user',
         ]
     ],
 

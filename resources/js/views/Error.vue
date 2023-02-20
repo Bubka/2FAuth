@@ -6,14 +6,6 @@
                 <p>{{ $t('errors.resource_not_found') }}</p>
                 <p class=""><router-link :to="{ name: 'accounts' }" class="is-text">{{ $t('errors.refresh') }}</router-link></p>
             </div>
-            <div v-else-if="$route.name == 'flooded'">
-                <p class="error-generic"></p>
-                <p>
-                    {{ $t('errors.already_one_user_registered') }}<br>
-                    {{ $t('errors.cannot_register_more_user') }}
-                </p>
-                <p><router-link :to="{ name: 'accounts' }" class="is-text">{{ $t('auth.sign_in') }}</router-link></p>
-            </div>
             <div v-else>
                 <p class="error-generic"></p>
                 <p>{{ $t('errors.error_occured') }} </p>

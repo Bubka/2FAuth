@@ -62,7 +62,6 @@ const router = new Router({
         { path: '/webauthn/recover', name: 'webauthn.recover', component: WebauthnRecover, meta: { disabledWithAuthProxy: true, showAbout: true } },
 
         { path: '/about', name: 'about',component: About, meta: { showAbout: true } },
-        { path: '/flooded', name: 'flooded',component: Errors, props: true },
         { path: '/error', name: 'genericError',component: Errors, props: true },
         { path: '/404', name: '404',component: Errors, props: true },
         { path: '*', redirect: { name: '404' } }
