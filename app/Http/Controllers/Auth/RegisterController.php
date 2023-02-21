@@ -36,7 +36,7 @@ class RegisterController extends Controller
     {
         $validated = $request->validated();
         event(new Registered($user = $this->create($validated)));
-        Log::info('User created');
+        Log::info(sprintf('User id #%s created', $user->id));
 
         $this->guard()->login($user);
 

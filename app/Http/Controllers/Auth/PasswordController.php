@@ -30,7 +30,7 @@ class PasswordController extends Controller
             $request->user()->update([
                 'password' => bcrypt($validated['password']),
             ]);
-            Log::info('User password updated');
+            Log::info(sprintf('Password of user id #%s updated', $request->user()->id));
         }
 
         return response()->json(['message' => __('auth.forms.password_successfully_changed')]);
