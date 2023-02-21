@@ -5,9 +5,10 @@
             <div class="field">
                 {{ $t('auth.webauthn.use_security_device_to_sign_in') }}
             </div>
-            <div class="control">
-                <button id="btnContinue" type="button" class="button is-link" @click="webauthnLogin">{{ $t('commons.continue') }}</button>
-            </div>
+            <form id="frmWebauthnLogin" @submit.prevent="webauthnLogin" @keydown="form.onKeydown($event)">
+                <form-field :form="form" fieldName="email" inputType="email" :label="$t('auth.forms.email')" autofocus />
+                <form-buttons :isBusy="form.isBusy" :caption="$t('commons.continue')" :submitId="'btnContinue'"/>
+            </form>
             <div class="nav-links">
                 <p>{{ $t('auth.webauthn.lost_your_device') }}&nbsp;<router-link id="lnkRecoverAccount" :to="{ name: 'webauthn.lost' }" class="is-link">{{ $t('auth.webauthn.recover_your_account') }}</router-link></p>
                 <p v-if="!this.$root.userPreferences.useWebauthnOnly">{{ $t('auth.sign_in_using') }}&nbsp;
@@ -103,11 +104,26 @@
                     return false
                 }
 
-                const loginOptions = await this.axios.post('/webauthn/login/options').then(res => res.data)
+                const loginOptions = await this.form.post('/webauthn/login/options').then(res => res.data)
                 const publicKey = this.webauthn.parseIncomingServerOptions(loginOptions)
                 const credentials = await navigator.credentials.get({ publicKey: publicKey })
                 .catch(error => {
-                    this.$notify({ type: 'is-danger', text: this.$t('auth.webauthn.unknown_device') })
+                    if (error.name == 'AbortError') {
+                        this.$notify({ type: 'is-warning', text: this.$t('errors.aborted_by_user') })
+                    }
+                    else if (error.name == 'SecurityError') {
+                        this.$notify({ type: 'is-danger', text: this.$t('errors.security_error_check_rpid') })
+                    }
+                    else if (error.name == 'NotAllowedError') {
+                        this.$notify({ type: 'is-danger', text: this.$t('errors.not_allowed_operation') })
+                    }
+                    else if (error.name == 'NotSupportedError') {
+                        this.$notify({ type: 'is-danger', text: this.$t('errors.unsupported_operation') })
+                    }
+                    else if (error.name == 'InvalidStateError') {
+                        this.$notify({ type: 'is-danger', text: this.$t('auth.webauthn.unknown_device') })
+                    }
+                    else this.$notify({ type: 'is-danger', text: this.$t('errors.unknown_error') })
                 })
 
                 if (!credentials) return false

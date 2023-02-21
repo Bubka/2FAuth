@@ -167,6 +167,9 @@
                     else if (error.name == 'NotAllowedError') {
                         this.$notify({ type: 'is-danger', text: this.$t('errors.not_allowed_operation') })
                     }
+                    else if (error.name == 'NotSupportedError') {
+                        this.$notify({ type: 'is-danger', text: this.$t('errors.unsupported_operation') })
+                    }
                     return false
                 }
 

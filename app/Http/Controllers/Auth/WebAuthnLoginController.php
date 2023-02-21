@@ -43,16 +43,13 @@ class WebAuthnLoginController extends Controller
                 break;
         }
 
-        // Since 2FAuth is single user designed we fetch the user instance.
-        // This lets Larapass validate the request without the need to ask
-        // the visitor for an email address.
-        $user = User::first();
-
-        return $user
-            ? $request->toVerify($user)
-            : response()->json([
-                'message' => 'no registered user',
-            ], 400);
+        return $request->toVerify($request->validate([
+            'email' => [
+                'required',
+                'email',
+                new \App\Rules\CaseInsensitiveEmailExists
+            ]
+        ]));
     }
 
     /**
@@ -69,7 +66,7 @@ class WebAuthnLoginController extends Controller
             $response = $request->response;
 
             // Some authenticators do not send a userHandle so we hack the response to be compliant
-            // with Larapass/webauthn-lib implementation that waits for a userHandle
+            // with Laragear\WebAuthn implementation that waits for a userHandle
             if (! Arr::exists($response, 'userHandle') || blank($response['userHandle'])) {
                 $response['userHandle'] = User::getFromCredentialId($request->id)?->userHandle();
                 $request->merge(['response' => $response]);
@@ -98,6 +95,6 @@ class WebAuthnLoginController extends Controller
         $user->last_seen_at = Carbon::now()->format('Y-m-d H:i:s');
         $user->save();
 
-        Log::info('User authenticated via webauthn');
+        Log::info(sprintf('User id #%s authenticated using webauthn', $user->id));
     }
 }

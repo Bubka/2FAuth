@@ -35,6 +35,8 @@ return [
     'aborted_by_user' => 'Aborted by user',
     'security_device_unsupported' => 'Unsupported or in use device',
     'not_allowed_operation' => 'Operation not allowed',
+    'unsupported_operation' => 'Unsupported operation',
+    'unknown_error' => 'Unknown error',
     'security_error_check_rpid' => 'Security error<br/>Check your WEBAUTHN_ID env var',
     'unsupported_with_reverseproxy' => 'Not applicable when using an auth proxy',
     'user_deletion_failed' => 'User account deletion failed, no data have been deleted',
