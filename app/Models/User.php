@@ -10,7 +10,6 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Log;
 use Laragear\WebAuthn\WebAuthnAuthentication;
 use Laravel\Passport\HasApiTokens;
-use Illuminate\Support\Arr;
 
 class User extends Authenticatable implements WebAuthnAuthenticatable
 {
@@ -42,8 +41,9 @@ class User extends Authenticatable implements WebAuthnAuthenticatable
      * @var array<string,string>
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
-        'is_admin'          => 'boolean',
+        'email_verified_at'  => 'datetime',
+        'is_admin'           => 'boolean',
+        'twofaccounts_count' => 'integer',
     ];
 
     /**
@@ -96,5 +96,15 @@ class User extends Authenticatable implements WebAuthnAuthenticatable
                 return $query->whereKey($id);
             }
         )->first();
+    }
+
+    /**
+     * Get the TwoFAccounts of the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<TwoFAccount>
+     */
+    public function twofaccounts()
+    {
+        return $this->hasMany(\App\Models\TwoFAccount::class);
     }
 }

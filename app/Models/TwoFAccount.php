@@ -695,4 +695,9 @@ class TwoFAccount extends Model implements Sortable
         // should be replaced by laravel 8 attribute encryption casting
         return Settings::get('useEncryption') ? Crypt::encryptString($value) : $value;
     }
+
+    public function buildSortQuery()
+    {
+        return static::query()->where('user_id', $this->user_id);
+    }
 }

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Factories\MigratorFactoryInterface;
 use App\Models\TwoFAccount;
+use App\Helpers\Helpers;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
@@ -31,7 +32,7 @@ class TwoFAccountService
     {
         // $ids as string could be a comma-separated list of ids
         // so in this case we explode the string to an array
-        $ids = self::commaSeparatedToArray($ids);
+        $ids = Helpers::commaSeparatedToArray($ids);
 
         // whereIn() expects an array
         $ids = is_array($ids) ? $ids : func_get_args();
@@ -66,7 +67,7 @@ class TwoFAccountService
      */
     public static function export($ids) : Collection
     {
-        $ids          = self::commaSeparatedToArray($ids);
+        $ids          = Helpers::commaSeparatedToArray($ids);
         $twofaccounts = TwoFAccount::whereIn('id', $ids)->get();
 
         return $twofaccounts;
@@ -82,7 +83,7 @@ class TwoFAccountService
     {
         // $ids as string could be a comma-separated list of ids
         // so in this case we explode the string to an array
-        $ids = self::commaSeparatedToArray($ids);
+        $ids = Helpers::commaSeparatedToArray($ids);
         Log::info(sprintf('Deletion of TwoFAccounts #%s requested', is_array($ids) ? implode(',#', $ids) : $ids));
         $deleted = TwoFAccount::destroy($ids);
 
@@ -116,21 +117,5 @@ class TwoFAccountService
 
         return $twofaccounts;
     }
-
-    /**
-     * Explode a comma separated list of IDs to an array of IDs
-     *
-     * @param  int|array|string  $ids
-     */
-    private static function commaSeparatedToArray($ids) : mixed
-    {
-        if (is_string($ids)) {
-            $regex = "/^\d+(,{1}\d+)*$/";
-            if (preg_match($regex, $ids)) {
-                $ids = explode(',', $ids);
-            }
-        }
-
-        return $ids;
-    }
+    
 }

@@ -26,4 +26,21 @@ class Helpers
     {
         return blank($str) ? '' : strtoupper(str_pad($str, (int) ceil(strlen($str) / 8) * 8, '='));
     }
+
+    /**
+     * Identify comma separated list of values and explode it to an array of values
+     *
+     * @param  mixed  $ids
+     */
+    public static function commaSeparatedToArray($ids) : mixed
+    {
+        if (is_string($ids)) {
+            $regex = "/^\d+(,{1}\d+)*$/";
+            if (preg_match($regex, $ids)) {
+                $ids = explode(',', $ids);
+            }
+        }
+
+        return $ids;
+    }
 }

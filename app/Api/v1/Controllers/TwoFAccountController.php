@@ -17,6 +17,7 @@ use App\Facades\Groups;
 use App\Facades\TwoFAccounts;
 use App\Http\Controllers\Controller;
 use App\Models\TwoFAccount;
+use App\Helpers\Helpers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 
@@ -29,7 +30,7 @@ class TwoFAccountController extends Controller
      */
     public function index(Request $request)
     {
-        return new TwoFAccountCollection(TwoFAccount::ordered()->get());
+        return new TwoFAccountCollection($request->user()->twofaccounts->sortBy('order_column'));
     }
 
     /**
@@ -40,6 +41,8 @@ class TwoFAccountController extends Controller
      */
     public function show(TwoFAccount $twofaccount)
     {
+        $this->authorize('view', $twofaccount);
+
         return new TwoFAccountReadResource($twofaccount);
     }
 
@@ -51,6 +54,8 @@ class TwoFAccountController extends Controller
      */
     public function store(TwoFAccountDynamicRequest $request)
     {
+        $this->authorize('create', TwoFAccount::class);
+
         // Two possible cases :
         // - The most common case, an URI is provided by the QuickForm, thanks to a QR code live scan or file upload
         //     -> We use that URI to define the account
@@ -65,7 +70,7 @@ class TwoFAccountController extends Controller
         } else {
             $twofaccount->fillWithOtpParameters($validated);
         }
-        $twofaccount->save();
+        $request->user()->twofaccounts()->save($twofaccount);
 
         // Possible group association
         Groups::assign($twofaccount->id);
@@ -84,10 +89,12 @@ class TwoFAccountController extends Controller
      */
     public function update(TwoFAccountUpdateRequest $request, TwoFAccount $twofaccount)
     {
+        $this->authorize('update', $twofaccount);
+
         $validated = $request->validated();
 
         $twofaccount->fillWithOtpParameters($validated);
-        $twofaccount->save();
+        $request->user()->twofaccounts()->save($twofaccount);
 
         return (new TwoFAccountReadResource($twofaccount))
             ->response()
@@ -125,6 +132,9 @@ class TwoFAccountController extends Controller
     {
         $validated = $request->validated();
 
+        $twofaccounts = TwoFAccount::whereIn('id', $validated['orderedIds'])->get();
+        $this->authorize('updateEach', [$twofaccounts[0], $twofaccounts]);
+
         TwoFAccount::setNewOrder($validated['orderedIds']);
 
         return response()->json(['message' => 'order saved'], 200);
@@ -161,7 +171,10 @@ class TwoFAccountController extends Controller
             ], 400);
         }
 
-        return new TwoFAccountExportCollection(TwoFAccounts::export($validated['ids']));
+        $twofaccounts = TwoFAccounts::export($validated['ids']);
+        $this->authorize('viewEach', [$twofaccounts[0], $twofaccounts]);
+
+        return new TwoFAccountExportCollection($twofaccounts);
     }
 
     /**
@@ -178,6 +191,7 @@ class TwoFAccountController extends Controller
         // The request input is the ID of an existing account
         if ($id) {
             $twofaccount = TwoFAccount::findOrFail((int) $id);
+            $this->authorize('view', $twofaccount);
         }
 
         // The request input is an uri
@@ -213,7 +227,7 @@ class TwoFAccountController extends Controller
      */
     public function count(Request $request)
     {
-        return response()->json(['count' => TwoFAccount::count()], 200);
+        return response()->json(['count' => $request->user()->twofaccounts->count()], 200);
     }
 
     /**
@@ -233,7 +247,12 @@ class TwoFAccountController extends Controller
             ], 400);
         }
 
-        TwoFAccounts::withdraw($validated['ids']);
+        $ids          = Helpers::commaSeparatedToArray($validated['ids']);
+        $twofaccounts = TwoFAccount::whereIn('id', $ids)->get();
+
+        $this->authorize('updateEach', [$twofaccounts[0], $twofaccounts]);
+
+        TwoFAccounts::withdraw($ids);
 
         return response()->json(['message' => 'accounts withdrawn'], 200);
     }
@@ -246,6 +265,8 @@ class TwoFAccountController extends Controller
      */
     public function destroy(TwoFAccount $twofaccount)
     {
+        $this->authorize('delete', $twofaccount);
+
         TwoFAccounts::delete($twofaccount->id);
 
         return response()->json(null, 204);
@@ -267,6 +288,11 @@ class TwoFAccountController extends Controller
                 'reason'  => [__('errors.too_many_ids')],
             ], 400);
         }
+
+        $ids          = Helpers::commaSeparatedToArray($validated['ids']);
+        $twofaccounts = TwoFAccount::whereIn('id', $ids)->get();
+
+        $this->authorize('deleteEach', [$twofaccounts[0], $twofaccounts]);
 
         TwoFAccounts::delete($validated['ids']);
 
