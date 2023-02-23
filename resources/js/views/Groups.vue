@@ -97,19 +97,19 @@
             /**
              * Delete a group (after confirmation)
              */
-            deleteGroup(id) {
+            async deleteGroup(id) {
                 if(confirm(this.$t('groups.confirm.delete'))) {
-                    this.axios.delete('/api/v1/groups/' + id)
+                    await this.axios.delete('/api/v1/groups/' + id).then(response => {
+                        // Remove the deleted group from the collection
+                        this.groups = this.groups.filter(a => a.id !== id)
+                        this.$notify({ type: 'is-success', text: this.$t('groups.group_successfully_deleted') })
 
-                    // Remove the deleted group from the collection
-                    this.groups = this.groups.filter(a => a.id !== id)
-                    this.$notify({ type: 'is-success', text: this.$t('groups.group_successfully_deleted') })
-
-                    // Reset persisted group filter to 'All' (groupId=0)
-                    // (backend will save to change automatically)
-                    if( parseInt(this.$root.userPreferences.activeGroup) === id ) {
-                        this.$root.userPreferences.activeGroup = 0
-                    }
+                        // Reset persisted group filter to 'All' (groupId=0)
+                        // (backend will save to change automatically)
+                        if( parseInt(this.$root.userPreferences.activeGroup) === id ) {
+                            this.$root.userPreferences.activeGroup = 0
+                        }
+                    })
                 }
             }
 

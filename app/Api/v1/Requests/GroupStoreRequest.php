@@ -4,6 +4,7 @@ namespace App\Api\v1\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class GroupStoreRequest extends FormRequest
 {
@@ -25,7 +26,12 @@ class GroupStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|max:32|unique:groups',
+            'name' => [
+                'required',
+                'string',
+                'max:32',
+                Rule::unique('groups')->where(fn ($query) => $query->where('user_id', $this->user()->id))
+            ]
         ];
     }
 }

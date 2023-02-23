@@ -11,30 +11,21 @@ use Illuminate\Support\Facades\Log;
 class GroupService
 {
     /**
-     * Returns all existing groups
+     * Prepends the pseudo group named 'All' to a group collection
      *
+     * @param  Collection<int, Group>  $groups
      * @return Collection<int, Group>
      */
-    public static function getAll() : Collection
+    public static function prependTheAllGroup(Collection $groups, int $userId) : Collection
     {
-        // We return the complete collection of groups
-        // stored in db plus a pseudo group corresponding to 'All'
-        //
-        // This pseudo group contains all twofaccounts regardless
-        // of the user created group they belong to.
-
-        // Get the user created groups
-        $groups = Group::withCount('twofaccounts')->get();
-
-        // Create the pseudo group
-        $allGroup = new Group([
+        $theAllGroup = new Group([
             'name' => __('commons.all'),
         ]);
 
-        $allGroup->id                 = 0;
-        $allGroup->twofaccounts_count = TwoFAccount::count();
+        $theAllGroup->id                 = 0;
+        $theAllGroup->twofaccounts_count = TwoFAccount::where('user_id', $userId)->count();
 
-        return $groups->prepend($allGroup);
+        return $groups->prepend($theAllGroup);
     }
 
     /**
@@ -136,19 +127,6 @@ class GroupService
         } else {
             Log::info('Cannot find a group to assign the TwoFAccounts to');
         }
-    }
-
-    /**
-     * Finds twofaccounts assigned to the group
-     *
-     * @param  \App\Models\Group  $group The group
-     * @return Collection<int, TwoFAccount> The assigned accounts
-     */
-    public static function getAccounts(Group $group) : Collection
-    {
-        $twofaccounts = $group->twofaccounts()->where('group_id', $group->id)->get();
-
-        return $twofaccounts;
     }
 
     /**

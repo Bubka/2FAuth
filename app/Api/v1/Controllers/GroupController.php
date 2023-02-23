@@ -9,6 +9,7 @@ use App\Api\v1\Resources\TwoFAccountCollection;
 use App\Facades\Groups;
 use App\Http\Controllers\Controller;
 use App\Models\Group;
+use Illuminate\Http\Request;
 
 class GroupController extends Controller
 {
@@ -17,9 +18,9 @@ class GroupController extends Controller
      *
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function index()
+    public function index(Request $request)
     {
-        $groups = Groups::getAll();
+        $groups = Groups::prependTheAllGroup($request->user()->groups, $request->user()->id);
 
         return GroupResource::collection($groups);
     }
@@ -32,9 +33,11 @@ class GroupController extends Controller
      */
     public function store(GroupStoreRequest $request)
     {
+        $this->authorize('create', Group::class);
+
         $validated = $request->validated();
 
-        $group = Groups::create($validated);
+        $group = $request->user()->groups()->create($validated);
 
         return (new GroupResource($group))
             ->response()
@@ -49,6 +52,8 @@ class GroupController extends Controller
      */
     public function show(Group $group)
     {
+        $this->authorize('view', $group);
+
         return new GroupResource($group);
     }
 
@@ -61,6 +66,8 @@ class GroupController extends Controller
      */
     public function update(GroupStoreRequest $request, Group $group)
     {
+        $this->authorize('update', $group);
+
         $validated = $request->validated();
 
         Groups::update($group, $validated);
@@ -77,6 +84,8 @@ class GroupController extends Controller
      */
     public function assignAccounts(GroupAssignRequest $request, Group $group)
     {
+        $this->authorize('update', $group);
+
         $validated = $request->validated();
 
         Groups::assign($validated['ids'], $group);
@@ -85,16 +94,16 @@ class GroupController extends Controller
     }
 
     /**
-     * Get accounts assign to the group
+     * Get accounts assigned to the group
      *
      * @param  \App\Models\Group  $group
      * @return \App\Api\v1\Resources\TwoFAccountCollection
      */
     public function accounts(Group $group)
     {
-        $twofaccounts = Groups::getAccounts($group);
+        $this->authorize('view', $group);
 
-        return new TwoFAccountCollection($twofaccounts);
+        return new TwoFAccountCollection($group->twofaccounts());
     }
 
     /**
@@ -105,6 +114,8 @@ class GroupController extends Controller
      */
     public function destroy(Group $group)
     {
+        $this->authorize('delete', $group);
+
         Groups::delete($group->id);
 
         return response()->json(null, 204);

@@ -17,6 +17,8 @@ class QrCodeController extends Controller
      */
     public function show(TwoFAccount $twofaccount)
     {
+        $this->authorize('view', $twofaccount);
+
         $uri = $twofaccount->getURI();
 
         return response()->json(['qrcode' => QrCode::encode($uri)], 200);

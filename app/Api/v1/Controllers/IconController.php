@@ -3,6 +3,7 @@
 namespace App\Api\v1\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\TwoFAccount;
 use App\Services\LogoService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -52,11 +53,17 @@ class IconController extends Controller
     /**
      * delete an icon
      *
+     * @param  \Illuminate\Http\Request  $request
      * @param  string  $icon
      * @return \Illuminate\Http\JsonResponse
      */
-    public function delete(string $icon)
+    public function delete(string $icon, Request $request)
     {
+        // An icon affected to someone else's twofaccount cannot be deleted
+        if ($icon && TwoFAccount::where('icon', $icon)->where('user_id', '<>', $request->user()->id)->count() > 0) {
+            abort(403, 'unauthorized');
+        }
+
         Storage::disk('icons')->delete($icon);
 
         return response()->json(null, 204);

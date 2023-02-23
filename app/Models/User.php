@@ -44,6 +44,7 @@ class User extends Authenticatable implements WebAuthnAuthenticatable
         'email_verified_at'  => 'datetime',
         'is_admin'           => 'boolean',
         'twofaccounts_count' => 'integer',
+        'groups_count'       => 'integer',
     ];
 
     /**
@@ -106,5 +107,15 @@ class User extends Authenticatable implements WebAuthnAuthenticatable
     public function twofaccounts()
     {
         return $this->hasMany(\App\Models\TwoFAccount::class);
+    }
+
+    /**
+     * Get the Groups of the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Group>
+     */
+    public function groups()
+    {
+        return $this->hasMany(\App\Models\Group::class);
     }
 }

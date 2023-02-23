@@ -6,7 +6,9 @@ use App\Extensions\RemoteUserProvider;
 use App\Extensions\WebauthnCredentialBroker;
 use App\Facades\Settings;
 use App\Models\TwoFAccount;
+use App\Models\Group;
 use App\Policies\TwoFAccountPolicy;
+use App\Policies\GroupPolicy;
 use App\Services\Auth\ReverseProxyGuard;
 use Illuminate\Auth\Passwords\DatabaseTokenRepository;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -23,6 +25,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         TwoFAccount::class => TwoFAccountPolicy::class,
+        Group::class       => GroupPolicy::class,
     ];
 
     /**
