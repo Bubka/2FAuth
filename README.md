@@ -72,7 +72,7 @@ Sensitive data stored in the database can be encrypted to protect them against d
 
 * [Docker (compose)](https://docs.2fauth.app/getting-started/installation/docker/docker-compose/)
 
-* [Heroku](https://docs.2fauth.app/getting-started/installation/docker/heroku/)
+* [Heroku](https://docs.2fauth.app/getting-started/installation/heroku/)
 
 ## Upgrading
 
