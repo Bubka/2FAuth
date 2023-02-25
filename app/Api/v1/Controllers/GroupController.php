@@ -20,7 +20,7 @@ class GroupController extends Controller
      */
     public function index(Request $request)
     {
-        $groups = Groups::prependTheAllGroup($request->user()->groups, $request->user()->id);
+        $groups = Groups::prependTheAllGroup($request->user()->groups()->withCount('twofaccounts')->get(), $request->user()->id);
 
         return GroupResource::collection($groups);
     }

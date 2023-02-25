@@ -545,7 +545,7 @@
 
                 // In db saving if the user set 2FAuth to memorize the active group
                 if( this.$root.userPreferences.rememberActiveGroup ) {
-                    this.form.put('/api/v1/settings/activeGroup', {returnError: true})
+                    this.form.put('/api/v1/user/preferences/activeGroup', {returnError: true})
                     .then(response => {
                         // everything's fine
                     })
