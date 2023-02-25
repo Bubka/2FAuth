@@ -41,9 +41,9 @@
                 </div>
                 <form>
                     <!-- use webauthn only -->
-                    <form-checkbox v-on:useWebauthnOnly="saveSetting('useWebauthnOnly', $event)" :form="form" fieldName="useWebauthnOnly" :label="$t('auth.webauthn.use_webauthn_only.label')" :help="$t('auth.webauthn.use_webauthn_only.help')" :disabled="isRemoteUser || credentials.length === 0" />
+                    <form-checkbox v-on:useWebauthnOnly="savePreference('useWebauthnOnly', $event)" :form="form" fieldName="useWebauthnOnly" :label="$t('auth.webauthn.use_webauthn_only.label')" :help="$t('auth.webauthn.use_webauthn_only.help')" :disabled="isRemoteUser || credentials.length === 0" />
                     <!-- default sign in method -->
-                    <form-checkbox v-on:useWebauthnAsDefault="saveSetting('useWebauthnAsDefault', $event)" :form="form" fieldName="useWebauthnAsDefault" :label="$t('auth.webauthn.use_webauthn_as_default.label')" :help="$t('auth.webauthn.use_webauthn_as_default.help')" :disabled="isRemoteUser || credentials.length === 0" />
+                    <form-checkbox v-on:useWebauthnAsDefault="savePreference('useWebauthnAsDefault', $event)" :form="form" fieldName="useWebauthnAsDefault" :label="$t('auth.webauthn.use_webauthn_as_default.label')" :help="$t('auth.webauthn.use_webauthn_as_default.help')" :disabled="isRemoteUser || credentials.length === 0" />
                 </form>
                 <!-- footer -->
                 <vue-footer :showButtons="true">
@@ -78,7 +78,7 @@
 
         async mounted() {
 
-            const { data } = await this.form.get('/api/v1/settings')
+            const { data } = await this.form.get('/api/v1/user/preferences')
 
             this.form.fillWithKeyValueObject(data)
             this.form.setOriginal()
@@ -89,10 +89,10 @@
         methods : {
 
             /**
-             * Save a setting
+             * Save a preference
              */
-            saveSetting(settingName, event) {
-                this.axios.put('/api/v1/user/preferences/' + settingName, { value: event }).then(response => {
+            savePreference(preferenceName, event) {
+                this.axios.put('/api/v1/user/preferences/' + preferenceName, { value: event }).then(response => {
                     this.$notify({ type: 'is-success', text: this.$t('settings.forms.setting_saved') })
                     this.$root.userPreferences[response.data.key] = response.data.value
                 })
