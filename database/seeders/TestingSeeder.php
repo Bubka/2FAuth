@@ -16,19 +16,20 @@ class TestingSeeder extends Seeder
      */
     public function run()
     {
-        User::create([
-            'name' => 'Tester',
-            'email' => 'testing@2fauth.app',
+        $admin = User::create([
+            'name' => 'Tester_admin',
+            'email' => 'testingAdmin@2fauth.app',
             'password' => bcrypt('password'),
             'is_admin' => 1,
         ]);
 
-        $groupSocialNetwork = Group::create([
-            'name' => 'Social Networks',
+        $groupSocialNetwork = $admin->groups()->create([
+            'name' => 'Social Networks (admin)',
         ]);
 
-        $groupSocialNetwork->twofaccounts()->createMany([
+        $admin->twofaccounts()->createMany([
             [
+                'group_id' => $groupSocialNetwork->id,
                 'otp_type' => 'totp',
                 'account' => 'johndoe@facebook.com',
                 'service' => 'Facebook',
@@ -40,6 +41,7 @@ class TestingSeeder extends Seeder
                 'legacy_uri' => 'otpauth://totp/Facebook:johndoe@facebook.com?secret=A4GRFTVVRBGY7UIW',
             ],
             [
+                'group_id' => $groupSocialNetwork->id,
                 'otp_type' => 'totp',
                 'service' => 'Twitter',
                 'account' => '@john',
@@ -51,6 +53,7 @@ class TestingSeeder extends Seeder
                 'legacy_uri' => 'otpauth://totp/Twitter:@john?secret=A2GRFTVVRBGY7UIW',
             ],
             [
+                'group_id' => $groupSocialNetwork->id,
                 'otp_type' => 'totp',
                 'service' => 'Instagram',
                 'account' => '@johndoe',
@@ -60,8 +63,67 @@ class TestingSeeder extends Seeder
                 'period' => 30,
                 'icon' => 'instagram.png',
                 'legacy_uri' => 'otpauth://totp/Instagram:@johndoe?secret=A6GRFTVVRBGY7UIW',
+            ]
+        ]);
+
+        $groupCloud = $admin->groups()->create([
+            'name' => 'Cloud',
+        ]);
+
+        $admin->twofaccounts()->createMany([
+            [
+                'group_id' => $groupCloud->id,
+                'otp_type' => 'totp',
+                'account' => 'john.doe',
+                'service' => 'Dropbox',
+                'secret' => 'A3GRFTVVRBGY7UIW',
+                'algorithm' => 'sha1',
+                'digits' => 6,
+                'period' => 30,
+                'icon' => 'dropbox.png',
+                'legacy_uri' => 'otpauth://totp/Dropbox:john.doe?secret=A3GRFTVVRBGY7UIW',
+            ]
+        ]);
+
+        $admin->twofaccounts()->createMany([
+            [
+                'otp_type' => 'totp',
+                'account' => 'johndoe',
+                'service' => 'Amazon',
+                'secret' => 'A7GRFTVVRBGY7UIW',
+                'algorithm' => 'sha1',
+                'digits' => 6,
+                'period' => 30,
+                'icon' => 'amazon.png',
+                'legacy_uri' => 'otpauth://totp/Amazon:johndoe?secret=A7GRFTVVRBGY7UIW',
             ],
             [
+                'otp_type' => 'totp',
+                'account' => 'john.doe@icloud.com',
+                'service' => 'Apple',
+                'secret' => 'A2GRFTVVRBGY7UIW',
+                'algorithm' => 'sha1',
+                'digits' => 6,
+                'period' => 30,
+                'icon' => 'apple.png',
+                'legacy_uri' => 'otpauth://totp/Apple:john.doe@icloud.com?secret=A2GRFTVVRBGY7UIW',
+            ]
+        ]);
+
+        $user = User::create([
+            'name' => 'Tester_user',
+            'email' => 'testingUser@2fauth.app',
+            'password' => bcrypt('password'),
+            'is_admin' => 0,
+        ]);
+
+        $groupSocialNetworkUser = $user->groups()->create([
+            'name' => 'Social Networks (user)',
+        ]);
+
+        $user->twofaccounts()->createMany([
+            [
+                'group_id' => $groupSocialNetworkUser->id,
                 'otp_type' => 'totp',
                 'service' => 'LinkedIn',
                 'account' => '@johndoe',
@@ -74,68 +136,37 @@ class TestingSeeder extends Seeder
             ]
         ]);
 
-        $groupECommerce = Group::create([
-            'name' => 'eCommerce',
+        $groupGafam = $user->groups()->create([
+            'name' => 'GAFAM',
         ]);
 
-        $groupECommerce->twofaccounts()->create([
-            'otp_type' => 'totp',
-            'account' => 'johndoe',
-            'service' => 'Amazon',
-            'secret' => 'A7GRFTVVRBGY7UIW',
-            'algorithm' => 'sha1',
-            'digits' => 6,
-            'period' => 30,
-            'icon' => 'amazon.png',
-            'legacy_uri' => 'otpauth://totp/Amazon:johndoe?secret=A7GRFTVVRBGY7UIW',
+        $user->twofaccounts()->createMany([
+            [
+                'group_id' => $groupGafam->id,
+                'otp_type' => 'totp',
+                'service' => 'Google',
+                'account' => 'john.doe@gmail.com',
+                'secret' => 'A5GRFTVVRBGY7UIW',
+                'algorithm' => 'sha1',
+                'digits' => 6,
+                'period' => 30,
+                'icon' => 'google.png',
+                'legacy_uri' => 'otpauth://totp/Google:john.doe@gmail.com?secret=A5GRFTVVRBGY7UIW',
+            ]
         ]);
 
-        TwoFAccount::create([
-            'otp_type' => 'totp',
-            'account' => 'john.doe@icloud.com',
-            'service' => 'Apple',
-            'secret' => 'A2GRFTVVRBGY7UIW',
-            'algorithm' => 'sha1',
-            'digits' => 6,
-            'period' => 30,
-            'icon' => 'apple.png',
-            'legacy_uri' => 'otpauth://totp/Apple:john.doe@icloud.com?secret=A2GRFTVVRBGY7UIW',
-        ]);
-
-        TwoFAccount::create([
-            'otp_type' => 'totp',
-            'account' => 'john.doe',
-            'service' => 'Dropbox',
-            'secret' => 'A3GRFTVVRBGY7UIW',
-            'algorithm' => 'sha1',
-            'digits' => 6,
-            'period' => 30,
-            'icon' => 'dropbox.png',
-            'legacy_uri' => 'otpauth://totp/Dropbox:john.doe?secret=A3GRFTVVRBGY7UIW',
-        ]);
-
-        TwoFAccount::create([
-            'otp_type' => 'totp',
-            'account' => '@john',
-            'service' => 'Github',
-            'secret' => 'A2GRFTVVRBGY7UIW',
-            'algorithm' => 'sha1',
-            'digits' => 6,
-            'period' => 30,
-            'icon' => 'github.png',
-            'legacy_uri' => 'otpauth://totp/Github:@john?secret=A2GRFTVVRBGY7UIW',
-        ]);
-
-        TwoFAccount::create([
-            'otp_type' => 'totp',
-            'service' => 'Google',
-            'account' => 'john.doe@gmail.com',
-            'secret' => 'A5GRFTVVRBGY7UIW',
-            'algorithm' => 'sha1',
-            'digits' => 6,
-            'period' => 30,
-            'icon' => 'google.png',
-            'legacy_uri' => 'otpauth://totp/Google:john.doe@gmail.com?secret=A5GRFTVVRBGY7UIW',
+        $user->twofaccounts()->createMany([
+            [
+                'otp_type' => 'totp',
+                'account' => '@john',
+                'service' => 'Github',
+                'secret' => 'A2GRFTVVRBGY7UIW',
+                'algorithm' => 'sha1',
+                'digits' => 6,
+                'period' => 30,
+                'icon' => 'github.png',
+                'legacy_uri' => 'otpauth://totp/Github:@john?secret=A2GRFTVVRBGY7UIW',
+            ],
         ]);
     }
 }

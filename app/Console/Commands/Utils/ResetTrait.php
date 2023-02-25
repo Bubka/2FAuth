@@ -60,7 +60,6 @@ trait ResetTrait
     protected function flushDB() : void
     {
         // Reset the db
-        DB::table('users')->delete();
         DB::table('password_resets')->delete();
         DB::table('oauth_access_tokens')->delete();
         DB::table('oauth_personal_access_clients')->delete();
@@ -68,8 +67,9 @@ trait ResetTrait
         DB::table('webauthn_credentials')->delete();
         DB::table('webauthn_recoveries')->delete();
         DB::table('twofaccounts')->delete();
-        DB::table('options')->delete();
         DB::table('groups')->delete();
+        DB::table('users')->delete();
+        DB::table('options')->delete();
 
         $this->line('Database cleaned');
     }
