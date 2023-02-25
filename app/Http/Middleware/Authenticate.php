@@ -2,8 +2,8 @@
 
 namespace App\Http\Middleware;
 
-use Illuminate\Support\Facades\App;
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
+use Illuminate\Support\Facades\App;
 
 class Authenticate extends Middleware
 {
@@ -38,7 +38,7 @@ class Authenticate extends Middleware
                 // by the SetLanguage global middleware
                 $lang = $this->auth->guard()->user()->preferences['lang'] ?? null;
 
-                if ($lang && in_array($lang, config('2fauth.locales')) && !App::isLocale($lang)) {
+                if ($lang && in_array($lang, config('2fauth.locales')) && ! App::isLocale($lang)) {
                     App::setLocale($lang);
                 }
 

@@ -3,10 +3,10 @@
 namespace Tests\Feature\Services;
 
 use App\Facades\Settings;
-use App\Services\SettingService;
 use App\Models\TwoFAccount;
-use Illuminate\Support\Facades\Crypt;
+use App\Services\SettingService;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Tests\FeatureTestCase;
 
@@ -174,7 +174,7 @@ class SettingServiceTest extends FeatureTestCase
      */
     public function test_set_setting_persist_correct_value_in_db_and_cache()
     {
-        $value = Settings::set(self::SETTING_NAME, self::SETTING_VALUE_STRING);
+        $value  = Settings::set(self::SETTING_NAME, self::SETTING_VALUE_STRING);
         $cached = Cache::get(SettingService::CACHE_ITEM_NAME); // returns a Collection
 
         $this->assertDatabaseHas('options', [
@@ -378,7 +378,7 @@ class SettingServiceTest extends FeatureTestCase
     }
 
     /**
-     * 
+     * @test
      */
     public function test_cache_is_updated_when_setting_is_set()
     {
@@ -392,7 +392,7 @@ class SettingServiceTest extends FeatureTestCase
     }
 
     /**
-     * 
+     * @test
      */
     public function test_cache_is_updated_when_setting_is_deleted()
     {

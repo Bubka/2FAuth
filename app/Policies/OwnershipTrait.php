@@ -3,14 +3,12 @@
 namespace App\Policies;
 
 use App\Models\User;
-use Illuminate\Contracts\Support\Arrayable;
 
 trait OwnershipTrait
 {
-
     /**
      * Ownership of single item condition
-     * 
+     *
      * @param  \App\Models\User  $user
      * @param  mixed  $item
      * @return bool
@@ -22,10 +20,10 @@ trait OwnershipTrait
 
     /**
      * Ownership of collection condition
-     * 
+     *
      * @template TKey of array-key
      * @template TValue
-     * 
+     *
      * @param  \App\Models\User  $user
      * @param  \Illuminate\Contracts\Support\Arrayable<TKey, TValue>|iterable<TKey, TValue>  $items
      * @return bool
@@ -40,5 +38,4 @@ trait OwnershipTrait
 
         return true;
     }
-
 }

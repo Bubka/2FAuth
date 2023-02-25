@@ -47,8 +47,8 @@ class WebAuthnLoginController extends Controller
             'email' => [
                 'required',
                 'email',
-                new \App\Rules\CaseInsensitiveEmailExists
-            ]
+                new \App\Rules\CaseInsensitiveEmailExists,
+            ],
         ]));
     }
 

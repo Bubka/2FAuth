@@ -3,8 +3,8 @@
 namespace App\Services;
 
 use App\Factories\MigratorFactoryInterface;
-use App\Models\TwoFAccount;
 use App\Helpers\Helpers;
+use App\Models\TwoFAccount;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
@@ -117,5 +117,4 @@ class TwoFAccountService
 
         return $twofaccounts;
     }
-    
 }

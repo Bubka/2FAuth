@@ -395,8 +395,7 @@ class TwoFAccount extends Model implements Sortable
         // First we instanciate the OTP generator
         try {
             $this->generator = Factory::loadFromProvisioningUri($isSteamTotp ? str_replace('otpauth://steam', 'otpauth://totp', $uri) : $uri);
-        }
-        catch (\Assert\AssertionFailedException|\Assert\InvalidArgumentException|\Exception|\Throwable $ex) {
+        } catch (\Assert\AssertionFailedException|\Assert\InvalidArgumentException|\Exception|\Throwable $ex) {
             throw ValidationException::withMessages([
                 'uri' => __('validation.custom.uri.regex', ['attribute' => 'uri']),
             ]);
@@ -696,6 +695,9 @@ class TwoFAccount extends Model implements Sortable
         return Settings::get('useEncryption') ? Crypt::encryptString($value) : $value;
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Builder<TwoFAccount>
+     */
     public function buildSortQuery()
     {
         return static::query()->where('user_id', $this->user_id);

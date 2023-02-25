@@ -2,9 +2,9 @@
 
 namespace App\Http\Middleware;
 
-use Illuminate\Support\Facades\Auth;
 use Closure;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 
 class SetLanguage
 {
@@ -22,7 +22,7 @@ class SetLanguage
         // - No language is specified
         //
         // We honor the language requested in the header or we use the fallback one.
-        // Note that if a user is authenticated later by the auth guard, the app locale 
+        // Note that if a user is authenticated later by the auth guard, the app locale
         // will be overriden if the user has set a specific language in its preferences.
 
         $lang     = config('app.fallback_locale');
@@ -33,13 +33,14 @@ class SetLanguage
                 array_diff(explode(',', $accepted), ['*']),
                 function ($langs, $langItem) {
                     [$langLong, $weight] = array_merge(explode(';q=', $langItem), [1]);
-                    $langShort = substr($langLong, 0, 2);
+                    $langShort           = substr($langLong, 0, 2);
                     if (array_key_exists($langShort, $langs)) {
                         if ($langs[$langShort] < $weight) {
                             $langs[$langShort] = (float) $weight;
                         }
+                    } else {
+                        $langs[$langShort] = (float) $weight;
                     }
-                    else $langs[$langShort] = (float) $weight;
 
                     return $langs;
                 },

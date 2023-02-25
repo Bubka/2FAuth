@@ -2,7 +2,6 @@
 
 namespace App\Http\Middleware;
 
-use App\Facades\Settings;
 use Carbon\Carbon;
 use Closure;
 use Illuminate\Http\Response;

@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\TwoFAccount;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class TwoFAccountPolicy
@@ -68,8 +67,6 @@ class TwoFAccountPolicy
     public function update(User $user, TwoFAccount $twofaccount)
     {
         return $this->isOwnerOf($user, $twofaccount);
-            // ? Response::allow()
-            // : Response::deny('You do not own this post.');
     }
 
     /**

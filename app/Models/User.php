@@ -62,7 +62,7 @@ class User extends Authenticatable implements WebAuthnAuthenticatable
 
     /**
      * Get Preferences attribute
-     * 
+     *
      * @param  string  $value
      * @return \Illuminate\Support\Collection<array-key, mixed>
      */

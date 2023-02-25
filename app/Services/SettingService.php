@@ -5,12 +5,11 @@ namespace App\Services;
 use App\Exceptions\DbEncryptionException;
 use App\Models\Option;
 use Exception;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Cache;
 use Throwable;
 
 class SettingService
@@ -25,7 +24,7 @@ class SettingService
     /**
      * Cache duration
      *
-     * @var int $minutes
+     * @var int
      */
     private int $minutes = 10;
 
@@ -41,6 +40,7 @@ class SettingService
     {
         $this->settings = Cache::remember(self::CACHE_ITEM_NAME, now()->addMinutes($this->minutes), function () {
             self::build();
+
             return $this->settings;
         });
     }
@@ -130,14 +130,13 @@ class SettingService
         });
 
         // Merge customized values with app default values
-        $settings = collect(config('2fauth.settings'))->merge($options); /** @phpstan-ignore-line */
-
+        $settings       = collect(config('2fauth.settings'))->merge($options); /** @phpstan-ignore-line */
         $this->settings = $settings;
     }
 
     /**
      * Build and cache the options collection
-     * 
+     *
      * @return void
      */
     private function buildAndCache()
