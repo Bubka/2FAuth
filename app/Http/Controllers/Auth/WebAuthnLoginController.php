@@ -95,6 +95,6 @@ class WebAuthnLoginController extends Controller
         $user->last_seen_at = Carbon::now()->format('Y-m-d H:i:s');
         $user->save();
 
-        Log::info(sprintf('User id #%s authenticated using webauthn', $user->id));
+        Log::info(sprintf('User ID #%s authenticated using webauthn', $user->id));
     }
 }

@@ -582,7 +582,7 @@ class TwoFAccount extends Model implements Sortable
 
         if (Storage::disk('icons')->put($filename, $content)) {
             if (self::isValidIcon($filename, 'icons')) {
-                Log::info(sprintf('Image %s successfully stored for import', $filename));
+                Log::info(sprintf('Image "%s" successfully stored for import', $filename));
 
                 return $filename;
             } else {
@@ -650,7 +650,7 @@ class TwoFAccount extends Model implements Sortable
                     Storage::disk('imagesLink')->delete($newFilename);
                 }
 
-                Log::info(sprintf('Icon file %s stored', $newFilename));
+                Log::info(sprintf('Icon file "%s" stored', $newFilename));
             } else {
                 Storage::disk('imagesLink')->delete($newFilename);
                 throw new \Exception('Unsupported mimeType or missing image on storage');

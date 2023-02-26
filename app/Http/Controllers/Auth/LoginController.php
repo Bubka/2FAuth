@@ -74,7 +74,7 @@ class LoginController extends Controller
         $user = $request->user();
         Auth::logout();
 
-        Log::info(sprintf('User id #%s logged out', $user->id));
+        Log::info(sprintf('User ID #%s logged out', $user->id));
 
         return response()->json(['message' => 'signed out'], Response::HTTP_OK);
     }
@@ -153,6 +153,6 @@ class LoginController extends Controller
         $user->last_seen_at = Carbon::now()->format('Y-m-d H:i:s');
         $user->save();
 
-        Log::info(sprintf('User id #%s authenticated using login & pwd', $user->id));
+        Log::info(sprintf('User ID #%s authenticated using login & pwd', $user->id));
     }
 }

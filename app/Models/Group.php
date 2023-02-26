@@ -64,7 +64,7 @@ class Group extends Model
 
         static::deleted(function (object $model) {
             // @codeCoverageIgnoreStart
-            Log::info(sprintf('Group %s deleted', var_export($model->name, true)));
+            Log::info(sprintf('Group "%s" deleted', var_export($model->name, true)));
             // @codeCoverageIgnoreEnd
         });
     }

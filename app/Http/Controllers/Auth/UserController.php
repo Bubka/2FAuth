@@ -37,7 +37,7 @@ class UserController extends Controller
                 'email' => $validated['email'],
             ]);
         }
-        Log::info(sprintf('Account of user id #%s updated', $user->id));
+        Log::info(sprintf('Account of user ID #%s updated', $user->id));
 
         return new UserResource($user);
     }
@@ -52,7 +52,7 @@ class UserController extends Controller
     {
         $validated = $request->validated();
 
-        Log::info(sprintf('Deletion of user id #%s requested', $validated['user_id']));
+        Log::info(sprintf('Deletion of user ID #%s requested', $validated['user_id']));
 
         if (! Hash::check($validated['password'], Auth::user()->password)) {
             return response()->json(['message' => __('errors.wrong_current_password')], 400);
@@ -84,7 +84,7 @@ class UserController extends Controller
             return response()->json(['message' => __('errors.user_deletion_failed')], 400);
         }
         // @codeCoverageIgnoreEnd
-        Log::info(sprintf('User id #%s deleted', $validated['user_id']));
+        Log::info(sprintf('User ID #%s deleted', $validated['user_id']));
 
         return response()->json(null, 204);
     }
