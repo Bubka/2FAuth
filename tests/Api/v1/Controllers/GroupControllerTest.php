@@ -14,7 +14,7 @@ use Tests\FeatureTestCase;
 class GroupControllerTest extends FeatureTestCase
 {
     /**
-     * @var \App\Models\User
+     * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
      */
     protected $user;
 
@@ -33,7 +33,7 @@ class GroupControllerTest extends FeatureTestCase
      */
     public function test_index_returns_group_collection_with_pseudo_group()
     {
-        Group::factory()->count(3)->create();
+        Group::factory()->count(3)->for($this->user)->create();
 
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('GET', '/api/v1/groups')
@@ -86,7 +86,7 @@ class GroupControllerTest extends FeatureTestCase
      */
     public function test_show_returns_group_resource()
     {
-        $group = Group::factory()->create([
+        $group = Group::factory()->for($this->user)->create([
             'name' => 'My group',
         ]);
 
@@ -117,7 +117,7 @@ class GroupControllerTest extends FeatureTestCase
      */
     public function test_update_returns_updated_group_resource()
     {
-        $group = Group::factory()->create();
+        $group = Group::factory()->for($this->user)->create();
 
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('PUT', '/api/v1/groups/' . $group->id, [
@@ -150,7 +150,7 @@ class GroupControllerTest extends FeatureTestCase
      */
     public function test_update_with_invalid_data_returns_validation_error()
     {
-        $group = Group::factory()->create();
+        $group = Group::factory()->for($this->user)->create();
 
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('PUT', '/api/v1/groups/' . $group->id, [
@@ -164,8 +164,8 @@ class GroupControllerTest extends FeatureTestCase
      */
     public function test_assign_accounts_returns_updated_group_resource()
     {
-        $group    = Group::factory()->create();
-        $accounts = TwoFAccount::factory()->count(2)->create();
+        $group    = Group::factory()->for($this->user)->create();
+        $accounts = TwoFAccount::factory()->count(2)->for($this->user)->create();
 
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/groups/' . $group->id . '/assign', [
@@ -184,7 +184,7 @@ class GroupControllerTest extends FeatureTestCase
      */
     public function test_assign_accounts_to_missing_group_returns_not_found()
     {
-        $accounts = TwoFAccount::factory()->count(2)->create();
+        $accounts = TwoFAccount::factory()->count(2)->for($this->user)->create();
 
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/groups/1000/assign', [
@@ -201,8 +201,8 @@ class GroupControllerTest extends FeatureTestCase
      */
     public function test_assign_invalid_accounts_returns_validation_error()
     {
-        $group    = Group::factory()->create();
-        $accounts = TwoFAccount::factory()->count(2)->create();
+        $group    = Group::factory()->for($this->user)->create();
+        $accounts = TwoFAccount::factory()->count(2)->for($this->user)->create();
 
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/groups/' . $group->id . '/assign', [
@@ -216,8 +216,8 @@ class GroupControllerTest extends FeatureTestCase
      */
     public function test_get_assigned_accounts_returns_twofaccounts_collection()
     {
-        $group    = Group::factory()->create();
-        $accounts = TwoFAccount::factory()->count(2)->create();
+        $group    = Group::factory()->for($this->user)->create();
+        $accounts = TwoFAccount::factory()->count(2)->for($this->user)->create();
 
         $assign = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/groups/' . $group->id . '/assign', [
@@ -248,8 +248,8 @@ class GroupControllerTest extends FeatureTestCase
      */
     public function test_get_assigned_accounts_returns_twofaccounts_collection_with_secret()
     {
-        $group    = Group::factory()->create();
-        $accounts = TwoFAccount::factory()->count(2)->create();
+        $group    = Group::factory()->for($this->user)->create();
+        $accounts = TwoFAccount::factory()->count(2)->for($this->user)->create();
 
         $assign = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/groups/' . $group->id . '/assign', [
@@ -296,7 +296,7 @@ class GroupControllerTest extends FeatureTestCase
      */
     public function test_destroy_group_returns_success()
     {
-        $group = Group::factory()->create();
+        $group = Group::factory()->for($this->user)->create();
 
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('DELETE', '/api/v1/groups/' . $group->id)

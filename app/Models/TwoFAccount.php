@@ -179,6 +179,16 @@ class TwoFAccount extends Model implements Sortable
     protected $generator = null;
 
     /**
+     * Get the user that owns the twofaccount.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Models\User, \App\Models\TwoFAccount>
+     */
+    public function user()
+    {
+        return $this->belongsTo(\App\Models\User::class);
+    }
+
+    /**
      * Get legacy_uri attribute
      *
      * @param  string  $value

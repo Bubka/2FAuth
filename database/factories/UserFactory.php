@@ -26,7 +26,22 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => bcrypt(self::USER_PASSWORD),
             'remember_token' => Str::random(10),
+            'is_admin' => false,
         ];
+    }
+
+    /**
+     * Indicate that the user is an administrator.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
+     */
+    public function administrator()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'is_admin' => true,
+            ];
+        });
     }
 
     /**

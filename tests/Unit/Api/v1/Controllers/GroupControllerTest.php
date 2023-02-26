@@ -3,13 +3,16 @@
 namespace Tests\Unit\Api\v1\Controllers;
 
 use App\Api\v1\Controllers\GroupController;
+use App\Api\v1\Requests\GroupAssignRequest;
+use App\Api\v1\Requests\GroupStoreRequest;
+use App\Api\v1\Resources\GroupResource;
+use App\Api\v1\Resources\TwoFAccountReadResource;
 use App\Facades\Groups;
 use App\Models\Group;
-use App\Models\TwoFAccount;
-use App\Services\SettingService;
+use App\Models\User;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Illuminate\Http\Request;
 use Mockery;
-use Mockery\MockInterface;
 use Tests\TestCase;
 
 /**
@@ -29,11 +32,20 @@ class GroupControllerTest extends TestCase
      */
     protected $groupStoreRequest;
 
+    /**
+     * @var \Illuminate\Http\Request mocked request
+     */
+    protected $request;
+
     public function setUp() : void
     {
         parent::setUp();
 
-        $this->groupStoreRequest = Mockery::mock('App\Api\v1\Requests\GroupStoreRequest');
+        $this->groupStoreRequest = Mockery::mock(GroupStoreRequest::class);
+        $this->request           = Mockery::mock(Request::class);
+
+        $this->request->shouldReceive('user')
+            ->andReturn(new User());
 
         $this->controller = new GroupController();
     }
@@ -49,9 +61,9 @@ class GroupControllerTest extends TestCase
             ->once()
             ->andReturn($groups);
 
-        $response = $this->controller->index();
+        $response = $this->controller->index($this->request);
 
-        $this->assertContainsOnlyInstancesOf('App\Api\v1\Resources\GroupResource', $response->collection);
+        $this->assertContainsOnlyInstancesOf(GroupResource::class, $response->collection);
     }
 
     /**
@@ -61,9 +73,11 @@ class GroupControllerTest extends TestCase
     {
         $group = Group::factory()->make();
 
-        $this->groupStoreRequest->shouldReceive('validated')
-            ->once()
-            ->andReturn(['name' => $group->name]);
+        $this->groupStoreRequest->shouldReceive([
+            'validated' => ['name' => $group->name],
+            'user'      => new User(),
+        ])
+            ->once();
 
         Groups::shouldReceive('create')
             ->once()
@@ -71,7 +85,8 @@ class GroupControllerTest extends TestCase
 
         $response = $this->controller->store($this->groupStoreRequest);
 
-        $this->assertInstanceOf('App\Models\Group', $response->original);
+        $this->assertInstanceOf(Group::class, $response->original);
+        // $this->assertInstanceOf(GroupResource::class, $response);
     }
 
     /**
@@ -83,7 +98,7 @@ class GroupControllerTest extends TestCase
 
         $response = $this->controller->show($group);
 
-        $this->assertInstanceOf('App\Api\v1\Resources\GroupResource', $response);
+        $this->assertInstanceOf(GroupResource::class, $response);
     }
 
     /**
@@ -93,9 +108,11 @@ class GroupControllerTest extends TestCase
     {
         $group = Group::factory()->make();
 
-        $this->groupStoreRequest->shouldReceive('validated')
-            ->once()
-            ->andReturn(['name' => $group->name]);
+        $this->groupStoreRequest->shouldReceive([
+            'validated' => ['name' => $group->name],
+            'user'      => new User(),
+        ])
+            ->once();
 
         Groups::shouldReceive('update')
             ->once()
@@ -103,7 +120,7 @@ class GroupControllerTest extends TestCase
 
         $response = $this->controller->update($this->groupStoreRequest, $group);
 
-        $this->assertInstanceOf('App\Api\v1\Resources\GroupResource', $response);
+        $this->assertInstanceOf(GroupResource::class, $response);
     }
 
     /**
@@ -112,19 +129,22 @@ class GroupControllerTest extends TestCase
     public function test_assignAccounts_returns_api_resource_assigned_using_groupService()
     {
         $group              = Group::factory()->make();
-        $groupAssignRequest = Mockery::mock('App\Api\v1\Requests\GroupAssignRequest');
+        $groupAssignRequest = Mockery::mock(GroupAssignRequest::class);
+        $user               = new User();
 
-        $groupAssignRequest->shouldReceive('validated')
-            ->once()
-            ->andReturn(['ids' => $group->id]);
+        $groupAssignRequest->shouldReceive([
+            'validated' => ['ids' => $group->id],
+            'user'      => $user,
+        ])
+            ->once();
 
         Groups::shouldReceive('assign')
-            ->with($group->id, $group)
+            ->with($group->id, $user, $group)
             ->once();
 
         $response = $this->controller->assignAccounts($groupAssignRequest, $group);
 
-        $this->assertInstanceOf('App\Api\v1\Resources\GroupResource', $response);
+        $this->assertInstanceOf(GroupResource::class, $response);
     }
 
     /**
@@ -134,21 +154,9 @@ class GroupControllerTest extends TestCase
     {
         $group = Group::factory()->make();
 
-        $settingService = $this->mock(SettingService::class, function (MockInterface $settingService) {
-            $settingService->shouldReceive('get')
-                ->andReturn(false);
-        });
+        $response = $this->controller->accounts($group, $this->request);
 
-        $twofaccounts = TwoFAccount::factory()->count(3)->make();
-
-        Groups::shouldReceive('getAccounts')
-            ->with($group)
-            ->once()
-            ->andReturn($twofaccounts);
-
-        $response = $this->controller->accounts($group);
-        // TwoFAccountCollection
-        $this->assertContainsOnlyInstancesOf('App\Api\v1\Resources\TwoFAccountReadResource', $response->collection);
+        $this->assertContainsOnlyInstancesOf(TwoFAccountReadResource::class, $response->collection);
     }
 
     /**
@@ -156,13 +164,15 @@ class GroupControllerTest extends TestCase
      */
     public function test_destroy_uses_group_service()
     {
-        $group = Group::factory()->make();
+        $group     = Group::factory()->make();
+        $group->id = 0;
 
         Groups::shouldReceive('delete')
             ->once()
-            ->with($group->id);
+            ->with($group->id, $this->request->user())
+            ->andReturn(0);
 
-        $response = $this->controller->destroy($group);
+        $response = $this->controller->destroy($group, $this->request);
 
         $this->assertInstanceOf('Illuminate\Http\JsonResponse', $response);
     }

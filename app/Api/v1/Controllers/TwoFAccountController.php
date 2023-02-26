@@ -73,7 +73,7 @@ class TwoFAccountController extends Controller
         $request->user()->twofaccounts()->save($twofaccount);
 
         // Possible group association
-        Groups::assign($twofaccount->id);
+        Groups::assign($twofaccount->id, $request->user());
 
         return (new TwoFAccountReadResource($twofaccount->refresh()))
             ->response()

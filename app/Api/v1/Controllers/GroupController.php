@@ -20,7 +20,7 @@ class GroupController extends Controller
      */
     public function index(Request $request)
     {
-        $groups = Groups::prependTheAllGroup($request->user()->groups()->withCount('twofaccounts')->get(), $request->user()->id);
+        $groups = Groups::getAll($request->user());
 
         return GroupResource::collection($groups);
     }
@@ -33,11 +33,9 @@ class GroupController extends Controller
      */
     public function store(GroupStoreRequest $request)
     {
-        $this->authorize('create', Group::class);
-
         $validated = $request->validated();
 
-        $group = $request->user()->groups()->create($validated);
+        $group = Groups::create($validated, $request->user());
 
         return (new GroupResource($group))
             ->response()
@@ -66,11 +64,9 @@ class GroupController extends Controller
      */
     public function update(GroupStoreRequest $request, Group $group)
     {
-        $this->authorize('update', $group);
-
         $validated = $request->validated();
 
-        Groups::update($group, $validated);
+        Groups::update($group, $validated, $request->user());
 
         return new GroupResource($group);
     }
@@ -84,11 +80,9 @@ class GroupController extends Controller
      */
     public function assignAccounts(GroupAssignRequest $request, Group $group)
     {
-        $this->authorize('update', $group);
-
         $validated = $request->validated();
 
-        Groups::assign($validated['ids'], $group);
+        Groups::assign($validated['ids'], $request->user(), $group);
 
         return new GroupResource($group);
     }
@@ -103,20 +97,19 @@ class GroupController extends Controller
     {
         $this->authorize('view', $group);
 
-        return new TwoFAccountCollection($group->twofaccounts());
+        return new TwoFAccountCollection($group->twofaccounts);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Group  $group
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(Group $group)
+    public function destroy(Group $group, Request $request)
     {
-        $this->authorize('delete', $group);
-
-        Groups::delete($group->id);
+        Groups::delete($group->id, $request->user());
 
         return response()->json(null, 204);
     }

@@ -3,9 +3,12 @@
 namespace Tests\Feature\Services;
 
 use App\Facades\Groups;
-use App\Facades\Settings;
 use App\Models\Group;
 use App\Models\TwoFAccount;
+use App\Models\User;
+use App\Policies\GroupPolicy;
+use Illuminate\Auth\Access\AuthorizationException;
+use Mockery\MockInterface;
 use Tests\FeatureTestCase;
 
 /**
@@ -14,6 +17,16 @@ use Tests\FeatureTestCase;
  */
 class GroupServiceTest extends FeatureTestCase
 {
+    /**
+     * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
+     */
+    protected $user;
+
+    /**
+     * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
+     */
+    protected $admin;
+
     /**
      * App\Models\Group $groupOne, $groupTwo
      */
@@ -30,26 +43,6 @@ class GroupServiceTest extends FeatureTestCase
 
     private const NEW_GROUP_NAME = 'MyNewGroup';
 
-    private const TWOFACCOUNT_COUNT = 2;
-
-    private const ACCOUNT = 'account';
-
-    private const SERVICE = 'service';
-
-    private const SECRET = 'A4GRFHVVRBGY7UIW';
-
-    private const ALGORITHM_CUSTOM = 'sha256';
-
-    private const DIGITS_CUSTOM = 7;
-
-    private const PERIOD_CUSTOM = 40;
-
-    private const IMAGE = 'https%3A%2F%2Fen.opensuse.org%2Fimages%2F4%2F44%2FButton-filled-colour.png';
-
-    private const ICON = 'test.png';
-
-    private const TOTP_FULL_CUSTOM_URI = 'otpauth://totp/' . self::SERVICE . ':' . self::ACCOUNT . '?secret=' . self::SECRET . '&issuer=' . self::SERVICE . '&digits=' . self::DIGITS_CUSTOM . '&period=' . self::PERIOD_CUSTOM . '&algorithm=' . self::ALGORITHM_CUSTOM . '&image=' . self::IMAGE;
-
     /**
      * @test
      */
@@ -57,68 +50,48 @@ class GroupServiceTest extends FeatureTestCase
     {
         parent::setUp();
 
-        $this->groupOne       = new Group;
-        $this->groupOne->name = 'MyGroupOne';
-        $this->groupOne->save();
+        $this->user  = User::factory()->create();
+        $this->admin = User::factory()->administrator()->create();
 
-        $this->groupTwo       = new Group;
-        $this->groupTwo->name = 'MyGroupTwo';
-        $this->groupTwo->save();
+        $this->groupOne = Group::factory()->for($this->user)->create();
+        $this->groupTwo = Group::factory()->for($this->user)->create();
 
-        $this->twofaccountOne             = new TwoFAccount;
-        $this->twofaccountOne->legacy_uri = self::TOTP_FULL_CUSTOM_URI;
-        $this->twofaccountOne->service    = self::SERVICE;
-        $this->twofaccountOne->account    = self::ACCOUNT;
-        $this->twofaccountOne->icon       = self::ICON;
-        $this->twofaccountOne->otp_type   = 'totp';
-        $this->twofaccountOne->secret     = self::SECRET;
-        $this->twofaccountOne->digits     = self::DIGITS_CUSTOM;
-        $this->twofaccountOne->algorithm  = self::ALGORITHM_CUSTOM;
-        $this->twofaccountOne->period     = self::PERIOD_CUSTOM;
-        $this->twofaccountOne->counter    = null;
-        $this->twofaccountOne->save();
+        Group::factory()->count(3)->for($this->admin)->create();
 
-        $this->twofaccountTwo             = new TwoFAccount;
-        $this->twofaccountTwo->legacy_uri = self::TOTP_FULL_CUSTOM_URI;
-        $this->twofaccountTwo->service    = self::SERVICE;
-        $this->twofaccountTwo->account    = self::ACCOUNT;
-        $this->twofaccountTwo->icon       = self::ICON;
-        $this->twofaccountTwo->otp_type   = 'totp';
-        $this->twofaccountTwo->secret     = self::SECRET;
-        $this->twofaccountTwo->digits     = self::DIGITS_CUSTOM;
-        $this->twofaccountTwo->algorithm  = self::ALGORITHM_CUSTOM;
-        $this->twofaccountTwo->period     = self::PERIOD_CUSTOM;
-        $this->twofaccountTwo->counter    = null;
-        $this->twofaccountTwo->save();
+        $this->twofaccountOne = TwoFAccount::factory()->for($this->user)->create([
+            'group_id' => $this->groupOne->id,
+        ]);
+        $this->twofaccountTwo = TwoFAccount::factory()->for($this->user)->create([
+            'group_id' => $this->groupTwo->id,
+        ]);
+
+        TwoFAccount::factory()->for($this->admin)->create();
     }
 
     /**
      * @test
      */
-    public function test_getAll_returns_a_collection()
+    public function test_getAll_returns_pseudo_group_on_top_of_user_groups_only()
     {
-        $this->assertInstanceOf(\Illuminate\Database\Eloquent\Collection::class, Groups::getAll());
-    }
+        $groups = Groups::getAll($this->user);
 
-    /**
-     * @test
-     */
-    public function test_getAll_adds_pseudo_group_on_top_of_user_groups()
-    {
-        $groups = Groups::getAll();
-
+        $this->assertCount(3, $groups);
         $this->assertEquals(0, $groups->first()->id);
         $this->assertEquals(__('commons.all'), $groups->first()->name);
+        $this->assertEquals($this->groupOne->user_id, $groups[1]->user_id);
+        $this->assertEquals($this->groupTwo->user_id, $groups[2]->user_id);
     }
 
     /**
      * @test
      */
-    public function test_getAll_returns_pseudo_group_with_all_twofaccounts_count()
+    public function test_getAll_returns_groups_with_count()
     {
-        $groups = Groups::getAll();
+        $groups = Groups::getAll($this->user);
 
-        $this->assertEquals(self::TWOFACCOUNT_COUNT, $groups->first()->twofaccounts_count);
+        $this->assertEquals(2, $groups->first()->twofaccounts_count);
+        $this->assertEquals(1, $groups[1]->twofaccounts_count);
+        $this->assertEquals(1, $groups[2]->twofaccounts_count);
     }
 
     /**
@@ -126,11 +99,29 @@ class GroupServiceTest extends FeatureTestCase
      */
     public function test_create_persists_and_returns_created_group()
     {
-        $newGroup = Groups::create(['name' => self::NEW_GROUP_NAME]);
+        $newGroup = Groups::create(['name' => self::NEW_GROUP_NAME], $this->user);
 
-        $this->assertDatabaseHas('groups', ['name' => self::NEW_GROUP_NAME]);
-        $this->assertInstanceOf(\App\Models\Group::class, $newGroup);
+        $this->assertDatabaseHas('groups', [
+            'name'    => self::NEW_GROUP_NAME,
+            'user_id' => $this->user->id,
+        ]);
+        $this->assertInstanceOf(Group::class, $newGroup);
         $this->assertEquals(self::NEW_GROUP_NAME, $newGroup->name);
+    }
+
+    /**
+     * @test
+     */
+    public function test_create_authorization()
+    {
+        $this->mock(GroupPolicy::class, function (MockInterface $groupPolicy) {
+            $groupPolicy->shouldReceive('create')
+                ->andReturn(false);
+        });
+
+        $this->expectException(AuthorizationException::class);
+
+        Groups::create(['name' => 'lorem'], $this->user);
     }
 
     /**
@@ -138,11 +129,21 @@ class GroupServiceTest extends FeatureTestCase
      */
     public function test_update_persists_and_returns_updated_group()
     {
-        $this->groupOne = Groups::update($this->groupOne, ['name' => self::NEW_GROUP_NAME]);
+        $this->groupOne = Groups::update($this->groupOne, ['name' => self::NEW_GROUP_NAME], $this->user);
 
         $this->assertDatabaseHas('groups', ['name' => self::NEW_GROUP_NAME]);
-        $this->assertInstanceOf(\App\Models\Group::class, $this->groupOne);
+        $this->assertInstanceOf(Group::class, $this->groupOne);
         $this->assertEquals(self::NEW_GROUP_NAME, $this->groupOne->name);
+    }
+
+    /**
+     * @test
+     */
+    public function test_update_fails_when_user_does_not_own_the_group()
+    {
+        $this->expectException(AuthorizationException::class);
+
+        Groups::update($this->groupOne, ['name' => self::NEW_GROUP_NAME], $this->admin);
     }
 
     /**
@@ -150,7 +151,7 @@ class GroupServiceTest extends FeatureTestCase
      */
     public function test_delete_a_groupId_clear_db_and_returns_deleted_count()
     {
-        $deleted = Groups::delete($this->groupOne->id);
+        $deleted = Groups::delete($this->groupOne->id, $this->user);
 
         $this->assertDatabaseMissing('groups', ['id' => $this->groupOne->id]);
         $this->assertEquals(1, $deleted);
@@ -161,7 +162,7 @@ class GroupServiceTest extends FeatureTestCase
      */
     public function test_delete_an_array_of_ids_clear_db_and_returns_deleted_count()
     {
-        $deleted = Groups::delete([$this->groupOne->id, $this->groupTwo->id]);
+        $deleted = Groups::delete([$this->groupOne->id, $this->groupTwo->id], $this->user);
 
         $this->assertDatabaseMissing('groups', ['id' => $this->groupOne->id]);
         $this->assertDatabaseMissing('groups', ['id' => $this->groupTwo->id]);
@@ -171,32 +172,53 @@ class GroupServiceTest extends FeatureTestCase
     /**
      * @test
      */
-    public function test_delete_default_group_reset_defaultGroup_setting()
+    public function test_delete_missing_id_does_not_fail_and_returns_deleted_count()
     {
-        Settings::set('defaultGroup', $this->groupOne->id);
+        $this->assertDatabaseMissing('groups', ['id' => 1000]);
 
-        $deleted = Groups::delete($this->groupOne->id);
+        $deleted = Groups::delete([$this->groupOne->id, 1000], $this->user);
 
-        $this->assertDatabaseHas('options', [
-            'key'   => 'defaultGroup',
-            'value' => 0,
-        ]);
+        $this->assertDatabaseMissing('groups', ['id' => $this->groupOne->id]);
+        $this->assertEquals(1, $deleted);
     }
 
     /**
      * @test
      */
-    public function test_delete_active_group_reset_activeGroup_setting()
+    public function test_delete_default_group_reset_defaultGroup_preference()
     {
-        Settings::set('rememberActiveGroup', true);
-        Settings::set('activeGroup', $this->groupOne->id);
+        $this->user['preferences->defaultGroup'] = $this->groupOne->id;
+        $this->user->save();
 
-        $deleted = Groups::delete($this->groupOne->id);
+        Groups::delete($this->groupOne->id, $this->user);
 
-        $this->assertDatabaseHas('options', [
-            'key'   => 'activeGroup',
-            'value' => 0,
-        ]);
+        $this->user->refresh();
+        $this->assertEquals(0, $this->user->preferences['defaultGroup']);
+    }
+
+    /**
+     * @test
+     */
+    public function test_delete_active_group_reset_activeGroup_preference()
+    {
+        $this->user['preferences->rememberActiveGroup'] = true;
+        $this->user['preferences->activeGroup']         = $this->groupOne->id;
+        $this->user->save();
+
+        Groups::delete($this->groupOne->id, $this->user);
+
+        $this->user->refresh();
+        $this->assertEquals(0, $this->user->preferences['activeGroup']);
+    }
+
+    /**
+     * @test
+     */
+    public function test_delete_fails_when_user_does_not_own_one_of_the_groups()
+    {
+        $this->expectException(AuthorizationException::class);
+
+        Groups::delete($this->groupOne->id, $this->admin);
     }
 
     /**
@@ -204,11 +226,11 @@ class GroupServiceTest extends FeatureTestCase
      */
     public function test_assign_a_twofaccountid_to_a_specified_group_persists_the_relation()
     {
-        Groups::assign($this->twofaccountOne->id, $this->groupOne);
+        Groups::assign($this->twofaccountOne->id, $this->user, $this->groupTwo);
 
         $this->assertDatabaseHas('twofaccounts', [
             'id'       => $this->twofaccountOne->id,
-            'group_id' => $this->groupOne->id,
+            'group_id' => $this->groupTwo->id,
         ]);
     }
 
@@ -217,15 +239,15 @@ class GroupServiceTest extends FeatureTestCase
      */
     public function test_assign_multiple_twofaccountid_to_a_specified_group_persists_the_relation()
     {
-        Groups::assign([$this->twofaccountOne->id, $this->twofaccountTwo->id], $this->groupOne);
+        Groups::assign([$this->twofaccountOne->id, $this->twofaccountTwo->id], $this->user, $this->groupTwo);
 
         $this->assertDatabaseHas('twofaccounts', [
             'id'       => $this->twofaccountOne->id,
-            'group_id' => $this->groupOne->id,
+            'group_id' => $this->groupTwo->id,
         ]);
         $this->assertDatabaseHas('twofaccounts', [
             'id'       => $this->twofaccountTwo->id,
-            'group_id' => $this->groupOne->id,
+            'group_id' => $this->groupTwo->id,
         ]);
     }
 
@@ -234,9 +256,10 @@ class GroupServiceTest extends FeatureTestCase
      */
     public function test_assign_a_twofaccountid_to_no_group_assigns_to_default_group()
     {
-        Settings::set('defaultGroup', $this->groupTwo->id);
+        $this->user['preferences->defaultGroup'] = $this->groupTwo->id;
+        $this->user->save();
 
-        Groups::assign($this->twofaccountOne->id);
+        Groups::assign($this->twofaccountOne->id, $this->user);
 
         $this->assertDatabaseHas('twofaccounts', [
             'id'       => $this->twofaccountOne->id,
@@ -249,10 +272,11 @@ class GroupServiceTest extends FeatureTestCase
      */
     public function test_assign_a_twofaccountid_to_no_group_assigns_to_active_group()
     {
-        Settings::set('defaultGroup', -1);
-        Settings::set('activeGroup', $this->groupTwo->id);
+        $this->user['preferences->defaultGroup'] = -1;
+        $this->user['preferences->activeGroup']  = $this->groupTwo->id;
+        $this->user->save();
 
-        Groups::assign($this->twofaccountOne->id);
+        Groups::assign($this->twofaccountOne->id, $this->user);
 
         $this->assertDatabaseHas('twofaccounts', [
             'id'       => $this->twofaccountOne->id,
@@ -263,27 +287,39 @@ class GroupServiceTest extends FeatureTestCase
     /**
      * @test
      */
-    public function test_assign_a_twofaccountid_to_missing_active_group_does_not_fails()
+    public function test_assign_a_twofaccountid_to_missing_active_group_returns_not_found()
     {
-        Settings::set('defaultGroup', -1);
-        Settings::set('activeGroup', 100000);
+        $orginalGroup = $this->twofaccountOne->group_id;
 
-        Groups::assign($this->twofaccountOne->id);
+        $this->user['preferences->defaultGroup'] = -1;
+        $this->user['preferences->activeGroup']  = 1000;
+        $this->user->save();
+
+        Groups::assign($this->twofaccountOne->id, $this->user);
 
         $this->assertDatabaseHas('twofaccounts', [
             'id'       => $this->twofaccountOne->id,
-            'group_id' => null,
+            'group_id' => $orginalGroup,
         ]);
     }
 
     /**
      * @test
      */
-    public function test_getAccounts_returns_accounts()
+    public function test_assign_fails_when_user_does_not_own_the_group()
     {
-        Groups::assign([$this->twofaccountOne->id, $this->twofaccountTwo->id], $this->groupOne);
-        $accounts = Groups::getAccounts($this->groupOne);
+        $this->expectException(AuthorizationException::class);
 
-        $this->assertEquals(2, $accounts->count());
+        Groups::assign($this->twofaccountOne->id, $this->user, $this->admin->groups()->first());
+    }
+
+    /**
+     * @test
+     */
+    public function test_assign_fails_when_user_does_not_own_one_of_the_accounts()
+    {
+        $this->expectException(AuthorizationException::class);
+
+        Groups::assign([$this->twofaccountOne->id, $this->admin->twofaccounts()->first()->id], $this->user, $this->groupTwo);
     }
 }

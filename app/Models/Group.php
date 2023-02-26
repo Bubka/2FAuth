@@ -78,4 +78,14 @@ class Group extends Model
     {
         return $this->hasMany(\App\Models\TwoFAccount::class);
     }
+
+   /**
+    * Get the user that owns the group.
+    *
+    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Models\User, \App\Models\Group>
+    */
+   public function user()
+   {
+       return $this->belongsTo(\App\Models\User::class);
+   }
 }
