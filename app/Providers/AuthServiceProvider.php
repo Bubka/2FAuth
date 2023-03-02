@@ -88,19 +88,17 @@ class AuthServiceProvider extends ServiceProvider
             return new ReverseProxyGuard(Auth::createUserProvider($config['provider']));
         });
 
-        // Previously we were using a custom user provider derived from the Larapass user provider
-        // in order to honor the "useWebauthnOnly" user option.
-        // Since Laragear\WebAuthn now replaces DarkGhostHunter\Larapass, the new approach is
-        // simplier: We overload the 'eloquent-webauthn' registration from Laragear\WebAuthn\WebAuthnServiceProvider
-        // with a custom closure that uses the "useWebauthnOnly" user option
+        // We use a custom user provider derivated from the Laragear\WebAuthn one to honor the "useWebauthnOnly" user option.
+        // As this option is now available in the $user->preferences array it is no more possible to overload the $fallback
+        // value here because $user is not available at registration.
         Auth::provider(
             'eloquent-webauthn',
             static function (\Illuminate\Contracts\Foundation\Application $app, array $config) : \Laragear\WebAuthn\Auth\WebAuthnUserProvider {
-                return new \Laragear\WebAuthn\Auth\WebAuthnUserProvider(
+                return new \App\Extensions\WebauthnTwoFAuthUserProvider(
                     $app->make('hash'),
                     $config['model'],
                     $app->make(\Laragear\WebAuthn\Assertion\Validator\AssertionValidator::class),
-                    Settings::get('useWebauthnOnly') ? false : true
+                    true
                 );
             }
         );
