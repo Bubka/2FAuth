@@ -33,6 +33,27 @@ use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 use SteamTotp\SteamTotp;
 
+/**
+ * App\Models\TwoFAccount
+ *
+ * @property int $id
+ * @property string|null $service
+ * @property string $legacy_uri
+ * @property string $account
+ * @property string|null $icon
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int|null $order_column
+ * @property int|null $group_id
+ * @property string $otp_type
+ * @property string $secret
+ * @property string $algorithm
+ * @property int $digits
+ * @property int|null $period
+ * @property int|null $counter
+ * @property int|null $user_id
+ * @property-read \App\Models\User|null $user
+ */
 class TwoFAccount extends Model implements Sortable
 {
     use SortableTrait, HasFactory;

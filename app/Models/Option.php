@@ -4,6 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\Option
+ *
+ * @property int $id
+ * @property string $key
+ * @property string $value
+ */
 class Option extends Model
 {
     /**
