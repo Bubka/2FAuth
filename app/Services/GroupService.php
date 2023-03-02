@@ -6,154 +6,268 @@ use App\Models\Group;
 use App\Models\TwoFAccount;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Log;
 
 class GroupService
 {
     /**
-     * Returns all existing groups for the given user
-     *
-     * @param  \App\Models\User  $user
-     * @return Collection<int, Group>
+     * @var  \App\Models\User|null
      */
-    public static function getAll(User $user) : Collection
+    protected $user;
+
+    /**
+     * @var  bool
+     */
+    protected $withTheAllGroup = false;
+
+
+    /**
+     * Create a new Group service instance.
+     *
+     * @return void
+     */
+    public function __construct()
     {
-        return self::prependTheAllGroup($user->groups()->withCount('twofaccounts')->get(), $user->id);
+        $this->user = null;
     }
 
     /**
-     * Creates a group for the given user
+     * Sets the user on behalf of whom the service act
+     * 
+     * @param  \App\Models\User  $user
+     * @return self
+     */
+    public function for(User $user)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Sets the service to return group collections prepended with the 'All' pseudo group
+     * 
+     * @return self
+     */
+    public function withTheAllGroup()
+    {
+        $this->withTheAllGroup = true;
+
+        return $this;
+    }
+
+    /**
+     * Get one or multiple group by their primary keys
+     *
+     * @param  int|array  $ids
+     * @return Collection<int, Group>|Group
+     * 
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException<\App\Models\Group>
+     */
+    public function get(mixed $ids)
+    {
+        /**
+         * @var Collection<int, Group>|Group
+         */
+        $groups = Group::withCount('twofaccounts')->findOrFail($ids);
+
+        if ($groups instanceof Collection) {
+            if (! is_null($this->user)) {
+                // Authorization check
+                if ($this->user->cannot('viewEach', [(new Group), $groups])) {
+                    Log::notice(sprintf('User ID #%s cannot view all groups in IDs #%s', $this->user->id, implode(',', $ids)));
+                    throw new AuthorizationException();
+                }
+            }
+        }
+        else {
+            if (! is_null($this->user)) {
+                // Authorization check
+                if ($this->user->cannot('view', $groups)) {
+                    Log::notice(sprintf('User ID #%s cannot view group %s (#%s)', $this->user->id, var_export($groups->name, true), $groups->id));
+                    throw new AuthorizationException();
+                }
+            }
+        }
+
+        return $groups;
+    }
+
+    /**
+     * Returns all existing groups preprended with the 'All' group for the given user
+     *
+     * @return Collection<int, Group>
+     */
+    public function all() : Collection
+    {
+        $groups = ! is_null($this->user)
+            ? $this->user->groups()->withCount('twofaccounts')->get()
+            : Group::withCount('twofaccounts')->get();
+
+        return $this->withTheAllGroup
+            ? self::prependTheAllGroup($groups)
+            : $groups;
+    }
+
+    /**
+     * Returns all accounts of the group
+     *
+     * @param  \App\Models\Group  $group
+     * @return Collection<int, \App\Models\TwoFAccount>
+     */
+    public function accounts(Group $group) : Collection
+    {
+        if (! is_null($this->user)) {
+            // Authorization check
+            if ($this->user->cannot('view', $group)) {
+                Log::notice(sprintf('User ID #%s cannot view group ID #%s', $this->user->id, $group->id));
+                throw new AuthorizationException();
+            }
+        }
+
+        return $group->twofaccounts;
+    }
+
+    /**
+     * Creates a group
      *
      * @param  array  $data
-     * @param  \App\Models\User  $user
      * @return \App\Models\Group The created group
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws \Exception
      */
-    public static function create(array $data, User $user) : Group
+    public function create(array $data) : Group
     {
-        if ($user->cannot('create', Group::class)) {
-            Log::notice(sprintf('User ID #%s cannot create groups', $user->id));
-            throw new AuthorizationException();
+        if (! is_null($this->user)) {
+            // Authorization check
+            if ($this->user->cannot('create', Group::class)) {
+                Log::notice(sprintf('User ID #%s cannot create groups', $this->user->id));
+                throw new AuthorizationException();
+            }
+
+            $group = $this->user->groups()->create([
+                'name' => $data['name'],
+            ]);
+
+            Log::info(sprintf('Group %s created for user ID #%s', var_export($group->name, true), $this->user->id));
+            
+            return $group;
         }
-
-        $group = $user->groups()->create([
-            'name' => $data['name'],
-        ]);
-
-        Log::info(sprintf('Group "%s" created for user ID #%s', var_export($group->name, true), $user->id));
-
-        return $group;
+        else {
+            throw new \Exception('Cannot create a group without a user');
+        }
     }
 
     /**
-     * Updates a group using a list of parameters
+     * Updates a group using a list of values
      *
      * @param  \App\Models\Group  $group The group
      * @param  array  $data The parameters
-     * @param  \App\Models\User  $user
      * @return \App\Models\Group The updated group
      *
+     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws \Exception
      */
-    public static function update(Group $group, array $data, User $user) : Group
+    public function update(Group $group, array $data) : Group
     {
-        if ($user->cannot('update', $group)) {
-            Log::notice(sprintf('User ID #%s cannot update group "%s"', $user->id, var_export($group->name, true)));
-            throw new AuthorizationException();
+        if (! is_null($this->user)) {
+            // Authorization check
+            if ($this->user->cannot('update', $group)) {
+                Log::notice(sprintf('User ID #%s cannot update group %s', $this->user->id, var_export($group->name, true)));
+                throw new AuthorizationException();
+            }
+
+            $group->update([
+                'name' => $data['name'],
+            ]);
+    
+            Log::info(sprintf('Group %s updated by user ID #%s', var_export($group->name, true), $this->user->id));
+    
+            return $group;
         }
-
-        $group->update([
-            'name' => $data['name'],
-        ]);
-
-        Log::info(sprintf('Group "%s" updated by user ID #%s', var_export($group->name, true), $user->id));
-
-        return $group;
+        else {
+            throw new \Exception('Cannot update a group without a user');
+        }
     }
 
     /**
      * Deletes one or more groups
      *
      * @param  int|array  $ids group ids to delete
-     * @param  \App\Models\User  $user
      * @return int The number of deleted
      */
-    public static function delete($ids, User $user) : int
+    public function delete($ids) : int
     {
         $ids = is_array($ids) ? $ids : [$ids];
-
         $groups = Group::findMany($ids);
 
         if ($groups->count() > 0) {
-            if ($user->cannot('deleteEach', [$groups[0], $groups])) {
-                Log::notice(sprintf('User ID #%s cannot delete all groups in IDs #%s', $user->id, implode(',', $ids)));
-                throw new AuthorizationException();
+            if (! is_null($this->user)) {
+                // Authorization check
+                if ($this->user->cannot('deleteEach', [$groups[0], $groups])) {
+                    Log::notice(sprintf('User ID #%s cannot delete all groups in IDs #%s', $this->user->id, implode(',', $ids)));
+                    throw new AuthorizationException();
+                }
             }
 
-            // One of the groups is possibly set as the default group of the given user.
-            // In this case we reset the preference to "No group" (groupId = 0)
-            if (in_array($user->preferences['defaultGroup'], $ids)) {
-                $user['preferences->defaultGroup'] = 0;
-                $user->save();
-            }
-
-            // One of the groups is also possibly set as the active group if the user
-            // configured 2FAuth to memorize the active group.
-            // In this case we reset the preference to the pseudo "All" group (groupId = 0)
-            if (in_array($user->preferences['activeGroup'], $ids)) {
-                $user['preferences->activeGroup'] = 0;
-                $user->save();
-            }
-
-            $deleted = Group::destroy($ids);
-            Log::info(sprintf('Groups IDs #%s deleted', implode(',#', $ids)));
-
-            return $deleted;
+            return Group::destroy($ids);
         }
 
         return 0;
     }
 
     /**
-     * Assign one or more accounts to a user group
+     * Assign one or more accounts to a group
      *
      * @param  array|int  $ids accounts ids to assign
-     * @param  \App\Models\User  $user
      * @param  \App\Models\Group  $group The target group
      * @return void
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException<\App\Models\TwoFAccount>
      */
-    public static function assign($ids, User $user, Group $group = null) : void
+    public function assign($ids, Group $group = null) : void
     {
-        if (! $group) {
-            $group = self::defaultGroup($user);
-        } else {
-            if ($user->cannot('update', $group)) {
-                Log::notice(sprintf('User ID #%s cannot update group "%s"', $user->id, var_export($group->name, true)));
-                throw new AuthorizationException();
+        $ids = is_array($ids) ? $ids : [$ids];
+        $twofaccounts = TwoFAccount::findOrFail($ids);
+
+        if (! is_null($this->user)) {
+            $group = $group ?? self::defaultGroup($this->user);
+
+            if ($group) {
+                // Authorization check on group
+                if ($this->user->cannot('update', $group)) {
+                    Log::notice(sprintf('User ID #%s cannot assign twofaccounts to group ID #%s', $this->user->id, $group->id));
+                    throw new AuthorizationException();
+                }
+
+                // Authorization check on twofaccounts
+                if ($this->user->cannot('updateEach', [$twofaccounts[0], $twofaccounts])) {
+                    Log::notice(sprintf('User ID #%s cannot assign twofaccounts IDs #%s to a group', $this->user->id, implode(',', $ids)));
+                    throw new AuthorizationException();
+                }
+
+                $group->twofaccounts()->saveMany($twofaccounts);
+                $group->loadCount('twofaccounts');
+    
+                Log::info(sprintf('Twofaccounts IDs #%s assigned to group %s (id #%s)', implode(',', $ids), var_export($group->name, true), $group->id));
+            } else {
+                Log::info(sprintf('Cannot find a group to assign the TwoFAccounts IDs #%s to', implode(',', $ids)));
             }
         }
-
-        if ($group) {
-            $ids = is_array($ids) ? $ids : [$ids];
-
-            $twofaccounts = TwoFAccount::findOrFail($ids);
-
-            if ($user->cannot('updateEach', [$twofaccounts[0], $twofaccounts])) {
-                Log::notice(sprintf('User ID #%s cannot assign twofaccounts %s to group "%s"', $user->id, implode(',', $ids), var_export($group->name, true)));
-                throw new AuthorizationException();
-            }
-
+        else if ($group) {
             $group->twofaccounts()->saveMany($twofaccounts);
             $group->loadCount('twofaccounts');
 
-            Log::info(sprintf('Twofaccounts IDS #%s assigned to groups "%s"', implode(',', $ids), var_export($group->name, true)));
-        } else {
-            Log::info('Cannot find a group to assign the TwoFAccounts to');
+            Log::info(sprintf('Twofaccounts IDs #%s assigned to group %s (id #%s)', implode(',', $ids), var_export($group->name, true), $group->id));
+        }
+        else
+        {
+            Log::info(sprintf('No group to assign the TwoFAccounts IDs #%s to', implode(',', $ids)));
         }
     }
 
@@ -163,14 +277,16 @@ class GroupService
      * @param  Collection<int, Group>  $groups
      * @return Collection<int, Group>
      */
-    private static function prependTheAllGroup(Collection $groups, int $userId) : Collection
+    private function prependTheAllGroup(Collection $groups) : Collection
     {
         $theAllGroup = new Group([
             'name' => __('commons.all'),
         ]);
 
         $theAllGroup->id                 = 0;
-        $theAllGroup->twofaccounts_count = TwoFAccount::where('user_id', $userId)->count();
+        $theAllGroup->twofaccounts_count = is_null($this->user)
+                                                ? TwoFAccount::count()
+                                                : TwoFAccount::where('user_id', $this->user->id)->count();
 
         return $groups->prepend($theAllGroup);
     }

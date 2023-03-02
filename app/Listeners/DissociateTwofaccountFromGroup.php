@@ -31,6 +31,6 @@ class DissociateTwofaccountFromGroup
                 ['group_id' => null]
             );
 
-        Log::info(sprintf('TwoFAccounts dissociated from group #%d', $event->group->id));
+        Log::info(sprintf('TwoFAccounts dissociated from group %s (id #%d)', var_export($event->group->name, true), $event->group->id));
     }
 }

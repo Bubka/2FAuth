@@ -9,6 +9,7 @@ use App\Api\v1\Resources\GroupResource;
 use App\Api\v1\Resources\TwoFAccountReadResource;
 use App\Facades\Groups;
 use App\Models\Group;
+use App\Models\TwoFAccount;
 use App\Models\User;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Http\Request;
@@ -31,6 +32,11 @@ class GroupControllerTest extends TestCase
      * @var \App\Api\v1\Requests\GroupStoreRequest mocked request
      */
     protected $groupStoreRequest;
+
+    /**
+     * @var \App\Models\User mocked user
+     */
+    protected $user;
 
     /**
      * @var \Illuminate\Http\Request mocked request
@@ -57,7 +63,14 @@ class GroupControllerTest extends TestCase
     {
         $groups = Group::factory()->count(3)->make();
 
-        Groups::shouldReceive('getAll')
+        Groups::shouldReceive('for')
+            ->with($this->request->user())
+            ->once()
+            ->andReturnSelf()
+            ->shouldReceive('withTheAllGroup')
+            ->once()
+            ->andReturnSelf()
+            ->shouldReceive('all')
             ->once()
             ->andReturn($groups);
 
@@ -72,14 +85,19 @@ class GroupControllerTest extends TestCase
     public function test_store_returns_api_resource_stored_using_groupService()
     {
         $group = Group::factory()->make();
+        $validated = ['name' => $group->name];
 
         $this->groupStoreRequest->shouldReceive([
-            'validated' => ['name' => $group->name],
+            'validated' => $validated,
             'user'      => new User(),
-        ])
-            ->once();
+        ]);
 
-        Groups::shouldReceive('create')
+        Groups::shouldReceive('for')
+            ->with($this->groupStoreRequest->user())
+            ->once()
+            ->andReturnSelf()
+            ->shouldReceive('create')
+            ->with($validated)
             ->once()
             ->andReturn($group);
 
@@ -92,11 +110,20 @@ class GroupControllerTest extends TestCase
     /**
      * @test
      */
-    public function test_show_returns_api_resource()
+    public function test_show_returns_api_resource_using_groupService()
     {
         $group = Group::factory()->make();
 
-        $response = $this->controller->show($group);
+        Groups::shouldReceive('for')
+            ->with($this->request->user())
+            ->once()
+            ->andReturnSelf()
+            ->shouldReceive('get')
+            ->with($group->id)
+            ->once()
+            ->andReturn($group);
+
+        $response = $this->controller->show($group, $this->request);
 
         $this->assertInstanceOf(GroupResource::class, $response);
     }
@@ -107,14 +134,19 @@ class GroupControllerTest extends TestCase
     public function test_update_returns_api_resource_updated_using_groupService()
     {
         $group = Group::factory()->make();
+        $validated = ['name' => $group->name];
 
         $this->groupStoreRequest->shouldReceive([
-            'validated' => ['name' => $group->name],
-            'user'      => new User(),
-        ])
-            ->once();
+                'validated' => $validated,
+                'user'      => new User(),
+        ]);
 
-        Groups::shouldReceive('update')
+        Groups::shouldReceive('for')
+            ->with($this->groupStoreRequest->user())
+            ->once()
+            ->andReturnSelf()
+            ->shouldReceive('update')
+            ->with($group, $validated)
             ->once()
             ->andReturn($group);
 
@@ -130,16 +162,19 @@ class GroupControllerTest extends TestCase
     {
         $group              = Group::factory()->make();
         $groupAssignRequest = Mockery::mock(GroupAssignRequest::class);
-        $user               = new User();
+        $validated          = ['ids' => $group->id];
 
         $groupAssignRequest->shouldReceive([
-            'validated' => ['ids' => $group->id],
-            'user'      => $user,
-        ])
-            ->once();
+            'validated' => $validated,
+            'user'      => new User(),
+        ]);
 
-        Groups::shouldReceive('assign')
-            ->with($group->id, $user, $group)
+        Groups::shouldReceive('for')
+            ->with($groupAssignRequest->user())
+            ->once()
+            ->andReturnSelf()
+            ->shouldReceive('assign')
+            ->with($group->id, $group)
             ->once();
 
         $response = $this->controller->assignAccounts($groupAssignRequest, $group);
@@ -154,6 +189,23 @@ class GroupControllerTest extends TestCase
     {
         $group = Group::factory()->make();
 
+        $groupAccounts = new TwoFAccount();
+        $groupAccounts = $groupAccounts->newCollection(
+            array(
+                new TwoFAccount(),
+                new TwoFAccount()
+            )
+        );
+
+        Groups::shouldReceive('for')
+            ->with($this->request->user())
+            ->once()
+            ->andReturnSelf()
+            ->shouldReceive('accounts')
+            ->with($group)
+            ->once()
+            ->andReturn($groupAccounts);
+
         $response = $this->controller->accounts($group, $this->request);
 
         $this->assertContainsOnlyInstancesOf(TwoFAccountReadResource::class, $response->collection);
@@ -167,10 +219,14 @@ class GroupControllerTest extends TestCase
         $group     = Group::factory()->make();
         $group->id = 0;
 
-        Groups::shouldReceive('delete')
+        Groups::shouldReceive('for')
+            ->with($this->request->user())
             ->once()
-            ->with($group->id, $this->request->user())
-            ->andReturn(0);
+            ->andReturnSelf()
+            ->shouldReceive('delete')
+            ->with($group->id)
+            ->once()
+            ->andReturn(1);
 
         $response = $this->controller->destroy($group, $this->request);
 

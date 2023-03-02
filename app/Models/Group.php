@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Events\GroupDeleted;
 use App\Events\GroupDeleting;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -51,6 +52,7 @@ class Group extends Model
      */
     protected $dispatchesEvents = [
         'deleting' => GroupDeleting::class,
+        'deleted'  => GroupDeleted::class,
     ];
 
     /**
@@ -62,9 +64,19 @@ class Group extends Model
     {
         parent::boot();
 
+        static::created(function (object $model) {
+            // @codeCoverageIgnoreStart
+            Log::info(sprintf('Group %s (id #%d) created ', var_export($model->name, true), $model->id));
+            // @codeCoverageIgnoreEnd
+        });
+        static::updated(function (object $model) {
+            // @codeCoverageIgnoreStart
+            Log::info(sprintf('Group %s (id #%d) updated ', var_export($model->name, true), $model->id));
+            // @codeCoverageIgnoreEnd
+        });
         static::deleted(function (object $model) {
             // @codeCoverageIgnoreStart
-            Log::info(sprintf('Group "%s" deleted', var_export($model->name, true)));
+            Log::info(sprintf('Group %s (id #%d) deleted ', var_export($model->name, true), $model->id));
             // @codeCoverageIgnoreEnd
         });
     }

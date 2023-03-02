@@ -3,11 +3,13 @@
 namespace App\Providers;
 
 use App\Events\GroupDeleting;
+use App\Events\GroupDeleted;
 use App\Events\ScanForNewReleaseCalled;
 use App\Events\TwoFAccountDeleted;
 use App\Listeners\CleanIconStorage;
 use App\Listeners\DissociateTwofaccountFromGroup;
 use App\Listeners\ReleaseRadar;
+use App\Listeners\ResetUsersPreference;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -28,6 +30,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         GroupDeleting::class => [
             DissociateTwofaccountFromGroup::class,
+        ],
+        GroupDeleted::class => [
+            ResetUsersPreference::class,
         ],
         ScanForNewReleaseCalled::class => [
             ReleaseRadar::class,
