@@ -86,7 +86,7 @@ class SettingService
 
         foreach ($settings as $setting => $value) {
             Option::updateOrCreate(['key' => $setting], ['value' => $value]);
-            Log::info(sprintf('Setting "%s" is now %s', var_export($setting, true), var_export($this->restoreType($value), true)));
+            Log::info(sprintf('Setting %s is now %s', var_export($setting, true), var_export($this->restoreType($value), true)));
         }
 
         self::buildAndCache();
@@ -100,7 +100,7 @@ class SettingService
     public function delete(string $name) : void
     {
         Option::where('key', $name)->delete();
-        Log::info(sprintf('Setting "%s" deleted', var_export($name, true)));
+        Log::info(sprintf('Setting %s deleted', var_export($name, true)));
 
         self::buildAndCache();
     }

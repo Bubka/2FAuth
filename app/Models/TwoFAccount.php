@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -386,7 +387,7 @@ class TwoFAccount extends Model implements Sortable
             $this->enforceAsSteam();
         }
 
-        if (! $this->icon && Settings::get('getOfficialIcons') && ! $skipIconFetching) {
+        if (! $this->icon && Auth::user()->preferences['getOfficialIcons'] && ! $skipIconFetching) {
             $this->icon = $this->getDefaultIcon();
         }
 
@@ -438,7 +439,7 @@ class TwoFAccount extends Model implements Sortable
             self::setIcon($this->generator->getParameter('image'));
         }
 
-        if (! $this->icon && Settings::get('getOfficialIcons') && ! $skipIconFetching) {
+        if (! $this->icon && Auth::user()->preferences['getOfficialIcons'] && ! $skipIconFetching) {
             $this->icon = $this->getDefaultIcon();
         }
 
@@ -676,7 +677,7 @@ class TwoFAccount extends Model implements Sortable
     {
         $logoService = App::make(LogoService::class);
 
-        return Settings::get('getOfficialIcons') ? $logoService->getIcon($this->service) : null;
+        return Auth::user()->preferences['getOfficialIcons'] ? $logoService->getIcon($this->service) : null;
     }
 
     /**
