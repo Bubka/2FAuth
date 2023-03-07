@@ -5,6 +5,8 @@ namespace App\Policies;
 use App\Models\Group;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Auth\Access\Response;
+use Illuminate\Support\Facades\Log;
 
 class GroupPolicy
 {
@@ -30,7 +32,13 @@ class GroupPolicy
      */
     public function view(User $user, Group $group)
     {
-        return $this->isOwnerOf($user, $group);
+        $can = $this->isOwnerOf($user, $group);
+
+        if (! $can) {
+            Log::notice(sprintf('User ID #%s cannot view group %s (ID #%s)', $user->id, var_export($group->name, true), $group->id));
+        }
+
+        return $can;
     }
 
     /**
@@ -43,7 +51,16 @@ class GroupPolicy
      */
     public function viewEach(User $user, Group $group, $groups)
     {
-        return $this->isOwnerOfEach($user, $groups);
+        $can = $this->isOwnerOfEach($user, $groups);
+
+        if (! $can) {
+            $ids = $groups->map(function ($group, $key) {
+                return $group->id;
+            });
+            Log::notice(sprintf('User ID #%s cannot view all groups in IDs #%s', $user->id, implode(',', $ids->toArray())));
+        }
+
+        return $can;
     }
 
     /**
@@ -54,6 +71,8 @@ class GroupPolicy
      */
     public function create(User $user)
     {
+        // Log::notice(sprintf('User ID #%s cannot create groups', $user->id));
+
         return true;
     }
 
@@ -66,7 +85,13 @@ class GroupPolicy
      */
     public function update(User $user, Group $group)
     {
-        return $this->isOwnerOf($user, $group);
+        $can = $this->isOwnerOf($user, $group);
+
+        if (! $can) {
+            Log::notice(sprintf('User ID #%s cannot update group %s (ID #%s)', $user->id, var_export($group->name, true), $group->id));
+        }
+
+        return $can;
     }
 
     /**
@@ -79,7 +104,16 @@ class GroupPolicy
      */
     public function updateEach(User $user, Group $group, $groups)
     {
-        return $this->isOwnerOfEach($user, $groups);
+        $can = $this->isOwnerOfEach($user, $groups);
+
+        if (! $can) {
+            $ids = $groups->map(function ($group, $key) {
+                return $group->id;
+            });
+            Log::notice(sprintf('User ID #%s cannot update all groups in IDs #%s', $user->id, implode(',', $ids->toArray())));
+        }
+
+        return $can;
     }
 
     /**
@@ -91,7 +125,13 @@ class GroupPolicy
      */
     public function delete(User $user, Group $group)
     {
-        return $this->isOwnerOf($user, $group);
+        $can = $this->isOwnerOf($user, $group);
+
+        if (! $can) {
+            Log::notice(sprintf('User ID #%s cannot delete group %s (ID #%s)', $user->id, var_export($group->name, true), $group->id));
+        }
+
+        return $can;
     }
 
     /**
@@ -104,7 +144,16 @@ class GroupPolicy
      */
     public function deleteEach(User $user, Group $group, $groups)
     {
-        return $this->isOwnerOfEach($user, $groups);
+        $can = $this->isOwnerOfEach($user, $groups);
+
+        if (! $can) {
+            $ids = $groups->map(function ($group, $key) {
+                return $group->id;
+            });
+            Log::notice(sprintf('User ID #%s cannot delete all groups in IDs #%s', $user->id, implode(',', $ids->toArray())));
+        }
+
+        return $can;
     }
 
     /**

@@ -74,19 +74,13 @@ class Group extends Model
         parent::boot();
 
         static::created(function (object $model) {
-            // @codeCoverageIgnoreStart
-            Log::info(sprintf('Group %s (id #%d) created ', var_export($model->name, true), $model->id));
-            // @codeCoverageIgnoreEnd
+            Log::info(sprintf('Group %s (id #%d) created for user ID #%s', var_export($model->name, true), $model->id, $model->user_id));
         });
         static::updated(function (object $model) {
-            // @codeCoverageIgnoreStart
-            Log::info(sprintf('Group %s (id #%d) updated ', var_export($model->name, true), $model->id));
-            // @codeCoverageIgnoreEnd
+            Log::info(sprintf('Group %s (id #%d) updated by user ID #%s', var_export($model->name, true), $model->id, $model->user_id));
         });
         static::deleted(function (object $model) {
-            // @codeCoverageIgnoreStart
             Log::info(sprintf('Group %s (id #%d) deleted ', var_export($model->name, true), $model->id));
-            // @codeCoverageIgnoreEnd
         });
     }
 

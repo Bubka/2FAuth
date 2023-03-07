@@ -14,15 +14,18 @@ use Illuminate\Http\Request;
 class GroupController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display all user groups.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
     public function index(Request $request)
     {
-        $groups = Groups::for($request->user())->withTheAllGroup()->all();
+        // We do not use fluent call all over the call chain to ease tests
+        $user = $request->user();
+        $groups = $user->groups()->withCount('twofaccounts')->get();
 
-        return GroupResource::collection($groups);
+        return GroupResource::collection(Groups::prependTheAllGroup($groups, $request->user()));
     }
 
     /**
@@ -33,9 +36,11 @@ class GroupController extends Controller
      */
     public function store(GroupStoreRequest $request)
     {
+        $this->authorize('create', Group::class);
+
         $validated = $request->validated();
 
-        $group = Groups::for($request->user())->create($validated);
+        $group = $request->user()->groups()->create($validated);
 
         return (new GroupResource($group))
             ->response()
@@ -46,12 +51,11 @@ class GroupController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\Group  $group
-     * @param  \Illuminate\Http\Request  $request
      * @return \App\Api\v1\Resources\GroupResource
      */
-    public function show(Group $group, Request $request)
+    public function show(Group $group)
     {
-        $group = Groups::for($request->user())->get($group->id);
+        $this->authorize('view', $group);
 
         return new GroupResource($group);
     }
@@ -65,9 +69,11 @@ class GroupController extends Controller
      */
     public function update(GroupStoreRequest $request, Group $group)
     {
+        $this->authorize('update', $group);
+
         $validated = $request->validated();
 
-        Groups::for($request->user())->update($group, $validated);
+        $group->update($validated);
 
         return new GroupResource($group);
     }
@@ -81,9 +87,11 @@ class GroupController extends Controller
      */
     public function assignAccounts(GroupAssignRequest $request, Group $group)
     {
+        $this->authorize('update', $group);
+
         $validated = $request->validated();
 
-        Groups::for($request->user())->assign($validated['ids'], $group);
+        Groups::assign($validated['ids'], $request->user(), $group);
 
         return new GroupResource($group);
     }
@@ -92,26 +100,26 @@ class GroupController extends Controller
      * Get accounts assigned to the group
      *
      * @param  \App\Models\Group  $group
-     * @param  \Illuminate\Http\Request  $request
      * @return \App\Api\v1\Resources\TwoFAccountCollection
      */
-    public function accounts(Group $group, Request $request)
+    public function accounts(Group $group)
     {
-        $groups = Groups::for($request->user())->accounts($group);
+        $this->authorize('view', $group);
 
-        return new TwoFAccountCollection($groups);
+        return new TwoFAccountCollection($group->twofaccounts);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Group  $group
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(Group $group, Request $request)
+    public function destroy(Group $group)
     {
-        Groups::for($request->user())->delete($group->id);
+        $this->authorize('delete', $group);
+
+        $group->delete();
 
         return response()->json(null, 204);
     }

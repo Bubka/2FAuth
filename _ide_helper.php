@@ -17317,119 +17317,30 @@
      */ 
         class Groups {
                     /**
-         * Sets the user on behalf of whom the service act
-         *
-         * @param \App\Models\User $user
-         * @return self 
-         * @static 
-         */ 
-        public static function for($user)
-        {
-                        /** @var \App\Services\GroupService $instance */
-                        return $instance->for($user);
-        }
-                    /**
-         * Sets the service to return group collections prepended with the 'All' pseudo group
-         *
-         * @return self 
-         * @static 
-         */ 
-        public static function withTheAllGroup()
-        {
-                        /** @var \App\Services\GroupService $instance */
-                        return $instance->withTheAllGroup();
-        }
-                    /**
-         * Get one or multiple group by their primary keys
-         *
-         * @param int|array $ids
-         * @return \App\Services\Collection<int, Group>|Group
-         * @throws \Illuminate\Database\Eloquent\ModelNotFoundException<\App\Models\Group>
-         * @static 
-         */ 
-        public static function get($ids)
-        {
-                        /** @var \App\Services\GroupService $instance */
-                        return $instance->get($ids);
-        }
-                    /**
-         * Returns all existing groups preprended with the 'All' group for the given user
-         *
-         * @return \App\Services\Collection<int, Group>
-         * @static 
-         */ 
-        public static function all()
-        {
-                        /** @var \App\Services\GroupService $instance */
-                        return $instance->all();
-        }
-                    /**
-         * Returns all accounts of the group
-         *
-         * @param \App\Models\Group $group
-         * @return \App\Services\Collection<int, \App\Models\TwoFAccount>
-         * @static 
-         */ 
-        public static function accounts($group)
-        {
-                        /** @var \App\Services\GroupService $instance */
-                        return $instance->accounts($group);
-        }
-                    /**
-         * Creates a group
-         *
-         * @param array $data
-         * @return \App\Models\Group The created group
-         * @throws \Illuminate\Auth\Access\AuthorizationException
-         * @throws \Exception
-         * @static 
-         */ 
-        public static function create($data)
-        {
-                        /** @var \App\Services\GroupService $instance */
-                        return $instance->create($data);
-        }
-                    /**
-         * Updates a group using a list of values
-         *
-         * @param \App\Models\Group $group The group
-         * @param array $data The parameters
-         * @return \App\Models\Group The updated group
-         * @throws \Illuminate\Auth\Access\AuthorizationException
-         * @throws \Exception
-         * @static 
-         */ 
-        public static function update($group, $data)
-        {
-                        /** @var \App\Services\GroupService $instance */
-                        return $instance->update($group, $data);
-        }
-                    /**
-         * Deletes one or more groups
-         *
-         * @param int|array $ids group ids to delete
-         * @return int The number of deleted
-         * @static 
-         */ 
-        public static function delete($ids)
-        {
-                        /** @var \App\Services\GroupService $instance */
-                        return $instance->delete($ids);
-        }
-                    /**
          * Assign one or more accounts to a group
          *
          * @param array|int $ids accounts ids to assign
-         * @param \App\Models\Group $group The target group
+         * @param \App\Models\User $user
+         * @param \App\Models\Group|null $group The group the accounts will be assigned to
          * @return void 
          * @throws \Illuminate\Auth\Access\AuthorizationException
-         * @throws \Illuminate\Database\Eloquent\ModelNotFoundException<\App\Models\TwoFAccount>
          * @static 
          */ 
-        public static function assign($ids, $group = null)
+        public static function assign($ids, $user, $group = null)
         {
-                        /** @var \App\Services\GroupService $instance */
-                        $instance->assign($ids, $group);
+                        \App\Services\GroupService::assign($ids, $user, $group);
+        }
+                    /**
+         * Prepends the pseudo group named 'All' to a group collection
+         *
+         * @param \App\Services\Collection<int,  Group>  $groups
+         * @param \App\Models\User $user
+         * @return \App\Services\Collection<int, Group>
+         * @static 
+         */ 
+        public static function prependTheAllGroup($groups, $user)
+        {
+                        return \App\Services\GroupService::prependTheAllGroup($groups, $user);
         }
          
     }
