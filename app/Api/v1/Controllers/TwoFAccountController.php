@@ -133,7 +133,7 @@ class TwoFAccountController extends Controller
         $validated = $request->validated();
 
         $twofaccounts = TwoFAccount::whereIn('id', $validated['orderedIds'])->get();
-        $this->authorize('updateEach', [$twofaccounts[0], $twofaccounts]);
+        $this->authorize('updateEach', [new TwoFAccount(), $twofaccounts]);
 
         TwoFAccount::setNewOrder($validated['orderedIds']);
 
@@ -172,7 +172,7 @@ class TwoFAccountController extends Controller
         }
 
         $twofaccounts = TwoFAccounts::export($validated['ids']);
-        $this->authorize('viewEach', [$twofaccounts[0], $twofaccounts]);
+        $this->authorize('viewEach', [new TwoFAccount(), $twofaccounts]);
 
         return new TwoFAccountExportCollection($twofaccounts);
     }
@@ -250,7 +250,7 @@ class TwoFAccountController extends Controller
         $ids          = Helpers::commaSeparatedToArray($validated['ids']);
         $twofaccounts = TwoFAccount::whereIn('id', $ids)->get();
 
-        $this->authorize('updateEach', [$twofaccounts[0], $twofaccounts]);
+        $this->authorize('updateEach', [new TwoFAccount(), $twofaccounts]);
 
         TwoFAccounts::withdraw($ids);
 
@@ -267,7 +267,7 @@ class TwoFAccountController extends Controller
     {
         $this->authorize('delete', $twofaccount);
 
-        TwoFAccounts::delete($twofaccount->id);
+        $twofaccount->delete();
 
         return response()->json(null, 204);
     }
@@ -292,7 +292,7 @@ class TwoFAccountController extends Controller
         $ids          = Helpers::commaSeparatedToArray($validated['ids']);
         $twofaccounts = TwoFAccount::whereIn('id', $ids)->get();
 
-        $this->authorize('deleteEach', [$twofaccounts[0], $twofaccounts]);
+        $this->authorize('deleteEach', [new TwoFAccount(), $twofaccounts]);
 
         TwoFAccounts::delete($validated['ids']);
 

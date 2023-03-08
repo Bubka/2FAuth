@@ -177,9 +177,15 @@ class TwoFAccount extends Model implements Sortable
             }
         });
 
-        // static::deleted(function ($model) {
-        //     Log::info(sprintf('TwoFAccount #%d deleted', $model->id));
-        // });
+        static::created(function (object $model) {
+            Log::info(sprintf('TwoFAccount ID #%d created for user ID #%s', $model->id, $model->user_id));
+        });
+        static::updated(function (object $model) {
+            Log::info(sprintf('TwoFAccount ID #%d updated by user ID #%s', $model->id, $model->user_id));
+        });
+        static::deleted(function (object $model) {
+            Log::info(sprintf('TwoFAccount ID #%d deleted ', $model->id));
+        });
     }
 
     /**
@@ -408,7 +414,9 @@ class TwoFAccount extends Model implements Sortable
             $this->enforceAsSteam();
         }
 
-        if (! $this->icon && Auth::user()->preferences['getOfficialIcons'] && ! $skipIconFetching) {
+        $user = is_null($this->user) ? Auth::user() : $this->user;
+
+        if (! $this->icon && $user->preferences['getOfficialIcons'] && ! $skipIconFetching) {
             $this->icon = $this->getDefaultIcon();
         }
 
@@ -460,7 +468,9 @@ class TwoFAccount extends Model implements Sortable
             self::setIcon($this->generator->getParameter('image'));
         }
 
-        if (! $this->icon && Auth::user()->preferences['getOfficialIcons'] && ! $skipIconFetching) {
+        $user = is_null($this->user) ? Auth::user() : $this->user;
+        
+        if (! $this->icon && $user->preferences['getOfficialIcons'] && ! $skipIconFetching) {
             $this->icon = $this->getDefaultIcon();
         }
 
@@ -697,8 +707,9 @@ class TwoFAccount extends Model implements Sortable
     private function getDefaultIcon()
     {
         $logoService = App::make(LogoService::class);
+        $user = is_null($this->user) ? Auth::user() : $this->user;
 
-        return Auth::user()->preferences['getOfficialIcons'] ? $logoService->getIcon($this->service) : null;
+        return $user->preferences['getOfficialIcons'] ? $logoService->getIcon($this->service) : null;
     }
 
     /**

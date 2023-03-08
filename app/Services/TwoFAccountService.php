@@ -42,7 +42,7 @@ class TwoFAccountService
                         ['group_id' => null]
                     );
 
-        Log::info(sprintf('TwoFAccounts #%s withdrawn', implode(',#', $ids)));
+        Log::info(sprintf('TwoFAccounts IDs #%s withdrawn', implode(',', $ids)));
     }
 
     /**

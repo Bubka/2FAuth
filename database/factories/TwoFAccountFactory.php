@@ -18,7 +18,7 @@ class TwoFAccountFactory extends Factory
     public function definition()
     {
         $account = $this->faker->safeEmail();
-        $service = $this->faker->unique()->domainName();
+        $service = $this->faker->domainName();
         $secret = Base32::encodeUpper($this->faker->regexify('[A-Z0-9]{8}'));
     
         return [

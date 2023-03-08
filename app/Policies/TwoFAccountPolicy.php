@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\Models\TwoFAccount;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Support\Facades\Log;
 
 class TwoFAccountPolicy
 {
@@ -30,7 +31,13 @@ class TwoFAccountPolicy
      */
     public function view(User $user, TwoFAccount $twofaccount)
     {
-        return $this->isOwnerOf($user, $twofaccount);
+        $can = $this->isOwnerOf($user, $twofaccount);
+
+        if (! $can) {
+            Log::notice(sprintf('User ID #%s cannot view twofaccount ID #%s', $user->id, $twofaccount->id));
+        }
+
+        return $can;
     }
 
     /**
@@ -43,7 +50,16 @@ class TwoFAccountPolicy
      */
     public function viewEach(User $user, TwoFAccount $twofaccount, $twofaccounts)
     {
-        return $this->isOwnerOfEach($user, $twofaccounts);
+        $can = $this->isOwnerOfEach($user, $twofaccounts);
+
+        if (! $can) {
+            $ids = $twofaccounts->map(function ($twofaccount, $key) {
+                return $twofaccount->id;
+            });
+            Log::notice(sprintf('User ID #%s cannot view all twofaccounts in IDs #%s', $user->id, implode(',', $ids->toArray())));
+        }
+
+        return $can;
     }
 
     /**
@@ -54,6 +70,8 @@ class TwoFAccountPolicy
      */
     public function create(User $user)
     {
+        // Log::notice(sprintf('User ID #%s cannot create twofaccounts', $user->id));
+
         return true;
     }
 
@@ -66,7 +84,13 @@ class TwoFAccountPolicy
      */
     public function update(User $user, TwoFAccount $twofaccount)
     {
-        return $this->isOwnerOf($user, $twofaccount);
+        $can = $this->isOwnerOf($user, $twofaccount);
+
+        if (! $can) {
+            Log::notice(sprintf('User ID #%s cannot update twofaccount ID #%s', $user->id, $twofaccount->id));
+        }
+
+        return $can;
     }
 
     /**
@@ -79,7 +103,16 @@ class TwoFAccountPolicy
      */
     public function updateEach(User $user, TwoFAccount $twofaccount, $twofaccounts)
     {
-        return $this->isOwnerOfEach($user, $twofaccounts);
+        $can = $this->isOwnerOfEach($user, $twofaccounts);
+
+        if (! $can) {
+            $ids = $twofaccounts->map(function ($twofaccount, $key) {
+                return $twofaccount->id;
+            });
+            Log::notice(sprintf('User ID #%s cannot update all twofaccounts in IDs #%s', $user->id, implode(',', $ids->toArray())));
+        }
+
+        return $can;
     }
 
     /**
@@ -91,7 +124,13 @@ class TwoFAccountPolicy
      */
     public function delete(User $user, TwoFAccount $twofaccount)
     {
-        return $this->isOwnerOf($user, $twofaccount);
+        $can = $this->isOwnerOf($user, $twofaccount);
+
+        if (! $can) {
+            Log::notice(sprintf('User ID #%s cannot delete twofaccount ID #%s', $user->id, $twofaccount->id));
+        }
+
+        return $can;
     }
 
     /**
@@ -104,7 +143,16 @@ class TwoFAccountPolicy
      */
     public function deleteEach(User $user, TwoFAccount $twofaccount, $twofaccounts)
     {
-        return $this->isOwnerOfEach($user, $twofaccounts);
+        $can = $this->isOwnerOfEach($user, $twofaccounts);
+
+        if (! $can) {
+            $ids = $twofaccounts->map(function ($twofaccount, $key) {
+                return $twofaccount->id;
+            });
+            Log::notice(sprintf('User ID #%s cannot delete all twofaccounts in IDs #%s', $user->id, implode(',', $ids->toArray())));
+        }
+
+        return $can;
     }
 
     /**
