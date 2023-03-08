@@ -4,9 +4,11 @@ namespace Tests\Api\v1\Requests;
 
 use App\Api\v1\Requests\GroupStoreRequest;
 use App\Models\Group;
+use App\Models\User;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Mockery;
 use Tests\FeatureTestCase;
 
 /**
@@ -15,8 +17,22 @@ use Tests\FeatureTestCase;
 class GroupStoreRequestTest extends FeatureTestCase
 {
     use WithoutMiddleware;
+    /**
+     * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
+     */
+    protected $user;
 
     protected String $uniqueGroupName = 'MyGroup';
+
+    /**
+     * @test
+     */
+    public function setUp() : void
+    {
+        parent::setUp();
+
+        $this->user = User::factory()->create();
+    }
 
     /**
      * @test
@@ -37,7 +53,10 @@ class GroupStoreRequestTest extends FeatureTestCase
      */
     public function test_valid_data(array $data) : void
     {
-        $request   = new GroupStoreRequest();
+        $request = Mockery::mock(GroupStoreRequest::class)->makePartial();
+        $request->shouldReceive('user')
+            ->andReturn($this->user);
+
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->fails());
@@ -60,13 +79,14 @@ class GroupStoreRequestTest extends FeatureTestCase
      */
     public function test_invalid_data(array $data) : void
     {
-        $group = new Group([
+        $group = Group::factory()->for($this->user)->create([
             'name' => $this->uniqueGroupName,
         ]);
 
-        $group->save();
+        $request = Mockery::mock(GroupStoreRequest::class)->makePartial();
+        $request->shouldReceive('user')
+            ->andReturn($this->user);
 
-        $request   = new GroupStoreRequest();
         $validator = Validator::make($data, $request->rules());
 
         $this->assertTrue($validator->fails());

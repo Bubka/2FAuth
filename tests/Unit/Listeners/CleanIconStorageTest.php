@@ -19,7 +19,7 @@ class CleanIconStorageTest extends TestCase
     /**
      * @test
      */
-    public function test_it_deletes_icon_file_on_twofaccount_deletion()
+    public function test_it_deletes_icon_file_using_storage_facade()
     {
         $settingService = $this->mock(SettingService::class, function (MockInterface $settingService) {
             $settingService->shouldReceive('get')

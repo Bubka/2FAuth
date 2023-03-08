@@ -20,6 +20,6 @@ class RemoteUserProviderTest extends TestCase
         ]);
 
         $this->assertInstanceOf('\App\Models\User', $user);
-        $this->assertEquals(false, $user->exists);
+        $this->assertEquals(true, $user->exists);
     }
 }

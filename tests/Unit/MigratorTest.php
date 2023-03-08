@@ -7,6 +7,8 @@ use App\Exceptions\InvalidMigrationDataException;
 use App\Exceptions\UnsupportedMigrationException;
 use App\Factories\MigratorFactory;
 use App\Models\TwoFAccount;
+use App\Models\User;
+use App\Services\LogoService;
 use App\Services\Migrators\AegisMigrator;
 use App\Services\Migrators\GoogleAuthMigrator;
 use App\Services\Migrators\Migrator;
@@ -57,7 +59,7 @@ class MigratorTest extends TestCase
     /**
      * App\Models\TwoFAccount $GAuthTotpBisTwofaccount
      */
-    protected $GAuthTotpBisTwofaccount;
+    protected $GAuthTotpBisTwofaccount, $fakeTwofaccount;
 
     public function setUp() : void
     {
@@ -67,11 +69,14 @@ class MigratorTest extends TestCase
             $settingService->allows()
                 ->get('useEncryption')
                 ->andReturn(false);
-
-            $settingService->allows()
-                ->get('getOfficialIcons')
-                ->andReturn(false);
         });
+
+        $this->mock(LogoService::class, function (MockInterface $logoService) {
+            $logoService->allows([
+                'getIcon' => null,
+            ]);
+        });
+        
 
         $this->totpTwofaccount             = new TwoFAccount;
         $this->totpTwofaccount->legacy_uri = OtpTestData::TOTP_FULL_CUSTOM_URI_NO_IMG;

@@ -9,19 +9,13 @@ use Illuminate\Support\Facades\Log;
 class ReleaseRadar
 {
     /**
-     * @var ReleaseRadarService
-     */
-    protected $releaseRadar;
-
-    /**
      * Create the event listener.
      *
-     * @param  \App\Services\ReleaseRadarService  $releaseRadar
      * @return void
      */
-    public function __construct(ReleaseRadarService $releaseRadar)
+    public function __construct()
     {
-        $this->releaseRadar = $releaseRadar;
+        //
     }
 
     /**
@@ -32,7 +26,9 @@ class ReleaseRadar
      */
     public function handle(ScanForNewReleaseCalled $event)
     {
-        $this->releaseRadar->scheduledScan();
+        $releaseRadarService = app()->make(ReleaseRadarService::class);
+        $releaseRadarService::scheduledScan();
+        
         Log::info('Scheduled release scan complete');
     }
 }

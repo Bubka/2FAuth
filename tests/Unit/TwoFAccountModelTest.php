@@ -6,6 +6,7 @@ use App\Events\TwoFAccountDeleted;
 use App\Helpers\Helpers;
 use App\Models\TwoFAccount;
 use App\Services\SettingService;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Crypt;
 use Mockery\MockInterface;
 use Tests\ModelTestCase;
@@ -137,5 +138,17 @@ class TwoFAccountModelTest extends ModelTestCase
         ]);
 
         $this->assertEquals('YYYY====', $twofaccount->secret);
+    }
+
+    /**
+     * @test
+     */
+    public function test_user_relation()
+    {
+        $model = new TwoFAccount();
+        $relation = $model->user();
+
+        $this->assertInstanceOf(BelongsTo::class, $relation);
+        $this->assertEquals('user_id', $relation->getForeignKeyName());
     }
 }

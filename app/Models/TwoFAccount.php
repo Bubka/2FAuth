@@ -414,9 +414,7 @@ class TwoFAccount extends Model implements Sortable
             $this->enforceAsSteam();
         }
 
-        $user = is_null($this->user) ? Auth::user() : $this->user;
-
-        if (! $this->icon && $user->preferences['getOfficialIcons'] && ! $skipIconFetching) {
+        if (! $this->icon && $this->shouldGetOfficialIcon() && ! $skipIconFetching) {
             $this->icon = $this->getDefaultIcon();
         }
 
@@ -467,10 +465,8 @@ class TwoFAccount extends Model implements Sortable
         if ($this->generator->hasParameter('image')) {
             self::setIcon($this->generator->getParameter('image'));
         }
-
-        $user = is_null($this->user) ? Auth::user() : $this->user;
         
-        if (! $this->icon && $user->preferences['getOfficialIcons'] && ! $skipIconFetching) {
+        if (! $this->icon && $this->shouldGetOfficialIcon() && ! $skipIconFetching) {
             $this->icon = $this->getDefaultIcon();
         }
 
@@ -707,9 +703,20 @@ class TwoFAccount extends Model implements Sortable
     private function getDefaultIcon()
     {
         $logoService = App::make(LogoService::class);
-        $user = is_null($this->user) ? Auth::user() : $this->user;
 
-        return $user->preferences['getOfficialIcons'] ? $logoService->getIcon($this->service) : null;
+        return $this->shouldGetOfficialIcon() ? $logoService->getIcon($this->service) : null;
+    }
+
+    /**
+     * Tells if an official icon should be fetched
+     * 
+     * @return bool
+     */
+    private function shouldGetOfficialIcon() : bool
+    {
+        return is_null($this->user)
+            ? (bool) config('2fauth.preferences.getOfficialIcons')
+            : (bool) $this->user->preferences['getOfficialIcons'];
     }
 
     /**

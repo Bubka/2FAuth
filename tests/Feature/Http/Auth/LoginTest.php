@@ -17,7 +17,7 @@ use Tests\FeatureTestCase;
 class LoginTest extends FeatureTestCase
 {
     /**
-     * @var \App\Models\User
+     * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
      */
     protected $user;
 

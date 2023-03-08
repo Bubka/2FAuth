@@ -14,10 +14,10 @@ class ReleaseRadarService
      *
      * @return void
      */
-    public function scheduledScan() : void
+    public static function scheduledScan() : void
     {
         if ((Settings::get('lastRadarScan') + (60 * 60 * 24 * 7)) < time()) {
-            $this->newRelease();
+            self::newRelease();
         }
     }
 
@@ -26,9 +26,9 @@ class ReleaseRadarService
      *
      * @return false|string False if no new release, the new release number otherwise
      */
-    public function manualScan() : false|string
+    public static function manualScan() : false|string
     {
-        return $this->newRelease();
+        return self::newRelease();
     }
 
     /**
@@ -36,9 +36,9 @@ class ReleaseRadarService
      *
      * @return false|string False if no new release, the new release number otherwise
      */
-    protected function newRelease() : false|string
+    protected static function newRelease() : false|string
     {
-        if ($latestReleaseData = json_decode($this->getLatestReleaseData())) {
+        if ($latestReleaseData = json_decode(self::getLatestReleaseData())) {
             $githubVersion    = Helpers::cleanVersionNumber($latestReleaseData->tag_name);
             $installedVersion = Helpers::cleanVersionNumber(config('2fauth.version'));
 
@@ -61,7 +61,7 @@ class ReleaseRadarService
      *
      * @return string|null
      */
-    protected function getLatestReleaseData() : string|null
+    protected static function getLatestReleaseData() : string|null
     {
         try {
             $response = Http::retry(3, 100)

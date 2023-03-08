@@ -13,9 +13,14 @@ use Tests\FeatureTestCase;
 class QrCodeControllerTest extends FeatureTestCase
 {
     /**
-     * @var \App\Models\User
+     * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
      */
-    protected $user;
+    protected $user, $anotherUser;
+
+    /**
+     * @var App\Models\TwoFAccount
+     */
+    protected $twofaccount;
 
     /**
      * @test
@@ -25,14 +30,9 @@ class QrCodeControllerTest extends FeatureTestCase
         parent::setUp();
 
         $this->user = User::factory()->create();
-    }
+        $this->anotherUser = User::factory()->create();
 
-    /**
-     * @test
-     */
-    public function test_show_qrcode_returns_base64_image()
-    {
-        $twofaccount = TwoFAccount::factory()->create([
+        $this->twofaccount = TwoFAccount::factory()->for($this->user)->create([
             'otp_type'   => 'totp',
             'account'    => 'account',
             'service'    => 'service',
@@ -42,9 +42,15 @@ class QrCodeControllerTest extends FeatureTestCase
             'period'     => 30,
             'legacy_uri' => 'otpauth://hotp/service:account?secret=A4GRFHZVRBGY7UIW&issuer=service',
         ]);
+    }
 
+    /**
+     * @test
+     */
+    public function test_show_qrcode_returns_base64_image()
+    {
         $response = $this->actingAs($this->user, 'api-guard')
-            ->json('GET', '/api/v1/twofaccounts/' . $twofaccount->id . '/qrcode')
+            ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/qrcode')
             ->assertJsonStructure([
                 'qrcode',
             ])
@@ -61,6 +67,19 @@ class QrCodeControllerTest extends FeatureTestCase
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('GET', '/api/v1/twofaccounts/1000/qrcode')
             ->assertNotFound()
+            ->assertJsonStructure([
+                'message',
+            ]);
+    }
+
+    /**
+     * @test
+     */
+    public function test_show_qrcode_of_another_user_is_forbidden()
+    {
+        $response = $this->actingAs($this->anotherUser, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/qrcode')
+            ->assertForbidden()
             ->assertJsonStructure([
                 'message',
             ]);
