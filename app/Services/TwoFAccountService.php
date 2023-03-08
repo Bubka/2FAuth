@@ -68,6 +68,8 @@ class TwoFAccountService
     public static function export($ids) : Collection
     {
         $ids          = Helpers::commaSeparatedToArray($ids);
+        $ids = is_array($ids) ? $ids : func_get_args();
+        
         $twofaccounts = TwoFAccount::whereIn('id', $ids)->get();
 
         return $twofaccounts;

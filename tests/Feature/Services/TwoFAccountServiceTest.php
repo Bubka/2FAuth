@@ -233,6 +233,41 @@ class TwoFAccountServiceTest extends FeatureTestCase
     /**
      * @test
      */
+    public function test_export_single_id_returns_collection()
+    {
+        $twofaccounts = TwoFAccounts::export($this->customTotpTwofaccount->id);
+
+        $this->assertContainsOnlyInstancesOf(TwoFAccount::class, $twofaccounts);
+        $this->assertObjectEquals($this->customTotpTwofaccount, $twofaccounts->first());
+    }
+
+    /**
+     * @test
+     */
+    public function test_export_comma_separated_ids_returns_collection()
+    {
+        $twofaccounts = TwoFAccounts::export($this->customTotpTwofaccount->id . ',' . $this->customHotpTwofaccount->id);
+
+        $this->assertContainsOnlyInstancesOf(TwoFAccount::class, $twofaccounts);
+        $this->assertObjectEquals($this->customTotpTwofaccount, $twofaccounts->first());
+        $this->assertObjectEquals($this->customHotpTwofaccount, $twofaccounts->last());
+    }
+
+    /**
+     * @test
+     */
+    public function test_export_array_of_ids_returns_collection()
+    {
+        $twofaccounts = TwoFAccounts::export([$this->customTotpTwofaccount->id, $this->customHotpTwofaccount->id]);
+
+        $this->assertContainsOnlyInstancesOf(TwoFAccount::class, $twofaccounts);
+        $this->assertObjectEquals($this->customTotpTwofaccount, $twofaccounts->first());
+        $this->assertObjectEquals($this->customHotpTwofaccount, $twofaccounts->last());
+    }
+
+    /**
+     * @test
+     */
     public function test_delete_comma_separated_ids()
     {
         $twofaccounts = TwoFAccount::factory()->count(2)->for($this->user)->create();
