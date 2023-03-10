@@ -6,7 +6,7 @@
             {{ $t('commons.2fauth_teaser')}}
         </p>
         <img class="about-logo" src="logo.svg" alt="2FAuth logo" />
-        <p class="block" :class="showUserOptions ? 'mb-5' : '' ">
+        <p class="block">
             ©Bubka <a class="is-size-7" href="https://github.com/Bubka/2FAuth/blob/master/LICENSE">AGPL-3.0 license</a>
         </p>
         <h2 class="title is-5 has-text-grey-light">
@@ -59,18 +59,27 @@
                 <li v-for="(value, key) in infos" :value="value" :key="key"><b>{{key}}</b>: {{value}}</li>
             </ul>
         </div>
-        <div v-if="showUserOptions">
-            <h2 class="title is-5 has-text-grey-light">
-                {{ $t('settings.user_options') }}
-            </h2>
-            <div class="about-debug box is-family-monospace is-size-7">
-                <button :aria-label="$t('commons.copy_to_clipboard')" class="button is-like-text is-pulled-right is-small is-text" v-clipboard="() => this.$refs.listUserOptions.innerText" v-clipboard:success="clipboardSuccessHandler">
-                    <font-awesome-icon :icon="['fas', 'copy']" />
-                </button>
-                <ul ref="listUserOptions">
-                    <li v-for="(value, option) in options" :value="value" :key="option"><b>{{option}}</b>: {{value}}</li>
-                </ul>
-            </div>
+        <h2 v-if="showAdminSettings" class="title is-5 has-text-grey-light">
+            {{ $t('settings.admin_settings') }}
+        </h2>
+        <div v-if="showAdminSettings" class="about-debug box is-family-monospace is-size-7">
+            <button :aria-label="$t('commons.copy_to_clipboard')" class="button is-like-text is-pulled-right is-small is-text" v-clipboard="() => this.$refs.listAdminSettings.innerText" v-clipboard:success="clipboardSuccessHandler">
+                <font-awesome-icon :icon="['fas', 'copy']" />
+            </button>
+            <ul ref="listAdminSettings">
+                <li v-for="(value, setting) in adminSettings" :value="value" :key="setting"><b>{{setting}}</b>: {{value}}</li>
+            </ul>
+        </div>
+        <h2 v-if="showUserPreferences" class="title is-5 has-text-grey-light">
+            {{ $t('settings.user_preferences') }}
+        </h2>
+        <div v-if="showUserPreferences" class="about-debug box is-family-monospace is-size-7">
+            <button :aria-label="$t('commons.copy_to_clipboard')" class="button is-like-text is-pulled-right is-small is-text" v-clipboard="() => this.$refs.listUserPreferences.innerText" v-clipboard:success="clipboardSuccessHandler">
+                <font-awesome-icon :icon="['fas', 'copy']" />
+            </button>
+            <ul ref="listUserPreferences">
+                <li v-for="(value, preference) in userPreferences" :value="value" :key="preference"><b>{{preference}}</b>: {{value}}</li>
+            </ul>
         </div>
         <!-- footer -->
         <vue-footer :showButtons="true">
@@ -88,19 +97,25 @@
             return {
                 pagetitle: this.$t('commons.about'),
                 infos : null,
-                options : null,
-                showUserOptions: false,
+                adminSettings : null,
+                userPreferences : null,
+                showUserPreferences: false,
+                showAdminSettings: false,
             }
         },
 
         async mounted() {
             await this.axios.get('infos').then(response => {
-                this.infos = response.data
+                this.infos = response.data.common
 
-                if (response.data.options) {
-                    this.options = response.data.options
-                    delete this.infos.options
-                    this.showUserOptions = true
+                if (response.data.admin_settings) {
+                    this.adminSettings = response.data.admin_settings
+                    this.showAdminSettings = true
+                }
+
+                if (response.data.user_preferences) {
+                    this.userPreferences = response.data.user_preferences
+                    this.showUserPreferences = true
                 }
             })
         },

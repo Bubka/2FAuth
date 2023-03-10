@@ -20,7 +20,8 @@ return [
     'webauthn' => 'WebAuthn',
     'tokens' => 'Tokens',
     'options' => 'Options',
-    'user_options' => 'User options',
+    'user_preferences' => 'User preferences',
+    'admin_settings' => 'Admin settings',
     'confirm' => [
 
     ],
