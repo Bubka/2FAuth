@@ -73,6 +73,17 @@ class User extends Authenticatable implements WebAuthnAuthenticatable
         'twofaccounts_count' => 'integer',
         'groups_count'       => 'integer',
     ];
+    
+    /**
+    * Scope a query to only include admin users.
+    *
+    * @param  \Illuminate\Database\Eloquent\Builder<User>  $query
+    * @return \Illuminate\Database\Eloquent\Builder<User>
+    */
+   public function scopeAdmins($query)
+   {
+       return $query->where('is_admin', true);
+   }
 
     /**
      * Send the password reset notification.
