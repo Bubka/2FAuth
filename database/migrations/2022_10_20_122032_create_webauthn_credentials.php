@@ -65,7 +65,7 @@ return new class extends Migration {
      */
     protected static function defaultBlueprint(Blueprint $table): void
     {
-        $table->string('id')->primary();
+        $table->string('id', 510)->primary();
 
         $table->morphs('authenticatable', 'webauthn_user_index');
 
