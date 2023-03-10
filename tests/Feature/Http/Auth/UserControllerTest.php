@@ -136,31 +136,31 @@ class UserControllerTest extends FeatureTestCase
                 'password' => self::PASSWORD,
             ])
             ->assertNoContent();
-        
+
         $this->assertDatabaseMissing('users', [
-            'id' => $this->user->id
+            'id' => $this->user->id,
         ]);
         $this->assertDatabaseHas('users', [
-            'id' => $admin->id
+            'id' => $admin->id,
         ]);
         $this->assertDatabaseCount('users', 1);
         $this->assertDatabaseMissing('twofaccounts', [
-            'user_id' => $this->user->id
+            'user_id' => $this->user->id,
         ]);
         $this->assertDatabaseMissing('groups', [
-            'user_id' => $this->user->id
+            'user_id' => $this->user->id,
         ]);
         $this->assertDatabaseMissing('webauthn_credentials', [
-            'authenticatable_id' => $this->user->id
+            'authenticatable_id' => $this->user->id,
         ]);
         $this->assertDatabaseMissing('webauthn_recoveries', [
-            'email' => $this->user->email
+            'email' => $this->user->email,
         ]);
         $this->assertDatabaseMissing('oauth_access_tokens', [
-            'user_id' => $this->user->id
+            'user_id' => $this->user->id,
         ]);
         $this->assertDatabaseMissing('password_resets', [
-            'email' => $this->user->email
+            'email' => $this->user->email,
         ]);
     }
 
@@ -182,7 +182,7 @@ class UserControllerTest extends FeatureTestCase
             ]);
 
         $this->assertDatabaseHas('users', [
-            'id' => $this->user->id
+            'id' => $this->user->id,
         ]);
     }
 
@@ -198,7 +198,7 @@ class UserControllerTest extends FeatureTestCase
             ->assertStatus(400);
 
         $this->assertDatabaseHas('users', [
-            'id' => $this->user->id
+            'id' => $this->user->id,
         ]);
     }
 
@@ -222,7 +222,7 @@ class UserControllerTest extends FeatureTestCase
             ->assertStatus(400);
 
         $this->assertDatabaseHas('users', [
-            'id' => $admin->id
+            'id' => $admin->id,
         ]);
     }
 }

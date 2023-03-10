@@ -14,7 +14,9 @@ class SettingControllerTest extends FeatureTestCase
     /**
      * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
      */
-    protected $user, $admin;
+    protected $user;
+
+    protected $admin;
 
     private const SETTING_JSON_STRUCTURE = [
         'key',
@@ -40,7 +42,7 @@ class SettingControllerTest extends FeatureTestCase
     {
         parent::setUp();
 
-        $this->user = User::factory()->create();
+        $this->user  = User::factory()->create();
         $this->admin = User::factory()->administrator()->create();
     }
 

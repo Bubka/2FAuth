@@ -34,7 +34,7 @@ class UserStoreRequestTest extends FeatureTestCase
             'name'  => 'Jane',
             'email' => 'jane@example.com',
         ]);
-        
+
         $request   = new UserStoreRequest();
         $validator = Validator::make($data, $request->rules());
 

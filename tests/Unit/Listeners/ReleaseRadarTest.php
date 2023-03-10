@@ -23,8 +23,8 @@ class ReleaseRadarTest extends TestCase
             $releaseRadarService->shouldReceive('scheduledScan');
         });
 
-        $event       = new ScanForNewReleaseCalled();
-        $listener    = new ReleaseRadar();
+        $event    = new ScanForNewReleaseCalled();
+        $listener = new ReleaseRadar();
 
         $this->assertNull($listener->handle($event));
     }

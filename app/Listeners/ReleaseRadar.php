@@ -28,7 +28,7 @@ class ReleaseRadar
     {
         $releaseRadarService = app()->make(ReleaseRadarService::class);
         $releaseRadarService::scheduledScan();
-        
+
         Log::info('Scheduled release scan complete');
     }
 }

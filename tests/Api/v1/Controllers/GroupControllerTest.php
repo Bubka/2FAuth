@@ -16,17 +16,31 @@ class GroupControllerTest extends FeatureTestCase
     /**
      * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
      */
-    protected $user, $anotherUser;
+    protected $user;
+
+    protected $anotherUser;
 
     /**
      * @var App\Models\Group
      */
-    protected $userGroupA, $userGroupB, $anotherUserGroupA, $anotherUserGroupB;
+    protected $userGroupA;
+
+    protected $userGroupB;
+
+    protected $anotherUserGroupA;
+
+    protected $anotherUserGroupB;
 
     /**
      * @var App\Models\TwoFAccount
      */
-    protected $twofaccountA, $twofaccountB, $twofaccountC, $twofaccountD;
+    protected $twofaccountA;
+
+    protected $twofaccountB;
+
+    protected $twofaccountC;
+
+    protected $twofaccountD;
 
     private const NEW_GROUP_NAME = 'MyNewGroup';
 
@@ -37,7 +51,7 @@ class GroupControllerTest extends FeatureTestCase
     {
         parent::setUp();
 
-        $this->user = User::factory()->create();
+        $this->user       = User::factory()->create();
         $this->userGroupA = Group::factory()->for($this->user)->create();
         $this->userGroupB = Group::factory()->for($this->user)->create();
 
@@ -48,7 +62,7 @@ class GroupControllerTest extends FeatureTestCase
             'group_id' => $this->userGroupA->id,
         ]);
 
-        $this->anotherUser = User::factory()->create();
+        $this->anotherUser       = User::factory()->create();
         $this->anotherUserGroupA = Group::factory()->for($this->anotherUser)->create();
         $this->anotherUserGroupB = Group::factory()->for($this->anotherUser)->create();
 
@@ -119,7 +133,6 @@ class GroupControllerTest extends FeatureTestCase
             ])
             ->assertStatus(422);
     }
-
 
     /**
      * @test
@@ -425,7 +438,7 @@ class GroupControllerTest extends FeatureTestCase
     public function test_destroy_group_of_another_user_is_forbidden()
     {
         $response = $this->actingAs($this->anotherUser, 'api-guard')
-        ->json('DELETE', '/api/v1/groups/'.$this->userGroupA->id)
+        ->json('DELETE', '/api/v1/groups/' . $this->userGroupA->id)
             ->assertForbidden()
             ->assertJsonStructure([
                 'message',

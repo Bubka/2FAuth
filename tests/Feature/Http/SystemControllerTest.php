@@ -51,7 +51,7 @@ class SystemControllerTest extends FeatureTestCase
                     'PHP version',
                     'Operating system',
                     'interface',
-                ]
+                ],
             ])
             ->assertJsonMissing([
                 'user_preferences',
@@ -107,7 +107,7 @@ class SystemControllerTest extends FeatureTestCase
                     'useEncryption',
                     'lastRadarScan',
                     'checkForUpdate',
-                ]
+                ],
             ]);
     }
 
@@ -123,7 +123,7 @@ class SystemControllerTest extends FeatureTestCase
                 'common' => [
                     'Auth proxy header for user',
                     'Auth proxy header for email',
-                ]
+                ],
             ]);
     }
 

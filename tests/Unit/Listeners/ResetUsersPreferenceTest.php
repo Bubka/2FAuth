@@ -5,7 +5,6 @@ namespace Tests\Unit\Listeners;
 use App\Events\GroupDeleted;
 use App\Listeners\ResetUsersPreference;
 use Illuminate\Support\Facades\Event;
-use Mockery\MockInterface;
 use Tests\TestCase;
 
 /**

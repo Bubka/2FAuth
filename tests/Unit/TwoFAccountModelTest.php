@@ -145,7 +145,7 @@ class TwoFAccountModelTest extends ModelTestCase
      */
     public function test_user_relation()
     {
-        $model = new TwoFAccount();
+        $model    = new TwoFAccount();
         $relation = $model->user();
 
         $this->assertInstanceOf(BelongsTo::class, $relation);

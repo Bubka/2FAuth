@@ -4,7 +4,6 @@ namespace Tests\Unit;
 
 use App\Events\GroupDeleted;
 use App\Events\GroupDeleting;
-use App\Models\User;
 use App\Models\Group;
 use App\Models\TwoFAccount;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -29,7 +28,7 @@ class GroupModelTest extends ModelTestCase
             ['id' => 'int', 'twofaccounts_count' => 'integer'],
             [
                 'deleting' => GroupDeleting::class,
-                'deleted' => GroupDeleted::class
+                'deleted'  => GroupDeleted::class,
             ]
         );
     }
@@ -49,7 +48,7 @@ class GroupModelTest extends ModelTestCase
      */
     public function test_user_relation()
     {
-        $model = new Group;
+        $model    = new Group;
         $relation = $model->user();
 
         $this->assertInstanceOf(BelongsTo::class, $relation);

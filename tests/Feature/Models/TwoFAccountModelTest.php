@@ -19,12 +19,18 @@ class TwoFAccountModelTest extends FeatureTestCase
     /**
      * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
      */
-    protected $user, $anotherUser;
+    protected $user;
+
+    protected $anotherUser;
 
     /**
      * @var \App\Models\TwoFAccount
      */
-    protected $customTotpTwofaccount, $customHotpTwofaccount, $customSteamTotpTwofaccount;
+    protected $customTotpTwofaccount;
+
+    protected $customHotpTwofaccount;
+
+    protected $customSteamTotpTwofaccount;
 
     /**
      * Helpers $helpers;

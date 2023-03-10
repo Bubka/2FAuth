@@ -23,7 +23,7 @@ class UserModelTest extends ModelTestCase
             ['*'],
             [],
             [
-                'id' => 'int',
+                'id'                 => 'int',
                 'email_verified_at'  => 'datetime',
                 'is_admin'           => 'boolean',
                 'twofaccounts_count' => 'integer',
@@ -49,7 +49,7 @@ class UserModelTest extends ModelTestCase
      */
     public function test_twofaccounts_relation()
     {
-        $user    = new User();
+        $user     = new User();
         $accounts = $user->twofaccounts();
         $this->assertHasManyRelation($accounts, $user, new TwoFAccount());
     }

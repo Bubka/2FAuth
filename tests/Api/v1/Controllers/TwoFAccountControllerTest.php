@@ -25,17 +25,31 @@ class TwoFAccountControllerTest extends FeatureTestCase
     /**
      * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
      */
-    protected $user, $anotherUser;
+    protected $user;
+
+    protected $anotherUser;
 
     /**
      * @var App\Models\Group
      */
-    protected $userGroupA, $userGroupB, $anotherUserGroupA, $anotherUserGroupB;
+    protected $userGroupA;
+
+    protected $userGroupB;
+
+    protected $anotherUserGroupA;
+
+    protected $anotherUserGroupB;
 
     /**
      * @var App\Models\TwoFAccount
      */
-    protected $twofaccountA, $twofaccountB, $twofaccountC, $twofaccountD;
+    protected $twofaccountA;
+
+    protected $twofaccountB;
+
+    protected $twofaccountC;
+
+    protected $twofaccountD;
 
     private const VALID_RESOURCE_STRUCTURE_WITHOUT_SECRET = [
         'id',
@@ -134,7 +148,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
     {
         parent::setUp();
 
-        $this->user = User::factory()->create();
+        $this->user       = User::factory()->create();
         $this->userGroupA = Group::factory()->for($this->user)->create();
         $this->userGroupB = Group::factory()->for($this->user)->create();
 
@@ -145,7 +159,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             'group_id' => $this->userGroupA->id,
         ]);
 
-        $this->anotherUser = User::factory()->create();
+        $this->anotherUser       = User::factory()->create();
         $this->anotherUserGroupA = Group::factory()->for($this->anotherUser)->create();
         $this->anotherUserGroupB = Group::factory()->for($this->anotherUser)->create();
 
@@ -1050,7 +1064,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
     public function test_get_otp_of_another_user_twofaccount_is_forbidden()
     {
         $response = $this->actingAs($this->user, 'api-guard')
-            ->json('GET', '/api/v1/twofaccounts/'.$this->twofaccountC->id.'/otp')
+            ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/otp')
             ->assertForbidden()
             ->assertJsonStructure([
                 'message',

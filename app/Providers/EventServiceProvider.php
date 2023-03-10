@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-use App\Events\GroupDeleting;
 use App\Events\GroupDeleted;
+use App\Events\GroupDeleting;
 use App\Events\ScanForNewReleaseCalled;
 use App\Events\TwoFAccountDeleted;
 use App\Listeners\CleanIconStorage;

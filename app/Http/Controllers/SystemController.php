@@ -17,7 +17,7 @@ class SystemController extends Controller
      */
     public function infos(Request $request)
     {
-        $infos              = [];
+        $infos                        = [];
         $infos['common']['Date']      = date(DATE_RFC2822);
         $infos['common']['userAgent'] = $request->header('user-agent');
         // App info
@@ -43,11 +43,11 @@ class SystemController extends Controller
             }
             $infos['common']['webauthn user verification'] = config('webauthn.user_verification');
             $infos['common']['Trusted proxies']            = config('2fauth.config.trustedProxies') ?: 'none';
-        
+
             // Admin settings
             if ($request->user()->is_admin == true) {
-                $infos['admin_settings']['useEncryption'] = Settings::get('useEncryption');
-                $infos['admin_settings']['lastRadarScan'] = Carbon::parse(Settings::get('lastRadarScan'))->format('Y-m-d H:i:s');
+                $infos['admin_settings']['useEncryption']  = Settings::get('useEncryption');
+                $infos['admin_settings']['lastRadarScan']  = Carbon::parse(Settings::get('lastRadarScan'))->format('Y-m-d H:i:s');
                 $infos['admin_settings']['checkForUpdate'] = Settings::get('CheckForUpdate');
             }
         }

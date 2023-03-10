@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Http\Auth;
 
-use App\Facades\Settings;
 use App\Models\User;
 use Illuminate\Support\Carbon;
 use Tests\FeatureTestCase;

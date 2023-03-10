@@ -17,7 +17,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -465,7 +464,7 @@ class TwoFAccount extends Model implements Sortable
         if ($this->generator->hasParameter('image')) {
             self::setIcon($this->generator->getParameter('image'));
         }
-        
+
         if (! $this->icon && $this->shouldGetOfficialIcon() && ! $skipIconFetching) {
             $this->icon = $this->getDefaultIcon();
         }
@@ -709,7 +708,7 @@ class TwoFAccount extends Model implements Sortable
 
     /**
      * Tells if an official icon should be fetched
-     * 
+     *
      * @return bool
      */
     private function shouldGetOfficialIcon() : bool

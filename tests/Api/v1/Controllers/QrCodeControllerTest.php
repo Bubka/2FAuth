@@ -15,7 +15,9 @@ class QrCodeControllerTest extends FeatureTestCase
     /**
      * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
      */
-    protected $user, $anotherUser;
+    protected $user;
+
+    protected $anotherUser;
 
     /**
      * @var App\Models\TwoFAccount
@@ -29,7 +31,7 @@ class QrCodeControllerTest extends FeatureTestCase
     {
         parent::setUp();
 
-        $this->user = User::factory()->create();
+        $this->user        = User::factory()->create();
         $this->anotherUser = User::factory()->create();
 
         $this->twofaccount = TwoFAccount::factory()->for($this->user)->create([

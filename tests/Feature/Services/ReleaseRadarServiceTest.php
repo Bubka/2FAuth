@@ -107,12 +107,12 @@ class ReleaseRadarServiceTest extends FeatureTestCase
         ReleaseRadarService::scheduledScan();
 
         $this->assertDatabaseHas('options', [
-            'key' => 'latestRelease',
+            'key'   => 'latestRelease',
             'value' => HttpRequestTestData::NEW_TAG_NAME,
         ]);
 
         $this->assertDatabaseMissing('options', [
-            'key' => 'lastRadarScan',
+            'key'   => 'lastRadarScan',
             'value' => $time,
         ]);
     }
@@ -137,12 +137,12 @@ class ReleaseRadarServiceTest extends FeatureTestCase
         ReleaseRadarService::scheduledScan();
 
         $this->assertDatabaseHas('options', [
-            'key' => 'latestRelease',
+            'key'   => 'latestRelease',
             'value' => 'v1',
         ]);
 
         $this->assertDatabaseHas('options', [
-            'key' => 'lastRadarScan',
+            'key'   => 'lastRadarScan',
             'value' => $time,
         ]);
     }

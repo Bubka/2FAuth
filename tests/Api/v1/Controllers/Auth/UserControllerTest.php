@@ -71,7 +71,7 @@ class UserControllerTest extends FeatureTestCase
 
         foreach (config('2fauth.preferences') as $pref => $value) {
             $response->assertJsonFragment([
-                'key' => $pref,
+                'key'   => $pref,
                 'value' => $value,
             ]);
         }
@@ -83,46 +83,46 @@ class UserControllerTest extends FeatureTestCase
     public function test_allPreferences_returns_preferences_with_user_values()
     {
         $userPrefs = [
-            'showTokenAsDot' => true,
-            'closeOtpOnCopy' => true,
-            'copyOtpOnDisplay' => true,
+            'showTokenAsDot'       => true,
+            'closeOtpOnCopy'       => true,
+            'copyOtpOnDisplay'     => true,
             'useBasicQrcodeReader' => true,
-            'displayMode' => 'grid',
-            'showAccountsIcons' => false,
-            'kickUserAfter' => 5,
-            'activeGroup' => 1,
-            'rememberActiveGroup' => false,
-            'defaultGroup' => 1,
-            'defaultCaptureMode' => 'advancedForm',
-            'useDirectCapture' => true,
+            'displayMode'          => 'grid',
+            'showAccountsIcons'    => false,
+            'kickUserAfter'        => 5,
+            'activeGroup'          => 1,
+            'rememberActiveGroup'  => false,
+            'defaultGroup'         => 1,
+            'defaultCaptureMode'   => 'advancedForm',
+            'useDirectCapture'     => true,
             'useWebauthnAsDefault' => true,
-            'useWebauthnOnly' => true,
-            'getOfficialIcons' => false,
-            'theme' => 'dark',
-            'formatPassword' => false,
-            'formatPasswordBy' => 1,
-            'lang' => 'fr',
+            'useWebauthnOnly'      => true,
+            'getOfficialIcons'     => false,
+            'theme'                => 'dark',
+            'formatPassword'       => false,
+            'formatPasswordBy'     => 1,
+            'lang'                 => 'fr',
         ];
 
-        $this->user['preferences->showTokenAsDot'] = $userPrefs['showTokenAsDot'];
-        $this->user['preferences->closeOtpOnCopy'] = $userPrefs['closeOtpOnCopy'];
-        $this->user['preferences->copyOtpOnDisplay'] = $userPrefs['copyOtpOnDisplay'];
+        $this->user['preferences->showTokenAsDot']       = $userPrefs['showTokenAsDot'];
+        $this->user['preferences->closeOtpOnCopy']       = $userPrefs['closeOtpOnCopy'];
+        $this->user['preferences->copyOtpOnDisplay']     = $userPrefs['copyOtpOnDisplay'];
         $this->user['preferences->useBasicQrcodeReader'] = $userPrefs['useBasicQrcodeReader'];
-        $this->user['preferences->displayMode'] = $userPrefs['displayMode'];
-        $this->user['preferences->showAccountsIcons'] = $userPrefs['showAccountsIcons'];
-        $this->user['preferences->kickUserAfter'] = $userPrefs['kickUserAfter'];
-        $this->user['preferences->activeGroup'] = $userPrefs['activeGroup'];
-        $this->user['preferences->rememberActiveGroup'] = $userPrefs['rememberActiveGroup'];
-        $this->user['preferences->defaultGroup'] = $userPrefs['defaultGroup'];
-        $this->user['preferences->defaultCaptureMode'] = $userPrefs['defaultCaptureMode'];
-        $this->user['preferences->useDirectCapture'] = $userPrefs['useDirectCapture'];
+        $this->user['preferences->displayMode']          = $userPrefs['displayMode'];
+        $this->user['preferences->showAccountsIcons']    = $userPrefs['showAccountsIcons'];
+        $this->user['preferences->kickUserAfter']        = $userPrefs['kickUserAfter'];
+        $this->user['preferences->activeGroup']          = $userPrefs['activeGroup'];
+        $this->user['preferences->rememberActiveGroup']  = $userPrefs['rememberActiveGroup'];
+        $this->user['preferences->defaultGroup']         = $userPrefs['defaultGroup'];
+        $this->user['preferences->defaultCaptureMode']   = $userPrefs['defaultCaptureMode'];
+        $this->user['preferences->useDirectCapture']     = $userPrefs['useDirectCapture'];
         $this->user['preferences->useWebauthnAsDefault'] = $userPrefs['useWebauthnAsDefault'];
-        $this->user['preferences->useWebauthnOnly'] = $userPrefs['useWebauthnOnly'];
-        $this->user['preferences->getOfficialIcons'] = $userPrefs['getOfficialIcons'];
-        $this->user['preferences->theme'] = $userPrefs['theme'];
-        $this->user['preferences->formatPassword'] = $userPrefs['formatPassword'];
-        $this->user['preferences->formatPasswordBy'] = $userPrefs['formatPasswordBy'];
-        $this->user['preferences->lang'] = $userPrefs['lang'];
+        $this->user['preferences->useWebauthnOnly']      = $userPrefs['useWebauthnOnly'];
+        $this->user['preferences->getOfficialIcons']     = $userPrefs['getOfficialIcons'];
+        $this->user['preferences->theme']                = $userPrefs['theme'];
+        $this->user['preferences->formatPassword']       = $userPrefs['formatPassword'];
+        $this->user['preferences->formatPasswordBy']     = $userPrefs['formatPasswordBy'];
+        $this->user['preferences->lang']                 = $userPrefs['lang'];
         $this->user->save();
 
         $response = $this->actingAs($this->user, 'api-guard')
@@ -131,7 +131,7 @@ class UserControllerTest extends FeatureTestCase
 
         foreach ($userPrefs as $pref => $value) {
             $response->assertJsonFragment([
-                'key' => $pref,
+                'key'   => $pref,
                 'value' => $value,
             ]);
         }
@@ -151,7 +151,7 @@ class UserControllerTest extends FeatureTestCase
             ->json('GET', '/api/v1/user/preferences/showTokenAsDot')
             ->assertOk()
             ->assertExactJson([
-                'key' => 'showTokenAsDot',
+                'key'   => 'showTokenAsDot',
                 'value' => config('2fauth.preferences.showTokenAsDot'),
             ]);
     }
@@ -161,14 +161,14 @@ class UserControllerTest extends FeatureTestCase
      */
     public function test_showPreference_returns_preference_with_custom_value()
     {
-        $showTokenAsDot = ! config('2fauth.preferences.showTokenAsDot');
+        $showTokenAsDot                            = ! config('2fauth.preferences.showTokenAsDot');
         $this->user['preferences->showTokenAsDot'] = $showTokenAsDot;
         $this->user->save();
 
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('GET', '/api/v1/user/preferences/showTokenAsDot')
             ->assertJsonFragment([
-                'key' => 'showTokenAsDot',
+                'key'   => 'showTokenAsDot',
                 'value' => $showTokenAsDot,
             ]);
     }
@@ -202,7 +202,7 @@ class UserControllerTest extends FeatureTestCase
             ])
             ->assertCreated()
             ->assertExactJson([
-                'key' => 'showTokenAsDot',
+                'key'   => 'showTokenAsDot',
                 'value' => $showTokenAsDot,
             ]);
     }

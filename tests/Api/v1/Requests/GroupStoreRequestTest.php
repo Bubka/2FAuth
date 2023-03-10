@@ -17,6 +17,7 @@ use Tests\FeatureTestCase;
 class GroupStoreRequestTest extends FeatureTestCase
 {
     use WithoutMiddleware;
+
     /**
      * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
      */

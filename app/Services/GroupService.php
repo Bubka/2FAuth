@@ -18,17 +18,17 @@ class GroupService
      * @param  \App\Models\User  $user
      * @param  \App\Models\Group|null  $group The group the accounts will be assigned to
      * @return void
-     * 
+     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public static function assign($ids, User $user, Group $group = null) : void
     {
-        if (!$group) {
+        if (! $group) {
             $group = self::defaultGroup($user);
         }
 
         if ($group) {
-            $ids = is_array($ids) ? $ids : [$ids];
+            $ids          = is_array($ids) ? $ids : [$ids];
             $twofaccounts = TwoFAccount::find($ids);
 
             if ($user->cannot('updateEach', [(new TwoFAccount), $twofaccounts])) {
@@ -39,8 +39,9 @@ class GroupService
             $group->loadCount('twofaccounts');
 
             Log::info(sprintf('Twofaccounts #%s assigned to group %s (ID #%s)', implode(',', $ids), var_export($group->name, true), $group->id));
+        } else {
+            Log::info('Cannot find a group to assign the TwoFAccounts to');
         }
-        else Log::info('Cannot find a group to assign the TwoFAccounts to');
     }
 
     /**

@@ -51,7 +51,7 @@ class UserController extends Controller
     public function delete(UserDeleteRequest $request)
     {
         $validated = $request->validated();
-        $user = Auth::user();
+        $user      = Auth::user();
 
         Log::info(sprintf('Deletion of user ID #%s requested', $user->id));
 
@@ -81,7 +81,7 @@ class UserController extends Controller
             return response()->json(['message' => __('errors.user_deletion_failed')], 400);
         }
         // @codeCoverageIgnoreEnd
-        
+
         Log::info(sprintf('User ID #%s deleted', $user->id));
 
         return response()->json(null, 204);

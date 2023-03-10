@@ -22,7 +22,7 @@ class GroupController extends Controller
     public function index(Request $request)
     {
         // We do not use fluent call all over the call chain to ease tests
-        $user = $request->user();
+        $user   = $request->user();
         $groups = $user->groups()->withCount('twofaccounts')->get();
 
         return GroupResource::collection(Groups::prependTheAllGroup($groups, $request->user()));

@@ -39,7 +39,7 @@ class UserUpdateRequestTest extends FeatureTestCase
             'name'  => 'Jane',
             'email' => 'jane@example.com',
         ]);
-        
+
         $request   = new UserUpdateRequest();
         $validator = Validator::make($data, $request->rules());
 

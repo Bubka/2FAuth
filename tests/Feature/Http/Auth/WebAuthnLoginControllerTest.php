@@ -195,8 +195,8 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
         ]);
 
         $response = $this->json('POST', '/webauthn/login/options', [
-                'email' => $this->user->email,
-            ])
+            'email' => $this->user->email,
+        ])
             ->assertOk()
             ->assertJsonStructure([
                 'challenge',
@@ -237,8 +237,8 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
         ]);
 
         $response = $this->json('POST', '/webauthn/login/options', [
-                'email' => $this->user->email,
-            ])
+            'email' => $this->user->email,
+        ])
             ->assertOk()
             ->assertJsonStructure([
                 'challenge',
@@ -262,8 +262,8 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
         $this->user = User::factory()->create();
 
         $this->json('POST', '/webauthn/login/options', [
-                'email' => strtoupper($this->user->email),
-            ])
+            'email' => strtoupper($this->user->email),
+        ])
             ->assertOk();
     }
 
@@ -273,8 +273,8 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
     public function test_get_options_with_missing_email_returns_validation_errors()
     {
         $this->json('POST', '/webauthn/login/options', [
-                'email' => null,
-            ])
+            'email' => null,
+        ])
             ->assertStatus(422)
             ->assertJsonValidationErrors([
                 'email',
@@ -287,8 +287,8 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
     public function test_get_options_with_invalid_email_returns_validation_errors()
     {
         $this->json('POST', '/webauthn/login/options', [
-                'email' => 'invalid',
-            ])
+            'email' => 'invalid',
+        ])
             ->assertStatus(422)
             ->assertJsonValidationErrors([
                 'email',
@@ -301,8 +301,8 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
     public function test_get_options_with_unknown_email_returns_validation_errors()
     {
         $this->json('POST', '/webauthn/login/options', [
-                'email' => 'john@example.com',
-            ])
+            'email' => 'john@example.com',
+        ])
             ->assertStatus(422)
             ->assertJsonValidationErrors([
                 'email',

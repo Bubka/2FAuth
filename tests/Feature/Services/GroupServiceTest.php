@@ -52,11 +52,11 @@ class GroupServiceTest extends FeatureTestCase
     {
         parent::setUp();
 
-        $this->user  = User::factory()->create();
+        $this->user      = User::factory()->create();
         $this->otherUser = User::factory()->create();
 
-        $this->groupOne = Group::factory()->for($this->user)->create();
-        $this->groupTwo = Group::factory()->for($this->user)->create();
+        $this->groupOne   = Group::factory()->for($this->user)->create();
+        $this->groupTwo   = Group::factory()->for($this->user)->create();
         $this->groupThree = Group::factory()->for($this->otherUser)->create();
 
         Group::factory()->count(2)->for($this->otherUser)->create();

@@ -47,8 +47,8 @@ class RegisterControllerTest extends FeatureTestCase
             ]);
 
         $this->assertDatabaseHas('users', [
-            'name'                  => self::USERNAME,
-            'email'                 => self::EMAIL,
+            'name'  => self::USERNAME,
+            'email' => self::EMAIL,
         ]);
     }
 
@@ -75,8 +75,8 @@ class RegisterControllerTest extends FeatureTestCase
             ]);
 
         $this->assertDatabaseHas('users', [
-            'name'                  => self::USERNAME,
-            'email'                 => self::EMAIL,
+            'name'  => self::USERNAME,
+            'email' => self::EMAIL,
         ]);
     }
 

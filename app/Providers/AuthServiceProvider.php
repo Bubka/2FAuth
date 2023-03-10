@@ -4,7 +4,6 @@ namespace App\Providers;
 
 use App\Extensions\RemoteUserProvider;
 use App\Extensions\WebauthnCredentialBroker;
-use App\Facades\Settings;
 use App\Models\Group;
 use App\Models\TwoFAccount;
 use App\Policies\GroupPolicy;

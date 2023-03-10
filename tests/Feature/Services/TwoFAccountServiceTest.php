@@ -24,12 +24,16 @@ class TwoFAccountServiceTest extends FeatureTestCase
     /**
      * @var \App\Models\TwoFAccount
      */
-    protected $customTotpTwofaccount, $customHotpTwofaccount;
+    protected $customTotpTwofaccount;
+
+    protected $customHotpTwofaccount;
 
     /**
      * @var \App\Models\Group
      */
-    protected $userGroupA, $userGroupB;
+    protected $userGroupA;
+
+    protected $userGroupB;
 
     /**
      * @test
@@ -37,8 +41,8 @@ class TwoFAccountServiceTest extends FeatureTestCase
     public function setUp() : void
     {
         parent::setUp();
-        
-        $this->user = User::factory()->create();
+
+        $this->user       = User::factory()->create();
         $this->userGroupA = Group::factory()->for($this->user)->create();
         $this->userGroupB = Group::factory()->for($this->user)->create();
 
@@ -195,7 +199,7 @@ class TwoFAccountServiceTest extends FeatureTestCase
     public function test_migrate_from_gauth_returns_flagged_duplicates()
     {
         $this->actingAs($this->user);
-        
+
         $parameters = [
             'service'   => OtpTestData::SERVICE,
             'account'   => OtpTestData::ACCOUNT,
@@ -323,7 +327,7 @@ class TwoFAccountServiceTest extends FeatureTestCase
         $this->assertDatabaseHas('twofaccounts', [
             'id' => $twofaccount->id,
         ]);
-        
+
         TwoFAccounts::delete($twofaccount->id);
 
         $this->assertDatabaseMissing('twofaccounts', [

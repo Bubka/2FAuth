@@ -2,8 +2,8 @@
 
 namespace App\Extensions;
 
-use Illuminate\Auth\EloquentUserProvider;
 use App\Models\WebAuthnAuthenticatable;
+use Illuminate\Auth\EloquentUserProvider;
 use Laragear\WebAuthn\Auth\WebAuthnUserProvider;
 
 class WebauthnTwoFAuthUserProvider extends WebAuthnUserProvider
@@ -13,10 +13,9 @@ class WebauthnTwoFAuthUserProvider extends WebAuthnUserProvider
      *
      * @param  \Illuminate\Contracts\Auth\Authenticatable|\App\Models\WebAuthnAuthenticatable|\App\Models\User  $user
      * @param  array  $credentials
-     *
      * @return bool
      */
-    public function validateCredentials($user, array $credentials): bool
+    public function validateCredentials($user, array $credentials) : bool
     {
         if ($user instanceof WebAuthnAuthenticatable && $this->isSignedChallenge($credentials)) {
             return $this->validateWebAuthn();
