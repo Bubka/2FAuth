@@ -25,8 +25,20 @@ class UserStoreRequest extends FormRequest
     {
         return [
             'name'     => 'required|string|max:255',
-            'email'    => 'required|string|email|max:255',
+            'email'    => 'unique:App\Models\User,email|required|string|email|max:255',
             'password' => 'required|string|min:8|confirmed',
         ];
+    }
+
+    /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'email' => strtolower($this->email),
+        ]);
     }
 }
