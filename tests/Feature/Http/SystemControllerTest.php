@@ -15,7 +15,7 @@ class SystemControllerTest extends FeatureTestCase
     use WithoutMiddleware;
 
     /**
-     * @var \App\Models\User
+     * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
      */
     protected $user;
 
@@ -37,34 +37,38 @@ class SystemControllerTest extends FeatureTestCase
         $response = $this->json('GET', '/infos')
             ->assertOk()
             ->assertJsonStructure([
-                'Date',
-                'userAgent',
-                'Version',
-                'Environment',
-                'Debug',
-                'Cache driver',
-                'Log channel',
-                'Log level',
-                'DB driver',
-                'PHP version',
-                'Operating system',
-                'interface',
+                'common' => [
+                    'Date',
+                    'userAgent',
+                    'Version',
+                    'Environment',
+                    'Install path',
+                    'Debug',
+                    'Cache driver',
+                    'Log channel',
+                    'Log level',
+                    'DB driver',
+                    'PHP version',
+                    'Operating system',
+                    'interface',
+                ]
+            ])
+            ->assertJsonMissing([
+                'user_preferences',
+                'admin_settings',
             ]);
     }
 
     /**
      * @test
      */
-    public function test_infos_returns_full_collection_when_signed_in()
+    public function test_infos_returns_user_preferences_when_signed_in()
     {
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('GET', '/infos')
             ->assertOk()
             ->assertJsonStructure([
-                'Auth guard',
-                'webauthn user verification',
-                'Trusted proxies',
-                'options' => [
+                'user_preferences' => [
                     'showTokenAsDot',
                     'closeOtpOnCopy',
                     'copyOtpOnDisplay',
@@ -75,15 +79,11 @@ class SystemControllerTest extends FeatureTestCase
                     'activeGroup',
                     'rememberActiveGroup',
                     'defaultGroup',
-                    'useEncryption',
                     'defaultCaptureMode',
                     'useDirectCapture',
                     'useWebauthnAsDefault',
                     'useWebauthnOnly',
                     'getOfficialIcons',
-                    'checkForUpdate',
-                    'lastRadarScan',
-                    'latestRelease',
                     'lang',
                 ],
             ]);
@@ -92,14 +92,38 @@ class SystemControllerTest extends FeatureTestCase
     /**
      * @test
      */
-    public function test_infos_returns_full_collection_when_signed_in_behind_proxy()
+    public function test_infos_returns_admin_settings_when_signed_in_as_admin()
+    {
+        /**
+         * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
+         */
+        $admin = User::factory()->administrator()->create();
+
+        $response = $this->actingAs($admin, 'api-guard')
+            ->json('GET', '/infos')
+            ->assertOk()
+            ->assertJsonStructure([
+                'admin_settings' => [
+                    'useEncryption',
+                    'lastRadarScan',
+                    'checkForUpdate',
+                ]
+            ]);
+    }
+
+    /**
+     * @test
+     */
+    public function test_infos_returns_proxy_collection_when_signed_in_behind_proxy()
     {
         $response = $this->actingAs($this->user, 'reverse-proxy-guard')
             ->json('GET', '/infos')
             ->assertOk()
             ->assertJsonStructure([
-                'Auth proxy header for user',
-                'Auth proxy header for email',
+                'common' => [
+                    'Auth proxy header for user',
+                    'Auth proxy header for email',
+                ]
             ]);
     }
 

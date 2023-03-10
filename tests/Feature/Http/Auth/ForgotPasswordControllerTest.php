@@ -103,6 +103,9 @@ class ForgotPasswordControllerTest extends FeatureTestCase
      */
     public function test_submit_email_password_request_when_authenticated_returns_bad_request()
     {
+        /**
+         * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
+         */
         $user = User::factory()->create();
 
         $this->actingAs($user, 'web-guard')

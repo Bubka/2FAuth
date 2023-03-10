@@ -15,7 +15,7 @@ use Tests\FeatureTestCase;
 class ResetPasswordControllerTest extends FeatureTestCase
 {
     /**
-     * @var \App\Models\User
+     * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
      */
     protected $user;
 

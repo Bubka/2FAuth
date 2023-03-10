@@ -3,15 +3,16 @@
 namespace Tests\Feature\Http\Requests;
 
 use App\Http\Requests\UserUpdateRequest;
+use App\Models\User;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use Tests\TestCase;
+use Tests\FeatureTestCase;
 
 /**
  * @covers \App\Http\Requests\UserUpdateRequest
  */
-class UserUpdateRequestTest extends TestCase
+class UserUpdateRequestTest extends FeatureTestCase
 {
     use WithoutMiddleware;
 
@@ -34,6 +35,11 @@ class UserUpdateRequestTest extends TestCase
      */
     public function test_valid_data(array $data) : void
     {
+        User::factory()->create([
+            'name'  => 'Jane',
+            'email' => 'jane@example.com',
+        ]);
+        
         $request   = new UserUpdateRequest();
         $validator = Validator::make($data, $request->rules());
 
@@ -59,6 +65,11 @@ class UserUpdateRequestTest extends TestCase
      */
     public function test_invalid_data(array $data) : void
     {
+        User::factory()->create([
+            'name'  => 'Jane',
+            'email' => 'jane@example.com',
+        ]);
+
         $request   = new UserUpdateRequest();
         $validator = Validator::make($data, $request->rules());
 
@@ -71,6 +82,11 @@ class UserUpdateRequestTest extends TestCase
     public function provideInvalidData() : array
     {
         return [
+            [[
+                'name'     => 'John',
+                'email'    => 'jane@example.com',  // unique
+                'password' => 'MyPassword',
+            ]],
             [[
                 'name'     => '', // required
                 'email'    => 'john@example.com',

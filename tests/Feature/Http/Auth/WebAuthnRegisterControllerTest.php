@@ -16,7 +16,7 @@ use Tests\FeatureTestCase;
 class WebAuthnRegisterControllerTest extends FeatureTestCase
 {
     /**
-     * @var \App\Models\User
+     * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
      */
     protected $user;
 

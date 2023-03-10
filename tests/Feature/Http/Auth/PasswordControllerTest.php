@@ -11,7 +11,7 @@ use Tests\FeatureTestCase;
 class PasswordControllerTest extends FeatureTestCase
 {
     /**
-     * @var \App\Models\User
+     * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
      */
     protected $user;
 

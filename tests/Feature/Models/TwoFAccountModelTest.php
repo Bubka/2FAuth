@@ -3,6 +3,7 @@
 namespace Tests\Feature\Models;
 
 use App\Models\TwoFAccount;
+use App\Models\User;
 use Illuminate\Http\Testing\FileFactory;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
@@ -16,14 +17,14 @@ use Tests\FeatureTestCase;
 class TwoFAccountModelTest extends FeatureTestCase
 {
     /**
-     * App\Models\TwoFAccount $customTotpTwofaccount
+     * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
      */
-    protected $customTotpTwofaccount;
+    protected $user, $anotherUser;
 
     /**
-     * App\Models\TwoFAccount $customTotpTwofaccount
+     * @var \App\Models\TwoFAccount
      */
-    protected $customHotpTwofaccount;
+    protected $customTotpTwofaccount, $customHotpTwofaccount, $customSteamTotpTwofaccount;
 
     /**
      * Helpers $helpers;
@@ -37,43 +38,45 @@ class TwoFAccountModelTest extends FeatureTestCase
     {
         parent::setUp();
 
-        $this->customTotpTwofaccount             = new TwoFAccount;
-        $this->customTotpTwofaccount->legacy_uri = OtpTestData::TOTP_FULL_CUSTOM_URI;
-        $this->customTotpTwofaccount->service    = OtpTestData::SERVICE;
-        $this->customTotpTwofaccount->account    = OtpTestData::ACCOUNT;
-        $this->customTotpTwofaccount->icon       = OtpTestData::ICON_PNG;
-        $this->customTotpTwofaccount->otp_type   = 'totp';
-        $this->customTotpTwofaccount->secret     = OtpTestData::SECRET;
-        $this->customTotpTwofaccount->digits     = OtpTestData::DIGITS_CUSTOM;
-        $this->customTotpTwofaccount->algorithm  = OtpTestData::ALGORITHM_CUSTOM;
-        $this->customTotpTwofaccount->period     = OtpTestData::PERIOD_CUSTOM;
-        $this->customTotpTwofaccount->counter    = null;
-        $this->customTotpTwofaccount->save();
+        $this->user = User::factory()->create();
 
-        $this->customHotpTwofaccount             = new TwoFAccount;
-        $this->customHotpTwofaccount->legacy_uri = OtpTestData::HOTP_FULL_CUSTOM_URI;
-        $this->customHotpTwofaccount->service    = OtpTestData::SERVICE;
-        $this->customHotpTwofaccount->account    = OtpTestData::ACCOUNT;
-        $this->customHotpTwofaccount->icon       = OtpTestData::ICON_PNG;
-        $this->customHotpTwofaccount->otp_type   = 'hotp';
-        $this->customHotpTwofaccount->secret     = OtpTestData::SECRET;
-        $this->customHotpTwofaccount->digits     = OtpTestData::DIGITS_CUSTOM;
-        $this->customHotpTwofaccount->algorithm  = OtpTestData::ALGORITHM_CUSTOM;
-        $this->customHotpTwofaccount->period     = null;
-        $this->customHotpTwofaccount->counter    = OtpTestData::COUNTER_CUSTOM;
-        $this->customHotpTwofaccount->save();
+        $this->customTotpTwofaccount = TwoFAccount::factory()->for($this->user)->create([
+            'legacy_uri' => OtpTestData::TOTP_FULL_CUSTOM_URI,
+            'service'    => OtpTestData::SERVICE,
+            'account'    => OtpTestData::ACCOUNT,
+            'icon'       => OtpTestData::ICON_PNG,
+            'otp_type'   => 'totp',
+            'secret'     => OtpTestData::SECRET,
+            'digits'     => OtpTestData::DIGITS_CUSTOM,
+            'algorithm'  => OtpTestData::ALGORITHM_CUSTOM,
+            'period'     => OtpTestData::PERIOD_CUSTOM,
+            'counter'    => null,
+        ]);
 
-        $this->customSteamTotpTwofaccount             = new TwoFAccount;
-        $this->customSteamTotpTwofaccount->legacy_uri = OtpTestData::STEAM_TOTP_URI;
-        $this->customSteamTotpTwofaccount->service    = OtpTestData::STEAM;
-        $this->customSteamTotpTwofaccount->account    = OtpTestData::ACCOUNT;
-        $this->customSteamTotpTwofaccount->otp_type   = 'steamtotp';
-        $this->customSteamTotpTwofaccount->secret     = OtpTestData::STEAM_SECRET;
-        $this->customSteamTotpTwofaccount->digits     = OtpTestData::DIGITS_STEAM;
-        $this->customSteamTotpTwofaccount->algorithm  = OtpTestData::ALGORITHM_DEFAULT;
-        $this->customSteamTotpTwofaccount->period     = OtpTestData::PERIOD_DEFAULT;
-        $this->customSteamTotpTwofaccount->counter    = null;
-        $this->customSteamTotpTwofaccount->save();
+        $this->customHotpTwofaccount = TwoFAccount::factory()->for($this->user)->create([
+            'legacy_uri' => OtpTestData::HOTP_FULL_CUSTOM_URI,
+            'service'    => OtpTestData::SERVICE,
+            'account'    => OtpTestData::ACCOUNT,
+            'icon'       => OtpTestData::ICON_PNG,
+            'otp_type'   => 'hotp',
+            'secret'     => OtpTestData::SECRET,
+            'digits'     => OtpTestData::DIGITS_CUSTOM,
+            'algorithm'  => OtpTestData::ALGORITHM_CUSTOM,
+            'period'     => null,
+            'counter'    => OtpTestData::COUNTER_CUSTOM,
+        ]);
+
+        $this->customSteamTotpTwofaccount = TwoFAccount::factory()->for($this->user)->create([
+            'legacy_uri' => OtpTestData::STEAM_TOTP_URI,
+            'service'    => OtpTestData::STEAM,
+            'account'    => OtpTestData::ACCOUNT,
+            'otp_type'   => 'steamtotp',
+            'secret'     => OtpTestData::STEAM_SECRET,
+            'digits'     => OtpTestData::DIGITS_STEAM,
+            'algorithm'  => OtpTestData::ALGORITHM_DEFAULT,
+            'period'     => OtpTestData::PERIOD_DEFAULT,
+            'counter'    => null,
+        ]);
     }
 
     /**

@@ -3,6 +3,8 @@
 namespace Tests\Feature\Http\Auth;
 
 use App\Facades\Settings;
+use App\Models\Group;
+use App\Models\TwoFAccount;
 use App\Models\User;
 use Illuminate\Support\Facades\Config;
 use Tests\FeatureTestCase;
@@ -14,7 +16,7 @@ use Tests\FeatureTestCase;
 class UserControllerTest extends FeatureTestCase
 {
     /**
-     * @var \App\Models\User
+     * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
      */
     protected $user;
 
@@ -47,10 +49,18 @@ class UserControllerTest extends FeatureTestCase
             ])
             ->assertOk()
             ->assertExactJson([
-                'name'  => self::NEW_USERNAME,
-                'id'    => $this->user->id,
-                'email' => self::NEW_EMAIL,
+                'name'     => self::NEW_USERNAME,
+                'id'       => $this->user->id,
+                'email'    => self::NEW_EMAIL,
+                'is_admin' => false,
             ]);
+
+        $this->assertDatabaseHas('users', [
+            'name'     => self::NEW_USERNAME,
+            'id'       => $this->user->id,
+            'email'    => self::NEW_EMAIL,
+            'is_admin' => false,
+        ]);
     }
 
     /**
@@ -68,10 +78,18 @@ class UserControllerTest extends FeatureTestCase
             ])
             ->assertOk()
             ->assertExactJson([
-                'name'  => $this->user->name,
-                'id'    => $this->user->id,
-                'email' => $this->user->email,
+                'name'     => $this->user->name,
+                'id'       => $this->user->id,
+                'email'    => $this->user->email,
+                'is_admin' => $this->user->is_admin,
             ]);
+
+        $this->assertDatabaseHas('users', [
+            'name'     => $this->user->name,
+            'id'       => $this->user->id,
+            'email'    => $this->user->email,
+            'is_admin' => $this->user->is_admin,
+        ]);
     }
 
     /**
@@ -107,11 +125,43 @@ class UserControllerTest extends FeatureTestCase
      */
     public function test_delete_user_returns_success()
     {
-        $response = $this->actingAs($this->user, 'web-guard')
+        TwoFAccount::factory()->for($this->user)->create();
+        Group::factory()->for($this->user)->create();
+
+        $admin = User::factory()->administrator()->create();
+        $this->assertDatabaseCount('users', 2);
+
+        $this->actingAs($this->user, 'web-guard')
             ->json('DELETE', '/user', [
                 'password' => self::PASSWORD,
             ])
             ->assertNoContent();
+        
+        $this->assertDatabaseMissing('users', [
+            'id' => $this->user->id
+        ]);
+        $this->assertDatabaseHas('users', [
+            'id' => $admin->id
+        ]);
+        $this->assertDatabaseCount('users', 1);
+        $this->assertDatabaseMissing('twofaccounts', [
+            'user_id' => $this->user->id
+        ]);
+        $this->assertDatabaseMissing('groups', [
+            'user_id' => $this->user->id
+        ]);
+        $this->assertDatabaseMissing('webauthn_credentials', [
+            'authenticatable_id' => $this->user->id
+        ]);
+        $this->assertDatabaseMissing('webauthn_recoveries', [
+            'email' => $this->user->email
+        ]);
+        $this->assertDatabaseMissing('oauth_access_tokens', [
+            'user_id' => $this->user->id
+        ]);
+        $this->assertDatabaseMissing('password_resets', [
+            'email' => $this->user->email
+        ]);
     }
 
     /**
@@ -130,6 +180,10 @@ class UserControllerTest extends FeatureTestCase
             ->assertJsonStructure([
                 'message',
             ]);
+
+        $this->assertDatabaseHas('users', [
+            'id' => $this->user->id
+        ]);
     }
 
     /**
@@ -142,5 +196,33 @@ class UserControllerTest extends FeatureTestCase
                 'password' => 'wrongPassword',
             ])
             ->assertStatus(400);
+
+        $this->assertDatabaseHas('users', [
+            'id' => $this->user->id
+        ]);
+    }
+
+    /**
+     * @test
+     */
+    public function test_delete_the_only_admin_returns_bad_request()
+    {
+        /**
+         * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
+         */
+        $admin = User::factory()->administrator()->create();
+
+        $this->assertDatabaseCount('users', 2);
+        $this->assertEquals(1, User::admins()->count());
+
+        $response = $this->actingAs($admin, 'web-guard')
+            ->json('DELETE', '/user', [
+                'password' => self::PASSWORD,
+            ])
+            ->assertStatus(400);
+
+        $this->assertDatabaseHas('users', [
+            'id' => $admin->id
+        ]);
     }
 }

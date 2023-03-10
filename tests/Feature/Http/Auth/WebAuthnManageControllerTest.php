@@ -17,7 +17,7 @@ class WebAuthnManageControllerTest extends FeatureTestCase
     // use WithoutMiddleware;
 
     /**
-     * @var \App\Models\User
+     * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
      */
     protected $user;
 

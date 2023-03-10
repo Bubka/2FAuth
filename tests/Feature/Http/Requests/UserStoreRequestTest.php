@@ -3,6 +3,7 @@
 namespace Tests\Feature\Http\Requests;
 
 use App\Http\Requests\UserStoreRequest;
+use App\Models\User;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Validator;
 use Tests\FeatureTestCase;
@@ -29,6 +30,11 @@ class UserStoreRequestTest extends FeatureTestCase
      */
     public function test_valid_data(array $data) : void
     {
+        User::factory()->create([
+            'name'  => 'Jane',
+            'email' => 'jane@example.com',
+        ]);
+        
         $request   = new UserStoreRequest();
         $validator = Validator::make($data, $request->rules());
 
@@ -47,6 +53,12 @@ class UserStoreRequestTest extends FeatureTestCase
                 'password'              => 'MyPassword',
                 'password_confirmation' => 'MyPassword',
             ]],
+            [[
+                'name'                  => 'John',
+                'email'                 => 'JOHN@example.com',
+                'password'              => 'MyPassword',
+                'password_confirmation' => 'MyPassword',
+            ]],
         ];
     }
 
@@ -55,15 +67,10 @@ class UserStoreRequestTest extends FeatureTestCase
      */
     public function test_invalid_data(array $data) : void
     {
-        $user = new \App\Models\User(
-            [
-                'name'                  => 'John',
-                'email'                 => 'john@example.com',
-                'password'              => 'MyPassword',
-                'password_confirmation' => 'MyPassword',
-            ]
-        );
-        $user->save();
+        User::factory()->create([
+            'name'  => 'John',
+            'email' => 'john@example.com',
+        ]);
 
         $request   = new UserStoreRequest();
         $validator = Validator::make($data, $request->rules());
@@ -78,8 +85,8 @@ class UserStoreRequestTest extends FeatureTestCase
     {
         return [
             [[
-                'name'                  => 'John', // unique
-                'email'                 => 'john@example.com',
+                'name'                  => 'John',
+                'email'                 => 'john@example.com', // unique
                 'password'              => 'MyPassword',
                 'password_confirmation' => 'MyPassword',
             ]],

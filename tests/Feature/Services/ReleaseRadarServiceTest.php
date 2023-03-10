@@ -3,7 +3,8 @@
 namespace Tests\Feature\Services;
 
 use App\Facades\Settings;
-use App\Services\ReleaseRadarService;
+// use App\Services\ReleaseRadarService;
+use Facades\App\Services\ReleaseRadarService;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Http;
 use Tests\Data\HttpRequestTestData;
@@ -28,10 +29,7 @@ class ReleaseRadarServiceTest extends FeatureTestCase
             $url => Http::response(HttpRequestTestData::LATEST_RELEASE_BODY_NO_NEW_RELEASE, 200),
         ]);
 
-        $releaseRadarService = new ReleaseRadarService();
-        $release             = $releaseRadarService->manualScan();
-
-        $this->assertFalse($release);
+        $this->assertFalse(ReleaseRadarService::manualScan());
         $this->assertDatabaseHas('options', [
             'key' => 'lastRadarScan',
         ]);
@@ -53,10 +51,7 @@ class ReleaseRadarServiceTest extends FeatureTestCase
             $url => Http::response(HttpRequestTestData::LATEST_RELEASE_BODY_NEW_RELEASE, 200),
         ]);
 
-        $releaseRadarService = new ReleaseRadarService();
-        $release             = $releaseRadarService->manualScan();
-
-        $this->assertEquals(HttpRequestTestData::NEW_TAG_NAME, $release);
+        $this->assertEquals(HttpRequestTestData::NEW_TAG_NAME, ReleaseRadarService::manualScan());
         $this->assertDatabaseHas('options', [
             'key'   => 'latestRelease',
             'value' => HttpRequestTestData::NEW_TAG_NAME,
@@ -69,17 +64,12 @@ class ReleaseRadarServiceTest extends FeatureTestCase
     /**
      * @test
      */
-    public function test_manualScan_succeed_when_something_fails()
+    public function test_manualScan_complete_when_http_call_fails()
     {
-        $url = config('2fauth.latestReleaseUrl');
-
         // We do not fake the http request so an exception will be thrown
         Http::preventStrayRequests();
 
-        $releaseRadarService = new ReleaseRadarService();
-        $release             = $releaseRadarService->manualScan();
-
-        $this->assertFalse($release);
+        $this->assertFalse(ReleaseRadarService::manualScan());
     }
 
     /**
@@ -94,10 +84,7 @@ class ReleaseRadarServiceTest extends FeatureTestCase
             $url => Http::response(null, 400),
         ]);
 
-        $releaseRadarService = new ReleaseRadarService();
-        $release             = $releaseRadarService->manualScan();
-
-        $this->assertFalse($release);
+        $this->assertFalse(ReleaseRadarService::manualScan());
     }
 
     /**
@@ -112,14 +99,22 @@ class ReleaseRadarServiceTest extends FeatureTestCase
             $url => Http::response(HttpRequestTestData::LATEST_RELEASE_BODY_NEW_RELEASE, 200),
         ]);
 
-        Settings::set('lastRadarScan', time() - (60 * 60 * 24 * 7) - 1);
+        $time = time() - (60 * 60 * 24 * 7) - 1;
 
-        $releaseRadarService = $this->mock(ReleaseRadarService::class)->makePartial();
-        $releaseRadarService->shouldAllowMockingProtectedMethods()
-            ->shouldReceive('newRelease')
-            ->once();
+        Settings::set('lastRadarScan', $time);
+        Settings::delete('latestRelease');
 
-        $releaseRadarService->scheduledScan();
+        ReleaseRadarService::scheduledScan();
+
+        $this->assertDatabaseHas('options', [
+            'key' => 'latestRelease',
+            'value' => HttpRequestTestData::NEW_TAG_NAME,
+        ]);
+
+        $this->assertDatabaseMissing('options', [
+            'key' => 'lastRadarScan',
+            'value' => $time,
+        ]);
     }
 
     /**
@@ -127,12 +122,39 @@ class ReleaseRadarServiceTest extends FeatureTestCase
      */
     public function test_scheduleScan_does_not_run_before_one_week()
     {
-        Settings::set('lastRadarScan', time() - (60 * 60 * 24 * 7) + 2);
+        $url = config('2fauth.latestReleaseUrl');
 
-        $releaseRadarService = $this->mock(ReleaseRadarService::class)->makePartial();
-        $releaseRadarService->shouldAllowMockingProtectedMethods()
-            ->shouldNotReceive('newRelease');
+        Http::preventStrayRequests();
+        Http::fake([
+            $url => Http::response(HttpRequestTestData::LATEST_RELEASE_BODY_NEW_RELEASE, 200),
+        ]);
 
-        $releaseRadarService->scheduledScan();
+        $time = time() - (60 * 60 * 24 * 7) + 1;
+
+        Settings::set('latestRelease', 'v1');
+        Settings::set('lastRadarScan', $time);
+
+        ReleaseRadarService::scheduledScan();
+
+        $this->assertDatabaseHas('options', [
+            'key' => 'latestRelease',
+            'value' => 'v1',
+        ]);
+
+        $this->assertDatabaseHas('options', [
+            'key' => 'lastRadarScan',
+            'value' => $time,
+        ]);
+    }
+
+    /**
+     * @test
+     */
+    public function test_scheduleScan_complete_when_http_call_fails()
+    {
+        // We do not fake the http request so an exception will be thrown
+        Http::preventStrayRequests();
+
+        $this->assertNull(ReleaseRadarService::scheduledScan());
     }
 }

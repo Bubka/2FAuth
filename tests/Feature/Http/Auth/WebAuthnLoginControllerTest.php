@@ -194,7 +194,9 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
             'created_at'           => now(),
         ]);
 
-        $response = $this->json('POST', '/webauthn/login/options')
+        $response = $this->json('POST', '/webauthn/login/options', [
+                'email' => $this->user->email,
+            ])
             ->assertOk()
             ->assertJsonStructure([
                 'challenge',
@@ -234,7 +236,9 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
             'created_at'           => now(),
         ]);
 
-        $response = $this->json('POST', '/webauthn/login/options')
+        $response = $this->json('POST', '/webauthn/login/options', [
+                'email' => $this->user->email,
+            ])
             ->assertOk()
             ->assertJsonStructure([
                 'challenge',
@@ -253,12 +257,55 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
     /**
      * @test
      */
-    public function test_get_options_with_no_registred_user_returns_error()
+    public function test_get_options_with_capitalized_email_returns_success()
     {
-        $this->json('POST', '/webauthn/login/options')
-            ->assertStatus(400)
-            ->assertJsonStructure([
-                'message',
+        $this->user = User::factory()->create();
+
+        $this->json('POST', '/webauthn/login/options', [
+                'email' => strtoupper($this->user->email),
+            ])
+            ->assertOk();
+    }
+
+    /**
+     * @test
+     */
+    public function test_get_options_with_missing_email_returns_validation_errors()
+    {
+        $this->json('POST', '/webauthn/login/options', [
+                'email' => null,
+            ])
+            ->assertStatus(422)
+            ->assertJsonValidationErrors([
+                'email',
+            ]);
+    }
+
+    /**
+     * @test
+     */
+    public function test_get_options_with_invalid_email_returns_validation_errors()
+    {
+        $this->json('POST', '/webauthn/login/options', [
+                'email' => 'invalid',
+            ])
+            ->assertStatus(422)
+            ->assertJsonValidationErrors([
+                'email',
+            ]);
+    }
+
+    /**
+     * @test
+     */
+    public function test_get_options_with_unknown_email_returns_validation_errors()
+    {
+        $this->json('POST', '/webauthn/login/options', [
+                'email' => 'john@example.com',
+            ])
+            ->assertStatus(422)
+            ->assertJsonValidationErrors([
+                'email',
             ]);
     }
 }

@@ -45,6 +45,39 @@ class RegisterControllerTest extends FeatureTestCase
             ->assertJsonFragment([
                 'name' => self::USERNAME,
             ]);
+
+        $this->assertDatabaseHas('users', [
+            'name'                  => self::USERNAME,
+            'email'                 => self::EMAIL,
+        ]);
+    }
+
+    /**
+     * @test
+     */
+    public function test_register_with_uppercased_email_returns_success()
+    {
+        DB::table('users')->delete();
+
+        $response = $this->json('POST', '/user', [
+            'name'                  => self::USERNAME,
+            'email'                 => strtoupper(self::EMAIL),
+            'password'              => self::PASSWORD,
+            'password_confirmation' => self::PASSWORD,
+        ])
+            ->assertCreated()
+            ->assertJsonStructure([
+                'message',
+                'name',
+            ])
+            ->assertJsonFragment([
+                'name' => self::USERNAME,
+            ]);
+
+        $this->assertDatabaseHas('users', [
+            'name'                  => self::USERNAME,
+            'email'                 => self::EMAIL,
+        ]);
     }
 
     /**
