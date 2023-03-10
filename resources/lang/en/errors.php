@@ -51,4 +51,5 @@ return [
     'file_upload_failed' => 'File upload failed',
     'unauthorized' => 'Unauthorized',
     'unauthorized_legend' => 'You do not have permissions to view this resource or to perform this action',
+    'cannot_delete_the_only_admin' => 'Cannot delete the only admin account'
 ];
