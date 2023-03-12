@@ -5,7 +5,6 @@ namespace App\Api\v1\Controllers;
 use App\Api\v1\Requests\SettingUpdateRequest;
 use App\Api\v1\Resources\UserResource;
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 

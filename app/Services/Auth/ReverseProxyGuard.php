@@ -50,19 +50,20 @@ class ReverseProxyGuard implements Guard
         $identifier       = [];
 
         try {
-            $identifier['user'] = request()->server($remoteUserHeader) ?? apache_request_headers()[$remoteUserHeader] ?? null;
+            $identifier['id'] = request()->server($remoteUserHeader) ?? apache_request_headers()[$remoteUserHeader] ?? null;
         } catch (\Throwable $e) {
-            $identifier['user'] = null;
+            $identifier['id'] = null;
         }
 
-        if (! $identifier['user'] || is_array($identifier['user'])) {
-            Log::error(sprintf('Proxy remote-user header "%s" is empty or missing.', $remoteUserHeader));
+        if (! $identifier['id'] || is_array($identifier['id'])) {
+            Log::error(sprintf('Proxy remote-user header %s is empty or missing.', var_export($remoteUserHeader, true)));
 
             return $this->user = null;
         }
 
         // Get the email identifier from $_SERVER
-        $remoteEmailHeader = config('auth.auth_proxy_headers.email');
+        $remoteEmailHeader   = config('auth.auth_proxy_headers.email');
+        $identifier['email'] = null;
 
         if ($remoteEmailHeader) {
             try {

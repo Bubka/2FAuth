@@ -68,7 +68,7 @@
                 formDelete: new Form({
                     password : '',
                 }),
-                isRemoteUser: false,
+                isRemoteUser: this.$root.appConfig.proxyAuth,
                 isAdmin: false,
             }
         },
@@ -77,7 +77,6 @@
             const { data } = await this.formProfile.get('/api/v1/user')
 
             if( data.is_admin === true ) this.isAdmin = true
-            if( data.id === null ) this.isRemoteUser = true
 
             this.formProfile.fill(data)
         },
