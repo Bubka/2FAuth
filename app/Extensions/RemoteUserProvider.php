@@ -29,7 +29,7 @@ class RemoteUserProvider implements UserProvider
     public function retrieveById($identifier)
     {
         // We don't know the id length so we trim it to prevent to long strings in DB
-        $name  = substr($identifier['id'], 0, 180);
+        $name  = substr($identifier['id'], 0, 191);
         $email = null;
 
         $user = User::where('name', $name)->first();
@@ -44,16 +44,16 @@ class RemoteUserProvider implements UserProvider
                 ]);
 
                 if (User::where('id', '<>', $user->id ?? 0)->where('email', $identifier['email'])->count() == 0) {
-                    $email = $identifier['email'];
+                    $email = strtolower($identifier['email']);
                 }
             } catch (ValidationException $e) {
                 // do nothing
             }
         }
 
-        $email = $email ?? $this->remoteEmail((string) $identifier['id']);
-
         if (is_null($user)) {
+            $email = $email ?? $this->fakeRemoteEmail($identifier['id']);
+
             $user = User::create([
                 'name'     => $name,
                 'email'    => strtolower($email),
@@ -68,7 +68,7 @@ class RemoteUserProvider implements UserProvider
             }
         } else {
             // Here we keep the account's email sync-ed
-            if ($user->email != $email) {
+            if ($email && $user->email != $email) {
                 $user->email = $email;
                 $user->save();
             }
@@ -80,10 +80,10 @@ class RemoteUserProvider implements UserProvider
     /**
      * Set a fake email address
      *
-     * @param    $id string
+     * @param    $id mixed
      * @return string
      */
-    protected function remoteEmail(string $id)
+    protected function fakeRemoteEmail(mixed $id)
     {
         return substr($id, 0, 184) . '@remote';
     }

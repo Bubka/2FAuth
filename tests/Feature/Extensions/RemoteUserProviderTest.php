@@ -9,6 +9,7 @@ use Tests\FeatureTestCase;
 
 /**
  * @covers \App\Extensions\RemoteUserProvider
+ * @covers \App\Services\Auth\ReverseProxyGuard
  */
 class RemoteUserProviderTest extends FeatureTestCase
 {
@@ -36,7 +37,31 @@ class RemoteUserProviderTest extends FeatureTestCase
     /**
      * @test
      */
-    public function test_user_is_set_from_reverse_proxy_info_with_provided_email()
+    public function test_user_is_set_from_proxy_headers()
+    {
+        Config::set('auth.auth_proxy_headers.user', 'HTTP_REMOTE_USER');
+
+        $this->app['auth']->shouldUse('reverse-proxy-guard');
+
+        $this->json('GET', '/api/v1/groups', [], [
+            'HTTP_REMOTE_USER' => self::USER_NAME,
+        ]);
+        $this->assertAuthenticated('reverse-proxy-guard');
+
+        $user = $this->app->make('auth')->guard('reverse-proxy-guard')->user();
+
+        $this->assertEquals(self::USER_NAME, $user->name);
+        $this->assertEquals(strtolower(self::USER_NAME) . '@remote', $user->email);
+        $this->assertDatabaseHas('users', [
+            'name'  => self::USER_NAME,
+            'email' => strtolower(self::USER_NAME) . '@remote',
+        ]);
+    }
+
+    /**
+     * @test
+     */
+    public function test_user_is_set_from_proxy_headers_with_an_email()
     {
         Config::set('auth.auth_proxy_headers.user', 'HTTP_REMOTE_USER');
         Config::set('auth.auth_proxy_headers.email', 'HTTP_REMOTE_EMAIL');
@@ -50,33 +75,19 @@ class RemoteUserProviderTest extends FeatureTestCase
         $this->assertAuthenticated('reverse-proxy-guard');
 
         $user = $this->app->make('auth')->guard('reverse-proxy-guard')->user();
+
         $this->assertEquals(self::USER_NAME, $user->name);
         $this->assertEquals(self::USER_EMAIL, $user->email);
-    }
-
-    /**
-     * @test
-     */
-    public function test_user_is_set_from_reverse_proxy_without_email()
-    {
-        Config::set('auth.auth_proxy_headers.user', 'HTTP_REMOTE_USER');
-
-        $this->app['auth']->shouldUse('reverse-proxy-guard');
-
-        $this->json('GET', '/api/v1/groups', [], [
-            'HTTP_REMOTE_USER' => self::USER_NAME,
+        $this->assertDatabaseHas('users', [
+            'name'  => self::USER_NAME,
+            'email' => self::USER_EMAIL,
         ]);
-        $this->assertAuthenticated('reverse-proxy-guard');
-
-        $user = $this->app->make('auth')->guard('reverse-proxy-guard')->user();
-        $this->assertEquals(self::USER_NAME, $user->name);
-        $this->assertEquals(strtolower(self::USER_NAME) . '@remote', $user->email);
     }
 
     /**
      * @test
      */
-    public function test_user_is_set_from_reverse_proxy_even_if_identifier_is_long()
+    public function test_user_is_set_from_proxy_headers_even_if_name_is_long()
     {
         Config::set('auth.auth_proxy_headers.user', 'HTTP_REMOTE_USER');
         Config::set('auth.auth_proxy_headers.email', 'HTTP_REMOTE_EMAIL');
@@ -84,6 +95,8 @@ class RemoteUserProviderTest extends FeatureTestCase
         $this->app['auth']->shouldUse('reverse-proxy-guard');
 
         $name = str_pad('john', 300, '_');
+        $inDbName = substr($name, 0, 191);
+        $inDbEmail = substr($name, 0, 184) . '@remote';
 
         $this->json('GET', '/api/v1/groups', [], [
             'HTTP_REMOTE_USER' => $name,
@@ -91,14 +104,40 @@ class RemoteUserProviderTest extends FeatureTestCase
         $this->assertAuthenticated('reverse-proxy-guard');
 
         $user = $this->app->make('auth')->guard('reverse-proxy-guard')->user();
-        $this->assertLessThan(192, strlen($user->name));
-        $this->assertLessThan(192, strlen($user->email));
+
+        $this->assertEquals($inDbName, $user->name);
+        $this->assertEquals($inDbEmail, $user->email);
+        $this->assertDatabaseHas('users', [
+            'name'  => $inDbName,
+            'email' => $inDbEmail,
+        ]);
     }
 
     /**
      * @test
      */
-    public function test_user_email_is_sync_with_email_proxy_header()
+    public function test_user_is_not_set_from_proxy_headers_when_name_is_missing()
+    {
+        Config::set('auth.auth_proxy_headers.user', 'HTTP_REMOTE_USER');
+        Config::set('auth.auth_proxy_headers.email', 'HTTP_REMOTE_EMAIL');
+
+        $this->app['auth']->shouldUse('reverse-proxy-guard');
+
+        $this->json('GET', '/api/v1/groups', [], [
+            'HTTP_REMOTE_USER' => '',
+        ]);
+        $this->assertGuest('reverse-proxy-guard');
+
+        $user = $this->app->make('auth')->guard('reverse-proxy-guard')->user();
+
+        $this->assertNull($user);
+        $this->assertDatabaseCount('users', 0);
+    }
+
+    /**
+     * @test
+     */
+    public function test_user_email_is_synced_with_email_from_proxy_headers()
     {
         Config::set('auth.auth_proxy_headers.user', 'HTTP_REMOTE_USER');
         Config::set('auth.auth_proxy_headers.email', 'HTTP_REMOTE_EMAIL');
@@ -116,7 +155,6 @@ class RemoteUserProviderTest extends FeatureTestCase
         ]);
 
         $this->assertAuthenticated('reverse-proxy-guard');
-
         $this->assertDatabaseHas('users', [
             'id'    => $dbUser->id,
             'email' => self::USER_EMAIL,
@@ -126,7 +164,34 @@ class RemoteUserProviderTest extends FeatureTestCase
     /**
      * @test
      */
-    public function test_user_email_is_not_sync_with_invalid_email_proxy_header()
+    public function test_user_email_is_not_synced_when_email_from_proxy_headers_is_missing()
+    {
+        Config::set('auth.auth_proxy_headers.user', 'HTTP_REMOTE_USER');
+        Config::set('auth.auth_proxy_headers.email', 'HTTP_REMOTE_EMAIL');
+
+        $dbUser = User::factory()->create([
+            'name'  => self::USER_NAME,
+            'email' => strtolower(self::USER_NAME) . '@remote',
+        ]);
+
+        $this->app['auth']->shouldUse('reverse-proxy-guard');
+
+        $this->json('GET', '/api/v1/groups', [], [
+            'HTTP_REMOTE_USER'  => self::USER_NAME,
+            'HTTP_REMOTE_EMAIL' => '',
+        ]);
+
+        $this->assertAuthenticated('reverse-proxy-guard');
+        $this->assertDatabaseHas('users', [
+            'id'    => $dbUser->id,
+            'email' => strtolower(self::USER_NAME) . '@remote',
+        ]);
+    }
+
+    /**
+     * @test
+     */
+    public function test_user_email_is_not_synced_when_email_from_proxy_headers_is_invalid()
     {
         Config::set('auth.auth_proxy_headers.user', 'HTTP_REMOTE_USER');
         Config::set('auth.auth_proxy_headers.email', 'HTTP_REMOTE_EMAIL');
@@ -144,7 +209,6 @@ class RemoteUserProviderTest extends FeatureTestCase
         ]);
 
         $this->assertAuthenticated('reverse-proxy-guard');
-
         $this->assertDatabaseHas('users', [
             'id'    => $dbUser->id,
             'email' => $dbUser->email,
@@ -154,14 +218,14 @@ class RemoteUserProviderTest extends FeatureTestCase
     /**
      * @test
      */
-    public function test_user_email_is_not_sync_with_already_used_email_proxy_header()
+    public function test_user_email_is_not_sync_when_email_from_proxy_headers_is_already_in_use()
     {
         Config::set('auth.auth_proxy_headers.user', 'HTTP_REMOTE_USER');
         Config::set('auth.auth_proxy_headers.email', 'HTTP_REMOTE_EMAIL');
 
         $dbUser = User::factory()->create([
             'name'  => self::USER_NAME,
-            'email' => strtolower(self::USER_NAME) . '@remote',
+            'email' => self::USER_EMAIL,
         ]);
 
         $otherUser = User::factory()->create([
@@ -176,7 +240,6 @@ class RemoteUserProviderTest extends FeatureTestCase
         ]);
 
         $this->assertAuthenticated('reverse-proxy-guard');
-
         $this->assertDatabaseHas('users', [
             'id'    => $dbUser->id,
             'email' => $dbUser->email,
