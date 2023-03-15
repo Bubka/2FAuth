@@ -21,7 +21,7 @@
                 // there is nothing to do, we simply catch the error to avoid redondant navigation
             });
             
-            this.$storage.clear()
+            this.clearStorage()
         },
     }
 </script>

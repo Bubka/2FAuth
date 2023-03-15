@@ -81,7 +81,6 @@ class SystemControllerTest extends FeatureTestCase
                     'defaultGroup',
                     'defaultCaptureMode',
                     'useDirectCapture',
-                    'useWebauthnAsDefault',
                     'useWebauthnOnly',
                     'getOfficialIcons',
                     'lang',

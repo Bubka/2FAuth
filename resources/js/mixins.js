@@ -20,9 +20,15 @@ Vue.mixin({
             }
             else {
                 await this.axios.get('/user/logout')
-                this.$storage.clear()
+                this.clearStorage()
                 this.$router.push({ name: 'login', params: { forceRefresh: true } })
             }
+        },
+
+        clearStorage() {
+            this.$storage.set('accounts')
+            this.$storage.set('groups')
+            this.$storage.set('lastRoute')
         },
 
         exitSettings: function (event) {

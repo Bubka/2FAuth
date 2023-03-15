@@ -42,8 +42,6 @@
                 <form>
                     <!-- use webauthn only -->
                     <form-checkbox v-on:useWebauthnOnly="savePreference('useWebauthnOnly', $event)" :form="form" fieldName="useWebauthnOnly" :label="$t('auth.webauthn.use_webauthn_only.label')" :help="$t('auth.webauthn.use_webauthn_only.help')" :disabled="isRemoteUser || credentials.length === 0" />
-                    <!-- default sign in method -->
-                    <form-checkbox v-on:useWebauthnAsDefault="savePreference('useWebauthnAsDefault', $event)" :form="form" fieldName="useWebauthnAsDefault" :label="$t('auth.webauthn.use_webauthn_as_default.label')" :help="$t('auth.webauthn.use_webauthn_as_default.help')" :disabled="isRemoteUser || credentials.length === 0" />
                 </form>
                 <!-- footer -->
                 <vue-footer :showButtons="true">
@@ -67,7 +65,6 @@
             return {
                 form: new Form({
                     useWebauthnOnly: null,
-                    useWebauthnAsDefault: null,
                 }),
                 credentials: [],
                 isFetching: false,
@@ -193,9 +190,7 @@
 
                         if (this.credentials.length == 0) {
                             this.form.useWebauthnOnly = false
-                            this.form.useWebauthnAsDefault = false
                             this.$root.userPreferences['useWebauthnOnly'] = false
-                            this.$root.userPreferences['useWebauthnAsDefault'] = false
                         }
 
                         this.$notify({ type: 'is-success', text: this.$t('auth.webauthn.device_revoked') })

@@ -95,7 +95,6 @@ class UserControllerTest extends FeatureTestCase
             'defaultGroup'         => 1,
             'defaultCaptureMode'   => 'advancedForm',
             'useDirectCapture'     => true,
-            'useWebauthnAsDefault' => true,
             'useWebauthnOnly'      => true,
             'getOfficialIcons'     => false,
             'theme'                => 'dark',
@@ -116,7 +115,6 @@ class UserControllerTest extends FeatureTestCase
         $this->user['preferences->defaultGroup']         = $userPrefs['defaultGroup'];
         $this->user['preferences->defaultCaptureMode']   = $userPrefs['defaultCaptureMode'];
         $this->user['preferences->useDirectCapture']     = $userPrefs['useDirectCapture'];
-        $this->user['preferences->useWebauthnAsDefault'] = $userPrefs['useWebauthnAsDefault'];
         $this->user['preferences->useWebauthnOnly']      = $userPrefs['useWebauthnOnly'];
         $this->user['preferences->getOfficialIcons']     = $userPrefs['getOfficialIcons'];
         $this->user['preferences->theme']                = $userPrefs['theme'];

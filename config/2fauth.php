@@ -80,7 +80,6 @@ return [
         'defaultGroup' => 0,
         'defaultCaptureMode' => 'livescan',
         'useDirectCapture' => false,
-        'useWebauthnAsDefault' => false,
         'useWebauthnOnly' => false,
         'getOfficialIcons' => true,
         'theme' => 'system',

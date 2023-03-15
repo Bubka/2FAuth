@@ -58,7 +58,6 @@ class WebAuthnManageController extends Controller
         // no more registered device exists.
         // See #110
         if (blank($user->webAuthnCredentials()->WhereEnabled()->get())) {
-            Settings::delete('useWebauthnAsDefault');
             Settings::delete('useWebauthnOnly');
             Log::notice('No Webauthn credential enabled, Webauthn settings reset to default');
         }

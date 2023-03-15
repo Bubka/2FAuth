@@ -68,15 +68,11 @@ return [
         'unknown_device' => 'Unknown device',
         'use_webauthn_only' => [
             'label' => 'Use WebAuthn only',
-            'help' => 'Make WebAuthn the only available method to sign in 2FAuth. This is the recommended setup to take advantage of the WebAuthn enhanced security.<br />
-                In case of device lost, you will be able to recover your account by resetting this option and signing in using your email and password.'
+            'help' => 'Make WebAuthn the only authorized method to log into your 2FAuth account. This is the recommended setup to take advantage of the WebAuthn enhanced security.<br /><br />
+                In case of device lost, you will be able to recover your account by resetting this option and signing in using your email and password.<br /><br />
+                Attention! The Email & Password form remains available despite this option being enabled, but it will always return an \'Authentication failed\' response.'
         ],
-        'need_a_security_device_to_enable_options' => 'Set at least one device to enable these options',
-        'use_webauthn_as_default' => [
-            'label' => 'Use WebAuthn as default sign in method',
-            'help' => 'Set the 2FAuth sign in form to propose the WebAuthn authentication at first. The Login/password method is then available as an alternative/fallback solution.<br />
-                This has no effect if you only use WebAuthn.'
-        ],
+        'need_a_security_device_to_enable_options' => 'Set at least one device to enable the following options',
     ],
     'forms' => [
         'name' => 'Name',

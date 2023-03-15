@@ -12,7 +12,7 @@
             <div class="nav-links">
                 <p>{{ $t('auth.webauthn.lost_your_device') }}&nbsp;<router-link id="lnkRecoverAccount" :to="{ name: 'webauthn.lost' }" class="is-link">{{ $t('auth.webauthn.recover_your_account') }}</router-link></p>
                 <p v-if="!this.$root.userPreferences.useWebauthnOnly">{{ $t('auth.sign_in_using') }}&nbsp;
-                    <a id="lnkSignWithLegacy" role="button" class="is-link" @keyup.enter="showWebauthn = false" @click="showWebauthn = false" tabindex="0">{{ $t('auth.login_and_password') }}</a>
+                    <a id="lnkSignWithLegacy" role="button" class="is-link" @keyup.enter="toggleForm" @click="toggleForm" tabindex="0">{{ $t('auth.login_and_password') }}</a>
                 </p>
             </div>
         </form-wrapper>
@@ -28,7 +28,7 @@
             <div class="nav-links">
                 <p>{{ $t('auth.forms.forgot_your_password') }}&nbsp;<router-link id="lnkResetPwd" :to="{ name: 'password.request' }" class="is-link" :aria-label="$t('auth.forms.reset_your_password')">{{ $t('auth.forms.request_password_reset') }}</router-link></p>
                 <p >{{ $t('auth.sign_in_using') }}&nbsp;
-                    <a id="lnkSignWithWebauthn" role="button" class="is-link" @keyup.enter="showWebauthn = true" @click="showWebauthn = true" tabindex="0" :aria-label="$t('auth.sign_in_using_security_device')">{{ $t('auth.webauthn.security_device') }}</a>
+                    <a id="lnkSignWithWebauthn" role="button" class="is-link" @keyup.enter="toggleForm" @click="toggleForm" tabindex="0" :aria-label="$t('auth.sign_in_using_security_device')">{{ $t('auth.webauthn.security_device') }}</a>
                 </p>
                 <p class="mt-4">{{ $t('auth.forms.dont_have_account_yet') }}&nbsp;<router-link id="lnkRegister" :to="{ name: 'register' }" class="is-link">{{ $t('auth.register') }}</router-link></p>
             </div>
@@ -53,17 +53,26 @@
                     password: ''
                 }),
                 isBusy: false,
-                showWebauthn: this.$root.userPreferences.useWebauthnAsDefault || this.$root.userPreferences.useWebauthnOnly,
+                showWebauthn: this.$root.userPreferences.useWebauthnOnly,
                 csrfRefresher: null,
                 webauthn: new WebAuthn()
             }
         },
 
         mounted: function() {
-            this.csrfRefresher = setInterval(this.refreshToken, 300000); // 5 min
+            this.csrfRefresher = setInterval(this.refreshToken, 300000) // 5 min
+            this.showWebauthn = this.$storage.get('showWebauthnForm', false)
         },
 
         methods : {
+            /**
+             * Toggle the form between legacy and webauthn method
+             */
+            toggleForm() {
+                this.showWebauthn = ! this.showWebauthn
+                this.$storage.set('showWebauthnForm', this.showWebauthn)
+            },
+
             /**
              * Sign in using the login/password form
              */

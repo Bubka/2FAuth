@@ -24,6 +24,11 @@ return new class extends Migration
 
         DB::table('users')->update(['is_admin' => 1]);
 
+        // The 'useWebauthnAsDefault' option is replaced by a local storage record
+        // so we delete it form the Options table to prevent its conversion to
+        // a user preference
+        DB::table('options')->where('key', 'useWebauthnAsDefault')->delete();
+
         // User options are converted as user preferences
         $options     = DB::table('options')->get();
         $preferences = config('2fauth.preferences');
