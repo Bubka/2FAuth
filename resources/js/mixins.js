@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import i18n from './langs/i18n'
 
 Vue.mixin({
 
@@ -100,7 +101,23 @@ Vue.mixin({
 
         setTheme(theme) {
             document.documentElement.dataset.theme = theme;
-        }
+        },
+
+        applyPreferences(preferences) {
+            for (const preference in preferences) {
+                try {
+                    this.$root.userPreferences[preference] = preferences[preference]
+                 }
+                 catch (e) {
+                    console.log(e)
+                 }
+            }
+
+            if (this.$root.userPreferences.lang != 'browser') {
+                i18n.locale = this.$root.userPreferences.lang
+                document.documentElement.lang = this.$root.userPreferences.lang
+            }
+        },
     }
 
 })

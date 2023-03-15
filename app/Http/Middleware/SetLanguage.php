@@ -17,11 +17,12 @@ class SetLanguage
      */
     public function handle($request, Closure $next)
     {
-        // 2 possible cases here:
+        // 3 possible cases here:
         // - The http client send an accept-language header
-        // - No language is specified
+        // - There is an authenticated user with a possible language set
+        // - No language is specified at all
         //
-        // We honor the language requested in the header or we use the fallback one.
+        // Priority to the user preference, then the header request, otherwise the fallback language.
         // Note that if a user is authenticated later by the auth guard, the app locale
         // will be overriden if the user has set a specific language in its preferences.
 
@@ -55,6 +56,11 @@ class SetLanguage
                     break;
                 }
             }
+        }
+
+        $user = $request->user();
+        if (! is_null($user) && $request->user()->preferences['lang'] != 'browser') {
+            $lang = $request->user()->preferences['lang'];
         }
 
         // If the language is not available (or partial), strings will be translated using the fallback language.

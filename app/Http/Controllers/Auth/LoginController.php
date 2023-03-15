@@ -94,8 +94,9 @@ class LoginController extends Controller
         $this->authenticated($request, $this->guard()->user());
 
         return response()->json([
-            'message' => 'authenticated',
-            'name'    => $name,
+            'message'     => 'authenticated',
+            'name'        => $name,
+            'preferences' => $this->guard()->user()->preferences,
         ], Response::HTTP_OK);
     }
 
@@ -107,7 +108,7 @@ class LoginController extends Controller
      */
     protected function sendFailedLoginResponse(Request $request)
     {
-        return response()->json(['message' => 'unauthorised'], Response::HTTP_UNAUTHORIZED);
+        return response()->json(['message' => 'unauthorized'], Response::HTTP_UNAUTHORIZED);
     }
 
     /**

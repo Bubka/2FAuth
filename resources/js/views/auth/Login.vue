@@ -72,6 +72,7 @@
 
                 this.form.post('/user/login', {returnError: true})
                 .then(response => {
+                    this.applyPreferences(response.data.preferences);
                     this.$router.push({ name: 'accounts', params: { toRefresh: true } })
                 })
                 .catch(error => {
@@ -131,6 +132,7 @@
                 const publicKeyCredential = this.webauthn.parseOutgoingCredentials(credentials)
 
                 this.axios.post('/webauthn/login', publicKeyCredential, {returnError: true}).then(response => {
+                    this.applyPreferences(response.data.preferences);
                     this.$router.push({ name: 'accounts', params: { toRefresh: true } })
                 })
                 .catch(error => {

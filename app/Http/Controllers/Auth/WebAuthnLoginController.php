@@ -7,6 +7,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 use Laragear\WebAuthn\Http\Requests\AssertedRequest;
@@ -73,12 +74,19 @@ class WebAuthnLoginController extends Controller
             }
         }
 
+        /**
+         * @var \App\Models\User|null
+         */
         $user = $request->login();
 
         if ($user) {
             $this->authenticated($user);
 
-            return response()->noContent();
+            return response()->json([
+                'message'     => 'authenticated',
+                'name'        => $user->name,
+                'preferences' => $user->preferences,
+            ], Response::HTTP_OK);
         }
 
         return response()->noContent(422);

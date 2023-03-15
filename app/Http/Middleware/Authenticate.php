@@ -36,9 +36,9 @@ class Authenticate extends Middleware
 
                 // We now have an authenticated user so we override the locale already set
                 // by the SetLanguage global middleware
-                $lang = $this->auth->guard()->user()->preferences['lang'] ?? null;
+                $lang = $this->auth->guard()->user()->preferences['lang'];
 
-                if ($lang && in_array($lang, config('2fauth.locales')) && ! App::isLocale($lang)) {
+                if (in_array($lang, config('2fauth.locales')) && ! App::isLocale($lang)) {
                     App::setLocale($lang);
                 }
 

@@ -23,7 +23,6 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
-        \App\Http\Middleware\SetLanguage::class,
         \App\Http\Middleware\ForceJsonResponse::class,
     ];
 
@@ -40,6 +39,7 @@ class Kernel extends HttpKernel
             // \Illuminate\Session\Middleware\AuthenticateSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \App\Http\Middleware\SetLanguage::class,
             \App\Http\Middleware\CustomCreateFreshApiToken::class,
         ],
 
@@ -52,6 +52,7 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\Authenticate::class,
             \App\Http\Middleware\LogUserLastSeen::class,
             \App\Http\Middleware\KickOutInactiveUser::class,
+            \App\Http\Middleware\SetLanguage::class,
             \App\Http\Middleware\CustomCreateFreshApiToken::class,
         ],
 
@@ -60,6 +61,7 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\KickOutInactiveUser::class,
             \App\Http\Middleware\LogUserLastSeen::class,
+            \App\Http\Middleware\SetLanguage::class,
         ],
     ];
 
@@ -94,6 +96,7 @@ class Kernel extends HttpKernel
         \Illuminate\Session\Middleware\StartSession::class,
         \Illuminate\View\Middleware\ShareErrorsFromSession::class,
         \App\Http\Middleware\Authenticate::class,
+        \App\Http\Middleware\SetLanguage::class,
         \Illuminate\Session\Middleware\AuthenticateSession::class,
         \Illuminate\Routing\Middleware\SubstituteBindings::class,
         \Illuminate\Auth\Middleware\Authorize::class,
