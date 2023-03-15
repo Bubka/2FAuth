@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Extensions\WebauthnCredentialBroker;
-use App\Facades\Settings;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\WebauthnRecoveryRequest;
 use Illuminate\Auth\AuthenticationException;
@@ -52,7 +51,8 @@ class WebAuthnRecoveryController extends Controller
                     if ($this->shouldRevokeAllCredentials($request)) {
                         $user->flushCredentials();
                     }
-                    Settings::delete('useWebauthnOnly');
+                    $user->preferences['useWebauthnOnly'] = false;
+                    $user->save();
                 } else {
                     throw new AuthenticationException();
                 }

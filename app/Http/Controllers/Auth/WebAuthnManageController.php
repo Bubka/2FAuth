@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Facades\Settings;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\WebauthnRenameRequest;
 use Illuminate\Http\Request;
@@ -58,8 +57,9 @@ class WebAuthnManageController extends Controller
         // no more registered device exists.
         // See #110
         if (blank($user->webAuthnCredentials()->WhereEnabled()->get())) {
-            Settings::delete('useWebauthnOnly');
             Log::notice('No Webauthn credential enabled, Webauthn settings reset to default');
+            $request->user()->preferences['useWebauthnOnly'] = false;
+            $request->user()->save();
         }
 
         Log::info('Security device deleted');

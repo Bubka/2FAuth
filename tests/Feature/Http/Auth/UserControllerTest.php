@@ -68,7 +68,10 @@ class UserControllerTest extends FeatureTestCase
      */
     public function test_update_user_in_demo_mode_returns_unchanged_user()
     {
-        Settings::set('isDemoApp', true);
+        Config::set('2fauth.config.isDemoApp', true);
+
+        $name = $this->user->name;
+        $email = $this->user->email;
 
         $response = $this->actingAs($this->user, 'web-guard')
             ->json('PUT', '/user', [
@@ -78,17 +81,16 @@ class UserControllerTest extends FeatureTestCase
             ])
             ->assertOk()
             ->assertExactJson([
-                'name'     => $this->user->name,
+                'name'     => $name,
                 'id'       => $this->user->id,
-                'email'    => $this->user->email,
+                'email'    => $email,
                 'is_admin' => $this->user->is_admin,
             ]);
 
         $this->assertDatabaseHas('users', [
-            'name'     => $this->user->name,
+            'name'     => $name,
             'id'       => $this->user->id,
-            'email'    => $this->user->email,
-            'is_admin' => $this->user->is_admin,
+            'email'    => $email,
         ]);
     }
 
@@ -170,7 +172,6 @@ class UserControllerTest extends FeatureTestCase
     public function test_delete_user_in_demo_mode_returns_unauthorized()
     {
         Config::set('2fauth.config.isDemoApp', true);
-        Settings::set('isDemoApp', true);
 
         $response = $this->actingAs($this->user, 'web-guard')
             ->json('DELETE', '/user', [
