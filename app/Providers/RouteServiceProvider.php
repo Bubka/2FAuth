@@ -73,7 +73,8 @@ class RouteServiceProvider extends ServiceProvider
     protected function configureRateLimiting()
     {
         RateLimiter::for('api', function (Request $request) {
-            return Limit::perMinute(60)->by($request->ip());
+            $maxAttempts = config('2fauth.api.throttle');
+            return is_null($maxAttempts) ? Limit::none() : Limit::perMinute($maxAttempts)->by($request->ip());
         });
     }
 }

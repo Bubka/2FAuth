@@ -13,7 +13,6 @@ return [
     'repository' => 'https://github.com/Bubka/2FAuth',
     'latestReleaseUrl' => 'https://api.github.com/repos/Bubka/2FAuth/releases/latest',
 
-
     /*
     |--------------------------------------------------------------------------
     | 2FAuth config
@@ -27,6 +26,17 @@ return [
         'trustedProxies' => env('TRUSTED_PROXIES', null),
         'proxyLogoutUrl' => env('PROXY_LOGOUT_URL', null),
         'appSubdirectory' => env('APP_SUBDIRECTORY', ''),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | 2FAuth API config
+    |--------------------------------------------------------------------------
+    |
+    */
+
+    'api' => [
+        'throttle' => env('THROTTLE_API', 60),
     ],
 
     /*

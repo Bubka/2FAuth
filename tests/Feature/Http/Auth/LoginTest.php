@@ -4,6 +4,7 @@ namespace Tests\Feature\Http\Auth;
 
 use App\Models\User;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Config;
 use Tests\FeatureTestCase;
 
 /**
@@ -140,19 +141,23 @@ class LoginTest extends FeatureTestCase
      */
     public function test_too_many_login_attempts_with_invalid_credentials_returns_too_many_request_error()
     {
+        $throttle = 8;
+        Config::set('auth.throttle.login', $throttle);
+        
         $post = [
             'email'    => $this->user->email,
             'password' => self::WRONG_PASSWORD,
         ];
 
-        $this->json('POST', '/user/login', $post);
-        $this->json('POST', '/user/login', $post);
-        $this->json('POST', '/user/login', $post);
-        $this->json('POST', '/user/login', $post);
-        $this->json('POST', '/user/login', $post);
-        $response = $this->json('POST', '/user/login', $post);
+        for ($i=0; $i < $throttle - 1; $i++) {
+            $this->json('POST', '/user/login', $post);
+        }
 
-        $response->assertStatus(429);
+        $this->json('POST', '/user/login', $post)
+            ->assertUnauthorized();
+
+            $this->json('POST', '/user/login', $post)
+        ->assertStatus(429);
     }
 
     /**

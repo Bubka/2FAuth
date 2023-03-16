@@ -28,6 +28,13 @@ class LoginController extends Controller
     use AuthenticatesUsers;
 
     /**
+     * The login throttle.
+     *
+     * @var integer
+     */
+    protected $maxAttempts;
+
+    /**
      * Handle a login request to the application.
      *
      * @param  \App\Http\Requests\LoginRequest  $request
@@ -38,6 +45,8 @@ class LoginController extends Controller
     public function login(LoginRequest $request)
     {
         Log::info(sprintf('User login requested by %s from %s', var_export($request['email'], true), $request->ip()));
+
+        $this->maxAttempts = config('auth.throttle.login');
 
         // If the class is using the ThrottlesLogins trait, we can automatically throttle
         // the login attempts for this application. We'll key this by the username and

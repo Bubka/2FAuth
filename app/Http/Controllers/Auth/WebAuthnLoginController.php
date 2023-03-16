@@ -20,6 +20,13 @@ class WebAuthnLoginController extends Controller
 {
     use AuthenticatesUsers;
 
+    /**
+     * The login throttle.
+     *
+     * @var integer
+     */
+    protected $maxAttempts;
+
     /*
     |--------------------------------------------------------------------------
     | WebAuthn Login Controller
@@ -66,6 +73,8 @@ class WebAuthnLoginController extends Controller
     public function login(WebauthnAssertedRequest $request)
     {
         Log::info(sprintf('User login via webauthn requested by %s from %s', var_export($request['email'], true), $request->ip()));
+
+        $this->maxAttempts = config('auth.throttle.login');
 
         // If the class is using the ThrottlesLogins trait, we can automatically throttle
         // the login attempts for this application. We'll key this by the username and

@@ -278,6 +278,9 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
      */
     public function test_too_many_invalid_login_attempts_returns_too_many_request_error()
     {
+        $throttle = 8;
+        Config::set('auth.throttle.login', $throttle);
+
         $this->user = User::factory()->create(['email' => self::EMAIL]);
 
         $this->session(['_webauthn' => new \Laragear\WebAuthn\Challenge(
@@ -286,14 +289,15 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
             false,
         )]);
 
-        $this->json('POST', '/webauthn/login', self::ASSERTION_RESPONSE_INVALID);
-        $this->json('POST', '/webauthn/login', self::ASSERTION_RESPONSE_INVALID);
-        $this->json('POST', '/webauthn/login', self::ASSERTION_RESPONSE_INVALID);
-        $this->json('POST', '/webauthn/login', self::ASSERTION_RESPONSE_INVALID);
-        $this->json('POST', '/webauthn/login', self::ASSERTION_RESPONSE_INVALID);
-        $response = $this->json('POST', '/webauthn/login', self::ASSERTION_RESPONSE_INVALID);
+        for ($i=0; $i < $throttle - 1; $i++) {
+            $this->json('POST', '/webauthn/login', self::ASSERTION_RESPONSE_INVALID);
+        }
 
-        $response->assertStatus(429);
+        $this->json('POST', '/webauthn/login', self::ASSERTION_RESPONSE_INVALID)
+            ->assertUnauthorized();
+
+        $this->json('POST', '/webauthn/login', self::ASSERTION_RESPONSE_INVALID)
+        ->assertStatus(429);
     }
 
     /**

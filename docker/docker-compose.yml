@@ -54,7 +54,16 @@ services:
       - MAIL_ENCRYPTION=null
       - MAIL_FROM_NAME=null
       - MAIL_FROM_ADDRESS=null
+      # API settings
+      # The maximum number of API calls in a minute from the same IP.
+      # Once reached, all requests from this IP will be rejected until the minute has elapsed.
+      # Set to null to disable the API throttling.
+      - THROTTLE_API=60
       # Authentication settings
+      # The number of times per minute a user can fail to log in before being locked out.
+      # Once reached, all login attempts will be rejected until the minute has elapsed.
+      # This setting applies to both email/password and webauthn login attemps.
+      - LOGIN_THROTTLE=5
       # The default authentication guard
       # Supported:
       #   'web-guard' : The Laravel built-in auth system (default if nulled)

@@ -2,6 +2,10 @@
 
 return [
 
+    'throttle' => [
+        'login' => env('LOGIN_THROTTLE', 5),
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Authentication Defaults
