@@ -138,7 +138,8 @@
 
                 if (!credentials) return false
 
-                const publicKeyCredential = this.webauthn.parseOutgoingCredentials(credentials)
+                let publicKeyCredential = this.webauthn.parseOutgoingCredentials(credentials)
+                publicKeyCredential.email = this.form.email
 
                 this.axios.post('/webauthn/login', publicKeyCredential, {returnError: true}).then(response => {
                     this.applyPreferences(response.data.preferences);

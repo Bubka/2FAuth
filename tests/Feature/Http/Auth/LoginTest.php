@@ -44,9 +44,14 @@ class LoginTest extends FeatureTestCase
             'password' => self::PASSWORD,
         ])
             ->assertOk()
-            ->assertExactJson([
+            ->assertJsonFragment([
                 'message' => 'authenticated',
                 'name'    => $this->user->name,
+            ])
+            ->assertJsonStructure([
+                'message',
+                'name',
+                'preferences',
             ]);
     }
 
@@ -62,9 +67,14 @@ class LoginTest extends FeatureTestCase
             'password' => self::PASSWORD,
         ])
             ->assertOk()
-            ->assertExactJson([
+            ->assertJsonFragment([
                 'message' => 'authenticated',
                 'name'    => $this->user->name,
+            ])
+            ->assertJsonStructure([
+                'message',
+                'name',
+                'preferences',
             ]);
     }
 
@@ -73,7 +83,7 @@ class LoginTest extends FeatureTestCase
      *
      * @covers  \App\Http\Middleware\SkipIfAuthenticated
      */
-    public function test_user_login_already_authenticated_returns_bad_request()
+    public function test_user_login_already_authenticated_returns_success()
     {
         $response = $this->json('POST', '/user/login', [
             'email'    => $this->user->email,
@@ -113,7 +123,7 @@ class LoginTest extends FeatureTestCase
      *
      * @covers  \App\Exceptions\Handler
      */
-    public function test_user_login_with_invalid_credentials_returns_authentication_error()
+    public function test_user_login_with_invalid_credentials_returns_unauthorized()
     {
         $response = $this->json('POST', '/user/login', [
             'email'    => $this->user->email,
@@ -121,7 +131,7 @@ class LoginTest extends FeatureTestCase
         ])
             ->assertStatus(401)
             ->assertJson([
-                'message' => 'unauthorised',
+                'message' => 'unauthorized',
             ]);
     }
 
@@ -130,35 +140,17 @@ class LoginTest extends FeatureTestCase
      */
     public function test_too_many_login_attempts_with_invalid_credentials_returns_too_many_request_error()
     {
-        $response = $this->json('POST', '/user/login', [
+        $post = [
             'email'    => $this->user->email,
             'password' => self::WRONG_PASSWORD,
-        ]);
+        ];
 
-        $response = $this->json('POST', '/user/login', [
-            'email'    => $this->user->email,
-            'password' => self::WRONG_PASSWORD,
-        ]);
-
-        $response = $this->json('POST', '/user/login', [
-            'email'    => $this->user->email,
-            'password' => self::WRONG_PASSWORD,
-        ]);
-
-        $response = $this->json('POST', '/user/login', [
-            'email'    => $this->user->email,
-            'password' => self::WRONG_PASSWORD,
-        ]);
-
-        $response = $this->json('POST', '/user/login', [
-            'email'    => $this->user->email,
-            'password' => self::WRONG_PASSWORD,
-        ]);
-
-        $response = $this->json('POST', '/user/login', [
-            'email'    => $this->user->email,
-            'password' => self::WRONG_PASSWORD,
-        ]);
+        $this->json('POST', '/user/login', $post);
+        $this->json('POST', '/user/login', $post);
+        $this->json('POST', '/user/login', $post);
+        $this->json('POST', '/user/login', $post);
+        $this->json('POST', '/user/login', $post);
+        $response = $this->json('POST', '/user/login', $post);
 
         $response->assertStatus(429);
     }

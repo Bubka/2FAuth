@@ -6,7 +6,6 @@ use App\Models\User;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Laragear\WebAuthn\Assertion\Validator\AssertionValidator;
-use Laragear\WebAuthn\Http\Requests\AssertedRequest;
 use Laragear\WebAuthn\WebAuthn;
 use Tests\FeatureTestCase;
 
@@ -33,6 +32,8 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
 
     const USER_ID_ALT = 'e8af6f703f8042aa91c30cf72289aa07';
 
+    const EMAIL = 'john.doe@example.com';
+
     const ASSERTION_RESPONSE = [
         'id'       => self::CREDENTIAL_ID_ALT,
         'rawId'    => self::CREDENTIAL_ID_ALT_RAW,
@@ -43,6 +44,7 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
             'signature'         => 'ca4IJ9h8bZnjMbEFuHX1zfX5LcbiPyDVz6sD1/ppR4t8++1DxKa5EdBIrfNlo8FSOv/JSzMrGGUCQvc/Ngj1KnZpO3s9OdTb54/gMDewH/K8EG4wSvxzHdL6sMbP7UUc5Wq1pcdu9MgXY8V+1gftXpzcoaae0X+mLEETgU7eB8jG0mZhVWvE4yQKuDnZA1i9r8oQhqsvG4nUw1BxvR8wAGiRR+R287LaL41k+xum5mS8zEojUmuLSH50miyVxZ4Y+/oyfxG7i+wSYGNSXlW5iNPB+2WupGS7ce4TuOgaFeMmP2a9rzP4m2IBSQoJ2FyrdzR7HwBEewqqrUVbGQw3Aw==',
             'userHandle'        => self::USER_ID_ALT,
         ],
+        'email' => self::EMAIL,
     ];
 
     const ASSERTION_RESPONSE_NO_HANDLE = [
@@ -55,6 +57,20 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
             'signature'         => 'ca4IJ9h8bZnjMbEFuHX1zfX5LcbiPyDVz6sD1/ppR4t8++1DxKa5EdBIrfNlo8FSOv/JSzMrGGUCQvc/Ngj1KnZpO3s9OdTb54/gMDewH/K8EG4wSvxzHdL6sMbP7UUc5Wq1pcdu9MgXY8V+1gftXpzcoaae0X+mLEETgU7eB8jG0mZhVWvE4yQKuDnZA1i9r8oQhqsvG4nUw1BxvR8wAGiRR+R287LaL41k+xum5mS8zEojUmuLSH50miyVxZ4Y+/oyfxG7i+wSYGNSXlW5iNPB+2WupGS7ce4TuOgaFeMmP2a9rzP4m2IBSQoJ2FyrdzR7HwBEewqqrUVbGQw3Aw==',
             'userHandle'        => null,
         ],
+        'email' => self::EMAIL,
+    ];
+
+    const ASSERTION_RESPONSE_INVALID = [
+        'id'       => self::CREDENTIAL_ID_ALT,
+        'rawId'    => self::CREDENTIAL_ID_ALT_RAW,
+        'type'     => 'public-key',
+        'response' => [
+            'clientDataJSON'    => 'eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiaVhvem15bktpLVlEMmlSdktOYlNQQSIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3QiLCJjcm9zc09yaWdpbiI6ZmFsc2V9',
+            'authenticatorData' => 'SZYN5YgOjGh0NBcPZHZgW4/krrmihjLHmVzzuoMdl2MFAAAAAQ==',
+            'signature'         => 'ca4IJ9h8bZnjMbEFuHX1zfX5LcbiPyDVz6sD1/ppR4t8++1DxKa5EdBIrfNlo8FSOv/JSzMrGGUCQvc/Ngj1KnZpO3s9OdTb54/gMDewH/K8EG4wSvxzHdL6sMbP7UUc5Wq1pcdu9MgXY8V+1gftXpzcoaae0X+mLEETgU7eB8jG0mZhVWvE4yQKuDnZA1i9r8oQhqsvG4nUw1BxvR8wAGiRR+R287LaL41k+xum5mS8zEojUmuLSH50miyVxZ4Y+/oyfxG7i+wSYGNSXlW5iNPB+2WupGS7ce4TuOgaFeMmP2a9rzP4m2IBSQoJ2FyrdzR7HwBEewqqrUVbGQw3Aw==',
+            'userHandle'        => self::USER_ID_ALT,
+        ],
+        'email' => self::EMAIL,
     ];
 
     const ASSERTION_CHALLENGE = 'iXozmynKi+YD2iRvKNbSPA==';
@@ -72,18 +88,46 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
     /**
      * @test
      */
-    public function test_webauthn_login_uses_login_and_returns_no_content()
+    public function test_webauthn_login_returns_success()
     {
-        $this->user = User::factory()->create();
+        $this->user = User::factory()->create(['email' => self::EMAIL]);
 
-        $mock = $this->mock(AssertedRequest::class)->makePartial()->shouldIgnoreMissing();
-        $mock->shouldReceive([
-            'has'   => false,
-            'login' => $this->user,
+        DB::table('webauthn_credentials')->insert([
+            'id'                   => self::CREDENTIAL_ID_ALT,
+            'authenticatable_type' => \App\Models\User::class,
+            'authenticatable_id'   => $this->user->id,
+            'user_id'              => self::USER_ID_ALT,
+            'counter'              => 0,
+            'rp_id'                => 'http://localhost',
+            'origin'               => 'http://localhost',
+            'aaguid'               => '00000000-0000-0000-0000-000000000000',
+            'attestation_format'   => 'none',
+            'public_key'           => self::PUBLIC_KEY,
+            'updated_at'           => now(),
+            'created_at'           => now(),
         ]);
 
-        $this->json('POST', '/webauthn/login')
-            ->assertNoContent();
+        $this->session(['_webauthn' => new \Laragear\WebAuthn\Challenge(
+            new \Laragear\WebAuthn\ByteBuffer(base64_decode(self::ASSERTION_CHALLENGE)),
+            60,
+            false,
+        )]);
+
+        $this->mock(AssertionValidator::class)
+            ->expects('send->thenReturn')
+            ->andReturn();
+
+        $this->json('POST', '/webauthn/login', self::ASSERTION_RESPONSE)
+            ->assertOk()
+            ->assertJsonFragment([
+                'message'     => 'authenticated',
+                'name'        => $this->user->name,
+            ])
+            ->assertJsonStructure([
+                'message',
+                'name',
+                'preferences',
+            ]);
     }
 
     /**
@@ -91,7 +135,7 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
      */
     public function test_webauthn_login_merge_handle_if_missing()
     {
-        $this->user = User::factory()->create();
+        $this->user = User::factory()->create(['email' => self::EMAIL]);
 
         DB::table('webauthn_credentials')->insert([
             'id'                   => self::CREDENTIAL_ID_ALT,
@@ -119,24 +163,66 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
             ->andReturn();
 
         $this->json('POST', '/webauthn/login', self::ASSERTION_RESPONSE_NO_HANDLE)
-            ->assertNoContent();
+            ->assertOk()
+            ->assertJsonFragment([
+                'message' => 'authenticated',
+                'name'    => $this->user->name,
+            ])
+            ->assertJsonStructure([
+                'message',
+                'name',
+                'preferences',
+            ]);
     }
 
     /**
      * @test
+     *
+     * @covers  \App\Http\Middleware\SkipIfAuthenticated
      */
-    public function test_webauthn_invalid_login_returns_error()
+    public function test_webauthn_login_already_authenticated_returns_success()
     {
-        $this->user = User::factory()->create();
+        $this->user = User::factory()->create(['email' => self::EMAIL]);
 
-        $mock = $this->mock(AssertedRequest::class)->makePartial()->shouldIgnoreMissing();
-        $mock->shouldReceive([
-            'has'   => false,
-            'login' => null,
+        DB::table('webauthn_credentials')->insert([
+            'id'                   => self::CREDENTIAL_ID_ALT,
+            'authenticatable_type' => \App\Models\User::class,
+            'authenticatable_id'   => $this->user->id,
+            'user_id'              => self::USER_ID_ALT,
+            'counter'              => 0,
+            'rp_id'                => 'http://localhost',
+            'origin'               => 'http://localhost',
+            'aaguid'               => '00000000-0000-0000-0000-000000000000',
+            'attestation_format'   => 'none',
+            'public_key'           => self::PUBLIC_KEY,
+            'updated_at'           => now(),
+            'created_at'           => now(),
         ]);
 
-        $this->json('POST', '/webauthn/login')
-            ->assertNoContent(422);
+        $this->session(['_webauthn' => new \Laragear\WebAuthn\Challenge(
+            new \Laragear\WebAuthn\ByteBuffer(base64_decode(self::ASSERTION_CHALLENGE)),
+            60,
+            false,
+        )]);
+
+        $this->mock(AssertionValidator::class)
+            ->expects('send->thenReturn')
+            ->andReturn();
+
+        $this->json('POST', '/webauthn/login', self::ASSERTION_RESPONSE)
+            ->assertOk();
+
+        $this->json('POST', '/webauthn/login', self::ASSERTION_RESPONSE)
+            ->assertOk()
+            ->assertJsonFragment([
+                'message'     => 'authenticated',
+                'name'        => $this->user->name,
+            ])
+            ->assertJsonStructure([
+                'message',
+                'name',
+                'preferences',
+            ]);
     }
 
     /**
@@ -144,7 +230,7 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
      */
     public function test_webauthn_login_with_missing_data_returns_validation_error()
     {
-        $this->user = User::factory()->create();
+        $this->user = User::factory()->create(['email' => self::EMAIL]);
 
         $data = [
             'id'       => '',
@@ -173,11 +259,51 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
     /**
      * @test
      */
+    public function test_webauthn_invalid_login_returns_unauthorized()
+    {
+        $this->user = User::factory()->create(['email' => self::EMAIL]);
+
+        $this->session(['_webauthn' => new \Laragear\WebAuthn\Challenge(
+            new \Laragear\WebAuthn\ByteBuffer(base64_decode(self::ASSERTION_CHALLENGE)),
+            60,
+            false,
+        )]);
+
+        $this->json('POST', '/webauthn/login', self::ASSERTION_RESPONSE_INVALID)
+            ->assertUnauthorized();
+    }
+
+    /**
+     * @test
+     */
+    public function test_too_many_invalid_login_attempts_returns_too_many_request_error()
+    {
+        $this->user = User::factory()->create(['email' => self::EMAIL]);
+
+        $this->session(['_webauthn' => new \Laragear\WebAuthn\Challenge(
+            new \Laragear\WebAuthn\ByteBuffer(base64_decode(self::ASSERTION_CHALLENGE)),
+            60,
+            false,
+        )]);
+
+        $this->json('POST', '/webauthn/login', self::ASSERTION_RESPONSE_INVALID);
+        $this->json('POST', '/webauthn/login', self::ASSERTION_RESPONSE_INVALID);
+        $this->json('POST', '/webauthn/login', self::ASSERTION_RESPONSE_INVALID);
+        $this->json('POST', '/webauthn/login', self::ASSERTION_RESPONSE_INVALID);
+        $this->json('POST', '/webauthn/login', self::ASSERTION_RESPONSE_INVALID);
+        $response = $this->json('POST', '/webauthn/login', self::ASSERTION_RESPONSE_INVALID);
+
+        $response->assertStatus(429);
+    }
+
+    /**
+     * @test
+     */
     public function test_get_options_for_securelogin_returns_success()
     {
         Config::set('webauthn.user_verification', WebAuthn::USER_VERIFICATION_REQUIRED);
 
-        $this->user = User::factory()->create();
+        $this->user = User::factory()->create(['email' => self::EMAIL]);
 
         DB::table('webauthn_credentials')->insert([
             'id'                   => self::CREDENTIAL_ID,
@@ -219,7 +345,7 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
     {
         Config::set('webauthn.user_verification', WebAuthn::USER_VERIFICATION_DISCOURAGED);
 
-        $this->user = User::factory()->create();
+        $this->user = User::factory()->create(['email' => self::EMAIL]);
 
         DB::table('webauthn_credentials')->insert([
             'id'                   => self::CREDENTIAL_ID,
@@ -259,7 +385,7 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
      */
     public function test_get_options_with_capitalized_email_returns_success()
     {
-        $this->user = User::factory()->create();
+        $this->user = User::factory()->create(['email' => self::EMAIL]);
 
         $this->json('POST', '/webauthn/login/options', [
             'email' => strtoupper($this->user->email),
