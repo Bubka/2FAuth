@@ -4,6 +4,7 @@ namespace Tests\Feature\Http\Auth;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Log;
 use Laragear\WebAuthn\Http\Requests\AttestationRequest;
 use Laragear\WebAuthn\Http\Requests\AttestedRequest;
 use Laragear\WebAuthn\JsonTransport;
@@ -69,7 +70,10 @@ class WebAuthnRegisterControllerTest extends FeatureTestCase
      */
     public function test_register_uses_attested_request() : void
     {
-        $this->mock(AttestedRequest::class)->expects('save')->andReturn();
+        $request = $this->mock(AttestedRequest::class);
+
+        $request->expects('save')->andReturn();
+        $request->expects('user')->andReturn($this->user);
 
         $this->actingAs($this->user, 'web-guard')
             ->json('POST', '/webauthn/register')

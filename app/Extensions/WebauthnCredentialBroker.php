@@ -6,6 +6,7 @@ use App\Models\WebAuthnAuthenticatable;
 use Closure;
 use Illuminate\Auth\Passwords\PasswordBroker;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Illuminate\Support\Facades\Log;
 
 class WebauthnCredentialBroker extends PasswordBroker
 {
@@ -18,6 +19,9 @@ class WebauthnCredentialBroker extends PasswordBroker
      */
     public function sendResetLink(array $credentials, Closure $callback = null) : string
     {
+        /**
+         * @var \App\Models\User
+         */
         $user = $this->getUser($credentials);
 
         if (! $user instanceof WebAuthnAuthenticatable) {
@@ -35,6 +39,8 @@ class WebauthnCredentialBroker extends PasswordBroker
         } else {
             $user->sendWebauthnRecoveryNotification($token);
         }
+
+        Log::notice(sprintf('Webauthn recovery email sent to user ID #%s', $user->id));
 
         return static::RESET_LINK_SENT;
     }

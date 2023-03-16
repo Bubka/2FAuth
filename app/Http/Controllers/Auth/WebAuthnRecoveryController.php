@@ -10,6 +10,7 @@ use Illuminate\Foundation\Auth\ResetsPasswords;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\ValidationException;
 
@@ -53,6 +54,7 @@ class WebAuthnRecoveryController extends Controller
                     }
                     $user->preferences['useWebauthnOnly'] = false;
                     $user->save();
+                    Log::notice(sprintf('Legacy login restored for user ID #%s', $user->id));
                 } else {
                     throw new AuthenticationException();
                 }

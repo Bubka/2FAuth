@@ -7,6 +7,7 @@ use App\Api\v1\Resources\UserResource;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -76,6 +77,8 @@ class UserController extends Controller
 
         $request->user()['preferences->' . $preferenceName] = $validated['value'];
         $request->user()->save();
+        
+        Log::info(sprintf('User ID #%s changed its preference %s to %s', $request->user()->id, var_export($preferenceName, true), var_export($validated['value'], true)));
 
         return response()->json([
             'key'   => $preferenceName,

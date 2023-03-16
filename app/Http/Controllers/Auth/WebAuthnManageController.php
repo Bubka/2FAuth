@@ -57,12 +57,12 @@ class WebAuthnManageController extends Controller
         // no more registered device exists.
         // See #110
         if (blank($user->webAuthnCredentials()->WhereEnabled()->get())) {
-            Log::notice('No Webauthn credential enabled, Webauthn settings reset to default');
             $request->user()->preferences['useWebauthnOnly'] = false;
             $request->user()->save();
+            Log::notice(sprintf('No more Webauthn credential for user ID #%s, user Webauthn options reset to default', $user->id));
         }
-
-        Log::info('Security device deleted');
+       
+        Log::info(sprintf('User ID #%s revoked a security device', $user->id));
 
         return response()->json(null, 204);
     }

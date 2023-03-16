@@ -37,7 +37,7 @@ class LoginController extends Controller
      */
     public function login(LoginRequest $request)
     {
-        Log::info('User login requested');
+        Log::info(sprintf('User login requested by %s from %s', var_export($request['email'], true), $request->ip()));
 
         // If the class is using the ThrottlesLogins trait, we can automatically throttle
         // the login attempts for this application. We'll key this by the username and
@@ -45,6 +45,12 @@ class LoginController extends Controller
         if (method_exists($this, 'hasTooManyLoginAttempts') &&
             $this->hasTooManyLoginAttempts($request)) {
             $this->fireLockoutEvent($request);
+
+            Log::notice(sprintf(
+                '%s from %s locked-out, too many failed login attempts (using email+password)',
+                var_export($request['email'], true),
+                $request->ip()
+            ));
 
             return $this->sendLockoutResponse($request);
         }
@@ -58,7 +64,13 @@ class LoginController extends Controller
         // user surpasses their maximum number of attempts they will get locked out.
         $this->incrementLoginAttempts($request);
 
-        Log::info('User login failed');
+        Log::notice(sprintf(
+            'Failed login for %s from %s - Attemp %d/%d (using email+password)',
+            var_export($request['email'], true),
+            $request->ip(),
+            $this->limiter()->attempts($this->throttleKey($request)),
+            $this->maxAttempts()
+        ));
 
         return $this->sendFailedLoginResponse($request);
     }
@@ -154,6 +166,6 @@ class LoginController extends Controller
         $user->last_seen_at = Carbon::now()->format('Y-m-d H:i:s');
         $user->save();
 
-        Log::info(sprintf('User ID #%s authenticated using login & pwd', $user->id));
+        Log::info(sprintf('User ID #%s authenticated (using email+password)', $user->id));
     }
 }

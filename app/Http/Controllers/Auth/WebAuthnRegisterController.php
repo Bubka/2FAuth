@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
 use Laragear\WebAuthn\Http\Requests\AttestationRequest;
 use Laragear\WebAuthn\Http\Requests\AttestedRequest;
 use Laragear\WebAuthn\WebAuthn;
@@ -43,6 +44,8 @@ class WebAuthnRegisterController extends Controller
     public function register(AttestedRequest $request) : Response
     {
         $request->save();
+        
+        Log::info(sprintf('User ID #%s registered a new security device', $request->user()->id));
 
         return response()->noContent();
     }
