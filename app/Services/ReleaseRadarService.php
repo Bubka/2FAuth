@@ -38,6 +38,8 @@ class ReleaseRadarService
      */
     protected static function newRelease() : false|string
     {
+        Log::info('Release scan started');
+
         if ($latestReleaseData = json_decode(self::getLatestReleaseData())) {
             $githubVersion    = Helpers::cleanVersionNumber($latestReleaseData->tag_name);
             $installedVersion = Helpers::cleanVersionNumber(config('2fauth.version'));
@@ -45,6 +47,8 @@ class ReleaseRadarService
             if ($githubVersion && $installedVersion) {
                 if (version_compare($githubVersion, $installedVersion) > 0 && $latestReleaseData->prerelease == false && $latestReleaseData->draft == false) {
                     Settings::set('latestRelease', $latestReleaseData->tag_name);
+
+                    Log::info(sprintf('New release found: %s', var_export($latestReleaseData->tag_name, true)));
 
                     return $latestReleaseData->tag_name;
                 } else {
@@ -63,9 +67,11 @@ class ReleaseRadarService
      */
     protected static function getLatestReleaseData() : string|null
     {
+        $url = config('2fauth.latestReleaseUrl');
+
         try {
             $response = Http::retry(3, 100)
-                ->get(config('2fauth.latestReleaseUrl'));
+                ->get($url);
 
             if ($response->successful()) {
                 Settings::set('lastRadarScan', time());
@@ -73,7 +79,7 @@ class ReleaseRadarService
                 return $response->body();
             }
         } catch (\Exception $exception) {
-            Log::error('cannot reach latestReleaseUrl endpoint');
+            Log::error(sprintf('cannot reach %s endpoint', var_export($url, true)));
         }
 
         return null;

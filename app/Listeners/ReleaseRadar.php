@@ -4,7 +4,6 @@ namespace App\Listeners;
 
 use App\Events\ScanForNewReleaseCalled;
 use App\Services\ReleaseRadarService;
-use Illuminate\Support\Facades\Log;
 
 class ReleaseRadar
 {
@@ -28,7 +27,5 @@ class ReleaseRadar
     {
         $releaseRadarService = app()->make(ReleaseRadarService::class);
         $releaseRadarService::scheduledScan();
-
-        Log::info('Scheduled release scan complete');
     }
 }
