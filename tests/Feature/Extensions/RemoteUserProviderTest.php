@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Extensions;
+namespace Tests\Feature\Extensions;
 
 use App\Extensions\RemoteUserProvider;
 use App\Models\User;
@@ -94,8 +94,8 @@ class RemoteUserProviderTest extends FeatureTestCase
 
         $this->app['auth']->shouldUse('reverse-proxy-guard');
 
-        $name = str_pad('john', 300, '_');
-        $inDbName = substr($name, 0, 191);
+        $name      = str_pad('john', 300, '_');
+        $inDbName  = substr($name, 0, 191);
         $inDbEmail = substr($name, 0, 184) . '@remote';
 
         $this->json('GET', '/api/v1/groups', [], [
