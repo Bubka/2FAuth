@@ -2,7 +2,7 @@
 
 return [
 
-    'user_verification' => env('WEBAUTHN_USER_VERIFICATION', 'discouraged'),
+    'user_verification' => env('WEBAUTHN_USER_VERIFICATION', 'preferred'),
 
     /*
     |--------------------------------------------------------------------------

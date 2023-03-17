@@ -303,7 +303,47 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
     /**
      * @test
      */
-    public function test_get_options_for_securelogin_returns_success()
+    public function test_get_options_returns_success()
+    {
+        Config::set('webauthn.user_verification', WebAuthn::USER_VERIFICATION_PREFERRED);
+
+        $this->user = User::factory()->create(['email' => self::EMAIL]);
+
+        DB::table('webauthn_credentials')->insert([
+            'id'                   => self::CREDENTIAL_ID,
+            'authenticatable_type' => \App\Models\User::class,
+            'authenticatable_id'   => $this->user->id,
+            'user_id'              => self::USER_ID,
+            'counter'              => 0,
+            'rp_id'                => 'http://localhost',
+            'origin'               => 'http://localhost',
+            'aaguid'               => '00000000-0000-0000-0000-000000000000',
+            'attestation_format'   => 'none',
+            'public_key'           => self::PUBLIC_KEY,
+            'updated_at'           => now(),
+            'created_at'           => now(),
+        ]);
+
+        $response = $this->json('POST', '/webauthn/login/options', [
+            'email' => $this->user->email,
+        ])
+            ->assertOk()
+            ->assertJsonStructure([
+                'challenge',
+                'timeout',
+            ])
+            ->assertJsonFragment([
+                'allowCredentials' => [[
+                    'id'   => self::CREDENTIAL_ID,
+                    'type' => 'public-key',
+                ]],
+            ]);
+    }
+
+    /**
+     * @test
+     */
+    public function test_get_options_for_securelogin_returns_required_userVerification()
     {
         Config::set('webauthn.user_verification', WebAuthn::USER_VERIFICATION_REQUIRED);
 
@@ -345,7 +385,7 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
     /**
      * @test
      */
-    public function test_get_options_for_fastlogin_returns_success()
+    public function test_get_options_for_fastlogin_returns_discouraged_userVerification()
     {
         Config::set('webauthn.user_verification', WebAuthn::USER_VERIFICATION_DISCOURAGED);
 
