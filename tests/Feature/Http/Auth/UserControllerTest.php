@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Http\Auth;
 
-use App\Facades\Settings;
 use App\Models\Group;
 use App\Models\TwoFAccount;
 use App\Models\User;
@@ -12,6 +11,7 @@ use Tests\FeatureTestCase;
 /**
  * @covers  \App\Http\Controllers\Auth\UserController
  * @covers  \App\Http\Middleware\RejectIfDemoMode
+ * @covers  \App\Http\Requests\UserUpdateRequest
  */
 class UserControllerTest extends FeatureTestCase
 {
@@ -66,11 +66,38 @@ class UserControllerTest extends FeatureTestCase
     /**
      * @test
      */
+    public function test_update_user_with_uppercased_email_returns_success()
+    {
+        $response = $this->actingAs($this->user, 'web-guard')
+            ->json('PUT', '/user', [
+                'name'     => self::NEW_USERNAME,
+                'email'    => strtoupper(self::NEW_EMAIL),
+                'password' => self::PASSWORD,
+            ])
+            ->assertOk()
+            ->assertExactJson([
+                'name'     => self::NEW_USERNAME,
+                'id'       => $this->user->id,
+                'email'    => self::NEW_EMAIL,
+                'is_admin' => false,
+            ]);
+
+        $this->assertDatabaseHas('users', [
+            'name'     => self::NEW_USERNAME,
+            'id'       => $this->user->id,
+            'email'    => self::NEW_EMAIL,
+            'is_admin' => false,
+        ]);
+    }
+
+    /**
+     * @test
+     */
     public function test_update_user_in_demo_mode_returns_unchanged_user()
     {
         Config::set('2fauth.config.isDemoApp', true);
 
-        $name = $this->user->name;
+        $name  = $this->user->name;
         $email = $this->user->email;
 
         $response = $this->actingAs($this->user, 'web-guard')
@@ -88,9 +115,9 @@ class UserControllerTest extends FeatureTestCase
             ]);
 
         $this->assertDatabaseHas('users', [
-            'name'     => $name,
-            'id'       => $this->user->id,
-            'email'    => $email,
+            'name'  => $name,
+            'id'    => $this->user->id,
+            'email' => $email,
         ]);
     }
 

@@ -12,6 +12,7 @@ use Tests\FeatureTestCase;
 /**
  * @covers  \App\Http\Controllers\Auth\WebAuthnLoginController
  * @covers  \App\Models\User
+ * @covers  \App\Extensions\WebauthnTwoFAuthUserProvider
  */
 class WebAuthnLoginControllerTest extends FeatureTestCase
 {
@@ -120,8 +121,8 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
         $this->json('POST', '/webauthn/login', self::ASSERTION_RESPONSE)
             ->assertOk()
             ->assertJsonFragment([
-                'message'     => 'authenticated',
-                'name'        => $this->user->name,
+                'message' => 'authenticated',
+                'name'    => $this->user->name,
             ])
             ->assertJsonStructure([
                 'message',
@@ -177,6 +178,26 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
 
     /**
      * @test
+     */
+    public function test_legacy_login_is_rejected_when_webauthn_only_is_enable()
+    {
+        $this->user = User::factory()->create([
+            'email' => self::EMAIL,
+        ]);
+
+        // Set to webauthn only
+        $this->user['preferences->useWebauthnOnly'] = true;
+        $this->user->save();
+
+        $response = $this->json('POST', '/user/login', [
+            'email'    => self::EMAIL,
+            'password' => 'password',
+        ])
+            ->assertUnauthorized();
+    }
+
+    /**
+     * @test
      *
      * @covers  \App\Http\Middleware\SkipIfAuthenticated
      */
@@ -215,8 +236,8 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
         $this->json('POST', '/webauthn/login', self::ASSERTION_RESPONSE)
             ->assertOk()
             ->assertJsonFragment([
-                'message'     => 'authenticated',
-                'name'        => $this->user->name,
+                'message' => 'authenticated',
+                'name'    => $this->user->name,
             ])
             ->assertJsonStructure([
                 'message',
@@ -289,7 +310,7 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
             false,
         )]);
 
-        for ($i=0; $i < $throttle - 1; $i++) {
+        for ($i = 0; $i < $throttle - 1; $i++) {
             $this->json('POST', '/webauthn/login', self::ASSERTION_RESPONSE_INVALID);
         }
 

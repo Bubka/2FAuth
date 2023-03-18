@@ -106,7 +106,7 @@ class MigrationTestData
                         "name": "' . OtpTestData::ACCOUNT . '",
                         "issuer": "' . OtpTestData::SERVICE . '",
                         "note": "",
-                        "icon": "PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDI0IDEwMjQiPg0KICAgPGNpcmNsZSBjeD0iNTEyIiBjeT0iNTEyIiByPSI1MTIiIHN0eWxlPSJmaWxsOiMwMDBlOWMiLz4NCiAgIDxwYXRoIGQ9Im03MDAuMiA0NjYuNSA2MS4yLTEwNi4zYzIzLjYgNDEuNiAzNy4yIDg5LjggMzcuMiAxNDEuMSAwIDY4LjgtMjQuMyAxMzEuOS02NC43IDE4MS40SDU3NS44bDQ4LjctODQuNmgtNjQuNGw3NS44LTEzMS43IDY0LjMuMXptLTU1LjQtMTI1LjJMNDQ4LjMgNjgyLjVsLjEuMkgyOTAuMWMtNDAuNS00OS41LTY0LjctMTEyLjYtNjQuNy0xODEuNCAwLTUxLjQgMTMuNi05OS42IDM3LjMtMTQxLjNsMTAyLjUgMTc4LjIgMTEzLjMtMTk3aDE2Ni4zeiIgc3R5bGU9ImZpbGw6I2ZmZiIvPg0KPC9zdmc+DQo=",
+                        "icon": "' . OtpTestData::ICON_SVG_DATA_ENCODED . '",
                         "icon_mime": "image\/svg+xml",
                         "info": {
                             "secret": "' . OtpTestData::SECRET . '",
@@ -463,4 +463,249 @@ class MigrationTestData
         },
         "db": "1rX0ajzsxNbhN2hvnNCMBNooLlzqwz\/LMT3bNEIJjPH+zIvIbA6GVVPHLpna+yvjxLPKVkt1OQig=="
     }';
+
+    const VALID_2FAUTH_JSON_MIGRATION_PAYLOAD = '
+        {
+            "app": "2fauth_v3.4.1",
+            "schema": 1,
+            "datetime": "2022-12-14T14:53:06.173939Z",
+            "data":
+            [
+                {
+                    "otp_type": "totp",
+                    "account": "' . OtpTestData::ACCOUNT . '",
+                    "service": "' . OtpTestData::SERVICE . '",
+                    "icon": null,
+                    "icon_mime": null,
+                    "icon_file": null,
+                    "secret": "' . OtpTestData::SECRET . '",
+                    "digits": ' . OtpTestData::DIGITS_CUSTOM . ',
+                    "algorithm": "' . OtpTestData::ALGORITHM_CUSTOM . '",
+                    "period": ' . OtpTestData::PERIOD_CUSTOM . ',
+                    "counter": null,
+                    "legacy_uri": "' . OtpTestData::TOTP_FULL_CUSTOM_URI_NO_IMG . '"
+                },
+                {
+                    "otp_type": "hotp",
+                    "account": "' . OtpTestData::ACCOUNT . '",
+                    "service": "' . OtpTestData::SERVICE . '",
+                    "icon": null,
+                    "icon_mime": null,
+                    "icon_file": null,
+                    "secret": "' . OtpTestData::SECRET . '",
+                    "digits": ' . OtpTestData::DIGITS_CUSTOM . ',
+                    "algorithm": "' . OtpTestData::ALGORITHM_CUSTOM . '",
+                    "period": null,
+                    "counter": ' . OtpTestData::COUNTER_CUSTOM . ',
+                    "legacy_uri": "' . OtpTestData::HOTP_FULL_CUSTOM_URI_NO_IMG . '"
+                },
+                {
+                    "otp_type": "steamtotp",
+                    "account": "' . OtpTestData::ACCOUNT . '",
+                    "service": "' . OtpTestData::STEAM . '",
+                    "icon": null,
+                    "icon_mime": null,
+                    "icon_file": null,
+                    "secret": "' . OtpTestData::STEAM_SECRET . '",
+                    "digits": ' . OtpTestData::DIGITS_STEAM . ',
+                    "algorithm": "' . OtpTestData::ALGORITHM_CUSTOM . '",
+                    "period": ' . OtpTestData::PERIOD_CUSTOM . ',
+                    "counter": null,
+                    "legacy_uri": "' . OtpTestData::STEAM_TOTP_URI . '"
+                }
+            ]
+        }';
+
+    const VALID_2FAUTH_MIGRATION_PAYLOAD_WITH_UNSUPPORTED_OTP_TYPE = '
+        {
+            "app": "2fauth_v3.4.1",
+            "schema": 1,
+            "datetime": "2022-12-14T14:53:06.173939Z",
+            "data":
+            [
+                {
+                    "otp_type": "totp",
+                    "account": "' . OtpTestData::ACCOUNT . '",
+                    "service": "' . OtpTestData::SERVICE . '",
+                    "icon": null,
+                    "icon_mime": null,
+                    "icon_file": null,
+                    "secret": "' . OtpTestData::SECRET . '",
+                    "digits": ' . OtpTestData::DIGITS_CUSTOM . ',
+                    "algorithm": "' . OtpTestData::ALGORITHM_CUSTOM . '",
+                    "period": ' . OtpTestData::PERIOD_CUSTOM . ',
+                    "counter": null,
+                    "legacy_uri": "' . OtpTestData::TOTP_FULL_CUSTOM_URI_NO_IMG . '"
+                },
+                {
+                    "otp_type": "Xotp",
+                    "account": "' . OtpTestData::ACCOUNT . '",
+                    "service": "' . OtpTestData::SERVICE . '",
+                    "icon": null,
+                    "icon_mime": null,
+                    "icon_file": null,
+                    "secret": "' . OtpTestData::SECRET . '",
+                    "digits": ' . OtpTestData::DIGITS_CUSTOM . ',
+                    "algorithm": "' . OtpTestData::ALGORITHM_CUSTOM . '",
+                    "period": ' . OtpTestData::PERIOD_CUSTOM . ',
+                    "counter": null,
+                    "legacy_uri": "' . OtpTestData::TOTP_FULL_CUSTOM_URI_NO_IMG . '"
+                }
+            ]
+        }';
+
+    const VALID_2FAUTH_JSON_MIGRATION_PAYLOAD_WITH_SVG_ICON = '
+        {
+            "app": "2fauth_v3.4.1",
+            "schema": 1,
+            "datetime": "2022-12-14T14:53:06.173939Z",
+            "data":
+            [
+                {
+                    "otp_type": "totp",
+                    "account": "' . OtpTestData::ACCOUNT . '",
+                    "service": "' . OtpTestData::SERVICE . '",
+                    "icon": "' . OtpTestData::ICON_SVG . '",
+                    "icon_mime": "image\/svg+xml",
+                    "icon_file": "' . OtpTestData::ICON_SVG_DATA_ENCODED . '",
+                    "secret": "' . OtpTestData::SECRET . '",
+                    "digits": ' . OtpTestData::DIGITS_CUSTOM . ',
+                    "algorithm": "' . OtpTestData::ALGORITHM_CUSTOM . '",
+                    "period": ' . OtpTestData::PERIOD_CUSTOM . ',
+                    "counter": null,
+                    "legacy_uri": "' . OtpTestData::TOTP_FULL_CUSTOM_URI_NO_IMG . '"
+                }
+            ]
+        }';
+
+    const VALID_2FAUTH_JSON_MIGRATION_PAYLOAD_WITH_JPG_ICON = '
+        {
+            "app": "2fauth_v3.4.1",
+            "schema": 1,
+            "datetime": "2022-12-14T14:53:06.173939Z",
+            "data":
+            [
+                {
+                    "otp_type": "totp",
+                    "account": "' . OtpTestData::ACCOUNT . '",
+                    "service": "' . OtpTestData::SERVICE . '",
+                    "icon": "' . OtpTestData::ICON_JPEG . '",
+                    "icon_mime": "image\/svg+xml",
+                    "icon_file": "' . OtpTestData::ICON_JPEG_DATA . '",
+                    "secret": "' . OtpTestData::SECRET . '",
+                    "digits": ' . OtpTestData::DIGITS_CUSTOM . ',
+                    "algorithm": "' . OtpTestData::ALGORITHM_CUSTOM . '",
+                    "period": ' . OtpTestData::PERIOD_CUSTOM . ',
+                    "counter": null,
+                    "legacy_uri": "' . OtpTestData::TOTP_FULL_CUSTOM_URI_NO_IMG . '"
+                }
+            ]
+        }';
+
+    const VALID_2FAUTH_JSON_MIGRATION_PAYLOAD_WITH_PNG_ICON = '
+        {
+            "app": "2fauth_v3.4.1",
+            "schema": 1,
+            "datetime": "2022-12-14T14:53:06.173939Z",
+            "data":
+            [
+                {
+                    "otp_type": "totp",
+                    "account": "' . OtpTestData::ACCOUNT . '",
+                    "service": "' . OtpTestData::SERVICE . '",
+                    "icon": "' . OtpTestData::ICON_PNG . '",
+                    "icon_mime": "image\/svg+xml",
+                    "icon_file": "' . OtpTestData::ICON_PNG_DATA . '",
+                    "secret": "' . OtpTestData::SECRET . '",
+                    "digits": ' . OtpTestData::DIGITS_CUSTOM . ',
+                    "algorithm": "' . OtpTestData::ALGORITHM_CUSTOM . '",
+                    "period": ' . OtpTestData::PERIOD_CUSTOM . ',
+                    "counter": null,
+                    "legacy_uri": "' . OtpTestData::TOTP_FULL_CUSTOM_URI_NO_IMG . '"
+                }
+            ]
+        }';
+
+    const VALID_2FAUTH_JSON_MIGRATION_PAYLOAD_WITH_BMP_ICON = '
+        {
+            "app": "2fauth_v3.4.1",
+            "schema": 1,
+            "datetime": "2022-12-14T14:53:06.173939Z",
+            "data":
+            [
+                {
+                    "otp_type": "totp",
+                    "account": "' . OtpTestData::ACCOUNT . '",
+                    "service": "' . OtpTestData::SERVICE . '",
+                    "icon": "' . OtpTestData::ICON_BMP . '",
+                    "icon_mime": "image\/svg+xml",
+                    "icon_file": "' . OtpTestData::ICON_BMP_DATA . '",
+                    "secret": "' . OtpTestData::SECRET . '",
+                    "digits": ' . OtpTestData::DIGITS_CUSTOM . ',
+                    "algorithm": "' . OtpTestData::ALGORITHM_CUSTOM . '",
+                    "period": ' . OtpTestData::PERIOD_CUSTOM . ',
+                    "counter": null,
+                    "legacy_uri": "' . OtpTestData::TOTP_FULL_CUSTOM_URI_NO_IMG . '"
+                }
+            ]
+        }';
+
+    const VALID_2FAUTH_JSON_MIGRATION_PAYLOAD_WITH_WEBP_ICON = '
+        {
+            "app": "2fauth_v3.4.1",
+            "schema": 1,
+            "datetime": "2022-12-14T14:53:06.173939Z",
+            "data":
+            [
+                {
+                    "otp_type": "totp",
+                    "account": "' . OtpTestData::ACCOUNT . '",
+                    "service": "' . OtpTestData::SERVICE . '",
+                    "icon": "' . OtpTestData::ICON_WEBP . '",
+                    "icon_mime": "image\/svg+xml",
+                    "icon_file": "' . OtpTestData::ICON_WEBP_DATA . '",
+                    "secret": "' . OtpTestData::SECRET . '",
+                    "digits": ' . OtpTestData::DIGITS_CUSTOM . ',
+                    "algorithm": "' . OtpTestData::ALGORITHM_CUSTOM . '",
+                    "period": ' . OtpTestData::PERIOD_CUSTOM . ',
+                    "counter": null,
+                    "legacy_uri": "' . OtpTestData::TOTP_FULL_CUSTOM_URI_NO_IMG . '"
+                }
+            ]
+        }';
+
+    const VALID_2FAUTH_JSON_MIGRATION_PAYLOAD_WITH_UNSUPPORTED_ICON = '
+        {
+            "app": "2fauth_v3.4.1",
+            "schema": 1,
+            "datetime": "2022-12-14T14:53:06.173939Z",
+            "data":
+            [
+                {
+                    "otp_type": "totp",
+                    "account": "' . OtpTestData::ACCOUNT . '",
+                    "service": "' . OtpTestData::SERVICE . '",
+                    "icon": "' . OtpTestData::ICON_PNG . '",
+                    "icon_mime": "image\/gif",
+                    "icon_file": "' . OtpTestData::ICON_PNG_DATA . '",
+                    "secret": "' . OtpTestData::SECRET . '",
+                    "digits": ' . OtpTestData::DIGITS_CUSTOM . ',
+                    "algorithm": "' . OtpTestData::ALGORITHM_CUSTOM . '",
+                    "period": ' . OtpTestData::PERIOD_CUSTOM . ',
+                    "counter": null,
+                    "legacy_uri": "' . OtpTestData::TOTP_FULL_CUSTOM_URI_NO_IMG . '"
+                }
+            ]
+    }';
+
+    const INVALID_2FAUTH_JSON_MIGRATION_PAYLOAD = '
+        {
+            "app": "2fauth_v3.4.1",
+            "schema": 1,
+            "datetime": "2022-12-14T14:53:06.173939Z",
+            "data":
+            [
+                ,
+            ]
+        }';
 }

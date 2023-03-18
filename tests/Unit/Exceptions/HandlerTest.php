@@ -174,4 +174,29 @@ class HandlerTest extends TestCase
                 'message',
             ]);
     }
+
+    /**
+     * @test
+     */
+    public function test_AccessDeniedException_returns_forbidden_json_response()
+    {
+        $request  = $this->createMock(Request::class);
+        $instance = new Handler($this->createMock(Container::class));
+        $class    = new \ReflectionClass(Handler::class);
+
+        $method = $class->getMethod('render');
+        $method->setAccessible(true);
+
+        $mockException = $this->createMock(\Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException::class);
+
+        $response = $method->invokeArgs($instance, [$request, $mockException]);
+
+        $this->assertInstanceOf(JsonResponse::class, $response);
+
+        $response = \Illuminate\Testing\TestResponse::fromBaseResponse($response);
+        $response->assertStatus(403)
+            ->assertJsonStructure([
+                'message',
+            ]);
+    }
 }

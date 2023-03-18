@@ -15,10 +15,14 @@ use Tests\FeatureTestCase;
 
 /**
  * @covers \App\Api\v1\Controllers\TwoFAccountController
+ * @covers \App\Api\v1\Resources\TwoFAccountCollection
  * @covers \App\Api\v1\Resources\TwoFAccountReadResource
  * @covers \App\Api\v1\Resources\TwoFAccountStoreResource
+ * @covers \App\Api\v1\Resources\TwoFAccountExportResource
+ * @covers \App\Api\v1\Resources\TwoFAccountExportCollection
  * @covers \App\Providers\MigrationServiceProvider
  * @covers \App\Providers\TwoFAuthServiceProvider
+ * @covers \App\Policies\TwoFAccountPolicy
  */
 class TwoFAccountControllerTest extends FeatureTestCase
 {
@@ -89,6 +93,27 @@ class TwoFAccountControllerTest extends FeatureTestCase
         'otp_type',
         'password',
         'counter',
+    ];
+
+    private const VALID_EXPORT_STRUTURE = [
+        'app',
+        'schema',
+        'datetime',
+        'data' => [
+            '*' => [
+                'otp_type',
+                'account',
+                'service',
+                'icon',
+                'icon_mime',
+                'icon_file',
+                'secret',
+                'digits',
+                'algorithm',
+                'period',
+                'counter',
+                'legacy_uri',
+            ], ],
     ];
 
     private const JSON_FRAGMENTS_FOR_CUSTOM_TOTP = [
@@ -871,6 +896,65 @@ class TwoFAccountControllerTest extends FeatureTestCase
     /**
      * @test
      */
+    public function test_export_returns_json_migration_resource()
+    {
+        $this->twofaccountA = TwoFAccount::factory()->for($this->user)->create(self::JSON_FRAGMENTS_FOR_DEFAULT_TOTP);
+        $this->twofaccountB = TwoFAccount::factory()->for($this->user)->create(self::JSON_FRAGMENTS_FOR_DEFAULT_HOTP);
+
+        $this->actingAs($this->user, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/export?ids=' . $this->twofaccountA->id . ',' . $this->twofaccountB->id)
+            ->assertOk()
+            ->assertJsonStructure(self::VALID_EXPORT_STRUTURE)
+            ->assertJsonFragment(self::JSON_FRAGMENTS_FOR_DEFAULT_TOTP)
+            ->assertJsonFragment(self::JSON_FRAGMENTS_FOR_DEFAULT_HOTP);
+    }
+
+    /**
+     * @test
+     */
+    public function test_export_too_many_ids_returns_bad_request()
+    {
+        TwoFAccount::factory()->count(102)->for($this->user)->create();
+
+        $ids = DB::table('twofaccounts')->where('user_id', $this->user->id)->pluck('id')->implode(',');
+
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/export?ids=' . $ids)
+            ->assertStatus(400)
+            ->assertJsonStructure([
+                'message',
+                'reason',
+            ]);
+    }
+
+    /**
+     * @test
+     */
+    public function test_export_missing_twofaccount_returns_existing_ones_only()
+    {
+        $this->twofaccountA = TwoFAccount::factory()->for($this->user)->create(self::JSON_FRAGMENTS_FOR_DEFAULT_TOTP);
+
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/export?ids=' . $this->twofaccountA->id . ',1000')
+            ->assertJsonFragment(self::JSON_FRAGMENTS_FOR_DEFAULT_TOTP);
+    }
+
+    /**
+     * @test
+     */
+    public function test_export_twofaccount_of_another_user_is_forbidden()
+    {
+        $response = $this->actingAs($this->user, 'api-guard')
+        ->json('GET', '/api/v1/twofaccounts/export?ids=' . $this->twofaccountC->id)
+            ->assertForbidden()
+            ->assertJsonStructure([
+                'message',
+            ]);
+    }
+
+    /**
+     * @test
+     */
     public function test_get_otp_using_totp_twofaccount_id_returns_consistent_resource()
     {
         $twofaccount = TwoFAccount::factory()->for($this->user)->create([
@@ -1154,8 +1238,6 @@ class TwoFAccountControllerTest extends FeatureTestCase
     public function test_batch_destroy_twofaccount_returns_success()
     {
         TwoFAccount::factory()->count(3)->for($this->user)->create();
-
-        $ids = DB::table('twofaccounts')->where('user_id', $this->user->id)->pluck('id')->implode(',');
 
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('DELETE', '/api/v1/twofaccounts?ids=' . $this->twofaccountA->id . ',' . $this->twofaccountB->id)

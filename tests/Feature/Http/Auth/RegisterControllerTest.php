@@ -7,6 +7,7 @@ use Tests\FeatureTestCase;
 
 /**
  * @covers  \App\Http\Controllers\Auth\RegisterController
+ * @covers  \App\Http\Requests\UserStoreRequest
  */
 class RegisterControllerTest extends FeatureTestCase
 {

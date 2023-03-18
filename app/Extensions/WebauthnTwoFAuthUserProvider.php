@@ -21,7 +21,7 @@ class WebauthnTwoFAuthUserProvider extends WebAuthnUserProvider
             return $this->validateWebAuthn();
         }
 
-        // If the user disabled the fallback is enabled, we will validate the credential password.
+        // If the user disabled the fallback, we will validate the credential password.
         return $user->preferences['useWebauthnOnly'] == false && EloquentUserProvider::validateCredentials($user, $credentials);
     }
 }

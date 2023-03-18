@@ -13,6 +13,7 @@ use App\Services\Migrators\GoogleAuthMigrator;
 use App\Services\Migrators\Migrator;
 use App\Services\Migrators\PlainTextMigrator;
 use App\Services\Migrators\TwoFASMigrator;
+use App\Services\Migrators\TwoFAuthMigrator;
 use App\Services\SettingService;
 use Illuminate\Support\Facades\Storage;
 use Mockery;
@@ -30,6 +31,7 @@ use Tests\TestCase;
  * @covers \App\Services\Migrators\TwoFASMigrator
  * @covers \App\Services\Migrators\PlainTextMigrator
  * @covers \App\Services\Migrators\GoogleAuthMigrator
+ * @covers \App\Services\Migrators\TwoFAuthMigrator
  *
  * @uses \App\Models\TwoFAccount
  */
@@ -208,6 +210,12 @@ class MigratorTest extends TestCase
                 'gauth',
                 $hasSteam = false,
             ],
+            '2FAUTH_MIGRATION_PAYLOAD' => [
+                new TwoFAuthMigrator(),
+                MigrationTestData::VALID_2FAUTH_JSON_MIGRATION_PAYLOAD,
+                'custom',
+                $hasSteam = true,
+            ],
         ];
     }
 
@@ -273,6 +281,10 @@ class MigratorTest extends TestCase
                 new GoogleAuthMigrator(),
                 MigrationTestData::GOOGLE_AUTH_MIGRATION_URI_WITH_INVALID_DATA,
             ],
+            'INVALID_2FAUTH_JSON_MIGRATION_PAYLOAD' => [
+                new TwoFAuthMigrator(),
+                MigrationTestData::INVALID_2FAUTH_JSON_MIGRATION_PAYLOAD,
+            ],
 
         ];
     }
@@ -312,6 +324,10 @@ class MigratorTest extends TestCase
             'VALID_2FAS_MIGRATION_PAYLOAD_WITH_UNSUPPORTED_OTP_TYPE' => [
                 new TwoFASMigrator(),
                 MigrationTestData::VALID_2FAS_MIGRATION_PAYLOAD_WITH_UNSUPPORTED_OTP_TYPE,
+            ],
+            'VALID_2FAUTH_MIGRATION_PAYLOAD_WITH_UNSUPPORTED_OTP_TYPE' => [
+                new TwoFAuthMigrator(),
+                MigrationTestData::VALID_2FAUTH_MIGRATION_PAYLOAD_WITH_UNSUPPORTED_OTP_TYPE,
             ],
         ];
     }
@@ -397,9 +413,68 @@ class MigratorTest extends TestCase
     /**
      * @test
      *
+     * @dataProvider TwoFAuthWithIconMigrationProvider
+     */
+    public function test_migrate_2fauth_payload_with_icon_sets_and_stores_the_icon($migration)
+    {
+        Storage::fake('icons');
+
+        $migrator = new TwoFAuthMigrator();
+        $accounts = $migrator->migrate($migration);
+
+        $this->assertContainsOnlyInstancesOf(TwoFAccount::class, $accounts);
+        $this->assertCount(1, $accounts);
+
+        Storage::disk('icons')->assertExists($accounts->first()->icon);
+    }
+
+    /**
+     * Provide data for TwoFAccount store tests
+     */
+    public function TwoFAuthWithIconMigrationProvider()
+    {
+        return [
+            'SVG' => [
+                MigrationTestData::VALID_2FAUTH_JSON_MIGRATION_PAYLOAD_WITH_SVG_ICON,
+            ],
+            'PNG' => [
+                MigrationTestData::VALID_2FAUTH_JSON_MIGRATION_PAYLOAD_WITH_PNG_ICON,
+            ],
+            'JPG' => [
+                MigrationTestData::VALID_2FAUTH_JSON_MIGRATION_PAYLOAD_WITH_JPG_ICON,
+            ],
+            'BMP' => [
+                MigrationTestData::VALID_2FAUTH_JSON_MIGRATION_PAYLOAD_WITH_BMP_ICON,
+            ],
+            'WEBP' => [
+                MigrationTestData::VALID_2FAUTH_JSON_MIGRATION_PAYLOAD_WITH_WEBP_ICON,
+            ],
+        ];
+    }
+
+    /**
+     * @test
+     */
+    public function test_migrate_2fauth_payload_with_unsupported_icon_does_not_fail()
+    {
+        Storage::fake('icons');
+
+        $migrator = new TwoFAuthMigrator();
+        $accounts = $migrator->migrate(MigrationTestData::VALID_2FAUTH_JSON_MIGRATION_PAYLOAD_WITH_UNSUPPORTED_ICON);
+
+        $this->assertContainsOnlyInstancesOf(TwoFAccount::class, $accounts);
+        $this->assertCount(1, $accounts);
+
+        $this->assertNull($this->fakeTwofaccount->icon);
+        Storage::disk('icons')->assertDirectoryEmpty('/');
+    }
+
+    /**
+     * @test
+     *
      * @dataProvider factoryProvider
      */
-    public function test_factory_returns_plain_text_migrator($payload, $migratorClass)
+    public function test_factory_returns_relevant_migrator($payload, $migratorClass)
     {
         $factory = new MigratorFactory();
 
@@ -433,6 +508,10 @@ class MigratorTest extends TestCase
             'GOOGLE_AUTH_MIGRATION_URI' => [
                 MigrationTestData::GOOGLE_AUTH_MIGRATION_URI,
                 GoogleAuthMigrator::class,
+            ],
+            '2FAUTH_MIGRATION_URI' => [
+                MigrationTestData::VALID_2FAUTH_JSON_MIGRATION_PAYLOAD,
+                TwoFAuthMigrator::class,
             ],
         ];
     }

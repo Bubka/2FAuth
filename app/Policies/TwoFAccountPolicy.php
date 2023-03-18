@@ -17,10 +17,10 @@ class TwoFAccountPolicy
      * @param  \App\Models\User  $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function viewAny(User $user)
-    {
-        return false;
-    }
+    // public function viewAny(User $user)
+    // {
+    //     return false;
+    // }
 
     /**
      * Determine whether the user can view the model.
@@ -162,10 +162,10 @@ class TwoFAccountPolicy
      * @param  \App\Models\TwoFAccount  $twofaccount
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(User $user, TwoFAccount $twofaccount)
-    {
-        return $this->isOwnerOf($user, $twofaccount);
-    }
+    // public function restore(User $user, TwoFAccount $twofaccount)
+    // {
+
+    // }
 
     /**
      * Determine whether the user can permanently delete the model.
@@ -174,8 +174,8 @@ class TwoFAccountPolicy
      * @param  \App\Models\TwoFAccount  $twofaccount
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(User $user, TwoFAccount $twofaccount)
-    {
-        return $this->isOwnerOf($user, $twofaccount);
-    }
+    // public function forceDelete(User $user, TwoFAccount $twofaccount)
+    // {
+
+    // }
 }

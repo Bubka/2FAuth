@@ -17,10 +17,10 @@ class GroupPolicy
      * @param  \App\Models\User  $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function viewAny(User $user)
-    {
-        return false;
-    }
+    // public function viewAny(User $user)
+    // {
+    //     return false;
+    // }
 
     /**
      * Determine whether the user can view the model.
@@ -48,19 +48,19 @@ class GroupPolicy
      * @param  \Illuminate\Support\Collection<int, \App\Models\Group>  $groups
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function viewEach(User $user, Group $group, $groups)
-    {
-        $can = $this->isOwnerOfEach($user, $groups);
+    // public function viewEach(User $user, Group $group, $groups)
+    // {
+    //     $can = $this->isOwnerOfEach($user, $groups);
 
-        if (! $can) {
-            $ids = $groups->map(function ($group, $key) {
-                return $group->id;
-            });
-            Log::notice(sprintf('User ID #%s cannot view all groups in IDs #%s', $user->id, implode(',', $ids->toArray())));
-        }
+    //     if (! $can) {
+    //         $ids = $groups->map(function ($group, $key) {
+    //             return $group->id;
+    //         });
+    //         Log::notice(sprintf('User ID #%s cannot view all groups in IDs #%s', $user->id, implode(',', $ids->toArray())));
+    //     }
 
-        return $can;
-    }
+    //     return $can;
+    // }
 
     /**
      * Determine whether the user can create models.
@@ -101,19 +101,19 @@ class GroupPolicy
      * @param  \Illuminate\Support\Collection<int, \App\Models\Group>  $groups
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function updateEach(User $user, Group $group, $groups)
-    {
-        $can = $this->isOwnerOfEach($user, $groups);
+    // public function updateEach(User $user, Group $group, $groups)
+    // {
+    //     $can = $this->isOwnerOfEach($user, $groups);
 
-        if (! $can) {
-            $ids = $groups->map(function ($group, $key) {
-                return $group->id;
-            });
-            Log::notice(sprintf('User ID #%s cannot update all groups in IDs #%s', $user->id, implode(',', $ids->toArray())));
-        }
+    //     if (! $can) {
+    //         $ids = $groups->map(function ($group, $key) {
+    //             return $group->id;
+    //         });
+    //         Log::notice(sprintf('User ID #%s cannot update all groups in IDs #%s', $user->id, implode(',', $ids->toArray())));
+    //     }
 
-        return $can;
-    }
+    //     return $can;
+    // }
 
     /**
      * Determine whether the user can delete the model.
@@ -141,19 +141,19 @@ class GroupPolicy
      * @param  \Illuminate\Support\Collection<int, \App\Models\Group>  $groups
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function deleteEach(User $user, Group $group, $groups)
-    {
-        $can = $this->isOwnerOfEach($user, $groups);
+    // public function deleteEach(User $user, Group $group, $groups)
+    // {
+    //     $can = $this->isOwnerOfEach($user, $groups);
 
-        if (! $can) {
-            $ids = $groups->map(function ($group, $key) {
-                return $group->id;
-            });
-            Log::notice(sprintf('User ID #%s cannot delete all groups in IDs #%s', $user->id, implode(',', $ids->toArray())));
-        }
+    //     if (! $can) {
+    //         $ids = $groups->map(function ($group, $key) {
+    //             return $group->id;
+    //         });
+    //         Log::notice(sprintf('User ID #%s cannot delete all groups in IDs #%s', $user->id, implode(',', $ids->toArray())));
+    //     }
 
-        return $can;
-    }
+    //     return $can;
+    // }
 
     /**
      * Determine whether the user can restore the model.
@@ -162,10 +162,10 @@ class GroupPolicy
      * @param  \App\Models\Group  $group
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(User $user, Group $group)
-    {
-        return $this->isOwnerOf($user, $group);
-    }
+    // public function restore(User $user, Group $group)
+    // {
+
+    // }
 
     /**
      * Determine whether the user can permanently delete the model.
@@ -174,8 +174,8 @@ class GroupPolicy
      * @param  \App\Models\Group  $group
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(User $user, Group $group)
-    {
-        return $this->isOwnerOf($user, $group);
-    }
+    // public function forceDelete(User $user, Group $group)
+    // {
+
+    // }
 }

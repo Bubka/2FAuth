@@ -45,7 +45,7 @@ class TwoFAuthMigrator extends Migrator
 
         if (is_null($json)) {
             Log::error('2FAuth JSON migration data cannot be read');
-            throw new InvalidMigrationDataException('2FAS Auth');
+            throw new InvalidMigrationDataException('2FAuth');
         }
 
         $twofaccounts = [];

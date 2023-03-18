@@ -10,6 +10,9 @@ use Tests\FeatureTestCase;
 /**
  * @covers \App\Api\v1\Controllers\GroupController
  * @covers \App\Api\v1\Resources\GroupResource
+ * @covers \App\Listeners\ResetUsersPreference
+ * @covers \App\Policies\GroupPolicy
+ * @covers \App\Models\Group
  */
 class GroupControllerTest extends FeatureTestCase
 {
@@ -443,5 +446,28 @@ class GroupControllerTest extends FeatureTestCase
             ->assertJsonStructure([
                 'message',
             ]);
+    }
+
+    /**
+     * @test
+     */
+    public function test_destroy_group_resets_user_preferences()
+    {
+        // Set the default group to a specific one
+        $this->user['preferences->defaultGroup'] = $this->userGroupA->id;
+        // Set the active group
+        $this->user['preferences->activeGroup'] = $this->userGroupA->id;
+        $this->user->save();
+
+        $this->assertEquals($this->userGroupA->id, $this->user->preferences['defaultGroup']);
+        $this->assertEquals($this->userGroupA->id, $this->user->preferences['activeGroup']);
+
+        $this->actingAs($this->user, 'api-guard')
+            ->json('DELETE', '/api/v1/groups/' . $this->userGroupA->id);
+
+        $this->user->refresh();
+
+        $this->assertEquals(0, $this->user->preferences['defaultGroup']);
+        $this->assertEquals(0, $this->user->preferences['activeGroup']);
     }
 }
