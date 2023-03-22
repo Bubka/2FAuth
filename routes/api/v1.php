@@ -6,6 +6,7 @@ use App\Api\v1\Controllers\QrCodeController;
 use App\Api\v1\Controllers\SettingController;
 use App\Api\v1\Controllers\TwoFAccountController;
 use App\Api\v1\Controllers\UserController;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +14,13 @@ use Illuminate\Support\Facades\Route;
 | API Routes
 |--------------------------------------------------------------------------
 */
+
+/**
+ * DEPRECATED - Unprotected routes
+ */
+Route::get('user/name', function() {
+    return response()->json(['deprecation' => true], 200, ['Deprecation' => Date::createFromDate(2023, 03, 21)->toRfc7231String()]);
+});
 
 /**
  * Routes protected by the api authentication guard
