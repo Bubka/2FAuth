@@ -6,6 +6,7 @@ use App\Factories\MigratorFactoryInterface;
 use App\Helpers\Helpers;
 use App\Models\TwoFAccount;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class TwoFAccountService
@@ -93,17 +94,18 @@ class TwoFAccountService
     }
 
     /**
-     * Return the given collection with items marked as Duplicates (using id=-1) if a similar record exists in database
+     * Return the given collection with items marked as Duplicates (using id=-1) if similar records exist
+     * in the authenticated user accounts
      *
      * @param  \Illuminate\Support\Collection<int|string, TwoFAccount>  $twofaccounts
      * @return \Illuminate\Support\Collection<int|string, TwoFAccount>
      */
     private static function markAsDuplicate(Collection $twofaccounts) : Collection
     {
-        $storage = TwoFAccount::all();
+        $userTwofaccounts = Auth::user()->twofaccounts;
 
-        $twofaccounts = $twofaccounts->map(function ($twofaccount, $key) use ($storage) {
-            if ($storage->contains(function ($value, $key) use ($twofaccount) {
+        $twofaccounts = $twofaccounts->map(function ($twofaccount, $key) use ($userTwofaccounts) {
+            if ($userTwofaccounts->contains(function ($value, $key) use ($twofaccount) {
                 return $value->secret == $twofaccount->secret
                     && $value->service == $twofaccount->service
                     && $value->account == $twofaccount->account

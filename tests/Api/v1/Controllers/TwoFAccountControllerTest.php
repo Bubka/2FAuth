@@ -541,7 +541,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
     /**
      * @test
      */
-    public function test_import_valid_gauth_payload_returns_success_with_consistent_resources()
+    public function test_migrate_valid_gauth_payload_returns_success_with_consistent_resources()
     {
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts/migration', [
@@ -577,7 +577,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
     /**
      * @test
      */
-    public function test_import_with_invalid_gauth_payload_returns_validation_error()
+    public function test_migrate_with_invalid_gauth_payload_returns_validation_error()
     {
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts/migration', [
@@ -589,9 +589,9 @@ class TwoFAccountControllerTest extends FeatureTestCase
     /**
      * @test
      */
-    public function test_import_gauth_payload_with_duplicates_returns_negative_ids()
+    public function test_migrate_payload_with_duplicates_returns_negative_ids()
     {
-        $twofaccount = TwoFAccount::factory()->create([
+        $twofaccount = TwoFAccount::factory()->for($this->user)->create([
             'otp_type'   => 'totp',
             'account'    => OtpTestData::ACCOUNT,
             'service'    => OtpTestData::SERVICE,
@@ -604,21 +604,84 @@ class TwoFAccountControllerTest extends FeatureTestCase
         ]);
 
         $response = $this->actingAs($this->user, 'api-guard')
-            ->json('POST', '/api/v1/twofaccounts/migration', [
+            ->json('POST', '/api/v1/twofaccounts/migration?withSecret=1', [
                 'payload' => MigrationTestData::GOOGLE_AUTH_MIGRATION_URI,
             ])
             ->assertOk()
             ->assertJsonFragment([
-                'id'      => -1,
-                'service' => OtpTestData::SERVICE,
-                'account' => OtpTestData::ACCOUNT,
+                'id'        => -1,
+                'service'   => OtpTestData::SERVICE,
+                'account'   => OtpTestData::ACCOUNT,
+                'otp_type'  => 'totp',
+                'secret'    => OtpTestData::SECRET,
+                'digits'    => OtpTestData::DIGITS_DEFAULT,
+                'algorithm' => OtpTestData::ALGORITHM_DEFAULT,
+                'period'    => OtpTestData::PERIOD_DEFAULT,
+                'counter'   => null,
+            ])
+            ->assertJsonFragment([
+                'id'        => 0,
+                'service'   => OtpTestData::SERVICE . '_bis',
+                'account'   => OtpTestData::ACCOUNT . '_bis',
+                'otp_type'  => 'totp',
+                'secret'    => OtpTestData::SECRET,
+                'digits'    => OtpTestData::DIGITS_DEFAULT,
+                'algorithm' => OtpTestData::ALGORITHM_DEFAULT,
+                'period'    => OtpTestData::PERIOD_DEFAULT,
+                'counter'   => null,
             ]);
     }
 
     /**
      * @test
      */
-    public function test_import_invalid_gauth_payload_returns_bad_request()
+    public function test_migrate_identify_duplicates_in_authenticated_user_twofaccounts_only()
+    {
+        $twofaccount = TwoFAccount::factory()->for($this->anotherUser)->create([
+            'otp_type'   => 'totp',
+            'account'    => OtpTestData::ACCOUNT,
+            'service'    => OtpTestData::SERVICE,
+            'secret'     => OtpTestData::SECRET,
+            'algorithm'  => OtpTestData::ALGORITHM_DEFAULT,
+            'digits'     => OtpTestData::DIGITS_DEFAULT,
+            'period'     => OtpTestData::PERIOD_DEFAULT,
+            'legacy_uri' => OtpTestData::TOTP_SHORT_URI,
+            'icon'       => '',
+        ]);
+
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('POST', '/api/v1/twofaccounts/migration?withSecret=1', [
+                'payload' => MigrationTestData::GOOGLE_AUTH_MIGRATION_URI,
+            ])
+            ->assertOk()
+            ->assertJsonFragment([
+                'id'         => 0,
+                'account'    => OtpTestData::ACCOUNT,
+                'service'    => OtpTestData::SERVICE,
+                'otp_type'   => 'totp',
+                'secret'     => OtpTestData::SECRET,
+                'algorithm'  => OtpTestData::ALGORITHM_DEFAULT,
+                'digits'     => OtpTestData::DIGITS_DEFAULT,
+                'period'     => OtpTestData::PERIOD_DEFAULT,
+                'icon'       => null,
+            ])
+            ->assertJsonFragment([
+                'id'        => 0,
+                'service'   => OtpTestData::SERVICE . '_bis',
+                'account'   => OtpTestData::ACCOUNT . '_bis',
+                'otp_type'  => 'totp',
+                'secret'    => OtpTestData::SECRET,
+                'digits'    => OtpTestData::DIGITS_DEFAULT,
+                'algorithm' => OtpTestData::ALGORITHM_DEFAULT,
+                'period'    => OtpTestData::PERIOD_DEFAULT,
+                'counter'   => null,
+            ]);
+    }
+
+    /**
+     * @test
+     */
+    public function test_migrate_invalid_gauth_payload_returns_bad_request()
     {
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts/migration', [
@@ -633,7 +696,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
     /**
      * @test
      */
-    public function test_import_valid_aegis_json_file_returns_success()
+    public function test_migrate_valid_aegis_json_file_returns_success()
     {
         $file = LocalFile::fake()->validAegisJsonFile();
 
@@ -685,7 +748,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
      *
      * @dataProvider invalidAegisJsonFileProvider
      */
-    public function test_import_invalid_aegis_json_file_returns_bad_request($file)
+    public function test_migrate_invalid_aegis_json_file_returns_bad_request($file)
     {
         $response = $this->withHeaders(['Content-Type' => 'multipart/form-data'])
             ->actingAs($this->user, 'api-guard')
@@ -715,7 +778,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
      *
      * @dataProvider validPlainTextFileProvider
      */
-    public function test_import_valid_plain_text_file_returns_success($file)
+    public function test_migrate_valid_plain_text_file_returns_success($file)
     {
         $response = $this->withHeaders(['Content-Type' => 'multipart/form-data'])
             ->actingAs($this->user, 'api-guard')
@@ -780,7 +843,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
      *
      * @dataProvider invalidPlainTextFileProvider
      */
-    public function test_import_invalid_plain_text_file_returns_bad_request($file)
+    public function test_migrate_invalid_plain_text_file_returns_bad_request($file)
     {
         $response = $this->withHeaders(['Content-Type' => 'multipart/form-data'])
             ->actingAs($this->user, 'api-guard')
