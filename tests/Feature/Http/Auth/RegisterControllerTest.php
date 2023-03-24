@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Http\Auth;
 
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Tests\FeatureTestCase;
 
@@ -93,5 +94,36 @@ class RegisterControllerTest extends FeatureTestCase
             'password_confirmation' => self::PASSWORD,
         ])
             ->assertStatus(422);
+    }
+
+    /**
+     * @test
+     */
+    public function test_register_first_user_only_as_admin()
+    {
+        $this->assertDatabaseCount('users', 0);
+
+        $response = $this->json('POST', '/user', [
+            'name'                  => self::USERNAME,
+            'email'                 => self::EMAIL,
+            'password'              => self::PASSWORD,
+            'password_confirmation' => self::PASSWORD,
+        ]);
+
+        $this->assertDatabaseCount('users', 1);
+        $this->assertDatabaseHas('users', [
+            'name'     => self::USERNAME,
+            'email'    => self::EMAIL,
+            'is_admin' => true,
+        ]);
+
+        $response = $this->json('POST', '/user', [
+            'name'                  => 'jane',
+            'email'                 => 'jane@example.org',
+            'password'              => self::PASSWORD,
+            'password_confirmation' => self::PASSWORD,
+        ]);
+
+        $this->assertEquals(1, User::admins()->count());
     }
 }
