@@ -1,0 +1,76 @@
+name: ci-docker-publish-release
+on:
+  release:
+    types: [published]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.release.tag_name }}
+
+      - uses: docker/setup-qemu-action@v2
+      - uses: docker/setup-buildx-action@v2
+
+      - uses: docker/login-action@v2
+        with:
+          username: 2fauth
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: Set tags
+        uses: actions/github-script@v6
+        id: set_tags
+        with:
+          # context.ref: For workflows triggered by release, this is the release tag created.
+          # A release tag is fully-formed as refs/tags/<tag_name> so we remove the 10 first
+          # characters to drop the 'refs/tags/' part.
+          script: |
+            const tag = context.ref.substring(10)
+            const version = tag.replace('v', '')
+            core.setOutput('version', version)
+
+      - name: Set variables
+        id: set_vars
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          echo "commit=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+          echo "created=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> $GITHUB_OUTPUT
+          echo "platforms=linux/amd64,linux/386,linux/arm64,linux/arm/v6,linux/arm/v7" >> $GITHUB_OUTPUT
+
+      - name: Update Docker Hub Description
+        uses: peter-evans/dockerhub-description@v3
+        with:
+          username: 2fauth
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+          repository: 2fauth/2fauth
+          short-description: A web app to manage your Two-Factor Authentication (2FA) accounts and generate their security codes
+          readme-filepath: docker/README.md
+
+      - name: Build and push to docker Hub with version as unique tag
+        uses: docker/build-push-action@v4
+        with:
+          platforms: ${{ steps.set_vars.outputs.platforms }}
+          build-args: |
+            CREATED=${{ steps.set_vars.outputs.created }}
+            COMMIT=${{ steps.set_vars.outputs.commit }}
+            VERSION=${{ steps.set_tags.outputs.version }}
+          tags: |
+            2fauth/2fauth:${{ steps.set_tags.outputs.version }}
+          push: true
+
+      - name: Build and push to docker Hub with stable tag latest
+        # We do not want to publish a prerelease as the 'latest' image
+        if: ${{ github.event.release.prerelease == false }}
+        uses: docker/build-push-action@v4
+        with:
+          platforms: ${{ steps.set_vars.outputs.platforms }}
+          build-args: |
+            CREATED=${{ steps.set_vars.outputs.created }}
+            COMMIT=${{ steps.set_vars.outputs.commit }}
+            VERSION=latest
+          tags: |
+            2fauth/2fauth:latest
+          push: true

@@ -1,0 +1,68 @@
+name: ci-docker-test
+on:
+  push:
+    branches:    
+      - master
+    paths:
+      - .github/workflows/ci-docker-test.yml
+      - app/**
+      - bootstrap/**
+      - config/**
+      - database/**
+      - docker/**
+      - public/**
+      - resources/**
+      - routes/**
+      - storage/**
+      - tests/**
+      - .dockerignore
+      - .env.travis
+      - artisan
+      - composer.json
+      - composer.lock
+      - Dockerfile
+      - phpunit.xml
+      - server.php
+  pull_request:
+    branches:    
+      - master
+    paths:
+      - .github/workflows/ci-docker-test.yml
+      - app/**
+      - bootstrap/**
+      - config/**
+      - database/**
+      - docker/**
+      - public/**
+      - resources/**
+      - routes/**
+      - storage/**
+      - tests/**
+      - .dockerignore
+      - .env.travis
+      - artisan
+      - composer.json
+      - composer.lock
+      - Dockerfile
+      - phpunit.xml
+      - server.php
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      DOCKER_BUILDKIT: "1"
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build test image
+        run: docker build --target test -t test-container .
+
+      - name: Run tests in test container
+        run: |
+          touch coverage.txt
+          docker run --rm \
+          test-container
+
+      - name: Build final image
+        run: docker build .
