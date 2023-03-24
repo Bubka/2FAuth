@@ -1,17 +1,20 @@
-name: update-docs
+name: update-docs-repo
 on:
   push:
     branches:    
       - dev
     paths:
       - docker/docker-compose.yml
+  workflow_dispatch:
+    
 
 jobs:
-  copy-file:
+  copy-docker-compose-file:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
       uses: actions/checkout@v3
+      ref: dev
 
     - name: Pushes docker-compose
       uses: dmnemec/copy_file_to_another_repo_action@main
