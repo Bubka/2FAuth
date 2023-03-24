@@ -35,8 +35,8 @@ class RegisterController extends Controller
     public function register(UserStoreRequest $request)
     {
         $validated = $request->validated();
+
         event(new Registered($user = $this->create($validated)));
-        Log::info(sprintf('User ID #%s created', $user->id));
 
         $this->guard()->login($user);
 
@@ -54,11 +54,20 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        $user = User::create([
             'name'     => $data['name'],
             'email'    => $data['email'],
             'password' => Hash::make($data['password']),
-            'is_admin' => DB::table('users')->count() === 0,
         ]);
+        
+        Log::info(sprintf('User ID #%s created', $user->id));
+
+        if (User::count() == 1) {
+            $user->is_admin = true;
+            $user->save();
+            Log::notice(sprintf('User ID #%s set as administrator', $user->id));
+        }
+
+        return $user;
     }
 }
