@@ -30,7 +30,7 @@ We assume your current directory is `/yourpath`.
     chmod 700 2fauth
     ```
 
-    💁 if you feel like using another ID, you can [build the image with build arguments](#Build-the-image-with-build-arguments).
+    💁 if you feel like using another ID, you can [build the image with build arguments](#build-the-image-with-build-arguments).
 
 1. Run the container interactively:
 
@@ -102,7 +102,7 @@ There are the following build arguments you can use to customize the image using
 | `UID` | 1000 | The UID of the user to run the container as |
 | `GID` | 1000 | The GID of the user to run the container as |
 | `DEBIAN_VERSION` | `buster-slim` | The Debian version to use |
-| `PHP_VERSION` | `8.0-buster` | The PHP version to use to get composer dependencies |
+| `PHP_VERSION` | `8.1-buster` | The PHP version to use to get composer dependencies |
 | `COMPOSER_VERSION` | `2.3` | The version of composer to use |
 | `SUPERVISORD_VERSION` | `v0.7.3` | The version of supervisord to use |
 | `VERSION` | `unknown` | The version of the image |
@@ -112,7 +112,7 @@ There are the following build arguments you can use to customize the image using
 #### Mail settings
 
 > Refer your email provider documentation to configure your mail settings
-> 
+>
 > Set a value for every available setting to avoid issue
 
 | Build argument | Recommendation | Description |

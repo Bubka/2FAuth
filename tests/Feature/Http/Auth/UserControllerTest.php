@@ -66,6 +66,60 @@ class UserControllerTest extends FeatureTestCase
     /**
      * @test
      */
+    public function test_update_user_without_changing_email_returns_success()
+    {
+        $response = $this->actingAs($this->user, 'web-guard')
+            ->json('PUT', '/user', [
+                'name'     => self::NEW_USERNAME,
+                'email'    => $this->user->email,
+                'password' => self::PASSWORD,
+            ])
+            ->assertOk()
+            ->assertExactJson([
+                'name'     => self::NEW_USERNAME,
+                'id'       => $this->user->id,
+                'email'    => $this->user->email,
+                'is_admin' => false,
+            ]);
+
+        $this->assertDatabaseHas('users', [
+            'name'     => self::NEW_USERNAME,
+            'id'       => $this->user->id,
+            'email'    => $this->user->email,
+            'is_admin' => false,
+        ]);
+    }
+
+    /**
+     * @test
+     */
+    public function test_update_user_without_changing_name_returns_success()
+    {
+        $response = $this->actingAs($this->user, 'web-guard')
+            ->json('PUT', '/user', [
+                'name'     => $this->user->name,
+                'email'    => self::NEW_EMAIL,
+                'password' => self::PASSWORD,
+            ])
+            ->assertOk()
+            ->assertExactJson([
+                'name'     => $this->user->name,
+                'id'       => $this->user->id,
+                'email'    => self::NEW_EMAIL,
+                'is_admin' => false,
+            ]);
+
+        $this->assertDatabaseHas('users', [
+            'name'     => $this->user->name,
+            'id'       => $this->user->id,
+            'email'    => self::NEW_EMAIL,
+            'is_admin' => false,
+        ]);
+    }
+
+    /**
+     * @test
+     */
     public function test_update_user_with_uppercased_email_returns_success()
     {
         $response = $this->actingAs($this->user, 'web-guard')

@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Mockery;
 use Tests\FeatureTestCase;
 
 /**
@@ -35,12 +36,18 @@ class UserUpdateRequestTest extends FeatureTestCase
      */
     public function test_valid_data(array $data) : void
     {
-        User::factory()->create([
+        /**
+         * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
+         */
+        $user = User::factory()->create([
             'name'  => 'Jane',
             'email' => 'jane@example.com',
         ]);
 
-        $request   = new UserUpdateRequest();
+        $request = Mockery::mock(UserUpdateRequest::class)->makePartial();
+        $request->shouldReceive('user')
+            ->andReturn($user);
+
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->fails());
@@ -57,6 +64,16 @@ class UserUpdateRequestTest extends FeatureTestCase
                 'email'    => 'john@example.com',
                 'password' => 'MyPassword',
             ]],
+            [[
+                'name'     => 'John',
+                'email'    => 'jane@example.com',
+                'password' => 'MyPassword',
+            ]],
+            [[
+                'name'     => 'Jane',
+                'email'    => 'john@example.com',
+                'password' => 'MyPassword',
+            ]],
         ];
     }
 
@@ -65,12 +82,23 @@ class UserUpdateRequestTest extends FeatureTestCase
      */
     public function test_invalid_data(array $data) : void
     {
-        User::factory()->create([
+        /**
+         * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
+         */
+        $user = User::factory()->create([
             'name'  => 'Jane',
             'email' => 'jane@example.com',
         ]);
 
-        $request   = new UserUpdateRequest();
+        User::factory()->create([
+            'name'  => 'Bob',
+            'email' => 'bob@example.com',
+        ]);
+
+        $request = Mockery::mock(UserUpdateRequest::class)->makePartial();
+        $request->shouldReceive('user')
+            ->andReturn($user);
+
         $validator = Validator::make($data, $request->rules());
 
         $this->assertTrue($validator->fails());
@@ -83,8 +111,13 @@ class UserUpdateRequestTest extends FeatureTestCase
     {
         return [
             [[
-                'name'     => 'John',
-                'email'    => 'jane@example.com',  // unique
+                'name'     => 'Jane',
+                'email'    => 'bob@example.com',  // unique
+                'password' => 'MyPassword',
+            ]],
+            [[
+                'name'     => 'Bob',  // unique
+                'email'    => 'jane@example.com',
                 'password' => 'MyPassword',
             ]],
             [[

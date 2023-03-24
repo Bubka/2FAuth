@@ -8,7 +8,7 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^8.0.2",
+        "php": "^8.1",
         "ext-bcmath": "*",
         "ext-ctype": "*",
         "ext-dom": "*",
@@ -21,34 +21,30 @@
         "ext-tokenizer": "*",
         "ext-xml": "*",
         "chillerlan/php-qrcode": "^4.3",
-        "laragear/webauthn": "^1.1.0",
+        "laragear/webauthn": "^1.2.0",
         "doctormckay/steam-totp": "^1.0",
         "doctrine/dbal": "^3.4",
-        "fruitcake/laravel-cors": "^2.0",
         "google/protobuf": "^3.21",
         "guzzlehttp/guzzle": "^7.2",
-        "khanamiryan/qrcode-detector-decoder": "^1.0.5",
+        "khanamiryan/qrcode-detector-decoder": "^2.0.2",
         "laravel/framework": "^9.0",
         "laravel/passport": "^11.2",
         "laravel/tinker": "^2.7",
         "laravel/ui": "^3.0",
         "paragonie/constant_time_encoding": "^2.6",
         "spatie/eloquent-sortable": "^4.0.1",
-        "spomky-labs/otphp": "^10.0"
+        "spomky-labs/otphp": "^11.0"
     },
     "require-dev": {
-        "barryvdh/laravel-ide-helper": "^2.12",
-        "fakerphp/faker": "^1.20",
-        "laravel/pint": "^1.2",
+        "barryvdh/laravel-ide-helper": "^2.13",
+        "fakerphp/faker": "^1.21",
+        "laravel/pint": "^1.6",
         "mockery/mockery": "^1.5",
         "nunomaduro/collision": "^6.1",
-        "nunomaduro/larastan": "^2.0",
-        "phpstan/phpstan": "^1.8",
-        "phpunit/phpunit": "^9.5",
-        "spatie/laravel-ignition": "^1.0"
-    },
-    "conflict": {
-        "khanamiryan/qrcode-detector-decoder": "~1.0.6"
+        "nunomaduro/larastan": "^2.5",
+        "phpstan/phpstan": "^1.10",
+        "phpunit/phpunit": "^9.6",
+        "spatie/laravel-ignition": "^1.6"
     },
     "config": {
         "optimize-autoloader": true,
@@ -85,15 +81,15 @@
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
         ],
-        "test" : [
+        "test": [
             "php artisan config:clear",
             "vendor/bin/phpunit"
         ],
-        "test-mysql" : [
+        "test-mysql": [
             "php artisan config:clear",
             "vendor/bin/phpunit -c phpunit-mysql.xml"
         ],
-        "test-coverage-html" : [
+        "test-coverage-html": [
             "@putenv XDEBUG_MODE=coverage",
             "vendor/bin/phpunit --coverage-html tests/Coverage/"
         ]
