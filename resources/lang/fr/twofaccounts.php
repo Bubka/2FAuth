@@ -30,6 +30,7 @@ return [
     'account_updated' => 'Compte mis à jour avec succès',
     'accounts_deleted' => 'Compte·s supprimé·s avec succès',
     'accounts_moved' => 'Compte·s déplacé·s avec succès',
+    'export_selected_to_json' => 'Télécharger un export json des comptes sélectionnés',
     'forms' => [
         'service' => [
             'placeholder' => 'Google, Twitter, Apple',
@@ -155,7 +156,7 @@ return [
         'possible_duplicate' => 'Un compte avec les mêmes informations existe déjà',
         'invalid_account' => '- compte non valide -',
         'invalid_service' => '- service non valide -',
-        'do_not_set_password_or_encryption' => 'Ne définissez PAS de mot de passe ou de chiffrement lorsque vous exportez des données à partir d\'une application 2FA.',
+        'do_not_set_password_or_encryption' => 'N\'activez PAS la protection par mot de passe ou le chiffrement lorsque vous exportez des données (depuis une application 2FA) que vous comptez importer dans 2FAuth.',
     ],
 
 ];

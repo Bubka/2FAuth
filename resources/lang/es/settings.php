@@ -14,15 +14,20 @@ return [
     */
 
     'settings' => 'Ajustes',
+    'preferences' => 'Preferences',
     'account' => 'Cuenta',
     'oauth' => 'OAuth',
     'webauthn' => 'WebAuthn',
     'tokens' => 'Tokens',
     'options' => 'Opciones',
-    'user_options' => 'Opciones de usuario',
+    'user_preferences' => 'User preferences',
+    'admin_settings' => 'Admin settings',
     'confirm' => [
 
     ],
+    'administration' => 'Administration',
+    'administration_legend' => 'While previous settings are user settings (every user can set its own preferences), following settings are global and apply to all users. Only an administrator can view and edit those settings.',
+    'you_are_administrator' => 'You are an administrator',
     'general' => 'General',
     'security' => 'Seguridad',
     'profile' => 'Perfil',
@@ -50,15 +55,15 @@ return [
         ],
         'show_otp_as_dot' => [
             'label' => 'Mostrar contraseñas generadas de un solo uso como punto',
-            'help' => 'Replace generated password caracters with *** to ensure confidentiality. Do not affect the copy/paste feature'
+            'help' => 'Reemplaza carácteres de contraseñas generados con *** para asegurar confidencialidad. No afecta la función copiar/pegar.'
         ],
         'close_otp_on_copy' => [
-            'label' => 'Close <abbr title="One-Time Password">OTP</abbr> after copy',
-            'help' => 'Clicking a generated password to copy it automatically hide it from the screen'
+            'label' => 'Cerrar <abbr title="One-Time Password">OTP</abbr> después de copiar',
+            'help' => 'Haciendo clic en la contraseña generada para copiarla, la oculta automáticamente de la pantalla'
         ],
         'copy_otp_on_display' => [
-            'label' => 'Copy <abbr title="One-Time Password">OTP</abbr> on display',
-            'help' => 'Automatically copy a generated password right after it appears on screen. Due to browsers limitations, only the first <abbr title="Time-based One-Time Password">TOTP</abbr> password will be copied, not the rotating ones'
+            'label' => 'Copiar <abbr title="One-Time Password">OTP</abbr> en pantalla',
+            'help' => 'Copiar automáticamente la contraseña justo después de aparecer en pantalla. Debido a limitaciones en los navegadores, solo la primera contraseña <abbr title="Time-based One-Time Password">TOTP</abbr> será copiada, no las que roten'
         ],
         'use_basic_qrcode_reader' => [
             'label' => 'Usar lector de código QR básico',
@@ -68,8 +73,25 @@ return [
             'label' => 'Modo de visualización',
             'help' => 'Elija si desea que las cuentas se muestren como una lista o como una cuadrícula'
         ],
+        'password_format' => [
+            'label' => 'Password formatting',
+            'help' => 'Change how the passwords are displayed by grouping digits to ease readability and memorization'
+        ],
+        'pair' => 'by Pair',
+        'pair_legend' => 'Group digits two by two',
+        'trio_legend' => 'Group digits three by three',
+        'half_legend' => 'Split digits into two equals groups',
+        'trio' => 'by Trio',
+        'half' => 'by Half',
         'grid' => 'Cuadrícula',
         'list' => 'Lista',
+        'theme' => [
+            'label' => 'Theme',
+            'help' => 'Force a specific theme or apply the theme defined in your system/browser preferences'
+        ],
+        'light' => 'Light',
+        'dark' => 'Dark',
+        'automatic' => 'Auto',
         'show_accounts_icons' => [
             'label' => 'Mostrar iconos',
             'help' => 'Mostar iconos de aplicaciones en la vista principal'

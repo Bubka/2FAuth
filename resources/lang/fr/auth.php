@@ -25,7 +25,7 @@ return [
     'sign_in_using_security_device' => 'Se connecter en utilisant un périphérique de sécurité',
     'login_and_password' => 'login & mot de passe',
     'register' => 'Créer un compte',
-    'welcome_back_x' => 'Bienvenue {0}',
+    'welcome_to_2fauth' => 'Bienvenue sur 2FAuth',
     'autolock_triggered' => 'Verrouillage automatique déclenché',
     'autolock_triggered_punchline' => 'L\'événement surveillé par la fonction de verrouillage automatique s\'est déclenché. Vous avez été automatiquement déconnecté.',
     'change_autolock_in_settings' => 'Vous pouvez modifier le comportement de la fonction de verrouillage automatique dans Réglages, onglet Options.',
@@ -49,31 +49,30 @@ return [
         'lost_your_device' => 'Vous avez perdu votre appareil ?',
         'recover_your_account' => 'Récupérer votre compte',
         'account_recovery' => 'Récupération du compte',
-        'recovery_punchline' => '2FAuth vous enverra un lien de récupération à cette adresse e-mail. Cliquez sur le lien dans l\'e-mail reçu pour enregistrer un nouveau périphérique de sécurité.<br /><br />Assurez-vous d\'ouvrir l\'e-mail depuis un appareil qui vous appartient ou que vous considérez de confiance.',
+        'recovery_punchline' => '2FAuth vous enverra un lien de récupération à cette adresse e-mail. Cliquez sur le lien et suivez les instructions pour restaurer l\'accès à votre compte.<br /><br />Assurez-vous d\'ouvrir l\'e-mail depuis un appareil qui vous appartient ou que vous considérez de confiance.',
         'send_recovery_link' => 'Envoyer le lien de récupération',
         'account_recovery_email_sent' => 'E-mail de récupération du compte envoyé !',
-        'disable_all_other_devices' => 'Désactiver tous les autres périphériques sauf celui-ci',
+        'disable_all_security_devices' => 'Désactiver tous les périphériques de sécurité',
+        'disable_all_security_devices_help' => 'Tous vos périphériques de sécurité seront révoqués. Utilisez cette option si vous avez perdu un périphérique ou si sa sécurité a été compromise.',
         'register_a_new_device' => 'Ajouter un nouveau périphérique',
         'register_a_device' => 'Ajouter un périphérique',
         'device_successfully_registered' => 'Périphérique enregistré avec succès',
         'device_revoked' => 'Périphérique révoqué avec succès',
         'revoking_a_device_is_permanent' => 'La révocation d\'un périphérique est définitive',
-        'recover_account_instructions' => 'Cliquez sur le bouton ci-dessous pour enregistrer un nouveau périphérique de sécurité afin de récupérer votre compte. Suivez simplement les instructions de votre navigateur.',
+        'recover_account_instructions' => 'Pour récupérer votre compte, 2FAuth réinitialise certains paramètres Webauthn afin que vous puissiez vous connecter en utilisant votre adresse e-mail et votre mot de passe.',
         'invalid_recovery_token' => 'Jeton de sécurité invalide',
+        'webauthn_login_disabled' => 'Connexion Webauthn désactivée',
+        'invalid_reset_token' => 'Ce jeton de réinitialisation n\'est pas valide.',
         'rename_device' => 'Renommer le périphérique',
         'my_device' => 'Mon périphérique',
         'unknown_device' => 'Périphérique inconnu',
         'use_webauthn_only' => [
             'label' => 'Utiliser uniquement WebAuthn',
-            'help' => 'Faire de WebAuthn la seule méthode disponible pour se connecter à 2FAuth. Ceci est la configuration recommandée pour profiter de la sécurité améliorée de WebAuthn.<br />
-                En cas de perte de votre périphérique, vous serez toujours en mesure d\'enregistrer un nouveau périphérique de sécurité pour récupérer votre compte.'
+            'help' => 'Faire de WebAuthn la seule méthode autorisée pour vous connecter à votre compte 2FAuth. Ceci est la configuration recommandée pour profiter de la sécurité améliorée de WebAuthn.<br /><br />
+                En cas de perte de votre périphérique, vous pourrez récupérer votre compte en réinitialisant cette option et en vous connectant à l\'aide de votre adresse e-mail et de votre mot de passe.<br /><br />
+                Attention ! Le formulaire E-mail + Mot de passe restera disponible même si l\'option est activée, mais il retournera systématiquement une réponse \'Échec de l\'authentification\'.'
         ],
         'need_a_security_device_to_enable_options' => 'Définissez au moins un périphérique pour activer ces options',
-        'use_webauthn_as_default' => [
-            'label' => 'Utiliser WebAuthn comme méthode de connexion par défaut',
-            'help' => 'Proposer d\'abord d\'utiliser WebAuthn lors de l\'identification. L\'identification avec login et mot de passe reste disponible en tant que méthode secondaire.<br />
-                Ceci est sans effet si vous utilisez uniquement WebAuthn.'
-        ],
     ],
     'forms' => [
         'name' => 'Nom',

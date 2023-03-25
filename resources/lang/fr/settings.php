@@ -14,15 +14,20 @@ return [
     */
 
     'settings' => 'Réglages',
+    'preferences' => 'Préférences',
     'account' => 'Compte',
     'oauth' => 'OAuth',
     'webauthn' => 'WebAuthn',
     'tokens' => 'Jetons',
     'options' => 'Options',
-    'user_options' => 'Options de l\'utilisateur',
+    'user_preferences' => 'Préférences utilisateur',
+    'admin_settings' => 'Paramètres administrateur',
     'confirm' => [
 
     ],
+    'administration' => 'Administration',
+    'administration_legend' => 'Contrairement aux paramètres précédents qui sont des paramètres utilisateur (chaque utilisateur peut les personnaliser à sa convenance), les paramètres qui suivent sont globaux et s\'appliquent à tous les utilisateurs. Seul les administrateurs peuvent voir et modifier ces paramètres.',
+    'you_are_administrator' => 'Vous êtes administrateur',
     'general' => 'General',
     'security' => 'Sécurité',
     'profile' => 'Profil',
@@ -68,8 +73,25 @@ return [
             'label' => 'Mode d\'affichage',
             'help' => 'Change le mode d\'affichage des comptes, soit sous forme de liste, soit sous forme de grille'
         ],
+        'password_format' => [
+            'label' => 'Mise en forme des mots de passe',
+            'help' => 'Modifie l\'affichage des mots de passe en regroupement les chiffres afin de faciliter la lisibilité et leur mémorisation'
+        ],
+        'pair' => 'par Paire',
+        'pair_legend' => 'Groupe les chiffres deux par deux',
+        'trio_legend' => 'Groupe les chiffres trois par trois',
+        'half_legend' => 'Sépare les chiffres en deux groupes égaux',
+        'trio' => 'par Trio',
+        'half' => 'par Moitié',
         'grid' => 'Grille',
         'list' => 'Liste',
+        'theme' => [
+            'label' => 'Thème',
+            'help' => 'Forcer un thème spécifique ou appliquer le thème défini dans vos préférences système/navigateur'
+        ],
+        'light' => 'Clair',
+        'dark' => 'Sombre',
+        'automatic' => 'Auto',
         'show_accounts_icons' => [
             'label' => 'Afficher les icônes',
             'help' => 'Affiche les icônes des comptes dans la vue principale'

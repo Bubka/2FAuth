@@ -37,6 +37,7 @@ return [
     'new' => 'Nouveau',
     'back' => 'Retour',
     'move' => 'Déplacer',
+    'export' => 'Exporter',
     'all' => 'Tous',
     'select_all' => 'Tout sélectionner',
     'clear_selection' => 'Effacer la sélection',

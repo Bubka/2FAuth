@@ -30,6 +30,7 @@ return [
     'account_updated' => '账户成功更新',
     'accounts_deleted' => '帐户成功删除',
     'accounts_moved' => '帐户成功移动',
+    'export_selected_to_json' => '将所选账号以json导出',
     'forms' => [
         'service' => [
             'placeholder' => '谷歌, 推特, 苹果',
@@ -155,7 +156,7 @@ return [
         'possible_duplicate' => '完全相同的帐户已经存在',
         'invalid_account' => '- 无效账户 -',
         'invalid_service' => '- 无效服务 -',
-        'do_not_set_password_or_encryption' => '当您从 2FA 应用程序导出数据时，不要设置密码或加密。',
+        'do_not_set_password_or_encryption' => '当您想要导入到2FAuth时不要启用密码保护或加密。',
     ],
 
 ];

@@ -15,7 +15,6 @@ return [
 
     'resource_not_found' => '资源未找到',
     'error_occured' => '发生错误:',
-    'cannot_register_more_user' => '您不能注册多个用户',
     'refresh' => '刷新',
     'no_valid_otp' => '此二维码中没有有效的OTP资源',
     'something_wrong_with_server' => '服务器发生内部错误',
@@ -34,7 +33,11 @@ return [
     'https_required' => '需要 HTTPS',
     'browser_does_not_support_webauthn' => '您的设备不支持Webauthn。请使用更现代的浏览器重试。',
     'aborted_by_user' => '被用户中止。',
-    'security_device_unsupported' => '不支持的安全设备',
+    'security_device_unsupported' => '不支持或正在使用的设备',
+    'not_allowed_operation' => '不允许此操作',
+    'unsupported_operation' => 'Unsupported operation',
+    'unknown_error' => 'Unknown error',
+    'security_error_check_rpid' => '安全错误<br/>请检查您的 WEBAUTHN_ID env var',
     'unsupported_with_reverseproxy' => '使用代理进行认证时不可用',
     'user_deletion_failed' => '帐户删除失败，没有数据被删除',
     'auth_proxy_failed' => '代理认证失败',
@@ -45,5 +48,8 @@ return [
     'unsupported_otp_type' => '不支持的 OTP 类型',
     'encrypted_migration' => '无法读取，数据似乎已加密',
     'no_logo_found_for_x' => '{service} 没有可用的 Logo',
-    'file_upload_failed' => '文件上传失败'
+    'file_upload_failed' => '文件上传失败',
+    'unauthorized' => 'Unauthorized',
+    'unauthorized_legend' => 'You do not have permissions to view this resource or to perform this action',
+    'cannot_delete_the_only_admin' => 'Cannot delete the only admin account'
 ];

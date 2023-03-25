@@ -23,6 +23,7 @@ return [
     'manage_groups_legend' => '您可以创建组以按照您想要的方式组织您的账户。 所有账户在名为“全部”的伪组中仍然可见，无论它们属于哪个组。',
     'deleting_group_does_not_delete_accounts' => '删除组不会删除帐户',
     'move_selected_to' => '移动选择到',
+    'move_selected_to_group' => '将所选移入组中',
     'no_group' => '没有分组',
     'change_group' => '更改组',
     'group_successfully_created' => '分组成功创建',

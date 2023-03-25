@@ -51,7 +51,8 @@ return [
         'fr',
         'de',
         'zh',
-        'es'
+        'es',
+        'bg',
     ],
 
     /*

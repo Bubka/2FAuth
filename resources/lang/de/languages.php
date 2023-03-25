@@ -14,4 +14,7 @@ return [
     'en' => 'Englisch',
     'fr' => 'Französisch',
     'de' => 'Deutsch',
+    'es' => 'Spanisch',
+    'zh' => 'Vereinfachtes Chinesisch',
+    'ru' => 'Russisch',
 ];

@@ -15,7 +15,6 @@ return [
 
     'resource_not_found' => 'Ressource introuvable',
     'error_occured' => 'Une erreur est survenue :',
-    'cannot_register_more_user' => 'Vous ne pouvez pas enregistrer plus d\'un utilisateur.',
     'refresh' => 'Actualiser',
     'no_valid_otp' => 'Aucune donnée OTP valide dans ce QR code',
     'something_wrong_with_server' => 'Il y a un problème avec votre serveur',
@@ -34,7 +33,11 @@ return [
     'https_required' => 'Contexte HTTPS requis',
     'browser_does_not_support_webauthn' => 'Votre appareil ne supporte pas WebAuthn. Réessayez plus tard en utilisant un navigateur plus récent',
     'aborted_by_user' => 'Abandonné par l\'utilisateur',
-    'security_device_unsupported' => 'Périphérique de sécurité non pris en charge',
+    'security_device_unsupported' => 'Périphérique non pris en charge ou déjà utilisé',
+    'not_allowed_operation' => 'Opération non autorisée',
+    'unsupported_operation' => 'Opération non supportée',
+    'unknown_error' => 'Erreur inconnue',
+    'security_error_check_rpid' => 'Erreur de sécurité<br/>Vérifiez votre variable d\'environnement WEBAUTHN_ID',
     'unsupported_with_reverseproxy' => 'Sans effet avec un proxy d\'authentification',
     'user_deletion_failed' => 'La suppression du compte utilisateur a échoué, aucune donnée n\'a été supprimée',
     'auth_proxy_failed' => 'Échec de l\'authentification par le proxy',
@@ -45,5 +48,8 @@ return [
     'unsupported_otp_type' => 'Type OTP non supporté',
     'encrypted_migration' => 'Non lisible, les données semblent chiffrées',
     'no_logo_found_for_x' => 'Aucun logo disponible pour {service}',
-    'file_upload_failed' => 'Échec de téléchargement du fichier'
+    'file_upload_failed' => 'Échec de téléchargement du fichier',
+    'unauthorized' => 'Non autorisé',
+    'unauthorized_legend' => 'Vous n\'avez pas la permission de voir cette ressource ou d\'effectuer cette action',
+    'cannot_delete_the_only_admin' => 'Impossible de supprimer le seul compte administrateur'
 ];

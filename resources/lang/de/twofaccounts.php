@@ -30,6 +30,7 @@ return [
     'account_updated' => 'Account successfully updated',
     'accounts_deleted' => 'Account(s) successfully deleted',
     'accounts_moved' => 'Account(s) successfully moved',
+    'export_selected_to_json' => 'Download a json export of selected accounts',
     'forms' => [
         'service' => [
             'placeholder' => 'Google, Twitter, Apple',
@@ -155,7 +156,7 @@ return [
         'possible_duplicate' => 'Ein Konto mit der gleichen Daten ist bereits vorhanden',
         'invalid_account' => '- invalid account -',
         'invalid_service' => '- invalid service -',
-        'do_not_set_password_or_encryption' => 'Do NOT set a password or encryption On when you export data from a 2FA app.',
+        'do_not_set_password_or_encryption' => 'Do NOT enable Password protection or Encryption when you export data (from a 2FA app) you want to import into 2FAuth.',
     ],
 
 ];

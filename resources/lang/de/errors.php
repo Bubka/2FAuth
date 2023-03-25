@@ -15,7 +15,6 @@ return [
 
     'resource_not_found' => 'Resource nicht gefunden',
     'error_occured' => 'Ein Fehler ist aufgetreten:',
-    'cannot_register_more_user' => 'Sie können nicht mehr als einen Benutzer registrieren.',
     'refresh' => 'Aktualisieren',
     'no_valid_otp' => 'Keine gültige OTP-Ressource in diesem QR-Code',
     'something_wrong_with_server' => 'Etwas stimmt mit Ihrem Server nicht',
@@ -34,7 +33,11 @@ return [
     'https_required' => 'HTTPS-Kontext erforderlich',
     'browser_does_not_support_webauthn' => 'Ihr Gerät unterstützt nicht webauthn. Versuchen Sie es später mit einem moderneren Browser erneut',
     'aborted_by_user' => 'Vom Benutzer abgebrochen',
-    'security_device_unsupported' => 'Sicherheitsgerät nicht unterstützt',
+    'security_device_unsupported' => 'Unsupported or in use device',
+    'not_allowed_operation' => 'Operation not allowed',
+    'unsupported_operation' => 'Unsupported operation',
+    'unknown_error' => 'Unknown error',
+    'security_error_check_rpid' => 'Security error<br/>Check your WEBAUTHN_ID env var',
     'unsupported_with_reverseproxy' => 'Nicht anwendbar, wenn ein Auth-Proxy benutzt wird',
     'user_deletion_failed' => 'Löschen des Benutzerkontos fehlgeschlagen, es wurden keine Daten gelöscht',
     'auth_proxy_failed' => 'Proxy-Anmeldung scheitern',
@@ -45,5 +48,8 @@ return [
     'unsupported_otp_type' => 'Nicht unterstützter OTP -Typ',
     'encrypted_migration' => 'Unreadable, the data seem encrypted',
     'no_logo_found_for_x' => 'Kein Logo verfügbar für {service}',
-    'file_upload_failed' => 'File upload failed'
+    'file_upload_failed' => 'File upload failed',
+    'unauthorized' => 'Unauthorized',
+    'unauthorized_legend' => 'You do not have permissions to view this resource or to perform this action',
+    'cannot_delete_the_only_admin' => 'Cannot delete the only admin account'
 ];

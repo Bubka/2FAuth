@@ -23,6 +23,7 @@ return [
     'manage_groups_legend' => 'Sie können Gruppen erstellen, um Ihre Konten so zu organisieren wie Sie wollen. Alle Konten bleiben in der Pseudo-Gruppe mit dem Namen "Alle" sichtbar, unabhängig davon, zu welcher Gruppe sie gehören.',
     'deleting_group_does_not_delete_accounts' => 'Konten bleiben beim Löschen der Gruppe erhalten',
     'move_selected_to' => 'Ausgewählte verschieben',
+    'move_selected_to_group' => 'Move selected into a group',
     'no_group' => 'Keine Gruppe',
     'change_group' => 'Gruppe ändern',
     'group_successfully_created' => 'Group successfully created',

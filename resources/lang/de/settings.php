@@ -14,15 +14,20 @@ return [
     */
 
     'settings' => 'Einstellungen',
+    'preferences' => 'Preferences',
     'account' => 'Account',
     'oauth' => 'OAuth',
     'webauthn' => 'WebAuthn',
     'tokens' => 'Token',
     'options' => 'Einstellungen',
-    'user_options' => 'Benutzeroptionen',
+    'user_preferences' => 'User preferences',
+    'admin_settings' => 'Admin settings',
     'confirm' => [
 
     ],
+    'administration' => 'Administration',
+    'administration_legend' => 'While previous settings are user settings (every user can set its own preferences), following settings are global and apply to all users. Only an administrator can view and edit those settings.',
+    'you_are_administrator' => 'You are an administrator',
     'general' => 'Allgemein',
     'security' => 'Sicherheit',
     'profile' => 'Profil',
@@ -50,10 +55,10 @@ return [
         ],
         'show_otp_as_dot' => [
             'label' => 'Generierte Einmalpasswörter als Punkte anzeigen',
-            'help' => 'Replace generated password caracters with *** to ensure confidentiality. Do not affect the copy/paste feature'
+            'help' => 'Passwortzeichen werden als *** angezeigt, um die Vertraulichkeit zu gewährleisten. Dies beeinflusst nicht die Kopieren/Einfügen Funktion'
         ],
         'close_otp_on_copy' => [
-            'label' => 'Close <abbr title="One-Time Password">OTP</abbr> after copy',
+            'label' => 'Schließe <abbr title="One-Time Password">OTP</abbr> nach dem Kopieren',
             'help' => 'Clicking a generated password to copy it automatically hide it from the screen'
         ],
         'copy_otp_on_display' => [
@@ -68,8 +73,25 @@ return [
             'label' => 'Anzeigemodus',
             'help' => 'Wählen Sie, ob Konten als Liste oder als Raster angezeigt werden sollen'
         ],
+        'password_format' => [
+            'label' => 'Password formatting',
+            'help' => 'Change how the passwords are displayed by grouping digits to ease readability and memorization'
+        ],
+        'pair' => 'by Pair',
+        'pair_legend' => 'Group digits two by two',
+        'trio_legend' => 'Group digits three by three',
+        'half_legend' => 'Split digits into two equals groups',
+        'trio' => 'by Trio',
+        'half' => 'by Half',
         'grid' => 'Raster',
         'list' => 'Liste',
+        'theme' => [
+            'label' => 'Theme',
+            'help' => 'Force a specific theme or apply the theme defined in your system/browser preferences'
+        ],
+        'light' => 'Light',
+        'dark' => 'Dark',
+        'automatic' => 'Auto',
         'show_accounts_icons' => [
             'label' => 'Symbole anzeigen',
             'help' => 'Kontosymbole in der Hauptansicht anzeigen'
