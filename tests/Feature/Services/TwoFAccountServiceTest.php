@@ -198,7 +198,7 @@ class TwoFAccountServiceTest extends FeatureTestCase
      */
     public function test_migrate_from_gauth_returns_flagged_duplicates()
     {
-        $this->actingAs($this->user);
+        $this->actingAs($this->user, 'api-guard');
 
         $parameters = [
             'service'   => OtpTestData::SERVICE,
@@ -210,14 +210,13 @@ class TwoFAccountServiceTest extends FeatureTestCase
             'algorithm' => OtpTestData::ALGORITHM_DEFAULT,
             'period'    => OtpTestData::PERIOD_DEFAULT,
         ];
-        $twofaccount = new TwoFAccount;
-        $twofaccount->fillWithOtpParameters($parameters)->save();
+
+        TwoFAccount::factory()->for($this->user)->create($parameters);
 
         $parameters['service'] = OtpTestData::SERVICE . '_bis';
         $parameters['account'] = OtpTestData::ACCOUNT . '_bis';
 
-        $twofaccount = new TwoFAccount;
-        $twofaccount->fillWithOtpParameters($parameters)->save();
+        TwoFAccount::factory()->for($this->user)->create($parameters);
 
         $twofaccounts = TwoFAccounts::migrate(MigrationTestData::GOOGLE_AUTH_MIGRATION_URI);
 
