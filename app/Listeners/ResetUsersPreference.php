@@ -21,7 +21,6 @@ class ResetUsersPreference
     /**
      * Handle the event.
      *
-     * @param  GroupDeleted  $event
      * @return void
      */
     public function handle(GroupDeleted $event)

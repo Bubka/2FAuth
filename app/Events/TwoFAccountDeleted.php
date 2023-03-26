@@ -20,7 +20,6 @@ class TwoFAccountDeleted
     /**
      * Create a new event instance.
      *
-     * @param  \App\Models\TwoFAccount  $twofaccount
      * @return void
      */
     public function __construct(TwoFAccount $twofaccount)

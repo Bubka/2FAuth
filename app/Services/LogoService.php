@@ -69,8 +69,6 @@ class LogoService
 
     /**
      * Build and set the TFA directoy collection
-     *
-     * @return void
      */
     protected function setTfaCollection() : void
     {
@@ -90,8 +88,6 @@ class LogoService
 
     /**
      * Fetch and cache fresh TFA.Directory data using the https://2fa.directory API
-     *
-     * @return void
      */
     protected function cacheTfaDirectorySource() : void
     {
@@ -117,7 +113,6 @@ class LogoService
      * Fetch and cache a logo from 2fa.Directory repository
      *
      * @param  string  $logoFile Logo filename to fetch
-     * @return void
      */
     protected function fetchLogo(string $logoFile) : void
     {
@@ -138,7 +133,6 @@ class LogoService
     /**
      * Prepare and make some replacement to optimize logo fetching
      *
-     * @param  string  $domain
      * @return string Optimized domain name
      */
     protected function cleanDomain(string $domain) : string

@@ -74,6 +74,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         RateLimiter::for('api', function (Request $request) {
             $maxAttempts = config('2fauth.api.throttle');
+
             return is_null($maxAttempts) ? Limit::none() : Limit::perMinute($maxAttempts)->by($request->ip());
         });
     }

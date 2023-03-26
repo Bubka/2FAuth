@@ -20,7 +20,6 @@ class MigratorFactory implements MigratorFactoryInterface
      * Infer the type of migrator needed from a payload and create the migrator
      *
      * @param  string  $migrationPayload The migration payload used to infer the migrator type
-     * @return Migrator
      */
     public function create(string $migrationPayload) : Migrator
     {
@@ -43,7 +42,6 @@ class MigratorFactory implements MigratorFactoryInterface
      * Determine if a payload comes from Google Authenticator
      *
      * @param  string  $migrationPayload The payload to analyse
-     * @return bool
      */
     private function isGoogleAuth(string $migrationPayload) : bool
     {
@@ -62,7 +60,6 @@ class MigratorFactory implements MigratorFactoryInterface
      * Determine if a payload is a plain text content
      *
      * @param  string  $migrationPayload The payload to analyse
-     * @return bool
      */
     private function isPlainText(string $migrationPayload) : bool
     {
@@ -81,7 +78,6 @@ class MigratorFactory implements MigratorFactoryInterface
      * Determine if a payload comes from 2FAuth in JSON format
      *
      * @param  string  $migrationPayload The payload to analyse
-     * @return bool
      */
     private function isTwoFAuthJSON(string $migrationPayload) : bool
     {

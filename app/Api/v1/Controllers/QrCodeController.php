@@ -12,7 +12,6 @@ class QrCodeController extends Controller
     /**
      * Show a QR code image
      *
-     * @param  \App\Models\TwoFAccount  $twofaccount
      * @return \Illuminate\Http\JsonResponse
      */
     public function show(TwoFAccount $twofaccount)
@@ -27,7 +26,6 @@ class QrCodeController extends Controller
     /**
      * Decode an uploaded QR Code image
      *
-     * @param  \App\Api\v1\Requests\QrCodeDecodeRequest  $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function decode(QrCodeDecodeRequest $request)

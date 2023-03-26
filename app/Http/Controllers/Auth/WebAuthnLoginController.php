@@ -23,7 +23,7 @@ class WebAuthnLoginController extends Controller
     /**
      * The login throttle.
      *
-     * @var integer
+     * @var int
      */
     protected $maxAttempts;
 
@@ -40,9 +40,6 @@ class WebAuthnLoginController extends Controller
 
     /**
      * Returns the challenge to assertion.
-     *
-     * @param  \Laragear\WebAuthn\Http\Requests\AssertionRequest  $request
-     * @return \Illuminate\Contracts\Support\Responsable|\Illuminate\Http\JsonResponse
      */
     public function options(AssertionRequest $request) : Responsable|JsonResponse
     {
@@ -67,7 +64,6 @@ class WebAuthnLoginController extends Controller
     /**
      * Log the user in.
      *
-     * @param  \App\Http\Requests\WebauthnAssertedRequest  $request
      * @return \Illuminate\Http\Response|\Illuminate\Http\JsonResponse
      */
     public function login(WebauthnAssertedRequest $request)
@@ -126,7 +122,6 @@ class WebAuthnLoginController extends Controller
     /**
      * Attempt to log the user into the application.
      *
-     * @param  \App\Http\Requests\WebauthnAssertedRequest  $request
      * @return bool
      */
     protected function attemptLogin(WebauthnAssertedRequest $request)
@@ -137,7 +132,6 @@ class WebAuthnLoginController extends Controller
     /**
      * Send the response after the user was authenticated.
      *
-     * @param  \App\Http\Requests\WebauthnAssertedRequest  $request
      * @return \Illuminate\Http\JsonResponse
      */
     protected function sendLoginResponse(WebauthnAssertedRequest $request)
@@ -161,7 +155,6 @@ class WebAuthnLoginController extends Controller
     /**
      * Get the failed login response instance.
      *
-     * @param  \App\Http\Requests\WebauthnAssertedRequest  $request
      * @return \Illuminate\Http\JsonResponse
      */
     protected function sendFailedLoginResponse(WebauthnAssertedRequest $request)
@@ -172,7 +165,6 @@ class WebAuthnLoginController extends Controller
     /**
      * Redirect the user after determining they are locked out.
      *
-     * @param  \App\Http\Requests\WebauthnAssertedRequest  $request
      * @return \Illuminate\Http\JsonResponse
      */
     protected function sendLockoutResponse(WebauthnAssertedRequest $request)
@@ -197,7 +189,6 @@ class WebAuthnLoginController extends Controller
     /**
      * Get the needed authorization credentials from the request.
      *
-     * @param  \App\Http\Requests\WebauthnAssertedRequest  $request
      * @return array
      */
     protected function credentials(WebauthnAssertedRequest $request)

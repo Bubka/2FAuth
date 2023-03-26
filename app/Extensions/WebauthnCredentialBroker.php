@@ -12,10 +12,6 @@ class WebauthnCredentialBroker extends PasswordBroker
 {
     /**
      * Send a password reset link to a user.
-     *
-     * @param  array  $credentials
-     * @param  \Closure|null  $callback
-     * @return string
      */
     public function sendResetLink(array $credentials, Closure $callback = null) : string
     {
@@ -48,8 +44,6 @@ class WebauthnCredentialBroker extends PasswordBroker
     /**
      * Reset the password for the given token.
      *
-     * @param  array  $credentials
-     * @param  \Closure  $callback
      * @return \Illuminate\Contracts\Auth\CanResetPassword|string
      */
     public function reset(array $credentials, Closure $callback)

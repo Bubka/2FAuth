@@ -20,7 +20,6 @@ class ReleaseRadar
     /**
      * Handle the event.
      *
-     * @param  \App\Events\ScanForNewReleaseCalled  $event
      * @return void
      */
     public function handle(ScanForNewReleaseCalled $event)

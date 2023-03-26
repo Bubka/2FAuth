@@ -7,7 +7,6 @@ use App\Http\Requests\UserStoreRequest;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\RegistersUsers;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 
@@ -29,7 +28,6 @@ class RegisterController extends Controller
     /**
      * Handle a registration request for the application.
      *
-     * @param  \App\Http\Requests\UserStoreRequest  $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function register(UserStoreRequest $request)
@@ -49,7 +47,6 @@ class RegisterController extends Controller
     /**
      * Create a new user instance after a valid registration.
      *
-     * @param  array  $data
      * @return \App\Models\User
      */
     protected function create(array $data)
@@ -59,7 +56,7 @@ class RegisterController extends Controller
             'email'    => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
-        
+
         Log::info(sprintf('User ID #%s created', $user->id));
 
         if (User::count() == 1) {

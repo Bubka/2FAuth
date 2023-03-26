@@ -17,7 +17,6 @@ class UserController extends Controller
     /**
      * Update the user's profile information.
      *
-     * @param  \App\Http\Requests\UserUpdateRequest  $request
      * @return \App\Api\v1\Resources\UserResource|\Illuminate\Http\JsonResponse
      */
     public function update(UserUpdateRequest $request)
@@ -45,7 +44,6 @@ class UserController extends Controller
     /**
      * Delete the user's account.
      *
-     * @param  \App\Http\Requests\UserDeleteRequest  $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function delete(UserDeleteRequest $request)

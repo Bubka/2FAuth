@@ -11,8 +11,6 @@ class ReleaseRadarService
 {
     /**
      * Run a scheduled release scan
-     *
-     * @return void
      */
     public static function scheduledScan() : void
     {
@@ -62,8 +60,6 @@ class ReleaseRadarService
 
     /**
      * Fetch releases on Github
-     *
-     * @return string|null
      */
     protected static function getLatestReleaseData() : string|null
     {

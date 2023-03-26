@@ -143,20 +143,20 @@ class LoginTest extends FeatureTestCase
     {
         $throttle = 8;
         Config::set('auth.throttle.login', $throttle);
-        
+
         $post = [
             'email'    => $this->user->email,
             'password' => self::WRONG_PASSWORD,
         ];
 
-        for ($i=0; $i < $throttle - 1; $i++) {
+        for ($i = 0; $i < $throttle - 1; $i++) {
             $this->json('POST', '/user/login', $post);
         }
 
         $this->json('POST', '/user/login', $post)
             ->assertUnauthorized();
 
-            $this->json('POST', '/user/login', $post)
+        $this->json('POST', '/user/login', $post)
         ->assertStatus(429);
     }
 

@@ -12,8 +12,6 @@ class WebauthnTwoFAuthUserProvider extends WebAuthnUserProvider
      * Validate a user against the given credentials.
      *
      * @param  \App\Models\User  $user
-     * @param  array  $credentials
-     * @return bool
      */
     public function validateCredentials($user, array $credentials) : bool
     {

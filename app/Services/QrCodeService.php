@@ -32,7 +32,6 @@ class QrCodeService
     /**
      * Decode an uploaded QR code image
      *
-     * @param  \Illuminate\Http\UploadedFile  $file
      * @return string
      */
     public static function decode(\Illuminate\Http\UploadedFile $file)

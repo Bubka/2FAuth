@@ -19,6 +19,7 @@ class DissociateTwofaccountFromGroupTest extends TestCase
      * @test
      *
      * @runInSeparateProcess
+     *
      * @preserveGlobalState disabled
      */
     public function test_twofaccount_is_released_on_group_deletion()

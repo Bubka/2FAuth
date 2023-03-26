@@ -11,8 +11,6 @@ class WebauthnRecoveryNotification extends Notification
 {
     /**
      * Token for account recovery.
-     *
-     * @var string
      */
     protected string $token;
 
@@ -32,8 +30,6 @@ class WebauthnRecoveryNotification extends Notification
 
     /**
      * AccountRecoveryNotification constructor.
-     *
-     * @param  string  $token
      */
     public function __construct(string $token)
     {

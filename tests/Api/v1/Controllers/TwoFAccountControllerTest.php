@@ -316,6 +316,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
 
     /**
      * @dataProvider accountCreationProvider
+     *
      * @test
      */
     public function test_store_without_encryption_returns_success_with_consistent_resource_structure($payload, $expected)
@@ -332,6 +333,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
 
     /**
      * @dataProvider accountCreationProvider
+     *
      * @test
      */
     public function test_store_with_encryption_returns_success_with_consistent_resource_structure($payload, $expected)
@@ -655,15 +657,15 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ])
             ->assertOk()
             ->assertJsonFragment([
-                'id'         => 0,
-                'account'    => OtpTestData::ACCOUNT,
-                'service'    => OtpTestData::SERVICE,
-                'otp_type'   => 'totp',
-                'secret'     => OtpTestData::SECRET,
-                'algorithm'  => OtpTestData::ALGORITHM_DEFAULT,
-                'digits'     => OtpTestData::DIGITS_DEFAULT,
-                'period'     => OtpTestData::PERIOD_DEFAULT,
-                'icon'       => null,
+                'id'        => 0,
+                'account'   => OtpTestData::ACCOUNT,
+                'service'   => OtpTestData::SERVICE,
+                'otp_type'  => 'totp',
+                'secret'    => OtpTestData::SECRET,
+                'algorithm' => OtpTestData::ALGORITHM_DEFAULT,
+                'digits'    => OtpTestData::DIGITS_DEFAULT,
+                'period'    => OtpTestData::PERIOD_DEFAULT,
+                'icon'      => null,
             ])
             ->assertJsonFragment([
                 'id'        => 0,

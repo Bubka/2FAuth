@@ -30,7 +30,6 @@ class AuthServiceProvider extends ServiceProvider
     /**
      * Register the service provider.
      *
-     * @return void
      *
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */

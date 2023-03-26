@@ -14,7 +14,6 @@ class TwoFAccountPolicy
     /**
      * Determine whether the user can view any models.
      *
-     * @param  \App\Models\User  $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
     // public function viewAny(User $user)
@@ -25,8 +24,6 @@ class TwoFAccountPolicy
     /**
      * Determine whether the user can view the model.
      *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\TwoFAccount  $twofaccount
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function view(User $user, TwoFAccount $twofaccount)
@@ -43,8 +40,6 @@ class TwoFAccountPolicy
     /**
      * Determine whether the user can view all provided models.
      *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\TwoFAccount  $twofaccount
      * @param  \Illuminate\Support\Collection<int, \App\Models\TwoFAccount>  $twofaccounts
      * @return \Illuminate\Auth\Access\Response|bool
      */
@@ -65,7 +60,6 @@ class TwoFAccountPolicy
     /**
      * Determine whether the user can create models.
      *
-     * @param  \App\Models\User  $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function create(User $user)
@@ -78,8 +72,6 @@ class TwoFAccountPolicy
     /**
      * Determine whether the user can update the model.
      *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\TwoFAccount  $twofaccount
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function update(User $user, TwoFAccount $twofaccount)
@@ -96,8 +88,6 @@ class TwoFAccountPolicy
     /**
      * Determine whether the user can update all provided models.
      *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\TwoFAccount  $twofaccount
      * @param  \Illuminate\Support\Collection<int, \App\Models\TwoFAccount>  $twofaccounts
      * @return \Illuminate\Auth\Access\Response|bool
      */
@@ -118,8 +108,6 @@ class TwoFAccountPolicy
     /**
      * Determine whether the user can delete the model.
      *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\TwoFAccount  $twofaccount
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function delete(User $user, TwoFAccount $twofaccount)
@@ -136,8 +124,6 @@ class TwoFAccountPolicy
     /**
      * Determine whether the user can delete all provided models.
      *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\TwoFAccount  $twofaccount
      * @param  \Illuminate\Support\Collection<int, \App\Models\TwoFAccount>  $twofaccounts
      * @return \Illuminate\Auth\Access\Response|bool
      */

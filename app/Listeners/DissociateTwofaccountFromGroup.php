@@ -21,7 +21,6 @@ class DissociateTwofaccountFromGroup
     /**
      * Handle the event.
      *
-     * @param  GroupDeleting  $event
      * @return void
      */
     public function handle(GroupDeleting $event)

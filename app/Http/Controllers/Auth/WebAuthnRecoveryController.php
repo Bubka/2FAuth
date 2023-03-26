@@ -22,8 +22,6 @@ class WebAuthnRecoveryController extends Controller
      * Let the user regain access to his account using email+password by resetting
      * the "use webauthn only" setting.
      *
-     * @param  \App\Http\Requests\WebauthnRecoveryRequest  $request
-     * @param  \App\Extensions\WebauthnCredentialBroker  $broker
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\JsonResponse
      *
      * @throws \Illuminate\Validation\ValidationException
@@ -69,7 +67,6 @@ class WebAuthnRecoveryController extends Controller
     /**
      * Check if the user has set to revoke all credentials.
      *
-     * @param  \App\Http\Requests\WebauthnRecoveryRequest  $request
      * @return bool|mixed
      */
     protected function shouldRevokeAllCredentials(WebauthnRecoveryRequest $request) : mixed
@@ -80,10 +77,6 @@ class WebAuthnRecoveryController extends Controller
 
     /**
      * Get the response for a successful account recovery.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  string  $response
-     * @return \Illuminate\Http\JsonResponse
      */
     protected function sendRecoveryResponse(Request $request, string $response) : JsonResponse
     {
@@ -93,9 +86,6 @@ class WebAuthnRecoveryController extends Controller
     /**
      * Get the response for a failed account recovery.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  string  $response
-     * @return \Illuminate\Http\JsonResponse
      *
      * @throws \Illuminate\Validation\ValidationException
      */

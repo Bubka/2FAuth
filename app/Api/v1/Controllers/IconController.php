@@ -13,7 +13,6 @@ class IconController extends Controller
     /**
      * Handle uploaded icon image
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function upload(Request $request)
@@ -33,8 +32,6 @@ class IconController extends Controller
     /**
      * Fetch a logo
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Services\LogoService  $logoService
      * @return \Illuminate\Http\JsonResponse
      */
     public function fetch(Request $request, LogoService $logoService)
@@ -53,8 +50,6 @@ class IconController extends Controller
     /**
      * delete an icon
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  string  $icon
      * @return \Illuminate\Http\JsonResponse
      */
     public function delete(string $icon, Request $request)

@@ -123,9 +123,6 @@ class User extends Authenticatable implements WebAuthnAuthenticatable
 
     /**
      * Returns an WebAuthnAuthenticatable user from a given Credential ID.
-     *
-     * @param  string  $id
-     * @return WebAuthnAuthenticatable|null
      */
     public static function getFromCredentialId(string $id) : ?WebAuthnAuthenticatable
     {

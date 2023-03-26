@@ -34,6 +34,7 @@ class WebAuthnDeviceLostControllerTest extends FeatureTestCase
 
     /**
      * @test
+     *
      * @covers  \App\Models\Traits\WebAuthnManageCredentials
      */
     public function test_sendRecoveryEmail_sends_notification_on_success()

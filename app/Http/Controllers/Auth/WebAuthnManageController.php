@@ -24,8 +24,6 @@ class WebAuthnManageController extends Controller
     /**
      * Rename a WebAuthn credential
      *
-     * @param  \App\Http\Requests\WebauthnRenameRequest  $request
-     * @param  string  $credential
      * @return \Illuminate\Http\JsonResponse
      */
     public function rename(WebauthnRenameRequest $request, string $credential)
@@ -42,7 +40,6 @@ class WebAuthnManageController extends Controller
     /**
      * Remove the specified credential from storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  string|array  $credential
      * @return \Illuminate\Http\JsonResponse
      */
@@ -61,7 +58,7 @@ class WebAuthnManageController extends Controller
             $request->user()->save();
             Log::notice(sprintf('No more Webauthn credential for user ID #%s, user Webauthn options reset to default', $user->id));
         }
-       
+
         Log::info(sprintf('User ID #%s revoked a security device', $user->id));
 
         return response()->json(null, 204);

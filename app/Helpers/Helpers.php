@@ -6,9 +6,6 @@ class Helpers
 {
     /**
      * Clean a version number string
-     *
-     * @param  string|null  $release
-     * @return string|false
      */
     public static function cleanVersionNumber(?string $release) : string|false
     {

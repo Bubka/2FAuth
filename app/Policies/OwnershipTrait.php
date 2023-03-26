@@ -9,8 +9,6 @@ trait OwnershipTrait
     /**
      * Ownership of single item condition
      *
-     * @param  \App\Models\User  $user
-     * @param  mixed  $item
      * @return bool
      */
     protected function isOwnerOf(User $user, mixed $item)
@@ -24,7 +22,6 @@ trait OwnershipTrait
      * @template TKey of array-key
      * @template TValue
      *
-     * @param  \App\Models\User  $user
      * @param  \Illuminate\Contracts\Support\Arrayable<TKey, TValue>|iterable<TKey, TValue>  $items
      * @return bool
      */

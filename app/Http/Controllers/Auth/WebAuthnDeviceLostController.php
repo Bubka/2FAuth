@@ -17,8 +17,6 @@ class WebAuthnDeviceLostController extends Controller
     /**
      * Send a recovery email to the user.
      *
-     * @param  \App\Http\Requests\WebauthnDeviceLostRequest  $request
-     * @param  \App\Extensions\WebauthnCredentialBroker  $broker
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      *
      * @throws \Illuminate\Validation\ValidationException
@@ -37,8 +35,6 @@ class WebAuthnDeviceLostController extends Controller
     /**
      * Get the response for a failed account recovery link.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  string  $response
      * @return \Illuminate\Http\JsonResponse
      *
      * @throws \Illuminate\Validation\ValidationException
@@ -51,8 +47,6 @@ class WebAuthnDeviceLostController extends Controller
     /**
      * Get the response for a successful account recovery link.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  string  $response
      * @return \Illuminate\Http\JsonResponse
      */
     protected function sendRecoveryLinkResponse(Request $request, string $response)

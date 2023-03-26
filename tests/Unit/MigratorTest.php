@@ -336,6 +336,7 @@ class MigratorTest extends TestCase
      * @test
      *
      * @runInSeparateProcess
+     *
      * @preserveGlobalState disabled
      */
     public function test_migrate_gauth_returns_fake_accounts()

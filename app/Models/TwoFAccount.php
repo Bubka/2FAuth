@@ -376,7 +376,7 @@ class TwoFAccount extends Model implements Sortable
             Log::info(sprintf('New OTP generated for TwoFAccount (%s)', $this->id ? 'id:' . $this->id : 'preview'));
 
             return $OtpDto;
-        } catch (\Exception | \Throwable $ex) {
+        } catch (\Exception|\Throwable $ex) {
             Log::error('An error occured, OTP generation aborted');
             // Currently a secret issue is the only possible exception thrown by OTPHP for this stack
             // so it is Ok to send the corresponding 2FAuth exception.
@@ -569,7 +569,7 @@ class TwoFAccount extends Model implements Sortable
         } catch (UnsupportedOtpTypeException $exception) {
             Log::error(sprintf('%s is not an OTP type supported by the current generator', $this->otp_type));
             throw $exception;
-        } catch (\Exception | \Throwable $exception) {
+        } catch (\Exception|\Throwable $exception) {
             throw new InvalidOtpParameterException($exception->getMessage());
         }
     }
@@ -623,7 +623,6 @@ class TwoFAccount extends Model implements Sortable
     /**
      * Generate a unique filename
      *
-     * @param  string  $extension
      * @return string The filename
      */
     private function getUniqueFilename(string $extension) : string
@@ -636,7 +635,6 @@ class TwoFAccount extends Model implements Sortable
      *
      * @param  string  $filename
      * @param  string  $disk
-     * @return  bool
      */
     private function isValidIcon($filename, $disk) : bool
     {
@@ -686,7 +684,7 @@ class TwoFAccount extends Model implements Sortable
             return Storage::disk('icons')->exists($newFilename) ? $newFilename : null;
         }
         // @codeCoverageIgnoreStart
-        catch (\Exception | \Throwable $ex) {
+        catch (\Exception|\Throwable $ex) {
             Log::error(sprintf('Icon storage failed: %s', $ex->getMessage()));
 
             return null;
@@ -708,8 +706,6 @@ class TwoFAccount extends Model implements Sortable
 
     /**
      * Tells if an official icon should be fetched
-     *
-     * @return bool
      */
     private function shouldGetOfficialIcon() : bool
     {

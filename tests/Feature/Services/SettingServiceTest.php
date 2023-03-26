@@ -237,6 +237,7 @@ class SettingServiceTest extends FeatureTestCase
 
     /**
      * @test
+     *
      * @dataProvider provideUndecipherableData
      */
     public function test_set_useEncryption_off_returns_exception_when_data_are_undecipherable(array $data)

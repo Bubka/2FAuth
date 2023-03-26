@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 abstract class ModelTestCase extends TestCase
 {
     /**
-     * @param  Model  $model
      * @param  array  $fillable
      * @param  array  $guarded
      * @param  array  $hidden
@@ -72,8 +71,6 @@ abstract class ModelTestCase extends TestCase
 
     /**
      * @param  HasMany  $relation
-     * @param  Model  $model
-     * @param  Model  $related
      * @param  string  $key
      * @param  string  $parent
      * @param  \Closure  $queryCheck
@@ -106,8 +103,6 @@ abstract class ModelTestCase extends TestCase
 
     /**
      * @param  BelongsTo  $relation
-     * @param  Model  $model
-     * @param  Model  $related
      * @param  string  $key
      * @param  string  $owner
      * @param  \Closure  $queryCheck

@@ -23,8 +23,6 @@ class SettingService
 
     /**
      * Cache duration
-     *
-     * @var int
      */
     private int $minutes = 10;
 
@@ -109,7 +107,6 @@ class SettingService
      * Determine if the given setting has been edited
      *
      * @param  string  $key
-     * @return bool
      */
     public function isEdited($key) : bool
     {
@@ -148,7 +145,6 @@ class SettingService
     /**
      * Replaces boolean by a patterned string as appstrack/laravel-options package does not support var type
      *
-     * @param  mixed  $value
      * @return string
      */
     private function replaceBoolean(mixed $value)
@@ -159,7 +155,6 @@ class SettingService
     /**
      * Replaces patterned string that represent booleans with real booleans
      *
-     * @param  mixed  $value
      * @return mixed
      */
     private function restoreType(mixed $value)
@@ -180,7 +175,6 @@ class SettingService
     /**
      * Enable or Disable encryption of 2FAccounts sensible data
      *
-     * @return void
      *
      * @throws DbEncryptionException Something failed, everything have been rolled back
      */

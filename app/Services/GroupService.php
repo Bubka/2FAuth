@@ -15,9 +15,7 @@ class GroupService
      * Assign one or more accounts to a group
      *
      * @param  array|int  $ids accounts ids to assign
-     * @param  \App\Models\User  $user
      * @param  \App\Models\Group|null  $group The group the accounts will be assigned to
-     * @return void
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
@@ -48,7 +46,6 @@ class GroupService
      * Prepends the pseudo group named 'All' to a group collection
      *
      * @param  Collection<int, Group>  $groups
-     * @param  \App\Models\User  $user
      * @return Collection<int, Group>
      */
     public static function prependTheAllGroup(Collection $groups, User $user) : Collection
@@ -66,7 +63,6 @@ class GroupService
     /**
      * Determines the default group of the given user
      *
-     * @param  \App\Models\User  $user
      * @return \App\Models\Group|null The group or null if it does not exist
      */
     private static function defaultGroup(User $user)

@@ -21,9 +21,6 @@ class WebAuthnRecoveryControllerTest extends FeatureTestCase
      */
     protected $user;
 
-    /**
-     * @var
-     */
     protected $now;
 
     const STORED_TOKEN_VALUE = '$2y$10$P6q8rl8te5QaO1EdpyJcNO0s9VFlVgf62KaItQhrPTskxfyu97mlW';

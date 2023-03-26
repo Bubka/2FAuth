@@ -19,7 +19,6 @@ class GroupDeleting
     /**
      * Create a new event instance.
      *
-     * @param  \App\Models\Group  $group
      * @return void
      */
     public function __construct(Group $group)

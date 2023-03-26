@@ -8,10 +8,8 @@ class WebauthnAssertedRequest extends AssertedRequest
 {
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array
      */
-    public function rules(): array
+    public function rules() : array
     {
         return array_merge(
             [

@@ -118,6 +118,7 @@ class TwoFAccountModelTest extends ModelTestCase
      * @test
      *
      * @runInSeparateProcess
+     *
      * @preserveGlobalState disabled
      */
     public function test_secret_is_uppercased_and_padded_at_setup()

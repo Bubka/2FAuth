@@ -24,7 +24,6 @@ class ReverseProxyGuard implements Guard
     /**
      * Create a new authentication guard.
      *
-     * @param  \Illuminate\Contracts\Auth\UserProvider  $provider
      * @return void
      */
     public function __construct(UserProvider $provider)
@@ -83,7 +82,6 @@ class ReverseProxyGuard implements Guard
     /**
      * Validate a user's credentials.
      *
-     * @param  array  $credentials
      * @return bool
      *
      * @codeCoverageIgnore

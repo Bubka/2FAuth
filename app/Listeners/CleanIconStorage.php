@@ -21,7 +21,6 @@ class CleanIconStorage
     /**
      * Handle the event.
      *
-     * @param  \App\Events\TwoFAccountDeleted  $event
      * @return void
      */
     public function handle(TwoFAccountDeleted $event)

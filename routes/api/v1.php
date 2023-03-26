@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 /**
  * DEPRECATED - Unprotected routes
  */
-Route::get('user/name', function() {
+Route::get('user/name', function () {
     return response()->json(['deprecation' => true], 200, ['Deprecation' => Date::createFromDate(2023, 03, 21)->toRfc7231String()]);
 });
 

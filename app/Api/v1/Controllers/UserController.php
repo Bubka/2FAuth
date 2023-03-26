@@ -44,8 +44,6 @@ class UserController extends Controller
     /**
      * Display a preference
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  string  $preferenceName
      * @return \Illuminate\Http\JsonResponse
      */
     public function showPreference(Request $request, string $preferenceName)
@@ -63,8 +61,6 @@ class UserController extends Controller
     /**
      * Save a preference
      *
-     * @param  \App\Api\v1\Requests\SettingUpdateRequest  $request
-     * @param  string  $preferenceName
      * @return \Illuminate\Http\JsonResponse
      */
     public function setPreference(SettingUpdateRequest $request, string $preferenceName)
@@ -77,7 +73,7 @@ class UserController extends Controller
 
         $request->user()['preferences->' . $preferenceName] = $validated['value'];
         $request->user()->save();
-        
+
         Log::info(sprintf('User ID #%s changed its preference %s to %s', $request->user()->id, var_export($preferenceName, true), var_export($validated['value'], true)));
 
         return response()->json([

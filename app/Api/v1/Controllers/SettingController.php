@@ -51,7 +51,6 @@ class SettingController extends Controller
     /**
      * Store a setting
      *
-     * @param  \App\Api\v1\Requests\SettingStoreRequest  $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function store(SettingStoreRequest $request)
@@ -69,7 +68,6 @@ class SettingController extends Controller
     /**
      * Update a setting
      *
-     * @param  \App\Api\v1\Requests\SettingUpdateRequest  $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function update(SettingUpdateRequest $request, string $settingName)
@@ -87,7 +85,6 @@ class SettingController extends Controller
     /**
      * Delete a setting
      *
-     * @param  string  $settingName
      * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(string $settingName)
