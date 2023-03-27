@@ -76,7 +76,7 @@ class WebAuthnManageControllerTest extends FeatureTestCase
             'authenticatable_type' => \App\Models\User::class,
             'authenticatable_id'   => $this->user->id,
             'user_id'              => 'e8af6f703f8042aa91c30cf72289aa07',
-            'alias'                => 'MyNewCredential',
+            'alias'                => 'MyOldCredential',
             'counter'              => 0,
             'rp_id'                => 'http://localhost',
             'origin'               => 'http://localhost',
