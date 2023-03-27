@@ -123,6 +123,8 @@ Vue.mixin({
                 i18n.locale = this.$root.userPreferences.lang
                 document.documentElement.lang = this.$root.userPreferences.lang
             }
+
+            this.setTheme(this.$root.userPreferences.theme)
         },
     }
 
