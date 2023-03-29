@@ -308,6 +308,7 @@
                 this.form.account = twofaccount.account
                 this.form.service = twofaccount.service
                 this.form.otp_type = twofaccount.otp_type
+                this.form.icon = twofaccount.icon
                 this.form.secret = twofaccount.secret
                 this.form.algorithm = twofaccount.algorithm
                 this.form.digits = twofaccount.digits

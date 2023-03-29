@@ -103,7 +103,7 @@ class TwoFAuthMigrator extends Migrator
 
             try {
                 $twofaccounts[$key] = new TwoFAccount;
-                $twofaccounts[$key]->fillWithOtpParameters($parameters);
+                $twofaccounts[$key]->fillWithOtpParameters($parameters, Arr::has($parameters, 'iconExt'));
                 if (Arr::has($parameters, 'iconExt')) {
                     $twofaccounts[$key]->setIcon($parameters['icon_file'], $parameters['iconExt']);
                 }
