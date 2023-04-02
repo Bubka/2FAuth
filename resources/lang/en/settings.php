@@ -124,6 +124,10 @@ return [
             'label' => 'Remember group filter',
             'help' => 'Save the last group filter applied and restore it on your next visit',
         ],
+        'disable_registration' => [
+            'label' => 'Disable registration',
+            'help' => 'Prevent new user registration',
+        ],
         'never' => 'Never',
         'on_otp_copy' => 'On security code copy',
         '1_minutes' => 'After 1 minute',

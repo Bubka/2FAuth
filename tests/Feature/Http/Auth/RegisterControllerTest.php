@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Http\Auth;
 
+use App\Facades\Settings;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Tests\FeatureTestCase;
@@ -125,5 +126,21 @@ class RegisterControllerTest extends FeatureTestCase
         ]);
 
         $this->assertEquals(1, User::admins()->count());
+    }
+
+    /**
+     * @test
+     */
+    public function test_register_is_forbidden_when_registration_is_disabled()
+    {
+        Settings::set('disableRegistration', true);
+
+        $this->json('POST', '/user', [
+            'name'                  => self::USERNAME,
+            'email'                 => self::EMAIL,
+            'password'              => self::PASSWORD,
+            'password_confirmation' => self::PASSWORD,
+        ])
+        ->assertStatus(403);
     }
 }

@@ -30,7 +30,7 @@
                 <p >{{ $t('auth.sign_in_using') }}&nbsp;
                     <a id="lnkSignWithWebauthn" role="button" class="is-link" @keyup.enter="toggleForm" @click="toggleForm" tabindex="0" :aria-label="$t('auth.sign_in_using_security_device')">{{ $t('auth.webauthn.security_device') }}</a>
                 </p>
-                <p class="mt-4">{{ $t('auth.forms.dont_have_account_yet') }}&nbsp;<router-link id="lnkRegister" :to="{ name: 'register' }" class="is-link">{{ $t('auth.register') }}</router-link></p>
+                <p v-if="this.$root.appSettings.disableRegistration == false" class="mt-4">{{ $t('auth.forms.dont_have_account_yet') }}&nbsp;<router-link id="lnkRegister" :to="{ name: 'register' }" class="is-link">{{ $t('auth.register') }}</router-link></p>
             </div>
         </form-wrapper>
         <!-- footer -->
@@ -178,6 +178,11 @@
                 clean: true
             })
             clearInterval(this.csrfRefresher);
+
+            if (this.$root.appSettings.disableRegistration && to.name == 'register') {
+                this.$router.push({name: 'genericError', params: { err: this.$t('errors.unauthorized_legend') } })
+            }
+
             next()
         }
     }

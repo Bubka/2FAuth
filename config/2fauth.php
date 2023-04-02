@@ -69,6 +69,7 @@ return [
         'checkForUpdate' => true,
         'lastRadarScan' => 0,
         'latestRelease' => false,
+        'disableRegistration' => false,
     ],
 
     /*

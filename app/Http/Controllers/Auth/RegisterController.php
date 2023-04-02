@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Facades\Settings;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserStoreRequest;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 
@@ -32,6 +34,10 @@ class RegisterController extends Controller
      */
     public function register(UserStoreRequest $request)
     {
+        if (Settings::get('disableRegistration') == true) {
+            return response()->json(['message' => 'forbidden'], Response::HTTP_FORBIDDEN);
+        }
+
         $validated = $request->validated();
 
         event(new Registered($user = $this->create($validated)));

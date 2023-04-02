@@ -61,6 +61,8 @@
                         <version-checker></version-checker>
                         <!-- protect db -->
                         <form-checkbox v-on:useEncryption="saveSetting('useEncryption', $event)" :form="settingsForm" fieldName="useEncryption" :label="$t('settings.forms.use_encryption.label')" :help="$t('settings.forms.use_encryption.help')" />
+                        <!-- disable registration -->
+                        <form-checkbox v-on:disableRegistration="saveSetting('disableRegistration', $event)" :form="settingsForm" fieldName="disableRegistration" :label="$t('settings.forms.disable_registration.label')" :help="$t('settings.forms.disable_registration.help')" />
                     </div>
                 </form>
             </form-wrapper>
@@ -122,6 +124,7 @@
                 settings: {
                     useEncryption: null,
                     checkForUpdate: null,
+                    disableRegistration: null,
                 },
                 layouts: [
                     { text: this.$t('settings.forms.grid'), value: 'grid', icon: 'th' },
