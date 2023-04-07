@@ -79,7 +79,7 @@ return [
     */
 
     'preferences' => [
-        'showTokenAsDot' => false,
+        'showOtpAsDot' => false,
         'closeOtpOnCopy' => false,
         'copyOtpOnDisplay' => false,
         'useBasicQrcodeReader' => false,
