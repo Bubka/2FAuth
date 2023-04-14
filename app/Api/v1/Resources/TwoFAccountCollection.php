@@ -29,6 +29,10 @@ class TwoFAccountCollection extends ResourceCollection
             $request->merge(['withSecret' => false]);
         }
 
+        if ($request->has('withOtp')) {
+            $request->merge(['at' => time()]);
+        }
+
         return $this->collection;
     }
 }

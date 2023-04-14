@@ -37,12 +37,14 @@
                         <h4 class="title is-4 pt-4 has-text-grey-light">{{ $t('settings.security') }}</h4>
                         <!-- auto lock -->
                         <form-select v-on:kickUserAfter="savePreference('kickUserAfter', $event)" :options="kickUserAfters" :form="preferencesForm" fieldName="kickUserAfter" :label="$t('settings.forms.auto_lock.label')"  :help="$t('settings.forms.auto_lock.help')" />
+                        <!-- get OTP on request -->
+                        <form-toggle v-on:getOtpOnRequest="savePreference('getOtpOnRequest', $event)" :choices="getOtpTriggers" :form="preferencesForm" fieldName="getOtpOnRequest" :label="$t('settings.forms.otp_generation.label')" :help="$t('settings.forms.otp_generation.help')" />
                         <!-- otp as dot -->
                         <form-checkbox v-on:showOtpAsDot="savePreference('showOtpAsDot', $event)" :form="preferencesForm" fieldName="showOtpAsDot" :label="$t('settings.forms.show_otp_as_dot.label')" :help="$t('settings.forms.show_otp_as_dot.help')" />
                         <!-- close otp on copy -->
-                        <form-checkbox v-on:closeOtpOnCopy="savePreference('closeOtpOnCopy', $event)" :form="preferencesForm" fieldName="closeOtpOnCopy" :label="$t('settings.forms.close_otp_on_copy.label')" :help="$t('settings.forms.close_otp_on_copy.help')" />
+                        <form-checkbox v-on:closeOtpOnCopy="savePreference('closeOtpOnCopy', $event)" :form="preferencesForm" fieldName="closeOtpOnCopy" :label="$t('settings.forms.close_otp_on_copy.label')" :help="$t('settings.forms.close_otp_on_copy.help')" :disabled="!preferencesForm.getOtpOnRequest" />
                         <!-- copy otp on get -->
-                        <form-checkbox v-on:copyOtpOnDisplay="savePreference('copyOtpOnDisplay', $event)" :form="preferencesForm" fieldName="copyOtpOnDisplay" :label="$t('settings.forms.copy_otp_on_display.label')" :help="$t('settings.forms.copy_otp_on_display.help')" />
+                        <form-checkbox v-on:copyOtpOnDisplay="savePreference('copyOtpOnDisplay', $event)" :form="preferencesForm" fieldName="copyOtpOnDisplay" :label="$t('settings.forms.copy_otp_on_display.label')" :help="$t('settings.forms.copy_otp_on_display.help')" :disabled="!preferencesForm.getOtpOnRequest" />
 
                         <h4 class="title is-4 pt-4 has-text-grey-light">{{ $t('settings.data_input') }}</h4>
                         <!-- basic qrcode -->
@@ -119,6 +121,7 @@
                     theme: '',
                     formatPassword: null,
                     formatPasswordBy: '',
+                    getOtpOnRequest: null,
                 }),
                 settingsForm: null,
                 settings: {
@@ -159,6 +162,10 @@
                     { text: this.$t('settings.forms.livescan'), value: 'livescan' },
                     { text: this.$t('settings.forms.upload'), value: 'upload' },
                     { text: this.$t('settings.forms.advanced_form'), value: 'advancedForm' },
+                ],
+                getOtpTriggers: [
+                    { text: this.$t('settings.forms.otp_generation_on_request'), value: true, legend: this.$t('settings.forms.otp_generation_on_request_legend'), title: this.$t('settings.forms.otp_generation_on_request_title') },
+                    { text: this.$t('settings.forms.otp_generation_on_home'), value: false, legend: this.$t('settings.forms.otp_generation_on_home_legend'), title: this.$t('settings.forms.otp_generation_on_home_title') },
                 ],
             }
         },

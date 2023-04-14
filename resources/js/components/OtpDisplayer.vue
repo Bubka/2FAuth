@@ -7,7 +7,7 @@
         <p class="is-size-6 has-ellipsis" :class="$root.showDarkMode ? 'has-text-grey' : 'has-text-grey-light'">{{ internal_account }}</p>
         <p>
             <span role="log" ref="otp" tabindex="0" class="otp is-size-1 is-clickable px-3" :class="$root.showDarkMode ? 'has-text-white' : 'has-text-grey-dark'" @click="copyOTP(internal_password, true)" @keyup.enter="copyOTP(internal_password, true)" :title="$t('commons.copy_to_clipboard')">
-                {{ displayedOtp }}
+                {{ displayPwd(this.internal_password) }}
             </span>
         </p>
         <ul class="dots" v-show="isTimeBased(internal_otp_type)">
@@ -61,17 +61,17 @@
 
         computed: {
 
-            displayedOtp() {
-                let pwd = this.internal_password
-                if (this.$root.userPreferences.formatPassword && pwd.length > 0) {
-                    const x = Math.ceil(this.$root.userPreferences.formatPasswordBy < 1 ? pwd.length * this.$root.userPreferences.formatPasswordBy : this.$root.userPreferences.formatPasswordBy)
-                    const chunks = pwd.match(new RegExp(`.{1,${x}}`, 'g'));
-                    if (chunks) {
-                        pwd = chunks.join(' ')
-                    }
-                }
-                return this.$root.userPreferences.showOtpAsDot ? pwd.replace(/[0-9]/g, '●') : pwd
-            },
+            // displayedOtp() {
+            //     let pwd = this.internal_password
+            //     if (this.$root.userPreferences.formatPassword && pwd.length > 0) {
+            //         const x = Math.ceil(this.$root.userPreferences.formatPasswordBy < 1 ? pwd.length * this.$root.userPreferences.formatPasswordBy : this.$root.userPreferences.formatPasswordBy)
+            //         const chunks = pwd.match(new RegExp(`.{1,${x}}`, 'g'));
+            //         if (chunks) {
+            //             pwd = chunks.join(' ')
+            //         }
+            //     }
+            //     return this.$root.userPreferences.showOtpAsDot ? pwd.replace(/[0-9]/g, '●') : pwd
+            // },
         },
 
         mounted: function() {

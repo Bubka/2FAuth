@@ -349,7 +349,7 @@ class TwoFAccount extends Model implements Sortable
      * @throws UnsupportedOtpTypeException The defined OTP type is not supported
      * @throws InvalidOtpParameterException One OTP parameter is invalid
      */
-    public function getOTP()
+    public function getOTP(?int $time = null)
     {
         Log::info(sprintf('OTP requested for TwoFAccount (%s)', $this->id ? 'id:' . $this->id : 'preview'));
 
@@ -377,7 +377,7 @@ class TwoFAccount extends Model implements Sortable
             } else {
                 $OtpDto               = new TotpDto();
                 $OtpDto->otp_type     = $this->otp_type;
-                $OtpDto->generated_at = time();
+                $OtpDto->generated_at = $time ?: time();
                 $OtpDto->password     = $this->otp_type === self::TOTP
                     ? $this->generator->at($OtpDto->generated_at)
                     : SteamTotp::getAuthCode(base64_encode(Base32::decodeUpper($this->secret)));

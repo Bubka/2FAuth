@@ -99,6 +99,7 @@ return [
         'formatPassword' => true,
         'formatPasswordBy' => 0.5,
         'lang' => 'browser',
+        'getOtpOnRequest' => true,
     ],
 
 ];

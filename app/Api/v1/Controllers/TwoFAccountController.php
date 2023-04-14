@@ -5,6 +5,7 @@ namespace App\Api\v1\Controllers;
 use App\Api\v1\Requests\TwoFAccountBatchRequest;
 use App\Api\v1\Requests\TwoFAccountDynamicRequest;
 use App\Api\v1\Requests\TwoFAccountImportRequest;
+use App\Api\v1\Requests\TwoFAccountIndexRequest;
 use App\Api\v1\Requests\TwoFAccountReorderRequest;
 use App\Api\v1\Requests\TwoFAccountStoreRequest;
 use App\Api\v1\Requests\TwoFAccountUpdateRequest;
@@ -29,7 +30,7 @@ class TwoFAccountController extends Controller
      *
      * @return \App\Api\v1\Resources\TwoFAccountCollection
      */
-    public function index(Request $request)
+    public function index(TwoFAccountIndexRequest $request)
     {
         // Quick fix for #176
         if (config('auth.defaults.guard') === 'reverse-proxy-guard' && User::count() === 1) {
@@ -39,7 +40,15 @@ class TwoFAccountController extends Controller
             }
         }
 
-        return new TwoFAccountCollection($request->user()->twofaccounts->sortBy('order_column'));
+        $validated = $request->validated();
+
+        // if ($request->has('withOtp')) {
+        //     $request->merge(['at' => time()]);
+        // }
+
+        return Arr::has($validated, 'ids')
+            ? new TwoFAccountCollection($request->user()->twofaccounts()->whereIn('id', Helpers::commaSeparatedToArray($validated['ids']))->get()->sortBy('order_column'))
+            : new TwoFAccountCollection($request->user()->twofaccounts->sortBy('order_column'));
     }
 
     /**

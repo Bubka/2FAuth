@@ -126,6 +126,17 @@ Vue.mixin({
 
             this.setTheme(this.$root.userPreferences.theme)
         },
+
+        displayPwd(pwd) {
+            if (this.$root.userPreferences.formatPassword && pwd.length > 0) {
+                const x = Math.ceil(this.$root.userPreferences.formatPasswordBy < 1 ? pwd.length * this.$root.userPreferences.formatPasswordBy : this.$root.userPreferences.formatPasswordBy)
+                const chunks = pwd.match(new RegExp(`.{1,${x}}`, 'g'));
+                if (chunks) {
+                    pwd = chunks.join(' ')
+                }
+            }
+            return this.$root.userPreferences.showOtpAsDot ? pwd.replace(/[0-9]/g, '●') : pwd
+        },
     }
 
 })

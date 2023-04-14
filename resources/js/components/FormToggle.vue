@@ -28,7 +28,7 @@
                     :disabled="isDisabled" 
                 />
                 <span v-if="choice.legend" v-html="choice.legend" class="is-block is-size-7"></span>
-                <font-awesome-icon :icon="['fas', choice.icon]" v-if="choice.icon" class="mr-3" /> {{ choice.text }}
+                <font-awesome-icon :icon="['fas', choice.icon]" v-if="choice.icon" class="mr-2" /> {{ choice.text }}
             </button>
         </div>
         <field-error :form="form" :field="fieldName" />

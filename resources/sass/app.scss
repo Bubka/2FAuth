@@ -466,7 +466,16 @@ figure.no-icon {
   height: 4px;
   border-radius: 50%;
   background: hsl(348, 100%, 61%);
-  /* red */
+}
+
+.dots.condensed {
+  line-height: 0.9;
+}
+
+.dots.condensed li {
+  margin: 0 2px;
+  width: 3px;
+  height: 3px;
 }
 
 .dots li[data-is-active]~li {
@@ -1229,9 +1238,16 @@ footer .field.is-grouped {
 .fadeInOut-enter-active {
   animation: fadeIn 500ms
 }
-
 .fadeInOut-leave-active {
   animation: fadeOut 500ms
+}
+
+
+.popLater-enter-active {
+  transition: opacity .2s linear .5s
+}
+.popLater-enter, .popLater-leave-active, .popLater-leave-to {
+  opacity: 0;
 }
 
 
