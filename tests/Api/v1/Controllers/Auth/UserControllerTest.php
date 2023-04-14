@@ -83,7 +83,7 @@ class UserControllerTest extends FeatureTestCase
     public function test_allPreferences_returns_preferences_with_user_values()
     {
         $userPrefs = [
-            'showTokenAsDot'       => true,
+            'showOtpAsDot'         => true,
             'closeOtpOnCopy'       => true,
             'copyOtpOnDisplay'     => true,
             'useBasicQrcodeReader' => true,
@@ -103,7 +103,7 @@ class UserControllerTest extends FeatureTestCase
             'lang'                 => 'fr',
         ];
 
-        $this->user['preferences->showTokenAsDot']       = $userPrefs['showTokenAsDot'];
+        $this->user['preferences->showOtpAsDot']         = $userPrefs['showOtpAsDot'];
         $this->user['preferences->closeOtpOnCopy']       = $userPrefs['closeOtpOnCopy'];
         $this->user['preferences->copyOtpOnDisplay']     = $userPrefs['copyOtpOnDisplay'];
         $this->user['preferences->useBasicQrcodeReader'] = $userPrefs['useBasicQrcodeReader'];
@@ -146,11 +146,11 @@ class UserControllerTest extends FeatureTestCase
         $this->user = User::factory()->create();
 
         $response = $this->actingAs($this->user, 'api-guard')
-            ->json('GET', '/api/v1/user/preferences/showTokenAsDot')
+            ->json('GET', '/api/v1/user/preferences/showOtpAsDot')
             ->assertOk()
             ->assertExactJson([
-                'key'   => 'showTokenAsDot',
-                'value' => config('2fauth.preferences.showTokenAsDot'),
+                'key'   => 'showOtpAsDot',
+                'value' => config('2fauth.preferences.showOtpAsDot'),
             ]);
     }
 
@@ -159,15 +159,15 @@ class UserControllerTest extends FeatureTestCase
      */
     public function test_showPreference_returns_preference_with_custom_value()
     {
-        $showTokenAsDot                            = ! config('2fauth.preferences.showTokenAsDot');
-        $this->user['preferences->showTokenAsDot'] = $showTokenAsDot;
+        $showOtpAsDot                            = ! config('2fauth.preferences.showOtpAsDot');
+        $this->user['preferences->showOtpAsDot'] = $showOtpAsDot;
         $this->user->save();
 
         $response = $this->actingAs($this->user, 'api-guard')
-            ->json('GET', '/api/v1/user/preferences/showTokenAsDot')
+            ->json('GET', '/api/v1/user/preferences/showOtpAsDot')
             ->assertJsonFragment([
-                'key'   => 'showTokenAsDot',
-                'value' => $showTokenAsDot,
+                'key'   => 'showOtpAsDot',
+                'value' => $showOtpAsDot,
             ]);
     }
 
@@ -191,17 +191,17 @@ class UserControllerTest extends FeatureTestCase
          */
         $this->user = User::factory()->create();
 
-        $showTokenAsDot = ! config('2fauth.preferences.showTokenAsDot');
+        $showOtpAsDot = ! config('2fauth.preferences.showOtpAsDot');
 
         $response = $this->actingAs($this->user, 'api-guard')
-            ->json('PUT', '/api/v1/user/preferences/showTokenAsDot', [
-                'key'   => 'showTokenAsDot',
-                'value' => $showTokenAsDot,
+            ->json('PUT', '/api/v1/user/preferences/showOtpAsDot', [
+                'key'   => 'showOtpAsDot',
+                'value' => $showOtpAsDot,
             ])
             ->assertCreated()
             ->assertExactJson([
-                'key'   => 'showTokenAsDot',
-                'value' => $showTokenAsDot,
+                'key'   => 'showOtpAsDot',
+                'value' => $showOtpAsDot,
             ]);
     }
 
@@ -212,7 +212,7 @@ class UserControllerTest extends FeatureTestCase
     {
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('PUT', '/api/v1/user/preferences/unknown', [
-                'key'   => 'showTokenAsDot',
+                'key'   => 'showOtpAsDot',
                 'value' => true,
             ])
             ->assertNotFound();
@@ -224,8 +224,8 @@ class UserControllerTest extends FeatureTestCase
     public function test_setPreference_with_invalid_data_returns_validation_error()
     {
         $response = $this->actingAs($this->user, 'api-guard')
-            ->json('PUT', '/api/v1/user/preferences/showTokenAsDot', [
-                'key'   => 'showTokenAsDot',
+            ->json('PUT', '/api/v1/user/preferences/showOtpAsDot', [
+                'key'   => 'showOtpAsDot',
                 'value' => null,
             ])
             ->assertStatus(422);

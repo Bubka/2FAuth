@@ -69,7 +69,7 @@ class SystemControllerTest extends FeatureTestCase
             ->assertOk()
             ->assertJsonStructure([
                 'user_preferences' => [
-                    'showTokenAsDot',
+                    'showOtpAsDot',
                     'closeOtpOnCopy',
                     'copyOtpOnDisplay',
                     'useBasicQrcodeReader',

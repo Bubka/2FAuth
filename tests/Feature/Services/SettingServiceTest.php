@@ -349,10 +349,10 @@ class SettingServiceTest extends FeatureTestCase
     public function test_isEdited_returns_true()
     {
         DB::table('options')->insert(
-            [self::KEY => 'showTokenAsDot', self::VALUE => strval(self::SETTING_VALUE_TRUE_TRANSFORMED)]
+            [self::KEY => 'showOtpAsDot', self::VALUE => strval(self::SETTING_VALUE_TRUE_TRANSFORMED)]
         );
 
-        $this->assertTrue(Settings::isEdited('showTokenAsDot'));
+        $this->assertTrue(Settings::isEdited('showOtpAsDot'));
     }
 
     /**
@@ -360,9 +360,9 @@ class SettingServiceTest extends FeatureTestCase
      */
     public function test_isEdited_returns_false()
     {
-        DB::table('options')->where(self::KEY, 'showTokenAsDot')->delete();
+        DB::table('options')->where(self::KEY, 'showOtpAsDot')->delete();
 
-        $this->assertFalse(Settings::isEdited('showTokenAsDot'));
+        $this->assertFalse(Settings::isEdited('showOtpAsDot'));
     }
 
     /**
