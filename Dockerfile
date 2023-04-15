@@ -47,15 +47,15 @@ RUN apk add --update --no-cache \
     # PHP
     php8 \
     # Composer dependencies
-    php8-phar \
+    php8.1-phar \
     # PHP SQLite driver
-    php8-pdo_sqlite php8-sqlite3 \
+    php8.1-pdo_sqlite php8.1-sqlite3 \
     # PHP extensions
-    php8-xml php8-gd php8-mbstring php8-tokenizer php8-fileinfo php8-bcmath php8-ctype php8-dom \
+    php8.1-xml php8.1-gd php8.1-mbstring php8.1-tokenizer php8.1-fileinfo php8.1-bcmath php8.1-ctype php8.1-dom \
     # Runtime dependencies
-    php8-session php8-openssl \
+    php8.1-session php8.1-openssl \
     # Nginx and PHP FPM to serve over HTTP
-    php8-fpm nginx
+    php8.1-fpm nginx
 
 # PHP FPM configuration
 # Change username and ownership in php-fpm pool config
