@@ -59,14 +59,14 @@ RUN apk add --update --no-cache \
 
 # PHP FPM configuration
 # Change username and ownership in php-fpm pool config
-RUN sed -i '/user = nobody/d' /etc/php8/php-fpm.d/www.conf && \
-    sed -i '/group = nobody/d' /etc/php8/php-fpm.d/www.conf && \
-    sed -i '/listen.owner/d' /etc/php8/php-fpm.d/www.conf && \
-    sed -i '/listen.group/d' /etc/php8/php-fpm.d/www.conf
+RUN sed -i '/user = nobody/d' /etc/php81/php-fpm.d/www.conf && \
+    sed -i '/group = nobody/d' /etc/php81/php-fpm.d/www.conf && \
+    sed -i '/listen.owner/d' /etc/php81/php-fpm.d/www.conf && \
+    sed -i '/listen.group/d' /etc/php81/php-fpm.d/www.conf
 # Pre-create files with the correct permissions
 RUN mkdir /run/php && \
-    chown ${UID}:${GID} /run/php /var/log/php8 && \
-    chmod 700 /run/php /var/log/php8
+    chown ${UID}:${GID} /run/php /var/log/php81 && \
+    chmod 700 /run/php /var/log/php81
 
 # NGINX
 # Clean up
