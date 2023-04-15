@@ -45,7 +45,7 @@ COPY --from=supervisord --chown=${UID}:${GID} /bin /usr/local/bin/supervisord
 # Install PHP and PHP system dependencies
 RUN apk add --update --no-cache \
     # PHP
-    php8 \
+    php8.1 \
     # Composer dependencies
     php8.1-phar \
     # PHP SQLite driver
