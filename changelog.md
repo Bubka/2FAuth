@@ -1,5 +1,11 @@
 # Change log
 
+## [4.0.1] - 2023-04-16
+
+### Fixed
+
+- [issue #174](https://github.com/Bubka/2FAuth/issues/174) PHP Fatal error after latest Update
+
 ## [4.0.0] - 2023-04-14
 
 Time for multi-user has arrived, here comes v4.0!
