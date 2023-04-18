@@ -11,6 +11,24 @@
 |
 */
 
+if (! function_exists('envUnlessEmpty')) {
+    /**
+     * @param  string  $key
+     * @param  null  $default
+     *
+     * @return mixed|null
+     */
+    function envUnlessEmpty(string $key, $default = null)
+    {
+        $result = env($key, $default);
+        if (is_string($result) && '' === $result) {
+            $result = $default;
+        }
+
+        return $result;
+    }
+}
+
 $app = new Illuminate\Foundation\Application(
     $_ENV['APP_BASE_PATH'] ?? dirname(__DIR__)
 );
