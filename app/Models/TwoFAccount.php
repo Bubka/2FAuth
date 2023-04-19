@@ -216,6 +216,17 @@ class TwoFAccount extends Model implements Sortable
     }
 
     /**
+     * Scope a query to only include orphan (userless) accounts.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder<User>  $query
+     * @return \Illuminate\Database\Eloquent\Builder<User>
+     */
+    public function scopeOrphans($query)
+    {
+        return $query->where('user_id', null);
+    }
+
+    /**
      * Get legacy_uri attribute
      *
      * @param  string  $value

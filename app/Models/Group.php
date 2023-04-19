@@ -103,4 +103,15 @@ class Group extends Model
    {
        return $this->belongsTo(\App\Models\User::class);
    }
+
+   /**
+    * Scope a query to only include orphan (userless) groups.
+    *
+    * @param  \Illuminate\Database\Eloquent\Builder<User>  $query
+    * @return \Illuminate\Database\Eloquent\Builder<User>
+    */
+   public function scopeOrphans($query)
+   {
+       return $query->where('user_id', null);
+   }
 }

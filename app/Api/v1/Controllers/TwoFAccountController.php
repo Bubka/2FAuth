@@ -18,6 +18,7 @@ use App\Facades\TwoFAccounts;
 use App\Helpers\Helpers;
 use App\Http\Controllers\Controller;
 use App\Models\TwoFAccount;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 
@@ -30,6 +31,14 @@ class TwoFAccountController extends Controller
      */
     public function index(Request $request)
     {
+        // Quick fix for #176
+        if (config('auth.defaults.guard') === 'reverse-proxy-guard' && User::count() === 1) {
+            if (TwoFAccount::orphans()->exists()) {
+                $twofaccounts = TwoFAccount::orphans()->get();
+                TwoFAccounts::setUser($twofaccounts, $request->user());
+            }
+        }
+
         return new TwoFAccountCollection($request->user()->twofaccounts->sortBy('order_column'));
     }
 

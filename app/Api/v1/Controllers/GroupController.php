@@ -9,6 +9,7 @@ use App\Api\v1\Resources\TwoFAccountCollection;
 use App\Facades\Groups;
 use App\Http\Controllers\Controller;
 use App\Models\Group;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class GroupController extends Controller
@@ -20,6 +21,14 @@ class GroupController extends Controller
      */
     public function index(Request $request)
     {
+        // Quick fix for #176
+        if (config('auth.defaults.guard') === 'reverse-proxy-guard' && User::count() === 1) {
+            if (Group::orphans()->exists()) {
+                $groups = Group::orphans()->get();
+                Groups::setUser($groups, $request->user());
+            }
+        }
+        
         // We do not use fluent call all over the call chain to ease tests
         $user   = $request->user();
         $groups = $user->groups()->withCount('twofaccounts')->get();

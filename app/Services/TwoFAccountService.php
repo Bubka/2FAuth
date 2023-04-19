@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Factories\MigratorFactoryInterface;
 use App\Helpers\Helpers;
 use App\Models\TwoFAccount;
+use App\Models\User;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -91,6 +92,20 @@ class TwoFAccountService
         $deleted = TwoFAccount::destroy($ids);
 
         return $deleted;
+    }
+
+    /**
+     * Set owner of given twofaccounts
+     * 
+     * @param  \Illuminate\Support\Collection<int, TwoFAccount>  $twofaccounts
+     * @param  \App\Models\User  $user
+     */
+    public static function setUser(Collection $twofaccounts, User $user) : void
+    {
+        $twofaccounts->each(function ($twofaccount, $key) use ($user) {
+            $twofaccount->user_id = $user->id;
+            $twofaccount->save();
+        });
     }
 
     /**

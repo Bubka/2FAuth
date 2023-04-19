@@ -61,6 +61,20 @@ class GroupService
     }
 
     /**
+     * Set owner of given groups
+     * 
+     * @param  Collection<int, Group>  $groups
+     * @param  \App\Models\User  $user
+     */
+    public static function setUser(Collection $groups, User $user) : void
+    {
+        $groups->each(function ($group, $key) use ($user) {
+            $group->user_id = $user->id;
+            $group->save();
+        });
+    }
+
+    /**
      * Determines the default group of the given user
      *
      * @return \App\Models\Group|null The group or null if it does not exist
