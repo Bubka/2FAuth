@@ -1,5 +1,11 @@
 # Change log
 
+## [4.0.2] - 2023-04-19
+
+### Fixed
+
+- [issue #176](https://github.com/Bubka/2FAuth/issues/176) Lost keys when upgrading to 4.x whilst using proxy header authentication
+
 ## [4.0.1] - 2023-04-16
 
 ### Fixed
