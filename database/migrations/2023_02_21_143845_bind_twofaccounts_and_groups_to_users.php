@@ -15,7 +15,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('twofaccounts', function (Blueprint $table) {
-            $table->unsignedBigInteger('user_id')
+            $table->integer('user_id')
                   ->after('id')
                   ->nullable();
 
@@ -23,7 +23,7 @@ return new class extends Migration
         });
 
         Schema::table('groups', function (Blueprint $table) {
-            $table->unsignedBigInteger('user_id')
+            $table->integer('user_id')
                   ->after('id')
                   ->nullable();
 
