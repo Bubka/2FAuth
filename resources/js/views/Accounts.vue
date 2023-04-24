@@ -425,8 +425,7 @@
                     this.$refs.OtpDisplayer.show(account.id);
                 }
             },
-
-
+            
             /**
              * Select an account while in edit mode
              */

@@ -1209,18 +1209,12 @@ footer .field.is-grouped {
     background-color: $white-ter;
     .spinner {
         color: $dark;
-        > div {
-            background-color: $dark !important;
-        }
     }
 }
 :root[data-theme="dark"] .spinner-container {
     background-color: $black-ter;
     .spinner {
         color: $light;
-        > div {
-            background-color: $light !important;
-        }
     }
 }
 @media (prefers-color-scheme: dark) {
@@ -1228,9 +1222,6 @@ footer .field.is-grouped {
         background-color: $black-ter;
         .spinner {
             color: $light;
-            > div {
-                background-color: $light !important;
-            }
         }
     }
 }
