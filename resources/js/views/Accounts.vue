@@ -1,5 +1,7 @@
 <template>
     <div>
+        <!-- Loading spinner -->
+        <loader :active="$root.loaderActive" message="calculating..." />
         <!-- Group switch -->
         <div class="container groups" v-if="showGroupSwitch">
             <div class="columns is-centered">
@@ -141,7 +143,7 @@
         	                            </div>
         	                        </div>
         	                    </transition>
-                                <div tabindex="0" class="tfa-cell tfa-content is-size-3 is-size-4-mobile" @click="showAccount(account)" @keyup.enter="showAccount(account)" role="button">  
+                                <div tabindex="0" class="tfa-cell tfa-content is-size-3 is-size-4-mobile" @click="showAccount(account)" @keyup.enter="showAccount(account)" role="button">
                                     <div class="tfa-text has-ellipsis">
                                         <img :src="$root.appConfig.subdirectory + '/storage/icons/' + account.icon" v-if="account.icon && $root.userPreferences.showAccountsIcons" :alt="$t('twofaccounts.icon_for_account_x_at_service_y', {account: account.account, service: account.service})">
                                         {{ displayService(account.service) }}<font-awesome-icon class="has-text-danger is-size-5 ml-2" v-if="$root.appSettings.useEncryption && account.account === $t('errors.indecipherable')" :icon="['fas', 'exclamation-circle']" />
@@ -186,9 +188,9 @@
                 </p>
                 <!-- move button -->
                 <p class="control" v-if="editMode">
-                    <button 
-                        :disabled='selectedAccounts.length == 0' class="button is-rounded" 
-                        :class="[{'is-outlined': $root.showDarkMode||selectedAccounts.length == 0}, selectedAccounts.length == 0 ? 'is-dark': 'is-link']" 
+                    <button
+                        :disabled='selectedAccounts.length == 0' class="button is-rounded"
+                        :class="[{'is-outlined': $root.showDarkMode||selectedAccounts.length == 0}, selectedAccounts.length == 0 ? 'is-dark': 'is-link']"
                         @click="showGroupSelector = true"
                         :title="$t('groups.move_selected_to_group')" >
                             {{ $t('commons.move') }}
@@ -196,19 +198,19 @@
                 </p>
                 <!-- delete button -->
                 <p class="control" v-if="editMode">
-                    <button 
-                        :disabled='selectedAccounts.length == 0' class="button is-rounded" 
-                        :class="[{'is-outlined': $root.showDarkMode||selectedAccounts.length == 0}, selectedAccounts.length == 0 ? 'is-dark': 'is-link']" 
+                    <button
+                        :disabled='selectedAccounts.length == 0' class="button is-rounded"
+                        :class="[{'is-outlined': $root.showDarkMode||selectedAccounts.length == 0}, selectedAccounts.length == 0 ? 'is-dark': 'is-link']"
                         @click="destroyAccounts" >
                             {{ $t('commons.delete') }}
                     </button>
                 </p>
                 <!-- export button -->
                 <p class="control" v-if="editMode">
-                    <button 
-                        :disabled='selectedAccounts.length == 0' class="button is-rounded" 
-                        :class="[{'is-outlined': $root.showDarkMode||selectedAccounts.length == 0}, selectedAccounts.length == 0 ? 'is-dark': 'is-link']" 
-                        @click="exportAccounts" 
+                    <button
+                        :disabled='selectedAccounts.length == 0' class="button is-rounded"
+                        :class="[{'is-outlined': $root.showDarkMode||selectedAccounts.length == 0}, selectedAccounts.length == 0 ? 'is-dark': 'is-link']"
+                        @click="exportAccounts"
                         :title="$t('twofaccounts.export_selected_to_json')" >
                             {{ $t('commons.export') }}
                     </button>
@@ -223,9 +225,9 @@
 
     /**
      *  Accounts view
-     *  
+     *
      *  route: '/account' (alias: '/')
-     *  
+     *
      *  The main view of 2FAuth that list all existing account recorded in DB.
      *  Available feature in this view :
      *  - {{OTP}} generation
@@ -248,12 +250,13 @@
      *    ~ 'userPreferences.showAccountsIcons' toggle the icon visibility
      *    ~ 'userPreferences.displayMode' change the account appearance
      *
-     *  Input : 
+     *  Input :
      *  - The 'initialEditMode' props : allows to load the view directly in Edit mode
-     *  
+     *
      */
 
     import Modal from '../components/Modal'
+    import Loader from '../components/Loader'
     import OtpDisplayer from '../components/OtpDisplayer'
     import draggable from 'vuedraggable'
     import Form from './../components/Form'
@@ -289,12 +292,12 @@
                     return this.accounts.filter(
                         item => {
                             if( parseInt(this.$root.userPreferences.activeGroup) > 0 ) {
-                                return ((item.service ? item.service.toLowerCase().includes(this.search.toLowerCase()) : false) || 
-                                    item.account.toLowerCase().includes(this.search.toLowerCase())) && 
+                                return ((item.service ? item.service.toLowerCase().includes(this.search.toLowerCase()) : false) ||
+                                    item.account.toLowerCase().includes(this.search.toLowerCase())) &&
                                     (item.group_id == parseInt(this.$root.userPreferences.activeGroup))
                             }
                             else {
-                                return ((item.service ? item.service.toLowerCase().includes(this.search.toLowerCase()) : false) || 
+                                return ((item.service ? item.service.toLowerCase().includes(this.search.toLowerCase()) : false) ||
                                     item.account.toLowerCase().includes(this.search.toLowerCase()))
                             }
                         }
@@ -361,6 +364,7 @@
             Modal,
             OtpDisplayer,
             draggable,
+            Loader
         },
 
         methods: {
@@ -417,6 +421,7 @@
                     this.selectAccount(account.id)
                 }
                 else {
+                    this.$root.showLoader();
                     this.$refs.OtpDisplayer.show(account.id)
                 }
             },
@@ -471,7 +476,7 @@
                             })
                             this.$notify({ type: 'is-success', text: this.$t('twofaccounts.accounts_deleted') })
                         })
-                        
+
                     // we fetch the accounts again to prevent the js collection being
                     // desynchronize from the backend php collection
                     this.fetchAccounts(true)
@@ -529,7 +534,7 @@
 
                     if ( !objectEquals(groups, this.groups) ) {
                         this.groups = groups
-                    } 
+                    }
 
                     this.$storage.set('groups', this.groups)
                 })
@@ -550,7 +555,7 @@
                         // everything's fine
                     })
                     .catch(error => {
-                        
+
                         this.$router.push({ name: 'genericError', params: { err: error.response } })
                     });
                 }
@@ -593,21 +598,21 @@
             },
 
             /**
-             * 
+             *
              */
             displayService(service) {
                 return service ? service : this.$t('twofaccounts.no_service')
             },
 
             /**
-             * 
+             *
              */
             clearSelected() {
                 this.selectedAccounts = []
             },
 
             /**
-             * 
+             *
              */
             selectAll() {
                 if(this.editMode) {
@@ -621,7 +626,7 @@
             },
 
             /**
-             * 
+             *
              */
             sortAsc() {
                 this.accounts.sort((a, b) => a.service > b.service ? 1 : -1)
@@ -629,7 +634,7 @@
             },
 
             /**
-             * 
+             *
              */
             sortDesc() {
                 this.accounts.sort((a, b) => a.service < b.service ? 1 : -1)
@@ -637,7 +642,7 @@
             },
 
             /**
-             * 
+             *
              */
             keyListener : function(e) {
                 if (e.key === "f" && (e.ctrlKey || e.metaKey)) {

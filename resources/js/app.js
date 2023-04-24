@@ -20,7 +20,8 @@ const app = new Vue({
         userPreferences: window.userPreferences,
         isDemoApp: window.isDemoApp,
         isTestingApp: window.isTestingApp,
-        prefersDarkScheme: window.matchMedia('(prefers-color-scheme: dark)').matches
+        prefersDarkScheme: window.matchMedia('(prefers-color-scheme: dark)').matches,
+        loaderActive: false
     },
 
     computed: {
@@ -44,6 +45,14 @@ const app = new Vue({
     methods: {
         setDarkScheme ({ matches }) {
             this.prefersDarkScheme = matches
+        },
+
+        showLoader() {
+            this.loaderActive = true
+        },
+
+        hideLoader() {
+            this.loaderActive = false
         }
     },
     i18n,
