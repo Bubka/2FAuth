@@ -1,7 +1,5 @@
 <template>
     <div>
-        <!-- Loading spinner -->
-        <spinner :active="$root.spinnerActive" :message="$t('commons.generating_otp')"/>
         <!-- Group switch -->
         <div class="container groups" v-if="showGroupSwitch">
             <div class="columns is-centered">
@@ -256,7 +254,6 @@
      */
 
     import Modal from '../components/Modal'
-    import Spinner from '../components/Spinner'
     import OtpDisplayer from '../components/OtpDisplayer'
     import draggable from 'vuedraggable'
     import Form from './../components/Form'
@@ -363,8 +360,7 @@
         components: {
             Modal,
             OtpDisplayer,
-            draggable,
-            Spinner
+            draggable
         },
 
         methods: {
@@ -421,11 +417,11 @@
                     this.selectAccount(account.id)
                 }
                 else {
-                    this.$root.showSpinner();
+                    this.$root.showSpinner(this.$t('commons.generating_otp'));
                     this.$refs.OtpDisplayer.show(account.id);
                 }
             },
-            
+
             /**
              * Select an account while in edit mode
              */
