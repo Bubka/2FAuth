@@ -173,10 +173,10 @@
                         this.clearOTP()
                     }
                     finally {
-                        this.$root.hideLoader();
+                        this.$root.hideSpinner();
                     }
                 } else  {
-                    this.$root.hideLoader();
+                    this.$root.hideSpinner();
                 }
             },
 

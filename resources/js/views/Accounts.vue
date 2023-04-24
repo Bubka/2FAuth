@@ -1,7 +1,7 @@
 <template>
     <div>
         <!-- Loading spinner -->
-        <loader :active="$root.loaderActive" message="calculating..." />
+        <spinner :active="$root.spinnerActive" :message="$t('commons.generating_otp')"/>
         <!-- Group switch -->
         <div class="container groups" v-if="showGroupSwitch">
             <div class="columns is-centered">
@@ -256,7 +256,7 @@
      */
 
     import Modal from '../components/Modal'
-    import Loader from '../components/Loader'
+    import Spinner from '../components/Spinner'
     import OtpDisplayer from '../components/OtpDisplayer'
     import draggable from 'vuedraggable'
     import Form from './../components/Form'
@@ -364,7 +364,7 @@
             Modal,
             OtpDisplayer,
             draggable,
-            Loader
+            Spinner
         },
 
         methods: {
@@ -421,8 +421,8 @@
                     this.selectAccount(account.id)
                 }
                 else {
-                    this.$root.showLoader();
-                    this.$refs.OtpDisplayer.show(account.id)
+                    this.$root.showSpinner();
+                    this.$refs.OtpDisplayer.show(account.id);
                 }
             },
 

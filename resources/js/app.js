@@ -21,7 +21,7 @@ const app = new Vue({
         isDemoApp: window.isDemoApp,
         isTestingApp: window.isTestingApp,
         prefersDarkScheme: window.matchMedia('(prefers-color-scheme: dark)').matches,
-        loaderActive: false
+        spinnerActive: false
     },
 
     computed: {
@@ -47,12 +47,12 @@ const app = new Vue({
             this.prefersDarkScheme = matches
         },
 
-        showLoader() {
-            this.loaderActive = true
+        showSpinner() {
+            this.spinnerActive = true
         },
 
-        hideLoader() {
-            this.loaderActive = false
+        hideSpinner() {
+            this.spinnerActive = false
         }
     },
     i18n,
