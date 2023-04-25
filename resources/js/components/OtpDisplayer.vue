@@ -6,7 +6,7 @@
         <p class="is-size-4 has-ellipsis" :class="$root.showDarkMode ? 'has-text-grey-light' : 'has-text-grey'">{{ internal_service }}</p>
         <p class="is-size-6 has-ellipsis" :class="$root.showDarkMode ? 'has-text-grey' : 'has-text-grey-light'">{{ internal_account }}</p>
         <p>
-            <span role="log" ref="otp" tabindex="0" class="otp is-size-1 is-clickable px-3" :class="$root.showDarkMode ? 'has-text-white' : 'has-text-grey-dark'" @click="copyOTP(internal_password)" @keyup.enter="copyOTP(internal_password)" :title="$t('commons.copy_to_clipboard')">
+            <span role="log" ref="otp" tabindex="0" class="otp is-size-1 is-clickable px-3" :class="$root.showDarkMode ? 'has-text-white' : 'has-text-grey-dark'" @click="copyOTP(internal_password, true)" @keyup.enter="copyOTP(internal_password, true)" :title="$t('commons.copy_to_clipboard')">
                 {{ displayedOtp }}
             </span>
         </p>
@@ -83,8 +83,8 @@
 
         methods: {
 
-            copyOTP (otp) {
-                // see https://web.dev/async-clipboard/ for futur Clipboard API usage.
+            copyOTP (otp, permit_closing) {
+                // see https://web.dev/async-clipboard/ for future Clipboard API usage.
                 // The API should allow to copy the password on each trip without user interaction.
 
                 // For now too many browsers don't support the clipboard-write permission
@@ -97,7 +97,7 @@
                     if(this.$root.userPreferences.kickUserAfter == -1) {
                         this.appLogout()
                     }
-                    else if(this.$root.userPreferences.closeOtpOnCopy) {
+                    else if(this.$root.userPreferences.closeOtpOnCopy && (permit_closing || false) === true) {
                         this.$parent.isActive = false
                         this.clearOTP()
                     }
