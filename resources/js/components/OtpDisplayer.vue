@@ -144,7 +144,7 @@
                     this.internal_account = data.account
                     this.internal_icon = data.icon
                     this.internal_otp_type = data.otp_type
-                    
+
                     if( this.isHMacBased(data.otp_type) && data.counter ) {
                         this.internal_counter = data.counter
                     }
@@ -165,13 +165,18 @@
                             await this.getHOTP()
                         }
                         else this.$router.push({ name: 'genericError', params: { err: this.$t('errors.not_a_supported_otp_type') } });
-    
+
                         this.$parent.isActive = true
                         this.focusOnOTP()
                     }
                     catch(error) {
                         this.clearOTP()
                     }
+                    finally {
+                        this.$root.hideSpinner();
+                    }
+                } else  {
+                    this.$root.hideSpinner();
                 }
             },
 
@@ -232,7 +237,7 @@
             },
 
             startTotpLoop: async function() {
-                
+
                 let otp = await this.getOtp()
 
                 this.internal_password = otp.password
@@ -258,7 +263,7 @@
                 //                              ● ● ● ● ●|● ◌ ◌ ◌ ◌ |
                 //                              | |      ||         |
                 //                              | |      |<-------->|--remainingTimeBeforeEndOfPeriod (for remainingTimeout)
-                //     durationBetweenTwoDots-->|-|<     ||         
+                //     durationBetweenTwoDots-->|-|<     ||
                 //     (for dotToDotInterval)   | |     >||<---durationFromFirstToNextDot (for firstDotToNextOneTimeout)
                 //                                        |
                 //                                        |
@@ -276,7 +281,7 @@
                 // We determine the position of the closest dot next to the generated_at timestamp
                 let relativePosition = (elapsedTimeInCurrentPeriod * 10) / period
                 let dotIndex = (Math.floor(relativePosition) +1)
-                
+
                 // We switch the dot on
                 this.lastActiveDot = dots.querySelector('li:nth-child(' + dotIndex + ')');
                 this.lastActiveDot.setAttribute('data-is-active', true);

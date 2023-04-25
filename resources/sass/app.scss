@@ -1204,6 +1204,28 @@ footer .field.is-grouped {
   }
 }
 
+// Themed Spinner
+.spinner-container {
+    background-color: $white-ter;
+    .spinner {
+        color: $dark;
+    }
+}
+:root[data-theme="dark"] .spinner-container {
+    background-color: $black-ter;
+    .spinner {
+        color: $light;
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root[data-theme="system"] .spinner-container {
+        background-color: $black-ter;
+        .spinner {
+            color: $light;
+        }
+    }
+}
+
 .fadeInOut-enter-active {
   animation: fadeIn 500ms
 }
