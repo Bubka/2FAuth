@@ -1,12 +1,5 @@
 <template>
-    <div class="has-text-light">
-        <!-- <span>period = {{ period }}</span><br />
-        <span>Started_at = {{ generatedAt }}</span><br />
-        <span>active step = {{ stepIndex }}/{{ step_count }}</span><br /><br />
-        <span>elapsedTimeInCurrentPeriod = {{ elapsedTimeInCurrentPeriod }}</span><br />
-        <span>remainingTimeBeforeEndOfPeriod = {{ remainingTimeBeforeEndOfPeriod }}</span><br />
-        <span>durationBetweenTwoSteps = {{ durationBetweenTwoSteps }}</span><br />
-        <hr /> -->
+    <div>
     </div>
 </template>
 
@@ -25,10 +18,16 @@
         },
 
         props: {
-            step_count: Number,
-            period : null,
+            step_count: {
+                type: Number,
+                default: 10
+            },
+            period : Number,
             generated_at: Number,
-
+            autostart: {
+                type: Boolean,
+                default: true
+            },
         },
 
         computed: {
@@ -70,8 +69,9 @@
         },
 
         mounted: function() {
-            this.generatedAt = this.generated_at
-            this.startLoop()
+            if (this.autostart == true) {
+                this.startLoop()
+            }
         },
 
         methods: {
@@ -79,6 +79,8 @@
             startLoop: function() {
 
                 this.clearLooper()
+                this.generatedAt = this.generated_at
+
                 this.$emit('loop-started', this.initialStepIndex)
 
                 this.stepIndex = this.initialStepIndex
@@ -86,6 +88,7 @@
 
                 // Main timeout that run until the end of the period
                 this.remainingTimeout = setTimeout(function() {
+                    self.clearLooper()
                     self.$emit('loop-ended')
                 }, this.remainingTimeBeforeEndOfPeriod*1000);
 
@@ -107,25 +110,12 @@
                 }, durationFromInitialToNextStep*1000)
             },
 
-
-
             clearLooper: function() {
-                // if( this.isTimeBased(this.internal_otp_type) ) {
-                    clearTimeout(this.remainingTimeout)
-                    clearTimeout(this.initialStepToNextStepTimeout)
-                    clearInterval(this.stepToStepInterval)
-                    this.stepIndex = null
-                // }
+                clearTimeout(this.remainingTimeout)
+                clearTimeout(this.initialStepToNextStepTimeout)
+                clearInterval(this.stepToStepInterval)
+                this.stepIndex = this.generatedAt = null
             },
-
-
-            // activateNextStep: function() {
-            //     if(this.lastActiveStep.nextSibling !== null) {
-            //         this.lastActiveStep.removeAttribute('data-is-active')
-            //         this.lastActiveStep.nextSibling.setAttribute('data-is-active', true)
-            //         this.lastActiveStep = this.lastActiveStep.nextSibling
-            //     }
-            // },
 
         },
 

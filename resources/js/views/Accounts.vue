@@ -159,7 +159,7 @@
                                                 {{ $t('commons.generate') }}
                                             </button>
                                         </span>
-                                        <dots v-if="account.otp_type.includes('totp')" :class="'condensed'" :ref="'dots_' + account.period"></dots>
+                                        <dots v-if="account.otp_type.includes('totp')" @hook:mounted="turnDotsOnFromCache(account.period)" :class="'condensed'" :ref="'dots_' + account.period"></dots>
                                     </div>
         	                    </transition>
         	                    <transition name="fadeInOut">
@@ -229,15 +229,14 @@
             </vue-footer>
         </div>
         <span v-if="!this.$root.userPreferences.getOtpOnRequest">
-            <totp-looper 
-                v-for="period in periods" 
-                :key="period.period" 
-                :period="period.period" 
-                :generated_at="period.generated_at" 
-                :step_count="10"
+            <totp-looper
+                v-for="period in periods"
+                :key="period.period"
+                :period="period.period"
+                :generated_at="period.generated_at"
                 v-on:loop-ended="updateTotps(period.period)"
-                v-on:loop-started="turnDotsOn(period.period, $event)"
-                v-on:stepped-up="turnDotsOn(period.period, $event)"
+                v-on:loop-started="setCurrentStep(period.period, $event)"
+                v-on:stepped-up="setCurrentStep(period.period, $event)"
                 ref="loopers"
             ></totp-looper>
         </span>
@@ -305,6 +304,7 @@
                 form: new Form({
                     value: this.$root.userPreferences.activeGroup,
                 }),
+                stepIndexes: {}
             }
         },
 
@@ -448,6 +448,23 @@
             /**
              * 
              */
+            setCurrentStep(period, stepIndex) {
+                this.stepIndexes[period] = stepIndex
+                this.turnDotsOn(period, stepIndex)
+            },
+
+            /**
+             * 
+             */
+            turnDotsOnFromCache(period, stepIndex) {
+                if (this.stepIndexes[period] != undefined) {
+                    this.turnDotsOn(period, this.stepIndexes[period])
+                }
+            },
+
+            /**
+             * 
+             */
             turnDotsOn(period, stepIndex) {
                 this.$refs['dots_' + period].forEach((dots) => {
                     dots.turnOn(stepIndex)
@@ -466,7 +483,9 @@
                         this.$refs.loopers.forEach((looper) => {
                             if (looper.period == period) {
                                 looper.generatedAt = account.otp.generated_at
-                                looper.startLoop();
+                                this.$nextTick(() => {
+                                    looper.startLoop()
+                                })
                             }
                         })
                     })
@@ -509,7 +528,7 @@
                         accounts.push(data)
                     })
 
-                    if ( this.accounts.length > 0 && !objectEquals(accounts, this.accounts) && !forceRefresh ) {
+                    if ( this.accounts.length > 0 && !objectEquals(accounts, this.accounts, {depth: 1}) && !forceRefresh ) {
                         this.$notify({ type: 'is-dark', text: '<span class="is-size-7">' + this.$t('commons.some_data_have_changed') + '</span><br /><a href="." class="button is-rounded is-warning is-small">' + this.$t('commons.reload') + '</a>', duration:-1, closeOnClick: false })
                     }
                     else if( this.accounts.length === 0 && accounts.length === 0 ) {

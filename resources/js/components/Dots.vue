@@ -1,6 +1,6 @@
 <template>
     <ul class="dots">
-        <li v-for="n in 10" :key="n"></li>
+        <li v-for="n in stepCount" :key="n" :data-is-active="n == activeDot ? true : null"></li>
     </ul>
 </template>
 
@@ -10,28 +10,34 @@
 
         data() {
             return {
+                activeDot: 0
             }
         },
 
+        mounted() {
+            if (this.initialIndex != null) {
+                this.turnOn(this.initialIndex)
+            }
+        },
+
+        props: {
+            stepCount: {
+                type: Number,
+                default: 10
+            },
+            initialIndex: {
+                type: Number,
+                default: null
+            },
+        },
+
         methods: {
+
             /**
              * 
              */
             turnOn: function(index) {
-                const dots = this.$el.querySelectorAll('[data-is-active]')
-                dots.forEach((dot) => {
-                    dot.removeAttribute('data-is-active')
-                });
-
-                if (index < 10) {
-                    const dot = this.$el.querySelector('.dots li:nth-child(' + (index + 1) + ')')
-                    if (dot) {
-                        dot.setAttribute('data-is-active', true)
-                    }
-                }
-                else {
-                    this.$el.querySelector('.dots li:nth-child(1)').setAttribute('data-is-active', true)
-                }
+                this.activeDot = index < 10 ? index + 1 : 1
             },
         },
     }
