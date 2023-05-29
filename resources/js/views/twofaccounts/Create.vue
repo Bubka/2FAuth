@@ -238,7 +238,9 @@
         watch: {
             tempIcon: function(val) {
                 if( this.showQuickForm ) {
-                    this.$refs.QuickFormOtpDisplayer.internal_icon = val
+                    this.$nextTick(() => {
+                        this.$refs.QuickFormOtpDisplayer.internal_icon = val
+                    })
                 }
             },
 
@@ -257,6 +259,9 @@
                     this.form.fill(response.data)
                     this.tempIcon = response.data.icon ? response.data.icon : null
                     this.showQuickForm = true
+                    this.$nextTick(() => {
+                        this.$refs.QuickFormOtpDisplayer.show()
+                    })
                 })
                 .catch(error => {
                     if( error.response.status === 422 ) {
@@ -265,7 +270,7 @@
                             this.showAdvancedForm = true
                         }
                     }
-                });
+                })
             } else {
                 this.showAdvancedForm = true
             }
