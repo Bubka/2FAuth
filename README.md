@@ -78,6 +78,12 @@ Sensitive data stored in the database can be encrypted to protect them against d
 
 * [Upgrade guide](https://docs.2fauth.app/getting-started/upgrade/)
 
+## Migration
+
+2FAuth supports importing from the following formats: 2FAuth (JSON), Google Auth (QR code), Aegis Auth (JSON, plain text), 2FAS Auth (JSON)
+
+* [Import guide](https://docs.2fauth.app/getting-started/usage/import/)
+
 ## Contributing
 
 You can contribute to 2FAuth in many ways:
