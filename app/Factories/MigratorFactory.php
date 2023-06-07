@@ -87,12 +87,12 @@ class MigratorFactory implements MigratorFactoryInterface
             return count(Validator::validate(
                 $json,
                 [
-                    'data.*.otp_type'  => 'required',
-                    'data.*.service'   => 'required',
-                    'data.*.account'   => 'required',
-                    'data.*.secret'    => 'required',
-                    'data.*.digits'    => 'required',
-                    'data.*.algorithm' => 'required',
+                    'data.*.otp_type'  => 'present',
+                    'data.*.service'   => 'present',
+                    'data.*.account'   => 'present',
+                    'data.*.secret'    => 'present',
+                    'data.*.digits'    => 'present',
+                    'data.*.algorithm' => 'present',
                     'data.*.period'    => 'present',
                     'data.*.counter'   => 'present',
                 ]
@@ -135,10 +135,10 @@ class MigratorFactory implements MigratorFactoryInterface
                 return count(Validator::validate(
                     $json,
                     [
-                        'db.entries.*.type'   => 'required',
-                        'db.entries.*.name'   => 'required',
-                        'db.entries.*.issuer' => 'required',
-                        'db.entries.*.info'   => 'required',
+                        'db.entries.*.type'   => 'present',
+                        'db.entries.*.name'   => 'present',
+                        'db.entries.*.issuer' => 'present',
+                        'db.entries.*.info'   => 'present',
                     ]
                 )) > 0;
             }
@@ -185,9 +185,9 @@ class MigratorFactory implements MigratorFactoryInterface
                 return count(Validator::validate(
                     $json,
                     [
-                        'services.*.secret' => 'required',
-                        'services.*.name'   => 'required',
-                        'services.*.otp'    => 'required',
+                        'services.*.secret' => 'present',
+                        'services.*.name'   => 'present',
+                        'services.*.otp'    => 'present',
                     ]
                 )) > 0;
             }
