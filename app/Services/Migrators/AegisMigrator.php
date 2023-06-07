@@ -50,7 +50,7 @@ class AegisMigrator extends Migrator
             $parameters              = [];
             $parameters['otp_type']  = $otp_parameters['type'] == 'steam' ? TwoFAccount::STEAM_TOTP : $otp_parameters['type'];
             $parameters['service']   = $otp_parameters['issuer'];
-            $parameters['account']   = $otp_parameters['name'];
+            $parameters['account']   = $otp_parameters['name'] ?? $parameters['service'];
             $parameters['secret']    = $this->padToValidBase32Secret($otp_parameters['info']['secret']);
             $parameters['algorithm'] = $otp_parameters['info']['algo'];
             $parameters['digits']    = $otp_parameters['info']['digits'];
