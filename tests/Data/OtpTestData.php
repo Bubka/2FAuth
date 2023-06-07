@@ -86,6 +86,18 @@ class OtpTestData
         'counter'   => null,
     ];
 
+    const ARRAY_OF_FULL_VALID_PARAMETERS_FOR_CUSTOM_TOTP_NO_ICON = [
+        'service'   => self::SERVICE,
+        'account'   => self::ACCOUNT,
+        'icon'      => null,
+        'otp_type'  => 'totp',
+        'secret'    => self::SECRET,
+        'digits'    => self::DIGITS_CUSTOM,
+        'algorithm' => self::ALGORITHM_CUSTOM,
+        'period'    => self::PERIOD_CUSTOM,
+        'counter'   => null,
+    ];
+
     const ARRAY_OF_MINIMUM_VALID_PARAMETERS_FOR_TOTP = [
         'account'  => self::ACCOUNT,
         'otp_type' => 'totp',

@@ -4,9 +4,11 @@ namespace Tests\Feature\Models;
 
 use App\Models\TwoFAccount;
 use App\Models\User;
+use App\Services\LogoService;
 use Illuminate\Http\Testing\FileFactory;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
+use Mockery\MockInterface;
 use Tests\Data\HttpRequestTestData;
 use Tests\Data\OtpTestData;
 use Tests\FeatureTestCase;
@@ -44,7 +46,9 @@ class TwoFAccountModelTest extends FeatureTestCase
     {
         parent::setUp();
 
+        /** @var \Illuminate\Contracts\Auth\Authenticatable $user */
         $this->user = User::factory()->create();
+        $this->actingAs($this->user, 'api-guard');
 
         $this->customTotpTwofaccount = TwoFAccount::factory()->for($this->user)->create([
             'legacy_uri' => OtpTestData::TOTP_FULL_CUSTOM_URI,
@@ -232,6 +236,47 @@ class TwoFAccountModelTest extends FeatureTestCase
         $this->expectException(\Illuminate\Validation\ValidationException::class);
         $twofaccount = new TwoFAccount;
         $twofaccount->fillWithURI('otpauth://totp/?secret=' . OtpTestData::SECRET);
+    }
+
+    /**
+     * @test
+     */
+    public function test_fill_with_getOfficialIcons_On_triggers_icon_fetching()
+    {
+        // Set the getOfficialIcons preference On
+        $this->user['preferences->getOfficialIcons'] = true;
+        $this->user->save();
+
+        $this->mock(LogoService::class, function (MockInterface $logoService) {
+            $logoService->expects()
+                ->getIcon(OtpTestData::SERVICE)
+                ->twice()
+                ->andReturn(null);
+        });
+
+        $twofaccount = new TwoFAccount;
+        $twofaccount->fillWithURI(OtpTestData::TOTP_FULL_CUSTOM_URI_NO_IMG);
+        $twofaccount->fillWithOtpParameters(OtpTestData::ARRAY_OF_FULL_VALID_PARAMETERS_FOR_CUSTOM_TOTP_NO_ICON);
+    }
+
+    /**
+     * @test
+     */
+    public function test_fill_with_getOfficialIcons_Off_skips_icon_fetching()
+    {
+        // Set the getOfficialIcons preference Off
+        $this->user['preferences->getOfficialIcons'] = false;
+        $this->user->save();
+
+        $this->mock(LogoService::class, function (MockInterface $logoService) {
+            $logoService->shouldNotReceive('getIcon');
+        });
+
+        $twofaccount = new TwoFAccount;
+        $twofaccount->fillWithURI(OtpTestData::TOTP_FULL_CUSTOM_URI_NO_IMG);
+
+        $twofaccount = new TwoFAccount;
+        $twofaccount->fillWithOtpParameters(OtpTestData::ARRAY_OF_FULL_VALID_PARAMETERS_FOR_CUSTOM_TOTP);
     }
 
     /**

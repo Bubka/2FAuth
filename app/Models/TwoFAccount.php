@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -424,7 +425,7 @@ class TwoFAccount extends Model implements Sortable
             $this->enforceAsSteam();
         }
 
-        if (! $this->icon && $this->shouldGetOfficialIcon() && ! $skipIconFetching) {
+        if (! $this->icon && ! $skipIconFetching) {
             $this->icon = $this->getDefaultIcon();
         }
 
@@ -476,7 +477,7 @@ class TwoFAccount extends Model implements Sortable
             self::setIcon($this->generator->getParameter('image'));
         }
 
-        if (! $this->icon && $this->shouldGetOfficialIcon() && ! $skipIconFetching) {
+        if (! $this->icon && ! $skipIconFetching) {
             $this->icon = $this->getDefaultIcon();
         }
 
@@ -704,25 +705,17 @@ class TwoFAccount extends Model implements Sortable
     }
 
     /**
-     * Fetch a logo in the tfa directory and store it as a new stand alone icon
+     * Triggers logo fetching if necessary
      *
      * @return string|null The icon
      */
     private function getDefaultIcon()
     {
-        $logoService = App::make(LogoService::class);
+        // $logoService = App::make(LogoService::class);
 
-        return $this->shouldGetOfficialIcon() ? $logoService->getIcon($this->service) : null;
-    }
-
-    /**
-     * Tells if an official icon should be fetched
-     */
-    private function shouldGetOfficialIcon() : bool
-    {
-        return is_null($this->user)
-            ? (bool) config('2fauth.preferences.getOfficialIcons')
-            : (bool) $this->user->preferences['getOfficialIcons'];
+        return (bool) Auth::user()?->preferences['getOfficialIcons']
+            ? App::make(LogoService::class)->getIcon($this->service)
+            : null;
     }
 
     /**

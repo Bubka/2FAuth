@@ -7,7 +7,6 @@ use App\Exceptions\InvalidMigrationDataException;
 use App\Exceptions\UnsupportedMigrationException;
 use App\Factories\MigratorFactory;
 use App\Models\TwoFAccount;
-use App\Services\LogoService;
 use App\Services\Migrators\AegisMigrator;
 use App\Services\Migrators\GoogleAuthMigrator;
 use App\Services\Migrators\Migrator;
@@ -72,12 +71,6 @@ class MigratorTest extends TestCase
             $settingService->allows()
                 ->get('useEncryption')
                 ->andReturn(false);
-        });
-
-        $this->mock(LogoService::class, function (MockInterface $logoService) {
-            $logoService->allows([
-                'getIcon' => null,
-            ]);
         });
 
         $this->totpTwofaccount             = new TwoFAccount;
