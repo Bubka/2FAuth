@@ -1,5 +1,26 @@
 # Change log
 
+## [4.1.0] - 2023-06-07
+
+This new version introduces a very common feature in the 2FA app world
+
+### Added
+
+- A user preference to view all 2FA passwords on the main view without user interaction
+- A setting to disable user registration
+- A `2fauth:install` Artisan command to ease both initial and upgrade installation. (see [Docs](https://docs.2fauth.app/getting-started/installation/self-hosted-server//#subdirectory))
+- A spinner, during 2FA passwords loading - By [@josh-gaby](<https://github>.
+
+### Changed
+
+- Aegis migrations with empty `name` properties are no longer rejected. The `issuer` property is then used as a fallback value.
+- The Docker image now embed the MySQL/MariaDB PHP extension, so it may be ready to work with
+
+### Fixed
+
+- [issue #180](https://github.com/Bubka/2FAuth/issues/180) OTP does not rotate while close after copy and copy on display is activated - By [@josh-gaby](https://github.com/josh-gaby)
+- [issue #194](https://github.com/Bubka/2FAuth/issues/194) Container keeps trying to make connection to 172.67.161.186
+
 ## [4.0.2] - 2023-04-19
 
 ### Fixed
