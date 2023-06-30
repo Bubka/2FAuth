@@ -1,5 +1,12 @@
 # Change log
 
+## [4.0.3] - 2023-06-30
+
+### Security release
+
+- Fix possible SQL injection in validation rule (thx [@YouGina](https://github.com/YouGina))
+- Fix various possible XSS injections (thx [@quirinziessler](https://github.com/quirinziessler))
+
 ## [4.0.2] - 2023-04-19
 
 ### Fixed
