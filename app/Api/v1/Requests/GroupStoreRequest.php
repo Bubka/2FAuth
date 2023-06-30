@@ -28,7 +28,7 @@ class GroupStoreRequest extends FormRequest
         return [
             'name' => [
                 'required',
-                'alpha_dash',
+                'regex:/^[a-zA-Z0-9\s\-_]+$/',
                 'max:32',
                 Rule::unique('groups')->where(fn ($query) => $query->where('user_id', $this->user()->id)),
             ],

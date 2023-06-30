@@ -106,9 +106,6 @@ class GroupStoreRequestTest extends FeatureTestCase
                 'name' => true, // string
             ]],
             [[
-                'name' => 8, // string
-            ]],
-            [[
                 'name' => 'mmmmmmoooooorrrrrreeeeeeettttttthhhhhhaaaaaaannnnnn32cccccchhhhhaaaaaarrrrrrsssssss', // max:32
             ]],
             [[
