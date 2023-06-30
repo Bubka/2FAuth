@@ -41,7 +41,8 @@ import {
     faFileDownload,
     faSun,
     faMoon,
-    faDesktop
+    faDesktop,
+    faCircleNotch
 } from '@fortawesome/free-solid-svg-icons'
 
 import {
@@ -87,7 +88,8 @@ library.add(
     faFileDownload,
     faSun,
     faMoon,
-    faDesktop
+    faDesktop,
+    faCircleNotch
 );
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)

@@ -153,6 +153,9 @@
                                         <span v-if="account.otp != undefined" class="is-clickable has-nowrap has-text-grey is-size-5 ml-4" @click="copyOTP(account.otp.password)" @keyup.enter="copyOTP(account.otp.password)" :title="$t('commons.copy_to_clipboard')">
                                             {{ displayPwd(account.otp.password) }}
                                         </span>
+                                        <span v-else-if="isRenewingOTPs" class="has-nowrap has-text-grey has-text-centered is-size-5 ml-4">
+                                            <font-awesome-icon :icon="['fas', 'circle-notch']" spin />
+                                        </span>
                                         <span v-else>
                                             <!-- get hotp button -->
                                             <button class="button tag" :class="$root.showDarkMode ? 'is-dark' : 'is-white'" @click="showAccount(account)" :title="$t('twofaccounts.import.import_this_account')">
@@ -304,7 +307,8 @@
                 form: new Form({
                     value: this.$root.userPreferences.activeGroup,
                 }),
-                stepIndexes: {}
+                stepIndexes: {},
+                isRenewingOTPs: false
             }
         },
 
@@ -475,6 +479,7 @@
              * Fetch all accounts set with the given period to get fresh OTPs
              */
             async updateTotps(period) {
+                this.isRenewingOTPs = true
                 this.axios.get('api/v1/twofaccounts?withOtp=1&ids=' + this.accountIdsWithPeriod(period).join(',')).then(response => {
                     response.data.forEach((account) => {
                         const index = this.accounts.findIndex(acc => acc.id === account.id)
@@ -489,6 +494,9 @@
                             }
                         })
                     })
+                })
+                .finally(() => {
+                    this.isRenewingOTPs = false
                 })
             },
 
