@@ -21,6 +21,13 @@ This new version introduces a very common feature in the 2FA app world
 - [issue #180](https://github.com/Bubka/2FAuth/issues/180) OTP does not rotate while close after copy and copy on display is activated - By [@josh-gaby](https://github.com/josh-gaby)
 - [issue #194](https://github.com/Bubka/2FAuth/issues/194) Container keeps trying to make connection to 172.67.161.186
 
+## [4.0.3] - 2023-06-30
+
+### Security release
+
+- Fix possible SQL injection in validation rule (thx [@YouGina](https://github.com/YouGina))
+- Fix various possible XSS injections (thx [@quirinziessler](https://github.com/quirinziessler))
+
 ## [4.0.2] - 2023-04-19
 
 ### Fixed

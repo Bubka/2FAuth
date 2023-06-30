@@ -137,6 +137,10 @@ Vue.mixin({
             }
             return this.$root.userPreferences.showOtpAsDot ? pwd.replace(/[0-9]/g, '●') : pwd
         },
+        
+        strip_tags (str) {
+            return str.replace(/(<([^> ]+)>)/ig, "")
+        }
     }
 
 })
