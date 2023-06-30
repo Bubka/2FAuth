@@ -126,6 +126,10 @@ Vue.mixin({
 
             this.setTheme(this.$root.userPreferences.theme)
         },
+
+        strip_tags (str) {
+            return str.replace(/(<([^> ]+)>)/ig, "")
+        }
     }
 
 })

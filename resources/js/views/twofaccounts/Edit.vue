@@ -265,10 +265,10 @@
                             this.deleteIcon()
                             this.tempIcon = response.data.filename;
                         }
-                        else this.$notify({type: 'is-warning', text: this.$t('errors.no_logo_found_for_x', {service: this.form.service}) })
+                        else this.$notify({type: 'is-warning', text: this.$t('errors.no_logo_found_for_x', {service: this.strip_tags(this.form.service)}) })
                     })
                     .catch(error => {
-                        this.$notify({type: 'is-warning', text: this.$t('errors.no_logo_found_for_x', {service: this.form.service}) })
+                        this.$notify({type: 'is-warning', text: this.$t('errors.no_logo_found_for_x', {service: this.strip_tags(this.form.service)}) })
                     });
                 }
             },
