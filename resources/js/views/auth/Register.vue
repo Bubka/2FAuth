@@ -117,9 +117,18 @@
 
                 const publicKeyCredential = this.webauthn.parseOutgoingCredentials(bufferedCredentials);
 
-                this.axios.post('/webauthn/register', publicKeyCredential).then(response => {
+                this.axios.post('/webauthn/register', publicKeyCredential, {returnError: true})
+                .then(response => {
                     this.deviceId = publicKeyCredential.id
                     this.deviceRegistered = true
+                })
+                .catch(error => {
+                    if( error.response.status === 422 ) {
+                        this.$notify({ type: 'is-danger', text: error.response.data.message })
+                    }
+                    else {
+                        this.$router.push({ name: 'genericError', params: { err: error.response } });
+                    }
                 })
             },
 
