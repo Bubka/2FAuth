@@ -39,7 +39,7 @@ else
 fi
 
 echo "${COMMIT}" > /2fauth/installed
-php artisan storage:link
+php artisan storage:link --quiet
 php artisan config:cache
 
 supervisord
