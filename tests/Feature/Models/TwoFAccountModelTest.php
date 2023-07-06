@@ -145,6 +145,25 @@ class TwoFAccountModelTest extends FeatureTestCase
     /**
      * @test
      */
+    public function test_fill_with_ms_corporate_totp_uri_returns_correct_value()
+    {
+        $twofaccount = new TwoFAccount;
+        $twofaccount->fillWithURI(OtpTestData::TOTP_MICROSOFT_CORPORATE_URI_MISMATCHING_ISSUER);
+
+        $this->assertEquals('totp', $twofaccount->otp_type);
+        $this->assertEquals(OtpTestData::TOTP_MICROSOFT_CORPORATE_URI_MISMATCHING_ISSUER, $twofaccount->legacy_uri);
+        $this->assertEquals(OtpTestData::MICROSOFT, $twofaccount->service);
+        $this->assertEquals(OtpTestData::ORGANIZATION . '_' . OtpTestData::ACCOUNT, $twofaccount->account);
+        $this->assertEquals(OtpTestData::SECRET, $twofaccount->secret);
+        $this->assertEquals(OtpTestData::DIGITS_DEFAULT, $twofaccount->digits);
+        $this->assertEquals(OtpTestData::PERIOD_DEFAULT, $twofaccount->period);
+        $this->assertEquals(null, $twofaccount->counter);
+        $this->assertEquals(OtpTestData::ALGORITHM_DEFAULT, $twofaccount->algorithm);
+    }
+
+    /**
+     * @test
+     */
     public function test_fill_with_custom_hotp_uri_returns_correct_value()
     {
         $file = (new FileFactory)->image('file.png', 10, 10);
@@ -226,6 +245,16 @@ class TwoFAccountModelTest extends FeatureTestCase
         $this->expectException(\Illuminate\Validation\ValidationException::class);
         $twofaccount = new TwoFAccount;
         $twofaccount->fillWithURI(OtpTestData::INVALID_OTPAUTH_URI);
+    }
+
+    /**
+     * @test
+     */
+    public function test_fill_with_invalid_uri_with_mismatching_issuer_returns_ValidationException()
+    {
+        $this->expectException(\Illuminate\Validation\ValidationException::class);
+        $twofaccount = new TwoFAccount;
+        $twofaccount->fillWithURI(OtpTestData::INVALID_OTPAUTH_URI_MISMATCHING_ISSUER);
     }
 
     /**

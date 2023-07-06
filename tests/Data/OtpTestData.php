@@ -58,6 +58,12 @@ class OtpTestData
 
     const TOTP_FULL_CUSTOM_URI_NO_IMG = 'otpauth://totp/' . self::SERVICE . ':' . self::ACCOUNT . '?secret=' . self::SECRET . '&issuer=' . self::SERVICE . '&digits=' . self::DIGITS_CUSTOM . '&period=' . self::PERIOD_CUSTOM . '&algorithm=' . self::ALGORITHM_CUSTOM;
 
+    const MICROSOFT = 'Microsoft';
+
+    const ORGANIZATION = 'MyOrganization';
+
+    const TOTP_MICROSOFT_CORPORATE_URI_MISMATCHING_ISSUER = 'otpauth://totp/' . self::ORGANIZATION . ':' . self::ACCOUNT . '?secret=' . self::SECRET . '&issuer=' . self::MICROSOFT;
+
     const TOTP_FULL_CUSTOM_URI = self::TOTP_FULL_CUSTOM_URI_NO_IMG . '&image=' . self::IMAGE;
 
     const HOTP_FULL_CUSTOM_URI_NO_IMG = 'otpauth://hotp/' . self::SERVICE . ':' . self::ACCOUNT . '?secret=' . self::SECRET . '&issuer=' . self::SERVICE . '&digits=' . self::DIGITS_CUSTOM . '&counter=' . self::COUNTER_CUSTOM . '&algorithm=' . self::ALGORITHM_CUSTOM;
@@ -71,6 +77,8 @@ class OtpTestData
     const TOTP_URI_WITH_UNREACHABLE_IMAGE = 'otpauth://totp/service:account?secret=A4GRFHVVRBGY7UIW&image=https%3A%2F%2Fen.opensuse.org%2Fimage.png';
 
     const INVALID_OTPAUTH_URI = 'otpauth://Xotp/' . self::ACCOUNT . '?secret=' . self::SECRET;
+
+    const INVALID_OTPAUTH_URI_MISMATCHING_ISSUER = 'otpauth://totp/' . self::MICROSOFT . ':' . self::ACCOUNT . '?secret=' . self::SECRET . '&issuer=' . self::SERVICE;
 
     const STEAM_TOTP_URI = 'otpauth://totp/' . self::STEAM . ':' . self::ACCOUNT . '?secret=' . self::STEAM_SECRET . '&issuer=' . self::STEAM . '&digits=' . self::DIGITS_STEAM . '&period=30&algorithm=' . self::ALGORITHM_DEFAULT;
 
