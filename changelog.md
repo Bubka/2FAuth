@@ -1,25 +1,31 @@
 # Change log
 
-## [4.1.0] - 2023-06-07
+## [4.1.0] - 2023-07-07
 
-This new version introduces a very common feature in the 2FA app world
+This new version introduces a very common feature in the 2FA app world, the automatic generation and display of passwords.
+
+Since the very beginning, 2FAuth offers an _Open, Click & Get one password_ behavior, this is one of the main reasons why I created it. But this can be very troublesome or frustrating for users migrating from other 2FA apps as almost all of them work with an _Open & Get passwords_ behavior, which is much more straightforward.
+
+So this is now only a user choice as 2FAuth offers both behaviors via a user preference. Obvisouly, the _Open, Click & Get one password_ behavior remains the default one.
 
 ### Added
 
-- A user preference to view all 2FA passwords on the main view without user interaction
-- A setting to disable user registration
-- A `2fauth:install` Artisan command to ease both initial and upgrade installation. (see [Docs](https://docs.2fauth.app/getting-started/installation/self-hosted-server//#subdirectory))
-- A spinner, during 2FA passwords loading - By [@josh-gaby](<https://github>.
+- A user preference to generate and show 2FA passwords on the main view without user interaction ([#153](https://github.com/Bubka/2FAuth/issues/153))
+- An administrator setting to disable user registration ([#170](https://github.com/Bubka/2FAuth/issues/170))
+- A `2fauth:install` Artisan command to ease both initial and upgrade installation.
+- A spinner, during 2FA password loading - By [@josh-gaby](https://github.com/josh-gaby).
 
 ### Changed
 
 - Aegis migrations with empty `name` properties are no longer rejected. The `issuer` property is then used as a fallback value.
-- The Docker image now embed the MySQL/MariaDB PHP extension, so it may be ready to work with
+- The Docker image now embed the MySQL/MariaDB PHP extension, so it may be ready to work with.
 
 ### Fixed
 
-- [issue #180](https://github.com/Bubka/2FAuth/issues/180) OTP does not rotate while close after copy and copy on display is activated - By [@josh-gaby](https://github.com/josh-gaby)
+- [issue #180](https://github.com/Bubka/2FAuth/issues/180) OTP does not rotate while _Close after copy_ and _Copy on display_ is activated - By [@josh-gaby](https://github.com/josh-gaby)
 - [issue #194](https://github.com/Bubka/2FAuth/issues/194) Container keeps trying to make connection to 172.67.161.186
+- [issue #134](https://github.com/Bubka/2FAuth/issues/134), [#143](https://github.com/Bubka/2FAuth/issues/143), [#147](https://github.com/Bubka/2FAuth/issues/147) Issue with some Microsoft 2FA
+- [issue #196](https://github.com/Bubka/2FAuth/issues/196) ERROR The [public/storage] link already exists
 
 ## [4.0.3] - 2023-06-30
 
