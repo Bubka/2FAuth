@@ -14,20 +14,20 @@ return [
     */
 
     'settings' => 'Настройки',
-    'preferences' => 'Preferences',
+    'preferences' => 'Предпочитания',
     'account' => 'Профил',
     'oauth' => 'OAuth',
     'webauthn' => 'WebAuthn',
     'tokens' => 'Токени',
     'options' => 'Опции',
-    'user_preferences' => 'User preferences',
-    'admin_settings' => 'Admin settings',
+    'user_preferences' => 'Потребителски предпочитания',
+    'admin_settings' => 'Настройки на администратора',
     'confirm' => [
 
     ],
-    'administration' => 'Administration',
-    'administration_legend' => 'While previous settings are user settings (every user can set its own preferences), following settings are global and apply to all users. Only an administrator can view and edit those settings.',
-    'you_are_administrator' => 'You are an administrator',
+    'administration' => 'Администрация',
+    'administration_legend' => 'Докато предишните настройки са потребителски (всеки потребител може да зададе свои собствени предпочитания), следващите настройки са глобални и се прилагат за всички потребители. Само администратор може да преглежда и редактира тези настройки.',
+    'you_are_administrator' => 'Вие сте администратор',
     'general' => 'Общи',
     'security' => 'Сигурност',
     'profile' => 'Профил',
@@ -74,24 +74,24 @@ return [
             'help' => 'Изберете дали искате профилите да се показват като списък или като решетка'
         ],
         'password_format' => [
-            'label' => 'Password formatting',
-            'help' => 'Change how the passwords are displayed by grouping digits to ease readability and memorization'
+            'label' => 'Форматиране на парола',
+            'help' => 'Променете начина, по който се показват паролите, като групирате цифри, за да улесните четливостта и запаметяването'
         ],
-        'pair' => 'by Pair',
-        'pair_legend' => 'Group digits two by two',
-        'trio_legend' => 'Group digits three by three',
-        'half_legend' => 'Split digits into two equals groups',
-        'trio' => 'by Trio',
-        'half' => 'by Half',
+        'pair' => 'на Две',
+        'pair_legend' => 'Групиране на цифрите две по две',
+        'trio_legend' => 'Групиране на цифрите три по три',
+        'half_legend' => 'Разделяне на цифрите на две равни групи',
+        'trio' => 'на Три',
+        'half' => 'на Половина',
         'grid' => 'Решетка',
         'list' => 'Списък',
         'theme' => [
-            'label' => 'Theme',
-            'help' => 'Force a specific theme or apply the theme defined in your system/browser preferences'
+            'label' => 'Облик',
+            'help' => 'Прилагане на специфичен облик или прилагане на предпочитания според системните/браузърните предпочитания'
         ],
-        'light' => 'Light',
-        'dark' => 'Dark',
-        'automatic' => 'Auto',
+        'light' => 'Светъл',
+        'dark' => 'Тъмен',
+        'automatic' => 'Авто',
         'show_accounts_icons' => [
             'label' => 'Показвай иконите',
             'help' => 'Показва иконите на профилите в основният екран'
@@ -124,6 +124,20 @@ return [
             'label' => 'Запомняне на груповия филтър',
             'help' => 'Запазва последния приложен групов филтър и го възстановява при следващото ви посещение',
         ],
+        'disable_registration' => [
+            'label' => 'Disable registration',
+            'help' => 'Prevent new user registration',
+        ],
+        'otp_generation' => [
+            'label' => 'Show Password',
+            'help' => 'Set how and when <abbr title="One-Time Passwords">OTPs</abbr> are displayed.<br/>',
+        ],
+        'otp_generation_on_request' => 'After a click/tap',
+        'otp_generation_on_request_legend' => 'Alone, in its own view',
+        'otp_generation_on_request_title' => 'Click an account to get a password in a dedicated view',
+        'otp_generation_on_home' => 'Constantly',
+        'otp_generation_on_home_legend' => 'All of them, on home',
+        'otp_generation_on_home_title' => 'Show all passwords in the main view, without doing anything',
         'never' => 'Никога',
         'on_otp_copy' => 'При копиране на кода',
         '1_minutes' => 'След 1 минута',

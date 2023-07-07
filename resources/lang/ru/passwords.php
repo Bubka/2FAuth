@@ -21,6 +21,6 @@ return [
     'user' => "Не удалось найти пользователя с указанным электронным адресом.",
 
     // 2FAuth
-    'password' => 'Passwords must be at least eight characters and match the confirmation.',
+    'password' => 'Пароль должен содержать не менее восьми символов и совпадать с паролем в поле "подтверждение пароля".',
     
 ];

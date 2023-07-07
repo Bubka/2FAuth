@@ -49,6 +49,7 @@ return [
     'reload' => 'Aktualisieren',
     'some_data_have_changed' => 'Einige Daten haben sich geändert. Sie sollten diese Seite',
     'generate' => 'Generieren',
+    'generating_otp' => 'Generating OTP',
     'open_in_browser' => 'Im Browser öffnen',
     'continue' => 'Weiter',
     'discard' => 'Löschen',

@@ -33,11 +33,11 @@ return [
     'https_required' => 'Изисква се HTTPS контекст',
     'browser_does_not_support_webauthn' => 'Вашето устройство не поддържа webauthn. Опитайте отново с по-модерен браузър',
     'aborted_by_user' => 'Прекратено от потребителя',
-    'security_device_unsupported' => 'Unsupported or in use device',
-    'not_allowed_operation' => 'Operation not allowed',
-    'unsupported_operation' => 'Unsupported operation',
-    'unknown_error' => 'Unknown error',
-    'security_error_check_rpid' => 'Security error<br/>Check your WEBAUTHN_ID env var',
+    'security_device_unsupported' => 'Неподдържано или използвано устройство',
+    'not_allowed_operation' => 'Операцията не е разрешена',
+    'unsupported_operation' => 'Неподдържана операция',
+    'unknown_error' => 'Неизвестна грешка',
+    'security_error_check_rpid' => 'Грешка в сигурността<br/>Проверете вашата WEBAUTHN_ID env променлива',
     'unsupported_with_reverseproxy' => 'Не е приложимо при използване на прокси за удостоверяване',
     'user_deletion_failed' => 'Изтриването на профила не бе успешно, няма изтрити данни',
     'auth_proxy_failed' => 'Неуспешно удостоверяване на проксито',
@@ -49,7 +49,7 @@ return [
     'encrypted_migration' => 'Нечетимо, данните изглеждат криптирани',
     'no_logo_found_for_x' => 'Няма налично лого за {service}',
     'file_upload_failed' => 'Качването на файл не бе успешно',
-    'unauthorized' => 'Unauthorized',
-    'unauthorized_legend' => 'You do not have permissions to view this resource or to perform this action',
-    'cannot_delete_the_only_admin' => 'Cannot delete the only admin account'
+    'unauthorized' => 'Неразрешено',
+    'unauthorized_legend' => 'Нямате права да видите този ресурс или да извършите това действие',
+    'cannot_delete_the_only_admin' => 'Не може да изтрие единствения администраторски акаунт'
 ];

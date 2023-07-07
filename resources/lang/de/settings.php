@@ -14,20 +14,20 @@ return [
     */
 
     'settings' => 'Einstellungen',
-    'preferences' => 'Preferences',
+    'preferences' => 'Vorlieben',
     'account' => 'Account',
     'oauth' => 'OAuth',
     'webauthn' => 'WebAuthn',
     'tokens' => 'Token',
     'options' => 'Einstellungen',
-    'user_preferences' => 'User preferences',
-    'admin_settings' => 'Admin settings',
+    'user_preferences' => 'Benutzereinstellungen',
+    'admin_settings' => 'Admin-Einstellungen',
     'confirm' => [
 
     ],
     'administration' => 'Administration',
-    'administration_legend' => 'While previous settings are user settings (every user can set its own preferences), following settings are global and apply to all users. Only an administrator can view and edit those settings.',
-    'you_are_administrator' => 'You are an administrator',
+    'administration_legend' => 'Vorangegangene Einstellungen betreffen Benutzereinstellungen (jeder Benutzer kann seine eigenen Einstellungen festlegen), folgende globale Einstellungen sind gültig für alle Benutzer. Nur ein Administrator kann diese Einstellungen ansehen und bearbeiten.',
+    'you_are_administrator' => 'Du bist ein Administrator',
     'general' => 'Allgemein',
     'security' => 'Sicherheit',
     'profile' => 'Profil',
@@ -59,11 +59,11 @@ return [
         ],
         'close_otp_on_copy' => [
             'label' => 'Schließe <abbr title="One-Time Password">OTP</abbr> nach dem Kopieren',
-            'help' => 'Clicking a generated password to copy it automatically hide it from the screen'
+            'help' => 'Bei einem Klick auf das generierte Passwort wird es automatisch auf dem Bildschirm ausgeblendet'
         ],
         'copy_otp_on_display' => [
-            'label' => 'Copy <abbr title="One-Time Password">OTP</abbr> on display',
-            'help' => 'Automatically copy a generated password right after it appears on screen. Due to browsers limitations, only the first <abbr title="Time-based One-Time Password">TOTP</abbr> password will be copied, not the rotating ones'
+            'label' => 'Das angezeigte, einmaliges Passwort (OTP) kopieren',
+            'help' => 'Kopiert automatisch ein generiertes Passwort bei Anzeige auf dem Bildschirm. Aufgrund der Einschränkungen des Browsers wird nur das erste <abbr title="Time-based One-Time Password">TOTP</abbr> Passwort kopiert, nicht das rotierende Passwort'
         ],
         'use_basic_qrcode_reader' => [
             'label' => 'Benutze den einfachen QR-Codeleser',
@@ -74,24 +74,24 @@ return [
             'help' => 'Wählen Sie, ob Konten als Liste oder als Raster angezeigt werden sollen'
         ],
         'password_format' => [
-            'label' => 'Password formatting',
-            'help' => 'Change how the passwords are displayed by grouping digits to ease readability and memorization'
+            'label' => 'Passwortformatierung',
+            'help' => 'Anzeige der Passwörter ändern durch Gruppierung der Ziffern. Verbessert die Lesbarkeit und Passwörter lassen sich einfacher merken'
         ],
-        'pair' => 'by Pair',
-        'pair_legend' => 'Group digits two by two',
-        'trio_legend' => 'Group digits three by three',
-        'half_legend' => 'Split digits into two equals groups',
-        'trio' => 'by Trio',
-        'half' => 'by Half',
+        'pair' => 'nach Paar',
+        'pair_legend' => 'Ziffern in zweistellige Gruppen aufteilen',
+        'trio_legend' => 'Ziffern in dreistellige Gruppen aufteilen',
+        'half_legend' => 'Ziffern in zwei gleiche Gruppen aufteilen',
+        'trio' => 'durch Trio',
+        'half' => 'nach Hälfte',
         'grid' => 'Raster',
         'list' => 'Liste',
         'theme' => [
-            'label' => 'Theme',
-            'help' => 'Force a specific theme or apply the theme defined in your system/browser preferences'
+            'label' => 'Erscheinungsbild',
+            'help' => 'Erzwinge eine bestimmte Darstellung oder wende die in deinen System/Browser-Einstellungen definierte Darstellung an'
         ],
-        'light' => 'Light',
-        'dark' => 'Dark',
-        'automatic' => 'Auto',
+        'light' => 'Hell',
+        'dark' => 'Dunkel',
+        'automatic' => 'Automatisch',
         'show_accounts_icons' => [
             'label' => 'Symbole anzeigen',
             'help' => 'Kontosymbole in der Hauptansicht anzeigen'
@@ -124,6 +124,20 @@ return [
             'label' => 'Gruppenfilter merken',
             'help' => 'Speichert den letzten Gruppenfilter und stellt ihn bei Ihrem nächsten Besuch wieder her',
         ],
+        'disable_registration' => [
+            'label' => 'Disable registration',
+            'help' => 'Prevent new user registration',
+        ],
+        'otp_generation' => [
+            'label' => 'Show Password',
+            'help' => 'Set how and when <abbr title="One-Time Passwords">OTPs</abbr> are displayed.<br/>',
+        ],
+        'otp_generation_on_request' => 'After a click/tap',
+        'otp_generation_on_request_legend' => 'Alone, in its own view',
+        'otp_generation_on_request_title' => 'Click an account to get a password in a dedicated view',
+        'otp_generation_on_home' => 'Constantly',
+        'otp_generation_on_home_legend' => 'All of them, on home',
+        'otp_generation_on_home_title' => 'Show all passwords in the main view, without doing anything',
         'never' => 'Niemals',
         'on_otp_copy' => 'Beim Kopieren des Tokens',
         '1_minutes' => 'Nach 1 Minute',

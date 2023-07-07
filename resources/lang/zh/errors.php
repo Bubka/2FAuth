@@ -35,8 +35,8 @@ return [
     'aborted_by_user' => '被用户中止。',
     'security_device_unsupported' => '不支持或正在使用的设备',
     'not_allowed_operation' => '不允许此操作',
-    'unsupported_operation' => 'Unsupported operation',
-    'unknown_error' => 'Unknown error',
+    'unsupported_operation' => '不支持的操作',
+    'unknown_error' => '未知错误',
     'security_error_check_rpid' => '安全错误<br/>请检查您的 WEBAUTHN_ID env var',
     'unsupported_with_reverseproxy' => '使用代理进行认证时不可用',
     'user_deletion_failed' => '帐户删除失败，没有数据被删除',
@@ -49,7 +49,7 @@ return [
     'encrypted_migration' => '无法读取，数据似乎已加密',
     'no_logo_found_for_x' => '{service} 没有可用的 Logo',
     'file_upload_failed' => '文件上传失败',
-    'unauthorized' => 'Unauthorized',
-    'unauthorized_legend' => 'You do not have permissions to view this resource or to perform this action',
-    'cannot_delete_the_only_admin' => 'Cannot delete the only admin account'
+    'unauthorized' => '无权限',
+    'unauthorized_legend' => '您无权查看此资源或执行此操作',
+    'cannot_delete_the_only_admin' => '无法删除唯一的管理员账户'
 ];

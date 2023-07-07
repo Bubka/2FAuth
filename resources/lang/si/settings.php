@@ -14,15 +14,20 @@ return [
     */
 
     'settings' => 'සැකසුම්',
+    'preferences' => 'Preferences',
     'account' => 'ගිණුම',
     'oauth' => 'OAuth',
     'webauthn' => 'WebAuthn',
     'tokens' => 'Tokens',
     'options' => 'විකල්ප',
-    'user_options' => 'User options',
+    'user_preferences' => 'User preferences',
+    'admin_settings' => 'Admin settings',
     'confirm' => [
 
     ],
+    'administration' => 'Administration',
+    'administration_legend' => 'While previous settings are user settings (every user can set its own preferences), following settings are global and apply to all users. Only an administrator can view and edit those settings.',
+    'you_are_administrator' => 'You are an administrator',
     'general' => 'General',
     'security' => 'ආරක්ෂාව',
     'profile' => 'Profile',
@@ -50,11 +55,15 @@ return [
         ],
         'show_otp_as_dot' => [
             'label' => 'Show generated one-time passwords as dot',
-            'help' => 'Replace generated password caracters with *** to ensure confidentiality. Do not affect the copy/paste feature.'
+            'help' => 'Replace generated password caracters with *** to ensure confidentiality. Do not affect the copy/paste feature'
         ],
         'close_otp_on_copy' => [
-            'label' => 'Close OTP after copy',
-            'help' => 'Automatically close the popup showing the generated password after it has been copied'
+            'label' => 'Close <abbr title="One-Time Password">OTP</abbr> after copy',
+            'help' => 'Clicking a generated password to copy it automatically hide it from the screen'
+        ],
+        'copy_otp_on_display' => [
+            'label' => 'Copy <abbr title="One-Time Password">OTP</abbr> on display',
+            'help' => 'Automatically copy a generated password right after it appears on screen. Due to browsers limitations, only the first <abbr title="Time-based One-Time Password">TOTP</abbr> password will be copied, not the rotating ones'
         ],
         'use_basic_qrcode_reader' => [
             'label' => 'Use basic QR code reader',
@@ -64,8 +73,25 @@ return [
             'label' => 'Display mode',
             'help' => 'Choose whether you want accounts to be displayed as a list or as a grid'
         ],
+        'password_format' => [
+            'label' => 'Password formatting',
+            'help' => 'Change how the passwords are displayed by grouping digits to ease readability and memorization'
+        ],
+        'pair' => 'by Pair',
+        'pair_legend' => 'Group digits two by two',
+        'trio_legend' => 'Group digits three by three',
+        'half_legend' => 'Split digits into two equals groups',
+        'trio' => 'by Trio',
+        'half' => 'by Half',
         'grid' => 'Grid',
         'list' => 'List',
+        'theme' => [
+            'label' => 'Theme',
+            'help' => 'Force a specific theme or apply the theme defined in your system/browser preferences'
+        ],
+        'light' => 'Light',
+        'dark' => 'Dark',
+        'automatic' => 'Auto',
         'show_accounts_icons' => [
             'label' => 'නිරූපක පෙන්වන්න',
             'help' => 'Show icons accounts in the main view'
@@ -98,6 +124,20 @@ return [
             'label' => 'Remember group filter',
             'help' => 'Save the last group filter applied and restore it on your next visit',
         ],
+        'disable_registration' => [
+            'label' => 'Disable registration',
+            'help' => 'Prevent new user registration',
+        ],
+        'otp_generation' => [
+            'label' => 'Show Password',
+            'help' => 'Set how and when <abbr title="One-Time Passwords">OTPs</abbr> are displayed.<br/>',
+        ],
+        'otp_generation_on_request' => 'After a click/tap',
+        'otp_generation_on_request_legend' => 'Alone, in its own view',
+        'otp_generation_on_request_title' => 'Click an account to get a password in a dedicated view',
+        'otp_generation_on_home' => 'Constantly',
+        'otp_generation_on_home_legend' => 'All of them, on home',
+        'otp_generation_on_home_title' => 'Show all passwords in the main view, without doing anything',
         'never' => 'Never',
         'on_otp_copy' => 'On security code copy',
         '1_minutes' => 'විනාඩි 1කට පසු',

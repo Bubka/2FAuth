@@ -14,20 +14,20 @@ return [
     */
 
     'settings' => '设置',
-    'preferences' => 'Preferences',
+    'preferences' => '偏好',
     'account' => '账户',
     'oauth' => 'OAuth',
     'webauthn' => 'WebAuthn',
     'tokens' => '令牌',
     'options' => '选项',
-    'user_preferences' => 'User preferences',
-    'admin_settings' => 'Admin settings',
+    'user_preferences' => '用户偏好',
+    'admin_settings' => '管理员设置',
     'confirm' => [
 
     ],
-    'administration' => 'Administration',
-    'administration_legend' => 'While previous settings are user settings (every user can set its own preferences), following settings are global and apply to all users. Only an administrator can view and edit those settings.',
-    'you_are_administrator' => 'You are an administrator',
+    'administration' => '管理',
+    'administration_legend' => '此前的设置是用户设置(每个用户都可以设置自己的偏好)。以下的设置则是应用于所有用户的全局设置。 只有管理员可以查看和编辑这些设置。',
+    'you_are_administrator' => '您是管理员',
     'general' => '常规',
     'security' => '安全',
     'profile' => '配置文件',
@@ -74,15 +74,15 @@ return [
             'help' => '选择将账户以列表或网格的方式进行展示'
         ],
         'password_format' => [
-            'label' => 'Password formatting',
-            'help' => 'Change how the passwords are displayed by grouping digits to ease readability and memorization'
+            'label' => '密码格式',
+            'help' => '分组显示密码，提高可读性并且便于记忆'
         ],
-        'pair' => 'by Pair',
-        'pair_legend' => 'Group digits two by two',
-        'trio_legend' => 'Group digits three by three',
-        'half_legend' => 'Split digits into two equals groups',
-        'trio' => 'by Trio',
-        'half' => 'by Half',
+        'pair' => '两位数分组',
+        'pair_legend' => '以两位数分组拆分数字',
+        'trio_legend' => '以三位数分组拆分数字',
+        'half_legend' => '将数字拆分为两个相等数位的分组',
+        'trio' => '三位数分组',
+        'half' => '两个相等数位的分组',
         'grid' => '网格',
         'list' => '列表',
         'theme' => [
@@ -124,6 +124,20 @@ return [
             'label' => '记住组筛选器',
             'help' => '保存最后应用的组过滤器并在下次访问时还原它',
         ],
+        'disable_registration' => [
+            'label' => 'Disable registration',
+            'help' => 'Prevent new user registration',
+        ],
+        'otp_generation' => [
+            'label' => 'Show Password',
+            'help' => 'Set how and when <abbr title="One-Time Passwords">OTPs</abbr> are displayed.<br/>',
+        ],
+        'otp_generation_on_request' => 'After a click/tap',
+        'otp_generation_on_request_legend' => 'Alone, in its own view',
+        'otp_generation_on_request_title' => 'Click an account to get a password in a dedicated view',
+        'otp_generation_on_home' => 'Constantly',
+        'otp_generation_on_home_legend' => 'All of them, on home',
+        'otp_generation_on_home_title' => 'Show all passwords in the main view, without doing anything',
         'never' => '从不',
         'on_otp_copy' => '在复制安全代码后',
         '1_minutes' => '1分钟后',

@@ -13,10 +13,9 @@ return [
     |
     */
 
-    'resource_not_found' => 'Resource not found',
-    'error_occured' => 'An error occured:',
-    'cannot_register_more_user' => 'You cannot register more than one user.',
-    'refresh' => 'Refresh',
+    'resource_not_found' => 'Ресурс не найден',
+    'error_occured' => 'Произошла ошибка:',
+    'refresh' => 'Обновить',
     'no_valid_otp' => 'No valid OTP resource in this QR code',
     'something_wrong_with_server' => 'Something is wrong with your server',
     'Unable_to_decrypt_uri' => 'Unable to decrypt uri',
@@ -33,9 +32,11 @@ return [
     'cannot_decipher_secret' => 'The secret cannot be deciphered. This is mainly caused by a wrong APP_KEY set in the .env configuration file of 2Fauth or a corrupted data stored in database.',
     'https_required' => 'HTTPS context required',
     'browser_does_not_support_webauthn' => 'Your device does not support webauthn. Try again later using a more modern browser',
-    'aborted_by_user' => 'Aborted by user',
-    'security_device_unsupported' => 'Unsupported or in use device',
+    'aborted_by_user' => 'Прервано пользователем',
+    'security_device_unsupported' => 'Устройство не поддерживается или используется',
     'not_allowed_operation' => 'Operation not allowed',
+    'unsupported_operation' => 'Unsupported operation',
+    'unknown_error' => 'Unknown error',
     'security_error_check_rpid' => 'Security error<br/>Check your WEBAUTHN_ID env var',
     'unsupported_with_reverseproxy' => 'Not applicable when using an auth proxy',
     'user_deletion_failed' => 'User account deletion failed, no data have been deleted',
@@ -47,5 +48,8 @@ return [
     'unsupported_otp_type' => 'Unsupported OTP type',
     'encrypted_migration' => 'Unreadable, the data seem encrypted',
     'no_logo_found_for_x' => 'No logo available for {service}',
-    'file_upload_failed' => 'File upload failed'
+    'file_upload_failed' => 'Не удалось загрузить файл',
+    'unauthorized' => 'Unauthorized',
+    'unauthorized_legend' => 'You do not have permissions to view this resource or to perform this action',
+    'cannot_delete_the_only_admin' => 'Cannot delete the only admin account'
 ];

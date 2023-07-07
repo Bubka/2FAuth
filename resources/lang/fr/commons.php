@@ -49,6 +49,7 @@ return [
     'reload' => 'Actualiser',
     'some_data_have_changed' => 'Certaines données ont été modifiées. Vous devriez',
     'generate' => 'Générer',
+    'generating_otp' => 'Génération de l\'OTP',
     'open_in_browser' => 'Ouvrir dans votre navigateur',
     'continue' => 'Continuer',
     'discard' => 'Retirer',

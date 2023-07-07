@@ -15,7 +15,7 @@ return [
 
     'resource_not_found' => 'Resource not found',
     'error_occured' => 'An error occured:',
-    'refresh' => 'නැවුම් කරන්න',
+    'refresh' => 'Refresh',
     'no_valid_otp' => 'No valid OTP resource in this QR code',
     'something_wrong_with_server' => 'Something is wrong with your server',
     'Unable_to_decrypt_uri' => 'Unable to decrypt uri',

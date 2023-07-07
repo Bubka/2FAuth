@@ -10,11 +10,11 @@ return [
     |
     */
 
-    'browser_preference' => 'Browser preference',
-    'en' => 'ඉංග්‍රීසි',
-    'fr' => 'ප්‍රංශ',
-    'de' => 'ජර්මානු',
-    'es' => 'Spanish',
-    'zh' => 'Chinese Simplified',
+    'browser_preference' => 'Preferensi perambaan',
+    'en' => 'Bahasa Inggris',
+    'fr' => 'Bahasa Perancis',
+    'de' => 'Bahasa Jerman',
+    'es' => 'Bahasa Spanyol',
+    'zh' => 'Bahasa Tiongkok yang disederhanakan',
     'ru' => 'Russian',
 ];

@@ -25,7 +25,7 @@ return [
     'sign_in_using_security_device' => '使用安全设备登录',
     'login_and_password' => '用户名和密码',
     'register' => '注册',
-    'welcome_to_2fauth' => 'Welcome to 2FAuth',
+    'welcome_to_2fauth' => '欢迎使用 2FAuth',
     'autolock_triggered' => '已自动锁定',
     'autolock_triggered_punchline' => '自动锁定已触发。您已被自动断开连接。',
     'change_autolock_in_settings' => '您可以在“设置 > 选项”中更改自动锁定的行为。',
@@ -68,11 +68,11 @@ WebAuthn允许您使用受信任的设备 (如Yubikeys 或具有生物识别能�
         'unknown_device' => '未知设备',
         'use_webauthn_only' => [
             'label' => '仅使用 WebAuthn',
-            'help' => 'Make WebAuthn the only authorized method to log into your 2FAuth account. This is the recommended setup to take advantage of the WebAuthn enhanced security.<br /><br />
-                In case of device lost, you will be able to recover your account by resetting this option and signing in using your email and password.<br /><br />
-                Attention! The Email & Password form remains available despite this option being enabled, but it will always return an \'Authentication failed\' response.'
+            'help' => '将WebAuthn设定为登录2FAuth账户的唯一授权的登录方式。推荐启用此选项，并利用WebAuth增强安全性。<br /><br />
+                设备丢失时， 您可以通过重置此选项并使用您的电子邮件和密码登录来恢复您的帐户。<br /><br />
+                请注意！ 尽管启用了此选项，输入电子邮件和密码的登录界面仍然可用，但是会提示 “身份验证失败”。'
         ],
-        'need_a_security_device_to_enable_options' => 'Set at least one device to enable the following options',
+        'need_a_security_device_to_enable_options' => '设置至少一个WebAuth设备以启用以下选项',
     ],
     'forms' => [
         'name' => '用户名',

@@ -23,7 +23,7 @@ return [
     'manage_groups_legend' => 'Можете да създавате групи, за да организирате акаунтите си по желания от вас начин. Всички профили остават видими в псевдо групата, наречена „Всички“, независимо от групата, към която принадлежат.',
     'deleting_group_does_not_delete_accounts' => 'Изтриването на група не изтрива профили',
     'move_selected_to' => 'Премести избраните в',
-    'move_selected_to_group' => 'Move selected into a group',
+    'move_selected_to_group' => 'Преместете избраните в група',
     'no_group' => 'Няма група',
     'change_group' => 'Промени група',
     'group_successfully_created' => 'Групата беше създадена успешно',

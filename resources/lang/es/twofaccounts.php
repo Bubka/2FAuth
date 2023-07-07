@@ -58,8 +58,8 @@ return [
             'title' => 'Bloquearlo',
         ],
         'choose_image' => 'Subir',
-        'i_m_lucky' => 'Tengo suerte',
-        'i_m_lucky_legend' => 'El botón "Tengo suerte" intenta obtener el icono oficial del servicio dado. Introduzca el nombre del servicio sin la extensión ".xyz" e intente evitar errores tipográficos. (función beta)',
+        'i_m_lucky' => 'Try my luck',
+        'i_m_lucky_legend' => 'The "Try my luck" button try to get the official icon of the given service. Enter actual service name without ".xyz" extension and try to avoid typo. (beta feature)',
         'test' => 'Test',
         'secret' => [
             'label' => 'Secreto',

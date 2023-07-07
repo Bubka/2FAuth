@@ -30,7 +30,7 @@ return [
     'account_updated' => 'Профилът е актуализиран успешно',
     'accounts_deleted' => 'Профил(ите) са изтрити успешно',
     'accounts_moved' => 'Профил(ите) са преместени успешно',
-    'export_selected_to_json' => 'Download a json export of selected accounts',
+    'export_selected_to_json' => 'Изтегляне на json извадка на избраните профили',
     'forms' => [
         'service' => [
             'placeholder' => 'Google, Twitter, Apple',
@@ -58,8 +58,8 @@ return [
             'title' => 'Заключи го',
         ],
         'choose_image' => 'Качи',
-        'i_m_lucky' => 'На късмет',
-        'i_m_lucky_legend' => 'Бутонът "На късмет" ще опита да изтегли официалната икона на дадената услуга. Въведете действителното име на услугата без разширение ".xyz" и се опитайте да избегнете правописна грешка. (бета функция)',
+        'i_m_lucky' => 'Try my luck',
+        'i_m_lucky_legend' => 'The "Try my luck" button try to get the official icon of the given service. Enter actual service name without ".xyz" extension and try to avoid typo. (beta feature)',
         'test' => 'Тест',
         'secret' => [
             'label' => 'Тайна',
@@ -156,7 +156,7 @@ return [
         'possible_duplicate' => 'Вече съществува профил със същите данни',
         'invalid_account' => '- невалиден профил -',
         'invalid_service' => '- невалидна услуга -',
-        'do_not_set_password_or_encryption' => 'Do NOT enable Password protection or Encryption when you export data (from a 2FA app) you want to import into 2FAuth.',
+        'do_not_set_password_or_encryption' => 'НЕ активирайте защита с парола или криптиране, когато експортирате данни (от 2FA приложение), които искате да импортирате в 2FAuth.',
     ],
 
 ];
