@@ -55,7 +55,7 @@ class Kernel extends HttpKernel
         ],
 
         'api.v1' => [
-            'throttle:api',
+            \Illuminate\Routing\Middleware\ThrottleRequests::class.':api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\KickOutInactiveUser::class,
             \App\Http\Middleware\LogUserLastSeen::class,
@@ -64,7 +64,7 @@ class Kernel extends HttpKernel
     ];
 
     /**
-     * The application's route middleware.
+     * The application's middleware aliases.
      *
      * Aliases may be used instead of class names to conveniently assign middleware to routes and groups.
      *

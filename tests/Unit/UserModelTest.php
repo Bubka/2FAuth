@@ -27,6 +27,7 @@ class UserModelTest extends ModelTestCase
             [
                 'id'                 => 'int',
                 'email_verified_at'  => 'datetime',
+                'password'           => 'hashed',
                 'is_admin'           => 'boolean',
                 'twofaccounts_count' => 'integer',
                 'groups_count'       => 'integer',
