@@ -98,7 +98,7 @@ class WebauthnRecoveryNotification extends Notification
     //  *
     //  * @return void
     //  */
-    // public static function createUrlUsing(?Closure $callback): void
+    // public static function createUrlUsing(?Closure $callback) : void
     // {
     //     static::$createUrlCallback = $callback;
     // }
@@ -110,7 +110,7 @@ class WebauthnRecoveryNotification extends Notification
     //  *
     //  * @return void
     //  */
-    // public static function toMailUsing(?Closure $callback): void
+    // public static function toMailUsing(?Closure $callback) : void
     // {
     //     static::$toMailCallback = $callback;
     // }

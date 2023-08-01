@@ -70,8 +70,6 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->registerPolicies();
-
         // Register a custom provider for reverse-proxy authentication
         Auth::provider('remote-user', function ($app, array $config) {
             // Return an instance of Illuminate\Contracts\Auth\UserProvider...
