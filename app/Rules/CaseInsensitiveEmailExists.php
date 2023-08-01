@@ -2,46 +2,24 @@
 
 namespace App\Rules;
 
+use Closure;
 use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Support\Facades\DB;
 
-class CaseInsensitiveEmailExists implements Rule
+class CaseInsensitiveEmailExists implements ValidationRule
 {
     /**
-     * Create a new rule instance.
-     *
-     * @return void
+     * Run the validation rule.
      */
-    public function __construct()
-    {
-        //
-    }
-
-    /**
-     * Determine if the validation rule passes.
-     *
-     * @param  string  $attribute
-     * @param  mixed  $value
-     * @return bool
-     */
-    public function passes($attribute, $value)
+    public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         $user = DB::table('users')
-            ->whereRaw('email = ?' . ('sqlite' === config('database.default') ? ' COLLATE NOCASE' : ''), [strtolower($value)])
-            ->first();
+        ->whereRaw('email = ?' . ('sqlite' === config('database.default') ? ' COLLATE NOCASE' : ''), [strtolower($value)])
+        ->first();
 
-        return ! $user ? false : true;
-    }
-
-    /**
-     * Get the validation error message.
-     *
-     * @codeCoverageIgnore
-     *
-     * @return array|string
-     */
-    public function message()
-    {
-        return trans('validation.custom.email.exists');
+        if (! $user) {
+            $fail('validation.custom.email.exists')->translate();
+        }
     }
 }

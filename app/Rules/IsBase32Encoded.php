@@ -3,46 +3,21 @@
 namespace App\Rules;
 
 use App\Helpers\Helpers;
-use Illuminate\Contracts\Validation\Rule;
+use Closure;
+use Illuminate\Contracts\Validation\ValidationRule;
 use ParagonIE\ConstantTime\Base32;
 
-class IsBase32Encoded implements Rule
+class IsBase32Encoded implements ValidationRule
 {
     /**
-     * Create a new rule instance.
-     *
-     * @return void
+     * Run the validation rule.
      */
-    public function __construct()
-    {
-        //
-    }
-
-    /**
-     * Determine if the validation rule passes.
-     *
-     * @param  string  $attribute
-     * @param  mixed  $value
-     * @return bool
-     */
-    public function passes($attribute, $value)
+    public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         try {
             $secret = Base32::decodeUpper(Helpers::PadToBase32Format($value));
         } catch (\Exception $e) {
-            return false;
+            $fail('validation.custom.secret.isBase32Encoded')->translate();
         }
-
-        return true;
-    }
-
-    /**
-     * Get the validation error message.
-     *
-     * @return array|string
-     */
-    public function message()
-    {
-        return trans('validation.custom.secret.isBase32Encoded');
     }
 }
