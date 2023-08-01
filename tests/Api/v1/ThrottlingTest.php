@@ -3,12 +3,15 @@
 namespace Tests\Api\v1;
 
 use App\Models\User;
+use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Config;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\FeatureTestCase;
 
 /**
- * @covers \App\Providers\RouteServiceProvider
+ * ThrottlingTest test class
  */
+#[CoversClass(RouteServiceProvider::class)]
 class ThrottlingTest extends FeatureTestCase
 {
     /**

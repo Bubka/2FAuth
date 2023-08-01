@@ -2,13 +2,16 @@
 
 namespace Tests\Api\v1\Controllers;
 
+use App\Api\v1\Controllers\SettingController;
 use App\Facades\Settings;
 use App\Models\User;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\FeatureTestCase;
 
 /**
- * @covers \App\Api\v1\Controllers\SettingController
+ * SettingController test class
  */
+#[CoversClass(SettingController::class)]
 class SettingControllerTest extends FeatureTestCase
 {
     /**

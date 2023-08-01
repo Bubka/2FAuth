@@ -2,18 +2,22 @@
 
 namespace Tests\Feature\Http\Auth;
 
+use App\Extensions\WebauthnTwoFAuthUserProvider;
+use App\Http\Controllers\Auth\WebAuthnLoginController;
 use App\Models\User;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Laragear\WebAuthn\Assertion\Validator\AssertionValidator;
 use Laragear\WebAuthn\WebAuthn;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\FeatureTestCase;
 
 /**
- * @covers  \App\Http\Controllers\Auth\WebAuthnLoginController
- * @covers  \App\Models\User
- * @covers  \App\Extensions\WebauthnTwoFAuthUserProvider
+ * WebAuthnLoginControllerTest test class
  */
+#[CoversClass(WebAuthnLoginController::class)]
+#[CoversClass(User::class)]
+#[CoversClass(WebauthnTwoFAuthUserProvider::class)]
 class WebAuthnLoginControllerTest extends FeatureTestCase
 {
     /**

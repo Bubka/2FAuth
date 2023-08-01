@@ -7,11 +7,13 @@ use App\Listeners\ReleaseRadar;
 use App\Services\ReleaseRadarService;
 use Illuminate\Support\Facades\Event;
 use Mockery\MockInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\TestCase;
 
 /**
- * @covers \App\Listeners\ReleaseRadar
+ * ReleaseRadarTest test class
  */
+#[CoversClass(ReleaseRadar::class)]
 class ReleaseRadarTest extends TestCase
 {
     /**

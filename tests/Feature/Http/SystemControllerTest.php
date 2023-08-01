@@ -2,14 +2,17 @@
 
 namespace Tests\Feature\Http;
 
+use App\Http\Controllers\SystemController;
 use App\Models\User;
 use App\Services\ReleaseRadarService;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\FeatureTestCase;
 
 /**
- * @covers \App\Http\Controllers\SystemController
+ * SystemControllerTest test class
  */
+#[CoversClass(SystemController::class)]
 class SystemControllerTest extends FeatureTestCase
 {
     use WithoutMiddleware;

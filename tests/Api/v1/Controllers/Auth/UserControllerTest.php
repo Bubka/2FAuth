@@ -2,13 +2,17 @@
 
 namespace Tests\Api\v1\Controllers\Auth;
 
+use App\Api\v1\Controllers\UserController;
+use App\Api\v1\Resources\UserResource;
 use App\Models\User;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\FeatureTestCase;
 
 /**
- * @covers \App\Api\v1\Controllers\UserController
- * @covers \App\Api\v1\Resources\UserResource
+ * UserControllerTest test class
  */
+#[CoversClass(UserController::class)]
+#[CoversClass(UserResource::class)]
 class UserControllerTest extends FeatureTestCase
 {
     /**

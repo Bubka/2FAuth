@@ -6,11 +6,14 @@ use App\Api\v1\Requests\TwoFAccountBatchRequest;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 /**
- * @covers \App\Api\v1\Requests\TwoFAccountBatchRequest
+ * TwoFAccountBatchRequestTest test class
  */
+#[CoversClass(TwoFAccountBatchRequest::class)]
 class TwoFAccountBatchRequestTest extends TestCase
 {
     use WithoutMiddleware;
@@ -30,8 +33,9 @@ class TwoFAccountBatchRequestTest extends TestCase
     }
 
     /**
-     * @dataProvider provideValidData
+     * @test
      */
+    #[DataProvider('provideValidData')]
     public function test_valid_data(array $data) : void
     {
         $request   = new TwoFAccountBatchRequest();
@@ -43,7 +47,7 @@ class TwoFAccountBatchRequestTest extends TestCase
     /**
      * Provide Valid data for validation test
      */
-    public function provideValidData() : array
+    public static function provideValidData() : array
     {
         return [
             [[
@@ -56,8 +60,9 @@ class TwoFAccountBatchRequestTest extends TestCase
     }
 
     /**
-     * @dataProvider provideInvalidData
+     * @test
      */
+    #[DataProvider('provideInvalidData')]
     public function test_invalid_data(array $data) : void
     {
         $request   = new TwoFAccountBatchRequest();
@@ -69,7 +74,7 @@ class TwoFAccountBatchRequestTest extends TestCase
     /**
      * Provide invalid data for validation test
      */
-    public function provideInvalidData() : array
+    public static function provideInvalidData() : array
     {
         return [
             [[

@@ -6,14 +6,17 @@ use App\Facades\TwoFAccounts;
 use App\Models\Group;
 use App\Models\TwoFAccount;
 use App\Models\User;
+use App\Services\TwoFAccountService;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\Data\MigrationTestData;
 use Tests\Data\OtpTestData;
 use Tests\FeatureTestCase;
 
 /**
- * @covers \App\Services\TwoFAccountService
- * @covers \App\Facades\TwoFAccounts
+ * TwoFAccountServiceTest test class
  */
+#[CoversClass(TwoFAccountService::class)]
+#[CoversClass(TwoFAccounts::class)]
 class TwoFAccountServiceTest extends FeatureTestCase
 {
     /**

@@ -5,11 +5,13 @@ namespace Tests\Unit\Listeners;
 use App\Events\GroupDeleted;
 use App\Listeners\ResetUsersPreference;
 use Illuminate\Support\Facades\Event;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\TestCase;
 
 /**
- * @covers \App\Listeners\ResetUsersPreference
+ * ResetUsersPreferenceTest test class
  */
+#[CoversClass(ResetUsersPreference::class)]
 class ResetUsersPreferenceTest extends TestCase
 {
     /**

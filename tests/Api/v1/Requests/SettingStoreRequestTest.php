@@ -7,16 +7,19 @@ use App\Facades\Settings;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\FeatureTestCase;
 
 /**
- * @covers \App\Api\v1\Requests\SettingStoreRequest
+ * SettingStoreRequestTest test class
  */
+#[CoversClass(SettingStoreRequest::class)]
 class SettingStoreRequestTest extends FeatureTestCase
 {
     use WithoutMiddleware;
 
-    protected String $uniqueKey = 'UniqueKey';
+    const UNIQUE_KEY = 'UniqueKey';
 
     /**
      * @test
@@ -33,8 +36,9 @@ class SettingStoreRequestTest extends FeatureTestCase
     }
 
     /**
-     * @dataProvider provideValidData
+     * @test
      */
+    #[DataProvider('provideValidData')]
     public function test_valid_data(array $data) : void
     {
         $request   = new SettingStoreRequest();
@@ -46,7 +50,7 @@ class SettingStoreRequestTest extends FeatureTestCase
     /**
      * Provide Valid data for validation test
      */
-    public function provideValidData() : array
+    public static function provideValidData() : array
     {
         return [
             [[
@@ -65,11 +69,12 @@ class SettingStoreRequestTest extends FeatureTestCase
     }
 
     /**
-     * @dataProvider provideInvalidData
+     * @test
      */
+    #[DataProvider('provideInvalidData')]
     public function test_invalid_data(array $data) : void
     {
-        Settings::set($this->uniqueKey, 'uniqueValue');
+        Settings::set(self::UNIQUE_KEY, 'uniqueValue');
 
         $request   = new SettingStoreRequest();
         $validator = Validator::make($data, $request->rules());
@@ -80,7 +85,7 @@ class SettingStoreRequestTest extends FeatureTestCase
     /**
      * Provide invalid data for validation test
      */
-    public function provideInvalidData() : array
+    public static function provideInvalidData() : array
     {
         return [
             [[
@@ -100,7 +105,7 @@ class SettingStoreRequestTest extends FeatureTestCase
                 'value' => 'MyValue',
             ]],
             [[
-                'key'   => $this->uniqueKey, // unique
+                'key'   => self::UNIQUE_KEY, // unique
                 'value' => 'MyValue',
             ]],
         ];

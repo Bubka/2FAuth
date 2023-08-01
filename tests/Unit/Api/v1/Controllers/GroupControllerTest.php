@@ -13,11 +13,13 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Http\Request;
 use Mockery;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\TestCase;
 
 /**
- * @covers \App\Api\v1\Controllers\GroupController
+ * GroupControllerTest test class
  */
+#[CoversClass(GroupController::class)]
 class GroupControllerTest extends TestCase
 {
     use WithoutMiddleware;

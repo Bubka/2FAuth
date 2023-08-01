@@ -4,11 +4,13 @@ namespace Tests\Unit\Events;
 
 use App\Events\GroupDeleting;
 use App\Models\Group;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\TestCase;
 
 /**
- * @covers \App\Events\GroupDeleting
+ * GroupDeletingTest test class
  */
+#[CoversClass(GroupDeleting::class)]
 class GroupDeletingTest extends TestCase
 {
     /**

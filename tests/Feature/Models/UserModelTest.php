@@ -3,11 +3,13 @@
 namespace Tests\Feature\Models;
 
 use App\Models\User;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\FeatureTestCase;
 
 /**
- * @covers \App\Models\User
+ * UserModelTest test class
  */
+#[CoversClass(User::class)]
 class UserModelTest extends FeatureTestCase
 {
     /**

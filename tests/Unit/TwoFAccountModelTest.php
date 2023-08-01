@@ -9,11 +9,16 @@ use App\Services\SettingService;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Crypt;
 use Mockery\MockInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\PreserveGlobalState;
+use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use Tests\ModelTestCase;
 
 /**
- * @covers \App\Models\TwoFAccount
+ * TwoFAccountModelTest test class
  */
+#[CoversClass(TwoFAccount::class)]
 class TwoFAccountModelTest extends ModelTestCase
 {
     /**
@@ -39,9 +44,8 @@ class TwoFAccountModelTest extends ModelTestCase
 
     /**
      * @test
-     *
-     * @dataProvider provideSensitiveAttributes
      */
+    #[DataProvider('provideSensitiveAttributes')]
     public function test_sensitive_attributes_are_stored_encrypted(string $attribute)
     {
         $settingService = $this->mock(SettingService::class, function (MockInterface $settingService) {
@@ -60,7 +64,7 @@ class TwoFAccountModelTest extends ModelTestCase
     /**
      * Provide attributes to test for encryption
      */
-    public function provideSensitiveAttributes() : array
+    public static function provideSensitiveAttributes() : array
     {
         return [
             [
@@ -77,9 +81,8 @@ class TwoFAccountModelTest extends ModelTestCase
 
     /**
      * @test
-     *
-     * @dataProvider provideSensitiveAttributes
      */
+    #[DataProvider('provideSensitiveAttributes')]
     public function test_sensitive_attributes_are_returned_clear(string $attribute)
     {
         $settingService = $this->mock(SettingService::class, function (MockInterface $settingService) {
@@ -95,9 +98,8 @@ class TwoFAccountModelTest extends ModelTestCase
 
     /**
      * @test
-     *
-     * @dataProvider provideSensitiveAttributes
      */
+    #[DataProvider('provideSensitiveAttributes')]
     public function test_indecipherable_attributes_returns_masked_value(string $attribute)
     {
         $settingService = $this->mock(SettingService::class, function (MockInterface $settingService) {
@@ -116,11 +118,9 @@ class TwoFAccountModelTest extends ModelTestCase
 
     /**
      * @test
-     *
-     * @runInSeparateProcess
-     *
-     * @preserveGlobalState disabled
      */
+    #[RunInSeparateProcess]
+    #[PreserveGlobalState(false)]
     public function test_secret_is_uppercased_and_padded_at_setup()
     {
         $settingService = $this->mock(SettingService::class, function (MockInterface $settingService) {

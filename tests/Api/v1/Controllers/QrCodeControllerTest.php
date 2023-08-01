@@ -2,14 +2,17 @@
 
 namespace Tests\Api\v1\Controllers;
 
+use App\Api\v1\Controllers\QrCodeController;
 use App\Models\TwoFAccount;
 use App\Models\User;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\Classes\LocalFile;
 use Tests\FeatureTestCase;
 
 /**
- * @covers \App\Api\v1\Controllers\QrCodeController
+ * QrCodeController test class
  */
+#[CoversClass(QrCodeController::class)]
 class QrCodeControllerTest extends FeatureTestCase
 {
     /**

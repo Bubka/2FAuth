@@ -3,15 +3,19 @@
 namespace Tests\Api\v1\Requests;
 
 use App\Api\v1\Requests\TwoFAccountStoreRequest;
+use App\Rules\IsBase32Encoded;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 /**
- * @covers \App\Api\v1\Requests\TwoFAccountStoreRequest
- * @covers \App\Rules\IsBase32Encoded
+ * TwoFAccountStoreRequestTest test class
  */
+#[CoversClass(TwoFAccountStoreRequest::class)]
+#[CoversClass(IsBase32Encoded::class)]
 class TwoFAccountStoreRequestTest extends TestCase
 {
     use WithoutMiddleware;
@@ -31,8 +35,9 @@ class TwoFAccountStoreRequestTest extends TestCase
     }
 
     /**
-     * @dataProvider provideValidData
+     * @test
      */
+    #[DataProvider('provideValidData')]
     public function test_valid_data(array $data) : void
     {
         $request   = new TwoFAccountStoreRequest();
@@ -44,7 +49,7 @@ class TwoFAccountStoreRequestTest extends TestCase
     /**
      * Provide Valid data for validation test
      */
-    public function provideValidData() : array
+    public static function provideValidData() : array
     {
         return [
             [[
@@ -106,8 +111,9 @@ class TwoFAccountStoreRequestTest extends TestCase
     }
 
     /**
-     * @dataProvider provideInvalidData
+     * @test
      */
+    #[DataProvider('provideInvalidData')]
     public function test_invalid_data(array $data) : void
     {
         $request   = new TwoFAccountStoreRequest();
@@ -119,7 +125,7 @@ class TwoFAccountStoreRequestTest extends TestCase
     /**
      * Provide invalid data for validation test
      */
-    public function provideInvalidData() : array
+    public static function provideInvalidData() : array
     {
         return [
             [[

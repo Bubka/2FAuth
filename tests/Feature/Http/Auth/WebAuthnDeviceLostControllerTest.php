@@ -2,19 +2,25 @@
 
 namespace Tests\Feature\Http\Auth;
 
+use App\Extensions\WebauthnCredentialBroker;
+use App\Http\Controllers\Auth\WebAuthnDeviceLostController;
+use App\Http\Requests\WebauthnDeviceLostRequest;
 use App\Models\User;
 use App\Notifications\WebauthnRecoveryNotification;
+use App\Providers\AuthServiceProvider;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Notification;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\FeatureTestCase;
 
 /**
- * @covers  \App\Http\Controllers\Auth\WebAuthnDeviceLostController
- * @covers  \App\Notifications\WebauthnRecoveryNotification
- * @covers  \App\Extensions\WebauthnCredentialBroker
- * @covers  \App\Http\Requests\WebauthnDeviceLostRequest
- * @covers  \App\Providers\AuthServiceProvider
+ * WebAuthnDeviceLostControllerTest test class
  */
+#[CoversClass(WebAuthnDeviceLostController::class)]
+#[CoversClass(WebauthnRecoveryNotification::class)]
+#[CoversClass(WebauthnCredentialBroker::class)]
+#[CoversClass(WebauthnDeviceLostRequest::class)]
+#[CoversClass(AuthServiceProvider::class)]
 class WebAuthnDeviceLostControllerTest extends FeatureTestCase
 {
     /**

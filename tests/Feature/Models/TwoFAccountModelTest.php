@@ -9,13 +9,16 @@ use Illuminate\Http\Testing\FileFactory;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Mockery\MockInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\Data\HttpRequestTestData;
 use Tests\Data\OtpTestData;
 use Tests\FeatureTestCase;
 
 /**
- * @covers \App\Models\TwoFAccount
+ * TwoFAccountModelTest test class
  */
+#[CoversClass(TwoFAccount::class)]
 class TwoFAccountModelTest extends FeatureTestCase
 {
     /**
@@ -739,9 +742,8 @@ class TwoFAccountModelTest extends FeatureTestCase
 
     /**
      * @test
-     *
-     * @dataProvider iconResourceProvider
      */
+    #[DataProvider('iconResourceProvider')]
     public function test_set_icon_stores_and_set_the_icon($res, $ext)
     {
         Storage::fake('imagesLink');
@@ -759,7 +761,7 @@ class TwoFAccountModelTest extends FeatureTestCase
     /**
      * Provide data for Icon store tests
      */
-    public function iconResourceProvider()
+    public static function iconResourceProvider()
     {
         return [
             'PNG' => [
@@ -787,9 +789,8 @@ class TwoFAccountModelTest extends FeatureTestCase
 
     /**
      * @test
-     *
-     * @dataProvider invalidIconResourceProvider
      */
+    #[DataProvider('invalidIconResourceProvider')]
     public function test_set_invalid_icon_ends_without_error($res, $ext)
     {
         Storage::fake('imagesLink');
@@ -807,7 +808,7 @@ class TwoFAccountModelTest extends FeatureTestCase
     /**
      * Provide data for Icon store tests
      */
-    public function invalidIconResourceProvider()
+    public static function invalidIconResourceProvider()
     {
         return [
             'INVALID_PNG' => [

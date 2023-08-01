@@ -9,11 +9,13 @@ use App\Services\SettingService;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
 use Mockery\MockInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\TestCase;
 
 /**
- * @covers \App\Listeners\CleanIconStorage
+ * CleanIconStorageTest test class
  */
+#[CoversClass(CleanIconStorage::class)]
 class CleanIconStorageTest extends TestCase
 {
     /**

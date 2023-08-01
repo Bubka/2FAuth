@@ -3,13 +3,16 @@
 namespace Tests\Feature\Services;
 
 use App\Facades\QrCode;
+use App\Services\QrCodeService;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\Classes\LocalFile;
 use Tests\FeatureTestCase;
 
 /**
- * @covers \App\Services\QrCodeService
- * @covers \App\Facades\QrCode
+ * QrCodeServiceTest test class
  */
+#[CoversClass(QrCodeService::class)]
+#[CoversClass(QrCode::class)]
 class QrCodeServiceTest extends FeatureTestCase
 {
     private const STRING_TO_ENCODE = 'stringToEncode';

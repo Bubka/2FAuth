@@ -2,16 +2,21 @@
 
 namespace Tests\Feature\Http\Auth;
 
+use App\Http\Controllers\Auth\WebAuthnManageController;
+use App\Http\Middleware\RejectIfReverseProxy;
+use App\Models\Traits\WebAuthnManageCredentials;
 use App\Models\User;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\DB;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\FeatureTestCase;
 
 /**
- * @covers  \App\Http\Controllers\Auth\WebAuthnManageController
- * @covers  \App\Http\Middleware\RejectIfReverseProxy
- * @covers  \App\Models\Traits\WebAuthnManageCredentials
+ * WebAuthnManageControllerTest test class
  */
+#[CoversClass(WebAuthnManageController::class)]
+#[CoversClass(RejectIfReverseProxy::class)]
+#[CoversClass(WebAuthnManageCredentials::class)]
 class WebAuthnManageControllerTest extends FeatureTestCase
 {
     // use WithoutMiddleware;

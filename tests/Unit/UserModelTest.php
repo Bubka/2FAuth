@@ -5,11 +5,13 @@ namespace Tests\Unit;
 use App\Models\Group;
 use App\Models\TwoFAccount;
 use App\Models\User;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\ModelTestCase;
 
 /**
- * @covers \App\Models\User
+ * UserModelTest test class
  */
+#[CoversClass(User::class)]
 class UserModelTest extends ModelTestCase
 {
     /**

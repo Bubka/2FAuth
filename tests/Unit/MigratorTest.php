@@ -7,6 +7,7 @@ use App\Exceptions\InvalidMigrationDataException;
 use App\Exceptions\UnsupportedMigrationException;
 use App\Factories\MigratorFactory;
 use App\Models\TwoFAccount;
+use App\Providers\MigrationServiceProvider;
 use App\Services\Migrators\AegisMigrator;
 use App\Services\Migrators\GoogleAuthMigrator;
 use App\Services\Migrators\Migrator;
@@ -18,22 +19,27 @@ use Illuminate\Support\Facades\Storage;
 use Mockery;
 use Mockery\MockInterface;
 use ParagonIE\ConstantTime\Base32;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\PreserveGlobalState;
+use PHPUnit\Framework\Attributes\RunInSeparateProcess;
+use PHPUnit\Framework\Attributes\UsesClass;
 use Tests\Data\MigrationTestData;
 use Tests\Data\OtpTestData;
 use Tests\TestCase;
 
 /**
- * @covers \App\Providers\MigrationServiceProvider
- * @covers \App\Factories\MigratorFactory
- * @covers \App\Services\Migrators\Migrator
- * @covers \App\Services\Migrators\AegisMigrator
- * @covers \App\Services\Migrators\TwoFASMigrator
- * @covers \App\Services\Migrators\PlainTextMigrator
- * @covers \App\Services\Migrators\GoogleAuthMigrator
- * @covers \App\Services\Migrators\TwoFAuthMigrator
- *
- * @uses \App\Models\TwoFAccount
+ * MigratorTest test class
  */
+#[CoversClass(MigrationServiceProvider::class)]
+#[CoversClass(MigratorFactory::class)]
+#[CoversClass(Migrator::class)]
+#[CoversClass(AegisMigrator::class)]
+#[CoversClass(TwoFASMigrator::class)]
+#[CoversClass(PlainTextMigrator::class)]
+#[CoversClass(GoogleAuthMigrator::class)]
+#[CoversClass(TwoFAuthMigrator::class)]
+#[UsesClass(TwoFAccount::class)]
 class MigratorTest extends TestCase
 {
     /**
@@ -137,9 +143,8 @@ class MigratorTest extends TestCase
 
     /**
      * @test
-     *
-     * @dataProvider validMigrationsProvider
      */
+    #[DataProvider('validMigrationsProvider')]
     public function test_migrate_returns_consistent_accounts(Migrator $migrator, mixed $payload, string $expected, bool $hasSteam)
     {
         $accounts = $migrator->migrate($payload);
@@ -170,7 +175,7 @@ class MigratorTest extends TestCase
     /**
      * Provide data for TwoFAccount store tests
      */
-    public function validMigrationsProvider()
+    public static function validMigrationsProvider()
     {
         return [
             'PLAIN_TEXT_PAYLOAD' => [
@@ -214,9 +219,8 @@ class MigratorTest extends TestCase
 
     /**
      * @test
-     *
-     * @dataProvider invalidMigrationsProvider
      */
+    #[DataProvider('invalidMigrationsProvider')]
     public function test_migrate_with_invalid_payload_returns_InvalidMigrationDataException(Migrator $migrator, mixed $payload)
     {
         $this->expectException(InvalidMigrationDataException::class);
@@ -227,7 +231,7 @@ class MigratorTest extends TestCase
     /**
      * Provide data for TwoFAccount store tests
      */
-    public function invalidMigrationsProvider()
+    public static function invalidMigrationsProvider()
     {
         return [
             'INVALID_PLAIN_TEXT_NO_URI' => [
@@ -284,9 +288,8 @@ class MigratorTest extends TestCase
 
     /**
      * @test
-     *
-     * @dataProvider migrationWithInvalidAccountsProvider
      */
+    #[DataProvider('migrationWithInvalidAccountsProvider')]
     public function test_migrate_returns_fake_accounts(Migrator $migrator, mixed $payload)
     {
         $accounts = $migrator->migrate($payload);
@@ -303,7 +306,7 @@ class MigratorTest extends TestCase
     /**
      * Provide data for TwoFAccount store tests
      */
-    public function migrationWithInvalidAccountsProvider()
+    public static function migrationWithInvalidAccountsProvider()
     {
         return [
             'PLAIN_TEXT_PAYLOAD_WITH_INVALID_URI' => [
@@ -327,11 +330,9 @@ class MigratorTest extends TestCase
 
     /**
      * @test
-     *
-     * @runInSeparateProcess
-     *
-     * @preserveGlobalState disabled
      */
+    #[RunInSeparateProcess]
+    #[PreserveGlobalState(false)]
     public function test_migrate_gauth_returns_fake_accounts()
     {
         $this->mock('alias:' . Base32::class, function (MockInterface $baseEncoder) {
@@ -353,9 +354,8 @@ class MigratorTest extends TestCase
 
     /**
      * @test
-     *
-     * @dataProvider AegisWithIconMigrationProvider
      */
+    #[DataProvider('AegisWithIconMigrationProvider')]
     public function test_migrate_aegis_payload_with_icon_sets_and_stores_the_icon($migration)
     {
         Storage::fake('icons');
@@ -372,7 +372,7 @@ class MigratorTest extends TestCase
     /**
      * Provide data for TwoFAccount store tests
      */
-    public function AegisWithIconMigrationProvider()
+    public static function AegisWithIconMigrationProvider()
     {
         return [
             'SVG' => [
@@ -406,9 +406,8 @@ class MigratorTest extends TestCase
 
     /**
      * @test
-     *
-     * @dataProvider TwoFAuthWithIconMigrationProvider
      */
+    #[DataProvider('TwoFAuthWithIconMigrationProvider')]
     public function test_migrate_2fauth_payload_with_icon_sets_and_stores_the_icon($migration)
     {
         Storage::fake('icons');
@@ -425,7 +424,7 @@ class MigratorTest extends TestCase
     /**
      * Provide data for TwoFAccount store tests
      */
-    public function TwoFAuthWithIconMigrationProvider()
+    public static function TwoFAuthWithIconMigrationProvider()
     {
         return [
             'SVG' => [
@@ -465,9 +464,8 @@ class MigratorTest extends TestCase
 
     /**
      * @test
-     *
-     * @dataProvider factoryProvider
      */
+    #[DataProvider('factoryProvider')]
     public function test_factory_returns_relevant_migrator($payload, $migratorClass)
     {
         $factory = new MigratorFactory();
@@ -480,7 +478,7 @@ class MigratorTest extends TestCase
     /**
      * Provide data for TwoFAccount store tests
      */
-    public function factoryProvider()
+    public static function factoryProvider()
     {
         return [
             'VALID_PLAIN_TEXT_PAYLOAD' => [
@@ -523,9 +521,8 @@ class MigratorTest extends TestCase
 
     /**
      * @test
-     *
-     * @dataProvider encryptedMigrationDataProvider
      */
+    #[DataProvider('encryptedMigrationDataProvider')]
     public function test_factory_throw_EncryptedMigrationException($payload)
     {
         $this->expectException(EncryptedMigrationException::class);
@@ -538,7 +535,7 @@ class MigratorTest extends TestCase
     /**
      * Provide data for TwoFAccount store tests
      */
-    public function encryptedMigrationDataProvider()
+    public static function encryptedMigrationDataProvider()
     {
         return [
             'ENCRYPTED_AEGIS_JSON_MIGRATION_PAYLOAD' => [

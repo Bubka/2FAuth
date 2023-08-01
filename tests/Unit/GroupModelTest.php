@@ -7,11 +7,13 @@ use App\Events\GroupDeleting;
 use App\Models\Group;
 use App\Models\TwoFAccount;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\ModelTestCase;
 
 /**
- * @covers \App\Models\Group
+ * GroupModelTest test class
  */
+#[CoversClass(Group::class)]
 class GroupModelTest extends ModelTestCase
 {
     /**

@@ -6,13 +6,16 @@ use App\Facades\Groups;
 use App\Models\Group;
 use App\Models\TwoFAccount;
 use App\Models\User;
+use App\Services\GroupService;
 use Illuminate\Auth\Access\AuthorizationException;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\FeatureTestCase;
 
 /**
- * @covers \App\Services\GroupService
- * @covers \App\Facades\Groups
+ * GroupServiceTest test class
  */
+#[CoversClass(GroupService::class)]
+#[CoversClass(Groups::class)]
 class GroupServiceTest extends FeatureTestCase
 {
     /**

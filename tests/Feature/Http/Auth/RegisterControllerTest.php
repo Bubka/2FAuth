@@ -3,14 +3,18 @@
 namespace Tests\Feature\Http\Auth;
 
 use App\Facades\Settings;
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Requests\UserStoreRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\FeatureTestCase;
 
 /**
- * @covers  \App\Http\Controllers\Auth\RegisterController
- * @covers  \App\Http\Requests\UserStoreRequest
+ * RegisterControllerTest test class
  */
+#[CoversClass(RegisterController::class)]
+#[CoversClass(UserStoreRequest::class)]
 class RegisterControllerTest extends FeatureTestCase
 {
     private const USERNAME = 'john doe';

@@ -7,12 +7,14 @@ use App\Facades\Settings;
 use Facades\App\Services\ReleaseRadarService;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Http;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\Data\HttpRequestTestData;
 use Tests\FeatureTestCase;
 
 /**
- * @covers \App\Services\ReleaseRadarService
+ * ReleaseRadarServiceTest test class
  */
+#[CoversClass(App\Services\ReleaseRadarService::class)]
 class ReleaseRadarServiceTest extends FeatureTestCase
 {
     use WithoutMiddleware;

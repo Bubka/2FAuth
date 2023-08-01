@@ -2,16 +2,19 @@
 
 namespace Tests\Feature\Http\Auth;
 
+use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Password;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\FeatureTestCase;
 
 /**
- * @covers  \App\Http\Controllers\Auth\ResetPasswordController
- * @covers  \App\Models\User
+ * ResetPasswordControllerTest test class
  */
+#[CoversClass(ResetPasswordController::class)]
+#[CoversClass(User::class)]
 class ResetPasswordControllerTest extends FeatureTestCase
 {
     /**

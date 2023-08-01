@@ -2,12 +2,15 @@
 
 namespace Tests\Feature\Http\Auth;
 
+use App\Http\Controllers\Auth\PasswordController;
 use App\Models\User;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\FeatureTestCase;
 
 /**
- * @covers  \App\Http\Controllers\Auth\PasswordController
+ * PasswordControllerTest test class
  */
+#[CoversClass(PasswordController::class)]
 class PasswordControllerTest extends FeatureTestCase
 {
     /**

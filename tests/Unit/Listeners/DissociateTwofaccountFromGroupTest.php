@@ -8,20 +8,22 @@ use App\Models\Group;
 use App\Models\TwoFAccount;
 use Illuminate\Support\Facades\Event;
 use Mockery\MockInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\PreserveGlobalState;
+use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use Tests\TestCase;
 
 /**
- * @covers \App\Listeners\DissociateTwofaccountFromGroup
+ * DissociateTwofaccountFromGroupTest test class
  */
+#[CoversClass(DissociateTwofaccountFromGroup::class)]
 class DissociateTwofaccountFromGroupTest extends TestCase
 {
     /**
      * @test
-     *
-     * @runInSeparateProcess
-     *
-     * @preserveGlobalState disabled
      */
+    #[RunInSeparateProcess]
+    #[PreserveGlobalState(false)]
     public function test_twofaccount_is_released_on_group_deletion()
     {
         $this->mock('alias:' . TwoFAccount::class, function (MockInterface $twoFAccount) {

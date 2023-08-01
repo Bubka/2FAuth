@@ -2,28 +2,40 @@
 
 namespace Tests\Api\v1\Controllers;
 
+use App\Api\v1\Controllers\TwoFAccountController;
+use App\Api\v1\Resources\TwoFAccountCollection;
+use App\Api\v1\Resources\TwoFAccountExportCollection;
+use App\Api\v1\Resources\TwoFAccountExportResource;
+use App\Api\v1\Resources\TwoFAccountReadResource;
+use App\Api\v1\Resources\TwoFAccountStoreResource;
 use App\Facades\Settings;
 use App\Models\Group;
 use App\Models\TwoFAccount;
 use App\Models\User;
+use App\Policies\TwoFAccountPolicy;
+use App\Providers\MigrationServiceProvider;
+use App\Providers\TwoFAuthServiceProvider;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\Classes\LocalFile;
 use Tests\Data\MigrationTestData;
 use Tests\Data\OtpTestData;
 use Tests\FeatureTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
- * @covers \App\Api\v1\Controllers\TwoFAccountController
- * @covers \App\Api\v1\Resources\TwoFAccountCollection
- * @covers \App\Api\v1\Resources\TwoFAccountReadResource
- * @covers \App\Api\v1\Resources\TwoFAccountStoreResource
- * @covers \App\Api\v1\Resources\TwoFAccountExportResource
- * @covers \App\Api\v1\Resources\TwoFAccountExportCollection
- * @covers \App\Providers\MigrationServiceProvider
- * @covers \App\Providers\TwoFAuthServiceProvider
- * @covers \App\Policies\TwoFAccountPolicy
+ * TwoFAccountControllerTest test class
  */
+#[CoversClass(TwoFAccountController::class)]
+#[CoversClass(TwoFAccountCollection::class)]
+#[CoversClass(TwoFAccountReadResource::class)]
+#[CoversClass(TwoFAccountStoreResource::class)]
+#[CoversClass(TwoFAccountExportResource::class)]
+#[CoversClass(TwoFAccountExportCollection::class)]
+#[CoversClass(MigrationServiceProvider::class)]
+#[CoversClass(TwoFAuthServiceProvider::class)]
+#[CoversClass(TwoFAccountPolicy::class)]
 class TwoFAccountControllerTest extends FeatureTestCase
 {
     /**
@@ -198,9 +210,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
 
     /**
      * @test
-     *
-     * @dataProvider indexUrlParameterProvider
      */
+    #[DataProvider('indexUrlParameterProvider')]
     public function test_index_returns_user_twofaccounts_only($urlParameter, $expected)
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -227,7 +238,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
     /**
      * Provide data for index tests
      */
-    public function indexUrlParameterProvider()
+    public static function indexUrlParameterProvider()
     {
         return [
             'VALID_RESOURCE_STRUCTURE_WITHOUT_SECRET' => [
@@ -315,10 +326,9 @@ class TwoFAccountControllerTest extends FeatureTestCase
     }
 
     /**
-     * @dataProvider accountCreationProvider
-     *
      * @test
      */
+    #[DataProvider('accountCreationProvider')]
     public function test_store_without_encryption_returns_success_with_consistent_resource_structure($payload, $expected)
     {
         Settings::set('useEncryption', false);
@@ -332,10 +342,9 @@ class TwoFAccountControllerTest extends FeatureTestCase
     }
 
     /**
-     * @dataProvider accountCreationProvider
-     *
      * @test
      */
+    #[DataProvider('accountCreationProvider')]
     public function test_store_with_encryption_returns_success_with_consistent_resource_structure($payload, $expected)
     {
         Settings::set('useEncryption', true);
@@ -351,7 +360,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
     /**
      * Provide data for TwoFAccount store tests
      */
-    public function accountCreationProvider()
+    public static function accountCreationProvider()
     {
         return [
             'TOTP_FULL_CUSTOM_URI' => [
@@ -747,9 +756,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
 
     /**
      * @test
-     *
-     * @dataProvider invalidAegisJsonFileProvider
      */
+    #[DataProvider('invalidAegisJsonFileProvider')]
     public function test_migrate_invalid_aegis_json_file_returns_bad_request($file)
     {
         $response = $this->withHeaders(['Content-Type' => 'multipart/form-data'])
@@ -763,7 +771,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
     /**
      * Provide invalid Aegis JSON files for import tests
      */
-    public function invalidAegisJsonFileProvider()
+    public static function invalidAegisJsonFileProvider()
     {
         return [
             'encryptedAegisJsonFile' => [
@@ -777,9 +785,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
 
     /**
      * @test
-     *
-     * @dataProvider validPlainTextFileProvider
      */
+    #[DataProvider('validPlainTextFileProvider')]
     public function test_migrate_valid_plain_text_file_returns_success($file)
     {
         $response = $this->withHeaders(['Content-Type' => 'multipart/form-data'])
@@ -828,7 +835,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
     /**
      * Provide valid Plain Text files for import tests
      */
-    public function validPlainTextFileProvider()
+    public static function validPlainTextFileProvider()
     {
         return [
             'validPlainTextFile' => [
@@ -842,9 +849,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
 
     /**
      * @test
-     *
-     * @dataProvider invalidPlainTextFileProvider
      */
+    #[DataProvider('invalidPlainTextFileProvider')]
     public function test_migrate_invalid_plain_text_file_returns_bad_request($file)
     {
         $response = $this->withHeaders(['Content-Type' => 'multipart/form-data'])
@@ -858,7 +864,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
     /**
      * Provide invalid Plain Text files for import tests
      */
-    public function invalidPlainTextFileProvider()
+    public static function invalidPlainTextFileProvider()
     {
         return [
             'invalidPlainTextFileEmpty' => [

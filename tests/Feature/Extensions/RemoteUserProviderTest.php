@@ -4,13 +4,16 @@ namespace Tests\Feature\Extensions;
 
 use App\Extensions\RemoteUserProvider;
 use App\Models\User;
+use App\Services\Auth\ReverseProxyGuard;
 use Illuminate\Support\Facades\Config;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\FeatureTestCase;
 
 /**
- * @covers \App\Extensions\RemoteUserProvider
- * @covers \App\Services\Auth\ReverseProxyGuard
+ * RemoteUserProviderTest test class
  */
+#[CoversClass(RemoteUserProvider::class)]
+#[CoversClass(ReverseProxyGuard::class)]
 class RemoteUserProviderTest extends FeatureTestCase
 {
     private const USER_NAME = 'John';

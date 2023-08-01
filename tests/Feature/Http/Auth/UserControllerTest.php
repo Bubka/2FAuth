@@ -2,17 +2,22 @@
 
 namespace Tests\Feature\Http\Auth;
 
+use App\Http\Controllers\Auth\UserController;
+use App\Http\Middleware\RejectIfDemoMode;
+use App\Http\Requests\UserUpdateRequest;
 use App\Models\Group;
 use App\Models\TwoFAccount;
 use App\Models\User;
 use Illuminate\Support\Facades\Config;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\FeatureTestCase;
 
 /**
- * @covers  \App\Http\Controllers\Auth\UserController
- * @covers  \App\Http\Middleware\RejectIfDemoMode
- * @covers  \App\Http\Requests\UserUpdateRequest
+ * UserControllerTest test class
  */
+#[CoversClass(UserController::class)]
+#[CoversClass(RejectIfDemoMode::class)]
+#[CoversClass(UserUpdateRequest::class)]
 class UserControllerTest extends FeatureTestCase
 {
     /**

@@ -8,12 +8,15 @@ use App\Services\SettingService;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\FeatureTestCase;
 
 /**
- * @covers \App\Services\SettingService
- * @covers \App\Facades\Settings
+ * SettingServiceTest test class
  */
+#[CoversClass(SettingService::class)]
+#[CoversClass(Settings::class)]
 class SettingServiceTest extends FeatureTestCase
 {
     /**
@@ -237,9 +240,8 @@ class SettingServiceTest extends FeatureTestCase
 
     /**
      * @test
-     *
-     * @dataProvider provideUndecipherableData
      */
+    #[DataProvider('provideUndecipherableData')]
     public function test_set_useEncryption_off_returns_exception_when_data_are_undecipherable(array $data)
     {
         $this->expectException(\App\Exceptions\DbEncryptionException::class);
@@ -258,7 +260,7 @@ class SettingServiceTest extends FeatureTestCase
     /**
      * Provide invalid data for validation test
      */
-    public function provideUndecipherableData() : array
+    public static function provideUndecipherableData() : array
     {
         return [
             [[

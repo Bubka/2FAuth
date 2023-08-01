@@ -7,11 +7,13 @@ use App\Api\v1\Requests\TwoFAccountStoreRequest;
 use App\Api\v1\Requests\TwoFAccountUriRequest;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Auth;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\TestCase;
 
 /**
- * @covers \App\Api\v1\Requests\TwoFAccountDynamicRequest
+ * TwoFAccountDynamicRequestTest test class
  */
+#[CoversClass(TwoFAccountDynamicRequest::class)]
 class TwoFAccountDynamicRequestTest extends TestCase
 {
     use WithoutMiddleware;

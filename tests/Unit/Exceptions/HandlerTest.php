@@ -15,18 +15,20 @@ use App\Exceptions\UnsupportedOtpTypeException;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 /**
- * @covers \App\Exceptions\Handler
+ * HandlerTest test class
  */
+#[CoversClass(Handler::class)]
 class HandlerTest extends TestCase
 {
     /**
      * @test
-     *
-     * @dataProvider provideExceptionsforBadRequest
      */
+    #[DataProvider('provideExceptionsforBadRequest')]
     public function test_exceptions_returns_badRequest_json_response($exception)
     {
         $request  = $this->createMock(Request::class);
@@ -50,7 +52,7 @@ class HandlerTest extends TestCase
     /**
      * Provide Valid data for validation test
      */
-    public function provideExceptionsforBadRequest() : array
+    public static function provideExceptionsforBadRequest() : array
     {
         return [
             [
@@ -85,9 +87,8 @@ class HandlerTest extends TestCase
 
     /**
      * @test
-     *
-     * @dataProvider provideExceptionsforNotFound
      */
+    #[DataProvider('provideExceptionsforNotFound')]
     public function test_exceptions_returns_notFound_json_response($exception)
     {
         $request  = $this->createMock(Request::class);
@@ -111,7 +112,7 @@ class HandlerTest extends TestCase
     /**
      * Provide Valid data for validation test
      */
-    public function provideExceptionsforNotFound() : array
+    public static function provideExceptionsforNotFound() : array
     {
         return [
             [

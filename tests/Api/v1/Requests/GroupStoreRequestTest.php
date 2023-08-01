@@ -9,11 +9,14 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Mockery;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\FeatureTestCase;
 
 /**
- * @covers \App\Api\v1\Requests\GroupStoreRequest
+ * GroupStoreRequestTest test class
  */
+#[CoversClass(GroupStoreRequest::class)]
 class GroupStoreRequestTest extends FeatureTestCase
 {
     use WithoutMiddleware;
@@ -23,7 +26,7 @@ class GroupStoreRequestTest extends FeatureTestCase
      */
     protected $user;
 
-    protected String $uniqueGroupName = 'MyGroup';
+    const UNIQUE_GROUP_NAME = 'MyGroup';
 
     /**
      * @test
@@ -50,8 +53,9 @@ class GroupStoreRequestTest extends FeatureTestCase
     }
 
     /**
-     * @dataProvider provideValidData
+     * @test
      */
+    #[DataProvider('provideValidData')]
     public function test_valid_data(array $data) : void
     {
         $request = Mockery::mock(GroupStoreRequest::class)->makePartial();
@@ -66,7 +70,7 @@ class GroupStoreRequestTest extends FeatureTestCase
     /**
      * Provide Valid data for validation test
      */
-    public function provideValidData() : array
+    public static function provideValidData() : array
     {
         return [
             [[
@@ -76,12 +80,13 @@ class GroupStoreRequestTest extends FeatureTestCase
     }
 
     /**
-     * @dataProvider provideInvalidData
+     * @test
      */
+    #[DataProvider('provideInvalidData')]
     public function test_invalid_data(array $data) : void
     {
         $group = Group::factory()->for($this->user)->create([
-            'name' => $this->uniqueGroupName,
+            'name' => self::UNIQUE_GROUP_NAME,
         ]);
 
         $request = Mockery::mock(GroupStoreRequest::class)->makePartial();
@@ -96,7 +101,7 @@ class GroupStoreRequestTest extends FeatureTestCase
     /**
      * Provide invalid data for validation test
      */
-    public function provideInvalidData() : array
+    public static function provideInvalidData() : array
     {
         return [
             [[
@@ -109,7 +114,7 @@ class GroupStoreRequestTest extends FeatureTestCase
                 'name' => 'mmmmmmoooooorrrrrreeeeeeettttttthhhhhhaaaaaaannnnnn32cccccchhhhhaaaaaarrrrrrsssssss', // max:32
             ]],
             [[
-                'name' => $this->uniqueGroupName, // unique
+                'name' => self::UNIQUE_GROUP_NAME, // unique
             ]],
         ];
     }

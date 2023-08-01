@@ -6,12 +6,14 @@ use App\Services\LogoService;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\Data\HttpRequestTestData;
 use Tests\TestCase;
 
 /**
- * @covers \App\Services\LogoService
+ * LogoServiceTest test class
  */
+#[CoversClass(LogoService::class)]
 class LogoServiceTest extends TestCase
 {
     use WithoutMiddleware;

@@ -6,11 +6,14 @@ use App\Http\Requests\UserPatchPwdRequest;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 /**
- * @covers \App\Http\Requests\UserPatchPwdRequest
+ * UserPatchPwdRequestTest test class
  */
+#[CoversClass(UserPatchPwdRequest::class)]
 class UserPatchPwdRequestTest extends TestCase
 {
     use WithoutMiddleware;
@@ -30,8 +33,9 @@ class UserPatchPwdRequestTest extends TestCase
     }
 
     /**
-     * @dataProvider provideValidData
+     * @test
      */
+    #[DataProvider('provideValidData')]
     public function test_valid_data(array $data) : void
     {
         $request   = new UserPatchPwdRequest();
@@ -43,7 +47,7 @@ class UserPatchPwdRequestTest extends TestCase
     /**
      * Provide Valid data for validation test
      */
-    public function provideValidData() : array
+    public static function provideValidData() : array
     {
         return [
             [[
@@ -55,8 +59,9 @@ class UserPatchPwdRequestTest extends TestCase
     }
 
     /**
-     * @dataProvider provideInvalidData
+     * @test
      */
+    #[DataProvider('provideInvalidData')]
     public function test_invalid_data(array $data) : void
     {
         $request   = new UserPatchPwdRequest();
@@ -68,7 +73,7 @@ class UserPatchPwdRequestTest extends TestCase
     /**
      * Provide invalid data for validation test
      */
-    public function provideInvalidData() : array
+    public static function provideInvalidData() : array
     {
         return [
             [[

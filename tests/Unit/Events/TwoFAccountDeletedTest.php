@@ -6,11 +6,13 @@ use App\Events\TwoFAccountDeleted;
 use App\Models\TwoFAccount;
 use App\Services\SettingService;
 use Mockery\MockInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\TestCase;
 
 /**
- * @covers \App\Events\TwoFAccountDeleted
+ * TwoFAccountDeletedTest test class
  */
+#[CoversClass(TwoFAccountDeleted::class)]
 class TwoFAccountDeletedTest extends TestCase
 {
     /**

@@ -2,18 +2,25 @@
 
 namespace Tests\Feature\Http\Auth;
 
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Middleware\RejectIfAuthenticated;
+use App\Http\Middleware\RejectIfDemoMode;
+use App\Http\Middleware\RejectIfReverseProxy;
+use App\Http\Middleware\SkipIfAuthenticated;
 use App\Models\User;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\FeatureTestCase;
 
 /**
- * @covers  \App\Http\Controllers\Auth\LoginController
- * @covers  \App\Http\Middleware\RejectIfAuthenticated
- * @covers  \App\Http\Middleware\RejectIfReverseProxy
- * @covers  \App\Http\Middleware\RejectIfDemoMode
- * @covers  \App\Http\Middleware\SkipIfAuthenticated
+ * LoginTest test class
  */
+#[CoversClass(LoginController::class)]
+#[CoversClass(RejectIfAuthenticated::class)]
+#[CoversClass(RejectIfReverseProxy::class)]
+#[CoversClass(RejectIfDemoMode::class)]
+#[CoversClass(SkipIfAuthenticated::class)]
 class LoginTest extends FeatureTestCase
 {
     /**

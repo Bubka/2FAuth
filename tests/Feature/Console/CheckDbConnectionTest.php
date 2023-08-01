@@ -2,12 +2,15 @@
 
 namespace Tests\Feature\Console;
 
+use App\Console\Commands\CheckDbConnection;
 use Illuminate\Support\Facades\DB;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\FeatureTestCase;
 
 /**
- * @covers \App\Console\Commands\CheckDbConnection
+ * CheckDbConnectionTest test class
  */
+#[CoversClass(CheckDbConnection::class)]
 class CheckDbConnectionTest extends FeatureTestCase
 {
     /**

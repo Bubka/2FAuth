@@ -3,18 +3,20 @@
 namespace Tests\Unit;
 
 use App\Helpers\Helpers;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 /**
- * @covers \App\Helpers\Helpers
+ * HelpersTest test class
  */
+#[CoversClass(Helpers::class)]
 class HelpersTest extends TestCase
 {
     /**
      * @test
-     *
-     * @dataProvider  versionNumberProvider
      */
+    #[DataProvider('versionNumberProvider')]
     public function test_cleanVersionNumber_returns_cleaned_version($dirtyVersion, $expected)
     {
         $cleanedVersion = Helpers::cleanVersionNumber($dirtyVersion);
@@ -25,7 +27,7 @@ class HelpersTest extends TestCase
     /**
      * Provide data for cleanVersionNumber() tests
      */
-    public function versionNumberProvider()
+    public static function versionNumberProvider()
     {
         return [
             [
@@ -49,9 +51,8 @@ class HelpersTest extends TestCase
 
     /**
      * @test
-     *
-     * @dataProvider  invalidVersionNumberProvider
      */
+    #[DataProvider('invalidVersionNumberProvider')]
     public function test_cleanVersionNumber_returns_false_with_invalid_semver($dirtyVersion)
     {
         $cleanedVersion = Helpers::cleanVersionNumber($dirtyVersion);
@@ -62,7 +63,7 @@ class HelpersTest extends TestCase
     /**
      * Provide data for cleanVersionNumber() tests
      */
-    public function invalidVersionNumberProvider()
+    public static function invalidVersionNumberProvider()
     {
         return [
             [
@@ -85,9 +86,8 @@ class HelpersTest extends TestCase
 
     /**
      * @test
-     *
-     * @dataProvider  toBase32PaddedStringProvider
      */
+    #[DataProvider('toBase32PaddedStringProvider')]
     public function test_toBase32Format_returns_base32_formated_string($str, $expected)
     {
         $base32str = Helpers::PadToBase32Format($str);
@@ -98,7 +98,7 @@ class HelpersTest extends TestCase
     /**
      * Provide data for cleanVersionNumber() tests
      */
-    public function toBase32PaddedStringProvider()
+    public static function toBase32PaddedStringProvider()
     {
         return [
             'SHORT_STRING' => [
@@ -138,9 +138,8 @@ class HelpersTest extends TestCase
 
     /**
      * @test
-     *
-     * @dataProvider  commaSeparatedToArrayProvider
      */
+    #[DataProvider('commaSeparatedToArrayProvider')]
     public function test_commaSeparatedToArray_returns_ids_in_array($str, $expected)
     {
         $array = Helpers::commaSeparatedToArray($str);
@@ -151,7 +150,7 @@ class HelpersTest extends TestCase
     /**
      * Provide data for cleanVersionNumber() tests
      */
-    public function commaSeparatedToArrayProvider()
+    public static function commaSeparatedToArrayProvider()
     {
         return [
             'NOMINAL' => [
@@ -167,9 +166,8 @@ class HelpersTest extends TestCase
 
     /**
      * @test
-     *
-     * @dataProvider  invalidCommaSeparatedToArrayProvider
      */
+    #[DataProvider('invalidCommaSeparatedToArrayProvider')]
     public function test_commaSeparatedToArray_returns_unchanged_ids($str, $expected)
     {
         $array = Helpers::commaSeparatedToArray($str);
@@ -180,7 +178,7 @@ class HelpersTest extends TestCase
     /**
      * Provide data for cleanVersionNumber() tests
      */
-    public function invalidCommaSeparatedToArrayProvider()
+    public static function invalidCommaSeparatedToArrayProvider()
     {
         return [
             'INVALID_IDS_LEADING_SPACES' => [

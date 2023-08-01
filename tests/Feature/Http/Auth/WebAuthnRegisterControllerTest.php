@@ -2,17 +2,20 @@
 
 namespace Tests\Feature\Http\Auth;
 
+use App\Http\Controllers\Auth\WebAuthnRegisterController;
 use App\Models\User;
 use Illuminate\Support\Facades\Config;
 use Laragear\WebAuthn\Http\Requests\AttestationRequest;
 use Laragear\WebAuthn\Http\Requests\AttestedRequest;
 use Laragear\WebAuthn\JsonTransport;
 use Laragear\WebAuthn\WebAuthn;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\FeatureTestCase;
 
 /**
- * @covers  \App\Http\Controllers\Auth\WebAuthnRegisterController
+ * WebAuthnRegisterControllerTest test class
  */
+#[CoversClass(WebAuthnRegisterController::class)]
 class WebAuthnRegisterControllerTest extends FeatureTestCase
 {
     /**

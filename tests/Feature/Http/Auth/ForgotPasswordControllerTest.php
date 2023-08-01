@@ -2,19 +2,24 @@
 
 namespace Tests\Feature\Http\Auth;
 
+use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Middleware\RejectIfAuthenticated;
+use App\Http\Middleware\RejectIfDemoMode;
 use App\Models\User;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\FeatureTestCase;
 
 /**
- * @covers  \App\Http\Controllers\Auth\ForgotPasswordController
- * @covers  \App\Models\User
- * @covers  \App\Http\Middleware\RejectIfDemoMode
- * @covers  \App\Http\Middleware\RejectIfAuthenticated
+ * ForgotPasswordControllerTest test class
  */
+#[CoversClass(ForgotPasswordController::class)]
+#[CoversClass(User::class)]
+#[CoversClass(RejectIfDemoMode::class)]
+#[CoversClass(RejectIfAuthenticated::class)]
 class ForgotPasswordControllerTest extends FeatureTestCase
 {
     /**

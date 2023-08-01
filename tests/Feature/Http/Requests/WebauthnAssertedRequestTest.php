@@ -5,18 +5,22 @@ namespace Tests\Feature\Http\Requests;
 use App\Http\Requests\WebauthnAssertedRequest;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Validator;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 /**
- * @covers \App\Http\Requests\WebauthnAssertedRequest
+ * WebauthnAssertedRequestTest test class
  */
+#[CoversClass(WebauthnAssertedRequest::class)]
 class WebauthnAssertedRequestTest extends TestCase
 {
     use WithoutMiddleware;
 
     /**
-     * @dataProvider provideValidData
+     * @test
      */
+    #[DataProvider('provideValidData')]
     public function test_valid_data(array $data) : void
     {
         $request   = new WebauthnAssertedRequest();
@@ -28,7 +32,7 @@ class WebauthnAssertedRequestTest extends TestCase
     /**
      * Provide Valid data for validation test
      */
-    public function provideValidData() : array
+    public static function provideValidData() : array
     {
         return [
             [[
@@ -47,8 +51,9 @@ class WebauthnAssertedRequestTest extends TestCase
     }
 
     /**
-     * @dataProvider provideInvalidData
+     * @test
      */
+    #[DataProvider('provideInvalidData')]
     public function test_invalid_data(array $data) : void
     {
         $request   = new WebauthnAssertedRequest();
@@ -60,7 +65,7 @@ class WebauthnAssertedRequestTest extends TestCase
     /**
      * Provide invalid data for validation test
      */
-    public function provideInvalidData() : array
+    public static function provideInvalidData() : array
     {
         return [
             [[

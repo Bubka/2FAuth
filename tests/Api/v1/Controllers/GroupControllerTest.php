@@ -2,18 +2,21 @@
 
 namespace Tests\Api\v1\Controllers;
 
+use App\Api\v1\Controllers\GroupController;
+use App\Api\v1\Resources\GroupResource;
+use App\Listeners\ResetUsersPreference;
 use App\Models\Group;
 use App\Models\TwoFAccount;
 use App\Models\User;
+use App\Policies\GroupPolicy;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\FeatureTestCase;
 
-/**
- * @covers \App\Api\v1\Controllers\GroupController
- * @covers \App\Api\v1\Resources\GroupResource
- * @covers \App\Listeners\ResetUsersPreference
- * @covers \App\Policies\GroupPolicy
- * @covers \App\Models\Group
- */
+#[CoversClass(GroupController::class)]
+#[CoversClass(GroupResource::class)]
+#[CoversClass(ResetUsersPreference::class)]
+#[CoversClass(GroupPolicy::class)]
+#[CoversClass(Group::class)]
 class GroupControllerTest extends FeatureTestCase
 {
     /**

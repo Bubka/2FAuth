@@ -2,18 +2,24 @@
 
 namespace Tests\Feature\Http\Auth;
 
+use App\Extensions\WebauthnCredentialBroker;
+use App\Http\Controllers\Auth\WebAuthnRecoveryController;
+use App\Http\Requests\WebauthnRecoveryRequest;
 use App\Models\User;
+use App\Providers\AuthServiceProvider;
 use Database\Factories\UserFactory;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\FeatureTestCase;
 
 /**
- * @covers  \App\Http\Controllers\Auth\WebAuthnRecoveryController
- * @covers  \App\Extensions\WebauthnCredentialBroker
- * @covers  \App\Http\Requests\WebauthnRecoveryRequest
- * @covers  \App\Providers\AuthServiceProvider
+ * WebAuthnRecoveryControllerTest test class
  */
+#[CoversClass(WebAuthnRecoveryController::class)]
+#[CoversClass(WebauthnCredentialBroker::class)]
+#[CoversClass(WebauthnRecoveryRequest::class)]
+#[CoversClass(AuthServiceProvider::class)]
 class WebAuthnRecoveryControllerTest extends FeatureTestCase
 {
     /**

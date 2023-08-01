@@ -6,12 +6,15 @@ use App\Api\v1\Requests\QrCodeDecodeRequest;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\Classes\LocalFile;
 use Tests\TestCase;
 
 /**
- * @covers \App\Api\v1\Requests\QrCodeDecodeRequest
+ * QrCodeDecodeRequestTest test class
  */
+#[CoversClass(QrCodeDecodeRequest::class)]
 class QrCodeDecodeRequestTest extends TestCase
 {
     use WithoutMiddleware;
@@ -31,8 +34,9 @@ class QrCodeDecodeRequestTest extends TestCase
     }
 
     /**
-     * @dataProvider provideValidData
+     * @test
      */
+    #[DataProvider('provideValidData')]
     public function test_valid_data(array $data) : void
     {
         $request   = new QrCodeDecodeRequest();
@@ -44,7 +48,7 @@ class QrCodeDecodeRequestTest extends TestCase
     /**
      * Provide Valid data for validation test
      */
-    public function provideValidData() : array
+    public static function provideValidData() : array
     {
         $file = LocalFile::fake()->validQrcode();
 
@@ -56,8 +60,9 @@ class QrCodeDecodeRequestTest extends TestCase
     }
 
     /**
-     * @dataProvider provideInvalidData
+     * @test
      */
+    #[DataProvider('provideInvalidData')]
     public function test_invalid_data(array $data) : void
     {
         $request   = new QrCodeDecodeRequest();
@@ -69,7 +74,7 @@ class QrCodeDecodeRequestTest extends TestCase
     /**
      * Provide invalid data for validation test
      */
-    public function provideInvalidData() : array
+    public static function provideInvalidData() : array
     {
         return [
             [[

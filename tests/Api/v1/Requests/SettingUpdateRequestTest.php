@@ -2,15 +2,19 @@
 
 namespace Tests\Api\v1\Requests;
 
+use App\Api\v1\Requests\SettingStoreRequest;
 use App\Api\v1\Requests\SettingUpdateRequest;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 /**
- * @covers \App\Api\v1\Requests\SettingUpdateRequest
+ * SettingUpdateRequestTest test class
  */
+#[CoversClass(SettingStoreRequest::class)]
 class SettingUpdateRequestTest extends TestCase
 {
     use WithoutMiddleware;
@@ -30,8 +34,9 @@ class SettingUpdateRequestTest extends TestCase
     }
 
     /**
-     * @dataProvider provideValidData
+     * @test
      */
+    #[DataProvider('provideValidData')]
     public function test_valid_data(array $data) : void
     {
         $request   = new SettingUpdateRequest();
@@ -43,7 +48,7 @@ class SettingUpdateRequestTest extends TestCase
     /**
      * Provide Valid data for validation test
      */
-    public function provideValidData() : array
+    public static function provideValidData() : array
     {
         return [
             [[
@@ -59,8 +64,9 @@ class SettingUpdateRequestTest extends TestCase
     }
 
     /**
-     * @dataProvider provideInvalidData
+     * @test
      */
+    #[DataProvider('provideInvalidData')]
     public function test_invalid_data(array $data) : void
     {
         $request   = new SettingUpdateRequest();
@@ -72,7 +78,7 @@ class SettingUpdateRequestTest extends TestCase
     /**
      * Provide invalid data for validation test
      */
-    public function provideInvalidData() : array
+    public static function provideInvalidData() : array
     {
         return [
             [[

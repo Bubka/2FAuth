@@ -2,14 +2,17 @@
 
 namespace Tests\Api\v1\Controllers;
 
+use App\Api\v1\Controllers\IconController;
 use App\Models\TwoFAccount;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\FeatureTestCase;
 
 /**
- * @covers \App\Api\v1\Controllers\IconController
+ * IconController test class
  */
+#[CoversClass(IconController::class)]
 class IconControllerTest extends FeatureTestCase
 {
     /**
