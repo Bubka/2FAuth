@@ -48,7 +48,7 @@ class SystemController extends Controller
             if ($request->user()->is_admin == true) {
                 $infos['admin_settings']['useEncryption']  = Settings::get('useEncryption');
                 $infos['admin_settings']['lastRadarScan']  = Carbon::parse(Settings::get('lastRadarScan'))->format('Y-m-d H:i:s');
-                $infos['admin_settings']['checkForUpdate'] = Settings::get('CheckForUpdate');
+                $infos['admin_settings']['checkForUpdate'] = Settings::get('checkForUpdate');
             }
         }
         // User info
