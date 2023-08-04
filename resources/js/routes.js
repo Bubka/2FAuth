@@ -79,7 +79,13 @@ router.beforeEach((to, from, next) => {
         isFirstLoad = false;
     }
 
-    if (to.matched.some(record => record.meta.disabledWithAuthProxy)) {
+    // See https://github.com/garethredfern/laravel-vue/ if one day the middleware pattern
+    // becomes relevant (i.e when some admin only pages are necessary)
+
+    if (to.name !== 'login' && to.meta.requiresAuth && ! Vue.$storage.get('authenticated', false)) {
+        next({ name: 'login' })
+    }
+    else if (to.matched.some(record => record.meta.disabledWithAuthProxy)) {
         if (window.appConfig.proxyAuth) {
             next({ name: 'accounts' })
         }

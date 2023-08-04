@@ -26,9 +26,6 @@ Vue.mixin({
         },
 
         clearStorage() {
-            this.$storage.set('accounts')
-            this.$storage.set('groups')
-            this.$storage.set('lastRoute')
         },
 
         exitSettings: function (event) {
@@ -36,6 +33,10 @@ Vue.mixin({
                 this.$notify({ clean: true })
                 this.$router.push({ name: 'accounts' })
             }
+            this.$storage.remove('accounts')
+            this.$storage.remove('groups')
+            this.$storage.remove('lastRoute')
+            this.$storage.remove('authenticated')
         },
 
         isUrl: function (url) {

@@ -81,10 +81,13 @@
 
                 this.form.post('/user/login', {returnError: true})
                 .then(response => {
-                    this.applyPreferences(response.data.preferences);
+                    this.$storage.set('authenticated', true)
+                    this.applyPreferences(response.data.preferences)
                     this.$router.push({ name: 'accounts', params: { toRefresh: true } })
                 })
                 .catch(error => {
+                    this.$storage.set('authenticated', false)
+
                     if( error.response.status === 401 ) {
 
                         this.$notify({ type: 'is-danger', text: this.$t('auth.forms.authentication_failed'), duration:-1 })
@@ -142,12 +145,15 @@
                 publicKeyCredential.email = this.form.email
 
                 this.axios.post('/webauthn/login', publicKeyCredential, {returnError: true}).then(response => {
+                    this.$storage.set('authenticated', true)
                     this.applyPreferences(response.data.preferences);
                     this.$router.push({ name: 'accounts', params: { toRefresh: true } })
                 })
                 .catch(error => {
-                    if( error.response.status === 401 ) {
+                    this.$storage.set('authenticated', false)
 
+                    if( error.response.status === 401 ) {
+                        
                         this.$notify({ type: 'is-danger', text: this.$t('auth.forms.authentication_failed'), duration:-1 })
                     }
                     else if( error.response.status !== 422 ) {

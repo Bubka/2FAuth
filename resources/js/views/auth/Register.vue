@@ -71,6 +71,7 @@
 
                 this.registerForm.post('/user', {returnError: true})
                 .then(response => {
+                    this.$storage.set('authenticated', true)
                     this.showWebauthnRegistration = true
                 })
                 .catch(error => {

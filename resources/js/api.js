@@ -13,6 +13,12 @@ if (window.appConfig.subdirectory) {
 }
 
 Vue.axios.interceptors.response.use(response => response, error => {
+    
+    // Whether or not the promise must be returned, if unauthenticated is received
+    // we update the auth state of the front-end
+    if ( error.response.status === 401 ) {
+        Vue.$storage.remove('authenticated')
+    }
 
     // Return the error when we need to handle it at component level
     if( error.config.hasOwnProperty('returnError') && error.config.returnError === true ) {
