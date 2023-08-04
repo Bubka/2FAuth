@@ -88,14 +88,6 @@
             });
 
         },
-
-        beforeRouteEnter (to, from, next) {
-            // return to home if no err is provided to prevent an empty error message
-            if (to.params.err == undefined) {
-                next({ name: 'accounts' });
-            }
-            else next()
-        },
     }
 
 </script>
