@@ -13,10 +13,10 @@
                 v-on:change="$emit('field-changed', form[fieldName])"
                 v-on:keyup="checkCapsLock"
             />
-            <span v-if="currentType == 'password'" role="button" tabindex="0" class="icon is-small is-right is-clickable" @keyup.enter="setFieldType('text')" @click="setFieldType('text')" :title="$t('auth.forms.reveal_password')">
+            <span v-if="currentType == 'password'" role="button" id="btnTogglePassword" tabindex="0" class="icon is-small is-right is-clickable" @keyup.enter="setFieldType('text')" @click="setFieldType('text')" :title="$t('auth.forms.reveal_password')">
                 <font-awesome-icon :icon="['fas', 'eye-slash']" />
             </span>
-            <span v-else role="button" tabindex="0" class="icon is-small is-right is-clickable" @keyup.enter="setFieldType('password')" @click="setFieldType('password')" :title="$t('auth.forms.hide_password')">
+            <span v-else role="button" id="btnTogglePassword" tabindex="0" class="icon is-small is-right is-clickable" @keyup.enter="setFieldType('password')" @click="setFieldType('password')" :title="$t('auth.forms.hide_password')">
                 <font-awesome-icon :icon="['fas', 'eye']" />
             </span>
         </div>
@@ -26,14 +26,14 @@
         <div v-if="showRules" class="columns is-mobile is-size-7 mt-0">
             <div class="column is-one-third">
                 <span class="has-text-weight-semibold">{{ $t("auth.forms.mandatory_rules") }}</span><br />
-                <span class="is-underscored" :class="{'is-dot' : IsLongEnough}"></span>{{ $t('auth.forms.is_long_enough') }}<br/>
+                <span class="is-underscored" id="valPwdIsLongEnough" :class="{'is-dot' : IsLongEnough}"></span>{{ $t('auth.forms.is_long_enough') }}<br/>
             </div>
             <div class="column">
                 <span class="has-text-weight-semibold">{{ $t("auth.forms.optional_rules_you_should_follow") }}</span><br />
-                <span class="is-underscored" :class="{'is-dot' : hasLowerCase}"></span>{{ $t('auth.forms.has_lower_case') }}<br/>
-                <span class="is-underscored" :class="{'is-dot' : hasUpperCase}"></span>{{ $t('auth.forms.has_upper_case') }}<br/>
-                <span class="is-underscored" :class="{'is-dot' : hasSpecialChar}"></span>{{ $t('auth.forms.has_special_char') }}<br/>
-                <span class="is-underscored" :class="{'is-dot' : hasNumber}"></span>{{ $t('auth.forms.has_number') }}
+                <span class="is-underscored" id="valPwdHasLowerCase" :class="{'is-dot' : hasLowerCase}"></span>{{ $t('auth.forms.has_lower_case') }}<br/>
+                <span class="is-underscored" id="valPwdHasUpperCase" :class="{'is-dot' : hasUpperCase}"></span>{{ $t('auth.forms.has_upper_case') }}<br/>
+                <span class="is-underscored" id="valPwdHasSpecialChar" :class="{'is-dot' : hasSpecialChar}"></span>{{ $t('auth.forms.has_special_char') }}<br/>
+                <span class="is-underscored" id="valPwdHasNumber" :class="{'is-dot' : hasNumber}"></span>{{ $t('auth.forms.has_number') }}
             </div>
         </div>
     </div> 
