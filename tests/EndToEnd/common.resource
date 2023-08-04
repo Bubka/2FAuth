@@ -4,26 +4,28 @@ Library           SeleniumLibrary
 Resource          workflows.resource
 
 *** Variables ***
-${SERVER}         2fauth
-${BROWSER}        chrome
-${DELAY}          0.5
+${SERVER}           localhost
+${BROWSER}          chrome
+# ${DELAY}            1
 
-${USERNAME}     Tester
-${EMAIL}     testing@2fauth.app
-${PASSWORD}    password
+${USERNAME}         Tester
+${ADMIN EMAIL}      testingadmin@2fauth.app
+${USER EMAIL}       testingadmin@2fauth.app
+${PASSWORD}         password
 
-${ROOT URL}    https://${SERVER}
-${LOGOUT LINK}    lnkSignOut
+${ROOT URL}         http://${SERVER}
+${LOGOUT LINK}      lnkSignOut
 
 *** Keywords ***
-Open Blank Browser
-    Set Selenium Speed    ${DELAY}
+Open Custom Browser
+    [Arguments]    ${url}=${ROOT URL}
+    # Set Selenium Speed    ${DELAY}
     ${options}=    Evaluate    sys.modules['selenium.webdriver'].ChromeOptions()    sys
     Call Method    ${options}    add_argument    --lang\=en,en-us
     Call Method    ${options}    add_argument    --disable-dev-shm-usage    # See https://stackoverflow.com/questions/50642308/org-openqa-selenium-webdriverexception-unknown-error-devtoolsactiveport-file-d
     ${prefs}=    Create Dictionary    intl.accept_languages=en,en-us
     Call Method    ${options}    add_experimental_option    prefs    ${prefs}
-    Open Browser    url=${ROOT URL}    browser=${BROWSER}    options=${options}
+    Open Browser    url=${url}    browser=${BROWSER}    options=${options}
     Maximize Browser Window
 
 Go Authenticated To
@@ -31,17 +33,31 @@ Go Authenticated To
     Go To    ${url}
     ${is_authenticated}=  Run Keyword And Return Status    Location Should Be    ${url}
     IF    ${is_authenticated} == False
-        Play sign In Workflow
+        Play Admin Sign In Workflow
         Go To    ${url}
     END
+    Wait Until Location Is    ${url}
+
+A Success Notification Should Appear
+    Wait Until Element Is Visible    css:#vueNotification .is-success
 
 An Error Notification Should Appear
     Wait Until Element Is Visible    css:#vueNotification .is-danger
 
 Field Should Show An Error
     [Arguments]    ${field error}
-    Element Should Be Visible   ${field error}
+    Wait Until Element Is Visible   ${field error}
     Should Not Be Empty    ${field error}
 
 Scroll To Bottom
     Execute Javascript  window.scrollTo(0,document.body.scrollHeight)
+
+Element Should Have Class
+    [Arguments]  ${element}  ${className}
+    ${class}=       Get Element Attribute  ${element}    class
+    Should Contain    ${class}    ${className}
+
+Element Should Not Have Class
+    [Arguments]  ${element}  ${className}
+    ${class}=       Get Element Attribute  ${element}    class
+    Should Not Contain    ${class}    ${className}

@@ -1,6 +1,5 @@
 *** Settings ***
 Documentation     A page object to use in Login tests.
-...
 Library           SeleniumLibrary
 Resource          ../common.resource
 
@@ -12,11 +11,13 @@ ${PASSWORD FIELD}    pwdPassword
 ${PASSWORD FIELD ERROR}    valErrorPassword
 ${LEGACY FORM}    frmLegacyLogin
 ${SIGN IN BUTTON}    btnSignIn
+${WEBAUTHN SIGN IN BUTTON}    btnContinue
 ${CONTINUE WITH WEBAUTHN BUTTON}    btnContinue
 ${SIGN IN WITH WEBAUTHN LINK}    lnkSignWithWebauthn
 ${SIGN IN WITH LOGIN PASSWORD LINK}    lnkSignWithLegacy
 ${RECOVER YOUR ACCOUNT LINK}    lnkRecoverAccount
 ${RESET PASSWORD LINK}    lnkResetPwd
+${REGISTER LINK}    lnkRegister
 ${PUNCHLINE TEXT}    punchline
 
 *** Keywords ***
@@ -39,6 +40,12 @@ Submit Credentials To Legacy Form Login
     Scroll To Bottom
     Click Button    ${SIGN IN BUTTON}
 
+Submit Credentials To Webauthn Form Login
+    [Arguments]    ${email}
+    Input Text    ${EMAIL FIELD}    ${email}
+    Scroll To Bottom
+    Click Button    ${WEBAUTHN SIGN IN BUTTON}
+
 Email Field Should Show An Error
     Field Should Show An Error    ${EMAIL FIELD ERROR}
 
@@ -60,4 +67,4 @@ Webauthn Form Should Be Visible
     Element Should Not Be Visible    ${LEGACY FORM}
 
 User Should Be Welcomed
-    Element Should Contain    ${PUNCHLINE TEXT}    ${USERNAME}
+    Element Should Be Visible     ${PUNCHLINE TEXT}

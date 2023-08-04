@@ -8,28 +8,36 @@ Resource          Pages/login_page.robot
 Resource          Pages/register_page.robot
 Resource          Pages/accounts_page.robot
 Resource          Pages/settings_account_page.robot
+Resource          Pages/autolock_page.robot
 
 *** Variables ***
 
 
 *** Keywords ***
-Play Delete User Account Workflow
+Play Delete Current User Account Workflow
     Go To Account Settings Page
     Delete User Account
+    Wait Until Location Is    ${REGISTER PAGE URL}
 
-Play sign In Workflow
+Play Admin Sign In Workflow
+    Play Logout Workflow
     Delete All Cookies
     Go To Legacy Login Page
-    Submit Credentials To Legacy Form Login    ${EMAIL}    ${PASSWORD}
+    Submit Credentials To Legacy Form Login    ${ADMIN EMAIL}    ${PASSWORD}
+    Wait Until Location Is    ${ACCOUNTS PAGE URL}
 
-Play Register New User Workflow
-    Go To Register Page
-    Submit User Data To Registration Form    ${USERNAME}    ${EMAIL}    ${PASSWORD}    ${PASSWORD}
+Play User Sign In Workflow
+    Play Logout Workflow
+    Delete All Cookies
+    Go To Legacy Login Page
+    Submit Credentials To Legacy Form Login    ${USER EMAIL}    ${PASSWORD}
+    Wait Until Location Is    ${ACCOUNTS PAGE URL}
 
 Play Logout Workflow
-    Go To    ${ROOT URL}/accounts
+    Go To    ${ACCOUNTS PAGE URL}
     ${is_authenticated}=  Run Keyword And Return Status    Page Should Contain Element    ${LOGOUT LINK}
     IF    ${is_authenticated} == True
         Click Element    ${LOGOUT LINK}
         Handle Alert
     END
+    Wait Until Location Is    ${LOGIN PAGE URL}

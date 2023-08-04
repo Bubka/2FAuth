@@ -5,6 +5,7 @@ Library           SeleniumLibrary
 Resource          ../common.resource
 
 *** Variables ***
+${EDIT ACCOUNT PAGE URL}    ${ROOT URL}/account/1/edit
 
 *** Keywords ***
 Edit Page Should Be Open For Account

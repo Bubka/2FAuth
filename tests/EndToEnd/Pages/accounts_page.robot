@@ -10,3 +10,6 @@ ${ACCOUNTS PAGE URL}    ${ROOT URL}/accounts
 *** Keywords ***
 Accounts Page Should Be Open
     Location Should Be    ${ACCOUNTS PAGE URL}
+    
+Go To Accounts Page
+    Go Authenticated To    ${ACCOUNTS PAGE URL}

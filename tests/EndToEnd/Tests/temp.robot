@@ -1,6 +1,6 @@
 # *** Settings ***
 # Documentation     A test suite to check available links on the login page.
-# Suite Setup       Open Blank Browser
+# Suite Setup       Open Custom Browser
 # Suite Teardown    Close Browser
 # Resource          Pages/login_page.robot
 # Resource          workflows.resource
@@ -10,4 +10,4 @@
 
 # *** Test Cases ***
 # My Test
-#     Play Delete User Account Workflow
+#     Play Delete Current User Account Workflow

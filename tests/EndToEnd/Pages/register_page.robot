@@ -12,11 +12,11 @@ ${EMAIL FIELD}    emlEmail
 ${EMAIL FIELD ERROR}    valErrorEmail
 ${PASSWORD FIELD}    pwdPassword
 ${PASSWORD FIELD ERROR}    valErrorPassword
-${PASSWORD CONFIRMATION FIELD}    pwdPassword_confirmation
 ${REGISTER BUTTON}    btnRegister
 ${REGISTER NEW DEVICE BUTTON}    btnRegisterNewDevice
 ${MAYBE LATER BUTTON}    btnMaybeLater
 ${SIGN IN LINK}    lnkSignIn
+${TOGGLE PASSWORD VISIBILITY BUTTON}    btnTogglePassword
 
 *** Keywords ***
 Go To Register Page
@@ -26,11 +26,10 @@ Register Page Should Be Open
     Location Should Be    ${REGISTER PAGE URL}
 
 Submit User Data To Registration Form
-    [Arguments]    ${username}    ${email}    ${password}    ${password confirmation}
+    [Arguments]    ${username}    ${email}    ${password}
     Input Text    ${USERNAME FIELD}    ${username}
     Input Text    ${EMAIL FIELD}    ${email}
     Input Text    ${PASSWORD FIELD}     ${password}
-    Input Text    ${PASSWORD CONFIRMATION FIELD}     ${password confirmation}
     Scroll To Bottom
     Click Button    ${REGISTER BUTTON}
 
@@ -44,4 +43,4 @@ Password Field Should Show An Error
     Field Should Show An Error    ${PASSWORD FIELD ERROR}
 
 Postpone Webauthn Registration
-    Click Element    ${MAYBE LATER BUTTON}
+    Click Link    ${MAYBE LATER BUTTON}

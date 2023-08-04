@@ -3,8 +3,10 @@ Documentation     A resource file for authentication tests.
 Resource          ../../common.resource
 
 *** Variables ***
-${VALID EMAIL CASED}     TESTING@2fauth.app
-${VALID PASSWORD CONFIRMATION}    password
+${NEW USER NAME}              bob
+${UNREGISTERED EMAIL}         unregistered@2fauth.app
+${VALID ADMIN EMAIL CASED}    TESTINGADMIN@2fauth.app
+${VALID USER EMAIL CASED}     TESTINGUSER@2fauth.app
 
 ${INVALID USERNAME TOO LONG}     veryLongUsernameeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
 ${INVALID EMAIL MALFORMED}     emailWithNoAt

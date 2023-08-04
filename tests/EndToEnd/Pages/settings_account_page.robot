@@ -23,3 +23,4 @@ Delete User Account
     Input Text    ${PASSWORD FIELD FOR DELETE}    ${PASSWORD}
     Click Button    ${DELETE YOUR ACCOUNT BUTTON}
     Handle Alert
+    Wait Until Location Is Not    ${ROOT URL}/settings/account
