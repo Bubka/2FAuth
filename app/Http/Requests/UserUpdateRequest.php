@@ -29,13 +29,13 @@ class UserUpdateRequest extends FormRequest
             'name' => [
                 'required',
                 'string',
-                'max:255',
+                'max:191',
                 Rule::unique('users')->ignore($this->user()->id),
             ],
             'email' => [
                 'required',
                 'email',
-                'max:255',
+                'max:191',
                 Rule::unique('users')->ignore($this->user()->id),
             ],
             'password' => 'required',
