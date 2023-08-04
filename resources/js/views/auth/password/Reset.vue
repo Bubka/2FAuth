@@ -1,8 +1,9 @@
 <template>
     <form-wrapper :title="$t('auth.forms.new_password')">
         <form @submit.prevent="handleSubmit" @keydown="form.onKeydown($event)">
-            <form-field :form="form" fieldName="email" inputType="email" :label="$t('auth.forms.email')" isDisabled="true" readonly />
+            <form-field :form="form" fieldName="email" inputType="email" :label="$t('auth.forms.email')" :isDisabled="true" readonly />
             <form-password-field :form="form" fieldName="password" :autocomplete="'new-password'" :showRules="true" :label="$t('auth.forms.new_password')" />
+            <field-error :form="form" field="token" />
             <form-buttons v-if="pending" :isBusy="form.isBusy" :caption="$t('auth.forms.change_password')" :showCancelButton="true" cancelLandingView="login" />
             <router-link v-if="!pending" id="btnContinue" :to="{ name: 'accounts' }" class="button is-link">{{ $t('commons.continue') }}</router-link>
         </form>
