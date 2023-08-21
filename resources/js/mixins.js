@@ -26,13 +26,6 @@ Vue.mixin({
         },
 
         clearStorage() {
-        },
-
-        exitSettings: function (event) {
-            if (event) {
-                this.$notify({ clean: true })
-                this.$router.push({ name: 'accounts' })
-            }
             this.$storage.remove('accounts')
             this.$storage.remove('groups')
             this.$storage.remove('lastRoute')

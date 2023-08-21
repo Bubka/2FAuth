@@ -70,11 +70,17 @@
             </form-wrapper>
         </div>
         <vue-footer :showButtons="true">
-            <!-- Cancel button -->
+            <!-- Close button -->
             <p class="control">
-                <button class="button is-rounded" :class="{'is-dark' : $root.showDarkMode}" @click.stop="exitSettings">
+                <router-link
+                    :to="{ path: $route.params.returnTo, params: { toRefresh: false } }"
+                    class="button is-rounded"
+                    :class="{'is-dark' : $root.showDarkMode}"
+                    tabindex="0"
+                    role="button"
+                    :aria-label="$t('commons.close_the_x_page', {pagetitle: $router.currentRoute.meta.title})">
                     {{ $t('commons.close') }}
-                </button>
+                </router-link>
             </p>
         </vue-footer>
     </div>
@@ -253,5 +259,25 @@
             },
 
         },
+
+        beforeRouteEnter(to, from, next) {
+            next(vm => {
+                if (from.params.returnTo) {
+                    to.params.returnTo = from.params.returnTo
+                }
+                else {
+                    to.params.returnTo = from.name
+                        ? from.path
+                        : '/accounts'
+                }
+            })
+        },
+
+        beforeRouteLeave(to, from, next) {
+            if (to.name == 'accounts') {
+                this.$notify({ clean: true })
+            }
+            next()
+        }
     }
 </script>

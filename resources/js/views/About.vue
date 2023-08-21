@@ -85,7 +85,13 @@
         <vue-footer :showButtons="true">
             <!-- close button -->
             <p class="control">
-                <router-link :to="{ name: 'accounts', params: { toRefresh: true } }" role="button" :aria-label="$t('commons.close_the_x_page', {pagetitle: pagetitle})" class="button is-rounded" :class="{'is-dark' : $root.showDarkMode}">{{ $t('commons.close') }}</router-link>
+                <router-link
+                    :to="{ path: $route.params.goBackTo, params: { returnTo: $route.params.returnTo, toRefresh: true } }"
+                    :aria-label="$t('commons.close_the_x_page', {pagetitle: pagetitle})"
+                    class="button is-rounded"
+                    :class="{'is-dark' : $root.showDarkMode}">
+                    {{ $t('commons.back') }}
+                </router-link>
             </p>
         </vue-footer>
     </responsive-width-wrapper>
@@ -129,6 +135,19 @@
             clipboardErrorHandler ({ value, event }) {
                 console.log('error', value)
             },
-        }
+        },
+
+        beforeRouteEnter(to, from, next) {
+            next(vm => {
+                if (from.params.returnTo) {
+                    to.params.returnTo = from.params.returnTo
+                }
+
+                to.params.goBackTo = from.name
+                    ? from.path
+                    : '/accounts'
+            })
+        },
+
     }
 </script>
