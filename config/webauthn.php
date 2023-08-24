@@ -2,7 +2,7 @@
 
 return [
 
-    'user_verification' => env('WEBAUTHN_USER_VERIFICATION', 'preferred'),
+    'user_verification' => envUnlessEmpty('WEBAUTHN_USER_VERIFICATION', 'preferred'),
 
     /*
     |--------------------------------------------------------------------------
@@ -16,8 +16,8 @@ return [
     */
 
     'relying_party' => [
-        'name' => env('WEBAUTHN_NAME', config('app.name')),
-        'id'   => env('WEBAUTHN_ID'),
+        'name' => envUnlessEmpty('WEBAUTHN_NAME', config('app.name')),
+        'id'   => envUnlessEmpty('WEBAUTHN_ID', null),
     ],
 
     /*
