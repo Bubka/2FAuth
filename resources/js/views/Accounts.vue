@@ -141,7 +141,7 @@
         	                            </div>
         	                        </div>
         	                    </transition>
-                                <div tabindex="0" class="tfa-cell tfa-content is-size-3 is-size-4-mobile" @click="showOrCopy(account)" @keyup.enter="showOrCopy(account)" role="button">  
+                                <div tabindex="0" class="tfa-cell tfa-content is-size-3 is-size-4-mobile" @click.exact="showOrCopy(account)" @keyup.enter="showOrCopy(account)" @click.ctrl="getAndCopyOTP(account)" role="button">  
                                     <div class="tfa-text has-ellipsis">
                                         <img :src="$root.appConfig.subdirectory + '/storage/icons/' + account.icon" v-if="account.icon && $root.userPreferences.showAccountsIcons" :alt="$t('twofaccounts.icon_for_account_x_at_service_y', {account: account.account, service: account.service})">
                                         {{ displayService(account.service) }}<font-awesome-icon class="has-text-danger is-size-5 ml-2" v-if="$root.appSettings.useEncryption && account.account === $t('errors.indecipherable')" :icon="['fas', 'exclamation-circle']" />
@@ -431,14 +431,32 @@
             /**
              * 
              */
-            copyOTP (otp) {
+            async getAndCopyOTP(account) {
+                await this.axios.get('/api/v1/twofaccounts/' + account.id + '/otp').then(response => {
+                    let otp = response.data
+                    this.copyOTP(otp.password)
+
+                    if (otp.otp_type == 'hotp') {
+                        let hotpToIncrement = this.accounts.find((acc) => acc.id == account.id)
+                        
+                        if (hotpToIncrement != undefined) {
+                            hotpToIncrement.counter = otp.counter
+                        }
+                    }
+                })
+            },
+
+            /**
+             * 
+             */
+            copyOTP (password) {
                 // see https://web.dev/async-clipboard/ for futur Clipboard API usage.
                 // The API should allow to copy the password on each trip without user interaction.
 
                 // For now too many browsers don't support the clipboard-write permission
                 // (see https://developer.mozilla.org/en-US/docs/Web/API/Permissions#browser_support)
 
-                const success = this.$clipboard(otp)
+                const success = this.$clipboard(password)
 
                 if (success == true) {
                     if(this.$root.userPreferences.kickUserAfter == -1) {
