@@ -25,13 +25,13 @@
             }
         },
 
-        props: ['id', 'name'],
+        props: ['groupId', 'name'],
 
         methods: {
 
             async updateGroup() {
 
-                await this.form.put('/api/v1/groups/' + this.id)
+                await this.form.put('/api/v1/groups/' + this.groupId)
 
                 if( this.form.errors.any() === false ) {
                     this.$notify({ type: 'is-success', text: this.$t('groups.group_name_saved') })
