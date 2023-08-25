@@ -121,8 +121,8 @@ ENV \
     # If you generate a new one all existing data must be considered LOST.
     # Change it to a string of exactly 32 chars or use command `php artisan key:generate` to generate it
     APP_KEY=SomeRandomStringOf32CharsExactly \
-    # This variable must match your installation's external address but keep in mind that
-    # it's only used on the command line as a fallback value.
+    # This variable must match your installation's external address.
+    # Webauthn won't work otherwise.
     APP_URL=http://localhost \
     # Turn this to true if you want your app to react like a demo.
     # The Demo mode reset the app content every hours and set a generic demo user.
@@ -186,10 +186,10 @@ ENV \
     # Relying Party name, aka the name of the application. If null, defaults to APP_NAME
     WEBAUTHN_NAME=2FAuth \
     # Relying Party ID. If null, the device will fill it internally.
-    # See https://webauthn-doc.spomky-labs.com/pre-requisites/the-relying-party#how-to-determine-the-relying-party-id
+    # See https://webauthn-doc.spomky-labs.com/prerequisites/the-relying-party#how-to-determine-the-relying-party-id
     WEBAUTHN_ID=null \
     # Optional image data in BASE64 (128 bytes maximum) or an image url
-    # See https://webauthn-doc.spomky-labs.com/pre-requisites/the-relying-party#relying-party-icon
+    # See https://webauthn-doc.spomky-labs.com/prerequisites/the-relying-party#relying-party-icon
     WEBAUTHN_ICON=null \
     # Use this setting to control how user verification behave during the
     # WebAuthn authentication flow.
