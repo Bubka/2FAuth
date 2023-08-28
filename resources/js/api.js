@@ -33,12 +33,12 @@ Vue.axios.interceptors.response.use(response => response, error => {
     // Push to the login view and force the page to refresh to get a fresh CSRF token
     if ( error.response.status === 401 ) {
         router.push({ name: 'login', params: { forceRefresh: true } })
-        throw new Vue.axios.Cancel();
+        return new Promise(() => {})
     }
 
     if ( error.response.status === 407 ) {
         router.push({ name: 'genericError', params: { err: error.response, closable: false } })
-        throw new Vue.axios.Cancel();
+        return new Promise(() => {})
     }
 
     // we push to a specific or generic error view
@@ -53,6 +53,6 @@ Vue.axios.interceptors.response.use(response => response, error => {
     if ( error.response.status === 404 ) routeName = '404'
 
     router.push({ name: routeName, params: { err: error.response } })
-    throw new Vue.axios.Cancel();
+    return new Promise(() => {})
 
 })
