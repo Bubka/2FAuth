@@ -1,0 +1,54 @@
+name: Bug report
+description: Create a bug report to help improve 2FAuth
+projects: Bubka/1
+body:
+  - type: input
+    id: 2fauth_version
+    attributes:
+      label: Version
+      description: The 2FAuth version on which the issue occurs
+      placeholder: x.y.z
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction_steps
+    attributes:
+      label: Details & Steps to reproduce
+      description: A clear and concise description of what is happening and how to reproduce it. Screenshots are welcome.
+    validations:
+      required: true
+  - type: textarea
+    id: expectation
+    attributes:
+      label: Expectation
+      description: A  description of what you expected to happen
+    validations:
+      required: true
+  - type: textarea
+    id: error_logs
+    attributes:
+      label: Error & Logs
+      description: >-
+        Error message, stack trace, error/access logs from the web server, php or your database system.
+      placeholder: 2FAuth logs can be found in [2FAuth_install_directory]/storage/logs/
+      render: shell
+  - type: textarea
+    id: environment
+    attributes:
+      label: Execution environment
+      description: How do you run 2FAuth, how do you access it and how it is configured
+      placeholder: >-
+        The /about page of your 2FAuth instance displays environment variables,
+        user preferences and admin settings you can easily copy and past here as a good starting point
+  - type: checkboxes
+    id: context
+    attributes:
+      label: Containerization
+      options:
+        - label: Docker
+          required: false
+  - type: textarea
+    id: additional_info
+    attributes:
+      label: Additional information
+      description: Any additional information you would like to submit
