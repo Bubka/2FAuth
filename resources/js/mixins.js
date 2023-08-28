@@ -53,7 +53,7 @@ Vue.mixin({
             fieldName = fieldName.toString()
 
             switch (fieldType) {
-                case 'button':
+                case 'text':
                     prefix = 'txt'
                     break
                 case 'button':
