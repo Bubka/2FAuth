@@ -52,10 +52,10 @@
             {{ $t('commons.environment') }}
         </h2>
         <div class="about-debug box is-family-monospace is-size-7">
-            <button :aria-label="$t('commons.copy_to_clipboard')" class="button is-like-text is-pulled-right is-small is-text" v-clipboard="() => this.$refs.listInfos.innerText" v-clipboard:success="clipboardSuccessHandler">
+            <button id="btnCopyEnvVars" :aria-label="$t('commons.copy_to_clipboard')" class="button is-like-text is-pulled-right is-small is-text" v-clipboard="() => this.$refs.listInfos.innerText" v-clipboard:success="clipboardSuccessHandler">
                 <font-awesome-icon :icon="['fas', 'copy']" />
             </button>
-            <ul ref="listInfos">
+            <ul ref="listInfos" id="listInfos">
                 <li v-for="(value, key) in infos" :value="value" :key="key"><b>{{key}}</b>: {{value}}</li>
             </ul>
         </div>
@@ -63,10 +63,10 @@
             {{ $t('settings.admin_settings') }}
         </h2>
         <div v-if="showAdminSettings" class="about-debug box is-family-monospace is-size-7">
-            <button :aria-label="$t('commons.copy_to_clipboard')" class="button is-like-text is-pulled-right is-small is-text" v-clipboard="() => this.$refs.listAdminSettings.innerText" v-clipboard:success="clipboardSuccessHandler">
+            <button id="btnCopyAdminSettings" :aria-label="$t('commons.copy_to_clipboard')" class="button is-like-text is-pulled-right is-small is-text" v-clipboard="() => this.$refs.listAdminSettings.innerText" v-clipboard:success="clipboardSuccessHandler">
                 <font-awesome-icon :icon="['fas', 'copy']" />
             </button>
-            <ul ref="listAdminSettings">
+            <ul ref="listAdminSettings" id="listAdminSettings">
                 <li v-for="(value, setting) in adminSettings" :value="value" :key="setting"><b>{{setting}}</b>: {{value}}</li>
             </ul>
         </div>
@@ -74,10 +74,10 @@
             {{ $t('settings.user_preferences') }}
         </h2>
         <div v-if="showUserPreferences" class="about-debug box is-family-monospace is-size-7">
-            <button :aria-label="$t('commons.copy_to_clipboard')" class="button is-like-text is-pulled-right is-small is-text" v-clipboard="() => this.$refs.listUserPreferences.innerText" v-clipboard:success="clipboardSuccessHandler">
+            <button id="btnCopyUserPreferences" :aria-label="$t('commons.copy_to_clipboard')" class="button is-like-text is-pulled-right is-small is-text" v-clipboard="() => this.$refs.listUserPreferences.innerText" v-clipboard:success="clipboardSuccessHandler">
                 <font-awesome-icon :icon="['fas', 'copy']" />
             </button>
-            <ul ref="listUserPreferences">
+            <ul ref="listUserPreferences" id="listUserPreferences">
                 <li v-for="(value, preference) in userPreferences" :value="value" :key="preference"><b>{{preference}}</b>: {{value}}</li>
             </ul>
         </div>
@@ -86,6 +86,7 @@
             <!-- close button -->
             <p class="control">
                 <router-link
+                    id="lnkBack"
                     :to="{ path: $route.params.goBackTo, params: { returnTo: $route.params.returnTo, toRefresh: true } }"
                     :aria-label="$t('commons.close_the_x_page', {pagetitle: pagetitle})"
                     class="button is-rounded"

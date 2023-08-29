@@ -16,6 +16,9 @@ ${PASSWORD}         password
 ${ROOT URL}         http://${SERVER}
 ${LOGOUT LINK}      lnkSignOut
 
+${SUCCESS NOTIFICATION}    css:#vueNotification .is-success
+${ALERT NOTIFICATION}    css:#vueNotification .is-danger
+
 *** Keywords ***
 Open Custom Browser
     [Arguments]    ${url}=${ROOT URL}
@@ -39,10 +42,10 @@ Go Authenticated To
     Wait Until Location Is    ${url}
 
 A Success Notification Should Appear
-    Wait Until Element Is Visible    css:#vueNotification .is-success
+    Wait Until Element Is Visible    ${SUCCESS NOTIFICATION}
 
 An Error Notification Should Appear
-    Wait Until Element Is Visible    css:#vueNotification .is-danger
+    Wait Until Element Is Visible    ${ALERT NOTIFICATION}
 
 Field Should Show An Error
     [Arguments]    ${field error}
@@ -50,7 +53,7 @@ Field Should Show An Error
     Should Not Be Empty    ${field error}
 
 Scroll To Bottom
-    Execute Javascript  window.scrollTo(0,document.body.scrollHeight)
+    Execute Javascript    window.scrollTo(0,document.body.scrollHeight)
 
 Element Should Have Class
     [Arguments]  ${element}  ${className}
@@ -61,3 +64,7 @@ Element Should Not Have Class
     [Arguments]  ${element}  ${className}
     ${class}=       Get Element Attribute  ${element}    class
     Should Not Contain    ${class}    ${className}
+
+Set Footer As Static
+    execute javascript  
+    ...  document.querySelector('footer').style = 'position: static';
