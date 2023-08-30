@@ -14,7 +14,7 @@
         </div>
         <div v-if="this.showcloseButton" class="fullscreen-footer">
             <!-- Close button -->
-            <button ref="closeModalButton" class="button is-rounded" :class="{'is-dark' : $root.showDarkMode}" @click.stop="closeModal">
+            <button id="btnClose" ref="closeModalButton" class="button is-rounded" :class="{'is-dark' : $root.showDarkMode}" @click.stop="closeModal">
                 {{ $t('commons.close') }}
             </button>
         </div>

@@ -12,7 +12,7 @@
         </div>
         <div v-else class="content has-text-centered">
             <div v-if="$route.meta.showAbout === true" class="is-size-6">
-                <router-link :to="{ name: 'about' }" class="has-text-grey">
+                <router-link id="lnkAbout" :to="{ name: 'about' }" class="has-text-grey">
                     2FAuth – <span class="has-text-weight-bold">v{{ appVersion }}</span>
                 </router-link>
             </div>

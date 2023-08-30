@@ -124,7 +124,7 @@
                 </p>
                 <!-- close button -->
                 <p class="control">
-                    <router-link  :to="{ name: 'accounts', params: { toRefresh: true } }" class="button is-rounded" :class="{'is-dark' : $root.showDarkMode}" v-html="importableCount > 0 ? $t('commons.cancel') : $t('commons.close')"></router-link>
+                    <router-link :id="importableCount > 0 ? 'btnCancel' : 'btnClose'" :to="{ name: 'accounts', params: { toRefresh: true } }" class="button is-rounded" :class="{'is-dark' : $root.showDarkMode}" v-html="importableCount > 0 ? $t('commons.cancel') : $t('commons.close')"></router-link>
                 </p>
             </vue-footer>
         </responsive-width-wrapper>

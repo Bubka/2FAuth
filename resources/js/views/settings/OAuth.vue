@@ -39,7 +39,7 @@
                     </div>
                 </div>
                 <div v-if="isFetching && tokens.length === 0" class="has-text-centered mt-6">
-                    <span class="is-size-4">
+                    <span id="icnSpinner" class="is-size-4">
                         <font-awesome-icon :icon="['fas', 'spinner']" spin />
                     </span>
                 </div>
@@ -48,6 +48,7 @@
                     <!-- close button -->
                     <p class="control">
                         <router-link
+                            id="btnClose"
                             :to="{ path: $route.params.returnTo, params: { toRefresh: false } }"
                             class="button is-rounded"
                             :class="{'is-dark' : $root.showDarkMode}"

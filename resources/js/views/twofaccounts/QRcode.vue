@@ -8,7 +8,7 @@
         </div>
         <div class="fullscreen-footer">
             <!-- Close button -->
-            <button class="button is-rounded" :class="{'is-dark' : $root.showDarkMode}" @click.stop="$router.push({name: 'accounts', params: {initialEditMode: true}});">
+            <button id="btnClose" class="button is-rounded" :class="{'is-dark' : $root.showDarkMode}" @click.stop="$router.push({name: 'accounts', params: {initialEditMode: true}});">
                 {{ $t('commons.close') }}
             </button>
         </div>

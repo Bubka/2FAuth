@@ -6,7 +6,7 @@
         <p class="is-size-4 has-ellipsis" :class="$root.showDarkMode ? 'has-text-grey-light' : 'has-text-grey'">{{ internal_service }}</p>
         <p class="is-size-6 has-ellipsis" :class="$root.showDarkMode ? 'has-text-grey' : 'has-text-grey-light'">{{ internal_account }}</p>
         <p>
-            <span role="log" ref="otp" tabindex="0" class="otp is-size-1 is-clickable px-3" :class="$root.showDarkMode ? 'has-text-white' : 'has-text-grey-dark'" @click="copyOTP(internal_password, true)" @keyup.enter="copyOTP(internal_password, true)" :title="$t('commons.copy_to_clipboard')">
+            <span id="otp" role="log" ref="otp" tabindex="0" class="otp is-size-1 is-clickable px-3" :class="$root.showDarkMode ? 'has-text-white' : 'has-text-grey-dark'" @click="copyOTP(internal_password, true)" @keyup.enter="copyOTP(internal_password, true)" :title="$t('commons.copy_to_clipboard')">
                 {{ displayPwd(this.internal_password) }}
             </span>
         </p>

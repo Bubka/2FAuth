@@ -30,7 +30,7 @@
                                 <v-button :isLoading="form.isBusy" >{{ $t('commons.save') }}</v-button>
                             </div>
                             <div class="control">
-                                <button type="button" class="button is-text" @click="cancelCreation">{{ $t('commons.cancel') }}</button>
+                                <button id="btnCancel" type="button" class="button is-text" @click="cancelCreation">{{ $t('commons.cancel') }}</button>
                             </div>
                         </div>
                     </div>
@@ -133,7 +133,7 @@
                         <button type="button" class="button is-success is-rounded" @click="previewAccount">{{ $t('twofaccounts.forms.test') }}</button>
                     </p>
                     <p class="control">
-                        <button type="button" class="button is-text is-rounded" @click="cancelCreation">{{ $t('commons.cancel') }}</button>
+                        <button id="btnCancel" type="button" class="button is-text is-rounded" @click="cancelCreation">{{ $t('commons.cancel') }}</button>
                     </p>
                 </vue-footer>
             </form>

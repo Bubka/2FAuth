@@ -1,7 +1,7 @@
 <template>
     <div>
         <!-- Group switch -->
-        <div class="container groups" v-if="showGroupSwitch">
+        <div id="groupSwitch" class="container groups" v-if="showGroupSwitch">
             <div class="columns is-centered">
                 <div class="column is-one-third-tablet is-one-quarter-desktop is-one-quarter-widescreen is-one-quarter-fullhd">
                     <div class="columns is-multiline">
@@ -19,7 +19,7 @@
             <vue-footer :showButtons="true">
                 <!-- Close Group switch button -->
                 <p class="control">
-                    <button class="button is-rounded" :class="{'is-dark' : $root.showDarkMode}" @click="closeGroupSwitch()">{{ $t('commons.close') }}</button>
+                    <button id="btnClose" class="button is-rounded" :class="{'is-dark' : $root.showDarkMode}" @click="closeGroupSwitch()">{{ $t('commons.close') }}</button>
                 </p>
             </vue-footer>
         </div>
@@ -56,7 +56,7 @@
                 </p>
                 <!-- Cancel button -->
                 <p class="control">
-                    <button class="button is-rounded" :class="{'is-dark' : $root.showDarkMode}" @click="showGroupSelector = false">{{ $t('commons.cancel') }}</button>
+                    <button id="btnCancel" class="button is-rounded" :class="{'is-dark' : $root.showDarkMode}" @click="showGroupSelector = false">{{ $t('commons.cancel') }}</button>
                 </p>
             </vue-footer>
         </div>
@@ -101,13 +101,13 @@
                     <div v-else class="has-text-centered">
                         <div class="columns">
                             <div class="column" v-if="!showGroupSwitch">
-                                <button :title="$t('groups.show_group_selector')" tabindex="1" class="button is-text is-like-text" :class="{'has-text-grey' : !$root.showDarkMode}" @click.stop="toggleGroupSwitch">
+                                <button id="btnShowGroupSwitch" :title="$t('groups.show_group_selector')" tabindex="1" class="button is-text is-like-text" :class="{'has-text-grey' : !$root.showDarkMode}" @click.stop="toggleGroupSwitch">
                                     {{ activeGroupName }} ({{ filteredAccounts.length }})&nbsp;
                                     <font-awesome-icon  :icon="['fas', 'caret-down']" />
                                 </button>
                             </div>
                             <div class="column" v-else>
-                                <button :title="$t('groups.hide_group_selector')" tabindex="1" class="button is-text is-like-text" :class="{'has-text-grey' : !$root.showDarkMode}" @click.stop="toggleGroupSwitch">
+                                <button id="btnHideGroupSwitch" :title="$t('groups.hide_group_selector')" tabindex="1" class="button is-text is-like-text" :class="{'has-text-grey' : !$root.showDarkMode}" @click.stop="toggleGroupSwitch">
                                     {{ $t('groups.select_accounts_to_show') }}
                                 </button>
                             </div>

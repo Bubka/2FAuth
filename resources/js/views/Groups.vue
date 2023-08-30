@@ -37,7 +37,7 @@
         <vue-footer :showButtons="true">
             <!-- close button -->
             <p class="control">
-                <router-link  :to="{ name: 'accounts', params: { toRefresh: true } }" class="button is-rounded" :class="{'is-dark' : $root.showDarkMode}">{{ $t('commons.close') }}</router-link>
+                <router-link id="btnClose" :to="{ name: 'accounts', params: { toRefresh: true } }" class="button is-rounded" :class="{'is-dark' : $root.showDarkMode}">{{ $t('commons.close') }}</router-link>
             </p>
         </vue-footer>
     </responsive-width-wrapper>

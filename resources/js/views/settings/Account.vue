@@ -41,6 +41,7 @@
             <!-- close button -->
             <p class="control">
                 <router-link
+                    id="btnClose" 
                     :to="{ path: $route.params.returnTo, params: { toRefresh: false } }"
                     class="button is-rounded"
                     :class="{'is-dark' : $root.showDarkMode}"

@@ -39,7 +39,7 @@
                 </div>
                 <!-- link to import view -->
                 <div v-if="showImportButton" class="block has-text-link">
-                    <router-link class="button is-link is-outlined is-rounded" :to="{ name: 'importAccounts' }" >
+                    <router-link id="btnImport" class="button is-link is-outlined is-rounded" :to="{ name: 'importAccounts' }" >
                         {{ $t('twofaccounts.import.import') }}
                     </router-link>
                 </div>
@@ -49,7 +49,7 @@
         <vue-footer :showButtons="true" >
             <!-- back button -->
             <p class="control" v-if="accountCount > 0">
-                <router-link class="button is-rounded" :class="{'is-dark' : $root.showDarkMode}" :to="{ name: returnToView }" >
+                <router-link id="lnkBack" class="button is-rounded" :class="{'is-dark' : $root.showDarkMode}" :to="{ name: returnToView }" >
                     {{ $t('commons.back') }}
                 </router-link>
             </p>
