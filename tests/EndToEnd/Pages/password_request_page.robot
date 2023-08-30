@@ -9,7 +9,6 @@ ${PASSWORD REQUEST PAGE URL}    ${ROOT URL}/password/request
 ${EMAIL FIELD}    emlEmail
 ${EMAIL FIELD ERROR}    valErrorEmail
 ${SUBMIT BUTTON}    btnSendResetPwd
-${CANCEL BUTTON}    btnCancel
 
 *** Keywords ***
 Password Request Page Should Be Open

@@ -9,7 +9,6 @@ ${WEBAUTHN LOST PAGE URL}    ${ROOT URL}/webauthn/lost
 ${EMAIL FIELD}    emlEmail
 ${EMAIL FIELD ERROR}    valErrorEmail
 ${SUBMIT BUTTON}    btnSubmit
-${CANCEL BUTTON}    btnCancel
 
 *** Keywords ***
 Webauthn Device Lost Page Should Be Open

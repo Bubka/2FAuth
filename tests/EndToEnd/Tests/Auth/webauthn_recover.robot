@@ -34,7 +34,7 @@ Reset Passwork Link Should Be Visible
 
 Webauthn Recover Form Can Be Quit
     Go To Webauthn Recover Page    \    \
-    Click Link    ${CANCEL BUTTON}
+    Click Element    ${CANCEL BUTTON}
     Login Page Should Be Open
     
 *** Keywords ***

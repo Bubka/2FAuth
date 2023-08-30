@@ -8,7 +8,7 @@ ${GROUPS PAGE URL}    ${ROOT URL}/groups
 
 *** Keywords ***
 Groups Page Should Be Open
-    Location Should Be    ${GROUPS PAGE URL}
+    Wait Until Location Is    ${GROUPS PAGE URL}
     
 Go To Groups Page
     Go Authenticated To    ${GROUPS PAGE URL}

@@ -2,6 +2,7 @@
 Documentation     A page object to use in OAuth settings tests.
 ...
 Library           SeleniumLibrary
+Resource          settings.resource
 Resource          ../common.resource
 
 *** Variables ***
@@ -13,3 +14,6 @@ OAuth Settings Page Should Be Open
 
 Go To OAuth Settings Page
     Go Authenticated To    ${OAUTH SETTINGS PAGE URL}
+
+Activate OAuth Settings Tab
+    Activate Settings Tab    ${OAUTH TAB}

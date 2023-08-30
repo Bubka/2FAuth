@@ -7,7 +7,6 @@ Library           String
 
 *** Variables ***
 ${ABOUT PAGE URL}    ${ROOT URL}/about
-${BACK BUTTON}    lnkBack
 
 *** Keywords ***
 About Page Should Be Open
@@ -15,6 +14,13 @@ About Page Should Be Open
 
 Go To About Page
     Go To    ${ABOUT PAGE URL}
+
+Browse To About Page
+    Click Link    ${ABOUT LINK}
+
+Exit About Page
+    Wait Until Page Contains Element    ${BACK BUTTON}
+    Click Link    ${BACK BUTTON}
 
 Block Vars Should Be Visible
     [Arguments]    ${elementId}

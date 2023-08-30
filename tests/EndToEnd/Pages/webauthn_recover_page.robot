@@ -10,7 +10,6 @@ ${PASSWORD FIELD}    pwdPassword
 ${PASSWORD FIELD ERROR}    valErrorPassword
 ${REVOKE ALL CHECKBOX}    revokeAll
 ${SUBMIT BUTTON}    btnRecover
-${CANCEL BUTTON}    btnCancel
 ${RESET PASSWORD LINK}    lnkResetPwd
 
 *** Keywords ***

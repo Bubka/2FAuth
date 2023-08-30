@@ -2,6 +2,7 @@
 Documentation     A page object to use in User Options settings tests.
 ...
 Library           SeleniumLibrary
+Resource          settings.resource
 Resource          ../common.resource
 
 *** Variables ***
@@ -13,3 +14,6 @@ Options Settings Page Should Be Open
 
 Go To Options Settings Page
     Go Authenticated To    ${OPTIONS SETTINGS PAGE URL}
+
+Activate Options Settings Tab
+    Activate Settings Tab    ${OPTIONS TAB}

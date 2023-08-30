@@ -13,7 +13,6 @@ ${PASSWORD FIELD ERROR}    valErrorPassword
 ${TOKEN FIELD ERROR}    valErrorToken
 ${SUBMIT BUTTON}    btnSubmit
 ${CONTINUE BUTTON}    btnContinue
-${CANCEL BUTTON}    btnCancel
 ${TOGGLE PASSWORD VISIBILITY BUTTON}    btnTogglePassword
 
 *** Keywords ***

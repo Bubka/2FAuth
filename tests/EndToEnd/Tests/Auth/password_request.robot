@@ -24,7 +24,7 @@ New Request While Pending One Is Rejected
     Email Submit Should Fail    ${ADMIN EMAIL}
 
 Request Form Can Be Quit
-    Click Link    ${CANCEL BUTTON}
+    Click Element    ${CANCEL BUTTON}
     Login Page Should Be Open
     
 *** Keywords ***

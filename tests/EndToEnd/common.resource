@@ -14,7 +14,14 @@ ${USER EMAIL}       testingadmin@2fauth.app
 ${PASSWORD}         password
 
 ${ROOT URL}         http://${SERVER}
+
 ${LOGOUT LINK}      lnkSignOut
+${ABOUT LINK}       lnkAbout
+${SETTINGS LINK}    lnkSettings
+${BACK BUTTON}      lnkBack
+${CANCEL BUTTON}    btnCancel
+${CLOSE BUTTON}     btnClose
+${OTP}              otp
 
 ${SUCCESS NOTIFICATION}    css:#vueNotification .is-success
 ${ALERT NOTIFICATION}    css:#vueNotification .is-danger
@@ -68,3 +75,6 @@ Element Should Not Have Class
 Set Footer As Static
     execute javascript  
     ...  document.querySelector('footer').style = 'position: static';
+
+Browse To Settings
+    Click Element    ${SETTINGS LINK}

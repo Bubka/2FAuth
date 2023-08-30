@@ -48,7 +48,7 @@ Password Reset Is Submitted Sucessfully
 
 Reset Form Can Be Quit
     Go To Password Reset Page    ${ADMIN EMAIL}    ${TOKEN}
-    Click Link    ${CANCEL BUTTON}
+    Click Element    ${CANCEL BUTTON}
     Login Page Should Be Open
     
 *** Keywords ***
