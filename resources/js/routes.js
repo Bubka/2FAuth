@@ -85,6 +85,22 @@ router.beforeEach((to, from, next) => {
     if (to.name !== 'login' && to.meta.requiresAuth && ! Vue.$storage.get('authenticated', false)) {
         next({ name: 'login' })
     }
+    else if (to.name.startsWith('settings.')) {
+        if (to.params.returnTo == undefined) {
+            if (from.params.returnTo) {
+                next({name: to.name, params: { returnTo: from.params.returnTo }})
+            }
+            else if (from.name) {
+                next({name: to.name, params: { returnTo: from.path }})
+            }
+            else {
+                next({name: to.name, params: { returnTo: '/accounts' }})
+            }
+        }
+        else {
+            next()
+        }
+    }
     else if (to.matched.some(record => record.meta.disabledWithAuthProxy)) {
         if (window.appConfig.proxyAuth) {
             next({ name: 'accounts' })

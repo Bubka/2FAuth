@@ -224,19 +224,6 @@
 
         },
 
-        beforeRouteEnter(to, from, next) {
-            next(vm => {
-                if (from.params.returnTo) {
-                    to.params.returnTo = from.params.returnTo
-                }
-                else {
-                    to.params.returnTo = from.name
-                        ? from.path
-                        : '/accounts'
-                }
-            })
-        },
-
         beforeRouteLeave(to, from, next) {
             if (to.name == 'accounts') {
                 this.$notify({ clean: true })

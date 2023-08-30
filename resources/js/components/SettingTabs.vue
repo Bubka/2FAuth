@@ -4,7 +4,7 @@
             <div class="tabs is-centered is-fullwidth">
                 <ul>
                     <li v-for="tab in tabs" :key="tab.view" :class="{ 'is-active': tab.view === activeTab }">
-                        <router-link :id="tab.id" :to="{ name: tab.view }">{{ tab.name }}</router-link>
+                        <router-link :id="tab.id" :to="{ name: tab.view, params: {returnTo: $route.params.returnTo} }">{{ tab.name }}</router-link>
                     </li>
                 </ul>
             </div>
