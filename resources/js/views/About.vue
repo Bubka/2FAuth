@@ -143,10 +143,6 @@
                 if (from.params.returnTo) {
                     to.params.returnTo = from.params.returnTo
                 }
-
-                to.params.goBackTo = from.name
-                    ? from.path
-                    : '/accounts'
             })
         },
 

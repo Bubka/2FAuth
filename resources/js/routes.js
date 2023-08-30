@@ -101,6 +101,12 @@ router.beforeEach((to, from, next) => {
             next()
         }
     }
+    else if (to.name == 'about' && to.params.goBackTo == undefined) {
+        if (from.name) {
+            next({ name: to.name, params: {goBackTo: from.path} })
+        }
+        else next({ name: to.name, params: {goBackTo: '/accounts'} })
+    }
     else if (to.matched.some(record => record.meta.disabledWithAuthProxy)) {
         if (window.appConfig.proxyAuth) {
             next({ name: 'accounts' })
