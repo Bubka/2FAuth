@@ -15,5 +15,5 @@ OAuth Settings Page Should Be Open
 Go To OAuth Settings Page
     Go Authenticated To    ${OAUTH SETTINGS PAGE URL}
 
-Activate OAuth Settings Tab
-    Activate Settings Tab    ${OAUTH TAB}
+Browse To OAuth Settings Tab
+    Browse To Settings Tab    ${OAUTH TAB}

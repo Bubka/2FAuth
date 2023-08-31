@@ -4,6 +4,7 @@
         <div class="options-tabs">
             <form-wrapper>
                 <form>
+                    <input type="hidden" name="isReady" id="isReady" :value="isReady" />
                     <!-- user preferences -->
                     <div class="block">
                         <h4 class="title is-4 has-text-grey-light">{{ $t('settings.general') }}</h4>
@@ -111,6 +112,7 @@
     export default {
         data(){
             return {
+                isReady: false,
                 preferencesForm: new Form({
                     lang: '',
                     showOtpAsDot: null,
@@ -214,6 +216,10 @@
             })
 
             this.fetchGroups()
+
+            this.$nextTick(function () {
+                this.isReady = true
+            })
         },
 
         methods : {

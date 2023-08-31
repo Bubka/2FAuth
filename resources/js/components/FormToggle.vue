@@ -3,6 +3,7 @@
         <label v-if="label" :id="inputId('label', fieldName)" class="label" v-html="label"></label>
         <div class="is-toggle buttons">
             <button 
+                :id="inputId('button',fieldName + choice.value)"
                 role="radio" 
                 type="button"
                 class="button" 

@@ -15,6 +15,6 @@ Webauthn Settings Page Should Be Open
 Go To Webauthn Settings Page
     Go Authenticated To    ${WEBAUTHN SETTINGS PAGE URL}
 
-Activate Webauthn Settings Tab
-    Activate Settings Tab    ${WEBAUTHN TAB}
+Browse To Webauthn Settings Tab
+    Browse To Settings Tab    ${WEBAUTHN TAB}
     Wait Until Page Does Not Contain Element    icnSpinner

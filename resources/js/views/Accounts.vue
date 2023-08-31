@@ -70,7 +70,7 @@
                             <input ref="searchBox" id="txtSearch" type="search" tabindex="1" :aria-label="$t('commons.search')" :title="$t('commons.search')" class="input is-rounded is-search" v-model="search">
                             <span class="icon is-small is-right">
                                 <font-awesome-icon :icon="['fas', 'search']"  v-if="!search" />
-                                <button tabindex="1" :title="$t('commons.clear_search')" class="clear-selection delete" v-if="search" @click="search = '' "></button>
+                                <button id="btnClearSearch" tabindex="1" :title="$t('commons.clear_search')" class="clear-selection delete" v-if="search" @click="search = '' "></button>
                             </span>
                         </div>
                     </div>

@@ -49,7 +49,7 @@ Cancel Button From Import Page Should Send To Accounts Page
 
 Close Button Should Close Modal Window
     Go To    ${ACCOUNTS PAGE URL}
-    Show First Totp In Modal
+    Show An Otp In Modal
     Click Element    ${CLOSE BUTTON}
     Wait Until Element Is Not Visible    class:modal-otp
 
@@ -76,7 +76,7 @@ Close Button From Settings Should Send To Page Before Settings Browsing
 Visiting About Page Via Settings Pages Should End To Starting Page
     Go To Groups Page
     Browse To Settings
-    Activate Webauthn Settings Tab
+    Browse To Webauthn Settings Tab
     Browse To About Page
     Exit About Page
     Webauthn Settings Page Should Be Open
@@ -89,6 +89,6 @@ Close Button From A Settings Tab Should Send To Previous Page
     [Arguments]    ${tab}
     Go To Groups Page
     Browse To Settings
-    Activate Settings Tab    ${tab}
+    Browse To Settings Tab    ${tab}
     Exit Settings
     Groups Page Should Be Open

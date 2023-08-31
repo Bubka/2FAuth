@@ -26,6 +26,9 @@ ${OTP}              otp
 ${SUCCESS NOTIFICATION}    css:#vueNotification .is-success
 ${ALERT NOTIFICATION}    css:#vueNotification .is-danger
 
+${OTP OBFUSCATOR SYMBOL}    ●
+${CLEARED CLIPBOARD VALUE}    -clear-
+
 *** Keywords ***
 Open Custom Browser
     [Arguments]    ${url}=${ROOT URL}
@@ -73,6 +76,7 @@ Element Should Not Have Class
     Should Not Contain    ${class}    ${className}
 
 Set Footer As Static
+    Wait Until Page Contains Element    tag:footer
     execute javascript  
     ...  document.querySelector('footer').style = 'position: static';
 

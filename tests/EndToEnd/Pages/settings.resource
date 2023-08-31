@@ -13,7 +13,7 @@ Exit Settings
     Wait Until Page Contains Element    ${CLOSE BUTTON}
     Click Link    ${CLOSE BUTTON}
 
-Activate Settings Tab
+Browse To Settings Tab
     [Arguments]    ${tab}
     Wait Until Page Contains Element    ${tab}
     ${requested tab is active}=  Run Keyword And Return Status    Element Attribute Value Should Be    .tabs > li.is-active a    id    ${tab} 

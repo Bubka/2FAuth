@@ -19,8 +19,8 @@ Account Settings Page Should Be Open
 Go To Account Settings Page
     Go Authenticated To    ${ACCOUNT SETTINGS PAGE URL}
 
-Activate Account Settings Tab
-    Activate Settings Tab    ${ACCOUNT TAB}
+Browse To Account Settings Tab
+    Browse To Settings Tab    ${ACCOUNT TAB}
     
 Delete User Account
     Scroll To Bottom
