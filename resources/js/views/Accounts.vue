@@ -153,7 +153,7 @@
                                         <span v-if="account.otp != undefined && isRenewingOTPs" class="has-nowrap has-text-grey has-text-centered is-size-5">
                                             <font-awesome-icon :icon="['fas', 'circle-notch']" spin />
                                         </span>
-                                        <span v-else-if="account.otp != undefined && isRenewingOTPs == false" class="is-clickable has-nowrap has-text-grey is-size-5 ml-4" @click="copyOTP(account.otp.password)" @keyup.enter="copyOTP(account.otp.password)" :title="$t('commons.copy_to_clipboard')">
+                                        <span v-else-if="account.otp != undefined && isRenewingOTPs == false" class="always-on-otp is-clickable has-nowrap has-text-grey is-size-5 ml-4" @click="copyOTP(account.otp.password)" @keyup.enter="copyOTP(account.otp.password)" :title="$t('commons.copy_to_clipboard')">
                                             {{ displayPwd(account.otp.password) }}
                                         </span>
                                         <span v-else>
