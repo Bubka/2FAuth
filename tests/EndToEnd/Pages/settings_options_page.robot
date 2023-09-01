@@ -17,6 +17,16 @@ Run Set Option Keyword And Come Back
     Go To Options Settings Page
     Run Keyword    ${set option keyword}
     Go To    ${current url}
+    
+Run Multiple Set Option Keyword And Come Back
+    [Arguments]    @{set option keywords}
+    ${current url} =    Get Location
+    Go To Options Settings Page
+    FOR    ${keyword}    IN    @{set option keywords}
+        Close Notification
+        Run Keyword    ${keyword}
+    END
+    Go To    ${current url}
 
 Options Tab Is Active
     Run Keyword And Return Status    Element Should Have Class    lnkTabOptions    router-link-active

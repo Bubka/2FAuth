@@ -26,7 +26,6 @@ ${OTP}              otp
 ${SUCCESS NOTIFICATION}    css:#vueNotification .is-success
 ${ALERT NOTIFICATION}    css:#vueNotification .is-danger
 
-${OTP OBFUSCATOR SYMBOL}    ●
 ${CLEARED CLIPBOARD VALUE}    -clear-
 
 *** Keywords ***
@@ -53,6 +52,9 @@ Go Authenticated To
 
 A Success Notification Should Appear
     Wait Until Element Is Visible    ${SUCCESS NOTIFICATION}
+
+Close Notification
+    Run Keyword And Ignore Error    Click Element    ${SUCCESS NOTIFICATION}
 
 An Error Notification Should Appear
     Wait Until Element Is Visible    ${ALERT NOTIFICATION}

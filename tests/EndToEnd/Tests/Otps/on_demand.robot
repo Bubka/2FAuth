@@ -31,22 +31,28 @@ Otp Digits Should Not Be Grouped
     Otp Digits Should Not Be Grouped    ${otp value}
 
 Otp Digits Should Be Grouped By Pair
-    Run Set Option Keyword And Come Back    Enable Option Password Formatting
-    Run Set Option Keyword And Come Back    Set Option Password Formatting By Pair
+    @{set option keywords} =    Create List
+    ...    Enable Option Password Formatting
+    ...    Set Option Password Formatting By Pair
+    Run Multiple Set Option Keyword And Come Back    @{set option keywords}
     Show An Otp In Modal
     ${otp value}=    Get OTP Value Shown In Modal
     Otp Digits Should Be Grouped By Pair    ${otp value}
 
 Otp Digits Should Be Grouped By Trio
-    Run Set Option Keyword And Come Back    Enable Option Password Formatting
-    Run Set Option Keyword And Come Back    Set Option Password Formatting By Trio
+    @{set option keywords} =    Create List
+    ...    Enable Option Password Formatting
+    ...    Set Option Password Formatting By Trio
+    Run Multiple Set Option Keyword And Come Back    @{set option keywords}
     Show An Otp In Modal
     ${otp value}=    Get OTP Value Shown In Modal
     Otp Digits Should Be Grouped By Trio    ${otp value}
 
 Otp Digits Should Be Grouped By Half
-    Run Set Option Keyword And Come Back    Enable Option Password Formatting
-    Run Set Option Keyword And Come Back    Set Option Password Formatting By Half
+    @{set option keywords} =    Create List
+    ...    Enable Option Password Formatting
+    ...    Set Option Password Formatting By Half
+    Run Multiple Set Option Keyword And Come Back    @{set option keywords}
     Show An Otp In Modal
     ${otp value}=    Get OTP Value Shown In Modal
     Otp Digits Should Be Grouped By Half    ${otp value}
@@ -66,9 +72,11 @@ Modal Should Not Be Closed After Otp Copy
     Element Should Be Visible    ${OTP}
 
 Readable Otp Should Be Copied On Click
-    Run Set Option Keyword And Come Back    Disable Option Show Otp As Dot
-    Run Set Option Keyword And Come Back    Enable Option Password Formatting
-    Run Set Option Keyword And Come Back    Disable Option Copy Otp On Display
+    @{set option keywords} =    Create List
+    ...    Disable Option Show Otp As Dot
+    ...    Enable Option Password Formatting
+    ...    Disable Option Copy Otp On Display
+    Run Multiple Set Option Keyword And Come Back    @{set option keywords}
     Show An Otp In Modal
     Click Otp In Modal To Copy It
     A Success Notification Should Appear
@@ -77,9 +85,11 @@ Readable Otp Should Be Copied On Click
 Obfuscated Otp Should Be Copied On Click
     ${random value} =    Generate Random String    8    [LETTERS]
     Copy To Clipboard    ${random value}
-    Run Set Option Keyword And Come Back    Enable Option Show Otp As Dot
-    Run Set Option Keyword And Come Back    Enable Option Password Formatting
-    Run Set Option Keyword And Come Back    Enable Option Copy Otp On Display
+    @{set option keywords} =    Create List
+    ...    Enable Option Show Otp As Dot
+    ...    Enable Option Password Formatting
+    ...    Enable Option Copy Otp On Display
+    Run Multiple Set Option Keyword And Come Back    @{set option keywords}
     Show An Otp In Modal
     Click Otp In Modal To Copy It
     A Success Notification Should Appear
@@ -90,9 +100,11 @@ Obfuscated Otp Should Be Copied On Click
     Should Match Regexp    ${clipboard}    ^\\d+$
 
 Readable Otp Should Be Copied On Display
-    Run Set Option Keyword And Come Back    Disable Option Show Otp As Dot
-    Run Set Option Keyword And Come Back    Enable Option Password Formatting
-    Run Set Option Keyword And Come Back    Enable Option Copy Otp On Display
+    @{set option keywords} =    Create List
+    ...    Disable Option Show Otp As Dot
+    ...    Enable Option Password Formatting
+    ...    Enable Option Copy Otp On Display
+    Run Multiple Set Option Keyword And Come Back    @{set option keywords}
     Show An Otp In Modal
     A Success Notification Should Appear
     On Screen Otp Notified As Copied Should Be In Clipboard
@@ -100,9 +112,11 @@ Readable Otp Should Be Copied On Display
 Obfuscated Otp Should Be Copied On Display
     ${random value} =    Generate Random String    8    [LETTERS]
     Copy To Clipboard    ${random value}
-    Run Set Option Keyword And Come Back    Enable Option Show Otp As Dot
-    Run Set Option Keyword And Come Back    Enable Option Password Formatting
-    Run Set Option Keyword And Come Back    Enable Option Copy Otp On Display
+    @{set option keywords} =    Create List
+    ...    Enable Option Show Otp As Dot
+    ...    Enable Option Password Formatting
+    ...    Enable Option Copy Otp On Display
+    Run Multiple Set Option Keyword And Come Back    @{set option keywords}
     Show An Otp In Modal
     A Success Notification Should Appear
     Close Modal Otp

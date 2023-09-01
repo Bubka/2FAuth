@@ -34,32 +34,40 @@ All Otp Digits Should Not Be Grouped
     END
 
 All Otp Digits Should Be Grouped By Pair
-    Run Set Option Keyword And Come Back    Enable Option Password Formatting
-    Run Set Option Keyword And Come Back    Set Option Password Formatting By Pair
+    @{set option keywords} =    Create List
+    ...    Enable Option Password Formatting
+    ...    Set Option Password Formatting By Pair
+    Run Multiple Set Option Keyword And Come Back    @{set option keywords}
     @{otps} =    Get OTP Values Shown On Home
     FOR    ${otp}    IN    @{otps}
         Otp Digits Should Be Grouped By Pair    ${otp}
     END
 
 All Otp Digits Should Be Grouped By Trio
-    Run Set Option Keyword And Come Back    Enable Option Password Formatting
-    Run Set Option Keyword And Come Back    Set Option Password Formatting By Trio
+    @{set option keywords} =    Create List
+    ...    Enable Option Password Formatting
+    ...    Set Option Password Formatting By Trio
+    Run Multiple Set Option Keyword And Come Back    @{set option keywords}
     @{otps} =    Get OTP Values Shown On Home
     FOR    ${otp}    IN    @{otps}
         Otp Digits Should Be Grouped By Trio    ${otp}
     END
 
 All Otp Digits Should Be Grouped By Half
-    Run Set Option Keyword And Come Back    Enable Option Password Formatting
-    Run Set Option Keyword And Come Back    Set Option Password Formatting By Half
+    @{set option keywords} =    Create List
+    ...    Enable Option Password Formatting
+    ...    Set Option Password Formatting By Half
+    Run Multiple Set Option Keyword And Come Back    @{set option keywords}
     @{otps} =    Get OTP Values Shown On Home
     FOR    ${otp}    IN    @{otps}
         Otp Digits Should Be Grouped By Half    ${otp}
     END
 
 Readable Otp Should Be Copied On Click
-    Run Set Option Keyword And Come Back    Disable Option Show Otp As Dot
-    Run Set Option Keyword And Come Back    Enable Option Password Formatting
+    @{set option keywords} =    Create List
+    ...    Disable Option Show Otp As Dot
+    ...    Enable Option Password Formatting
+    Run Multiple Set Option Keyword And Come Back    @{set option keywords}
     Click Otp On Home To Copy It
     A Success Notification Should Appear
     Otp Notified As Copied Should Be In Clipboard
