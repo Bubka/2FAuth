@@ -10,24 +10,31 @@ ${ACCOUNTS PAGE URL}    ${ROOT URL}/accounts
 
 ${GROUP SWITCH}    groupSwitch
 ${SEARCH FIELD}    txtSearch
+${GRID CLASS}    tfa-grid
+${LIST CLASS}    tfa-list
+${ACCOUNTS CONTAINER}    .accounts > span
 ${2FA ACCOUNT}    class:tfa-cell
 ${MODAL OTP}    class:modal-otp
 ${ALWAYS ON OTP}    class:always-on-otp
 ${SHOW GROUP SWITCH BUTTON}    btnShowGroupSwitch
 ${HIDE GROUP SWITCH BUTTON}    btnHideGroupSwitch
 
-*** Keywords ***
-Accounts Page Should Be Open
-    Wait Until Location Is    ${ACCOUNTS PAGE URL}
-    
+*** Keywords ***    
 Go To Accounts Page
     Go Authenticated To    ${ACCOUNTS PAGE URL}
+
+Wait Until Accounts Are Loaded
+    Wait Until Page Contains Element    class:accounts
 
 Show An Otp In Modal
     Wait Until Page Contains Element    ${2FA ACCOUNT}
     ${account} =    Get WebElement    ${2FA ACCOUNT}:first-child
     Click Element    ${account}
     Wait Until Element Is Visible    ${OTP}
+
+Get TwoFAccounts Elements
+    @{twofaccounts} =    Get WebElements    ${ACCOUNTS CONTAINER} > div
+    [return]  ${twofaccounts}
 
 Get OTP Value Shown In Modal
     ${string}=    Get Text    ${OTP}

@@ -42,6 +42,20 @@ Browse To Options Settings Tab
     Browse To Settings Tab    ${OPTIONS TAB}
 
 
+# Display Mode
+Set Option Display Mode To List
+    Activate Option Button    btnDisplaymodelist
+
+Set Option Display Mode To Grid
+    Activate Option Button    btnDisplaymodegrid
+
+# Show icons
+Enable Option Show Icons
+    Set Option Checkbox As    showAccountsIcons    True
+    
+Disable Option Show Icons
+    Set Option Checkbox As    showAccountsIcons    False
+
 # Show Password
 Set Option Show Password To On Demand
     Activate Option Button    btnGetotponrequesttrue
