@@ -1,5 +1,27 @@
 # Change log
 
+## [4.2.0] - 2023-09-12
+
+### Added
+
+- An Only for the brave feature: ctrl + click a TOTP account from the main view automatically generates a password and copies it to the clipboard without displaying it at all. Will the password be valid at the time you paste it? Nobody knows.
+- The `MAIL_VERIFY_SSL_PEER` environment variable to disable SSL peers verification ([#219](https://github.com/Bubka/2FAuth/issues/219)).
+
+### Changed
+
+- Navigation with the Back and Close buttons is now fully consistent with their labeling, even when browsing back through successive views using those buttons.
+- The length of the email submitted during registration is now limited to 191 characters ([#214](https://github.com/Bubka/2FAuth/issues/214)).
+- Upgrade to Laravel 10
+
+### Fixed
+
+- [issue #213](https://github.com/Bubka/2FAuth/issues/213) `checkForUpdate` value is missing in the About view
+- Inconsistent page titles
+
+---
+
+**Full Changelog**: [v4.1.0...v4.2.0](https://github.com/Bubka/2FAuth/compare/v4.1.0...v4.2.0)
+
 ## [4.1.0] - 2023-07-07
 
 This new version introduces a very common feature in the 2FA app world, the automatic generation and display of passwords.
