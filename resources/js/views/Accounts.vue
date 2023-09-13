@@ -81,17 +81,17 @@
                                 <!-- selected label -->
                                 <span class="has-text-grey mr-1">{{ selectedAccounts.length }}&nbsp;{{ $t('commons.selected') }}</span>
                                 <!-- deselect all -->
-                                <button @click="clearSelected" class="clear-selection delete mr-4" :style="{visibility: selectedAccounts.length > 0 ? 'visible' : 'hidden'}" :title="$t('commons.clear_selection')"></button>
+                                <button id="btnUnselectAll" @click="clearSelected" class="clear-selection delete mr-4" :style="{visibility: selectedAccounts.length > 0 ? 'visible' : 'hidden'}" :title="$t('commons.clear_selection')"></button>
                                 <!-- select all button -->
-                                <button @click="selectAll" class="button mr-5 has-line-height p-1 is-ghost has-text-grey" :title="$t('commons.select_all')">
+                                <button id="btnSelectAll" @click="selectAll" class="button mr-5 has-line-height p-1 is-ghost has-text-grey" :title="$t('commons.select_all')">
                                     <span>{{ $t('commons.all') }}</span>
                                     <font-awesome-icon class="ml-1" :icon="['fas', 'check-square']" />
                                 </button>
                                 <!-- sort asc/desc buttons -->
-                                <button @click="sortAsc" class="button has-line-height p-1 is-ghost has-text-grey" :title="$t('commons.sort_ascending')">
+                                <button id="btnSortAscending" @click="sortAsc" class="button has-line-height p-1 is-ghost has-text-grey" :title="$t('commons.sort_ascending')">
                                     <font-awesome-icon :icon="['fas', 'sort-alpha-down']" />
                                 </button>
-                                <button @click="sortDesc" class="button has-line-height p-1 is-ghost has-text-grey" :title="$t('commons.sort_descending')">
+                                <button id="btnSortDescending" @click="sortDesc" class="button has-line-height p-1 is-ghost has-text-grey" :title="$t('commons.sort_descending')">
                                     <font-awesome-icon :icon="['fas', 'sort-alpha-up']" />
                                 </button>
                             </div>
@@ -198,11 +198,12 @@
                 </p>
                 <!-- Manage button -->
                 <p class="control" v-if="!editMode">
-                    <button class="button is-rounded" :class="{'is-dark' : $root.showDarkMode}" @click="setEditModeTo(true)">{{ $t('commons.manage') }}</button>
+                    <button id="btnManage" class="button is-rounded" :class="{'is-dark' : $root.showDarkMode}" @click="setEditModeTo(true)">{{ $t('commons.manage') }}</button>
                 </p>
                 <!-- move button -->
                 <p class="control" v-if="editMode">
                     <button
+                        id="btnMove" 
                         :disabled='selectedAccounts.length == 0' class="button is-rounded"
                         :class="[{'is-outlined': $root.showDarkMode||selectedAccounts.length == 0}, selectedAccounts.length == 0 ? 'is-dark': 'is-link']"
                         @click="showGroupSelector = true"
@@ -213,6 +214,7 @@
                 <!-- delete button -->
                 <p class="control" v-if="editMode">
                     <button
+                        id="btnDelete" 
                         :disabled='selectedAccounts.length == 0' class="button is-rounded"
                         :class="[{'is-outlined': $root.showDarkMode||selectedAccounts.length == 0}, selectedAccounts.length == 0 ? 'is-dark': 'is-link']"
                         @click="destroyAccounts" >
@@ -222,6 +224,7 @@
                 <!-- export button -->
                 <p class="control" v-if="editMode">
                     <button
+                        id="btnExport" 
                         :disabled='selectedAccounts.length == 0' class="button is-rounded"
                         :class="[{'is-outlined': $root.showDarkMode||selectedAccounts.length == 0}, selectedAccounts.length == 0 ? 'is-dark': 'is-link']"
                         @click="exportAccounts"

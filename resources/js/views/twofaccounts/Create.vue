@@ -127,10 +127,10 @@
                 </div>
                 <vue-footer :showButtons="true">
                     <p class="control">
-                        <v-button :isLoading="form.isBusy" class="is-rounded" >{{ $t('commons.create') }}</v-button>
+                        <v-button id="btnCreate" :isLoading="form.isBusy" class="is-rounded" >{{ $t('commons.create') }}</v-button>
                     </p>
                     <p class="control" v-if="form.otp_type && form.secret">
-                        <button type="button" class="button is-success is-rounded" @click="previewAccount">{{ $t('twofaccounts.forms.test') }}</button>
+                        <button id="btnPreview" type="button" class="button is-success is-rounded" @click="previewAccount">{{ $t('twofaccounts.forms.test') }}</button>
                     </p>
                     <p class="control">
                         <button id="btnCancel" type="button" class="button is-text is-rounded" @click="cancelCreation">{{ $t('commons.cancel') }}</button>
