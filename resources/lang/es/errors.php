@@ -33,11 +33,11 @@ return [
     'https_required' => 'Contexto HTTPS requerido',
     'browser_does_not_support_webauthn' => 'Su dispositivo no soporta WebAuthn. Intente de nuevo más tarde en un navegador más moderno',
     'aborted_by_user' => 'Abortado por el usuario',
-    'security_device_unsupported' => 'Unsupported or in use device',
-    'not_allowed_operation' => 'Operation not allowed',
-    'unsupported_operation' => 'Unsupported operation',
-    'unknown_error' => 'Unknown error',
-    'security_error_check_rpid' => 'Security error<br/>Check your WEBAUTHN_ID env var',
+    'security_device_unsupported' => 'Dispositivo no soportado o en uso',
+    'not_allowed_operation' => 'Operacion no permitida',
+    'unsupported_operation' => 'Operación no admitida',
+    'unknown_error' => 'Error desconocido',
+    'security_error_check_rpid' => 'Error de seguridad<br/>Compruebe su variable de entorno WEBAUTHN_ID',
     'unsupported_with_reverseproxy' => 'No aplicable cuando se utiliza un proxy de autenticación',
     'user_deletion_failed' => 'Error al borrar la cuenta de usuario, no se han eliminado datos',
     'auth_proxy_failed' => 'La autenticación proxy falló',
@@ -49,7 +49,7 @@ return [
     'encrypted_migration' => 'Ilegíble, los datos parecen estar encriptados',
     'no_logo_found_for_x' => 'Logo no disponible para {service}',
     'file_upload_failed' => 'Fallo al subir el archivo',
-    'unauthorized' => 'Unauthorized',
-    'unauthorized_legend' => 'You do not have permissions to view this resource or to perform this action',
-    'cannot_delete_the_only_admin' => 'Cannot delete the only admin account'
+    'unauthorized' => 'No autorizado',
+    'unauthorized_legend' => 'No tiene permisos para ver este recurso o para realizar esta acción',
+    'cannot_delete_the_only_admin' => 'No se puede eliminar la única cuenta de administrador'
 ];

@@ -49,7 +49,7 @@ return [
     'reload' => '刷新',
     'some_data_have_changed' => '某些数据已经更改，您应该：',
     'generate' => '生成',
-    'generating_otp' => 'Generating OTP',
+    'generating_otp' => '正在生成 OTP',
     'open_in_browser' => '在浏览器中打开',
     'continue' => '继续',
     'discard' => '放弃',

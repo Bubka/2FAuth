@@ -10,11 +10,11 @@ return [
     |
     */
 
-    'browser_preference' => 'Preferencia del navegador',
-    'en' => 'Inglés',
-    'fr' => 'Francés',
-    'de' => 'Alemán',
-    'es' => 'Español',
-    'zh' => 'Chino Simplificado',
-    'ru' => 'Ruso',
+    'browser_preference' => 'Browser preference',
+    'en' => 'English',
+    'fr' => 'French',
+    'de' => 'German',
+    'es' => 'Spanish',
+    'zh' => 'Chinese Simplified',
+    'ru' => 'Russian',
 ];

@@ -37,6 +37,7 @@ So this is now only a user choice as 2FAuth offers both behaviors via a user pre
 - An administrator setting to disable user registration ([#170](https://github.com/Bubka/2FAuth/issues/170))
 - A `2fauth:install` Artisan command to ease both initial and upgrade installation.
 - A spinner, during 2FA password loading - By [@josh-gaby](https://github.com/josh-gaby).
+- Russian translation, but partial. Want to help complete this translation? ➡️ [2FAuth project on Crowdin](https://crowdin.com/project/2fauth).
 
 ### Changed
 

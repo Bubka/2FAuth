@@ -30,7 +30,7 @@ return [
     'account_updated' => 'Cuenta actualizada correctamente',
     'accounts_deleted' => 'Cuenta(s) eliminada(s) correctamente',
     'accounts_moved' => 'Cuenta(s) movida(s) correctamente',
-    'export_selected_to_json' => 'Download a json export of selected accounts',
+    'export_selected_to_json' => 'Descargar un fichero json con el contenido de las cuentas seleccionadas',
     'forms' => [
         'service' => [
             'placeholder' => 'Google, Twitter, Apple',
@@ -58,8 +58,8 @@ return [
             'title' => 'Bloquearlo',
         ],
         'choose_image' => 'Subir',
-        'i_m_lucky' => 'Try my luck',
-        'i_m_lucky_legend' => 'The "Try my luck" button try to get the official icon of the given service. Enter actual service name without ".xyz" extension and try to avoid typo. (beta feature)',
+        'i_m_lucky' => 'Probar suerte',
+        'i_m_lucky_legend' => 'El botón "Probar suerte" intenta obtener el icono oficial del servicio dado. Introduzca el nombre del servicio sin la extensión ".xyz" e intente evitar errores tipográficos. (función beta)',
         'test' => 'Test',
         'secret' => [
             'label' => 'Secreto',
@@ -156,7 +156,7 @@ return [
         'possible_duplicate' => 'Ya existe una cuenta con exactamente los mismos datos',
         'invalid_account' => '- cuenta inválida -',
         'invalid_service' => '- servicio inválido -',
-        'do_not_set_password_or_encryption' => 'Do NOT enable Password protection or Encryption when you export data (from a 2FA app) you want to import into 2FAuth.',
+        'do_not_set_password_or_encryption' => 'NO habilite la protección de contraseña o el cifrado cuando exporte datos (desde una aplicación 2FA) que desee importar a 2FAuth.',
     ],
 
 ];

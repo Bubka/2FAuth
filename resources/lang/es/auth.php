@@ -25,7 +25,7 @@ return [
     'sign_in_using_security_device' => 'Iniciar sesión usando un dispositivo de seguridad',
     'login_and_password' => 'usuario y contraseña',
     'register' => 'Registrarse',
-    'welcome_to_2fauth' => 'Welcome to 2FAuth',
+    'welcome_to_2fauth' => 'Bienvenido a 2FAuth',
     'autolock_triggered' => 'Autobloqueo activado',
     'autolock_triggered_punchline' => 'El evento observado por el Auto Bloqueo ha sido activado. Has sido desconectado automáticamente.',
     'change_autolock_in_settings' => 'Puedes cambiar el comportamiento de la función Auto Bloqueo en la pestaña Configuración > Opciones.',
@@ -49,30 +49,30 @@ return [
         'lost_your_device' => '¿Perdió su dispositivo?',
         'recover_your_account' => 'Recuperar su cuenta',
         'account_recovery' => 'Recuperación cuenta',
-        'recovery_punchline' => '2FAuth will send you a recovery link to this email address. Click the link in the received email and follow the instructions.<br /><br />Ensure you open the email on a device you fully own.',
+        'recovery_punchline' => '2FAuth te enviará un enlace de recuperación a esta dirección de correo electrónico. Haz clic en el enlace en el correo electrónico recibido y sigue las instrucciones.<br /><br />Asegúrate de abrir el correo electrónico en un dispositivo que sea completamente tuyo.',
         'send_recovery_link' => 'Enviar enlace de recuperación',
         'account_recovery_email_sent' => '¡Correo de recuperación de cuenta enviado!',
-        'disable_all_security_devices' => 'Disable all security devices',
-        'disable_all_security_devices_help' => 'All your security devices will be revoked. Use this option if you have lost one or its security has been compromised.',
+        'disable_all_security_devices' => 'Desactivar todos los dispositivos de seguridad',
+        'disable_all_security_devices_help' => 'Todos sus dispositivos de seguridad serán revocados. Utilice esta opción si ha perdido uno o si su seguridad ha sido comprometida.',
         'register_a_new_device' => 'Registrar un nuevo dispositivo',
         'register_a_device' => 'Registrar un dispositivo',
         'device_successfully_registered' => 'Dispositivo registrado correctamente',
         'device_revoked' => 'Dispositivo revocado correctamente',
         'revoking_a_device_is_permanent' => 'El revocado de un dispositivo es permanente',
-        'recover_account_instructions' => 'To recover your account, 2FAuth resets some Webauthn settings so you will be able to sign in using your email and password.',
+        'recover_account_instructions' => 'Para recuperar su cuenta, 2FAuth restablece algunos ajustes de Webauthn para que pueda iniciar sesión usando su correo electrónico y contraseña.',
         'invalid_recovery_token' => 'Token de recuperación inválido',
-        'webauthn_login_disabled' => 'Webauthn login disabled',
-        'invalid_reset_token' => 'This reset token is invalid.',
+        'webauthn_login_disabled' => 'Login Webauthn desactivado',
+        'invalid_reset_token' => 'Este token de recuperación no es válido.',
         'rename_device' => 'Renombrar dispositivo',
         'my_device' => 'Mi dispositivo',
         'unknown_device' => 'Dispositivo desconocido',
         'use_webauthn_only' => [
             'label' => 'Usar WebAuthn solo',
-            'help' => 'Make WebAuthn the only authorized method to log into your 2FAuth account. This is the recommended setup to take advantage of the WebAuthn enhanced security.<br /><br />
-                In case of device lost, you will be able to recover your account by resetting this option and signing in using your email and password.<br /><br />
-                Attention! The Email & Password form remains available despite this option being enabled, but it will always return an \'Authentication failed\' response.'
+            'help' => 'Haga de WebAuthn el único método autorizado para iniciar sesión en su cuenta de 2FAuth. Esta es la configuración recomendada para aprovechar la seguridad mejorada de WebAuthn.<br /><br />
+                En caso de pérdida del dispositivo, podrás recuperar tu cuenta restableciendo esta opción e iniciando sesión utilizando tu correo electrónico y contraseña.<br /><br />
+                Atención! El formulario de correo electrónico y contraseña sigue disponible a pesar de que esta opción está activada, pero siempre devolverá una respuesta de \'Autenticación fallida\'.'
         ],
-        'need_a_security_device_to_enable_options' => 'Set at least one device to enable the following options',
+        'need_a_security_device_to_enable_options' => 'Establezca al menos un dispositivo para activar las siguientes opciones',
     ],
     'forms' => [
         'name' => 'Nombre',

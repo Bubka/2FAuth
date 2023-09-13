@@ -23,7 +23,7 @@ return [
     'manage_groups_legend' => 'Puedes crear grupos para organizar tus cuentas de la manera que quieras. Todas las cuentas permanecen visibles en el pseudo grupo llamado \'Todo\', independientemente del grupo al que pertenezcan.',
     'deleting_group_does_not_delete_accounts' => 'La eliminación de un grupo no elimina cuentas',
     'move_selected_to' => 'Mover selección a',
-    'move_selected_to_group' => 'Move selected into a group',
+    'move_selected_to_group' => 'Mover seleccionados a un grupo',
     'no_group' => 'Sin grupo',
     'change_group' => 'Cambiar grupo',
     'group_successfully_created' => 'Grupo creado correctamente',

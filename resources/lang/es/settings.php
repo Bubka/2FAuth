@@ -14,18 +14,18 @@ return [
     */
 
     'settings' => 'Ajustes',
-    'preferences' => 'Preferences',
+    'preferences' => 'Preferencias',
     'account' => 'Cuenta',
     'oauth' => 'OAuth',
     'webauthn' => 'WebAuthn',
     'tokens' => 'Tokens',
     'options' => 'Opciones',
-    'user_preferences' => 'User preferences',
-    'admin_settings' => 'Admin settings',
+    'user_preferences' => 'Preferencias de usuario',
+    'admin_settings' => 'Ajustes de administración',
     'confirm' => [
 
     ],
-    'administration' => 'Administration',
+    'administration' => 'Administración',
     'administration_legend' => 'While previous settings are user settings (every user can set its own preferences), following settings are global and apply to all users. Only an administrator can view and edit those settings.',
     'you_are_administrator' => 'You are an administrator',
     'general' => 'General',
@@ -74,24 +74,24 @@ return [
             'help' => 'Elija si desea que las cuentas se muestren como una lista o como una cuadrícula'
         ],
         'password_format' => [
-            'label' => 'Password formatting',
+            'label' => 'Formato de contraseñas',
             'help' => 'Change how the passwords are displayed by grouping digits to ease readability and memorization'
         ],
-        'pair' => 'by Pair',
+        'pair' => 'por parejas',
         'pair_legend' => 'Group digits two by two',
         'trio_legend' => 'Group digits three by three',
-        'half_legend' => 'Split digits into two equals groups',
-        'trio' => 'by Trio',
-        'half' => 'by Half',
+        'half_legend' => 'Dividir dígitos en dos grupos iguales',
+        'trio' => 'por tríos',
+        'half' => 'por la mitad',
         'grid' => 'Cuadrícula',
         'list' => 'Lista',
         'theme' => [
-            'label' => 'Theme',
-            'help' => 'Force a specific theme or apply the theme defined in your system/browser preferences'
+            'label' => 'Tema',
+            'help' => 'Forzar un tema específico o aplicar el tema definido en sus preferencias de sistema/navegador'
         ],
-        'light' => 'Light',
-        'dark' => 'Dark',
-        'automatic' => 'Auto',
+        'light' => 'Claro',
+        'dark' => 'Oscuro',
+        'automatic' => 'Automático',
         'show_accounts_icons' => [
             'label' => 'Mostrar iconos',
             'help' => 'Mostar iconos de aplicaciones en la vista principal'
@@ -125,19 +125,19 @@ return [
             'help' => 'Guardar el último filtro de grupo aplicado y restaurarlo en su próxima visita',
         ],
         'disable_registration' => [
-            'label' => 'Disable registration',
-            'help' => 'Prevent new user registration',
+            'label' => 'Deshabilitar registro de usuarios',
+            'help' => 'Evitar el registro de nuevos usuarios',
         ],
         'otp_generation' => [
-            'label' => 'Show Password',
+            'label' => 'Mostrar contraseña',
             'help' => 'Set how and when <abbr title="One-Time Passwords">OTPs</abbr> are displayed.<br/>',
         ],
-        'otp_generation_on_request' => 'After a click/tap',
+        'otp_generation_on_request' => 'Después de un clic/toque',
         'otp_generation_on_request_legend' => 'Alone, in its own view',
         'otp_generation_on_request_title' => 'Click an account to get a password in a dedicated view',
-        'otp_generation_on_home' => 'Constantly',
+        'otp_generation_on_home' => 'Constantemente',
         'otp_generation_on_home_legend' => 'All of them, on home',
-        'otp_generation_on_home_title' => 'Show all passwords in the main view, without doing anything',
+        'otp_generation_on_home_title' => 'Mostrar todas las contraseñas en la vista principal, sin hacer nada',
         'never' => 'Nunca',
         'on_otp_copy' => 'Al copiar código de seguridad',
         '1_minutes' => 'Después de 1 minuto',

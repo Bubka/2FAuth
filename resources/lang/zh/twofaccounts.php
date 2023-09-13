@@ -58,8 +58,8 @@ return [
             'title' => '将其锁定',
         ],
         'choose_image' => '上传',
-        'i_m_lucky' => 'Try my luck',
-        'i_m_lucky_legend' => 'The "Try my luck" button try to get the official icon of the given service. Enter actual service name without ".xyz" extension and try to avoid typo. (beta feature)',
+        'i_m_lucky' => '手气不错',
+        'i_m_lucky_legend' => '"手气不错"按钮会尝试获取指定服务的官方图标。输入实际的英文服务名（不带后缀）并避免输入错误。(测试中的功能)',
         'test' => '测试',
         'secret' => [
             'label' => '密钥',
