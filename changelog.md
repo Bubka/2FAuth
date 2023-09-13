@@ -1,15 +1,16 @@
 # Change log
 
-## [4.2.0] - 2023-09-12
+## [4.2.0] - 2023-09-13
 
 ### Added
 
-- An Only for the brave feature: ctrl + click a TOTP account from the main view automatically generates a password and copies it to the clipboard without displaying it at all. Will the password be valid at the time you paste it? Nobody knows.
+- An Only for the brave feature: ctrl + click a TOTP account from the main view automatically generates a password and copies it to the clipboard without displaying it at all. Will the password be valid at the time you paste it? Nobody knows 💀
 - The `MAIL_VERIFY_SSL_PEER` environment variable to disable SSL peers verification ([#219](https://github.com/Bubka/2FAuth/issues/219)).
+- Russian translation, but partial. Want to help complete this translation? ➡️ [2FAuth project on Crowdin](https://crowdin.com/project/2fauth).
 
 ### Changed
 
-- Navigation with the Back and Close buttons is now fully consistent with their labeling, even when browsing back through successive views using those buttons.
+- Navigation with the __Back__ and __Close__ buttons is now fully consistent with their labeling, even when browsing back through successive views using those buttons.
 - The length of the email submitted during registration is now limited to 191 characters ([#214](https://github.com/Bubka/2FAuth/issues/214)).
 - Upgrade to Laravel 10
 
