@@ -8,10 +8,10 @@ Resource          ../common.resource
 ${EDIT ACCOUNT PAGE URL}    ${ROOT URL}/account/1/edit
 
 *** Keywords ***
-Edit Page Should Be Open For Account
+Edit Page Should Be Open For TwoFAccount
     [Arguments]    ${account id}
     Location Should Be    ${ROOT URL}/account/${account id}/edit
 
-Go To Edit Page For Account
+Go To Edit Page For TwoFAccount
     [Arguments]    ${account id}
     Go Authenticated To    ${ROOT URL}/account/${account id}/edit

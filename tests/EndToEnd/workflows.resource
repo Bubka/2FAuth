@@ -24,7 +24,7 @@ Play Admin Sign In Workflow
     Delete All Cookies
     Go To Legacy Login Page
     Submit Credentials To Legacy Form Login    ${ADMIN EMAIL}    ${PASSWORD}
-    Wait Until Location Is    ${ACCOUNTS PAGE URL}
+    Wait Until Location Is Not    ${LOGIN PAGE URL}
 
 Play User Sign In Workflow
     Play Logout Workflow

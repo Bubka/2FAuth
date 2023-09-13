@@ -8,8 +8,8 @@ Resource          ../common.resource
 ${SHOW ACCOUNT QRCODE PAGE URL}    ${ROOT URL}/account/1/qrcode
 
 *** Keywords ***
-Show Account Qrcode Page Should Be Open
+Show TwoFAccount Qrcode Page Should Be Open
     Location Should Be    ${SHOW ACCOUNT QRCODE PAGE URL}
     
-Go To Show Account Qrcode Page
+Go To Show TwoFAccount Qrcode Page
     Go Authenticated To    ${SHOW ACCOUNT QRCODE PAGE URL}

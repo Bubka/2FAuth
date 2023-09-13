@@ -2,7 +2,8 @@
 Documentation     A page object to use in Accounts tests.
 ...
 Library           SeleniumLibrary
-Library    Collections
+Library           Collections
+Resource          start_page.robot
 Resource          ../common.resource
 
 *** Variables ***
@@ -12,12 +13,18 @@ ${GROUP SWITCH}    groupSwitch
 ${SEARCH FIELD}    txtSearch
 ${GRID CLASS}    tfa-grid
 ${LIST CLASS}    tfa-list
-${ACCOUNTS CONTAINER}    .accounts > span
+${ACCOUNTS CONTAINER}    css:.accounts > span
 ${2FA ACCOUNT}    class:tfa-cell
 ${MODAL OTP}    class:modal-otp
 ${ALWAYS ON OTP}    class:always-on-otp
 ${SHOW GROUP SWITCH BUTTON}    btnShowGroupSwitch
 ${HIDE GROUP SWITCH BUTTON}    btnHideGroupSwitch
+${MANAGE BUTTON}    btnManage
+${SELECT ALL BUTTON}    btnSelectAll
+${UNSELECT ALL BUTTON}    btnUnselectAll
+${MOVE BUTTON}    btnMove
+${DELETE BUTTON}    btnDelete
+${EXPORT BUTTON}    btnExport
 
 *** Keywords ***    
 Go To Accounts Page
@@ -32,9 +39,10 @@ Show An Otp In Modal
     Click Element    ${account}
     Wait Until Element Is Visible    ${OTP}
 
-Get TwoFAccounts Elements
+Get Visible TwoFAccounts Elements
+    Wait Until Page Contains Element    ${ACCOUNTS CONTAINER}
     @{twofaccounts} =    Get WebElements    ${ACCOUNTS CONTAINER} > div
-    [return]  ${twofaccounts}
+    [return]  @{twofaccounts}
 
 Get OTP Value Shown In Modal
     ${string}=    Get Text    ${OTP}
@@ -97,3 +105,12 @@ Close Modal Otp
     Run Keyword If    ${modal is open}    Click Element    ${CLOSE BUTTON}
     Wait Until Element Is Not Visible    ${MODAL OTP}
 
+Delete All TwoFAccounts
+    Wait Until Page Contains Element    ${MANAGE BUTTON}
+    Click Element    ${MANAGE BUTTON}
+    Wait Until Page Contains Element    ${SELECT ALL BUTTON}
+    Click Element    ${SELECT ALL BUTTON}
+    Wait Until Element Is Enabled    ${DELETE BUTTON}
+    Click Element    ${DELETE BUTTON}
+    Handle Alert
+    Wait Until Location Is    ${START PAGE URL}

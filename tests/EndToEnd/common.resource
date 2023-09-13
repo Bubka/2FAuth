@@ -43,12 +43,13 @@ Open Custom Browser
 Go Authenticated To
     [Arguments]    ${url}
     Go To    ${url}
-    ${is_authenticated}=  Run Keyword And Return Status    Location Should Be    ${url}
-    IF    ${is_authenticated} == False
+    Wait Until Page Contains Element    tag:footer
+    ${is anonymous}=  Run Keyword And Return Status    Location Should Be   ${LOGIN PAGE URL}
+    IF    ${is anonymous} == True
         Play Admin Sign In Workflow
         Go To    ${url}
+        Wait Until Page Contains Element    tag:footer
     END
-    Wait Until Location Is    ${url}
 
 A Success Notification Should Appear
     Wait Until Element Is Visible    ${SUCCESS NOTIFICATION}
