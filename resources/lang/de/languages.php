@@ -17,4 +17,5 @@ return [
     'es' => 'Spanisch',
     'zh' => 'Vereinfachtes Chinesisch',
     'ru' => 'Russisch',
+    'bg' => 'Bulgarian',
 ];

@@ -17,4 +17,5 @@ return [
     'es' => 'Bahasa Spanyol',
     'zh' => 'Bahasa Tiongkok yang disederhanakan',
     'ru' => 'Russian',
+    'bg' => 'Bulgarian',
 ];
