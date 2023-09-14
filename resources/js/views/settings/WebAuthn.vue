@@ -183,7 +183,7 @@
 
                 this.axios.post('/webauthn/register', publicKeyCredential, {returnError: true})
                 .then(response => {
-                    this.$router.push({ name: 'settings.webauthn.editCredential', params: { id: publicKeyCredential.id, name: this.$t('auth.webauthn.my_device') } })
+                    this.$router.push({ name: 'settings.webauthn.editCredential', params: { credentialId: publicKeyCredential.id, name: this.$t('auth.webauthn.my_device') } })
                 })
                 .catch(error => {
                     if( error.response.status === 422 ) {

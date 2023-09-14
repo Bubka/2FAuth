@@ -88,13 +88,13 @@ router.beforeEach((to, from, next) => {
     else if (to.name.startsWith('settings.')) {
         if (to.params.returnTo == undefined) {
             if (from.params.returnTo) {
-                next({name: to.name, params: { returnTo: from.params.returnTo }})
+                next({name: to.name, params: { ...to.params, returnTo: from.params.returnTo }})
             }
             else if (from.name) {
-                next({name: to.name, params: { returnTo: from.path }})
+                next({name: to.name, params: { ...to.params, returnTo: from.path }})
             }
             else {
-                next({name: to.name, params: { returnTo: '/accounts' }})
+                next({name: to.name, params: { ...to.params, returnTo: '/accounts' }})
             }
         }
         else {

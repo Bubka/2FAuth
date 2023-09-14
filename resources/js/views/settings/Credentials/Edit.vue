@@ -25,13 +25,13 @@
             }
         },
 
-        props: ['id', 'name'],
+        props: ['credentialId', 'name'],
 
         methods: {
 
             async updateCredential() {
 
-                await this.form.patch('/webauthn/credentials/' + this.id + '/name')
+                await this.form.patch('/webauthn/credentials/' + this.credentialId + '/name')
 
                 if( this.form.errors.any() === false ) {
                     this.$notify({ type: 'is-success', text: this.$t('auth.webauthn.device_successfully_registered') })

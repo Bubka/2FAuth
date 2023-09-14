@@ -88,6 +88,14 @@
             });
 
         },
+
+        beforeRouteEnter(to, from, next) {
+            next(vm => {
+                if (from.params.returnTo) {
+                    to.params.returnTo = from.params.returnTo
+                }
+            })
+        },
     }
 
 </script>
