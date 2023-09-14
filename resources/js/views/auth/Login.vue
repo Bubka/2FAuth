@@ -41,7 +41,8 @@
 <script>
 
     import Form from './../../components/Form'
-    import WebAuthn from './../../components/WebAuthn'
+    import WebauthnService from './../../webauthn/WebauthnService'
+    import { webauthnAbortService } from '../../webauthn/webauthnAbortService'
 
     export default {
         data(){
@@ -55,7 +56,7 @@
                 isBusy: false,
                 showWebauthn: this.$root.userPreferences.useWebauthnOnly,
                 csrfRefresher: null,
-                webauthn: new WebAuthn()
+                webauthn: new WebauthnService()
             }
         },
 
@@ -131,7 +132,7 @@
                         this.$notify({ type: 'is-danger', text: this.$t('errors.not_allowed_operation') })
                     }
                     else if (error.name == 'NotSupportedError') {
-                        this.$notify({ type: 'is-danger', text: this.$t('errors.unsupported_operation') })
+                        this.$notify({ type: 'is-danger', text: this.$t('errors.no_authenticator_support_specified_algorithms') })
                     }
                     else if (error.name == 'InvalidStateError') {
                         this.$notify({ type: 'is-danger', text: this.$t('auth.webauthn.unknown_device') })

@@ -40,7 +40,9 @@
 <script>
 
     import Form from './../../components/Form'
-    import WebAuthn from './../../components/WebAuthn'
+    import WebauthnService from './../../webauthn/WebauthnService'
+    import { webauthnAbortService } from './../../webauthn/webauthnAbortService'
+    import { identifyRegistrationError }  from './../../webauthn/identifyRegistrationError'
 
     export default {
         data(){
@@ -56,8 +58,7 @@
                 }),
                 showWebauthnRegistration: false,
                 deviceRegistered: false,
-                deviceId : null,
-                webauthn: new WebAuthn()
+                deviceId : null
             }
         },
 
@@ -87,6 +88,8 @@
              * Register a new security device
              */
             async registerWebauthnDevice() {
+                let webauthnService = new WebauthnService()
+
                 // Check https context
                 if (!window.isSecureContext) {
                     this.$notify({ type: 'is-danger', text: this.$t('errors.https_required') })
@@ -94,29 +97,29 @@
                 }
 
                 // Check browser support
-                if (this.webauthn.doesntSupportWebAuthn) {
+                if (webauthnService.doesntSupportWebAuthn) {
                     this.$notify({ type: 'is-danger', text: this.$t('errors.browser_does_not_support_webauthn') })
                     return false
                 }
 
                 const registerOptions = await this.axios.post('/webauthn/register/options').then(res => res.data)
-                const publicKey = this.webauthn.parseIncomingServerOptions(registerOptions)
-                let bufferedCredentials
+                const publicKey = webauthnService.parseIncomingServerOptions(registerOptions)
+                
+                let options = { publicKey }
+                options.signal = webauthnAbortService.createNewAbortSignal()
 
+                let bufferedCredentials
                 try {
-                    bufferedCredentials = await navigator.credentials.create({ publicKey })
+                    bufferedCredentials = await navigator.credentials.create(options)
                 }
                 catch (error) {
-                    if (error.name == 'AbortError') {
-                        this.$notify({ type: 'is-warning', text: this.$t('errors.aborted_by_user') })
-                    }
-                    else if (error.name == 'NotAllowedError' || 'InvalidStateError') {
-                        this.$notify({ type: 'is-danger', text: this.$t('errors.security_device_unsupported') })
-                    }
+                    const webauthnError = identifyRegistrationError(error, options)
+                    this.$notify({ type: webauthnError.type, text: this.$t(webauthnError.phrase) })
+
                     return false
                 }
 
-                const publicKeyCredential = this.webauthn.parseOutgoingCredentials(bufferedCredentials);
+                const publicKeyCredential = webauthnService.parseOutgoingCredentials(bufferedCredentials);
 
                 this.axios.post('/webauthn/register', publicKeyCredential, {returnError: true})
                 .then(response => {

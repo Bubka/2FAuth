@@ -23,10 +23,10 @@
  * SOFTWARE.
  */
 
-export default class WebAuthn {
+export default class WebauthnService {
 
     /**
-     * Create a new WebAuthn instance.
+     * Create a new WebauthnService instance.
      *
      */
     constructor () {
@@ -40,12 +40,12 @@ export default class WebAuthn {
      * @returns {Object}
      */
     parseIncomingServerOptions(publicKey) {
-        publicKey.challenge = WebAuthn.uint8Array(publicKey.challenge);
+        publicKey.challenge = WebauthnService.uint8Array(publicKey.challenge);
 
         if ('user' in publicKey) {
             publicKey.user = {
                 ...publicKey.user,
-                id: WebAuthn.uint8Array(publicKey.user.id)
+                id: WebauthnService.uint8Array(publicKey.user.id)
             };
         }
 
@@ -56,7 +56,7 @@ export default class WebAuthn {
             .filter(key => key in publicKey)
             .forEach(key => {
                 publicKey[key] = publicKey[key].map(data => {
-                    return {...data, id: WebAuthn.uint8Array(data.id)};
+                    return {...data, id: WebauthnService.uint8Array(data.id)};
                 });
             });
 
@@ -74,7 +74,7 @@ export default class WebAuthn {
         let parseCredentials = {
             id: credentials.id,
             type: credentials.type,
-            rawId: WebAuthn.arrayToBase64String(credentials.rawId),
+            rawId: WebauthnService.arrayToBase64String(credentials.rawId),
             response: {}
         };
 
@@ -86,7 +86,7 @@ export default class WebAuthn {
             "userHandle"
         ]
             .filter(key => key in credentials.response)
-            .forEach(key => parseCredentials.response[key] = WebAuthn.arrayToBase64String(credentials.response[key]));
+            .forEach(key => parseCredentials.response[key] = WebauthnService.arrayToBase64String(credentials.response[key]));
 
         return parseCredentials;
     }
@@ -101,7 +101,7 @@ export default class WebAuthn {
      */
     static uint8Array(input, useAtob = false) {
         return Uint8Array.from(
-            useAtob ? atob(input) : WebAuthn.base64UrlDecode(input), c => c.charCodeAt(0)
+            useAtob ? atob(input) : WebauthnService.base64UrlDecode(input), c => c.charCodeAt(0)
         );
     }
 
@@ -112,7 +112,7 @@ export default class WebAuthn {
      * @param arrayBuffer {ArrayBuffer|Uint8Array}
      * @returns {string}
      */
-     static arrayToBase64String(arrayBuffer) {
+    static arrayToBase64String(arrayBuffer) {
         return btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
     }
 
@@ -123,7 +123,7 @@ export default class WebAuthn {
      * @param input {string}
      * @returns {string|Iterable}
      */
-     static base64UrlDecode(input) {
+    static base64UrlDecode(input) {
         input = input.replace(/-/g, "+").replace(/_/g, "/");
 
         const pad = input.length % 4;
@@ -146,7 +146,7 @@ export default class WebAuthn {
      * @returns {boolean}
      */
     static supportsWebAuthn() {
-        return typeof PublicKeyCredential != "undefined";
+        return (window?.PublicKeyCredential !== undefined && typeof window.PublicKeyCredential === 'function');
     }
     
 
