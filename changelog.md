@@ -1,5 +1,11 @@
 # Change log
 
+## [4.2.1] - 2023-09-14
+
+### Fixed
+
+- [issue #227](https://github.com/Bubka/2FAuth/issues/227) PAT and Webauthn registration broken
+
 ## [4.2.0] - 2023-09-13
 
 ### Added
