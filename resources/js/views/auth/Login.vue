@@ -42,7 +42,8 @@
 
     import Form from './../../components/Form'
     import WebauthnService from './../../webauthn/WebauthnService'
-    import { webauthnAbortService } from '../../webauthn/webauthnAbortService'
+    import { webauthnAbortService } from './../../webauthn/webauthnAbortService'
+    import { identifyAuthenticationError }  from './../../webauthn/identifyAuthenticationError'
 
     export default {
         data(){
@@ -55,8 +56,7 @@
                 }),
                 isBusy: false,
                 showWebauthn: this.$root.userPreferences.useWebauthnOnly,
-                csrfRefresher: null,
-                webauthn: new WebauthnService()
+                csrfRefresher: null
             }
         },
 
@@ -105,6 +105,7 @@
              */
             async webauthnLogin() {
                 this.isBusy = false
+                let webauthnService = new WebauthnService()
 
                 // Check https context
                 if (!window.isSecureContext) {
@@ -113,36 +114,26 @@
                 }
 
                 // Check browser support
-                if (this.webauthn.doesntSupportWebAuthn) {
+                if (webauthnService.doesntSupportWebAuthn) {
                     this.$notify({ type: 'is-danger', text: this.$t('errors.browser_does_not_support_webauthn') })
                     return false
                 }
 
                 const loginOptions = await this.form.post('/webauthn/login/options').then(res => res.data)
-                const publicKey = this.webauthn.parseIncomingServerOptions(loginOptions)
-                const credentials = await navigator.credentials.get({ publicKey: publicKey })
+                const publicKey = webauthnService.parseIncomingServerOptions(loginOptions)
+
+                let options = { publicKey }
+                options.signal = webauthnAbortService.createNewAbortSignal()
+
+                const credentials = await navigator.credentials.get(options)
                 .catch(error => {
-                    if (error.name == 'AbortError') {
-                        this.$notify({ type: 'is-warning', text: this.$t('errors.aborted_by_user') })
-                    }
-                    else if (error.name == 'SecurityError') {
-                        this.$notify({ type: 'is-danger', text: this.$t('errors.security_error_check_rpid') })
-                    }
-                    else if (error.name == 'NotAllowedError') {
-                        this.$notify({ type: 'is-danger', text: this.$t('errors.not_allowed_operation') })
-                    }
-                    else if (error.name == 'NotSupportedError') {
-                        this.$notify({ type: 'is-danger', text: this.$t('errors.no_authenticator_support_specified_algorithms') })
-                    }
-                    else if (error.name == 'InvalidStateError') {
-                        this.$notify({ type: 'is-danger', text: this.$t('auth.webauthn.unknown_device') })
-                    }
-                    else this.$notify({ type: 'is-danger', text: this.$t('errors.unknown_error') })
+                    const webauthnError = identifyAuthenticationError(error, options)
+                    this.$notify({ type: webauthnError.type, text: this.$t(webauthnError.phrase) })
                 })
 
                 if (!credentials) return false
 
-                let publicKeyCredential = this.webauthn.parseOutgoingCredentials(credentials)
+                let publicKeyCredential = webauthnService.parseOutgoingCredentials(credentials)
                 publicKeyCredential.email = this.form.email
 
                 this.axios.post('/webauthn/login', publicKeyCredential, {returnError: true}).then(response => {
