@@ -40,7 +40,7 @@
 <script>
 
     import Form from './../../components/Form'
-    import WebauthnService from './../../webauthn/WebauthnService'
+    import WebauthnService from './../../webauthn/webauthnService'
     import { webauthnAbortService } from './../../webauthn/webauthnAbortService'
     import { identifyRegistrationError }  from './../../webauthn/identifyRegistrationError'
 
