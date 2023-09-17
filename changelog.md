@@ -1,5 +1,11 @@
 # Change log
 
+## [4.2.2] - 2023-09-17
+
+### Fixed
+
+- [issue #232](https://github.com/Bubka/2FAuth/issues/232) Vendor.js throws error making frontend unusable
+
 ## [4.2.1] - 2023-09-14
 
 ### Fixed
