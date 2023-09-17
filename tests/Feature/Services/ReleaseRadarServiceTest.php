@@ -14,7 +14,7 @@ use Tests\FeatureTestCase;
 /**
  * ReleaseRadarServiceTest test class
  */
-#[CoversClass(App\Services\ReleaseRadarService::class)]
+#[CoversClass(\App\Services\ReleaseRadarService::class)]
 class ReleaseRadarServiceTest extends FeatureTestCase
 {
     use WithoutMiddleware;
