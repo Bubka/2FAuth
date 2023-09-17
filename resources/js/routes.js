@@ -72,7 +72,7 @@ let isFirstLoad = true;
 
 router.beforeEach((to, from, next) => {
     
-    document.title = to.meta.title = router.app.$options.i18n.t('titles.' + to.name)
+    document.title = router.app.$options.i18n.t('titles.' + to.name)
     
     if( to.name === 'accounts') {
         to.params.isFirstLoad = isFirstLoad ? true : false
