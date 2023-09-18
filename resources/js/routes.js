@@ -82,8 +82,14 @@ router.beforeEach((to, from, next) => {
     // See https://github.com/garethredfern/laravel-vue/ if one day the middleware pattern
     // becomes relevant (i.e when some admin only pages are necessary)
 
-    if (to.name !== 'login' && to.meta.requiresAuth && ! Vue.$storage.get('authenticated', false)) {
-        next({ name: 'login' })
+    if (to.meta.requiresAuth
+        && ! Vue.$storage.get('authenticated', false)
+        && ! window.appConfig.proxyAuth) {
+            next({ name: 'login' })
+    }
+    else if (to.matched.some(record => record.meta.disabledWithAuthProxy) && window.appConfig.proxyAuth) {
+        // The page is not relevant with auth proxy On so we push to the main view
+        next({ name: 'accounts' })
     }
     else if (to.name.startsWith('settings.')) {
         if (to.params.returnTo == undefined) {
@@ -106,12 +112,6 @@ router.beforeEach((to, from, next) => {
             next({ name: to.name, params: {goBackTo: from.path} })
         }
         else next({ name: to.name, params: {goBackTo: '/accounts'} })
-    }
-    else if (to.matched.some(record => record.meta.disabledWithAuthProxy)) {
-        if (window.appConfig.proxyAuth) {
-            next({ name: 'accounts' })
-        }
-        else next()
     }
     else if (to.name === 'genericError' && to.params.err == undefined) {
         // return to home if no err object is provided to prevent an empty error message
