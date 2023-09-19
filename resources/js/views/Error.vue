@@ -84,7 +84,7 @@
         mounted(){
             // stop OTP generation on modal close
             this.$on('modalClose', function() {
-                window.history.length > 1 ? this.$router.go(-1) : this.$router.push({ name: 'accounts '})
+                window.history.length > 1 && this.$route.name !== '404' ? this.$router.go(-1) : this.$router.push({ name: 'accounts' })
             });
 
         },
