@@ -26,6 +26,13 @@ class FixUnsplittedAccounts extends Command
     protected $description = 'Try to fix accounts that haven\t been splitted during SplitTwofaccountsUriInMultipleColumns migration';
 
     /**
+     * Indicates whether the command should be shown in the Artisan command list.
+     *
+     * @var bool
+     */
+    protected $hidden = true;
+
+    /**
      * Create a new command instance.
      *
      * @return void
