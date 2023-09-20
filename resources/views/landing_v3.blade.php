@@ -17,7 +17,6 @@
     <link rel="apple-touch-icon-precomposed" href="{{ asset('favicon_lg.png') }}" />
     <link rel="manifest" href="/manifest.json">
 
-    @vite('resources/sass/app.scss')
 </head>
 <body>
     <div id="app">
@@ -32,6 +31,6 @@
         var isTestingApp = {!! $isTestingApp !!};
         var appLocales = {!! $locales !!};
     </script>
-    @vite('resources/js/app.js')
+    @vite('resources/js_vue3/app.js')
 </body>
 </html>

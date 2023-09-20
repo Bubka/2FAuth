@@ -5,7 +5,6 @@ import vue from '@vitejs/plugin-vue';
 export default defineConfig({
     plugins: [
         laravel([
-            'resources/sass/app.scss',
             'resources/js_vue3/app.js',
         ]),
         vue({
@@ -27,4 +26,9 @@ export default defineConfig({
             },
         }),
     ],
+    resolve: {
+        alias: {
+            '@': '/resources/js_vue3',
+        },
+    },
 });
