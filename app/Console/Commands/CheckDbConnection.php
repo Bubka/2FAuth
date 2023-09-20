@@ -36,14 +36,16 @@ class CheckDbConnection extends Command
      */
     public function handle() : int
     {
-        $this->line('This will return the name of the connected database, otherwise false');
+        $this->newLine();
 
         try {
             DB::connection()->getPDO();
-            $this->line(DB::connection()->getDatabaseName());
+            $this->info('Currently connected to ' . DB::connection()->getDriverName() . ' db "' . DB::connection()->getDatabaseName() . '"');
 
             return 1;
         } catch (\Exception $e) {
+            $this->error('Cannot connect to ' . DB::connection()->getDriverName() . ' db "' . DB::connection()->getDatabaseName() . '"');
+
             return 0;
         }
     }
