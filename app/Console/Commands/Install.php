@@ -59,7 +59,7 @@ class Install extends Command
      *
      * @var string
      */
-    protected $description = 'Run 2FAuth installation or update';
+    protected $description = 'Run 2FAuth installation/update wizard';
 
     /**
      * Create a new command instance.
@@ -138,6 +138,7 @@ class Install extends Command
         $this->newLine();
         $this->line('Want to support its development?');
         $this->line('You can Buy me a coffee => <info>https://ko-fi.com/bubka</info>');
+        $this->line('You can sponsor me on GitHub => <info>https://github.com/sponsors/Bubka</info>');
 
         return self::SUCCESS;
     }
