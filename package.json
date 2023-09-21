@@ -6,6 +6,7 @@
         "build": "vite build"
     },
     "devDependencies": {
+        "@kyvg/vue3-notification": "^3.0.2",
         "@vitejs/plugin-vue": "^4.3.4",
         "axios": "^1.1.2",
         "bulma": "^0.9.4",
