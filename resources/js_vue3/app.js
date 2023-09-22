@@ -2,7 +2,7 @@ import '/resources/js_vue3/assets/app.scss';
 
 import { createApp } from 'vue'
 import { i18nVue } from 'laravel-vue-i18n'
-// import { createPinia } from 'pinia'
+import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
 import Notifications from '@kyvg/vue3-notification'
@@ -19,7 +19,7 @@ app.config.globalProperties.$2fauth = {
     langs: window.appLocales
 }
 
-// app.use(createPinia())
+app.use(createPinia())
 app.use(router)
 app.use(i18nVue, {
     resolve: async lang => {
