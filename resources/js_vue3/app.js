@@ -26,9 +26,12 @@ app.config.globalProperties.$2fauth = {
 app.use(createPinia())
 app.use(router)
 app.use(i18nVue, {
+    lang: document.documentElement.lang.substring(0, 2),
     resolve: async lang => {
         const langs = import.meta.glob('../lang/*.json');
-        return await langs[`../lang/${lang}.json`]();
+        if (lang.includes('php_')) {
+            return await langs[`../lang/${lang}.json`]();
+        }
     }
 })
 app.use(Notifications)
