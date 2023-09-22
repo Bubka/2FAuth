@@ -8,6 +8,10 @@ import router from './router'
 import Notifications from '@kyvg/vue3-notification'
 import FontAwesomeIcon from './icons'
 
+import ResponsiveWidthWrapper from '@/layouts/ResponsiveWidthWrapper.vue'
+import FormWrapper from '@/layouts/FormWrapper.vue'
+
+
 const app = createApp(App)
 
 // Immutable app properties provided by the laravel blade view
@@ -28,7 +32,9 @@ app.use(i18nVue, {
     }
 })
 app.use(Notifications)
-
-app.component('font-awesome-icon', FontAwesomeIcon)
+app
+    .component('font-awesome-icon', FontAwesomeIcon)
+    .component('responsive-width-wrapper', ResponsiveWidthWrapper)
+    .component('form-wrapper', FormWrapper)
 
 app.mount('#app')
