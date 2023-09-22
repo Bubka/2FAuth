@@ -1,6 +1,7 @@
 import '/resources/js_vue3/assets/app.scss'; 
 
 import { createApp } from 'vue'
+import { i18nVue } from 'laravel-vue-i18n'
 // import { createPinia } from 'pinia'
 
 import App from './App.vue'
@@ -20,6 +21,12 @@ app.config.globalProperties.$2fauth = {
 
 // app.use(createPinia())
 app.use(router)
+app.use(i18nVue, {
+    resolve: async lang => {
+        const langs = import.meta.glob('../lang/*.json');
+        return await langs[`../lang/${lang}.json`]();
+    }
+})
 app.use(Notifications)
 
 app.mount('#app')
