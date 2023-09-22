@@ -8,15 +8,11 @@ import router from './router'
 import Notifications from '@kyvg/vue3-notification'
 import FontAwesomeIcon from './icons'
 
-import ResponsiveWidthWrapper from '@/layouts/ResponsiveWidthWrapper.vue'
-import FormWrapper from '@/layouts/FormWrapper.vue'
-
-
 const app = createApp(App)
 
 // Immutable app properties provided by the laravel blade view
 app.config.globalProperties.$2fauth = {
-    config: window.appConfig,
+    config: window.appConfig, //{"proxyAuth":false,"proxyLogoutUrl":false,"subdirectory":""}
     version: window.appVersion,
     isDemoApp: window.isDemoApp,
     isTestingApp: window.isTestingApp,
@@ -35,9 +31,17 @@ app.use(i18nVue, {
     }
 })
 app.use(Notifications)
+
+import ResponsiveWidthWrapper from '@/layouts/ResponsiveWidthWrapper.vue'
+import FormWrapper from '@/layouts/FormWrapper.vue'
+import Footer from '@/layouts/Footer.vue'
+
+// Components registration
 app
     .component('font-awesome-icon', FontAwesomeIcon)
     .component('responsive-width-wrapper', ResponsiveWidthWrapper)
     .component('form-wrapper', FormWrapper)
+    .component('vue-footer', Footer)
 
+// App mounting
 app.mount('#app')
