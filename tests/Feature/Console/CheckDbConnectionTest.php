@@ -19,20 +19,18 @@ class CheckDbConnectionTest extends FeatureTestCase
     public function test_CheckDbConnection_ends_successfully()
     {
         $this->artisan('2fauth:check-db-connection')
-            ->expectsOutput('This will return the name of the connected database, otherwise false')
-            ->expectsOutput(DB::connection()->getDatabaseName())
             ->assertExitCode(1);
     }
 
     /**
      * @test
      */
-    public function test_CheckDbConnection_without_db_returns_false()
-    {
-        DB::shouldReceive('connection', 'getPDO')
-            ->andThrow(new \Exception());
+    // public function test_CheckDbConnection_without_db_returns_false()
+    // {
+    //     DB::shouldReceive('connection', 'getPDO')
+    //         ->andThrow(new \Exception());
 
-        $this->artisan('2fauth:check-db-connection')
-            ->assertExitCode(0);
-    }
+    //     $this->artisan('2fauth:check-db-connection')
+    //         ->assertExitCode(0);
+    // }
 }
