@@ -1,5 +1,12 @@
 # Change log
 
+## [4.2.3] - 2023-09-26
+
+### Fixed
+
+- [issue #232](https://github.com/Bubka/2FAuth/issues/232) Vendor.js throws error making frontend unusable
+- [issue #233](https://github.com/Bubka/2FAuth/issues/233) The Close button of the 404 error page loops the page on itself
+
 ## [4.2.2] - 2023-09-17
 
 ### Fixed
