@@ -1,9 +1,9 @@
 <template>
-    <responsive-width-wrapper>
+    <ResponsiveWidthWrapper>
         <h1 class="title has-text-grey-dark" v-html="title" v-if="title"></h1>
         <div id="punchline" v-if="punchline" class="block" v-html="punchline"></div>
         <slot />
-    </responsive-width-wrapper>   
+    </ResponsiveWidthWrapper>   
 </template>
 
 <script>

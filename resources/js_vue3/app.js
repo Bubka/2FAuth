@@ -42,13 +42,23 @@ app.use(Notifications)
 import ResponsiveWidthWrapper from '@/layouts/ResponsiveWidthWrapper.vue'
 import FormWrapper from '@/layouts/FormWrapper.vue'
 import Footer from '@/layouts/Footer.vue'
+import VueButton           from '@/components/formElements/Button.vue'
+import FieldError       from '@/components/formElements/FieldError.vue'
+import FormField        from '@/components/formElements/FormField.vue'
+import FormPasswordField        from '@/components/formElements/FormPasswordField.vue'
+import FormButtons      from '@/components/formElements/FormButtons.vue'
 
 // Components registration
 app
-    .component('font-awesome-icon', FontAwesomeIcon)
-    .component('responsive-width-wrapper', ResponsiveWidthWrapper)
-    .component('form-wrapper', FormWrapper)
-    .component('vue-footer', Footer)
+    .component('FontAwesomeIcon', FontAwesomeIcon)
+    .component('ResponsiveWidthWrapper', ResponsiveWidthWrapper)
+    .component('FormWrapper', FormWrapper)
+    .component('VueFooter', Footer)
+    .component('VueButton', VueButton)
+    .component('FieldError', FieldError)
+    .component('FormField', FormField)
+    .component('FormPasswordField', FormPasswordField)
+    .component('FormButtons', FormButtons)
 
 // App mounting
 app.mount('#app')
