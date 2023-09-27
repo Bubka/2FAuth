@@ -11,15 +11,22 @@ import FontAwesomeIcon from './icons'
 const app = createApp(App)
 
 // Immutable app properties provided by the laravel blade view
-app.config.globalProperties.$2fauth = {
+const $2fauth = {
+    prefix: '2fauth_',
     config: window.appConfig, //{"proxyAuth":false,"proxyLogoutUrl":false,"subdirectory":""}
     version: window.appVersion,
     isDemoApp: window.isDemoApp,
     isTestingApp: window.isTestingApp,
-    langs: window.appLocales
+    langs: window.appLocales,
 }
+app.provide('2fauth', readonly($2fauth))
 
-app.use(createPinia())
+const pinia = createPinia()
+pinia.use(({ store }) => {
+    store.$2fauth = $2fauth;
+});
+app.use(pinia)
+
 app.use(router)
 app.use(i18nVue, {
     lang: document.documentElement.lang.substring(0, 2),
