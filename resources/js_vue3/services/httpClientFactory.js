@@ -1,24 +1,24 @@
 import axios from "axios"
 
-export const apiFactory = (endpoint = 'api') => {
+export const httpClientFactory = (endpoint = 'api') => {
 	let baseURL
 
 	if (endpoint === 'web') {
 		baseURL = '/'
 	} else {
-		baseURL = '/api'
+		baseURL = '/api/v1'
 	}
 
-	const apiClient = axios.create({
+	const httpClient = axios.create({
 		baseURL,
 		headers: { 'X-Requested-With': 'XMLHttpRequest', 'Content-Type': 'application/json' },
 		withCredentials: true,
 	})
 
     // see https://github.com/fsgreco/vue3-laravel-api/blob/main/src/api/middlewareCSRF.js
-	//apiClient.interceptors.request.use( middlewareCSRF, err => Promise.reject(err)) 
+	//httpClient.interceptors.request.use( middlewareCSRF, err => Promise.reject(err)) 
 
-    apiClient.interceptors.response.use(
+    httpClient.interceptors.response.use(
         (response) => {
             return response;
         },
@@ -35,5 +35,5 @@ export const apiFactory = (endpoint = 'api') => {
         }
     )
 
-	return apiClient
+	return httpClient
 }

@@ -1,6 +1,6 @@
-import { apiFactory } from '@/services/apiFactory'
+import { httpClientFactory } from '@/services/httpClientFactory'
 
-const web = apiFactory('web')
+const webClient = httpClientFactory('web')
 
 export default {
     /**
@@ -8,7 +8,7 @@ export default {
      * @returns 
      */
     getSystemInfos() {
-        return web.get('infos')
+        return webClient.get('infos')
     },
     
 }
