@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 import vue from '@vitejs/plugin-vue';
 import i18n from 'laravel-vue-i18n/vite';
+import AutoImport from 'unplugin-auto-import/vite';
 
 export default defineConfig({
     plugins: [
@@ -27,6 +28,33 @@ export default defineConfig({
             },
         }),
         i18n('resources/lang'),
+        AutoImport({
+            // https://github.com/unplugin/unplugin-auto-import?tab=readme-ov-file#configuration
+            imports: [
+                'vue',
+                'vue-router',
+                'pinia',
+                {
+                    '@vueuse/core': [
+                        'useStorage',
+                      ],
+                    'laravel-vue-i18n': [
+                        'i18nVue',
+                        'trans'
+                    ],
+                    '@kyvg/vue3-notification': [
+                        'useNotification'
+                    ],
+                },
+            ],
+            // resolvers: [
+            //     ElementPlusResolver(),
+            // ],
+            dirs: [
+                '@/composables/**',
+            ],
+            vueTemplate: true,
+        }),
     ],
     resolve: {
         alias: {
