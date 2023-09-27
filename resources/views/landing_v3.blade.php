@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html data-theme="{{ $userPreferences['theme'] }}" lang="{{ $lang }}">
+<html data-theme="{{ $defaultPreferences['theme'] }}" lang="{{ $lang }}">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -25,7 +25,7 @@
     <script type="text/javascript">
         var appSettings = {!! $appSettings !!};
         var appConfig = {!! $appConfig !!};
-        var userPreferences = {!! $userPreferences->toJson() !!};
+        var defaultPreferences = {!! $defaultPreferences->toJson() !!};
         var appVersion = '{{ config("2fauth.version") }}';
         var isDemoApp = {!! $isDemoApp !!};
         var isTestingApp = {!! $isTestingApp !!};

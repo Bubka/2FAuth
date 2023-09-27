@@ -115,6 +115,7 @@ class LoginController extends Controller
             'message'     => 'authenticated',
             'name'        => $name,
             'preferences' => $this->guard()->user()->preferences,
+            'is_admin'    => $this->guard()->user()->is_admin,
         ], Response::HTTP_OK);
     }
 

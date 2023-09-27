@@ -29,7 +29,7 @@ return [
     'autolock_triggered' => 'Auto lock triggered',
     'autolock_triggered_punchline' => 'The event watched by the Auto Lock feature has fired. You\'ve been automatically disconnected.',
     'change_autolock_in_settings' => 'You can change the behavior of the Autolock feature in Settings > Options tab.',
-    'already_authenticated' => 'Already authenticated',
+    'already_authenticated' => 'Already authenticated, please log out first',
     'authentication' => 'Authentication',
     'maybe_later' => 'Maybe later',
     'user_account_controlled_by_proxy' => 'User account made available by an authentication proxy.<br />Manage the account at proxy level.',
