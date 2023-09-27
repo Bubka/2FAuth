@@ -1,0 +1,110 @@
+<script setup>
+    // import { ref, reactive, inject } from 'vue'
+    // import { onMounted } from 'vue'
+    // import { useStorage } from '@vueuse/core'
+    import Form from '@/components/formElements/Form'
+    import { useUserStore } from '@/stores/user'
+    import { useAppSettingsStore } from '@/stores/appSettings'
+    // import { useRouter } from 'vue-router';
+    // import { useNotification } from "@kyvg/vue3-notification";
+    // import { trans } from 'laravel-vue-i18n';
+
+    const $2fauth = inject('2fauth')
+    const { notify }  = useNotification()
+    const router = useRouter()
+    const user = useUserStore()
+    const appSettings = useAppSettingsStore()
+    const showWebauthnForm = user.preferences.useWebauthnOnly ? true : useStorage($2fauth.prefix + 'showWebauthnForm', true) 
+    const form = reactive(new Form({
+        email: '',
+        password: ''
+    }))
+
+    /**
+     * Toggle the form between legacy and webauthn method
+     */
+    function toggleForm() {
+        showWebauthnForm.value = ! showWebauthnForm.value
+    }
+
+    /**
+     * Sign in using the login/password form
+     */
+    function LegacysignIn(e) {
+        form.post('/user/login', {returnError: true})
+        .then(response => {
+            user.$patch({
+                name: response.data.name,
+                preferences: response.data.preferences,
+                isAdmin: response.data.is_admin,
+            })
+
+            router.push({ name: 'accounts', params: { toRefresh: true } })
+        })
+        .catch(error => {
+            if( error.response.status === 401 ) {
+                notify({ type: 'is-danger', text: trans('auth.forms.authentication_failed'), duration:-1 })
+            }
+            else if( error.response.status !== 422 ) {
+                router.push({ name: 'genericError', params: { err: error.response } });
+            }
+        });
+    }
+
+</script>
+
+<template>
+    <!-- webauthn authentication -->
+    <FormWrapper v-if="showWebauthnForm" :title="$t('auth.forms.webauthn_login')" :punchline="$t('auth.welcome_to_2fauth')">
+        <div class="field">
+            {{ $t('auth.webauthn.use_security_device_to_sign_in') }}
+        </div>
+        <form id="frmWebauthnLogin" @submit.prevent="webauthnLogin" @keydown="form.onKeydown($event)">
+            <FormField :form="form" fieldName="email" inputType="email" :label="$t('auth.forms.email')" autofocus />
+            <FormButtons :isBusy="form.isBusy" :caption="$t('commons.continue')" :submitId="'btnContinue'"/>
+        </form>
+        <div class="nav-links">
+            <p>
+                {{ $t('auth.webauthn.lost_your_device') }}&nbsp;
+                <RouterLink id="lnkRecoverAccount" :to="{ name: 'webauthn.lost' }" class="is-link">
+                    {{ $t('auth.webauthn.recover_your_account') }}
+                </RouterLink>
+            </p>
+            <p v-if="!user.preferences.useWebauthnOnly">{{ $t('auth.sign_in_using') }}&nbsp;
+                <a id="lnkSignWithLegacy" role="button" class="is-link" @keyup.enter="toggleForm" @click="toggleForm" tabindex="0">
+                    {{ $t('auth.login_and_password') }}
+                </a>
+            </p>
+        </div>
+    </FormWrapper>
+    <!-- login/password legacy form -->
+    <FormWrapper v-else :title="$t('auth.forms.login')" :punchline="$t('auth.welcome_to_2fauth')">
+        <div v-if="$2fauth.isDemoApp" class="notification is-info has-text-centered is-radiusless" v-html="$t('auth.forms.welcome_to_demo_app_use_those_credentials')" />
+        <div v-if="$2fauth.isTestingApp" class="notification is-warning has-text-centered is-radiusless" v-html="$t('auth.forms.welcome_to_testing_app_use_those_credentials')" />
+        <form id="frmLegacyLogin" @submit.prevent="LegacysignIn" @keydown="form.onKeydown($event)">
+            <FormField :form="form" fieldName="email" inputType="email" :label="$t('auth.forms.email')" autofocus />
+            <FormPasswordField :form="form" fieldName="password" :label="$t('auth.forms.password')" />
+            <FormButtons :isBusy="form.isBusy" :caption="$t('auth.sign_in')" :submitId="'btnSignIn'"/>
+        </form>
+        <div class="nav-links">
+            <p>{{ $t('auth.forms.forgot_your_password') }}&nbsp;
+                <RouterLink id="lnkResetPwd" :to="{ name: 'password.request' }" class="is-link" :aria-label="$t('auth.forms.reset_your_password')">
+                    {{ $t('auth.forms.request_password_reset') }}
+                </RouterLink>
+            </p>
+            <p >{{ $t('auth.sign_in_using') }}&nbsp;
+                <a id="lnkSignWithWebauthn" role="button" class="is-link" @keyup.enter="toggleForm" @click="toggleForm" tabindex="0" :aria-label="$t('auth.sign_in_using_security_device')">
+                    {{ $t('auth.webauthn.security_device') }}
+                </a>
+            </p>
+            <p v-if="appSettings.disableRegistration == false" class="mt-4">
+                {{ $t('auth.forms.dont_have_account_yet') }}&nbsp;
+                <RouterLink id="lnkRegister" :to="{ name: 'register' }" class="is-link">
+                    {{ $t('auth.register') }}
+                </RouterLink>
+            </p>
+        </div>
+    </FormWrapper>
+    <!-- footer -->
+    <VueFooter/>
+</template>

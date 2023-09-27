@@ -1,3 +1,22 @@
+<script setup>
+    import { useAppSettingsStore } from '@/stores/appSettings'
+    import { useUserStore } from '@/stores/user'
+    const appSettings = useAppSettingsStore()
+    const user = useUserStore()
+    const $2fauth = inject('2fauth')
+
+    const props = defineProps({
+        showButtons: true,
+        editMode: false,
+    })
+
+    function logout() {
+        if(confirm(trans('auth.confirm.logout'))) {
+            user.logout()
+        }
+    }
+</script>
+
 <template>
     <footer>
         <div class="columns is-gapless" v-if="showButtons">
@@ -27,20 +46,3 @@
         </div>
     </footer>
 </template>
-
-
-<script setup>
-    import { useAppSettingsStore } from '@/stores/appSettings'
-    const appSettings = useAppSettingsStore()
-
-    const props = defineProps({
-        showButtons: true,
-        editMode: false,
-    })
-
-    function logout() {
-        if(confirm(this.$t('auth.confirm.logout'))) {
-            this.appLogout()
-        }
-    }
-</script>
