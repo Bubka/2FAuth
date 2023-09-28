@@ -4,15 +4,16 @@
     // import { useStorage } from '@vueuse/core'
     import Form from '@/components/formElements/Form'
     import { useUserStore } from '@/stores/user'
+    import { useNotifyStore } from '@/stores/notify'
     import { useAppSettingsStore } from '@/stores/appSettings'
     // import { useRouter } from 'vue-router';
     // import { useNotification } from "@kyvg/vue3-notification";
     // import { trans } from 'laravel-vue-i18n';
 
     const $2fauth = inject('2fauth')
-    const { notify }  = useNotification()
     const router = useRouter()
     const user = useUserStore()
+    const notify = useNotifyStore()
     const appSettings = useAppSettingsStore()
     const showWebauthnForm = user.preferences.useWebauthnOnly ? true : useStorage($2fauth.prefix + 'showWebauthnForm', true) 
     const form = reactive(new Form({
@@ -43,10 +44,10 @@
         })
         .catch(error => {
             if( error.response.status === 401 ) {
-                notify({ type: 'is-danger', text: trans('auth.forms.authentication_failed'), duration:-1 })
+                notify.alert({text: trans('auth.forms.authentication_failed'), duration:5 })
             }
             else if( error.response.status !== 422 ) {
-                router.push({ name: 'genericError', params: { err: error.response } });
+                notify.error(error)
             }
         });
     }

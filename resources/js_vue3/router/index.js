@@ -25,10 +25,11 @@ import SettingsOptions  from '../views/settings/Options.vue'
 // import SettingsWebAuthn from './views/settings/WebAuthn.vue'
 // import EditCredential   from './views/settings/Credentials/Edit.vue'
 // import GeneratePAT      from './views/settings/PATokens/Create.vue'
-// import Errors           from './views/Error.vue'
+import Errors           from '../views/Error.vue'
 import About            from '../views/About.vue'
 
 import authGuard from './middlewares/authGuard'
+import noEmptyError from './middlewares/noEmptyError'
 
 const router = createRouter({
 	history: createWebHistory('/'),
@@ -61,8 +62,8 @@ const router = createRouter({
         { path: '/webauthn/lost', name: 'webauthn.lost', component: WebauthnLost, meta: { disabledWithAuthProxy: true, showAbout: true } },
         // { path: '/webauthn/recover', name: 'webauthn.recover', component: WebauthnRecover, meta: { disabledWithAuthProxy: true, showAbout: true } },
 
-        { path: '/about', name: 'about',component: About, meta: { showAbout: true } },
-        // { path: '/error', name: 'genericError',component: Errors, props: true },
+        { path: '/about', name: 'about', component: About, meta: { showAbout: true } },
+        { path: '/error', name: 'genericError', component: Errors, meta: { middlewares: [noEmptyError], err: null } },
         // { path: '/404', name: '404',component: Errors, props: true },
         // { path: '*', redirect: { name: '404' } },
 
