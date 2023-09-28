@@ -1,21 +1,15 @@
 <script setup>
-    // import { ref, reactive, inject } from 'vue'
-    // import { onMounted } from 'vue'
-    // import { useStorage } from '@vueuse/core'
     import Form from '@/components/formElements/Form'
     import { useUserStore } from '@/stores/user'
     import { useNotifyStore } from '@/stores/notify'
     import { useAppSettingsStore } from '@/stores/appSettings'
-    // import { useRouter } from 'vue-router';
-    // import { useNotification } from "@kyvg/vue3-notification";
-    // import { trans } from 'laravel-vue-i18n';
 
     const $2fauth = inject('2fauth')
     const router = useRouter()
     const user = useUserStore()
     const notify = useNotifyStore()
     const appSettings = useAppSettingsStore()
-    const showWebauthnForm = user.preferences.useWebauthnOnly ? true : useStorage($2fauth.prefix + 'showWebauthnForm', true) 
+    const showWebauthnForm = user.preferences.useWebauthnOnly ? true : useStorage($2fauth.prefix + 'showWebauthnForm', false) 
     const form = reactive(new Form({
         email: '',
         password: ''
@@ -32,6 +26,7 @@
      * Sign in using the login/password form
      */
     function LegacysignIn(e) {
+        notify.clear()
         form.post('/user/login', {returnError: true})
         .then(response => {
             user.$patch({
@@ -44,12 +39,12 @@
         })
         .catch(error => {
             if( error.response.status === 401 ) {
-                notify.alert({text: trans('auth.forms.authentication_failed'), duration:5 })
+                notify.alert({text: trans('auth.forms.authentication_failed'), duration: 10000 })
             }
             else if( error.response.status !== 422 ) {
                 notify.error(error)
             }
-        });
+        })
     }
 
 </script>

@@ -63,5 +63,9 @@ export const useNotifyStore = defineStore({
             notify({ type: 'is-danger', ...notification})
         },
 
+        clear() {
+            notify({ clean: true })
+        }
+
     },
 })
