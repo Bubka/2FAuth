@@ -1,4 +1,5 @@
 import axios from "axios"
+import { useUserStore } from '@/stores/user'
 
 export const httpClientFactory = (endpoint = 'api') => {
 	let baseURL
@@ -26,10 +27,9 @@ export const httpClientFactory = (endpoint = 'api') => {
             if (
                 error.response &&
                 [401, 419].includes(error.response.status)
-                // && store.getters["auth/authUser"] &&
-                // !store.getters["auth/guest"]
             ) {
-                // store.dispatch("auth/logout");
+                const user = useUserStore()
+                user.reset()
             }
             return Promise.reject(error);
         }

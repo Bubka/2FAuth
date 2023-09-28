@@ -34,14 +34,18 @@ export const useUserStore = defineStore({
             }
             else {
                 return authService.logout().then(() => {
-                    localStorage.clear()
-                    this.$reset()
-                    router.push({ name: 'login' })
+                    this.reset()
                 })
 
                 // this.$router.push({ name: 'login', params: { forceRefresh: true } })
             }
             // },
+        },
+
+        reset() {
+            localStorage.clear()
+            this.$reset()
+            router.push({ name: 'login' })
         }
 
     },
