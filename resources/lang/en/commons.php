@@ -70,5 +70,5 @@ return [
     'image_of_qrcode_to_scan' => 'Image of a QR code to scan',
     'file' => 'File',
     'or' => 'OR',
-    'close_the_x_page' => 'Close the {pagetitle} page',
+    'close_the_x_page' => 'Close the :pagetitle page',
 ];

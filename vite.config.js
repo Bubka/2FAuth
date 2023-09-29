@@ -37,7 +37,8 @@ export default defineConfig({
                 {
                     '@vueuse/core': [
                         'useStorage',
-                      ],
+                        'useClipboard',
+                    ],
                     'laravel-vue-i18n': [
                         'i18nVue',
                         'trans'
