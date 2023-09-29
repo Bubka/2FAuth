@@ -86,6 +86,11 @@ router.beforeEach((to, from, next) => {
         ...context,
         next: middlewarePipeline(context, middlewares, 1),
     });
-});
+})
+
+router.afterEach((to, from) => {
+    to.meta.title = trans('titles.' + to.name)
+    document.title = to.meta.title
+})
 
 export default router
