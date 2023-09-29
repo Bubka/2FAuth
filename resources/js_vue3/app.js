@@ -71,9 +71,10 @@ app
 
 // Global error handling
 import { useNotifyStore } from '@/stores/notify'
-
-app.config.errorHandler = (err, instance, info) => {
-    useNotifyStore().error(err)
+if (process.env.NODE_ENV === 'development') {
+    app.config.errorHandler = (err) => {
+        useNotifyStore().error(err)
+    }
 }
 
 // App mounting
