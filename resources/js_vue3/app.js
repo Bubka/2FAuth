@@ -71,7 +71,7 @@ app
 
 // Global error handling
 import { useNotifyStore } from '@/stores/notify'
-if (process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV != 'development') {
     app.config.errorHandler = (err) => {
         useNotifyStore().error(err)
     }
