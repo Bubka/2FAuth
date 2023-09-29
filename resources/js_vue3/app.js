@@ -78,3 +78,10 @@ app.config.errorHandler = (err, instance, info) => {
 
 // App mounting
 app.mount('#app')
+
+// Theme
+import { useColorMode } from '@vueuse/core'
+
+const mode = useColorMode({
+    attribute: 'data-theme',
+  })

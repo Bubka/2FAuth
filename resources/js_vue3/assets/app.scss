@@ -19,24 +19,9 @@ footer,
 :root[data-theme="dark"] .options-header {
   background-color: $black-ter;
 }
-@media (prefers-color-scheme: dark) {
-  :root[data-theme="system"],
-  :root[data-theme="system"] footer,
-  :root[data-theme="system"] .header,
-  :root[data-theme="system"] .modal-background,
-  :root[data-theme="system"] .modal-slot,
-  :root[data-theme="system"] .options-header {
-    background-color: $black-ter;
-  }
-}
 
 :root[data-theme="dark"] .about-debug {
   background-color: $black-bis;
-}
-@media (prefers-color-scheme: dark) {
-  :root[data-theme="system"] .about-debug {
-    background-color: $black-bis;
-  }
 }
 
 a:hover {
@@ -96,11 +81,6 @@ a:hover {
 :root[data-theme="dark"] .toolbar button {
   background-color: $black-ter;
 }
-@media (prefers-color-scheme: dark) {
-  :root[data-theme="system"] .toolbar button {
-    background-color: $black-ter;
-  }
-}
 
 .toolbar button.delete {
   background-color: $grey;
@@ -145,12 +125,6 @@ a:hover {
 :root[data-theme="dark"] .group-item {
   border-color: $grey-darker;
   color: $light;
-}
-@media (prefers-color-scheme: dark) {
-  :root[data-theme="system"] .group-item {
-    border-color: $grey-darker;
-    color: $light;
-  }
 }
 
 .group-item:first-of-type {
@@ -218,11 +192,6 @@ a:hover {
 :root[data-theme="dark"] .tfa-grid {
   background-color: hsl(0, 0%, 10%);
 }
-@media (prefers-color-scheme: dark) {
-  :root[data-theme="system"] .tfa-grid {
-    background-color: hsl(0, 0%, 10%);
-  }
-}
 
 .tfa-list {
   text-align: inherit;
@@ -234,12 +203,6 @@ a:hover {
 :root[data-theme="dark"] .tfa-list {
   background-color: $black-ter;
   border-bottom: 1px solid $grey-darker;
-}
-@media (prefers-color-scheme: dark) {
-  :root[data-theme="system"] .tfa-list {
-    background-color: $black-ter;
-    border-bottom: 1px solid $grey-darker;
-  }
 }
 
 @media screen and (max-width: 1217px) {
@@ -347,11 +310,6 @@ a:hover {
 :root[data-theme="dark"] .tfa-text {
   color: $white;
 }
-@media (prefers-color-scheme: dark) {
-  :root[data-theme="system"] .tfa-text {
-    color: $white;
-  }
-}
 
 .tfa-container img {
   height: 0.75em;
@@ -447,12 +405,6 @@ figure.no-icon {
 :root[data-theme="dark"] .add-icon-button:hover {
     color: $black-bis;
 }
-@media (prefers-color-scheme: dark) {
-  :root[data-theme="system"] .add-icon-button,
-  :root[data-theme="system"] .add-icon-button:hover {
-      color: $black-bis;
-  }
-}
 
 .dots {
   list-style: none;
@@ -484,11 +436,6 @@ figure.no-icon {
 :root[data-theme="dark"] .dots li[data-is-active]~li {
   background: $black-bis;
 }
-@media (prefers-color-scheme: dark) {
-  :root[data-theme="system"] .dots li[data-is-active]~li {
-    background: $black-bis;
-  }
-}
 
 .dots li:nth-child(-n+9) {
   background: hsl(48, 100%, 67%);
@@ -511,27 +458,11 @@ figure.no-icon {
   border-color: hsl(0, 0%, 29%);
   color: hsl(0, 0%, 100%);
 }
-@media (prefers-color-scheme: dark) {
-  :root[data-theme="system"] .input,
-  :root[data-theme="system"] .select select,
-  :root[data-theme="system"] .textarea {
-    background-color: $grey-darker;
-    border-color: hsl(0, 0%, 29%);
-    color: hsl(0, 0%, 100%);
-  }
-}
 
 :root[data-theme="dark"] .select select::placeholder,
 :root[data-theme="dark"] .textarea::placeholder,
 :root[data-theme="dark"] .input::placeholder {
   color: hsl(0, 0%, 48%);
-}
-@media (prefers-color-scheme: dark) {
-  :root[data-theme="system"] .select select::placeholder,
-  :root[data-theme="system"] .textarea::placeholder,
-  :root[data-theme="system"] .input::placeholder {
-    color: hsl(0, 0%, 48%);
-  }
 }
 
 .select select[disabled],
@@ -557,20 +488,6 @@ fieldset[disabled] .input {
   box-shadow: none;
   color: $grey-darker;
 }
-@media (prefers-color-scheme: dark) {
-  :root[data-theme="system"] .select select[disabled],
-  :root[data-theme="system"] [disabled].textarea,
-  :root[data-theme="system"] [disabled].input,
-  :root[data-theme="system"] fieldset[disabled] .select select,
-  :root[data-theme="system"] .select fieldset[disabled] select,
-  :root[data-theme="system"] fieldset[disabled] .textarea,
-  :root[data-theme="system"] fieldset[disabled] .input {
-    background-color: hsl(0, 0%, 10%);
-    border-color: $grey-darker;
-    box-shadow: none;
-    color: $grey-darker;
-  }
-}
 
 :root[data-theme="dark"] .select select[disabled]::placeholder,
 :root[data-theme="dark"] [disabled].textarea::placeholder,
@@ -580,17 +497,6 @@ fieldset[disabled] .input {
 :root[data-theme="dark"] fieldset[disabled] .textarea::placeholder,
 :root[data-theme="dark"] fieldset[disabled] .input::placeholder {
   color: $grey-darker;
-}
-@media (prefers-color-scheme: dark) {
-  :root[data-theme="system"] .select select[disabled]::placeholder,
-  :root[data-theme="system"] [disabled].textarea::placeholder,
-  :root[data-theme="system"] [disabled].input::placeholder,
-  :root[data-theme="system"] fieldset[disabled] .select select::placeholder,
-  :root[data-theme="system"] .select fieldset[disabled] select::placeholder,
-  :root[data-theme="system"] fieldset[disabled] .textarea::placeholder,
-  :root[data-theme="system"] fieldset[disabled] .input::placeholder {
-    color: $grey-darker;
-  }
 }
 
 .button.has-line-height {
@@ -931,23 +837,12 @@ button.button.tag.is-white,
   border-color: $grey;
   background: none;
 }
-@media (prefers-color-scheme: dark) {
-  :root[data-theme="system"] .is-checkradio[type="checkbox"]+label::before {
-    border-color: $grey;
-    background: none;
-  }
-}
 
 .is-checkradio[type="checkbox"]:checked + label::before {
   border-color: $grey;
 }
 :root[data-theme="dark"] .is-checkradio[type="checkbox"]:checked + label::before {
   border-color: $grey-lighter;
-}
-@media (prefers-color-scheme: dark) {
-  :root[data-theme="system"] .is-checkradio[type="checkbox"]:checked + label::before {
-    border-color: $grey-lighter;
-  }
 }
 
 .label {
@@ -970,11 +865,6 @@ button.button.tag.is-white,
 
 :root[data-theme="dark"] .is-underscored.is-dot {
   background-color: $success-dark;
-}
-@media (prefers-color-scheme: dark) {
-  :root[data-theme="system"] .is-underscored.is-dot {
-    background-color: $success-dark;
-  }
 }
 
 .is-mid-width-field input {
@@ -1002,20 +892,9 @@ button.button.tag.is-white,
 :root[data-theme="dark"] .control.has-icons-right .icon {
   color: inherit;
 }
-@media (prefers-color-scheme: dark) {
-  :root[data-theme="system"] .control.has-icons-left .icon,
-  :root[data-theme="system"] .control.has-icons-right .icon {
-    color: inherit;
-  }
-}
 
 :root[data-theme="dark"].is-search {
   border-color: $grey-darker;
-}
-@media (prefers-color-scheme: dark) {
-  :root[data-theme="system"].is-search {
-    border-color: $grey-darker;
-  }
 }
 
 .modal .field.is-grouped:last-child {
@@ -1152,11 +1031,6 @@ footer .field.is-grouped {
 :root[data-theme="dark"] quick-uploader-button::before {
   opacity: 0.05;
 }
-@media (prefers-color-scheme: dark) {
-  :root[data-theme="system"] quick-uploader-button::before {
-    opacity: 0.05;
-  }
-}
 
 .error-404,
 .error-generic,
@@ -1207,11 +1081,6 @@ footer .field.is-grouped {
 :root[data-theme="dark"] .about-logo {
   filter: none;
 }
-@media (prefers-color-scheme: dark) {
-  :root[data-theme="system"] .about-logo {
-    filter: none;
-  }
-}
 
 // Themed Spinner
 .spinner-container {
@@ -1224,14 +1093,6 @@ footer .field.is-grouped {
     background-color: $black-ter;
     .spinner {
         color: $light;
-    }
-}
-@media (prefers-color-scheme: dark) {
-    :root[data-theme="system"] .spinner-container {
-        background-color: $black-ter;
-        .spinner {
-            color: $light;
-        }
     }
 }
 
