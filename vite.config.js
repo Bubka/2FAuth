@@ -38,10 +38,15 @@ export default defineConfig({
                     '@vueuse/core': [
                         'useStorage',
                         'useClipboard',
+                        'useNavigatorLanguage'
                     ],
                     'laravel-vue-i18n': [
                         'i18nVue',
-                        'trans'
+                        'trans',
+                        'wTrans',
+                        'getActiveLanguage',
+                        'loadLanguageAsync',
+                        'getActiveLanguage'
                     ],
                     '@kyvg/vue3-notification': [
                         'useNotification'

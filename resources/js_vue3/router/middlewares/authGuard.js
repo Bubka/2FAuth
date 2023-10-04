@@ -13,6 +13,7 @@ export default async function auth({ to, next, stores }) {
                 preferences: currentUser.preferences,
                 isAdmin: currentUser.is_admin,
             })
+            user.applyUserPrefs()
         }
     }
 

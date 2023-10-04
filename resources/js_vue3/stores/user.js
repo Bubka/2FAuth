@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import authService from '@/services/authService'
 import router from '@/router'
+import { useColorMode } from '@vueuse/core'
 
 export const useUserStore = defineStore({
     id: 'user',
@@ -20,9 +21,6 @@ export const useUserStore = defineStore({
     },
 
     actions: {
-        updatePreference(preference) {
-            this.preferences = { ...this.state.preferences, ...preference }
-        },
 
         logout() {
             // async appLogout(evt) {
@@ -45,7 +43,29 @@ export const useUserStore = defineStore({
         reset() {
             localStorage.clear()
             this.$reset()
+            this.applyUserPrefs()
             router.push({ name: 'login' })
+        },
+
+        applyTheme() {
+            const mode = useColorMode({
+                attribute: 'data-theme',
+            })
+            mode.value = this.preferences.theme == 'system' ? 'auto' : this.preferences.theme
+        },
+
+        applyLanguage() {
+            const { isSupported, language } = useNavigatorLanguage()
+
+            if (isSupported) {
+                loadLanguageAsync(this.preferences.lang == 'browser' ? language.value.slice(0, 2)  : this.preferences.lang)
+            }
+            else loadLanguageAsync('en')
+        },
+
+        applyUserPrefs() {
+            this.applyTheme()
+            this.applyLanguage()
         }
 
     },

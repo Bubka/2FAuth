@@ -1,0 +1,14 @@
+import { httpClientFactory } from '@/services/httpClientFactory'
+
+const apiClient = httpClientFactory('api')
+
+export default {
+    /**
+     * 
+     * @returns 
+     */
+    update(name, value) {
+        return apiClient.put('/user/preferences/' + name, { value: value })
+    },
+    
+}

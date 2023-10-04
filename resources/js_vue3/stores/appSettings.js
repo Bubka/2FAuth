@@ -1,18 +1,14 @@
 import { defineStore } from 'pinia'
-// import { useApi } from '@/api/useAPI.js'
-
-// const api = useApi()
+import appSettingService from '@/services/appSettingService'
 
 export const useAppSettingsStore = defineStore({
-	id: 'settings',
+    id: 'appSettings',
 
-	state: () => {
+    state: () => {
         return { ...window.appSettings }
     },
 
-	actions: {
-		updateSetting(setting) {
-			this.settings = { ...this.state.settings, ...setting }
-		},
-	},
+    actions: {
+        
+    },
 })

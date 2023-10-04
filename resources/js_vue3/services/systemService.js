@@ -5,10 +5,18 @@ const webClient = httpClientFactory('web')
 export default {
     /**
      * 
-     * @returns 
+     * @returns Promise
      */
     getSystemInfos() {
         return webClient.get('infos')
     },
+
+    /**
+     * 
+     * @returns Promise
+     */
+    getLastRelease() {
+        return webClient.get('latestRelease')
+    }
     
 }

@@ -34,6 +34,7 @@
                 preferences: response.data.preferences,
                 isAdmin: response.data.is_admin,
             })
+            user.applyTheme()
 
             router.push({ name: 'accounts', params: { toRefresh: true } })
         })

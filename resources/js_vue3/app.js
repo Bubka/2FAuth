@@ -38,9 +38,11 @@ app.use(i18nVue, {
         }
     }
 })
+
+// Notifications
 app.use(Notifications)
 
-// Components registration
+// Global components registration
 import ResponsiveWidthWrapper from '@/layouts/ResponsiveWidthWrapper.vue'
 import FormWrapper from '@/layouts/FormWrapper.vue'
 import Footer from '@/layouts/Footer.vue'
@@ -49,10 +51,10 @@ import VueButton           from '@/components/formElements/Button.vue'
 import FieldError       from '@/components/formElements/FieldError.vue'
 import FormField        from '@/components/formElements/FormField.vue'
 import FormPasswordField        from '@/components/formElements/FormPasswordField.vue'
-// import FormSelect       from './FormSelect'
+import FormSelect       from '@/components/formElements/FormSelect.vue'
 // import FormSwitch       from './FormSwitch'
-// import FormToggle       from './FormToggle'
-// import FormCheckbox     from './FormCheckbox'
+import FormToggle       from '@/components/formElements/FormToggle.vue'
+import FormCheckbox     from '@/components/formElements/FormCheckbox.vue'
 import FormButtons      from '@/components/formElements/FormButtons.vue'
 // import Kicker           from './Kicker'
 // import SettingTabs      from './SettingTabs'
@@ -67,6 +69,9 @@ app
     .component('FieldError', FieldError)
     .component('FormField', FormField)
     .component('FormPasswordField', FormPasswordField)
+    .component('FormSelect', FormSelect)
+    .component('FormToggle', FormToggle)
+    .component('FormCheckbox', FormCheckbox)
     .component('FormButtons', FormButtons)
 
 // Global error handling
@@ -81,8 +86,5 @@ if (process.env.NODE_ENV != 'development') {
 app.mount('#app')
 
 // Theme
-import { useColorMode } from '@vueuse/core'
-
-const mode = useColorMode({
-    attribute: 'data-theme',
-  })
+import { useUserStore } from '@/stores/user'
+useUserStore().applyUserPrefs()

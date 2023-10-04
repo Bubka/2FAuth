@@ -1,5 +1,14 @@
 <script setup>
     import { RouterView } from 'vue-router'
+
+    onMounted(async () => {
+        const { useUserStore } = await import('./stores/user.js');
+        const { language } = useNavigatorLanguage()
+
+        watch(language, () => {
+            useUserStore().applyLanguage()
+        })
+    })
 </script>
 
 <template>
