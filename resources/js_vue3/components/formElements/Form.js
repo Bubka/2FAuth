@@ -195,8 +195,9 @@ class Form {
                     if (error.response) {
                         this.errors.set(this.extractErrors(error.response))
                     }
-
-                    reject(error)
+                    if (error.response?.status != 422) {
+                        reject(error)
+                    }
                 })
         })
     }
@@ -226,8 +227,9 @@ class Form {
                     if (error.response) {
                         this.errors.set(this.extractErrors(error.response))
                     }
-
-                    reject(error)
+                    if (error.response?.status != 422) {
+                        reject(error)
+                    }
                 })
         })
     }
