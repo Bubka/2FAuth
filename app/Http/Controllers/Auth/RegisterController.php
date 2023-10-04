@@ -45,8 +45,10 @@ class RegisterController extends Controller
         $this->guard()->login($user);
 
         return response()->json([
-            'message' => 'account created',
-            'name'    => $user->name,
+            'message'     => 'account created',
+            'name'        => $user->name,
+            'preferences' => $this->guard()->user()->preferences,
+            'is_admin'    => $this->guard()->user()->is_admin,
         ], 201);
     }
 

@@ -10,7 +10,7 @@
     const hasCapsLockOn = ref(false)
 
     const props = defineProps({
-        modelValue: [String, Number, Boolean],
+        modelValue: [String],
         label: {
             type: String,
             default: ''
@@ -48,19 +48,19 @@
     })
 
     const hasLowerCase = computed(() => {
-        return /[a-z]/.test(modelValue)
+        return /[a-z]/.test(props.modelValue)
     })
     const hasUpperCase = computed(() => {
-        return /[A-Z]/.test(modelValue)
+        return /[A-Z]/.test(props.modelValue)
     })
     const hasNumber = computed(() => {
-        return /[0-9]/.test(modelValue)
+        return /[0-9]/.test(props.modelValue)
     })
     const hasSpecialChar = computed(() => {
-        return /[^A-Za-z0-9]/.test(modelValue)
+        return /[^A-Za-z0-9]/.test(props.modelValue)
     })
     const IsLongEnough = computed(() => {
-        return modelValue.length >= 8
+        return props.modelValue.length >= 8
     })
 
     function checkCapsLock(event) {
@@ -86,7 +86,7 @@
                 :value="modelValue" 
                 :placeholder="placeholder" 
                 v-bind="$attrs" 
-                v-on:change="$emit('update:modelValue', $event.target.value)"
+                v-on:input="$emit('update:modelValue', $event.target.value)"
                 v-on:keyup="checkCapsLock"
             />
             <span v-if="currentType == 'password'" role="button" id="btnTogglePassword" tabindex="0" class="icon is-small is-right is-clickable" @keyup.enter="setFieldType('text')" @click="setFieldType('text')" :title="$t('auth.forms.reveal_password')">
