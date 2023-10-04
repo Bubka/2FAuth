@@ -12,6 +12,7 @@
             type: String,
             required: true
         },
+        fieldError: [String],
         hasOffset: Boolean,
         isDisabled: Boolean,
         label: {
@@ -67,7 +68,7 @@
                 </button>
             </UseColorMode>
         </div>
-        <!-- <FieldError :form="form" :field="fieldName" /> -->
+        <FieldError v-if="fieldError != undefined" :error="fieldError" :field="fieldName" />
         <p class="help" v-html="$t(help)" v-if="help" />
     </div>
 </template>

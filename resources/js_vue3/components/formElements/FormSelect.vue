@@ -10,6 +10,7 @@
             default: '',
             required: true
         },
+        fieldError: [String],
         options: {
             type: Array,
             required: true
@@ -33,7 +34,7 @@
                 </select>
             </div>
         </div>
-        <!-- <FieldError :form="form" :field="fieldName" /> -->
+        <FieldError v-if="fieldError != undefined" :error="fieldError" :field="fieldName" />
         <p class="help" v-html="$t(help)" v-if="help"></p>
     </div>
 </template>

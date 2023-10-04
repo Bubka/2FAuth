@@ -10,10 +10,11 @@
     const notify = useNotifyStore()
     const appSettings = useAppSettingsStore()
     const showWebauthnForm = user.preferences.useWebauthnOnly ? true : useStorage($2fauth.prefix + 'showWebauthnForm', false) 
-    const form = reactive(new Form({
+    const formData = {
         email: '',
         password: ''
-    }))
+    }
+    const form = reactive(new Form(formData))
 
     /**
      * Toggle the form between legacy and webauthn method
@@ -52,13 +53,13 @@
 
 <template>
     <!-- webauthn authentication -->
-    <FormWrapper v-if="showWebauthnForm" :title="$t('auth.forms.webauthn_login')" :punchline="$t('auth.welcome_to_2fauth')">
+    <FormWrapper v-if="showWebauthnForm" title="auth.forms.webauthn_login" punchline="auth.welcome_to_2fauth">
         <div class="field">
             {{ $t('auth.webauthn.use_security_device_to_sign_in') }}
         </div>
         <form id="frmWebauthnLogin" @submit.prevent="webauthnLogin" @keydown="form.onKeydown($event)">
-            <FormField :form="form" fieldName="email" inputType="email" :label="$t('auth.forms.email')" autofocus />
-            <FormButtons :isBusy="form.isBusy" :caption="$t('commons.continue')" :submitId="'btnContinue'"/>
+            <FormField v-model="form.email" fieldName="email" :fieldError="form.errors.get('email')" inputType="email" label="auth.forms.email" autofocus />
+            <FormButtons :isBusy="form.isBusy" caption="commons.continue" submitId="btnContinue"/>
         </form>
         <div class="nav-links">
             <p>
@@ -75,13 +76,13 @@
         </div>
     </FormWrapper>
     <!-- login/password legacy form -->
-    <FormWrapper v-else :title="$t('auth.forms.login')" :punchline="$t('auth.welcome_to_2fauth')">
+    <FormWrapper v-else title="auth.forms.login" punchline="auth.welcome_to_2fauth">
         <div v-if="$2fauth.isDemoApp" class="notification is-info has-text-centered is-radiusless" v-html="$t('auth.forms.welcome_to_demo_app_use_those_credentials')" />
         <div v-if="$2fauth.isTestingApp" class="notification is-warning has-text-centered is-radiusless" v-html="$t('auth.forms.welcome_to_testing_app_use_those_credentials')" />
         <form id="frmLegacyLogin" @submit.prevent="LegacysignIn" @keydown="form.onKeydown($event)">
-            <FormField :form="form" fieldName="email" inputType="email" :label="$t('auth.forms.email')" autofocus />
-            <FormPasswordField :form="form" fieldName="password" :label="$t('auth.forms.password')" />
-            <FormButtons :isBusy="form.isBusy" :caption="$t('auth.sign_in')" :submitId="'btnSignIn'"/>
+            <FormField v-model="form.email" fieldName="email" :fieldError="form.errors.get('email')" inputType="email" label="auth.forms.email" autofocus />
+            <FormPasswordField v-model="form.password" fieldName="password" :fieldError="form.errors.get('password')" label="auth.forms.password" />
+            <FormButtons :isBusy="form.isBusy" caption="auth.sign_in" submitId="btnSignIn"/>
         </form>
         <div class="nav-links">
             <p>{{ $t('auth.forms.forgot_your_password') }}&nbsp;

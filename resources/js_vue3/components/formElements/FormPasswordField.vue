@@ -1,16 +1,92 @@
+<script setup>
+    import { useIdGenerator } from '@/composables/helpers'
+
+    defineOptions({
+        inheritAttrs: false
+    })
+
+    const { inputId } = useIdGenerator(props.inputType, props.fieldName)
+    const currentType = ref(props.inputType)
+    const hasCapsLockOn = ref(false)
+
+    const props = defineProps({
+        modelValue: [String, Number, Boolean],
+        label: {
+            type: String,
+            default: ''
+        },
+        fieldName: {
+            type: String,
+            default: '',
+            required: true
+        },
+        fieldError: [String],
+        inputType: {
+            type: String,
+            default: 'password'
+        },
+        placeholder: {
+            type: String,
+            default: ''
+        },
+        help: {
+            type: String,
+            default: ''
+        },
+        hasOffset: {
+            type: Boolean,
+            default: false
+        },
+        isDisabled: {
+            type: Boolean,
+            default: false
+        },
+        showRules: {
+            type: Boolean,
+            default: false
+        },
+    })
+
+    const hasLowerCase = computed(() => {
+        return /[a-z]/.test(modelValue)
+    })
+    const hasUpperCase = computed(() => {
+        return /[A-Z]/.test(modelValue)
+    })
+    const hasNumber = computed(() => {
+        return /[0-9]/.test(modelValue)
+    })
+    const hasSpecialChar = computed(() => {
+        return /[^A-Za-z0-9]/.test(modelValue)
+    })
+    const IsLongEnough = computed(() => {
+        return modelValue.length >= 8
+    })
+
+    function checkCapsLock(event) {
+        hasCapsLockOn.value = event.getModifierState('CapsLock') ? true : false
+    }
+
+    function setFieldType(event) {
+        if (currentType.value != event) {
+            currentType.value = event
+        }
+    }
+</script>
+
 <template>
     <div class="field" :class="{ 'pt-3' : hasOffset }">
-        <label :for="inputId" class="label" v-html="label"></label>
+        <label :for="inputId" class="label" v-html="$t(label)" />
         <div class="control has-icons-right">
             <input
                 :disabled="isDisabled"
                 :id="inputId"
                 :type="currentType" 
                 class="input" 
-                v-model="form[fieldName]" 
+                :value="modelValue" 
                 :placeholder="placeholder" 
                 v-bind="$attrs" 
-                v-on:change="$emit('field-changed', form[fieldName])"
+                v-on:change="$emit('update:modelValue', $event.target.value)"
                 v-on:keyup="checkCapsLock"
             />
             <span v-if="currentType == 'password'" role="button" id="btnTogglePassword" tabindex="0" class="icon is-small is-right is-clickable" @keyup.enter="setFieldType('text')" @click="setFieldType('text')" :title="$t('auth.forms.reveal_password')">
@@ -21,8 +97,8 @@
             </span>
         </div>
         <p class="help is-warning" v-if="hasCapsLockOn" v-html="$t('auth.forms.caps_lock_is_on')" />
-        <FieldError :form="form" :field="fieldName" />
-        <p class="help" v-html="help" v-if="help"></p>
+        <FieldError v-if="fieldError != undefined" :error="fieldError" :field="fieldName" />
+        <p class="help" v-html="$t(help)" v-if="help" />
         <div v-if="showRules" class="columns is-mobile is-size-7 mt-0">
             <div class="column is-one-third">
                 <span class="has-text-weight-semibold">{{ $t("auth.forms.mandatory_rules") }}</span><br />
@@ -38,102 +114,3 @@
         </div>
     </div> 
 </template>
-
-<script>
-    import { useIdGenerator } from '../../composables/helpers'
-
-    export default {
-        name: 'FormPasswordField',
-        inheritAttrs: false,
-
-        setup(props) {
-            const { inputId } = useIdGenerator('password', props.fieldName)
-            return { inputId }
-        },
-        
-        data() {
-            return {
-                currentType: this.inputType,
-                hasCapsLockOn: false,
-            }
-        },
-
-        computed: {
-            hasLowerCase() {
-                return /[a-z]/.test(this.form[this.fieldName])
-            },
-            hasUpperCase() {
-                return /[A-Z]/.test(this.form[this.fieldName])
-            },
-            hasNumber() {
-                return /[0-9]/.test(this.form[this.fieldName])
-            },
-            hasSpecialChar() {
-                return /[^A-Za-z0-9]/.test(this.form[this.fieldName])
-            },
-            IsLongEnough() {
-                return this.form[this.fieldName].length >= 8
-            },
-        },
-
-        props: {
-            label: {
-                type: String,
-                default: ''
-            },
-
-            fieldName: {
-                type: String,
-                default: '',
-                required: true
-            },
-
-            inputType: {
-                type: String,
-                default: 'password'
-            },
-
-            form: {
-                type: Object,
-                required: true
-            },
-
-            placeholder: {
-                type: String,
-                default: ''
-            },
-
-            help: {
-                type: String,
-                default: ''
-            },
-
-            hasOffset: {
-                type: Boolean,
-                default: false
-            },
-
-            isDisabled: {
-                type: Boolean,
-                default: false
-            },
-
-            showRules: {
-                type: Boolean,
-                default: false
-            },
-        },
-
-        methods: {
-            checkCapsLock(event) {
-                this.hasCapsLockOn = event.getModifierState('CapsLock') ? true : false
-            },
-
-            setFieldType(event) {
-                if (this.currentType != event) {
-                    this.currentType = event
-                }
-            }
-        },
-    }
-</script>

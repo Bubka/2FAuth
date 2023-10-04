@@ -14,7 +14,7 @@
             },
             caption: {
                 type: String,
-                default: 'Submit'
+                default: 'commons.submit'
             },
             cancelLandingView: {
                 type: String,
@@ -39,7 +39,7 @@
     <div class="field is-grouped">
         <div class="control">
             <VueButton :id="submitId" :color="color" :isLoading="isBusy" :disabled="isDisabled" >
-                {{ caption }}
+                {{ $t(caption) }}
             </VueButton>
         </div>
         <div class="control" v-if="showCancelButton">

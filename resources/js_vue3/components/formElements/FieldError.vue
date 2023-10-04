@@ -1,7 +1,7 @@
 <script setup>
     const props = defineProps({
-        form: {
-            type: Object,
+        error: {
+            type: String,
             required: true
         },
         field: {
@@ -13,6 +13,8 @@
 
 <template>
     <div role="alert">
-        <p :id="'valError' + field[0].toUpperCase() + field.toLowerCase().slice(1)" class="help is-danger" v-if="form.errors.has(field)" v-html="form.errors.get(field)" />
+        <p :id="'valError' + field[0].toUpperCase() + field.toLowerCase().slice(1)"
+            class="help is-danger"
+            v-html="error" />
     </div>
 </template>
