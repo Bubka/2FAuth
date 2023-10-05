@@ -1,7 +1,7 @@
 <script setup>
     import SettingTabs from '@/layouts/SettingTabs.vue'
     import groupService from '@/services/groupService'
-    import userPreferenceService from '@/services/userPreferenceService'
+    import userService from '@/services/userService'
     import appSettingService from '@/services/appSettingService'
     import { useUserStore } from '@/stores/user'
     import { useAppSettingsStore } from '@/stores/appSettings'
@@ -70,7 +70,7 @@
     })
 
     user.$subscribe((mutation) => {
-        userPreferenceService.update(mutation.events.key, mutation.events.newValue).then(response => {
+        userService.updatePreference(mutation.events.key, mutation.events.newValue).then(response => {
             useNotifyStore().info({ type: 'is-success', text: trans('settings.forms.setting_saved') })
             
             if(mutation.events.key === 'lang' && getActiveLanguage() !== mutation.events.newValue) {
