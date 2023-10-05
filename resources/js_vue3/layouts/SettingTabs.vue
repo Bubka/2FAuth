@@ -6,15 +6,15 @@
             'id'   : 'lnkTabOptions'
         },
         // {
-        //     'name' : wTrans('settings.account'),
-        //     'view' : 'settings.account',
-        //     'id'   : 'lnkTabAccount'
-        // },
-        // {
         //     'name' : wTrans('settings.oauth'),
         //     'view' : 'settings.oauth.tokens',
         //     'id'   : 'lnkTabOAuth'
         // },
+        {
+            'name' : trans('settings.account'),
+            'view' : 'settings.account',
+            'id'   : 'lnkTabAccount'
+        },
         {
             'name' : trans('settings.webauthn'),
             'view' : 'settings.webauthn.devices',

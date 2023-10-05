@@ -20,8 +20,8 @@ import PasswordRequest  from '../views/auth/password/Request.vue'
 import WebauthnLost     from '../views/auth/webauthn/Lost.vue'
 // import WebauthnRecover  from './views/auth/webauthn/Recover.vue'
 import SettingsOptions  from '../views/settings/Options.vue'
-// import SettingsAccount  from './views/settings/Account.vue'
 // import SettingsOAuth    from './views/settings/OAuth.vue'
+import SettingsAccount  from '../views/settings/Account.vue'
 import SettingsWebAuthn from '../views/settings/WebAuthn.vue'
 import EditCredential   from '../views/settings/Credentials/Edit.vue'
 // import GeneratePAT      from './views/settings/PATokens/Create.vue'
@@ -48,9 +48,9 @@ const router = createRouter({
         // { path: '/group/:groupId/edit', name: 'editGroup', component: EditGroup, meta: { middlewares: [authGuard] }, props: true },
 
         { path: '/settings/options', name: 'settings.options', component: SettingsOptions, meta: { middlewares: [authGuard], showAbout: true } },
-        // { path: '/settings/account', name: 'settings.account', component: SettingsAccount, meta: { middlewares: [authGuard], showAbout: true } },
         // { path: '/settings/oauth', name: 'settings.oauth.tokens', component: SettingsOAuth, meta: { middlewares: [authGuard], showAbout: true } },
         // { path: '/settings/oauth/pat/create', name: 'settings.oauth.generatePAT', component: GeneratePAT, meta: { middlewares: [authGuard], showAbout: true } },
+        { path: '/settings/account', name: 'settings.account', component: SettingsAccount, meta: { middlewares: [authGuard], showAbout: true } },
         { path: '/settings/webauthn/:credentialId/edit', name: 'settings.webauthn.editCredential', component: EditCredential, meta: { middlewares: [authGuard], showAbout: true }, props: true },
         { path: '/settings/webauthn', name: 'settings.webauthn.devices', component: SettingsWebAuthn, meta: { middlewares: [authGuard], showAbout: true } },
 
