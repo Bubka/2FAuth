@@ -115,7 +115,7 @@
 
 <template>
     <div>
-        <SettingTabs activeTab="settings.options"></SettingTabs>
+        <SettingTabs activeTab="settings.options" />
         <div class="options-tabs">
             <FormWrapper>
                 <form>

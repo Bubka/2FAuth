@@ -1,7 +1,7 @@
 <script setup>
     const tabs = ref([
         {
-            'name' : wTrans('settings.options'),
+            'name' : trans('settings.options'),
             'view' : 'settings.options',
             'id'   : 'lnkTabOptions'
         },
@@ -15,11 +15,11 @@
         //     'view' : 'settings.oauth.tokens',
         //     'id'   : 'lnkTabOAuth'
         // },
-        // {
-        //     'name' : wTrans('settings.webauthn'),
-        //     'view' : 'settings.webauthn.devices',
-        //     'id'   : 'lnkTabWebauthn'
-        // },
+        {
+            'name' : trans('settings.webauthn'),
+            'view' : 'settings.webauthn.devices',
+            'id'   : 'lnkTabWebauthn'
+        },
     ])
 
     const props = defineProps({
