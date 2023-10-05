@@ -1,12 +1,14 @@
 <script setup>
     import Form from '@/components/formElements/Form'
     import { useUserStore } from '@/stores/user'
+    import { webauthnService } from '@/services/webauthn/webauthnService'
     import { useNotifyStore } from '@/stores/notify'
 
     const user = useUserStore()
     const notify = useNotifyStore()
+    const router = useRouter()
     const showWebauthnRegistration = ref(false)
-    const deviceRegistered = ref(false)
+    const deviceId = ref(null)
     
     const registerForm = reactive(new Form({
         name : '',
@@ -15,7 +17,7 @@
         password_confirmation : '',
     }))
 
-    const securityDeviceForm = reactive(new Form({
+    const renameDeviceForm = reactive(new Form({
         name : ''
     }))
 
@@ -35,13 +37,36 @@
 
             showWebauthnRegistration.value = true
         })
-    }
+    }    
 
     /**
      * Register a new security device
      */
-    async function registerWebauthnDevice() {
+    function registerWebauthnDevice() {
+        webauthnService.register().then((response) => {
+            const publicKeyCredential = JSON.parse(response.config.data)
 
+            deviceId.value = publicKeyCredential.id
+        })
+        .catch(error => {
+            if( error.response.status === 422 ) {
+                notify.alert({ text: error.response.data.message })
+            }
+            else {
+                notify.error(error);
+            }
+        })
+    }
+
+    /**
+     * Rename the registered device
+     */
+    function RenameDevice(e) {
+        renameDeviceForm.patch('/webauthn/credentials/' + deviceId.value + '/name')
+        .then(() => {
+            notify.info({ text: trans('auth.webauthn.device_successfully_registered') })
+            router.push({ name: 'accounts' })
+        })
     }
 
     onBeforeRouteLeave(() => {
@@ -53,11 +78,11 @@
     <div>
         <!-- webauthn registration -->
         <FormWrapper v-if="showWebauthnRegistration" title="auth.authentication" punchline="auth.webauthn.enhance_security_using_webauthn">
-            <div v-if="deviceRegistered" class="field">
+            <div v-if="deviceId" class="field">
                 <label id="lblDeviceRegistrationSuccess" class="label mb-5">{{ $t('auth.webauthn.device_successfully_registered') }}&nbsp;<font-awesome-icon :icon="['fas', 'check']" /></label>
-                <form @submit.prevent="handleDeviceSubmit" @keydown="deviceForm.onKeydown($event)">
-                    <FormField v-model="securityDeviceForm.name" fieldName="name" :fieldError="securityDeviceForm.errors.get('name')" inputType="text" placeholder="iPhone 12, TouchID, Yubikey 5C" label="auth.forms.name_this_device" />
-                    <FormButtons :isBusy="securityDeviceForm.isBusy" :isDisabled="deviceForm.isDisabled" caption="commons.continue" />
+                <form @submit.prevent="RenameDevice" @keydown="renameDeviceForm.onKeydown($event)">
+                    <FormField v-model="renameDeviceForm.name" fieldName="name" :fieldError="renameDeviceForm.errors.get('name')" inputType="text" placeholder="iPhone 12, TouchID, Yubikey 5C" label="auth.forms.name_this_device" />
+                    <FormButtons :isBusy="renameDeviceForm.isBusy" :isDisabled="renameDeviceForm.isDisabled" caption="commons.continue" />
                 </form>
             </div>
             <div v-else class="field is-grouped">
@@ -87,88 +112,3 @@
         <VueFooter />
     </div>
 </template>
-<!-- 
-<script>
-
-    import WebauthnService from './../../webauthn/webauthnService'
-    import { webauthnAbortService } from './../../webauthn/webauthnAbortService'
-    import { identifyRegistrationError }  from './../../webauthn/identifyRegistrationError'
-
-    export default {
-        data(){
-            return {
-                deviceRegistered: false,
-                deviceId : null
-            }
-        },
-
-        methods : {
-
-            /**
-             * Register a new security device
-             */
-            async registerWebauthnDevice() {
-                let webauthnService = new WebauthnService()
-
-                // Check https context
-                if (!window.isSecureContext) {
-                    this.$notify({ type: 'is-danger', text: this.$t('errors.https_required') })
-                    return false
-                }
-
-                // Check browser support
-                if (webauthnService.doesntSupportWebAuthn) {
-                    this.$notify({ type: 'is-danger', text: this.$t('errors.browser_does_not_support_webauthn') })
-                    return false
-                }
-
-                const registerOptions = await this.axios.post('/webauthn/register/options').then(res => res.data)
-                const publicKey = webauthnService.parseIncomingServerOptions(registerOptions)
-                
-                let options = { publicKey }
-                options.signal = webauthnAbortService.createNewAbortSignal()
-
-                let bufferedCredentials
-                try {
-                    bufferedCredentials = await navigator.credentials.create(options)
-                }
-                catch (error) {
-                    const webauthnError = identifyRegistrationError(error, options)
-                    this.$notify({ type: webauthnError.type, text: this.$t(webauthnError.phrase) })
-
-                    return false
-                }
-
-                const publicKeyCredential = webauthnService.parseOutgoingCredentials(bufferedCredentials);
-
-                this.axios.post('/webauthn/register', publicKeyCredential, {returnError: true})
-                .then(response => {
-                    this.deviceId = publicKeyCredential.id
-                    this.deviceRegistered = true
-                })
-                .catch(error => {
-                    if( error.response.status === 422 ) {
-                        this.$notify({ type: 'is-danger', text: error.response.data.message })
-                    }
-                    else {
-                        this.$router.push({ name: 'genericError', params: { err: error.response } });
-                    }
-                })
-            },
-
-
-            /**
-             * Rename the registered device
-             */
-            async handleDeviceSubmit(e) {
-
-                await this.deviceForm.patch('/webauthn/credentials/' + this.deviceId + '/name')
-
-                if( this.deviceForm.errors.any() === false ) {
-                    this.$router.push({name: 'accounts', params: { toRefresh: true }})
-                }
-            },
-
-        },
-    }
-</script> -->

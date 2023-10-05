@@ -41,7 +41,6 @@
             router.push({ name: 'settings.webauthn.editCredential', params: { credentialId: JSON.parse(response.config.data).id, name: trans('auth.webauthn.my_device') } })
         })
         .catch(error => {
-            console.log(error)
             if ('webauthn' in error) {
                 if (error.name == 'is-warning') {
                     notify.warn({ text: trans(error.message) })

@@ -62,7 +62,6 @@ class WebauthnService {
         }
         catch (error) {
             const webauthnError = identifyRegistrationError(error, options)
-            // console.log(webauthnError)
             return Promise.reject({
                 webauthn: true,
                 type: webauthnError.type,
