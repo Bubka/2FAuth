@@ -26,19 +26,26 @@
 
     const emit = defineEmits(['update:modelValue'])
     const attrs = useAttrs()
-    const checked = ref(props.modelValue)
+    const model = computed({
+        get() {
+            return props.modelValue;
+        },
+        set(value) {
+            emit("update:modelValue", value);
+        },
+    })
 
-    function setCheckbox() {
-        if (attrs['disabled'] == undefined) {
-            emit('update:modelValue', checked)
+    function toggleModel() {
+        if (attrs['disabled'] != true) {
+            model.value = !model.value
         }
     }
 </script>
 
 <template>
     <div class="field">
-        <input :id="fieldName" type="checkbox" :name="fieldName" class="is-checkradio is-info" v-model="checked" v-on:change="setCheckbox" v-bind="$attrs"/>
-        <label tabindex="0" :for="fieldName" class="label" :class="labelClass" v-html="$t(label)" v-on:keypress.space.prevent="setCheckbox" />
+        <input :id="fieldName" type="checkbox" :name="fieldName" class="is-checkradio is-info" v-model="model" v-bind="$attrs"/>
+        <label tabindex="0" :for="fieldName" class="label" :class="labelClass" v-html="$t(label)" v-on:keypress.space.prevent="toggleModel" />
         <p class="help" v-html="$t(help)" v-if="help" />
     </div>
 </template>
