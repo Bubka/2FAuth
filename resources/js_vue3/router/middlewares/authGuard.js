@@ -10,6 +10,7 @@ export default async function auth({ to, next, stores }) {
         if (currentUser) {
             user.$patch({
                 name: currentUser.name,
+                email: currentUser.email,
                 preferences: currentUser.preferences,
                 isAdmin: currentUser.is_admin,
             })

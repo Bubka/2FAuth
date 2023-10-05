@@ -30,6 +30,7 @@
         registerForm.post('/user').then(response => {
             user.$patch({
                 name: response.data.name,
+                email: response.data.email,
                 preferences: response.data.preferences,
                 isAdmin: response.data.is_admin ?? false,
             })

@@ -114,6 +114,7 @@ class LoginController extends Controller
         return response()->json([
             'message'     => 'authenticated',
             'name'        => $name,
+            'email'       => $this->guard()->user()->email,
             'preferences' => $this->guard()->user()->preferences,
             'is_admin'    => $this->guard()->user()->is_admin,
         ], Response::HTTP_OK);

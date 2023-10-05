@@ -9,6 +9,7 @@ export const useUserStore = defineStore({
     state: () => {
         return {
             name: undefined,
+            email: undefined,
             preferences: window.defaultPreferences,
             isAdmin: false,
         }
