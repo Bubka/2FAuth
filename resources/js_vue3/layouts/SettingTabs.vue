@@ -5,15 +5,15 @@
             'view' : 'settings.options',
             'id'   : 'lnkTabOptions'
         },
-        // {
-        //     'name' : wTrans('settings.oauth'),
-        //     'view' : 'settings.oauth.tokens',
-        //     'id'   : 'lnkTabOAuth'
-        // },
         {
             'name' : trans('settings.account'),
             'view' : 'settings.account',
             'id'   : 'lnkTabAccount'
+        },
+        {
+            'name' : trans('settings.oauth'),
+            'view' : 'settings.oauth.tokens',
+            'id'   : 'lnkTabOAuth'
         },
         {
             'name' : trans('settings.webauthn'),

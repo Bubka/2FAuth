@@ -36,5 +36,25 @@ export default {
     revokeWebauthnDevice(credentialId, config = {}) {
         return webClient.delete('/webauthn/credentials/' + credentialId, {...config})
     },
+
+    /**
+     * Get all user PATs
+     * 
+     * @param {*} config 
+     * @returns 
+     */
+    getPersonalAccessTokens(config = {}) {
+        return webClient.get('/oauth/personal-access-tokens', {...config})
+    },
+
+    /**
+     * Delete a user PAT
+     * 
+     * @param {*} tokenId 
+     * @returns 
+     */
+    deletePersonalAccessToken(tokenId, config = {}) {
+        return webClient.delete('/oauth/personal-access-tokens/' + tokenId, {...config})
+    }
     
 }
