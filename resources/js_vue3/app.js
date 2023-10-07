@@ -56,7 +56,7 @@ import FormSelect       from '@/components/formElements/FormSelect.vue'
 import FormToggle       from '@/components/formElements/FormToggle.vue'
 import FormCheckbox     from '@/components/formElements/FormCheckbox.vue'
 import FormButtons      from '@/components/formElements/FormButtons.vue'
-// import Kicker           from './Kicker'
+import Kicker           from '@/components/Kicker.vue'
 // import SettingTabs      from './SettingTabs'
 
 app
@@ -73,6 +73,7 @@ app
     .component('FormToggle', FormToggle)
     .component('FormCheckbox', FormCheckbox)
     .component('FormButtons', FormButtons)
+    .component('Kicker', Kicker)
 
 // Global error handling
 import { useNotifyStore } from '@/stores/notify'
