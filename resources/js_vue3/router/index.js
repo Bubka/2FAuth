@@ -2,12 +2,12 @@ import { createRouter, createWebHistory } from 'vue-router'
 import middlewarePipeline from "@/router/middlewarePipeline";
 import { useUserStore } from '@/stores/user'
 
-// import Start            from './views/Start.vue'
-// import Capture          from './views/Capture.vue'
+import Start            from '../views/Start.vue'
 import Accounts         from '../views/Accounts.vue'
-// import CreateAccount    from './views/twofaccounts/Create.vue'
+import Capture          from '../views/twofaccounts/Capture.vue'
+import CreateAccount    from '../views/twofaccounts/Create.vue'
 // import EditAccount      from './views/twofaccounts/Edit.vue'
-// import ImportAccount    from './views/twofaccounts/Import.vue'
+import ImportAccount    from '../views/twofaccounts/Import.vue'
 // import QRcodeAccount    from './views/twofaccounts/QRcode.vue'
 // import Groups           from './views/Groups.vue'
 // import CreateGroup      from './views/groups/Create.vue'
@@ -33,12 +33,12 @@ import noEmptyError from './middlewares/noEmptyError'
 const router = createRouter({
 	history: createWebHistory('/'),
 	routes: [
-		// { path: '/start', name: 'start', component: Start, meta: { middlewares: [authGuard] }, props: true },
-        // { path: '/capture', name: 'capture', component: Capture, meta: { middlewares: [authGuard] }, props: true },
+		{ path: '/start', name: 'start', component: Start, meta: { middlewares: [authGuard] } },
+        { path: '/capture', name: 'capture', component: Capture, meta: { middlewares: [authGuard] } },
 
-        { path: '/accounts', name: 'accounts', component: Accounts, meta: { middlewares: [authGuard] }, alias: '/', props: true },
-        // { path: '/account/create', name: 'createAccount', component: CreateAccount, meta: { middlewares: [authGuard] } },
-        // { path: '/account/import', name: 'importAccounts', component: ImportAccount, meta: { middlewares: [authGuard] } },
+        { path: '/accounts', name: 'accounts', component: Accounts, meta: { middlewares: [authGuard] }, alias: '/' },
+        { path: '/account/create', name: 'createAccount', component: CreateAccount, meta: { middlewares: [authGuard] } },
+        { path: '/account/import', name: 'importAccounts', component: ImportAccount, meta: { middlewares: [authGuard] } },
         // { path: '/account/:twofaccountId/edit', name: 'editAccount', component: EditAccount, meta: { middlewares: [authGuard] } },
         // { path: '/account/:twofaccountId/qrcode', name: 'showQRcode', component: QRcodeAccount, meta: { middlewares: [authGuard] } },
 

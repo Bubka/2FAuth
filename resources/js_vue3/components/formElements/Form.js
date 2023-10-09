@@ -210,12 +210,12 @@ class Form {
      * @param  {Object} config (axios config)
      * @return {Promise}
      */
-    upload (url, formData, config = {}) {
+    upload (url, config = {}) {
         this.startProcessing()
 
         return new Promise((resolve, reject) => {
-            // (Form.axios || axios).request({ url: this.route(url), method, data, ...config })
-            this.axios.request({ url: this.route(url), method: 'post', data: formData, header: {'Content-Type' : 'multipart/form-data'}, ...config })
+            // https://www.npmjs.com/package/axios#-automatic-serialization-to-formdata
+            this.axios.post(this.route(url), this.data(), { headers: {'Content-Type' : 'multipart/form-data'}, ...config })
                 .then(response => {
                     this.finishProcessing()
 
@@ -227,9 +227,9 @@ class Form {
                     if (error.response) {
                         this.errors.set(this.extractErrors(error.response))
                     }
-                    if (error.response?.status != 422) {
+                    // if (error.response?.status != 422) {
                         reject(error)
-                    }
+                    // }
                 })
         })
     }
