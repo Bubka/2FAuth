@@ -45,6 +45,15 @@ class Form {
      *
      * @param {Object} data
      */
+    hasChanged () {
+        return this.keys().some(key => this[key] !== this.originalData[key])
+    }
+
+    /**
+     * Fill form data.
+     *
+     * @param {Object} data
+     */
     fillWithKeyValueObject (data) {
         this.keys().forEach(key => {
             const keyValueObject = data.find(s => s.key === key.toString())
@@ -315,6 +324,6 @@ class Form {
 
 Form.routes = {}
 Form.errorMessage = 'Something went wrong. Please try again.'
-Form.ignore = ['isBusy', 'isDisabled', 'errors', 'originalData']
+Form.ignore = ['isBusy', 'isDisabled', 'errors', 'originalData', 'axios']
 
 export default Form

@@ -52,7 +52,7 @@ return [
     'unsupported_migration' => 'Data do not match any supported format',
     'unsupported_otp_type' => 'Unsupported OTP type',
     'encrypted_migration' => 'Unreadable, the data seem encrypted',
-    'no_logo_found_for_x' => 'No logo available for {service}',
+    'no_logo_found_for_x' => 'No logo available for :service',
     'file_upload_failed' => 'File upload failed',
     'unauthorized' => 'Unauthorized',
     'unauthorized_legend' => 'You do not have permissions to view this resource or to perform this action',

@@ -9,14 +9,14 @@
         },
     })
 
-    const emit = defineEmits(['modalClosed'])
+    const emit = defineEmits(['update:modelValue'])
 
     const isActive = computed({
         get() {
             return props.modelValue
         },
         set(value) {
-            emit('modalClosed')
+            emit('update:modelValue', value)
         }
     })
 
