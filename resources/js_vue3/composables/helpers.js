@@ -1,4 +1,5 @@
 // import { ref } from 'vue'
+import { useUserStore } from '@/stores/user'
 
 export function useIdGenerator(fieldType, fieldName) {
 	let prefix
@@ -31,4 +32,21 @@ export function useIdGenerator(fieldType, fieldName) {
 	return {
 		inputId: prefix + fieldName[0].toUpperCase() + fieldName.toLowerCase().slice(1)
 	}
+}
+
+export function useDisplayablePassword(pwd) {
+    const user = useUserStore()
+
+	if (user.preferences.formatPassword && pwd.length > 0) {
+		const x = Math.ceil(user.preferences.formatPasswordBy < 1
+			? pwd.length * user.preferences.formatPasswordBy
+			: user.preferences.formatPasswordBy)
+			
+		const chunks = pwd.match(new RegExp(`.{1,${x}}`, 'g'));
+		if (chunks) {
+			pwd = chunks.join(' ')
+		}
+	}
+
+	return user.preferences.showOtpAsDot ? pwd.replace(/[0-9]/g, '●') : pwd
 }
