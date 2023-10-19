@@ -447,6 +447,10 @@ figure.no-icon {
   /* green */
 }
 
+.dots.off li {
+  background: $black-bis;
+}
+
 // .dots li:nth-child(3n+2), .dots li:nth-child(3n+3) {
 //     display:none;
 // }
