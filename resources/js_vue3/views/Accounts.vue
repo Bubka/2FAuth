@@ -8,13 +8,15 @@
     import SearchBox from '@/components/SearchBox.vue'
     import Toolbar from '@/components/Toolbar.vue'
     import OtpDisplay from '@/components/OtpDisplay.vue'
+    import ActionButtons from '@/components/ActionButtons.vue'
     import { UseColorMode } from '@vueuse/components'
     import { useUserStore } from '@/stores/user'
     import { useNotifyStore } from '@/stores/notify'
     import { useBusStore } from '@/stores/bus'
+    import { useTwofaccounts } from '@/stores/twofaccounts'
+    import { useGroups } from '@/stores/groups'
     import { useAppSettingsStore } from '@/stores/appSettings'
     import { useDisplayablePassword } from '@/composables/helpers'
-    import { saveAs } from 'file-saver';
 
     const $2fauth = inject('2fauth')
     const notify = useNotifyStore()
@@ -23,41 +25,27 @@
     const router = useRouter()
     const appSettings = useAppSettingsStore()
     const { copy, copied } = useClipboard({ legacy: true })
+    const twofaccounts = useTwofaccounts()
+    const groups = useGroups()
 
-    const search = ref('')
-    const accounts = ref([])
-    const groups = ref([])
-    const selectedAccounts = ref([])
     const showOtpInModal = ref(false)
-    const isDragging = ref(false)
     const showGroupSwitch = ref(false)
     const showDestinationGroupSelector = ref(false)
+    const isDragging = ref(false)
+
     const otpDisplay = ref(null)
 
-    const selectedAccountsIds = computed(() => {
-        return selectedAccounts.value.forEach(id => ids.push(id))
-    })
-
-    /**
-     * Returns the name of a group
-     */
-    const activeGroupName = computed(() => {
-        const g = groups.value.find(el => el.id === parseInt(user.preferences.activeGroup))
-
-        return g ? g.name : trans('commons.all')
+    watch(showOtpInModal, (val) => {
+        if (val == false) {
+            otpDisplay.value?.clearOTP()
+        }
     })
 
     /**
      * Returns whether or not the accounts should be displayed
     */
     const showAccounts = computed(() => {
-        return accounts.value.length > 0 && !showGroupSwitch.value && !showDestinationGroupSelector.value
-    })
-
-    watch(showOtpInModal, (val) => {
-        if (val == false) {
-            otpDisplay.value?.clearOTP()
-        }
+        return twofaccounts.isNotEmpty && !showGroupSwitch.value && !showDestinationGroupSelector.value
     })
 
     onMounted(() => {
@@ -70,8 +58,14 @@
         //     if( groups ) this.groups = groups
         // }
 
-        // we fetch fresh data whatever. The user will be notified to reload the page if there are any data changes
-        fetchAccounts()
+        // We fetch fresh data whatever. The user will be notified to reload the page if there are any data changes
+        twofaccounts.refresh()
+        groups.refresh()
+
+        // if (twofaccounts.count === 0) {
+        //     // No account yet, we force user to land on the start view.
+        //     router.push({ name: 'start' });
+        // }
 
         // stop OTP generation on modal close
         // this.$on('modalClose', function() {
@@ -80,107 +74,7 @@
     })
 
     /**
-     * The actual list of displayed accounts
-     */
-    const filteredAccounts = computed({
-        get() {
-            return accounts.value.filter(
-                item => {
-                    if (parseInt(user.preferences.activeGroup) > 0 ) {
-                        return ((item.service ? item.service.toLowerCase().includes(search.value.toLowerCase()) : false) ||
-                            item.account.toLowerCase().includes(search.value.toLowerCase())) &&
-                            (item.group_id == parseInt(user.preferences.activeGroup))
-                    }
-                    else {
-                        return ((item.service ? item.service.toLowerCase().includes(search.value.toLowerCase()) : false) ||
-                            item.account.toLowerCase().includes(search.value.toLowerCase()))
-                    }
-                }
-            )
-        },
-        set(newValue) {
-            accounts.value = newValue
-        }
-    })
-
-    /**
-     * Fetch accounts from db
-     */
-    function fetchAccounts(forceRefresh = false) {
-        let _accounts = []
-        selectedAccounts.value = []
-
-        twofaccountService.getAll(!user.preferences.getOtpOnRequest).then(response => {
-            response.data.forEach((data) => {
-                _accounts.push(data)
-            })
-
-            // if ( accounts.value.length > 0 && !objectEquals(_accounts, accounts.value, { depth: 1 }) && !forceRefresh ) {
-            //     notify.action({
-            //         text: '<span class="is-size-7">' + trans('commons.some_data_have_changed') + '</span><br /><a href="." class="button is-rounded is-warning is-small">' + trans('commons.reload') + '</a>',
-            //         duration:-1,
-            //         closeOnClick: false
-            //     })
-            // }
-            if( accounts.value.length === 0 && _accounts.length === 0 ) {
-                // No account yet, we force user to land on the start view.
-                //this.$storage.set('accounts', this.accounts)
-                router.push({ name: 'start' });
-            }
-            else {
-                accounts.value = _accounts
-                //this.$storage.set('accounts', accounts.value)
-                fetchGroups()
-            }
-        })
-    }
-
-    /**
-     * Select an account while in edit mode
-     */
-    function selectAccount(accountId) {
-        for (var i=0 ; i < selectedAccounts.value.length ; i++) {
-            if ( selectedAccounts.value[i] === accountId ) {
-                selectedAccounts.value.splice(i,1);
-                return
-            }
-        }
-
-        selectedAccounts.value.push(accountId)
-    }
-
-    /**
-     * Delete accounts selected from the Edit mode
-     */
-    async function destroyAccounts() {
-        if(confirm(trans('twofaccounts.confirm.delete'))) {
-            await twofaccountService.batchDelete(selectedAccountsIds.join())
-                .then(response => {
-                    ids.forEach(function(id) {
-                        accounts.value = accounts.filter(a => a.id !== id)
-                    })
-                    notify.info({ text: trans('twofaccounts.accounts_deleted') })
-                })
-
-            // we fetch the accounts again to prevent the js collection being
-            // desynchronize from the backend php collection
-            fetchAccounts(true)
-        }
-    }
-
-    /**
-     * Export selected accounts to a downloadable file
-     */
-    function exportAccounts() {
-        twofaccountService.export(selectedAccountsIds.join(), {responseType: 'blob'})
-        .then((response) => {
-            var blob = new Blob([response.data], {type: "application/json;charset=utf-8"});
-            saveAs.saveAs(blob, "2fauth_export.json");
-        })
-    }
-
-    /**
-     * Runs some updates after accounts assignement/withdraw
+     * Runs some updates after accounts assignement/withdrawal
      */
     function postGroupAssignementUpdate() {
         // we fetch the accounts again to prevent the js collection being
@@ -193,9 +87,9 @@
      * Shows rotating OTP for the provided account
      */
     function showOTP(account) {
-        // In Edit mode, clicking an account does not show the otpDisplay, it selects the account
+        // In Management mode, clicking an account does not show the otpDisplay, it selects the account
         if(bus.inManagementMode) {
-            selectAccount(account.id)
+            twofaccounts.select(account.id)
         }
         else {
             showOtpInModal.value = true
@@ -204,45 +98,11 @@
     }
 
     /**
-     * Gets groups list from backend
-     */
-    function fetchGroups() {
-        groupService.getAll().then(response => {
-            let _groups = []
-
-            response.data.forEach((data) => {
-                _groups.push(data)
-            })
-
-            // if ( !objectEquals(_groups, groups.value) ) {
-                groups.value = _groups
-            // }
-
-            //this.$storage.set('groups', this.groups)
-        })
-    }
-
-    /**
-     * Routes user to the appropriate submitting view
-     */
-    function start() {
-        if( user.preferences.useDirectCapture && user.preferences.defaultCaptureMode === 'advancedForm' ) {
-            router.push({ name: 'createAccount' })
-        }
-        else if( user.preferences.useDirectCapture && user.preferences.defaultCaptureMode === 'livescan' ) {
-            router.push({ name: 'capture' })
-        }
-        else {
-            router.push({ name: 'start' })
-        }
-    }
-
-    /**
      * Shows an OTP in a modal or directly copies it to the clipboard
      */
     function showOrCopy(account) {
         if (!user.preferences.getOtpOnRequest && account.otp_type.includes('totp')) {
-            copyOTP(account.otp.password)
+            copyToClipboard(account.otp.password)
         }
         else {
             showOTP(account)
@@ -250,9 +110,9 @@
     }
 
     /**
-     * Copies an OTP
+     * Copies a string to the clipboard
      */
-    function copyOTP (password) {
+    function copyToClipboard (password) {
         copy(password)
 
         if (copied) {
@@ -266,10 +126,10 @@
     /**
      * Gets a fresh OTP from backend and copies it
      */
-     async function getAndCopyOTP(account) {
+    async function getAndCopyOTP(account) {
         twofaccountService.getOtpById(account.id).then(response => {
             let otp = response.data
-            copyOTP(otp.password)
+            copyToClipboard(otp.password)
 
             if (otp.otp_type == 'hotp') {
                 let hotpToIncrement = accounts.value.find((acc) => acc.id == account.id)
@@ -281,52 +141,6 @@
             }
         })
     }
-
-    /**
-     * Save the account order in db
-     */
-    function saveOrder() {
-        isDragging.value = false
-        const orderedIds = accounts.value.map(a => a.id)
-        twofaccountService.saveOrder(orderedIds)
-    }
-
-    /**
-     * Sort accounts ascending
-     */
-    function sortAsc() {
-        accounts.value.sort((a, b) => a.service > b.service ? 1 : -1)
-        saveOrder()
-    }
-
-    /**
-     *Sort accounts descending
-     */
-     function sortDesc() {
-        accounts.value.sort((a, b) => a.service < b.service ? 1 : -1)
-        saveOrder()
-    }
-
-    /**
-     * Select all accounts while in edit mode
-     */
-    function selectAll() {
-        if(bus.inManagementMode) {
-            accounts.value.forEach(function(account) {
-                if ( !selectedAccounts.value.includes(account.id) ) {
-                    selectedAccounts.value.push(account.id)
-                }
-            })
-        }
-    }
-
-    /**
-     * Unselect all accounts
-     */
-    function unselectAll() {
-        selectedAccounts.value = []
-    }
-
 </script>
 
 <template>
@@ -335,7 +149,7 @@
         <DestinationGroupSelector
             v-if="showDestinationGroupSelector"
             v-model:showDestinationGroupSelector="showDestinationGroupSelector"
-            v-model:selectedAccountsIds="selectedAccountsIds"
+            v-model:selectedAccountsIds="twofaccounts.selectedIds"
             @account-moved="postGroupAssignementUpdate">
         </DestinationGroupSelector>
         <!-- header -->
@@ -343,28 +157,28 @@
             <div class="columns is-gapless is-mobile is-centered">
                 <div class="column is-three-quarters-mobile is-one-third-tablet is-one-quarter-desktop is-one-quarter-widescreen is-one-quarter-fullhd">
                     <!-- search -->
-                    <SearchBox v-model:keyword="search"/>
+                    <SearchBox v-model:keyword="twofaccounts.filter"/>
                     <!-- toolbar -->
                     <Toolbar v-if="bus.inManagementMode"
-                        :selectedCount="selectedAccounts.length"
-                        @clear-selected="selectedAccounts = []"
-                        @select-all="selectAll"
-                        @sort-asc="sortAsc"
-                        @sort-desc="sortDesc">
+                        :selectedCount="twofaccounts.selectedCount"
+                        @clear-selected="twofaccounts.selectNone()"
+                        @select-all="twofaccounts.selectAll()"
+                        @sort-asc="twofaccounts.sortAsc()"
+                        @sort-desc="twofaccounts.sortDesc()">
                     </Toolbar>
                     <!-- group switch toggle -->
                     <div v-else class="has-text-centered">
                         <div class="columns">
                             <UseColorMode v-slot="{ mode }">
-                                <div class="column" v-if="!showGroupSwitch">
-                                    <button id="btnShowGroupSwitch" :title="$t('groups.show_group_selector')" tabindex="1" class="button is-text is-like-text" :class="{'has-text-grey' : mode != 'dark'}" @click.stop="showGroupSwitch = !showGroupSwitch">
-                                        {{ activeGroupName }} ({{ filteredAccounts.length }})&nbsp;
-                                        <FontAwesomeIcon  :icon="['fas', 'caret-down']" />
+                                <div class="column" v-if="showGroupSwitch">
+                                    <button id="btnHideGroupSwitch" :title="$t('groups.hide_group_selector')" tabindex="1" class="button is-text is-like-text" :class="{'has-text-grey' : mode != 'dark'}" @click.stop="showGroupSwitch = !showGroupSwitch">
+                                        {{ $t('groups.select_accounts_to_show') }}
                                     </button>
                                 </div>
                                 <div class="column" v-else>
-                                    <button id="btnHideGroupSwitch" :title="$t('groups.hide_group_selector')" tabindex="1" class="button is-text is-like-text" :class="{'has-text-grey' : mode != 'dark'}" @click.stop="showGroupSwitch = !showGroupSwitch">
-                                        {{ $t('groups.select_accounts_to_show') }}
+                                    <button id="btnShowGroupSwitch" :title="$t('groups.show_group_selector')" tabindex="1" class="button is-text is-like-text" :class="{'has-text-grey' : mode != 'dark'}" @click.stop="showGroupSwitch = !showGroupSwitch">
+                                        {{ groups.current }} ({{ twofaccounts.filteredCount }})&nbsp;
+                                        <FontAwesomeIcon  :icon="['fas', 'caret-down']" />
                                     </button>
                                 </div>
                             </UseColorMode>
@@ -389,19 +203,19 @@
                 readyLabel: '',
                 loadingLabel: 'refreshing'
                 }" > -->
-                <!-- <draggable v-model="filteredAccounts" @start="isDragging = true" @end="saveOrder" ghost-class="ghost" handle=".tfa-dots" animation="200" class="accounts"> -->
+                <!-- <draggable v-model="twofaccounts.filtered" @start="isDragging = true" @end="() => {isDragging = false; twofaccounts.saveOrder()}" ghost-class="ghost" handle=".tfa-dots" animation="200" class="accounts"> -->
                 <div class="accounts">
                     <!-- <transition-group class="columns is-multiline" :class="{ 'is-centered': user.preferences.displayMode === 'grid' }" type="transition" :name="!isDragging ? 'flip-list' : null"> -->
                     <span class="columns is-multiline">
-                        <div :class="[user.preferences.displayMode === 'grid' ? 'tfa-grid' : 'tfa-list']" class="column is-narrow" v-for="account in filteredAccounts" :key="account.id">
+                        <div :class="[user.preferences.displayMode === 'grid' ? 'tfa-grid' : 'tfa-list']" class="column is-narrow" v-for="account in twofaccounts.filtered" :key="account.id">
                             <div class="tfa-container">
         	                    <!-- <transition name="slideCheckbox"> -->
         	                        <div class="tfa-cell tfa-checkbox" v-if="bus.inManagementMode">
         	                            <div class="field">
                                             <UseColorMode v-slot="{ mode }">
-                                                <input class="is-checkradio is-small" :class="mode == 'dark' ? 'is-white':'is-info'" :id="'ckb_' + account.id" :value="account.id" type="checkbox" :name="'ckb_' + account.id" v-model="selectedAccounts">
+                                                <input class="is-checkradio is-small" :class="mode == 'dark' ? 'is-white':'is-info'" :id="'ckb_' + account.id" :value="account.id" type="checkbox" :name="'ckb_' + account.id" v-model="twofaccounts.selectedIds">
                                             </UseColorMode>
-        	                                <label tabindex="0" :for="'ckb_' + account.id" v-on:keypress.space.prevent="selectAccount(account.id)"></label>
+        	                                <label tabindex="0" :for="'ckb_' + account.id" v-on:keypress.space.prevent="twofaccounts.select(account.id)"></label>
         	                            </div>
         	                        </div>
         	                    <!-- </transition> -->
@@ -417,7 +231,7 @@
                                         <span v-if="account.otp != undefined && isRenewingOTPs" class="has-nowrap has-text-grey has-text-centered is-size-5">
                                             <FontAwesomeIcon :icon="['fas', 'circle-notch']" spin />
                                         </span>
-                                        <span v-else-if="account.otp != undefined && isRenewingOTPs == false" class="always-on-otp is-clickable has-nowrap has-text-grey is-size-5 ml-4" @click="copyOTP(account.otp.password)" @keyup.enter="copyOTP(account.otp.password)" :title="$t('commons.copy_to_clipboard')">
+                                        <span v-else-if="account.otp != undefined && isRenewingOTPs == false" class="always-on-otp is-clickable has-nowrap has-text-grey is-size-5 ml-4" @click="copyToClipboard(account.otp.password)" @keyup.enter="copyToClipboard(account.otp.password)" :title="$t('commons.copy_to_clipboard')">
                                             {{ useDisplayablePassword(account.otp.password) }}
                                         </span>
                                         <span v-else>
@@ -455,54 +269,14 @@
                 </div>
                 <!-- </draggable> -->
             <!-- </vue-pull-refresh> -->
-            <VueFooter :showButtons="true" v-on:management-mode-exited="unselectAll">
-                <UseColorMode v-slot="{ mode }">
-                    <!-- New item buttons -->
-                    <p class="control" v-if="!bus.inManagementMode">
-                        <button class="button is-link is-rounded is-focus" @click="start">
-                            <span>{{ $t('commons.new') }}</span>
-                            <span class="icon is-small">
-                                <FontAwesomeIcon :icon="['fas', 'qrcode']" />
-                            </span>
-                        </button>
-                    </p>
-                    <!-- Manage button -->
-                    <p class="control" v-if="!bus.inManagementMode">
-                        <button id="btnManage" class="button is-rounded" :class="{'is-dark' : mode == 'dark'}" @click="bus.inManagementMode = true">{{ $t('commons.manage') }}</button>
-                    </p>
-                    <!-- move button -->
-                    <p class="control" v-if="bus.inManagementMode">
-                        <button
-                            id="btnMove" 
-                            :disabled='selectedAccounts.length == 0' class="button is-rounded"
-                            :class="[{ 'is-outlined': mode == 'dark' || selectedAccounts.length == 0 }, selectedAccounts.length == 0 ? 'is-dark': 'is-link']"
-                            @click="showDestinationGroupSelector = true"
-                            :title="$t('groups.move_selected_to_group')" >
-                                {{ $t('commons.move') }}
-                        </button>
-                    </p>
-                    <!-- delete button -->
-                    <p class="control" v-if="bus.inManagementMode">
-                        <button
-                            id="btnDelete" 
-                            :disabled='selectedAccounts.length == 0' class="button is-rounded"
-                            :class="[{ 'is-outlined': mode == 'dark' || selectedAccounts.length == 0 }, selectedAccounts.length == 0 ? 'is-dark': 'is-link']"
-                            @click="destroyAccounts" >
-                                {{ $t('commons.delete') }}
-                        </button>
-                    </p>
-                    <!-- export button -->
-                    <p class="control" v-if="bus.inManagementMode">
-                        <button
-                            id="btnExport" 
-                            :disabled='selectedAccounts.length == 0' class="button is-rounded"
-                            :class="[{ 'is-outlined': mode == 'dark' || selectedAccounts.length == 0 }, selectedAccounts.length == 0 ? 'is-dark': 'is-link']"
-                            @click="exportAccounts"
-                            :title="$t('twofaccounts.export_selected_to_json')" >
-                                {{ $t('commons.export') }}
-                        </button>
-                    </p>
-                </UseColorMode>
+            <VueFooter :showButtons="true" v-on:management-mode-exited="twofaccounts.selectNone()">
+                <ActionButtons
+                    v-model:inManagementMode="bus.inManagementMode"
+                    :areDisabled="twofaccounts.hasNoneSelected"
+                    @move-button-clicked="showDestinationGroupSelector = true"
+                    @delete-button-clicked="twofaccounts.deleteSelected()"
+                    @export-button-clicked="twofaccounts.export()">
+                </ActionButtons>
             </VueFooter>
         </div>
         <!-- totp loopers -->
