@@ -4,11 +4,13 @@
     import { useBusStore } from '@/stores/bus'
     import { useNotifyStore } from '@/stores/notify'
     import { UseColorMode } from '@vueuse/components'
+    import { useTwofaccounts } from '@/stores/twofaccounts'
 
     const router = useRouter()
     const user = useUserStore()
     const bus = useBusStore()
     const notify = useNotifyStore()
+    const twofaccounts = useTwofaccounts()
 
     const qrcodeInput = ref(null)
     const qrcodeInputLabel = ref(null)
@@ -60,7 +62,7 @@
     <div class="container has-text-centered">
         <div class="columns quick-uploader">
             <!-- trailer phrase that invite to add an account -->
-            <div class="column is-full quick-uploader-header" :class="{ 'is-invisible' : twofaccounts.length !== 0 }">
+            <div class="column is-full quick-uploader-header" :class="{ 'is-invisible' : twofaccounts.count !== 0 }">
                 {{ $t('twofaccounts.no_account_here') }}<br>
                 {{ $t('twofaccounts.add_first_account') }}
             </div>
