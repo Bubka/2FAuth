@@ -9,7 +9,7 @@ export const useBusStore = defineStore({
             decodedUri: null,
             goBackTo: null,
             returnTo: null,
-            initialEditMode: null,
+            inManagementMode: false,
         }
     },
 

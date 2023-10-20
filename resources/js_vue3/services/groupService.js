@@ -10,5 +10,9 @@ export default {
     getAll() {
         return apiClient.get('groups')
     },
+
+    assign(accountsIds, groupId, config = {}) {
+        return apiClient.post('/groups/' + groupId + '/assign', {ids: accountsIds})
+    }
     
 }

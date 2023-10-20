@@ -3,12 +3,8 @@ import { httpClientFactory } from '@/services/httpClientFactory'
 const apiClient = httpClientFactory('api')
 
 export default {
-    /**
-     * 
-     * @returns 
-     */
-    getAll() {
-        return apiClient.get('/twofaccounts')
+    getAll(withOtp = false) {
+        return apiClient.get('/twofaccounts' + (withOtp ? '?withOtp=1' : ''))
     },
 
     get(id, config = {}) {
@@ -37,6 +33,22 @@ export default {
 
     getOtpByParams(params, config = {}) {
         return apiClient.post('/twofaccounts/otp', params, { ...config }) 
+    },
+
+    withdraw(ids, config = {}) {
+        return apiClient.patch('/twofaccounts/withdraw?ids=' + ids.join())
+    },
+
+    saveOrder(orderedIds, config = {}) {
+        return apiClient.post('/api/v1/twofaccounts/reorder', { orderedIds: orderedIds })
+    },
+
+    batchDelete(ids, config = {}) {
+        return apiClient.delete('/twofaccounts?ids=' + ids, { ...config })
+    },
+
+    export(ids, config = {}) {
+        return apiClient.delete('/twofaccounts/export?ids=' + ids, { ...config })
     },
     
 }

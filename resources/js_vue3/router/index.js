@@ -6,10 +6,10 @@ import Start            from '../views/Start.vue'
 import Accounts         from '../views/Accounts.vue'
 import Capture          from '../views/twofaccounts/Capture.vue'
 import CreateAccount    from '../views/twofaccounts/Create.vue'
-// import EditAccount      from './views/twofaccounts/Edit.vue'
+import EditAccount      from '../views/twofaccounts/Edit.vue'
 import ImportAccount    from '../views/twofaccounts/Import.vue'
-// import QRcodeAccount    from './views/twofaccounts/QRcode.vue'
-// import Groups           from './views/Groups.vue'
+import QRcodeAccount    from '../views/twofaccounts/QRcode.vue'
+import Groups           from '../views/Groups.vue'
 // import CreateGroup      from './views/groups/Create.vue'
 // import EditGroup        from './views/groups/Edit.vue'
 import Login            from '../views/auth/Login.vue'
@@ -39,10 +39,10 @@ const router = createRouter({
         { path: '/accounts', name: 'accounts', component: Accounts, meta: { middlewares: [authGuard] }, alias: '/' },
         { path: '/account/create', name: 'createAccount', component: CreateAccount, meta: { middlewares: [authGuard] } },
         { path: '/account/import', name: 'importAccounts', component: ImportAccount, meta: { middlewares: [authGuard] } },
-        // { path: '/account/:twofaccountId/edit', name: 'editAccount', component: EditAccount, meta: { middlewares: [authGuard] } },
-        // { path: '/account/:twofaccountId/qrcode', name: 'showQRcode', component: QRcodeAccount, meta: { middlewares: [authGuard] } },
+        { path: '/account/:twofaccountId/edit', name: 'editAccount', component: EditAccount, meta: { middlewares: [authGuard] } },
+        { path: '/account/:twofaccountId/qrcode', name: 'showQRcode', component: QRcodeAccount, meta: { middlewares: [authGuard] } },
 
-        // { path: '/groups', name: 'groups', component: Groups, meta: { middlewares: [authGuard] }, props: true },
+        { path: '/groups', name: 'groups', component: Groups, meta: { middlewares: [authGuard] }, props: true },
         // { path: '/group/create', name: 'createGroup', component: CreateGroup, meta: { middlewares: [authGuard] } },
         // { path: '/group/:groupId/edit', name: 'editGroup', component: EditGroup, meta: { middlewares: [authGuard] }, props: true },
 

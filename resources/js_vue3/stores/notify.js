@@ -63,6 +63,10 @@ export const useNotifyStore = defineStore({
             notify({ type: 'is-danger', ...notification})
         },
 
+        action(notification) {
+            notify({ type: 'is-dark', ...notification})
+        },
+
         clear() {
             notify({ clean: true })
         }

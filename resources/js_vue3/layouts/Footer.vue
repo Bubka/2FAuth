@@ -1,14 +1,23 @@
 <script setup>
     import { useAppSettingsStore } from '@/stores/appSettings'
     import { useUserStore } from '@/stores/user'
+    import { useBusStore } from '@/stores/bus'
+
     const appSettings = useAppSettingsStore()
     const user = useUserStore()
+    const bus = useBusStore()
     const $2fauth = inject('2fauth')
 
     const props = defineProps({
-        showButtons: true,
-        editMode: false,
+        showButtons: true
     })
+
+    const emit = defineEmits(['management-mode-exited'])
+
+    function exitManagementMode() {
+        bus.inManagementMode = false
+        emit('management-mode-exited')
+    }
 
     function logout() {
         if(confirm(trans('auth.confirm.logout'))) {
@@ -26,8 +35,8 @@
                 </div>
             </div>
         </div>
-        <div v-if="editMode" class="content has-text-centered">
-            <button id="lnkExitEdit" class="button is-ghost is-like-text" @click="$emit('exit-edit')">{{ $t('commons.done') }}</button>
+        <div v-if="bus.inManagementMode" class="content has-text-centered">
+            <button id="lnkExitEdit" class="button is-ghost is-like-text" @click="exitManagementMode">{{ $t('commons.done') }}</button>
         </div>
         <div v-else class="content has-text-centered">
             <div v-if="$route.meta.showAbout === true" class="is-size-6">
