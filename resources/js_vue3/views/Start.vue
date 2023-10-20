@@ -2,7 +2,6 @@
     import Form from '@/components/formElements/Form'
     import { useUserStore } from '@/stores/user'
     import { useBusStore } from '@/stores/bus'
-    import { useDataStore } from '@/stores/data'
     import { useNotifyStore } from '@/stores/notify'
     import { UseColorMode } from '@vueuse/components'
 
@@ -10,8 +9,6 @@
     const user = useUserStore()
     const bus = useBusStore()
     const notify = useNotifyStore()
-    const data = useDataStore()
-    const { twofaccounts } = storeToRefs(data)
 
     const qrcodeInput = ref(null)
     const qrcodeInputLabel = ref(null)

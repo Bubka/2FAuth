@@ -4,11 +4,9 @@
     import twofaccountService from '@/services/twofaccountService'
     import { useUserStore } from '@/stores/user'
     import { useBusStore } from '@/stores/bus'
-    import { useDataStore } from '@/stores/data'
     import { useNotifyStore } from '@/stores/notify'
     import { UseColorMode } from '@vueuse/components'
     import { useIdGenerator } from '@/composables/helpers'
-import { watch } from 'vue'
     
     const { copy } = useClipboard({ legacy: true })
     const $2fauth = inject('2fauth')
@@ -16,8 +14,6 @@ import { watch } from 'vue'
     const user = useUserStore()
     const bus = useBusStore()
     const notify = useNotifyStore()
-    const data = useDataStore()
-    const { twofaccounts } = storeToRefs(data)
     const form = reactive(new Form({
         service: '',
         account: '',
