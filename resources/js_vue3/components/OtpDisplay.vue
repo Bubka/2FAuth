@@ -9,7 +9,7 @@
 
     const user = useUserStore()
     const $2fauth = inject('2fauth')
-    const { copy } = useClipboard({ legacy: true })
+    const { copy, copied } = useClipboard({ legacy: true })
     
     const emit = defineEmits(['please-close-me', 'increment-hotp', 'validation-error'])
     const props = defineProps({
@@ -208,15 +208,17 @@
     function copyOTP(otp, permit_closing) {
         copy(otp.replace(/ /g, ''))
 
-        if(user.preferences.kickUserAfter == -1 && (permit_closing || false) === true) {
-            user.logout()
-        }
-        else if(user.preferences.closeOtpOnCopy && (permit_closing || false) === true) {
-            emit("please-close-me");
-            clearOTP()
-        }
+        if (copied) {
+            if(user.preferences.kickUserAfter == -1 && (permit_closing || false) === true) {
+                user.logout()
+            }
+            else if(user.preferences.closeOtpOnCopy && (permit_closing || false) === true) {
+                emit("please-close-me");
+                clearOTP()
+            }
 
-        notify.info({ text: trans('commons.copied_to_clipboard') })
+            notify.info({ text: trans('commons.copied_to_clipboard') })
+        }
     }
 
     /**
