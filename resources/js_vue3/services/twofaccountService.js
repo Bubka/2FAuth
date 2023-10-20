@@ -40,7 +40,7 @@ export default {
     },
 
     saveOrder(orderedIds, config = {}) {
-        return apiClient.post('/api/v1/twofaccounts/reorder', { orderedIds: orderedIds })
+        return apiClient.post('/twofaccounts/reorder', { orderedIds: orderedIds })
     },
 
     batchDelete(ids, config = {}) {
