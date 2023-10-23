@@ -10,7 +10,7 @@
         areDisabled: Boolean
     }) 
     
-    const emit = defineEmits(['update:inManagementMode, move-button-clicked', 'delete-button-clicked', 'export-button-clicked'])
+    const emit = defineEmits(['update:inManagementMode', 'move-button-clicked', 'delete-button-clicked', 'export-button-clicked'])
 
     /**
      * Routes user to the appropriate submitting view
