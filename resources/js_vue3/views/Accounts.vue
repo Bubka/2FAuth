@@ -17,6 +17,7 @@
     import { useGroups } from '@/stores/groups'
     import { useAppSettingsStore } from '@/stores/appSettings'
     import { useDisplayablePassword } from '@/composables/helpers'
+    import { vDraggable } from 'vue-draggable-plus'
 
     const $2fauth = inject('2fauth')
     const notify = useNotifyStore()
@@ -141,6 +142,22 @@
             }
         })
     }
+
+    /**
+     * Dragging start
+     */
+    function onStart() {
+        isDragging.value = true
+    }
+
+    /**
+     * Dragging end
+     */
+    function onEnd() {
+        isDragging.value = false
+        twofaccounts.saveOrder()
+    }
+
 </script>
 
 <template>
@@ -197,78 +214,76 @@
         <!-- show accounts list -->
         <div class="container" v-if="showAccounts" :class="bus.inManagementMode ? 'is-edit-mode' : ''">
             <!-- accounts -->
-            <!-- <vue-pull-refresh :on-refresh="onRefresh" :config="{
-                errorLabel: 'error',
-                startLabel: '',
-                readyLabel: '',
-                loadingLabel: 'refreshing'
-                }" > -->
-                <!-- <draggable v-model="twofaccounts.filtered" @start="isDragging = true" @end="() => {isDragging = false; twofaccounts.saveOrder()}" ghost-class="ghost" handle=".tfa-dots" animation="200" class="accounts"> -->
-                <div class="accounts">
-                    <!-- <transition-group class="columns is-multiline" :class="{ 'is-centered': user.preferences.displayMode === 'grid' }" type="transition" :name="!isDragging ? 'flip-list' : null"> -->
-                    <span class="columns is-multiline">
-                        <div :class="[user.preferences.displayMode === 'grid' ? 'tfa-grid' : 'tfa-list']" class="column is-narrow" v-for="account in twofaccounts.filtered" :key="account.id">
-                            <div class="tfa-container">
-        	                    <!-- <transition name="slideCheckbox"> -->
-        	                        <div class="tfa-cell tfa-checkbox" v-if="bus.inManagementMode">
-        	                            <div class="field">
-                                            <UseColorMode v-slot="{ mode }">
-                                                <input class="is-checkradio is-small" :class="mode == 'dark' ? 'is-white':'is-info'" :id="'ckb_' + account.id" :value="account.id" type="checkbox" :name="'ckb_' + account.id" v-model="twofaccounts.selectedIds">
-                                            </UseColorMode>
-        	                                <label tabindex="0" :for="'ckb_' + account.id" v-on:keypress.space.prevent="twofaccounts.select(account.id)"></label>
-        	                            </div>
-        	                        </div>
-        	                    <!-- </transition> -->
-                                <div tabindex="0" class="tfa-cell tfa-content is-size-3 is-size-4-mobile" @click.exact="showOrCopy(account)" @keyup.enter="showOrCopy(account)" @click.ctrl="getAndCopyOTP(account)" role="button">  
-                                    <div class="tfa-text has-ellipsis">
-                                        <img class="tfa-icon" :src="$2fauth.config.subdirectory + '/storage/icons/' + account.icon" v-if="account.icon && user.preferences.showAccountsIcons" :alt="$t('twofaccounts.icon_for_account_x_at_service_y', {account: account.account, service: account.service})">
-                                        {{ account.service ? account.service : $t('twofaccounts.no_service') }}<FontAwesomeIcon class="has-text-danger is-size-5 ml-2" v-if="appSettings.useEncryption && account.account === $t('errors.indecipherable')" :icon="['fas', 'exclamation-circle']" />
-                                        <span class="has-ellipsis is-family-primary is-size-6 is-size-7-mobile has-text-grey ">{{ account.account }}</span>
+            <div class="accounts">
+                <span class="columns is-multiline" :class="{ 'is-centered': user.preferences.displayMode === 'grid' }" v-draggable="[
+                    twofaccounts.filtered,
+                    {
+                        animation: 150,
+                        ghostClass: 'ghost',
+                        handle: '.tfa-dots',
+                        onEnd,
+                        onStart
+                    }
+                ]">
+                    <div :class="[user.preferences.displayMode === 'grid' ? 'tfa-grid' : 'tfa-list']" class="column is-narrow" v-for="account in twofaccounts.filtered" :key="account.id">
+                        <div class="tfa-container">
+                            <transition name="slideCheckbox">
+                                <div class="tfa-cell tfa-checkbox" v-if="bus.inManagementMode">
+                                    <div class="field">
+                                        <UseColorMode v-slot="{ mode }">
+                                            <input class="is-checkradio is-small" :class="mode == 'dark' ? 'is-white':'is-info'" :id="'ckb_' + account.id" :value="account.id" type="checkbox" :name="'ckb_' + account.id" v-model="twofaccounts.selectedIds">
+                                        </UseColorMode>
+                                        <label tabindex="0" :for="'ckb_' + account.id" v-on:keypress.space.prevent="twofaccounts.select(account.id)"></label>
                                     </div>
                                 </div>
-        	                    <!-- <transition name="popLater"> -->
-                                    <div v-show="user.preferences.getOtpOnRequest == false && !bus.inManagementMode" class="has-text-right">
-                                        <span v-if="account.otp != undefined && isRenewingOTPs" class="has-nowrap has-text-grey has-text-centered is-size-5">
-                                            <FontAwesomeIcon :icon="['fas', 'circle-notch']" spin />
-                                        </span>
-                                        <span v-else-if="account.otp != undefined && isRenewingOTPs == false" class="always-on-otp is-clickable has-nowrap has-text-grey is-size-5 ml-4" @click="copyToClipboard(account.otp.password)" @keyup.enter="copyToClipboard(account.otp.password)" :title="$t('commons.copy_to_clipboard')">
-                                            {{ useDisplayablePassword(account.otp.password) }}
-                                        </span>
-                                        <span v-else>
-                                            <!-- get hotp button -->
-                                            <UseColorMode v-slot="{ mode }">
-                                                <button class="button tag" :class="mode == 'dark' ? 'is-dark' : 'is-white'" @click="showOTP(account)" :title="$t('twofaccounts.import.import_this_account')">
-                                                    {{ $t('commons.generate') }}
-                                                </button>
-                                            </UseColorMode>
-                                        </span>
-                                        <!-- <dots v-if="account.otp_type.includes('totp')" @hook:mounted="turnDotsOnFromCache(account.period)" :class="'condensed'" :ref="'dots_' + account.period"></dots> -->
-                                    </div>
-        	                    <!-- </transition> -->
-        	                    <!-- <transition name="fadeInOut"> -->
-        	                        <div class="tfa-cell tfa-edit has-text-grey" v-if="bus.inManagementMode">
-                                        <UseColorMode v-slot="{ mode }">
-                                            <RouterLink :to="{ name: 'editAccount', params: { twofaccountId: account.id }}" class="tag is-rounded mr-1" :class="mode == 'dark' ? 'is-dark' : 'is-white'">
-                                                {{ $t('commons.edit') }}
-                                            </RouterLink>
-                                            <RouterLink :to="{ name: 'showQRcode', params: { twofaccountId: account.id }}" class="tag is-rounded" :class="mode == 'dark' ? 'is-dark' : 'is-white'" :title="$t('twofaccounts.show_qrcode')">
-                                                <FontAwesomeIcon :icon="['fas', 'qrcode']" />
-                                            </RouterLink>
-                                        </UseColorMode>
-        	                        </div>
-        	                    <!-- </transition> -->
-                                <!-- <transition name="fadeInOut"> -->
-                                    <div class="tfa-cell tfa-dots has-text-grey" v-if="bus.inManagementMode">
-                                        <FontAwesomeIcon :icon="['fas', 'bars']" />
-                                    </div>
-                                <!-- </transition> -->
+                            </transition>
+                            <div tabindex="0" class="tfa-cell tfa-content is-size-3 is-size-4-mobile" @click.exact="showOrCopy(account)" @keyup.enter="showOrCopy(account)" @click.ctrl="getAndCopyOTP(account)" role="button">  
+                                <div class="tfa-text has-ellipsis">
+                                    <img class="tfa-icon" :src="$2fauth.config.subdirectory + '/storage/icons/' + account.icon" v-if="account.icon && user.preferences.showAccountsIcons" :alt="$t('twofaccounts.icon_for_account_x_at_service_y', {account: account.account, service: account.service})">
+                                    {{ account.service ? account.service : $t('twofaccounts.no_service') }}<FontAwesomeIcon class="has-text-danger is-size-5 ml-2" v-if="appSettings.useEncryption && account.account === $t('errors.indecipherable')" :icon="['fas', 'exclamation-circle']" />
+                                    <span class="has-ellipsis is-family-primary is-size-6 is-size-7-mobile has-text-grey ">{{ account.account }}</span>
+                                </div>
                             </div>
+                            <transition name="popLater">
+                                <div v-show="user.preferences.getOtpOnRequest == false && !bus.inManagementMode" class="has-text-right">
+                                    <span v-if="account.otp != undefined && isRenewingOTPs" class="has-nowrap has-text-grey has-text-centered is-size-5">
+                                        <FontAwesomeIcon :icon="['fas', 'circle-notch']" spin />
+                                    </span>
+                                    <span v-else-if="account.otp != undefined && isRenewingOTPs == false" class="always-on-otp is-clickable has-nowrap has-text-grey is-size-5 ml-4" @click="copyToClipboard(account.otp.password)" @keyup.enter="copyToClipboard(account.otp.password)" :title="$t('commons.copy_to_clipboard')">
+                                        {{ useDisplayablePassword(account.otp.password) }}
+                                    </span>
+                                    <span v-else>
+                                        <!-- get hotp button -->
+                                        <UseColorMode v-slot="{ mode }">
+                                            <button class="button tag" :class="mode == 'dark' ? 'is-dark' : 'is-white'" @click="showOTP(account)" :title="$t('twofaccounts.import.import_this_account')">
+                                                {{ $t('commons.generate') }}
+                                            </button>
+                                        </UseColorMode>
+                                    </span>
+                                    <!-- <dots v-if="account.otp_type.includes('totp')" @hook:mounted="turnDotsOnFromCache(account.period)" :class="'condensed'" :ref="'dots_' + account.period"></dots> -->
+                                </div>
+                            </transition>
+                            <transition name="fadeInOut">
+                                <div class="tfa-cell tfa-edit has-text-grey" v-if="bus.inManagementMode">
+                                    <UseColorMode v-slot="{ mode }">
+                                        <RouterLink :to="{ name: 'editAccount', params: { twofaccountId: account.id }}" class="tag is-rounded mr-1" :class="mode == 'dark' ? 'is-dark' : 'is-white'">
+                                            {{ $t('commons.edit') }}
+                                        </RouterLink>
+                                        <RouterLink :to="{ name: 'showQRcode', params: { twofaccountId: account.id }}" class="tag is-rounded" :class="mode == 'dark' ? 'is-dark' : 'is-white'" :title="$t('twofaccounts.show_qrcode')">
+                                            <FontAwesomeIcon :icon="['fas', 'qrcode']" />
+                                        </RouterLink>
+                                    </UseColorMode>
+                                </div>
+                            </transition>
+                            <transition name="fadeInOut">
+                                <div class="tfa-cell tfa-dots has-text-grey" v-if="bus.inManagementMode">
+                                    <FontAwesomeIcon :icon="['fas', 'bars']" />
+                                </div>
+                            </transition>
                         </div>
-                    </span>
-                    <!-- </transition-group> -->
-                </div>
-                <!-- </draggable> -->
-            <!-- </vue-pull-refresh> -->
+                    </div>
+                </span>
+            </div>
             <VueFooter :showButtons="true" v-on:management-mode-exited="twofaccounts.selectNone()">
                 <ActionButtons
                     v-model:inManagementMode="bus.inManagementMode"
@@ -428,12 +443,8 @@
 </script>
 
 <style scoped>
-    .flip-list-move {
-      transition: transform 0.5s;
-    }
-
     .ghost {
-      opacity: 1;
-      /*background: hsl(0, 0%, 21%);*/
+        opacity: 1;
+        /*background: hsl(0, 0%, 21%);*/
     }
 </style>
