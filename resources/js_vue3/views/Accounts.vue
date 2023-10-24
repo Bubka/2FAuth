@@ -1,6 +1,6 @@
 <script setup>
+
     import twofaccountService from '@/services/twofaccountService'
-    import groupService from '@/services/groupService'
     import Spinner from '@/components/Spinner.vue'
     import TotpLooper from '@/components/TotpLooper.vue'
     import GroupSwitch from '@/components/GroupSwitch.vue'
@@ -9,6 +9,7 @@
     import Toolbar from '@/components/Toolbar.vue'
     import OtpDisplay from '@/components/OtpDisplay.vue'
     import ActionButtons from '@/components/ActionButtons.vue'
+    import Dots from '@/components/Dots.vue'
     import { UseColorMode } from '@vueuse/components'
     import { useUserStore } from '@/stores/user'
     import { useNotifyStore } from '@/stores/notify'
@@ -33,8 +34,12 @@
     const showGroupSwitch = ref(false)
     const showDestinationGroupSelector = ref(false)
     const isDragging = ref(false)
+    const stepIndexesCache = ref({})
+    const isRenewingOTPs = ref(false)
 
     const otpDisplay = ref(null)
+    const looperRefs = ref([])
+    const dotsRefs = ref([])
 
     watch(showOtpInModal, (val) => {
         if (val == false) {
@@ -158,6 +163,60 @@
         twofaccounts.saveOrder()
     }
 
+    
+    /**
+     * Turns dots On at the current step and caches the state
+     */
+    function setCurrentStep(period, stepIndex) {
+        stepIndexesCache.value[period] = stepIndex
+        turnDotsOn(period, stepIndex)
+    }
+
+    /**
+     * Turns dots On at the cached step index
+     */
+     function turnDotsOnFromCache(period, stepIndex) {
+        if (stepIndexesCache.value[period] != undefined) {
+            turnDotsOn(period, stepIndexesCache.value[period])
+        }
+    }
+
+    /**
+     * Turns dots On for all dots components that match the provided period
+     */
+     function turnDotsOn(period, stepIndex) {
+        dotsRefs.value.forEach((dots) => {
+            if (dots.props.period == period) {
+                dots.turnOn(stepIndex)
+            }
+        })
+    }
+
+    /**
+     * Updates "Always On" OTPs for all TOTP accounts with the given period and restarts loopers
+     */
+    async function updateTotps(period) {
+        isRenewingOTPs.value = true
+        
+        twofaccountService.getByIds(twofaccounts.accountIdsWithPeriod(period).join(','), true).then(response => {
+            response.data.forEach((account) => {
+                const index = twofaccounts.items.findIndex(acc => acc.id === account.id)
+                twofaccounts.items[index].otp = account.otp
+                
+                looperRefs.value.forEach((looper) => {
+                    if (looper.props.period == period) {
+                        nextTick().then(() => {
+                            looper.startLoop(account.otp.generated_at)
+                        })
+                    }
+                })
+            })
+        })
+        .finally(() => {
+            isRenewingOTPs.value = false
+        })
+    }
+
 </script>
 
 <template>
@@ -260,7 +319,7 @@
                                             </button>
                                         </UseColorMode>
                                     </span>
-                                    <!-- <dots v-if="account.otp_type.includes('totp')" @hook:mounted="turnDotsOnFromCache(account.period)" :class="'condensed'" :ref="'dots_' + account.period"></dots> -->
+                                    <Dots v-if="account.otp_type.includes('totp')" @hook:mounted="turnDotsOnFromCache(account.period)" :class="'condensed'" ref="dotsRefs" :period="account.period" />
                                 </div>
                             </transition>
                             <transition name="fadeInOut">
@@ -295,152 +354,20 @@
             </VueFooter>
         </div>
         <!-- totp loopers -->
-        <!-- <span v-if="!user.preferences.getOtpOnRequest">
+        <span v-if="!user.preferences.getOtpOnRequest">
             <TotpLooper
-                v-for="period in periods"
+                v-for="period in twofaccounts.periods"
                 :key="period.period"
                 :period="period.period"
                 :generated_at="period.generated_at"
                 v-on:loop-ended="updateTotps(period.period)"
                 v-on:loop-started="setCurrentStep(period.period, $event)"
                 v-on:stepped-up="setCurrentStep(period.period, $event)"
-                ref="loopers"
+                ref="looperRefs"
             ></TotpLooper>
-        </span> -->
+        </span>
     </div>
 </template>
-
-<script>
-
-    /**
-     *  Accounts view
-     *
-     *  route: '/account' (alias: '/')
-     *
-     *  The main view of 2FAuth that list all existing account recorded in DB.
-     *  Available feature in this view :
-     *  - {{OTP}} generation
-     *  - Account fetching :
-     *    ~ Search
-     *    ~ Filtering (by group)
-     *  - Accounts management :
-     *    ~ Sorting
-     *    ~ QR code recovering
-     *    ~ Mass association to group
-     *    ~ Mass account deletion
-     *    ~ Access to account editing
-     *
-     *  Behavior :
-     *  - The view has 2 modes (toggle is done with the 'manage' button) :
-     *    ~ The View mode (the default one)
-     *    ~ The Edit mode
-     *  - User are automatically pushed to the start view if there is no account to list.
-     *  - The view is affected by :
-     *    ~ 'userPreferences.showAccountsIcons' toggle the icon visibility
-     *    ~ 'userPreferences.displayMode' change the account appearance
-     *
-     *
-     */
-
-
-    // export default {
-    //     data(){
-    //         return {
-    //             stepIndexes: {},
-    //             isRenewingOTPs: false
-    //         }
-    //     },
-
-        // computed: {
-            /**
-             * Returns an array of all totp periods present in the twofaccounts list
-             */
-            // periods() {
-            //     return !user.preferences.getOtpOnRequest ?
-            //         this.accounts.filter(acc => acc.otp_type == 'totp').map(function(item) {
-            //             return {period: item.period, generated_at: item.otp.generated_at}
-            //             // return item.period
-            //         }).filter((value, index, self) => index === self.findIndex((t) => (
-            //             t.period === value.period
-            //         ))).sort()
-            //         : null
-            // },
-        // },
-
-        // props: ['toRefresh'],
-     
-        // methods: {
-            /**
-             * 
-             */
-            // setCurrentStep(period, stepIndex) {
-            //     this.stepIndexes[period] = stepIndex
-            //     this.turnDotsOn(period, stepIndex)
-            // },
-
-            /**
-             * 
-             */
-            // turnDotsOnFromCache(period, stepIndex) {
-            //     if (this.stepIndexes[period] != undefined) {
-            //         this.turnDotsOn(period, this.stepIndexes[period])
-            //     }
-            // },
-
-            /**
-             * 
-             */
-            // turnDotsOn(period, stepIndex) {
-            //     this.$refs['dots_' + period].forEach((dots) => {
-            //         dots.turnOn(stepIndex)
-            //     })
-            // },
-
-            /**
-             * Fetch all accounts set with the given period to get fresh OTPs
-             */
-            // async updateTotps(period) {
-            //     this.isRenewingOTPs = true
-            //     this.axios.get('api/v1/twofaccounts?withOtp=1&ids=' + this.accountIdsWithPeriod(period).join(',')).then(response => {
-            //         response.data.forEach((account) => {
-            //             const index = this.accounts.findIndex(acc => acc.id === account.id)
-            //             this.accounts[index].otp = account.otp
-                        
-            //             this.$refs.loopers.forEach((looper) => {
-            //                 if (looper.period == period) {
-            //                     looper.generatedAt = account.otp.generated_at
-            //                     this.$nextTick(() => {
-            //                         looper.startLoop()
-            //                     })
-            //                 }
-            //             })
-            //         })
-            //     })
-            //     .finally(() => {
-            //         this.isRenewingOTPs = false
-            //     })
-            // },
-
-            /**
-             * Return an array of all accounts (ids) set with the given period
-             */
-            // accountIdsWithPeriod(period) {
-            //     return this.accounts.filter(a => a.period == period).map(item => item.id)
-            // },
-
-            /**
-             * Get a fresh OTP for the provided account
-             */
-            // getOTP(accountId) {
-            //     this.axios.get('api/v1/twofaccounts/' + accountId + '/otp').then(response => {
-            //         this.$notify({ type: 'is-success', text: this.$t('commons.copied_to_clipboard')+ ' '+response.data })
-            //     })
-            // },
-
-    //     }
-    // };
-
-</script>
 
 <style scoped>
     .ghost {

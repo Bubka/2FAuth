@@ -8,6 +8,10 @@
             type: Number,
             default: null
         },
+        period: { // Used only to identify the dots component in Accounts.vue
+            type: Number,
+            default: null
+        },
     })
 
     const activeDot = ref(0)
@@ -37,7 +41,8 @@
 
     defineExpose({
         turnOn,
-        turnOff
+        turnOff,
+        props
     })
 
 </script>

@@ -58,9 +58,9 @@
     /**
      * Starts looping
      */
-    const startLoop = () => {
+    const startLoop = (generated_at = null) => {
         clearLooper()
-        generatedAt.value = props.generated_at
+        generatedAt.value = generated_at != null ? generated_at : props.generated_at
 
         emit('loop-started', initialStepIndex.value)
 
@@ -110,7 +110,8 @@
 
     defineExpose({
         startLoop,
-        clearLooper
+        clearLooper,
+        props
     })
 
 </script>

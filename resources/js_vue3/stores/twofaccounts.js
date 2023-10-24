@@ -34,6 +34,19 @@ export const useTwofaccounts = defineStore({
             )
         },
 
+        /**
+         * Lists unique periods used by twofaccounts in the collection
+         * ex: The items collection has 3 accounts with a period of 30s and 5 accounts with a period of 40s
+         *     => The method will return [30, 40]
+         */
+        periods(state) {
+            return state.items.filter(acc => acc.otp_type == 'totp').map(function(item) {
+                return { period: item.period, generated_at: item.otp?.generated_at }
+            }).filter((value, index, self) => index === self.findIndex((t) => (
+                t.period === value.period
+            ))).sort()
+        },
+
         orderedIds(state) {
             return state.items.map(a => a.id)
         },
@@ -141,11 +154,20 @@ export const useTwofaccounts = defineStore({
         },
 
         /**
-         *Sorts accounts descending
+         * Sorts accounts descending
         */
         sortDesc() {
             this.items.sort((a, b) => a.service < b.service ? 1 : -1)
             this.saveOrder()
+        },
+        
+        /**
+         * Gets the IDs of all accounts that match the given period
+         * @param {*} period 
+         * @returns {Array<Number>} IDs of matching accounts
+         */
+        accountIdsWithPeriod(period) {
+            return this.items.filter(a => a.period == period).map(item => item.id)
         },
     },
 })

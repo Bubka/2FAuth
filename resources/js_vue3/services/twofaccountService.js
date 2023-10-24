@@ -7,6 +7,10 @@ export default {
         return apiClient.get('/twofaccounts' + (withOtp ? '?withOtp=1' : ''))
     },
 
+    getByIds(ids, withOtp = false) {
+        return apiClient.get('/twofaccounts?ids=' + ids + (withOtp ? '&withOtp=1' : ''))
+    },
+
     get(id, config = {}) {
         return apiClient.get('/twofaccounts/' + id, { ...config })
     },
