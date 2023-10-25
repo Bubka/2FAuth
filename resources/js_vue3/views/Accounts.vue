@@ -51,32 +51,20 @@
      * Returns whether or not the accounts should be displayed
     */
     const showAccounts = computed(() => {
-        return twofaccounts.isNotEmpty && !showGroupSwitch.value && !showDestinationGroupSelector.value
+        return !twofaccounts.isEmpty && !showGroupSwitch.value && !showDestinationGroupSelector.value
     })
 
-    onMounted(() => {
-        // we don't have to fetch fresh data so we try to load them from localstorage to avoid display latency
-        // if( user.preferences.getOtpOnRequest && !this.toRefresh && !this.$route.params.isFirstLoad ) {
-        //     const accounts = this.$storage.get('accounts', null) // use null as fallback if localstorage is empty
-        //     if( accounts ) this.accounts = accounts
-
-        //     const groups = this.$storage.get('groups', null) // use null as fallback if localstorage is empty
-        //     if( groups ) this.groups = groups
-        // }
-
-        // We fetch fresh data whatever. The user will be notified to reload the page if there are any data changes
-        twofaccounts.refresh()
-        groups.refresh()
-
-        // if (twofaccounts.count === 0) {
-        //     // No account yet, we force user to land on the start view.
-        //     router.push({ name: 'start' });
-        // }
-
-        // stop OTP generation on modal close
-        // this.$on('modalClose', function() {
-        //     this.$refs.OtpDisplayer.clearOTP()
-        // })
+    onMounted(async () => {
+        // This SFC is reached only if the user has some twofaccounts in the store (see the starter middleware).
+        // This allows to display accounts without latency.
+        // We now check the twofaccounts store state in case the backend data have changed.
+        const isUpToDate = await twofaccounts.isUpToDateWithBackend()
+        if (! isUpToDate) {
+            notify.action({
+                text: '<span class="is-size-7">' + trans('commons.data_have_changed_on_server_side') + '</span><br /><a href="." class="button is-rounded is-warning is-small">' + trans('commons.reload') + '</a>',
+                duration: -1
+            })
+        }
     })
 
     /**

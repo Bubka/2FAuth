@@ -27,7 +27,8 @@ import EditCredential   from '../views/settings/Credentials/Edit.vue'
 import Errors           from '../views/Error.vue'
 import About            from '../views/About.vue'
 
-import authGuard from './middlewares/authGuard'
+import authGuard    from './middlewares/authGuard'
+import starter      from './middlewares/starter'
 import noEmptyError from './middlewares/noEmptyError'
 
 const router = createRouter({
@@ -36,7 +37,7 @@ const router = createRouter({
 		{ path: '/start', name: 'start', component: Start, meta: { middlewares: [authGuard] } },
         { path: '/capture', name: 'capture', component: Capture, meta: { middlewares: [authGuard] } },
 
-        { path: '/accounts', name: 'accounts', component: Accounts, meta: { middlewares: [authGuard] }, alias: '/' },
+        { path: '/accounts', name: 'accounts', component: Accounts, meta: { middlewares: [authGuard, starter] }, alias: '/' },
         { path: '/account/create', name: 'createAccount', component: CreateAccount, meta: { middlewares: [authGuard] } },
         { path: '/account/import', name: 'importAccounts', component: ImportAccount, meta: { middlewares: [authGuard] } },
         { path: '/account/:twofaccountId/edit', name: 'editAccount', component: EditAccount, meta: { middlewares: [authGuard] } },

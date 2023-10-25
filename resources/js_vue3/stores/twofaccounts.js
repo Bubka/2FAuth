@@ -51,8 +51,8 @@ export const useTwofaccounts = defineStore({
             return state.items.map(a => a.id)
         },
 
-        isNotEmpty(state) {
-            return state.items.length > 0
+        isEmpty(state) {
+            return state.items.length == 0
         },
 
         count(state) {
@@ -81,6 +81,32 @@ export const useTwofaccounts = defineStore({
             await twofaccountService.getAll(! useUserStore().preferences.getOtpOnRequest).then(response => {
                 this.items = response.data
             })
+        },
+
+        /**
+         * Tells if the store is up-to-date with the backend
+         */
+        async isUpToDateWithBackend() {
+            let isUpToDate = true
+            await twofaccountService.getAll().then(response => {
+                isUpToDate = response.data.length === this.items.length
+
+                this.items.forEach((item) => {
+                    let matchingBackendItem = response.data.find(e => e.id === item.id)
+                    if (matchingBackendItem == undefined) {
+                        isUpToDate = false
+                        return;
+                    }
+                    for (const field in item) {
+                        if (item[field] != matchingBackendItem[field]) {
+                            isUpToDate = false
+                            return;
+                        }
+                    }
+                })
+            })
+
+            return isUpToDate
         },
 
         /**

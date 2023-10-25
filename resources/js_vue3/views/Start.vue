@@ -110,7 +110,7 @@
         <!-- Footer -->
         <VueFooter :showButtons="true" >
             <!-- back button -->
-            <p class="control" v-if="twofaccounts.length > 0">
+            <p class="control" v-if="! twofaccounts.isEmpty">
                 <UseColorMode v-slot="{ mode }">
                     <RouterLink id="lnkBack" class="button is-rounded" :class="{'is-dark' : mode == 'dark'}" :to="{ name: 'accounts' }" >
                         {{ $t('commons.back') }}
