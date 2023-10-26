@@ -125,7 +125,7 @@
         await form.post('/api/v1/twofaccounts')
 
         if (form.errors.any() === false) {
-            notify.info({ text: trans('twofaccounts.account_created') })
+            notify.success({ text: trans('twofaccounts.account_created') })
             router.push({ name: 'accounts' });
         }
     }
@@ -307,7 +307,7 @@
      */
     function copyToClipboard(data) {
         copy(data)
-        notify.info({ text: trans('commons.copied_to_clipboard') })
+        notify.success({ text: trans('commons.copied_to_clipboard') })
     }
 
 </script>

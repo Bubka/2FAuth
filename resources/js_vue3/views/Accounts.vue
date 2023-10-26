@@ -74,7 +74,7 @@
         // we fetch the accounts again to prevent the js collection being
         // desynchronize from the backend php collection
         fetchAccounts(true)
-        notify.info({ text: trans('twofaccounts.accounts_moved') })
+        notify.success({ text: trans('twofaccounts.accounts_moved') })
     }
 
     /**
@@ -113,7 +113,7 @@
             if(user.preferences.kickUserAfter == -1) {
                 user.logout()
             }
-            notify.info({ text: trans('commons.copied_to_clipboard') })
+            notify.success({ text: trans('commons.copied_to_clipboard') })
         }
     }
 

@@ -52,6 +52,10 @@ export const useNotifyStore = defineStore({
         },
 
         info(notification) {
+            notify({ type: 'is-info', ...notification})
+        },
+
+        success(notification) {
             notify({ type: 'is-success', ...notification})
         },
 

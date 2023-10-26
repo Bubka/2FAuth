@@ -23,7 +23,7 @@
 
     watch(() => user.preferences.useWebauthnOnly, () => {
         userService.updatePreference('useWebauthnOnly', user.preferences.useWebauthnOnly).then(response => {
-            notify.info({ text: trans('settings.forms.setting_saved') })
+            notify.success({ text: trans('settings.forms.setting_saved') })
         })
     })
 
@@ -71,7 +71,7 @@
                     user.preferences.useWebauthnOnly = false
                 }
 
-                notify.info({ text: trans('auth.webauthn.device_revoked') })
+                notify.success({ text: trans('auth.webauthn.device_revoked') })
             });
         }
     }

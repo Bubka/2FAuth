@@ -65,7 +65,7 @@
     function RenameDevice(e) {
         renameDeviceForm.patch('/webauthn/credentials/' + deviceId.value + '/name')
         .then(() => {
-            notify.info({ text: trans('auth.webauthn.device_successfully_registered') })
+            notify.success({ text: trans('auth.webauthn.device_successfully_registered') })
             router.push({ name: 'accounts' })
         })
     }

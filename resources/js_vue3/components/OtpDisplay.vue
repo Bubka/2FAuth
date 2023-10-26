@@ -217,7 +217,7 @@
                 clearOTP()
             }
 
-            notify.info({ text: trans('commons.copied_to_clipboard') })
+            notify.success({ text: trans('commons.copied_to_clipboard') })
         }
     }
 

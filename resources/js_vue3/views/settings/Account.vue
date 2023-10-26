@@ -37,7 +37,7 @@
                 email: response.data.email,
                 isAdmin: response.data.is_admin,
             })
-            notify.info({ text: trans('auth.forms.profile_saved') })
+            notify.success({ text: trans('auth.forms.profile_saved') })
         })
         .catch(error => {
             if( error.response.status === 400 ) {
@@ -59,7 +59,7 @@
             formPassword.password = ''
             formPassword.formPassword = ''
             formPassword.password_confirmation = ''
-            notify.info({ text: response.data.message })
+            notify.success({ text: response.data.message })
         })
         .catch(error => {
             if( error.response.status === 400 ) {
@@ -79,7 +79,7 @@
         if(confirm(trans('auth.confirm.delete_account'))) {
             formDelete.delete('/user', {returnError: true})
             .then(response => {
-                notify.info({ text: trans('auth.forms.user_account_successfully_deleted') })
+                notify.success({ text: trans('auth.forms.user_account_successfully_deleted') })
                 router.push({ name: 'register' });
             })
             .catch(error => {

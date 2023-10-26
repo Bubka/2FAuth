@@ -94,14 +94,14 @@
             .then(response => {
                 // Remove the revoked token from the collection
                 tokens.value = tokens.value.filter(a => a.id !== tokenId)
-                notify.info({ text: trans('settings.token_revoked') })
+                notify.success({ text: trans('settings.token_revoked') })
             })
         }
     }
 
     function copyToClipboard(data) {
         copy(data)
-        notify.info({ text: trans('commons.copied_to_clipboard') })
+        notify.success({ text: trans('commons.copied_to_clipboard') })
     }
 
     onBeforeRouteLeave((to) => {

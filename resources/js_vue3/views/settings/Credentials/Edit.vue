@@ -18,7 +18,7 @@
     function updateCredential() {
         form.patch('/webauthn/credentials/' + props.credentialId + '/name')
         .then(() => {
-            notify.info({ text: trans('auth.webauthn.device_successfully_registered') })
+            notify.success({ text: trans('auth.webauthn.device_successfully_registered') })
             router.push({ name: 'settings.webauthn.devices' })
         })
     }
