@@ -52,12 +52,10 @@ import FieldError       from '@/components/formElements/FieldError.vue'
 import FormField        from '@/components/formElements/FormField.vue'
 import FormPasswordField        from '@/components/formElements/FormPasswordField.vue'
 import FormSelect       from '@/components/formElements/FormSelect.vue'
-// import FormSwitch       from './FormSwitch'
 import FormToggle       from '@/components/formElements/FormToggle.vue'
 import FormCheckbox     from '@/components/formElements/FormCheckbox.vue'
 import FormButtons      from '@/components/formElements/FormButtons.vue'
 import Kicker           from '@/components/Kicker.vue'
-// import SettingTabs      from './SettingTabs'
 
 app
     .component('FontAwesomeIcon', FontAwesomeIcon)

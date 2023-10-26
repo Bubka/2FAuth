@@ -27,8 +27,7 @@
             'button': true,
             [`${color}`]: true,
             'is-loading': isLoading,
-        }"
-        v-on:click="$emit('click')">
+        }">
         <slot />
     </button>
 </template>

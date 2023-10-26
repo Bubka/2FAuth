@@ -1,7 +1,6 @@
 <script setup>
 
     import twofaccountService from '@/services/twofaccountService'
-    import Spinner from '@/components/Spinner.vue'
     import TotpLooper from '@/components/TotpLooper.vue'
     import GroupSwitch from '@/components/GroupSwitch.vue'
     import DestinationGroupSelector from '@/components/DestinationGroupSelector.vue'
@@ -24,7 +23,6 @@
     const notify = useNotifyStore()
     const user = useUserStore()
     const bus = useBusStore()
-    const router = useRouter()
     const appSettings = useAppSettingsStore()
     const { copy, copied } = useClipboard({ legacy: true })
     const twofaccounts = useTwofaccounts()
