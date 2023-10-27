@@ -1,11 +1,9 @@
-import { useTwofaccounts } from '@/stores/twofaccounts'
-
 /**
- * Allows the user to access the main view only if he owns at least one twofaccount.
+ * Allows an authenticated user to access the main view only if he owns at least one twofaccount.
  * Push to the starter view otherwise.
  */
-export default function starter({ to, next }) {
-    const twofaccounts = useTwofaccounts()
+export default function starter({ to, next, stores }) {
+    const { twofaccounts } = stores
 
     if (twofaccounts.isEmpty) {
         twofaccounts.refresh().then(() => {

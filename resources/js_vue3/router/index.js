@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import middlewarePipeline from "@/router/middlewarePipeline";
 import { useUserStore } from '@/stores/user'
+import { useTwofaccounts } from '@/stores/twofaccounts'
 
 import Start            from '../views/Start.vue'
 import Accounts         from '../views/Accounts.vue'
@@ -74,7 +75,8 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
     const middlewares = to.meta.middlewares
     const user = useUserStore()
-    const stores = { user: user }
+    const twofaccounts = useTwofaccounts()
+    const stores = { user: user, twofaccounts: twofaccounts }
     const context = { to, from, next, stores }
 
     if (!middlewares) {
