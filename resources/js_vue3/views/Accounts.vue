@@ -205,7 +205,7 @@
 
 <template>
     <div>
-        <GroupSwitch v-if="showGroupSwitch" v-model:showGroupSwitch="showGroupSwitch" />
+        <GroupSwitch v-if="showGroupSwitch" v-model:showGroupSwitch="showGroupSwitch" v-model:groups="groups.items" />
         <DestinationGroupSelector
             v-if="showDestinationGroupSelector"
             v-model:showDestinationGroupSelector="showDestinationGroupSelector"
