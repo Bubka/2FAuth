@@ -8,13 +8,12 @@ export default async function auth({ to, next, stores }) {
     if (! user.isAuthenticated) {
         const currentUser = await authService.getCurrentUser()
         if (currentUser) {
-            user.$patch({
+            user.loginAs({
                 name: currentUser.name,
                 email: currentUser.email,
                 preferences: currentUser.preferences,
                 isAdmin: currentUser.is_admin,
             })
-            user.applyUserPrefs()
         }
     }
 

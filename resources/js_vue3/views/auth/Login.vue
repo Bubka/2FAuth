@@ -30,13 +30,12 @@
         notify.clear()
         form.post('/user/login', {returnError: true})
         .then(response => {
-            user.$patch({
+            user.loginAs({
                 name: response.data.name,
                 email: response.data.email,
                 preferences: response.data.preferences,
                 isAdmin: response.data.is_admin,
             })
-            user.applyTheme()
 
             router.push({ name: 'accounts', params: { toRefresh: true } })
         })

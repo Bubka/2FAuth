@@ -2,6 +2,8 @@ import { defineStore } from 'pinia'
 import authService from '@/services/authService'
 import router from '@/router'
 import { useColorMode } from '@vueuse/core'
+import { useTwofaccounts } from '@/stores/twofaccounts'
+import { useGroups } from '@/stores/groups'
 
 export const useUserStore = defineStore({
     id: 'user',
@@ -22,7 +24,37 @@ export const useUserStore = defineStore({
     },
 
     actions: {
+        /**
+         * Initializes the store for the given user
+         * 
+         * @param {object} user 
+         */
+        loginAs(user) {
+            this.$patch(user)
+            this.initDataStores()
+            this.applyUserPrefs()
+        },
 
+        /**
+         * Initializes the user's data stores
+         */
+        initDataStores() {
+            const accounts = useTwofaccounts()
+            const groups = useGroups()
+
+            if (this.isAuthenticated) {
+                accounts.fetch()
+                groups.fetch()
+            }
+            else {
+                accounts.$reset()
+                groups.$reset()
+            }
+        },
+
+        /**
+         * Logs the user out or moves to proxy logout url
+         */
         logout() {
             // async appLogout(evt) {
             if (this.$2fauth.config.proxyAuth) {
@@ -41,13 +73,19 @@ export const useUserStore = defineStore({
             // },
         },
 
+        /**
+         * Resets all user data
+         */
         reset() {
-            localStorage.clear()
             this.$reset()
+            this.initDataStores()
             this.applyUserPrefs()
             router.push({ name: 'login' })
         },
 
+        /**
+         * Applies user theme
+         */
         applyTheme() {
             const mode = useColorMode({
                 attribute: 'data-theme',
@@ -55,6 +93,10 @@ export const useUserStore = defineStore({
             mode.value = this.preferences.theme == 'system' ? 'auto' : this.preferences.theme
         },
 
+
+        /**
+         * Applies user language
+         */
         applyLanguage() {
             const { isSupported, language } = useNavigatorLanguage()
 
@@ -64,6 +106,10 @@ export const useUserStore = defineStore({
             else loadLanguageAsync('en')
         },
 
+
+        /**
+         * Applies both user theme & language
+         */
         applyUserPrefs() {
             this.applyTheme()
             this.applyLanguage()
