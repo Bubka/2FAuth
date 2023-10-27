@@ -71,7 +71,7 @@
 
     user.$subscribe((mutation) => {
         userService.updatePreference(mutation.events.key, mutation.events.newValue).then(response => {
-            useNotifyStore().info({ type: 'is-success', text: trans('settings.forms.setting_saved') })
+            useNotifyStore().success({ type: 'is-success', text: trans('settings.forms.setting_saved') })
             
             if(mutation.events.key === 'lang' && getActiveLanguage() !== mutation.events.newValue) {
                 user.applyLanguage()
@@ -86,7 +86,7 @@
         if (mutation.type == 'patch object') {
             for (const property in mutation.payload) {
                 appSettingService.update(property, mutation.payload[property].value).then(response => {
-                    useNotifyStore().info({ type: 'is-success', text: trans('settings.forms.setting_saved') })
+                    useNotifyStore().success({ type: 'is-success', text: trans('settings.forms.setting_saved') })
                 })
             }
         }

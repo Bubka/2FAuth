@@ -146,7 +146,7 @@ export const useTwofaccounts = defineStore({
                     ids.forEach(function(id) {
                         this.items = this.items.filter(a => a.id !== id)
                     })
-                    useNotifyStore().info({ text: trans('twofaccounts.accounts_deleted') })
+                    useNotifyStore().success({ text: trans('twofaccounts.accounts_deleted') })
                 })
 
                 this.refresh()
