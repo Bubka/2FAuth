@@ -6,7 +6,7 @@ export default function starter({ to, next, stores }) {
     const { twofaccounts } = stores
 
     if (twofaccounts.isEmpty) {
-        twofaccounts.refresh().then(() => {
+        twofaccounts.fetch().then(() => {
             if (twofaccounts.isEmpty) {
                 next({ name: 'start' });
             }

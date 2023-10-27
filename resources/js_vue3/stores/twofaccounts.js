@@ -77,7 +77,7 @@ export const useTwofaccounts = defineStore({
         /**
          * Refreshes the accounts collection using the backend
          */
-        async refresh() {
+        async fetch() {
             await twofaccountService.getAll(! useUserStore().preferences.getOtpOnRequest).then(response => {
                 this.items = response.data
             })

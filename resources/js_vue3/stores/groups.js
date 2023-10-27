@@ -22,10 +22,10 @@ export const useGroups = defineStore({
     actions: {
 
         /**
-         * Refreshes the groups collection using the backend
+         * Fetches the groups collection from the backend
          */
-        refresh() {
-            groupService.getAll().then(response => {
+        async fetch() {
+            await groupService.getAll().then(response => {
                 this.items = response.data
             })
         },

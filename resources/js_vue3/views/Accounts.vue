@@ -58,7 +58,7 @@
         // We now check the twofaccounts store state in case the backend data have changed.
         const isUpToDate = await twofaccounts.isUpToDateWithBackend()
         if (! isUpToDate) {
-            await twofaccounts.refresh()
+            await twofaccounts.fetch()
             notify.info({ text: trans('commons.data_refreshed_to_reflect_server_changes'), duration: 10000 })
         }
     })
