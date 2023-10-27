@@ -11,8 +11,16 @@ export default {
         return apiClient.get('groups')
     },
 
+    get(id, config = {}) {
+        return apiClient.get('/groups/' + id, { ...config })
+    },
+
     assign(accountsIds, groupId, config = {}) {
         return apiClient.post('/groups/' + groupId + '/assign', {ids: accountsIds})
-    }
+    },
+
+    delete(id, config = {}) {
+        return apiClient.delete('/groups/' + id, { ...config })
+    },
     
 }

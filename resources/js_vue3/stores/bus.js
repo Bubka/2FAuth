@@ -10,6 +10,7 @@ export const useBusStore = defineStore({
             goBackTo: null,
             returnTo: null,
             inManagementMode: false,
+            editedGroupName: null,
         }
     },
 

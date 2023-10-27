@@ -10,9 +10,8 @@ import CreateAccount    from '../views/twofaccounts/Create.vue'
 import EditAccount      from '../views/twofaccounts/Edit.vue'
 import ImportAccount    from '../views/twofaccounts/Import.vue'
 import QRcodeAccount    from '../views/twofaccounts/QRcode.vue'
-import Groups           from '../views/Groups.vue'
-// import CreateGroup      from './views/groups/Create.vue'
-// import EditGroup        from './views/groups/Edit.vue'
+import Groups           from '../views/groups/Groups.vue'
+import CreateUpdateGroup      from '../views/groups/CreateUpdate.vue'
 import Login            from '../views/auth/Login.vue'
 import Register         from '../views/auth/Register.vue'
 // import Autolock         from './views/auth/Autolock.vue'
@@ -45,8 +44,8 @@ const router = createRouter({
         { path: '/account/:twofaccountId/qrcode', name: 'showQRcode', component: QRcodeAccount, meta: { middlewares: [authGuard] } },
 
         { path: '/groups', name: 'groups', component: Groups, meta: { middlewares: [authGuard] }, props: true },
-        // { path: '/group/create', name: 'createGroup', component: CreateGroup, meta: { middlewares: [authGuard] } },
-        // { path: '/group/:groupId/edit', name: 'editGroup', component: EditGroup, meta: { middlewares: [authGuard] }, props: true },
+        { path: '/group/create', name: 'createGroup', component: CreateUpdateGroup, meta: { middlewares: [authGuard] } },
+        { path: '/group/:groupId/edit', name: 'editGroup', component: CreateUpdateGroup, meta: { middlewares: [authGuard] }, props: true },
 
         { path: '/settings/options', name: 'settings.options', component: SettingsOptions, meta: { middlewares: [authGuard], showAbout: true } },
         { path: '/settings/account', name: 'settings.account', component: SettingsAccount, meta: { middlewares: [authGuard], showAbout: true } },
