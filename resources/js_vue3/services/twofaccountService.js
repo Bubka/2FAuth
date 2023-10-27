@@ -54,5 +54,9 @@ export default {
     export(ids, config = {}) {
         return apiClient.delete('/twofaccounts/export?ids=' + ids, { ...config })
     },
+
+    getQrcode(id, config = {}) {
+        return apiClient.get('/twofaccounts/' + id + '/qrcode', { ...config })
+    }
     
 }
