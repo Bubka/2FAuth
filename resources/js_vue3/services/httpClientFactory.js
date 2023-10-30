@@ -69,7 +69,7 @@ export const httpClientFactory = (endpoint = 'api') => {
             // api calls are stateless so when user inactivity is detected
             // by the backend middleware, it cannot logout the user directly
             // so it returns a 418 response.
-            // We catch the 418 response and push the user to the autolock view
+            // We catch the 418 response and log the user out
             if ( error.response.status === 418 ) {
                 const user = useUserStore()
                 user.logout()

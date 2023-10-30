@@ -7,14 +7,12 @@ import Start                from '../views/Start.vue'
 import Accounts             from '../views/Accounts.vue'
 import Capture              from '../views/twofaccounts/Capture.vue'
 import CreateUpdateAccount  from '../views/twofaccounts/CreateUpdate.vue'
-import EditAccount          from '../views/twofaccounts/Edit.vue'
 import ImportAccount        from '../views/twofaccounts/Import.vue'
 import QRcodeAccount        from '../views/twofaccounts/QRcode.vue'
 import Groups               from '../views/groups/Groups.vue'
 import CreateUpdateGroup    from '../views/groups/CreateUpdate.vue'
 import Login                from '../views/auth/Login.vue'
 import Register             from '../views/auth/Register.vue'
-// import Autolock          from './views/auth/Autolock.vue'
 import PasswordRequest      from '../views/auth/password/Request.vue'
 // import PasswordReset     from './views/auth/password/Reset.vue'
 import WebauthnLost         from '../views/auth/webauthn/Lost.vue'
@@ -55,7 +53,6 @@ const router = createRouter({
 
         { path: '/login', name: 'login', component: Login, meta: { disabledWithAuthProxy: true, showAbout: true } },
         { path: '/register', name: 'register', component: Register, meta: { disabledWithAuthProxy: true, showAbout: true } },
-        // { path: '/autolock', name: 'autolock',component: Autolock, meta: { disabledWithAuthProxy: true, showAbout: true } },
         { path: '/password/request', name: 'password.request', component: PasswordRequest, meta: { disabledWithAuthProxy: true, showAbout: true } },
         // { path: '/user/password/reset', name: 'password.reset', component: PasswordReset, meta: { disabledWithAuthProxy: true, showAbout: true } },
         { path: '/webauthn/lost', name: 'webauthn.lost', component: WebauthnLost, meta: { disabledWithAuthProxy: true, showAbout: true } },
