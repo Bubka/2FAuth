@@ -2,7 +2,7 @@
     import { useIdGenerator } from '@/composables/helpers'
 
     defineOptions({
-        inheritAttrs: false
+        inheritAttrs: true
     })
 
     const { inputId } = useIdGenerator(props.inputType, props.fieldName)
