@@ -143,13 +143,13 @@ export const useTwofaccounts = defineStore({
             if(confirm(trans('twofaccounts.confirm.delete')) && this.selectedIds.length > 0) {
                 await twofaccountService.batchDelete(this.selectedIds.join())
                 .then(response => {
-                    ids.forEach(function(id) {
+                    selectedIds.forEach(function(id) {
                         this.items = this.items.filter(a => a.id !== id)
                     })
                     useNotifyStore().success({ text: trans('twofaccounts.accounts_deleted') })
                 })
 
-                this.refresh()
+                //this.refresh()
             }
         },
 
