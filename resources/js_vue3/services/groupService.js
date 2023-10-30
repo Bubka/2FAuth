@@ -16,7 +16,7 @@ export default {
     },
 
     assign(accountsIds, groupId, config = {}) {
-        return apiClient.post('/groups/' + groupId + '/assign', {ids: accountsIds})
+        return apiClient.post('/groups/' + groupId + '/assign', { ids: accountsIds }, { ...config })
     },
 
     delete(id, config = {}) {

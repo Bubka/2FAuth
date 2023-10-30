@@ -40,11 +40,11 @@ export default {
     },
 
     withdraw(ids, config = {}) {
-        return apiClient.patch('/twofaccounts/withdraw?ids=' + ids.join())
+        return apiClient.patch('/twofaccounts/withdraw?ids=' + ids.join(), { ...config })
     },
 
     saveOrder(orderedIds, config = {}) {
-        return apiClient.post('/twofaccounts/reorder', { orderedIds: orderedIds })
+        return apiClient.post('/twofaccounts/reorder', { orderedIds: orderedIds }, { ...config })
     },
 
     batchDelete(ids, config = {}) {

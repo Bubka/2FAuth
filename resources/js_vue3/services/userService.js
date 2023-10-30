@@ -11,8 +11,8 @@ export default {
      * @param {any} value 
      * @returns promise
      */
-    updatePreference(name, value) {
-        return apiClient.put('/user/preferences/' + name, { value: value })
+    updatePreference(name, value, config = {}) {
+        return apiClient.put('/user/preferences/' + name, { value: value }, { ...config })
     },
 
     /**
@@ -23,7 +23,7 @@ export default {
      * @returns promise
      */
     getWebauthnDevices(config = {}) {
-        return webClient.get('/webauthn/credentials', {...config})
+        return webClient.get('/webauthn/credentials', { ...config })
     },
 
     /**
@@ -34,7 +34,7 @@ export default {
      * @returns promise
      */
     revokeWebauthnDevice(credentialId, config = {}) {
-        return webClient.delete('/webauthn/credentials/' + credentialId, {...config})
+        return webClient.delete('/webauthn/credentials/' + credentialId, { ...config })
     },
 
     /**
@@ -44,7 +44,7 @@ export default {
      * @returns 
      */
     getPersonalAccessTokens(config = {}) {
-        return webClient.get('/oauth/personal-access-tokens', {...config})
+        return webClient.get('/oauth/personal-access-tokens', { ...config })
     },
 
     /**
@@ -54,7 +54,7 @@ export default {
      * @returns 
      */
     deletePersonalAccessToken(tokenId, config = {}) {
-        return webClient.delete('/oauth/personal-access-tokens/' + tokenId, {...config})
+        return webClient.delete('/oauth/personal-access-tokens/' + tokenId, { ...config })
     }
     
 }
