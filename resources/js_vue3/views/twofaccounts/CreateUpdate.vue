@@ -1,6 +1,7 @@
 <script setup>
     import Form from '@/components/formElements/Form'
     import OtpDisplay from '@/components/OtpDisplay.vue'
+    import FormLockField from '@/components/formelements/FormLockField.vue'
     import twofaccountService from '@/services/twofaccountService'
     import { useUserStore } from '@/stores/user'
     import { useBusStore } from '@/stores/bus'
@@ -11,6 +12,7 @@
     const { copy } = useClipboard({ legacy: true })
     const $2fauth = inject('2fauth')
     const router = useRouter()
+    const route = useRoute()
     const user = useUserStore()
     const bus = useBusStore()
     const notify = useNotifyStore()
@@ -52,6 +54,7 @@
     const showAdvancedForm = ref(false)
     const ShowTwofaccountInModal = ref(false)
     const fetchingLogo = ref(false)
+    const secretIsLocked = ref(false)
 
     // $refs
     const iconInput = ref(null)
@@ -60,9 +63,25 @@
     const qrcodeInputLabel = ref(null)
     const qrcodeInput = ref(null)
     const iconInputLabel = ref(null)
+    
+    const props = defineProps({
+        twofaccountId: [Number, String]
+    })
+
+    const isEditMode = computed(() => {
+        return props.twofaccountId != undefined
+    })
 
     onMounted(() => {
-        if( bus.decodedUri ) {
+        if (route.name == 'editAccount') {
+            twofaccountService.get(props.twofaccountId).then(response => {
+                form.fill(response.data)
+                // set account icon as temp icon
+                tempIcon.value = form.icon
+                showAdvancedForm.value = true
+            })
+        }
+        else if( bus.decodedUri ) {
             // the Start view provided an uri via the bus store so we parse it and prefill the quick form
             uri.value = bus.decodedUri
             bus.decodedUri = null
@@ -116,6 +135,13 @@
     )
 
     /**
+     * Wrapper to call the appropriate function at form submit
+     */
+     function handleSubmit() {
+        isEditMode.value ? updateAccount() : createAccount()
+    }
+
+    /**
      * Submits the form to the backend to store the new account
      */
     async function createAccount() {
@@ -127,6 +153,29 @@
         if (form.errors.any() === false) {
             notify.success({ text: trans('twofaccounts.account_created') })
             router.push({ name: 'accounts' });
+        }
+    }
+
+    /**
+     * Submits the form to the backend to save the edited account
+     */
+    async function updateAccount() {
+        // Set new icon and delete old one
+        if( tempIcon.value !== form.icon ) {
+            let oldIcon = ''
+
+            oldIcon = form.icon
+
+            form.icon = tempIcon.value
+            tempIcon.value = oldIcon
+            deleteIcon()
+        }
+
+        await form.put('/api/v1/twofaccounts/' + props.twofaccountId)
+
+        if( form.errors.any() === false ) {
+            notify.success({ text: trans('twofaccounts.account_updated') })
+            router.push({ name: 'accounts' })
         }
     }
 
@@ -196,6 +245,8 @@
         // This could desynchronized the HOTP verification server and our local counter if the user never verified the HOTP but this
         // is acceptable (and HOTP counter can be edited by the way)
         form.counter = payload.nextHotpCounter
+        
+        //form.uri = payload.nextUri
     }
     
     /**
@@ -315,7 +366,7 @@
 <template>
     <div>
         <!-- Quick form -->
-        <form @submit.prevent="createAccount" @keydown="form.onKeydown($event)" v-if="showQuickForm">
+        <form @submit.prevent="createAccount" @keydown="form.onKeydown($event)" v-if="!isEditMode && showQuickForm">
             <div class="container preview has-text-centered">
                 <div class="columns is-mobile">
                     <div class="column">
@@ -357,10 +408,10 @@
             </div>
         </form>
         <!-- Full form -->
-        <FormWrapper :title="$t('twofaccounts.forms.new_account')" v-if="showAdvancedForm">
-            <form @submit.prevent="createAccount" @keydown="form.onKeydown($event)">
+        <FormWrapper :title="$t(isEditMode ? 'twofaccounts.forms.edit_account' : 'twofaccounts.forms.new_account')" v-if="showAdvancedForm">
+            <form @submit.prevent="handleSubmit" @keydown="form.onKeydown($event)">
                 <!-- qcode fileupload -->
-                <div class="field is-grouped">
+                <div v-if="!isEditMode" class="field is-grouped">
                     <div class="control">
                         <div role="button" tabindex="0" class="file is-black is-small" @keyup.enter="qrcodeInputLabel.click()">
                             <label class="file-label" :title="$t('twofaccounts.forms.use_qrcode.title')" ref="qrcodeInputLabel">
@@ -375,7 +426,7 @@
                         </div>
                     </div>
                 </div>
-                <FieldError v-if="form.errors.hasAny('qrcode')" :error="form.errors.get('qrcode')" :field="'qrcode'" class="help-for-file" />
+                <FieldError v-if="!isEditMode && form.errors.hasAny('qrcode')" :error="form.errors.get('qrcode')" :field="'qrcode'" class="help-for-file" />
                 <!-- service -->
                 <FormField v-model="form.service" fieldName="service" :fieldError="form.errors.get('email')" :isDisabled="form.otp_type === 'steamtotp'" label="twofaccounts.service" :placeholder="$t('twofaccounts.forms.service.placeholder')" autofocus />
                 <!-- account -->
@@ -420,19 +471,11 @@
                     <p v-if="user.preferences.getOfficialIcons" class="help" v-html="$t('twofaccounts.forms.i_m_lucky_legend')"></p>
                 </div>
                 <!-- otp type -->
-                <FormToggle v-model="form.otp_type" :choices="otp_types" fieldName="otp_type" :fieldError="form.errors.get('otp_type')" label="twofaccounts.forms.otp_type.label" help="twofaccounts.forms.otp_type.help" :hasOffset="true" />
+                <FormToggle v-model="form.otp_type" :isDisabled="isEditMode" :choices="otp_types" fieldName="otp_type" :fieldError="form.errors.get('otp_type')" label="twofaccounts.forms.otp_type.label" help="twofaccounts.forms.otp_type.help" :hasOffset="true" />
                 <div v-if="form.otp_type != ''">
                     <!-- secret -->
-                    <label :for="useIdGenerator('text','secret')" class="label" v-html="$t('twofaccounts.forms.secret.label')"></label>
-                    <div class="field">
-                        <p class="control is-expanded">
-                            <input :id="useIdGenerator('text','secret')" class="input" type="text" v-model="form.secret">
-                        </p>
-                    </div>
-                    <div class="field">
-                        <FieldError v-if="form.errors.hasAny('secret')" :error="form.errors.get('secret')" :field="'secret'"  />
-                        <p class="help" v-html="$t('twofaccounts.forms.secret.help')"></p>
-                    </div>
+                    <FormLockField :isEditMode="isEditMode" v-model="form.secret" fieldName="secret" :fieldError="form.errors.get('secret')" label="twofaccounts.forms.secret.label" help="twofaccounts.forms.secret.help" />
+                    <!-- Options -->
                     <div v-if="form.otp_type !== 'steamtotp'">
                         <h2 class="title is-4 mt-5 mb-2">{{ $t('commons.options') }}</h2>
                         <p class="help mb-4">
@@ -445,12 +488,12 @@
                         <!-- TOTP period -->
                         <FormField v-if="form.otp_type === 'totp'" pattern="[0-9]{1,4}" :class="'is-third-width-field'" v-model="form.period" fieldName="period" :fieldError="form.errors.get('period')" label="twofaccounts.forms.period.label" help="twofaccounts.forms.period.help" :placeholder="$t('twofaccounts.forms.period.placeholder')" />
                         <!-- HOTP counter -->
-                        <FormField v-if="form.otp_type === 'hotp'" pattern="[0-9]{1,4}" :class="'is-third-width-field'" v-model="form.counter" fieldName="counter" :fieldError="form.errors.get('counter')" label="twofaccounts.forms.counter.label" help="twofaccounts.forms.counter.help" :placeholder="$t('twofaccounts.forms.counter.placeholder')" />
+                        <FormLockField v-if="form.otp_type === 'hotp'" pattern="[0-9]{1,4}" :isEditMode="isEditMode" :isExpanded="false" v-model="form.counter" fieldName="counter" :fieldError="form.errors.get('counter')" label="twofaccounts.forms.counter.label" :placeholder="$t('twofaccounts.forms.counter.placeholder')" :help="isEditMode ? 'twofaccounts.forms.counter.help_lock' : 'twofaccounts.forms.counter.help'" />
                     </div>
                 </div>
                 <VueFooter :showButtons="true">
                     <p class="control">
-                        <VueButton id="btnCreate" :isLoading="form.isBusy" class="is-rounded" >{{ $t('commons.create') }}</VueButton>
+                        <VueButton :id="isEditMode ? 'btnUpdate' : 'btnCreate'" :isLoading="form.isBusy" class="is-rounded" >{{ isEditMode ? $t('commons.save') : $t('commons.create') }}</VueButton>
                     </p>
                     <p class="control" v-if="form.otp_type && form.secret">
                         <button id="btnPreview" type="button" class="button is-success is-rounded" @click="previewOTP">{{ $t('twofaccounts.forms.test') }}</button>

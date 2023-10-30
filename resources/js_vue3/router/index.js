@@ -3,29 +3,29 @@ import middlewarePipeline from "@/router/middlewarePipeline";
 import { useUserStore } from '@/stores/user'
 import { useTwofaccounts } from '@/stores/twofaccounts'
 
-import Start            from '../views/Start.vue'
-import Accounts         from '../views/Accounts.vue'
-import Capture          from '../views/twofaccounts/Capture.vue'
-import CreateAccount    from '../views/twofaccounts/Create.vue'
-import EditAccount      from '../views/twofaccounts/Edit.vue'
-import ImportAccount    from '../views/twofaccounts/Import.vue'
-import QRcodeAccount    from '../views/twofaccounts/QRcode.vue'
-import Groups           from '../views/groups/Groups.vue'
-import CreateUpdateGroup      from '../views/groups/CreateUpdate.vue'
-import Login            from '../views/auth/Login.vue'
-import Register         from '../views/auth/Register.vue'
-// import Autolock         from './views/auth/Autolock.vue'
-import PasswordRequest  from '../views/auth/password/Request.vue'
-// import PasswordReset    from './views/auth/password/Reset.vue'
-import WebauthnLost     from '../views/auth/webauthn/Lost.vue'
-// import WebauthnRecover  from './views/auth/webauthn/Recover.vue'
-import SettingsOptions  from '../views/settings/Options.vue'
-import SettingsAccount  from '../views/settings/Account.vue'
-import SettingsOAuth    from '../views/settings/OAuth.vue'
-import SettingsWebAuthn from '../views/settings/WebAuthn.vue'
-import EditCredential   from '../views/settings/Credentials/Edit.vue'
-import Errors           from '../views/Error.vue'
-import About            from '../views/About.vue'
+import Start                from '../views/Start.vue'
+import Accounts             from '../views/Accounts.vue'
+import Capture              from '../views/twofaccounts/Capture.vue'
+import CreateUpdateAccount  from '../views/twofaccounts/CreateUpdate.vue'
+import EditAccount          from '../views/twofaccounts/Edit.vue'
+import ImportAccount        from '../views/twofaccounts/Import.vue'
+import QRcodeAccount        from '../views/twofaccounts/QRcode.vue'
+import Groups               from '../views/groups/Groups.vue'
+import CreateUpdateGroup    from '../views/groups/CreateUpdate.vue'
+import Login                from '../views/auth/Login.vue'
+import Register             from '../views/auth/Register.vue'
+// import Autolock          from './views/auth/Autolock.vue'
+import PasswordRequest      from '../views/auth/password/Request.vue'
+// import PasswordReset     from './views/auth/password/Reset.vue'
+import WebauthnLost         from '../views/auth/webauthn/Lost.vue'
+// import WebauthnRecover   from './views/auth/webauthn/Recover.vue'
+import SettingsOptions      from '../views/settings/Options.vue'
+import SettingsAccount      from '../views/settings/Account.vue'
+import SettingsOAuth        from '../views/settings/OAuth.vue'
+import SettingsWebAuthn     from '../views/settings/WebAuthn.vue'
+import EditCredential       from '../views/settings/Credentials/Edit.vue'
+import Errors               from '../views/Error.vue'
+import About                from '../views/About.vue'
 
 import authGuard    from './middlewares/authGuard'
 import starter      from './middlewares/starter'
@@ -38,9 +38,9 @@ const router = createRouter({
         { path: '/capture', name: 'capture', component: Capture, meta: { middlewares: [authGuard] } },
 
         { path: '/accounts', name: 'accounts', component: Accounts, meta: { middlewares: [authGuard, starter] }, alias: '/' },
-        { path: '/account/create', name: 'createAccount', component: CreateAccount, meta: { middlewares: [authGuard] } },
+        { path: '/account/create', name: 'createAccount', component: CreateUpdateAccount, meta: { middlewares: [authGuard] } },
         { path: '/account/import', name: 'importAccounts', component: ImportAccount, meta: { middlewares: [authGuard] } },
-        { path: '/account/:twofaccountId/edit', name: 'editAccount', component: EditAccount, meta: { middlewares: [authGuard] } },
+        { path: '/account/:twofaccountId/edit', name: 'editAccount', component: CreateUpdateAccount, meta: { middlewares: [authGuard] }, props: true },
         { path: '/account/:twofaccountId/qrcode', name: 'showQRcode', component: QRcodeAccount, meta: { middlewares: [authGuard] } },
 
         { path: '/groups', name: 'groups', component: Groups, meta: { middlewares: [authGuard] }, props: true },
