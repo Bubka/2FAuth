@@ -4,6 +4,7 @@ import Notifications from '@kyvg/vue3-notification'
 import App from './App.vue'
 import router from './router'
 import FontAwesomeIcon from './icons'
+// import helpers from './helpers'
 
 const app = createApp(App)
 
@@ -80,6 +81,9 @@ if (process.env.NODE_ENV != 'development') {
         useNotifyStore().error(err)
     }
 }
+
+// Helpers
+// app.config.globalProperties.$helpers = helpers
 
 // App mounting
 app.mount('#app')
