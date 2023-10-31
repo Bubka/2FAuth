@@ -14,9 +14,6 @@
         token: route.query.token
     }))
 
-    // form.email = route.query.email
-    // form.token = route.query.token
-
     /**
      * Submits the password reset to the backend
      */
@@ -60,7 +57,6 @@
                 cancelLandingView="login" />
             <RouterLink v-if="!isPending" id="btnContinue" :to="{ name: 'accounts' }" class="button is-link">{{ $t('commons.continue') }}</RouterLink>
         </form>
-        <!-- footer -->
         <VueFooter />
     </FormWrapper>
 </template>

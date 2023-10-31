@@ -3,16 +3,20 @@
     import { useNotifyStore } from '@/stores/notify'
 
     const notify = useNotifyStore()
+    const route = useRoute()
+
+    const isWebauthnReset = route.name == 'webauthn.lost'
 
     const form = reactive(new Form({
         email: '',
     }))
 
     /**
-     * Submits the password reset request to the backend
+     * Submits the reset request to the backend
      */
     function requestPasswordReset(e) {
-        form.post('/user/password/lost', {returnError: true})
+        notify.clear()
+        form.post(isWebauthnReset ? '/webauthn/lost' : '/user/password/lost', {returnError: true})
         .then(response => {
             notify.success({ text: response.data.message, duration:-1 })
         })
@@ -33,13 +37,13 @@
 </script>
 
 <template>
-    <FormWrapper :title="$t('auth.forms.reset_password')" :punchline="$t('auth.forms.reset_punchline')">
+    <FormWrapper :title="$t(isWebauthnReset ? 'auth.webauthn.account_recovery' : 'auth.forms.reset_password')" :punchline="$t(isWebauthnReset ? 'auth.webauthn.recovery_punchline' : 'auth.forms.reset_punchline')">
         <form @submit.prevent="requestPasswordReset" @keydown="form.onKeydown($event)">
             <FormField v-model="form.email" fieldName="email" :fieldError="form.errors.get('email')" label="auth.forms.email" autofocus />
             <FormButtons
                 :submitId="'btnSendResetPwd'"
                 :isBusy="form.isBusy"
-                :caption="$t('auth.forms.send_password_reset_link')"
+                :caption="$t(isWebauthnReset ? 'auth.webauthn.send_recovery_link' : 'auth.forms.send_password_reset_link')"
                 :showCancelButton="true"
                 cancelLandingView="login" />
         </form>

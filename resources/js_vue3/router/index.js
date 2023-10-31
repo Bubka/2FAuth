@@ -13,10 +13,9 @@ import Groups               from '../views/groups/Groups.vue'
 import CreateUpdateGroup    from '../views/groups/CreateUpdate.vue'
 import Login                from '../views/auth/Login.vue'
 import Register             from '../views/auth/Register.vue'
-import PasswordRequest      from '../views/auth/password/Request.vue'
+import RequestReset         from '../views/auth/RequestReset.vue'
 import PasswordReset        from '../views/auth/password/Reset.vue'
-import WebauthnLost         from '../views/auth/webauthn/Lost.vue'
-// import WebauthnRecover   from './views/auth/webauthn/Recover.vue'
+import WebauthnRecover      from '../views/auth/webauthn/Recover.vue'
 import SettingsOptions      from '../views/settings/Options.vue'
 import SettingsAccount      from '../views/settings/Account.vue'
 import SettingsOAuth        from '../views/settings/OAuth.vue'
@@ -53,10 +52,10 @@ const router = createRouter({
 
         { path: '/login', name: 'login', component: Login, meta: { disabledWithAuthProxy: true, showAbout: true } },
         { path: '/register', name: 'register', component: Register, meta: { disabledWithAuthProxy: true, showAbout: true } },
-        { path: '/password/request', name: 'password.request', component: PasswordRequest, meta: { disabledWithAuthProxy: true, showAbout: true } },
+        { path: '/password/request', name: 'password.request', component: RequestReset, meta: { disabledWithAuthProxy: true, showAbout: true } },
         { path: '/user/password/reset', name: 'password.reset', component: PasswordReset, meta: { disabledWithAuthProxy: true, showAbout: true } },
-        { path: '/webauthn/lost', name: 'webauthn.lost', component: WebauthnLost, meta: { disabledWithAuthProxy: true, showAbout: true } },
-        // { path: '/webauthn/recover', name: 'webauthn.recover', component: WebauthnRecover, meta: { disabledWithAuthProxy: true, showAbout: true } },
+        { path: '/webauthn/lost', name: 'webauthn.lost', component: RequestReset, meta: { disabledWithAuthProxy: true, showAbout: true } },
+        { path: '/webauthn/recover', name: 'webauthn.recover', component: WebauthnRecover, meta: { disabledWithAuthProxy: true, showAbout: true } },
 
         { path: '/about', name: 'about', component: About, meta: { showAbout: true } },
         { path: '/error', name: 'genericError', component: Errors, meta: { middlewares: [noEmptyError], err: null } },
