@@ -27,6 +27,7 @@
         "vite": "^4.4.9",
         "vue": "^3.3.4",
         "vue-draggable-plus": "^0.2.6",
+        "vue-qrcode-reader": "^5.4.0",
         "vue-router": "^4.2.4"
     }
 }

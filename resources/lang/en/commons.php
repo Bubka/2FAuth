@@ -73,4 +73,5 @@ return [
     'or' => 'OR',
     'close_the_x_page' => 'Close the :pagetitle page',
     'submit' => 'Submit',
+    'default' => 'Default',
 ];

@@ -330,7 +330,7 @@ a:hover {
 
 .fullscreen-streamer {
   position: fixed;
-  top: 10%;
+  top: 7%;
   left: 0;
   width: 100%;
   height: 65%;
@@ -363,7 +363,8 @@ a:hover {
 
 .fullscreen-footer {
   position: fixed;
-  top: calc(100vh - 8rem);
+  // top: calc(100vh - 8rem);
+  bottom: 68px;
   left: 0;
   width: 100%;
   text-align: center;
