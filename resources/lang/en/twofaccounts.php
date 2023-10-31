@@ -146,7 +146,7 @@ return [
         'issuer' => 'Issuer',
         'imported' => 'Imported',
         'failure' => 'Failure',
-        'x_valid_accounts_found' => '{count} valid accounts found',
+        'x_valid_accounts_found' => ':count valid accounts found',
         'import_all' => 'Import all',
         'import_this_account' => 'Import this account',
         'discard_all' => 'Discard all',

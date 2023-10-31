@@ -57,6 +57,10 @@ export default {
 
     getQrcode(id, config = {}) {
         return apiClient.get('/twofaccounts/' + id + '/qrcode', { ...config })
-    }
+    },
+
+    migrate(payload, config = {}) {
+        return apiClient.post('/twofaccounts/migration', { payload: payload, withSecret: true }, { ...config })
+    },
     
 }
