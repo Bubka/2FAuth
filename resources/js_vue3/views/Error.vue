@@ -5,7 +5,7 @@
     const router = useRouter()
     const route = useRoute()
 
-    const showModal = true
+    const showModal = ref(true)
     const showDebug = computed(() => process.env.NODE_ENV === 'development')
 
     const props = defineProps({
@@ -15,8 +15,19 @@
         }
     })
 
+    watch(showModal, (val) => {
+        if (val == false) {
+            exit()
+        }
+    })
+
+    /**
+     * Exits the error view
+     */
     function exit() {
-        window.history.length > 1 && route.name !== '404' ? router.go(-1) : router.push({ name: 'accounts' })
+        window.history.length > 1 && route.name !== '404' && route.name !== 'notFound'
+            ? router.go(-1)
+            : router.push({ name: 'accounts' })
     }
 
 </script>
