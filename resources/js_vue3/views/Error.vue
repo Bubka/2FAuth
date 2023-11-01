@@ -23,8 +23,8 @@
 
 <template>
     <div class="error-message">
-        <modal v-model="showModal" :closable="props.closable" @modal-closed="exit">
-            <div class="error-message" v-if="$route.name == '404'">
+        <modal v-model="showModal" :closable="props.closable">
+            <div class="error-message" v-if="$route.name == '404' || $route.name == 'notFound'">
                 <p class="error-404"></p>
                 <p>{{ $t('errors.resource_not_found') }}</p>
             </div>

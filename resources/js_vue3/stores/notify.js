@@ -46,6 +46,10 @@ export const useNotifyStore = defineStore({
             // 
         },
 
+        notFound(err) {
+            router.push({ name: '404' })
+        },
+
         error(err) {
             this.parseError(err)
             router.push({ name: 'genericError' })

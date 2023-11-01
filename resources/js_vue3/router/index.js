@@ -59,8 +59,8 @@ const router = createRouter({
 
         { path: '/about', name: 'about', component: About, meta: { showAbout: true } },
         { path: '/error', name: 'genericError', component: Errors, meta: { middlewares: [noEmptyError], err: null } },
-        // { path: '/404', name: '404',component: Errors, props: true },
-        // { path: '*', redirect: { name: '404' } },
+        { path: '/404', name: '404', component: Errors, props: true },
+        { path: '/:pathMatch(.*)*', name: 'notFound', component: Errors, props: true },
 
 		// Lazy loaded view
 		{ path: '/about', name: 'about', component: () => import('../views/About.vue') }
