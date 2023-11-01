@@ -61,6 +61,7 @@
             await twofaccounts.fetch()
             notify.info({ text: trans('commons.data_refreshed_to_reflect_server_changes'), duration: 10000 })
         }
+        //groups.refresh()
     })
 
     /**
