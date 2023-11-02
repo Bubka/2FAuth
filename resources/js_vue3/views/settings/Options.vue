@@ -4,6 +4,7 @@
     import userService from '@/services/userService'
     import appSettingService from '@/services/appSettingService'
     import { useUserStore } from '@/stores/user'
+    import { useGroups } from '@/stores/groups'
     import { useAppSettingsStore } from '@/stores/appSettings'
     import { useNotifyStore } from '@/stores/notify'
     import { UseColorMode } from '@vueuse/components'
@@ -11,6 +12,7 @@
 
     const $2fauth = inject('2fauth')
     const user = useUserStore()
+    const groups = useGroups()
     const notify = useNotifyStore()
     const appSettings = useAppSettingsStore()
     const returnTo = useStorage($2fauth.prefix + 'returnTo', 'accounts')
@@ -40,10 +42,10 @@
         { text: 'settings.forms.1_hour', value: 60 },
         { text: 'settings.forms.1_day', value: 1440 }, 
     ]
-    const groups = [
+    const groupsList = ref([
         { text: 'groups.no_group', value: 0 },
         { text: 'groups.active_group', value: -1 },
-    ]
+    ])
     const captureModes = [
         { text: 'settings.forms.livescan', value: 'livescan' },
         { text: 'settings.forms.upload', value: 'upload' },
@@ -93,15 +95,13 @@
     })
 
     onMounted(() => {
-        groupService.getAll().then(response => {
-            response.data.forEach((data) => {
-                if( data.id >0 ) {
-                    groups.push({
-                        text: data.name,
-                        value: data.id
-                    })
-                }
-            })
+        groups.items.forEach((group) => {
+            if( group.id > 0 ) {
+                groupsList.value.push({
+                    text: group.name,
+                    value: group.id
+                })
+            }
         })
     })
 
@@ -146,7 +146,7 @@
 
                         <h4 class="title is-4 pt-4 has-text-grey-light">{{ $t('groups.groups') }}</h4>
                         <!-- default group -->
-                        <FormSelect v-model="user.preferences.defaultGroup" :options="groups" fieldName="defaultGroup" label="settings.forms.default_group.label" help="settings.forms.default_group.help" />
+                        <FormSelect v-model="user.preferences.defaultGroup" :options="groupsList" fieldName="defaultGroup" label="settings.forms.default_group.label" help="settings.forms.default_group.help" />
                         <!-- retain active group -->
                         <FormCheckbox v-model="user.preferences.rememberActiveGroup" fieldName="rememberActiveGroup" label="settings.forms.remember_active_group.label" help="settings.forms.remember_active_group.help" />
 

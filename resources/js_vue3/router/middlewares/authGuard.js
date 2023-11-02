@@ -8,7 +8,7 @@ export default async function auth({ to, next, stores }) {
     if (! user.isAuthenticated) {
         const currentUser = await authService.getCurrentUser()
         if (currentUser) {
-            user.loginAs({
+            await user.loginAs({
                 name: currentUser.name,
                 email: currentUser.email,
                 preferences: currentUser.preferences,

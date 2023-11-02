@@ -29,22 +29,22 @@ export const useUserStore = defineStore({
          * 
          * @param {object} user 
          */
-        loginAs(user) {
+        async loginAs(user) {
             this.$patch(user)
-            this.initDataStores()
+            await this.initDataStores()
             this.applyUserPrefs()
         },
 
         /**
          * Initializes the user's data stores
          */
-        initDataStores() {
+        async initDataStores() {
             const accounts = useTwofaccounts()
             const groups = useGroups()
 
             if (this.isAuthenticated) {
-                accounts.fetch()
-                groups.fetch()
+                await accounts.fetch()
+                await groups.fetch()
             }
             else {
                 accounts.$reset()
