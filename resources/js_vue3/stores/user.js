@@ -44,7 +44,7 @@ export const useUserStore = defineStore({
 
             if (this.isAuthenticated) {
                 await accounts.fetch()
-                await groups.fetch()
+                groups.fetch()
             }
             else {
                 accounts.$reset()
