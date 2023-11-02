@@ -62,5 +62,9 @@ export default {
     migrate(payload, config = {}) {
         return apiClient.post('/twofaccounts/migration', { payload: payload, withSecret: true }, { ...config })
     },
+
+    count(config = {}) {
+        return apiClient.get('/twofaccounts/count', { ...config })
+    },
     
 }
