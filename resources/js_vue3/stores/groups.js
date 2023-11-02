@@ -9,6 +9,7 @@ export const useGroups = defineStore({
     state: () => {
         return {
             items: [],
+            fetchedOn: null,
         }
     },
 
@@ -58,9 +59,17 @@ export const useGroups = defineStore({
          * Fetches the groups collection from the backend
          */
         async fetch() {
-            await groupService.getAll().then(response => {
-                this.items = response.data
-            })
+            // We do not want to fetch fresh data multiple times in the same 2s timespan
+            const age = Math.floor(Date.now() - this.fetchedOn)
+            const isNotFresh = age > 2000
+
+            if (isNotFresh) {
+                this.fetchedOn = Date.now()
+
+                await groupService.getAll().then(response => {
+                    this.items = response.data
+                })
+            }
         },
 
         /**

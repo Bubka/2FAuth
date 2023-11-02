@@ -1,5 +1,4 @@
 <script setup>
-
     import twofaccountService from '@/services/twofaccountService'
     import TotpLooper from '@/components/TotpLooper.vue'
     import GroupSwitch from '@/components/GroupSwitch.vue'
@@ -53,15 +52,16 @@
     })
 
     onMounted(async () => {
-        // This SFC is reached only if the user has some twofaccounts in the store (see the starter middleware).
+        // This SFC is reached only if the user has some twofaccounts (see the starter middleware).
         // This allows to display accounts without latency.
-        // We now check the twofaccounts store state in case the backend data have changed.
-        const isUpToDate = await twofaccounts.isUpToDateWithBackend()
-        if (! isUpToDate) {
-            await twofaccounts.fetch()
-            notify.info({ text: trans('commons.data_refreshed_to_reflect_server_changes'), duration: 10000 })
-        }
-        //groups.refresh()
+        //
+        // We sync the store with the backend again to 
+        twofaccounts.fetch().then(() => {
+            if (twofaccounts.backendWasNewer) {
+                notify.info({ text: trans('commons.data_refreshed_to_reflect_server_changes'), duration: 10000 })
+            }
+        })
+        groups.fetch()
     })
 
     /**
@@ -70,7 +70,7 @@
     function postGroupAssignementUpdate() {
         // we fetch the accounts again to prevent the js collection being
         // desynchronize from the backend php collection
-        fetchAccounts(true)
+        twofaccounts.fetch()
         notify.success({ text: trans('twofaccounts.accounts_moved') })
     }
 

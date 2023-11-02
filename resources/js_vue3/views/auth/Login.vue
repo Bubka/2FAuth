@@ -37,7 +37,7 @@
                 isAdmin: response.data.is_admin,
             })
 
-            router.push({ name: 'accounts', params: { toRefresh: true } })
+            router.push({ name: 'accounts' })
         })
         .catch(error => {
             if( error.response.status === 401 ) {
