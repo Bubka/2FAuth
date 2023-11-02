@@ -1,4 +1,6 @@
 <script setup>
+    import { UseColorMode } from '@vueuse/components'
+
     const { notify }  = useNotification()
 
     const props = defineProps({
@@ -44,9 +46,11 @@
         </div>
         <div v-if="props.closable" class="fullscreen-footer">
             <!-- Close button -->
-            <button id="btnClose" class="button is-rounded" :class="{'is-dark' : false}" @click.stop="closeModal">
-                {{ $t('commons.close') }}
-            </button>
+            <UseColorMode v-slot="{ mode }">
+                <button id="btnClose" class="button is-rounded" :class="{'is-dark' : mode == 'dark'}" @click.stop="closeModal">
+                    {{ $t('commons.close') }}
+                </button>
+            </UseColorMode>
         </div>
     </div>
 </template>
