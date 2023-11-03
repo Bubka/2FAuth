@@ -17,7 +17,6 @@
         "axios": "^1.1.2",
         "bulma": "^0.9.4",
         "bulma-checkradio": "^2.1.3",
-        "bulma-switch": "^2.0.4",
         "file-saver": "^2.0.5",
         "laravel-vite-plugin": "^0.8.0",
         "laravel-vue-i18n": "^2.7.1",
