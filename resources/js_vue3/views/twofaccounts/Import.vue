@@ -376,7 +376,7 @@
                         </span> -->
                     </button>
                 </p>
-                <ButtonBackCloseCancel :action="importableCount > 0 ? 'cancel' : 'close'" />
+                <ButtonBackCloseCancel :returnTo="{ name: 'accounts' }" :action="importableCount > 0 ? 'cancel' : 'close'" />
             </VueFooter>
         </ResponsiveWidthWrapper>
         <!-- modal -->

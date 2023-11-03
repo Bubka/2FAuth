@@ -4,19 +4,17 @@
     import { UseColorMode } from '@vueuse/components'
 
     const $2fauth = inject('2fauth')
+    const router = useRouter()
     const notify = useNotifyStore()
-    const returnTo = useStorage($2fauth.prefix + 'returnTo', 'accounts')
+    const { copy } = useClipboard({ legacy: true })
 
+    const returnTo = router.options.history.state.back
     const infos = ref()
     const listInfos = ref(null)
-
     const userPreferences = ref(false)
     const listUserPreferences = ref(null)
-
     const adminSettings = ref(false)
     const listAdminSettings = ref(null)
-
-    const { copy } = useClipboard({ legacy: true })
 
     onMounted(() => {
         systemService.getSystemInfos().then(response => {
@@ -128,7 +126,7 @@
         </div>
         <!-- footer -->
         <VueFooter :showButtons="true">
-            <ButtonBackCloseCancel action="back" />
+            <ButtonBackCloseCancel :returnTo="{ path: returnTo }" action="back" />
         </VueFooter>
     </ResponsiveWidthWrapper>
 </template>

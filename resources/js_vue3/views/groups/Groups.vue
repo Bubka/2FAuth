@@ -3,8 +3,10 @@
     import { useGroups } from '@/stores/groups'
     import { useBusStore } from '@/stores/bus'
 
+    const router = useRouter()
     const groups = useGroups()
     const bus = useBusStore()
+
     const isFetching = ref(false)
 
     onMounted(async () => {
@@ -68,7 +70,7 @@
         </div>
         <!-- footer -->
         <VueFooter :showButtons="true">
-            <ButtonBackCloseCancel action="close" />
+            <ButtonBackCloseCancel :returnTo="{ name: 'accounts' }" action="close" />
         </VueFooter>
     </ResponsiveWidthWrapper>
 </template>

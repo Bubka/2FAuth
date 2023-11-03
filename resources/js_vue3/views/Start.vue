@@ -109,7 +109,7 @@
         </div>
         <!-- Footer -->
         <VueFooter :showButtons="true" >
-            <ButtonBackCloseCancel action="back" v-if="!twofaccounts.isEmpty" />
+            <ButtonBackCloseCancel :returnTo="{ name: 'accounts' }" action="back" v-if="!twofaccounts.isEmpty" />
         </VueFooter>
     </div>
 </template>

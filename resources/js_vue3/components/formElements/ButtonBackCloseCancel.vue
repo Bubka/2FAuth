@@ -7,8 +7,8 @@
     
     const props = defineProps({
         returnTo: {
-            type: String,
-            default: 'accounts'
+            type: Object,
+            default: { name: 'accounts' }
         },
         action: {
             type: String,
@@ -40,7 +40,7 @@
         <RouterLink
             v-if="action == 'close'"
             id="btnClose"
-            :to="{ name: returnTo }"
+            :to="returnTo"
             :class="classes"
             tabindex="0"
             role="button"
@@ -51,7 +51,7 @@
         <RouterLink
             v-else-if="action == 'back'"
             id="lnkBack"
-            :to="{ name: returnTo }"
+            :to="returnTo"
             :class="classes"
             :aria-label="$t('commons.close_the_x_page', { pagetitle: $route.meta.title })"
         >
@@ -60,7 +60,7 @@
         <RouterLink
             v-else-if="action == 'cancel'"
             id="btnCancel"
-            :to="{ name: returnTo }"
+            :to="returnTo"
             :class="classes"
         >
             {{ $t('commons.cancel') }}

@@ -29,7 +29,7 @@
             </p>
         </div>
         <div class="fullscreen-footer">
-            <ButtonBackCloseCancel action="close" />
+            <ButtonBackCloseCancel :returnTo="{ name: 'accounts' }" action="close" />
         </div>
     </div>
 </template>

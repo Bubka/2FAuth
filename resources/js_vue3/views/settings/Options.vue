@@ -185,7 +185,7 @@
             </FormWrapper>
         </div>
         <VueFooter :showButtons="true">
-            <ButtonBackCloseCancel action="close" />
+            <ButtonBackCloseCancel :returnTo="{ name: returnTo }" action="close" />
         </VueFooter>
     </div>
 </template>
