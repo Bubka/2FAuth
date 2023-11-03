@@ -45,12 +45,7 @@
             </div>
         </div>
         <VueFooter :showButtons="true">
-            <!-- Close Group switch button -->
-            <p class="control">
-                <UseColorMode v-slot="{ mode }">
-                    <button id="btnClose" class="button is-rounded" :class="{'is-dark' : mode == 'dark'}" @click="$emit('update:showGroupSwitch', false)">{{ $t('commons.close') }}</button>
-                </UseColorMode>
-            </p>
+            <ButtonBackCloseCancel action="close" :useLinkTag="false" @closed="$emit('update:showGroupSwitch', false)" />
         </VueFooter>
     </div>
 </template>

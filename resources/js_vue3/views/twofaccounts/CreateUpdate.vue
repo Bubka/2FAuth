@@ -399,9 +399,7 @@
                             <div class="control">
                                 <VueButton :isLoading="form.isBusy" >{{ $t('commons.save') }}</VueButton>
                             </div>
-                            <div class="control">
-                                <button id="btnCancel" type="button" class="button is-text" @click="cancelCreation">{{ $t('commons.cancel') }}</button>
-                            </div>
+                            <ButtonBackCloseCancel action="cancel" :useLinkTag="false" @canceled="cancelCreation" />
                         </div>
                     </div>
                 </div>
@@ -498,9 +496,7 @@
                     <p class="control" v-if="form.otp_type && form.secret">
                         <button id="btnPreview" type="button" class="button is-success is-rounded" @click="previewOTP">{{ $t('twofaccounts.forms.test') }}</button>
                     </p>
-                    <p class="control">
-                        <button id="btnCancel" type="button" class="button is-text is-rounded" @click="cancelCreation">{{ $t('commons.cancel') }}</button>
-                    </p>
+                    <ButtonBackCloseCancel action="cancel" :useLinkTag="false" @canceled="cancelCreation" />
                 </VueFooter>
             </form>
             <!-- modal -->

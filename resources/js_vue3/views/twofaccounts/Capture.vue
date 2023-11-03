@@ -168,10 +168,7 @@
             </div>
         </div>
         <div class="fullscreen-footer">
-            <!-- Cancel button -->
-            <button id="btnCancel" class="button is-large is-warning is-rounded" @click="exitStream()">
-                {{ $t('commons.cancel') }}
-            </button>
+            <ButtonBackCloseCancel action="cancel" :isCapture="true" :useLinkTag="false" @canceled="exitStream()" />
         </div>
     </div>
 </template>

@@ -49,6 +49,7 @@ import FormWrapper from '@/layouts/FormWrapper.vue'
 import Footer from '@/layouts/Footer.vue'
 import Modal from '@/layouts/Modal.vue'
 import VueButton           from '@/components/formElements/Button.vue'
+import ButtonBackCloseCancel from '@/components/formElements/ButtonBackCloseCancel.vue'
 import FieldError       from '@/components/formElements/FieldError.vue'
 import FormField        from '@/components/formElements/FormField.vue'
 import FormPasswordField        from '@/components/formElements/FormPasswordField.vue'
@@ -65,6 +66,7 @@ app
     .component('VueFooter', Footer)
     .component('Modal', Modal)
     .component('VueButton', VueButton)
+    .component('ButtonBackCloseCancel', ButtonBackCloseCancel)
     .component('FieldError', FieldError)
     .component('FormField', FormField)
     .component('FormPasswordField', FormPasswordField)

@@ -68,12 +68,7 @@
         </div>
         <!-- footer -->
         <VueFooter :showButtons="true">
-            <!-- close button -->
-            <p class="control">
-                <UseColorMode v-slot="{ mode }">
-                    <RouterLink id="btnClose" :to="{ name: 'accounts' }" class="button is-rounded" :class="{'is-dark' : mode == 'dark'}">{{ $t('commons.close') }}</RouterLink>
-                </UseColorMode>
-            </p>
+            <ButtonBackCloseCancel action="close" />
         </VueFooter>
     </ResponsiveWidthWrapper>
 </template>

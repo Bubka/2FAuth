@@ -376,12 +376,7 @@
                         </span> -->
                     </button>
                 </p>
-                <!-- close button -->
-                <p class="control">
-                    <UseColorMode v-slot="{ mode }">
-                        <RouterLink :id="importableCount > 0 ? 'btnCancel' : 'btnClose'" :to="{ name: 'accounts' }" class="button is-rounded" :class="{'is-dark' : mode == 'dark'}" v-html="importableCount > 0 ? $t('commons.cancel') : $t('commons.close')"></RouterLink>
-                    </UseColorMode>
-                </p>
+                <ButtonBackCloseCancel :action="importableCount > 0 ? 'cancel' : 'close'" />
             </VueFooter>
         </ResponsiveWidthWrapper>
         <!-- modal -->

@@ -3,7 +3,6 @@
     import SettingTabs from '@/layouts/SettingTabs.vue'
     import { useUserStore } from '@/stores/user'
     import { useNotifyStore } from '@/stores/notify'
-    import { UseColorMode } from '@vueuse/components'
 
     const $2fauth = inject('2fauth')
     const user = useUserStore()
@@ -140,21 +139,7 @@
             </FormWrapper>
         </div>
         <VueFooter :showButtons="true">
-            <!-- close button -->
-            <p class="control">
-                <UseColorMode v-slot="{ mode }">
-                    <RouterLink
-                        id="btnClose"
-                        :to="{ name: returnTo }"
-                        class="button is-rounded"
-                        :class="{'is-dark' : mode === 'dark'}"
-                        tabindex="0"
-                        role="button"
-                        :aria-label="$t('commons.close_the_x_page', {pagetitle: $route.meta.title})">
-                        {{ $t('commons.close') }}
-                    </RouterLink>
-                </UseColorMode>
-            </p>
+            <ButtonBackCloseCancel action="close" />
         </VueFooter>
     </div>
 </template>

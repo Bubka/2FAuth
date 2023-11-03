@@ -62,12 +62,7 @@
             <p class="control">
                 <button class="button is-link is-rounded" @click="moveAccounts">{{ $t('commons.move') }}</button>
             </p>
-            <!-- Cancel button -->
-            <p class="control">
-                <UseColorMode v-slot="{ mode }">
-                    <button id="btnCancel" class="button is-rounded" :class="{'is-dark' : mode == 'dark'}" @click="$emit('update:showDestinationGroupSelector', false)">{{ $t('commons.cancel') }}</button>
-                </UseColorMode>
-            </p>
+            <ButtonBackCloseCancel action="cancel" :useLinkTag="false" @canceled="$emit('update:showDestinationGroupSelector', false)" />
         </VueFooter>
     </div>
 </template>

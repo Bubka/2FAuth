@@ -128,19 +128,7 @@
         </div>
         <!-- footer -->
         <VueFooter :showButtons="true">
-            <!-- close button -->
-            <p class="control">
-                <UseColorMode v-slot="{ mode }">
-                    <RouterLink
-                        id="lnkBack"
-                        :to="{ name: returnTo }"
-                        :aria-label="$t('commons.close_the_x_page', {pagetitle: $route.meta.title})"
-                        class="button is-rounded"
-                        :class="{'is-dark' : mode == 'dark'}">
-                        {{ $t('commons.back') }}
-                    </RouterLink>
-                </UseColorMode>
-            </p>
+            <ButtonBackCloseCancel action="back" />
         </VueFooter>
     </ResponsiveWidthWrapper>
 </template>

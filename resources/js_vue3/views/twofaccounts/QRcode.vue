@@ -1,7 +1,6 @@
 <script setup>
     import twofaccountService from '@/services/twofaccountService'
     import Spinner from '@/components/Spinner.vue'
-    import { UseColorMode } from '@vueuse/components'
 
     const router = useRouter()
     const route = useRoute()
@@ -18,7 +17,6 @@
         const { data } = await twofaccountService.getQrcode(route.params.twofaccountId)
         qrcode.value = data.qrcode
     }
-
 </script>
 
 <template>
@@ -31,12 +29,7 @@
             </p>
         </div>
         <div class="fullscreen-footer">
-            <!-- Close button -->
-            <UseColorMode v-slot="{ mode }">
-                <button id="btnClose" class="button is-rounded" :class="{'is-dark' : mode == 'dark'}" @click.stop="router.push({ name: 'accounts' });">
-                    {{ $t('commons.close') }}
-                </button>
-            </UseColorMode>
+            <ButtonBackCloseCancel action="close" />
         </div>
     </div>
 </template>

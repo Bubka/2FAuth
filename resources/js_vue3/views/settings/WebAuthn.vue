@@ -166,21 +166,7 @@
                 </form>
                 <!-- footer -->
                 <VueFooter :showButtons="true">
-                    <!-- close button -->
-                    <p class="control">
-                        <UseColorMode v-slot="{ mode }">
-                            <RouterLink
-                                id="btnClose"
-                                :to="{ name: returnTo }"
-                                class="button is-rounded"
-                                :class="{'is-dark' : mode === 'dark'}"
-                                tabindex="0"
-                                role="button"
-                                :aria-label="$t('commons.close_the_x_page', {pagetitle: $route.meta.title})">
-                                {{ $t('commons.close') }}
-                            </RouterLink>
-                        </UseColorMode>
-                    </p>
+                    <ButtonBackCloseCancel action="close" />
                 </VueFooter>
             </FormWrapper>
         </div>
