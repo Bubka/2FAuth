@@ -1,6 +1,5 @@
 <script setup>
     import SettingTabs from '@/layouts/SettingTabs.vue'
-    import groupService from '@/services/groupService'
     import userService from '@/services/userService'
     import appSettingService from '@/services/appSettingService'
     import { useUserStore } from '@/stores/user'

@@ -370,7 +370,7 @@
                 <!-- Import all button -->
                 <p class="control" v-if="importableCount > 0">
                     <button class="button is-link is-rounded is-focus" @click="createAccounts">
-                        <span>{{ $t('twofaccounts.import.import_all') }} ({{importableCount}})</span>
+                        <span>{{ $t('twofaccounts.import.import_all') }} ({{ importableCount }})</span>
                         <!-- <span class="icon is-small">
                             <FontAwesomeIcon :icon="['fas', 'qrcode']" />
                         </span> -->

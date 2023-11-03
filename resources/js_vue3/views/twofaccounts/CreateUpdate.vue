@@ -7,7 +7,6 @@
     import { useBusStore } from '@/stores/bus'
     import { useNotifyStore } from '@/stores/notify'
     import { UseColorMode } from '@vueuse/components'
-    import { useIdGenerator } from '@/composables/helpers'
     
     const { copy } = useClipboard({ legacy: true })
     const $2fauth = inject('2fauth')
