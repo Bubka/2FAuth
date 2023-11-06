@@ -7,8 +7,6 @@ export const useBusStore = defineStore({
         return {
             migrationUri: null,
             decodedUri: null,
-            goBackTo: null,
-            returnTo: null,
             inManagementMode: false,
             editedGroupName: null,
         }
