@@ -19,6 +19,7 @@
     import { vDraggable } from 'vue-draggable-plus'
 
     const $2fauth = inject('2fauth')
+    const router = useRouter()
     const notify = useNotifyStore()
     const user = useUserStore()
     const bus = useBusStore()
@@ -202,6 +203,17 @@
         })
     }
 
+    /**
+     * Deletes selected accounts
+     */
+    async function deleteAccounts() {
+        await twofaccounts.deleteSelected()
+
+        if (twofaccounts.isEmpty) {
+            router.push({ name: 'start' })
+        }
+    }
+
 </script>
 
 <template>
@@ -333,7 +345,7 @@
                     v-model:inManagementMode="bus.inManagementMode"
                     :areDisabled="twofaccounts.hasNoneSelected"
                     @move-button-clicked="showDestinationGroupSelector = true"
-                    @delete-button-clicked="twofaccounts.deleteSelected()"
+                    @delete-button-clicked="deleteAccounts"
                     @export-button-clicked="twofaccounts.export()">
                 </ActionButtons>
             </VueFooter>
