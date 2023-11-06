@@ -21,7 +21,7 @@ return [
     'icon_to_illustrate_the_account' => 'Icono que representa a la cuenta',
     'remove_icon' => 'Eliminar icono',
     'no_account_here' => '¡No hay 2FA aquí!',
-    'add_first_account' => 'Elige un método y añade tu primer cuenta',
+    'add_first_account' => 'Elige un método y añade tu primera cuenta',
     'use_full_form' => 'O usa el formulario completo',
     'add_one' => 'Agregar uno',
     'show_qrcode' => 'Muestra el código QR',
