@@ -210,6 +210,7 @@
         await twofaccounts.deleteSelected()
 
         if (twofaccounts.isEmpty) {
+            bus.inManagementMode = false
             router.push({ name: 'start' })
         }
     }
