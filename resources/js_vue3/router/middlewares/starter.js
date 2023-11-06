@@ -8,7 +8,7 @@ export default function starter({ to, next, stores }) {
     if (twofaccounts.isEmpty) {
         twofaccounts.fetch().then(() => {
             if (twofaccounts.isEmpty) {
-                next({ name: 'start' });
+                next({ name: 'start' })
             }
             else next()
         })

@@ -1,6 +1,6 @@
 import authService from '@/services/authService'
 
-export default async function auth({ to, next, stores }) {
+export default async function authGuard({ to, next, stores }) {
     const { user } = stores
 
     // No authenticated user on the front-end side, we try to

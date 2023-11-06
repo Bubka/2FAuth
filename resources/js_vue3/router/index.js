@@ -14,7 +14,7 @@ const router = createRouter({
 		{ path: '/start', name: 'start', component: () => import('../views/Start.vue'), meta: { middlewares: [authGuard, setReturnTo] } },
         { path: '/capture', name: 'capture', component: () => import('../views/twofaccounts/Capture.vue'), meta: { middlewares: [authGuard, setReturnTo] } },
 
-        { path: '/accounts', name: 'accounts', component: () => import('../views/twofaccounts/Accounts.vue'), meta: { middlewares: [authGuard, starter, setReturnTo] }, alias: '/' },
+        { path: '/accounts', name: 'accounts', component: () => import('../views/twofaccounts/Accounts.vue'), meta: { middlewares: [authGuard, setReturnTo, starter] }, alias: '/' },
         { path: '/account/create', name: 'createAccount', component: () => import('../views/twofaccounts/CreateUpdate.vue'), meta: { middlewares: [authGuard, setReturnTo] } },
         { path: '/account/import', name: 'importAccounts', component: () => import('../views/twofaccounts/Import.vue'), meta: { middlewares: [authGuard, setReturnTo] } },
         { path: '/account/:twofaccountId/edit', name: 'editAccount', component: () => import('../views/twofaccounts/CreateUpdate.vue'), meta: { middlewares: [authGuard, setReturnTo] }, props: true },
