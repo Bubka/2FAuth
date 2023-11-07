@@ -233,13 +233,6 @@
     }
 
     /**
-     * Pushes user to the dedicated capture view for live scan
-     */
-    function capture() {
-        router.push({ name: 'capture' })
-    }
-
-    /**
      * Notifies that valid account(s) have been found for import
      */
     function notifyValidAccountFound() {
@@ -260,16 +253,14 @@
                 <!-- scan button that launch camera stream -->
                 <div class="block">
                     <div class="buttons mb-0">
-                        <button tabindex="0" class="button is-link is-rounded mr-0" @click="capture()">
+                        <RouterLink id="btnCapture" :to="{ name: 'capture' }" class="button is-link is-rounded mr-0">
                             <span class="icon">
                                 <FontAwesomeIcon :icon="['fas', 'camera']" />
                             </span>
                             <span>{{ $t('twofaccounts.import.scan') }}</span>
-                        </button>
+                        </RouterLink>
                         <span class="p-2 mb-2">{{ $t('commons.or') }}</span>
-                        <!-- </div> -->
                         <!-- upload a qr code (with basic file field and backend decoding) -->
-                        <!-- <div class="block"> -->
                         <label role="button" tabindex="0" class="button is-link is-rounded is-outlined" ref="qrcodeInputLabel"  @keyup.enter="qrcodeInputLabel.click()">
                             {{ $t('twofaccounts.import.upload') }}
                             <input aria-hidden="true" tabindex="-1" class="file-input" type="file" accept="image/*" v-on:change="submitQrCode" ref="qrcodeInput">
