@@ -21,10 +21,8 @@
     })
 
     function closeModal(event) {
-        if (event) {
-            notify({ clean: true })
-            isActive.value = false
-        }
+        notify({ clean: true })
+        isActive.value = false
     }
 </script>
 
