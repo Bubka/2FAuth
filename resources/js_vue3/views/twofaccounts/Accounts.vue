@@ -217,6 +217,15 @@
         }
     }
 
+    /**
+     * Exits from the Management mode
+     */
+    function exitManagementMode()
+    {
+        bus.inManagementMode = false
+        twofaccounts.selectNone()
+    }
+
 </script>
 
 <template>
@@ -344,7 +353,7 @@
                     </div>
                 </span>
             </div>
-            <VueFooter :showButtons="true" v-on:management-mode-exited="twofaccounts.selectNone()">
+            <VueFooter :showButtons="true" :internalFooterType="bus.inManagementMode && !showDestinationGroupSelector ? 'doneButton' : 'navLinks'" @done-button-clicked="exitManagementMode">
                 <ActionButtons
                     v-model:inManagementMode="bus.inManagementMode"
                     :areDisabled="twofaccounts.hasNoneSelected"
