@@ -5,13 +5,14 @@
     import { useNotifyStore } from '@/stores/notify'
     import { useUserStore } from '@/stores/user'
     import { useBusStore } from '@/stores/bus'
+    import { useTwofaccounts } from '@/stores/twofaccounts'
     import { UseColorMode } from '@vueuse/components'
 
     const $2fauth = inject('2fauth')
     const notify = useNotifyStore()
     const user = useUserStore()
     const bus = useBusStore()
-    const router = useRouter()
+    const twofaccounts = useTwofaccounts()
     const otpDisplay = ref(null)
     const fileInput = ref(null)
     const fileInputLabel = ref(null)
@@ -28,6 +29,14 @@
         counter: null,
         period: null,
     }))
+    const fileForm = new Form({
+        file: null,
+        withSecret: true
+    })
+    const qrcodeForm = new Form({
+        qrcode: null,
+        withSecret: true
+    })
     const showTwofaccountInModal = ref(false)
     const supportedSources = [
         {app: '2FAuth', format: 'JSON'},
@@ -132,13 +141,14 @@
      * Stores the provided account
      */
     async function createAccount(accountIndex) {
-        let twofaccount = exportedAccounts.value[accountIndex]
-        mapAccountToForm(twofaccount)
+        form.fill(exportedAccounts.value[accountIndex])
 
         await form.post('/api/v1/twofaccounts', {returnError: true})
         .then(response => {
             exportedAccounts.value[accountIndex].imported = 1
             exportedAccounts.value[accountIndex].id = response.data.id
+            delete response.data.secret
+            twofaccounts.items.push(response.data)
         })
         .catch(error => {
             exportedAccounts.value[accountIndex].imported = 0
@@ -151,33 +161,13 @@
      * Generates a fresh OTP password and displays it
      */
     function previewAccount(accountIndex) {
-        mapAccountToForm(exportedAccounts.value[accountIndex])
-        .then(() => {
-            // this.$refs.OtpDisplayForAdvancedForm.$forceUpdate()
-            otpDisplay.value?.show()
+        form.fill(exportedAccounts.value[accountIndex])
+        showTwofaccountInModal.value = true
+
+        nextTick().then(() => {
+            otpDisplay.value.show()
         })
-
     }
-
-    /**
-     * Maps account field with the Form object
-     */
-    function mapAccountToForm(twofaccount) {
-        form.account = twofaccount.account
-        form.service = twofaccount.service
-        form.otp_type = twofaccount.otp_type
-        form.icon = twofaccount.icon
-        form.secret = twofaccount.secret
-        form.algorithm = twofaccount.algorithm
-        form.digits = twofaccount.digits
-        form.counter = twofaccount.otp_type === 'hotp' ? twofaccount.counter : null
-        form.period = twofaccount.otp_type === 'totp' ? twofaccount.period : null
-    }
-
-    const fileForm = new Form({
-        file: null,
-        withSecret: true
-    })
 
     /**
      * Uploads the submitted file to the backend for parsing
@@ -204,11 +194,6 @@
         
         isFetching.value = false
     }
-
-    const qrcodeForm = new Form({
-        qrcode: null,
-        withSecret: true
-    })
 
     /**
      * Uploads the submitted QR code file to the backend for decoding

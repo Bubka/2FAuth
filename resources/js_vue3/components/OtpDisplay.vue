@@ -4,10 +4,12 @@
     import Dots from '@/components/Dots.vue'
     import twofaccountService from '@/services/twofaccountService'
     import { useUserStore } from '@/stores/user'
+    import { useNotifyStore } from '@/stores/notify'
     import { UseColorMode } from '@vueuse/components'
     import { useDisplayablePassword } from '@/composables/helpers'
 
     const user = useUserStore()
+    const notify = useNotifyStore()
     const $2fauth = inject('2fauth')
     const { copy, copied } = useClipboard({ legacy: true })
     
@@ -29,17 +31,17 @@
 
     const id = ref(null)
     const uri = ref(null)
-    const otpauthParams = reactive({
-        otp_type : String,
-        account : String,
-        service : String,
-        icon : String,
-        secret : String,
-        digits : Number,
-        algorithm : String,
+    const otpauthParams = ref({
+        otp_type : '',
+        account : '',
+        service : '',
+        icon : '',
+        secret : '',
+        digits : null,
+        algorithm : '',
         period : null,
         counter : null,
-        image : String
+        image : ''
     })
     const password = ref('')
     const generated_at = ref(null)
@@ -66,16 +68,15 @@
         //   Case 3 : When user uses the Advanced form and preview the account: We should have all OTP parameter
         //     to obtain an otp, including Secret and otp_type which are required
 
-        otpauthParams.otp_type = props.otp_type
-        otpauthParams.account = props.account
-        otpauthParams.service = props.service
-        otpauthParams.icon = props.icon
-        otpauthParams.secret = props.secret
-        otpauthParams.digits = props.digits
-        otpauthParams.algorithm = props.algorithm
-        otpauthParams.period = props.period
-        otpauthParams.counter = props.counter
-
+        otpauthParams.value.otp_type = props.otp_type
+        otpauthParams.value.account = props.account
+        otpauthParams.value.service = props.service
+        otpauthParams.value.icon = props.icon
+        otpauthParams.value.secret = props.secret
+        otpauthParams.value.digits = props.digits
+        otpauthParams.value.algorithm = props.algorithm
+        otpauthParams.value.period = props.period
+        otpauthParams.value.counter = props.counter
         setLoadingState()
 
         // Case 1
@@ -83,25 +84,25 @@
             id.value = accountId
             const { data } = await twofaccountService.get(id.value)
 
-            otpauthParams.service = data.service
-            otpauthParams.account = data.account
-            otpauthParams.icon = data.icon
-            otpauthParams.otp_type = data.otp_type
+            otpauthParams.value.service = data.service
+            otpauthParams.value.account = data.account
+            otpauthParams.value.icon = data.icon
+            otpauthParams.value.otp_type = data.otp_type
 
             if( isHMacBased(data.otp_type) && data.counter ) {
-                otpauthParams.counter = data.counter
+                otpauthParams.value.counter = data.counter
             }
         }
         // Case 2
         else if(props.uri) {
             uri.value = props.uri
-            otpauthParams.otp_type = props.uri.slice(0, 15 ).toLowerCase() === "otpauth://totp/" ? 'totp' : 'hotp'
+            otpauthParams.value.otp_type = props.uri.slice(0, 15 ).toLowerCase() === "otpauth://totp/" ? 'totp' : 'hotp'
         }
         // Case 3
         else if (! props.secret) {
             notify.error(new Error(trans('errors.cannot_create_otp_without_secret')))
         }
-        else if (! isTimeBased(otpauthParams.otp_type) && ! isHMacBased(otpauthParams.otp_type)) {
+        else if (! isTimeBased(otpauthParams.value.otp_type) && ! isHMacBased(otpauthParams.value.otp_type)) {
             notify.error(new Error(trans('errors.not_a_supported_otp_type')))
         }
 
@@ -120,7 +121,7 @@
     async function getOtp() {
         setLoadingState()
 
-        getOtpPromise().then(response => {
+        await getOtpPromise().then(response => {
             let otp = response.data
             password.value = otp.password
 
@@ -130,7 +131,7 @@
 
             if (isTimeBased(otp.otp_type)) {
                 generated_at.value = otp.generated_at
-                otpauthParams.period = otp.period
+                otpauthParams.value.period = otp.period
                 hasTOTP.value = true
 
                 nextTick().then(() => {
@@ -138,7 +139,7 @@
                 })
             }
             else if (isHMacBased(otp.otp_type)) {
-                otpauthParams.counter = otp.counter
+                otpauthParams.value.counter = otp.counter
 
                 // returned counter & uri are incremented
                 emit('increment-hotp', { nextHotpCounter: otp.counter, nextUri: otp.uri })
@@ -148,7 +149,8 @@
             if (error.response.status === 422) {
                 emit('validation-error', error.response)
             }
-            throw error
+            console.log(error)
+            //throw error
         })
         .finally(() => {
             showInlineSpinner.value = false
@@ -174,7 +176,7 @@
             return twofaccountService.getOtpByUri(uri.value)
         }
         else {
-            return twofaccountService.getOtpByParams(otpauthParams)
+            return twofaccountService.getOtpByParams(otpauthParams.value)
         }
     }
 
@@ -182,8 +184,8 @@
      * Reset component's refs
      */
     function clearOTP() {
-        id.value = otpauthParams.counter = generated_at.value = null
-        otpauthParams.service = otpauthParams.account = otpauthParams.icon = otpauthParams.otp_type = otpauthParams.secret = ''
+        id.value = otpauthParams.value.counter = generated_at.value = null
+        otpauthParams.value.service = otpauthParams.value.account = otpauthParams.value.icon = otpauthParams.value.otp_type = otpauthParams.value.secret = ''
         password.value = '... ...'
         hasTOTP.value = false
 
