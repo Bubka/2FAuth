@@ -10,7 +10,7 @@
     })
     const destinationGroupId = ref(null)
 
-    const emit = defineEmits(['update:showDestinationGroupSelector, accounts-moved'])
+    const emit = defineEmits(['update:showDestinationGroupSelector', 'accounts-moved'])
 
     /**
      * Move accounts selected from the Edit mode to another group or withdraw them

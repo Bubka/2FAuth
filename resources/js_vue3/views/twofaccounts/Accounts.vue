@@ -72,6 +72,8 @@
         // we fetch the accounts again to prevent the js collection being
         // desynchronize from the backend php collection
         twofaccounts.fetch()
+        twofaccounts.selectNone()
+        showDestinationGroupSelector.value = false
         notify.success({ text: trans('twofaccounts.accounts_moved') })
     }
 
@@ -224,7 +226,8 @@
             v-if="showDestinationGroupSelector"
             v-model:showDestinationGroupSelector="showDestinationGroupSelector"
             v-model:selectedAccountsIds="twofaccounts.selectedIds"
-            @account-moved="postGroupAssignementUpdate">
+            :groups="groups.items"
+            @accounts-moved="postGroupAssignementUpdate">
         </DestinationGroupSelector>
         <!-- header -->
         <div class="header" v-if="showAccounts || showGroupSwitch">
