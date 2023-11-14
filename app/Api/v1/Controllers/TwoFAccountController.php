@@ -148,8 +148,12 @@ class TwoFAccountController extends Controller
         $this->authorize('updateEach', [new TwoFAccount(), $twofaccounts]);
 
         TwoFAccount::setNewOrder($validated['orderedIds']);
+        $orderedIds = $request->user()->twofaccounts->sortBy('order_column')->pluck('id');
 
-        return response()->json(['message' => 'order saved'], 200);
+        return response()->json([
+            'message' => 'order saved',
+            'orderedIds' => $orderedIds
+        ], 200);
     }
 
     /**

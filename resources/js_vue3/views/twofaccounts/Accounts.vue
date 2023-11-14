@@ -16,7 +16,7 @@
     import { useGroups } from '@/stores/groups'
     import { useAppSettingsStore } from '@/stores/appSettings'
     import { useDisplayablePassword } from '@/composables/helpers'
-    import { vDraggable } from 'vue-draggable-plus'
+    import { useSortable, moveArrayElement } from '@vueuse/integrations/useSortable'
 
     const $2fauth = inject('2fauth')
     const router = useRouter()
@@ -39,11 +39,33 @@
     const looperRefs = ref([])
     const dotsRefs = ref([])
 
+    let stopSortable
+
     watch(showOtpInModal, (val) => {
         if (val == false) {
             otpDisplay.value?.clearOTP()
         }
     })
+
+    watch(
+        () => twofaccounts.items,
+        (val) => {
+            stopSortable
+            if (bus.inManagementMode) {
+                setSortable()
+            }
+        }
+    )
+
+    watch(
+        () => bus.inManagementMode,
+        (val) => {
+            stopSortable
+            if (val) {
+                setSortable()
+            }
+        }
+    )
 
     /**
      * Returns whether or not the accounts should be displayed
@@ -64,6 +86,24 @@
         })
         groups.fetch()
     })
+
+    // Enables the sortable behaviour of the twofaccounts list
+    function setSortable() {
+        const { stop } = useSortable('#dv', twofaccounts.filtered, {
+            animation: 200,
+            handle: '.drag-handle',
+            onUpdate: (e) => {
+                const movedId = twofaccounts.filtered[e.oldIndex].id
+                const inItemsIndex = twofaccounts.items.findIndex(item => item.id == movedId)
+                moveArrayElement(twofaccounts.items, inItemsIndex, e.newIndex)
+
+                nextTick(() => {
+                    twofaccounts.saveOrder()
+                })
+            }
+        })
+        stopSortable = stop
+    }
 
     /**
      * Runs some updates after accounts assignement/withdrawal
@@ -284,16 +324,7 @@
         <div class="container" v-if="showAccounts" :class="bus.inManagementMode ? 'is-edit-mode' : ''">
             <!-- accounts -->
             <div class="accounts">
-                <span class="columns is-multiline" :class="{ 'is-centered': user.preferences.displayMode === 'grid' }" v-draggable="[
-                    twofaccounts.filtered,
-                    {
-                        animation: 150,
-                        ghostClass: 'ghost',
-                        handle: '.tfa-dots',
-                        onEnd,
-                        onStart
-                    }
-                ]">
+                <span id="dv" class="columns is-multiline" :class="{ 'is-centered': user.preferences.displayMode === 'grid' }">
                     <div :class="[user.preferences.displayMode === 'grid' ? 'tfa-grid' : 'tfa-list']" class="column is-narrow" v-for="account in twofaccounts.filtered" :key="account.id">
                         <div class="tfa-container">
                             <transition name="slideCheckbox">
@@ -345,7 +376,7 @@
                                 </div>
                             </transition>
                             <transition name="fadeInOut">
-                                <div class="tfa-cell tfa-dots has-text-grey" v-if="bus.inManagementMode">
+                                <div class="drag-handle tfa-cell tfa-dots has-text-grey" v-if="bus.inManagementMode">
                                     <FontAwesomeIcon :icon="['fas', 'bars']" />
                                 </div>
                             </transition>
@@ -378,10 +409,3 @@
         </span>
     </div>
 </template>
-
-<style scoped>
-    .ghost {
-        opacity: 1;
-        /*background: hsl(0, 0%, 21%);*/
-    }
-</style>
