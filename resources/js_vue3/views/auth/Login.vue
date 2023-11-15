@@ -29,8 +29,8 @@
     function LegacysignIn(e) {
         notify.clear()
         form.post('/user/login', {returnError: true})
-        .then(response => {
-            user.loginAs({
+        .then(async (response) => {
+            await user.loginAs({
                 name: response.data.name,
                 email: response.data.email,
                 preferences: response.data.preferences,
