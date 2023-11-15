@@ -12,6 +12,7 @@
     const notify = useNotifyStore()
     const $2fauth = inject('2fauth')
     const { copy, copied } = useClipboard({ legacy: true })
+    const route = useRoute()
     
     const emit = defineEmits(['please-close-me', 'increment-hotp', 'validation-error'])
     const props = defineProps({
@@ -211,7 +212,7 @@
         copy(otp.replace(/ /g, ''))
 
         if (copied) {
-            if(user.preferences.kickUserAfter == -1 && (permit_closing || false) === true) {
+            if(user.preferences.kickUserAfter == -1 && (permit_closing || false) === true && route.name != 'importAccounts') {
                 user.logout({ kicked: true})
             }
             else if(user.preferences.closeOtpOnCopy && (permit_closing || false) === true) {
