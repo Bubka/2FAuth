@@ -1,25 +1,28 @@
 import authService from '@/services/authService'
 
-export default async function authGuard({ to, next, stores }) {
+export default async function authGuard({ to, next, nextMiddleware, stores }) {
     const { user } = stores
 
     // No authenticated user on the front-end side, we try to
     // get an active user from the back-end side
     if (! user.isAuthenticated) {
-        const currentUser = await authService.getCurrentUser()
-        if (currentUser) {
+        await authService.getCurrentUser({ returnError: true }).then(async (response) => {
+            const currentUser = response.data
             await user.loginAs({
                 name: currentUser.name,
                 email: currentUser.email,
                 preferences: currentUser.preferences,
                 isAdmin: currentUser.is_admin,
             })
-        }
+        })
+        .catch(error => {
+            // nothing to do
+        })
     }
 
     if (! user.isAuthenticated) {
         next({ name: 'login' })
     } else {
-        next()
+        nextMiddleware()
     }
 }

@@ -1,12 +1,12 @@
-export default function middlewarePipeline(context, middleware, index) {
-    const nextMiddleware = middleware[index];
+export default function middlewarePipeline(context, middlewares, index) {
+    const nextMiddleware = middlewares[index];
     if (!nextMiddleware) {
         return context.next;
     }
     return () => {
         nextMiddleware({
             ...context,
-            next: middlewarePipeline(context, middleware, index + 1),
+            nextMiddleware: middlewarePipeline(context, middlewares, index + 1),
         });
     };
 }

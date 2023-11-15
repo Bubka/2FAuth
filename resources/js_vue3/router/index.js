@@ -14,7 +14,7 @@ const router = createRouter({
 		{ path: '/start', name: 'start', component: () => import('../views/Start.vue'), meta: { middlewares: [authGuard, setReturnTo] } },
         { path: '/capture', name: 'capture', component: () => import('../views/twofaccounts/Capture.vue'), meta: { middlewares: [authGuard, setReturnTo] } },
 
-        { path: '/accounts', name: 'accounts', component: () => import('../views/twofaccounts/Accounts.vue'), meta: { middlewares: [authGuard, setReturnTo, starter] }, alias: '/' },
+        { path: '/accounts', name: 'accounts', component: () => import('../views/twofaccounts/Accounts.vue'), meta: { middlewares: [authGuard, starter, setReturnTo] }, alias: '/' },
         { path: '/account/create', name: 'createAccount', component: () => import('../views/twofaccounts/CreateUpdate.vue'), meta: { middlewares: [authGuard, setReturnTo] } },
         { path: '/account/import', name: 'importAccounts', component: () => import('../views/twofaccounts/Import.vue'), meta: { middlewares: [authGuard, setReturnTo] } },
         { path: '/account/:twofaccountId/edit', name: 'editAccount', component: () => import('../views/twofaccounts/CreateUpdate.vue'), meta: { middlewares: [authGuard, setReturnTo] }, props: true },
@@ -49,7 +49,8 @@ router.beforeEach((to, from, next) => {
     const user = useUserStore()
     const twofaccounts = useTwofaccounts()
     const stores = { user: user, twofaccounts: twofaccounts }
-    const context = { to, from, next, stores }
+    const nextMiddleware = {}
+    const context = { to, from, next, nextMiddleware, stores }
 
     if (!middlewares) {
         return next();
@@ -57,7 +58,7 @@ router.beforeEach((to, from, next) => {
 
     middlewares[0]({
         ...context,
-        next: middlewarePipeline(context, middlewares, 1),
+        nextMiddleware: middlewarePipeline(context, middlewares, 1),
     });
 })
 

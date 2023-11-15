@@ -2,7 +2,7 @@
  * Allows an authenticated user to access the main view only if he owns at least one twofaccount.
  * Push to the starter view otherwise.
  */
-export default function starter({ to, next, stores }) {
+export default function starter({ to, next, nextMiddleware, stores }) {
     const { twofaccounts } = stores
 
     if (twofaccounts.isEmpty) {
@@ -10,8 +10,8 @@ export default function starter({ to, next, stores }) {
             if (twofaccounts.isEmpty) {
                 next({ name: 'start' })
             }
-            else next()
+            else nextMiddleware()
         })
     }
-    else next()
+    else nextMiddleware()
 }

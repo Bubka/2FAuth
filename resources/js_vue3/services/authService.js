@@ -14,13 +14,8 @@ export default {
     /**
      * 
      */
-    async getCurrentUser() {
-        try {
-            const { data } = await apiClient.get('/user')
-            return data
-        } catch (error) {
-            return null
-        }
+    async getCurrentUser(config = {}) {
+        return apiClient.get('/user', { ...config })
     },
     
 }
