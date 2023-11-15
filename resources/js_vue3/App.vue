@@ -36,7 +36,7 @@
     function protectedRoute(route) {
         let bool = false
         route.meta.middlewares?.forEach(func => {
-            if (func instanceof Function && func.name == 'auth') {
+            if (func instanceof Function && func.name == 'authGuard') {
                 bool = true
                 return
             }

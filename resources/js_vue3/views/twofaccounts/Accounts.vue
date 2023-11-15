@@ -166,7 +166,7 @@
 
         if (copied) {
             if(user.preferences.kickUserAfter == -1) {
-                user.logout()
+                user.logout({ kicked: true})
             }
             notify.success({ text: trans('commons.copied_to_clipboard') })
         }

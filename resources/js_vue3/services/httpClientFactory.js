@@ -78,7 +78,7 @@ export const httpClientFactory = (endpoint = 'api') => {
             // We catch the 418 response and log the user out
             if (error.response.status === 418) {
                 const user = useUserStore()
-                user.logout()
+                user.logout({ kicked: true})
             }
 
             useNotifyStore().error(error)

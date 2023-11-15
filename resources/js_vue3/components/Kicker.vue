@@ -42,11 +42,12 @@
         // }, 1000);
     }
 
+    // Triggers the user logout
     function logoutUser() {
         clearTimeout(logoutTimer.value)
         console.log('inativity detected, user kicked out')
 
-        user.logout()
+        user.logout({ kicked: true})
     }
 
     function resetTimer() {

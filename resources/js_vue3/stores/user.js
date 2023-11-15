@@ -4,6 +4,7 @@ import router from '@/router'
 import { useColorMode } from '@vueuse/core'
 import { useTwofaccounts } from '@/stores/twofaccounts'
 import { useGroups } from '@/stores/groups'
+import { useNotifyStore } from '@/stores/notify'
 
 export const useUserStore = defineStore({
     id: 'user',
@@ -55,7 +56,9 @@ export const useUserStore = defineStore({
         /**
          * Logs the user out or moves to proxy logout url
          */
-        logout() {
+        logout(options = {}) {
+            const { kicked } = options
+
             // async appLogout(evt) {
             if (this.$2fauth.config.proxyAuth) {
                 if (this.$2fauth.config.proxyLogoutUrl) {
@@ -66,11 +69,13 @@ export const useUserStore = defineStore({
             else {
                 return authService.logout().then(() => {
                     this.reset()
+                    if (kicked) {
+                        const notify = useNotifyStore()
+                        notify.clear()
+                        notify.warn({ text: trans('auth.autolock_triggered_punchline'), duration:-1 })
+                    }
                 })
-
-                // this.$router.push({ name: 'login', params: { forceRefresh: true } })
             }
-            // },
         },
 
         /**

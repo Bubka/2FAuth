@@ -212,7 +212,7 @@
 
         if (copied) {
             if(user.preferences.kickUserAfter == -1 && (permit_closing || false) === true) {
-                user.logout()
+                user.logout({ kicked: true})
             }
             else if(user.preferences.closeOtpOnCopy && (permit_closing || false) === true) {
                 emit("please-close-me");
