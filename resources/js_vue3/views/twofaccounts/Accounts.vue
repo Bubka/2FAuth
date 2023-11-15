@@ -36,6 +36,12 @@
     const isRenewingOTPs = ref(false)
 
     const otpDisplay = ref(null)
+    const otpDisplayProps = ref({
+        otp_type: '',
+        account : '',
+        service : '',
+        icon : '',
+    })
     const looperRefs = ref([])
     const dotsRefs = ref([])
 
@@ -126,8 +132,17 @@
             twofaccounts.select(account.id)
         }
         else {
-            showOtpInModal.value = true
-            otpDisplay.value.show(account.id);
+            // Data that should be displayed quickly by the OtpDisplay
+            // component are passed using props.
+            otpDisplayProps.value.otp_type = account.otp_type
+            otpDisplayProps.value.service = account.service
+            otpDisplayProps.value.account = account.account
+            otpDisplayProps.value.icon = account.icon
+
+            nextTick().then(() => {
+                showOtpInModal.value = true
+                otpDisplay.value.show(account.id);
+            })
         }
     }
 
@@ -317,6 +332,7 @@
         <Modal v-model="showOtpInModal">
             <OtpDisplay
                 ref="otpDisplay"
+                v-bind="otpDisplayProps"
                 @please-close-me="showOtpInModal = false">
             </OtpDisplay>
         </Modal>
