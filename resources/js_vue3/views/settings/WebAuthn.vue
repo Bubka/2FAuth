@@ -38,7 +38,7 @@
         }
 
         webauthnService.register().then((response) => {
-            router.push({ name: 'settings.webauthn.editCredential', params: { credentialId: JSON.parse(response.config.data).id, name: trans('auth.webauthn.my_device') } })
+            router.push({ name: 'settings.webauthn.editCredential', params: { credentialId: JSON.parse(response.config.data).id } })
         })
         .catch(error => {
             if ('webauthn' in error) {
