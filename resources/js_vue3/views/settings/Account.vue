@@ -132,7 +132,7 @@
                         {{ $t('auth.forms.delete_your_account_and_reset_all_data')}}
                     </div>
                     <fieldset :disabled="$2fauth.config.proxyAuth">
-                        <FormField v-model="formDelete.password" fieldName="password" :fieldError="formDelete.errors.get('password')" inputType="password" :autocomplete="'off'" label="auth.forms.current_password.label" help="auth.forms.current_password.help" />
+                        <FormField v-model="formDelete.password" fieldName="password" :fieldError="formDelete.errors.get('password')" inputType="password" autocomplete="new-password" label="auth.forms.current_password.label" help="auth.forms.current_password.help" />
                         <FormButtons :isBusy="formDelete.isBusy" caption="auth.forms.delete_your_account" submitId="btnDeleteAccount" color="is-danger" />
                     </fieldset>
                 </form>
