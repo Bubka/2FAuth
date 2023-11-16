@@ -26,6 +26,7 @@
 import { httpClientFactory } from '@/services/httpClientFactory'
 import { webauthnAbortService } from '@/services/webauthn/webauthnAbortService'
 import { identifyRegistrationError }  from '@/services/webauthn/identifyRegistrationError'
+import { identifyAuthenticationError }  from '@/services/webauthn/identifyAuthenticationError'
 
 const webClient = httpClientFactory('web')
 
@@ -72,6 +73,43 @@ class WebauthnService {
         const publicKeyCredential = WebauthnService.parseOutgoingCredentials(bufferedCredentials);
 
         return webClient.post('/webauthn/register', publicKeyCredential, {returnError: true})
+    }
+
+
+    async authenticate(email) {
+
+        // Check https context
+        if (!window.isSecureContext) {
+            err.message = 'errors.https_required'
+            return Promise.reject(err)
+        }
+
+        // Check browser support
+        if (! WebauthnService.supportsWebAuthn) {
+            err.message = 'errors.browser_does_not_support_webauthn'
+            return Promise.reject(err)
+        }
+
+        const loginOptions = await webClient.post('/webauthn/login/options', { email: email }).then(response => response.data)
+        const publicKey = WebauthnService.parseIncomingServerOptions(loginOptions)
+
+        let options = { publicKey }
+        options.signal = webauthnAbortService.createNewAbortSignal()
+
+        const credentials = await navigator.credentials.get(options)
+        .catch(error => {
+            const webauthnError = identifyAuthenticationError(error, options)
+            return Promise.reject({
+                webauthn: true,
+                type: webauthnError.type,
+                message: webauthnError.phrase
+            })
+        })
+
+        let publicKeyCredential = WebauthnService.parseOutgoingCredentials(credentials)
+        publicKeyCredential.email = email
+
+        return webClient.post('/webauthn/login', publicKeyCredential, {returnError: true})
     }
 
     /**

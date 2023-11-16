@@ -3,6 +3,7 @@
     import { useUserStore } from '@/stores/user'
     import { useNotifyStore } from '@/stores/notify'
     import { useAppSettingsStore } from '@/stores/appSettings'
+    import { webauthnService } from '@/services/webauthn/webauthnService'
 
     const $2fauth = inject('2fauth')
     const router = useRouter()
@@ -10,16 +11,17 @@
     const notify = useNotifyStore()
     const appSettings = useAppSettingsStore()
     const showWebauthnForm = user.preferences.useWebauthnOnly ? true : useStorage($2fauth.prefix + 'showWebauthnForm', false) 
-    const formData = {
+    const form = reactive(new Form({
         email: '',
         password: ''
-    }
-    const form = reactive(new Form(formData))
+    }))
+    const isBusy = ref(false)
 
     /**
      * Toggle the form between legacy and webauthn method
      */
     function toggleForm() {
+        form.clear()
         showWebauthnForm.value = ! showWebauthnForm.value
     }
 
@@ -28,8 +30,8 @@
      */
     function LegacysignIn(e) {
         notify.clear()
-        form.post('/user/login', {returnError: true})
-        .then(async (response) => {
+
+        form.post('/user/login', {returnError: true}).then(async (response) => {
             await user.loginAs({
                 name: response.data.name,
                 email: response.data.email,
@@ -49,6 +51,46 @@
         })
     }
 
+    /**
+     * Sign in using webauthn
+     */
+    function webauthnLogin() {
+        notify.clear()
+        form.clear()
+        isBusy.value = true
+
+        webauthnService.authenticate(form.email).then(async (response) => {
+            await user.loginAs({
+                name: response.data.name,
+                email: response.data.email,
+                preferences: response.data.preferences,
+                isAdmin: response.data.is_admin,
+            })
+
+            router.push({ name: 'accounts' })
+        })
+        .catch(error => {
+            if ('webauthn' in error) {
+                if (error.name == 'is-warning') {
+                    notify.warn({ text: trans(error.message) })
+                }
+                else notify.alert({ text: trans(error.message) })
+            }
+            else if( error.response.status === 401 ) {
+                notify.alert({text: trans('auth.forms.authentication_failed'), duration: 10000 })
+            }
+            else if( error.response.status == 422 ) {
+                form.errors.set(form.extractErrors(error.response))
+            }
+            else {
+                notify.error(error)
+            }
+        })
+        .finally(() => {
+            isBusy.value = false
+        })
+    }
+
 </script>
 
 <template>
@@ -59,7 +101,7 @@
         </div>
         <form id="frmWebauthnLogin" @submit.prevent="webauthnLogin" @keydown="form.onKeydown($event)">
             <FormField v-model="form.email" fieldName="email" :fieldError="form.errors.get('email')" inputType="email" label="auth.forms.email" autofocus />
-            <FormButtons :isBusy="form.isBusy" caption="commons.continue" submitId="btnContinue"/>
+            <FormButtons :isBusy="isBusy" caption="commons.continue" submitId="btnContinue"/>
         </form>
         <div class="nav-links">
             <p>
