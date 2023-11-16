@@ -73,6 +73,12 @@
                     {{ $t('auth.login_and_password') }}
                 </a>
             </p>
+            <p v-if="appSettings.disableRegistration == false" class="mt-4">
+                {{ $t('auth.forms.dont_have_account_yet') }}&nbsp;
+                <RouterLink id="lnkRegister" :to="{ name: 'register' }" class="is-link">
+                    {{ $t('auth.register') }}
+                </RouterLink>
+            </p>
         </div>
     </FormWrapper>
     <!-- login/password legacy form -->

@@ -2,10 +2,12 @@ import { createRouter, createWebHistory } from 'vue-router'
 import middlewarePipeline from "@/router/middlewarePipeline";
 import { useUserStore } from '@/stores/user'
 import { useTwofaccounts } from '@/stores/twofaccounts'
+import { useAppSettingsStore } from '@/stores/appSettings'
 
 import authGuard    from './middlewares/authGuard'
 import starter      from './middlewares/starter'
 import noEmptyError from './middlewares/noEmptyError'
+import noRegistration from './middlewares/noRegistration'
 import setReturnTo  from './middlewares/setReturnTo'
 
 const router = createRouter({
@@ -31,7 +33,7 @@ const router = createRouter({
         { path: '/settings/webauthn', name: 'settings.webauthn.devices', component: () => import('../views/settings/WebAuthn.vue'), meta: { middlewares: [authGuard], showAbout: true } },
 
         { path: '/login', name: 'login', component: () => import('../views/auth/Login.vue'), meta: { middlewares: [setReturnTo], disabledWithAuthProxy: true, showAbout: true } },
-        { path: '/register', name: 'register', component: () => import('../views/auth/Register.vue'), meta: { middlewares: [setReturnTo], disabledWithAuthProxy: true, showAbout: true } },
+        { path: '/register', name: 'register', component: () => import('../views/auth/Register.vue'), meta: { middlewares: [noRegistration, setReturnTo], disabledWithAuthProxy: true, showAbout: true } },
         { path: '/password/request', name: 'password.request', component: () => import('../views/auth/RequestReset.vue'), meta: { middlewares: [setReturnTo], disabledWithAuthProxy: true, showAbout: true } },
         { path: '/user/password/reset', name: 'password.reset', component: () => import('../views/auth/password/Reset.vue'), meta: { middlewares: [setReturnTo], disabledWithAuthProxy: true, showAbout: true } },
         { path: '/webauthn/lost', name: 'webauthn.lost', component: () => import('../views/auth/RequestReset.vue'), meta: { middlewares: [setReturnTo], disabledWithAuthProxy: true, showAbout: true } },
@@ -48,7 +50,8 @@ router.beforeEach((to, from, next) => {
     const middlewares = to.meta.middlewares
     const user = useUserStore()
     const twofaccounts = useTwofaccounts()
-    const stores = { user: user, twofaccounts: twofaccounts }
+    const appSettings = useAppSettingsStore()
+    const stores = { user: user, twofaccounts: twofaccounts, appSettings: appSettings }
     const nextMiddleware = {}
     const context = { to, from, next, nextMiddleware, stores }
 
