@@ -85,7 +85,7 @@
     appSettings.$subscribe((mutation) => {
         if (mutation.type == 'patch object') {
             for (const property in mutation.payload) {
-                appSettingService.update(property, mutation.payload[property].value).then(response => {
+                appSettingService.update(property, mutation.payload[property]).then(response => {
                     useNotifyStore().success({ type: 'is-success', text: trans('settings.forms.setting_saved') })
                 })
             }
@@ -173,12 +173,12 @@
                         <h4 class="title is-4 pt-4 has-text-grey-light">{{ $t('settings.administration') }}</h4>
                         <div class="is-size-7-mobile block" v-html="$t('settings.administration_legend')"></div>
                         <!-- Check for update -->
-                        <FormCheckbox v-model="appSettings.checkForUpdate" @update:modelValue="(val) => appSettings.$patch({checkForUpdate: val})" fieldName="checkForUpdate" label="commons.check_for_update" help="commons.check_for_update_help" />
+                        <FormCheckbox :model-value="appSettings.checkForUpdate" @update:modelValue="(val) => appSettings.$patch({checkForUpdate: val})" fieldName="checkForUpdate" label="commons.check_for_update" help="commons.check_for_update_help" />
                         <VersionChecker />
                         <!-- protect db -->
-                        <FormCheckbox v-model="appSettings.useEncryption" @update:modelValue="(val) => appSettings.$patch({useEncryption: val})" fieldName="useEncryption" label="settings.forms.use_encryption.label" help="settings.forms.use_encryption.help" />
+                        <FormCheckbox :model-value="appSettings.useEncryption" @update:modelValue="(val) => appSettings.$patch({useEncryption: val})" fieldName="useEncryption" label="settings.forms.use_encryption.label" help="settings.forms.use_encryption.help" />
                         <!-- disable registration -->
-                        <FormCheckbox v-model="appSettings.disableRegistration" @update:modelValue="(val) => appSettings.$patch({disableRegistration: val})" fieldName="disableRegistration" label="settings.forms.disable_registration.label" help="settings.forms.disable_registration.help" />
+                        <FormCheckbox :model-value="appSettings.disableRegistration" @update:modelValue="(val) => appSettings.$patch({disableRegistration: val})" fieldName="disableRegistration" label="settings.forms.disable_registration.label" help="settings.forms.disable_registration.help" />
                     </div>
                 </form>
             </FormWrapper>
