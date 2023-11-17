@@ -4,6 +4,7 @@
     import FormLockField from '@/components/formelements/FormLockField.vue'
     import twofaccountService from '@/services/twofaccountService'
     import { useUserStore } from '@/stores/user'
+    import { useTwofaccounts } from '@/stores/twofaccounts'
     import { useBusStore } from '@/stores/bus'
     import { useNotifyStore } from '@/stores/notify'
     import { UseColorMode } from '@vueuse/components'
@@ -13,6 +14,7 @@
     const router = useRouter()
     const route = useRoute()
     const user = useUserStore()
+    const twofaccounts = useTwofaccounts()
     const bus = useBusStore()
     const notify = useNotifyStore()
     const form = reactive(new Form({
@@ -147,9 +149,10 @@
         // set current temp icon as account icon
         form.icon = tempIcon.value
 
-        await form.post('/api/v1/twofaccounts')
+        const { data } = await form.post('/api/v1/twofaccounts')
 
         if (form.errors.any() === false) {
+            twofaccounts.items.push(data)
             notify.success({ text: trans('twofaccounts.account_created') })
             router.push({ name: 'accounts' });
         }
@@ -170,9 +173,12 @@
             deleteIcon()
         }
 
-        await form.put('/api/v1/twofaccounts/' + props.twofaccountId)
+        const { data } = await form.put('/api/v1/twofaccounts/' + props.twofaccountId)
 
         if( form.errors.any() === false ) {
+            const index = twofaccounts.items.findIndex(acc => acc.id === data.id)
+            twofaccounts.items.splice(index, 1, data)
+
             notify.success({ text: trans('twofaccounts.account_updated') })
             router.push({ name: 'accounts' })
         }
