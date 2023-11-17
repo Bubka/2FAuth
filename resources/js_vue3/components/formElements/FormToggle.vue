@@ -26,7 +26,7 @@
     })
 
     // defines what events our component emits
-    const emit = defineEmits('update:modelValue')
+    const emit = defineEmits(['update:modelValue'])
 
     function setRadio(event) {
         emit('update:modelValue', event)
