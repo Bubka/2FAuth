@@ -427,7 +427,7 @@
                 <!-- service -->
                 <FormField v-model="form.service" fieldName="service" :fieldError="form.errors.get('email')" :isDisabled="form.otp_type === 'steamtotp'" label="twofaccounts.service" :placeholder="$t('twofaccounts.forms.service.placeholder')" autofocus />
                 <!-- account -->
-                <FormField v-model="form.account" fieldName="account" :fieldError="form.errors.get('account')" :isDisabled="form.otp_type === 'steamtotp'" label="twofaccounts.account" :placeholder="$t('twofaccounts.forms.account.placeholder')" />
+                <FormField v-model="form.account" fieldName="account" :fieldError="form.errors.get('account')" label="twofaccounts.account" :placeholder="$t('twofaccounts.forms.account.placeholder')" />
                 <!-- icon upload -->
                 <label class="label">{{ $t('twofaccounts.icon') }}</label>
                 <div class="field is-grouped">
