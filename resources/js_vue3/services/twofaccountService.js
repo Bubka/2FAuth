@@ -3,12 +3,12 @@ import { httpClientFactory } from '@/services/httpClientFactory'
 const apiClient = httpClientFactory('api')
 
 export default {
-    getAll(withOtp = false) {
-        return apiClient.get('/twofaccounts' + (withOtp ? '?withOtp=1' : ''))
+    getAll(withOtp = false, config = {}) {
+        return apiClient.get('/twofaccounts' + (withOtp ? '?withOtp=1' : ''), { ...config })
     },
 
-    getByIds(ids, withOtp = false) {
-        return apiClient.get('/twofaccounts?ids=' + ids + (withOtp ? '&withOtp=1' : ''))
+    getByIds(ids, withOtp = false, config = {}) {
+        return apiClient.get('/twofaccounts?ids=' + ids + (withOtp ? '&withOtp=1' : ''), { ...config })
     },
 
     get(id, config = {}) {

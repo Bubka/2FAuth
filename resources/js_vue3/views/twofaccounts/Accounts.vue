@@ -32,9 +32,8 @@
     const showGroupSwitch = ref(false)
     const showDestinationGroupSelector = ref(false)
     const isDragging = ref(false)
-    const stepIndexesCache = ref({})
     const isRenewingOTPs = ref(false)
-    const renewedOTPs = ref(null)
+    const renewedPeriod = ref(null)
 
     const otpDisplay = ref(null)
     const otpDisplayProps = ref({
@@ -85,12 +84,17 @@
         // This SFC is reached only if the user has some twofaccounts (see the starter middleware).
         // This allows to display accounts without latency.
         //
-        // We sync the store with the backend again to 
-        twofaccounts.fetch().then(() => {
-            if (twofaccounts.backendWasNewer) {
-                notify.info({ text: trans('commons.data_refreshed_to_reflect_server_changes'), duration: 10000 })
-            }
-        })
+        // We sync the store with the backend again to
+        if (! user.preferences.getOtpOnRequest) {
+            updateTotps()
+        }
+        else {
+            twofaccounts.fetch().then(() => {
+                if (twofaccounts.backendWasNewer) {
+                    notify.info({ text: trans('commons.data_refreshed_to_reflect_server_changes'), duration: 10000 })
+                }
+            })
+        }
         groups.fetch()
     })
 
@@ -207,59 +211,69 @@
         twofaccounts.saveOrder()
     }
 
-    
-    /**
-     * Turns dots On at the current step and caches the state
-     */
-    function setCurrentStep(period, stepIndex) {
-        stepIndexesCache.value[period] = stepIndex
-        turnDotsOn(period, stepIndex)
-    }
-
-    /**
-     * Turns dots On at the cached step index
-     */
-     function turnDotsOnFromCache(period, stepIndex) {
-        if (stepIndexesCache.value[period] != undefined) {
-            turnDotsOn(period, stepIndexesCache.value[period])
-        }
-    }
-
     /**
      * Turns dots On for all dots components that match the provided period
      */
      function turnDotsOn(period, stepIndex) {
         dotsRefs.value
-            .filter((dots) => dots.props.period == period)
+            .filter((dots) => dots.props.period == period || period == undefined)
             .forEach((dot) => {
                 dot.turnOn(stepIndex)
         })
     }
 
     /**
-     * Updates "Always On" OTPs for all TOTP accounts with the given period and restarts loopers
+     * Turns dots Off for all dots components that match the provided period
+     */
+    function turnDotsOff(period) {
+        dotsRefs.value
+            .filter((dots) => dots.props.period == period || period == undefined)
+            .forEach((dot) => {
+                dot.turnOff()
+        })
+    }
+
+    /**
+     * Updates "Always On" OTPs for all TOTP accounts and (re)starts loopers
      */
     async function updateTotps(period) {
         isRenewingOTPs.value = true
-        renewedOTPs.value = period
-        
-        twofaccountService.getByIds(twofaccounts.accountIdsWithPeriod(period).join(','), true).then(response => {
+        turnDotsOff(period)
+        let fetchPromise
+
+        if (period == undefined) {
+            renewedPeriod.value = -1
+            fetchPromise = twofaccountService.getAll(true)
+        } else {
+            renewedPeriod.value = period
+            fetchPromise = twofaccountService.getByIds(twofaccounts.accountIdsWithPeriod(period).join(','), true)
+        }
+
+        fetchPromise.then(response => {
+            let generatedAt = 0
+
+            // twofaccounts OTP updates
             response.data.forEach((account) => {
                 const index = twofaccounts.items.findIndex(acc => acc.id === account.id)
-                twofaccounts.items[index].otp = account.otp
-                
-                looperRefs.value.forEach((looper) => {
-                    if (looper.props.period == period) {
-                        nextTick().then(() => {
-                            looper.startLoop(account.otp.generated_at)
-                        })
-                    }
-                })
+                if (twofaccounts.items[index] == undefined) {
+                    twofaccounts.items.push(account)
+                }
+                else twofaccounts.items[index].otp = account.otp
+                generatedAt = account.otp.generated_at
+            })
+
+            // Loopers restart at new timestamp
+            looperRefs.value.forEach((looper) => {
+                if (looper.props.period == period || period == undefined) {
+                    nextTick().then(() => {
+                        looper.startLoop(generatedAt)
+                    })
+                }
             })
         })
         .finally(() => {
             isRenewingOTPs.value = false
-            renewedOTPs.value = null
+            renewedPeriod.value = null
         })
     }
 
@@ -339,6 +353,20 @@
                 @please-close-me="showOtpInModal = false">
             </OtpDisplay>
         </Modal>
+        <!-- totp loopers -->
+        <span v-if="!user.preferences.getOtpOnRequest">
+            <TotpLooper
+                v-for="period in twofaccounts.periods"
+                :key="period.period"
+                :autostart="false"
+                :period="period.period"
+                :generated_at="period.generated_at"
+                v-on:loop-ended="updateTotps(period.period)"
+                v-on:loop-started="turnDotsOn(period.period, $event)"
+                v-on:stepped-up="turnDotsOn(period.period, $event)"
+                ref="looperRefs"
+            ></TotpLooper>
+        </span>
         <!-- show accounts list -->
         <div class="container" v-if="showAccounts" :class="bus.inManagementMode ? 'is-edit-mode' : ''">
             <!-- accounts -->
@@ -366,13 +394,17 @@
                             <transition name="popLater">
                                 <div v-show="user.preferences.getOtpOnRequest == false && !bus.inManagementMode" class="has-text-right">
                                     <span v-if="account.otp != undefined">
-                                        <span v-if="isRenewingOTPs == true && renewedOTPs == account.period" class="has-nowrap has-text-grey has-text-centered is-size-5">
+                                        <span v-if="isRenewingOTPs == true && (renewedPeriod == -1 || renewedPeriod == account.period)" class="has-nowrap has-text-grey has-text-centered is-size-5">
                                             <FontAwesomeIcon :icon="['fas', 'circle-notch']" spin />
                                         </span>
                                         <span v-else class="always-on-otp is-clickable has-nowrap has-text-grey is-size-5 ml-4" @click="copyToClipboard(account.otp.password)" @keyup.enter="copyToClipboard(account.otp.password)" :title="$t('commons.copy_to_clipboard')">
                                             {{ useDisplayablePassword(account.otp.password) }}
                                         </span>
-                                        <Dots v-if="account.otp_type.includes('totp')" @hook:mounted="turnDotsOnFromCache(account.period)" :class="'condensed'" ref="dotsRefs" :period="account.period" />
+                                        <Dots
+                                            v-if="account.otp_type.includes('totp')"
+                                            :class="'condensed'"
+                                            ref="dotsRefs"
+                                            :period="account.period" />
                                     </span>
                                     <span v-else>
                                         <!-- get hotp button -->
@@ -415,18 +447,5 @@
                 </ActionButtons>
             </VueFooter>
         </div>
-        <!-- totp loopers -->
-        <span v-if="!user.preferences.getOtpOnRequest">
-            <TotpLooper
-                v-for="period in twofaccounts.periods"
-                :key="period.period"
-                :period="period.period"
-                :generated_at="period.generated_at"
-                v-on:loop-ended="updateTotps(period.period)"
-                v-on:loop-started="setCurrentStep(period.period, $event)"
-                v-on:stepped-up="setCurrentStep(period.period, $event)"
-                ref="looperRefs"
-            ></TotpLooper>
-        </span>
     </div>
 </template>

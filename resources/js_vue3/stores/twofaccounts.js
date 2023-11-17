@@ -79,31 +79,33 @@ export const useTwofaccounts = defineStore({
         /**
          * Refreshes the accounts collection using the backend
          */
-        async fetch() {
+        async fetch(force = false) {
             // We do not want to fetch fresh data multiple times in the same 2s timespan
             const age = Math.floor(Date.now() - this.fetchedOn)
-            const isNotFresh = age > 2000
+            const isOutOfAge = age > 2000
 
-            if (isNotFresh) {
+            if (isOutOfAge || force) {
                 this.fetchedOn = Date.now()
 
                 await twofaccountService.getAll(! useUserStore().preferences.getOtpOnRequest).then(response => {
                     // Defines if the store was up-to-date with the backend
-                    this.backendWasNewer = response.data.length !== this.items.length
-    
-                    this.items.forEach((item) => {
-                        let matchingBackendItem = response.data.find(e => e.id === item.id)
-                        if (matchingBackendItem == undefined) {
-                            this.backendWasNewer = true
-                            return;
-                        }
-                        for (const field in item) {
-                            if (field !== 'otp' && item[field] != matchingBackendItem[field]) {
+                    if (force) {
+                        this.backendWasNewer = response.data.length !== this.items.length
+                        
+                        this.items.forEach((item) => {
+                            let matchingBackendItem = response.data.find(e => e.id === item.id)
+                            if (matchingBackendItem == undefined) {
                                 this.backendWasNewer = true
                                 return;
                             }
-                        }
-                    })
+                            for (const field in item) {
+                                if (field !== 'otp' && item[field] != matchingBackendItem[field]) {
+                                    this.backendWasNewer = true
+                                    return;
+                                }
+                            }
+                        })
+                    }
     
                     // Updates the state
                     this.items = response.data
