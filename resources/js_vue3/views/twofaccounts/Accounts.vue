@@ -34,6 +34,7 @@
     const isDragging = ref(false)
     const stepIndexesCache = ref({})
     const isRenewingOTPs = ref(false)
+    const renewedOTPs = ref(null)
 
     const otpDisplay = ref(null)
     const otpDisplayProps = ref({
@@ -228,10 +229,10 @@
      * Turns dots On for all dots components that match the provided period
      */
      function turnDotsOn(period, stepIndex) {
-        dotsRefs.value.forEach((dots) => {
-            if (dots.props.period == period) {
-                dots.turnOn(stepIndex)
-            }
+        dotsRefs.value
+            .filter((dots) => dots.props.period == period)
+            .forEach((dot) => {
+                dot.turnOn(stepIndex)
         })
     }
 
@@ -240,6 +241,7 @@
      */
     async function updateTotps(period) {
         isRenewingOTPs.value = true
+        renewedOTPs.value = period
         
         twofaccountService.getByIds(twofaccounts.accountIdsWithPeriod(period).join(','), true).then(response => {
             response.data.forEach((account) => {
@@ -257,6 +259,7 @@
         })
         .finally(() => {
             isRenewingOTPs.value = false
+            renewedOTPs.value = null
         })
     }
 
@@ -362,11 +365,14 @@
                             </div>
                             <transition name="popLater">
                                 <div v-show="user.preferences.getOtpOnRequest == false && !bus.inManagementMode" class="has-text-right">
-                                    <span v-if="account.otp != undefined && isRenewingOTPs" class="has-nowrap has-text-grey has-text-centered is-size-5">
-                                        <FontAwesomeIcon :icon="['fas', 'circle-notch']" spin />
-                                    </span>
-                                    <span v-else-if="account.otp != undefined && isRenewingOTPs == false" class="always-on-otp is-clickable has-nowrap has-text-grey is-size-5 ml-4" @click="copyToClipboard(account.otp.password)" @keyup.enter="copyToClipboard(account.otp.password)" :title="$t('commons.copy_to_clipboard')">
-                                        {{ useDisplayablePassword(account.otp.password) }}
+                                    <span v-if="account.otp != undefined">
+                                        <span v-if="isRenewingOTPs == true && renewedOTPs == account.period" class="has-nowrap has-text-grey has-text-centered is-size-5">
+                                            <FontAwesomeIcon :icon="['fas', 'circle-notch']" spin />
+                                        </span>
+                                        <span v-else class="always-on-otp is-clickable has-nowrap has-text-grey is-size-5 ml-4" @click="copyToClipboard(account.otp.password)" @keyup.enter="copyToClipboard(account.otp.password)" :title="$t('commons.copy_to_clipboard')">
+                                            {{ useDisplayablePassword(account.otp.password) }}
+                                        </span>
+                                        <Dots v-if="account.otp_type.includes('totp')" @hook:mounted="turnDotsOnFromCache(account.period)" :class="'condensed'" ref="dotsRefs" :period="account.period" />
                                     </span>
                                     <span v-else>
                                         <!-- get hotp button -->
@@ -376,7 +382,6 @@
                                             </button>
                                         </UseColorMode>
                                     </span>
-                                    <Dots v-if="account.otp_type.includes('totp')" @hook:mounted="turnDotsOnFromCache(account.period)" :class="'condensed'" ref="dotsRefs" :period="account.period" />
                                 </div>
                             </transition>
                             <transition name="fadeInOut">
