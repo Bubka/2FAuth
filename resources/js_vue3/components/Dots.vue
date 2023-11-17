@@ -34,9 +34,9 @@
     }
 
     onMounted(() => {
-        if (props.initialIndex != null) {
-                turnOn(props.initialIndex)
-            }
+        if (! isNaN(props.initialIndex)) {
+            turnOn(props.initialIndex)
+        }
     })
 
     defineExpose({
