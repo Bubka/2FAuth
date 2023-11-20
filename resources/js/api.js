@@ -13,7 +13,7 @@ if (window.appConfig.subdirectory) {
 }
 
 Vue.axios.interceptors.response.use(response => response, error => {
-    
+
     // Whether or not the promise must be returned, if unauthenticated is received
     // we update the auth state of the front-end
     if ( error.response.status === 401 ) {
@@ -49,7 +49,7 @@ Vue.axios.interceptors.response.use(response => response, error => {
     // so it returns a 418 response.
     // We catch the 418 response and push the user to the autolock view
     if ( error.response.status === 418 ) routeName = 'autolock'
-    
+
     if ( error.response.status === 404 ) routeName = '404'
 
     router.push({ name: routeName, params: { err: error.response } })

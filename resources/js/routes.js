@@ -68,12 +68,18 @@ const router = new Router({
     ],
 });
 
+const urlParams = new URLSearchParams(window.location.search);
+
+if (urlParams.has('authenticated')) {
+    Vue.$storage.set('authenticated', true)
+}
+
 let isFirstLoad = true;
 
 router.beforeEach((to, from, next) => {
-    
+
     document.title = router.app.$options.i18n.t('titles.' + to.name)
-    
+
     if( to.name === 'accounts') {
         to.params.isFirstLoad = isFirstLoad ? true : false
         isFirstLoad = false;

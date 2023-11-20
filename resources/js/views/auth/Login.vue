@@ -14,6 +14,7 @@
                 <p v-if="!this.$root.userPreferences.useWebauthnOnly">{{ $t('auth.sign_in_using') }}&nbsp;
                     <a id="lnkSignWithLegacy" role="button" class="is-link" @keyup.enter="toggleForm" @click="toggleForm" tabindex="0">{{ $t('auth.login_and_password') }}</a>
                 </p>
+                <p v-if="this.$root.appConfig.openidAuth"><a id="lnkSignWithOpenID" class="is-link" href="/socialite/redirect/openid">{{ $t('auth.sign_in_using') }} OpenID</a></p>
             </div>
         </form-wrapper>
         <!-- login/password legacy form -->
@@ -31,6 +32,7 @@
                     <a id="lnkSignWithWebauthn" role="button" class="is-link" @keyup.enter="toggleForm" @click="toggleForm" tabindex="0" :aria-label="$t('auth.sign_in_using_security_device')">{{ $t('auth.webauthn.security_device') }}</a>
                 </p>
                 <p v-if="this.$root.appSettings.disableRegistration == false" class="mt-4">{{ $t('auth.forms.dont_have_account_yet') }}&nbsp;<router-link id="lnkRegister" :to="{ name: 'register' }" class="is-link">{{ $t('auth.register') }}</router-link></p>
+                <p v-if="this.$root.appConfig.openidAuth"><a id="lnkSignWithOpenID" class="is-link" href="/socialite/redirect/openid">{{ $t('auth.sign_in_using') }} OpenID</a></p>
             </div>
         </form-wrapper>
         <!-- footer -->
@@ -145,7 +147,7 @@
                     this.$storage.set('authenticated', false)
 
                     if( error.response.status === 401 ) {
-                        
+
                         this.$notify({ type: 'is-danger', text: this.$t('auth.forms.authentication_failed'), duration:-1 })
                     }
                     else if( error.response.status !== 422 ) {

@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\Auth\WebAuthnDeviceLostController;
 use App\Http\Controllers\Auth\WebAuthnLoginController;
@@ -47,6 +48,9 @@ Route::group(['middleware' => ['rejectIfDemoMode', 'throttle:10,1']], function (
 Route::group(['middleware' => ['SkipIfAuthenticated', 'throttle:10,1']], function () {
     Route::post('user/login', [LoginController::class, 'login'])->name('user.login');
     Route::post('webauthn/login', [WebAuthnLoginController::class, 'login'])->name('webauthn.login');
+
+    Route::get('/socialite/redirect/{driver}', [SocialiteController::class, 'redirect'])->name('socialite.redirect');
+    Route::get('/socialite/callback/{driver}', [SocialiteController::class, 'callback'])->name('socialite.callback');
 });
 
 /**
