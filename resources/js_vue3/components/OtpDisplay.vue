@@ -53,6 +53,15 @@
     const totpLooper = ref()
     const otpSpanTag = ref()
 
+    watch(
+        () => props.icon,
+        (val) => {
+            if (val != undefined) {
+                otpauthParams.value.icon = val
+            }
+        }
+    )
+
     /***
      * 
      */

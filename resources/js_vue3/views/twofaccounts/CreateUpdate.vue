@@ -244,6 +244,9 @@
             twofaccountService.deleteIcon(tempIcon.value)
             tempIcon.value = ''
         }
+        if (showQuickForm.value) {
+            form.icon = tempIcon.value
+        }
     }
 
     /**
