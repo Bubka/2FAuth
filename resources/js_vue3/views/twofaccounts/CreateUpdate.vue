@@ -410,7 +410,7 @@
                             <div class="control">
                                 <VueButton :isLoading="form.isBusy" >{{ $t('commons.save') }}</VueButton>
                             </div>
-                            <ButtonBackCloseCancel action="cancel" :useLinkTag="false" @canceled="cancelCreation" />
+                            <ButtonBackCloseCancel action="cancel" :isText="true" :useLinkTag="false" @canceled="cancelCreation" />
                         </div>
                     </div>
                 </div>
