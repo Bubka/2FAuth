@@ -27,7 +27,7 @@ return [
     'register' => 'Register',
     'welcome_to_2fauth' => 'Welcome to 2FAuth',
     'autolock_triggered' => 'Auto lock triggered',
-    'autolock_triggered_punchline' => 'You\'ve been automatically disconnected.',
+    'autolock_triggered_punchline' => 'Auto-lock triggered and logged you out',
     'already_authenticated' => 'Already authenticated, please log out first',
     'authentication' => 'Authentication',
     'maybe_later' => 'Maybe later',
