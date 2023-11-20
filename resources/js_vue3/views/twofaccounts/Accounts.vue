@@ -132,34 +132,34 @@
      * Shows rotating OTP for the provided account
      */
     function showOTP(account) {
-        // In Management mode, clicking an account does not show the otpDisplay, it selects the account
-        if(bus.inManagementMode) {
-            twofaccounts.select(account.id)
-        }
-        else {
-            // Data that should be displayed quickly by the OtpDisplay
-            // component are passed using props.
-            otpDisplayProps.value.otp_type = account.otp_type
-            otpDisplayProps.value.service = account.service
-            otpDisplayProps.value.account = account.account
-            otpDisplayProps.value.icon = account.icon
+        // Data that should be displayed quickly by the OtpDisplay
+        // component are passed using props.
+        otpDisplayProps.value.otp_type = account.otp_type
+        otpDisplayProps.value.service = account.service
+        otpDisplayProps.value.account = account.account
+        otpDisplayProps.value.icon = account.icon
 
-            nextTick().then(() => {
-                showOtpInModal.value = true
-                otpDisplay.value.show(account.id);
-            })
-        }
+        nextTick().then(() => {
+            showOtpInModal.value = true
+            otpDisplay.value.show(account.id);
+        })
     }
 
     /**
      * Shows an OTP in a modal or directly copies it to the clipboard
      */
     function showOrCopy(account) {
-        if (!user.preferences.getOtpOnRequest && account.otp_type.includes('totp')) {
-            copyToClipboard(account.otp.password)
+        // In Management mode, clicking an account does not show/copy, it selects the account
+        if(bus.inManagementMode) {
+            twofaccounts.select(account.id)
         }
         else {
-            showOTP(account)
+            if (!user.preferences.getOtpOnRequest && account.otp_type.includes('totp')) {
+                copyToClipboard(account.otp.password)
+            }
+            else {
+                showOTP(account)
+            }
         }
     }
 
