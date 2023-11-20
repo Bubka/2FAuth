@@ -150,7 +150,6 @@
             if (error.response.status === 422) {
                 emit('validation-error', error.response)
             }
-            console.log(error)
             //throw error
         })
         .finally(() => {

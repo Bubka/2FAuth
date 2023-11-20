@@ -313,7 +313,6 @@
 
             twofaccountService.getLogo(form.service, { returnError: true })
             .then(response => {
-                console.log('enter fetchLogo response')
                 if (response.status === 201) {
                     // clean possible already uploaded temp icon
                     deleteIcon()

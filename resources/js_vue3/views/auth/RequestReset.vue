@@ -21,7 +21,6 @@
             notify.success({ text: response.data.message, duration:-1 })
         })
         .catch(error => {
-            console.log(error)
             if( error.response.data.requestFailed ) {
                 notify.alert({ text: error.response.data.requestFailed, duration:-1 })
             }

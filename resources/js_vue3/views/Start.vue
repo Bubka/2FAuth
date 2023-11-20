@@ -28,7 +28,6 @@
         form.qrcode = qrcodeInput.value.files[0]
 
         form.upload('/api/v1/qrcode/decode', { returnError: true }).then(response => {
-            console.log(response.data)
             if (response.data.data.slice(0, 33).toLowerCase() === "otpauth-migration://offline?data=") {
                 bus.migrationUri = response.data.data
                 router.push({ name: 'importAccounts' })
