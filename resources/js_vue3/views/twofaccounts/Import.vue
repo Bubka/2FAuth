@@ -29,14 +29,14 @@
         counter: null,
         period: null,
     }))
-    const fileForm = new Form({
+    const fileForm = reactive(new Form({
         file: null,
         withSecret: true
-    })
-    const qrcodeForm = new Form({
+    }))
+    const qrcodeForm = reactive(new Form({
         qrcode: null,
         withSecret: true
-    })
+    }))
     const showTwofaccountInModal = ref(false)
     const supportedSources = [
         {app: '2FAuth', format: 'JSON'},
@@ -173,6 +173,7 @@
      * Uploads the submitted file to the backend for parsing
      */
     function submitFile() {
+        fileForm.clear()
         isFetching.value = true
         fileForm.file = fileInput.value.files[0]
 
@@ -199,6 +200,7 @@
      * Uploads the submitted QR code file to the backend for decoding
      */
     function submitQrCode() {
+        qrcodeForm.clear()
         isFetching.value = true
         qrcodeForm.qrcode = qrcodeInput.value.files[0]
 
@@ -208,7 +210,7 @@
         .catch(error => {
             if( error.response.status === 422 ) {
                 if (error.response.data.errors.qrcode == undefined) {
-                    notify.alert({ text: this.$t('errors.invalid_2fa_data') })
+                    notify.alert({ text: trans('errors.invalid_2fa_data') })
                 }
             }
             else notify.alert({ text: error.response.data.message})
@@ -251,7 +253,7 @@
                             <input aria-hidden="true" tabindex="-1" class="file-input" type="file" accept="image/*" v-on:change="submitQrCode" ref="qrcodeInput">
                         </label>
                     </div>
-                    <FieldError v-if="qrcodeForm.errors.get('qrcode') != undefined" :error="qrcodeForm.errors.get('qrcode')" :field="qrcodeForm.qrcode" />
+                    <FieldError v-if="qrcodeForm.errors.hasAny('qrcode')" :error="qrcodeForm.errors.get('qrcode')" :field="'qrcode'" />
                     <p class="help">{{ $t('twofaccounts.import.supported_formats_for_qrcode_upload') }}</p>
                 </div>
                 <h5 class="title is-5 mb-3 has-text-grey">{{ $t('commons.file') }}</h5>
@@ -261,7 +263,7 @@
                         <input aria-hidden="true" tabindex="-1" class="file-input" type="file" accept="text/plain,application/json,text/csv,.2fas" v-on:change="submitFile" ref="fileInput">
                         {{ $t('twofaccounts.import.upload') }}
                     </label>
-                    <FieldError v-if="fileForm.errors.get('file') != undefined" :error="fileForm.errors.get('file')" :field="fileForm.file" />
+                    <FieldError v-if="fileForm.errors.hasAny('file')" :error="fileForm.errors.get('file')" :field="'file'" />
                     <p class="help">{{ $t('twofaccounts.import.supported_formats_for_file_upload') }}</p>
                 </div>
                 <!-- Supported migration resources -->

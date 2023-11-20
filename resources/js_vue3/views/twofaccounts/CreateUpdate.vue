@@ -28,7 +28,12 @@
         counter: null,
         period: null,
         image: '',
-        qrcode: null,
+    }))
+    const qrcodeForm = reactive(new Form({
+        qrcode: null
+    }))
+    const iconForm = reactive(new Form({
+        icon: null
     }))
     const otp_types = [
         { text: 'TOTP', value: 'totp' },
@@ -215,17 +220,19 @@
     function uploadIcon() {
         // clean possible already uploaded temp icon
         deleteIcon()
-
-        const iconForm = new Form({
-            icon: iconInput.value.files[0]
-        })
+        iconForm.icon = iconInput.value.files[0]
 
         iconForm.upload('/api/v1/icons', { returnError: true })
         .then(response => {
-            tempIcon.value = response.data.filename;
+            tempIcon.value = response.data.filename
+            if (showQuickForm.value) {
+                form.icon = tempIcon.value
+            }
         })
         .catch(error => {
-            notify.alert({ text: trans(error.response.data.message) })
+            if (error.response.status !== 422) {
+                notify.alert({ text: error.response.data.message})
+            }
         })
     }
 
@@ -267,9 +274,7 @@
      * Sends a QR code to backend for decoding and prefill the form with the qr data
      */
     function uploadQrcode() {
-        const qrcodeForm = new Form({
-            qrcode: qrcodeInput.value.files[0]
-        })
+        qrcodeForm.qrcode = qrcodeInput.value.files[0]
 
         // First we get the uri encoded in the qrcode
         qrcodeForm.upload('/api/v1/qrcode/decode', { returnError: true })
@@ -293,8 +298,9 @@
             })
         })
         .catch(error => {
-            notify.alert({ text: trans(error.response.data.message) })
-            return false
+            if (error.response.status !== 422) {
+                notify.alert({ text: error.response.data.message})
+            }
         })
     }
 
@@ -375,6 +381,7 @@
             <div class="container preview has-text-centered">
                 <div class="columns is-mobile">
                     <div class="column">
+                        <FieldError v-if="iconForm.errors.hasAny('icon')" :error="iconForm.errors.get('icon')" :field="'icon'" class="help-for-file" />
                         <label class="add-icon-button" v-if="!tempIcon">
                             <input class="file-input" type="file" accept="image/*" v-on:change="uploadIcon" ref="iconInput">
                             <FontAwesomeIcon :icon="['fas', 'image']" size="2x" />
@@ -429,7 +436,7 @@
                         </div>
                     </div>
                 </div>
-                <FieldError v-if="!isEditMode && form.errors.hasAny('qrcode')" :error="form.errors.get('qrcode')" :field="'qrcode'" class="help-for-file" />
+                <FieldError v-if="qrcodeForm.errors.hasAny('qrcode')" :error="qrcodeForm.errors.get('qrcode')" :field="'qrcode'" class="help-for-file" />
                 <!-- service -->
                 <FormField v-model="form.service" fieldName="service" :fieldError="form.errors.get('email')" :isDisabled="form.otp_type === 'steamtotp'" label="twofaccounts.service" :placeholder="$t('twofaccounts.forms.service.placeholder')" autofocus />
                 <!-- account -->
@@ -470,7 +477,7 @@
                     </div>
                 </div>
                 <div class="field">
-                    <FieldError v-if="form.errors.hasAny('icon')" :error="form.errors.get('icon')" :field="'icon'" class="help-for-file" />
+                    <FieldError v-if="iconForm.errors.hasAny('icon')" :error="iconForm.errors.get('icon')" :field="'icon'" class="help-for-file" />
                     <p v-if="user.preferences.getOfficialIcons" class="help" v-html="$t('twofaccounts.forms.i_m_lucky_legend')"></p>
                 </div>
                 <!-- otp type -->

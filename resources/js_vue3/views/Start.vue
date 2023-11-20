@@ -78,7 +78,7 @@
                     <button v-else class="button is-link is-medium is-rounded is-main" @click="capture()">
                         {{ $t('twofaccounts.forms.scan_qrcode') }}
                     </button>
-                    <FieldError v-if="form.hasAny" :error="form.errors.get('qrcode')" :field="'qrcode'" />
+                    <FieldError v-if="form.errors.hasAny('qrcode')" :error="form.errors.get('qrcode')" :field="'qrcode'" />
                 </div>
             </div>
             <!-- alternative methods -->
