@@ -2,6 +2,7 @@
     import Form from '@/components/formElements/Form'
     import twofaccountService from '@/services/twofaccountService'
     import OtpDisplay from '@/components/OtpDisplay.vue'
+    import Spinner from '@/components/Spinner.vue'
     import { useNotifyStore } from '@/stores/notify'
     import { useUserStore } from '@/stores/user'
     import { useBusStore } from '@/stores/bus'
@@ -15,9 +16,7 @@
     const twofaccounts = useTwofaccounts()
     const otpDisplay = ref(null)
     const fileInput = ref(null)
-    const fileInputLabel = ref(null)
     const qrcodeInput = ref(null)
-    const qrcodeInputLabel = ref(null)
     const form = reactive(new Form({
         service: '',
         account: '',
@@ -234,53 +233,111 @@
             <h1 class="title has-text-grey-dark">
                 {{ $t('twofaccounts.import.import') }}
             </h1>
-            <div v-if="exportedAccounts.length == 0">
+            <div v-if="!isFetching && exportedAccounts.length == 0">
                 <div class="block is-size-7-mobile" v-html="$t('twofaccounts.import.import_legend')"></div>
-                <h5 class="title is-5 mb-3 has-text-grey">{{ $t('twofaccounts.import.qr_code') }}</h5>
-                <!-- scan button that launch camera stream -->
-                <div class="block">
-                    <div class="buttons mb-0">
-                        <RouterLink id="btnCapture" :to="{ name: 'capture' }" class="button is-link is-rounded mr-0">
-                            <span class="icon">
-                                <FontAwesomeIcon :icon="['fas', 'camera']" />
-                            </span>
-                            <span>{{ $t('twofaccounts.import.scan') }}</span>
-                        </RouterLink>
-                        <span class="p-2 mb-2">{{ $t('commons.or') }}</span>
-                        <!-- upload a qr code (with basic file field and backend decoding) -->
-                        <label role="button" tabindex="0" class="button is-link is-rounded is-outlined" ref="qrcodeInputLabel"  @keyup.enter="qrcodeInputLabel.click()">
-                            {{ $t('twofaccounts.import.upload') }}
-                            <input aria-hidden="true" tabindex="-1" class="file-input" type="file" accept="image/*" v-on:change="submitQrCode" ref="qrcodeInput">
-                        </label>
-                    </div>
-                    <FieldError v-if="qrcodeForm.errors.hasAny('qrcode')" :error="qrcodeForm.errors.get('qrcode')" :field="'qrcode'" />
-                    <p class="help">{{ $t('twofaccounts.import.supported_formats_for_qrcode_upload') }}</p>
-                </div>
-                <h5 class="title is-5 mb-3 has-text-grey">{{ $t('commons.file') }}</h5>
-                <!-- upload a file -->
-                <div class="block mb-6">
-                    <label role="button" tabindex="0" class="button is-link is-rounded is-outlined" ref="fileInputLabel" @keyup.enter="fileInputLabel.click()">
-                        <input aria-hidden="true" tabindex="-1" class="file-input" type="file" accept="text/plain,application/json,text/csv,.2fas" v-on:change="submitFile" ref="fileInput">
-                        {{ $t('twofaccounts.import.upload') }}
-                    </label>
-                    <FieldError v-if="fileForm.errors.hasAny('file')" :error="fileForm.errors.get('file')" :field="'file'" />
-                    <p class="help">{{ $t('twofaccounts.import.supported_formats_for_file_upload') }}</p>
-                </div>
-                <!-- Supported migration resources -->
-                <h5 class="title is-6 mb-3 has-text-grey-dark">{{ $t('twofaccounts.import.supported_migration_formats') }}</h5>
-                <div class="field is-grouped is-grouped-multiline pt-0">
-                    <div v-for="(source, index) in supportedSources" :key="index" class="control">
-                        <div class="tags has-addons">
-                        <UseColorMode v-slot="{ mode }">
-                            <span class="tag" :class="mode == 'dark' ? 'is-dark' : 'is-white'">{{ source.app }}</span>
-                            <span class="tag" :class="mode == 'dark' ? 'is-black' : 'has-background-grey-lighter has-text-black'">{{ source.format }}</span>
-                        </UseColorMode>
+                <div class="columns">
+                    <div class="column">
+                        <div class="block">
+                            <div class="card">
+                                <div class="card-content">
+                                    <div class="media">
+                                        <div class="media-left">
+                                            <figure class="image is-32x32">
+                                                <FontAwesomeIcon :icon="['fas', 'qrcode']" size="2x" class="has-text-grey-darker" />
+                                            </figure>
+                                        </div>
+                                        <div class="media-content">
+                                            <p class="title is-5 has-text-grey" v-html="$t('twofaccounts.import.qr_code')" />
+                                            <p class="subtitle is-6 is-size-7-mobile">{{ $t('twofaccounts.import.supported_formats_for_qrcode_upload') }}</p>
+                                        </div>
+                                    </div>
+                                    <FieldError v-if="qrcodeForm.errors.hasAny('qrcode')" :error="qrcodeForm.errors.get('qrcode')" :field="'qrcode'" />
+                                </div>
+                                <footer class="card-footer">
+                                    <RouterLink id="btnCapture" :to="{ name: 'capture' }" class="card-footer-item">
+                                        {{ $t('twofaccounts.import.scan') }}
+                                    </RouterLink>
+                                    <a role="button" tabindex="0" class="card-footer-item is-relative" @keyup.enter="qrcodeInput.click()">
+                                        <input aria-hidden="true" tabindex="-1" class="file-input" type="file" accept="image/*" v-on:change="submitQrCode" ref="qrcodeInput">
+                                        {{ $t('twofaccounts.import.upload') }}
+                                    </a>
+                                </footer>
+                            </div>
+                        </div>
+                        <div class="block">
+                            <div class="card">
+                                <div class="card-content">
+                                    <div class="media">
+                                        <div class="media-left">
+                                            <figure class="image is-32x32">
+                                                <FontAwesomeIcon :icon="['fas', 'file-lines']" size="2x" class="has-text-grey-darker" />
+                                            </figure>
+                                        </div>
+                                        <div class="media-content">
+                                            <p class="title is-5 has-text-grey">{{ $t('twofaccounts.import.text_file') }}</p>
+                                            <p class="subtitle is-6 is-size-7-mobile">{{ $t('twofaccounts.import.supported_formats_for_file_upload') }}</p>
+                                        </div>
+                                    </div>
+                                    <FieldError v-if="fileForm.errors.hasAny('file')" :error="fileForm.errors.get('file')" :field="'file'" />
+                                </div>
+                                <footer class="card-footer">
+                                    <a role="button" tabindex="0" class="card-footer-item is-relative" @keyup.enter="fileInput.click()">
+                                        <input aria-hidden="true" tabindex="-1" class="file-input" type="file" accept="text/plain,application/json,text/csv,.2fas" v-on:change="submitFile" ref="fileInput">
+                                        {{ $t('twofaccounts.import.upload') }}
+                                    </a>
+                                </footer>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <span class="is-size-7" v-html="$t('twofaccounts.import.do_not_set_password_or_encryption')"></span>
+                <!-- Supported migration resources -->
+                <h2 class="title is-5 has-text-grey-dark">{{ $t('twofaccounts.import.supported_migration_formats') }}</h2>
+                <div class="block is-size-7-mobile">
+                    <FontAwesomeIcon :icon="['fas', 'fa-triangle-exclamation']" class="has-text-warning-dark" />
+                    {{  $t('twofaccounts.import.do_not_set_password_or_encryption') }}
+                </div>
+                <table class="table is-size-7-mobile is-fullwidth">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Plain text</th>
+                            <th>QR code</th>
+                            <th>JSON</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>Google Authenticator</th>
+                            <td></td>
+                            <td><FontAwesomeIcon :icon="['fas', 'circle-check']" /></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th>Aegis Auth</th>
+                            <td><FontAwesomeIcon :icon="['fas', 'circle-check']" /></td>
+                            <td></td>
+                            <td><FontAwesomeIcon :icon="['fas', 'circle-check']" /></td>
+                        </tr>
+                        <tr>
+                            <th>2FAS auth</th>
+                            <td></td>
+                            <td></td>
+                            <td><FontAwesomeIcon :icon="['fas', 'circle-check']" /></td>
+                        </tr>
+                        <tr>
+                            <th>2FAuth</th>
+                            <td></td>
+                            <td></td>
+                            <td><FontAwesomeIcon :icon="['fas', 'circle-check']" /></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div v-else-if="isFetching && exportedAccounts.length === 0">
+                <Spinner :type="'fullscreen-overlay'" :isVisible="true" :message="'twofaccounts.import.parsing_data'" />
             </div>
             <div v-else>
+                <div class="block is-size-7-mobile" v-html="$t('twofaccounts.import.submitted_data_parsed_now_accounts_are_awaiting_import')"></div>
                 <div v-for="(account, index) in exportedAccounts" :key="account.name" class="group-item is-size-5 is-size-6-mobile">
                     <div class="is-flex is-justify-content-space-between">
                         <!-- Account name -->
@@ -337,11 +394,6 @@
                 <div v-if="importedCount == exportedAccounts.length"  class="mt-2 is-size-7 is-pulled-right">
                     <button @click="exportedAccounts = []" class="has-text-grey button is-small is-ghost">{{ $t('commons.clear') }}</button>
                 </div>
-            </div>
-            <div v-if="isFetching && exportedAccounts.length === 0" class="has-text-centered">
-                <span class="is-size-4">
-                    <FontAwesomeIcon :icon="['fas', 'spinner']" spin />
-                </span>
             </div>
             <!-- footer -->
             <VueFooter :showButtons="true">

@@ -1,5 +1,3 @@
-// import Vue from 'vue'
-
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
@@ -42,7 +40,10 @@ import {
     faSun,
     faMoon,
     faDesktop,
-    faCircleNotch
+    faCircleNotch,
+    faCircleCheck,
+    faTriangleExclamation,
+    faFileLines
 } from '@fortawesome/free-solid-svg-icons'
 
 import {
@@ -89,9 +90,10 @@ library.add(
     faSun,
     faMoon,
     faDesktop,
-    faCircleNotch
+    faCircleNotch,
+    faCircleCheck,
+    faTriangleExclamation,
+    faFileLines
 );
 
 export default FontAwesomeIcon
-
-// Vue.component('font-awesome-icon', FontAwesomeIcon)

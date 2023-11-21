@@ -1281,3 +1281,30 @@ footer.main .field.is-grouped {
     transform: translateY(-2rem);
   }
 }
+
+:root[data-theme="dark"] .table {
+	background-color: $black-ter;
+	color: $white-bis;
+}
+:root[data-theme="dark"] .table th,
+:root[data-theme="dark"] .table thead th {
+	color: $grey;
+}
+:root[data-theme="dark"] .table td,
+:root[data-theme="dark"] .table th {
+	border: 1px solid $grey-darker;
+	border-width: 0 0 1px;
+}
+
+:root[data-theme="dark"] .card {
+	background-color: $black-ter;
+	border: 1px solid $grey-darker;
+}
+
+:root[data-theme="dark"] .card-footer {
+	border-top: 1px solid $grey-darker;
+}
+
+:root[data-theme="dark"] .card-footer-item:not(:last-child) {
+	border-right: 1px solid $grey-darker;
+}
