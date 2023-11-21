@@ -1,6 +1,8 @@
-export default function noEmptyError({ to, next, nextMiddleware }) {
-    if (to.params.err == undefined) {
-        // return to home if no err object is provided to prevent an empty error message
+export default function noEmptyError({ to, next, nextMiddleware, stores }) {
+    const { notify } = stores
+
+    if (notify.err == null) {
+        // return to home if no err object is set to prevent an empty error message
         next({ name: 'accounts' });
     }
     else nextMiddleware()

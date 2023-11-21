@@ -3,6 +3,7 @@ import middlewarePipeline from "@/router/middlewarePipeline";
 import { useUserStore } from '@/stores/user'
 import { useTwofaccounts } from '@/stores/twofaccounts'
 import { useAppSettingsStore } from '@/stores/appSettings'
+import { useNotifyStore } from '@/stores/notify'
 
 import authGuard    from './middlewares/authGuard'
 import starter      from './middlewares/starter'
@@ -40,7 +41,7 @@ const router = createRouter({
         { path: '/webauthn/recover', name: 'webauthn.recover', component: () => import('../views/auth/webauthn/Recover.vue'), meta: { middlewares: [setReturnTo], disabledWithAuthProxy: true, showAbout: true } },
 
         { path: '/about', name: 'about', component: () => import('../views/About.vue'), meta: { showAbout: true } },
-        { path: '/error', name: 'genericError', component: () => import('../views/Error.vue'), meta: { middlewares: [noEmptyError], err: null } },
+        { path: '/error', name: 'genericError', component: () => import('../views/Error.vue'), meta: { middlewares: [noEmptyError] } },
         { path: '/404', name: '404', component: () => import('../views/Error.vue'), props: true },
         { path: '/:pathMatch(.*)*', name: 'notFound', component: () => import('../views/Error.vue'), props: true },
 	]
@@ -51,7 +52,8 @@ router.beforeEach((to, from, next) => {
     const user = useUserStore()
     const twofaccounts = useTwofaccounts()
     const appSettings = useAppSettingsStore()
-    const stores = { user: user, twofaccounts: twofaccounts, appSettings: appSettings }
+    const notify = useNotifyStore()
+    const stores = { user: user, twofaccounts: twofaccounts, appSettings: appSettings, notify: notify }
     const nextMiddleware = {}
     const context = { to, from, next, nextMiddleware, stores }
 
