@@ -49,7 +49,7 @@ RUN apk add --update --no-cache \
     # Composer dependencies
     php81-phar \
     # PHP SQLite, MySQL/MariaDB & Postgres drivers
-    php81-pdo_sqlite php81-sqlite3 php81-pdo_mysql php81-pdo_pgsql \
+    php81-pdo_sqlite php81-sqlite3 php81-pdo_mysql php81-pdo_pgsql php81-pgsql \
     # PHP extensions
     php81-xml php81-gd php81-mbstring php81-tokenizer php81-fileinfo php81-bcmath php81-ctype php81-dom \
     # Runtime dependencies
