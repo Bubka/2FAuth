@@ -1099,6 +1099,9 @@ footer.main .field.is-grouped {
         color: $light;
     }
 }
+.spinner-overlay-container {
+    background-color: none;
+}
 
 .fadeInOut-enter-active {
   animation: fadeIn 500ms

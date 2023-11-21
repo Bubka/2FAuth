@@ -22,6 +22,14 @@
                 <span>{{ $t(message) }}</span>
             </div>
         </div>
+        <div v-if="type == 'fullscreen-overlay'" class="spinner-overlay-container">
+            <div class="spinner-wrapper">
+                <span id="icnSpinnerFull" class="is-size-1 spinner">
+                    <FontAwesomeIcon :icon="['fas', 'spinner']" spin />
+                </span>
+                <span>{{ $t(message) }}</span>
+            </div>
+        </div>
         <FontAwesomeIcon v-else-if="type == 'raw'" :icon="['fas', 'spinner']" spin />
         <div v-else class="has-text-centered mt-6">
             <span id="icnSpinner" class="is-size-4">
@@ -32,7 +40,8 @@
 </template>
 
 <style scoped>
-.spinner-container {
+.spinner-container,
+.spinner-overlay-container {
     text-align: center;
     z-index: 100000;
     position: absolute;
@@ -43,6 +52,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+.spinner-container,
+.spinner-overlay-container {
+    top: 25%;
+    height: 50%;
 }
 .spinner {
     display: block;
