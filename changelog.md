@@ -1,5 +1,15 @@
 # Change log
 
+## [4.2.4] - 2023-11-21
+
+### Changed
+
+- [PR #242](https://github.com/Bubka/2FAuth/pull/242) The Docker image now embed the PostgreSQL PHP extensions, thanks to [@stavros-k](https://github.com/stavros-k)
+
+### Fixed
+
+- [PR #235](https://github.com/Bubka/2FAuth/pull/235) Fix build badge broken, thanks to [@sy-records](https://github.com/sy-records)
+
 ## [4.2.3] - 2023-09-26
 
 ### Fixed
