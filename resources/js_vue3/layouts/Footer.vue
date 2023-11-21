@@ -22,7 +22,7 @@
 </script>
 
 <template>
-    <footer>
+    <footer class="main">
         <div class="columns is-gapless" v-if="showButtons">
             <div class="column has-text-centered">
                 <div class="field is-grouped">
