@@ -57,7 +57,6 @@
                         </RouterLink>
                     </p>
                 </div>
-                <FieldError v-if="form.errors.get('token') != undefined" :error="form.errors.get('token')" :field="form.token" />
                 <FormButtons
                     :submitId="'btnRecover'"
                     :isBusy="form.isBusy"

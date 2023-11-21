@@ -25,6 +25,7 @@
      * to the Create or Import form with decoded URI to prefill the form
      */
     function submitQrCode() {
+        form.clear()
         form.qrcode = qrcodeInput.value.files[0]
 
         form.upload('/api/v1/qrcode/decode', { returnError: true }).then(response => {
@@ -38,7 +39,9 @@
             }
         })
         .catch(error => {
-            notify.alert({ text: trans(error.response.data.message) })
+            if (error.response.status !== 422) {
+                notify.alert({ text: error.response.data.message })
+            }
         })
     }
 
@@ -77,8 +80,8 @@
                     <button v-else class="button is-link is-medium is-rounded is-main" @click="capture()">
                         {{ $t('twofaccounts.forms.scan_qrcode') }}
                     </button>
-                    <FieldError v-if="form.errors.hasAny('qrcode')" :error="form.errors.get('qrcode')" :field="'qrcode'" />
                 </div>
+                <FieldError v-if="form.errors.hasAny('qrcode')" :error="form.errors.get('qrcode')" :field="'qrcode'" />
             </div>
             <!-- alternative methods -->
             <div class="column is-full">
