@@ -15,8 +15,8 @@
     const isFetching = ref(false)
     const isRemoteUser = ref(false)
     const createPATModalIsVisible = ref(false)
-    const accessToken = ref(null)
-    const token_id = ref(null)
+    const visibleToken = ref(null)
+    const visibleTokenId = ref(null)
 
     onMounted(() => {
         fetchTokens()
@@ -34,9 +34,10 @@
 
         userService.getPersonalAccessTokens({returnError: true})
         .then(response => {
+            tokens.value = []
             response.data.forEach((data) => {
-                if (data.id === token_id.value) {
-                    data.value = accessToken.value
+                if (data.id === visibleTokenId.value) {
+                    data.value = visibleToken.value
                     tokens.value.unshift(data)
                 }
                 else {
@@ -56,8 +57,8 @@
         })
         .finally(() => {
             isFetching.value = false
-            token_id.value = null
-            accessToken.value = null
+            visibleTokenId.value = null
+            visibleToken.value = null
         })
     }
 
@@ -66,6 +67,8 @@
      * Open the PAT creation view
      */
     function showPATcreationForm() {
+        clearTokenValues()
+
         if (isRemoteUser.value) {
             notify.warn({ text: trans('errors.unsupported_with_reverseproxy') })
         }
@@ -78,10 +81,11 @@
     function generatePAToken() {
         form.post('/oauth/personal-access-tokens')
         .then(response => {
-            accessToken.value = response.data.accessToken
-            token_id.value = response.data.token.id
+            visibleToken.value = response.data.accessToken
+            visibleTokenId.value = response.data.token.id
             fetchTokens()
             createPATModalIsVisible.value = false
+            form.reset()
         })
     }
 
@@ -99,9 +103,30 @@
         }
     }
 
+    /**
+     * Removes visible tokens data
+     */
+    function clearTokenValues() {
+        tokens.value.forEach(token => {
+            token.value = null
+        })
+        visibleToken.value = null
+    }
+
+    /**
+     * Copies data to clipboard and notifies on success
+     */
     function copyToClipboard(data) {
         copy(data)
         notify.success({ text: trans('commons.copied_to_clipboard') })
+    }
+
+    /**
+     * Closes & resets the PAT creation form 
+     */
+    function cancelPATcreation() {
+        createPATModalIsVisible.value = false
+        form.reset()
     }
 
     onBeforeRouteLeave((to) => {
@@ -172,7 +197,7 @@
                                 </VueButton>
                             </div>
                             <div class="control">
-                                <VueButton @click="createPATModalIsVisible = false" :nativeType="'button'" id="btnCancel" :color="'is-text'">
+                                <VueButton @click="cancelPATcreation" :nativeType="'button'" id="btnCancel" :color="'is-text'">
                                     {{ $t('commons.cancel') }}
                                 </VueButton>
                             </div>
