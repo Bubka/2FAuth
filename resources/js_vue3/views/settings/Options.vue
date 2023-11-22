@@ -171,7 +171,10 @@
                     <!-- Admin settings -->
                     <div v-if="user.isAdmin">
                         <h4 class="title is-4 pt-4 has-text-grey-light">{{ $t('settings.administration') }}</h4>
-                        <div class="is-size-7-mobile block" v-html="$t('settings.administration_legend')"></div>
+                        <div class="is-size-7-mobile block has-text-grey">
+                            <p class="mb-2">{{ $t('settings.administration_legend') }}</p>
+                            <p>{{ $t('settings.only_an_admin_can_edit_them') }}</p>
+                        </div>
                         <!-- Check for update -->
                         <FormCheckbox :model-value="appSettings.checkForUpdate" @update:modelValue="(val) => appSettings.$patch({checkForUpdate: val})" fieldName="checkForUpdate" label="commons.check_for_update" help="commons.check_for_update_help" />
                         <VersionChecker />

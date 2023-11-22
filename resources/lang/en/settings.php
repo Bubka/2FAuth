@@ -26,7 +26,8 @@ return [
 
     ],
     'administration' => 'Administration',
-    'administration_legend' => 'While previous settings are user settings (every user can set its own preferences), following settings are global and apply to all users. Only an administrator can view and edit those settings.',
+    'administration_legend' => 'While previous settings are user settings (every user can set its own preferences), following settings are global and apply to all users.',
+    'only_an_admin_can_edit_them' => 'Only an administrator can view and edit them.',
     'you_are_administrator' => 'You are an administrator',
     'general' => 'General',
     'security' => 'Security',
