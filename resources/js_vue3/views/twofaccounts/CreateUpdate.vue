@@ -425,17 +425,19 @@
                 <!-- qcode fileupload -->
                 <div v-if="!isEditMode" class="field is-grouped">
                     <div class="control">
-                        <div role="button" tabindex="0" class="file is-small" @keyup.enter="qrcodeInputLabel.click()">
-                            <label class="file-label" :title="$t('twofaccounts.forms.use_qrcode.title')" ref="qrcodeInputLabel">
-                                <input aria-hidden="true" tabindex="-1" class="file-input" type="file" accept="image/*" v-on:change="uploadQrcode" ref="qrcodeInput">
-                                <span class="file-cta">
-                                    <span class="file-icon">
-                                        <FontAwesomeIcon :icon="['fas', 'qrcode']" size="lg" />
+                        <UseColorMode v-slot="{ mode }">
+                            <div role="button" tabindex="0" class="file is-small" :class="{ 'is-black': mode == 'dark' }" @keyup.enter="qrcodeInputLabel.click()">
+                                <label class="file-label" :title="$t('twofaccounts.forms.use_qrcode.title')" ref="qrcodeInputLabel">
+                                    <input aria-hidden="true" tabindex="-1" class="file-input" type="file" accept="image/*" v-on:change="uploadQrcode" ref="qrcodeInput">
+                                    <span class="file-cta">
+                                        <span class="file-icon">
+                                            <FontAwesomeIcon :icon="['fas', 'qrcode']" size="lg" />
+                                        </span>
+                                        <span class="file-label">{{ $t('twofaccounts.forms.prefill_using_qrcode') }}</span>
                                     </span>
-                                    <span class="file-label">{{ $t('twofaccounts.forms.prefill_using_qrcode') }}</span>
-                                </span>
-                            </label>
-                        </div>
+                                </label>
+                            </div>
+                        </UseColorMode>
                     </div>
                 </div>
                 <FieldError v-if="qrcodeForm.errors.hasAny('qrcode')" :error="qrcodeForm.errors.get('qrcode')" :field="'qrcode'" class="help-for-file" />
