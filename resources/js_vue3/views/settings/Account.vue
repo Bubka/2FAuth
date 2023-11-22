@@ -120,7 +120,7 @@
                 <form @submit.prevent="submitPassword" @keydown="formPassword.onKeydown($event)">
                     <h4 class="title is-4 pt-6 has-text-grey-light">{{ $t('settings.change_password') }}</h4>
                     <fieldset :disabled="$2fauth.config.proxyAuth">
-                        <FormPasswordField v-model="formPassword.password" fieldName="password" :fieldError="formPassword.errors.get('password')" :autocomplete="'new-password'" :showRules="true" label="auth.forms.password" />
+                        <FormPasswordField v-model="formPassword.password" fieldName="password" :fieldError="formPassword.errors.get('password')" :autocomplete="'new-password'" :showRules="true" label="auth.forms.new_password" />
                         <FormPasswordField v-model="formPassword.password_confirmation" :showRules="false" fieldName="password_confirmation" :fieldError="formPassword.errors.get('password_confirmation')" inputType="password" :autocomplete="'new-password'" label="auth.forms.confirm_new_password" />
                         <FormField v-model="formPassword.currentPassword" fieldName="currentPassword" :fieldError="formPassword.errors.get('currentPassword')" inputType="password" label="auth.forms.current_password.label" help="auth.forms.current_password.help" />
                         <FormButtons :isBusy="formPassword.isBusy" caption="auth.forms.change_password" />
