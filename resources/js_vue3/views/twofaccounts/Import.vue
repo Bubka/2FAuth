@@ -243,7 +243,9 @@
                                     <div class="media">
                                         <div class="media-left">
                                             <figure class="image is-32x32">
-                                                <FontAwesomeIcon :icon="['fas', 'qrcode']" size="2x" class="has-text-grey-darker" />
+                                                <UseColorMode v-slot="{ mode }">
+                                                    <FontAwesomeIcon :icon="['fas', 'qrcode']" size="2x" :class="mode == 'dark' ? 'has-text-grey-darker' : 'has-text-grey-lighter'" />
+                                                </UseColorMode>
                                             </figure>
                                         </div>
                                         <div class="media-content">
@@ -270,7 +272,9 @@
                                     <div class="media">
                                         <div class="media-left">
                                             <figure class="image is-32x32">
-                                                <FontAwesomeIcon :icon="['fas', 'file-lines']" size="2x" class="has-text-grey-darker" />
+                                                <UseColorMode v-slot="{ mode }">
+                                                    <FontAwesomeIcon :icon="['fas', 'file-lines']" size="2x" :class="mode == 'dark' ? 'has-text-grey-darker' : 'has-text-grey-lighter'" />
+                                                </UseColorMode>
                                             </figure>
                                         </div>
                                         <div class="media-content">

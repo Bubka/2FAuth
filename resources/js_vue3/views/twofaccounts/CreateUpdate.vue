@@ -425,7 +425,7 @@
                 <!-- qcode fileupload -->
                 <div v-if="!isEditMode" class="field is-grouped">
                     <div class="control">
-                        <div role="button" tabindex="0" class="file is-black is-small" @keyup.enter="qrcodeInputLabel.click()">
+                        <div role="button" tabindex="0" class="file is-small" @keyup.enter="qrcodeInputLabel.click()">
                             <label class="file-label" :title="$t('twofaccounts.forms.use_qrcode.title')" ref="qrcodeInputLabel">
                                 <input aria-hidden="true" tabindex="-1" class="file-input" type="file" accept="image/*" v-on:change="uploadQrcode" ref="qrcodeInput">
                                 <span class="file-cta">

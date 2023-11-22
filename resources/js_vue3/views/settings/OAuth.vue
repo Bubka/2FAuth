@@ -185,7 +185,7 @@
                 </VueFooter>
             </FormWrapper>
         </div>
-        <div v-if="createPATModalIsVisible" class="is-overlay has-background-black-ter modal-otp">
+        <div v-if="createPATModalIsVisible" class="is-overlay modal-otp modal-background">
             <main class="main-section">
                 <FormWrapper title="settings.forms.new_token">
                     <form @submit.prevent="generatePAToken" @keydown="form.onKeydown($event)">

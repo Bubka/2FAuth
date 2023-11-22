@@ -431,7 +431,7 @@ figure.no-icon {
 }
 
 .dots li[data-is-active]~li {
-  background: $grey;
+  background: $grey-light;
 }
 :root[data-theme="dark"] .dots li[data-is-active]~li {
   background: $black-bis;
@@ -448,6 +448,9 @@ figure.no-icon {
 }
 
 .dots.off li {
+  background: $grey-light;
+}
+:root[data-theme="dark"] .dots.off li {
   background: $black-bis;
 }
 
@@ -1296,15 +1299,26 @@ footer.main .field.is-grouped {
 	border-width: 0 0 1px;
 }
 
+.card {
+	background-color: none;
+	border: 1px solid $grey-lighter;
+  box-shadow: none;
+}
 :root[data-theme="dark"] .card {
 	background-color: $black-ter;
 	border: 1px solid $grey-darker;
 }
 
+.card-footer {
+	border-top: 1px solid $grey-lighter;
+}
 :root[data-theme="dark"] .card-footer {
 	border-top: 1px solid $grey-darker;
 }
 
+.card-footer-item:not(:last-child) {
+	border-right: 1px solid $grey-lighter;
+}
 :root[data-theme="dark"] .card-footer-item:not(:last-child) {
 	border-right: 1px solid $grey-darker;
 }
