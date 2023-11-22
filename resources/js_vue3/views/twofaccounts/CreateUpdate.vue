@@ -54,13 +54,12 @@
         { text: 'md5', value: 'md5' },
     ]
     const uri = ref()
-    const tempIcon = ref()
+    const tempIcon = ref('')
     const showQuickForm = ref(false)
     const showAlternatives = ref(false)
     const showAdvancedForm = ref(false)
     const ShowTwofaccountInModal = ref(false)
     const fetchingLogo = ref(false)
-    const secretIsLocked = ref(false)
 
     // $refs
     const iconInput = ref(null)
@@ -82,6 +81,7 @@
         if (route.name == 'editAccount') {
             twofaccountService.get(props.twofaccountId).then(response => {
                 form.fill(response.data)
+                form.setOriginal()
                 // set account icon as temp icon
                 tempIcon.value = form.icon
                 showAdvancedForm.value = true
@@ -94,7 +94,7 @@
 
             twofaccountService.preview(uri.value).then(response => {
                 form.fill(response.data)
-                tempIcon.value = response.data.icon ? response.data.icon : null
+                tempIcon.value = response.data.icon ? response.data.icon : ''
                 showQuickForm.value = true
                 nextTick().then(() => {
                     OtpDisplayForQuickForm.value.show()
@@ -135,7 +135,7 @@
             }
             else if (from === 'steamtotp') {
                 form.service = ''
-                deleteIcon()
+                deleteTempIcon()
             }
         }
     )
@@ -170,12 +170,10 @@
         // Set new icon and delete old one
         if( tempIcon.value !== form.icon ) {
             let oldIcon = ''
-
             oldIcon = form.icon
-
             form.icon = tempIcon.value
             tempIcon.value = oldIcon
-            deleteIcon()
+            deleteTempIcon()
         }
 
         const { data } = await form.put('/api/v1/twofaccounts/' + props.twofaccountId)
@@ -203,15 +201,15 @@
      * Exits the view with user confirmation
      */
     function cancelCreation() {
-        if( form.hasChanged() ) {
-            if( confirm(trans('twofaccounts.confirm.cancel')) === false ) {
-                return
+        if (form.hasChanged() || tempIcon.value != form.icon) {
+            if (confirm(trans('twofaccounts.confirm.cancel')) === true) {
+                if (!isEditMode || tempIcon.value != form.icon) {
+                    deleteTempIcon()
+                }
+                router.push({name: 'accounts'})
             }
         }
-        // clean possible uploaded temp icon
-        deleteIcon()
-
-        router.push({name: 'accounts'});
+        else router.push({name: 'accounts'})
     }
 
     /**
@@ -219,7 +217,7 @@
      */
     function uploadIcon() {
         // clean possible already uploaded temp icon
-        deleteIcon()
+        deleteTempIcon()
         iconForm.icon = iconInput.value.files[0]
 
         iconForm.upload('/api/v1/icons', { returnError: true })
@@ -239,13 +237,21 @@
     /**
      * Deletes the temp icon from backend
      */
-    function deleteIcon() {
-        if (tempIcon.value) {
+    function deleteTempIcon() {
+        if (isEditMode) {
+            if (tempIcon.value) {
+                if (tempIcon.value !== form.icon) {
+                    twofaccountService.deleteIcon(tempIcon.value)
+                }
+                tempIcon.value = ''
+            }
+        }
+        else if (tempIcon.value) {
             twofaccountService.deleteIcon(tempIcon.value)
             tempIcon.value = ''
-        }
-        if (showQuickForm.value) {
-            form.icon = tempIcon.value
+            if (showQuickForm.value) {
+                form.icon = ''
+            }
         }
     }
 
@@ -318,7 +324,7 @@
             .then(response => {
                 if (response.status === 201) {
                     // clean possible already uploaded temp icon
-                    deleteIcon()
+                    deleteTempIcon()
                     tempIcon.value = response.data.filename;
                 }
                 else notify.warn( {text: trans('errors.no_logo_found_for_x', {service: strip_tags(form.service)}) })
@@ -388,7 +394,7 @@
                             <input class="file-input" type="file" accept="image/*" v-on:change="uploadIcon" ref="iconInput">
                             <FontAwesomeIcon :icon="['fas', 'image']" size="2x" />
                         </label>
-                        <button class="delete delete-icon-button is-medium" v-if="tempIcon" @click.prevent="deleteIcon"></button>
+                        <button class="delete delete-icon-button is-medium" v-if="tempIcon" @click.prevent="deleteTempIcon"></button>
                         <OtpDisplay
                             ref="OtpDisplayForQuickForm"
                             v-bind="form.data()"
@@ -459,10 +465,10 @@
                             </VueButton>
                         </UseColorMode>
                     </div>
-                    <!-- upload button -->
-                    <div class="control">
+                    <!-- upload icon button -->
+                    <div class="control is-flex">
                         <UseColorMode v-slot="{ mode }">
-                            <div role="button" tabindex="0" class="file" :class="mode == 'dark' ? 'is-dark' : 'is-white'" @keyup.enter="iconInputLabel.click()">
+                            <div role="button" tabindex="0" class="file mr-3" :class="mode == 'dark' ? 'is-dark' : 'is-white'" @keyup.enter="iconInputLabel.click()">
                                 <label class="file-label" ref="iconInputLabel">
                                     <input aria-hidden="true" tabindex="-1" class="file-input" type="file" accept="image/*" v-on:change="uploadIcon" ref="iconInput">
                                     <span class="file-cta">
@@ -472,11 +478,11 @@
                                         <span class="file-label">{{ $t('twofaccounts.forms.choose_image') }}</span>
                                     </span>
                                 </label>
-                                <span class="tag is-large" :class="mode =='dark' ? 'is-dark' : 'is-white'" v-if="tempIcon">
-                                    <img class="icon-preview" :src="$2fauth.config.subdirectory + '/storage/icons/' + tempIcon" :alt="$t('twofaccounts.icon_to_illustrate_the_account')">
-                                    <button class="clear-selection delete is-small" @click.prevent="deleteIcon" :aria-label="$t('twofaccounts.remove_icon')"></button>
-                                </span>
                             </div>
+                            <span class="tag is-large" :class="mode =='dark' ? 'is-dark' : 'is-white'" v-if="tempIcon">
+                                <img class="icon-preview" :src="$2fauth.config.subdirectory + '/storage/icons/' + tempIcon" :alt="$t('twofaccounts.icon_to_illustrate_the_account')">
+                                <button class="clear-selection delete is-small" @click.prevent="deleteTempIcon" :aria-label="$t('twofaccounts.remove_icon')"></button>
+                            </span>
                         </UseColorMode>
                     </div>
                 </div>

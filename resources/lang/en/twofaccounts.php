@@ -127,7 +127,7 @@ return [
     ],
     'confirm' => [
         'delete' => 'Are you sure you want to delete this account?',
-        'cancel' => 'The account will be lost. Are you sure?',
+        'cancel' => 'Changes will be lost. Are you sure?',
         'discard' => 'Are you sure you want to discard this account?',
         'discard_all' => 'Are you sure you want to discard all accounts?',
         'discard_duplicates' => 'Are you sure you want to discard all duplicates?',

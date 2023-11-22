@@ -72,6 +72,7 @@
             id="btnClose"
             :class="classes"
             @click="$emit('closed')"
+            type="button"
         >
             {{ $t('commons.close') }}
         </button>
@@ -80,6 +81,7 @@
             id="btnCancel"
             :class="classes"
             @click="$emit('canceled')"
+            type="button"
         >
             {{ $t('commons.cancel') }}
         </button>
