@@ -234,7 +234,10 @@
                 {{ $t('twofaccounts.import.import') }}
             </h1>
             <div v-if="!isFetching && exportedAccounts.length == 0">
-                <div class="block is-size-7-mobile" v-html="$t('twofaccounts.import.import_legend')"></div>
+                <div class="block is-size-7-mobile">
+                    <p class="mb-2">{{ $t('twofaccounts.import.import_legend') }}</p>
+                    <p>{{ $t('twofaccounts.import.import_legend_afterpart') }}</p>
+                </div>
                 <div class="columns">
                     <div class="column">
                         <div class="block">
@@ -341,7 +344,10 @@
                 <Spinner :type="'fullscreen-overlay'" :isVisible="true" :message="'twofaccounts.import.parsing_data'" />
             </div>
             <div v-else>
-                <div class="block is-size-7-mobile" v-html="$t('twofaccounts.import.submitted_data_parsed_now_accounts_are_awaiting_import')"></div>
+                <div class="block is-size-7-mobile">
+                    <p class="mb-2">{{ $t('twofaccounts.import.submitted_data_parsed_now_accounts_are_awaiting_import') }}</p>
+                    <p>{{ $t('twofaccounts.import.use_buttons_to_save_or_discard') }}</p>
+                </div>
                 <div v-for="(account, index) in exportedAccounts" :key="account.name" class="group-item is-size-5 is-size-6-mobile">
                     <div class="is-flex is-justify-content-space-between">
                         <!-- Account name -->
