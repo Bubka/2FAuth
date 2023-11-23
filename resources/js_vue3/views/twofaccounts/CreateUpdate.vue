@@ -203,7 +203,7 @@
     function cancelCreation() {
         if (form.hasChanged() || tempIcon.value != form.icon) {
             if (confirm(trans('twofaccounts.confirm.cancel')) === true) {
-                if (!isEditMode || tempIcon.value != form.icon) {
+                if (!isEditMode.value || tempIcon.value != form.icon) {
                     deleteTempIcon()
                 }
                 router.push({name: 'accounts'})
@@ -238,7 +238,7 @@
      * Deletes the temp icon from backend
      */
     function deleteTempIcon() {
-        if (isEditMode) {
+        if (isEditMode.value) {
             if (tempIcon.value) {
                 if (tempIcon.value !== form.icon) {
                     twofaccountService.deleteIcon(tempIcon.value)
@@ -457,7 +457,7 @@
                     <!-- Try my luck button -->
                     <div class="control" v-if="user.preferences.getOfficialIcons">
                         <UseColorMode v-slot="{ mode }">
-                            <VueButton @click="fetchLogo" :color="mode == 'dark' ? 'is-dark' : ''" :nativeType="'button'" :is-loading="fetchingLogo" :isDisabled="form.service.length < 1">
+                            <VueButton @click="fetchLogo" :color="mode == 'dark' ? 'is-dark' : ''" :nativeType="'button'" :is-loading="fetchingLogo" :isDisabled="!form.service">
                                 <span class="icon is-small">
                                     <FontAwesomeIcon :icon="['fas', 'globe']" />
                                 </span>
