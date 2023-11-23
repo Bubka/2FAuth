@@ -40,8 +40,8 @@
                 </div>
             </section>
         </div>
-        <div v-if="props.closable" class="fullscreen-footer">
+        <VueFooter v-if="props.closable" :showButtons="true" :internalFooterType="'modal'">
             <ButtonBackCloseCancel action="close" :useLinkTag="false" @closed="closeModal" />
-        </div>
+        </VueFooter>
     </div>
 </template>

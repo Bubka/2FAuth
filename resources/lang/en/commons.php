@@ -74,4 +74,5 @@ return [
     'close_the_x_page' => 'Close the :pagetitle page',
     'submit' => 'Submit',
     'default' => 'Default',
+    'back_to_home' => 'Back to home',
 ];

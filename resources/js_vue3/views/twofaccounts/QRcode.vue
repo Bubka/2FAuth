@@ -28,8 +28,8 @@
                 <Spinner :isVisible="!qrcode" :type="'raw'" class="is-size-1" />
             </p>
         </div>
-        <div class="fullscreen-footer">
+        <VueFooter :showButtons="true" :internalFooterType="'modal'">
             <ButtonBackCloseCancel :returnTo="{ name: 'accounts' }" action="close" />
-        </div>
+        </VueFooter>
     </div>
 </template>
