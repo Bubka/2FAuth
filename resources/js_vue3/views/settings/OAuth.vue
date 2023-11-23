@@ -46,8 +46,8 @@
             })
         })
         .catch(error => {
-            if( error.response.status === 400 ) {
-                // The backend returns a 400 response for routes with the
+            if( error.response.status === 405 ) {
+                // The backend returns a 405 response for routes with the
                 // rejectIfReverseProxy middleware
                 isRemoteUser.value = true
             }

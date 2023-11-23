@@ -136,7 +136,7 @@ class WebAuthnManageControllerTest extends FeatureTestCase
     {
         $response = $this->actingAs($this->user, 'reverse-proxy-guard')
             ->json('GET', '/webauthn/credentials')
-            ->assertStatus(400);
+            ->assertStatus(405);
     }
 
     /**
@@ -146,7 +146,7 @@ class WebAuthnManageControllerTest extends FeatureTestCase
     {
         $response = $this->actingAs($this->user, 'reverse-proxy-guard')
             ->json('PATCH', '/webauthn/credentials/fqsdfqsdf/name')
-            ->assertStatus(400);
+            ->assertStatus(405);
     }
 
     /**
@@ -156,7 +156,7 @@ class WebAuthnManageControllerTest extends FeatureTestCase
     {
         $response = $this->actingAs($this->user, 'reverse-proxy-guard')
             ->json('DELETE', '/webauthn/credentials/dcnskldjnkljsrn')
-            ->assertStatus(400);
+            ->assertStatus(405);
     }
 
     /**

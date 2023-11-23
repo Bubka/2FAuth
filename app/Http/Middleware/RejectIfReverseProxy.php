@@ -20,7 +20,7 @@ class RejectIfReverseProxy
 
             return response()->json([
                 'message' => __('errors.unsupported_with_reverseproxy'),
-            ], 400);
+            ], 405);
         }
 
         return $next($request);
