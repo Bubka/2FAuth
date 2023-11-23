@@ -17,7 +17,7 @@
     const listAdminSettings = ref(null)
 
     onMounted(() => {
-        systemService.getSystemInfos().then(response => {
+        systemService.getSystemInfos({returnError: true}).then(response => {
             infos.value = response.data.common
 
             if (response.data.admin_settings) {
@@ -27,6 +27,9 @@
             if (response.data.user_preferences) {
                 userPreferences.value = response.data.user_preferences
             }
+        })
+        .catch(() => {
+            infos.value = null
         })
     })
 
@@ -94,13 +97,16 @@
         <h2 class="title is-5 has-text-grey-light">
             {{ $t('commons.environment') }}
         </h2>
-        <div class="about-debug box is-family-monospace is-size-7">
+        <div v-if="infos" class="about-debug box is-family-monospace is-size-7">
             <button id="btnCopyEnvVars" :aria-label="$t('commons.copy_to_clipboard')" class="button is-like-text is-pulled-right is-small is-text" @click.stop="copyToClipboard(listInfos.innerText)">
                 <FontAwesomeIcon :icon="['fas', 'copy']" />
             </button>
             <ul ref="listInfos" id="listInfos">
                 <li v-for="(value, key) in infos" :value="value" :key="key"><b>{{key}}</b>: {{value}}</li>
             </ul>
+        </div>
+        <div v-else-if="infos === null" class="about-debug box is-family-monospace is-size-7 has-text-warning-dark">
+            {{ $t('errors.error_during_data_fetching') }}
         </div>
         <h2 v-if="adminSettings" class="title is-5 has-text-grey-light">
             {{ $t('settings.admin_settings') }}

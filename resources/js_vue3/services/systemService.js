@@ -7,16 +7,16 @@ export default {
      * 
      * @returns Promise
      */
-    getSystemInfos() {
-        return webClient.get('infos')
+    getSystemInfos(config = {}) {
+        return webClient.get('infos', { ...config })
     },
 
     /**
      * 
      * @returns Promise
      */
-    getLastRelease() {
-        return webClient.get('latestRelease')
+    getLastRelease(config = {}) {
+        return webClient.get('latestRelease', { ...config })
     }
     
 }
