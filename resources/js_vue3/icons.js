@@ -43,8 +43,13 @@ import {
     faCircleNotch,
     faCircleCheck,
     faTriangleExclamation,
-    faFileLines
+    faFileLines,
+    faVideoSlash,
 } from '@fortawesome/free-solid-svg-icons'
+
+import {
+    faStar
+} from '@fortawesome/free-regular-svg-icons'
 
 import {
     faGithubAlt
@@ -93,7 +98,9 @@ library.add(
     faCircleNotch,
     faCircleCheck,
     faTriangleExclamation,
-    faFileLines
+    faFileLines,
+    faVideoSlash,
+    faStar,
 );
 
 export default FontAwesomeIcon

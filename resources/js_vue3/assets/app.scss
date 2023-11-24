@@ -1322,3 +1322,27 @@ footer.main .field.is-grouped {
 :root[data-theme="dark"] .card-footer-item:not(:last-child) {
 	border-right: 1px solid $grey-darker;
 }
+
+.addressbar {
+  padding: 6px;
+  border: 1px solid $grey-light;
+  background-color: $white;
+  border-radius: $radius;
+  position: relative;
+}
+:root[data-theme="dark"] .addressbar {
+  background-color: $black-bis;
+  border: none;
+}
+
+.circled::before {
+  display: block;
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid $danger;
+  left: 25px;
+  top: 4px;
+  width: 29px;
+  height: 29px;
+}

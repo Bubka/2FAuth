@@ -101,7 +101,8 @@ return [
         'live_scan_cant_start' => 'Live scan can\'t start :(',
         'need_grant_permission' => [
             'reason' => '2FAuth does not have permission to access your camera',
-            'solution' => 'You need to grant permission to use your device camera. If you already denied and your browser do not prompt you again, please refers to the browser documentation to find out how to grant permission.'
+            'solution' => 'You need to grant permission to use your device camera. If you already denied and your browser do not prompt you again, please refers to the browser documentation to find out how to grant permission.',
+            'click_camera_icon' => 'It is usually done by clicking on a slashed camera icon in or next to the browser\'s address bar',
         ],
         'not_readable' => [
             'reason' => 'Fail to load scanner',
