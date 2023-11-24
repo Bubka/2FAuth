@@ -72,7 +72,7 @@
                 :placeholder="placeholder" 
                 v-bind="$attrs"
                 v-on:change="$emit('update:modelValue', $event.target.value)"
-                :maxlength="this.maxLength" 
+                :maxlength="maxLength" 
             />
         </div>
         <UseColorMode v-slot="{ mode }" v-if="isEditMode">

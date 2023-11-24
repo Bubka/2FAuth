@@ -59,7 +59,7 @@
                 :placeholder="placeholder" 
                 v-bind="$attrs"
                 v-on:change="$emit('update:modelValue', $event.target.value)"
-                :maxlength="this.maxLength" 
+                :maxlength="maxLength" 
             />
         </div>
         <FieldError v-if="fieldError != undefined" :error="fieldError" :field="fieldName" />
