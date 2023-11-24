@@ -114,6 +114,10 @@
             ctx.stroke()
         }
     }
+
+    function reloadLocation() {
+        location.reload()
+    }
 </script>
 
 <template>
@@ -145,6 +149,9 @@
                                             <FontAwesomeIcon :icon="['far', 'star']" class="mr-1" />
                                         </div>
                                     </div>
+                                    <p>
+                                        <a @click.stop="reloadLocation">{{ $t('commons.refresh') }}</a>
+                                    </p>
                                     
                                     <!-- <div class="addressbar">
                                         <FontAwesomeIcon :icon="['fas', 'video-slash']" class="mr-3 ml-2" size="xs" />
@@ -164,7 +171,7 @@
                 </div>
             </section>
         </div>
-        <div class="fullscreen-streamer">
+        <div v-show="!errorPhrase" class="fullscreen-streamer">
             <qrcode-stream
                 v-if="selectedDevice !== null"
                 :constraints="{ deviceId: selectedDevice.deviceId }"
