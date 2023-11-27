@@ -7,7 +7,7 @@
 <template>
     <div class="toolbar has-text-centered">
         <div class="columns">
-            <div class="column">
+            <div class="column has-nowrap px-0">
                 <!-- selected label -->
                 <span class="has-text-grey mr-1">{{ selectedCount }}&nbsp;{{ $t('commons.selected') }}</span>
                 <!-- deselect all -->
