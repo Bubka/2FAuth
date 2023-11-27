@@ -1,8 +1,9 @@
-import { defineConfig } from 'vite';
-import laravel from 'laravel-vite-plugin';
-import vue from '@vitejs/plugin-vue';
-import i18n from 'laravel-vue-i18n/vite';
-import AutoImport from 'unplugin-auto-import/vite';
+import { defineConfig } from 'vite'
+import laravel from 'laravel-vite-plugin'
+import vue from '@vitejs/plugin-vue'
+import i18n from 'laravel-vue-i18n/vite'
+import AutoImport from 'unplugin-auto-import/vite'
+import version from './vite.version'
 
 export default defineConfig({
     plugins: [
@@ -65,6 +66,13 @@ export default defineConfig({
     resolve: {
         alias: {
             '@': '/resources/js_vue3',
+        },
+    },
+    build: {
+        rollupOptions: {
+            output: {
+                banner: '/*! 2FAuth version ' + version + ' - Copyright (c) 2023 Bubka - https://github.com/Bubka/2FAuth */',
+            },
         },
     },
 });
