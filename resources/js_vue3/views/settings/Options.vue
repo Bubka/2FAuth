@@ -69,29 +69,6 @@
         return locales
     })
 
-    user.$subscribe((mutation) => {
-        userService.updatePreference(mutation.events.key, mutation.events.newValue).then(response => {
-            useNotifyStore().success({ type: 'is-success', text: trans('settings.forms.setting_saved') })
-            
-            if(mutation.events.key === 'lang' && getActiveLanguage() !== mutation.events.newValue) {
-                user.applyLanguage()
-            }
-            else if(mutation.events.key === 'theme') {
-                user.applyTheme()
-            }
-        })
-    })
-
-    appSettings.$subscribe((mutation) => {
-        if (mutation.type == 'patch object') {
-            for (const property in mutation.payload) {
-                appSettingService.update(property, mutation.payload[property]).then(response => {
-                    useNotifyStore().success({ type: 'is-success', text: trans('settings.forms.setting_saved') })
-                })
-            }
-        }
-    })
-
     onMounted(() => {
         groups.items.forEach((group) => {
             if( group.id > 0 ) {
@@ -102,6 +79,35 @@
             }
         })
     })
+
+    /**
+     * Saves a preference on the backend
+     * @param {string} preference 
+     * @param {any} value 
+     */
+    function savePreference(preference, value) {
+        userService.updatePreference(preference, value).then(response => {
+            useNotifyStore().success({ type: 'is-success', text: trans('settings.forms.setting_saved') })
+            
+            if(preference === 'lang' && getActiveLanguage() !== value) {
+                user.applyLanguage()
+            }
+            else if(preference === 'theme') {
+                user.applyTheme()
+            }
+        })
+    }
+
+    /**
+     * Saves a setting on the backend
+     * @param {string} preference 
+     * @param {any} value 
+     */
+    function saveSetting(setting, value) {
+        appSettingService.update(setting, value).then(response => {
+            useNotifyStore().success({ type: 'is-success', text: trans('settings.forms.setting_saved') })
+        })
+    }
 
     onBeforeRouteLeave((to) => {
         if (! to.name.startsWith('settings.')) {
@@ -122,7 +128,7 @@
                     <div class="block">
                         <h4 class="title is-4 has-text-grey-light">{{ $t('settings.general') }}</h4>
                         <!-- Language -->
-                        <FormSelect v-model="user.preferences.lang" :options="langs" fieldName="lang" label="settings.forms.language.label" help="settings.forms.language.help" />
+                        <FormSelect v-model="user.preferences.lang" @update:model-value="val => savePreference('lang', val)" :options="langs" fieldName="lang" label="settings.forms.language.label" help="settings.forms.language.help" />
                         <div class="field help">
                             {{ $t('settings.forms.some_translation_are_missing') }}
                             <a class="ml-2" href="https://crowdin.com/project/2fauth">
@@ -131,42 +137,42 @@
                             </a>
                         </div>
                         <!-- display mode -->
-                        <FormToggle v-model="user.preferences.displayMode" :choices="layouts" fieldName="displayMode" label="settings.forms.display_mode.label" help="settings.forms.display_mode.help"/>
+                        <FormToggle v-model="user.preferences.displayMode" @update:model-value="val => savePreference('displayMode', val)" :choices="layouts" fieldName="displayMode" label="settings.forms.display_mode.label" help="settings.forms.display_mode.help"/>
                         <!-- theme -->
-                        <FormToggle v-model="user.preferences.theme" :choices="themes" fieldName="theme" label="settings.forms.theme.label" help="settings.forms.theme.help"/>
+                        <FormToggle v-model="user.preferences.theme" @update:model-value="val => savePreference('theme', val)" :choices="themes" fieldName="theme" label="settings.forms.theme.label" help="settings.forms.theme.help"/>
                         <!-- show icon -->
-                        <FormCheckbox v-model="user.preferences.showAccountsIcons" fieldName="showAccountsIcons" label="settings.forms.show_accounts_icons.label" help="settings.forms.show_accounts_icons.help" />
+                        <FormCheckbox v-model="user.preferences.showAccountsIcons" @update:model-value="val => savePreference('showAccountsIcons', val)" fieldName="showAccountsIcons" label="settings.forms.show_accounts_icons.label" help="settings.forms.show_accounts_icons.help" />
                         <!-- Official icons -->
-                        <FormCheckbox v-model="user.preferences.getOfficialIcons" fieldName="getOfficialIcons" label="settings.forms.get_official_icons.label" help="settings.forms.get_official_icons.help" />
+                        <FormCheckbox v-model="user.preferences.getOfficialIcons" @update:model-value="val => savePreference('getOfficialIcons', val)" fieldName="getOfficialIcons" label="settings.forms.get_official_icons.label" help="settings.forms.get_official_icons.help" />
                         <!-- password format -->
-                        <FormCheckbox v-model="user.preferences.formatPassword" fieldName="formatPassword" label="settings.forms.password_format.label" help="settings.forms.password_format.help" />
-                        <FormToggle v-model="user.preferences.formatPasswordBy" :choices="passwordFormats" fieldName="formatPasswordBy" />
+                        <FormCheckbox v-model="user.preferences.formatPassword" @update:model-value="val => savePreference('formatPassword', val)" fieldName="formatPassword" label="settings.forms.password_format.label" help="settings.forms.password_format.help" />
+                        <FormToggle v-model="user.preferences.formatPasswordBy" @update:model-value="val => savePreference('formatPasswordBy', val)" :choices="passwordFormats" fieldName="formatPasswordBy" />
 
                         <h4 class="title is-4 pt-4 has-text-grey-light">{{ $t('groups.groups') }}</h4>
                         <!-- default group -->
-                        <FormSelect v-model="user.preferences.defaultGroup" :options="groupsList" fieldName="defaultGroup" label="settings.forms.default_group.label" help="settings.forms.default_group.help" />
+                        <FormSelect v-model="user.preferences.defaultGroup" @update:model-value="val => savePreference('defaultGroup', val)" :options="groupsList" fieldName="defaultGroup" label="settings.forms.default_group.label" help="settings.forms.default_group.help" />
                         <!-- retain active group -->
-                        <FormCheckbox v-model="user.preferences.rememberActiveGroup" fieldName="rememberActiveGroup" label="settings.forms.remember_active_group.label" help="settings.forms.remember_active_group.help" />
+                        <FormCheckbox v-model="user.preferences.rememberActiveGroup" @update:model-value="val => savePreference('rememberActiveGroup', val)" fieldName="rememberActiveGroup" label="settings.forms.remember_active_group.label" help="settings.forms.remember_active_group.help" />
 
                         <h4 class="title is-4 pt-4 has-text-grey-light">{{ $t('settings.security') }}</h4>
                         <!-- auto lock -->
-                        <FormSelect v-model="user.preferences.kickUserAfter" :options="kickUserAfters" fieldName="kickUserAfter" label="settings.forms.auto_lock.label" help="settings.forms.auto_lock.help" />
+                        <FormSelect v-model="user.preferences.kickUserAfter" @update:model-value="val => savePreference('kickUserAfter', val)" :options="kickUserAfters" fieldName="kickUserAfter" label="settings.forms.auto_lock.label" help="settings.forms.auto_lock.help" />
                         <!-- get OTP on request -->
-                        <FormToggle v-model="user.preferences.getOtpOnRequest" :choices="getOtpTriggers" fieldName="getOtpOnRequest" label="settings.forms.otp_generation.label" help="settings.forms.otp_generation.help"/>
+                        <FormToggle v-model="user.preferences.getOtpOnRequest" @update:model-value="val => savePreference('getOtpOnRequest', val)" :choices="getOtpTriggers" fieldName="getOtpOnRequest" label="settings.forms.otp_generation.label" help="settings.forms.otp_generation.help"/>
                         <!-- otp as dot -->
-                        <FormCheckbox v-model="user.preferences.showOtpAsDot" fieldName="showOtpAsDot" label="settings.forms.show_otp_as_dot.label" help="settings.forms.show_otp_as_dot.help" />
+                        <FormCheckbox v-model="user.preferences.showOtpAsDot" @update:model-value="val => savePreference('showOtpAsDot', val)" fieldName="showOtpAsDot" label="settings.forms.show_otp_as_dot.label" help="settings.forms.show_otp_as_dot.help" />
                         <!-- close otp on copy -->
-                        <FormCheckbox v-model="user.preferences.closeOtpOnCopy" fieldName="closeOtpOnCopy" label="settings.forms.close_otp_on_copy.label" help="settings.forms.close_otp_on_copy.help" :disabled="!user.preferences.getOtpOnRequest" />
+                        <FormCheckbox v-model="user.preferences.closeOtpOnCopy" @update:model-value="val => savePreference('closeOtpOnCopy', val)" fieldName="closeOtpOnCopy" label="settings.forms.close_otp_on_copy.label" help="settings.forms.close_otp_on_copy.help" :disabled="!user.preferences.getOtpOnRequest" />
                         <!-- copy otp on get -->
-                        <FormCheckbox v-model="user.preferences.copyOtpOnDisplay" fieldName="copyOtpOnDisplay" label="settings.forms.copy_otp_on_display.label" help="settings.forms.copy_otp_on_display.help" :disabled="!user.preferences.getOtpOnRequest" />
+                        <FormCheckbox v-model="user.preferences.copyOtpOnDisplay" @update:model-value="val => savePreference('copyOtpOnDisplay', val)" fieldName="copyOtpOnDisplay" label="settings.forms.copy_otp_on_display.label" help="settings.forms.copy_otp_on_display.help" :disabled="!user.preferences.getOtpOnRequest" />
 
                         <h4 class="title is-4 pt-4 has-text-grey-light">{{ $t('settings.data_input') }}</h4>
                         <!-- basic qrcode -->
-                        <FormCheckbox v-model="user.preferences.useBasicQrcodeReader" fieldName="useBasicQrcodeReader" label="settings.forms.use_basic_qrcode_reader.label" help="settings.forms.use_basic_qrcode_reader.help" />
+                        <FormCheckbox v-model="user.preferences.useBasicQrcodeReader" @update:model-value="val => savePreference('useBasicQrcodeReader', val)" fieldName="useBasicQrcodeReader" label="settings.forms.use_basic_qrcode_reader.label" help="settings.forms.use_basic_qrcode_reader.help" />
                         <!-- direct capture -->
-                        <FormCheckbox v-model="user.preferences.useDirectCapture" fieldName="useDirectCapture" label="settings.forms.useDirectCapture.label" help="settings.forms.useDirectCapture.help" />
+                        <FormCheckbox v-model="user.preferences.useDirectCapture" @update:model-value="val => savePreference('useDirectCapture', val)" fieldName="useDirectCapture" label="settings.forms.useDirectCapture.label" help="settings.forms.useDirectCapture.help" />
                         <!-- default capture mode -->
-                        <FormSelect v-model="user.preferences.defaultCaptureMode" :options="captureModes" fieldName="defaultCaptureMode" label="settings.forms.defaultCaptureMode.label" help="settings.forms.defaultCaptureMode.help" />
+                        <FormSelect v-model="user.preferences.defaultCaptureMode" @update:model-value="val => savePreference('defaultCaptureMode', val)" :options="captureModes" fieldName="defaultCaptureMode" label="settings.forms.defaultCaptureMode.label" help="settings.forms.defaultCaptureMode.help" />
                     </div>
                     <!-- Admin settings -->
                     <div v-if="user.isAdmin">
@@ -176,12 +182,12 @@
                             <p>{{ $t('settings.only_an_admin_can_edit_them') }}</p>
                         </div>
                         <!-- Check for update -->
-                        <FormCheckbox :model-value="appSettings.checkForUpdate" @update:modelValue="(val) => appSettings.$patch({checkForUpdate: val})" fieldName="checkForUpdate" label="commons.check_for_update" help="commons.check_for_update_help" />
+                        <FormCheckbox :model-value="appSettings.checkForUpdate" @update:model-value="val => saveSetting('checkForUpdate', val)" fieldName="checkForUpdate" label="commons.check_for_update" help="commons.check_for_update_help" />
                         <VersionChecker />
                         <!-- protect db -->
-                        <FormCheckbox :model-value="appSettings.useEncryption" @update:modelValue="(val) => appSettings.$patch({useEncryption: val})" fieldName="useEncryption" label="settings.forms.use_encryption.label" help="settings.forms.use_encryption.help" />
+                        <FormCheckbox :model-value="appSettings.useEncryption" @update:model-value="val => saveSetting('useEncryption', val)" fieldName="useEncryption" label="settings.forms.use_encryption.label" help="settings.forms.use_encryption.help" />
                         <!-- disable registration -->
-                        <FormCheckbox :model-value="appSettings.disableRegistration" @update:modelValue="(val) => appSettings.$patch({disableRegistration: val})" fieldName="disableRegistration" label="settings.forms.disable_registration.label" help="settings.forms.disable_registration.help" />
+                        <FormCheckbox :model-value="appSettings.disableRegistration" @update:model-value="val => saveSetting('disableRegistration', val)" fieldName="disableRegistration" label="settings.forms.disable_registration.label" help="settings.forms.disable_registration.help" />
                     </div>
                 </form>
             </FormWrapper>
