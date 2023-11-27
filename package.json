@@ -3,7 +3,8 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
-        "build": "vite build"
+        "build": "vite build",
+        "rebuild": "vite build --watch"
     },
     "devDependencies": {
         "@fortawesome/fontawesome-svg-core": "^6.4.2",
