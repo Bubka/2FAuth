@@ -77,12 +77,12 @@ app
     .component('Kicker', Kicker)
 
 // Global error handling
-import { useNotifyStore } from '@/stores/notify'
-if (process.env.NODE_ENV != 'development') {
-    app.config.errorHandler = (err) => {
-        useNotifyStore().error(err)
-    }
-}
+// import { useNotifyStore } from '@/stores/notify'
+// if (process.env.NODE_ENV != 'development') {
+//     app.config.errorHandler = (err) => {
+//         useNotifyStore().error(err)
+//     }
+// }
 
 // Helpers
 // app.config.globalProperties.$helpers = helpers
