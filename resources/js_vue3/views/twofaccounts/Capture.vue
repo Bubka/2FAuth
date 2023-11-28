@@ -174,7 +174,6 @@
         <div v-show="!errorPhrase" class="fullscreen-streamer">
             <qrcode-stream
                 v-if="selectedDevice !== null"
-                :constraints="{ deviceId: selectedDevice.deviceId }"
                 :track="paintOutline"
                 @detect="onDetect"
                 @error="onError"
