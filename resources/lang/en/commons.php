@@ -75,4 +75,5 @@ return [
     'submit' => 'Submit',
     'default' => 'Default',
     'back_to_home' => 'Back to home',
+    'nothing' => 'nothing',
 ];

@@ -1,6 +1,7 @@
 <script setup>
     import Form from '@/components/formElements/Form'
     import Spinner from '@/components/Spinner.vue'
+    import QrContentDisplay from '@/components/QrContentDisplay.vue'
     import { useBusStore } from '@/stores/bus'
     import { UseColorMode } from '@vueuse/components'
     import { useNotifyStore } from '@/stores/notify'
@@ -18,6 +19,7 @@
         qrcode: null,
         uri: '',
     }))
+    const showQrContent = ref(false)
 
     onMounted(async () => {
         devices.value = (await navigator.mediaDevices.enumerateDevices())
@@ -65,6 +67,7 @@
             router.push({ name: 'importAccounts' })
         }
         else if (form.uri.slice(0, 15).toLowerCase() !== "otpauth://totp/" && form.uri.slice(0, 15).toLowerCase() !== "otpauth://hotp/") {
+            showQrContent.value = true
             notify.warn({ text: trans('errors.no_valid_otp') })
         }
         else {
@@ -200,4 +203,7 @@
             <ButtonBackCloseCancel action="cancel" :isCapture="true" :useLinkTag="false" @canceled="exitStream()" />
         </div>
     </div>
+    <modal v-model="showQrContent">
+        <QrContentDisplay :qrContent="form.uri" />
+    </modal>
 </template>
