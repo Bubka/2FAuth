@@ -927,14 +927,14 @@ footer.main .field.is-grouped {
 }
 
 @supports (padding-top: env(safe-area-inset-top)) {
-  .notification {
+  .notification-banner {
     --safe-area-inset-top: env(safe-area-inset-top);
     padding-top: calc(0.4rem + var(--safe-area-inset-top));
   }
 }
 
 @supports (padding-top: constant(safe-area-inset-top)) {
-  .notification {
+  .notification-banner {
     --safe-area-inset-top: constant(safe-area-inset-top);
     padding-top: calc(0.4rem + var(--safe-area-inset-top));
   }

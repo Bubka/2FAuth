@@ -55,7 +55,7 @@
         :duration="4000"
         :speed="0"
         :max="1"
-        classes="notification is-radiusless" />
+        classes="notification notification-banner is-radiusless" />
     <main class="main-section">
         <RouterView />
     </main>
