@@ -58,6 +58,7 @@ export const useUserStore = defineStore({
          */
         logout(options = {}) {
             const { kicked } = options
+            const notify = useNotifyStore()
 
             // async appLogout(evt) {
             if (this.$2fauth.config.proxyAuth) {
@@ -67,21 +68,29 @@ export const useUserStore = defineStore({
                 else return false
             }
             else {
-                return authService.logout().then(() => {
-                    this.reset()
+                authService.logout({ returnError: true }).then(() => {
                     if (kicked) {
-                        const notify = useNotifyStore()
                         notify.clear()
                         notify.warn({ text: trans('auth.autolock_triggered_punchline'), duration:-1 })
                     }
+                    this.tossOut()
+                })
+                .catch(error => {
+                    // The logout request will receive a 401 response when the
+                    // backend has already detect inactivity on its side. In this case we
+                    // don't want any error to be displayed.
+                    if (error.response.status !== 401) {
+                        notify.error(error)
+                    }
+                    else this.tossOut()
                 })
             }
         },
 
         /**
-         * Resets all user data
+         * Resets all user data and push out
          */
-        reset() {
+        tossOut() {
             this.$reset()
             this.initDataStores()
             this.applyUserPrefs()

@@ -1,17 +1,18 @@
 <script setup>
     import { RouterView } from 'vue-router'
     const route = useRoute()
+    const kickUser = ref(null)
     const kickUserAfter = ref(null)
-    const isProtectedRoute = ref(null)
+    const isProtectedRoute = ref(route.meta.watchedByKicker)
 
     watch(
         () => route.name,
         () => {
-            isProtectedRoute.value = protectedRoute(route)
+            isProtectedRoute.value = route.meta.watchedByKicker
         }
     )
 
-    const kickInactiveUser = computed(() => kickUserAfter.value > 0 && isProtectedRoute.value)
+    // const kickInactiveUser = computed(() => kickUser && kickUserAfter.value > 0 && isProtectedRoute.value)
 
     onBeforeMount(async () => {
         const { useUserStore } = await import('./stores/user.js')
@@ -19,7 +20,7 @@
         const user = useUserStore()
 
         kickUserAfter.value = parseInt(user.preferences.kickUserAfter)
-        isProtectedRoute.value = protectedRoute(route)
+        kickUser.value = user.isAuthenticated
 
         watch(
             () => user.preferences.kickUserAfter,
@@ -27,22 +28,16 @@
                 kickUserAfter.value = parseInt(user.preferences.kickUserAfter)
             }
         )
-
+        watch(
+            () => user.isAuthenticated,
+            () => {
+                kickUser.value = user.isAuthenticated
+            }
+        )
         watch(language, () => {
             user.applyLanguage()
         })
     })
-
-    function protectedRoute(route) {
-        let bool = false
-        route.meta.middlewares?.forEach(func => {
-            if (func instanceof Function && func.name == 'authGuard') {
-                bool = true
-                return
-            }
-        })
-        return bool
-    }
 
 </script>
 
@@ -59,5 +54,5 @@
     <main class="main-section">
         <RouterView />
     </main>
-    <kicker v-if="kickInactiveUser" :kickAfter="kickUserAfter"></kicker>
+    <kicker v-if="kickUser && kickUserAfter > 0 && isProtectedRoute" :kickAfter="kickUserAfter"></kicker>
 </template>

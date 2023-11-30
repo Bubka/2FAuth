@@ -7,8 +7,8 @@ export default {
     /**
      * 
      */
-    logout() {
-        return webClient.get('/user/logout')
+    logout(config = {}) {
+        return webClient.get('/user/logout', { ...config })
     },
 
     /**

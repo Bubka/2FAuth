@@ -58,7 +58,7 @@ export const httpClientFactory = (endpoint = 'api') => {
             
             if (error.response && [401].includes(error.response.status)) {
                 const user = useUserStore()
-                user.reset()
+                user.tossOut()
             }
 
             // Always return the form validation errors
