@@ -35,8 +35,9 @@
         <div v-if="internalFooterType == 'doneButton'" class="content has-text-centered">
             <button id="lnkExitEdit" class="button is-ghost is-like-text" @click.stop="$emit('doneButtonClicked', true)">{{ $t('commons.done') }}</button>
         </div>
-        <div v-if="internalFooterType == 'modal'" class="content has-text-centered">
-            <router-link id="lnkBackToHome" :to="{ name: 'accounts' }" class="has-text-grey">{{ $t('commons.back_to_home') }}</router-link>
+        <div v-else-if="internalFooterType == 'modal'" class="content has-text-centered">
+            <router-link v-if="$route.name != 'accounts'" id="lnkBackToHome" :to="{ name: 'accounts' }" class="has-text-grey">{{ $t('commons.back_to_home') }}</router-link>
+            <span v-else>&nbsp;</span>
         </div>
         <div v-else class="content has-text-centered">
             <div v-if="$route.meta.showAbout === true" class="is-size-6">
