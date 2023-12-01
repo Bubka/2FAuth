@@ -1,30 +1,170 @@
+<script setup>
+    import Form from '@/components/formElements/Form'
+    import userService from '@/services/userService'
+    import SettingTabs from '@/layouts/SettingTabs.vue'
+    import { useNotifyStore } from '@/stores/notify'
+    import { UseColorMode } from '@vueuse/components'
+    import Spinner from '@/components/Spinner.vue'
+
+    const $2fauth = inject('2fauth')
+    const notify = useNotifyStore()
+    const returnTo = useStorage($2fauth.prefix + 'returnTo', 'accounts')
+    const { copy } = useClipboard({ legacy: true })
+
+    const tokens = ref([])
+    const isFetching = ref(false)
+    const isRemoteUser = ref(false)
+    const createPATModalIsVisible = ref(false)
+    const visibleToken = ref(null)
+    const visibleTokenId = ref(null)
+
+    onMounted(() => {
+        fetchTokens()
+    })
+
+    const form = reactive(new Form({
+        name : '',
+    }))
+
+    /**
+     * Get all groups from backend
+     */
+    function fetchTokens() {
+        isFetching.value = true
+
+        userService.getPersonalAccessTokens({returnError: true})
+        .then(response => {
+            tokens.value = []
+            response.data.forEach((data) => {
+                if (data.id === visibleTokenId.value) {
+                    data.value = visibleToken.value
+                    tokens.value.unshift(data)
+                }
+                else {
+                    tokens.value.push(data)
+                }
+            })
+        })
+        .catch(error => {
+            if( error.response.status === 405 ) {
+                // The backend returns a 405 response for routes with the
+                // rejectIfReverseProxy middleware
+                isRemoteUser.value = true
+            }
+            else {
+                notify.error(error)
+            }
+        })
+        .finally(() => {
+            isFetching.value = false
+            visibleTokenId.value = null
+            visibleToken.value = null
+        })
+    }
+
+
+    /**
+     * Open the PAT creation view
+     */
+    function showPATcreationForm() {
+        clearTokenValues()
+
+        if (isRemoteUser.value) {
+            notify.warn({ text: trans('errors.unsupported_with_reverseproxy') })
+        }
+        else createPATModalIsVisible.value = true
+    }
+    
+    /**
+     * Generate a fresh token
+     */
+    function generatePAToken() {
+        form.post('/oauth/personal-access-tokens')
+        .then(response => {
+            visibleToken.value = response.data.accessToken
+            visibleTokenId.value = response.data.token.id
+            fetchTokens()
+            createPATModalIsVisible.value = false
+            form.reset()
+        })
+    }
+
+    /**
+     * revoke a token (after confirmation)
+     */
+    function revokeToken(tokenId) {
+        if(confirm(trans('settings.confirm.revoke'))) {
+            userService.deletePersonalAccessToken(tokenId)
+            .then(response => {
+                // Remove the revoked token from the collection
+                tokens.value = tokens.value.filter(a => a.id !== tokenId)
+                notify.success({ text: trans('settings.token_revoked') })
+            })
+        }
+    }
+
+    /**
+     * Removes visible tokens data
+     */
+    function clearTokenValues() {
+        tokens.value.forEach(token => {
+            token.value = null
+        })
+        visibleToken.value = null
+    }
+
+    /**
+     * Copies data to clipboard and notifies on success
+     */
+    function copyToClipboard(data) {
+        copy(data)
+        notify.success({ text: trans('commons.copied_to_clipboard') })
+    }
+
+    /**
+     * Closes & resets the PAT creation form 
+     */
+    function cancelPATcreation() {
+        createPATModalIsVisible.value = false
+        form.reset()
+    }
+
+    onBeforeRouteLeave((to) => {
+        if (! to.name.startsWith('settings.')) {
+            notify.clear()
+        }
+    })
+</script>
+
 <template>
     <div>
-        <setting-tabs :activeTab="'settings.oauth.tokens'"></setting-tabs>
+        <SettingTabs :activeTab="'settings.oauth.tokens'" />
         <div class="options-tabs">
-            <form-wrapper>
+            <FormWrapper>
                 <div v-if="isRemoteUser" class="notification is-warning has-text-centered" v-html="$t('auth.auth_handled_by_proxy')" />
                 <h4 class="title is-4 has-text-grey-light">{{ $t('settings.personal_access_tokens') }}</h4>
                 <div class="is-size-7-mobile">
                     {{ $t('settings.token_legend')}}
                 </div>
                 <div class="mt-3">
-                    <a tabindex="0" class="is-link" @click="createToken" @keyup.enter="createToken">
-                        <font-awesome-icon :icon="['fas', 'plus-circle']" /> {{ $t('settings.generate_new_token')}}
+                    <a tabindex="0" class="is-link" @click="showPATcreationForm" @keyup.enter="showPATcreationForm">
+                        <FontAwesomeIcon :icon="['fas', 'plus-circle']" /> {{ $t('settings.generate_new_token')}}
                     </a>
                 </div>
                 <div v-if="tokens.length > 0">
                     <div v-for="token in tokens" :key="token.id" class="group-item is-size-5 is-size-6-mobile">
-                        <font-awesome-icon v-if="token.value" class="has-text-success" :icon="['fas', 'check']" /> {{ token.name }}
+                        <FontAwesomeIcon v-if="token.value" class="has-text-success" :icon="['fas', 'check']" /> {{ token.name }}
                         <!-- revoke link -->
                         <div class="tags is-pulled-right">
-                            <button v-if="token.value" class="button tag" :class="{'is-link': !$root.showDarkMode}" v-clipboard="() => token.value" v-clipboard:success="clipboardSuccessHandler">{{ $t('commons.copy') }}</button>
-                            <button class="button tag" :class="$root.showDarkMode ? 'is-dark':'is-white'" @click="revokeToken(token.id)" :title="$t('settings.revoke')">{{ $t('settings.revoke') }}</button>
+                            <UseColorMode v-slot="{ mode }">
+                                <button v-if="token.value" class="button tag" :class="{'is-link': mode != 'dark'}" @click.stop="copyToClipboard(token.value)">
+                                    {{ $t('commons.copy') }}
+                                </button>
+                                <button class="button tag" :class="mode === 'dark' ? 'is-dark':'is-white'" @click="revokeToken(token.id)" :title="$t('settings.revoke')">
+                                    {{ $t('settings.revoke') }}
+                                </button>
+                            </UseColorMode>
                         </div>
-                        <!-- edit link -->
-                        <!-- <router-link :to="{ name: 'settings.oauth.editPAT' }" class="has-text-grey pl-1" :title="$t('commons.edit')">
-                            <font-awesome-icon :icon="['fas', 'pen-square']" />
-                        </router-link> -->
                         <!-- warning msg -->
                         <span v-if="token.value" class="is-size-7-mobile is-size-6 my-3">
                             {{ $t('settings.make_sure_copy_token') }}
@@ -38,130 +178,33 @@
                         {{ $t('settings.revoking_a_token_is_permanent')}}
                     </div>
                 </div>
-                <div v-if="isFetching && tokens.length === 0" class="has-text-centered mt-6">
-                    <span id="icnSpinner" class="is-size-4">
-                        <font-awesome-icon :icon="['fas', 'spinner']" spin />
-                    </span>
-                </div>
+                <Spinner :isVisible="isFetching && tokens.length === 0" />
                 <!-- footer -->
-                <vue-footer :showButtons="true">
-                    <!-- close button -->
-                    <p class="control">
-                        <router-link
-                            id="btnClose"
-                            :to="{ path: $route.params.returnTo, params: { toRefresh: false } }"
-                            class="button is-rounded"
-                            :class="{'is-dark' : $root.showDarkMode}"
-                            tabindex="0"
-                            role="button"
-                            :aria-label="$t('commons.close_the_x_page', {pagetitle: $router.currentRoute.meta.title})">
-                            {{ $t('commons.close') }}
-                        </router-link>
-                    </p>
-                </vue-footer>
-            </form-wrapper>
+                <VueFooter :showButtons="true">
+                    <ButtonBackCloseCancel :returnTo="{ name: returnTo }" action="close" />
+                </VueFooter>
+            </FormWrapper>
+        </div>
+        <div v-if="createPATModalIsVisible" class="is-overlay modal-otp modal-background">
+            <main class="main-section">
+                <FormWrapper title="settings.forms.new_token">
+                    <form @submit.prevent="generatePAToken" @keydown="form.onKeydown($event)">
+                        <FormField v-model="form.name" fieldName="name" :fieldError="form.errors.get('name')" inputType="text" label="commons.name" autofocus />
+                        <div class="field is-grouped">
+                            <div class="control">
+                                <VueButton :id="'btnGenerateToken'" :isLoading="form.isBusy" >
+                                    {{ $t('commons.generate') }}
+                                </VueButton>
+                            </div>
+                            <div class="control">
+                                <VueButton @click="cancelPATcreation" :nativeType="'button'" id="btnCancel" :color="'is-text'">
+                                    {{ $t('commons.cancel') }}
+                                </VueButton>
+                            </div>
+                        </div>
+                    </form>
+                </FormWrapper>
+            </main>
         </div>
     </div>
 </template>
-
-<script>
-
-    import Form from './../../components/Form'
-
-    export default {
-        data(){
-            return {
-                tokens : [],
-                isFetching: false,
-                form: new Form({
-                    token : '',
-                }),
-                isRemoteUser: false,
-            }
-        },
-
-        mounted() {
-            this.fetchTokens()
-        },
-
-        methods : {
-
-            /**
-             * Get all groups from backend
-             */
-            async fetchTokens() {
-
-                this.isFetching = true
-
-                await this.axios.get('/oauth/personal-access-tokens', {returnError: true})
-                .then(response => {
-                    const tokens = []
-
-                    response.data.forEach((data) => {
-                        if (data.id === this.$route.params.token_id) {
-                            data.value = this.$route.params.accessToken
-                            tokens.unshift(data)
-                        }
-                        else {
-                            tokens.push(data)
-                        }
-                    })
-
-                    this.tokens = tokens
-                })
-                .catch(error => {
-                    if( error.response.status === 400 ) {
-
-                        this.isRemoteUser = true
-                    }
-                    else {
-
-                        this.$router.push({ name: 'genericError', params: { err: error.response } });
-                    }
-                })
-
-                this.isFetching = false
-            },
-
-            clipboardSuccessHandler ({ value, event }) {
-
-                this.$notify({ type: 'is-success', text: this.$t('commons.copied_to_clipboard') })
-            },
-
-            clipboardErrorHandler ({ value, event }) {
-                console.log('error', value)
-            },
-
-            /**
-             * revoke a token (after confirmation)
-             */
-            async revokeToken(tokenId) {
-                if(confirm(this.$t('settings.confirm.revoke'))) {
-
-                    await this.axios.delete('/oauth/personal-access-tokens/' + tokenId).then(response => {
-                        // Remove the revoked token from the collection
-                        this.tokens = this.tokens.filter(a => a.id !== tokenId)
-                        this.$notify({ type: 'is-success', text: this.$t('settings.token_revoked') })
-                    });
-                }
-            },
-
-            /**
-             * Open the PAT creation view
-             */
-            createToken() {
-                if (this.isRemoteUser) {
-                    this.$notify({ type: 'is-warning', text: this.$t('errors.unsupported_with_reverseproxy') })
-                }
-                else this.$router.push({ name: 'settings.oauth.generatePAT' })
-            },
-        },
-
-        beforeRouteLeave(to, from, next) {
-            if (to.name == 'accounts') {
-                this.$notify({ clean: true })
-            }
-            next()
-        }
-    }
-</script>

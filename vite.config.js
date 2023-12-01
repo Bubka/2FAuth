@@ -8,7 +8,7 @@ import version from './vite.version'
 export default defineConfig({
     plugins: [
         laravel([
-            'resources/js_vue3/app.js',
+            'resources/js/app.js',
         ]),
         vue({
             template: {
@@ -65,7 +65,7 @@ export default defineConfig({
     ],
     resolve: {
         alias: {
-            '@': '/resources/js_vue3',
+            '@': '/resources/js',
         },
     },
     build: {

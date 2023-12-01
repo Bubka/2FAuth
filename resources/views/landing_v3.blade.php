@@ -31,6 +31,6 @@
         var isTestingApp = {!! $isTestingApp !!};
         var appLocales = {!! $locales !!};
     </script>
-    @vite('resources/js_vue3/app.js')
+    @vite('resources/js/app.js')
 </body>
 </html>

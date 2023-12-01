@@ -1,70 +1,62 @@
-<template>
-    <form-wrapper :title="$t('auth.forms.new_password')">
-        <form @submit.prevent="handleSubmit" @keydown="form.onKeydown($event)">
-            <form-field :form="form" fieldName="email" inputType="email" :label="$t('auth.forms.email')" :isDisabled="true" readonly />
-            <form-password-field :form="form" fieldName="password" :autocomplete="'new-password'" :showRules="true" :label="$t('auth.forms.new_password')" />
-            <field-error :form="form" field="token" />
-            <form-buttons v-if="pending" :isBusy="form.isBusy" :caption="$t('auth.forms.change_password')" :showCancelButton="true" cancelLandingView="login" />
-            <router-link v-if="!pending" id="btnContinue" :to="{ name: 'accounts' }" class="button is-link">{{ $t('commons.continue') }}</router-link>
-        </form>
-        <!-- footer -->
-        <vue-footer></vue-footer>
-    </form-wrapper>
-</template>
+<script setup>
+    import Form from '@/components/formElements/Form'
+    import { useNotifyStore } from '@/stores/notify'
 
-<script>
+    const notify = useNotifyStore()
+    const router = useRouter()
+    const route = useRoute()
+    
+    const isPending = ref(true)
+    const form = reactive(new Form({
+        email : route.query.email,
+        password : '',
+        password_confirmation : '',
+        token: route.query.token
+    }))
 
-    import Form from './../../../components/Form'
+    /**
+     * Submits the password reset to the backend
+     */
+    function resetPassword(e) {
+        form.password_confirmation = form.password
 
-    export default {
-        data(){
-            return {
-                pending: true,
-                form: new Form({
-                    email : '',
-                    password : '',
-                    password_confirmation : '',
-                    token: ''
-                })
+        form.post('/user/password/reset', {returnError: true})
+        .then(response => {
+            form.password = ''
+            form.password_confirmation = ''
+            isPending.value = false
+            notify.success({ text: response.data.message, duration:-1 })
+        })
+        .catch(error => {
+            if( error.response.data.resetFailed ) {
+                notify.alert({ text: error.response.data.resetFailed, duration:-1 })
             }
-        },
-
-        created () {
-            this.form.email = this.$route.query.email
-            this.form.token = this.$route.query.token
-        },
-
-        methods : {
-            handleSubmit(e) {
-                e.preventDefault()
-
-                this.form.password_confirmation = this.form.password
-
-                this.form.post('/user/password/reset', {returnError: true})
-                .then(response => {
-                    this.pending = false
-                    this.$notify({ type: 'is-success', text: response.data.message, duration:-1 })
-
-                })
-                .catch(error => {
-                    if( error.response.data.resetFailed ) {
-
-                        this.$notify({ type: 'is-danger', text: error.response.data.resetFailed, duration:-1 })
-                    }
-                    else if( error.response.status !== 422 ) {
-                        
-                        this.$router.push({ name: 'genericError', params: { err: error.response } });
-                    }
-                });
+            else if( error.response.status !== 422 ) {
+                notify.error(error)
             }
-        },
-
-        beforeRouteLeave (to, from, next) {
-            this.$notify({
-                clean: true
-            })
-
-            next()
-        }
+        })
     }
+
+    onBeforeRouteLeave(() => {
+        notify.clear()
+    })
 </script>
+
+<template>
+    <FormWrapper :title="$t('auth.forms.new_password')">
+        <form @submit.prevent="resetPassword" @keydown="form.onKeydown($event)">
+            <FormField v-model="form.email" :isDisabled="true" fieldName="email" :fieldError="form.errors.get('email')" label="auth.forms.email" autofocus />
+            <FormPasswordField v-model="form.password" fieldName="password" :fieldError="form.errors.get('password')" :autocomplete="'new-password'" :showRules="true" label="auth.forms.new_password" />
+            <FieldError v-if="form.errors.get('token') != undefined" :error="form.errors.get('token')" :field="form.token" />
+            <FormButtons
+                v-if="isPending"
+                :submitId="'btnResetPwd'"
+                :isBusy="form.isBusy"
+                :caption="$t('auth.forms.change_password')"
+                :showCancelButton="true"
+                cancelLandingView="login" />
+            <RouterLink v-if="!isPending" id="btnContinue" :to="{ name: 'accounts' }" class="button is-link">{{ $t('commons.continue') }}</RouterLink>
+        </form>
+        <VueFooter />
+    </FormWrapper>
+</template>

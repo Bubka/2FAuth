@@ -1,102 +1,51 @@
-<template>
-    <div class="error-message">
-        <modal v-model="ShowModal" :closable="this.showcloseButton">
-            <div class="error-message" v-if="$route.name == '404'">
-                <p class="error-404"></p>
-                <p>{{ $t('errors.resource_not_found') }}</p>
-                <p class=""><router-link :to="{ name: 'accounts' }" class="is-text">{{ $t('errors.refresh') }}</router-link></p>
-            </div>
-            <div v-else>
-                <p class="error-generic"></p>
-                <p>{{ $t('errors.error_occured') }} </p>
-                <p v-if="error.message" class="has-text-grey-lighter">{{ error.message }}</p>
-                <p v-if="error.originalMessage" class="has-text-grey-lighter">{{ error.originalMessage }}</p>
-                <p><router-link :to="{ name: 'accounts', params: { toRefresh: true } }" class="is-text">{{ $t('errors.refresh') }}</router-link></p>
-                <p v-if="debugMode == 'development' && error.debug">
-                    <br>
-                    {{ error.debug }}
-                </p>
-            </div>
-        </modal>
-    </div>
-</template>
+<script setup>
+    import { useNotifyStore } from '@/stores/notify'
+    
+    const errorHandler = useNotifyStore()
+    const router = useRouter()
+    const route = useRoute()
 
+    const showModal = ref(true)
+    const showDebug = computed(() => process.env.NODE_ENV === 'development')
 
-<script>
-    import Modal from '../components/Modal'
+    const props = defineProps({
+        closable: {
+            type: Boolean,
+            default: true
+        }
+    })
 
-    export default {
-        data(){
-            return {
-                ShowModal : true,
-                showcloseButton: this.closable,
-            }
-        },
+    watch(showModal, (val) => {
+        if (val == false) {
+            exit()
+        }
+    })
 
-        computed: {
-
-            debugMode: function() {
-                return process.env.NODE_ENV
-            },
-
-            error: function() {
-                if( this.err === null || this.err === undefined ) {
-                    return false
-                }
-                else
-                {
-                    if (this.err.status === 407) {
-                        return {
-                            'message' : this.$t('errors.auth_proxy_failed'),
-                            'originalMessage' : this.$t('errors.auth_proxy_failed_legend')
-                        }
-                    }
-                    else if (this.err.status === 403) {
-                        return {
-                            'message' : this.$t('errors.unauthorized'),
-                            'originalMessage' : this.$t('errors.unauthorized_legend')
-                        }
-                    }
-                    else if(this.err.data) {
-                        return this.err.data
-                    }
-                    else {
-                        return { 'message' : this.err }
-                    }
-
-                }
-            }
-
-        },
-
-        props: {
-            err: [String, Object], // on object (error.response) or a string
-            closable: {
-                type: Boolean,
-                default: true
-            }
-        }, 
-
-        components: {
-            Modal
-        },
-
-        mounted(){
-            // stop OTP generation on modal close
-            this.$on('modalClose', function() {
-                window.history.length > 1 && this.$route.name !== '404' ? this.$router.go(-1) : this.$router.push({ name: 'accounts' })
-            });
-
-        },
-
-        beforeRouteEnter(to, from, next) {
-            next(vm => {
-                if (from.params.returnTo) {
-                    to.params.returnTo = from.params.returnTo
-                }
-            })
-        },
+    /**
+     * Exits the error view
+     */
+    function exit() {
+        window.history.length > 1 && route.name !== '404' && route.name !== 'notFound'
+            ? router.go(-1)
+            : router.push({ name: 'accounts' })
     }
 
 </script>
 
+<template>
+    <div>
+        <modal v-model="showModal" :closable="props.closable">
+            <div class="error-message" v-if="$route.name == '404' || $route.name == 'notFound'">
+                <p class="error-404"></p>
+                <p>{{ $t('errors.resource_not_found') }}</p>
+            </div>
+            <div v-else class="error-message" >
+                <p class="error-generic"></p>
+                <p>{{ $t('errors.error_occured') }} </p>
+                <p v-if="errorHandler.message" class="has-text-grey-lighter">{{ errorHandler.message }}</p>
+                <p v-if="errorHandler.originalMessage" class="has-text-grey-lighter">{{ errorHandler.originalMessage }}</p>
+                <p v-if="showDebug && errorHandler.debug" class="is-size-7 is-family-code"><br>{{ errorHandler.debug }}</p>
+            </div>
+        </modal>
+    </div>
+</template>

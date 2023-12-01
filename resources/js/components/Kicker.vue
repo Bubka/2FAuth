@@ -1,58 +1,70 @@
+<script setup>
+    import { useUserStore } from '@/stores/user'
+
+    const user = useUserStore()
+    const events = ref(['mousedown', 'scroll', 'keypress'])
+    const logoutTimer = ref(null)
+    // const elapsed = ref(0)
+    // const counter = ref(null)
+
+    const props = defineProps({
+        kickAfter: {
+            type: Number,
+            required: true
+        },
+    })
+
+    watch(
+        () => props.kickAfter,
+        () => {
+            restartTimer()
+        }
+    )
+
+    onMounted(() => {
+        events.value.forEach(function (event) {
+            window.addEventListener(event, restartTimer)
+        }, this)
+
+        startTimer()
+    })
+
+    onUnmounted(() => {
+        events.value.forEach(function (event) {
+            window.removeEventListener(event, restartTimer)
+        }, this)
+
+        stopTimer()
+    })
+
+    function startTimer() {
+        logoutTimer.value = setTimeout(logoutUser, props.kickAfter * 60 * 1000)
+        // counter.value = setInterval(() => {
+        //     elapsed.value += 1
+        //     console.log(elapsed.value + '/' + props.kickAfter * 60)
+        // }, 1000)
+    }
+
+    // Triggers the user logout
+    function logoutUser() {
+        clearTimeout(logoutTimer.value)
+        user.logout({ kicked: true})
+    }
+
+    // Restarts the timer
+    function restartTimer() {
+        stopTimer()
+        startTimer()
+    }
+
+    // Stops the timer
+    function stopTimer() {
+        clearTimeout(logoutTimer.value)
+        // elapsed.value = 0
+        // clearInterval(counter.value)
+    }
+</script>
+
 <template>
 
 </template>
-
-<script>
-
-    export default {
-        name: 'Kicker',
-
-        data: function () {
-            return {
-                events: ['click', 'mousedown', 'scroll', 'keypress', 'load'],
-                logoutTimer: null
-            }
-        },
-
-        mounted() {
-
-            this.events.forEach(function (event) {
-                window.addEventListener(event, this.resetTimer)
-            }, this);
-
-            this.setTimer()
-        },
-
-        destroyed() {
-
-            this.events.forEach(function (event) {
-                window.removeEventListener(event, this.resetTimer)
-            }, this);
-
-            clearTimeout(this.logoutTimer)
-        },
-
-        methods: {
-
-            setTimer: function() {
-
-                this.logoutTimer = setTimeout(this.logoutUser, this.$root.userPreferences.kickUserAfter * 60 * 1000)
-            },
-
-            logoutUser: function() {
-
-                clearTimeout(this.logoutTimer)
-
-                this.$router.push({ name: 'autolock' })
-            },
-
-            resetTimer: function() {
-
-                clearTimeout(this.logoutTimer)
-
-                this.setTimer()
-            }
-        }
-    }
-
-</script>

@@ -1,75 +1,71 @@
+<script setup>
+    import Form from '@/components/formElements/Form'
+    import { useNotifyStore } from '@/stores/notify'
+
+    const $2fauth = inject('2fauth')
+    const notify = useNotifyStore()
+    const router = useRouter()
+    const route = useRoute()
+    const showWebauthnForm = useStorage($2fauth.prefix + 'showWebauthnForm', false)
+    
+    const form = reactive(new Form({
+        email : route.query.email,
+        password : '',
+        token: route.query.token,
+        revokeAll: false,
+    }))
+
+    /**
+     * Submits the recovery to the backend
+     */
+    function recover(e) {
+        notify.clear()
+        form.post('/webauthn/recover', {returnError: true})
+        .then(response => {
+            showWebauthnForm.value = false
+            router.push({ name: 'login' })
+        })
+        .catch(error => {
+            if ( error.response.status === 401 ) {
+                notify.alert({ text: trans('auth.forms.authentication_failed'), duration:-1 })
+            }
+            else if (error.response.status === 422) {
+                notify.alert({ text: error.response.data.message, duration:-1 })
+            }
+            else  {
+                notify.error(error)
+            }
+        })
+    }
+
+    onBeforeRouteLeave(() => {
+        notify.clear()
+    })
+</script>
+
 <template>
-    <form-wrapper :title="$t('auth.webauthn.account_recovery')" :punchline="$t('auth.webauthn.recover_account_instructions')" >
+    <FormWrapper :title="$t('auth.webauthn.account_recovery')" :punchline="$t('auth.webauthn.recover_account_instructions')" >
         <div>
             <form @submit.prevent="recover" @keydown="form.onKeydown($event)">
-                <form-checkbox :form="form" fieldName="revokeAll" :label="$t('auth.webauthn.disable_all_security_devices')" :help="$t('auth.webauthn.disable_all_security_devices_help')" />
-                <form-password-field :form="form" :autocomplete="'current-password'" fieldName="password" :label="$t('auth.forms.current_password.label')" :help="$t('auth.forms.current_password.help')" />
+                <FormCheckbox v-model="form.revokeAll" fieldName="revokeAll" label="auth.webauthn.disable_all_security_devices" help="auth.webauthn.disable_all_security_devices_help" />
+                <FormPasswordField v-model="form.password" fieldName="password" :fieldError="form.errors.get('password')" :autocomplete="'current-password'" :showRules="false" label="auth.forms.current_password.label" help="auth.forms.current_password.help" />
                 <div class="field">
-                    <p>{{ $t('auth.forms.forgot_your_password') }}&nbsp;<router-link id="lnkResetPwd" :to="{ name: 'password.request' }" class="is-link" :aria-label="$t('auth.forms.reset_your_password')">{{ $t('auth.forms.request_password_reset') }}</router-link></p>
+                    <p>
+                        {{ $t('auth.forms.forgot_your_password') }}&nbsp;
+                        <RouterLink id="lnkResetPwd" :to="{ name: 'password.request' }" class="is-link" :aria-label="$t('auth.forms.reset_your_password')">
+                            {{ $t('auth.forms.request_password_reset') }}
+                        </RouterLink>
+                    </p>
                 </div>
-                <form-buttons :caption="$t('commons.continue')" :cancelLandingView="'login'" :showCancelButton="true" :isBusy="form.isBusy" :isDisabled="form.isDisabled" :submitId="'btnRecover'" />
+                <FormButtons
+                    :submitId="'btnRecover'"
+                    :isBusy="form.isBusy"
+                    :isDisabled="form.isDisabled"
+                    :caption="$t('commons.continue')"
+                    :showCancelButton="true"
+                    cancelLandingView="login" />
             </form>
         </div>
-        <!-- footer -->
-        <vue-footer></vue-footer>
-    </form-wrapper>
+        <VueFooter />
+    </FormWrapper>
 </template>
-
-<script>
-
-    import Form from './../../../components/Form'
-
-    export default {
-        data(){
-            return {
-                currentPassword: '',
-                deviceRegistered: false,
-                deviceId : null,
-                form: new Form({
-                    email: '',
-                    password: '',
-                    token: '',
-                    revokeAll: false,
-                }),
-            }
-        },
-
-        created () {
-            this.form.email = this.$route.query.email
-            this.form.token = this.$route.query.token
-        },
-
-        methods : {
-
-            /**
-             * Register a new security device
-             */
-            recover() {
-                this.form.post('/webauthn/recover', {returnError: true})
-                .then(response => {
-                    this.$router.push({ name: 'login', params: { forceRefresh: true } })
-                })
-                .catch(error => {
-                    if( error.response.status === 401 ) {
-
-                        this.$notify({ type: 'is-danger', text: this.$t('auth.forms.authentication_failed'), duration:-1 })
-                    }
-                    else if (error.response.status === 422) {
-                        this.$notify({ type: 'is-danger', text: error.response.data.message })
-                    }
-                    else {
-                        this.$router.push({ name: 'genericError', params: { err: error.response } });
-                    }
-                });
-            }
-        },
-
-        beforeRouteLeave (to, from, next) {
-            this.$notify({
-                clean: true
-            })
-
-            next()
-        }
-    }
-</script>
