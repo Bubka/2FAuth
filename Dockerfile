@@ -155,6 +155,12 @@ ENV \
     MAIL_ENCRYPTION=null \
     MAIL_FROM_NAME=null \
     MAIL_FROM_ADDRESS=null \
+    # SSL peer verification.
+    # Set this to false to disable the SSL certificate validation.
+    # WARNING
+    # Disabling peer verification can result in a major security flaw.
+    # Change it only if you know what you're doing.
+    MAIL_VERIFY_SSL_PEER=true \
     # API settings
     # The maximum number of API calls in a minute from the same IP.
     # Once reached, all requests from this IP will be rejected until the minute has elapsed.
