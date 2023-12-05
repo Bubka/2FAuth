@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html data-theme="{{ $userPreferences['theme'] }}" lang="{{ $lang }}">
+<html data-theme="{{ $defaultPreferences['theme'] }}" lang="{{ $lang }}">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -17,7 +17,6 @@
     <link rel="apple-touch-icon-precomposed" href="{{ asset('favicon_lg.png') }}" />
     <link rel="manifest" href="/manifest.json">
 
-    <link href="{!! $subdirectory !!}{{ mix('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
     <div id="app">
@@ -26,14 +25,12 @@
     <script type="text/javascript">
         var appSettings = {!! $appSettings !!};
         var appConfig = {!! $appConfig !!};
-        var userPreferences = {!! $userPreferences->toJson() !!};
+        var defaultPreferences = {!! $defaultPreferences->toJson() !!};
         var appVersion = '{{ config("2fauth.version") }}';
         var isDemoApp = {!! $isDemoApp !!};
         var isTestingApp = {!! $isTestingApp !!};
         var appLocales = {!! $locales !!};
     </script>
-    <script src="{!! $subdirectory !!}{{ mix('js/manifest.js') }}"></script>
-    <script src="{!! $subdirectory !!}{{ mix('js/vendor.js') }}"></script>
-    <script src="{!! $subdirectory !!}{{ mix('js/app.js') }}"></script>
+    @vite('resources/js/app.js')
 </body>
 </html>

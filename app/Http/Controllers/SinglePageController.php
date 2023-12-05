@@ -30,7 +30,7 @@ class SinglePageController extends Controller
 
         // if (Auth::user()->preferences)
 
-        return view('landing_v3')->with([
+        return view('landing')->with([
             'appSettings' => $settings,
             'appConfig'   => collect([
                 'proxyAuth'      => $proxyAuth,
