@@ -63,7 +63,7 @@ class IconControllerTest extends FeatureTestCase
     {
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/icons/default', [
-                'service' => 'abode',
+                'service' => 'dropbox',
             ])
             ->assertStatus(201)
             ->assertJsonStructure([

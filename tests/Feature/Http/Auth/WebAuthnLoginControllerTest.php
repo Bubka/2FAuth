@@ -205,7 +205,7 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
      *
      * @covers  \App\Http\Middleware\SkipIfAuthenticated
      */
-    public function test_webauthn_login_already_authenticated_returns_success()
+    public function test_webauthn_login_already_authenticated_is_rejected()
     {
         $this->user = User::factory()->create(['email' => self::EMAIL]);
 
@@ -238,15 +238,9 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
             ->assertOk();
 
         $this->json('POST', '/webauthn/login', self::ASSERTION_RESPONSE)
-            ->assertOk()
-            ->assertJsonFragment([
-                'message' => 'authenticated',
-                'name'    => $this->user->name,
-            ])
+            ->assertStatus(400)
             ->assertJsonStructure([
                 'message',
-                'name',
-                'preferences',
             ]);
     }
 

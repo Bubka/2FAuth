@@ -43,11 +43,14 @@ class UserControllerTest extends FeatureTestCase
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('GET', '/api/v1/user')
             ->assertOk()
-            ->assertExactJson([
-                'name'     => $this->user->name,
-                'id'       => $this->user->id,
-                'email'    => $this->user->email,
-                'is_admin' => $this->user->is_admin,
+            ->assertJsonFragment([
+                'name'        => $this->user->name,
+                'id'          => $this->user->id,
+                'email'       => $this->user->email,
+                'is_admin'    => $this->user->is_admin,
+            ])
+            ->assertJsonStructure([
+                'preferences',
             ]);
     }
 

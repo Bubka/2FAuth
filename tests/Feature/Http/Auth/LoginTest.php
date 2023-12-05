@@ -91,7 +91,7 @@ class LoginTest extends FeatureTestCase
      *
      * @covers  \App\Http\Middleware\SkipIfAuthenticated
      */
-    public function test_user_login_already_authenticated_returns_success()
+    public function test_user_login_already_authenticated_is_rejected()
     {
         $response = $this->json('POST', '/user/login', [
             'email'    => $this->user->email,
@@ -103,10 +103,9 @@ class LoginTest extends FeatureTestCase
                 'email'    => $this->user->email,
                 'password' => self::PASSWORD,
             ])
-            ->assertStatus(200)
-            ->assertJson([
-                'message' => 'authenticated',
-                'name'    => $this->user->name,
+            ->assertStatus(400)
+            ->assertJsonStructure([
+                'message',
             ]);
     }
 

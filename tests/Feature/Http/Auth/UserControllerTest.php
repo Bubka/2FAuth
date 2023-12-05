@@ -53,11 +53,14 @@ class UserControllerTest extends FeatureTestCase
                 'password' => self::PASSWORD,
             ])
             ->assertOk()
-            ->assertExactJson([
+            ->assertJsonFragment([
                 'name'     => self::NEW_USERNAME,
                 'id'       => $this->user->id,
                 'email'    => self::NEW_EMAIL,
                 'is_admin' => false,
+            ])
+            ->assertJsonStructure([
+                'preferences',
             ]);
 
         $this->assertDatabaseHas('users', [
@@ -80,7 +83,7 @@ class UserControllerTest extends FeatureTestCase
                 'password' => self::PASSWORD,
             ])
             ->assertOk()
-            ->assertExactJson([
+            ->assertJsonFragment([
                 'name'     => self::NEW_USERNAME,
                 'id'       => $this->user->id,
                 'email'    => $this->user->email,
@@ -107,7 +110,7 @@ class UserControllerTest extends FeatureTestCase
                 'password' => self::PASSWORD,
             ])
             ->assertOk()
-            ->assertExactJson([
+            ->assertJsonFragment([
                 'name'     => $this->user->name,
                 'id'       => $this->user->id,
                 'email'    => self::NEW_EMAIL,
@@ -134,7 +137,7 @@ class UserControllerTest extends FeatureTestCase
                 'password' => self::PASSWORD,
             ])
             ->assertOk()
-            ->assertExactJson([
+            ->assertJsonFragment([
                 'name'     => self::NEW_USERNAME,
                 'id'       => $this->user->id,
                 'email'    => self::NEW_EMAIL,
@@ -166,7 +169,7 @@ class UserControllerTest extends FeatureTestCase
                 'password' => self::PASSWORD,
             ])
             ->assertOk()
-            ->assertExactJson([
+            ->assertJsonFragment([
                 'name'     => $name,
                 'id'       => $this->user->id,
                 'email'    => $email,
