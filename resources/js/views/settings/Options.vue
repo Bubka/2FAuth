@@ -146,7 +146,7 @@
                         <FormCheckbox v-model="user.preferences.getOfficialIcons" @update:model-value="val => savePreference('getOfficialIcons', val)" fieldName="getOfficialIcons" label="settings.forms.get_official_icons.label" help="settings.forms.get_official_icons.help" />
                         <!-- password format -->
                         <FormCheckbox v-model="user.preferences.formatPassword" @update:model-value="val => savePreference('formatPassword', val)" fieldName="formatPassword" label="settings.forms.password_format.label" help="settings.forms.password_format.help" />
-                        <FormToggle v-model="user.preferences.formatPasswordBy" @update:model-value="val => savePreference('formatPasswordBy', val)" :choices="passwordFormats" fieldName="formatPasswordBy" />
+                        <FormToggle v-model="user.preferences.formatPasswordBy" @update:model-value="val => savePreference('formatPasswordBy', val)" :choices="passwordFormats" fieldName="formatPasswordBy" :isDisabled="!user.preferences.formatPassword" />
 
                         <h4 class="title is-4 pt-4 has-text-grey-light">{{ $t('groups.groups') }}</h4>
                         <!-- default group -->
