@@ -58,6 +58,10 @@ return [
             'label' => 'Show generated <abbr title="One-Time Password">OTP</abbr> as dot',
             'help' => 'Replace generated password caracters with *** to ensure confidentiality. Do not affect the copy/paste feature'
         ],
+        'reveal_dotted_otp' => [
+            'label' => 'Reveal obscured <abbr title="One-Time Password">OTP</abbr>',
+            'help' => 'Let the ability to temporarily reveal Dot-Obscured passwords'
+        ],
         'close_otp_on_copy' => [
             'label' => 'Close <abbr title="One-Time Password">OTP</abbr> after copy',
             'help' => 'Clicking a generated password to copy it automatically hide it from the screen'

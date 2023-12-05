@@ -165,6 +165,8 @@
                             <FormCheckbox v-model="user.preferences.copyOtpOnDisplay" @update:model-value="val => savePreference('copyOtpOnDisplay', val)" fieldName="copyOtpOnDisplay" label="settings.forms.copy_otp_on_display.label" help="settings.forms.copy_otp_on_display.help" :isDisabled="!user.preferences.getOtpOnRequest" :isIndented="true" />
                         <!-- otp as dot -->
                         <FormCheckbox v-model="user.preferences.showOtpAsDot" @update:model-value="val => savePreference('showOtpAsDot', val)" fieldName="showOtpAsDot" label="settings.forms.show_otp_as_dot.label" help="settings.forms.show_otp_as_dot.help" />
+                            <!-- reveal dotted OTPs -->
+                            <FormCheckbox v-model="user.preferences.revealDottedOTP" @update:model-value="val => savePreference('revealDottedOTP', val)" fieldName="revealDottedOTP" label="settings.forms.reveal_dotted_otp.label" help="settings.forms.reveal_dotted_otp.help" :isDisabled="!user.preferences.showOtpAsDot" :isIndented="true" />
                         <h4 class="title is-4 pt-4 has-text-grey-light">{{ $t('settings.data_input') }}</h4>
                         <!-- basic qrcode -->
                         <FormCheckbox v-model="user.preferences.useBasicQrcodeReader" @update:model-value="val => savePreference('useBasicQrcodeReader', val)" fieldName="useBasicQrcodeReader" label="settings.forms.use_basic_qrcode_reader.label" help="settings.forms.use_basic_qrcode_reader.help" />

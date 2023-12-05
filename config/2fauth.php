@@ -83,6 +83,7 @@ return [
 
     'preferences' => [
         'showOtpAsDot' => false,
+        'revealDottedOTP' => false,
         'closeOtpOnCopy' => false,
         'copyOtpOnDisplay' => false,
         'useBasicQrcodeReader' => false,

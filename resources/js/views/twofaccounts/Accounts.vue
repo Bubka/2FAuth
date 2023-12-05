@@ -34,6 +34,7 @@
     const isDragging = ref(false)
     const isRenewingOTPs = ref(false)
     const renewedPeriod = ref(null)
+    const revealPassword = ref(null)
 
     const otpDisplay = ref(null)
     const otpDisplayProps = ref({
@@ -398,7 +399,7 @@
                                             <FontAwesomeIcon :icon="['fas', 'circle-notch']" spin />
                                         </span>
                                         <span v-else class="always-on-otp is-clickable has-nowrap has-text-grey is-size-5 ml-4" @click="copyToClipboard(account.otp.password)" @keyup.enter="copyToClipboard(account.otp.password)" :title="$t('commons.copy_to_clipboard')">
-                                            {{ useDisplayablePassword(account.otp.password) }}
+                                            {{ useDisplayablePassword(account.otp.password, user.preferences.showOtpAsDot && user.preferences.revealDottedOTP && revealPassword == account.id) }}
                                         </span>
                                         <Dots
                                             v-if="account.otp_type.includes('totp')"
@@ -414,6 +415,16 @@
                                             </button>
                                         </UseColorMode>
                                     </span>
+                                </div>
+                            </transition>
+                            <transition name="popLater" v-if="user.preferences.showOtpAsDot && user.preferences.revealDottedOTP">
+                                <div v-show="user.preferences.getOtpOnRequest == false && !bus.inManagementMode" class="has-text-right">
+                                    <button v-if="revealPassword == account.id" class="pr-0 button is-ghost has-text-grey-dark" @click.stop="revealPassword = null">
+                                        <font-awesome-icon :icon="['fas', 'eye']" />
+                                    </button>
+                                    <button v-else class="pr-0 button is-ghost has-text-grey-dark" @click.stop="revealPassword = account.id">
+                                        <font-awesome-icon :icon="['fas', 'eye-slash']" />
+                                    </button>
                                 </div>
                             </transition>
                             <transition name="fadeInOut">

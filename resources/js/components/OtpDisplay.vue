@@ -48,6 +48,7 @@
     const generated_at = ref(null)
     const hasTOTP = ref(false)
     const showInlineSpinner = ref(false)
+    const revealPassword = ref(false)
 
     const dots = ref()
     const totpLooper = ref()
@@ -66,6 +67,7 @@
      * 
      */
     const show = async (accountId) => {
+        revealPassword.value = false
 
         // 3 possible cases :
         //
@@ -225,6 +227,7 @@
             }
             else if(user.preferences.closeOtpOnCopy && (permit_closing || false) === true) {
                 emit("please-close-me");
+                revealPassword.value = false
                 clearOTP()
             }
 
@@ -285,7 +288,7 @@
                     @keyup.enter="copyOTP(password, true)"
                     :title="$t('commons.copy_to_clipboard')"
                 >
-                    {{ useDisplayablePassword(password) }}
+                    {{ useDisplayablePassword(password, user.preferences.showOtpAsDot && user.preferences.revealDottedOTP && revealPassword) }}
                 </span>
                 <span v-else tabindex="0" class="otp is-size-1">
                     <Spinner :isVisible="showInlineSpinner" :type="'raw'" />
@@ -293,9 +296,15 @@
             </p>
         </UseColorMode>
         <Dots v-show="isTimeBased(otpauthParams.otp_type)" ref="dots"></Dots>
-        <ul v-show="isHMacBased(otpauthParams.otp_type)">
-            <li>counter: {{ otpauthParams.counter }}</li>
-        </ul>
+        <p v-show="isHMacBased(otpauthParams.otp_type)">
+            {{ $t('twofaccounts.forms.counter.label') }}: {{ otpauthParams.counter }}
+        </p>
+        <p v-if="user.preferences.showOtpAsDot && user.preferences.revealDottedOTP" class="mt-3">
+            <button class="button is-ghost has-text-grey-dark" @click.stop="revealPassword = !revealPassword">
+                <font-awesome-icon v-if="revealPassword" :icon="['fas', 'eye']" />
+                <font-awesome-icon v-else :icon="['fas', 'eye-slash']" />
+            </button>
+        </p>
         <TotpLooper 
             v-if="hasTOTP"
             :period="otpauthParams.period" 

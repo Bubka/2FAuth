@@ -31,6 +31,7 @@ return [
     'accounts_deleted' => 'Account(s) successfully deleted',
     'accounts_moved' => 'Account(s) successfully moved',
     'export_selected_to_json' => 'Download a json export of selected accounts',
+    'reveal' => 'reveal',
     'forms' => [
         'service' => [
             'placeholder' => 'Google, Twitter, Apple',

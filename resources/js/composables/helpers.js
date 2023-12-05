@@ -34,7 +34,7 @@ export function useIdGenerator(fieldType, fieldName) {
 	}
 }
 
-export function useDisplayablePassword(pwd) {
+export function useDisplayablePassword(pwd, reveal = false) {
     const user = useUserStore()
 
 	if (user.preferences.formatPassword && pwd.length > 0) {
@@ -48,5 +48,5 @@ export function useDisplayablePassword(pwd) {
 		}
 	}
 
-	return user.preferences.showOtpAsDot ? pwd.replace(/[0-9]/g, '●') : pwd
+	return user.preferences.showOtpAsDot && !reveal ? pwd.replace(/[0-9]/g, '●') : pwd
 }
