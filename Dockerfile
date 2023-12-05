@@ -150,7 +150,6 @@ ENV \
     MAIL_DRIVER=log \
     MAIL_HOST=smtp.mailtrap.io \
     MAIL_PORT=2525 \
-    MAIL_FROM=changeme@example.com \
     MAIL_USERNAME=null \
     MAIL_PASSWORD=null \
     MAIL_ENCRYPTION=null \
