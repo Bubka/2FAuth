@@ -55,7 +55,7 @@ return [
             'help' => 'Language used to translate the 2FAuth user interface. Named languages are complete, set the one of your choice to override your browser preference.'
         ],
         'show_otp_as_dot' => [
-            'label' => 'Show generated one-time passwords as dot',
+            'label' => 'Show generated <abbr title="One-Time Password">OTP</abbr> as dot',
             'help' => 'Replace generated password caracters with *** to ensure confidentiality. Do not affect the copy/paste feature'
         ],
         'close_otp_on_copy' => [

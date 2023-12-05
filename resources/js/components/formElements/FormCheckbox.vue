@@ -22,6 +22,8 @@
             type: String,
             default: ''
         },
+        isIndented: Boolean,
+        isDisabled: Boolean,
     })
 
     const emit = defineEmits(['update:modelValue'])
@@ -43,9 +45,14 @@
 </script>
 
 <template>
-    <div class="field">
-        <input :id="fieldName" type="checkbox" :name="fieldName" class="is-checkradio is-info" v-model="model" v-bind="$attrs"/>
-        <label tabindex="0" :for="fieldName" class="label" :class="labelClass" v-html="$t(label)" v-on:keypress.space.prevent="toggleModel" />
-        <p class="help" v-html="$t(help)" v-if="help" />
+    <div class="field is-flex">
+        <div v-if="isIndented" class="mx-2 pr-1" :style="{ 'opacity': isDisabled ? '0.5' : '1' }">
+            <FontAwesomeIcon class="has-text-grey" :icon="['fas', 'chevron-right']" transform="rotate-135"/>
+        </div>
+        <div>
+            <input :id="fieldName" type="checkbox" :name="fieldName" class="is-checkradio is-info" v-model="model" :disabled="isDisabled" />
+            <label tabindex="0" :for="fieldName" class="label" :class="labelClass" v-html="$t(label)" v-on:keypress.space.prevent="toggleModel" />
+            <p class="help" v-html="$t(help)" v-if="help" />
+        </div>
     </div>
 </template>

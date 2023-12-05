@@ -45,6 +45,7 @@ import {
     faTriangleExclamation,
     faFileLines,
     faVideoSlash,
+    faChevronRight,
 } from '@fortawesome/free-solid-svg-icons'
 
 import {
@@ -101,6 +102,7 @@ library.add(
     faFileLines,
     faVideoSlash,
     faStar,
+    faChevronRight,
 );
 
 export default FontAwesomeIcon
