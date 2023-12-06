@@ -115,6 +115,11 @@
                     {{ $t('auth.login_and_password') }}
                 </a>
             </p>
+            <p v-if="appSettings.openidAuth">{{ $t('auth.sign_in_using') }}&nbsp;
+                <a id="lnkSignWithOpenID" class="is-link" href="/socialite/redirect/openid">
+                    OpenID
+                </a>
+            </p>
             <p v-if="appSettings.disableRegistration == false" class="mt-4">
                 {{ $t('auth.forms.dont_have_account_yet') }}&nbsp;
                 <RouterLink id="lnkRegister" :to="{ name: 'register' }" class="is-link">
@@ -141,6 +146,11 @@
             <p >{{ $t('auth.sign_in_using') }}&nbsp;
                 <a id="lnkSignWithWebauthn" role="button" class="is-link" @keyup.enter="toggleForm" @click="toggleForm" tabindex="0" :aria-label="$t('auth.sign_in_using_security_device')">
                     {{ $t('auth.webauthn.security_device') }}
+                </a>
+            </p>
+            <p v-if="appSettings.openidAuth">{{ $t('auth.sign_in_using') }}&nbsp;
+                <a id="lnkSignWithOpenID" class="is-link" href="/socialite/redirect/openid">
+                    OpenID
                 </a>
             </p>
             <p v-if="appSettings.disableRegistration == false" class="mt-4">
