@@ -20,7 +20,7 @@ jobs:
     - name: Pushes docker-compose
       uses: dmnemec/copy_file_to_another_repo_action@main
       env:
-        API_TOKEN_GITHUB: ${{ secrets.ACTIONS_TOKEN }}
+        API_TOKEN_GITHUB: ${{ secrets.ACTIONS_TOKEN_2FAUTH_DOCS }}
       with:
         source_file: 'docker/docker-compose.yml'
         destination_repo: 'Bubka/2FAuth-Docs'
