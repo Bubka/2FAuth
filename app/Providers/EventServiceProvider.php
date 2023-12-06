@@ -10,9 +10,11 @@ use App\Listeners\CleanIconStorage;
 use App\Listeners\DissociateTwofaccountFromGroup;
 use App\Listeners\ReleaseRadar;
 use App\Listeners\ResetUsersPreference;
+use App\Providers\Socialite\RegisterOpenId;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use SocialiteProviders\Manager\SocialiteWasCalled;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -36,6 +38,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         ScanForNewReleaseCalled::class => [
             ReleaseRadar::class,
+        ],
+        SocialiteWasCalled::class => [
+            RegisterOpenId::class,
         ],
     ];
 
