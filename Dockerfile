@@ -209,6 +209,15 @@ ENV \
     #   'preferred' (default) : Will ask for user verification IF POSSIBLE
     #   'discouraged' : Will NOT ask for user verification (for example, to minimize disruption to the user interaction flow)
     WEBAUTHN_USER_VERIFICATION=preferred \
+    #### SSO settings (for Socialite) ####
+    # Uncomment and complete lines for the OAuth providers you want to enable.
+    # OPENID_AUTHORIZE_URL= \
+    # OPENID_TOKEN_URL= \
+    # OPENID_USERINFO_URL= \
+    # OPENID_CLIENT_ID= \
+    # OPENID_CLIENT_SECRET= \
+    # GITHUB_CLIENT_ID= \
+    # GITHUB_CLIENT_SECRET= \
     # Use this setting to declare trusted proxied.
     # Supported:
     #   '*': to trust any proxy

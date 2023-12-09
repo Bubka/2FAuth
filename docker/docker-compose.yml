@@ -78,12 +78,6 @@ services:
       # authentication checks. That means your proxy is fully responsible of the authentication process, 2FAuth will
       # trust him as long as headers are presents.
       - AUTHENTICATION_GUARD=web-guard
-      # OpenId settings
-      # - OPENID_AUTHORIZE_URL=
-      # - OPENID_TOKEN_URL=
-      # - OPENID_USERINFO_URL=
-      # - OPENID_CLIENT_ID=
-      # - OPENID_CLIENT_SECRET=
       # Name of the HTTP headers sent by the reverse proxy that identifies the authenticated user at proxy level.
       # Check your proxy documentation to find out how these headers are named (i.e 'REMOTE_USER', 'REMOTE_EMAIL', etc...)
       # (only relevant when AUTHENTICATION_GUARD is set to 'reverse-proxy-guard')
@@ -113,6 +107,15 @@ services:
       #   'preferred' (default) : Will ask for user verification IF POSSIBLE
       #   'discouraged' : Will NOT ask for user verification (for example, to minimize disruption to the user interaction flow)
       - WEBAUTHN_USER_VERIFICATION=preferred
+      #### SSO settings (for Socialite) ####
+      # Uncomment and complete lines for the OAuth providers you want to enable.
+      # - OPENID_AUTHORIZE_URL=
+      # - OPENID_TOKEN_URL=
+      # - OPENID_USERINFO_URL=
+      # - OPENID_CLIENT_ID=
+      # - OPENID_CLIENT_SECRET=
+      # - GITHUB_CLIENT_ID=
+      # - GITHUB_CLIENT_SECRET=
       # Use this setting to declare trusted proxied.
       # Supported:
       #   '*': to trust any proxy
