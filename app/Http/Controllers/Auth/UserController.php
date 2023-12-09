@@ -24,6 +24,12 @@ class UserController extends Controller
         $user      = $request->user();
         $validated = $request->validated();
 
+        if (config('auth.defaults.guard') === 'reverse-proxy-guard' || $user->oauth_provider) {
+            Log::notice('Account update rejected: reverse-proxy-guard enabled or account from external sso provider');
+
+            return response()->json(['message' => __('errors.account_managed_by_external_provider')], 400);
+        }
+
         if (! Hash::check($request->password, Auth::user()->password)) {
             Log::notice('Account update failed: wrong password provided');
 

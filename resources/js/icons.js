@@ -53,7 +53,8 @@ import {
 } from '@fortawesome/free-regular-svg-icons'
 
 import {
-    faGithubAlt
+    faGithubAlt,
+    faOpenid
 } from '@fortawesome/free-brands-svg-icons'
 
 library.add(
@@ -103,6 +104,7 @@ library.add(
     faVideoSlash,
     faStar,
     faChevronRight,
+    faOpenid,
 );
 
 export default FontAwesomeIcon

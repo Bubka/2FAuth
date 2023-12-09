@@ -13,32 +13,58 @@ use Laravel\Socialite\Facades\Socialite;
 
 class SocialiteController extends Controller
 {
-    public function redirect(Request $request, $driver)
+    /**
+     * Redirect to the provider's authentication url
+     * 
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Illuminate\Http\RedirectResponse
+     */
+    public function redirect(Request $request, string $driver)
     {
-        return Socialite::driver($driver)->redirect();
-    }
-
-    public function callback(Request $request, $driver)
-    {
-        $socialiteUser = Socialite::driver($driver)->user();
-
-        /** @var User $user */
-        $user = User::firstOrNew([
-            'email' => $socialiteUser->getEmail(),
-        ], [
-            'name' => $socialiteUser->getName(),
-            'password' => bcrypt(Str::random()),
-        ]);
-
-        if (!$user->exists && Settings::get('disableRegistrationSso')) {
-            return response(401);
+        if (! config('services.' . $driver . '.client_id') || ! config('services.' . $driver . '.client_secret')) {
+            return redirect('/error?err=sso_bad_provider_setup');
         }
 
+        return Settings::get('enableSso')
+            ? Socialite::driver($driver)->redirect()
+            : redirect('/error?err=sso_disabled');
+    }
+
+    /**
+     * Register (if needed) the user and authenticate him
+     * 
+     * @return \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse
+     */
+    public function callback(Request $request, string $driver)
+    {
+        try {
+            $socialiteUser = Socialite::driver($driver)->user();
+        } catch (\Exception $e) {
+            return redirect('/error?err=sso_failed');
+        }
+
+        /** @var User|null $user */
+        $user = User::firstOrNew([
+            'oauth_id'       => $socialiteUser->getId(),
+            'oauth_provider' => $driver,
+        ]);
+
+        if (! $user->exists) {
+            if (User::count() === 0) {
+                $user->is_admin = true;
+            }
+            else if (Settings::get('disableRegistration')) {
+                return redirect('/error?err=no_register');
+            }
+            $user->password = bcrypt(Str::random());
+        }
+
+        $user->email        = $socialiteUser->getEmail() ?? $socialiteUser->getId() . '@' . $driver;
+        $user->name         = $socialiteUser->getNickname() ?? $socialiteUser->getName() ?? $driver . ' #' . $socialiteUser->getId();
         $user->last_seen_at = Carbon::now()->format('Y-m-d H:i:s');
         $user->save();
 
-        Auth::guard()->login($user, true);
+        Auth::guard()->login($user);
 
-        return redirect('/accounts?authenticated');
+        return redirect('/accounts');
     }
 }

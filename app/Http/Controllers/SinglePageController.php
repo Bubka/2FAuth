@@ -27,7 +27,8 @@ class SinglePageController extends Controller
         $isTestingApp       = config('2fauth.config.isTestingApp') ? 'true' : 'false';
         $lang               = App::getLocale();
         $locales            = collect(config('2fauth.locales'))->toJson(); /** @phpstan-ignore-line */
-        $openidAuth      = config('services.openid.client_secret') ? true : false;
+        $openidAuth         = config('services.openid.client_secret') ? true : false;
+        $githubAuth         = config('services.github.client_secret') ? true : false;
 
         // if (Auth::user()->preferences)
 
@@ -36,7 +37,10 @@ class SinglePageController extends Controller
             'appConfig'   => collect([
                 'proxyAuth'      => $proxyAuth,
                 'proxyLogoutUrl' => $proxyLogoutUrl,
-                'openidAuth'     => $openidAuth,
+                'sso'            => [
+                    'openid' => $openidAuth,
+                    'github' => $githubAuth,
+                ],
                 'subdirectory'   => $subdir,
             ])->toJson(),
             'defaultPreferences' => $defaultPreferences,

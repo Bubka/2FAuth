@@ -189,6 +189,8 @@
                         <FormCheckbox :model-value="appSettings.useEncryption" @update:model-value="val => saveSetting('useEncryption', val)" fieldName="useEncryption" label="settings.forms.use_encryption.label" help="settings.forms.use_encryption.help" />
                         <!-- disable registration -->
                         <FormCheckbox :model-value="appSettings.disableRegistration" @update:model-value="val => saveSetting('disableRegistration', val)" fieldName="disableRegistration" label="settings.forms.disable_registration.label" help="settings.forms.disable_registration.help" />
+                        <!-- disable SSO registration -->
+                        <FormCheckbox :model-value="appSettings.enableSso" @update:model-value="val => saveSetting('enableSso', val)" fieldName="enableSso" label="settings.forms.enable_sso.label" help="settings.forms.enable_sso.help" />
                     </div>
                 </form>
             </FormWrapper>

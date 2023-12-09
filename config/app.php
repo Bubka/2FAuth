@@ -159,7 +159,7 @@ return [
         /*
          * Package Service Providers...
          */
-
+        \SocialiteProviders\Manager\ServiceProvider::class,
         /*
          * Application Service Providers...
          */
@@ -170,7 +170,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\TwoFAuthServiceProvider::class,
         App\Providers\MigrationServiceProvider::class,
-        ])->toArray(),
+    ])->toArray(),
 
     /*
     |--------------------------------------------------------------------------

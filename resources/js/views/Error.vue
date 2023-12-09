@@ -21,11 +21,17 @@
         }
     })
 
+    onMounted(() => {
+        if (route.query.err) {
+            errorHandler.message = trans('errors.' + route.query.err)
+        }
+    })
+
     /**
      * Exits the error view
      */
     function exit() {
-        window.history.length > 1 && route.name !== '404' && route.name !== 'notFound'
+        window.history.length > 1 && route.name !== '404' && route.name !== 'notFound' && !route.query.err
             ? router.go(-1)
             : router.push({ name: 'accounts' })
     }

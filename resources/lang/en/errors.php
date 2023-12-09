@@ -59,4 +59,9 @@ return [
     'cannot_delete_the_only_admin' => 'Cannot delete the only admin account',
     'error_during_data_fetching' => '💀 Something went wrong during data fetching',
     'check_failed_try_later' => 'Check failed, please retry later',
+    'sso_disabled' => 'SSO is disabled',
+    'sso_bad_provider_setup' => 'This SSO provider is not fully setup in your .env file',
+    'sso_failed' => 'Authentication via SSO rejected',
+    'no_register' => 'Registrations are disabled',
+    'account_managed_by_external_provider' => 'Account managed by an external provider',
 ];

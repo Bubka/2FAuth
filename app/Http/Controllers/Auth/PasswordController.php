@@ -17,7 +17,14 @@ class PasswordController extends Controller
      */
     public function update(UserPatchPwdRequest $request)
     {
+        $user      = $request->user();
         $validated = $request->validated();
+
+        if (config('auth.defaults.guard') === 'reverse-proxy-guard' || $user->oauth_provider) {
+            Log::notice('Password update rejected: reverse-proxy-guard enabled or account from external sso provider');
+
+            return response()->json(['message' => __('errors.account_managed_by_external_provider')], 400);
+        }
 
         if (! Hash::check($validated['currentPassword'], Auth::user()->password)) {
             Log::notice('Password update failed: wrong password provided');
@@ -26,10 +33,10 @@ class PasswordController extends Controller
         }
 
         if (! config('2fauth.config.isDemoApp')) {
-            $request->user()->update([
+            $user->update([
                 'password' => bcrypt($validated['password']),
             ]);
-            Log::info(sprintf('Password of user ID #%s updated', $request->user()->id));
+            Log::info(sprintf('Password of user ID #%s updated', $user->id));
         }
 
         return response()->json(['message' => __('auth.forms.password_successfully_changed')]);

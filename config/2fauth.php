@@ -71,7 +71,7 @@ return [
         'lastRadarScan' => 0,
         'latestRelease' => false,
         'disableRegistration' => false,
-        'disableRegistrationSso' => false,
+        'enableSso' => true,
     ],
 
     /*

@@ -29,6 +29,7 @@ return [
     'administration_legend' => 'While previous settings are user settings (every user can set its own preferences), following settings are global and apply to all users.',
     'only_an_admin_can_edit_them' => 'Only an administrator can view and edit them.',
     'you_are_administrator' => 'You are an administrator',
+    'account_linked_to_sso_x_provider' => 'You signed-in via SSO using your :provider account. Your information cannot be changed here but on :provider.',
     'general' => 'General',
     'security' => 'Security',
     'profile' => 'Profile',
@@ -131,7 +132,11 @@ return [
         ],
         'disable_registration' => [
             'label' => 'Disable registration',
-            'help' => 'Prevent new user registration',
+            'help' => 'Prevent new user registration. This affects SSO as well, so new SSO users won\'t be able to sign on',
+        ],
+        'enable_sso' => [
+            'label' => 'Enable Single Sign-On (SSO)',
+            'help' => 'Allow visitors to authenticate using an external ID via the Single Sign-On scheme',
         ],
         'otp_generation' => [
             'label' => 'Show Password',

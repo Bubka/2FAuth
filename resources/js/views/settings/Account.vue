@@ -107,10 +107,13 @@
                 <div v-if="user.isAdmin" class="notification is-warning">
                     {{ $t('settings.you_are_administrator') }}
                 </div>
+                <div v-if="user.oauth_provider" class="notification is-info">
+                    {{ $t('settings.account_linked_to_sso_x_provider', { provider: user.oauth_provider }) }}
+                </div>
                 <form @submit.prevent="submitProfile" @keydown="formProfile.onKeydown($event)">
                     <div v-if="$2fauth.config.proxyAuth" class="notification is-warning has-text-centered" v-html="$t('auth.user_account_controlled_by_proxy')" />
                     <h4 class="title is-4 has-text-grey-light">{{ $t('settings.profile') }}</h4>
-                    <fieldset :disabled="$2fauth.config.proxyAuth">
+                    <fieldset :disabled="$2fauth.config.proxyAuth || user.oauth_provider">
                         <FormField v-model="formProfile.name" fieldName="name" :fieldError="formProfile.errors.get('name')" label="auth.forms.name" :maxLength="255" autofocus />
                         <FormField v-model="formProfile.email" fieldName="email" :fieldError="formProfile.errors.get('email')" inputType="email" label="auth.forms.email" :maxLength="255" autofocus />
                         <FormField v-model="formProfile.password" fieldName="password" :fieldError="formProfile.errors.get('password')" inputType="password" label="auth.forms.current_password.label" help="auth.forms.current_password.help" />
@@ -119,7 +122,7 @@
                 </form>
                 <form @submit.prevent="submitPassword" @keydown="formPassword.onKeydown($event)">
                     <h4 class="title is-4 pt-6 has-text-grey-light">{{ $t('settings.change_password') }}</h4>
-                    <fieldset :disabled="$2fauth.config.proxyAuth">
+                    <fieldset :disabled="$2fauth.config.proxyAuth || user.oauth_provider">
                         <FormPasswordField v-model="formPassword.password" fieldName="password" :fieldError="formPassword.errors.get('password')" :autocomplete="'new-password'" :showRules="true" label="auth.forms.new_password" />
                         <FormPasswordField v-model="formPassword.password_confirmation" :showRules="false" fieldName="password_confirmation" :fieldError="formPassword.errors.get('password_confirmation')" inputType="password" :autocomplete="'new-password'" label="auth.forms.confirm_new_password" />
                         <FormField v-model="formPassword.currentPassword" fieldName="currentPassword" :fieldError="formPassword.errors.get('currentPassword')" inputType="password" label="auth.forms.current_password.label" help="auth.forms.current_password.help" />
@@ -129,7 +132,9 @@
                 <form id="frmDeleteAccount" @submit.prevent="submitDelete" @keydown="formDelete.onKeydown($event)">
                     <h4 class="title is-4 pt-6 has-text-danger">{{ $t('auth.forms.delete_account') }}</h4>
                     <div class="field is-size-7-mobile">
-                        {{ $t('auth.forms.delete_your_account_and_reset_all_data')}}
+                        <p class="block">{{ $t('auth.forms.delete_your_account_and_reset_all_data')}}</p>
+                        <p>{{ $t('auth.forms.reset_your_password_to_delete_your_account') }}</p>
+                        <p>{{ $t('auth.forms.deleting_2fauth_account_does_not_impact_provider') }}</p>
                     </div>
                     <fieldset :disabled="$2fauth.config.proxyAuth">
                         <FormField v-model="formDelete.password" fieldName="password" :fieldError="formDelete.errors.get('password')" inputType="password" autocomplete="new-password" label="auth.forms.current_password.label" help="auth.forms.current_password.help" />

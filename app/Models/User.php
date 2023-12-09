@@ -49,7 +49,7 @@ class User extends Authenticatable implements WebAuthnAuthenticatable
      * @var string[]
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'oauth_id', 'oauth_provider'
     ];
 
     /**

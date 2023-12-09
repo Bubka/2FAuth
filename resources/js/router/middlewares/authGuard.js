@@ -11,6 +11,7 @@ export default async function authGuard({ to, next, nextMiddleware, stores }) {
             await user.loginAs({
                 name: currentUser.name,
                 email: currentUser.email,
+                oauth_provider: currentUser.oauth_provider,
                 preferences: currentUser.preferences,
                 isAdmin: currentUser.is_admin,
             })

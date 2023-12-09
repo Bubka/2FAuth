@@ -35,6 +35,7 @@
             await user.loginAs({
                 name: response.data.name,
                 email: response.data.email,
+                oauth_provider: response.data.oauth_provider,
                 preferences: response.data.preferences,
                 isAdmin: response.data.is_admin,
             })
@@ -63,6 +64,7 @@
             await user.loginAs({
                 name: response.data.name,
                 email: response.data.email,
+                oauth_provider: response.data.oauth_provider,
                 preferences: response.data.preferences,
                 isAdmin: response.data.is_admin,
             })
@@ -115,17 +117,25 @@
                     {{ $t('auth.login_and_password') }}
                 </a>
             </p>
-            <p v-if="appSettings.openidAuth">{{ $t('auth.sign_in_using') }}&nbsp;
-                <a id="lnkSignWithOpenID" class="is-link" href="/socialite/redirect/openid">
-                    OpenID
-                </a>
-            </p>
             <p v-if="appSettings.disableRegistration == false" class="mt-4">
                 {{ $t('auth.forms.dont_have_account_yet') }}&nbsp;
                 <RouterLink id="lnkRegister" :to="{ name: 'register' }" class="is-link">
                     {{ $t('auth.register') }}
                 </RouterLink>
             </p>
+            <div v-if="appSettings.enableSso" class="columns mt-4 is-variable is-1">
+                <div class="column is-narrow py-1">
+                    {{ $t('auth.or_continue_with') }}
+                </div>
+                <div class="column py-1">
+                    <a v-if="$2fauth.config.sso.openid" id="lnkSignWithOpenID" class="button is-link is-outlined is-small ml-2" href="/socialite/redirect/openid">
+                        OpenID<FontAwesomeIcon class="ml-2" :icon="['fab', 'openid']" />
+                    </a>
+                    <a v-if="$2fauth.config.sso.github" id="lnkSignWithGithub" class="button is-link is-outlined is-small ml-2" href="/socialite/redirect/github">
+                        Github<FontAwesomeIcon class="ml-2" :icon="['fab', 'github-alt']" />
+                    </a>
+                </div>
+            </div>
         </div>
     </FormWrapper>
     <!-- login/password legacy form -->
@@ -148,17 +158,25 @@
                     {{ $t('auth.webauthn.security_device') }}
                 </a>
             </p>
-            <p v-if="appSettings.openidAuth">{{ $t('auth.sign_in_using') }}&nbsp;
-                <a id="lnkSignWithOpenID" class="is-link" href="/socialite/redirect/openid">
-                    OpenID
-                </a>
-            </p>
             <p v-if="appSettings.disableRegistration == false" class="mt-4">
                 {{ $t('auth.forms.dont_have_account_yet') }}&nbsp;
                 <RouterLink id="lnkRegister" :to="{ name: 'register' }" class="is-link">
                     {{ $t('auth.register') }}
                 </RouterLink>
             </p>
+            <div v-if="appSettings.enableSso" class="columns mt-4 is-variable is-1">
+                <div class="column is-narrow py-1">
+                    {{ $t('auth.or_continue_with') }}
+                </div>
+                <div class="column py-1">
+                    <a v-if="$2fauth.config.sso.openid" id="lnkSignWithOpenID" class="button is-link is-outlined is-small mr-2" href="/socialite/redirect/openid">
+                        OpenID<FontAwesomeIcon class="ml-2" :icon="['fab', 'openid']" />
+                    </a>
+                    <a v-if="$2fauth.config.sso.github" id="lnkSignWithGithub" class="button is-link is-outlined is-small mr-2" href="/socialite/redirect/github">
+                        Github<FontAwesomeIcon class="ml-2" :icon="['fab', 'github-alt']" />
+                    </a>
+                </div>
+            </div>
         </div>
     </FormWrapper>
     <!-- footer -->

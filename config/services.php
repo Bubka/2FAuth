@@ -21,6 +21,27 @@ return [
         'scheme' => 'https',
     ],
 
+    'openid' => [
+        'token_url' => env('OPENID_TOKEN_URL'),
+        'authorize_url' => env('OPENID_AUTHORIZE_URL'),
+        'userinfo_url' => env('OPENID_USERINFO_URL'),
+        'client_id' => env('OPENID_CLIENT_ID'),
+        'client_secret' => env('OPENID_CLIENT_SECRET'),
+        'redirect' => '/socialite/callback/openid',
+    ],
+
+    'github' => [
+        'client_id' => env('GITHUB_CLIENT_ID'),
+        'client_secret' => env('GITHUB_CLIENT_SECRET'),
+        'redirect' => '/socialite/callback/github',
+    ],
+
+    // 'google' => [    
+    //     'client_id' => env('GOOGLE_CLIENT_ID'),  
+    //     'client_secret' => env('GOOGLE_CLIENT_SECRET'),  
+    //     'redirect' => '/socialite/callback/google ',
+    // ],
+
     'postmark' => [
         'token' => env('POSTMARK_TOKEN'),
     ],

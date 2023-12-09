@@ -56,9 +56,11 @@ class OpenId extends AbstractProvider
     }
 
     /**
-     * {@inheritdoc}
+     * Get a refresh token
+     * 
+     * @return \Psr\Http\Message\ResponseInterface
      */
-    protected function refreshToken($refreshToken)
+    protected function refreshToken(string $refreshToken)
     {
         return $this->getHttpClient()->post($this->getTokenUrl(), [
             RequestOptions::FORM_PARAMS => [
