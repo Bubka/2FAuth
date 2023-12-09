@@ -183,14 +183,14 @@
                             <p>{{ $t('settings.only_an_admin_can_edit_them') }}</p>
                         </div>
                         <!-- Check for update -->
-                        <FormCheckbox :model-value="appSettings.checkForUpdate" @update:model-value="val => saveSetting('checkForUpdate', val)" fieldName="checkForUpdate" label="commons.check_for_update" help="commons.check_for_update_help" />
+                        <FormCheckbox v-model="appSettings.checkForUpdate" @update:model-value="val => saveSetting('checkForUpdate', val)" fieldName="checkForUpdate" label="commons.check_for_update" help="commons.check_for_update_help" />
                         <VersionChecker />
                         <!-- protect db -->
-                        <FormCheckbox :model-value="appSettings.useEncryption" @update:model-value="val => saveSetting('useEncryption', val)" fieldName="useEncryption" label="settings.forms.use_encryption.label" help="settings.forms.use_encryption.help" />
+                        <FormCheckbox v-model="appSettings.useEncryption" @update:model-value="val => saveSetting('useEncryption', val)" fieldName="useEncryption" label="settings.forms.use_encryption.label" help="settings.forms.use_encryption.help" />
                         <!-- disable registration -->
-                        <FormCheckbox :model-value="appSettings.disableRegistration" @update:model-value="val => saveSetting('disableRegistration', val)" fieldName="disableRegistration" label="settings.forms.disable_registration.label" help="settings.forms.disable_registration.help" />
+                        <FormCheckbox v-model="appSettings.disableRegistration" @update:model-value="val => saveSetting('disableRegistration', val)" fieldName="disableRegistration" label="settings.forms.disable_registration.label" help="settings.forms.disable_registration.help" />
                         <!-- disable SSO registration -->
-                        <FormCheckbox :model-value="appSettings.enableSso" @update:model-value="val => saveSetting('enableSso', val)" fieldName="enableSso" label="settings.forms.enable_sso.label" help="settings.forms.enable_sso.help" />
+                        <FormCheckbox v-model="appSettings.enableSso" @update:model-value="val => saveSetting('enableSso', val)" fieldName="enableSso" label="settings.forms.enable_sso.label" help="settings.forms.enable_sso.help" />
                     </div>
                 </form>
             </FormWrapper>
