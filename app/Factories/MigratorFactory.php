@@ -155,7 +155,7 @@ class MigratorFactory implements MigratorFactoryInterface
      */
     private function is2FASv2(string $migrationPayload) : mixed
     {
-        // - 2FAS JSON : is a JSON object with the key 'schemaVersion' == 2 and a key 'services' full of objects like
+        // - 2FAS JSON : is a JSON object with a 'schemaVersion' key and a key 'services' full of objects like
         // {
         //     "secret": "A4GRFTVVRBGY7UIW",
         //     ...
@@ -178,7 +178,7 @@ class MigratorFactory implements MigratorFactoryInterface
 
         $json = json_decode($migrationPayload, true);
 
-        if (Arr::get($json, 'schemaVersion') == 2 && (Arr::has($json, 'services') || Arr::has($json, 'servicesEncrypted'))) {
+        if (Arr::has($json, 'schemaVersion') && (Arr::has($json, 'services') || Arr::has($json, 'servicesEncrypted'))) {
             if (Arr::has($json, 'servicesEncrypted')) {
                 throw new EncryptedMigrationException();
             } else {
