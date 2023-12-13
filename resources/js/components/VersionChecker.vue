@@ -13,7 +13,7 @@
         await systemService.getLastRelease({returnError: true})
         .then(response => {
             appSettings.latestRelease = response.data.newRelease
-            isUpToDate.value = response.data.newRelease === false
+            isUpToDate.value = response.data.newRelease === null ? null : response.data.newRelease === false
         })
         .catch(() => {
             isUpToDate.value = null

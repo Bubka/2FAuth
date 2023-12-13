@@ -71,7 +71,7 @@ class ReleaseRadarServiceTest extends FeatureTestCase
         // We do not fake the http request so an exception will be thrown
         Http::preventStrayRequests();
 
-        $this->assertFalse(ReleaseRadarService::manualScan());
+        $this->assertNull(ReleaseRadarService::manualScan());
     }
 
     /**
@@ -86,7 +86,7 @@ class ReleaseRadarServiceTest extends FeatureTestCase
             $url => Http::response(null, 400),
         ]);
 
-        $this->assertFalse(ReleaseRadarService::manualScan());
+        $this->assertNull(ReleaseRadarService::manualScan());
     }
 
     /**

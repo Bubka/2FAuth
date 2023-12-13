@@ -121,6 +121,10 @@ services:
       #   '*': to trust any proxy
       #   A comma separated IP list: The list of proxies IP to trust
       - TRUSTED_PROXIES=null
+      # Proxy for outgoing requests like new releases detection or logo fetching.
+      # You can provide a proxy URL that contains a scheme, username, and password.
+      # For example, "http://username:password@192.168.16.1:10".
+      - PROXY_FOR_OUTGOING_REQUESTS=null
       # Leave the following configuration vars as is.
       # Unless you like to tinker and know what you're doing.
       - BROADCAST_DRIVER=log

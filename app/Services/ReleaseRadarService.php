@@ -22,9 +22,9 @@ class ReleaseRadarService
     /**
      * Run a manual release scan
      *
-     * @return false|string False if no new release, the new release number otherwise
+     * @return string|null|false False if no new release, null if check failed, the new release number otherwise
      */
-    public static function manualScan() : false|string
+    public static function manualScan() : string|null|false
     {
         return self::newRelease();
     }
@@ -32,13 +32,15 @@ class ReleaseRadarService
     /**
      * Run a release scan
      *
-     * @return false|string False if no new release, the new release number otherwise
+     * @return string|null|false False if no new release, null if check failed, the new release number otherwise
      */
-    protected static function newRelease() : false|string
+    protected static function newRelease() : string|null|false
     {
         Log::info('Release scan started');
+        $latestRelease = self::getLatestReleaseData();
 
-        if ($latestReleaseData = json_decode(self::getLatestReleaseData())) {
+        if ($latestRelease) {
+            $latestReleaseData = json_decode($latestRelease);
             $githubVersion    = Helpers::cleanVersionNumber($latestReleaseData->tag_name);
             $installedVersion = Helpers::cleanVersionNumber(config('2fauth.version'));
 
@@ -55,7 +57,7 @@ class ReleaseRadarService
             }
         }
 
-        return false;
+        return $latestRelease ? false : null;
     }
 
     /**
@@ -66,8 +68,9 @@ class ReleaseRadarService
         $url = config('2fauth.latestReleaseUrl');
 
         try {
-            $response = Http::retry(3, 100)
-                ->get($url);
+            $response = Http::withOptions([
+                'proxy' => config('2fauth.config.outgoingProxy'),
+            ])->retry(3, 100)->get($url);
 
             if ($response->successful()) {
                 Settings::set('lastRadarScan', time());

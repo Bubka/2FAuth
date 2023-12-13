@@ -92,7 +92,9 @@ class LogoService
     protected function cacheTfaDirectorySource() : void
     {
         try {
-            $response = Http::retry(3, 100)->get(self::TFA_URL);
+            $response = Http::withOptions([
+                'proxy' => config('2fauth.config.outgoingProxy'),
+            ])->retry(3, 100)->get(self::TFA_URL);
 
             $coll = collect(json_decode(htmlspecialchars_decode($response->body()), true)) /* @phpstan-ignore-line */
                 ->mapWithKeys(function ($item, $key) {
@@ -117,8 +119,9 @@ class LogoService
     protected function fetchLogo(string $logoFile) : void
     {
         try {
-            $response = Http::retry(3, 100)
-                ->get('https://raw.githubusercontent.com/2factorauth/twofactorauth/master/img/' . $logoFile[0] . '/' . $logoFile);
+            $response = Http::withOptions([
+                'proxy' => config('2fauth.config.outgoingProxy'),
+            ])->retry(3, 100)->get('https://raw.githubusercontent.com/2factorauth/twofactorauth/master/img/' . $logoFile[0] . '/' . $logoFile);
 
             if ($response->successful()) {
                 Storage::disk('logos')->put($logoFile, $response->body())

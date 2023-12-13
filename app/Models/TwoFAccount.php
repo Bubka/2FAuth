@@ -691,7 +691,9 @@ class TwoFAccount extends Model implements Sortable
             $newFilename = self::getUniqueFilename($path_parts['extension']);
 
             try {
-                $response = Http::retry(3, 100)->get($url);
+                $response = Http::withOptions([
+                    'proxy' => config('2fauth.config.outgoingProxy'),
+                ])->retry(3, 100)->get($url);
 
                 if ($response->successful()) {
                     Storage::disk('imagesLink')->put($newFilename, $response->body());

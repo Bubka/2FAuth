@@ -25,6 +25,7 @@ return [
         'isDemoApp' => env('IS_DEMO_APP', false),
         'isTestingApp' => env('IS_TESTING_APP', false),
         'trustedProxies' => env('TRUSTED_PROXIES', null),
+        'outgoingProxy' => env('PROXY_FOR_OUTGOING_REQUESTS', ''),
         'proxyLogoutUrl' => env('PROXY_LOGOUT_URL', null),
         'appSubdirectory' => env('APP_SUBDIRECTORY', ''),
     ],
