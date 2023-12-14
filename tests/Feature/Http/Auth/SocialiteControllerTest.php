@@ -129,7 +129,6 @@ class SocialiteControllerTest extends FeatureTestCase
         $this->assertDatabaseHas('users', [
             'oauth_id'       => self::USER_OAUTH_ID,
             'oauth_provider' => self::USER_OAUTH_PROVIDER,
-            'name'           => 'new_nickname',
             'email'          => 'new_email',
         ]);
     }
@@ -152,7 +151,6 @@ class SocialiteControllerTest extends FeatureTestCase
         $this->assertDatabaseHas('users', [
             'oauth_id'       => self::USER_OAUTH_ID,
             'oauth_provider' => self::USER_OAUTH_PROVIDER,
-            'name'           => 'new_name',
             'email'          => 'new_email',
         ]);
     }
@@ -175,9 +173,31 @@ class SocialiteControllerTest extends FeatureTestCase
         $this->assertDatabaseHas('users', [
             'oauth_id'       => 'new_id',
             'oauth_provider' => self::USER_OAUTH_PROVIDER,
-            'name'           => 'jane',
             'email'          => 'jane@provider.com',
             'is_admin'       => 0,
+        ]);
+    }
+
+    /**
+     * @test
+     */
+    public function test_callback_registers_new_user_with_existing_name()
+    {
+        $socialiteUserWithSameName = new \Laravel\Socialite\Two\User;
+        $socialiteUserWithSameName->id = 'socialiteUserWithSameNameId';
+        $socialiteUserWithSameName->name = self::USER_NAME;
+        $socialiteUserWithSameName->email = 'socialiteuserwithsamename@example.com';
+        $socialiteUserWithSameName->nickname = self::USER_NICKNAME;
+
+        Socialite::shouldReceive('driver->user')
+            ->andReturn($socialiteUserWithSameName);
+
+        $response = $this->get('/socialite/callback/github', ['driver' => 'github']);
+
+        $this->assertDatabaseHas('users', [
+            'oauth_id'       => 'socialiteUserWithSameNameId',
+            'oauth_provider' => self::USER_OAUTH_PROVIDER,
+            'email'          => 'socialiteuserwithsamename@example.com',
         ]);
     }
 
@@ -205,6 +225,35 @@ class SocialiteControllerTest extends FeatureTestCase
     /**
      * @test
      */
+    public function test_callback_returns_error_when_email_is_already_used()
+    {
+        $userWithSameEmail = User::factory()->create([
+            'name'     => 'userWithSameEmail',
+            'email'    => 'other@example.com',
+            'password' => 'password',
+        ]);
+
+        $socialiteUserWithSameEmail = new \Laravel\Socialite\Two\User;
+        $socialiteUserWithSameEmail->id = '666';
+        $socialiteUserWithSameEmail->name = 'socialiteUserWithSameEmail';
+        $socialiteUserWithSameEmail->email = 'other@example.com';
+        $socialiteUserWithSameEmail->nickname = self::USER_NICKNAME;
+
+        Socialite::shouldReceive('driver->user')
+            ->andReturn($socialiteUserWithSameEmail);
+
+        $response = $this->get('/socialite/callback/github', ['driver' => 'github']);
+
+        $response->assertRedirect('/error?err=sso_email_already_used');
+        $this->assertDatabaseMissing('users', [
+            'oauth_id'       => '666',
+            'oauth_provider' => self::USER_OAUTH_PROVIDER,
+        ]);
+    }
+
+    /**
+     * @test
+     */
     public function test_callback_returns_error_when_registrations_are_closed()
     {
         Settings::set('disableRegistration', true);
@@ -219,7 +268,7 @@ class SocialiteControllerTest extends FeatureTestCase
 
         $response = $this->get('/socialite/callback/github', ['driver' => 'github']);
 
-        $response->assertRedirect('/error?err=no_register');
+        $response->assertRedirect('/error?err=sso_no_register');
     }
 
     /**

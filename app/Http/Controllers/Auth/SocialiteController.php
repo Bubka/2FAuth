@@ -42,6 +42,10 @@ class SocialiteController extends Controller
             return redirect('/error?err=sso_failed');
         }
 
+        $uniqueName = $socialiteUser->getId() . '@' . $driver;
+        $socialiteEmail = $socialiteUser->getEmail() ?? $uniqueName;
+        $socialiteName  = ($socialiteUser->getNickname() ?? $socialiteUser->getName()) . ' (' . $uniqueName . ')';
+
         /** @var User|null $user */
         $user = User::firstOrNew([
             'oauth_id'       => $socialiteUser->getId(),
@@ -49,17 +53,20 @@ class SocialiteController extends Controller
         ]);
 
         if (! $user->exists) {
-            if (User::count() === 0) {
+            if (User::where('email', $socialiteEmail)->exists()) {
+                return redirect('/error?err=sso_email_already_used');
+            }
+            else if (User::count() === 0) {
                 $user->is_admin = true;
             }
             else if (Settings::get('disableRegistration')) {
-                return redirect('/error?err=no_register');
+                return redirect('/error?err=sso_no_register');
             }
             $user->password = bcrypt(Str::random());
         }
 
-        $user->email        = $socialiteUser->getEmail() ?? $socialiteUser->getId() . '@' . $driver;
-        $user->name         = $socialiteUser->getNickname() ?? $socialiteUser->getName() ?? $driver . ' #' . $socialiteUser->getId();
+        $user->email        = $socialiteEmail;
+        $user->name         = $socialiteName;
         $user->last_seen_at = Carbon::now()->format('Y-m-d H:i:s');
         $user->save();
 

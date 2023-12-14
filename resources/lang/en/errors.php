@@ -62,6 +62,7 @@ return [
     'sso_disabled' => 'SSO is disabled',
     'sso_bad_provider_setup' => 'This SSO provider is not fully setup in your .env file',
     'sso_failed' => 'Authentication via SSO rejected',
-    'no_register' => 'Registrations are disabled',
+    'sso_no_register' => 'Registrations are disabled',
+    'sso_email_already_used' => 'A user account with the same email address already exists but it does not match your external account ID. Do not use SSO if you are already registered on 2FAuth with this email.',
     'account_managed_by_external_provider' => 'Account managed by an external provider',
 ];
