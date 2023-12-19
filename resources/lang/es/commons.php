@@ -47,7 +47,8 @@ return [
     'new_name' => 'Nuevo nombre',
     'options' => 'Opciones',
     'reload' => 'Recargar',
-    'some_data_have_changed' => 'Algunos datos han cambiado. Deberías',
+    'refresh' => 'Refresh',
+    'data_refreshed_to_reflect_server_changes' => 'Data has been refresh to reflect server-side changes',
     'generate' => 'Generar',
     'generating_otp' => 'Generando contraseña de un solo uso',
     'open_in_browser' => 'Abrir en el navegador',
@@ -71,4 +72,8 @@ return [
     'file' => 'Archivo',
     'or' => 'O',
     'close_the_x_page' => 'Cerrar la página {pagetitle}',
+    'submit' => 'Submit',
+    'default' => 'Default',
+    'back_to_home' => 'Back to home',
+    'nothing' => 'nothing',
 ];

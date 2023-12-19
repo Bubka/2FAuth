@@ -31,6 +31,7 @@ return [
     'accounts_deleted' => '帐户成功删除',
     'accounts_moved' => '帐户成功移动',
     'export_selected_to_json' => '将所选账号以json导出',
+    'reveal' => 'reveal',
     'forms' => [
         'service' => [
             'placeholder' => '谷歌, 推特, 苹果',
@@ -101,7 +102,8 @@ return [
         'live_scan_cant_start' => '扫描无法开始 :(',
         'need_grant_permission' => [
             'reason' => '2FAuth 没有权限访问您的相机',
-            'solution' => '您需要授予权限才能使用您的设备相机。 如果您已经拒绝，且您的浏览器不会再次提示您，请参考浏览器文档以了解如何授予权限。'
+            'solution' => '您需要授予权限才能使用您的设备相机。 如果您已经拒绝，且您的浏览器不会再次提示您，请参考浏览器文档以了解如何授予权限。',
+            'click_camera_icon' => 'It is usually done by clicking on a slashed camera icon in or next to the browser\'s address bar',
         ],
         'not_readable' => [
             'reason' => '载入扫描仪失败',
@@ -136,17 +138,22 @@ return [
         'import' => '导入',
         'to_import' => '导入',
         'import_legend' => '2FAuth 可以从各种2FA 应用程序导入数据。<br />使用这些应用的导出功能来获取迁移资源(QR码或文件)，并在下方加载它。',
+        'import_legend_afterpart' => 'Use the Export feature of these apps to get a migration resource like a QR code or a JSON file then load it here.',
         'upload' => '上传',
         'scan' => '扫描',
         'supported_formats_for_qrcode_upload' => '接受：jpg、jpeg、png、bmp、gif、svg或webp',
         'supported_formats_for_file_upload' => '接受：纯文本，json，2fas',
         'supported_migration_formats' => '支持的迁移格式',
         'qr_code' => '二维码',
+        'text_file' => 'Text file',
         'plain_text' => '纯文本',
+        'parsing_data' => 'Parsing data...',
         'issuer' => '发行商',
         'imported' => '已导入',
         'failure' => '失败',
         'x_valid_accounts_found' => '找到 {count} 个有效账户',
+        'submitted_data_parsed_now_accounts_are_awaiting_import' => 'The following 2FA accounts were found in the migration resource. So far none of them have been added to 2FAuth.',
+        'use_buttons_to_save_or_discard' => 'Use the available buttons to permanently save them to your 2FA collection or discard them.',
         'import_all' => '全部导入',
         'import_this_account' => '导入此账户',
         'discard_all' => '全部丢弃',

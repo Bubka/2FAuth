@@ -20,7 +20,7 @@ return [
     'createGroup' => 'Създай група',
     'editGroup' => 'Промяна на група',
     'settings' => [
-        'options' => 'Настроики',
+        'options' => 'Опции',
         'account' => 'Потребителски профил',
         'oauth' => [
             'tokens' => 'OAuth токени',

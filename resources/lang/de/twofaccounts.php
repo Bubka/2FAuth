@@ -31,6 +31,7 @@ return [
     'accounts_deleted' => 'Konto(s) erfolgreich gelöscht',
     'accounts_moved' => 'Konto(en) erfolgreich verschoben',
     'export_selected_to_json' => 'Json-Export ausgewählter Konten herunterladen',
+    'reveal' => 'reveal',
     'forms' => [
         'service' => [
             'placeholder' => 'Google, Twitter, Apple',
@@ -58,8 +59,8 @@ return [
             'title' => 'Sperren',
         ],
         'choose_image' => 'Hochladen',
-        'i_m_lucky' => 'Try my luck',
-        'i_m_lucky_legend' => 'The "Try my luck" button try to get the official icon of the given service. Enter actual service name without ".xyz" extension and try to avoid typo. (beta feature)',
+        'i_m_lucky' => 'Mein Glück versuchen',
+        'i_m_lucky_legend' => 'Durch den Knopf "mein Glück versuchen" wird versucht, das offizielle Symbol des jeweiligen Dienstes zu erhalten. Geben Sie den tatsächlichen Namen des Dienstes ohne die Erweiterung ".xyz" ein und versuchen Sie, Tippfehler zu vermeiden (Beta-Funktion)',
         'test' => 'Test',
         'secret' => [
             'label' => 'Geheimnis',
@@ -101,7 +102,8 @@ return [
         'live_scan_cant_start' => 'Der Live-Scan kann nicht gestartet werden :(',
         'need_grant_permission' => [
             'reason' => '2FAuth hat keine Berechtigung auf Ihre Kamera zuzugreifen',
-            'solution' => 'Sie müssen die Erlaubnis erteilen, um Ihre Gerätekamera zu verwenden. Falls Sie bereits verweigert haben und Ihr Browser Sie nicht erneut anfragt, verweisen Sie bitte auf die Browser-Dokumentation, um herauszufinden, wie Sie die Erlaubnis erteilen können.'
+            'solution' => 'Sie müssen die Erlaubnis erteilen, um Ihre Gerätekamera zu verwenden. Falls Sie bereits verweigert haben und Ihr Browser Sie nicht erneut anfragt, verweisen Sie bitte auf die Browser-Dokumentation, um herauszufinden, wie Sie die Erlaubnis erteilen können.',
+            'click_camera_icon' => 'It is usually done by clicking on a slashed camera icon in or next to the browser\'s address bar',
         ],
         'not_readable' => [
             'reason' => 'Fehler beim Laden des Scanners',
@@ -136,17 +138,22 @@ return [
         'import' => 'Import',
         'to_import' => 'Import',
         'import_legend' => '2FAuth kann Daten aus verschiedenen 2FA-Apps importieren.<br />Benutze die Exportfunktion dieser Apps, um eine Migrationsquelle zu erhalten (QR-Code oder eine Datei) und lade sie mit einer bevorzugten Methode unterhalb.',
+        'import_legend_afterpart' => 'Use the Export feature of these apps to get a migration resource like a QR code or a JSON file then load it here.',
         'upload' => 'Hochladen',
         'scan' => 'Scannen',
         'supported_formats_for_qrcode_upload' => 'Akzeptiert: jpg, jpeg, png, bmp, gif, svg oder webp',
         'supported_formats_for_file_upload' => 'Akzeptiert: Klartext, Json, 2fas',
         'supported_migration_formats' => 'Unterstütze Migrationsformate',
         'qr_code' => 'QR Code',
+        'text_file' => 'Text file',
         'plain_text' => 'Klartext',
+        'parsing_data' => 'Parsing data...',
         'issuer' => 'Aussteller',
         'imported' => 'Importiert',
         'failure' => 'Fehler',
         'x_valid_accounts_found' => '{count} gültige Konten gefunden',
+        'submitted_data_parsed_now_accounts_are_awaiting_import' => 'The following 2FA accounts were found in the migration resource. So far none of them have been added to 2FAuth.',
+        'use_buttons_to_save_or_discard' => 'Use the available buttons to permanently save them to your 2FA collection or discard them.',
         'import_all' => 'Alle importieren',
         'import_this_account' => 'Importiere dieses Konto',
         'discard_all' => 'Alles wegwerfen',

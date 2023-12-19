@@ -26,8 +26,10 @@ return [
 
     ],
     'administration' => 'Administración',
-    'administration_legend' => 'While previous settings are user settings (every user can set its own preferences), following settings are global and apply to all users. Only an administrator can view and edit those settings.',
-    'you_are_administrator' => 'You are an administrator',
+    'administration_legend' => 'Mientras que los ajustes anteriores son de usuario (cada usuario puede establecer sus propias preferencias), los siguientes son globales y se aplican a todos los usuarios. Sólo un administrador puede ver y editar esas configuraciones.',
+    'only_an_admin_can_edit_them' => 'Only an administrator can view and edit them.',
+    'you_are_administrator' => 'Usted es un administrador',
+    'account_linked_to_sso_x_provider' => 'You signed-in via SSO using your :provider account. Your information cannot be changed here but on :provider.',
     'general' => 'General',
     'security' => 'Seguridad',
     'profile' => 'Perfil',
@@ -57,6 +59,10 @@ return [
             'label' => 'Mostrar contraseñas generadas de un solo uso como punto',
             'help' => 'Reemplaza carácteres de contraseñas generados con *** para asegurar confidencialidad. No afecta la función copiar/pegar.'
         ],
+        'reveal_dotted_otp' => [
+            'label' => 'Reveal obscured <abbr title="One-Time Password">OTP</abbr>',
+            'help' => 'Let the ability to temporarily reveal Dot-Obscured passwords'
+        ],
         'close_otp_on_copy' => [
             'label' => 'Cerrar <abbr title="One-Time Password">OTP</abbr> después de copiar',
             'help' => 'Haciendo clic en la contraseña generada para copiarla, la oculta automáticamente de la pantalla'
@@ -75,11 +81,11 @@ return [
         ],
         'password_format' => [
             'label' => 'Formato de contraseñas',
-            'help' => 'Change how the passwords are displayed by grouping digits to ease readability and memorization'
+            'help' => 'Cambiar cómo se muestran las contraseñas agrupando dígitos para facilitar la legibilidad y la memorización'
         ],
         'pair' => 'por parejas',
-        'pair_legend' => 'Group digits two by two',
-        'trio_legend' => 'Group digits three by three',
+        'pair_legend' => 'Grupo de dígitos dos por dos',
+        'trio_legend' => 'Grupo de dígitos tres por tres',
         'half_legend' => 'Dividir dígitos en dos grupos iguales',
         'trio' => 'por tríos',
         'half' => 'por la mitad',
@@ -128,15 +134,19 @@ return [
             'label' => 'Deshabilitar registro de usuarios',
             'help' => 'Evitar el registro de nuevos usuarios',
         ],
+        'enable_sso' => [
+            'label' => 'Enable Single Sign-On (SSO)',
+            'help' => 'Allow visitors to authenticate using an external ID via the Single Sign-On scheme',
+        ],
         'otp_generation' => [
             'label' => 'Mostrar contraseña',
-            'help' => 'Set how and when <abbr title="One-Time Passwords">OTPs</abbr> are displayed.<br/>',
+            'help' => 'Establezca cómo y cuándo se muestran las <abbr title="Contraseñas de un solo uso">OTP</abbr>.<br/>',
         ],
         'otp_generation_on_request' => 'Después de un clic/toque',
-        'otp_generation_on_request_legend' => 'Alone, in its own view',
-        'otp_generation_on_request_title' => 'Click an account to get a password in a dedicated view',
+        'otp_generation_on_request_legend' => 'Solo, en su propia vista',
+        'otp_generation_on_request_title' => 'Haga clic en una cuenta para obtener una contraseña en una vista dedicada',
         'otp_generation_on_home' => 'Constantemente',
-        'otp_generation_on_home_legend' => 'All of them, on home',
+        'otp_generation_on_home_legend' => 'Todos ellos, en casa',
         'otp_generation_on_home_title' => 'Mostrar todas las contraseñas en la vista principal, sin hacer nada',
         'never' => 'Nunca',
         'on_otp_copy' => 'Al copiar código de seguridad',

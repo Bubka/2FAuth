@@ -47,7 +47,8 @@ return [
     'new_name' => '新名称',
     'options' => '选项',
     'reload' => '刷新',
-    'some_data_have_changed' => '某些数据已经更改，您应该：',
+    'refresh' => 'Refresh',
+    'data_refreshed_to_reflect_server_changes' => 'Data has been refresh to reflect server-side changes',
     'generate' => '生成',
     'generating_otp' => '正在生成 OTP',
     'open_in_browser' => '在浏览器中打开',
@@ -71,4 +72,8 @@ return [
     'file' => '文件',
     'or' => '或',
     'close_the_x_page' => '关闭 {pagetitle} 页',
+    'submit' => 'Submit',
+    'default' => 'Default',
+    'back_to_home' => 'Back to home',
+    'nothing' => 'nothing',
 ];

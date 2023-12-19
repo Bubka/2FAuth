@@ -13,7 +13,7 @@ return [
     'capture' => 'QR blinken',
     'accounts' => 'Konten',
     'createAccount' => 'Konto erstellen',
-    'importAccounts' => 'Konten importieren',
+    'importAccounts' => 'Importiere Konten',
     'editAccount' => 'Konto bearbeiten',
     'showQRcode' => 'Konto als QR-Code',
     'groups' => 'Gruppen',

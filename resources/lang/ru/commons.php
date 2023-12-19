@@ -47,7 +47,8 @@ return [
     'new_name' => 'Новое имя',
     'options' => 'Настройки',
     'reload' => 'Обновить',
-    'some_data_have_changed' => 'Некоторые данные были изменены. Вы должны',
+    'refresh' => 'Refresh',
+    'data_refreshed_to_reflect_server_changes' => 'Data has been refresh to reflect server-side changes',
     'generate' => 'Генерировать',
     'generating_otp' => 'Generating OTP',
     'open_in_browser' => 'Открыть в браузере',
@@ -71,4 +72,8 @@ return [
     'file' => 'Файл',
     'or' => 'или',
     'close_the_x_page' => 'Закрыть страницу {pagetitle}',
+    'submit' => 'Submit',
+    'default' => 'Default',
+    'back_to_home' => 'Back to home',
+    'nothing' => 'nothing',
 ];

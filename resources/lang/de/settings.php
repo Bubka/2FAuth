@@ -27,7 +27,9 @@ return [
     ],
     'administration' => 'Administration',
     'administration_legend' => 'Vorangegangene Einstellungen betreffen Benutzereinstellungen (jeder Benutzer kann seine eigenen Einstellungen festlegen), folgende globale Einstellungen sind gültig für alle Benutzer. Nur ein Administrator kann diese Einstellungen ansehen und bearbeiten.',
+    'only_an_admin_can_edit_them' => 'Only an administrator can view and edit them.',
     'you_are_administrator' => 'Du bist ein Administrator',
+    'account_linked_to_sso_x_provider' => 'You signed-in via SSO using your :provider account. Your information cannot be changed here but on :provider.',
     'general' => 'Allgemein',
     'security' => 'Sicherheit',
     'profile' => 'Profil',
@@ -56,6 +58,10 @@ return [
         'show_otp_as_dot' => [
             'label' => 'Generierte Einmalpasswörter als Punkte anzeigen',
             'help' => 'Passwortzeichen werden als *** angezeigt, um die Vertraulichkeit zu gewährleisten. Dies beeinflusst nicht die Kopieren/Einfügen Funktion'
+        ],
+        'reveal_dotted_otp' => [
+            'label' => 'Reveal obscured <abbr title="One-Time Password">OTP</abbr>',
+            'help' => 'Let the ability to temporarily reveal Dot-Obscured passwords'
         ],
         'close_otp_on_copy' => [
             'label' => 'Schließe <abbr title="One-Time Password">OTP</abbr> nach dem Kopieren',
@@ -125,19 +131,23 @@ return [
             'help' => 'Speichert den letzten Gruppenfilter und stellt ihn bei Ihrem nächsten Besuch wieder her',
         ],
         'disable_registration' => [
-            'label' => 'Disable registration',
-            'help' => 'Prevent new user registration',
+            'label' => 'Registrierung deaktivieren',
+            'help' => 'Deaktiviere Registrierung',
+        ],
+        'enable_sso' => [
+            'label' => 'Enable Single Sign-On (SSO)',
+            'help' => 'Allow visitors to authenticate using an external ID via the Single Sign-On scheme',
         ],
         'otp_generation' => [
-            'label' => 'Show Password',
-            'help' => 'Set how and when <abbr title="One-Time Passwords">OTPs</abbr> are displayed.<br/>',
+            'label' => 'Passwort zeigen',
+            'help' => 'Legelt fest, wie und wann <abbr title="One-Time Passwords">OTPs</abbr> angezeigt werden.<br/>',
         ],
-        'otp_generation_on_request' => 'After a click/tap',
-        'otp_generation_on_request_legend' => 'Alone, in its own view',
-        'otp_generation_on_request_title' => 'Click an account to get a password in a dedicated view',
-        'otp_generation_on_home' => 'Constantly',
-        'otp_generation_on_home_legend' => 'All of them, on home',
-        'otp_generation_on_home_title' => 'Show all passwords in the main view, without doing anything',
+        'otp_generation_on_request' => 'Nach einem Klick/Tippen',
+        'otp_generation_on_request_legend' => 'Einzeln, in eigener Ansicht',
+        'otp_generation_on_request_title' => 'Konto anklicken um ein Passwort in einer eigenen Ansicht zu erhalten',
+        'otp_generation_on_home' => 'Ständig',
+        'otp_generation_on_home_legend' => 'Alle auf dem Startbildschirm anzeigen',
+        'otp_generation_on_home_title' => 'Alle Passwörter auf dem Startbildschirm anzeigen, ohne etwas tun zu müssen',
         'never' => 'Niemals',
         'on_otp_copy' => 'Beim Kopieren des Tokens',
         '1_minutes' => 'Nach 1 Minute',

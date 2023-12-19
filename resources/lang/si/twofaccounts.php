@@ -17,7 +17,7 @@ return [
     'account' => 'ගිණුම',
     'accounts' => 'ගිණුම්',
     'icon' => 'නිරූපකය',
-    'icon_for_account_x_at_service_y' => 'Icon of the {account} account at {service}',
+    'icon_for_account_x_at_service_y' => 'Icon of the :account account at :service',
     'icon_to_illustrate_the_account' => 'Icon that illustrates the account',
     'remove_icon' => 'Remove icon',
     'no_account_here' => 'No 2FA here!',
@@ -31,6 +31,7 @@ return [
     'accounts_deleted' => 'Account(s) successfully deleted',
     'accounts_moved' => 'Account(s) successfully moved',
     'export_selected_to_json' => 'Download a json export of selected accounts',
+    'reveal' => 'reveal',
     'forms' => [
         'service' => [
             'placeholder' => 'Google, Twitter, Apple',
@@ -101,7 +102,8 @@ return [
         'live_scan_cant_start' => 'Live scan can\'t start :(',
         'need_grant_permission' => [
             'reason' => '2FAuth does not have permission to access your camera',
-            'solution' => 'You need to grant permission to use your device camera. If you already denied and your browser do not prompt you again, please refers to the browser documentation to find out how to grant permission.'
+            'solution' => 'You need to grant permission to use your device camera. If you already denied and your browser do not prompt you again, please refers to the browser documentation to find out how to grant permission.',
+            'click_camera_icon' => 'It is usually done by clicking on a slashed camera icon in or next to the browser\'s address bar',
         ],
         'not_readable' => [
             'reason' => 'Fail to load scanner',
@@ -127,7 +129,7 @@ return [
     ],
     'confirm' => [
         'delete' => 'Are you sure you want to delete this account?',
-        'cancel' => 'The account will be lost. Are you sure?',
+        'cancel' => 'Changes will be lost. Are you sure?',
         'discard' => 'Are you sure you want to discard this account?',
         'discard_all' => 'Are you sure you want to discard all accounts?',
         'discard_duplicates' => 'Are you sure you want to discard all duplicates?',
@@ -135,18 +137,23 @@ return [
     'import' => [
         'import' => 'Import',
         'to_import' => 'Import',
-        'import_legend' => '2FAuth can import data from various 2FA apps.<br />Use the Export feature of these apps to get a migration resource (a QR code or a file) and load it using your preferred method below.',
+        'import_legend' => '2FAuth can import data from various 2FA apps.',
+        'import_legend_afterpart' => 'Use the Export feature of these apps to get a migration resource like a QR code or a JSON file then load it here.',
         'upload' => 'Upload',
         'scan' => 'Scan',
         'supported_formats_for_qrcode_upload' => 'Accepted: jpg, jpeg, png, bmp, gif, svg, or webp',
         'supported_formats_for_file_upload' => 'Accepted: Plain text, json, 2fas',
         'supported_migration_formats' => 'Supported migration formats',
         'qr_code' => 'QR Code',
+        'text_file' => 'Text file',
         'plain_text' => 'Plain text',
+        'parsing_data' => 'Parsing data...',
         'issuer' => 'Issuer',
         'imported' => 'Imported',
         'failure' => 'Failure',
-        'x_valid_accounts_found' => '{count} valid accounts found',
+        'x_valid_accounts_found' => ':count valid accounts found',
+        'submitted_data_parsed_now_accounts_are_awaiting_import' => 'The following 2FA accounts were found in the migration resource. So far none of them have been added to 2FAuth.',
+        'use_buttons_to_save_or_discard' => 'Use the available buttons to permanently save them to your 2FA collection or discard them.',
         'import_all' => 'Import all',
         'import_this_account' => 'Import this account',
         'discard_all' => 'Discard all',
@@ -156,7 +163,7 @@ return [
         'possible_duplicate' => 'An account with the exact same data already exists',
         'invalid_account' => '- invalid account -',
         'invalid_service' => '- invalid service -',
-        'do_not_set_password_or_encryption' => 'Do NOT enable Password protection or Encryption when you export data (from a 2FA app) you want to import into 2FAuth.',
+        'do_not_set_password_or_encryption' => 'Do NOT enable Password protection or Encryption when you export data from a 2FA app otherwise 2FAuth will not be able to decipher them.',
     ],
 
 ];

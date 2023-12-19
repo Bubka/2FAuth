@@ -26,8 +26,10 @@ return [
 
     ],
     'administration' => 'Administration',
-    'administration_legend' => 'While previous settings are user settings (every user can set its own preferences), following settings are global and apply to all users. Only an administrator can view and edit those settings.',
+    'administration_legend' => 'While previous settings are user settings (every user can set its own preferences), following settings are global and apply to all users.',
+    'only_an_admin_can_edit_them' => 'Only an administrator can view and edit them.',
     'you_are_administrator' => 'You are an administrator',
+    'account_linked_to_sso_x_provider' => 'You signed-in via SSO using your :provider account. Your information cannot be changed here but on :provider.',
     'general' => 'General',
     'security' => 'Security',
     'profile' => 'Profile',
@@ -54,8 +56,12 @@ return [
             'help' => 'Language used to translate the 2FAuth user interface. Named languages are complete, set the one of your choice to override your browser preference.'
         ],
         'show_otp_as_dot' => [
-            'label' => 'Show generated one-time passwords as dot',
+            'label' => 'Show generated <abbr title="One-Time Password">OTP</abbr> as dot',
             'help' => 'Replace generated password caracters with *** to ensure confidentiality. Do not affect the copy/paste feature'
+        ],
+        'reveal_dotted_otp' => [
+            'label' => 'Reveal obscured <abbr title="One-Time Password">OTP</abbr>',
+            'help' => 'Let the ability to temporarily reveal Dot-Obscured passwords'
         ],
         'close_otp_on_copy' => [
             'label' => 'Close <abbr title="One-Time Password">OTP</abbr> after copy',
@@ -126,7 +132,11 @@ return [
         ],
         'disable_registration' => [
             'label' => 'Disable registration',
-            'help' => 'Prevent new user registration',
+            'help' => 'Prevent new user registration. This affects SSO as well, so new SSO users won\'t be able to sign on',
+        ],
+        'enable_sso' => [
+            'label' => 'Enable Single Sign-On (SSO)',
+            'help' => 'Allow visitors to authenticate using an external ID via the Single Sign-On scheme',
         ],
         'otp_generation' => [
             'label' => 'Show Password',

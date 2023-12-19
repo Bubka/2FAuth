@@ -31,6 +31,7 @@ return [
     'accounts_deleted' => 'Профил(ите) са изтрити успешно',
     'accounts_moved' => 'Профил(ите) са преместени успешно',
     'export_selected_to_json' => 'Изтегляне на json извадка на избраните профили',
+    'reveal' => 'reveal',
     'forms' => [
         'service' => [
             'placeholder' => 'Google, Twitter, Apple',
@@ -58,8 +59,8 @@ return [
             'title' => 'Заключи го',
         ],
         'choose_image' => 'Качи',
-        'i_m_lucky' => 'Try my luck',
-        'i_m_lucky_legend' => 'The "Try my luck" button try to get the official icon of the given service. Enter actual service name without ".xyz" extension and try to avoid typo. (beta feature)',
+        'i_m_lucky' => 'На късмет',
+        'i_m_lucky_legend' => 'Бутонът "На късмет" ще опита да изтегли официалната икона на дадената услуга. Въведете действителното име на услугата без разширение ".xyz" и се опитайте да избегнете правописна грешка. (бета функция)',
         'test' => 'Тест',
         'secret' => [
             'label' => 'Тайна',
@@ -101,7 +102,8 @@ return [
         'live_scan_cant_start' => 'Сканирането не може да стартира :(',
         'need_grant_permission' => [
             'reason' => '2FAuth няма разрешение за достъп до камерата ви',
-            'solution' => 'Трябва да дадете разрешение за използване на камерата на вашето устройство. Ако вече сте отказали и вашият браузър не ви подкани отново, моля, вижте документацията на браузъра, за да разберете как да дадете разрешение.'
+            'solution' => 'Трябва да дадете разрешение за използване на камерата на вашето устройство. Ако вече сте отказали и вашият браузър не ви подкани отново, моля, вижте документацията на браузъра, за да разберете как да дадете разрешение.',
+            'click_camera_icon' => 'It is usually done by clicking on a slashed camera icon in or next to the browser\'s address bar',
         ],
         'not_readable' => [
             'reason' => 'Неуспешно зареждане на скенера',
@@ -136,17 +138,22 @@ return [
         'import' => 'Импорт',
         'to_import' => 'Импорт',
         'import_legend' => '2FAuth може да импортира данни от различни 2FA приложения.<br />Използвайте функцията за експортиране на тези приложения, за да получите ресурс за мигриране (QR код или файл) и да го заредите, като използвате предпочитания от вас метод по-долу.',
+        'import_legend_afterpart' => 'Use the Export feature of these apps to get a migration resource like a QR code or a JSON file then load it here.',
         'upload' => 'Качи',
         'scan' => 'Сканирай',
         'supported_formats_for_qrcode_upload' => 'Приемат се: jpg, jpeg, png, bmp, gif, svg или webp',
         'supported_formats_for_file_upload' => 'Приема се: чист текст, json, 2fas',
         'supported_migration_formats' => 'Поддържани формати за миграция',
         'qr_code' => 'QR код',
+        'text_file' => 'Text file',
         'plain_text' => 'Чист текст',
+        'parsing_data' => 'Parsing data...',
         'issuer' => 'Издател',
         'imported' => 'Импортиран',
         'failure' => 'Грешка',
         'x_valid_accounts_found' => 'Намерени са {count} валидни профила',
+        'submitted_data_parsed_now_accounts_are_awaiting_import' => 'The following 2FA accounts were found in the migration resource. So far none of them have been added to 2FAuth.',
+        'use_buttons_to_save_or_discard' => 'Use the available buttons to permanently save them to your 2FA collection or discard them.',
         'import_all' => 'Импорт. на всички',
         'import_this_account' => 'Импориране на профила',
         'discard_all' => 'Отхвърли всички',

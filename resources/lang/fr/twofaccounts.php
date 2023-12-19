@@ -31,6 +31,7 @@ return [
     'accounts_deleted' => 'Compte·s supprimé·s avec succès',
     'accounts_moved' => 'Compte·s déplacé·s avec succès',
     'export_selected_to_json' => 'Télécharger un export json des comptes sélectionnés',
+    'reveal' => 'révéler',
     'forms' => [
         'service' => [
             'placeholder' => 'Google, Twitter, Apple',
@@ -101,7 +102,8 @@ return [
         'live_scan_cant_start' => 'Le scanner ne peut pas démarrer :(',
         'need_grant_permission' => [
             'reason' => '2FAuth n\'a pas la permission d\'accéder à votre caméra',
-            'solution' => 'Vous devez autoriser l\'utilisation de l\'appareil photo de votre appareil. Si vous avez déjà refusé et que votre navigateur ne vous le demande plus, veuillez vous référer à la documentation du navigateur pour savoir comment accorder l’autorisation.'
+            'solution' => 'Vous devez autoriser l\'utilisation de l\'appareil photo de votre appareil. Si vous avez déjà refusé et que votre navigateur ne vous le demande plus, veuillez vous référer à la documentation du navigateur pour savoir comment accorder l’autorisation.',
+            'click_camera_icon' => 'Cela se fait généralement en cliquant sur une icône représentant une caméra barrée, dans ou à côté de la barre d\'adresse du navigateur',
         ],
         'not_readable' => [
             'reason' => 'Impossible de charger le scanner',
@@ -136,17 +138,22 @@ return [
         'import' => 'Import',
         'to_import' => 'Importer',
         'import_legend' => '2FAuth peut importer les données de diverses applications 2FA.<br />Utilisez la fonction d\'exportation de ces applications pour obtenir une ressource de migration (un code QR ou un fichier) et chargez-la via une de ces méthodes.',
+        'import_legend_afterpart' => 'Utilisez la fonction d\'exportation de ces applications pour obtenir une ressource de migration, comme un code QR ou un fichier JSON, puis chargez-la ici.',
         'upload' => 'Upload',
         'scan' => 'Scan',
         'supported_formats_for_qrcode_upload' => 'Accepté : jpg, jpeg, png, bmp, gif, svg, ou webp',
         'supported_formats_for_file_upload' => 'Accepté : Texte brut, json, 2fas',
         'supported_migration_formats' => 'Formats de migration supportés',
         'qr_code' => 'QR Code',
+        'text_file' => 'Fichier texte',
         'plain_text' => 'Texte brut',
+        'parsing_data' => 'Analyse des données...',
         'issuer' => 'Émetteur',
         'imported' => 'Importé',
         'failure' => 'Échec',
         'x_valid_accounts_found' => '{count} comptes valides trouvés',
+        'submitted_data_parsed_now_accounts_are_awaiting_import' => 'Les comptes 2FA suivants ont été trouvés dans la ressource de migration. Pour l\'instant aucun d\'entre eux n\'a été ajouté à 2FAuth.',
+        'use_buttons_to_save_or_discard' => 'Utilisez les boutons disponibles pour les enregistrer de façon permanente dans votre collection 2FA ou les retirer.',
         'import_all' => 'Tout importer',
         'import_this_account' => 'Importer ce compte',
         'discard_all' => 'Tout retirer',

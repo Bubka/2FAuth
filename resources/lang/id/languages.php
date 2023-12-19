@@ -16,6 +16,6 @@ return [
     'de' => 'Bahasa Jerman',
     'es' => 'Bahasa Spanyol',
     'zh' => 'Bahasa Tiongkok yang disederhanakan',
-    'ru' => 'Russian',
-    'bg' => 'Bulgarian',
+    'ru' => 'Bahasa Rusia',
+    'bg' => 'Bahasa Bulgaria',
 ];

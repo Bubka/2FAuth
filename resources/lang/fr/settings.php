@@ -27,7 +27,9 @@ return [
     ],
     'administration' => 'Administration',
     'administration_legend' => 'Contrairement aux paramètres précédents qui sont des paramètres utilisateur (chaque utilisateur peut les personnaliser à sa convenance), les paramètres qui suivent sont globaux et s\'appliquent à tous les utilisateurs. Seul les administrateurs peuvent voir et modifier ces paramètres.',
+    'only_an_admin_can_edit_them' => 'Seul un administrateur peut les voir et les modifier.',
     'you_are_administrator' => 'Vous êtes administrateur',
+    'account_linked_to_sso_x_provider' => 'Vous vous êtes connecté via SSO avec votre compte :provider. Vos informations ne peuvent être modifiées ici mais sur :provider.',
     'general' => 'General',
     'security' => 'Sécurité',
     'profile' => 'Profil',
@@ -56,6 +58,10 @@ return [
         'show_otp_as_dot' => [
             'label' => 'Afficher les mots de passe générés sous forme de point',
             'help' => 'Remplace les caractères des mots de passe générés par des ●●● pour garantir leur confidentialité. N\'affecte pas la fonction de copier/coller qui reste utilisable.'
+        ],
+        'reveal_dotted_otp' => [
+            'label' => 'Révéler les <abbr title="One-Time Passwords">OTPs</abbr> masqués',
+            'help' => 'Permet à l\'utilisateur de réveler temporairement les mots de passe masqués derrière des ●●●'
         ],
         'close_otp_on_copy' => [
             'label' => 'Cacher les mots de passe <abbr title="One-Time Password">OTP</abbr> copiés',
@@ -127,6 +133,10 @@ return [
         'disable_registration' => [
             'label' => 'Bloquer les inscriptions',
             'help' => 'Empêche l\'enregistrement de nouveaux utilisateurs',
+        ],
+        'enable_sso' => [
+            'label' => 'Activer l\'authentification unique (SSO)',
+            'help' => 'Permet aux visiteurs de s\'authentifier avec un compte externe grâce à la méthode Single Sign-On',
         ],
         'otp_generation' => [
             'label' => 'Affichage des mots de passe',
