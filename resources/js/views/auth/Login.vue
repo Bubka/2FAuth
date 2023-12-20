@@ -123,7 +123,7 @@
                     {{ $t('auth.register') }}
                 </RouterLink>
             </p>
-            <div v-if="appSettings.enableSso" class="columns mt-4 is-variable is-1">
+            <div v-if="appSettings.enableSso && Object.values($2fauth.config.sso).includes(true)" class="columns mt-4 is-variable is-1">
                 <div class="column is-narrow py-1">
                     {{ $t('auth.or_continue_with') }}
                 </div>
@@ -164,7 +164,7 @@
                     {{ $t('auth.register') }}
                 </RouterLink>
             </p>
-            <div v-if="appSettings.enableSso" class="columns mt-4 is-variable is-1">
+            <div v-if="appSettings.enableSso && Object.values($2fauth.config.sso).includes(true)" class="columns mt-4 is-variable is-1">
                 <div class="column is-narrow py-1">
                     {{ $t('auth.or_continue_with') }}
                 </div>
