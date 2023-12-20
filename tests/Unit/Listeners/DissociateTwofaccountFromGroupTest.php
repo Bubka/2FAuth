@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Event;
 use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\PreserveGlobalState;
+use PHPUnit\Framework\Attributes\RequiresPhp;
 use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use Tests\TestCase;
 
@@ -24,6 +25,7 @@ class DissociateTwofaccountFromGroupTest extends TestCase
      */
     #[RunInSeparateProcess]
     #[PreserveGlobalState(false)]
+    #[RequiresPhp('< 8.3.0')]
     public function test_twofaccount_is_released_on_group_deletion()
     {
         $this->mock('alias:' . TwoFAccount::class, function (MockInterface $twoFAccount) {

@@ -22,6 +22,7 @@ use ParagonIE\ConstantTime\Base32;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\PreserveGlobalState;
+use PHPUnit\Framework\Attributes\RequiresPhp;
 use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use PHPUnit\Framework\Attributes\UsesClass;
 use Tests\Data\MigrationTestData;
@@ -333,6 +334,7 @@ class MigratorTest extends TestCase
      */
     #[RunInSeparateProcess]
     #[PreserveGlobalState(false)]
+    #[RequiresPhp('< 8.3.0')]
     public function test_migrate_gauth_returns_fake_accounts()
     {
         $this->mock('alias:' . Base32::class, function (MockInterface $baseEncoder) {

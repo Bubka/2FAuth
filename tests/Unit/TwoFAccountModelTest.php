@@ -12,6 +12,7 @@ use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\PreserveGlobalState;
+use PHPUnit\Framework\Attributes\RequiresPhp;
 use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use Tests\ModelTestCase;
 
@@ -121,6 +122,7 @@ class TwoFAccountModelTest extends ModelTestCase
      */
     #[RunInSeparateProcess]
     #[PreserveGlobalState(false)]
+    #[RequiresPhp('< 8.3.0')]
     public function test_secret_is_uppercased_and_padded_at_setup()
     {
         $settingService = $this->mock(SettingService::class, function (MockInterface $settingService) {
