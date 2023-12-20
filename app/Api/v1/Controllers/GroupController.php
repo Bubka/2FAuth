@@ -28,7 +28,7 @@ class GroupController extends Controller
                 Groups::setUser($groups, $request->user());
             }
         }
-        
+
         // We do not use fluent call all over the call chain to ease tests
         $user   = $request->user();
         $groups = $user->groups()->withCount('twofaccounts')->get();

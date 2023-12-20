@@ -163,7 +163,7 @@ class LoginTest extends FeatureTestCase
             ->assertUnauthorized();
 
         $this->json('POST', '/user/login', $post)
-        ->assertStatus(429);
+            ->assertStatus(429);
     }
 
     /**

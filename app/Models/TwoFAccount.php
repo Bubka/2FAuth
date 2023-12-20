@@ -56,7 +56,7 @@ use SteamTotp\SteamTotp;
  */
 class TwoFAccount extends Model implements Sortable
 {
-    use SortableTrait, HasFactory;
+    use HasFactory, SortableTrait;
 
     const TOTP = 'totp';
 
@@ -634,7 +634,7 @@ class TwoFAccount extends Model implements Sortable
      * @param  string  $extension The file extension, without the dot
      * @return string|null The filename of the stored icon or null if the operation fails
      */
-    private function storeFileDataAsIcon($content, $extension) : string|null
+    private function storeFileDataAsIcon($content, $extension) : ?string
     {
         $filename = self::getUniqueFilename($extension);
 
@@ -684,7 +684,7 @@ class TwoFAccount extends Model implements Sortable
      *
      * @return string|null The filename of the stored icon or null if the operation fails
      */
-    private function storeRemoteImageAsIcon(string $url) : string|null
+    private function storeRemoteImageAsIcon(string $url) : ?string
     {
         try {
             $path_parts  = pathinfo($url);

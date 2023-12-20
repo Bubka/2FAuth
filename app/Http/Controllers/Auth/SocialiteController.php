@@ -15,7 +15,7 @@ class SocialiteController extends Controller
 {
     /**
      * Redirect to the provider's authentication url
-     * 
+     *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Illuminate\Http\RedirectResponse
      */
     public function redirect(Request $request, string $driver)
@@ -31,7 +31,7 @@ class SocialiteController extends Controller
 
     /**
      * Register (if needed) the user and authenticate him
-     * 
+     *
      * @return \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse
      */
     public function callback(Request $request, string $driver)
@@ -42,7 +42,7 @@ class SocialiteController extends Controller
             return redirect('/error?err=sso_failed');
         }
 
-        $uniqueName = $socialiteUser->getId() . '@' . $driver;
+        $uniqueName     = $socialiteUser->getId() . '@' . $driver;
         $socialiteEmail = $socialiteUser->getEmail() ?? $uniqueName;
         $socialiteName  = ($socialiteUser->getNickname() ?? $socialiteUser->getName()) . ' (' . $uniqueName . ')';
 
@@ -55,11 +55,9 @@ class SocialiteController extends Controller
         if (! $user->exists) {
             if (User::where('email', $socialiteEmail)->exists()) {
                 return redirect('/error?err=sso_email_already_used');
-            }
-            else if (User::count() === 0) {
+            } elseif (User::count() === 0) {
                 $user->is_admin = true;
-            }
-            else if (Settings::get('disableRegistration')) {
+            } elseif (Settings::get('disableRegistration')) {
                 return redirect('/error?err=sso_no_register');
             }
             $user->password = bcrypt(Str::random());

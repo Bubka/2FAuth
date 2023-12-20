@@ -41,7 +41,7 @@ class SinglePageController extends Controller
                     'openid' => $openidAuth,
                     'github' => $githubAuth,
                 ],
-                'subdirectory'   => $subdir,
+                'subdirectory' => $subdir,
             ])->toJson(),
             'defaultPreferences' => $defaultPreferences,
             'subdirectory'       => $subdir,

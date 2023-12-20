@@ -44,10 +44,10 @@ class UserControllerTest extends FeatureTestCase
             ->json('GET', '/api/v1/user')
             ->assertOk()
             ->assertJsonFragment([
-                'name'        => $this->user->name,
-                'id'          => $this->user->id,
-                'email'       => $this->user->email,
-                'is_admin'    => $this->user->is_admin,
+                'name'     => $this->user->name,
+                'id'       => $this->user->id,
+                'email'    => $this->user->email,
+                'is_admin' => $this->user->is_admin,
             ])
             ->assertJsonStructure([
                 'preferences',

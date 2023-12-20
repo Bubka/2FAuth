@@ -58,12 +58,12 @@ class FixUnsplittedAccounts extends Command
         }
 
         $twofaccounts = TwoFAccount::where('otp_type', '')
-                        ->where('secret', '')
-                        ->where('algorithm', '')
-                        ->where('digits', 0)
-                        ->whereNull('period')
-                        ->whereNull('counter')
-                        ->get();
+            ->where('secret', '')
+            ->where('algorithm', '')
+            ->where('digits', 0)
+            ->whereNull('period')
+            ->whereNull('counter')
+            ->get();
 
         $this->line(sprintf('%d inconsistent accounts found', $twofaccounts->count()));
 

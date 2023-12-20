@@ -373,7 +373,7 @@ class SettingServiceTest extends FeatureTestCase
     public function test_cache_is_requested_at_instanciation()
     {
         Cache::shouldReceive('remember')
-                    ->andReturn(collect([]));
+            ->andReturn(collect([]));
 
         $settingService = new SettingService();
 
@@ -386,7 +386,7 @@ class SettingServiceTest extends FeatureTestCase
     public function test_cache_is_updated_when_setting_is_set()
     {
         Cache::shouldReceive('remember', 'put')
-                    ->andReturn(collect([]), true);
+            ->andReturn(collect([]), true);
 
         $settingService = new SettingService();
         $settingService->set(self::SETTING_NAME, self::SETTING_VALUE_STRING);
@@ -400,7 +400,7 @@ class SettingServiceTest extends FeatureTestCase
     public function test_cache_is_updated_when_setting_is_deleted()
     {
         Cache::shouldReceive('remember', 'put')
-                    ->andReturn(collect([]), true);
+            ->andReturn(collect([]), true);
 
         $settingService = new SettingService();
         $settingService->delete(self::SETTING_NAME);

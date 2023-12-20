@@ -12,7 +12,7 @@ class IsBase32Encoded implements ValidationRule
     /**
      * Run the validation rule.
      */
-    public function validate(string $attribute, mixed $value, Closure $fail): void
+    public function validate(string $attribute, mixed $value, Closure $fail) : void
     {
         try {
             $secret = Base32::decodeUpper(Helpers::PadToBase32Format($value));

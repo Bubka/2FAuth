@@ -18,11 +18,11 @@ use App\Providers\TwoFAuthServiceProvider;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\Classes\LocalFile;
 use Tests\Data\MigrationTestData;
 use Tests\Data\OtpTestData;
 use Tests\FeatureTestCase;
-use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * TwoFAccountControllerTest test class
@@ -1016,7 +1016,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
     public function test_export_twofaccount_of_another_user_is_forbidden()
     {
         $response = $this->actingAs($this->user, 'api-guard')
-        ->json('GET', '/api/v1/twofaccounts/export?ids=' . $this->twofaccountC->id)
+            ->json('GET', '/api/v1/twofaccounts/export?ids=' . $this->twofaccountC->id)
             ->assertForbidden()
             ->assertJsonStructure([
                 'message',
@@ -1296,7 +1296,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
     public function test_destroy_twofaccount_of_another_user_is_forbidden()
     {
         $response = $this->actingAs($this->user, 'api-guard')
-        ->json('DELETE', '/api/v1/twofaccounts/' . $this->twofaccountC->id)
+            ->json('DELETE', '/api/v1/twofaccounts/' . $this->twofaccountC->id)
             ->assertForbidden()
             ->assertJsonStructure([
                 'message',
@@ -1346,7 +1346,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->implode(',');
 
         $response = $this->actingAs($this->user, 'api-guard')
-        ->json('DELETE', '/api/v1/twofaccounts?ids=' . $ids)
+            ->json('DELETE', '/api/v1/twofaccounts?ids=' . $ids)
             ->assertForbidden()
             ->assertJsonStructure([
                 'message',

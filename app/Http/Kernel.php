@@ -55,7 +55,7 @@ class Kernel extends HttpKernel
         ],
 
         'api.v1' => [
-            \Illuminate\Routing\Middleware\ThrottleRequests::class.':api',
+            \Illuminate\Routing\Middleware\ThrottleRequests::class . ':api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\KickOutInactiveUser::class,
             \App\Http\Middleware\LogUserLastSeen::class,

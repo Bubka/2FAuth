@@ -40,9 +40,9 @@ class TwoFAccountService
         $ids = is_array($ids) ? $ids : func_get_args();
 
         TwoFAccount::whereIn('id', $ids)
-                    ->update(
-                        ['group_id' => null]
-                    );
+            ->update(
+                ['group_id' => null]
+            );
 
         Log::info(sprintf('TwoFAccounts IDs #%s withdrawn', implode(',', $ids)));
     }
@@ -96,9 +96,8 @@ class TwoFAccountService
 
     /**
      * Set owner of given twofaccounts
-     * 
+     *
      * @param  \Illuminate\Support\Collection<int, TwoFAccount>  $twofaccounts
-     * @param  \App\Models\User  $user
      */
     public static function setUser(Collection $twofaccounts, User $user) : void
     {

@@ -40,8 +40,8 @@ use Laravel\Passport\HasApiTokens;
  */
 class User extends Authenticatable implements WebAuthnAuthenticatable
 {
-    use WebAuthnAuthentication, WebAuthnManageCredentials;
     use HasApiTokens, HasFactory, Notifiable;
+    use WebAuthnAuthentication, WebAuthnManageCredentials;
 
     /**
      * The attributes that are mass assignable.
@@ -49,7 +49,7 @@ class User extends Authenticatable implements WebAuthnAuthenticatable
      * @var string[]
      */
     protected $fillable = [
-        'name', 'email', 'password', 'oauth_id', 'oauth_provider'
+        'name', 'email', 'password', 'oauth_id', 'oauth_provider',
     ];
 
     /**

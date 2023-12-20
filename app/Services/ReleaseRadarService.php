@@ -41,8 +41,8 @@ class ReleaseRadarService
 
         if ($latestRelease) {
             $latestReleaseData = json_decode($latestRelease);
-            $githubVersion    = Helpers::cleanVersionNumber($latestReleaseData->tag_name);
-            $installedVersion = Helpers::cleanVersionNumber(config('2fauth.version'));
+            $githubVersion     = Helpers::cleanVersionNumber($latestReleaseData->tag_name);
+            $installedVersion  = Helpers::cleanVersionNumber(config('2fauth.version'));
 
             if ($githubVersion && $installedVersion) {
                 if (version_compare($githubVersion, $installedVersion) > 0 && $latestReleaseData->prerelease == false && $latestReleaseData->draft == false) {
@@ -63,7 +63,7 @@ class ReleaseRadarService
     /**
      * Fetch releases on Github
      */
-    protected static function getLatestReleaseData() : string|null
+    protected static function getLatestReleaseData() : ?string
     {
         $url = config('2fauth.latestReleaseUrl');
 

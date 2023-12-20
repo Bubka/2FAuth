@@ -4,7 +4,6 @@ namespace App\Console\Commands\Maintenance;
 
 use App\Models\TwoFAccount;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Schema;
 
 /**
  * @codeCoverageIgnore
@@ -31,7 +30,7 @@ class FixOrphanAccounts extends Command
      * @var bool
      */
     protected $hidden = true;
-    
+
     /**
      * Create a new command instance.
      *
@@ -50,12 +49,12 @@ class FixOrphanAccounts extends Command
     public function handle()
     {
         $twofaccounts = TwoFAccount::where('otp_type', '')
-                        ->where('secret', '')
-                        ->where('algorithm', '')
-                        ->where('digits', 0)
-                        ->whereNull('period')
-                        ->whereNull('counter')
-                        ->get();
+            ->where('secret', '')
+            ->where('algorithm', '')
+            ->where('digits', 0)
+            ->whereNull('period')
+            ->whereNull('counter')
+            ->get();
 
         $this->line(sprintf('%d inconsistent accounts found', $twofaccounts->count()));
 

@@ -53,14 +53,13 @@ class SocialiteControllerTest extends FeatureTestCase
             'oauth_provider' => self::USER_OAUTH_PROVIDER,
         ]);
 
-        
-        $this->socialiteUser = new \Laravel\Socialite\Two\User;
-        $this->socialiteUser->id = self::USER_OAUTH_ID;
-        $this->socialiteUser->name = self::USER_NAME;
-        $this->socialiteUser->email = self::USER_EMAIL;
+        $this->socialiteUser           = new \Laravel\Socialite\Two\User;
+        $this->socialiteUser->id       = self::USER_OAUTH_ID;
+        $this->socialiteUser->name     = self::USER_NAME;
+        $this->socialiteUser->email    = self::USER_EMAIL;
         $this->socialiteUser->nickname = self::USER_NICKNAME;
     }
-    
+
     /**
      * @test
      */
@@ -116,9 +115,9 @@ class SocialiteControllerTest extends FeatureTestCase
      */
     public function test_callback_updates_user_informations()
     {
-        $socialiteUpdatedUser = new \Laravel\Socialite\Two\User;
-        $socialiteUpdatedUser->id = self::USER_OAUTH_ID;
-        $socialiteUpdatedUser->email = 'new_email';
+        $socialiteUpdatedUser           = new \Laravel\Socialite\Two\User;
+        $socialiteUpdatedUser->id       = self::USER_OAUTH_ID;
+        $socialiteUpdatedUser->email    = 'new_email';
         $socialiteUpdatedUser->nickname = 'new_nickname';
 
         Socialite::shouldReceive('driver->user')
@@ -138,9 +137,9 @@ class SocialiteControllerTest extends FeatureTestCase
      */
     public function test_callback_updates_username_with_fallback_value()
     {
-        $socialiteUpdatedUser = new \Laravel\Socialite\Two\User;
-        $socialiteUpdatedUser->id = self::USER_OAUTH_ID;
-        $socialiteUpdatedUser->name = 'new_name';
+        $socialiteUpdatedUser        = new \Laravel\Socialite\Two\User;
+        $socialiteUpdatedUser->id    = self::USER_OAUTH_ID;
+        $socialiteUpdatedUser->name  = 'new_name';
         $socialiteUpdatedUser->email = 'new_email';
 
         Socialite::shouldReceive('driver->user')
@@ -160,9 +159,9 @@ class SocialiteControllerTest extends FeatureTestCase
      */
     public function test_callback_registers_new_user()
     {
-        $newSocialiteUser = new \Laravel\Socialite\Two\User;
-        $newSocialiteUser->id = 'new_id';
-        $newSocialiteUser->name = 'jane';
+        $newSocialiteUser        = new \Laravel\Socialite\Two\User;
+        $newSocialiteUser->id    = 'new_id';
+        $newSocialiteUser->name  = 'jane';
         $newSocialiteUser->email = 'jane@provider.com';
 
         Socialite::shouldReceive('driver->user')
@@ -183,10 +182,10 @@ class SocialiteControllerTest extends FeatureTestCase
      */
     public function test_callback_registers_new_user_with_existing_name()
     {
-        $socialiteUserWithSameName = new \Laravel\Socialite\Two\User;
-        $socialiteUserWithSameName->id = 'socialiteUserWithSameNameId';
-        $socialiteUserWithSameName->name = self::USER_NAME;
-        $socialiteUserWithSameName->email = 'socialiteuserwithsamename@example.com';
+        $socialiteUserWithSameName           = new \Laravel\Socialite\Two\User;
+        $socialiteUserWithSameName->id       = 'socialiteUserWithSameNameId';
+        $socialiteUserWithSameName->name     = self::USER_NAME;
+        $socialiteUserWithSameName->email    = 'socialiteuserwithsamename@example.com';
         $socialiteUserWithSameName->nickname = self::USER_NICKNAME;
 
         Socialite::shouldReceive('driver->user')
@@ -233,10 +232,10 @@ class SocialiteControllerTest extends FeatureTestCase
             'password' => 'password',
         ]);
 
-        $socialiteUserWithSameEmail = new \Laravel\Socialite\Two\User;
-        $socialiteUserWithSameEmail->id = '666';
-        $socialiteUserWithSameEmail->name = 'socialiteUserWithSameEmail';
-        $socialiteUserWithSameEmail->email = 'other@example.com';
+        $socialiteUserWithSameEmail           = new \Laravel\Socialite\Two\User;
+        $socialiteUserWithSameEmail->id       = '666';
+        $socialiteUserWithSameEmail->name     = 'socialiteUserWithSameEmail';
+        $socialiteUserWithSameEmail->email    = 'other@example.com';
         $socialiteUserWithSameEmail->nickname = self::USER_NICKNAME;
 
         Socialite::shouldReceive('driver->user')
@@ -258,9 +257,9 @@ class SocialiteControllerTest extends FeatureTestCase
     {
         Settings::set('disableRegistration', true);
 
-        $newSocialiteUser = new \Laravel\Socialite\Two\User;
-        $newSocialiteUser->id = 'rejected_id';
-        $newSocialiteUser->name = 'jane';
+        $newSocialiteUser        = new \Laravel\Socialite\Two\User;
+        $newSocialiteUser->id    = 'rejected_id';
+        $newSocialiteUser->name  = 'jane';
         $newSocialiteUser->email = 'jane@provider.com';
 
         Socialite::shouldReceive('driver->user')
@@ -278,9 +277,9 @@ class SocialiteControllerTest extends FeatureTestCase
     {
         Settings::set('disableRegistration', true);
 
-        $newSocialiteUser = new \Laravel\Socialite\Two\User;
-        $newSocialiteUser->id = 'rejected_id';
-        $newSocialiteUser->name = 'jane';
+        $newSocialiteUser        = new \Laravel\Socialite\Two\User;
+        $newSocialiteUser->id    = 'rejected_id';
+        $newSocialiteUser->name  = 'jane';
         $newSocialiteUser->email = 'jane@provider.com';
 
         Socialite::shouldReceive('driver->user')
@@ -293,5 +292,4 @@ class SocialiteControllerTest extends FeatureTestCase
             'oauth_provider' => self::USER_OAUTH_PROVIDER,
         ]);
     }
-
 }

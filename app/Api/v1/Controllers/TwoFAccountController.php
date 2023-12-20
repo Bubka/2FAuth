@@ -151,8 +151,8 @@ class TwoFAccountController extends Controller
         $orderedIds = $request->user()->twofaccounts->sortBy('order_column')->pluck('id');
 
         return response()->json([
-            'message' => 'order saved',
-            'orderedIds' => $orderedIds
+            'message'    => 'order saved',
+            'orderedIds' => $orderedIds,
         ], 200);
     }
 

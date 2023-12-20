@@ -1,19 +1,18 @@
 <?php
 /**
- * 
  * The MIT License (MIT)
  * Copyright (c) 2023 Bubka
  * Copyright (c) 2018 Phan An (https://github.com/koel/koel/blob/master/app/Console/Commands/InitCommand.php)
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
  * including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
  * and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so,
  * subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all copies or substantial
  * portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT
  * LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
  * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
@@ -26,14 +25,10 @@ namespace App\Console\Commands;
 use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Console\ConfirmableTrait;
-use Illuminate\Database\Connection;
-use Illuminate\Database\Migrations\Migrator;
-use Illuminate\Database\SQLiteDatabaseDoesNotExistException;
 use Illuminate\Encryption\Encrypter;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Jackiedo\DotenvEditor\DotenvEditor;
-use PDOException;
 use Throwable;
 
 class Install extends Command
@@ -64,13 +59,11 @@ class Install extends Command
     /**
      * Create a new command instance.
      *
-     * @param  \Jackiedo\DotenvEditor\DotenvEditor  $dotenvEditor
      * @return void
      */
     public function __construct(
         protected DotenvEditor $dotenvEditor,
-    )
-    {
+    ) {
         parent::__construct();
     }
 
@@ -115,7 +108,7 @@ class Install extends Command
             $this->newLine();
             $this->components->error($e->getMessage());
             $this->components->info('See the error log at storage/logs/laravel.log for the full stack trace.');
-            
+
             $this->newLine();
             $this->line('Fix the error and rerun the \'2fauth:install\' command to complete installation.');
             $this->newLine();
@@ -201,7 +194,6 @@ class Install extends Command
         $this->dotenvEditor->setKey('APP_URL', $appUrl);
     }
 
-
     /**
      * Prompt user for valid database credentials and set them to .env file.
      */
@@ -232,7 +224,7 @@ class Install extends Command
 
             $config['DB_DATABASE'] = $this->ask('Absolute path to the DB file', $databasePath);
         } else {
-            $defaultName = $this->dotenvEditor->getValue('DB_DATABASE') ?: '2fauth';
+            $defaultName  = $this->dotenvEditor->getValue('DB_DATABASE') ?: '2fauth';
             $databaseName = $this->dotenvEditor->getValue('DB_CONNECTION') == 'sqlite'
                 ? '2fauth'
                 : $defaultName;
@@ -250,7 +242,7 @@ class Install extends Command
 
         // Set the config so that the next DB attempt uses refreshed credentials
         config([
-            'database.default' => $config['DB_CONNECTION'],
+            'database.default'                                               => $config['DB_CONNECTION'],
             'database.connections.' . $config['DB_CONNECTION'] . '.database' => $config['DB_DATABASE'],
             'database.connections.' . $config['DB_CONNECTION'] . '.host'     => $config['DB_HOST'],
             'database.connections.' . $config['DB_CONNECTION'] . '.port'     => $config['DB_PORT'],
@@ -299,7 +291,7 @@ class Install extends Command
         }
 
         $this->components->task('Preparing .env file', static function () : void {
-            if (!file_exists(base_path('.env'))) {
+            if (! file_exists(base_path('.env'))) {
                 copy(base_path('.env.example'), base_path('.env'));
             }
         });
@@ -315,7 +307,7 @@ class Install extends Command
         $key = config('app.key');
 
         $this->components->task($key ? 'Retrieving app key' : 'Generating app key', function () use (&$key) : void {
-            if (!$key) {
+            if (! $key) {
                 // Generate the key manually to prevent some clashes with `php artisan key:generate`
                 $key = $this->generateRandomKey();
                 $this->dotenvEditor->setKey('APP_KEY', $key);

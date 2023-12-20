@@ -13,7 +13,7 @@ class WebauthnCredentialBroker extends PasswordBroker
     /**
      * Send a password reset link to a user.
      */
-    public function sendResetLink(array $credentials, Closure $callback = null) : string
+    public function sendResetLink(array $credentials, ?Closure $callback = null) : string
     {
         /**
          * @var \App\Models\User

@@ -19,7 +19,7 @@ class GroupService
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public static function assign($ids, User $user, Group $group = null) : void
+    public static function assign($ids, User $user, ?Group $group = null) : void
     {
         if (! $group) {
             $group = self::defaultGroup($user);
@@ -62,9 +62,8 @@ class GroupService
 
     /**
      * Set owner of given groups
-     * 
+     *
      * @param  Collection<int, Group>  $groups
-     * @param  \App\Models\User  $user
      */
     public static function setUser(Collection $groups, User $user) : void
     {

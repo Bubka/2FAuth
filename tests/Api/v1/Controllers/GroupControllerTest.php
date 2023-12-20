@@ -444,7 +444,7 @@ class GroupControllerTest extends FeatureTestCase
     public function test_destroy_group_of_another_user_is_forbidden()
     {
         $response = $this->actingAs($this->anotherUser, 'api-guard')
-        ->json('DELETE', '/api/v1/groups/' . $this->userGroupA->id)
+            ->json('DELETE', '/api/v1/groups/' . $this->userGroupA->id)
             ->assertForbidden()
             ->assertJsonStructure([
                 'message',

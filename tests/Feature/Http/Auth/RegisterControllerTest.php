@@ -145,6 +145,6 @@ class RegisterControllerTest extends FeatureTestCase
             'password'              => self::PASSWORD,
             'password_confirmation' => self::PASSWORD,
         ])
-        ->assertStatus(403);
+            ->assertStatus(403);
     }
 }

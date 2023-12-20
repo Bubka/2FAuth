@@ -16,7 +16,6 @@ class Helpers
     /**
      * Format a string to comply with Base32 format
      *
-     * @param  string  $str
      * @return string The filename
      */
     public static function PadToBase32Format(?string $str) : string

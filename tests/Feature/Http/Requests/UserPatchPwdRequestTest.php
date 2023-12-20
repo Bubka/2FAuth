@@ -24,8 +24,8 @@ class UserPatchPwdRequestTest extends TestCase
     public function test_user_is_authorized()
     {
         Auth::shouldReceive('check')
-        ->once()
-        ->andReturn(true);
+            ->once()
+            ->andReturn(true);
 
         $request = new UserPatchPwdRequest();
 

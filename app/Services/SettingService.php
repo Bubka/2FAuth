@@ -215,6 +215,7 @@ class SettingService
                 $item->secret     = $encrypted ? Crypt::encryptString($item->secret) : Crypt::decryptString($item->secret);
             } catch (Exception $ex) {
                 $success = false;
+
                 // Exit the each iteration
                 return false;
             }

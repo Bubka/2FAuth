@@ -3,10 +3,8 @@
 namespace App\Providers\Socialite;
 
 use GuzzleHttp\RequestOptions;
-use InvalidArgumentException;
 use SocialiteProviders\Manager\OAuth2\AbstractProvider;
 use SocialiteProviders\Manager\OAuth2\User;
-use SocialiteProviders\Manager\SocialiteWasCalled;
 
 class OpenId extends AbstractProvider
 {
@@ -48,7 +46,7 @@ class OpenId extends AbstractProvider
     {
         $response = $this->getHttpClient()->get($this->getConfig('userinfo_url'), [
             RequestOptions::HEADERS => [
-                'Authorization' => 'Bearer '.$token,
+                'Authorization' => 'Bearer ' . $token,
             ],
         ]);
 

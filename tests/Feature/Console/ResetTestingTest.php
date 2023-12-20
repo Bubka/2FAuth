@@ -13,8 +13,8 @@ class ResetTestingTest extends FeatureTestCase
     public function test_reset_testing_without_testing_mode_succeeded()
     {
         $this->artisan('2fauth:reset-testing')
-             ->expectsOutput('2fauth:reset-testing can only run when isTestingApp option is On')
-             ->assertSuccessful();
+            ->expectsOutput('2fauth:reset-testing can only run when isTestingApp option is On')
+            ->assertSuccessful();
     }
 
     /**
@@ -25,9 +25,9 @@ class ResetTestingTest extends FeatureTestCase
         Config::set('2fauth.config.isTestingApp', true);
 
         $this->artisan('2fauth:reset-testing')
-             ->expectsOutput('This will reset the app in order to run a clean and fresh testing app.')
-             ->expectsQuestion('To prevent any mistake please type the word "testing" to go on', 'testing')
-             ->assertSuccessful();
+            ->expectsOutput('This will reset the app in order to run a clean and fresh testing app.')
+            ->expectsQuestion('To prevent any mistake please type the word "testing" to go on', 'testing')
+            ->assertSuccessful();
 
         $this->assertDatabaseCount('twofaccounts', 9);
 
@@ -140,9 +140,9 @@ class ResetTestingTest extends FeatureTestCase
         Config::set('2fauth.config.isTestingApp', true);
 
         $this->artisan('2fauth:reset-testing')
-             ->expectsQuestion('To prevent any mistake please type the word "testing" to go on', 'null')
-             ->expectsOutput('Bad confirmation word, nothing appened')
-             ->assertSuccessful();
+            ->expectsQuestion('To prevent any mistake please type the word "testing" to go on', 'null')
+            ->expectsOutput('Bad confirmation word, nothing appened')
+            ->assertSuccessful();
     }
 
     /**
@@ -153,6 +153,6 @@ class ResetTestingTest extends FeatureTestCase
         Config::set('2fauth.config.isTestingApp', true);
 
         $this->artisan('2fauth:reset-testing --no-confirm')
-             ->assertSuccessful();
+            ->assertSuccessful();
     }
 }

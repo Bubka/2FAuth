@@ -13,8 +13,8 @@ class ResetDemoTest extends FeatureTestCase
     public function test_reset_demo_without_demo_mode_succeeded()
     {
         $this->artisan('2fauth:reset-demo')
-             ->expectsOutput('2fauth:reset-demo can only run when isDemoApp option is On')
-             ->assertSuccessful();
+            ->expectsOutput('2fauth:reset-demo can only run when isDemoApp option is On')
+            ->assertSuccessful();
     }
 
     /**
@@ -25,9 +25,9 @@ class ResetDemoTest extends FeatureTestCase
         Config::set('2fauth.config.isDemoApp', true);
 
         $this->artisan('2fauth:reset-demo')
-             ->expectsOutput('This will reset the app in order to run a clean and fresh demo.')
-             ->expectsQuestion('To prevent any mistake please type the word "demo" to go on', 'demo')
-             ->assertSuccessful();
+            ->expectsOutput('This will reset the app in order to run a clean and fresh demo.')
+            ->expectsQuestion('To prevent any mistake please type the word "demo" to go on', 'demo')
+            ->assertSuccessful();
 
         $this->assertDatabaseCount('twofaccounts', 9);
 
@@ -140,9 +140,9 @@ class ResetDemoTest extends FeatureTestCase
         Config::set('2fauth.config.isDemoApp', true);
 
         $this->artisan('2fauth:reset-demo')
-             ->expectsQuestion('To prevent any mistake please type the word "demo" to go on', 'null')
-             ->expectsOutput('Bad confirmation word, nothing appened')
-             ->assertSuccessful();
+            ->expectsQuestion('To prevent any mistake please type the word "demo" to go on', 'null')
+            ->expectsOutput('Bad confirmation word, nothing appened')
+            ->assertSuccessful();
     }
 
     /**
