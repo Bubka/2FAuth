@@ -1,5 +1,47 @@
 # Change log
 
+## [5.0.0] - 2023-12-15
+
+### 2FAuth v5, the not-so-major release
+
+Why? Because most of the changes are internal and come from the Vue 3 migration. I choose the long way, the one where all components had to be rewritten to adopt the new Vue Composition API and where the whole architecture has been rethought. Thus, despite all that work, almost nothing has changed on the surface.
+
+But it was a necessary step, especially because Vue 2 will reach End Of Life on the end of 2023. Now 2FAuth is also better prepared for futur enhancements.
+
+Ok, so is there anything new?  
+Yes, SSO.
+
+Not so bad, right ?
+
+The feature, bootstrapped by [@indyKoning](https://github.com/indykoning) with an OpenID provider, has been completed and now provides a Github provider as well. If you need help, the [doc site](https://docs.2fauth.app/security/authenticattion/sso/) has been updated to guide you through the setup process.
+
+v5 also comes with the following.
+
+### Added
+
+- Single Sign-On (SSO) is now available as an authentication method, with OpenID & Github. Contributed by [@indyKoning](https://github.com/indykoning) ([PR #243](https://github.com/Bubka/2FAuth/pull/243))
+- The ability to reveal passwords obscured with dots. See the Options tab in Settings ([#208](https://github.com/Bubka/2FAuth/issues/208)).
+- An env var to set a proxy for outgoing requests ([#252](https://github.com/Bubka/2FAuth/issues/252)).
+
+### Changed
+
+- Automatic signed out user now lands on the Login view instead of the Autolock view ([#138](https://github.com/Bubka/2FAuth/issues/138))
+- User preferences that depend on another now appear indented
+- Letters with diacritic marks are allowed in Group name ([#241](https://github.com/Bubka/2FAuth/issues/241))
+- Request body threshold increased to 10Mo in the Docker image to allow importing large file ([#239](https://github.com/Bubka/2FAuth/issues/239))
+
+### Removed
+
+- [PR #247](https://github.com/Bubka/2FAuth/pull/247), [PR #248](https://github.com/Bubka/2FAuth/pull/248), [PR #249](https://github.com/Bubka/2FAuth/pull/249) Useless env var, thanks to [@rouilj](https://github.com/rouilj)
+
+### Fixed
+
+- [issue #253](https://github.com/Bubka/2FAuth/issues/253) 2FAs exports cannot be imported
+
+---
+
+**Full Changelog**: [v4.2.4...v5.0.0](https://github.com/Bubka/2FAuth/compare/v4.2.4...v5.0.0)
+
 ## [4.2.4] - 2023-11-21
 
 ### Changed
