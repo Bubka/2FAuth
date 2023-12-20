@@ -2,7 +2,7 @@
     import Form from '@/components/formElements/Form'
     import OtpDisplay from '@/components/OtpDisplay.vue'
     import QrContentDisplay from '@/components/QrContentDisplay.vue'
-    import FormLockField from '@/components/formelements/FormLockField.vue'
+    import FormLockField from '@/components/formElements/FormLockField.vue'
     import twofaccountService from '@/services/twofaccountService'
     import { useUserStore } from '@/stores/user'
     import { useTwofaccounts } from '@/stores/twofaccounts'
