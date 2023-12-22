@@ -41,10 +41,10 @@
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.13",
         "fakerphp/faker": "^1.21",
+        "larastan/larastan": "^2.0",
         "laravel/pint": "^1.6",
         "mockery/mockery": "^1.5",
         "nunomaduro/collision": "^7.0",
-        "nunomaduro/larastan": "^2.5",
         "phpstan/phpstan": "^1.10",
         "phpunit/phpunit": "^10.1",
         "spatie/laravel-ignition": "^2.0"
