@@ -13,7 +13,7 @@ Yes, SSO.
 
 Not so bad, right ?
 
-The feature, bootstrapped by [@indyKoning](https://github.com/indykoning) with an OpenID provider, has been completed and now provides a Github provider as well. If you need help, the [doc site](https://docs.2fauth.app/security/authenticattion/sso/) has been updated to guide you through the setup process.
+The feature, bootstrapped by [@indyKoning](https://github.com/indykoning) with an OpenID provider, has been completed and now provides a Github provider as well. I plan to add more providers, tell me in the discussion which ones you would like to see. If you need help, the [docs site](https://docs.2fauth.app/security/authentication/sso/) has been updated to guide you through the setup process.
 
 v5 also comes with the following.
 
