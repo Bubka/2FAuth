@@ -38,6 +38,11 @@ v5 also comes with the following.
 
 - [issue #253](https://github.com/Bubka/2FAuth/issues/253) 2FAs exports cannot be imported
 
+### API [1.2.0]
+
+- `/api/v1/user` GET path added
+- `ids` and `withOtp` query parameters added to the `/api/v1/twofaccounts` GET path
+
 ---
 
 **Full Changelog**: [v4.2.4...v5.0.0](https://github.com/Bubka/2FAuth/compare/v4.2.4...v5.0.0)
@@ -81,7 +86,7 @@ v5 also comes with the following.
 
 ### Changed
 
-- Navigation with the __Back__ and __Close__ buttons is now fully consistent with their labeling, even when browsing back through successive views using those buttons.
+- Navigation with the **Back** and **Close** buttons is now fully consistent with their labeling, even when browsing back through successive views using those buttons.
 - The length of the email submitted during registration is now limited to 191 characters ([#214](https://github.com/Bubka/2FAuth/issues/214)).
 - Upgrade to Laravel 10
 
