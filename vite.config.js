@@ -5,7 +5,10 @@ import i18n from 'laravel-vue-i18n/vite'
 import AutoImport from 'unplugin-auto-import/vite'
 import version from './vite.version'
 
+const ASSET_URL = process.env.ASSET_URL || ''
+
 export default defineConfig({
+    base: `${ASSET_URL}`,
     plugins: [
         laravel([
             'resources/js/app.js',

@@ -12,7 +12,7 @@ import noRegistration from './middlewares/noRegistration'
 import setReturnTo  from './middlewares/setReturnTo'
 
 const router = createRouter({
-	history: createWebHistory('/'),
+	history: createWebHistory(window.appConfig.subdirectory ? window.appConfig.subdirectory : '/'),
 	routes: [
 		{ path: '/start', name: 'start', component: () => import('../views/Start.vue'), meta: { middlewares: [authGuard, setReturnTo], watchedByKicker: true } },
         { path: '/capture', name: 'capture', component: () => import('../views/twofaccounts/Capture.vue'), meta: { middlewares: [authGuard, setReturnTo], watchedByKicker: true } },

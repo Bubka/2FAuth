@@ -4,11 +4,12 @@ import { useNotifyStore } from '@/stores/notify'
 
 export const httpClientFactory = (endpoint = 'api') => {
 	let baseURL
+    const subdir = window.appConfig.subdirectory
 
 	if (endpoint === 'web') {
-		baseURL = '/'
+		baseURL = subdir + '/'
 	} else {
-		baseURL = '/api/v1'
+		baseURL = subdir + '/api/v1'
 	}
 
 	const httpClient = axios.create({
