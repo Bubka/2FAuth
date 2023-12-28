@@ -51,6 +51,11 @@ export const httpClientFactory = (endpoint = 'api') => {
                 await axios.get('/refresh-csrf')
                 return httpClient.request(originalRequestConfig)
             }
+            
+            if (error.response && [407].includes(error.response.status)) {
+                useNotifyStore().error(error)
+                return new Promise(() => {})
+            }
 
             // Return the error when we need to handle it at component level
             if (error.config.hasOwnProperty('returnError') && error.config.returnError === true) {

@@ -10,6 +10,7 @@ import starter      from './middlewares/starter'
 import noEmptyError from './middlewares/noEmptyError'
 import noRegistration from './middlewares/noRegistration'
 import setReturnTo  from './middlewares/setReturnTo'
+import skipIfAuthProxy  from './middlewares/skipIfAuthProxy'
 
 const router = createRouter({
 	history: createWebHistory(window.appConfig.subdirectory ? window.appConfig.subdirectory : '/'),
@@ -33,12 +34,12 @@ const router = createRouter({
         { path: '/settings/webauthn/:credentialId/edit', name: 'settings.webauthn.editCredential', component: () => import('../views/settings/Credentials/Edit.vue'), meta: { middlewares: [authGuard], watchedByKicker: true, showAbout: true }, props: true },
         { path: '/settings/webauthn', name: 'settings.webauthn.devices', component: () => import('../views/settings/WebAuthn.vue'), meta: { middlewares: [authGuard], watchedByKicker: true, showAbout: true } },
 
-        { path: '/login', name: 'login', component: () => import('../views/auth/Login.vue'), meta: { middlewares: [setReturnTo], disabledWithAuthProxy: true, showAbout: true } },
-        { path: '/register', name: 'register', component: () => import('../views/auth/Register.vue'), meta: { middlewares: [noRegistration, setReturnTo], disabledWithAuthProxy: true, showAbout: true } },
-        { path: '/password/request', name: 'password.request', component: () => import('../views/auth/RequestReset.vue'), meta: { middlewares: [setReturnTo], disabledWithAuthProxy: true, showAbout: true } },
-        { path: '/user/password/reset', name: 'password.reset', component: () => import('../views/auth/password/Reset.vue'), meta: { middlewares: [setReturnTo], disabledWithAuthProxy: true, showAbout: true } },
-        { path: '/webauthn/lost', name: 'webauthn.lost', component: () => import('../views/auth/RequestReset.vue'), meta: { middlewares: [setReturnTo], disabledWithAuthProxy: true, showAbout: true } },
-        { path: '/webauthn/recover', name: 'webauthn.recover', component: () => import('../views/auth/webauthn/Recover.vue'), meta: { middlewares: [setReturnTo], disabledWithAuthProxy: true, showAbout: true } },
+        { path: '/login', name: 'login', component: () => import('../views/auth/Login.vue'), meta: { middlewares: [skipIfAuthProxy, setReturnTo], showAbout: true } },
+        { path: '/register', name: 'register', component: () => import('../views/auth/Register.vue'), meta: { middlewares: [skipIfAuthProxy, noRegistration, setReturnTo], showAbout: true } },
+        { path: '/password/request', name: 'password.request', component: () => import('../views/auth/RequestReset.vue'), meta: { middlewares: [skipIfAuthProxy, setReturnTo], showAbout: true } },
+        { path: '/user/password/reset', name: 'password.reset', component: () => import('../views/auth/password/Reset.vue'), meta: { middlewares: [skipIfAuthProxy, setReturnTo], showAbout: true } },
+        { path: '/webauthn/lost', name: 'webauthn.lost', component: () => import('../views/auth/RequestReset.vue'), meta: { middlewares: [skipIfAuthProxy, setReturnTo], showAbout: true } },
+        { path: '/webauthn/recover', name: 'webauthn.recover', component: () => import('../views/auth/webauthn/Recover.vue'), meta: { middlewares: [skipIfAuthProxy, setReturnTo], showAbout: true } },
 
         { path: '/about', name: 'about', component: () => import('../views/About.vue'), meta: { showAbout: true, watchedByKicker: true } },
         { path: '/error', name: 'genericError', component: () => import('../views/Error.vue'), meta: { middlewares: [noEmptyError], watchedByKicker: true } },
