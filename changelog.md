@@ -1,5 +1,11 @@
 # Change log
 
+## [5.0.1] - 2023-12-29
+
+### Fixed
+
+- [issue #262](https://github.com/Bubka/2FAuth/issues/262) Missing custom base url support
+
 ## [5.0.0] - 2023-12-15
 
 ### 2FAuth v5, the not-so-major release
