@@ -253,14 +253,16 @@
         fetchPromise.then(response => {
             let generatedAt = 0
 
-            // twofaccounts OTP updates
+            // twofaccounts TOTP updates
             response.data.forEach((account) => {
-                const index = twofaccounts.items.findIndex(acc => acc.id === account.id)
-                if (twofaccounts.items[index] == undefined) {
-                    twofaccounts.items.push(account)
+                if (account.otp_type === 'totp') {
+                    const index = twofaccounts.items.findIndex(acc => acc.id === account.id)
+                    if (twofaccounts.items[index] == undefined) {
+                        twofaccounts.items.push(account)
+                    }
+                    else twofaccounts.items[index].otp = account.otp
+                    generatedAt = account.otp.generated_at
                 }
-                else twofaccounts.items[index].otp = account.otp
-                generatedAt = account.otp.generated_at
             })
 
             // Loopers restart at new timestamp
