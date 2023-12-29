@@ -1,0 +1,1 @@
+import{a1 as s}from"./app-7741c0f3.js";/*! 2FAuth version 5.0.2 - Copyright (c) 2023 Bubka - https://github.com/Bubka/2FAuth */const t=s("web"),a={getSystemInfos(e={}){return t.get("infos",{...e})},getLastRelease(e={}){return t.get("latestRelease",{...e})}};export{a as s};
