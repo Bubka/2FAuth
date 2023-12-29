@@ -1,5 +1,11 @@
 # Change log
 
+## [5.0.2] - 2023-12-29
+
+### Fixed
+
+- [issue #265](https://github.com/Bubka/2FAuth/issues/265) Version 5.0.1 doesn't display colored countdown segments
+
 ## [5.0.1] - 2023-12-29
 
 ### Fixed
