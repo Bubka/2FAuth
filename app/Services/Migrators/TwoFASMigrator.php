@@ -86,12 +86,12 @@ class TwoFASMigrator extends Migrator
             $parameters['service']   = $otp_parameters['name'];
             $parameters['account']   = $otp_parameters['otp']['account'] ?? $parameters['service'];
             $parameters['secret']    = $this->padToValidBase32Secret($otp_parameters['secret']);
-            $parameters['algorithm'] = $otp_parameters['otp']['algorithm'];
-            $parameters['digits']    = $otp_parameters['otp']['digits'];
-            $parameters['counter']   = strtolower($parameters['otp_type']) === 'hotp' && $otp_parameters['otp']['counter'] > 0
+            $parameters['algorithm'] = $otp_parameters['otp']['algorithm'] ?? null;
+            $parameters['digits']    = $otp_parameters['otp']['digits'] ?? null;
+            $parameters['counter']   = strtolower($parameters['otp_type']) === 'hotp' && Arr::has($otp_parameters['otp'], 'counter')
                 ? $otp_parameters['otp']['counter']
                 : null;
-            $parameters['period'] = strtolower($parameters['otp_type']) === 'totp' && $otp_parameters['otp']['period'] > 0
+            $parameters['period'] = strtolower($parameters['otp_type']) === 'totp' && Arr::has($otp_parameters['otp'], 'period')
                 ? $otp_parameters['otp']['period']
                 : null;
 

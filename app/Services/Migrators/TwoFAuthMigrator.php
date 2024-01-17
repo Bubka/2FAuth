@@ -55,8 +55,8 @@ class TwoFAuthMigrator extends Migrator
             $parameters['service']    = $otp_parameters['service'];
             $parameters['account']    = $otp_parameters['account'];
             $parameters['secret']     = $this->padToValidBase32Secret($otp_parameters['secret']);
-            $parameters['algorithm']  = $otp_parameters['algorithm'];
-            $parameters['digits']     = $otp_parameters['digits'];
+            $parameters['algorithm']  = $otp_parameters['algorithm'] ?? null;
+            $parameters['digits']     = $otp_parameters['digits'] ?? null;
             $parameters['legacy_uri'] = $otp_parameters['legacy_uri'];
             $parameters['counter']    = strtolower($parameters['otp_type']) === 'hotp' && $otp_parameters['counter'] > 0
                 ? $otp_parameters['counter']

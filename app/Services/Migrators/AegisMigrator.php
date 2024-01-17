@@ -52,8 +52,8 @@ class AegisMigrator extends Migrator
             $parameters['service']   = $otp_parameters['issuer'];
             $parameters['account']   = $otp_parameters['name'] ?? $parameters['service'];
             $parameters['secret']    = $this->padToValidBase32Secret($otp_parameters['info']['secret']);
-            $parameters['algorithm'] = $otp_parameters['info']['algo'];
-            $parameters['digits']    = $otp_parameters['info']['digits'];
+            $parameters['algorithm'] = $otp_parameters['info']['algo'] ?? null;
+            $parameters['digits']    = $otp_parameters['info']['digits'] ?? null;
             $parameters['counter']   = $otp_parameters['info']['counter'] ?? null;
             $parameters['period']    = $otp_parameters['info']['period'] ?? null;
 
