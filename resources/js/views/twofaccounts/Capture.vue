@@ -31,6 +31,7 @@
                 if (cameras.value.length > 0) {
                     selectedCamera.value = cameras.value[0]
                 }
+                else errorPhrase.value  = 'no_cam_on_device'
             })
             .catch((err) => {
                 onError(err)
