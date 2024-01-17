@@ -128,9 +128,9 @@ ENV \
     # The Demo mode reset the app content every hours and set a generic demo user.
     IS_DEMO_APP=false \
     # The log channel defines where your log entries go to.
-    # 'daily' is the default logging mode giving you 5 daily rotated log files in /storage/logs/.
-    # Several other options exist. You can use 'single' for one big fat error log (not recommended).
-    # Also available are 'syslog', 'errorlog' and 'stdout' which will log to the system itself.
+    # 'daily' is the default logging mode giving you 7 daily rotated log files in /storage/logs/.
+    # Also available are 'errorlog', 'syslog', 'stderr', 'papertrail', 'slack' and a 'stack' channel
+    # to combine multiple channels into a single one.
     LOG_CHANNEL=daily \
     # Log level. You can set this from least severe to most severe:
     # debug, info, notice, warning, error, critical, alert, emergency
