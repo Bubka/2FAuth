@@ -58,7 +58,7 @@
                 :value="modelValue" 
                 :placeholder="placeholder" 
                 v-bind="$attrs"
-                v-on:change="$emit('update:modelValue', $event.target.value)"
+                v-on:input="$emit('update:modelValue', $event.target.value)"
                 :maxlength="maxLength" 
             />
         </div>
