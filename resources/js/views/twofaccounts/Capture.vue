@@ -12,8 +12,8 @@
     const notify = useNotifyStore()
 
     const cameraIsOn = ref(false)
-    const selectedDevice = ref(null)
-    const devices = ref([])
+    const selectedCamera = ref(null)
+    const cameras = ref([])
     const errorPhrase = ref('')
     const form = reactive(new Form({
         qrcode: null,
@@ -22,11 +22,19 @@
     const showQrContent = ref(false)
 
     onMounted(async () => {
-        devices.value = (await navigator.mediaDevices.enumerateDevices())
-        .filter(({ kind }) => kind === 'videoinput')
+        if (!navigator.mediaDevices?.enumerateDevices) {
+            errorPhrase.value  = 'secured_context_required'
+        } else {
+            await navigator.mediaDevices.enumerateDevices().then((devices) => {
+                cameras.value = devices.filter(({ kind }) => kind === 'videoinput')
 
-        if (devices.value.length > 0) {
-            selectedDevice.value = devices.value[0]
+                if (cameras.value.length > 0) {
+                    selectedCamera.value = cameras.value[0]
+                }
+            })
+            .catch((err) => {
+                onError(err)
+            })
         }
     })
 
@@ -176,7 +184,7 @@
         </div>
         <div v-show="!errorPhrase" class="fullscreen-streamer">
             <qrcode-stream
-                v-if="selectedDevice !== null"
+                v-if="selectedCamera !== null"
                 :track="paintOutline"
                 @detect="onDetect"
                 @error="onError"
@@ -184,12 +192,12 @@
                 @camera-off="cameraOff"
             ></qrcode-stream>
             <!-- device selector -->
-            <div v-if="cameraIsOn && devices.length > 1" class="field has-addons has-addons-centered mt-3">
+            <div v-if="cameraIsOn && cameras.length > 1" class="field has-addons has-addons-centered mt-3">
                 <p class="control has-icons-left">
                     <span class="select">
-                        <select v-model="selectedDevice">
-                            <option v-for="device in devices" :key="device.label" :value="device">
-                                {{ device.label ? device.label : $t('commons.default') }}
+                        <select v-model="selectedCamera">
+                            <option v-for="camera in cameras" :key="camera.label" :value="camera">
+                                {{ camera.label ? camera.label : $t('commons.default') }}
                             </option>
                         </select>
                     </span>
