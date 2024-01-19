@@ -1,5 +1,13 @@
 # Change log
 
+## [5.0.3] - 2024-01-19
+
+### Fixed
+
+- [issue #273](https://github.com/Bubka/2FAuth/issues/273) Unable to automatically paste email and password in login page
+- [issue #276](https://github.com/Bubka/2FAuth/issues/276) Camera does not work
+- [issue #279](https://github.com/Bubka/2FAuth/issues/279) Cannot use stdout LOG_CHANNEL anymore
+
 ## [5.0.2] - 2023-12-29
 
 ### Fixed
