@@ -1,12 +1,10 @@
 <script setup>
     import systemService from '@/services/systemService'
-    import { useNotifyStore } from '@/stores/notify'
     import { UseColorMode } from '@vueuse/components'
+    import CopyButton from '@/components/CopyButton.vue'
 
     const $2fauth = inject('2fauth')
     const router = useRouter()
-    const notify = useNotifyStore()
-    const { copy } = useClipboard({ legacy: true })
 
     const returnTo = router.options.history.state.back
     const infos = ref()
@@ -32,11 +30,6 @@
             infos.value = null
         })
     })
-
-    function copyToClipboard(data) {
-        copy(data)
-        notify.success({ text: trans('commons.copied_to_clipboard') })
-    }
 </script>
 
 <template>
@@ -98,9 +91,7 @@
             {{ $t('commons.environment') }}
         </h2>
         <div v-if="infos" class="about-debug box is-family-monospace is-size-7">
-            <button id="btnCopyEnvVars" :aria-label="$t('commons.copy_to_clipboard')" class="button is-like-text is-pulled-right is-small is-text" @click.stop="copyToClipboard(listInfos.innerText)">
-                <FontAwesomeIcon :icon="['fas', 'copy']" />
-            </button>
+            <CopyButton id="btnCopyEnvVars" :token="listInfos?.innerText" />
             <ul ref="listInfos" id="listInfos">
                 <li v-for="(value, key) in infos" :value="value" :key="key"><b>{{key}}</b>: {{value}}</li>
             </ul>
@@ -112,9 +103,7 @@
             {{ $t('settings.admin_settings') }}
         </h2>
         <div v-if="adminSettings" class="about-debug box is-family-monospace is-size-7">
-            <button id="btnCopyAdminSettings" :aria-label="$t('commons.copy_to_clipboard')" class="button is-like-text is-pulled-right is-small is-text" @click.stop="copyToClipboard(listAdminSettings.innerText)">
-                <FontAwesomeIcon :icon="['fas', 'copy']" />
-            </button>
+            <CopyButton id="btnCopyAdminSettings" :token="listAdminSettings?.innerText" />
             <ul ref="listAdminSettings" id="listAdminSettings">
                 <li v-for="(value, setting) in adminSettings" :value="value" :key="setting"><b>{{setting}}</b>: {{value}}</li>
             </ul>
@@ -123,9 +112,7 @@
             {{ $t('settings.user_preferences') }}
         </h2>
         <div v-if="userPreferences" class="about-debug box is-family-monospace is-size-7">
-            <button id="btnCopyUserPreferences" :aria-label="$t('commons.copy_to_clipboard')" class="button is-like-text is-pulled-right is-small is-text" @click.stop="copyToClipboard(listUserPreferences.innerText)">
-                <FontAwesomeIcon :icon="['fas', 'copy']" />
-            </button>
+            <CopyButton id="btnCopyUserPreferences" :token="listUserPreferences?.innerText" />
             <ul ref="listUserPreferences" id="listUserPreferences">
                 <li v-for="(value, preference) in userPreferences" :value="value" :key="preference"><b>{{preference}}</b>: {{value}}</li>
             </ul>
