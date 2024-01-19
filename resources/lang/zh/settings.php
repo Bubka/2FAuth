@@ -27,9 +27,9 @@ return [
     ],
     'administration' => '管理',
     'administration_legend' => '此前的设置是用户设置(每个用户都可以设置自己的偏好)。以下的设置则是应用于所有用户的全局设置。 只有管理员可以查看和编辑这些设置。',
-    'only_an_admin_can_edit_them' => 'Only an administrator can view and edit them.',
+    'only_an_admin_can_edit_them' => '只有管理员可以查看和编辑它们。',
     'you_are_administrator' => '您是管理员',
-    'account_linked_to_sso_x_provider' => 'You signed-in via SSO using your :provider account. Your information cannot be changed here but on :provider.',
+    'account_linked_to_sso_x_provider' => '您通过SSO使用您的 :provider 帐户登录。您的信息不能在这里更改，只能在 :provider 。',
     'general' => '常规',
     'security' => '安全',
     'profile' => '配置文件',
@@ -56,12 +56,12 @@ return [
             'help' => '用来翻译 2FAuth 用户界面的语言。列出的语言已完成翻译，请设置你选择的语言来覆盖你的浏览器偏好。'
         ],
         'show_otp_as_dot' => [
-            'label' => '将生成的一次性密码作为点显示',
+            'label' => '用 *** 来显示生成的一次性密码',
             'help' => '将生成的密码替换为 *** 以确保保密。不影响复制和粘贴功能。'
         ],
         'reveal_dotted_otp' => [
-            'label' => 'Reveal obscured <abbr title="One-Time Password">OTP</abbr>',
-            'help' => 'Let the ability to temporarily reveal Dot-Obscured passwords'
+            'label' => '显示被 *** 隐藏的 <abbr title="One-Time Password">OTP</abbr>',
+            'help' => '允许临时显示被 *** 隐藏的密码'
         ],
         'close_otp_on_copy' => [
             'label' => '复制后关闭 <abbr title="One-Time Password">OTP</abbr>',
@@ -135,8 +135,8 @@ return [
             'help' => '阻止新用户注册',
         ],
         'enable_sso' => [
-            'label' => 'Enable Single Sign-On (SSO)',
-            'help' => 'Allow visitors to authenticate using an external ID via the Single Sign-On scheme',
+            'label' => '启用单点登录 (SSO)',
+            'help' => '允许访问者通过单点登录方案使用外部ID进行身份验证',
         ],
         'otp_generation' => [
             'label' => '显示密码',

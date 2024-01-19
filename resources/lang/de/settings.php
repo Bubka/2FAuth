@@ -27,9 +27,9 @@ return [
     ],
     'administration' => 'Administration',
     'administration_legend' => 'Vorangegangene Einstellungen betreffen Benutzereinstellungen (jeder Benutzer kann seine eigenen Einstellungen festlegen), folgende globale Einstellungen sind gültig für alle Benutzer. Nur ein Administrator kann diese Einstellungen ansehen und bearbeiten.',
-    'only_an_admin_can_edit_them' => 'Only an administrator can view and edit them.',
+    'only_an_admin_can_edit_them' => 'Nur ein Administrator kann sie ansehen und bearbeiten.',
     'you_are_administrator' => 'Du bist ein Administrator',
-    'account_linked_to_sso_x_provider' => 'You signed-in via SSO using your :provider account. Your information cannot be changed here but on :provider.',
+    'account_linked_to_sso_x_provider' => 'Sie haben sich mit Ihrem :provider-Konto via SSO angemeldet. Ihre Daten können hier nicht geändert werden, sondern auf :provider.',
     'general' => 'Allgemein',
     'security' => 'Sicherheit',
     'profile' => 'Profil',
@@ -60,8 +60,8 @@ return [
             'help' => 'Passwortzeichen werden als *** angezeigt, um die Vertraulichkeit zu gewährleisten. Dies beeinflusst nicht die Kopieren/Einfügen Funktion'
         ],
         'reveal_dotted_otp' => [
-            'label' => 'Reveal obscured <abbr title="One-Time Password">OTP</abbr>',
-            'help' => 'Let the ability to temporarily reveal Dot-Obscured passwords'
+            'label' => 'Decke verdecktes <abbr title="One-Time Password">OTP</abbr> auf',
+            'help' => 'Lass die Fähigkeit Punkt-verdeckte Passwörter temporär freigeben'
         ],
         'close_otp_on_copy' => [
             'label' => 'Schließe <abbr title="One-Time Password">OTP</abbr> nach dem Kopieren',
@@ -135,8 +135,8 @@ return [
             'help' => 'Deaktiviere Registrierung',
         ],
         'enable_sso' => [
-            'label' => 'Enable Single Sign-On (SSO)',
-            'help' => 'Allow visitors to authenticate using an external ID via the Single Sign-On scheme',
+            'label' => 'Single Sign-On (SSO) aktivieren',
+            'help' => 'Besuchern erlauben, eine externe ID über das Single Sign-On Schema zu authentifizieren',
         ],
         'otp_generation' => [
             'label' => 'Passwort zeigen',

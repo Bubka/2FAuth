@@ -22,7 +22,7 @@ return [
     'sign_out' => 'Abmelden',
     'sign_in' => 'Anmelden',
     'sign_in_using' => 'Anmelden mit',
-    'or_continue_with' => 'You an also continue with:',
+    'or_continue_with' => 'Du kannst auch fortfahren mit:',
     'sign_in_using_security_device' => 'Mit einem Sicherheitsgerät anmelden',
     'login_and_password' => 'benutzername & passwort',
     'register' => 'Registrieren',
@@ -93,7 +93,7 @@ return [
         'reset_your_password' => 'Passwort zurücksetzen',
         'reset_password' => 'Password zurücksetzen',
         'disabled_in_demo' => 'Funktion ist im Demo-Modus deaktiviert',
-        'new_password' => 'New password',
+        'new_password' => 'Neues Passwort',
         'current_password' => [
             'label' => 'Aktuelles Passwort',
             'help' => 'Geben Sie Ihr aktuelles Passwort ein, um zu bestätigen, dass Sie es sind'
@@ -111,8 +111,8 @@ return [
         'delete_account' => 'Konto löschen',
         'delete_your_account' => 'Ihr Konto Löschen',
         'delete_your_account_and_reset_all_data' => 'Dies wird 2FAuth zurücksetzen. Ihr Benutzerkonto sowie alle 2FA-Daten werden gelöscht. Dies kann nicht rückgängig gemacht werden.',
-        'reset_your_password_to_delete_your_account' => 'If you always used SSO to sign in, sign out then use the reset password feature to get a password so you can fill this form.',
-        'deleting_2fauth_account_does_not_impact_provider' => 'Deleting your 2FAuth account has no impact on your external SSO account.',
+        'reset_your_password_to_delete_your_account' => 'Wenn Sie immer SSO zum Anmelden verwendet haben, melde dich ab und setze das Passwort zurück, damit du dieses Formular ausfüllen kannst.',
+        'deleting_2fauth_account_does_not_impact_provider' => 'Das Löschen Ihres 2FAuth Kontos hat keine Auswirkungen auf Ihr externes SSO Konto.',
         'user_account_successfully_deleted' => 'Benutzerkonto wurde erfolgreich gelöscht',
         'has_lower_case' => 'Beinhaltet Kleinbuchstaben',
         'has_upper_case' => 'Beinhaltet Großbuchstaben',

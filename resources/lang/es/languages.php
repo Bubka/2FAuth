@@ -13,9 +13,9 @@ return [
     'browser_preference' => 'Preferencia del navegador',
     'en' => 'Inglés',
     'fr' => 'Francés',
-    'de' => 'Alemán',
+    'de' => 'Deutsch (Alemán)',
     'es' => 'Español',
-    'zh' => 'Chino Simplificado',
-    'ru' => 'Ruso',
-    'bg' => 'Búlgaro',
+    'zh' => '简体中文 (Chino Simplificado)',
+    'ru' => 'Русский (Ruso)',
+    'bg' => 'Български (Búlgaro)',
 ];

@@ -22,7 +22,7 @@ return [
     'sign_out' => '登出',
     'sign_in' => '登录',
     'sign_in_using' => '登录使用',
-    'or_continue_with' => 'You an also continue with:',
+    'or_continue_with' => '您也可以：',
     'sign_in_using_security_device' => '使用安全设备登录',
     'login_and_password' => '用户名和密码',
     'register' => '注册',
@@ -93,7 +93,7 @@ WebAuthn允许您使用受信任的设备 (如Yubikeys 或具有生物识别能�
         'reset_your_password' => '重置你的密码',
         'reset_password' => '重置密码',
         'disabled_in_demo' => '此功能将在演示模式下禁用。',
-        'new_password' => 'New password',
+        'new_password' => '新密码',
         'current_password' => [
             'label' => '当前密码',
             'help' => '填写您当前设置的密码以确认是您本人'
@@ -111,8 +111,8 @@ WebAuthn允许您使用受信任的设备 (如Yubikeys 或具有生物识别能�
         'delete_account' => '删除账户',
         'delete_your_account' => '删除您的账户',
         'delete_your_account_and_reset_all_data' => '这将重置您的 2FAuth。您的账号以及所有的 2FA 数据都将被删除，这是一个不可逆的操作。',
-        'reset_your_password_to_delete_your_account' => 'If you always used SSO to sign in, sign out then use the reset password feature to get a password so you can fill this form.',
-        'deleting_2fauth_account_does_not_impact_provider' => 'Deleting your 2FAuth account has no impact on your external SSO account.',
+        'reset_your_password_to_delete_your_account' => '如果您总是使用 SSO 登录， 登出后使用重置密码功能获取密码，以便您可以填写此表格。',
+        'deleting_2fauth_account_does_not_impact_provider' => '删除您的 2FAuth 帐户对您的外部 SSO 帐户没有影响。',
         'user_account_successfully_deleted' => '账号已成功删除',
         'has_lower_case' => '包含小写字母',
         'has_upper_case' => '包含大写字母',

@@ -13,153 +13,153 @@ return [
     |
     */
 
-    'settings' => 'Settings',
-    'preferences' => 'Preferences',
-    'account' => 'Account',
+    'settings' => 'Настройки',
+    'preferences' => 'Настройки',
+    'account' => 'Учётная запись',
     'oauth' => 'OAuth',
     'webauthn' => 'WebAuthn',
-    'tokens' => 'Tokens',
-    'options' => 'Options',
-    'user_preferences' => 'User preferences',
-    'admin_settings' => 'Admin settings',
+    'tokens' => 'Токены',
+    'options' => 'Опции',
+    'user_preferences' => 'Настройки пользователя',
+    'admin_settings' => 'Настройки администратора',
     'confirm' => [
 
     ],
-    'administration' => 'Administration',
-    'administration_legend' => 'While previous settings are user settings (every user can set its own preferences), following settings are global and apply to all users.',
-    'only_an_admin_can_edit_them' => 'Only an administrator can view and edit them.',
-    'you_are_administrator' => 'You are an administrator',
-    'account_linked_to_sso_x_provider' => 'You signed-in via SSO using your :provider account. Your information cannot be changed here but on :provider.',
-    'general' => 'General',
-    'security' => 'Security',
-    'profile' => 'Profile',
-    'change_password' => 'Change password',
-    'personal_access_tokens' => 'Personal access tokens',
-    'token_legend' => 'Personal Access Tokens allow any app to authenticate to the 2Fauth API. You should specify the access token as a Bearer token in the authorization header of consumer apps requests.',
-    'generate_new_token' => 'Generate a new token',
-    'revoke' => 'Revoke',
-    'token_revoked' => 'Token successfully revoked',
-    'revoking_a_token_is_permanent' => 'Revoking a token is permanent',
+    'administration' => 'Администрирование',
+    'administration_legend' => 'Хотя предыдущие настройки являются пользовательскими настройками (каждый пользователь может установить свои собственные настройки), следующие настройки являются глобальными и применимы ко всем пользователям.',
+    'only_an_admin_can_edit_them' => 'Только администратор может просматривать и редактировать их.',
+    'you_are_administrator' => 'Вы являетесь администратором',
+    'account_linked_to_sso_x_provider' => 'Вы вошли через SSO с помощью учетной записи :provider. Ваша информация не может быть изменена здесь, измените данные в :provider.',
+    'general' => 'Общие',
+    'security' => 'Безопасность',
+    'profile' => 'Профиль',
+    'change_password' => 'Изменить пароль',
+    'personal_access_tokens' => 'Персональные токены доступа',
+    'token_legend' => 'Токены личного доступа позволяют любому приложению аутентифицироваться в API 2Fauth. Вам необходимо указать токен доступа как Bearer токен в HTTP заголовке Authorization запросов от клиентского приложения.',
+    'generate_new_token' => 'Сгенерировать новый токен',
+    'revoke' => 'Отозвать',
+    'token_revoked' => 'Токен успешно отозван',
+    'revoking_a_token_is_permanent' => 'Отзыв токена необратим',
     'confirm' => [
-        'revoke' => 'Are you sure you want to revoke this token?',
+        'revoke' => 'Вы уверены, что хотите отозвать этот токен?',
     ],
-    'make_sure_copy_token' => 'Make sure to copy your personal access token now. You won’t be able to see it again!',
-    'data_input' => 'Data input',
+    'make_sure_copy_token' => 'Убедитесь, что вы скопировали ваш персональный токен доступа прямо сейчас. Вы не сможете увидеть его снова!',
+    'data_input' => 'Ввод данных',
     'forms' => [
-        'edit_settings' => 'Edit settings',
-        'setting_saved' => 'Settings saved',
-        'new_token' => 'New token',
-        'some_translation_are_missing' => 'Some translations are missing using the browser preferred language?',
-        'help_translate_2fauth' => 'Help translate 2FAuth',
+        'edit_settings' => 'Изменить настройки',
+        'setting_saved' => 'Настройки сохранены',
+        'new_token' => 'Новый токен',
+        'some_translation_are_missing' => 'Некоторые переводы отсутствуют на предпочитаемом языке?',
+        'help_translate_2fauth' => 'Помогите перевести 2FAuth',
         'language' => [
-            'label' => 'Language',
-            'help' => 'Language used to translate the 2FAuth user interface. Named languages are complete, set the one of your choice to override your browser preference.'
+            'label' => 'Язык',
+            'help' => 'Язык, используемый для пользовательского интерфейса 2FAuth. Именованные языки полны, выберите язык, чтобы переопределить настройки браузера по умолчанию.'
         ],
         'show_otp_as_dot' => [
-            'label' => 'Show generated <abbr title="One-Time Password">OTP</abbr> as dot',
-            'help' => 'Replace generated password caracters with *** to ensure confidentiality. Do not affect the copy/paste feature'
+            'label' => 'Показать сгенерированный код <abbr title="One-Time Password">OTP</abbr> как точки',
+            'help' => 'Заменить сгенерированный код на звёздочки для обеспечения конфиденциальности. Это не повлияет на функцию копирования/вставки'
         ],
         'reveal_dotted_otp' => [
-            'label' => 'Reveal obscured <abbr title="One-Time Password">OTP</abbr>',
-            'help' => 'Let the ability to temporarily reveal Dot-Obscured passwords'
+            'label' => 'Раскрытие скрытых кодов <abbr title="One-Time Password">OTP</abbr>',
+            'help' => 'Разрешить временно раскрывать коды, скрытые звёздочками'
         ],
         'close_otp_on_copy' => [
-            'label' => 'Close <abbr title="One-Time Password">OTP</abbr> after copy',
-            'help' => 'Clicking a generated password to copy it automatically hide it from the screen'
+            'label' => 'Закрыть <abbr title="One-Time Password">OTP</abbr> после копирования',
+            'help' => 'Нажатие на сгенерированный код, чтобы скопировать его, автоматически скроет его с экрана'
         ],
         'copy_otp_on_display' => [
-            'label' => 'Copy <abbr title="One-Time Password">OTP</abbr> on display',
-            'help' => 'Automatically copy a generated password right after it appears on screen. Due to browsers limitations, only the first <abbr title="Time-based One-Time Password">TOTP</abbr> password will be copied, not the rotating ones'
+            'label' => 'Копировать <abbr title="One-Time Password">OTP</abbr> при отображении',
+            'help' => 'Автоматически копировать сгенерированный код сразу после его появления на экране. Из-за ограничений браузеров, только первый пароль <abbr title="Time-based One-Time Password">TOTP</abbr> будет скопирован, но не последующие'
         ],
         'use_basic_qrcode_reader' => [
-            'label' => 'Use basic QR code reader',
-            'help' => 'If you experiences issues when capturing QR codes enables this option to switch to a more basic but more reliable QR code reader'
+            'label' => 'Использовать базовый сканер QR-кода',
+            'help' => 'Если вы столкнулись с проблемами при захвате QR-кодов, это позволяет переключиться на более простой, но более надежный сканер QR-кодов'
         ],
         'display_mode' => [
-            'label' => 'Display mode',
-            'help' => 'Choose whether you want accounts to be displayed as a list or as a grid'
+            'label' => 'Режим отображения',
+            'help' => 'Выберите, хотите ли вы отображать учётные записи как список или как сетку'
         ],
         'password_format' => [
-            'label' => 'Password formatting',
-            'help' => 'Change how the passwords are displayed by grouping digits to ease readability and memorization'
+            'label' => 'Форматирование кодов',
+            'help' => 'Изменить способ отображения кодов путем группировки цифр, чтобы облегчить чтение и запоминание'
         ],
-        'pair' => 'by Pair',
-        'pair_legend' => 'Group digits two by two',
-        'trio_legend' => 'Group digits three by three',
-        'half_legend' => 'Split digits into two equals groups',
-        'trio' => 'by Trio',
-        'half' => 'by Half',
-        'grid' => 'Grid',
-        'list' => 'List',
+        'pair' => 'парами',
+        'pair_legend' => 'Группами по 2 цифры',
+        'trio_legend' => 'Группами по 3 цифры',
+        'half_legend' => 'Двумя одинаковыми группами',
+        'trio' => 'тройками',
+        'half' => 'половинками',
+        'grid' => 'Сетка',
+        'list' => 'Список',
         'theme' => [
-            'label' => 'Theme',
-            'help' => 'Force a specific theme or apply the theme defined in your system/browser preferences'
+            'label' => 'Тема',
+            'help' => 'Принудительно использовать тему, определенную в настройках вашей системы/браузера'
         ],
-        'light' => 'Light',
-        'dark' => 'Dark',
-        'automatic' => 'Auto',
+        'light' => 'Светлая',
+        'dark' => 'Тёмная',
+        'automatic' => 'Авто',
         'show_accounts_icons' => [
-            'label' => 'Show icons',
-            'help' => 'Show icons accounts in the main view'
+            'label' => 'Показать значки',
+            'help' => 'Показывать значки учётных записей на главной'
         ],
         'get_official_icons' => [
-            'label' => 'Get official icons',
-            'help' => '(Try to) Get the official icon of the 2FA issuer when adding an account'
+            'label' => 'Получить официальные значки',
+            'help' => '(Пробовать) Получать официальную иконку эмитента 2FA при добавлении учётной записи'
         ],
         'auto_lock' => [
-            'label' => 'Auto lock',
-            'help' => 'Log out the user automatically in case of inactivity. Has no effect when authentication is handled by a proxy and no custom logout url is specified.'
+            'label' => 'Автоблокировка',
+            'help' => 'Выйти из учётной записи автоматически в случае неактивности. Не имеет эффекта, когда аутентификация обрабатывается прокси и не задан пользовательский адрес выхода.'
         ],
         'use_encryption' => [
-            'label' => 'Protect sensible data',
-            'help' => 'Sensitive data, the 2FA secrets and emails, are stored encrypted in database. Be sure to backup the APP_KEY value of your .env file (or the whole file) as it serves as key encryption. There is no way to decypher encrypted data without this key.',
+            'label' => 'Защитить важные данные',
+            'help' => 'Конфиденциальные данные, секреты 2FA и адреса email хранятся в зашифрованном виде в базе данных. Убедитесь, что у вас есть резервная копия значения APP_KEY вашего .env файла (или весь файл) так как оно служит в качестве ключа шифрования. Не существует способа расшифровки данных без этого ключа.',
         ],
         'default_group' => [
-            'label' => 'Default group',
-            'help' => 'The group to which the newly created accounts are associated',
+            'label' => 'Группа по умолчанию',
+            'help' => 'Группа, к которой будут привязаны новые учётные данные',
         ],
         'useDirectCapture' => [
-            'label' => 'Direct input',
-            'help' => 'Choose whether you want to be prompted to choose an input mode among those available or if you want to directly use the default input mode',
+            'label' => 'Прямой ввод',
+            'help' => 'Выберите, хотите ли вы выбрать режим ввода среди имеющихся или вы хотите непосредственно использовать режим ввода по умолчанию',
         ],
         'defaultCaptureMode' => [
-            'label' => 'Default input mode',
-            'help' => 'Default input mode used when the Direct input option is On',
+            'label' => 'Режим ввода по умолчанию',
+            'help' => 'Режим ввода по умолчанию используется при включенной опции прямого ввода',
         ],
         'remember_active_group' => [
-            'label' => 'Remember group filter',
-            'help' => 'Save the last group filter applied and restore it on your next visit',
+            'label' => 'Запомнить фильтр группы',
+            'help' => 'Сохранить последний примененный групповой фильтр и восстановить его при следующем посещении',
         ],
         'disable_registration' => [
-            'label' => 'Disable registration',
-            'help' => 'Prevent new user registration. This affects SSO as well, so new SSO users won\'t be able to sign on',
+            'label' => 'Отключить регистрацию',
+            'help' => 'Запретить регистрацию новых пользователей. Это также влияет на SSO, так что новые пользователи SSO не смогут войти',
         ],
         'enable_sso' => [
-            'label' => 'Enable Single Sign-On (SSO)',
-            'help' => 'Allow visitors to authenticate using an external ID via the Single Sign-On scheme',
+            'label' => 'Включить Single Sign-On (SSO)',
+            'help' => 'Разрешить посетителям аутентифицироваться с использованием внешнего ID через схему Single Sign-On',
         ],
         'otp_generation' => [
-            'label' => 'Show Password',
-            'help' => 'Set how and when <abbr title="One-Time Passwords">OTPs</abbr> are displayed.<br/>',
+            'label' => 'Показывать пароль',
+            'help' => 'Установка того, как и когда отображаются <abbr title="One-Time Passwords">OTP</abbr> .<br/>',
         ],
-        'otp_generation_on_request' => 'After a click/tap',
-        'otp_generation_on_request_legend' => 'Alone, in its own view',
-        'otp_generation_on_request_title' => 'Click an account to get a password in a dedicated view',
-        'otp_generation_on_home' => 'Constantly',
-        'otp_generation_on_home_legend' => 'All of them, on home',
-        'otp_generation_on_home_title' => 'Show all passwords in the main view, without doing anything',
-        'never' => 'Never',
-        'on_otp_copy' => 'On security code copy',
-        '1_minutes' => 'After 1 minute',
-        '5_minutes' => 'After 5 minutes',
-        '10_minutes' => 'After 10 minutes',
-        '15_minutes' => 'After 15 minutes',
-        '30_minutes' => 'After 30 minutes',
-        '1_hour' => 'After 1 hour',
-        '1_day' => 'After 1 day',
-        'livescan' => 'QR code livescan',
-        'upload' => 'QR code upload',
-        'advanced_form' => 'Advanced form',
+        'otp_generation_on_request' => 'После щелчка/касания',
+        'otp_generation_on_request_legend' => 'Один, по-своему',
+        'otp_generation_on_request_title' => 'Щелкните на учётную запись, чтобы получить код в отдельном окне',
+        'otp_generation_on_home' => 'Постоянно',
+        'otp_generation_on_home_legend' => 'Все на домашней странице',
+        'otp_generation_on_home_title' => 'Показать все пароли в главной странице, не делая ничего',
+        'never' => 'Никогда',
+        'on_otp_copy' => 'При копировании кода',
+        '1_minutes' => 'Через 1 минуту',
+        '5_minutes' => 'Через 5 минут',
+        '10_minutes' => 'Через 10 минут',
+        '15_minutes' => 'Через 15 минут',
+        '30_minutes' => 'Через 30 минут',
+        '1_hour' => 'Через 1 час',
+        '1_day' => 'Через 1 день',
+        'livescan' => '📷 Сфотографировать QR-код',
+        'upload' => 'Загрузить файл с QR-кодом',
+        'advanced_form' => 'Расширенная форма',
     ],
 
 ];

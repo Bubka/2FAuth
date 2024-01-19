@@ -11,11 +11,11 @@ return [
     */
 
     'browser_preference' => '使用游览器偏好',
-    'en' => 'English',
-    'fr' => 'French',
-    'de' => 'German',
-    'es' => 'Spanish',
-    'zh' => '简体中文',
-    'ru' => 'Russian',
-    'bg' => 'Bulgarian',
+    'en' => 'English (英语)',
+    'fr' => 'Français (法语)',
+    'de' => 'Deutsch (德语)',
+    'es' => 'Español (西班牙语)',
+    'zh' => '简体中文 (Chinese Simplified)',
+    'ru' => 'Русский (俄语)',
+    'bg' => 'Български (保加利亚语)',
 ];
