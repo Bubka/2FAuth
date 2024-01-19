@@ -2,10 +2,17 @@
 
 ## [5.0.3] - 2024-01-19
 
+⚠️ For everyone experiencing a blank screen after updating to v5.*, please set the `ASSET_URL` env variable to the same value as `APP_URL`.
+
+### Added
+
+- The `ASSET_URL` now appears in the .env.example variables next to `APP_URL`
+
 ### Fixed
 
 - [issue #273](https://github.com/Bubka/2FAuth/issues/273) Unable to automatically paste email and password in login page
 - [issue #276](https://github.com/Bubka/2FAuth/issues/276) Camera does not work
+- [issue #277](https://github.com/Bubka/2FAuth/issues/277) Import 2FAS
 - [issue #279](https://github.com/Bubka/2FAuth/issues/279) Cannot use stdout LOG_CHANNEL anymore
 
 ## [5.0.2] - 2023-12-29
