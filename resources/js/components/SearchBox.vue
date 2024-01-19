@@ -1,6 +1,10 @@
 <script setup>
     const props = defineProps({
-        keyword: String
+        keyword: String,
+        hasNoBackground: {
+            type: Boolean,
+            default: false
+        },
     })
     const searchInput = ref(null)
 
@@ -34,6 +38,7 @@
                 :aria-label="$t('commons.search')"
                 :title="$t('commons.search')"
                 class="input is-rounded is-search"
+                :class="{ 'has-no-background': hasNoBackground }"
                 :value="keyword"
                 v-on:keyup="$emit('update:keyword', $event.target.value)">
             <span class="icon is-small is-right">
