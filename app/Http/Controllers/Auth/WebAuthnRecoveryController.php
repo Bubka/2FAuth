@@ -50,7 +50,7 @@ class WebAuthnRecoveryController extends Controller
                     if ($this->shouldRevokeAllCredentials($request)) {
                         $user->flushCredentials();
                     }
-                    $user->preferences['useWebauthnOnly'] = false;
+                    $user['preferences->useWebauthnOnly'] = false;
                     $user->save();
                     Log::notice(sprintf('Legacy login restored for user ID #%s', $user->id));
                 } else {
