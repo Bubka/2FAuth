@@ -43,13 +43,17 @@ class RegisterController extends Controller
         event(new Registered($user = $this->create($validated)));
 
         $this->guard()->login($user);
+        /**
+         * @var \App\Models\User|null
+         */
+        $user = $this->guard()->user();
 
         return response()->json([
             'message'     => 'account created',
             'name'        => $user->name,
             'email'       => $user->email,
-            'preferences' => $this->guard()->user()->preferences,
-            'is_admin'    => $this->guard()->user()->is_admin,
+            'preferences' => $user->preferences,
+            'is_admin'    => $user->isAdministrator(),
         ], 201);
     }
 
@@ -69,7 +73,7 @@ class RegisterController extends Controller
         Log::info(sprintf('User ID #%s created', $user->id));
 
         if (User::count() == 1) {
-            $user->is_admin = true;
+            $user->promoteToAdministrator();
             $user->save();
             Log::notice(sprintf('User ID #%s set as administrator', $user->id));
         }

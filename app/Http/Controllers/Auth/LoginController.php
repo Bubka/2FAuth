@@ -107,16 +107,21 @@ class LoginController extends Controller
     {
         $this->clearLoginAttempts($request);
 
-        $name = $this->guard()->user()?->name;
+        /**
+         * @var \App\Models\User|null
+         */
+        $user = $this->guard()->user();
+        $name = $user?->name;
 
         $this->authenticated($request, $this->guard()->user());
 
         return response()->json([
             'message'     => 'authenticated',
+            'id'          => $user->id,
             'name'        => $name,
-            'email'       => $this->guard()->user()->email,
-            'preferences' => $this->guard()->user()->preferences,
-            'is_admin'    => $this->guard()->user()->is_admin,
+            'email'       => $user->email,
+            'preferences' => $user->preferences,
+            'is_admin'    => $user->isAdministrator(),
         ], Response::HTTP_OK);
     }
 

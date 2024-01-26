@@ -59,7 +59,7 @@ class UserController extends Controller
 
         Log::info(sprintf('Deletion of user ID #%s requested', $user->id));
 
-        if ($user->is_admin && User::admins()->count() == 1) {
+        if ($user->isAdministrator() && User::admins()->count() == 1) {
             return response()->json(['message' => __('errors.cannot_delete_the_only_admin')], 400);
         }
 

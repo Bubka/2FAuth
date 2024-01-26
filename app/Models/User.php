@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Laragear\WebAuthn\WebAuthnAuthentication;
 use Laravel\Passport\HasApiTokens;
 
@@ -84,6 +85,27 @@ class User extends Authenticatable implements WebAuthnAuthenticatable
     public function scopeAdmins($query)
     {
         return $query->where('is_admin', true);
+    }
+
+    /**
+     * Determine if the user is an administrator.
+     *
+     * @return boolean
+     */
+    public function isAdministrator()
+    {
+        return $this->is_admin;
+    }
+
+    /**
+     * Grant administrator permissions to the user.
+     *
+     * @param  bool  $promote  
+     * @return void
+     */
+    public function promoteToAdministrator(bool $promote = true)
+    {
+        $this->is_admin = $promote;
     }
 
     /**

@@ -56,7 +56,7 @@ class SocialiteController extends Controller
             if (User::where('email', $socialiteEmail)->exists()) {
                 return redirect('/error?err=sso_email_already_used');
             } elseif (User::count() === 0) {
-                $user->is_admin = true;
+                $user->promoteToAdministrator();
             } elseif (Settings::get('disableRegistration')) {
                 return redirect('/error?err=sso_no_register');
             }

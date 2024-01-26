@@ -63,7 +63,7 @@ class RemoteUserProvider implements UserProvider
             Log::info(sprintf('Remote user %s created with email address %s', var_export($user->name, true), var_export($user->email, true)));
 
             if (User::count() === 1) {
-                $user->is_admin = true;
+                $user->promoteToAdministrator();
                 $user->save();
             }
         } else {

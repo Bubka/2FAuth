@@ -45,7 +45,7 @@ class SystemController extends Controller
             $infos['common']['Trusted proxies']            = config('2fauth.config.trustedProxies') ?: 'none';
 
             // Admin settings
-            if ($request->user()->is_admin == true) {
+            if ($request->user()->isAdministrator()) {
                 $infos['admin_settings']['useEncryption']  = Settings::get('useEncryption');
                 $infos['admin_settings']['lastRadarScan']  = Carbon::parse(Settings::get('lastRadarScan'))->format('Y-m-d H:i:s');
                 $infos['admin_settings']['checkForUpdate'] = Settings::get('checkForUpdate');
