@@ -81,7 +81,7 @@ class ForgotPasswordControllerTest extends FeatureTestCase
 
         $response->assertStatus(200);
 
-        $token = \Illuminate\Support\Facades\DB::table('password_resets')->first();
+        $token = \Illuminate\Support\Facades\DB::table(config('auth.passwords.users.table'))->first();
         $this->assertNotNull($token);
 
         Notification::assertSentTo($this->user, ResetPassword::class, function ($notification, $channels) use ($token) {

@@ -58,7 +58,7 @@ class WebAuthnDeviceLostControllerTest extends FeatureTestCase
                 'message',
             ]);
 
-        $this->assertDatabaseHas('webauthn_recoveries', [
+        $this->assertDatabaseHas(config('auth.passwords.webauthn.table'), [
             'email' => $this->user->email,
         ]);
     }
@@ -119,7 +119,7 @@ class WebAuthnDeviceLostControllerTest extends FeatureTestCase
                 'email',
             ]);
 
-        $this->assertDatabaseMissing('webauthn_recoveries', [
+        $this->assertDatabaseMissing(config('auth.passwords.webauthn.table'), [
             'email' => 'bad@email.com',
         ]);
     }
@@ -142,7 +142,7 @@ class WebAuthnDeviceLostControllerTest extends FeatureTestCase
                 'email',
             ]);
 
-        $this->assertDatabaseMissing('webauthn_recoveries', [
+        $this->assertDatabaseMissing(config('auth.passwords.webauthn.table'), [
             'email' => 'bad@email.com',
         ]);
     }
@@ -188,7 +188,7 @@ class WebAuthnDeviceLostControllerTest extends FeatureTestCase
                 'message',
             ]);
 
-        $this->assertDatabaseHas('webauthn_recoveries', [
+        $this->assertDatabaseHas(config('auth.passwords.webauthn.table'), [
             'email' => $this->user->email,
         ]);
 

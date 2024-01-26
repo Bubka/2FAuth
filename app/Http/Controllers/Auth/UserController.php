@@ -72,9 +72,9 @@ class UserController extends Controller
                 DB::table('twofaccounts')->where('user_id', $user->id)->delete();
                 DB::table('groups')->where('user_id', $user->id)->delete();
                 DB::table('webauthn_credentials')->where('authenticatable_id', $user->id)->delete();
-                DB::table('webauthn_recoveries')->where('email', $user->email)->delete();
+                DB::table(config('auth.passwords.webauthn.table'))->where('email', $user->email)->delete();
                 DB::table('oauth_access_tokens')->where('user_id', $user->id)->delete();
-                DB::table('password_resets')->where('email', $user->email)->delete();
+                DB::table(config('auth.passwords.users.table'))->where('email', $user->email)->delete();
                 DB::table('users')->where('id', $user->id)->delete();
             });
         }

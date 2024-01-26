@@ -46,7 +46,7 @@ class WebAuthnRecoveryControllerTest extends FeatureTestCase
 
         Date::setTestNow($this->now = Date::create(2022, 11, 16, 9, 4));
 
-        DB::table('webauthn_recoveries')->insert([
+        DB::table(config('auth.passwords.webauthn.table'))->insert([
             'email'      => $this->user->email,
             'token'      => self::STORED_TOKEN_VALUE,
             'created_at' => $this->now->toDateTimeString(),
@@ -58,7 +58,7 @@ class WebAuthnRecoveryControllerTest extends FeatureTestCase
      */
     public function test_recover_fails_if_no_recovery_is_set()
     {
-        DB::table('webauthn_recoveries')->delete();
+        DB::table(config('auth.passwords.webauthn.table'))->delete();
 
         $this->json('POST', '/webauthn/recover', [
             'token'    => self::ACTUAL_TOKEN_VALUE,
@@ -91,8 +91,8 @@ class WebAuthnRecoveryControllerTest extends FeatureTestCase
     {
         Date::setTestNow($now = Date::create(2020, 01, 01, 16, 30));
 
-        DB::table('webauthn_recoveries')->delete();
-        DB::table('webauthn_recoveries')->insert([
+        DB::table(config('auth.passwords.webauthn.table'))->delete();
+        DB::table(config('auth.passwords.webauthn.table'))->insert([
             'token'      => self::STORED_TOKEN_VALUE,
             'email'      => $this->user->email,
             'created_at' => $now->clone()->subHour()->subSecond()->toDateTimeString(),
@@ -148,13 +148,29 @@ class WebAuthnRecoveryControllerTest extends FeatureTestCase
         ])
             ->assertStatus(200);
 
-        $this->assertDatabaseMissing('webauthn_recoveries', [
+        $this->assertDatabaseMissing(config('auth.passwords.webauthn.table'), [
             'token' => self::STORED_TOKEN_VALUE,
         ]);
+    }
 
-        $this->assertDatabaseMissing('options', [
-            'key' => 'useWebauthnOnly',
-        ]);
+    /**
+     * @test
+     */
+    public function test_recover_resets_useWebauthnOnly_user_preference()
+    {
+        $this->user['preferences->useWebauthnOnly'] = true;
+        $this->user->save();
+
+        $response = $this->json('POST', '/webauthn/recover', [
+            'token'    => self::ACTUAL_TOKEN_VALUE,
+            'email'    => $this->user->email,
+            'password' => UserFactory::USER_PASSWORD,
+        ])
+        ->assertStatus(200);
+
+        $this->user->refresh();
+        
+        $this->assertFalse($this->user->preferences['useWebauthnOnly']);
     }
 
     /**

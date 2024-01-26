@@ -60,12 +60,12 @@ trait ResetTrait
     protected function flushDB() : void
     {
         // Reset the db
-        DB::table('password_resets')->delete();
+        DB::table(config('auth.passwords.users.table'))->delete();
         DB::table('oauth_access_tokens')->delete();
         DB::table('oauth_personal_access_clients')->delete();
         DB::table('oauth_refresh_tokens')->delete();
         DB::table('webauthn_credentials')->delete();
-        DB::table('webauthn_recoveries')->delete();
+        DB::table(config('auth.passwords.webauthn.table'))->delete();
         DB::table('twofaccounts')->delete();
         DB::table('groups')->delete();
         DB::table('users')->delete();
