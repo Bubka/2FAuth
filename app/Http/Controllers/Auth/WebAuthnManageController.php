@@ -56,7 +56,7 @@ class WebAuthnManageController extends Controller
         if (blank($user->webAuthnCredentials()->WhereEnabled()->get())) {
             $request->user()->preferences['useWebauthnOnly'] = false;
             $request->user()->save();
-            Log::notice(sprintf('No more Webauthn credential for user ID #%s, user Webauthn options reset to default', $user->id));
+            Log::notice(sprintf('No more Webauthn credential for user ID #%s, useWebauthnOnly user preference reset to false', $user->id));
         }
 
         Log::info(sprintf('User ID #%s revoked a security device', $user->id));
