@@ -6,6 +6,7 @@ use App\Api\v1\Controllers\QrCodeController;
 use App\Api\v1\Controllers\SettingController;
 use App\Api\v1\Controllers\TwoFAccountController;
 use App\Api\v1\Controllers\UserController;
+use App\Api\v1\Controllers\UserManagerController;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Route;
 
@@ -31,7 +32,7 @@ Route::group(['middleware' => 'auth:api-guard'], function () {
     Route::get('user/preferences/{preferenceName}', [UserController::class, 'showPreference'])->name('user.preferences.show');
     Route::get('user/preferences', [UserController::class, 'allPreferences'])->name('user.preferences.all');
     Route::put('user/preferences/{preferenceName}', [UserController::class, 'setPreference'])->name('user.preferences.set');
-
+    
     Route::delete('twofaccounts', [TwoFAccountController::class, 'batchDestroy'])->name('twofaccounts.batchDestroy');
     Route::patch('twofaccounts/withdraw', [TwoFAccountController::class, 'withdraw'])->name('twofaccounts.withdraw');
     Route::post('twofaccounts/reorder', [TwoFAccountController::class, 'reorder'])->name('twofaccounts.reorder');
@@ -59,6 +60,11 @@ Route::group(['middleware' => 'auth:api-guard'], function () {
  * Routes protected by the api authentication guard and restricted to administrators
  */
 Route::group(['middleware' => ['auth:api-guard', 'admin']], function () {
+    Route::patch('users/{user}/password/reset', [UserManagerController::class, 'resetPassword'])->name('users.password.reset');
+    Route::delete('users/{user}/pats', [UserManagerController::class, 'revokePATs'])->name('users.revoke.pats');
+    Route::delete('users/{user}/credentials', [UserManagerController::class, 'revokeWebauthnCredentials'])->name('users.revoke.credentials');
+    Route::apiResource('users', UserManagerController::class);
+
     Route::get('settings/{settingName}', [SettingController::class, 'show'])->name('settings.show');
     Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
     Route::post('settings', [SettingController::class, 'store'])->name('settings.store');

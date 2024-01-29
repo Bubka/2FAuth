@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use App\Models\Traits\WebAuthnManageCredentials;
+use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Laragear\WebAuthn\WebAuthnAuthentication;
@@ -106,6 +108,18 @@ class User extends Authenticatable implements WebAuthnAuthenticatable
     public function promoteToAdministrator(bool $promote = true)
     {
         $this->is_admin = $promote;
+    }
+
+    /**
+     * Reset user password with a 12 chars random string.
+     *
+     * @return void
+     */
+    public function resetPassword()
+    {
+        $this->password = Hash::make(Str::password(12));
+
+        event(new PasswordReset($this));
     }
 
     /**
