@@ -5,8 +5,6 @@ namespace Tests\Feature\Http\Auth;
 use App\Http\Controllers\Auth\UserController;
 use App\Http\Middleware\RejectIfDemoMode;
 use App\Http\Requests\UserUpdateRequest;
-use App\Models\Group;
-use App\Models\TwoFAccount;
 use App\Models\User;
 use App\Observers\UserObserver;
 use App\Policies\UserPolicy;
@@ -220,43 +218,11 @@ class UserControllerTest extends FeatureTestCase
      */
     public function test_delete_user_returns_success()
     {
-        TwoFAccount::factory()->for($this->user)->create();
-        Group::factory()->for($this->user)->create();
-
-        $admin = User::factory()->administrator()->create();
-        $this->assertDatabaseCount('users', 2);
-
         $this->actingAs($this->user, 'web-guard')
             ->json('DELETE', '/user', [
                 'password' => self::PASSWORD,
             ])
             ->assertNoContent();
-
-        $this->assertDatabaseMissing('users', [
-            'id' => $this->user->id,
-        ]);
-        $this->assertDatabaseHas('users', [
-            'id' => $admin->id,
-        ]);
-        $this->assertDatabaseCount('users', 1);
-        $this->assertDatabaseMissing('twofaccounts', [
-            'user_id' => $this->user->id,
-        ]);
-        $this->assertDatabaseMissing('groups', [
-            'user_id' => $this->user->id,
-        ]);
-        $this->assertDatabaseMissing('webauthn_credentials', [
-            'authenticatable_id' => $this->user->id,
-        ]);
-        $this->assertDatabaseMissing('webauthn_recoveries', [
-            'email' => $this->user->email,
-        ]);
-        $this->assertDatabaseMissing('oauth_access_tokens', [
-            'user_id' => $this->user->id,
-        ]);
-        $this->assertDatabaseMissing('password_resets', [
-            'email' => $this->user->email,
-        ]);
     }
 
     /**

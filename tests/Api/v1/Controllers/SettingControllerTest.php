@@ -5,6 +5,9 @@ namespace Tests\Api\v1\Controllers;
 use App\Api\v1\Controllers\SettingController;
 use App\Facades\Settings;
 use App\Models\User;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\FeatureTestCase;
 
@@ -47,6 +50,24 @@ class SettingControllerTest extends FeatureTestCase
 
         $this->user  = User::factory()->create();
         $this->admin = User::factory()->administrator()->create();
+    }
+
+    /**
+     * @test
+     */
+    public function test_all_controller_routes_are_protected_by_admin_middleware()
+    {
+        $routes = Route::getRoutes()->getRoutes();
+
+        $controllerRoutes = Arr::where($routes, function (\Illuminate\Routing\Route $route, int $key) {
+            if (Str::startsWith($route->getActionName(), SettingController::class)) {
+                return $route;
+            }
+        });
+
+        foreach ($controllerRoutes as $controllerRoute) {
+            $this->assertContains('admin', $controllerRoute->middleware());
+        }
     }
 
     /**

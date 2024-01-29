@@ -11,7 +11,7 @@ abstract class FeatureTestCase extends BaseTestCase
     use CreatesApplication;
 
     /**
-     * Rollback and execute migrations for each test.
+     * Refresh db only when test is using database transaction.
      */
     use LazilyRefreshDatabase;
 
