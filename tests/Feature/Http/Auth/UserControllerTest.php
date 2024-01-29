@@ -8,6 +8,8 @@ use App\Http\Requests\UserUpdateRequest;
 use App\Models\Group;
 use App\Models\TwoFAccount;
 use App\Models\User;
+use App\Observers\UserObserver;
+use App\Policies\UserPolicy;
 use Illuminate\Support\Facades\Config;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\FeatureTestCase;
@@ -16,6 +18,8 @@ use Tests\FeatureTestCase;
  * UserControllerTest test class
  */
 #[CoversClass(UserController::class)]
+#[CoversClass(UserObserver::class)]
+#[CoversClass(UserPolicy::class)]
 #[CoversClass(RejectIfDemoMode::class)]
 #[CoversClass(UserUpdateRequest::class)]
 class UserControllerTest extends FeatureTestCase

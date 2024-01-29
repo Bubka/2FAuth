@@ -24,6 +24,8 @@ class UserController extends Controller
         $user      = $request->user();
         $validated = $request->validated();
 
+        $this->authorize('update', $user);
+
         if (config('auth.defaults.guard') === 'reverse-proxy-guard' || $user->oauth_provider) {
             Log::notice('Account update rejected: reverse-proxy-guard enabled or account from external sso provider');
 
@@ -57,37 +59,16 @@ class UserController extends Controller
         $validated = $request->validated();
         $user      = Auth::user();
 
-        Log::info(sprintf('Deletion of user ID #%s requested', $user->id));
-
-        if ($user->isAdministrator() && User::admins()->count() == 1) {
-            return response()->json(['message' => __('errors.cannot_delete_the_only_admin')], 400);
-        }
-
         if (! Hash::check($validated['password'], Auth::user()->password)) {
             return response()->json(['message' => __('errors.wrong_current_password')], 400);
         }
 
-        try {
-            DB::transaction(function () use ($user) {
-                DB::table('twofaccounts')->where('user_id', $user->id)->delete();
-                DB::table('groups')->where('user_id', $user->id)->delete();
-                DB::table('webauthn_credentials')->where('authenticatable_id', $user->id)->delete();
-                DB::table(config('auth.passwords.webauthn.table'))->where('email', $user->email)->delete();
-                DB::table('oauth_access_tokens')->where('user_id', $user->id)->delete();
-                DB::table(config('auth.passwords.users.table'))->where('email', $user->email)->delete();
-                DB::table('users')->where('id', $user->id)->delete();
-            });
-        }
-        // @codeCoverageIgnoreStart
-        catch (\Throwable $e) {
-            Log::error(sprintf('Deletion of user ID #%s failed, transaction has been rolled-back', $user->id));
-
-            return response()->json(['message' => __('errors.user_deletion_failed')], 400);
-        }
-        // @codeCoverageIgnoreEnd
-
-        Log::info(sprintf('User ID #%s deleted', $user->id));
-
-        return response()->json(null, 204);
+        // This will delete the user and all its 2FAs & Groups thanks to the onCascadeDelete constrains.
+        // Deletion will not be done (and returns False) if the user is the only existing admin (see UserObserver clas)
+        return $user->delete() === false
+            ? response()->json([
+                'message' => __('errors.cannot_delete_the_only_admin'),
+            ], 400)
+            : response()->json(null, 204);
     }
 }

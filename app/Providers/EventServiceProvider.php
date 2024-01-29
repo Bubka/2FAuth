@@ -11,6 +11,8 @@ use App\Listeners\DissociateTwofaccountFromGroup;
 use App\Listeners\RegisterOpenId;
 use App\Listeners\ReleaseRadar;
 use App\Listeners\ResetUsersPreference;
+use App\Models\User;
+use App\Observers\UserObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -42,6 +44,15 @@ class EventServiceProvider extends ServiceProvider
         SocialiteWasCalled::class => [
             RegisterOpenId::class,
         ],
+    ];
+    
+    /**
+    * The model observers for your application.
+    *
+    * @var array<string, string|object|array<int, string|object>>
+    */
+    protected $observers = [
+        User::class => [UserObserver::class],
     ];
 
     /**
