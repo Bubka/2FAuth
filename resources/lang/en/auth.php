@@ -101,7 +101,7 @@ return [
         ],
         'change_password' => 'Change password',
         'send_password_reset_link' => 'Send password reset link',
-        'password_successfully_changed' => 'Password successfully changed',
+        'password_successfully_reset' => 'Password successfully reset',
         'edit_account' => 'Edit account',
         'profile_saved' => 'Profile successfully updated!',
         'welcome_to_demo_app_use_those_credentials' => 'Welcome to the 2FAuth demo.<br><br>You can connect using the email address <strong>demo@2fauth.app</strong> and the password <strong>demo</strong>',

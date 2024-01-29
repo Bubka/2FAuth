@@ -12,6 +12,7 @@ export const useUserStore = defineStore({
 
     state: () => {
         return {
+            id: undefined,
             name: undefined,
             email: undefined,
             oauth_provider: undefined,

@@ -6,6 +6,7 @@ import { useAppSettingsStore } from '@/stores/appSettings'
 import { useNotifyStore } from '@/stores/notify'
 
 import authGuard    from './middlewares/authGuard'
+import adminOnly    from './middlewares/adminOnly'
 import starter      from './middlewares/starter'
 import noEmptyError from './middlewares/noEmptyError'
 import noRegistration from './middlewares/noRegistration'
@@ -34,6 +35,11 @@ const router = createRouter({
         { path: '/settings/webauthn/:credentialId/edit', name: 'settings.webauthn.editCredential', component: () => import('../views/settings/Credentials/Edit.vue'), meta: { middlewares: [authGuard], watchedByKicker: true, showAbout: true }, props: true },
         { path: '/settings/webauthn', name: 'settings.webauthn.devices', component: () => import('../views/settings/WebAuthn.vue'), meta: { middlewares: [authGuard], watchedByKicker: true, showAbout: true } },
 
+        { path: '/admin/app', name: 'admin.appSetup', component: () => import('../views/admin/AppSetup.vue'), meta: { middlewares: [authGuard, adminOnly], watchedByKicker: true, showAbout: true } },
+        { path: '/admin/users', name: 'admin.users', component: () => import('../views/admin/Users.vue'), meta: { middlewares: [authGuard, adminOnly], watchedByKicker: true, showAbout: true } },
+        { path: '/admin/users/create', name: 'admin.users.create', component: () => import('../views/admin/users/Create.vue'), meta: { middlewares: [authGuard, adminOnly], watchedByKicker: true, showAbout: true } },
+        { path: '/admin/users/:userId/manage', name: 'admin.users.manage', component: () => import('../views/admin/users/Manage.vue'), meta: { middlewares: [authGuard, adminOnly], watchedByKicker: true, showAbout: true }, props: true },
+        
         { path: '/login', name: 'login', component: () => import('../views/auth/Login.vue'), meta: { middlewares: [skipIfAuthProxy, setReturnTo], showAbout: true } },
         { path: '/register', name: 'register', component: () => import('../views/auth/Register.vue'), meta: { middlewares: [skipIfAuthProxy, noRegistration, setReturnTo], showAbout: true } },
         { path: '/password/request', name: 'password.request', component: () => import('../views/auth/RequestReset.vue'), meta: { middlewares: [skipIfAuthProxy, setReturnTo], showAbout: true } },

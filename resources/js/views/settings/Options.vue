@@ -1,18 +1,14 @@
 <script setup>
     import SettingTabs from '@/layouts/SettingTabs.vue'
     import userService from '@/services/userService'
-    import appSettingService from '@/services/appSettingService'
     import { useUserStore } from '@/stores/user'
     import { useGroups } from '@/stores/groups'
-    import { useAppSettingsStore } from '@/stores/appSettings'
     import { useNotifyStore } from '@/stores/notify'
-    import VersionChecker from '@/components/VersionChecker.vue'
 
     const $2fauth = inject('2fauth')
     const user = useUserStore()
     const groups = useGroups()
     const notify = useNotifyStore()
-    const appSettings = useAppSettingsStore()
     const returnTo = useStorage($2fauth.prefix + 'returnTo', 'accounts')
 
     const layouts = [
@@ -100,17 +96,6 @@
         })
     }
 
-    /**
-     * Saves a setting on the backend
-     * @param {string} preference 
-     * @param {any} value 
-     */
-    function saveSetting(setting, value) {
-        appSettingService.update(setting, value).then(response => {
-            useNotifyStore().success({ type: 'is-success', text: trans('settings.forms.setting_saved') })
-        })
-    }
-
     onBeforeRouteLeave((to) => {
         if (! to.name.startsWith('settings.')) {
             notify.clear()
@@ -176,23 +161,6 @@
                         <FormCheckbox v-model="user.preferences.useDirectCapture" @update:model-value="val => savePreference('useDirectCapture', val)" fieldName="useDirectCapture" label="settings.forms.useDirectCapture.label" help="settings.forms.useDirectCapture.help" />
                         <!-- default capture mode -->
                         <FormSelect v-model="user.preferences.defaultCaptureMode" @update:model-value="val => savePreference('defaultCaptureMode', val)" :options="captureModes" fieldName="defaultCaptureMode" label="settings.forms.defaultCaptureMode.label" help="settings.forms.defaultCaptureMode.help" />
-                    </div>
-                    <!-- Admin settings -->
-                    <div v-if="user.isAdmin">
-                        <h4 class="title is-4 pt-4 has-text-grey-light">{{ $t('settings.administration') }}</h4>
-                        <div class="is-size-7-mobile block has-text-grey">
-                            <p class="mb-2">{{ $t('settings.administration_legend') }}</p>
-                            <p>{{ $t('settings.only_an_admin_can_edit_them') }}</p>
-                        </div>
-                        <!-- Check for update -->
-                        <FormCheckbox v-model="appSettings.checkForUpdate" @update:model-value="val => saveSetting('checkForUpdate', val)" fieldName="checkForUpdate" label="commons.check_for_update" help="commons.check_for_update_help" />
-                        <VersionChecker />
-                        <!-- protect db -->
-                        <FormCheckbox v-model="appSettings.useEncryption" @update:model-value="val => saveSetting('useEncryption', val)" fieldName="useEncryption" label="settings.forms.use_encryption.label" help="settings.forms.use_encryption.help" />
-                        <!-- disable registration -->
-                        <FormCheckbox v-model="appSettings.disableRegistration" @update:model-value="val => saveSetting('disableRegistration', val)" fieldName="disableRegistration" label="settings.forms.disable_registration.label" help="settings.forms.disable_registration.help" />
-                        <!-- disable SSO registration -->
-                        <FormCheckbox v-model="appSettings.enableSso" @update:model-value="val => saveSetting('enableSso', val)" fieldName="enableSso" label="settings.forms.enable_sso.label" help="settings.forms.enable_sso.help" />
                     </div>
                 </form>
             </FormWrapper>

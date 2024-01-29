@@ -9,6 +9,7 @@ export default async function authGuard({ to, next, nextMiddleware, stores }) {
         await authService.getCurrentUser({ returnError: true }).then(async (response) => {
             const currentUser = response.data
             await user.loginAs({
+                id: currentUser.id,
                 name: currentUser.name,
                 email: currentUser.email,
                 oauth_provider: currentUser.oauth_provider,

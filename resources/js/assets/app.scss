@@ -120,13 +120,17 @@ a:hover {
 }
 
 // has-text-weight-semibold / $weight-semibold
-.group-item {
+.group-item, .list-item {
   border-bottom: 1px solid $grey-lighter;
   padding: 0.75rem;
 }
-:root[data-theme="dark"] .group-item {
+:root[data-theme="dark"] .group-item,
+:root[data-theme="dark"] .list-item {
   border-color: $grey-darker;
   color: $light;
+}
+:root[data-theme="dark"] .list-item {
+  color: $grey-lighter;
 }
 
 .group-item:first-of-type {
@@ -384,6 +388,24 @@ a:hover {
 
 .has-no-background {
   background: none !important;
+}
+
+.is-left-bordered-link,
+.is-left-bordered-warning,
+.is-left-bordered-danger {
+  border: none;
+  border-left-style: solid;
+  border-left-width: 3px;
+  padding-left: $size-normal;
+}
+.is-left-bordered-link {
+  border-left-color: $link;
+}
+.is-left-bordered-warning {
+  border-left-color: $warning;
+}
+.is-left-bordered-danger {
+  border-left-color: $danger;
 }
 
 .add-icon-button {

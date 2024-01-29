@@ -33,6 +33,7 @@
 
         form.post('/user/login', {returnError: true}).then(async (response) => {
             await user.loginAs({
+                id: response.data.id,
                 name: response.data.name,
                 email: response.data.email,
                 oauth_provider: response.data.oauth_provider,
@@ -62,6 +63,7 @@
 
         webauthnService.authenticate(form.email).then(async (response) => {
             await user.loginAs({
+                id: response.data.id,
                 name: response.data.name,
                 email: response.data.email,
                 oauth_provider: response.data.oauth_provider,

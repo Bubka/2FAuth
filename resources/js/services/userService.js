@@ -50,7 +50,7 @@ export default {
      * Get all user PATs
      * 
      * @param {*} config 
-     * @returns 
+     * @returns promise
      */
     getPersonalAccessTokens(config = {}) {
         return webClient.get('/oauth/personal-access-tokens', { ...config })
@@ -60,10 +60,73 @@ export default {
      * Delete a user PAT
      * 
      * @param {*} tokenId 
-     * @returns 
+     * @returns promise
      */
     deletePersonalAccessToken(tokenId, config = {}) {
         return webClient.delete('/oauth/personal-access-tokens/' + tokenId, { ...config })
-    }
+    },
+
+    /**
+     * Get all registered users
+     * 
+     * @returns promise
+     */
+    getAll(config = {}) {
+        return apiClient.get('/users', { ...config })
+    },
+
+    /**
+     * Get a registered user by id
+     * 
+     * @returns promise
+     */
+    getById(id, config = {}) {
+        return apiClient.get('/users/' + id, { ...config })
+    },
+
+    /**
+     * Reset user password
+     * 
+     * @returns promise
+     */
+    resetPassword(id, config = {}) {
+        return apiClient.patch('/users/' + id + '/password/reset', {}, { ...config })
+    },
+
+    /**
+     * Delete user
+     * 
+     * @returns promise
+     */
+    delete(id, config = {}) {
+        return apiClient.delete('/users/' + id, { ...config })
+    },
+
+    /**
+     * Update user
+     * 
+     * @returns promise
+     */
+    update(id, payload, config = {}) {
+        return apiClient.patch('/users/' + id, payload, { ...config })
+    },
+
+    /**
+     * Purge user's PATs
+     * 
+     * @returns promise
+     */
+    revokePATs(id, config = {}) {
+        return apiClient.delete('/users/' + id + '/pats', { ...config })
+    },
+
+    /**
+     * Purge user's PATs
+     * 
+     * @returns promise
+     */
+    revokeWebauthnCredentials(id, config = {}) {
+        return apiClient.delete('/users/' + id + '/credentials', { ...config })
+    },
     
 }

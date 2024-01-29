@@ -25,9 +25,6 @@ return [
     'confirm' => [
 
     ],
-    'administration' => 'Administration',
-    'administration_legend' => 'While previous settings are user settings (every user can set its own preferences), following settings are global and apply to all users.',
-    'only_an_admin_can_edit_them' => 'Only an administrator can view and edit them.',
     'you_are_administrator' => 'You are an administrator',
     'account_linked_to_sso_x_provider' => 'You signed-in via SSO using your :provider account. Your information cannot be changed here but on :provider.',
     'general' => 'General',
@@ -110,10 +107,6 @@ return [
             'label' => 'Auto lock',
             'help' => 'Log out the user automatically in case of inactivity. Has no effect when authentication is handled by a proxy and no custom logout url is specified.'
         ],
-        'use_encryption' => [
-            'label' => 'Protect sensitive data',
-            'help' => 'Sensitive data, the 2FA secrets and emails, are stored encrypted in database. Be sure to backup the APP_KEY value of your .env file (or the whole file) as it serves as key encryption. There is no way to decypher encrypted data without this key.',
-        ],
         'default_group' => [
             'label' => 'Default group',
             'help' => 'The group to which the newly created accounts are associated',
@@ -129,14 +122,6 @@ return [
         'remember_active_group' => [
             'label' => 'Remember group filter',
             'help' => 'Save the last group filter applied and restore it on your next visit',
-        ],
-        'disable_registration' => [
-            'label' => 'Disable registration',
-            'help' => 'Prevent new user registration. This affects SSO as well, so new SSO users won\'t be able to sign on',
-        ],
-        'enable_sso' => [
-            'label' => 'Enable Single Sign-On (SSO)',
-            'help' => 'Allow visitors to authenticate using an external ID via the Single Sign-On scheme',
         ],
         'otp_generation' => [
             'label' => 'Show Password',
