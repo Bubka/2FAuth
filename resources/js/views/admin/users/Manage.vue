@@ -84,6 +84,13 @@
      * @param {boolean} isAdmin 
      */
     function saveAdminRole(isAdmin) {
+        if (! confirm(trans('admin.confirm.change_admin_role'))) {
+            nextTick().then(() => {
+                    managedUser.value.info.is_admin = ! isAdmin
+                })
+            return
+        }
+
         if(isAdmin === false && managedUser.value.info.id === user.id) {
             if (! confirm(trans('admin.confirm.demote_own_account'))) {
                 nextTick().then(() => {

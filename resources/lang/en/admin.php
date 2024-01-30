@@ -27,7 +27,8 @@ return [
         'purge_password_reset_request' => 'Are you sure you want to purge the request?',
         'delete_account' => 'Are you sure you want to delete this user?',
         'edit_own_account' => 'This is your own account. Are you sure?',
-        'demote_own_account' => 'You will no longer be an administrator. Are you sure?'
+        'change_admin_role' => 'This will have serious impacts on this user\'s permissions. Are you sure?',
+        'demote_own_account' => 'You will no longer be an administrator. Really sure?'
     ],
     'administration' => 'Administration',
     'logs' => 'Logs',
