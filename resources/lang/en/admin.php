@@ -15,6 +15,7 @@ return [
 
     'admin' => 'Admin',
     'app_setup' => 'App setup',
+    'registrations' => 'Registrations',
     'users' => 'Users',
     'users_legend' => 'Manage users registered on your instance or create new ones.',
     'admin_settings' => 'Admin settings',

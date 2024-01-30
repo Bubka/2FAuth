@@ -36,14 +36,13 @@
             <FormWrapper>
                 <form>
                     <h4 class="title is-4 pt-4 has-text-grey-light">{{ $t('settings.general') }}</h4>
-                    <div class="block has-text-grey">
-                        <p class="mb-2">{{ $t('admin.administration_legend') }}</p>
-                    </div>
                     <!-- Check for update -->
                     <FormCheckbox v-model="appSettings.checkForUpdate" @update:model-value="val => saveSetting('checkForUpdate', val)" fieldName="checkForUpdate" label="commons.check_for_update" help="commons.check_for_update_help" />
                     <VersionChecker />
+                    <h4 class="title is-4 pt-4 has-text-grey-light">{{ $t('settings.security') }}</h4>
                     <!-- protect db -->
                     <FormCheckbox v-model="appSettings.useEncryption" @update:model-value="val => saveSetting('useEncryption', val)" fieldName="useEncryption" label="admin.forms.use_encryption.label" help="admin.forms.use_encryption.help" />
+                    <h4 class="title is-4 pt-4 has-text-grey-light">{{ $t('admin.registrations') }}</h4>
                     <!-- disable registration -->
                     <FormCheckbox v-model="appSettings.disableRegistration" @update:model-value="val => saveSetting('disableRegistration', val)" fieldName="disableRegistration" label="admin.forms.disable_registration.label" help="admin.forms.disable_registration.help" />
                     <!-- disable SSO registration -->
