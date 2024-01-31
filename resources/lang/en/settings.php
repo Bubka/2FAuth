@@ -111,7 +111,7 @@ return [
             'help' => 'Log out the user automatically in case of inactivity. Has no effect when authentication is handled by a proxy and no custom logout url is specified.'
         ],
         'use_encryption' => [
-            'label' => 'Protect sensible data',
+            'label' => 'Protect sensitive data',
             'help' => 'Sensitive data, the 2FA secrets and emails, are stored encrypted in database. Be sure to backup the APP_KEY value of your .env file (or the whole file) as it serves as key encryption. There is no way to decypher encrypted data without this key.',
         ],
         'default_group' => [

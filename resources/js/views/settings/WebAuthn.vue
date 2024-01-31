@@ -150,7 +150,7 @@
                     </div>
                 </div>
                 <Spinner :isVisible="isFetching && credentials.length === 0" />
-                <h4 class="title is-4 pt-6 has-text-grey-light">{{ $t('settings.options') }}</h4>
+                <h4 class="title is-4 pt-6 has-text-grey-light">{{ $t('auth.webauthn.options') }}</h4>
                 <div class="field">
                     {{ $t('auth.webauthn.need_a_security_device_to_enable_options')}}
                 </div>

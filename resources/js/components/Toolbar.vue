@@ -9,12 +9,12 @@
         <div class="columns">
             <div class="column has-nowrap px-0">
                 <!-- selected label -->
-                <span class="has-text-grey mr-1">{{ selectedCount }}&nbsp;{{ $t('commons.selected') }}</span>
+                <span class="has-text-grey mr-1">{{ $t('commons.x_selected', { count: selectedCount }) }}</span>
                 <!-- deselect all -->
                 <button id="btnUnselectAll" @click="$emit('clear-selected')" class="clear-selection delete mr-4" :style="{visibility: selectedCount > 0 ? 'visible' : 'hidden'}" :title="$t('commons.clear_selection')"></button>
                 <!-- select all button -->
                 <button id="btnSelectAll" @click="$emit('select-all')" class="button mr-5 has-line-height p-1 is-ghost has-text-grey" :title="$t('commons.select_all')">
-                    <span>{{ $t('commons.all') }}</span>
+                    <span>{{ $t('commons.check_all') }}</span>
                     <FontAwesomeIcon class="ml-1" :icon="['fas', 'check-square']" />
                 </button>
                 <!-- sort asc/desc buttons -->

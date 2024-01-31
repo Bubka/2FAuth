@@ -57,7 +57,7 @@
                 <RouterLink :to="{ name: 'editGroup', params: { groupId: group.id }}" class="has-text-grey px-1" :title="$t('commons.rename')">
                     <FontAwesomeIcon :icon="['fas', 'pen-square']" />
                 </RouterLink>
-                <span class="is-family-primary is-size-6 is-size-7-mobile has-text-grey">{{ group.twofaccounts_count }} {{ $t('twofaccounts.accounts') }}</span>
+                <span class="is-family-primary is-size-6 is-size-7-mobile has-text-grey">{{ $t('groups.x_accounts', { count: group.twofaccounts_count }) }}</span>
             </div>
             <div class="mt-2 is-size-7 is-pulled-right">
                 {{ $t('groups.deleting_group_does_not_delete_accounts')}}

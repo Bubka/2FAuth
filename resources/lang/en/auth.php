@@ -73,6 +73,7 @@ return [
                 Attention! The Email & Password form remains available despite this option being enabled, but it will always return an \'Authentication failed\' response.'
         ],
         'need_a_security_device_to_enable_options' => 'Set at least one device to enable the following options',
+        'options' => 'Options',
     ],
     'forms' => [
         'name' => 'Name',
