@@ -21,6 +21,7 @@ return [
     'admin_settings' => 'Admin settings',
     'create_new_user' => 'Create a user',
     'new_user' => 'New user',
+    'search_user_placeholder' => 'User name, email...',
     'user_created' => 'user successfully created',
     'confirm' => [
         'delete_user' => 'Are you sure you want to delete this user? There is no going back.',

@@ -129,7 +129,7 @@
                 <!-- search -->
                 <div class="columns">
                     <div class="column pb-0">
-                        <SearchBox v-model:keyword="searched" :hasNoBackground="true" />
+                        <SearchBox v-model:keyword="searched" :hasNoBackground="true" :placeholder="$t('admin.search_user_placeholder')" />
                     </div>
                 </div>
                 <div class="buttons is-centered mb-0">

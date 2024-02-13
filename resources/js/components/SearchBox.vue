@@ -5,6 +5,7 @@
             type: Boolean,
             default: false
         },
+        placeholder: String,
     })
     const searchInput = ref(null)
 
@@ -37,6 +38,7 @@
                 tabindex="1"
                 :aria-label="$t('commons.search')"
                 :title="$t('commons.search')"
+                :placeholder="placeholder"
                 class="input is-rounded is-search"
                 :class="{ 'has-no-background': hasNoBackground }"
                 :value="keyword"
