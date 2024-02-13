@@ -132,10 +132,19 @@
                         <SearchBox v-model:keyword="searched" :hasNoBackground="true" :placeholder="$t('admin.search_user_placeholder')" />
                     </div>
                 </div>
-                <div class="buttons is-centered mb-0">
-                    <button class="button is-small is-ghost p-0" @click="addFilter('admin:1')">admin</button>
-                    <button class="button is-small is-ghost p-0" @click="addFilter('oauth:github')">github</button>
-                    <button class="button is-small is-ghost p-0" @click="addFilter('oauth:openid')">openId</button>
+                <div class="level is-mobile mb-0">
+                    <div class="level-item has-text-centered is-justify-content-end">
+                        <p class="subtitle is-7">
+                            {{ $t('admin.quick_filters_colons') }}
+                        </p>
+                    </div>
+                    <div class="level-item has-text-centered is-justify-content-start">
+                        <div class="buttons">
+                            <button class="button is-small is-ghost p-0" @click="addFilter('admin:1')">admin</button>
+                            <button class="button is-small is-ghost p-0" @click="addFilter('oauth:github')">github</button>
+                            <button class="button is-small is-ghost p-0" @click="addFilter('oauth:openid')">openId</button>
+                        </div>
+                    </div>
                 </div>
                 <div v-if="visibleUsers.length > 0">
                     <div v-for="user in visibleUsers" :key="user.id" class="list-item is-size-5 is-size-6-mobile is-flex is-justify-content-space-between">
