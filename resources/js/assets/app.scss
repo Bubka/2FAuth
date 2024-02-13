@@ -712,6 +712,10 @@ button.is-main {
   box-shadow: $button-focus-box-shadow-size $button-focus-box-shadow-color;
 }
 
+.button.has-normal-radius {
+  border-radius: $radius !important;
+}
+
 .file[role=button]:focus-visible {
   border-radius: $radius;
 }

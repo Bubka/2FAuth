@@ -181,7 +181,6 @@
         <h1 class="title has-text-grey-dark mb-6">
             {{ $t('admin.user_management') }}
         </h1>
-        <!-- <button class="button is-text is-pulled-right" @click="getUser()">.</button> -->
         <!-- loader -->
         <div v-if="isFetching || ! managedUser" class="has-text-centered">
             <span class="is-size-4">
@@ -196,6 +195,7 @@
                 </UseColorMode>
                 <p class="subtitle is-6 block">{{ managedUser.info.email }}</p>
             </div>
+            <!-- oauth banner -->
             <div v-if="managedUser.info.oauth_provider" class="notification is-dark is-size-7-mobile has-text-centered">
                 {{ $t('admin.account_bound_to_x_via_oauth', { provider: managedUser.info.oauth_provider }) }}
             </div>
@@ -214,11 +214,11 @@
                             <div class="tags ml-3 is-right">
                                 <UseColorMode v-slot="{ mode }">
                                     <!-- resend email button -->
-                                    <button v-if="managedUser.password_reset" class="button tag is-pulled-right has-background-link" :class="mode == 'dark' ? 'is-dark' : 'is-white'" @click="resendPasswordEmail" :title="$t('admin.resend_email_title')">
+                                    <button v-if="managedUser.password_reset" class="button tag is-pulled-right" :class="mode == 'dark' ? 'is-dark has-background-link' : 'is-white'" @click="resendPasswordEmail" :title="$t('admin.resend_email_title')">
                                         {{ $t('admin.resend_email') }}
                                     </button>
                                     <!-- reset password button -->
-                                    <button class="button tag is-pulled-right has-background-link" :class="mode == 'dark' ? 'is-dark' : 'is-white'" @click="resetPassword" :title="$t('admin.reset_password_title')">
+                                    <button class="button tag is-pulled-right " :class="mode == 'dark' ? 'is-dark has-background-link' : 'is-white'" @click="resetPassword" :title="$t('admin.reset_password_title')">
                                         {{ $t('admin.reset_password') }}
                                     </button>
                                 </UseColorMode>
@@ -243,7 +243,7 @@
                         <div class="tags ml-3 is-right">
                             <UseColorMode v-slot="{ mode }">
                                 <!-- manage link -->
-                                <button class="button tag is-pulled-right has-background-link" :class="mode == 'dark' ? 'is-dark' : 'is-white'" @click="revokePATs" :title="$t('admin.revoke_all_pat_for_user')">
+                                <button class="button tag is-pulled-right" :class="mode == 'dark' ? 'is-dark has-background-link' : 'is-white'" @click="revokePATs" :title="$t('admin.revoke_all_pat_for_user')">
                                     {{ $t('settings.revoke') }}
                                 </button>
                             </UseColorMode>
@@ -261,7 +261,7 @@
                         <div class="tags ml-3 is-right">
                             <UseColorMode v-slot="{ mode }">
                                 <!-- manage link -->
-                                <button class="button tag is-pulled-right has-background-link" :class="mode == 'dark' ? 'is-dark' : 'is-white'" :title="$t('admin.revoke_all_devices_for_user')">
+                                <button class="button tag is-pulled-right" :class="mode == 'dark' ? 'is-dark has-background-link' : 'is-white'" :title="$t('admin.revoke_all_devices_for_user')">
                                     {{ $t('settings.revoke') }}
                                 </button>
                             </UseColorMode>
@@ -271,9 +271,6 @@
             </div>
             <h2 class="title is-4 has-text-grey-light">{{ $t('settings.preferences') }}</h2>
             <div class="about-debug box is-family-monospace is-size-7">
-                <!-- <button id="btnCopyUserPreferences" :aria-label="$t('commons.copy_to_clipboard')" class="button is-like-text is-pulled-right is-small is-text" @click.stop="copyToClipboard(listUserPreferences.innerText)">
-                    <FontAwesomeIcon :icon="['fas', 'copy']" />
-                </button> -->
                 <CopyButton id="btnCopyEnvVars" :token="listUserPreferences?.innerText" />
                 <ul ref="listUserPreferences" id="listUserPreferences">
                     <li v-for="(value, preference) in managedUser.info.preferences" :value="value" :key="preference">

@@ -155,20 +155,20 @@
                             <!-- admin tag -->
                             <span class="is-block has-ellipsis is-family-primary is-size-6 is-size-7-mobile has-text-grey">{{ user.email }}</span>
                             <!-- tag -->
-                            <div class="tags mt-2">
-                                <span v-if="user.is_admin" class="tag is-rounded has-background-black-bis has-text-warning-dark">admin</span>
-                                <span v-if="user.oauth_provider" class="tag is-rounded has-background-black-bis has-text-grey">oauth: {{ user.oauth_provider }}</span>
-                            </div>
+                            <UseColorMode v-slot="{ mode }">
+                                <div class="tags mt-2">
+                                    <span v-if="user.is_admin" class="tag is-rounded has-text-warning-dark" :class="mode == 'dark' ? 'has-background-black-bis' : 'has-background-grey-lighter'" >admin</span>
+                                    <span v-if="user.oauth_provider" class="tag is-rounded  has-text-grey" :class="mode == 'dark' ? 'has-background-black-bis' : 'has-background-grey-lighter'" >oauth: {{ user.oauth_provider }}</span>
+                                </div>
+                            </UseColorMode>
                         </div>
-                        <div>
-                            <div class="tags ml-3">
-                                <UseColorMode v-slot="{ mode }">
-                                    <!-- manage link -->
-                                    <RouterLink :to="{ name: 'admin.users.manage', params: { userId: user.id }}" class="button tag is-pulled-right" :class="mode == 'dark' ? 'is-dark' : 'is-white'" :title="$t('commons.manage')">
-                                        {{ $t('commons.manage') }}
-                                    </RouterLink>
-                                </UseColorMode>
-                            </div>
+                        <div class="ml-3">
+                            <UseColorMode v-slot="{ mode }">
+                                <!-- manage link -->
+                                <RouterLink :to="{ name: 'admin.users.manage', params: { userId: user.id }}" class="button is-small has-normal-radius is-pulled-right" :class="{'is-dark' : mode == 'dark'}" :title="$t('commons.manage')">
+                                    {{ $t('commons.manage') }}
+                                </RouterLink>
+                            </UseColorMode>
                         </div>
                     </div>
                     <!-- <div class="mt-2 is-size-7 is-pulled-right">
