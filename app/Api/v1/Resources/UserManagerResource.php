@@ -90,9 +90,8 @@ class UserManagerResource extends UserResource
             parent::toArray($request),
             [
                 'twofaccounts_count' => is_null($this->twofaccounts_count) ? 0 : $this->twofaccounts_count,
-                'last_seen_at' => Carbon::parse($this->last_seen_at)->toDateString(),
-                'created_at'   => Carbon::parse($this->created_at)->toDateString(),
-                'updated_at'   => Carbon::parse($this->updated_at)->toDateString(),
+                'last_seen_at' => Carbon::parse($this->last_seen_at)->locale(App::getLocale())->diffForHumans(),
+                'created_at'   => Carbon::parse($this->created_at)->locale(App::getLocale())->diffForHumans(),
             ]
         );
     }

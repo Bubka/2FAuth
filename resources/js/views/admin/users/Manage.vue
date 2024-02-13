@@ -281,9 +281,8 @@
             <h2 class="title is-4 has-text-grey-light">{{ $t('admin.logs') }}</h2>
             <div class="block">
                 <ul class="is-size-6 is-size-7-mobile">
-                    <li>{{ $t('admin.last_seen_on_date', { date: managedUser.info.last_seen_at }) }}</li>
                     <li>{{ $t('admin.registered_on_date', { date: managedUser.info.created_at }) }}</li>
-                    <li>{{ $t('admin.updated_on_date', { date: managedUser.info.updated_at }) }}</li>
+                    <li>{{ $t('admin.last_seen_on_date', { date: managedUser.info.last_seen_at }) }}</li>
                 </ul>
             </div>
             <!-- danger zone -->
