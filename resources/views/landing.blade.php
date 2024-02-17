@@ -22,6 +22,7 @@
     <div id="app">
         <app></app>
     </div>
+    @if (config('app.debug') === true)
     <script type="text/javascript">
         var appSettings = {!! $appSettings !!};
         var appConfig = {!! $appConfig !!};
@@ -31,6 +32,11 @@
         var isTestingApp = {!! $isTestingApp !!};
         var appLocales = {!! $locales !!};
     </script>
+    @else
+    <script type="text/javascript">
+        document.getElementById("app").append("Permission Denied");
+    </script>
+    @endif
     @vite('resources/js/app.js')
 </body>
 </html>
