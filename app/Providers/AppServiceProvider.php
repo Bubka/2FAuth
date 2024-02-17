@@ -29,8 +29,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Blade::withoutComponentTags();
-
         // Limited to 191 to prevent index length issue with MyISAM and utf8mb4_unicode_ci
         // when using WAMP (WAMP uses MyISAM as default engine in place of INNOdb)
         Schema::defaultStringLength(191);
