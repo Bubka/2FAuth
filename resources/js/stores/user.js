@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import authService from '@/services/authService'
+import userService from '@/services/userService'
 import router from '@/router'
 import { useColorMode } from '@vueuse/core'
 import { useTwofaccounts } from '@/stores/twofaccounts'
@@ -108,7 +109,6 @@ export const useUserStore = defineStore({
             mode.value = this.preferences.theme == 'system' ? 'auto' : this.preferences.theme
         },
 
-
         /**
          * Applies user language
          */
@@ -121,13 +121,27 @@ export const useUserStore = defineStore({
             else loadLanguageAsync('en')
         },
 
-
         /**
          * Applies both user theme & language
          */
         applyUserPrefs() {
             this.applyTheme()
             this.applyLanguage()
+        },
+
+        /**
+         * Refresh user preferences with backend state
+         */
+        refreshPreferences() {
+            userService.getPreferences({returnError: true})
+            .then(response => {
+                response.data.forEach(preference => {
+                    this.preferences[preference.key] = preference.value
+                })
+            })
+            .catch(error => {
+                notify.alert({ text: trans('errors.data_cannot_be_refreshed_from_server') })
+            })
         }
 
     },

@@ -78,6 +78,8 @@
                 })
             }
         })
+
+        user.refreshPreferences()
     })
 
     /**

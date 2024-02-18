@@ -5,6 +5,15 @@ const webClient = httpClientFactory('web')
 
 export default {
     /**
+     * Get current signed-in user preferences
+     * 
+     * @returns promise
+     */
+    getPreferences(config = {}) {
+        return apiClient.get('/user/preferences', { ...config })
+    },
+
+    /**
      * Update a user preference
      * 
      * @param {string} name 
