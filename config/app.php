@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
 
+$appUrl = env('APP_URL', env('HEROKU_APP_NAME') ? 'https://' . env('HEROKU_APP_NAME') . '.herokuapp.com' : 'http://localhost');
+
 return [
 
     /*
@@ -55,9 +57,9 @@ return [
     |
     */
 
-    'url' => env('APP_URL', env('HEROKU_APP_NAME') ? 'https://' . env('HEROKU_APP_NAME') . '.herokuapp.com' : 'http://localhost'),
+    'url' => $appUrl,
 
-    'asset_url' => env('ASSET_URL', null),
+    'asset_url' => env('ASSET_URL', $appUrl),
 
     /*
     |--------------------------------------------------------------------------

@@ -25,9 +25,10 @@ services:
       # Webauthn won't work otherwise.
       - APP_URL=http://localhost
       # If you want to serve js assets from a CDN (like https://cdn.example.com),
-      # you need to set this custom URL here.
-      # Otherwise, this should be the exact same value as APP_URL.
-      - ASSET_URL=http://localhost
+      # uncomment the following line and set this var with the CDN url.
+      # Otherwise, let this line commented.
+      # - ASSET_URL=http://localhost
+      #
       # Turn this to true if you want your app to react like a demo.
       # The Demo mode reset the app content every hours and set a generic demo user.
       - IS_DEMO_APP=false
