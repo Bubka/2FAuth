@@ -30,11 +30,11 @@ if [ -f /2fauth/installed ]; then
   INSTALLED_COMMIT="$(cat /2fauth/installed)"
   if [ "${INSTALLED_COMMIT}" != "${COMMIT}" ]; then
     echo "Installed commit ${INSTALLED_COMMIT} is different from program commit ${COMMIT}, we are migrating..."
-    php artisan migrate
+    php artisan migrate --force
     php artisan config:clear
   fi
 else
-  php artisan migrate:refresh
+  php artisan migrate:refresh --force
   php artisan passport:install
 fi
 
