@@ -49,9 +49,11 @@
                 <router-link id="lnkSettings" :to="{ name: 'settings.options' }" class="has-text-grey">
                     {{ $t('settings.settings') }}
                 </router-link>
-                <router-link v-if="user.isAdmin" id="lnkAdmin" :to="{ name: 'admin.appSetup' }" class="has-text-grey">
-                    | {{ $t('admin.admin') }}<span v-if="appSettings.latestRelease && appSettings.checkForUpdate" class="release-flag"></span>
-                </router-link>
+                <span v-if="user.isAdmin"> -
+                    <router-link id="lnkAdmin" :to="{ name: 'admin.appSetup' }" class="has-text-grey">
+                        {{ $t('admin.admin') }}<span v-if="appSettings.latestRelease && appSettings.checkForUpdate" class="release-flag"></span>
+                    </router-link>
+                </span>
                 <span v-if="!$2fauth.config.proxyAuth || ($2fauth.config.proxyAuth && $2fauth.config.proxyLogoutUrl)">
                     - <button id="lnkSignOut" class="button is-text is-like-text has-text-grey" @click="logout">{{ $t('auth.sign_out') }}</button>
                 </span>
