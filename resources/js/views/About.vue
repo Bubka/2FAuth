@@ -1,35 +1,9 @@
 <script setup>
-    import systemService from '@/services/systemService'
     import { UseColorMode } from '@vueuse/components'
-    import CopyButton from '@/components/CopyButton.vue'
 
     const $2fauth = inject('2fauth')
     const router = useRouter()
-
     const returnTo = router.options.history.state.back
-    const infos = ref()
-    const listInfos = ref(null)
-    const userPreferences = ref(false)
-    const listUserPreferences = ref(null)
-    const adminSettings = ref(false)
-    const listAdminSettings = ref(null)
-
-    onMounted(() => {
-        systemService.getSystemInfos({returnError: true}).then(response => {
-            infos.value = response.data.common
-
-            if (response.data.admin_settings) {
-                adminSettings.value = response.data.admin_settings
-            }
-
-            if (response.data.user_preferences) {
-                userPreferences.value = response.data.user_preferences
-            }
-        })
-        .catch(() => {
-            infos.value = null
-        })
-    })
 </script>
 
 <template>
@@ -87,36 +61,6 @@
                 <li>{{ $t('commons.logos_by') }}&nbsp;<a href="https://2fa.directory/">2FA Directory</a>&nbsp;<a class="is-size-7" href="https://github.com/2factorauth/twofactorauth/blob/master/LICENSE.md">(MIT License)</a></li>
             </ul>
         </p>
-        <h2 class="title is-5 has-text-grey-light">
-            {{ $t('commons.environment') }}
-        </h2>
-        <div v-if="infos" class="about-debug box is-family-monospace is-size-7">
-            <CopyButton id="btnCopyEnvVars" :token="listInfos?.innerText" />
-            <ul ref="listInfos" id="listInfos">
-                <li v-for="(value, key) in infos" :value="value" :key="key"><b>{{key}}</b>: {{value}}</li>
-            </ul>
-        </div>
-        <div v-else-if="infos === null" class="about-debug box is-family-monospace is-size-7 has-text-warning-dark">
-            {{ $t('errors.error_during_data_fetching') }}
-        </div>
-        <h2 v-if="adminSettings" class="title is-5 has-text-grey-light">
-            {{ $t('settings.admin_settings') }}
-        </h2>
-        <div v-if="adminSettings" class="about-debug box is-family-monospace is-size-7">
-            <CopyButton id="btnCopyAdminSettings" :token="listAdminSettings?.innerText" />
-            <ul ref="listAdminSettings" id="listAdminSettings">
-                <li v-for="(value, setting) in adminSettings" :value="value" :key="setting"><b>{{setting}}</b>: {{value}}</li>
-            </ul>
-        </div>
-        <h2 v-if="userPreferences" class="title is-5 has-text-grey-light">
-            {{ $t('settings.user_preferences') }}
-        </h2>
-        <div v-if="userPreferences" class="about-debug box is-family-monospace is-size-7">
-            <CopyButton id="btnCopyUserPreferences" :token="listUserPreferences?.innerText" />
-            <ul ref="listUserPreferences" id="listUserPreferences">
-                <li v-for="(value, preference) in userPreferences" :value="value" :key="preference"><b>{{preference}}</b>: {{value}}</li>
-            </ul>
-        </div>
         <!-- footer -->
         <VueFooter :showButtons="true">
             <ButtonBackCloseCancel :returnTo="{ path: returnTo }" action="back" />

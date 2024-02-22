@@ -34,27 +34,15 @@ class SystemController extends Controller
         $infos['common']['Operating system'] = PHP_OS;
         $infos['common']['interface']        = PHP_SAPI;
         // Auth & Security infos
-        if (! is_null($request->user())) {
-            $infos['common']['Auth guard'] = config('auth.defaults.guard');
-            if ($infos['common']['Auth guard'] === 'reverse-proxy-guard') {
-                $infos['common']['Auth proxy logout url']       = config('2fauth.config.proxyLogoutUrl');
-                $infos['common']['Auth proxy header for user']  = config('auth.auth_proxy_headers.user');
-                $infos['common']['Auth proxy header for email'] = config('auth.auth_proxy_headers.email');
-            }
-            $infos['common']['webauthn user verification'] = config('webauthn.user_verification');
-            $infos['common']['Trusted proxies']            = config('2fauth.config.trustedProxies') ?: 'none';
-
-            // Admin settings
-            if ($request->user()->isAdministrator()) {
-                $infos['admin_settings']['useEncryption']  = Settings::get('useEncryption');
-                $infos['admin_settings']['lastRadarScan']  = Carbon::parse(Settings::get('lastRadarScan'))->format('Y-m-d H:i:s');
-                $infos['admin_settings']['checkForUpdate'] = Settings::get('checkForUpdate');
-            }
+        $infos['common']['Auth guard'] = config('auth.defaults.guard');
+        if ($infos['common']['Auth guard'] === 'reverse-proxy-guard') {
+            $infos['common']['Auth proxy logout url']       = config('2fauth.config.proxyLogoutUrl');
+            $infos['common']['Auth proxy header for user']  = config('auth.auth_proxy_headers.user');
+            $infos['common']['Auth proxy header for email'] = config('auth.auth_proxy_headers.email');
         }
-        // User info
-        if ($request->user()) {
-            $infos['user_preferences'] = $request->user()->preferences->toArray();
-        }
+        $infos['common']['webauthn user verification'] = config('webauthn.user_verification');
+        $infos['common']['Trusted proxies']            = config('2fauth.config.trustedProxies') ?: 'none';
+        $infos['common']['lastRadarScan']              = Carbon::parse(Settings::get('lastRadarScan'))->format('Y-m-d H:i:s');
 
         return response()->json($infos);
     }

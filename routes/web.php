@@ -77,7 +77,14 @@ Route::get('refresh-csrf', function () {
     return csrf_token();
 });
 
-Route::get('infos', [SystemController::class, 'infos'])->name('system.infos');
+
+/**
+ * Routes protected by an authentication guard and restricted to administrators
+ */
+Route::group(['middleware' => ['behind-auth', 'admin']], function () {   
+    Route::get('infos', [SystemController::class, 'infos'])->name('system.infos');
+});
+
 Route::get('latestRelease', [SystemController::class, 'latestRelease'])->name('system.latestRelease');
 
 /**
