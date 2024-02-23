@@ -73,6 +73,7 @@ WebAuthn允许您使用受信任的设备 (如Yubikeys 或具有生物识别能�
                 请注意！ 尽管启用了此选项，输入电子邮件和密码的登录界面仍然可用，但是会提示 “身份验证失败”。'
         ],
         'need_a_security_device_to_enable_options' => '设置至少一个WebAuth设备以启用以下选项',
+        'options' => '选项',
     ],
     'forms' => [
         'name' => '用户名',

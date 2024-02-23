@@ -18,6 +18,7 @@ return [
     'show_group_selector' => 'Afficher le sélecteur de groupe',
     'hide_group_selector' => 'Masquer le sélecteur de groupe',
     'select_accounts_to_show' => 'Sélectionnez les comptes à afficher',
+    'x_accounts' => ':count comptes',
     'manage_groups' => 'Gérer les groupes',
     'active_group' => 'Groupe actif',
     'manage_groups_legend' => 'Vous pouvez créer des groupes pour organiser vos comptes comme bon vous semble. Tous les comptes restent visibles dans le pseudo groupe nommé "Tous", quel que soit le groupe auquel ils appartiennent.',

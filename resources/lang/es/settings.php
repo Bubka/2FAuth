@@ -27,9 +27,9 @@ return [
     ],
     'administration' => 'Administración',
     'administration_legend' => 'Mientras que los ajustes anteriores son de usuario (cada usuario puede establecer sus propias preferencias), los siguientes son globales y se aplican a todos los usuarios. Sólo un administrador puede ver y editar esas configuraciones.',
-    'only_an_admin_can_edit_them' => 'Only an administrator can view and edit them.',
+    'only_an_admin_can_edit_them' => 'Sólo un administrador puede verlos y editarlos.',
     'you_are_administrator' => 'Usted es un administrador',
-    'account_linked_to_sso_x_provider' => 'You signed-in via SSO using your :provider account. Your information cannot be changed here but on :provider.',
+    'account_linked_to_sso_x_provider' => 'Ha iniciado sesión a través de SSO usando su cuenta :provider. Su información no se puede cambiar aquí, sino en :provider.',
     'general' => 'General',
     'security' => 'Seguridad',
     'profile' => 'Perfil',
@@ -111,7 +111,7 @@ return [
             'help' => 'Cerrar sesión del usuario automáticamente en caso de inactividad. No tiene efecto cuando la autenticación es manejada por un proxy, ni cuando ninguna url de cierre de sesión personalizada se especificada.'
         ],
         'use_encryption' => [
-            'label' => 'Proteger los datos confidenciales',
+            'label' => 'Protect sensitive data',
             'help' => 'Los datos sensibles, las claves secretas y correos electrónicos de 2FA, se almacenan cifrados en la base de datos. Asegúrese de respaldar el valor de APP_KEY de su archivo .env (o el archivo entero), pues, sirve como clave de cifrado. No hay forma de descifrar datos encriptados sin esta clave.',
         ],
         'default_group' => [
@@ -135,8 +135,8 @@ return [
             'help' => 'Evitar el registro de nuevos usuarios',
         ],
         'enable_sso' => [
-            'label' => 'Enable Single Sign-On (SSO)',
-            'help' => 'Allow visitors to authenticate using an external ID via the Single Sign-On scheme',
+            'label' => 'Habilitar Inicio de Sesión Único (SSO)',
+            'help' => 'Permitir a los visitantes autenticarse usando un ID externo mediante el esquema de Inicio de Sesión Único',
         ],
         'otp_generation' => [
             'label' => 'Mostrar contraseña',

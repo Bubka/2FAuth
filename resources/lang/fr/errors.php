@@ -65,4 +65,5 @@ return [
     'sso_no_register' => 'Les inscriptions sont désactivées',
     'sso_email_already_used' => 'Un compte utilisateur avec la même adresse e-mail existe déjà mais ne correspond pas à votre compte externe. N\'utilisez pas SSO si vous êtes déjà inscrit sur 2FAuth avec cette adresse e-mail.',
     'account_managed_by_external_provider' => 'Compte géré par un fournisseur externe',
+    'data_cannot_be_refreshed_from_server' => 'Les données ne peuvent être actualisées depuis le serveur'
 ];

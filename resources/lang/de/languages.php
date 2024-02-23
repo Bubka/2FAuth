@@ -11,11 +11,11 @@ return [
     */
 
     'browser_preference' => 'Browsereinstellung',
-    'en' => 'Englisch',
-    'fr' => 'Französisch',
-    'de' => 'Deutsch',
-    'es' => 'Spanisch',
-    'zh' => 'Vereinfachtes Chinesisch',
-    'ru' => 'Russisch',
+    'en' => 'English (Englisch)',
+    'fr' => 'Français (Französisch)',
+    'de' => 'Deutsch (Deutsch)',
+    'es' => 'Español (Spanisch)',
+    'zh' => '简体中文 (Vereinfachtes Chinesisch)',
+    'ru' => 'Русский (Russisch)',
     'bg' => 'Български (Bulgarisch)',
 ];

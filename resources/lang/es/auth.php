@@ -22,7 +22,7 @@ return [
     'sign_out' => 'Cerrar sesión',
     'sign_in' => 'Iniciar sesión',
     'sign_in_using' => 'Inicia sesión, usando',
-    'or_continue_with' => 'You an also continue with:',
+    'or_continue_with' => 'También puede continuar con:',
     'sign_in_using_security_device' => 'Iniciar sesión usando un dispositivo de seguridad',
     'login_and_password' => 'usuario y contraseña',
     'register' => 'Registrarse',
@@ -73,6 +73,7 @@ return [
                 Atención! El formulario de correo electrónico y contraseña sigue disponible a pesar de que esta opción está activada, pero siempre devolverá una respuesta de \'Autenticación fallida\'.'
         ],
         'need_a_security_device_to_enable_options' => 'Establezca al menos un dispositivo para activar las siguientes opciones',
+        'options' => 'Options',
     ],
     'forms' => [
         'name' => 'Nombre',
@@ -93,7 +94,7 @@ return [
         'reset_your_password' => 'Reestablecer tu contraseña',
         'reset_password' => 'Restablecer contraseña',
         'disabled_in_demo' => 'Característica desactivada en el modo Demo',
-        'new_password' => 'New password',
+        'new_password' => 'Nueva contraseña',
         'current_password' => [
             'label' => 'Contraseña actual',
             'help' => 'Introduzca su contraseña actual para confirmar que es usted'
@@ -111,8 +112,8 @@ return [
         'delete_account' => 'Eliminar cuenta',
         'delete_your_account' => 'Eliminar su cuenta',
         'delete_your_account_and_reset_all_data' => 'Esto restablecerá 2FAuth. Su cuenta de usuario se eliminará, así como, todos los datos de 2FA. No hay vuelta atrás.',
-        'reset_your_password_to_delete_your_account' => 'If you always used SSO to sign in, sign out then use the reset password feature to get a password so you can fill this form.',
-        'deleting_2fauth_account_does_not_impact_provider' => 'Deleting your 2FAuth account has no impact on your external SSO account.',
+        'reset_your_password_to_delete_your_account' => 'Si siempre ha usado SSO para iniciar sesión, desconecte y use la función de restablecer la contraseña y así obtener una nueva y pueda rellenar este formulario.',
+        'deleting_2fauth_account_does_not_impact_provider' => 'Eliminar su cuenta de 2FAuth no tiene impacto en su cuenta SSO externa.',
         'user_account_successfully_deleted' => 'Cuenta de usuario eliminada correctamente',
         'has_lower_case' => 'Tiene minúsculas',
         'has_upper_case' => 'Tiene mayúsculas',

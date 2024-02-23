@@ -18,6 +18,7 @@ return [
     'show_group_selector' => 'Gruppenauswahl anzeigen',
     'hide_group_selector' => 'Gruppenauswahl ausblenden',
     'select_accounts_to_show' => 'Kontogruppe auswählen',
+    'x_accounts' => ':count accounts',
     'manage_groups' => 'Gruppen verwalten',
     'active_group' => 'Aktive Gruppe',
     'manage_groups_legend' => 'Sie können Gruppen erstellen, um Ihre Konten so zu organisieren wie Sie wollen. Alle Konten bleiben in der Pseudo-Gruppe mit dem Namen "Alle" sichtbar, unabhängig davon, zu welcher Gruppe sie gehören.',

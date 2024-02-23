@@ -15,7 +15,7 @@ return [
     'fr' => 'Français (法语)',
     'de' => 'Deutsch (德语)',
     'es' => 'Español (西班牙语)',
-    'zh' => '简体中文 (Chinese Simplified)',
+    'zh' => '简体中文 (简体中文)',
     'ru' => 'Русский (俄语)',
     'bg' => 'Български (保加利亚语)',
 ];

@@ -31,7 +31,7 @@ return [
     'accounts_deleted' => 'Cuenta(s) eliminada(s) correctamente',
     'accounts_moved' => 'Cuenta(s) movida(s) correctamente',
     'export_selected_to_json' => 'Descargar un fichero json con el contenido de las cuentas seleccionadas',
-    'reveal' => 'reveal',
+    'reveal' => 'mostrar',
     'forms' => [
         'service' => [
             'placeholder' => 'Google, Twitter, Apple',
@@ -103,7 +103,7 @@ return [
         'need_grant_permission' => [
             'reason' => '2FAuth no tiene permiso para acceder a tu cámara',
             'solution' => 'Necesitas conceder permiso para usar la cámara de tu dispositivo. Si ya lo ha denegado y su navegador no le preguntan de nuevo, por favor refiérase a la documentación del navegador para averiguar cómo conceder permisos.',
-            'click_camera_icon' => 'It is usually done by clicking on a slashed camera icon in or next to the browser\'s address bar',
+            'click_camera_icon' => 'Normalmente se realiza haciendo clic en el icono de la cámara en o al lado de la barra de direcciones del navegador',
         ],
         'not_readable' => [
             'reason' => 'Fallo al cargar el escáner',
@@ -145,15 +145,15 @@ return [
         'supported_formats_for_file_upload' => 'Aceptado: texto plano, json, 2fas',
         'supported_migration_formats' => 'Formatos de migración soportados',
         'qr_code' => 'Código QR',
-        'text_file' => 'Text file',
+        'text_file' => 'Fichero de texto',
         'plain_text' => 'Texto plano',
-        'parsing_data' => 'Parsing data...',
+        'parsing_data' => 'Analizando datos...',
         'issuer' => 'Emisor',
         'imported' => 'Importado',
         'failure' => 'Fallo',
         'x_valid_accounts_found' => '{count} cuentas válidos encontrados',
-        'submitted_data_parsed_now_accounts_are_awaiting_import' => 'The following 2FA accounts were found in the migration resource. So far none of them have been added to 2FAuth.',
-        'use_buttons_to_save_or_discard' => 'Use the available buttons to permanently save them to your 2FA collection or discard them.',
+        'submitted_data_parsed_now_accounts_are_awaiting_import' => 'Las siguientes cuentas de 2FA fueron encontradas en el recurso de migración. Hasta ahora, ninguna de ellas ha sido añadida a 2FAuth.',
+        'use_buttons_to_save_or_discard' => 'Utilice los botones disponibles para guardarlos permanentemente en su colección de 2FA o descartarlos.',
         'import_all' => 'Importar todo',
         'import_this_account' => 'Importar esta Cuenta',
         'discard_all' => 'Descartar todo',

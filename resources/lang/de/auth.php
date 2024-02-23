@@ -73,6 +73,7 @@ return [
                 Achtung! Das E-Mail & Passwort Anmeldeformular bleibt verfügbar, obwohl diese Option aktiviert ist. Eine Anmeldung hiermit führt jedoch immer zu der Meldung \'Authentifizierung fehlgeschlagen\'.'
         ],
         'need_a_security_device_to_enable_options' => 'Richten Sie mindestens ein Gerät ein um die nachfolgenden Optionen zu aktiveren',
+        'options' => 'Options',
     ],
     'forms' => [
         'name' => 'Name',

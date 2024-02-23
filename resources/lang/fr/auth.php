@@ -73,6 +73,7 @@ return [
                 Attention ! Le formulaire E-mail + Mot de passe restera disponible même si l\'option est activée, mais il retournera systématiquement une réponse \'Échec de l\'authentification\'.'
         ],
         'need_a_security_device_to_enable_options' => 'Définissez au moins un périphérique pour activer ces options',
+        'options' => 'Options',
     ],
     'forms' => [
         'name' => 'Nom',

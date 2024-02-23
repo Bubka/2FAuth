@@ -111,7 +111,7 @@ return [
             'help' => 'Meldet den Benutzer bei Inaktivität automatisch ab. Hat keine Auswirkung, wenn die Authentifizierung über einen Proxy erfolgt und keine benutzerdefinierte Logout-URL angegeben ist.'
         ],
         'use_encryption' => [
-            'label' => 'Sensible Daten schützen',
+            'label' => 'Protect sensitive data',
             'help' => 'Vertrauliche Daten, die 2FA-Geheimnisse und E-Mails, werden verschlüsselt in der Datenbank gespeichert. Erstellen Sie ein Backup von der APP_KEY Variablen in der .env Datei (oder der gesamten Datei), da sie als Schlüssel zur gesicherten Datenbank dient. Es gibt keine Möglichkeit, verschlüsselte Daten ohne diesen Schlüssel zu wiederherzustellen.',
         ],
         'default_group' => [

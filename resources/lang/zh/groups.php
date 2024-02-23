@@ -18,6 +18,7 @@ return [
     'show_group_selector' => '显示分组选择器',
     'hide_group_selector' => '隐藏分组选择器',
     'select_accounts_to_show' => '选择要显示的帐户分组',
+    'x_accounts' => ':count个帐户',
     'manage_groups' => '管理组',
     'active_group' => '活跃组',
     'manage_groups_legend' => '您可以创建组以按照您想要的方式组织您的账户。 所有账户在名为“全部”的伪组中仍然可见，无论它们属于哪个组。',

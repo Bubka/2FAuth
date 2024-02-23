@@ -65,4 +65,5 @@ return [
     'sso_no_register' => 'Регистрация отключена',
     'sso_email_already_used' => 'Учетная запись с таким же адресом электронной почты уже существует, но не соответствует внешнему идентификатору учетной записи. Не используйте SSO, если вы уже зарегистрированы на 2FAuth с этим email.',
     'account_managed_by_external_provider' => 'Учетная запись управляется внешним провайдером',
+    'data_cannot_be_refreshed_from_server' => 'Data cannot be refreshed from server'
 ];
