@@ -16,6 +16,7 @@ return [
     'de' => 'Deutsch (Alemán)',
     'es' => 'Español (Español)',
     'zh' => '简体中文 (Chino Simplificado)',
-    'ru' => 'Русский (Ruso)',
+    'ru' => 'Русский (ruso)',
     'bg' => 'Български (Búlgaro)',
+    'ja' => '日本語 (Japonés)',
 ];

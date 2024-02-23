@@ -18,4 +18,5 @@ return [
     'zh' => '简体中文 (Vereinfachtes Chinesisch)',
     'ru' => 'Русский (Russisch)',
     'bg' => 'Български (Bulgarisch)',
+    'ja' => '日本語 (Japanisch)',
 ];
