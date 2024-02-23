@@ -1,5 +1,18 @@
 # Change log
 
+## [5.0.4] - 2024-02-23
+
+### Added
+
+- Japanese translation, thanks to [@yheuhtozr](https://crowdin.com/profile/yheuhtozr)
+
+### Fixed
+
+- [issue #284](https://github.com/Bubka/2FAuth/issues/284) Blank screen with version 5.0.3
+- [issue #296](https://github.com/Bubka/2FAuth/issues/296) WARN Command cancelled (env=production breaks docker entrypoint)
+- [issue #298](https://github.com/Bubka/2FAuth/issues/298) WebAuthn account recovery and password recovery doesn't work. Email template broken
+- [issue #299](https://github.com/Bubka/2FAuth/issues/299) OID redirect behind reverse proxy
+
 ## [5.0.3] - 2024-01-19
 
 ⚠️ For everyone experiencing a blank screen after updating to v5.*, please set the `ASSET_URL` env variable to the same value as `APP_URL`.
