@@ -15,7 +15,7 @@
 </script>
 
 <template>
-    <button :aria-label="$t('commons.copy_to_clipboard')" class="button is-like-text is-pulled-right is-small is-text" @click.stop="copyToClipboard()">
+    <button :aria-label="$t('commons.copy_to_clipboard')" :title="$t('commons.copy_to_clipboard')" class="button is-like-text is-pulled-right is-small is-text" @click.stop="copyToClipboard()">
         <FontAwesomeIcon :icon="['fas', 'copy']" />
     </button>
 </template>
