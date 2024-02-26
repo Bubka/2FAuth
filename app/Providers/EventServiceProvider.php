@@ -8,6 +8,7 @@ use App\Events\ScanForNewReleaseCalled;
 use App\Events\TwoFAccountDeleted;
 use App\Listeners\CleanIconStorage;
 use App\Listeners\DissociateTwofaccountFromGroup;
+use App\Listeners\LogNotification;
 use App\Listeners\RegisterOpenId;
 use App\Listeners\ReleaseRadar;
 use App\Listeners\ResetUsersPreference;
@@ -16,6 +17,7 @@ use App\Observers\UserObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use Illuminate\Notifications\Events\NotificationSent;
 use SocialiteProviders\Manager\SocialiteWasCalled;
 
 class EventServiceProvider extends ServiceProvider
@@ -43,6 +45,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         SocialiteWasCalled::class => [
             RegisterOpenId::class,
+        ],
+        NotificationSent::class => [
+            LogNotification::class,
         ],
     ];
     

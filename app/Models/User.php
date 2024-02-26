@@ -131,8 +131,6 @@ class User extends Authenticatable implements WebAuthnAuthenticatable
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new ResetPassword($token));
-
-        Log::info(sprintf('Password reset token sent to user id "%s', $this->id));
     }
 
     /**
