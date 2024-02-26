@@ -78,7 +78,7 @@ return [
         ],
         'is_admin' => [
             'label' => 'Is administrator',
-            'help' => 'Give administrator rights to the user. Administrators have permissions to manage app settings and users.'
+            'help' => 'Give administrator rights to the user. Administrators have permissions to manage the whole app, i.e. settings and other users, but cannot generate password for a 2FA they don\'t own.'
         ]
     ],
 
