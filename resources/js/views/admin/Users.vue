@@ -122,7 +122,7 @@
                     {{ $t('admin.users_legend')}}
                 </div>
                 <div class="mb-6 mt-3">
-                    <RouterLink class="is-link mt-5" :to="{ name: 'admin.users.create' }">
+                    <RouterLink class="is-link mt-5" :to="{ name: 'admin.createUser' }">
                         <FontAwesomeIcon :icon="['fas', 'plus-circle']" /> {{ $t('admin.create_new_user') }}
                     </RouterLink>
                 </div>
@@ -165,7 +165,7 @@
                         <div class="ml-3">
                             <UseColorMode v-slot="{ mode }">
                                 <!-- manage link -->
-                                <RouterLink :to="{ name: 'admin.users.manage', params: { userId: user.id }}" class="button is-small has-normal-radius is-pulled-right" :class="{'is-dark' : mode == 'dark'}" :title="$t('commons.manage')">
+                                <RouterLink :to="{ name: 'admin.manageUser', params: { userId: user.id }}" class="button is-small has-normal-radius is-pulled-right" :class="{'is-dark' : mode == 'dark'}" :title="$t('commons.manage')">
                                     {{ $t('commons.manage') }}
                                 </RouterLink>
                             </UseColorMode>

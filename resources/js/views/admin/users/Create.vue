@@ -22,7 +22,7 @@
         registerForm.post('/api/v1/users').then(response => {
             const user = response.data
             notify.success({ text: trans('admin.user_created') })
-            router.push({ name: 'admin.users.manage', params: { userId: user.info.id } })
+            router.push({ name: 'admin.manageUser', params: { userId: user.info.id } })
         })
     }
 </script>

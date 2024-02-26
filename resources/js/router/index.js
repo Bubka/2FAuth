@@ -37,8 +37,8 @@ const router = createRouter({
 
         { path: '/admin/app', name: 'admin.appSetup', component: () => import('../views/admin/AppSetup.vue'), meta: { middlewares: [authGuard, adminOnly], watchedByKicker: true, showAbout: true } },
         { path: '/admin/users', name: 'admin.users', component: () => import('../views/admin/Users.vue'), meta: { middlewares: [authGuard, adminOnly], watchedByKicker: true, showAbout: true } },
-        { path: '/admin/users/create', name: 'admin.users.create', component: () => import('../views/admin/users/Create.vue'), meta: { middlewares: [authGuard, adminOnly], watchedByKicker: true, showAbout: true } },
-        { path: '/admin/users/:userId/manage', name: 'admin.users.manage', component: () => import('../views/admin/users/Manage.vue'), meta: { middlewares: [authGuard, adminOnly], watchedByKicker: true, showAbout: true }, props: true },
+        { path: '/admin/users/create', name: 'admin.createUser', component: () => import('../views/admin/users/Create.vue'), meta: { middlewares: [authGuard, adminOnly], watchedByKicker: true, showAbout: true } },
+        { path: '/admin/users/:userId/manage', name: 'admin.manageUser', component: () => import('../views/admin/users/Manage.vue'), meta: { middlewares: [authGuard, adminOnly], watchedByKicker: true, showAbout: true }, props: true },
         
         { path: '/login', name: 'login', component: () => import('../views/auth/Login.vue'), meta: { middlewares: [skipIfAuthProxy, setReturnTo], showAbout: true } },
         { path: '/register', name: 'register', component: () => import('../views/auth/Register.vue'), meta: { middlewares: [skipIfAuthProxy, noRegistration, setReturnTo], showAbout: true } },
