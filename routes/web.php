@@ -83,6 +83,7 @@ Route::get('refresh-csrf', function () {
  */
 Route::group(['middleware' => ['behind-auth', 'admin']], function () {   
     Route::get('infos', [SystemController::class, 'infos'])->name('system.infos');
+    Route::post('testEmail', [SystemController::class, 'testEmail'])->name('system.testEmail');
 });
 
 Route::get('latestRelease', [SystemController::class, 'latestRelease'])->name('system.latestRelease');

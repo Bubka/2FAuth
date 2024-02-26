@@ -79,6 +79,11 @@ return [
         'is_admin' => [
             'label' => 'Is administrator',
             'help' => 'Give administrator rights to the user. Administrators have permissions to manage the whole app, i.e. settings and other users, but cannot generate password for a 2FA they don\'t own.'
+        ],
+        'test_email' => [
+            'label' => 'Email configuration test',
+            'help' => 'Send a test email to control your instance\'s email configuration. It is important to have a working configuration, otherwise users will not be able to request a reset password.',
+            'email_will_be_send_to_x' => 'The email will be send to <span class="is-family-code has-text-info">:email</span>',
         ]
     ],
 

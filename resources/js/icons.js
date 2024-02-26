@@ -49,7 +49,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 
 import {
-    faStar
+    faStar,
+    faPaperPlane,
 } from '@fortawesome/free-regular-svg-icons'
 
 import {
@@ -105,6 +106,7 @@ library.add(
     faStar,
     faChevronRight,
     faOpenid,
+    faPaperPlane,
 );
 
 export default FontAwesomeIcon

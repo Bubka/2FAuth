@@ -4,16 +4,19 @@
     import systemService from '@/services/systemService'
     import { useAppSettingsStore } from '@/stores/appSettings'
     import { useNotifyStore } from '@/stores/notify'
+    import { useUserStore } from '@/stores/user'
     import VersionChecker from '@/components/VersionChecker.vue'
     import CopyButton from '@/components/CopyButton.vue'
 
     const $2fauth = inject('2fauth')
+    const user = useUserStore()
     const notify = useNotifyStore()
     const appSettings = useAppSettingsStore()
     const returnTo = useStorage($2fauth.prefix + 'returnTo', 'accounts')
 
     const infos = ref()
     const listInfos = ref(null)
+    const isSendingTestEmail = ref(false)
 
     /**
      * Saves a setting on the backend
@@ -23,6 +26,18 @@
     function saveSetting(setting, value) {
         appSettingService.update(setting, value).then(response => {
             useNotifyStore().success({ type: 'is-success', text: trans('settings.forms.setting_saved') })
+        })
+    }
+
+    /**
+     * Sends a test email
+     */
+    function sendTestEmail() {
+        isSendingTestEmail.value = true;
+
+        systemService.sendTestEmail()
+        .finally(() => {
+            isSendingTestEmail.value = false;
         })
     }
 
@@ -53,6 +68,22 @@
                     <!-- Check for update -->
                     <FormCheckbox v-model="appSettings.checkForUpdate" @update:model-value="val => saveSetting('checkForUpdate', val)" fieldName="checkForUpdate" label="commons.check_for_update" help="commons.check_for_update_help" />
                     <VersionChecker />
+                    <div class="field">
+                        <!-- <h5 class="title is-5">{{ $t('settings.security') }}</h5> -->
+                        <label class="label"  v-html="$t('admin.forms.test_email.label')" />
+                        <p class="help" v-html="$t('admin.forms.test_email.help')" />
+                        <p class="help" v-html="$t('admin.forms.test_email.email_will_be_send_to_x', { email: user.email })" />
+                    </div>
+                    <div class="columns is-mobile is-vcentered">
+                        <div class="column is-narrow">
+                            <button type="button" :class="isSendingTestEmail ? 'is-loading' : ''" class="button is-link is-rounded is-small" @click="sendTestEmail">
+                                <span class="icon is-small">
+                                    <FontAwesomeIcon :icon="['far', 'paper-plane']" />
+                                </span>
+                                <span>{{ $t('commons.send') }}</span>
+                            </button>   
+                        </div>
+                    </div>                   
                     <h4 class="title is-4 pt-4 has-text-grey-light">{{ $t('settings.security') }}</h4>
                     <!-- protect db -->
                     <FormCheckbox v-model="appSettings.useEncryption" @update:model-value="val => saveSetting('useEncryption', val)" fieldName="useEncryption" label="admin.forms.use_encryption.label" help="admin.forms.use_encryption.help" />

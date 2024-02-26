@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Facades\Settings;
+use App\Notifications\TestEmailSettingNotification;
 use App\Services\ReleaseRadarService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class SystemController extends Controller
 {
@@ -57,5 +59,21 @@ class SystemController extends Controller
         $release = $releaseRadar->manualScan();
 
         return response()->json(['newRelease' => $release]);
+    }
+
+    /**
+     * Send a test email.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function testEmail(Request $request)
+    {
+        try {
+            $request->user()->notify(new TestEmailSettingNotification());
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+        }
+
+        return response()->json(['message' => 'Ok']);
     }
 }

@@ -4,8 +4,9 @@ namespace Tests\Feature\Http;
 
 use App\Http\Controllers\SystemController;
 use App\Models\User;
+use App\Notifications\TestEmailSettingNotification;
 use App\Services\ReleaseRadarService;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Illuminate\Support\Facades\Notification;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\FeatureTestCase;
 
@@ -15,8 +16,6 @@ use Tests\FeatureTestCase;
 #[CoversClass(SystemController::class)]
 class SystemControllerTest extends FeatureTestCase
 {
-    //use WithoutMiddleware;
-
     /**
      * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
      */
@@ -115,5 +114,39 @@ class SystemControllerTest extends FeatureTestCase
             ->assertJson([
                 'newRelease' => 'new_release',
             ]);
+    }
+
+    /**
+     * @test
+     */
+    public function test_testEmail_sends_a_notification()
+    {
+        Notification::fake();
+
+        $response = $this->actingAs($this->admin, 'web-guard')
+            ->json('POST', '/testEmail', []);
+
+        $response->assertStatus(200);
+
+        Notification::assertSentTo($this->admin, TestEmailSettingNotification::class);
+    }
+
+    /**
+     * @test
+     */
+    public function test_testEmail_returns_unauthorized()
+    {
+        $response = $this->json('GET', '/infos')
+            ->assertUnauthorized();
+    }
+
+    /**
+     * @test
+     */
+    public function test_testEmail_returns_forbidden()
+    {
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('GET', '/infos')
+            ->assertForbidden();
     }
 }

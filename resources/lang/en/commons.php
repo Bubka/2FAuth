@@ -79,5 +79,6 @@ return [
     'nothing' => 'nothing',
     'no_result' => 'No result',
     'information' => 'Information',
-    'permissions' => 'Permissions'
+    'permissions' => 'Permissions',
+    'send' => 'Send',
 ];

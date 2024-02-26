@@ -17,6 +17,14 @@ export default {
      */
     getLastRelease(config = {}) {
         return webClient.get('latestRelease', { ...config })
+    },
+
+    /**
+     * 
+     * @returns Promise
+     */
+    sendTestEmail(config = {}) {
+        return webClient.post('testEmail', { ...config })
     }
     
 }
