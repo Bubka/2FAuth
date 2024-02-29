@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\ComplyWithEmailRestrictionPolicy;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UserStoreRequest extends FormRequest
@@ -24,8 +25,15 @@ class UserStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'     => 'unique:App\Models\User,name|required|string|max:191',
-            'email'    => 'unique:App\Models\User,email|required|string|email|max:191',
+            'name'  => 'unique:App\Models\User,name|required|string|max:191',
+            'email' => [
+                'unique:App\Models\User,email',
+                'required',
+                'string',
+                'email',
+                'max:191',
+                new ComplyWithEmailRestrictionPolicy,
+            ],
             'password' => 'required|string|min:8|confirmed',
         ];
     }

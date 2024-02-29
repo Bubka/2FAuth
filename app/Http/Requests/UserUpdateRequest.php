@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\ComplyWithEmailRestrictionPolicy;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -37,6 +38,7 @@ class UserUpdateRequest extends FormRequest
                 'email',
                 'max:191',
                 Rule::unique('users')->ignore($this->user()->id),
+                new ComplyWithEmailRestrictionPolicy,
             ],
             'password' => 'required',
         ];

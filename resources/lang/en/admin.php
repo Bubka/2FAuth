@@ -65,8 +65,20 @@ return [
     'security_devices_succesfully_revoked' => 'User\'s security devices successfully revoked',
     'forms' => [
         'use_encryption' => [
-            'label' => 'Protect sensible data',
+            'label' => 'Protect sensitive data',
             'help' => 'Sensitive data, the 2FA secrets and emails, are stored encrypted in database. Be sure to backup the APP_KEY value of your .env file (or the whole file) as it serves as key encryption. There is no way to decypher encrypted data without this key.',
+        ],
+        'restrict_registration' => [
+            'label' => 'Restrict registration',
+            'help' => 'Make registration only available to a limited range of email addresses. Both rules can be used simultaneously.',
+        ],
+        'restrict_list' => [
+            'label' => 'Filtering list',
+            'help' => 'Emails in this list will be allowed to register. Separate addresses with a pipe ("|")',
+        ],
+        'restrict_rule' => [
+            'label' => 'Filtering rule',
+            'help' => 'Emails matching this regular expression will be allowed to register',
         ],
         'disable_registration' => [
             'label' => 'Disable registration',

@@ -74,6 +74,7 @@ return [
         'latestRelease' => false,
         'disableRegistration' => false,
         'enableSso' => true,
+        'restrictRegistration' => false,
     ],
 
     /*

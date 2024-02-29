@@ -21,7 +21,15 @@ class RegisterControllerTest extends FeatureTestCase
 
     private const EMAIL = 'johndoe@example.org';
 
+    private const EMAIL_NOT_IN_FILTERING_LIST = 'jane@example.org';
+
+    private const EMAIL_EXCLUDED_BY_FILTERING_RULE = 'johndoe@anywhere.org';
+
     private const PASSWORD = 'password';
+
+    private const EMAIL_FILTERING_LIST = 'johndoe@example.org|johndoe@test.org|johndoe@anywhere.org';
+
+    private const EMAIL_FILTERING_RULE = '^[A-Za-z0-9._%+-]+@example\.org';
 
     /**
      * @test
@@ -146,5 +154,113 @@ class RegisterControllerTest extends FeatureTestCase
             'password_confirmation' => self::PASSWORD,
         ])
             ->assertStatus(403);
+    }
+
+    /**
+     * @test
+     */
+    public function test_register_succeeds_when_email_is_in_restricted_list()
+    {
+        Settings::set('restrictRegistration', true);
+        Settings::set('restrictList', self::EMAIL_FILTERING_LIST);
+        Settings::set('restrictRule', '');
+
+        $this->json('POST', '/user', [
+            'name'                  => self::USERNAME,
+            'email'                 => self::EMAIL,
+            'password'              => self::PASSWORD,
+            'password_confirmation' => self::PASSWORD,
+        ])
+        ->assertStatus(201);
+    }
+
+    /**
+     * @test
+     */
+    public function test_register_fails_when_email_is_not_in_restricted_list()
+    {
+        Settings::set('restrictRegistration', true);
+        Settings::set('restrictList', self::EMAIL_FILTERING_LIST);
+        Settings::set('restrictRule', '');
+
+        $this->json('POST', '/user', [
+            'name'                  => self::USERNAME,
+            'email'                 => self::EMAIL_NOT_IN_FILTERING_LIST,
+            'password'              => self::PASSWORD,
+            'password_confirmation' => self::PASSWORD,
+        ])
+        ->assertStatus(422);
+    }
+
+    /**
+     * @test
+     */
+    public function test_register_succeeds_when_email_matchs_filtering_rule()
+    {
+        Settings::set('restrictRegistration', true);
+        Settings::set('restrictList', '');
+        Settings::set('restrictRule', self::EMAIL_FILTERING_RULE);
+
+        $this->json('POST', '/user', [
+            'name'                  => self::USERNAME,
+            'email'                 => self::EMAIL,
+            'password'              => self::PASSWORD,
+            'password_confirmation' => self::PASSWORD,
+        ])
+        ->assertStatus(201);
+    }
+
+    /**
+     * @test
+     */
+    public function test_register_fails_when_email_does_not_match_filtering_rule()
+    {
+        Settings::set('restrictRegistration', true);
+        Settings::set('restrictList', '');
+        Settings::set('restrictRule', self::EMAIL_FILTERING_RULE);
+
+        $this->json('POST', '/user', [
+            'name'                  => self::USERNAME,
+            'email'                 => self::EMAIL_EXCLUDED_BY_FILTERING_RULE,
+            'password'              => self::PASSWORD,
+            'password_confirmation' => self::PASSWORD,
+        ])
+        ->assertStatus(422);
+    }
+
+    /**
+     * @test
+     */
+    public function test_register_succeeds_when_email_is_allowed_by_list_over_regex()
+    {
+        Settings::set('restrictRegistration', true);
+        Settings::set('restrictList', self::EMAIL_FILTERING_LIST);
+        Settings::set('restrictRule', self::EMAIL_FILTERING_RULE);
+
+        $this->json('POST', '/user', [
+            'name'                  => self::USERNAME,
+            'email'                 => self::EMAIL_EXCLUDED_BY_FILTERING_RULE,
+            'password'              => self::PASSWORD,
+            'password_confirmation' => self::PASSWORD,
+        ])
+        ->assertStatus(201);
+    }
+
+    /**
+     * @test
+     */
+    public function test_register_succeeds_when_email_is_allowed_by_regex_over_list()
+    {
+        Settings::set('restrictRegistration', true);
+        Settings::set('restrictList', self::EMAIL_FILTERING_LIST);
+        Settings::set('restrictRule', self::EMAIL_FILTERING_RULE);
+
+        $this->json('POST', '/user', [
+            'name'                  => self::USERNAME,
+            'email'                 => self::EMAIL_NOT_IN_FILTERING_LIST,
+            'password'              => self::PASSWORD,
+            'password_confirmation' => self::PASSWORD,
+        ])
+        ->assertStatus(201);
     }
 }
