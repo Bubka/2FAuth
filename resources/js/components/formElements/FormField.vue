@@ -42,27 +42,42 @@
         maxLength: {
             type: Number,
             default: null
-        }
+        },
+        isIndented: Boolean,
+        leftIcon: '',
+        rightIcon: '',
     })
 </script>
 
 <template>
-    <div class="field" :class="{ 'pt-3' : hasOffset }">
-        <label :for="inputId" class="label" v-html="$t(label)"></label>
-        <div class="control">
-            <input 
-                :disabled="isDisabled" 
-                :id="inputId" 
-                :type="inputType" 
-                class="input" 
-                :value="modelValue" 
-                :placeholder="placeholder" 
-                v-bind="$attrs"
-                v-on:input="$emit('update:modelValue', $event.target.value)"
-                :maxlength="maxLength" 
-            />
+    <div class="mb-3" :class="{ 'pt-3' : hasOffset, 'is-flex' : isIndented }">
+        <div v-if="isIndented" class="mx-2 pr-1" :style="{ 'opacity': isDisabled ? '0.5' : '1' }">
+            <FontAwesomeIcon class="has-text-grey" :icon="['fas', 'chevron-right']" transform="rotate-135"/>
         </div>
-        <FieldError v-if="fieldError != undefined" :error="fieldError" :field="fieldName" />
-        <p class="help" v-html="$t(help)" v-if="help"></p>
+        <div class="field" :class="{ 'is-flex-grow-5' : isIndented }">
+            <label :for="inputId" class="label" v-html="$t(label)"></label>
+            <div class="control" :class="{ 'has-icons-left' : leftIcon, 'has-icons-right': rightIcon }">
+                <input 
+                    :disabled="isDisabled" 
+                    :id="inputId" 
+                    :type="inputType" 
+                    class="input" 
+                    :value="modelValue" 
+                    :placeholder="placeholder" 
+                    v-bind="$attrs"
+                    v-on:input="$emit('update:modelValue', $event.target.value)"
+                    v-on:change="$emit('change:modelValue', $event.target.value)"
+                    :maxlength="maxLength"
+                />
+                <span v-if="leftIcon" class="icon is-small is-left">
+                    <FontAwesomeIcon :icon="['fas', leftIcon]" transform="rotate-75" size="xs" />
+                </span>
+                <span v-if="rightIcon" class="icon is-small is-right">
+                    <FontAwesomeIcon :icon="['fas', rightIcon]" transform="rotate-75" size="xs" />
+                </span>
+            </div>
+            <FieldError v-if="fieldError != undefined" :error="fieldError" :field="fieldName" />
+            <p class="help" v-html="$t(help)" v-if="help"></p>
+        </div>
     </div> 
 </template>
