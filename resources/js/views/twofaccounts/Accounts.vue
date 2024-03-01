@@ -174,6 +174,10 @@
             if(user.preferences.kickUserAfter == -1) {
                 user.logout({ kicked: true})
             }
+            if(user.preferences.clearSearchOnCopy) {
+                twofaccounts.filter = ''
+            }
+            
             notify.success({ text: trans('commons.copied_to_clipboard') })
         }
     }
@@ -353,7 +357,8 @@
             <OtpDisplay
                 ref="otpDisplay"
                 v-bind="otpDisplayProps"
-                @please-close-me="showOtpInModal = false">
+                @please-close-me="showOtpInModal = false"
+                @please-clear-search="twofaccounts.filter = ''">
             </OtpDisplay>
         </Modal>
         <!-- totp loopers -->

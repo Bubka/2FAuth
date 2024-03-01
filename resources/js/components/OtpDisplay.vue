@@ -231,6 +231,10 @@
                 clearOTP()
             }
 
+            if(user.preferences.clearSearchOnCopy) {
+                emit("please-clear-search");
+            }
+
             notify.success({ text: trans('commons.copied_to_clipboard') })
         }
     }

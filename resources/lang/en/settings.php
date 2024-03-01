@@ -64,6 +64,10 @@ return [
             'label' => 'Close <abbr title="One-Time Password">OTP</abbr> after copy',
             'help' => 'Clicking a generated password to copy it automatically hide it from the screen'
         ],
+        'clear_search_on_copy' => [
+            'label' => 'Clear Search on copy',
+            'help' => 'Empty the Search box right after a code has been copied to the clipboard'
+        ],
         'copy_otp_on_display' => [
             'label' => 'Copy <abbr title="One-Time Password">OTP</abbr> on display',
             'help' => 'Automatically copy a generated password right after it appears on screen. Due to browsers limitations, only the first <abbr title="Time-based One-Time Password">TOTP</abbr> password will be copied, not the rotating ones'

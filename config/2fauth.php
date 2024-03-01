@@ -90,6 +90,7 @@ return [
         'revealDottedOTP' => false,
         'closeOtpOnCopy' => false,
         'copyOtpOnDisplay' => false,
+        'clearSearchOnCopy' => false,
         'useBasicQrcodeReader' => false,
         'displayMode' => 'list',
         'showAccountsIcons' => true,

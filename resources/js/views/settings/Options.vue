@@ -134,6 +134,8 @@
                         <!-- password format -->
                         <FormCheckbox v-model="user.preferences.formatPassword" @update:model-value="val => savePreference('formatPassword', val)" fieldName="formatPassword" label="settings.forms.password_format.label" help="settings.forms.password_format.help" />
                         <FormToggle v-model="user.preferences.formatPasswordBy" @update:model-value="val => savePreference('formatPasswordBy', val)" :choices="passwordFormats" fieldName="formatPasswordBy" :isDisabled="!user.preferences.formatPassword" />
+                        <FormCheckbox v-model="user.preferences.clearSearchOnCopy" @update:model-value="val => savePreference('clearSearchOnCopy', val)" fieldName="clearSearchOnCopy" label="settings.forms.clear_search_on_copy.label" help="settings.forms.clear_search_on_copy.help" />
+                        <!-- copy otp on get -->
 
                         <h4 class="title is-4 pt-4 has-text-grey-light">{{ $t('groups.groups') }}</h4>
                         <!-- default group -->
@@ -148,7 +150,7 @@
                         <FormToggle v-model="user.preferences.getOtpOnRequest" @update:model-value="val => savePreference('getOtpOnRequest', val)" :choices="getOtpTriggers" fieldName="getOtpOnRequest" label="settings.forms.otp_generation.label" help="settings.forms.otp_generation.help"/>
                             <!-- close otp on copy -->
                             <FormCheckbox v-model="user.preferences.closeOtpOnCopy" @update:model-value="val => savePreference('closeOtpOnCopy', val)" fieldName="closeOtpOnCopy" label="settings.forms.close_otp_on_copy.label" help="settings.forms.close_otp_on_copy.help" :isDisabled="!user.preferences.getOtpOnRequest" :isIndented="true" />
-                            <!-- copy otp on get -->
+                            <!-- clear search on copy -->
                             <FormCheckbox v-model="user.preferences.copyOtpOnDisplay" @update:model-value="val => savePreference('copyOtpOnDisplay', val)" fieldName="copyOtpOnDisplay" label="settings.forms.copy_otp_on_display.label" help="settings.forms.copy_otp_on_display.help" :isDisabled="!user.preferences.getOtpOnRequest" :isIndented="true" />
                         <!-- otp as dot -->
                         <FormCheckbox v-model="user.preferences.showOtpAsDot" @update:model-value="val => savePreference('showOtpAsDot', val)" fieldName="showOtpAsDot" label="settings.forms.show_otp_as_dot.label" help="settings.forms.show_otp_as_dot.help" />
