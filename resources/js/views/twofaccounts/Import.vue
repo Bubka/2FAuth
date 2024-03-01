@@ -1,5 +1,6 @@
 <script setup>
     import Form from '@/components/formElements/Form'
+    import FormTextarea from '@/components/formElements/FormTextarea.vue'
     import twofaccountService from '@/services/twofaccountService'
     import OtpDisplay from '@/components/OtpDisplay.vue'
     import Spinner from '@/components/Spinner.vue'
@@ -17,6 +18,8 @@
     const otpDisplay = ref(null)
     const fileInput = ref(null)
     const qrcodeInput = ref(null)
+    const directInput = ref(null)
+    const directInputError = ref(null)
     const form = reactive(new Form({
         service: '',
         account: '',
@@ -86,6 +89,7 @@
                 exportedAccounts.value.push(data)
             })
             notifyValidAccountFound()
+            directInput.value = directInputError.value = null
         })
         .catch(error => {
             notify.alert({ text: trans(error.response.data.message) })
@@ -225,6 +229,18 @@
         notify.success({ text: trans('twofaccounts.import.x_valid_accounts_found', { count: importableCount.value }) })
     }
 
+    /**
+     * Submits the directInput form to the backend
+     */
+    function submitDirectInput() {
+        directInputError.value = null
+        
+        if (! directInput.value) {
+            directInputError.value = trans('validation.required', { attribute: 'Direct input' })
+        }
+        else migrate(directInput.value)
+    }
+
 </script>
 
 <template>
@@ -295,6 +311,33 @@
                                 </footer>
                             </div>
                         </div>
+                        <div class="block">
+                            <div class="card">
+                                <div class="card-content">
+                                    <div class="media">
+                                        <div class="media-left">
+                                            <figure class="image is-32x32">
+                                                <UseColorMode v-slot="{ mode }">
+                                                    <FontAwesomeIcon :icon="['fas', 'align-left']" size="2x" :class="mode == 'dark' ? 'has-text-grey-darker' : 'has-text-grey-lighter'" />
+                                                </UseColorMode>
+                                            </figure>
+                                        </div>
+                                        <div class="media-content">
+                                            <p class="title is-5 has-text-grey" v-html="$t('twofaccounts.import.direct_input')" />
+                                            <p class="subtitle is-6 is-size-7-mobile">{{ $t('twofaccounts.import.expected_format_for_direct_input') }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="content">
+                                        <FormTextarea v-model="directInput" :fieldError="directInputError" fieldName="payload" rows="5" :size="'is-small'" />
+                                    </div>
+                                </div>
+                                <footer class="card-footer">
+                                    <a role="button" tabindex="0" class="card-footer-item is-relative" @click.stop="submitDirectInput">
+                                        {{ $t('commons.submit') }}
+                                    </a>
+                                </footer>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <!-- Supported migration resources -->
@@ -330,6 +373,12 @@
                             <td></td>
                             <td></td>
                             <td><FontAwesomeIcon :icon="['fas', 'circle-check']" /></td>
+                        </tr>
+                        <tr>
+                            <th>FreeOTP+</th>
+                            <td><FontAwesomeIcon :icon="['fas', 'circle-check']" /></td>
+                            <td></td>
+                            <td></td>
                         </tr>
                         <tr>
                             <th>2FAuth</th>

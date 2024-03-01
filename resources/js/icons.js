@@ -47,6 +47,7 @@ import {
     faVideoSlash,
     faChevronRight,
     faSlash,
+    faAlignLeft,
 } from '@fortawesome/free-solid-svg-icons'
 
 import {
@@ -109,6 +110,7 @@ library.add(
     faOpenid,
     faPaperPlane,
     faSlash,
+    faAlignLeft
 );
 
 export default FontAwesomeIcon
