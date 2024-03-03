@@ -30,8 +30,8 @@ if [ -f /2fauth/installed ]; then
   INSTALLED_COMMIT="$(cat /2fauth/installed)"
   if [ "${INSTALLED_COMMIT}" != "${COMMIT}" ]; then
     echo "Installed commit ${INSTALLED_COMMIT} is different from program commit ${COMMIT}, we are migrating..."
+    php artisan optimize:clear
     php artisan migrate --force
-    php artisan config:clear
   fi
 else
   php artisan migrate:refresh --force
@@ -41,5 +41,7 @@ fi
 echo "${COMMIT}" > /2fauth/installed
 php artisan storage:link --quiet
 php artisan config:cache
+php artisan route:cache
+php artisan view:cache
 
 supervisord
