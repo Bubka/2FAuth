@@ -171,11 +171,16 @@
         copy(password)
 
         if (copied) {
-            if(user.preferences.kickUserAfter == -1) {
+            if (user.preferences.kickUserAfter == -1) {
                 user.logout({ kicked: true})
             }
-            if(user.preferences.clearSearchOnCopy) {
+            if (user.preferences.clearSearchOnCopy) {
                 twofaccounts.filter = ''
+            }
+            if (user.preferences.viewDefaultGroupOnCopy) {
+                user.preferences.activeGroup = user.preferences.defaultGroup == -1 ?
+                    user.preferences.activeGroup
+                    : user.preferences.defaultGroup
             }
             
             notify.success({ text: trans('commons.copied_to_clipboard') })

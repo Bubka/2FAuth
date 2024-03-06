@@ -115,6 +115,10 @@ return [
             'label' => 'Default group',
             'help' => 'The group to which the newly created accounts are associated',
         ],
+        'view_default_group_on_copy' => [
+            'label' => 'View default group on copy',
+            'help' => 'Always return to the default group when an OTP is copied',
+        ],
         'useDirectCapture' => [
             'label' => 'Direct input',
             'help' => 'Choose whether you want to be prompted to choose an input mode among those available or if you want to directly use the default input mode',

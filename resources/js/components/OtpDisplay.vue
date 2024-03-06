@@ -234,6 +234,11 @@
             if(user.preferences.clearSearchOnCopy) {
                 emit("please-clear-search");
             }
+            if (user.preferences.viewDefaultGroupOnCopy) {
+                user.preferences.activeGroup = user.preferences.defaultGroup == -1 ?
+                    user.preferences.activeGroup
+                    : user.preferences.defaultGroup
+            }
 
             notify.success({ text: trans('commons.copied_to_clipboard') })
         }

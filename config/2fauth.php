@@ -97,6 +97,7 @@ return [
         'kickUserAfter' => 15,
         'activeGroup' => 0,
         'rememberActiveGroup' => true,
+        'viewDefaultGroupOnCopy' => false,
         'defaultGroup' => 0,
         'defaultCaptureMode' => 'livescan',
         'useDirectCapture' => false,

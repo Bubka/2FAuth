@@ -142,7 +142,9 @@
                         <FormSelect v-model="user.preferences.defaultGroup" @update:model-value="val => savePreference('defaultGroup', val)" :options="groupsList" fieldName="defaultGroup" label="settings.forms.default_group.label" help="settings.forms.default_group.help" />
                         <!-- retain active group -->
                         <FormCheckbox v-model="user.preferences.rememberActiveGroup" @update:model-value="val => savePreference('rememberActiveGroup', val)" fieldName="rememberActiveGroup" label="settings.forms.remember_active_group.label" help="settings.forms.remember_active_group.help" />
-
+                        <!-- always return to default group after copying -->
+                        <FormCheckbox v-model="user.preferences.viewDefaultGroupOnCopy" @update:model-value="val => savePreference('viewDefaultGroupOnCopy', val)" fieldName="viewDefaultGroupOnCopy" label="settings.forms.view_default_group_on_copy.label" help="settings.forms.view_default_group_on_copy.help" />
+                        
                         <h4 class="title is-4 pt-4 has-text-grey-light">{{ $t('settings.security') }}</h4>
                         <!-- auto lock -->
                         <FormSelect v-model="user.preferences.kickUserAfter" @update:model-value="val => savePreference('kickUserAfter', val)" :options="kickUserAfters" fieldName="kickUserAfter" label="settings.forms.auto_lock.label" help="settings.forms.auto_lock.help" />
