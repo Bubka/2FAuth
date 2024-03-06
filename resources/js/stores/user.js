@@ -141,6 +141,7 @@ export const useUserStore = defineStore({
                 })
             })
             .catch(error => {
+                const notify = useNotifyStore()
                 notify.alert({ text: trans('errors.data_cannot_be_refreshed_from_server') })
             })
         }
