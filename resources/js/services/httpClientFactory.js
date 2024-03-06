@@ -51,6 +51,15 @@ export const httpClientFactory = (endpoint = 'api') => {
                 await axios.get('/refresh-csrf')
                 return httpClient.request(originalRequestConfig)
             }
+
+            // api calls are stateless so when user inactivity is detected
+            // by the backend middleware, it cannot logout the user directly
+            // so it returns a 418 response.
+            // We catch the 418 response and log the user out
+            if (error.response.status === 418) {
+                const user = useUserStore()
+                user.logout({ kicked: true})
+            }
             
             if (error.response && [407].includes(error.response.status)) {
                 useNotifyStore().error(error)
@@ -76,15 +85,6 @@ export const httpClientFactory = (endpoint = 'api') => {
             if (error.response.status === 404) {
                 useNotifyStore().notFound()
                 return new Promise(() => {})
-            }
-
-            // api calls are stateless so when user inactivity is detected
-            // by the backend middleware, it cannot logout the user directly
-            // so it returns a 418 response.
-            // We catch the 418 response and log the user out
-            if (error.response.status === 418) {
-                const user = useUserStore()
-                user.logout({ kicked: true})
             }
 
             useNotifyStore().error(error)

@@ -38,11 +38,8 @@ class KickOutInactiveUser
         if ($kickUserAfterXSecond > 0 && $inactiveFor > $kickUserAfterXSecond) {
             $user->last_seen_at = $now->format('Y-m-d H:i:s');
             $user->save();
-
             Log::info(sprintf('User ID #%s detected as inactive, authentication rejected', $user->id));
-            if (method_exists('Illuminate\Support\Facades\Auth', 'logout')) {
-                Auth::logout();
-            }
+            Auth::guard('web-guard')->logout();
 
             return response()->json(['message' => 'inactivity detected'], Response::HTTP_I_AM_A_TEAPOT);
         }
