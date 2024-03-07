@@ -1119,6 +1119,11 @@ footer.main .field.is-grouped {
   background-color: $warning;
   vertical-align: middle;
   margin: 0 5px;
+  box-shadow: 0px 0px 2px black;
+}
+:root[data-theme="dark"] .release-flag {
+  background-color: $warning;
+  box-shadow: none;
 }
 
 .about-logo {

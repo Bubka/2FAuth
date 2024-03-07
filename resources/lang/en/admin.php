@@ -63,6 +63,9 @@ return [
     'user_role_updated' => 'User role updated',
     'pats_succesfully_revoked' => 'User\'s PATs successfully revoked',
     'security_devices_succesfully_revoked' => 'User\'s security devices successfully revoked',
+    'check_now' => 'Check now',
+    'view_on_github' => 'View on Github',
+    'x_is_available' => ':version is available',
     'forms' => [
         'use_encryption' => [
             'label' => 'Protect sensitive data',
