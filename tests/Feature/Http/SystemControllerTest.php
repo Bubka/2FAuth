@@ -37,7 +37,7 @@ class SystemControllerTest extends FeatureTestCase
      */
     public function test_infos_returns_unauthorized()
     {
-        $response = $this->json('GET', '/infos')
+        $response = $this->json('GET', '/system/infos')
             ->assertUnauthorized();
     }
 
@@ -47,7 +47,7 @@ class SystemControllerTest extends FeatureTestCase
     public function test_infos_returns_forbidden()
     {
         $response = $this->actingAs($this->user, 'api-guard')
-            ->json('GET', '/infos')
+            ->json('GET', '/system/infos')
             ->assertForbidden();
     }
 
@@ -57,7 +57,7 @@ class SystemControllerTest extends FeatureTestCase
     public function test_infos_returns_only_base_collection()
     {
         $response = $this->actingAs($this->admin, 'api-guard')
-            ->json('GET', '/infos')
+            ->json('GET', '/system/infos')
             ->assertOk()
             ->assertJsonStructure([
                 'common' => [
@@ -88,7 +88,7 @@ class SystemControllerTest extends FeatureTestCase
     public function test_infos_returns_proxy_collection_when_signed_in_behind_proxy()
     {
         $response = $this->actingAs($this->admin, 'reverse-proxy-guard')
-            ->json('GET', '/infos')
+            ->json('GET', '/system/infos')
             ->assertOk()
             ->assertJsonStructure([
                 'common' => [
@@ -109,7 +109,7 @@ class SystemControllerTest extends FeatureTestCase
             ->once()
             ->andReturn('new_release');
 
-        $response = $this->json('GET', '/latestRelease')
+        $response = $this->json('GET', '/system/latestRelease')
             ->assertOk()
             ->assertJson([
                 'newRelease' => 'new_release',
@@ -124,7 +124,7 @@ class SystemControllerTest extends FeatureTestCase
         Notification::fake();
 
         $response = $this->actingAs($this->admin, 'web-guard')
-            ->json('POST', '/testEmail', []);
+            ->json('POST', '/system/test-email', []);
 
         $response->assertStatus(200);
 
@@ -136,7 +136,7 @@ class SystemControllerTest extends FeatureTestCase
      */
     public function test_testEmail_returns_unauthorized()
     {
-        $response = $this->json('GET', '/infos')
+        $response = $this->json('GET', '/system/infos')
             ->assertUnauthorized();
     }
 
@@ -146,7 +146,27 @@ class SystemControllerTest extends FeatureTestCase
     public function test_testEmail_returns_forbidden()
     {
         $response = $this->actingAs($this->user, 'api-guard')
-            ->json('GET', '/infos')
+            ->json('GET', '/system/infos')
             ->assertForbidden();
+    }
+
+    /**
+     * @test
+     */
+    public function test_clearCache_returns_success()
+    {
+        $response = $this->json('GET', '/system/clear-cache');
+
+        $response->assertStatus(200);
+    }
+
+    /**
+     * @test
+     */
+    public function test_optimize_returns_success()
+    {
+        $response = $this->json('GET', '/system/optimize');
+
+        $response->assertStatus(200);
     }
 }

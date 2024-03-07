@@ -8,7 +8,7 @@ export default {
      * @returns Promise
      */
     getSystemInfos(config = {}) {
-        return webClient.get('infos', { ...config })
+        return webClient.get('system/infos', { ...config })
     },
 
     /**
@@ -16,7 +16,7 @@ export default {
      * @returns Promise
      */
     getLastRelease(config = {}) {
-        return webClient.get('latestRelease', { ...config })
+        return webClient.get('system/latestRelease', { ...config })
     },
 
     /**
@@ -24,7 +24,23 @@ export default {
      * @returns Promise
      */
     sendTestEmail(config = {}) {
-        return webClient.post('testEmail', { ...config })
-    }
+        return webClient.post('system/test-email', { ...config })
+    },
+
+    /**
+     * 
+     * @returns Promise
+     */
+    clearCache(config = {}) {
+        return webClient.get('system/clear-cache', { ...config })
+    },
+
+    /**
+     * 
+     * @returns Promise
+     */
+    optimize(config = {}) {
+        return webClient.get('system/optimize', { ...config })
+    },
     
 }

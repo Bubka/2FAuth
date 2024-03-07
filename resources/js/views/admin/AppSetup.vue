@@ -17,6 +17,7 @@
     const infos = ref()
     const listInfos = ref(null)
     const isSendingTestEmail = ref(false)
+    const isClearingCache = ref(false)
     const fieldErrors = ref({
         restrictList: null,
         restrictRule: null,
@@ -91,6 +92,20 @@
         })
     }
 
+    /**
+     * clears app cache
+     */
+    function clearCache() {
+        isClearingCache.value = true;
+
+        systemService.clearCache().then(response => {
+            useNotifyStore().success({ type: 'is-success', text: trans('admin.cache_cleared') })
+        })
+        .finally(() => {
+            isClearingCache.value = false;
+        })
+    }
+
     onBeforeRouteLeave((to) => {
         if (! to.name.startsWith('admin.')) {
             notify.clear()
@@ -134,6 +149,7 @@
                     <!-- Check for update -->
                     <FormCheckbox v-model="_settings.checkForUpdate" @update:model-value="val => saveSetting('checkForUpdate', val)" fieldName="checkForUpdate" label="commons.check_for_update" help="commons.check_for_update_help" />
                     <VersionChecker />
+                    <!-- email config test -->
                     <div class="field">
                         <!-- <h5 class="title is-5">{{ $t('settings.security') }}</h5> -->
                         <label class="label"  v-html="$t('admin.forms.test_email.label')" />
@@ -149,7 +165,8 @@
                                 <span>{{ $t('commons.send') }}</span>
                             </button>   
                         </div>
-                    </div>                   
+                    </div>    
+
                     <h4 class="title is-4 pt-4 has-text-grey-light">{{ $t('settings.security') }}</h4>
                     <!-- protect db -->
                     <FormCheckbox v-model="_settings.useEncryption" @update:model-value="val => saveSetting('useEncryption', val)" fieldName="useEncryption" label="admin.forms.use_encryption.label" help="admin.forms.use_encryption.help" />
@@ -165,7 +182,25 @@
                     <!-- disable SSO registration -->
                     <FormCheckbox v-model="_settings.enableSso" @update:model-value="val => saveSetting('enableSso', val)" fieldName="enableSso" label="admin.forms.enable_sso.label" help="admin.forms.enable_sso.help" />
                 </form>
+
                 <h4 class="title is-4 pt-5 has-text-grey-light">{{ $t('commons.environment') }}</h4>
+                <!-- cache management -->
+                <div class="field">
+                    <!-- <h5 class="title is-5">{{ $t('settings.security') }}</h5> -->
+                    <label class="label"  v-html="$t('admin.forms.cache_management.label')" />
+                    <p class="help" v-html="$t('admin.forms.cache_management.help')" />
+                </div>
+                <div class="field mb-5 is-grouped">
+                    <p class="control">
+                        <button type="button" :class="isClearingCache ? 'is-loading' : ''" class="button is-link is-rounded is-small" @click="clearCache">
+                            {{ $t('commons.clear') }}
+                        </button>
+                    </p>
+                </div>
+                <!-- env vars -->
+                <div class="field">
+                    <label class="label"  v-html="$t('admin.variables')" />
+                </div>
                 <div v-if="infos" class="about-debug box is-family-monospace is-size-7">
                     <CopyButton id="btnCopyEnvVars" :token="listInfos?.innerText" />
                     <ul ref="listInfos" id="listInfos">

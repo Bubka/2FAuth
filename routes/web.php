@@ -73,20 +73,21 @@ Route::group(['middleware' => ['behind-auth', 'rejectIfReverseProxy']], function
     Route::delete('webauthn/credentials/{credential}', [WebAuthnManageController::class, 'delete'])->name('webauthn.credentials.delete');
 });
 
-Route::get('refresh-csrf', function () {
-    return csrf_token();
-});
-
-
 /**
  * Routes protected by an authentication guard and restricted to administrators
  */
 Route::group(['middleware' => ['behind-auth', 'admin']], function () {   
-    Route::get('infos', [SystemController::class, 'infos'])->name('system.infos');
-    Route::post('testEmail', [SystemController::class, 'testEmail'])->name('system.testEmail');
+    Route::get('system/infos', [SystemController::class, 'infos'])->name('system.infos');
+    Route::post('system/test-email', [SystemController::class, 'testEmail'])->name('system.testEmail');
 });
 
-Route::get('latestRelease', [SystemController::class, 'latestRelease'])->name('system.latestRelease');
+Route::get('system/optimize', [SystemController::class, 'optimize'])->name('system.optimize');
+Route::get('system/clear-cache', [SystemController::class, 'clear'])->name('system.clear');
+Route::get('system/latestRelease', [SystemController::class, 'latestRelease'])->name('system.latestRelease');
+
+Route::get('refresh-csrf', function () {
+    return csrf_token();
+});
 
 /**
  * Route for the main landing view

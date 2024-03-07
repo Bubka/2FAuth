@@ -63,6 +63,9 @@ return [
     'user_role_updated' => 'User role updated',
     'pats_succesfully_revoked' => 'User\'s PATs successfully revoked',
     'security_devices_succesfully_revoked' => 'User\'s security devices successfully revoked',
+    'variables' => 'Variables',
+    'cache_cleared' => 'Cache cleared',
+    'cache_optimized' => 'Cache optimized',
     'check_now' => 'Check now',
     'view_on_github' => 'View on Github',
     'x_is_available' => ':version is available',
@@ -99,6 +102,10 @@ return [
             'label' => 'Email configuration test',
             'help' => 'Send a test email to control your instance\'s email configuration. It is important to have a working configuration, otherwise users will not be able to request a reset password.',
             'email_will_be_send_to_x' => 'The email will be send to <span class="is-family-code has-text-info">:email</span>',
+        ],
+        'cache_management' => [
+            'label' => 'Cache management',
+            'help' => 'Sometimes cache needs to be cleared, for instance after a change to environment variables or an update. You can do it from here.',
         ]
     ],
 

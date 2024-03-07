@@ -7,6 +7,7 @@ use App\Notifications\TestEmailSettingNotification;
 use App\Services\ReleaseRadarService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -62,7 +63,7 @@ class SystemController extends Controller
     }
 
     /**
-     * Send a test email.
+     * Send a test email
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -76,4 +77,38 @@ class SystemController extends Controller
 
         return response()->json(['message' => 'Ok']);
     }
+
+    /**
+     * Clears all app caches and rebuild them
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function optimize(Request $request)
+    {
+        $configCode = Artisan::call('config:cache');
+        $routeCode  = Artisan::call('route:cache');
+        $eventCode  = Artisan::call('event:cache');
+        $viewCode   = Artisan::call('view:cache');
+
+        return response()->json([
+            'config-exit-code' => $configCode,
+            'route-exit-code'  => $routeCode,
+            'event-exit-code'  => $eventCode,
+            'view-exit-code'   => $viewCode,
+        ], 200);
+    }
+
+    /**
+     * Clears application cache
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function clear(Request $request)
+    {
+        $exitCode = Artisan::call('optimize:clear');
+
+        return response()->json(['exit-code' => $exitCode], 200);
+    }
+
+    
 }

@@ -81,4 +81,5 @@ return [
     'information' => 'Information',
     'permissions' => 'Permissions',
     'send' => 'Send',
+    'optimize' => 'Optimize',
 ];
