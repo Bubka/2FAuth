@@ -55,7 +55,7 @@
             <FontAwesomeIcon class="has-text-grey" :icon="['fas', 'chevron-right']" transform="rotate-135"/>
         </div>
         <div class="field" :class="{ 'is-flex-grow-5' : isIndented }">
-            <label :for="inputId" class="label" v-html="$t(label)"></label>
+            <label :for="inputId" class="label" :style="{ 'opacity': isDisabled ? '0.5' : '1' }" v-html="$t(label)"></label>
             <div class="control" :class="{ 'has-icons-left' : leftIcon, 'has-icons-right': rightIcon }">
                 <input 
                     :disabled="isDisabled" 
