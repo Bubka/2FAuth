@@ -461,7 +461,7 @@
                 <FormToggle v-model="form.otp_type" :isDisabled="isEditMode" :choices="otp_types" fieldName="otp_type" :fieldError="form.errors.get('otp_type')" label="twofaccounts.forms.otp_type.label" help="twofaccounts.forms.otp_type.help" :hasOffset="true" />
                 <div v-if="form.otp_type != ''">
                     <!-- secret -->
-                    <FormLockField :isEditMode="isEditMode" v-model="form.secret" fieldName="secret" :fieldError="form.errors.get('secret')" label="twofaccounts.forms.secret.label" help="twofaccounts.forms.secret.help" />
+                    <FormLockField :isEditMode="isEditMode" v-model.trimAll="form.secret" fieldName="secret" :fieldError="form.errors.get('secret')" label="twofaccounts.forms.secret.label" help="twofaccounts.forms.secret.help" />
                     <!-- Options -->
                     <div v-if="form.otp_type !== 'steamtotp'">
                         <h2 class="title is-4 mt-5 mb-2">{{ $t('commons.options') }}</h2>

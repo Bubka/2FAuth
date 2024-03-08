@@ -96,6 +96,7 @@ return [
         ],
         'options_help' => 'You can leave the following options blank if you don\'t know how to set them. The most commonly used values will be applied.',
         'alternative_methods' => 'Alternative methods',
+        'spaces_are_ignored' => 'Unwanted spaces will be automatically removed'
     ],
     'stream' => [
         'live_scan_cant_start' => 'Live scan can\'t start :(',

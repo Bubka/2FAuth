@@ -9,7 +9,8 @@
     const { inputId } = useIdGenerator(props.inputType, props.fieldName)
 
     const props = defineProps({
-        modelValue: [String, Number, Boolean],
+        modelValue: String,
+        modelModifiers: { default: () => ({}) },
         isEditMode: {
             type: Boolean,
             default: false
@@ -55,15 +56,45 @@
     })
 
     const fieldIsLocked = ref(props.isDisabled || props.isEditMode)
+    const hasBeenTrimmed = ref(false)
+    const componentKey = ref(0);
+
+    const emit = defineEmits(['input:modelValue'])
+
+    /**
+     * Removes spaces from the input string
+     */
+    function emitValue(e) {
+        let value = e.target.value
+        
+
+        if (props.modelModifiers.trimAll) {
+            value = value.replace(/\s+/g, '')
+        }
+
+        emit('update:modelValue', value)
+    }
+
+    function alertOnSpace(e) {
+        let value = e.target.value
+        hasBeenTrimmed.value = value.includes(' ')
+
+        emit('update:modelValue', value)
+    }
+
+    function forceRefresh(e) {
+        hasBeenTrimmed.value = e.target.value.includes(' ')
+        componentKey.value += 1
+    }
+
 </script>
 
 <template>
-    <div class="field" style="margin-bottom: 0.5rem;">
-        <label :for="inputId" class="label" v-html="$t(label)" />
-    </div>
-    <div class="field has-addons" :class="{ 'pt-3' : hasOffset }">
+    <label :for="inputId" class="label" v-html="$t(label)" />
+    <div class="field has-addons mb-0" :class="{ 'pt-3' : hasOffset }">
         <div class="control" :class="{ 'is-expanded': isExpanded }">
             <input 
+                :key="componentKey"
                 :disabled="fieldIsLocked" 
                 :id="inputId" 
                 :type="inputType" 
@@ -71,7 +102,9 @@
                 :value="modelValue" 
                 :placeholder="placeholder" 
                 v-bind="$attrs"
-                v-on:input="$emit('update:modelValue', $event.target.value)"
+                v-on:input="alertOnSpace"
+                v-on:change="emitValue"
+                v-on:blur="forceRefresh"
                 :maxlength="maxLength" 
             />
         </div>
@@ -92,6 +125,7 @@
             </div>
         </UseColorMode>
     </div>
+    <FieldError v-if="hasBeenTrimmed" :error="$t('twofaccounts.forms.spaces_are_ignored')" :field="'spaces'" :alertType="'is-warning'" />
     <FieldError v-if="fieldError != undefined" :error="fieldError" :field="fieldName" />
     <p class="help" v-html="$t(help)" v-if="help"></p>
 </template>
