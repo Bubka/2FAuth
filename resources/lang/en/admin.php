@@ -76,7 +76,7 @@ return [
         ],
         'restrict_registration' => [
             'label' => 'Restrict registration',
-            'help' => 'Make registration only available to a limited range of email addresses. Both rules can be used simultaneously.',
+            'help' => 'Make registration only available to a limited range of email addresses. Both rules can be used simultaneously. This has no effect on registration via SSO.',
         ],
         'restrict_list' => [
             'label' => 'Filtering list',
@@ -88,11 +88,15 @@ return [
         ],
         'disable_registration' => [
             'label' => 'Disable registration',
-            'help' => 'Prevent new user registration. This affects SSO as well, so new SSO users won\'t be able to sign on',
+            'help' => 'Prevent new user registration. Unless overridden (see below), this affects SSO as well, so new users won\'t be able to sign in via SSO',
         ],
         'enable_sso' => [
             'label' => 'Enable Single Sign-On (SSO)',
             'help' => 'Allow visitors to authenticate using an external ID via the Single Sign-On scheme',
+        ],
+        'keep_sso_registration_enabled' => [
+            'label' => 'Keep SSO registration enabled',
+            'help' => 'Allow new users to sign in for the first time via SSO whereas registration is disabled',
         ],
         'is_admin' => [
             'label' => 'Is administrator',

@@ -57,7 +57,7 @@ class SocialiteController extends Controller
                 return redirect('/error?err=sso_email_already_used');
             } elseif (User::count() === 0) {
                 $user->promoteToAdministrator();
-            } elseif (Settings::get('disableRegistration')) {
+            } elseif (Settings::get('disableRegistration') && ! Settings::get('keepSsoRegistrationEnabled')) {
                 return redirect('/error?err=sso_no_register');
             }
             $user->password = bcrypt(Str::random());

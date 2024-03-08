@@ -29,6 +29,7 @@
         restrictList: appSettings.restrictList,
         restrictRule: appSettings.restrictRule,
         disableRegistration: appSettings.disableRegistration,
+        keepSsoRegistrationEnabled: appSettings.keepSsoRegistrationEnabled,
         enableSso: appSettings.enableSso,
     })
 
@@ -171,6 +172,8 @@
                     <!-- protect db -->
                     <FormCheckbox v-model="_settings.useEncryption" @update:model-value="val => saveSetting('useEncryption', val)" fieldName="useEncryption" label="admin.forms.use_encryption.label" help="admin.forms.use_encryption.help" />
                     <h4 class="title is-4 pt-4 has-text-grey-light">{{ $t('admin.registrations') }}</h4>
+                    <!-- disable SSO registration -->
+                    <FormCheckbox v-model="_settings.enableSso" @update:model-value="val => saveSetting('enableSso', val)" fieldName="enableSso" label="admin.forms.enable_sso.label" help="admin.forms.enable_sso.help" />
                     <!-- restrict registration -->
                     <FormCheckbox v-model="_settings.restrictRegistration" @update:model-value="val => saveSetting('restrictRegistration', val)" fieldName="restrictRegistration" :isDisabled="appSettings.disableRegistration" label="admin.forms.restrict_registration.label" help="admin.forms.restrict_registration.help" />
                         <!-- restrict list -->
@@ -179,8 +182,8 @@
                         <FormField v-model="_settings.restrictRule" @change:model-value="val => saveOrDeleteSetting('restrictRule', val)" :fieldError="fieldErrors.restrictRule" fieldName="restrictRule" :isDisabled="!appSettings.restrictRegistration || appSettings.disableRegistration" label="admin.forms.restrict_rule.label" help="admin.forms.restrict_rule.help" :isIndented="true" leftIcon="slash" rightIcon="slash" />
                     <!-- disable registration -->
                     <FormCheckbox v-model="_settings.disableRegistration" @update:model-value="val => saveSetting('disableRegistration', val)" fieldName="disableRegistration" label="admin.forms.disable_registration.label" help="admin.forms.disable_registration.help" />
-                    <!-- disable SSO registration -->
-                    <FormCheckbox v-model="_settings.enableSso" @update:model-value="val => saveSetting('enableSso', val)" fieldName="enableSso" label="admin.forms.enable_sso.label" help="admin.forms.enable_sso.help" />
+                        <!-- keep sso registration -->
+                        <FormCheckbox v-model="_settings.keepSsoRegistrationEnabled" @change:model-value="val => saveOrDeleteSetting('keepSsoRegistrationEnabled', val)" :fieldError="fieldErrors.keepSsoRegistrationEnabled" fieldName="keepSsoRegistrationEnabled" :isDisabled="!appSettings.enableSso || !appSettings.disableRegistration" label="admin.forms.keep_sso_registration_enabled.label" help="admin.forms.keep_sso_registration_enabled.help" :isIndented="true" />
                 </form>
 
                 <h4 class="title is-4 pt-5 has-text-grey-light">{{ $t('commons.environment') }}</h4>

@@ -253,9 +253,10 @@ class SocialiteControllerTest extends FeatureTestCase
     /**
      * @test
      */
-    public function test_callback_returns_error_when_registrations_are_closed()
+    public function test_callback_redirects_to_error_when_registrations_are_closed()
     {
         Settings::set('disableRegistration', true);
+        Settings::set('keepSsoRegistrationEnabled', false);
 
         $newSocialiteUser        = new \Laravel\Socialite\Two\User;
         $newSocialiteUser->id    = 'rejected_id';
@@ -273,9 +274,10 @@ class SocialiteControllerTest extends FeatureTestCase
     /**
      * @test
      */
-    public function test_callback_skips_registration_when_registrations_are_closed()
+    public function test_callback_skips_registration_when_all_registrations_are_closed()
     {
         Settings::set('disableRegistration', true);
+        Settings::set('keepSsoRegistrationEnabled', false);
 
         $newSocialiteUser        = new \Laravel\Socialite\Two\User;
         $newSocialiteUser->id    = 'rejected_id';
@@ -290,6 +292,32 @@ class SocialiteControllerTest extends FeatureTestCase
         $this->assertDatabaseMissing('users', [
             'oauth_id'       => 'rejected_id',
             'oauth_provider' => self::USER_OAUTH_PROVIDER,
+        ]);
+    }
+
+    /**
+     * @test
+     */
+    public function test_callback_registers_new_user_when_sso_registrations_are_enabled()
+    {
+        Settings::set('disableRegistration', true);
+        Settings::set('keepSsoRegistrationEnabled', true);
+
+        $newSocialiteUser        = new \Laravel\Socialite\Two\User;
+        $newSocialiteUser->id    = 'new_id';
+        $newSocialiteUser->name  = 'jane';
+        $newSocialiteUser->email = 'jane@provider.com';
+
+        Socialite::shouldReceive('driver->user')
+            ->andReturn($newSocialiteUser);
+
+        $response = $this->get('/socialite/callback/github', ['driver' => 'github']);
+
+        $this->assertDatabaseHas('users', [
+            'oauth_id'       => 'new_id',
+            'oauth_provider' => self::USER_OAUTH_PROVIDER,
+            'email'          => 'jane@provider.com',
+            'is_admin'       => 0,
         ]);
     }
 }
