@@ -31,7 +31,7 @@ class SettingUpdateRequest extends FormRequest
             ]
         ];
 
-        if ($this->route()->parameter('settingName') == 'restrictList') {
+        if ($this->route()?->parameter('settingName') == 'restrictList') {
             $rule['value'][] = new IsValideEmailList;
         }
 
