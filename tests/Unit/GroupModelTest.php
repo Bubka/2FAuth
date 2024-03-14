@@ -27,7 +27,11 @@ class GroupModelTest extends ModelTestCase
             ['created_at', 'updated_at'],
             ['*'],
             [],
-            ['id' => 'int', 'twofaccounts_count' => 'integer'],
+            [
+                'id'                 => 'int',
+                'twofaccounts_count' => 'integer',
+                'user_id'            => 'integer'
+            ],
             [
                 'deleting' => GroupDeleting::class,
                 'deleted'  => GroupDeleted::class,

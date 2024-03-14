@@ -145,7 +145,9 @@ class TwoFAccount extends Model implements Sortable
      *
      * @var array<string, string>
      */
-    protected $casts = [];
+    protected $casts = [
+        'user_id' => 'integer',
+    ];
 
     /**
      * The event map for the model.

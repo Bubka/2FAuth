@@ -52,6 +52,7 @@ class Group extends Model
      */
     protected $casts = [
         'twofaccounts_count' => 'integer',
+        'user_id'            => 'integer',
     ];
 
     /**

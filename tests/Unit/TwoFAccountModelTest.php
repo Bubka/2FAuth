@@ -33,7 +33,10 @@ class TwoFAccountModelTest extends ModelTestCase
             [],
             ['*'],
             [],
-            ['id'      => 'int'],
+            [
+                'id' => 'int',
+                'user_id' => 'integer'
+            ],
             ['deleted' => TwoFAccountDeleted::class],
             ['created_at', 'updated_at'],
             \Illuminate\Database\Eloquent\Collection::class,
