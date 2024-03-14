@@ -61,9 +61,10 @@ Route::group(['middleware' => 'auth:api-guard'], function () {
  */
 Route::group(['middleware' => ['auth:api-guard', 'admin']], function () {
     Route::patch('users/{user}/password/reset', [UserManagerController::class, 'resetPassword'])->name('users.password.reset');
+    Route::patch('users/{user}/promote', [UserManagerController::class, 'promote'])->name('users.promote');
     Route::delete('users/{user}/pats', [UserManagerController::class, 'revokePATs'])->name('users.revoke.pats');
     Route::delete('users/{user}/credentials', [UserManagerController::class, 'revokeWebauthnCredentials'])->name('users.revoke.credentials');
-    Route::apiResource('users', UserManagerController::class);
+    Route::apiResource('users', UserManagerController::class, ['except' => ['update']]);
 
     Route::get('settings/{settingName}', [SettingController::class, 'show'])->name('settings.show');
     Route::get('settings', [SettingController::class, 'index'])->name('settings.index');

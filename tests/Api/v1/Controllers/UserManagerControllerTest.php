@@ -452,10 +452,10 @@ class UserManagerControllerTest extends FeatureTestCase
     /**
      * @test
      */
-    public function test_update_changes_admin_status(): void
+    public function test_promote_changes_admin_status(): void
     {
         $this->actingAs($this->admin, 'api-guard')
-            ->json('PUT', '/api/v1/users/' . $this->user->id, [
+            ->json('PATCH', '/api/v1/users/' . $this->user->id . '/promote', [
                 'is_admin' => true
             ])
             ->assertOk();
@@ -468,13 +468,13 @@ class UserManagerControllerTest extends FeatureTestCase
     /**
      * @test
      */
-    public function test_update_returns_UserManagerResource(): void
+    public function test_promote_returns_UserManagerResource(): void
     {
-        $path = '/api/v1/users/' . $this->user->id;
+        $path = '/api/v1/users/' . $this->user->id . '/promote';
         $request  = Request::create($path, 'PUT');
 
         $response = $this->actingAs($this->admin, 'api-guard')
-            ->json('PUT', $path, [
+            ->json('PATCH', $path, [
                 'is_admin' => true
             ]);
 

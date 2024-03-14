@@ -103,12 +103,12 @@ export default {
     },
 
     /**
-     * Update user
+     * Promote or demote user from the admin role
      * 
      * @returns promise
      */
-    update(id, payload, config = {}) {
-        return apiClient.patch('/users/' + id, payload, { ...config })
+    promote(id, payload, config = {}) {
+        return apiClient.patch('/users/' + id + '/promote', payload, { ...config })
     },
 
     /**

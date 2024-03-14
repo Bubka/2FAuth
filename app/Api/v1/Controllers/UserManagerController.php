@@ -3,7 +3,7 @@
 namespace App\Api\v1\Controllers;
 
 use App\Api\v1\Requests\UserManagerStoreRequest;
-use App\Api\v1\Requests\UserManagerUpdateRequest;
+use App\Api\v1\Requests\UserManagerPromoteRequest;
 use App\Api\v1\Resources\UserManagerResource;
 use App\Http\Controllers\Controller;
 use App\Models\User;
@@ -177,7 +177,7 @@ class UserManagerController extends Controller
      *
      * @return \App\Api\v1\Resources\UserManagerResource
      */
-    public function update(UserManagerUpdateRequest $request, User $user)
+    public function promote(UserManagerPromoteRequest $request, User $user)
     {
         $user->promoteToAdministrator($request->validated('is_admin'));
         $user->save();

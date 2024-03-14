@@ -100,7 +100,7 @@
             }
         }
 
-        userService.update(managedUser.value.info.id, { 'is_admin': isAdmin }).then(response => {
+        userService.promote(managedUser.value.info.id, { 'is_admin': isAdmin }).then(response => {
             managedUser.value.info.is_admin = response.data.info.is_admin
             notify.success({ text: trans('admin.user_role_updated') })
         })
