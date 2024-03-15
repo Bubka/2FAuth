@@ -173,7 +173,7 @@ class UserManagerController extends Controller
     }
 
     /**
-     * Update a user
+     * Promote (or demote) a user
      *
      * @return \App\Api\v1\Resources\UserManagerResource
      */
