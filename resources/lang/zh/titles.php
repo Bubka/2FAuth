@@ -46,4 +46,10 @@ return [
     'genericError' => '错误',
     '404' => '找不到项目',
     'about' => '关于',
+    'admin' =>  [
+        'appSetup' => 'App setup',
+        'users' => 'Users management',
+        'createUser' => 'Create user',
+        'manageUser' => 'Manage user',
+    ]
 ];

@@ -15,7 +15,6 @@ return [
 
     'service' => 'Servicio',
     'account' => 'Cuenta',
-    'accounts' => 'Cuentas',
     'icon' => 'Icono',
     'icon_for_account_x_at_service_y' => 'Icono de la cuenta {account} en {service}',
     'icon_to_illustrate_the_account' => 'Icono que representa a la cuenta',
@@ -97,6 +96,7 @@ return [
         ],
         'options_help' => 'Puede dejar las siguientes opciones en blanco si no sabe cómo establecerlas. Los valores más utilizados se aplicarán.',
         'alternative_methods' => 'Métodos alternativos',
+        'spaces_are_ignored' => 'Unwanted spaces will be automatically removed'
     ],
     'stream' => [
         'live_scan_cant_start' => 'Live scan no puede comenzar :(',
@@ -138,14 +138,16 @@ return [
         'import' => 'Import',
         'to_import' => 'Importar',
         'import_legend' => '2FAuth puede importar datos de varias apps 2FA.<br />Usa la función de Exportación de éstas apps para generar los recursos de migración (código QR o archivo), y cargalo usando el método preferido abajo.',
-        'import_legend_afterpart' => 'Use the Export feature of these apps to get a migration resource like a QR code or a JSON file then load it here.',
+        'import_legend_afterpart' => 'Use la función Exportar de estas aplicaciones para obtener un recurso de migración como un código QR o un archivo JSON y luego cárguelo aquí.',
         'upload' => 'Subir',
         'scan' => 'Escanear',
         'supported_formats_for_qrcode_upload' => 'Aceptado: jpg, jpeg, png, bmp, gif, svg, o webp',
         'supported_formats_for_file_upload' => 'Aceptado: texto plano, json, 2fas',
+        'expected_format_for_direct_input' => 'Expected: A list of otpauth URI, one by line',
         'supported_migration_formats' => 'Formatos de migración soportados',
         'qr_code' => 'Código QR',
         'text_file' => 'Fichero de texto',
+        'direct_input' => 'Direct input',
         'plain_text' => 'Texto plano',
         'parsing_data' => 'Analizando datos...',
         'issuer' => 'Emisor',

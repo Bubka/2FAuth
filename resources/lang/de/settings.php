@@ -25,9 +25,6 @@ return [
     'confirm' => [
 
     ],
-    'administration' => 'Administration',
-    'administration_legend' => 'Vorangegangene Einstellungen betreffen Benutzereinstellungen (jeder Benutzer kann seine eigenen Einstellungen festlegen), folgende globale Einstellungen sind gültig für alle Benutzer. Nur ein Administrator kann diese Einstellungen ansehen und bearbeiten.',
-    'only_an_admin_can_edit_them' => 'Nur ein Administrator kann sie ansehen und bearbeiten.',
     'you_are_administrator' => 'Du bist ein Administrator',
     'account_linked_to_sso_x_provider' => 'Sie haben sich mit Ihrem :provider-Konto via SSO angemeldet. Ihre Daten können hier nicht geändert werden, sondern auf :provider.',
     'general' => 'Allgemein',
@@ -66,6 +63,10 @@ return [
         'close_otp_on_copy' => [
             'label' => 'Schließe <abbr title="One-Time Password">OTP</abbr> nach dem Kopieren',
             'help' => 'Bei einem Klick auf das generierte Passwort wird es automatisch auf dem Bildschirm ausgeblendet'
+        ],
+        'clear_search_on_copy' => [
+            'label' => 'Clear Search on copy',
+            'help' => 'Empty the Search box right after a code has been copied to the clipboard'
         ],
         'copy_otp_on_display' => [
             'label' => 'Das angezeigte, einmaliges Passwort (OTP) kopieren',
@@ -110,13 +111,13 @@ return [
             'label' => 'Automatische Sperrung',
             'help' => 'Meldet den Benutzer bei Inaktivität automatisch ab. Hat keine Auswirkung, wenn die Authentifizierung über einen Proxy erfolgt und keine benutzerdefinierte Logout-URL angegeben ist.'
         ],
-        'use_encryption' => [
-            'label' => 'Protect sensitive data',
-            'help' => 'Vertrauliche Daten, die 2FA-Geheimnisse und E-Mails, werden verschlüsselt in der Datenbank gespeichert. Erstellen Sie ein Backup von der APP_KEY Variablen in der .env Datei (oder der gesamten Datei), da sie als Schlüssel zur gesicherten Datenbank dient. Es gibt keine Möglichkeit, verschlüsselte Daten ohne diesen Schlüssel zu wiederherzustellen.',
-        ],
         'default_group' => [
             'label' => 'Standardgruppe',
             'help' => 'Die Gruppe, der neu erstellte Konten zugeordnet werden',
+        ],
+        'view_default_group_on_copy' => [
+            'label' => 'View default group on copy',
+            'help' => 'Always return to the default group when an OTP is copied',
         ],
         'useDirectCapture' => [
             'label' => 'Direkteingabe',
@@ -129,14 +130,6 @@ return [
         'remember_active_group' => [
             'label' => 'Gruppenfilter merken',
             'help' => 'Speichert den letzten Gruppenfilter und stellt ihn bei Ihrem nächsten Besuch wieder her',
-        ],
-        'disable_registration' => [
-            'label' => 'Registrierung deaktivieren',
-            'help' => 'Deaktiviere Registrierung',
-        ],
-        'enable_sso' => [
-            'label' => 'Single Sign-On (SSO) aktivieren',
-            'help' => 'Besuchern erlauben, eine externe ID über das Single Sign-On Schema zu authentifizieren',
         ],
         'otp_generation' => [
             'label' => 'Passwort zeigen',

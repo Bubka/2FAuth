@@ -46,4 +46,10 @@ return [
     'genericError' => 'エラー',
     '404' => '見つかりません',
     'about' => 'このアプリについて',
+    'admin' =>  [
+        'appSetup' => 'App setup',
+        'users' => 'Users management',
+        'createUser' => 'Create user',
+        'manageUser' => 'Manage user',
+    ]
 ];

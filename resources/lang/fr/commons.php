@@ -77,4 +77,9 @@ return [
     'default' => 'Défaut',
     'back_to_home' => 'Retour à l’accueil',
     'nothing' => 'rien',
+    'no_result' => 'Aucun résultat',
+    'information' => 'Information',
+    'permissions' => 'Autorisations',
+    'send' => 'Envoyer',
+    'optimize' => 'Optimiser',
 ];

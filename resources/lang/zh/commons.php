@@ -77,4 +77,9 @@ return [
     'default' => '默认值',
     'back_to_home' => '返回首页',
     'nothing' => '无',
+    'no_result' => 'No result',
+    'information' => 'Information',
+    'permissions' => 'Permissions',
+    'send' => 'Send',
+    'optimize' => 'Optimize',
 ];

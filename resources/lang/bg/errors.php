@@ -65,5 +65,6 @@ return [
     'sso_no_register' => 'Registrations are disabled',
     'sso_email_already_used' => 'A user account with the same email address already exists but it does not match your external account ID. Do not use SSO if you are already registered on 2FAuth with this email.',
     'account_managed_by_external_provider' => 'Account managed by an external provider',
-    'data_cannot_be_refreshed_from_server' => 'Data cannot be refreshed from server'
+    'data_cannot_be_refreshed_from_server' => 'Data cannot be refreshed from server',
+    'no_pwd_reset_for_this_user_type' => 'Password reset unavailable for this user',
 ];

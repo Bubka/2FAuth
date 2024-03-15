@@ -15,7 +15,6 @@ return [
 
     'service' => '服务',
     'account' => '账户',
-    'accounts' => '账户',
     'icon' => '图标',
     'icon_for_account_x_at_service_y' => '{account} 在 {service} 的帐户图标',
     'icon_to_illustrate_the_account' => '说明账户的图标',
@@ -97,6 +96,7 @@ return [
         ],
         'options_help' => '如果您不知道如何填写，您可以将下列选项留空。将会应用最常见的设置。',
         'alternative_methods' => '备选方法',
+        'spaces_are_ignored' => 'Unwanted spaces will be automatically removed'
     ],
     'stream' => [
         'live_scan_cant_start' => '扫描无法开始 :(',
@@ -143,9 +143,11 @@ return [
         'scan' => '扫描',
         'supported_formats_for_qrcode_upload' => '接受：jpg、jpeg、png、bmp、gif、svg或webp',
         'supported_formats_for_file_upload' => '接受：纯文本，json，2fas',
+        'expected_format_for_direct_input' => 'Expected: A list of otpauth URI, one by line',
         'supported_migration_formats' => '支持的迁移格式',
         'qr_code' => '二维码',
         'text_file' => '文本文件',
+        'direct_input' => 'Direct input',
         'plain_text' => '纯文本',
         'parsing_data' => '正在解析数据...',
         'issuer' => '发行商',

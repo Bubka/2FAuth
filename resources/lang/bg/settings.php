@@ -25,9 +25,6 @@ return [
     'confirm' => [
 
     ],
-    'administration' => 'Администрация',
-    'administration_legend' => 'Докато предишните настройки са потребителски (всеки потребител може да зададе свои собствени предпочитания), следващите настройки са глобални и се прилагат за всички потребители. Само администратор може да преглежда и редактира тези настройки.',
-    'only_an_admin_can_edit_them' => 'Only an administrator can view and edit them.',
     'you_are_administrator' => 'Вие сте администратор',
     'account_linked_to_sso_x_provider' => 'You signed-in via SSO using your :provider account. Your information cannot be changed here but on :provider.',
     'general' => 'Общи',
@@ -66,6 +63,10 @@ return [
         'close_otp_on_copy' => [
             'label' => 'Затворете <abbr title="One-Time Password">OTP</abbr> след копиране',
             'help' => 'Кликването върху генерираната парола ще я копира и автоматично ще я скрива от екрана'
+        ],
+        'clear_search_on_copy' => [
+            'label' => 'Clear Search on copy',
+            'help' => 'Empty the Search box right after a code has been copied to the clipboard'
         ],
         'copy_otp_on_display' => [
             'label' => 'Копирайте <abbr title="One-Time Password">OTP</abbr> при показване',
@@ -110,13 +111,13 @@ return [
             'label' => 'Автоматично заключване',
             'help' => 'Отписване на потребителя автоматично в случай на неактивност. Няма ефект, когато удостоверяването се обработва от прокси и не е указан персонализиран URL адрес за излизане.'
         ],
-        'use_encryption' => [
-            'label' => 'Protect sensitive data',
-            'help' => 'Чувствителните данни, 2FA тайните и имейлите се съхраняват криптирани в база данни. Не забравяйте да направите резервно копие на стойността "APP_KEY" във вашия .env файл (или на целия файл), тъй като тя служи като ключ за криптиране. Няма начин да дешифрирате криптирани данни без този ключ.',
-        ],
         'default_group' => [
             'label' => 'Група по подразбиране',
             'help' => 'Групата, към която са свързани новосъздадените акаунти',
+        ],
+        'view_default_group_on_copy' => [
+            'label' => 'View default group on copy',
+            'help' => 'Always return to the default group when an OTP is copied',
         ],
         'useDirectCapture' => [
             'label' => 'Директно въвеждане',
@@ -129,14 +130,6 @@ return [
         'remember_active_group' => [
             'label' => 'Запомняне на груповия филтър',
             'help' => 'Запазва последния приложен групов филтър и го възстановява при следващото ви посещение',
-        ],
-        'disable_registration' => [
-            'label' => 'Деактивиране на регистрациите',
-            'help' => 'Предотвратява нови потребителски регистрации',
-        ],
-        'enable_sso' => [
-            'label' => 'Enable Single Sign-On (SSO)',
-            'help' => 'Allow visitors to authenticate using an external ID via the Single Sign-On scheme',
         ],
         'otp_generation' => [
             'label' => 'Покажи паролата',

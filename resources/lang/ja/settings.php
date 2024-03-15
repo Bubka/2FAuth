@@ -25,9 +25,6 @@ return [
     'confirm' => [
 
     ],
-    'administration' => '管理者',
-    'administration_legend' => 'ここまでの設定はユーザー設定（すべてのユーザーが個別に設定可能）ですが、以下の設定は全体設定で、すべてのユーザーに適用されます。',
-    'only_an_admin_can_edit_them' => '管理者のみが閲覧および編集できます。',
     'you_are_administrator' => 'あなたは管理者です',
     'account_linked_to_sso_x_provider' => 'あなたは :provider アカウントのSSO経由でサインインしています。ここでは、:provider 以外の情報は変更できません。',
     'general' => '全般',
@@ -66,6 +63,10 @@ return [
         'close_otp_on_copy' => [
             'label' => 'コピー後に<abbr title="ワンタイムパスワード">OTP</abbr>を隠す',
             'help' => '生成されたパスワードをクリックすると、自動的に画面から非表示になります。'
+        ],
+        'clear_search_on_copy' => [
+            'label' => 'Clear Search on copy',
+            'help' => 'Empty the Search box right after a code has been copied to the clipboard'
         ],
         'copy_otp_on_display' => [
             'label' => '表示時に<abbr title="ワンタイムパスワード">OTP</abbr> をコピー',
@@ -110,13 +111,13 @@ return [
             'label' => '自動ロック',
             'help' => 'この期間操作がないと、自動的にログアウトします。 プロキシが認証を処理していて、ログアウトURLが指定されていない場合は効果がありません。'
         ],
-        'use_encryption' => [
-            'label' => '機密データを保護',
-            'help' => '機密データ（2 要素認証シークレットやメールアドレス）を暗号化してデータベースに保存されます。暗号化キーとなるので、.env ファイル内の APP_KEY の値（またはファイル全体）は必ずバックアップしてください。キーが失われるとデータは復号できません。',
-        ],
         'default_group' => [
             'label' => '既定のグループ',
             'help' => '新規作成したアカウントが所属するグループ',
+        ],
+        'view_default_group_on_copy' => [
+            'label' => 'View default group on copy',
+            'help' => 'Always return to the default group when an OTP is copied',
         ],
         'useDirectCapture' => [
             'label' => '選択画面を飛ばす',
@@ -129,14 +130,6 @@ return [
         'remember_active_group' => [
             'label' => 'グループフィルタを記憶',
             'help' => '次回アクセス時に最後に使用したグループフィルタを適用します。',
-        ],
-        'disable_registration' => [
-            'label' => '登録を無効化',
-            'help' => '新規ユーザー登録を停止します。これはSSOにも影響するため、新しいSSOユーザーはサインオンできません。',
-        ],
-        'enable_sso' => [
-            'label' => 'シングルサインオン (SSO) を有効化',
-            'help' => '訪問者が外部 ID のシングルサインオンを利用して認証できるようにします。',
         ],
         'otp_generation' => [
             'label' => 'パスワードの表示方式',

@@ -65,5 +65,6 @@ return [
     'sso_no_register' => '新規登録は受け付けていません',
     'sso_email_already_used' => '同じメールアドレスを持つユーザーアカウントは既に存在しますが、あなたの外部アカウントIDと一致しません。 このアドレスで 2FAuth に登録済みの場合は、SSOを使用しないでください。',
     'account_managed_by_external_provider' => '外部プロバイダが管理するアカウント',
-    'data_cannot_be_refreshed_from_server' => 'Data cannot be refreshed from server'
+    'data_cannot_be_refreshed_from_server' => 'データをサーバーから更新できません',
+    'no_pwd_reset_for_this_user_type' => 'Password reset unavailable for this user',
 ];

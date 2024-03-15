@@ -46,4 +46,10 @@ return [
     'genericError' => 'Erreur',
     '404' => 'Élément non trouvé',
     'about' => 'À propos',
+    'admin' =>  [
+        'appSetup' => 'Configuration de l\'application',
+        'users' => 'Gestion des utilisateurs',
+        'createUser' => 'Créer un utilisateur',
+        'manageUser' => 'Gestion de l\'utilisateur',
+    ]
 ];

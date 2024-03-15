@@ -14,7 +14,7 @@ return [
     */
 
     'accepted' => ':attribute debe ser aceptado.',
-    'accepted_if' => ':attribute debe ser aceptado cuando :other sea :value.',
+    'accepted_if' => ':attribute debe aceptarse cuando :other sea :value.',
     'active_url' => ':attribute no es una URL válida.',
     'after' => ':attribute debe ser una fecha posterior a :date.',
     'after_or_equal' => ':attribute debe ser una fecha posterior o igual a :date.',
@@ -170,6 +170,8 @@ return [
         ],
         'email' => [
             'exists' => 'No se ha encontrado ninguna cuenta con este correo electrónico.',
+            'ComplyWithEmailRestrictionPolicy' => 'This email address does not comply with the registration policy',
+            'IsValidEmailList' => 'All emails must be valid and separated with a pipe'
         ],
         'secret' => [
             'isBase32Encoded' => ':attribute debe ser una cadena codificada en base32.',

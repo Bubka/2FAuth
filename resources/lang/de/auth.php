@@ -101,7 +101,7 @@ return [
         ],
         'change_password' => 'Passwort ändern',
         'send_password_reset_link' => 'Link zum Zurücksetzen des Passworts senden',
-        'password_successfully_changed' => 'Passwort erfolgreich geändert',
+        'password_successfully_reset' => 'Password successfully reset',
         'edit_account' => 'Account bearbeiten',
         'profile_saved' => 'Profil erfolgreich aktualisiert!',
         'welcome_to_demo_app_use_those_credentials' => 'Willkommen bei der 2FAuth Demo.<br><br>Sie können sich mit der E-Mail-Adresse <strong>demo@2fauth.app</strong> und dem Passwort <strong>demo</strong> anmelden',

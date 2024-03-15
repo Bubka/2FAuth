@@ -94,14 +94,14 @@ return [
         'reset_your_password' => 'Нулиране на паролата',
         'reset_password' => 'Нулиране на парола',
         'disabled_in_demo' => 'Функцията е деактивирана в демо режима',
-        'new_password' => 'New password',
+        'new_password' => 'Нова парола',
         'current_password' => [
             'label' => 'Текуща парола',
             'help' => 'Попълнете текущата си парола, за да потвърдите, че това сте вие'
         ],
         'change_password' => 'Промяна на паролата',
         'send_password_reset_link' => 'Изпратете връзка за нулиране на паролата',
-        'password_successfully_changed' => 'Паролата е променена успешно',
+        'password_successfully_reset' => 'Password successfully reset',
         'edit_account' => 'Редактиране на профил',
         'profile_saved' => 'Профилът е актуализиран успешно!',
         'welcome_to_demo_app_use_those_credentials' => 'Добре дошли в демонстрацията на 2FAuth.<br><br>Можете да влезете с имейл <strong>demo@2fauth.app</strong> и парола <strong>demo</strong>',

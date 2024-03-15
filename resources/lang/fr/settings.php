@@ -25,9 +25,6 @@ return [
     'confirm' => [
 
     ],
-    'administration' => 'Administration',
-    'administration_legend' => 'Contrairement aux paramètres précédents qui sont des paramètres utilisateur (chaque utilisateur peut les personnaliser à sa convenance), les paramètres qui suivent sont globaux et s\'appliquent à tous les utilisateurs. Seul les administrateurs peuvent voir et modifier ces paramètres.',
-    'only_an_admin_can_edit_them' => 'Seul un administrateur peut les voir et les modifier.',
     'you_are_administrator' => 'Vous êtes administrateur',
     'account_linked_to_sso_x_provider' => 'Vous vous êtes connecté via SSO avec votre compte :provider. Vos informations ne peuvent être modifiées ici mais sur :provider.',
     'general' => 'General',
@@ -66,6 +63,10 @@ return [
         'close_otp_on_copy' => [
             'label' => 'Cacher les mots de passe <abbr title="One-Time Password">OTP</abbr> copiés',
             'help' => 'Les mots de passe qui viennent d\'être copiés ne restent pas visibles à l\'écran'
+        ],
+        'clear_search_on_copy' => [
+            'label' => 'Effacer la recherche après copie',
+            'help' => 'Vide le champ de recherche dès qu\'un code a été copié dans le presse-papier'
         ],
         'copy_otp_on_display' => [
             'label' => 'Copier le mot de passe <abbr title="One-Time Password">OTP</abbr> dès qu\'il s\'affiche',
@@ -110,13 +111,13 @@ return [
             'label' => 'Verrouillage automatique',
             'help' => 'Déconnecte automatiquement l\'utilisateur en cas d\'inactivité. Est sans effet lorsque l\'authentification est gérée par un proxy et qu\'aucune URL de déconnexion personnalisée n\'est configurée.'
         ],
-        'use_encryption' => [
-            'label' => 'Protéger les données sensibles',
-            'help' => 'Les données sensibles, les secrets et les e-mails 2FA, sont stockés chiffrés dans la base de données. Assurez-vous de sauvegarder la valeur APP_KEY de votre fichier env (ou tout le fichier) car il sert de clé de chiffrement. Il n\'y a aucun moyen de déchiffrer les données chiffrées sans cette clé.',
-        ],
         'default_group' => [
             'label' => 'Groupe par défaut',
             'help' => 'Le groupe auquel sont associés les nouveaux comptes',
+        ],
+        'view_default_group_on_copy' => [
+            'label' => 'Afficher le groupe par défaut après copie',
+            'help' => 'Bascule systématiquement l\'affichage sur le groupe par défaut dès qu\'un code a été copié dans le presse-papier',
         ],
         'useDirectCapture' => [
             'label' => 'Saisie directe',
@@ -129,14 +130,6 @@ return [
         'remember_active_group' => [
             'label' => 'Mémoriser le filtrage par groupe',
             'help' => 'Enregistre le dernier groupe affiché et le restaure lors de votre prochaine visite',
-        ],
-        'disable_registration' => [
-            'label' => 'Bloquer les inscriptions',
-            'help' => 'Empêche l\'enregistrement de nouveaux utilisateurs',
-        ],
-        'enable_sso' => [
-            'label' => 'Activer l\'authentification unique (SSO)',
-            'help' => 'Permet aux visiteurs de s\'authentifier avec un compte externe grâce à la méthode Single Sign-On',
         ],
         'otp_generation' => [
             'label' => 'Affichage des mots de passe',

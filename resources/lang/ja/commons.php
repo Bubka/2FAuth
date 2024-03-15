@@ -39,7 +39,7 @@ return [
     'move' => '移動',
     'export' => 'エクスポート',
     'all' => 'すべて',
-    'check_all' => '全部',
+    'check_all' => '全部に',
     'select_all' => 'すべて選択',
     'clear_selection' => '選択をすべて解除',
     'sort_descending' => '降順に並べ替え',
@@ -77,4 +77,9 @@ return [
     'default' => '既定',
     'back_to_home' => 'ホームへ戻る',
     'nothing' => 'なし',
+    'no_result' => 'No result',
+    'information' => 'Information',
+    'permissions' => 'Permissions',
+    'send' => 'Send',
+    'optimize' => 'Optimize',
 ];

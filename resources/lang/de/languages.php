@@ -19,4 +19,5 @@ return [
     'ru' => 'Русский (Russisch)',
     'bg' => 'Български (Bulgarisch)',
     'ja' => '日本語 (Japanisch)',
+    'hi' => 'हिंदी (Hindi)',
 ];

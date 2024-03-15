@@ -73,7 +73,7 @@ return [
                 Atención! El formulario de correo electrónico y contraseña sigue disponible a pesar de que esta opción está activada, pero siempre devolverá una respuesta de \'Autenticación fallida\'.'
         ],
         'need_a_security_device_to_enable_options' => 'Establezca al menos un dispositivo para activar las siguientes opciones',
-        'options' => 'Options',
+        'options' => 'Opciones',
     ],
     'forms' => [
         'name' => 'Nombre',
@@ -101,7 +101,7 @@ return [
         ],
         'change_password' => 'Cambiar Contraseña',
         'send_password_reset_link' => 'Enviar enlace para restablecer contraseña',
-        'password_successfully_changed' => 'Contraseña cambiada correctamente',
+        'password_successfully_reset' => 'Password successfully reset',
         'edit_account' => 'Editar cuenta',
         'profile_saved' => '¡Perfil actualizado con éxito!',
         'welcome_to_demo_app_use_those_credentials' => 'Bienvenido/a a la demostración de 2FAuth.<br><br>Puedes conectarte usando el email <strong>demo@2fauth.app</strong> y la contraseña <strong>demo</strong>',

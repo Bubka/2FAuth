@@ -15,7 +15,6 @@ return [
 
     'service' => 'サービス',
     'account' => 'アカウント',
-    'accounts' => 'Accounts',
     'icon' => 'アイコン',
     'icon_for_account_x_at_service_y' => ':service の :account アカウント用アイコン',
     'icon_to_illustrate_the_account' => 'このアカウントを表すアイコン',
@@ -97,6 +96,7 @@ return [
         ],
         'options_help' => '以下の項目は、必要がない限り空白のままで結構です。最も一般的な値が使用されます。',
         'alternative_methods' => 'または',
+        'spaces_are_ignored' => 'Unwanted spaces will be automatically removed'
     ],
     'stream' => [
         'live_scan_cant_start' => 'スキャンできません (´・ω・`)',
@@ -143,9 +143,11 @@ return [
         'scan' => 'スキャン',
         'supported_formats_for_qrcode_upload' => '対応形式：jpg, jpeg, png, bmp, gif, svg, webp',
         'supported_formats_for_file_upload' => '対応形式：プレーンテキスト, json, 2fas',
+        'expected_format_for_direct_input' => 'Expected: A list of otpauth URI, one by line',
         'supported_migration_formats' => '対応する移行用フォーマット',
         'qr_code' => 'QRコード',
         'text_file' => 'テキストファイル',
+        'direct_input' => 'Direct input',
         'plain_text' => 'プレーンテキスト',
         'parsing_data' => 'データを解析中...',
         'issuer' => '発行者',

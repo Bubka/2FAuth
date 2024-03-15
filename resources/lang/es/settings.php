@@ -25,9 +25,6 @@ return [
     'confirm' => [
 
     ],
-    'administration' => 'Administración',
-    'administration_legend' => 'Mientras que los ajustes anteriores son de usuario (cada usuario puede establecer sus propias preferencias), los siguientes son globales y se aplican a todos los usuarios. Sólo un administrador puede ver y editar esas configuraciones.',
-    'only_an_admin_can_edit_them' => 'Sólo un administrador puede verlos y editarlos.',
     'you_are_administrator' => 'Usted es un administrador',
     'account_linked_to_sso_x_provider' => 'Ha iniciado sesión a través de SSO usando su cuenta :provider. Su información no se puede cambiar aquí, sino en :provider.',
     'general' => 'General',
@@ -60,12 +57,16 @@ return [
             'help' => 'Reemplaza carácteres de contraseñas generados con *** para asegurar confidencialidad. No afecta la función copiar/pegar.'
         ],
         'reveal_dotted_otp' => [
-            'label' => 'Reveal obscured <abbr title="One-Time Password">OTP</abbr>',
-            'help' => 'Let the ability to temporarily reveal Dot-Obscured passwords'
+            'label' => 'Muestra el <abbr title="One-Time Password">OTP</abbr> oculto',
+            'help' => 'Activa la capacidad de revelar temporalmente las contraseñas ocultas'
         ],
         'close_otp_on_copy' => [
             'label' => 'Cerrar <abbr title="One-Time Password">OTP</abbr> después de copiar',
             'help' => 'Haciendo clic en la contraseña generada para copiarla, la oculta automáticamente de la pantalla'
+        ],
+        'clear_search_on_copy' => [
+            'label' => 'Clear Search on copy',
+            'help' => 'Empty the Search box right after a code has been copied to the clipboard'
         ],
         'copy_otp_on_display' => [
             'label' => 'Copiar <abbr title="One-Time Password">OTP</abbr> en pantalla',
@@ -110,13 +111,13 @@ return [
             'label' => 'Bloqueo automático',
             'help' => 'Cerrar sesión del usuario automáticamente en caso de inactividad. No tiene efecto cuando la autenticación es manejada por un proxy, ni cuando ninguna url de cierre de sesión personalizada se especificada.'
         ],
-        'use_encryption' => [
-            'label' => 'Protect sensitive data',
-            'help' => 'Los datos sensibles, las claves secretas y correos electrónicos de 2FA, se almacenan cifrados en la base de datos. Asegúrese de respaldar el valor de APP_KEY de su archivo .env (o el archivo entero), pues, sirve como clave de cifrado. No hay forma de descifrar datos encriptados sin esta clave.',
-        ],
         'default_group' => [
             'label' => 'Grupo por defecto',
             'help' => 'El grupo al que las cuentas recién creadas están asociadas',
+        ],
+        'view_default_group_on_copy' => [
+            'label' => 'View default group on copy',
+            'help' => 'Always return to the default group when an OTP is copied',
         ],
         'useDirectCapture' => [
             'label' => 'Entrada directa',
@@ -129,14 +130,6 @@ return [
         'remember_active_group' => [
             'label' => 'Recordar filtro de grupo',
             'help' => 'Guardar el último filtro de grupo aplicado y restaurarlo en su próxima visita',
-        ],
-        'disable_registration' => [
-            'label' => 'Deshabilitar registro de usuarios',
-            'help' => 'Evitar el registro de nuevos usuarios',
-        ],
-        'enable_sso' => [
-            'label' => 'Habilitar Inicio de Sesión Único (SSO)',
-            'help' => 'Permitir a los visitantes autenticarse usando un ID externo mediante el esquema de Inicio de Sesión Único',
         ],
         'otp_generation' => [
             'label' => 'Mostrar contraseña',

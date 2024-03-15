@@ -25,9 +25,6 @@ return [
     'confirm' => [
 
     ],
-    'administration' => '管理',
-    'administration_legend' => '此前的设置是用户设置(每个用户都可以设置自己的偏好)。以下的设置则是应用于所有用户的全局设置。 只有管理员可以查看和编辑这些设置。',
-    'only_an_admin_can_edit_them' => '只有管理员可以查看和编辑它们。',
     'you_are_administrator' => '您是管理员',
     'account_linked_to_sso_x_provider' => '您通过SSO使用您的 :provider 帐户登录。您的信息不能在这里更改，只能在 :provider 。',
     'general' => '常规',
@@ -66,6 +63,10 @@ return [
         'close_otp_on_copy' => [
             'label' => '复制后关闭 <abbr title="One-Time Password">OTP</abbr>',
             'help' => '点击生成的密码进行复制，并自动将其从屏幕上隐藏'
+        ],
+        'clear_search_on_copy' => [
+            'label' => 'Clear Search on copy',
+            'help' => 'Empty the Search box right after a code has been copied to the clipboard'
         ],
         'copy_otp_on_display' => [
             'label' => '在显示时复制 <abbr title="One-Time Password">OTP</abbr>',
@@ -110,13 +111,13 @@ return [
             'label' => '自动锁定',
             'help' => '在没有活动的情况下自动登出用户。当使用认证代理或没有指定自定义注销 URL 时无效。'
         ],
-        'use_encryption' => [
-            'label' => '保护敏感数据',
-            'help' => '敏感数据、2FA 秘钥和电子邮件已被加密存储在数据库中。请务必备份您在 .env 中设置的 APP_KEY 的值（或备份整个文件）。没有此密钥将无法解码已加密的数据。',
-        ],
         'default_group' => [
             'label' => '默认分组',
             'help' => '新创建的账户所关联的分组',
+        ],
+        'view_default_group_on_copy' => [
+            'label' => 'View default group on copy',
+            'help' => 'Always return to the default group when an OTP is copied',
         ],
         'useDirectCapture' => [
             'label' => '直接输入',
@@ -129,14 +130,6 @@ return [
         'remember_active_group' => [
             'label' => '记住组筛选器',
             'help' => '保存最后应用的组过滤器并在下次访问时还原它',
-        ],
-        'disable_registration' => [
-            'label' => '禁用注册',
-            'help' => '阻止新用户注册',
-        ],
-        'enable_sso' => [
-            'label' => '启用单点登录 (SSO)',
-            'help' => '允许访问者通过单点登录方案使用外部ID进行身份验证',
         ],
         'otp_generation' => [
             'label' => '显示密码',

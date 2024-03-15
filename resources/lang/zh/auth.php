@@ -101,7 +101,7 @@ WebAuthn允许您使用受信任的设备 (如Yubikeys 或具有生物识别能�
         ],
         'change_password' => '修改密码',
         'send_password_reset_link' => '发送密码重置链接',
-        'password_successfully_changed' => '密码修改成功',
+        'password_successfully_reset' => 'Password successfully reset',
         'edit_account' => '编辑账户',
         'profile_saved' => '个人资料更新成功！',
         'welcome_to_demo_app_use_those_credentials' => '欢迎访问 2FAuth 的演示站点。<br><br>您可以使用电子邮件地址 <strong>demo@2fauth.app</strong> 和密码 <strong>demo</strong>来登录。',

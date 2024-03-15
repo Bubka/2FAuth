@@ -46,4 +46,10 @@ return [
     'genericError' => 'Error',
     '404' => 'Artículo no encontrado',
     'about' => 'Acerca de',
+    'admin' =>  [
+        'appSetup' => 'App setup',
+        'users' => 'Users management',
+        'createUser' => 'Create user',
+        'manageUser' => 'Manage user',
+    ]
 ];

@@ -101,7 +101,7 @@ return [
         ],
         'change_password' => 'パスワードを変更',
         'send_password_reset_link' => 'リセット用リンクを送信',
-        'password_successfully_changed' => 'パスワードの変更が完了しました',
+        'password_successfully_reset' => 'Password successfully reset',
         'edit_account' => 'アカウント編集',
         'profile_saved' => 'プロフィールを更新しました！',
         'welcome_to_demo_app_use_those_credentials' => '2FAuth デモへようこそ。<br><br>メールアドレス <strong>demo@2fauth.app</strong> とパスワード <strong>demo</strong> で接続できます',

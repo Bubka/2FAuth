@@ -15,7 +15,6 @@ return [
 
     'service' => 'Услуга',
     'account' => 'Профил',
-    'accounts' => 'Профили',
     'icon' => 'Икона',
     'icon_for_account_x_at_service_y' => 'Икона на профил {account} в {service}',
     'icon_to_illustrate_the_account' => 'Икона, илюстрираща акаунта',
@@ -97,6 +96,7 @@ return [
         ],
         'options_help' => 'Можете да оставите следните опции празни, ако не знаете как да ги зададете. Ще бъдат приложени най-често използваните стойности.',
         'alternative_methods' => 'Алтернативни методи',
+        'spaces_are_ignored' => 'Unwanted spaces will be automatically removed'
     ],
     'stream' => [
         'live_scan_cant_start' => 'Сканирането не може да стартира :(',
@@ -143,9 +143,11 @@ return [
         'scan' => 'Сканирай',
         'supported_formats_for_qrcode_upload' => 'Приемат се: jpg, jpeg, png, bmp, gif, svg или webp',
         'supported_formats_for_file_upload' => 'Приема се: чист текст, json, 2fas',
+        'expected_format_for_direct_input' => 'Expected: A list of otpauth URI, one by line',
         'supported_migration_formats' => 'Поддържани формати за миграция',
         'qr_code' => 'QR код',
         'text_file' => 'Text file',
+        'direct_input' => 'Direct input',
         'plain_text' => 'Чист текст',
         'parsing_data' => 'Parsing data...',
         'issuer' => 'Издател',

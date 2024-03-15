@@ -46,4 +46,10 @@ return [
     'genericError' => 'Грешка',
     '404' => 'Записът не е намерен',
     'about' => 'Относно',
+    'admin' =>  [
+        'appSetup' => 'App setup',
+        'users' => 'Users management',
+        'createUser' => 'Create user',
+        'manageUser' => 'Manage user',
+    ]
 ];
