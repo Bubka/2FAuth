@@ -1,5 +1,42 @@
 # Change log
 
+## [5.1.0] - 2024-03-08
+
+Hey Administrators, this release is for you, a brand new Admin Panel has arrived.
+
+With this dedicated space, you will be able to manage admin settings previously located in the User Options view (like encryption, version check, registration). Some new settings are available to better control registration (email restrictions and self-ruling SSO) and two new features are coming: Email Configuration Testing and Cache Clearing.
+
+But the real newness is the user management. All registered accounts are now searchable, the administrator role can be granted to any user, user access (password, personal token, security key/passphrase) can be revoked and you may also delete existing users or even create new ones.
+
+Note that the 2FAuth API has been updated with the new paths related to user management.
+
+### Added
+
+- A user preference to clear search results after copying a code ([#300](https://github.com/Bubka/2FAuth/issues/300)).
+- A user preference to return to default group after copying a code ([#300](https://github.com/Bubka/2FAuth/issues/300)).
+- The ability to submit a migration text directly in the Import view besides TXT files & QR codes loading ([#288](https://github.com/Bubka/2FAuth/issues/288)).
+- An administrator setting to restrict registration to a limited range of email addresses ([#250](https://github.com/Bubka/2FAuth/issues/250)).
+- An administrator setting to keep user registration via SSO enabled ([#317](https://github.com/Bubka/2FAuth/issues/317)).
+- A test email feature to ensure email sending works as expected ([#307](https://github.com/Bubka/2FAuth/issues/307)).
+- A Clear cache feature to... clear the cache, but from the browser ([#316](https://github.com/Bubka/2FAuth/issues/316)).
+
+### Changed
+
+- User preferences & Environment variables have been moved from the About view to the new Administration panel ([#303](https://github.com/Bubka/2FAuth/issues/303)).
+- Spaces are now removed from the Secret when filling out the Advanced form ([#311](https://github.com/Bubka/2FAuth/issues/311)).
+
+### Fixed
+
+- [issue #303](https://github.com/Bubka/2FAuth/issues/303) "Already authenticated" error message
+- [issue #305](https://github.com/Bubka/2FAuth/issues/305) 403 Forbidden {message: "unauthorized"}
+- [issue #315](https://github.com/Bubka/2FAuth/issues/315) "Check now" button is untranslatable
+- [issue #320](https://github.com/Bubka/2FAuth/issues/320) app/Policies/OwnershipTrait contains a bug, i think
+
+### API [1.3.0]
+
+- `/api/v1/users` paths added to manage registered users
+- `oauth_provider` property to the response body of `/api/v1/user` GET path
+
 ## [5.0.4] - 2024-02-23
 
 ### Added
