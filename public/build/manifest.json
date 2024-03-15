@@ -3,77 +3,77 @@
     "file": "assets/Spinner-2c227a70.css",
     "src": "Spinner.css"
   },
-  "_AdminTabs-e10d9edb.js": {
-    "file": "assets/AdminTabs-e10d9edb.js",
+  "_AdminTabs-169daa20.js": {
+    "file": "assets/AdminTabs-169daa20.js",
     "imports": [
       "resources/js/app.js"
     ]
   },
-  "_CopyButton-346411c3.js": {
-    "file": "assets/CopyButton-346411c3.js",
+  "_CopyButton-f30d9b07.js": {
+    "file": "assets/CopyButton-f30d9b07.js",
     "imports": [
       "resources/js/app.js"
     ]
   },
-  "_Form-830ceef6.js": {
-    "file": "assets/Form-830ceef6.js",
+  "_Form-88ba26a4.js": {
+    "file": "assets/Form-88ba26a4.js",
     "imports": [
       "resources/js/app.js"
     ]
   },
-  "_OtpDisplay-d48e5cb6.js": {
-    "file": "assets/OtpDisplay-d48e5cb6.js",
+  "_OtpDisplay-4c8a5daa.js": {
+    "file": "assets/OtpDisplay-4c8a5daa.js",
     "imports": [
       "resources/js/app.js",
-      "_Spinner-fe378243.js"
+      "_Spinner-f03b508f.js"
     ]
   },
-  "_QrContentDisplay-9d2dd4eb.js": {
-    "file": "assets/QrContentDisplay-9d2dd4eb.js",
+  "_QrContentDisplay-1899c813.js": {
+    "file": "assets/QrContentDisplay-1899c813.js",
     "imports": [
       "resources/js/app.js"
     ]
   },
-  "_SearchBox-c447cdfe.js": {
-    "file": "assets/SearchBox-c447cdfe.js",
+  "_SearchBox-23302ff7.js": {
+    "file": "assets/SearchBox-23302ff7.js",
     "imports": [
       "resources/js/app.js"
     ]
   },
-  "_SettingTabs-517412fa.js": {
-    "file": "assets/SettingTabs-517412fa.js",
+  "_SettingTabs-beebcb43.js": {
+    "file": "assets/SettingTabs-beebcb43.js",
     "imports": [
       "resources/js/app.js"
     ]
   },
-  "_Spinner-fe378243.js": {
+  "_Spinner-f03b508f.js": {
     "css": [
       "assets/Spinner-2c227a70.css"
     ],
-    "file": "assets/Spinner-fe378243.js",
+    "file": "assets/Spinner-f03b508f.js",
     "imports": [
       "resources/js/app.js"
     ]
   },
-  "_bus-c5fbcf1b.js": {
-    "file": "assets/bus-c5fbcf1b.js",
+  "_bus-d94d2521.js": {
+    "file": "assets/bus-d94d2521.js",
     "imports": [
       "resources/js/app.js"
     ]
   },
-  "_webauthnService-8e6366d1.js": {
-    "file": "assets/webauthnService-8e6366d1.js",
+  "_webauthnService-d9fc6500.js": {
+    "file": "assets/webauthnService-d9fc6500.js",
     "imports": [
       "resources/js/app.js"
     ]
   },
   "resources/js/app.css": {
-    "file": "assets/app-3440e106.css",
+    "file": "assets/app-35eece6d.css",
     "src": "resources/js/app.css"
   },
   "resources/js/app.js": {
     "css": [
-      "assets/app-3440e106.css"
+      "assets/app-35eece6d.css"
     ],
     "dynamicImports": [
       "resources/js/views/Start.vue",
@@ -110,6 +110,7 @@
       "resources/lang/php_en.json",
       "resources/lang/php_es.json",
       "resources/lang/php_fr.json",
+      "resources/lang/php_hi.json",
       "resources/lang/php_id.json",
       "resources/lang/php_it.json",
       "resources/lang/php_ja.json",
@@ -118,12 +119,12 @@
       "resources/lang/php_si.json",
       "resources/lang/php_zh.json"
     ],
-    "file": "assets/app-32c6ab3e.js",
+    "file": "assets/app-94c6def1.js",
     "isEntry": true,
     "src": "resources/js/app.js"
   },
   "resources/js/views/About.vue": {
-    "file": "assets/About-6806dbea.js",
+    "file": "assets/About-2c92bb64.js",
     "imports": [
       "resources/js/app.js"
     ],
@@ -131,7 +132,7 @@
     "src": "resources/js/views/About.vue"
   },
   "resources/js/views/Error.vue": {
-    "file": "assets/Error-74e25407.js",
+    "file": "assets/Error-38fc2eeb.js",
     "imports": [
       "resources/js/app.js"
     ],
@@ -139,285 +140,290 @@
     "src": "resources/js/views/Error.vue"
   },
   "resources/js/views/Start.vue": {
-    "file": "assets/Start-d6c1daf0.js",
+    "file": "assets/Start-4db59337.js",
     "imports": [
       "resources/js/app.js",
-      "_Form-830ceef6.js",
-      "_bus-c5fbcf1b.js"
+      "_Form-88ba26a4.js",
+      "_bus-d94d2521.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/js/views/Start.vue"
   },
   "resources/js/views/admin/AppSetup.vue": {
-    "file": "assets/AppSetup-b6087d83.js",
+    "file": "assets/AppSetup-989082f4.js",
     "imports": [
-      "_AdminTabs-e10d9edb.js",
+      "_AdminTabs-169daa20.js",
       "resources/js/app.js",
-      "_CopyButton-346411c3.js"
+      "_CopyButton-f30d9b07.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/js/views/admin/AppSetup.vue"
   },
   "resources/js/views/admin/Users.vue": {
-    "file": "assets/Users-97dd4df2.js",
+    "file": "assets/Users-dd1a2a6d.js",
     "imports": [
-      "_AdminTabs-e10d9edb.js",
+      "_AdminTabs-169daa20.js",
       "resources/js/app.js",
-      "_Spinner-fe378243.js",
-      "_SearchBox-c447cdfe.js"
+      "_Spinner-f03b508f.js",
+      "_SearchBox-23302ff7.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/js/views/admin/Users.vue"
   },
   "resources/js/views/admin/users/Create.vue": {
-    "file": "assets/Create-d2bdf686.js",
+    "file": "assets/Create-1758d7a4.js",
     "imports": [
       "resources/js/app.js",
-      "_Form-830ceef6.js"
+      "_Form-88ba26a4.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/js/views/admin/users/Create.vue"
   },
   "resources/js/views/admin/users/Manage.vue": {
-    "file": "assets/Manage-eb644258.js",
+    "file": "assets/Manage-0bf446dd.js",
     "imports": [
-      "_CopyButton-346411c3.js",
+      "_CopyButton-f30d9b07.js",
       "resources/js/app.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/js/views/admin/users/Manage.vue"
   },
   "resources/js/views/auth/Login.vue": {
-    "file": "assets/Login-51e937b8.js",
+    "file": "assets/Login-09d93a22.js",
     "imports": [
       "resources/js/app.js",
-      "_Form-830ceef6.js",
-      "_webauthnService-8e6366d1.js"
+      "_Form-88ba26a4.js",
+      "_webauthnService-d9fc6500.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/js/views/auth/Login.vue"
   },
   "resources/js/views/auth/Register.vue": {
-    "file": "assets/Register-9cd82dde.js",
+    "file": "assets/Register-5477e1ea.js",
     "imports": [
       "resources/js/app.js",
-      "_Form-830ceef6.js",
-      "_webauthnService-8e6366d1.js"
+      "_Form-88ba26a4.js",
+      "_webauthnService-d9fc6500.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/js/views/auth/Register.vue"
   },
   "resources/js/views/auth/RequestReset.vue": {
-    "file": "assets/RequestReset-0742e266.js",
+    "file": "assets/RequestReset-ae792188.js",
     "imports": [
       "resources/js/app.js",
-      "_Form-830ceef6.js"
+      "_Form-88ba26a4.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/js/views/auth/RequestReset.vue"
   },
   "resources/js/views/auth/password/Reset.vue": {
-    "file": "assets/Reset-b1f12c3e.js",
+    "file": "assets/Reset-d53fbaa6.js",
     "imports": [
       "resources/js/app.js",
-      "_Form-830ceef6.js"
+      "_Form-88ba26a4.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/js/views/auth/password/Reset.vue"
   },
   "resources/js/views/auth/webauthn/Recover.vue": {
-    "file": "assets/Recover-37db0bbc.js",
+    "file": "assets/Recover-358a3490.js",
     "imports": [
       "resources/js/app.js",
-      "_Form-830ceef6.js"
+      "_Form-88ba26a4.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/js/views/auth/webauthn/Recover.vue"
   },
   "resources/js/views/groups/CreateUpdate.vue": {
-    "file": "assets/CreateUpdate-a7ffbe81.js",
+    "file": "assets/CreateUpdate-6d65a394.js",
     "imports": [
       "resources/js/app.js",
-      "_Form-830ceef6.js",
-      "_bus-c5fbcf1b.js"
+      "_Form-88ba26a4.js",
+      "_bus-d94d2521.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/js/views/groups/CreateUpdate.vue"
   },
   "resources/js/views/groups/Groups.vue": {
-    "file": "assets/Groups-b68f0e3a.js",
+    "file": "assets/Groups-9709021e.js",
     "imports": [
       "resources/js/app.js",
-      "_bus-c5fbcf1b.js"
+      "_bus-d94d2521.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/js/views/groups/Groups.vue"
   },
   "resources/js/views/settings/Account.vue": {
-    "file": "assets/Account-62d8d801.js",
+    "file": "assets/Account-b029928c.js",
     "imports": [
       "resources/js/app.js",
-      "_Form-830ceef6.js",
-      "_SettingTabs-517412fa.js"
+      "_Form-88ba26a4.js",
+      "_SettingTabs-beebcb43.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/js/views/settings/Account.vue"
   },
   "resources/js/views/settings/Credentials/Edit.vue": {
-    "file": "assets/Edit-8d1255f2.js",
+    "file": "assets/Edit-c8ca049e.js",
     "imports": [
       "resources/js/app.js",
-      "_Form-830ceef6.js"
+      "_Form-88ba26a4.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/js/views/settings/Credentials/Edit.vue"
   },
   "resources/js/views/settings/OAuth.vue": {
-    "file": "assets/OAuth-3d7db678.js",
+    "file": "assets/OAuth-aa3383bc.js",
     "imports": [
       "resources/js/app.js",
-      "_Form-830ceef6.js",
-      "_SettingTabs-517412fa.js",
-      "_Spinner-fe378243.js"
+      "_Form-88ba26a4.js",
+      "_SettingTabs-beebcb43.js",
+      "_Spinner-f03b508f.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/js/views/settings/OAuth.vue"
   },
   "resources/js/views/settings/Options.vue": {
-    "file": "assets/Options-62a6a506.js",
+    "file": "assets/Options-e3b3035d.js",
     "imports": [
-      "_SettingTabs-517412fa.js",
+      "_SettingTabs-beebcb43.js",
       "resources/js/app.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/js/views/settings/Options.vue"
   },
   "resources/js/views/settings/WebAuthn.vue": {
-    "file": "assets/WebAuthn-33bebb9f.js",
+    "file": "assets/WebAuthn-214c6fd8.js",
     "imports": [
       "resources/js/app.js",
-      "_SettingTabs-517412fa.js",
-      "_webauthnService-8e6366d1.js",
-      "_Spinner-fe378243.js"
+      "_SettingTabs-beebcb43.js",
+      "_webauthnService-d9fc6500.js",
+      "_Spinner-f03b508f.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/js/views/settings/WebAuthn.vue"
   },
   "resources/js/views/twofaccounts/Accounts.vue": {
-    "file": "assets/Accounts-b2457b65.js",
+    "file": "assets/Accounts-bba10aec.js",
     "imports": [
       "resources/js/app.js",
-      "_OtpDisplay-d48e5cb6.js",
-      "_SearchBox-c447cdfe.js",
-      "_bus-c5fbcf1b.js",
-      "_Spinner-fe378243.js"
+      "_OtpDisplay-4c8a5daa.js",
+      "_SearchBox-23302ff7.js",
+      "_bus-d94d2521.js",
+      "_Spinner-f03b508f.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/js/views/twofaccounts/Accounts.vue"
   },
   "resources/js/views/twofaccounts/Capture.vue": {
-    "file": "assets/Capture-d88974f7.js",
+    "file": "assets/Capture-01720b57.js",
     "imports": [
       "resources/js/app.js",
-      "_Form-830ceef6.js",
-      "_Spinner-fe378243.js",
-      "_QrContentDisplay-9d2dd4eb.js",
-      "_bus-c5fbcf1b.js"
+      "_Form-88ba26a4.js",
+      "_Spinner-f03b508f.js",
+      "_QrContentDisplay-1899c813.js",
+      "_bus-d94d2521.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/js/views/twofaccounts/Capture.vue"
   },
   "resources/js/views/twofaccounts/CreateUpdate.vue": {
-    "file": "assets/CreateUpdate-dd6d2d96.js",
+    "file": "assets/CreateUpdate-818ecca1.js",
     "imports": [
       "resources/js/app.js",
-      "_Form-830ceef6.js",
-      "_OtpDisplay-d48e5cb6.js",
-      "_QrContentDisplay-9d2dd4eb.js",
-      "_bus-c5fbcf1b.js",
-      "_Spinner-fe378243.js"
+      "_Form-88ba26a4.js",
+      "_OtpDisplay-4c8a5daa.js",
+      "_QrContentDisplay-1899c813.js",
+      "_bus-d94d2521.js",
+      "_Spinner-f03b508f.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/js/views/twofaccounts/CreateUpdate.vue"
   },
   "resources/js/views/twofaccounts/Import.vue": {
-    "file": "assets/Import-1adbb4d1.js",
+    "file": "assets/Import-372ba8b3.js",
     "imports": [
       "resources/js/app.js",
-      "_Form-830ceef6.js",
-      "_OtpDisplay-d48e5cb6.js",
-      "_Spinner-fe378243.js",
-      "_bus-c5fbcf1b.js"
+      "_Form-88ba26a4.js",
+      "_OtpDisplay-4c8a5daa.js",
+      "_Spinner-f03b508f.js",
+      "_bus-d94d2521.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/js/views/twofaccounts/Import.vue"
   },
   "resources/js/views/twofaccounts/QRcode.vue": {
-    "file": "assets/QRcode-327868ae.js",
+    "file": "assets/QRcode-40be5488.js",
     "imports": [
       "resources/js/app.js",
-      "_Spinner-fe378243.js"
+      "_Spinner-f03b508f.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/js/views/twofaccounts/QRcode.vue"
   },
   "resources/lang/php_bg.json": {
-    "file": "assets/php_bg-00cf410a.js",
+    "file": "assets/php_bg-79a9a6b2.js",
     "isDynamicEntry": true,
     "src": "resources/lang/php_bg.json"
   },
   "resources/lang/php_de.json": {
-    "file": "assets/php_de-4a8a7ade.js",
+    "file": "assets/php_de-edabb7b3.js",
     "isDynamicEntry": true,
     "src": "resources/lang/php_de.json"
   },
   "resources/lang/php_en.json": {
-    "file": "assets/php_en-4216ab91.js",
+    "file": "assets/php_en-65348e5a.js",
     "isDynamicEntry": true,
     "src": "resources/lang/php_en.json"
   },
   "resources/lang/php_es.json": {
-    "file": "assets/php_es-5428d2b7.js",
+    "file": "assets/php_es-8bc38a41.js",
     "isDynamicEntry": true,
     "src": "resources/lang/php_es.json"
   },
   "resources/lang/php_fr.json": {
-    "file": "assets/php_fr-3fa5e13c.js",
+    "file": "assets/php_fr-4e3a581d.js",
     "isDynamicEntry": true,
     "src": "resources/lang/php_fr.json"
   },
+  "resources/lang/php_hi.json": {
+    "file": "assets/php_hi-0477d2c4.js",
+    "isDynamicEntry": true,
+    "src": "resources/lang/php_hi.json"
+  },
   "resources/lang/php_id.json": {
-    "file": "assets/php_id-ed2bdd4e.js",
+    "file": "assets/php_id-8aeb6da7.js",
     "isDynamicEntry": true,
     "src": "resources/lang/php_id.json"
   },
   "resources/lang/php_it.json": {
-    "file": "assets/php_it-07124743.js",
+    "file": "assets/php_it-b90e26fa.js",
     "isDynamicEntry": true,
     "src": "resources/lang/php_it.json"
   },
   "resources/lang/php_ja.json": {
-    "file": "assets/php_ja-9673de62.js",
+    "file": "assets/php_ja-bbda5fec.js",
     "isDynamicEntry": true,
     "src": "resources/lang/php_ja.json"
   },
   "resources/lang/php_ro.json": {
-    "file": "assets/php_ro-78ad1709.js",
+    "file": "assets/php_ro-43bf93e4.js",
     "isDynamicEntry": true,
     "src": "resources/lang/php_ro.json"
   },
   "resources/lang/php_ru.json": {
-    "file": "assets/php_ru-4858ff62.js",
+    "file": "assets/php_ru-d1282df9.js",
     "isDynamicEntry": true,
     "src": "resources/lang/php_ru.json"
   },
   "resources/lang/php_si.json": {
-    "file": "assets/php_si-764c82c4.js",
+    "file": "assets/php_si-85c4e7b8.js",
     "isDynamicEntry": true,
     "src": "resources/lang/php_si.json"
   },
   "resources/lang/php_zh.json": {
-    "file": "assets/php_zh-cc6c848c.js",
+    "file": "assets/php_zh-0c409c6d.js",
     "isDynamicEntry": true,
     "src": "resources/lang/php_zh.json"
   }
