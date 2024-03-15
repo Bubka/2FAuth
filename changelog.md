@@ -19,6 +19,7 @@ Note that the 2FAuth API has been updated with the new paths related to user man
 - An administrator setting to keep user registration via SSO enabled ([#317](https://github.com/Bubka/2FAuth/issues/317)).
 - A test email feature to ensure email sending works as expected ([#307](https://github.com/Bubka/2FAuth/issues/307)).
 - A Clear cache feature to... clear the cache, but from the browser ([#316](https://github.com/Bubka/2FAuth/issues/316)).
+- Hindi translation, thanks to [@saxenas](https://crowdin.com/profile/saxenas)
 
 ### Changed
 
