@@ -31,6 +31,7 @@ COPY . .
 RUN mv .env.testing .env
 RUN composer install
 RUN php artisan key:generate
+COPY docker/php-test.ini /usr/local/etc/php/php.ini
 ENTRYPOINT [ "/srv/vendor/bin/phpunit" ]
 
 FROM alpine:${ALPINE_VERSION}
