@@ -170,8 +170,8 @@ return [
         ],
         'email' => [
             'exists' => '未找到使用此电子邮件的账户。',
-            'ComplyWithEmailRestrictionPolicy' => 'This email address does not comply with the registration policy',
-            'IsValidEmailList' => 'All emails must be valid and separated with a pipe'
+            'ComplyWithEmailRestrictionPolicy' => '此电子邮件地址不符合注册策略',
+            'IsValidEmailList' => '所有电子邮件必须是有效的并用管道符隔开'
         ],
         'secret' => [
             'isBase32Encoded' => ':attribute 必须是 base32 编码的字符串',

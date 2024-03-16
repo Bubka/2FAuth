@@ -101,7 +101,7 @@ return [
         ],
         'change_password' => 'पासवर्ड बदलें',
         'send_password_reset_link' => 'पासवर्ड रिसेट करने के लिए लिंक भेजें',
-        'password_successfully_reset' => 'Password successfully reset',
+        'password_successfully_reset' => 'पासवर्ड सफलता पूर्वक बदला गया।',
         'edit_account' => 'खाता एडिट करें',
         'profile_saved' => 'प्रोफ़ाइल सफलतापूर्वक अपडेट की गई!',
         'welcome_to_demo_app_use_those_credentials' => '2FAuth डेमो में आपका स्वागत है।<br><br>आप ईमेल पते <strong>demo@2fauth.app</strong> और पासवर्ड <strong>demo</strong> का उपयोग करके कनेक्ट कर सकते हैं।',

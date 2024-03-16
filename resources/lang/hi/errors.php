@@ -66,5 +66,5 @@ return [
     'sso_email_already_used' => 'समान ईमेल पते वाला एक उपयोगकर्ता खाता पहले से मौजूद है लेकिन यह आपकी बाहरी खाता आईडी से मेल नहीं खाता है। यदि आप पहले से ही इस ईमेल के साथ 2FAuth पर पंजीकृत हैं तो SSO का उपयोग न करें।',
     'account_managed_by_external_provider' => 'खाता किसी बाहरी प्रदाता द्वारा प्रबंधित किया गया है',
     'data_cannot_be_refreshed_from_server' => 'सर्वर से डेटा रिफ्रेश नहीं किया जा सकता',
-    'no_pwd_reset_for_this_user_type' => 'Password reset unavailable for this user',
+    'no_pwd_reset_for_this_user_type' => 'इस ईमेल के लिए पासवर्ड रीसेट नहीं किया जा सकता है।',
 ];

@@ -47,9 +47,9 @@ return [
     '404' => '找不到项目',
     'about' => '关于',
     'admin' =>  [
-        'appSetup' => 'App setup',
-        'users' => 'Users management',
-        'createUser' => 'Create user',
-        'manageUser' => 'Manage user',
+        'appSetup' => '应用设置',
+        'users' => '用户管理',
+        'createUser' => '创建用户',
+        'manageUser' => '管理用户',
     ]
 ];

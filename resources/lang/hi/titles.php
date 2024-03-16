@@ -47,9 +47,9 @@ return [
     '404' => 'आइटम नहीं मिला',
     'about' => 'बारे में',
     'admin' =>  [
-        'appSetup' => 'App setup',
-        'users' => 'Users management',
-        'createUser' => 'Create user',
-        'manageUser' => 'Manage user',
+        'appSetup' => 'एप का सेटअप',
+        'users' => 'उपयोगकर्ता प्रबंधन',
+        'createUser' => 'उपयोगकर्ता बनाइये',
+        'manageUser' => 'उपयोगकर्ताओं को प्रतिबंधित करें',
     ]
 ];

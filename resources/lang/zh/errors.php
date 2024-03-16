@@ -65,6 +65,6 @@ return [
     'sso_no_register' => '注册已禁用',
     'sso_email_already_used' => '已存在具有相同电子邮件地址的用户帐户，但它与您的外部帐户ID不匹配。 如果您已经在 2FAuth 上使用此邮箱注册，请不要使用 SSO。',
     'account_managed_by_external_provider' => '由外部提供商管理的帐户',
-    'data_cannot_be_refreshed_from_server' => 'Data cannot be refreshed from server',
-    'no_pwd_reset_for_this_user_type' => 'Password reset unavailable for this user',
+    'data_cannot_be_refreshed_from_server' => '无法从服务器刷新数据',
+    'no_pwd_reset_for_this_user_type' => '此用户无法重置密码',
 ];

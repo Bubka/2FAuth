@@ -65,8 +65,8 @@ return [
             'help' => '点击生成的密码进行复制，并自动将其从屏幕上隐藏'
         ],
         'clear_search_on_copy' => [
-            'label' => 'Clear Search on copy',
-            'help' => 'Empty the Search box right after a code has been copied to the clipboard'
+            'label' => '复制后清空搜索框',
+            'help' => '代码复制到剪贴板后立即清空搜索框'
         ],
         'copy_otp_on_display' => [
             'label' => '在显示时复制 <abbr title="One-Time Password">OTP</abbr>',
@@ -116,8 +116,8 @@ return [
             'help' => '新创建的账户所关联的分组',
         ],
         'view_default_group_on_copy' => [
-            'label' => 'View default group on copy',
-            'help' => 'Always return to the default group when an OTP is copied',
+            'label' => '在复制后查看默认组',
+            'help' => '复制OTP后总是返回到默认组',
         ],
         'useDirectCapture' => [
             'label' => '直接输入',

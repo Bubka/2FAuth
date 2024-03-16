@@ -13,11 +13,11 @@ return [
     |
     */
 
-    'hello' => 'Hello',
+    'hello' => 'नमस्कार',
     'test_email_settings' => [
-        'subject' => '2FAuth test email',
-        'reason' => 'You are receiving this email because you requested a test email to validate the email settings of your 2FAuth instance.',
-        'success' => 'Good news, it works :)'
+        'subject' => '2FAuth की टेस्ट ईमेल',
+        'reason' => 'आपको यह ईमेल इसलिए प्राप्त हुआ है क्योंकि आपने अपने 2FAuth इंस्टेंस की ईमेल सेटिंग्स को मान्य करने के लिए एक परीक्षण ईमेल का अनुरोध किया था।',
+        'success' => 'बधाई हो! यह काम करता है :)'
     ],
 
 ];

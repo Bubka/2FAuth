@@ -170,8 +170,8 @@ return [
         ],
         'email' => [
             'exists' => 'इस ईमेल का कोई अकाउंट नहीं पाया गया।',
-            'ComplyWithEmailRestrictionPolicy' => 'This email address does not comply with the registration policy',
-            'IsValidEmailList' => 'All emails must be valid and separated with a pipe'
+            'ComplyWithEmailRestrictionPolicy' => 'यह ईमेल पता रेजिस्ट्रेशन के नियम का पालन नहीं करता है',
+            'IsValidEmailList' => 'सभी ईमेल वैध होने चाहिए और पाइप सिम्बल (|) से अलग किए जाने चाहिए'
         ],
         'secret' => [
             'isBase32Encoded' => ':attribute base32 कोडिंग में बनाया हुआ स्ट्रिंग होना चाहिए।',

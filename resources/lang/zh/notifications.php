@@ -13,11 +13,11 @@ return [
     |
     */
 
-    'hello' => 'Hello',
+    'hello' => '您好',
     'test_email_settings' => [
-        'subject' => '2FAuth test email',
-        'reason' => 'You are receiving this email because you requested a test email to validate the email settings of your 2FAuth instance.',
-        'success' => 'Good news, it works :)'
+        'subject' => '2FAuth 测试电子邮件',
+        'reason' => '您收到这封邮件是因为您请求了一封测试电子邮件来验证您的2FAuth 实例的电子邮件设置。',
+        'success' => '好消息是，它正常工作:)'
     ],
 
 ];

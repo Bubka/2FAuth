@@ -96,7 +96,7 @@ return [
         ],
         'options_help' => 'यदि आप नहीं जानते कि उन्हें कैसे सेट किया जाए तो आप निम्नलिखित विकल्पों को खाली छोड़ सकते हैं। सबसे अधिक उपयोग किए जाने वाले मान लागू किए जाएंगे।',
         'alternative_methods' => 'वैकल्पिक विधियाँ',
-        'spaces_are_ignored' => 'Unwanted spaces will be automatically removed'
+        'spaces_are_ignored' => 'अनावश्यक खाली अक्षर अपने आप निकाल दिए जाएंगे'
     ],
     'stream' => [
         'live_scan_cant_start' => 'लाइव स्कैन शुरू नहीं किया जा सकता :(',
@@ -143,11 +143,11 @@ return [
         'scan' => 'स्कैन करें',
         'supported_formats_for_qrcode_upload' => 'स्वीकृत: jpg, jpeg, png, bmp, gif, svg, या webp',
         'supported_formats_for_file_upload' => 'स्वीकृत: Plain text, json, 2fas',
-        'expected_format_for_direct_input' => 'Expected: A list of otpauth URI, one by line',
+        'expected_format_for_direct_input' => 'अपेक्षित: otpauth URI की सूची, एक लाइन पर एक',
         'supported_migration_formats' => 'समर्थित माइग्रेशन फॉर्मैट',
         'qr_code' => 'QR कोड',
         'text_file' => 'टेक्स्ट फ़ाईल',
-        'direct_input' => 'Direct input',
+        'direct_input' => 'सीधे दर्ज करें',
         'plain_text' => 'साधारण टेक्स्ट',
         'parsing_data' => 'डेटा पार्स किया जा रहा है...',
         'issuer' => 'ज़ारीकर्ता',

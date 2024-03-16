@@ -65,8 +65,8 @@ return [
             'help' => 'जेनरेट किए गए पासवर्ड को कॉपी करने के लिए उस पर क्लिक करने से वह स्वचालित रूप से स्क्रीन से छिप जाता है'
         ],
         'clear_search_on_copy' => [
-            'label' => 'Clear Search on copy',
-            'help' => 'Empty the Search box right after a code has been copied to the clipboard'
+            'label' => 'कॉपी होने पर खोज मिटा दें',
+            'help' => 'क्लिपबोर्ड पर कोड कॉपी होने के ठीक बाद सर्च बॉक्स को खाली कर दें'
         ],
         'copy_otp_on_display' => [
             'label' => 'डिस्प्ले पर <abbr title="वन-टाइम पासवर्ड">OTP</abbr> कॉपी करें',
@@ -116,8 +116,8 @@ return [
             'help' => 'वह समूह जिससे नव निर्मित अकाउंट जुड़े हैं',
         ],
         'view_default_group_on_copy' => [
-            'label' => 'View default group on copy',
-            'help' => 'Always return to the default group when an OTP is copied',
+            'label' => 'कॉपी होने पर डिफ़ॉल्ट ग्रुप देखें',
+            'help' => 'जब भी OTP कॉपी हो जाए तो हमेशा डिफ़ॉल्ट ग्रुप पर वापस आ जाएं',
         ],
         'useDirectCapture' => [
             'label' => 'सीधे दर्ज करें',
