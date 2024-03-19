@@ -183,7 +183,7 @@
                     <!-- disable registration -->
                     <FormCheckbox v-model="_settings.disableRegistration" @update:model-value="val => saveSetting('disableRegistration', val)" fieldName="disableRegistration" label="admin.forms.disable_registration.label" help="admin.forms.disable_registration.help" />
                         <!-- keep sso registration -->
-                        <FormCheckbox v-model="_settings.keepSsoRegistrationEnabled" @change:model-value="val => saveOrDeleteSetting('keepSsoRegistrationEnabled', val)" :fieldError="fieldErrors.keepSsoRegistrationEnabled" fieldName="keepSsoRegistrationEnabled" :isDisabled="!appSettings.enableSso || !appSettings.disableRegistration" label="admin.forms.keep_sso_registration_enabled.label" help="admin.forms.keep_sso_registration_enabled.help" :isIndented="true" />
+                        <FormCheckbox v-model="_settings.keepSsoRegistrationEnabled" @update:model-value="val => saveSetting('keepSsoRegistrationEnabled', val)" :fieldError="fieldErrors.keepSsoRegistrationEnabled" fieldName="keepSsoRegistrationEnabled" :isDisabled="!appSettings.enableSso || !appSettings.disableRegistration" label="admin.forms.keep_sso_registration_enabled.label" help="admin.forms.keep_sso_registration_enabled.help" :isIndented="true" />
                 </form>
 
                 <h4 class="title is-4 pt-5 has-text-grey-light">{{ $t('commons.environment') }}</h4>
