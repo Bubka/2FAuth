@@ -25,6 +25,11 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
      */
     protected $user;
 
+    /**
+     * @var \App\Models\User
+     */
+    protected $admin;
+
     const CREDENTIAL_ID = 's06aG41wsIYh5X1YUhB-SlH8y3F2RzdJZVse8iXRXOCd3oqQdEyCOsBawzxrYBtJRQA2azAMEN_q19TUp6iMgg';
 
     const CREDENTIAL_ID_ALT = '-VOLFKPY-_FuMI_sJ7gMllK76L3VoRUINj6lL_Z3qDg';
@@ -125,13 +130,53 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
         $this->json('POST', '/webauthn/login', self::ASSERTION_RESPONSE)
             ->assertOk()
             ->assertJsonFragment([
-                'message' => 'authenticated',
-                'name'    => $this->user->name,
+                'message'  => 'authenticated',
+                'id'       => $this->user->id,
+                'name'     => $this->user->name,
+                'email'    => $this->user->email,
+                'is_admin' => false,
             ])
             ->assertJsonStructure([
-                'message',
-                'name',
                 'preferences',
+            ]);
+    }
+
+    /**
+     * @test
+     */
+    public function test_webauthn_admin_login_returns_admin_role()
+    {
+        $this->admin = User::factory()->administrator()->create(['email' => self::EMAIL]);
+
+        DB::table('webauthn_credentials')->insert([
+            'id'                   => self::CREDENTIAL_ID_ALT,
+            'authenticatable_type' => \App\Models\User::class,
+            'authenticatable_id'   => $this->admin->id,
+            'user_id'              => self::USER_ID_ALT,
+            'counter'              => 0,
+            'rp_id'                => 'http://localhost',
+            'origin'               => 'http://localhost',
+            'aaguid'               => '00000000-0000-0000-0000-000000000000',
+            'attestation_format'   => 'none',
+            'public_key'           => self::PUBLIC_KEY,
+            'updated_at'           => now(),
+            'created_at'           => now(),
+        ]);
+
+        $this->session(['_webauthn' => new \Laragear\WebAuthn\Challenge(
+            new \Laragear\WebAuthn\ByteBuffer(base64_decode(self::ASSERTION_CHALLENGE)),
+            60,
+            false,
+        )]);
+
+        $this->mock(AssertionValidator::class)
+            ->expects('send->thenReturn')
+            ->andReturn();
+
+        $this->json('POST', '/webauthn/login', self::ASSERTION_RESPONSE)
+            ->assertOk()
+            ->assertJsonFragment([
+                'is_admin' => true,
             ]);
     }
 

@@ -28,6 +28,11 @@ class LoginTest extends FeatureTestCase
      */
     protected $user;
 
+    /**
+     * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
+     */
+    protected $admin;
+
     private const PASSWORD = 'password';
 
     private const WRONG_PASSWORD = 'wrong_password';
@@ -39,7 +44,8 @@ class LoginTest extends FeatureTestCase
     {
         parent::setUp();
 
-        $this->user = User::factory()->create();
+        $this->user  = User::factory()->create();
+        $this->admin = User::factory()->administrator()->create();
     }
 
     /**
@@ -53,13 +59,29 @@ class LoginTest extends FeatureTestCase
         ])
             ->assertOk()
             ->assertJsonFragment([
-                'message' => 'authenticated',
-                'name'    => $this->user->name,
+                'message'  => 'authenticated',
+                'id'       => $this->user->id,
+                'name'     => $this->user->name,
+                'email'    => $this->user->email,
+                'is_admin' => false,
             ])
             ->assertJsonStructure([
-                'message',
-                'name',
                 'preferences',
+            ]);
+    }
+
+    /**
+     * @test
+     */
+    public function test_admin_login_returns_admin_role()
+    {
+        $response = $this->json('POST', '/user/login', [
+            'email'    => $this->admin->email,
+            'password' => self::PASSWORD,
+        ])
+            ->assertOk()
+            ->assertJsonFragment([
+                'is_admin' => true,
             ]);
     }
 

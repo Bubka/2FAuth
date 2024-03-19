@@ -147,8 +147,11 @@ class WebAuthnLoginController extends Controller
 
         return response()->json([
             'message'     => 'authenticated',
+            'id'          => $user->id,
             'name'        => $user->name,
+            'email'       => $user->email,
             'preferences' => $user->preferences,
+            'is_admin'    => $user->isAdministrator(),
         ], Response::HTTP_OK);
     }
 
