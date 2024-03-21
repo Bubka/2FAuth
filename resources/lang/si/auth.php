@@ -73,6 +73,7 @@ return [
                 Attention! The Email & Password form remains available despite this option being enabled, but it will always return an \'Authentication failed\' response.'
         ],
         'need_a_security_device_to_enable_options' => 'Set at least one device to enable the following options',
+        'options' => 'Options',
     ],
     'forms' => [
         'name' => 'නම',
@@ -93,14 +94,14 @@ return [
         'reset_your_password' => 'Reset your password',
         'reset_password' => 'මුරපදය නැවත සකසන්න',
         'disabled_in_demo' => 'Feature disabled in Demo mode',
-        'new_password' => 'New password',
+        'new_password' => 'නව මුරපදය',
         'current_password' => [
             'label' => 'වත්මන් මුරපදය',
             'help' => 'Fill in your current password to confirm that it\'s you'
         ],
         'change_password' => 'මුරපදය වෙනස් කරන්න',
         'send_password_reset_link' => 'මුරපදය නැවත සැකසීමේ සබැඳිය යවන්න',
-        'password_successfully_changed' => 'මුරපදය සාර්ථකව වෙනස් කෙරිණි',
+        'password_successfully_reset' => 'Password successfully reset',
         'edit_account' => 'ගිණුම සංස්කරණය',
         'profile_saved' => 'පැතිකඩ සාර්ථකව යාවත්කාල කෙරිණි!',
         'welcome_to_demo_app_use_those_credentials' => 'Welcome to the 2FAuth demo.<br><br>You can connect using the email address <strong>demo@2fauth.app</strong> and the password <strong>demo</strong>',

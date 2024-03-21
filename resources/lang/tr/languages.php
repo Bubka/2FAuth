@@ -10,7 +10,7 @@ return [
     |
     */
 
-    'browser_preference' => 'Preferenza del browser',
+    'browser_preference' => 'Tarayıcı tercihleri',
     'en' => 'English (English)',
     'fr' => 'Français (French)',
     'de' => 'Deutsch (German)',

@@ -170,6 +170,8 @@ return [
         ],
         'email' => [
             'exists' => 'No account found using this email.',
+            'ComplyWithEmailRestrictionPolicy' => 'This email address does not comply with the registration policy',
+            'IsValidEmailList' => 'All emails must be valid and separated with a pipe'
         ],
         'secret' => [
             'isBase32Encoded' => 'The :attribute must be a base32 encoded string.',

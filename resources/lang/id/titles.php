@@ -46,4 +46,10 @@ return [
     'genericError' => 'Galat',
     '404' => 'Item tidak ditemukan',
     'about' => 'Tentang',
+    'admin' =>  [
+        'appSetup' => 'App setup',
+        'users' => 'Users management',
+        'createUser' => 'Create user',
+        'manageUser' => 'Manage user',
+    ]
 ];

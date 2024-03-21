@@ -96,7 +96,7 @@ return [
         ],
         'options_help' => 'Sie können die folgenden Einstellungen leer lassen, wenn Sie nicht wissen, wie Sie sie einstellen. In dem Fall werden die Standardwerte verwendet.',
         'alternative_methods' => 'Alternative Methoden',
-        'spaces_are_ignored' => 'Unwanted spaces will be automatically removed'
+        'spaces_are_ignored' => 'Ungewollte Leerzeichen werden automatisch entfernt'
     ],
     'stream' => [
         'live_scan_cant_start' => 'Der Live-Scan kann nicht gestartet werden :(',
@@ -143,11 +143,11 @@ return [
         'scan' => 'Scannen',
         'supported_formats_for_qrcode_upload' => 'Akzeptiert: jpg, jpeg, png, bmp, gif, svg oder webp',
         'supported_formats_for_file_upload' => 'Akzeptiert: Klartext, Json, 2fas',
-        'expected_format_for_direct_input' => 'Expected: A list of otpauth URI, one by line',
+        'expected_format_for_direct_input' => 'Erwartet: Eine Liste der otpauth URI, eins pro Zeile',
         'supported_migration_formats' => 'Unterstütze Migrationsformate',
         'qr_code' => 'QR Code',
         'text_file' => 'Textdatei',
-        'direct_input' => 'Direct input',
+        'direct_input' => 'Direkte Eingabe',
         'plain_text' => 'Klartext',
         'parsing_data' => 'Daten werden verarbeitet...',
         'issuer' => 'Aussteller',

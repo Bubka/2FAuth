@@ -65,6 +65,6 @@ return [
     'sso_no_register' => 'Registrierungen sind deaktiviert',
     'sso_email_already_used' => 'Ein Benutzerkonto mit der gleichen E-Mail-Adresse existiert bereits, aber es stimmt nicht mit Ihrer externen Konto-ID überein. Verwenden Sie kein SSO, wenn Sie bereits bei 2FAuth mit dieser E-Mail registriert sind.',
     'account_managed_by_external_provider' => 'Konto von einem externen Anbieter verwaltet',
-    'data_cannot_be_refreshed_from_server' => 'Data cannot be refreshed from server',
-    'no_pwd_reset_for_this_user_type' => 'Password reset unavailable for this user',
+    'data_cannot_be_refreshed_from_server' => 'Daten können nicht vom Server aktualisiert werden',
+    'no_pwd_reset_for_this_user_type' => 'Das Zurücksetzen des Passworts ist für diese Benutzer nicht verfügbar',
 ];

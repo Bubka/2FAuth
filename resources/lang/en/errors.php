@@ -67,4 +67,5 @@ return [
     'account_managed_by_external_provider' => 'Account managed by an external provider',
     'data_cannot_be_refreshed_from_server' => 'Data cannot be refreshed from server',
     'no_pwd_reset_for_this_user_type' => 'Password reset unavailable for this user',
+    'app_key_is_not_set' => 'The APP_KEY environment variable is not set',
 ];

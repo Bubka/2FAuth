@@ -48,8 +48,8 @@ return [
     'about' => 'Über',
     'admin' =>  [
         'appSetup' => 'App setup',
-        'users' => 'Users management',
-        'createUser' => 'Create user',
-        'manageUser' => 'Manage user',
+        'users' => 'Benutzerverwaltung',
+        'createUser' => 'Benutzer erstellen',
+        'manageUser' => 'Benutzer verwalten',
     ]
 ];

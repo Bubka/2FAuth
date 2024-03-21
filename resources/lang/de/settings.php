@@ -65,8 +65,8 @@ return [
             'help' => 'Bei einem Klick auf das generierte Passwort wird es automatisch auf dem Bildschirm ausgeblendet'
         ],
         'clear_search_on_copy' => [
-            'label' => 'Clear Search on copy',
-            'help' => 'Empty the Search box right after a code has been copied to the clipboard'
+            'label' => 'Suche beim Kopieren löschen',
+            'help' => 'Leeren das Suchfeld, nachdem ein Code in die Zwischenablage kopiert wurde'
         ],
         'copy_otp_on_display' => [
             'label' => 'Das angezeigte, einmaliges Passwort (OTP) kopieren',
@@ -116,8 +116,8 @@ return [
             'help' => 'Die Gruppe, der neu erstellte Konten zugeordnet werden',
         ],
         'view_default_group_on_copy' => [
-            'label' => 'View default group on copy',
-            'help' => 'Always return to the default group when an OTP is copied',
+            'label' => 'Standardgruppe beim Kopieren anzeigen',
+            'help' => 'Immer zur Standardgruppe zurückkehren, wenn ein OTP kopiert wird',
         ],
         'useDirectCapture' => [
             'label' => 'Direkteingabe',

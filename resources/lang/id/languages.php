@@ -11,11 +11,13 @@ return [
     */
 
     'browser_preference' => 'Preferensi perambaan',
-    'en' => 'Bahasa Inggris',
-    'fr' => 'Bahasa Perancis',
-    'de' => 'Bahasa Jerman',
-    'es' => 'Bahasa Spanyol',
-    'zh' => 'Bahasa Tiongkok yang disederhanakan',
-    'ru' => 'Bahasa Rusia',
-    'bg' => 'Bahasa Bulgaria',
+    'en' => 'English (English)',
+    'fr' => 'Français (French)',
+    'de' => 'Deutsch (German)',
+    'es' => 'Español (Spanish)',
+    'zh' => '简体中文 (Chinese Simplified)',
+    'ru' => 'Русский (Russian)',
+    'bg' => 'Български (Bulgarian)',
+    'ja' => '日本語 (Japanese)',
+    'hi' => 'हिंदी (Hindi)',
 ];

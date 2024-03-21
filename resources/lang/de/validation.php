@@ -170,8 +170,8 @@ return [
         ],
         'email' => [
             'exists' => 'Kein Konto mit dieser E-Mail gefunden.',
-            'ComplyWithEmailRestrictionPolicy' => 'This email address does not comply with the registration policy',
-            'IsValidEmailList' => 'All emails must be valid and separated with a pipe'
+            'ComplyWithEmailRestrictionPolicy' => 'Diese E-Mail-Adresse entspricht nicht den Registrierungsrichtlinien',
+            'IsValidEmailList' => 'Alle E-Mails müssen gültig und durch eine Pipe getrennt sein'
         ],
         'secret' => [
             'isBase32Encoded' => 'Das :attribute Feld muss einen Base32 kodierten String enthalten.',

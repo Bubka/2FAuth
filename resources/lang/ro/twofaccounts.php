@@ -15,7 +15,6 @@ return [
 
     'service' => 'Service',
     'account' => 'Account',
-    'accounts' => 'Accounts',
     'icon' => 'Icon',
     'icon_for_account_x_at_service_y' => 'Icon of the :account account at :service',
     'icon_to_illustrate_the_account' => 'Icon that illustrates the account',
@@ -97,6 +96,7 @@ return [
         ],
         'options_help' => 'You can leave the following options blank if you don\'t know how to set them. The most commonly used values will be applied.',
         'alternative_methods' => 'Alternative methods',
+        'spaces_are_ignored' => 'Unwanted spaces will be automatically removed'
     ],
     'stream' => [
         'live_scan_cant_start' => 'Live scan can\'t start :(',
@@ -143,9 +143,11 @@ return [
         'scan' => 'Scan',
         'supported_formats_for_qrcode_upload' => 'Accepted: jpg, jpeg, png, bmp, gif, svg, or webp',
         'supported_formats_for_file_upload' => 'Accepted: Plain text, json, 2fas',
+        'expected_format_for_direct_input' => 'Expected: A list of otpauth URI, one by line',
         'supported_migration_formats' => 'Supported migration formats',
         'qr_code' => 'QR Code',
         'text_file' => 'Text file',
+        'direct_input' => 'Direct input',
         'plain_text' => 'Plain text',
         'parsing_data' => 'Parsing data...',
         'issuer' => 'Issuer',

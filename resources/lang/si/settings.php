@@ -25,9 +25,6 @@ return [
     'confirm' => [
 
     ],
-    'administration' => 'Administration',
-    'administration_legend' => 'While previous settings are user settings (every user can set its own preferences), following settings are global and apply to all users.',
-    'only_an_admin_can_edit_them' => 'Only an administrator can view and edit them.',
     'you_are_administrator' => 'You are an administrator',
     'account_linked_to_sso_x_provider' => 'You signed-in via SSO using your :provider account. Your information cannot be changed here but on :provider.',
     'general' => 'General',
@@ -66,6 +63,10 @@ return [
         'close_otp_on_copy' => [
             'label' => 'Close <abbr title="One-Time Password">OTP</abbr> after copy',
             'help' => 'Clicking a generated password to copy it automatically hide it from the screen'
+        ],
+        'clear_search_on_copy' => [
+            'label' => 'Clear Search on copy',
+            'help' => 'Empty the Search box right after a code has been copied to the clipboard'
         ],
         'copy_otp_on_display' => [
             'label' => 'Copy <abbr title="One-Time Password">OTP</abbr> on display',
@@ -110,13 +111,13 @@ return [
             'label' => 'ස්වයං අගුලුවැටීම',
             'help' => 'Log out the user automatically in case of inactivity. Has no effect when authentication is handled by a proxy and no custom logout url is specified.'
         ],
-        'use_encryption' => [
-            'label' => 'Protect sensible data',
-            'help' => 'Sensitive data, the 2FA secrets and emails, are stored encrypted in database. Be sure to backup the APP_KEY value of your .env file (or the whole file) as it serves as key encryption. There is no way to decypher encrypted data without this key.',
-        ],
         'default_group' => [
             'label' => 'Default group',
             'help' => 'The group to which the newly created accounts are associated',
+        ],
+        'view_default_group_on_copy' => [
+            'label' => 'View default group on copy',
+            'help' => 'Always return to the default group when an OTP is copied',
         ],
         'useDirectCapture' => [
             'label' => 'සෘජු ආදානය',
@@ -129,14 +130,6 @@ return [
         'remember_active_group' => [
             'label' => 'Remember group filter',
             'help' => 'Save the last group filter applied and restore it on your next visit',
-        ],
-        'disable_registration' => [
-            'label' => 'Disable registration',
-            'help' => 'Prevent new user registration. This affects SSO as well, so new SSO users won\'t be able to sign on',
-        ],
-        'enable_sso' => [
-            'label' => 'Enable Single Sign-On (SSO)',
-            'help' => 'Allow visitors to authenticate using an external ID via the Single Sign-On scheme',
         ],
         'otp_generation' => [
             'label' => 'Show Password',
