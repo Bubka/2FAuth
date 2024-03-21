@@ -1,5 +1,12 @@
 # Change log
 
+## [5.1.0] - 2024-03-21
+
+### Fixed
+
+- [issue #326](https://github.com/Bubka/2FAuth/issues/326) Admin panel not working when using security device
+- [issue #327](https://github.com/Bubka/2FAuth/issues/327) "Keep SSO registration enabled" is not saved
+
 ## [5.1.0] - 2024-03-08
 
 Hey Administrators, this release is for you, a brand new Admin Panel has arrived.
