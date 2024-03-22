@@ -45,7 +45,8 @@ class Handler extends ExceptionHandler
 
         $this->renderable(function (InvalidQrCodeException $exception, $request) {
             return response()->json([
-                'message' => 'not a valid QR code', ], 400);
+                'message' => $exception->getMessage(),
+            ], 400);
         });
 
         $this->renderable(function (InvalidSecretException $exception, $request) {
