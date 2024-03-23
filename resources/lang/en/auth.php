@@ -22,7 +22,7 @@ return [
     'sign_out' => 'Sign out',
     'sign_in' => 'Sign in',
     'sign_in_using' => 'Sign in using',
-    'or_continue_with' => 'You an also continue with:',
+    'or_continue_with' => 'You can also continue with:',
     'sign_in_using_security_device' => 'Sign in using a security device',
     'login_and_password' => 'login & password',
     'register' => 'Register',

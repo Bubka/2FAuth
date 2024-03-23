@@ -27,7 +27,7 @@ return [
     'confirm' => [
         'delete_user' => 'Are you sure you want to delete this user? There is no going back.',
         'request_password_reset' => 'Are you sure you want to reset this user\'s password?',
-        'purge_password_reset_request' => 'Are you sure you want to purge the request?',
+        'purge_password_reset_request' => 'Are you sure you want to revoke the previous request?',
         'delete_account' => 'Are you sure you want to delete this user?',
         'edit_own_account' => 'This is your own account. Are you sure?',
         'change_admin_role' => 'This will have serious impacts on this user\'s permissions. Are you sure?',
