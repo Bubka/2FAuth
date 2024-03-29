@@ -40,6 +40,7 @@
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.13",
+        "brianium/paratest": "^7.3",
         "fakerphp/faker": "^1.21",
         "larastan/larastan": "^2.0",
         "laravel/pint": "^1.6",
@@ -89,7 +90,7 @@
         ],
         "test": [
             "php artisan config:clear",
-            "vendor/bin/phpunit"
+            "php artisan test --parallel"
         ],
         "test-mysql": [
             "php artisan config:clear",
