@@ -91,14 +91,12 @@ services:
       # Custom logout URL to open when using an auth proxy.
       - PROXY_LOGOUT_URL=null
       # WebAuthn settings
-      # Relying Party name, aka the name of the application. If null, defaults to APP_NAME
+      # Relying Party name, aka the name of the application. If blank, defaults to APP_NAME. Do not set to null.
       - WEBAUTHN_NAME=2FAuth
-      # Relying Party ID. If null, the device will fill it internally.
+      # Relying Party ID, should equal the site domain (i.e 2fauth.example.com).
+      # If null, the device will fill it internally (recommended)
       # See https://webauthn-doc.spomky-labs.com/prerequisites/the-relying-party#how-to-determine-the-relying-party-id
       - WEBAUTHN_ID=null
-      # Optional image data in BASE64 (128 bytes maximum) or an image url
-      # See https://webauthn-doc.spomky-labs.com/prerequisites/the-relying-party#relying-party-icon
-      - WEBAUTHN_ICON=null
       # Use this setting to control how user verification behave during the
       # WebAuthn authentication flow.
       #

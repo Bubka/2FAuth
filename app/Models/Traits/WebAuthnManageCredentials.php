@@ -4,7 +4,6 @@ namespace App\Models\Traits;
 
 use App\Notifications\WebauthnRecoveryNotification;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Str;
 
 /**
  * @see \App\Models\WebAuthnAuthenticatable
@@ -12,20 +11,6 @@ use Illuminate\Support\Str;
  */
 trait WebAuthnManageCredentials
 {
-    /**
-     * Return the handle used to identify his credentials.
-     */
-    public function userHandle() : string
-    {
-        // Laragear\WebAuthn uses Ramsey\Uuid\Uuid::fromString()->getHex()->toString()
-        // to obtain a UUID v4 with dashes removed and uses it as user_id (aka userHandle)
-        // see https://github.com/ramsey/uuid/blob/4.x/src/Uuid.php#L379
-        // and Laragear\WebAuthn\Assertion\Validator\Pipes\CheckCredentialIsForUser::validateId()
-
-        return $this->webAuthnCredentials()->value('user_id')
-            ?? str_replace('-', '', Str::uuid()->toString());
-    }
-
     /**
      * Saves a new alias for a given WebAuthn credential.
      */

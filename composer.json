@@ -27,7 +27,7 @@
         "guzzlehttp/guzzle": "^7.2",
         "jackiedo/dotenv-editor": "^2.1",
         "khanamiryan/qrcode-detector-decoder": "^2.0.2",
-        "laragear/webauthn": "^1.2.0",
+        "laragear/webauthn": "^2.0",
         "laravel/framework": "^10.10",
         "laravel/passport": "^11.2",
         "laravel/socialite": "^5.10",

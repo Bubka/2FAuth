@@ -2,14 +2,10 @@
 
 namespace Tests\Feature\Models;
 
-use App\Extensions\WebauthnCredentialBroker;
 use App\Models\Group;
 use App\Models\TwoFAccount;
 use App\Models\User;
-use Database\Factories\UserFactory;
 use Illuminate\Auth\Events\PasswordReset;
-use Illuminate\Http\Testing\FileFactory;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Password;
@@ -52,7 +48,7 @@ class UserModelTest extends FeatureTestCase
      */
     public function test_isAdministrator_returns_correct_state()
     {
-        $user = User::factory()->create();
+        $user  = User::factory()->create();
         $admin = User::factory()->administrator()->create();
 
         $this->assertEquals($user->isAdministrator(), false);
@@ -88,7 +84,7 @@ class UserModelTest extends FeatureTestCase
      */
     public function test_resetPassword_resets_password_with_success()
     {
-        $user = User::factory()->create();
+        $user        = User::factory()->create();
         $oldPassword = $user->password;
 
         $user->resetPassword();
@@ -118,7 +114,7 @@ class UserModelTest extends FeatureTestCase
         $user = User::factory()->create();
         TwoFAccount::factory()->for($user)->create();
         Group::factory()->for($user)->create();
-        
+
         DB::table('webauthn_credentials')->insert([
             'id'                   => '-VOLFKPY-_FuMI_sJ7gMllK76L3VoRUINj6lL_Z3qDg',
             'authenticatable_type' => \App\Models\User::class,
@@ -139,7 +135,7 @@ class UserModelTest extends FeatureTestCase
         Password::broker()->createToken($user);
 
         $user->delete();
-        
+
         $this->assertDatabaseMissing('twofaccounts', [
             'user_id' => $user->id,
         ]);

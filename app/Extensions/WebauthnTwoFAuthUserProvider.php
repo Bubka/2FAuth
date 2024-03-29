@@ -16,7 +16,7 @@ class WebauthnTwoFAuthUserProvider extends WebAuthnUserProvider
     public function validateCredentials($user, array $credentials) : bool
     {
         if ($user instanceof WebAuthnAuthenticatable && $this->isSignedChallenge($credentials)) {
-            return $this->validateWebAuthn();
+            return $this->validateWebAuthn($user);
         }
 
         // If the user disabled the fallback, we will validate the credential password.

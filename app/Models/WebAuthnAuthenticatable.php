@@ -7,11 +7,6 @@ use Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable as Authenticatable;
 interface WebAuthnAuthenticatable extends Authenticatable
 {
     /**
-     * Return the handle used to identify his credentials.
-     */
-    public function userHandle() : string;
-
-    /**
      * Saves a new alias for a given WebAuthn credential.
      */
     public function renameCredential(string $id, string $alias) : bool;

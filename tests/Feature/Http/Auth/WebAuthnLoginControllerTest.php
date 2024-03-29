@@ -8,7 +8,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Laragear\WebAuthn\Assertion\Validator\AssertionValidator;
-use Laragear\WebAuthn\WebAuthn;
+use Laragear\WebAuthn\Enums\UserVerification;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\FeatureTestCase;
 
@@ -369,7 +369,7 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
      */
     public function test_get_options_returns_success()
     {
-        Config::set('webauthn.user_verification', WebAuthn::USER_VERIFICATION_PREFERRED);
+        Config::set('webauthn.user_verification', UserVerification::PREFERRED);
 
         $this->user = User::factory()->create(['email' => self::EMAIL]);
 
@@ -409,7 +409,7 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
      */
     public function test_get_options_for_securelogin_returns_required_userVerification()
     {
-        Config::set('webauthn.user_verification', WebAuthn::USER_VERIFICATION_REQUIRED);
+        Config::set('webauthn.user_verification', UserVerification::REQUIRED);
 
         $this->user = User::factory()->create(['email' => self::EMAIL]);
 
@@ -451,7 +451,7 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
      */
     public function test_get_options_for_fastlogin_returns_discouraged_userVerification()
     {
-        Config::set('webauthn.user_verification', WebAuthn::USER_VERIFICATION_DISCOURAGED);
+        Config::set('webauthn.user_verification', UserVerification::DISCOURAGED);
 
         $this->user = User::factory()->create(['email' => self::EMAIL]);
 

@@ -10,11 +10,10 @@ use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Log;
+use Laragear\WebAuthn\Enums\UserVerification;
 use Laragear\WebAuthn\Http\Requests\AssertionRequest;
-use Laragear\WebAuthn\WebAuthn;
 
 class WebAuthnLoginController extends Controller
 {
@@ -44,10 +43,10 @@ class WebAuthnLoginController extends Controller
     public function options(AssertionRequest $request) : Responsable|JsonResponse
     {
         switch (config('webauthn.user_verification')) {
-            case WebAuthn::USER_VERIFICATION_DISCOURAGED:
+            case UserVerification::DISCOURAGED:
                 $request = $request->fastLogin();    // Makes the authenticator to only check for user presence on registration
                 break;
-            case WebAuthn::USER_VERIFICATION_REQUIRED:
+            case UserVerification::REQUIRED:
                 $request = $request->secureLogin();  // Makes the authenticator to always verify the user thoroughly on registration
                 break;
         }
@@ -86,17 +85,6 @@ class WebAuthnLoginController extends Controller
             ));
 
             return $this->sendLockoutResponse($request);
-        }
-
-        if ($request->has('response')) {
-            $response = $request->response;
-
-            // Some authenticators do not send a userHandle so we hack the response to be compliant
-            // with Laragear\WebAuthn implementation that waits for a userHandle
-            if (! Arr::exists($response, 'userHandle') || blank($response['userHandle'])) {
-                $response['userHandle'] = User::getFromCredentialId($request->id)?->userHandle();
-                $request->merge(['response' => $response]);
-            }
         }
 
         if ($this->attemptLogin($request)) {

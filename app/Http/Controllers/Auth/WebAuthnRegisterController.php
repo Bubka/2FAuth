@@ -6,9 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
+use Laragear\WebAuthn\Enums\UserVerification;
 use Laragear\WebAuthn\Http\Requests\AttestationRequest;
 use Laragear\WebAuthn\Http\Requests\AttestedRequest;
-use Laragear\WebAuthn\WebAuthn;
 
 class WebAuthnRegisterController extends Controller
 {
@@ -18,10 +18,10 @@ class WebAuthnRegisterController extends Controller
     public function options(AttestationRequest $request) : Responsable
     {
         switch (config('webauthn.user_verification')) {
-            case WebAuthn::USER_VERIFICATION_DISCOURAGED:
+            case UserVerification::DISCOURAGED:
                 $request = $request->fastRegistration();    // Makes the authenticator to only check for user presence on registration
                 break;
-            case WebAuthn::USER_VERIFICATION_REQUIRED:
+            case UserVerification::REQUIRED:
                 $request = $request->secureRegistration();  // Makes the authenticator to always verify the user thoroughly on registration
                 break;
         }
