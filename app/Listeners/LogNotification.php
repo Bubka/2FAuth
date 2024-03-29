@@ -3,7 +3,6 @@
 namespace App\Listeners;
 
 use Illuminate\Notifications\Events\NotificationSent;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class LogNotification

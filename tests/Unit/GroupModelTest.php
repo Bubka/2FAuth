@@ -30,7 +30,7 @@ class GroupModelTest extends ModelTestCase
             [
                 'id'                 => 'int',
                 'twofaccounts_count' => 'integer',
-                'user_id'            => 'integer'
+                'user_id'            => 'integer',
             ],
             [
                 'deleting' => GroupDeleting::class,

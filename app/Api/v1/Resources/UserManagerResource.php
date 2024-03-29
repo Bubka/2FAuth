@@ -38,7 +38,7 @@ class UserManagerResource extends UserResource
     {
         $this->resource = $resource;
         $password_reset = null;
-        
+
         // Password reset token
         $resetToken = DB::table(config('auth.passwords.users.table'))->where(
             'email', $this->resource->getEmailForPasswordReset()
@@ -52,7 +52,7 @@ class UserManagerResource extends UserResource
 
         // Personal Access Tokens (PATs)
         $tokenRepository = App::make(TokenRepository::class);
-        $tokens = $tokenRepository->forUser($this->resource->getAuthIdentifier());
+        $tokens          = $tokenRepository->forUser($this->resource->getAuthIdentifier());
 
         $PATs_count = $tokens->load('client')->filter(function ($token) {
             return $token->client->personal_access_client && ! $token->revoked;
@@ -61,10 +61,9 @@ class UserManagerResource extends UserResource
         $this->with = [
             'password_reset'               => $password_reset,
             'valid_personal_access_tokens' => $PATs_count,
-            'webauthn_credentials'         => $this->resource->webAuthnCredentials()->count()
+            'webauthn_credentials'         => $this->resource->webAuthnCredentials()->count(),
         ];
     }
-    
 
     /**
      * Determine if the token has expired.
@@ -75,7 +74,7 @@ class UserManagerResource extends UserResource
     protected function tokenExpired($createdAt)
     {
         // See Illuminate\Auth\Passwords\DatabaseTokenRepository
-        return Carbon::parse($createdAt)->addSeconds(config('auth.passwords.users.expires', 60)*60)->isPast();
+        return Carbon::parse($createdAt)->addSeconds(config('auth.passwords.users.expires', 60) * 60)->isPast();
     }
 
     /**
@@ -90,8 +89,8 @@ class UserManagerResource extends UserResource
             parent::toArray($request),
             [
                 'twofaccounts_count' => is_null($this->twofaccounts_count) ? 0 : $this->twofaccounts_count,
-                'last_seen_at' => Carbon::parse($this->last_seen_at)->locale(App::getLocale())->diffForHumans(),
-                'created_at'   => Carbon::parse($this->created_at)->locale(App::getLocale())->diffForHumans(),
+                'last_seen_at'       => Carbon::parse($this->last_seen_at)->locale(App::getLocale())->diffForHumans(),
+                'created_at'         => Carbon::parse($this->created_at)->locale(App::getLocale())->diffForHumans(),
             ]
         );
     }

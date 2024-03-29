@@ -19,7 +19,9 @@ class SystemControllerTest extends FeatureTestCase
     /**
      * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
      */
-    protected $user, $admin;
+    protected $user;
+
+    protected $admin;
 
     /**
      * @test
@@ -28,7 +30,7 @@ class SystemControllerTest extends FeatureTestCase
     {
         parent::setUp();
 
-        $this->user = User::factory()->create();
+        $this->user  = User::factory()->create();
         $this->admin = User::factory()->administrator()->create();
     }
 
@@ -77,7 +79,7 @@ class SystemControllerTest extends FeatureTestCase
                     'Auth guard',
                     'webauthn user verification',
                     'Trusted proxies',
-                    'lastRadarScan'
+                    'lastRadarScan',
                 ],
             ]);
     }

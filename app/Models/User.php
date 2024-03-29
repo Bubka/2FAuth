@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Laragear\WebAuthn\WebAuthnAuthentication;
 use Laravel\Passport\HasApiTokens;
@@ -92,7 +91,7 @@ class User extends Authenticatable implements WebAuthnAuthenticatable
     /**
      * Determine if the user is an administrator.
      *
-     * @return boolean
+     * @return bool
      */
     public function isAdministrator()
     {
@@ -102,7 +101,6 @@ class User extends Authenticatable implements WebAuthnAuthenticatable
     /**
      * Grant administrator permissions to the user.
      *
-     * @param  bool  $promote  
      * @return void
      */
     public function promoteToAdministrator(bool $promote = true)

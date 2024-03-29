@@ -76,7 +76,7 @@ Route::group(['middleware' => ['behind-auth', 'rejectIfReverseProxy']], function
 /**
  * Routes protected by an authentication guard and restricted to administrators
  */
-Route::group(['middleware' => ['behind-auth', 'admin']], function () {   
+Route::group(['middleware' => ['behind-auth', 'admin']], function () {
     Route::get('system/infos', [SystemController::class, 'infos'])->name('system.infos');
     Route::post('system/test-email', [SystemController::class, 'testEmail'])->name('system.testEmail');
 });

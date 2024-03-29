@@ -95,11 +95,11 @@ class UserManagerControllerTest extends FeatureTestCase
     /**
      * @test
      */
-    public function test_index_succeeds_and_returns_UserManagerResource(): void
+    public function test_index_succeeds_and_returns_UserManagerResource() : void
     {
-        $path = '/api/v1/users';
+        $path      = '/api/v1/users';
         $resources = UserManagerResource::collection(User::all());
-        $request  = Request::create($path, 'GET');
+        $request   = Request::create($path, 'GET');
 
         $this->actingAs($this->admin, 'api-guard')
             ->json('GET', $path)
@@ -121,11 +121,11 @@ class UserManagerControllerTest extends FeatureTestCase
     /**
      * @test
      */
-    public function test_show_returns_UserManagerResource(): void
+    public function test_show_returns_UserManagerResource() : void
     {
-        $path = '/api/v1/users/' . $this->user->id;
+        $path      = '/api/v1/users/' . $this->user->id;
         $resources = UserManagerResource::make($this->user);
-        $request  = Request::create($path, 'GET');
+        $request   = Request::create($path, 'GET');
 
         $this->actingAs($this->admin, 'api-guard')
             ->json('GET', $path)
@@ -140,7 +140,7 @@ class UserManagerControllerTest extends FeatureTestCase
         Notification::fake();
 
         DB::table(config('auth.passwords.users.table'))->delete();
-        $user  = User::factory()->create();
+        $user        = User::factory()->create();
         $oldPassword = $user->password;
 
         $this->actingAs($this->admin, 'api-guard')
@@ -165,9 +165,9 @@ class UserManagerControllerTest extends FeatureTestCase
     {
         Notification::fake();
 
-        $user  = User::factory()->create();
-        $path = '/api/v1/users/' . $user->id . '/password/reset';
-        $request  = Request::create($path, 'PATCH');
+        $user    = User::factory()->create();
+        $path    = '/api/v1/users/' . $user->id . '/password/reset';
+        $request = Request::create($path, 'PATCH');
 
         $response = $this->actingAs($this->admin, 'api-guard')
             ->json('PATCH', $path);
@@ -201,7 +201,7 @@ class UserManagerControllerTest extends FeatureTestCase
                 'message',
                 'reason',
             ]);
-        
+
         Notification::assertNothingSent();
     }
 
@@ -232,7 +232,7 @@ class UserManagerControllerTest extends FeatureTestCase
                 'message',
                 'reason',
             ]);
-        
+
         Notification::assertNothingSent();
     }
 
@@ -247,10 +247,10 @@ class UserManagerControllerTest extends FeatureTestCase
                 'email'                 => self::EMAIL,
                 'password'              => self::PASSWORD,
                 'password_confirmation' => self::PASSWORD,
-                'is_admin'              => false
+                'is_admin'              => false,
             ])
             ->assertCreated();
-        
+
         $this->assertDatabaseHas('users', [
             'name'  => self::USERNAME,
             'email' => self::EMAIL,
@@ -260,18 +260,18 @@ class UserManagerControllerTest extends FeatureTestCase
     /**
      * @test
      */
-    public function test_store_returns_UserManagerResource_of_created_user(): void
+    public function test_store_returns_UserManagerResource_of_created_user() : void
     {
-        $path = '/api/v1/users';
-        $userDefinition = (new UserFactory)->definition();
+        $path                                    = '/api/v1/users';
+        $userDefinition                          = (new UserFactory)->definition();
         $userDefinition['password_confirmation'] = $userDefinition['password'];
-        $request  = Request::create($path, 'POST');
+        $request                                 = Request::create($path, 'POST');
 
         $response = $this->actingAs($this->admin, 'api-guard')
             ->json('POST', $path, $userDefinition)
             ->assertCreated();
-            
-        $user = User::where('email', $userDefinition['email'])->first();
+
+        $user     = User::where('email', $userDefinition['email'])->first();
         $resource = UserManagerResource::make($user);
 
         $response->assertExactJson($resource->response($request)->getData(true));
@@ -280,19 +280,19 @@ class UserManagerControllerTest extends FeatureTestCase
     /**
      * @test
      */
-    public function test_store_returns_UserManagerResource_of_created_admin(): void
+    public function test_store_returns_UserManagerResource_of_created_admin() : void
     {
-        $path = '/api/v1/users';
-        $userDefinition = (new UserFactory)->definition();
-        $userDefinition['is_admin'] = true;
+        $path                                    = '/api/v1/users';
+        $userDefinition                          = (new UserFactory)->definition();
+        $userDefinition['is_admin']              = true;
         $userDefinition['password_confirmation'] = $userDefinition['password'];
-        $request  = Request::create($path, 'POST');
+        $request                                 = Request::create($path, 'POST');
 
         $response = $this->actingAs($this->admin, 'api-guard')
             ->json('POST', $path, $userDefinition)
             ->assertCreated();
-            
-        $user = User::where('email', $userDefinition['email'])->first();
+
+        $user     = User::where('email', $userDefinition['email'])->first();
         $resource = UserManagerResource::make($user);
 
         $response->assertExactJson($resource->response($request)->getData(true));
@@ -310,10 +310,10 @@ class UserManagerControllerTest extends FeatureTestCase
                 'name' => 'RandomTokenName',
             ])
             ->assertOk();
-        
+
         $this->actingAs($this->admin, 'api-guard')
             ->json('DELETE', '/api/v1/users/' . $this->user->id . '/pats');
-        
+
         $tokens = $tokenRepository->forUser($this->user->getAuthIdentifier());
         $tokens = $tokens->load('client')->filter(function ($token) {
             return $token->client->personal_access_client && ! $token->revoked;
@@ -423,7 +423,7 @@ class UserManagerControllerTest extends FeatureTestCase
             ->assertNoContent();
 
         $this->user->refresh();
-        
+
         $this->assertFalse($this->user->preferences['useWebauthnOnly']);
     }
 
@@ -452,30 +452,30 @@ class UserManagerControllerTest extends FeatureTestCase
     /**
      * @test
      */
-    public function test_promote_changes_admin_status(): void
+    public function test_promote_changes_admin_status() : void
     {
         $this->actingAs($this->admin, 'api-guard')
             ->json('PATCH', '/api/v1/users/' . $this->user->id . '/promote', [
-                'is_admin' => true
+                'is_admin' => true,
             ])
             ->assertOk();
 
         $this->user->refresh();
-        
+
         $this->assertTrue($this->user->isAdministrator());
     }
 
     /**
      * @test
      */
-    public function test_promote_returns_UserManagerResource(): void
+    public function test_promote_returns_UserManagerResource() : void
     {
-        $path = '/api/v1/users/' . $this->user->id . '/promote';
-        $request  = Request::create($path, 'PUT');
+        $path    = '/api/v1/users/' . $this->user->id . '/promote';
+        $request = Request::create($path, 'PUT');
 
         $response = $this->actingAs($this->admin, 'api-guard')
             ->json('PATCH', $path, [
-                'is_admin' => true
+                'is_admin' => true,
             ]);
 
         $this->user->refresh();
@@ -483,6 +483,4 @@ class UserManagerControllerTest extends FeatureTestCase
 
         $response->assertExactJson($resources->response($request)->getData(true));
     }
-
-
 }

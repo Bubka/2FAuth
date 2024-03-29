@@ -50,12 +50,12 @@ class EventServiceProvider extends ServiceProvider
             LogNotification::class,
         ],
     ];
-    
+
     /**
-    * The model observers for your application.
-    *
-    * @var array<string, string|object|array<int, string|object>>
-    */
+     * The model observers for your application.
+     *
+     * @var array<string, string|object|array<int, string|object>>
+     */
     protected $observers = [
         User::class => [UserObserver::class],
     ];

@@ -166,10 +166,10 @@ class WebAuthnRecoveryControllerTest extends FeatureTestCase
             'email'    => $this->user->email,
             'password' => UserFactory::USER_PASSWORD,
         ])
-        ->assertStatus(200);
+            ->assertStatus(200);
 
         $this->user->refresh();
-        
+
         $this->assertFalse($this->user->preferences['useWebauthnOnly']);
     }
 

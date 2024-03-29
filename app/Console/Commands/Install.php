@@ -137,7 +137,7 @@ class Install extends Command
     }
 
     /**
-     * 
+     * Runs the passport:install command silently
      */
     protected function installPassport() : void
     {
@@ -147,7 +147,7 @@ class Install extends Command
     }
 
     /**
-     * 
+     * Runs the config:cache command silently
      */
     protected function cacheConfig() : void
     {
@@ -157,11 +157,11 @@ class Install extends Command
     }
 
     /**
-     * 
+     * Runs the storage:link command silently
      */
     protected function createStorageLink() : void
     {
-        if (!file_exists(public_path('storage'))) {
+        if (! file_exists(public_path('storage'))) {
             $this->components->task('Creating storage link', function () : void {
                 $this->callSilently('storage:link');
             });
@@ -169,7 +169,7 @@ class Install extends Command
     }
 
     /**
-     * 
+     * Lets the user set the main environment variables
      */
     protected function setMainEnvVars() : void
     {
@@ -177,8 +177,7 @@ class Install extends Command
             $appUrl = trim($this->ask('URL of this 2FAuth instance', config('app.url')), '/');
             if (filter_var($appUrl, FILTER_VALIDATE_URL)) {
                 break;
-            }
-            else {
+            } else {
                 $this->components->error('This is not a valid URL, please retry');
             }
         }
@@ -195,7 +194,7 @@ class Install extends Command
     }
 
     /**
-     * Prompt user for valid database credentials and set them to .env file.
+     * Prompts user for valid database credentials and sets them to .env file.
      */
     protected function setDbEnvVars() : void
     {
@@ -253,7 +252,7 @@ class Install extends Command
     }
 
     /**
-     * 
+     * Runs db migration with --force option
      */
     protected function migrateDatabase() : mixed
     {
@@ -265,7 +264,7 @@ class Install extends Command
     }
 
     /**
-     * 
+     * Clears some caches
      */
     protected function clearCaches() : void
     {
@@ -276,7 +275,7 @@ class Install extends Command
     }
 
     /**
-     * 
+     * Loads the existing env file or creates it
      */
     protected function loadEnvFile() : void
     {
@@ -300,7 +299,7 @@ class Install extends Command
     }
 
     /**
-     * 
+     * Generates an app key if necessary
      */
     protected function maybeGenerateAppKey() : void
     {
@@ -317,7 +316,7 @@ class Install extends Command
     }
 
     /**
-     * Generate a random key for the application.
+     * Generates a random key for the application.
      */
     protected function generateRandomKey() : string
     {

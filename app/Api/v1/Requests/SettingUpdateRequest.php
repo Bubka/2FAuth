@@ -28,7 +28,7 @@ class SettingUpdateRequest extends FormRequest
         $rule = [
             'value' => [
                 'required',
-            ]
+            ],
         ];
 
         if ($this->route()?->parameter('settingName') == 'restrictList') {

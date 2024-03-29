@@ -171,7 +171,7 @@ class RegisterControllerTest extends FeatureTestCase
             'password'              => self::PASSWORD,
             'password_confirmation' => self::PASSWORD,
         ])
-        ->assertStatus(201);
+            ->assertStatus(201);
     }
 
     /**
@@ -189,7 +189,7 @@ class RegisterControllerTest extends FeatureTestCase
             'password'              => self::PASSWORD,
             'password_confirmation' => self::PASSWORD,
         ])
-        ->assertStatus(422);
+            ->assertStatus(422);
     }
 
     /**
@@ -207,7 +207,7 @@ class RegisterControllerTest extends FeatureTestCase
             'password'              => self::PASSWORD,
             'password_confirmation' => self::PASSWORD,
         ])
-        ->assertStatus(201);
+            ->assertStatus(201);
     }
 
     /**
@@ -225,7 +225,7 @@ class RegisterControllerTest extends FeatureTestCase
             'password'              => self::PASSWORD,
             'password_confirmation' => self::PASSWORD,
         ])
-        ->assertStatus(422);
+            ->assertStatus(422);
     }
 
     /**
@@ -243,7 +243,7 @@ class RegisterControllerTest extends FeatureTestCase
             'password'              => self::PASSWORD,
             'password_confirmation' => self::PASSWORD,
         ])
-        ->assertStatus(201);
+            ->assertStatus(201);
     }
 
     /**
@@ -261,6 +261,6 @@ class RegisterControllerTest extends FeatureTestCase
             'password'              => self::PASSWORD,
             'password_confirmation' => self::PASSWORD,
         ])
-        ->assertStatus(201);
+            ->assertStatus(201);
     }
 }

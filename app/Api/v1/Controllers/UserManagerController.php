@@ -2,8 +2,8 @@
 
 namespace App\Api\v1\Controllers;
 
-use App\Api\v1\Requests\UserManagerStoreRequest;
 use App\Api\v1\Requests\UserManagerPromoteRequest;
+use App\Api\v1\Requests\UserManagerStoreRequest;
 use App\Api\v1\Resources\UserManagerResource;
 use App\Http\Controllers\Controller;
 use App\Models\User;
@@ -36,7 +36,7 @@ class UserManagerController extends Controller
     }
 
     /**
-     * Reset user's password 
+     * Reset user's password
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -59,15 +59,14 @@ class UserManagerController extends Controller
 
         if ($response == Password::PASSWORD_RESET) {
             Log::info(sprintf('Temporary password set for User ID #%s', $user->id));
-    
+
             $response = $this->broker()->sendResetLink(
                 ['email' => $credentials['email']]
             );
-        }
-        else {
+        } else {
             return response()->json([
                 'message' => 'bad request',
-                'reason'  => is_string($response) ? __($response) : __('errors.no_pwd_reset_for_this_user_type')
+                'reason'  => is_string($response) ? __($response) : __('errors.no_pwd_reset_for_this_user_type'),
             ], 400);
         }
 
@@ -75,7 +74,7 @@ class UserManagerController extends Controller
                     ? new UserManagerResource($user)
                     : response()->json([
                         'message' => 'bad request',
-                        'reason'  => __($response)
+                        'reason'  => __($response),
                     ], 400);
     }
 
@@ -89,9 +88,9 @@ class UserManagerController extends Controller
         $validated = $request->validated();
 
         $user = User::create([
-            'name'      => $validated['name'],
-            'email'     => $validated['email'],
-            'password'  => Hash::make($validated['password']),
+            'name'     => $validated['name'],
+            'email'    => $validated['email'],
+            'password' => Hash::make($validated['password']),
         ]);
 
         Log::info(sprintf('User ID #%s created by user ID #%s', $user->id, $request->user()->id));
@@ -196,5 +195,4 @@ class UserManagerController extends Controller
     {
         return Password::broker();
     }
-
 }

@@ -11,11 +11,11 @@ class ComplyWithEmailRestrictionPolicy implements ValidationRule
     /**
      * Run the validation rule.
      */
-    public function validate(string $attribute, mixed $value, Closure $fail): void
+    public function validate(string $attribute, mixed $value, Closure $fail) : void
     {
         $list  = Settings::get('restrictList');
         $regex = Settings::get('restrictRule');
-        
+
         $validatesFilter = true;
         $validatesRegex  = true;
 
@@ -31,8 +31,7 @@ class ComplyWithEmailRestrictionPolicy implements ValidationRule
                 if (! $validatesFilter && ! $validatesRegex) {
                     $fail('validation.custom.email.ComplyWithEmailRestrictionPolicy')->translate();
                 }
-            }
-            else {
+            } else {
                 if (! $validatesFilter || ! $validatesRegex) {
                     $fail('validation.custom.email.ComplyWithEmailRestrictionPolicy')->translate();
                 }

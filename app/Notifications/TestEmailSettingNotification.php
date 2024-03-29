@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Lang;
 
 class TestEmailSettingNotification extends Notification
 {
-
     // /**
     //  * The callback that should be used to create the reset password URL.
     //  *

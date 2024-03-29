@@ -32,7 +32,7 @@ Route::group(['middleware' => 'auth:api-guard'], function () {
     Route::get('user/preferences/{preferenceName}', [UserController::class, 'showPreference'])->name('user.preferences.show');
     Route::get('user/preferences', [UserController::class, 'allPreferences'])->name('user.preferences.all');
     Route::put('user/preferences/{preferenceName}', [UserController::class, 'setPreference'])->name('user.preferences.set');
-    
+
     Route::delete('twofaccounts', [TwoFAccountController::class, 'batchDestroy'])->name('twofaccounts.batchDestroy');
     Route::patch('twofaccounts/withdraw', [TwoFAccountController::class, 'withdraw'])->name('twofaccounts.withdraw');
     Route::post('twofaccounts/reorder', [TwoFAccountController::class, 'reorder'])->name('twofaccounts.reorder');

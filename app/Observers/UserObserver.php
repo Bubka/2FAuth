@@ -14,7 +14,7 @@ class UserObserver
     /**
      * Handle the User "created" event.
      */
-    public function created(User $user): void
+    public function created(User $user) : void
     {
         //
     }
@@ -22,7 +22,7 @@ class UserObserver
     /**
      * Handle the User "updated" event.
      */
-    public function updated(User $user): void
+    public function updated(User $user) : void
     {
         //
     }
@@ -30,7 +30,7 @@ class UserObserver
     /**
      * Handle the User "deleting" event.
      */
-    public function deleting(User $user): bool
+    public function deleting(User $user) : bool
     {
         Log::info(sprintf('Deletion of User ID #%s requested by User ID #%s', $user->id, Auth::user()->id ?? 'unknown'));
 
@@ -39,7 +39,7 @@ class UserObserver
 
         if ($isLastAdmin) {
             Log::notice(sprintf('Deletion of user ID #%s refused, cannot delete the only administrator', $user->id));
-            
+
             return false;
         }
 
@@ -57,7 +57,7 @@ class UserObserver
     /**
      * Handle the User "deleted" event.
      */
-    public function deleted(User $user): void
+    public function deleted(User $user) : void
     {
         // DB has cascade delete enabled to flush 2FA and Groups but,
         // for an unknown reason, SQLite refuses to delete these related.
@@ -82,7 +82,7 @@ class UserObserver
     /**
      * Handle the User "restored" event.
      */
-    public function restored(User $user): void
+    public function restored(User $user) : void
     {
         //
     }
@@ -90,7 +90,7 @@ class UserObserver
     /**
      * Handle the User "force deleted" event.
      */
-    public function forceDeleted(User $user): void
+    public function forceDeleted(User $user) : void
     {
         //
     }

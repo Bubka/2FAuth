@@ -109,6 +109,4 @@ class SystemController extends Controller
 
         return response()->json(['exit-code' => $exitCode], 200);
     }
-
-    
 }
