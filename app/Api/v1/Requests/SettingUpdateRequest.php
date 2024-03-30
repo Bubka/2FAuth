@@ -2,7 +2,7 @@
 
 namespace App\Api\v1\Requests;
 
-use App\Rules\IsValideEmailList;
+use App\Rules\IsValidEmailList;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
@@ -32,7 +32,7 @@ class SettingUpdateRequest extends FormRequest
         ];
 
         if ($this->route()?->parameter('settingName') == 'restrictList') {
-            $rule['value'][] = new IsValideEmailList;
+            $rule['value'][] = new IsValidEmailList;
         }
 
         return $rule;

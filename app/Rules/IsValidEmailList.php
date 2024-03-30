@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Support\Facades\Validator;
 
-class IsValideEmailList implements ValidationRule
+class IsValidEmailList implements ValidationRule
 {
     /**
      * Run the validation rule.
