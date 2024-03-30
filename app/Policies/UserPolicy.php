@@ -78,4 +78,12 @@ class UserPolicy
 
         return $can;
     }
+
+    /**
+     * Determine whether the user can promote the model.
+     */
+    public function promote(User $user) : bool
+    {
+        return false;
+    }
 }

@@ -32,6 +32,8 @@ class UserManagerController extends Controller
      */
     public function show(User $user)
     {
+        $this->authorize('view', $user);
+
         return new UserManagerResource($user);
     }
 
@@ -43,6 +45,8 @@ class UserManagerController extends Controller
     public function resetPassword(Request $request, User $user)
     {
         Log::info(sprintf('Password reset for User ID #%s requested by User ID #%s', $user->id, $request->user()->id));
+
+        $this->authorize('update', $user);
 
         $credentials = [
             'token'    => $this->broker()->createToken($user),
@@ -85,6 +89,8 @@ class UserManagerController extends Controller
      */
     public function store(UserManagerStoreRequest $request)
     {
+        $this->authorize('create', User::class);
+
         $validated = $request->validated();
 
         $user = User::create([
@@ -117,6 +123,8 @@ class UserManagerController extends Controller
     {
         Log::info(sprintf('Deletion of all personal access tokens for User ID #%s requested by User ID #%s', $user->id, $request->user()->id));
 
+        $this->authorize('update', $user);
+
         $tokens = $tokenRepository->forUser($user->getAuthIdentifier());
 
         $tokens->load('client')->filter(function ($token) {
@@ -138,6 +146,8 @@ class UserManagerController extends Controller
     public function revokeWebauthnCredentials(Request $request, User $user)
     {
         Log::info(sprintf('Deletion of all security devices for User ID #%s requested by User ID #%s', $user->id, $request->user()->id));
+
+        $this->authorize('update', $user);
 
         $user->flushCredentials();
 
@@ -162,6 +172,8 @@ class UserManagerController extends Controller
      */
     public function destroy(Request $request, User $user)
     {
+        $this->authorize('delete', $user);
+
         // This will delete the user and all its 2FAs & Groups thanks to the onCascadeDelete constrains.
         // Deletion will not be done (and returns False) if the user is the only existing admin (see UserObserver clas)
         return $user->delete() === false
@@ -178,6 +190,8 @@ class UserManagerController extends Controller
      */
     public function promote(UserManagerPromoteRequest $request, User $user)
     {
+        $this->authorize('promote', $user);
+
         $user->promoteToAdministrator($request->validated('is_admin'));
         $user->save();
 
