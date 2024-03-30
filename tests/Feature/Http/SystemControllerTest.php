@@ -6,6 +6,7 @@ use App\Http\Controllers\SystemController;
 use App\Models\User;
 use App\Notifications\TestEmailSettingNotification;
 use App\Services\ReleaseRadarService;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Notification;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\FeatureTestCase;
@@ -14,6 +15,8 @@ use Tests\FeatureTestCase;
  * SystemControllerTest test class
  */
 #[CoversClass(SystemController::class)]
+#[CoversClass(TestEmailSettingNotification::class)]
+
 class SystemControllerTest extends FeatureTestCase
 {
     /**
@@ -131,6 +134,19 @@ class SystemControllerTest extends FeatureTestCase
         $response->assertStatus(200);
 
         Notification::assertSentTo($this->admin, TestEmailSettingNotification::class);
+    }
+
+    /**
+     * @test
+     */
+    public function test_testEmail_renders_to_email()
+    {
+        $mail = (new TestEmailSettingNotification('test_token'))->toMail($this->user)->render();
+
+        $this->assertStringContainsString(
+            Lang::get('notifications.test_email_settings.reason'),
+            $mail
+        );
     }
 
     /**

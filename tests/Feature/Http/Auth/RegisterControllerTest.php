@@ -6,6 +6,7 @@ use App\Facades\Settings;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Requests\UserStoreRequest;
 use App\Models\User;
+use App\Rules\ComplyWithEmailRestrictionPolicy;
 use Illuminate\Support\Facades\DB;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\FeatureTestCase;
@@ -15,6 +16,7 @@ use Tests\FeatureTestCase;
  */
 #[CoversClass(RegisterController::class)]
 #[CoversClass(UserStoreRequest::class)]
+#[CoversClass(ComplyWithEmailRestrictionPolicy::class)]
 class RegisterControllerTest extends FeatureTestCase
 {
     private const USERNAME = 'john doe';

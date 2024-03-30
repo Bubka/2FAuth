@@ -13,6 +13,8 @@ class UserObserver
 {
     /**
      * Handle the User "created" event.
+     *
+     * @codeCoverageIgnore
      */
     public function created(User $user) : void
     {
@@ -21,6 +23,8 @@ class UserObserver
 
     /**
      * Handle the User "updated" event.
+     *
+     * @codeCoverageIgnore
      */
     public function updated(User $user) : void
     {
@@ -81,6 +85,8 @@ class UserObserver
 
     /**
      * Handle the User "restored" event.
+     *
+     * @codeCoverageIgnore
      */
     public function restored(User $user) : void
     {
@@ -89,6 +95,8 @@ class UserObserver
 
     /**
      * Handle the User "force deleted" event.
+     *
+     * @codeCoverageIgnore
      */
     public function forceDeleted(User $user) : void
     {
