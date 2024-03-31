@@ -74,7 +74,7 @@ export default defineConfig({
     build: {
         rollupOptions: {
             output: {
-                banner: '/*! 2FAuth version ' + version + ' - Copyright (c) 2023 Bubka - https://github.com/Bubka/2FAuth */',
+                banner: '/*! 2FAuth version ' + version + ' - Copyright (c) 2024 Bubka - https://github.com/Bubka/2FAuth */',
             },
         },
     },

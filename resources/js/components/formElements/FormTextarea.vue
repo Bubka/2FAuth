@@ -5,8 +5,6 @@
         inheritAttrs: false
     })
 
-    const { inputId } = useIdGenerator(props.inputType, props.fieldName)
-
     const props = defineProps({
         modelValue: [String, Number, Boolean],
         label: {
@@ -45,6 +43,8 @@
         },
         isIndented: Boolean,
     })
+
+    const { inputId } = useIdGenerator(props.inputType, props.fieldName)
 </script>
 
 <template>

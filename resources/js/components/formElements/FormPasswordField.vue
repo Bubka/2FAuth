@@ -5,10 +5,6 @@
         inheritAttrs: true
     })
 
-    const { inputId } = useIdGenerator(props.inputType, props.fieldName)
-    const currentType = ref(props.inputType)
-    const hasCapsLockOn = ref(false)
-
     const props = defineProps({
         modelValue: [String],
         label: {
@@ -46,6 +42,10 @@
             default: false
         },
     })
+
+    const { inputId } = useIdGenerator(props.inputType, props.fieldName)
+    const currentType = ref(props.inputType)
+    const hasCapsLockOn = ref(false)
 
     const hasLowerCase = computed(() => {
         return /[a-z]/.test(props.modelValue)

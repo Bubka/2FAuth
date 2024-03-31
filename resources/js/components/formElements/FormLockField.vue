@@ -5,9 +5,7 @@
     defineOptions({
         inheritAttrs: false
     })
-
-    const { inputId } = useIdGenerator(props.inputType, props.fieldName)
-
+    
     const props = defineProps({
         modelValue: String,
         modelModifiers: { default: () => ({}) },
@@ -54,6 +52,8 @@
             default: null
         }
     })
+
+    const { inputId } = useIdGenerator(props.inputType, props.fieldName)
 
     const fieldIsLocked = ref(props.isDisabled || props.isEditMode)
     const hasBeenTrimmed = ref(false)
