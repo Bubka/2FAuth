@@ -11,5 +11,22 @@
   "start_url": "/",
   "display": "standalone",
   "scope": "/",
-  "theme_color": "#242424"
+  "theme_color": "#242424",
+  "shortcuts": [
+    {
+      "name": "New 2FA",
+      "url": "/start",
+      "description": "Add a new 2FA account by flashing a QR code or filling out a form"
+    },
+    {
+      "name": "Import 2FAs",
+      "url": "/account/import",
+      "description": "Import 2FA accounts previously exported from another 2FA app"
+    },
+    {
+      "name": "Settings",
+      "url": "/settings/options",
+      "description": "Manage your 2FAuth user settings"
+    }
+  ]
 }
