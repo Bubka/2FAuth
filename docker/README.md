@@ -117,7 +117,7 @@ There are the following build arguments you can use to customize the image using
 
 | Build argument | Recommendation | Description |
 | --- | --- | --- |
-| MAIL_DRIVER | SMTP | The driver type |
+| MAIL_MAILER | SMTP | The driver type |
 | MAIL_HOST | smtp.yourdomain.com | The SMTP hostname |
 | MAIL_PORT | 587 | The corresponding SMTP port (587 with STARTTLS) or (465 with SSL recommended) |
 | MAIL_USERNAME | 2fauth@yourdomain.com | The SMTP username |
@@ -129,7 +129,7 @@ There are the following build arguments you can use to customize the image using
 Example:
 
 ```text
--e MAIL_DRIVER=SMTP
+-e MAIL_MAILER=SMTP
 -e MAIL_HOST=smtp.example.com
 -e MAIL_PORT=587 # STARTTLS
 -e MAIL_USERNAME=2fauth@example.com

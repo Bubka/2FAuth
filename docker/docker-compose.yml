@@ -50,7 +50,7 @@ services:
       # Mail settings
       # Refer your email provider documentation to configure your mail settings
       # Set a value for every available setting to avoid issue
-      - MAIL_DRIVER=log
+      - MAIL_MAILER=log
       - MAIL_HOST=smtp.mailtrap.io
       - MAIL_PORT=2525
       - MAIL_USERNAME=null

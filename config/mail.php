@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => env('MAIL_MAILER', 'smtp'),
+    'default' => env('MAIL_MAILER', env('MAIL_DRIVER', 'smtp')),
 
     /*
     |--------------------------------------------------------------------------
@@ -84,6 +84,14 @@ return [
             'mailers' => [
                 'smtp',
                 'log',
+            ],
+        ],
+
+        'roundrobin' => [
+            'transport' => 'roundrobin',
+            'mailers' => [
+                'ses',
+                'postmark',
             ],
         ],
     ],
