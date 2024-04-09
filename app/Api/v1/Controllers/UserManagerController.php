@@ -102,9 +102,10 @@ class UserManagerController extends Controller
         Log::info(sprintf('User ID #%s created by user ID #%s', $user->id, $request->user()->id));
 
         if ($validated['is_admin']) {
-            $user->promoteToAdministrator();
-            $user->save();
-            Log::notice(sprintf('User ID #%s set as administrator at creation by user ID #%s', $user->id, $request->user()->id));
+            if ($user->promoteToAdministrator()) {
+                $user->save();
+                Log::notice(sprintf('User ID #%s set as administrator at creation by user ID #%s', $user->id, $request->user()->id));
+            }
         }
 
         $user->refresh();
@@ -192,12 +193,17 @@ class UserManagerController extends Controller
     {
         $this->authorize('promote', $user);
 
-        $user->promoteToAdministrator($request->validated('is_admin'));
-        $user->save();
+        if ($user->promoteToAdministrator($request->validated('is_admin')))
+        {
+            $user->save();
+            Log::info(sprintf('User ID #%s set is_admin=%s for User ID #%s', $request->user()->id, $user->isAdministrator(), $user->id));
 
-        Log::info(sprintf('User ID #%s set is_admin=%s for User ID #%s', $request->user()->id, $user->isAdministrator(), $user->id));
+            return new UserManagerResource($user);
+        }
 
-        return new UserManagerResource($user);
+        return response()->json([
+            'message' => __('errors.cannot_demote_the_only_admin'),
+        ], 403);
     }
 
     /**

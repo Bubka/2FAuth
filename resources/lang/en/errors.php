@@ -57,6 +57,7 @@ return [
     'unauthorized' => 'Unauthorized',
     'unauthorized_legend' => 'You do not have permissions to view this resource or to perform this action',
     'cannot_delete_the_only_admin' => 'Cannot delete the only admin account',
+    'cannot_demote_the_only_admin' => 'Cannot demote the only admin account',
     'error_during_data_fetching' => '💀 Something went wrong during data fetching',
     'check_failed_try_later' => 'Check failed, please retry later',
     'sso_disabled' => 'SSO is disabled',

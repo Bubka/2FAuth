@@ -100,12 +100,18 @@
             }
         }
 
-        userService.promote(managedUser.value.info.id, { 'is_admin': isAdmin }).then(response => {
+        userService.promote(managedUser.value.info.id, { 'is_admin': isAdmin }, { returnError: true }).then(response => {
             managedUser.value.info.is_admin = response.data.info.is_admin
             notify.success({ text: trans('admin.user_role_updated') })
         })
         .catch(error => {
-            notify.error(error)
+            if( error.response.status === 403 ) {
+                notify.alert({ text: error.response.data.message })
+                managedUser.value.info.is_admin = true
+            }
+            else {
+                notify.error(error.response)
+            }
         })
     }
 

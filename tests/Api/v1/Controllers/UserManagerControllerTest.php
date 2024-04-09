@@ -483,4 +483,39 @@ class UserManagerControllerTest extends FeatureTestCase
 
         $response->assertExactJson($resources->response($request)->getData(true));
     }
+
+    /**
+     * @test
+     */
+    public function test_demote_returns_UserManagerResource() : void
+    {
+        $anotherAdmin = User::factory()->administrator()->create();
+
+        $path    = '/api/v1/users/' . $anotherAdmin->id . '/promote';
+        $request = Request::create($path, 'PUT');
+
+        $response = $this->actingAs($this->admin, 'api-guard')
+            ->json('PATCH', $path, [
+                'is_admin' => false,
+            ]);
+
+        $anotherAdmin->refresh();
+        $resources = UserManagerResource::make($anotherAdmin);
+
+        $response->assertExactJson($resources->response($request)->getData(true));
+    }
+
+    /**
+     * @test
+     */
+    public function test_demote_the_only_admin_returns_forbidden() : void
+    {
+        $this->assertTrue(User::admins()->count() == 1);
+
+        $this->actingAs($this->admin, 'api-guard')
+            ->json('PATCH', '/api/v1/users/' . $this->admin->id . '/promote', [
+                'is_admin' => false,
+            ])
+            ->assertForbidden();
+    }
 }

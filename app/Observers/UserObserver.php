@@ -32,6 +32,21 @@ class UserObserver
     }
 
     /**
+     * Handle the User "demoting" event.
+     */
+    public function demoting(User $user) : bool
+    {
+        // Prevent demotion of the only administrator
+        if ($user->isLastAdministrator()) {
+            Log::notice(sprintf('Demotion of user ID #%s denied, cannot demote the only administrator', $user->id));
+
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Handle the User "deleting" event.
      */
     public function deleting(User $user) : bool
@@ -39,10 +54,8 @@ class UserObserver
         Log::info(sprintf('Deletion of User ID #%s requested by User ID #%s', $user->id, Auth::user()->id ?? 'unknown'));
 
         // Prevent deletion of the only administrator
-        $isLastAdmin = $user->isAdministrator() && User::admins()->count() == 1;
-
-        if ($isLastAdmin) {
-            Log::notice(sprintf('Deletion of user ID #%s refused, cannot delete the only administrator', $user->id));
+        if ($user->isLastAdministrator()) {
+            Log::notice(sprintf('Deletion of user ID #%s denied, cannot delete the only administrator', $user->id));
 
             return false;
         }

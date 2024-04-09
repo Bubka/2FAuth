@@ -78,6 +78,13 @@ class User extends Authenticatable implements WebAuthnAuthenticatable
     ];
 
     /**
+     * These are extra user-defined events observers may subscribe to.
+     */
+    protected $observables = [
+        'demoting'
+    ];
+
+    /**
      * Scope a query to only include admin users.
      *
      * @param  \Illuminate\Database\Eloquent\Builder<User>  $query
@@ -100,12 +107,30 @@ class User extends Authenticatable implements WebAuthnAuthenticatable
 
     /**
      * Grant administrator permissions to the user.
+     */
+    public function promoteToAdministrator(bool $promote = true): bool
+    {
+        if ($promote == false && $this->fireModelEvent('demoting') === false) {
+            return false;
+        }
+
+        $this->is_admin = $promote;
+
+        return true;
+    }
+
+    /**
+     * Say if the user is the only registered administrator
      *
      * @return void
      */
-    public function promoteToAdministrator(bool $promote = true)
+    public function isLastAdministrator()
     {
-        $this->is_admin = $promote;
+        $admins = User::admins()->get();
+
+        $toto = $admins->contains($this->id) && $admins->count() === 1;
+
+        return $toto;
     }
 
     /**
