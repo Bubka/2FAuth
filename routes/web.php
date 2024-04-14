@@ -17,6 +17,10 @@ use App\Http\Controllers\SystemController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Passport\Http\Controllers\PersonalAccessTokenController;
 
+// use App\Models\User;
+// use App\Notifications\SignedInWithNewDevice;
+// use Rappasoft\LaravelAuthenticationLog\Models\AuthenticationLog;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -88,6 +92,12 @@ Route::get('system/latestRelease', [SystemController::class, 'latestRelease'])->
 Route::get('refresh-csrf', function () {
     return csrf_token();
 });
+
+// Route::get('/notification', function () {
+//     $user = User::find(1);
+//     return (new SignedInWithNewDevice(AuthenticationLog::find(9)))
+//         ->toMail($user);
+// });
 
 /**
  * Route for the main landing view

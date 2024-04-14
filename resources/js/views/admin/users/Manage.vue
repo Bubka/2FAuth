@@ -1,14 +1,16 @@
 <script setup>
     import CopyButton from '@/components/CopyButton.vue'
+    import AccessLogViewer from '@/components/AccessLogViewer.vue'
     import userService from '@/services/userService'
     import { useNotifyStore } from '@/stores/notify'
     import { UseColorMode } from '@vueuse/components'
     import { useUserStore } from '@/stores/user'
+    import { useBusStore } from '@/stores/bus'
 
     const notify = useNotifyStore()
     const router = useRouter()
-    const route = useRoute()
     const user = useUserStore()
+    const bus = useBusStore()
 
     const isFetching = ref(false)
     const managedUser = ref(null)
@@ -31,6 +33,7 @@
         userService.getById(props.userId, {returnError: true})
         .then(response => {
             managedUser.value = response.data
+            bus.username = managedUser.value.info.name
         })
         .catch(error => {
             notify.error(error)
@@ -284,12 +287,19 @@
                     </li>
                 </ul>
             </div>
+            <!-- logs -->
             <h2 class="title is-4 has-text-grey-light">{{ $t('admin.logs') }}</h2>
+            <div class="block is-size-6 is-size-7-mobile has-text-grey">
+                {{ $t('admin.registered_on_date', { date: managedUser.info.created_at }) }} - {{ $t('admin.last_seen_on_date', { date: managedUser.info.last_seen_at }) }}
+            </div>
             <div class="block">
-                <ul class="is-size-6 is-size-7-mobile">
-                    <li>{{ $t('admin.registered_on_date', { date: managedUser.info.created_at }) }}</li>
-                    <li>{{ $t('admin.last_seen_on_date', { date: managedUser.info.last_seen_at }) }}</li>
-                </ul>
+                <h3 class="title is-6 has-text-grey-light mb-0">{{ $t('admin.last_accesses') }}</h3>
+                <AccessLogViewer :userId="props.userId" :lastOnly="true" />
+            </div>
+            <div class="block is-size-6 is-size-7-mobile has-text-grey">
+                {{ $t('admin.access_log_has_more_entries') }} <router-link id="lnkFullLogs" :to="{ name: 'admin.logs.access', params: { userId: props.userId }}" >
+                    {{ $t('admin.see_full_log') }}
+                </router-link>
             </div>
             <!-- danger zone -->
             <h2 class="title is-4 has-text-danger">{{ $t('admin.danger_zone') }}</h2>

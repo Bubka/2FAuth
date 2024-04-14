@@ -60,6 +60,7 @@ Route::group(['middleware' => 'auth:api-guard'], function () {
  * Routes protected by the api authentication guard and restricted to administrators
  */
 Route::group(['middleware' => ['auth:api-guard', 'admin']], function () {
+    Route::get('users/{user}/authentications', [UserManagerController::class, 'authentications'])->name('users.authentications');
     Route::patch('users/{user}/password/reset', [UserManagerController::class, 'resetPassword'])->name('users.password.reset');
     Route::patch('users/{user}/promote', [UserManagerController::class, 'promote'])->name('users.promote');
     Route::delete('users/{user}/pats', [UserManagerController::class, 'revokePATs'])->name('users.revoke.pats');

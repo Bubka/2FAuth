@@ -4,6 +4,7 @@ namespace App\Api\v1\Controllers;
 
 use App\Api\v1\Requests\UserManagerPromoteRequest;
 use App\Api\v1\Requests\UserManagerStoreRequest;
+use App\Api\v1\Resources\UserAuthentication;
 use App\Api\v1\Resources\UserManagerResource;
 use App\Http\Controllers\Controller;
 use App\Models\User;
@@ -193,8 +194,7 @@ class UserManagerController extends Controller
     {
         $this->authorize('promote', $user);
 
-        if ($user->promoteToAdministrator($request->validated('is_admin')))
-        {
+        if ($user->promoteToAdministrator($request->validated('is_admin'))) {
             $user->save();
             Log::info(sprintf('User ID #%s set is_admin=%s for User ID #%s', $request->user()->id, $user->isAdministrator(), $user->id));
 
@@ -204,6 +204,24 @@ class UserManagerController extends Controller
         return response()->json([
             'message' => __('errors.cannot_demote_the_only_admin'),
         ], 403);
+    }
+
+    /**
+     * Get the user's authentication logs
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function authentications(Request $request, User $user)
+    {
+        $this->authorize('view', $user);
+
+        $validated = $this->validate($request, [
+            'limit' => 'sometimes|numeric',
+        ]);
+
+        $authentications = $request->has('limit') ? $user->authentications->take($validated['limit']) : $user->authentications;
+
+        return UserAuthentication::collection($authentications);
     }
 
     /**

@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Laragear\WebAuthn\WebAuthnAuthentication;
 use Laravel\Passport\HasApiTokens;
+use Rappasoft\LaravelAuthenticationLog\Traits\AuthenticationLoggable;
 
 /**
  * App\Models\User
@@ -42,6 +43,7 @@ use Laravel\Passport\HasApiTokens;
  */
 class User extends Authenticatable implements WebAuthnAuthenticatable
 {
+    use AuthenticationLoggable;
     use HasApiTokens, HasFactory, Notifiable;
     use WebAuthnAuthentication, WebAuthnManageCredentials;
 
@@ -81,7 +83,7 @@ class User extends Authenticatable implements WebAuthnAuthenticatable
      * These are extra user-defined events observers may subscribe to.
      */
     protected $observables = [
-        'demoting'
+        'demoting',
     ];
 
     /**
@@ -108,7 +110,7 @@ class User extends Authenticatable implements WebAuthnAuthenticatable
     /**
      * Grant administrator permissions to the user.
      */
-    public function promoteToAdministrator(bool $promote = true): bool
+    public function promoteToAdministrator(bool $promote = true) : bool
     {
         if ($promote == false && $this->fireModelEvent('demoting') === false) {
             return false;

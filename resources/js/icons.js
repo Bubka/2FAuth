@@ -48,6 +48,9 @@ import {
     faChevronRight,
     faSlash,
     faAlignLeft,
+    faMobileScreen,
+    faTabletScreenButton,
+    faDisplay,
 } from '@fortawesome/free-solid-svg-icons'
 
 import {
@@ -110,7 +113,10 @@ library.add(
     faOpenid,
     faPaperPlane,
     faSlash,
-    faAlignLeft
+    faAlignLeft,
+    faMobileScreen,
+    faTabletScreenButton,
+    faDisplay
 );
 
 export default FontAwesomeIcon

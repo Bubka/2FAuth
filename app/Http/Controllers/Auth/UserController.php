@@ -6,7 +6,6 @@ use App\Api\v1\Resources\UserResource;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserDeleteRequest;
 use App\Http\Requests\UserUpdateRequest;
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;

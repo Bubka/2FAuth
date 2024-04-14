@@ -9,6 +9,7 @@ export const useBusStore = defineStore({
             decodedUri: null,
             inManagementMode: false,
             editedGroupName: null,
+            username: null,
         }
     },
 

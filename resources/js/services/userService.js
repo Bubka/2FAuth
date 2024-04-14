@@ -128,5 +128,14 @@ export default {
     revokeWebauthnCredentials(id, config = {}) {
         return apiClient.delete('/users/' + id + '/credentials', { ...config })
     },
+
+    /**
+     * Get user's authentication logs
+     * 
+     * @returns promise
+     */
+    getauthentications(id, limit, config = {}) {
+        return apiClient.get('/users/' + id + '/authentications' + (limit ? '?limit=' + limit : ''), { ...config })
+    },
     
 }

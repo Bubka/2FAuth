@@ -26,6 +26,7 @@
         "google/protobuf": "^3.21",
         "guzzlehttp/guzzle": "^7.2",
         "jackiedo/dotenv-editor": "^2.1",
+        "jenssegers/agent": "^2.6",
         "khanamiryan/qrcode-detector-decoder": "^2.0.2",
         "laragear/webauthn": "^2.0",
         "laravel/framework": "^10.10",
@@ -34,6 +35,7 @@
         "laravel/tinker": "^2.8",
         "laravel/ui": "^4.2",
         "paragonie/constant_time_encoding": "^2.6",
+        "rappasoft/laravel-authentication-log": "^4.0",
         "socialiteproviders/manager": "^4.4",
         "spatie/eloquent-sortable": "^4.0.1",
         "spomky-labs/otphp": "^11.0"

@@ -68,6 +68,13 @@ return [
     'check_now' => 'Check now',
     'view_on_github' => 'View on Github',
     'x_is_available' => ':version is available',
+    'successful_login_on' => 'Successful login on <span class="has-text-grey-light">:login_at</span>',
+    'failed_login_on' => 'Failed login on <span class="has-text-grey-light">:login_at</span>',
+    'last_accesses' => 'Last accesses',
+    'see_full_log' => 'See full log',
+    'browser_on_platform' => ':browser on :platform',
+    'access_log_has_more_entries' => 'The access log is likely to contain more entries.',
+    'access_log_legend_for_user' => 'Full access log for user :username',
     'forms' => [
         'use_encryption' => [
             'label' => 'Protect sensitive data',

@@ -70,6 +70,7 @@ trait ResetTrait
         DB::table('groups')->delete();
         DB::table('users')->delete();
         DB::table('options')->delete();
+        DB::table(config('authentication-log.table_name'))->delete();
 
         $this->line('Database cleaned');
     }
