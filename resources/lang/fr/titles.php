@@ -51,5 +51,8 @@ return [
         'users' => 'Gestion des utilisateurs',
         'createUser' => 'Créer un utilisateur',
         'manageUser' => 'Gestion de l\'utilisateur',
+        'logs' => [
+            'access' => 'Journal des accès'
+        ]
     ]
 ];
