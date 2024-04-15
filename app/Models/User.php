@@ -6,6 +6,7 @@ use App\Models\Traits\AuthenticationLoggable;
 use App\Models\Traits\WebAuthnManageCredentials;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Contracts\Translation\HasLocalePreference;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -41,7 +42,7 @@ use Laravel\Passport\HasApiTokens;
  * @property-read \Illuminate\Database\Eloquent\Collection|\Laragear\WebAuthn\Models\WebAuthnCredential[] $webAuthnCredentials
  * @property-read int|null $web_authn_credentials_count
  */
-class User extends Authenticatable implements WebAuthnAuthenticatable
+class User extends Authenticatable implements HasLocalePreference, WebAuthnAuthenticatable
 {
     use AuthenticationLoggable;
     use HasApiTokens, HasFactory, Notifiable;
@@ -85,6 +86,14 @@ class User extends Authenticatable implements WebAuthnAuthenticatable
     protected $observables = [
         'demoting',
     ];
+
+    /**
+     * Get the user's preferred locale.
+     */
+    public function preferredLocale() : string
+    {
+        return strval($this->preferences['lang']);
+    }
 
     /**
      * Scope a query to only include admin users.
