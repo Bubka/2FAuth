@@ -53,7 +53,12 @@ class UserAuthentication extends JsonResource
             'browser'          => $this->agent->browser(),
             'platform'         => $this->agent->platform(),
             'device'           => $this->agent->deviceType(),
-            'login_at'         => Carbon::parse($this->login_at)->toDayDateTimeString(),
+            'login_at'         => $this->login_at
+                                      ? Carbon::parse($this->login_at)->toDayDateTimeString()
+                                      : null,
+            'logout_at'        => $this->logout_at
+                                      ? Carbon::parse($this->logout_at)->toDayDateTimeString()
+                                      : null,
             'login_successful' => $this->login_successful,
             'duration'         => $this->logout_at
                                       ? Carbon::parse($this->logout_at)->diffForHumans(Carbon::parse($this->login_at), ['syntax' => CarbonInterface::DIFF_ABSOLUTE])

@@ -69,6 +69,7 @@ return [
     'view_on_github' => 'View on Github',
     'x_is_available' => ':version is available',
     'successful_login_on' => 'Successful login on <span class="has-text-grey-light">:login_at</span>',
+    'successful_logout_on' => 'Successful logout on <span class="has-text-grey-light">:login_at</span>',
     'failed_login_on' => 'Failed login on <span class="has-text-grey-light">:login_at</span>',
     'last_accesses' => 'Last accesses',
     'see_full_log' => 'See full log',
