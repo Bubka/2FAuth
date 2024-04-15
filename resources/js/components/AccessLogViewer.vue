@@ -125,13 +125,21 @@
 
 <template>
     <SearchBox v-if="props.showSearch" v-model:keyword="searched" :hasNoBackground="true" />
-    <nav v-if="props.showSearch" class="level is-mobile">
+    <nav v-if="props.showSearch" class="level is-mobile mb-2">
         <div class="level-item has-text-centered">
             <div class="buttons"> 
-                <button id="btnShowOneMonth" :title="$t('admin.show_last_month_log')" v-on:click="setPeriod(periods.aMonth)" :class="{ 'has-text-grey' : period !== periods.aMonth }" class="button is-ghost p-1">1m</button>
-                <button id="btnShowThreeMonths" :title="$t('admin.show_three_months_log')" v-on:click="setPeriod(periods.threeMonths)" :class="{ 'has-text-grey' : period !== periods.threeMonths }" class="button is-ghost p-1">3m</button>
-                <button id="btnShowSixMonths" :title="$t('admin.show_six_months_log')" v-on:click="setPeriod(periods.halfYear)" :class="{ 'has-text-grey' : period !== periods.halfYear }" class="button is-ghost p-1">6m</button>
-                <button id="btnShowOneYear" :title="$t('admin.show_one_year_log')" v-on:click="setPeriod(periods.aYear)" :class="{ 'has-text-grey' : period !== periods.aYear }" class="button is-ghost p-1 mr-5">1y</button>
+                <button id="btnShowOneMonth" :title="$t('admin.show_last_month_log')" v-on:click="setPeriod(periods.aMonth)" :class="{ 'has-text-grey' : period !== periods.aMonth }" class="button is-ghost p-1">
+                    {{ $t('commons.one_month') }}
+                </button>
+                <button id="btnShowThreeMonths" :title="$t('admin.show_three_months_log')" v-on:click="setPeriod(periods.threeMonths)" :class="{ 'has-text-grey' : period !== periods.threeMonths }" class="button is-ghost p-1">
+                    {{ $t('commons.x_month', { 'x' : '3' }) }}
+                </button>
+                <button id="btnShowSixMonths" :title="$t('admin.show_six_months_log')" v-on:click="setPeriod(periods.halfYear)" :class="{ 'has-text-grey' : period !== periods.halfYear }" class="button is-ghost p-1">
+                    {{ $t('commons.x_month', { 'x' : '6' }) }}
+                </button>
+                <button id="btnShowOneYear" :title="$t('admin.show_one_year_log')" v-on:click="setPeriod(periods.aYear)" :class="{ 'has-text-grey' : period !== periods.aYear }" class="button is-ghost p-1 mr-5">
+                    {{ $t('commons.one_year') }}
+                </button>
                 <button id="btnSortLogDesc" v-on:click="setDesc" :title="$t('admin.sort_by_date_desc')" :class="{ 'has-text-grey' : !orderIsDesc }" class="button p-1 is-ghost">
                     <FontAwesomeIcon :icon="['fas', 'arrow-up-long']" flip="vertical" />
                     <FontAwesomeIcon :icon="['far', 'calendar']" />
