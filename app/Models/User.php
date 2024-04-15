@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\AuthenticationLoggable;
 use App\Models\Traits\WebAuthnManageCredentials;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Auth\Notifications\ResetPassword;
@@ -12,7 +13,6 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Laragear\WebAuthn\WebAuthnAuthentication;
 use Laravel\Passport\HasApiTokens;
-use Rappasoft\LaravelAuthenticationLog\Traits\AuthenticationLoggable;
 
 /**
  * App\Models\User

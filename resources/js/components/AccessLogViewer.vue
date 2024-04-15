@@ -1,7 +1,8 @@
 <script setup>
     import SearchBox from '@/components/SearchBox.vue'
-    import { useNotifyStore } from '@/stores/notify'
     import userService from '@/services/userService'
+    import Spinner from '@/components/Spinner.vue'
+    import { useNotifyStore } from '@/stores/notify'
     import { FontAwesomeLayers } from '@fortawesome/vue-fontawesome'
 
     const notify = useNotifyStore()
@@ -12,9 +13,18 @@
         showSearch: Boolean
     })
 
+    const periods = {
+        aMonth: 1,
+        threeMonths: 3,
+        halfYear: 6,
+        aYear: 12
+    }
+
     const authentications = ref([])
     const isFetching = ref(false)
     const searched = ref('')
+    const period = ref(periods.aMonth)
+    const orderIsDesc = ref(true)
 
     const visibleAuthentications = computed(() => {
         return authentications.value.filter(authentication => {
@@ -30,15 +40,56 @@
     })
 
     /**
+     * Sets the visible time span
+     * 
+     * @param {int} duration 
+     */
+    function setPeriod(duration) {
+        period.value = duration
+        getAuthentications()
+    }
+
+    /**
+     * Set sort order to ASC
+     */
+    function setAsc() {
+        orderIsDesc.value = false
+        sortAsc()
+    }
+        
+    /**
+     * Sorts entries ascending
+     */
+    function sortAsc() {
+        authentications.value.sort((a, b) => a.id > b.id ? 1 : -1)
+    }
+
+    /**
+     * Set sort order to DESC
+     */
+    function setDesc() {
+        orderIsDesc.value = true
+        sortDesc()
+    }
+
+    /**
+     * Sorts entries descending
+    */
+    function sortDesc() {
+        authentications.value.sort((a, b) => a.id < b.id ? 1 : -1)
+    }
+
+    /**
      * Gets user authentication logs
      */
     function getAuthentications() {
         isFetching.value = true
         let limit = props.lastOnly ? 3 : false
 
-        userService.getauthentications(props.userId, limit, {returnError: true})
+        userService.getauthentications(props.userId, period.value, limit, {returnError: true})
         .then(response => {
             authentications.value = response.data
+            orderIsDesc.value == true ? sortDesc() : sortAsc()
         })
         .catch(error => {
             notify.error(error)
@@ -74,6 +125,24 @@
 
 <template>
     <SearchBox v-if="props.showSearch" v-model:keyword="searched" :hasNoBackground="true" />
+    <nav v-if="props.showSearch" class="level is-mobile">
+        <div class="level-item has-text-centered">
+            <div class="buttons"> 
+                <button id="btnShowOneMonth" :title="$t('admin.show_last_month_log')" v-on:click="setPeriod(periods.aMonth)" :class="{ 'has-text-grey' : period !== periods.aMonth }" class="button is-ghost p-1">1m</button>
+                <button id="btnShowThreeMonths" :title="$t('admin.show_three_months_log')" v-on:click="setPeriod(periods.threeMonths)" :class="{ 'has-text-grey' : period !== periods.threeMonths }" class="button is-ghost p-1">3m</button>
+                <button id="btnShowSixMonths" :title="$t('admin.show_six_months_log')" v-on:click="setPeriod(periods.halfYear)" :class="{ 'has-text-grey' : period !== periods.halfYear }" class="button is-ghost p-1">6m</button>
+                <button id="btnShowOneYear" :title="$t('admin.show_one_year_log')" v-on:click="setPeriod(periods.aYear)" :class="{ 'has-text-grey' : period !== periods.aYear }" class="button is-ghost p-1 mr-5">1y</button>
+                <button id="btnSortLogDesc" v-on:click="setDesc" :title="$t('admin.sort_by_date_desc')" :class="{ 'has-text-grey' : !orderIsDesc }" class="button p-1 is-ghost">
+                    <FontAwesomeIcon :icon="['fas', 'arrow-up-long']" flip="vertical" />
+                    <FontAwesomeIcon :icon="['far', 'calendar']" />
+                </button>
+                <button id="btnSortLogAsc" v-on:click="setAsc" :title="$t('admin.sort_by_date_asc')" :class="{ 'has-text-grey' : orderIsDesc }" class="button p-1 is-ghost">
+                    <FontAwesomeIcon :icon="['fas', 'arrow-up-long']" />
+                    <FontAwesomeIcon :icon="['far', 'calendar']" />
+                </button>
+            </div>
+        </div>
+    </nav>
     <div v-if="visibleAuthentications.length > 0">
         <div v-for="authentication in visibleAuthentications" :key="authentication.id" class="list-item is-size-6 is-size-7-mobile has-text-grey is-flex is-justify-content-space-between">
             <div>
@@ -104,4 +173,5 @@
     <div v-else class="mt-5 pl-3">
         {{ $t('commons.no_result') }}
     </div>
+    <Spinner :isVisible="isFetching" />
 </template>

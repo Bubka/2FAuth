@@ -76,6 +76,12 @@ return [
     'browser_on_platform' => ':browser on :platform',
     'access_log_has_more_entries' => 'The access log is likely to contain more entries.',
     'access_log_legend_for_user' => 'Full access log for user :username',
+    'show_last_month_log' => 'Show entries from the last month',
+    'show_three_months_log' => 'Show entries from the last 3 months',
+    'show_six_months_log' => 'Show entries from the last 6 months',
+    'show_one_year_log' => 'Show entries from the last year',
+    'sort_by_date_asc' => 'Show least recent first',
+    'sort_by_date_desc' => 'Show most recent first',
     'forms' => [
         'use_encryption' => [
             'label' => 'Protect sensitive data',

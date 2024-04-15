@@ -216,10 +216,12 @@ class UserManagerController extends Controller
         $this->authorize('view', $user);
 
         $validated = $this->validate($request, [
+            'period' => 'sometimes|numeric',
             'limit' => 'sometimes|numeric',
         ]);
 
-        $authentications = $request->has('limit') ? $user->authentications->take($validated['limit']) : $user->authentications;
+        $authentications = $request->has('period') ? $user->authentications($validated['period'])->get() : $user->authentications->get();
+        $authentications = $request->has('limit') ? $authentications->take($validated['limit']) : $authentications;
 
         return UserAuthentication::collection($authentications);
     }

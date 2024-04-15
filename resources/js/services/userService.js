@@ -134,8 +134,8 @@ export default {
      * 
      * @returns promise
      */
-    getauthentications(id, limit, config = {}) {
-        return apiClient.get('/users/' + id + '/authentications' + (limit ? '?limit=' + limit : ''), { ...config })
+    getauthentications(id, period = 90, limit, config = {}) {
+        return apiClient.get('/users/' + id + '/authentications?period=' + period + (limit ? '&limit=' + limit : ''), { ...config })
     },
     
 }

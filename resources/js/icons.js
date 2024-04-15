@@ -51,11 +51,13 @@ import {
     faMobileScreen,
     faTabletScreenButton,
     faDisplay,
+    faArrowUpLong,
 } from '@fortawesome/free-solid-svg-icons'
 
 import {
     faStar,
     faPaperPlane,
+    faCalendar
 } from '@fortawesome/free-regular-svg-icons'
 
 import {
@@ -116,7 +118,9 @@ library.add(
     faAlignLeft,
     faMobileScreen,
     faTabletScreenButton,
-    faDisplay
+    faDisplay,
+    faCalendar,
+    faArrowUpLong
 );
 
 export default FontAwesomeIcon
