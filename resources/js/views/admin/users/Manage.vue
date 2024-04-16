@@ -318,6 +318,7 @@
         <!-- footer -->
         <VueFooter :showButtons="true">
             <ButtonBackCloseCancel :returnTo="{ name: 'admin.users' }" action="back" />
+            <ButtonBackCloseCancel :returnTo="{ name: 'accounts' }" action="close" />
         </VueFooter>
     </ResponsiveWidthWrapper>
 </template>

@@ -40,7 +40,8 @@
         <AccessLogViewer :userId="props.userId" :lastOnly="false" :showSearch="true" />
         <!-- footer -->
         <VueFooter :showButtons="true">
-            <ButtonBackCloseCancel :returnTo="{ name: 'admin.manageUser', params: { userId: props.userId }}" action="close" />
+            <ButtonBackCloseCancel :returnTo="{ name: 'admin.manageUser', params: { userId: props.userId }}" action="back" />
+            <ButtonBackCloseCancel :returnTo="{ name: 'accounts' }" action="close" />
         </VueFooter>
     </ResponsiveWidthWrapper>
 </template>
