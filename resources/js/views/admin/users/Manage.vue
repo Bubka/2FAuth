@@ -15,6 +15,7 @@
     const isFetching = ref(false)
     const managedUser = ref(null)
     const listUserPreferences = ref(null)
+    const showFullLogLink = ref(false)
 
     const props = defineProps({
         userId: [Number, String]
@@ -208,6 +209,9 @@
             <div v-if="managedUser.info.oauth_provider" class="notification is-dark is-size-7-mobile has-text-centered">
                 {{ $t('admin.account_bound_to_x_via_oauth', { provider: managedUser.info.oauth_provider }) }}
             </div>
+            <div class="block is-size-6 is-size-7-mobile has-text-grey">
+                {{ $t('admin.registered_on_date', { date: managedUser.info.created_at }) }} - {{ $t('admin.last_seen_on_date', { date: managedUser.info.last_seen_at }) }}
+            </div>
             <div class="block">
                 <!-- otp as dot -->
                 <FormCheckbox v-model="managedUser.info.is_admin" @update:model-value="val => saveAdminRole(val === true)" fieldName="is_admin" label="admin.forms.is_admin.label" help="admin.forms.is_admin.help" />
@@ -244,7 +248,7 @@
                 <div class="list-item is-size-6 is-size-6-mobile has-text-grey is-flex is-justify-content-space-between">
                     <div>
                         <span class="has-text-weight-bold">{{ $t('settings.personal_access_tokens') }}</span>
-                        <span class="is-block is-family-primary is-size-7 is-size-7-mobile has-text-grey-dark">
+                        <span class="is-block is-family-primary has-text-grey-dark">
                             {{ $t('admin.user_has_x_active_pat', { count: managedUser.valid_personal_access_tokens }) }}
                         </span>
                     </div>
@@ -262,7 +266,7 @@
                 <div class="list-item is-size-6 is-size-6-mobile has-text-grey is-flex is-justify-content-space-between">
                     <div>
                         <span class="has-text-weight-bold">{{ $t('auth.webauthn.security_devices') }}</span>
-                        <span class="is-block is-size-7 is-size-7-mobile has-text-grey-dark">
+                        <span class="is-block has-text-grey-dark">
                             {{ $t('admin.user_has_x_security_devices', { count: managedUser.webauthn_credentials }) }}
                         </span>
                     </div>
@@ -278,6 +282,16 @@
                     </div>
                 </div>
             </div>
+            <div class="block">
+                <h3 class="title is-5 has-text-grey-light mb-2">{{ $t('admin.last_accesses') }}</h3>
+                <AccessLogViewer :userId="props.userId" :lastOnly="true" @has-more-entries="showFullLogLink = true"/>
+            </div>
+            <div v-if="showFullLogLink" class="block is-size-6 is-size-7-mobile has-text-grey">
+                {{ $t('admin.access_log_has_more_entries') }} <router-link id="lnkFullLogs" :to="{ name: 'admin.logs.access', params: { userId: props.userId }}" >
+                    {{ $t('admin.see_full_log') }}.
+                </router-link>
+            </div>
+            <!-- preferences -->
             <h2 class="title is-4 has-text-grey-light">{{ $t('settings.preferences') }}</h2>
             <div class="about-debug box is-family-monospace is-size-7">
                 <CopyButton id="btnCopyEnvVars" :token="listUserPreferences?.innerText" />
@@ -286,20 +300,6 @@
                         <b>{{preference}}</b>: <span class="has-text-grey">{{value}}</span>
                     </li>
                 </ul>
-            </div>
-            <!-- logs -->
-            <h2 class="title is-4 has-text-grey-light">{{ $t('admin.logs') }}</h2>
-            <div class="block is-size-6 is-size-7-mobile has-text-grey">
-                {{ $t('admin.registered_on_date', { date: managedUser.info.created_at }) }} - {{ $t('admin.last_seen_on_date', { date: managedUser.info.last_seen_at }) }}
-            </div>
-            <div class="block">
-                <h3 class="title is-6 has-text-grey-light mb-0">{{ $t('admin.last_accesses') }}</h3>
-                <AccessLogViewer :userId="props.userId" :lastOnly="true" />
-            </div>
-            <div class="block is-size-6 is-size-7-mobile has-text-grey">
-                {{ $t('admin.access_log_has_more_entries') }} <router-link id="lnkFullLogs" :to="{ name: 'admin.logs.access', params: { userId: props.userId }}" >
-                    {{ $t('admin.see_full_log') }}
-                </router-link>
             </div>
             <!-- danger zone -->
             <h2 class="title is-4 has-text-danger">{{ $t('admin.danger_zone') }}</h2>

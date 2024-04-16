@@ -27,6 +27,8 @@
     const period = ref(periods.aMonth)
     const orderIsDesc = ref(true)
 
+    const emit = defineEmits(['has-more-entries'])
+
     const visibleAuthentications = computed(() => {
         return authentications.value.filter(authentication => {
             return JSON.stringify(authentication)
@@ -85,11 +87,17 @@
      */
     function getAuthentications() {
         isFetching.value = true
-        let limit = props.lastOnly ? 3 : false
+        let limit = props.lastOnly ? 4 : false
 
         userService.getauthentications(props.userId, period.value, limit, {returnError: true})
         .then(response => {
             authentications.value = response.data
+
+            if (authentications.value.length > 3) {
+                emit('has-more-entries')
+                authentications.value.pop()
+            }
+            
             orderIsDesc.value == true ? sortDesc() : sortAsc()
         })
         .catch(error => {
@@ -168,7 +176,7 @@
                     </div>
                 </div>
                 <div :class="mode == 'dark' ? 'has-text-grey-darker' : 'has-text-grey-lighter'" class="is-align-self-center ">
-                    <font-awesome-layers class="fa-2x">
+                    <font-awesome-layers class="fa-2x width-1-5x">
                         <FontAwesomeIcon :icon="['fas', deviceIcon(authentication.device)]" transform="grow-6" fixed-width />
                         <FontAwesomeIcon :icon="['fas', isFailedEntry(authentication) ? 'times' : 'check']"
                             :transform="'shrink-7' + (authentication.device == 'desktop' ? ' up-2' : '')"
