@@ -11,7 +11,11 @@
     const props = defineProps({
         userId: [Number, String],
         lastOnly: Boolean,
-        showSearch: Boolean
+        showSearch: Boolean,
+        period: {
+            type: [Number, String],
+            default: 12
+        },
     })
 
     const periods = {
@@ -24,7 +28,7 @@
     const authentications = ref([])
     const isFetching = ref(false)
     const searched = ref('')
-    const period = ref(periods.aMonth)
+    const period = ref(props.period)
     const orderIsDesc = ref(true)
 
     const emit = defineEmits(['has-more-entries'])
@@ -93,7 +97,7 @@
         .then(response => {
             authentications.value = response.data
 
-            if (authentications.value.length > 3) {
+            if (authentications.value.length > 3 && props.lastOnly) {
                 emit('has-more-entries')
                 authentications.value.pop()
             }

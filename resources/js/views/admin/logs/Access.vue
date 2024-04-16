@@ -37,7 +37,7 @@
         <div class="block is-size-7-mobile">
             {{ $t('admin.access_log_legend_for_user', { username: username }) }} (#{{ props.userId }})
         </div>
-        <AccessLogViewer :userId="props.userId" :lastOnly="false" :showSearch="true" />
+        <AccessLogViewer :userId="props.userId" :lastOnly="false" :showSearch="true" :period="1" />
         <!-- footer -->
         <VueFooter :showButtons="true">
             <ButtonBackCloseCancel :returnTo="{ name: 'admin.manageUser', params: { userId: props.userId }}" action="back" />
