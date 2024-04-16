@@ -90,5 +90,5 @@ return [
     'device' => 'Device',
     'one_month' => '1 mo.',
     'x_month' => ':x mos.',
-    'one_year' => '1 yr',
+    'one_year' => '1 yr.',
 ];
