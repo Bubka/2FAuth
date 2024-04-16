@@ -3,7 +3,6 @@
     import { useUserStore } from '@/stores/user'
     import { useBusStore } from '@/stores/bus'
     import { useNotifyStore } from '@/stores/notify'
-    import { UseColorMode } from '@vueuse/components'
     import { useTwofaccounts } from '@/stores/twofaccounts'
 
     const router = useRouter()
@@ -85,9 +84,7 @@
             </div>
             <!-- alternative methods -->
             <div class="column is-full">
-                <UseColorMode v-slot="{ mode }">
-                    <div class="block" :class="mode == 'dark' ? 'has-text-light':'has-text-grey-dark'">{{ $t('twofaccounts.forms.alternative_methods') }}</div>
-                </UseColorMode>
+                <div class="block light-or-darker">{{ $t('twofaccounts.forms.alternative_methods') }}</div>
                 <!-- upload a qr code -->
                 <div class="block has-text-link" v-if="!user.preferences.useBasicQrcodeReader">
                     <label role="button" tabindex="0" class="button is-link is-outlined is-rounded" ref="qrcodeInputLabel" @keyup.enter="qrcodeInputLabel.click()">

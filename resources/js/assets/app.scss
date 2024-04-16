@@ -1391,3 +1391,10 @@ footer.main .field.is-grouped {
   width: 29px;
   height: 29px;
 }
+
+.light-or-darker {
+  color: $grey-darker;
+}
+:root[data-theme="dark"] .light-or-darker {
+  color: $grey-light;
+}

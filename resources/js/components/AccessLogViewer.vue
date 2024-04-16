@@ -4,6 +4,7 @@
     import Spinner from '@/components/Spinner.vue'
     import { useNotifyStore } from '@/stores/notify'
     import { FontAwesomeLayers } from '@fortawesome/vue-fontawesome'
+    import { UseColorMode } from '@vueuse/components'
 
     const notify = useNotifyStore()
 
@@ -153,26 +154,28 @@
     </nav>
     <div v-if="visibleAuthentications.length > 0">
         <div v-for="authentication in visibleAuthentications" :key="authentication.id" class="list-item is-size-6 is-size-7-mobile has-text-grey is-flex is-justify-content-space-between">
-            <div>
+            <UseColorMode v-slot="{ mode }">
                 <div>
-                    <span v-if="isFailedEntry(authentication)" v-html="$t('admin.failed_login_on', { login_at: authentication.login_at })" />
-                    <span v-else-if="isSuccessfulLogout(authentication)" v-html="$t('admin.successful_logout_on', { login_at: authentication.logout_at })" />
-                    <span v-else v-html="$t('admin.successful_login_on', { login_at: authentication.login_at })" />
+                    <div>
+                        <span v-if="isFailedEntry(authentication)" v-html="$t('admin.failed_login_on', { login_at: authentication.login_at })" />
+                        <span v-else-if="isSuccessfulLogout(authentication)" v-html="$t('admin.successful_logout_on', { login_at: authentication.logout_at })" />
+                        <span v-else v-html="$t('admin.successful_login_on', { login_at: authentication.login_at })" />
+                    </div>
+                    <div>
+                        {{ $t('commons.IP') }}: <span class="light-or-darker">{{ authentication.ip_address }}</span> -
+                        {{ $t('commons.browser') }}: <span class="light-or-darker">{{ authentication.browser }}</span> -
+                        {{ $t('commons.operating_system_short') }}: <span class="light-or-darker">{{ authentication.platform }}</span>
+                    </div>
                 </div>
-                <div>
-                    {{ $t('commons.IP') }}: <span class="has-text-grey-light">{{ authentication.ip_address }}</span> -
-                    {{ $t('commons.browser') }}: <span class="has-text-grey-light">{{ authentication.browser }}</span> -
-                    {{ $t('commons.operating_system_short') }}: <span class="has-text-grey-light">{{ authentication.platform }}</span>
+                <div :class="mode == 'dark' ? 'has-text-grey-darker' : 'has-text-grey-lighter'" class="is-align-self-center ">
+                    <font-awesome-layers class="fa-2x">
+                        <FontAwesomeIcon :icon="['fas', deviceIcon(authentication.device)]" transform="grow-6" fixed-width />
+                        <FontAwesomeIcon :icon="['fas', isFailedEntry(authentication) ? 'times' : 'check']"
+                            :transform="'shrink-7' + (authentication.device == 'desktop' ? ' up-2' : '')"
+                            :class="isFailedEntry(authentication) ? 'has-text-danger' + (mode == 'dark' ? '-dark' : '') : 'has-text-success' + (mode == 'dark' ? '-dark' : '')" fixed-width />
+                    </font-awesome-layers>
                 </div>
-            </div>
-            <div class="is-align-self-center has-text-grey-darker">
-                <font-awesome-layers class="fa-2x">
-                    <FontAwesomeIcon :icon="['fas', deviceIcon(authentication.device)]" transform="grow-6" fixed-width />
-                    <FontAwesomeIcon :icon="['fas', isFailedEntry(authentication) ? 'times' : 'check']"
-                        :transform="'shrink-7' + (authentication.device == 'desktop' ? ' up-2' : '')"
-                        :class="isFailedEntry(authentication) ? 'has-text-danger-dark' : 'has-text-success-dark'" fixed-width />
-                </font-awesome-layers>
-            </div>
+            </UseColorMode>
         </div>
     </div>
     <div v-else-if="authentications.length == 0" class="mt-4">

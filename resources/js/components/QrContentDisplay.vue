@@ -1,7 +1,6 @@
 <script setup>
     const { copy } = useClipboard({ legacy: true })
     import { useNotifyStore } from '@/stores/notify'
-    import { UseColorMode } from '@vueuse/components'
     
     const notify = useNotifyStore()
 
@@ -48,9 +47,7 @@
     <div class="block">
         {{ $t('errors.data_of_qrcode_is_not_valid_URI') }}
     </div>
-    <UseColorMode v-slot="{ mode }">
-        <div class="block mb-6" :class="mode == 'dark' ? 'has-text-light':'has-text-grey-dark'">{{ qrContent ? qrContent : '[' + trans('commons.nothing') + ']' }}</div>
-    </UseColorMode>
+    <div class="block mb-6 light-or-darker">{{ qrContent ? qrContent : '[' + trans('commons.nothing') + ']' }}</div>
     <!-- Copy to clipboard -->
     <div class="block has-text-link" v-if="qrContent">
         <button class="button is-link is-outlined is-rounded" @click.stop="copyToClipboard(qrContent)">
