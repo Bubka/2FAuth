@@ -220,7 +220,7 @@ class UserManagerController extends Controller
             'limit' => 'sometimes|numeric',
         ]);
 
-        $authentications = $request->has('period') ? $user->authentications($validated['period'])->get() : $user->authentications->get();
+        $authentications = $request->has('period') ? $user->authenticationsByPeriod($validated['period']) : $user->authentications;
         $authentications = $request->has('limit') ? $authentications->take($validated['limit']) : $authentications;
 
         return UserAuthentication::collection($authentications);
