@@ -165,7 +165,7 @@
                         <div class="ml-3">
                             <UseColorMode v-slot="{ mode }">
                                 <!-- manage link -->
-                                <RouterLink :to="{ name: 'admin.manageUser', params: { userId: user.id }}" class="button is-small has-normal-radius is-pulled-right" :class="{'is-dark' : mode == 'dark'}" :title="$t('commons.manage')">
+                                <RouterLink :to="{ name: 'admin.manageUser', params: { userId: user.id }}" class="button is-small has-normal-radius" :class="{'is-dark' : mode == 'dark'}" :title="$t('commons.manage')">
                                     {{ $t('commons.manage') }}
                                 </RouterLink>
                             </UseColorMode>
