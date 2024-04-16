@@ -10,6 +10,7 @@ use Database\Factories\UserFactory;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
@@ -19,6 +20,8 @@ use Illuminate\Support\Str;
 use Laravel\Passport\TokenRepository;
 use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Tests\Data\AuthenticationLogData;
 use Tests\FeatureTestCase;
 
 #[CoversClass(UserManagerController::class)]
@@ -518,4 +521,278 @@ class UserManagerControllerTest extends FeatureTestCase
             ])
             ->assertForbidden();
     }
+
+    protected function feedAuthenticationLog() : int
+    {
+        // Do not change creation order
+        $this->user->authentications()->create(AuthenticationLogData::beforeLastYear());
+        $this->user->authentications()->create(AuthenticationLogData::duringLastYear());
+        $this->user->authentications()->create(AuthenticationLogData::duringLastSixMonth());
+        $this->user->authentications()->create(AuthenticationLogData::duringLastThreeMonth());
+        $this->user->authentications()->create(AuthenticationLogData::duringLastMonth());
+        $this->user->authentications()->create(AuthenticationLogData::noLogin());
+        $this->user->authentications()->create(AuthenticationLogData::noLogout());
+
+        return 7;
+    }
+
+    /**
+     * @test
+     */
+    public function test_authentications_returns_all_entries() : void
+    {
+        $created = $this->feedAuthenticationLog();
+        
+        $this->actingAs($this->admin, 'api-guard')
+            ->json('GET', '/api/v1/users/' . $this->user->id . '/authentications')
+            ->assertOk()
+            ->assertJsonCount($created);
+    }
+
+    /**
+     * @test
+     */
+    public function test_authentications_returns_expected_resource() : void
+    {
+        $this->user->authentications()->create(AuthenticationLogData::duringLastMonth());
+        
+        $this->actingAs($this->admin, 'api-guard')
+            ->json('GET', '/api/v1/users/' . $this->user->id . '/authentications')
+            ->assertJsonStructure([
+                '*' => [
+                    'id',
+                    'ip_address',
+                    'user_agent',
+                    'browser',
+                    'platform',
+                    'device',
+                    'login_at',
+                    'logout_at',
+                    'login_successful',
+                    'duration',
+                ]
+            ]);
+    }
+
+    /**
+     * @test
+     */
+    public function test_authentications_returns_no_login_entry() : void
+    {
+        $this->user->authentications()->create(AuthenticationLogData::noLogin());
+        
+        $this->actingAs($this->admin, 'api-guard')
+            ->json('GET', '/api/v1/users/' . $this->user->id . '/authentications?period=1')
+            ->assertJsonCount(1)
+            ->assertJsonFragment([
+                'login_at' => null
+            ]);
+    }
+
+    /**
+     * @test
+     */
+    public function test_authentications_returns_no_logout_entry() : void
+    {
+        $this->user->authentications()->create(AuthenticationLogData::noLogout());
+        
+        $this->actingAs($this->admin, 'api-guard')
+            ->json('GET', '/api/v1/users/' . $this->user->id . '/authentications?period=1')
+            ->assertJsonCount(1)
+            ->assertJsonFragment([
+                'logout_at' => null
+            ]);
+    }
+
+    /**
+     * @test
+     */
+    public function test_authentications_returns_failed_entry() : void
+    {
+        $this->user->authentications()->create(AuthenticationLogData::failedLogin());
+        $expected = Carbon::parse(AuthenticationLogData::failedLogin()['login_at'])->toDayDateTimeString();
+        
+        $this->actingAs($this->admin, 'api-guard')
+            ->json('GET', '/api/v1/users/' . $this->user->id . '/authentications?period=1')
+            ->assertJsonCount(1)
+            ->assertJsonFragment([
+                'login_at' => $expected,
+                'login_successful' => false,
+            ]);
+    }
+
+    /**
+     * @test
+     */
+    public function test_authentications_returns_last_month_entries() : void
+    {
+        $this->feedAuthenticationLog();
+        $expected = Carbon::parse(AuthenticationLogData::duringLastMonth()['login_at'])->toDayDateTimeString();
+        
+        $this->actingAs($this->admin, 'api-guard')
+            ->json('GET', '/api/v1/users/' . $this->user->id . '/authentications?period=1')
+            ->assertJsonCount(3)
+            ->assertJsonFragment([
+                'login_at' => $expected
+            ]);
+    }
+
+    /**
+     * @test
+     */
+    public function test_authentications_returns_last_three_months_entries() : void
+    {
+        $this->feedAuthenticationLog();
+        $expectedOneMonth = Carbon::parse(AuthenticationLogData::duringLastMonth()['login_at'])->toDayDateTimeString();
+        $expectedThreeMonth = Carbon::parse(AuthenticationLogData::duringLastThreeMonth()['login_at'])->toDayDateTimeString();
+        
+        $this->actingAs($this->admin, 'api-guard')
+            ->json('GET', '/api/v1/users/' . $this->user->id . '/authentications?period=3')
+            ->assertJsonCount(4)
+            ->assertJsonFragment([
+                'login_at' => $expectedOneMonth
+            ])
+            ->assertJsonFragment([
+                'login_at' => $expectedThreeMonth
+            ]);
+    }
+
+    /**
+     * @test
+     */
+    public function test_authentications_returns_last_six_months_entries() : void
+    {
+        $this->feedAuthenticationLog();
+        $expectedOneMonth = Carbon::parse(AuthenticationLogData::duringLastMonth()['login_at'])->toDayDateTimeString();
+        $expectedThreeMonth = Carbon::parse(AuthenticationLogData::duringLastThreeMonth()['login_at'])->toDayDateTimeString();
+        $expectedSixMonth = Carbon::parse(AuthenticationLogData::duringLastSixMonth()['login_at'])->toDayDateTimeString();
+        
+        $this->actingAs($this->admin, 'api-guard')
+            ->json('GET', '/api/v1/users/' . $this->user->id . '/authentications?period=6')
+            ->assertJsonCount(5)
+            ->assertJsonFragment([
+                'login_at' => $expectedOneMonth
+            ])
+            ->assertJsonFragment([
+                'login_at' => $expectedThreeMonth
+            ])
+            ->assertJsonFragment([
+                'login_at' => $expectedSixMonth
+            ]);
+    }
+
+    /**
+     * @test
+     */
+    public function test_authentications_returns_last_year_entries() : void
+    {
+        $this->feedAuthenticationLog();
+        $expectedOneMonth = Carbon::parse(AuthenticationLogData::duringLastMonth()['login_at'])->toDayDateTimeString();
+        $expectedThreeMonth = Carbon::parse(AuthenticationLogData::duringLastThreeMonth()['login_at'])->toDayDateTimeString();
+        $expectedSixMonth = Carbon::parse(AuthenticationLogData::duringLastSixMonth()['login_at'])->toDayDateTimeString();
+        $expectedYear = Carbon::parse(AuthenticationLogData::duringLastYear()['login_at'])->toDayDateTimeString();
+        
+        $this->actingAs($this->admin, 'api-guard')
+            ->json('GET', '/api/v1/users/' . $this->user->id . '/authentications?period=12')
+            ->assertJsonCount(6)
+            ->assertJsonFragment([
+                'login_at' => $expectedOneMonth
+            ])
+            ->assertJsonFragment([
+                'login_at' => $expectedThreeMonth
+            ])
+            ->assertJsonFragment([
+                'login_at' => $expectedSixMonth
+            ])
+            ->assertJsonFragment([
+                'login_at' => $expectedYear
+            ]);
+    }
+
+    /**
+     * @test
+     */
+    #[DataProvider('LimitProvider')]
+    public function test_authentications_returns_limited_entries($limit) : void
+    {
+        $this->feedAuthenticationLog();
+        
+        $this->actingAs($this->admin, 'api-guard')
+            ->json('GET', '/api/v1/users/' . $this->user->id . '/authentications?limit=' . $limit)
+            ->assertOk()
+            ->assertJsonCount($limit);
+    }
+
+    /**
+     * Provide various limit
+     */
+    public static function LimitProvider()
+    {
+        return [
+            'limited to 1' => [1],
+            'limited to 2' => [2],
+            'limited to 3' => [3],
+        ];
+    }
+
+    /**
+     * @test
+     */
+    public function test_authentications_returns_expected_ip_and_useragent_chunks() : void
+    {
+        $this->user->authentications()->create([
+            'ip_address' => '127.0.0.1',
+            'user_agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0',
+            'login_at' => now(),
+            'login_successful' => true,
+            'logout_at' => null,
+            'location' => null,
+        ]);
+        
+        $this->actingAs($this->admin, 'api-guard')
+            ->json('GET', '/api/v1/users/' . $this->user->id . '/authentications?period=1')
+            ->assertJsonFragment([
+                'ip_address' => '127.0.0.1',
+                'browser' => 'Firefox',
+                'platform' => 'Windows',
+                'device' => 'desktop',
+            ]);
+    }
+
+    /**
+     * @test
+     */
+    #[DataProvider('invalidQueryParameterProvider')]
+    public function test_authentications_with_invalid_limit_returns_validation_error($limit) : void
+    {
+        $this->actingAs($this->admin, 'api-guard')
+            ->json('GET', '/api/v1/users/' . $this->user->id . '/authentications?limit=' . $limit)
+            ->assertStatus(422);
+    }
+
+    /**
+     * @test
+     */
+    #[DataProvider('invalidQueryParameterProvider')]
+    public function test_authentications_with_invalid_period_returns_validation_error($period) : void
+    {
+        $this->actingAs($this->admin, 'api-guard')
+            ->json('GET', '/api/v1/users/' . $this->user->id . '/authentications?period=' . $period)
+            ->assertStatus(422);
+    }
+
+    /**
+     * Provide various invalid value to test query parameter
+     */
+    public static function invalidQueryParameterProvider()
+    {
+        return [
+            'empty' => [''],
+            'null' => ['null'],
+            'boolean' => ['true'],
+            'string' => ['string'],
+            'array' => ['[]'],
+        ];
+    }
+    
 }
