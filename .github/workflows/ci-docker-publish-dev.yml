@@ -22,7 +22,6 @@ on:
       - composer.lock
       - Dockerfile
       - phpunit.xml
-      - server.php
   pull_request:
     branches:    
       - dev
@@ -45,7 +44,6 @@ on:
       - composer.lock
       - Dockerfile
       - phpunit.xml
-      - server.php
 
 jobs:
   publish:
