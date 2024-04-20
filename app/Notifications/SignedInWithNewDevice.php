@@ -2,12 +2,12 @@
 
 namespace App\Notifications;
 
+use Bubka\LaravelAuthenticationLog\Models\AuthenticationLog;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Jenssegers\Agent\Agent;
-use Bubka\LaravelAuthenticationLog\Models\AuthenticationLog;
 
 class SignedInWithNewDevice extends Notification implements ShouldQueue
 {
@@ -32,10 +32,7 @@ class SignedInWithNewDevice extends Notification implements ShouldQueue
         $this->agent->setUserAgent($authenticationLog->user_agent);
     }
 
-    /**
-     * 
-     */
-    public function via($notifiable)
+    public function via(mixed $notifiable) : array|string
     {
         return $notifiable->notifyAuthenticationLogVia();
     }
@@ -43,7 +40,7 @@ class SignedInWithNewDevice extends Notification implements ShouldQueue
     /**
      * Wrap the notification to a mail envelop
      */
-    public function toMail($notifiable)
+    public function toMail(mixed $notifiable) : MailMessage
     {
         return (new MailMessage())
             ->subject(__('notifications.new_device.subject'))

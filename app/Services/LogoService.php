@@ -33,7 +33,7 @@ class LogoService
     /**
      * Fetch a logo for the given service and save it as an icon
      *
-     * @param  string  $serviceName Name of the service to fetch a logo for
+     * @param  string  $serviceName  Name of the service to fetch a logo for
      * @return string|null The icon filename or null if no logo has been found
      */
     public function getIcon($serviceName)
@@ -52,7 +52,7 @@ class LogoService
     /**
      * Return the logo's filename for a given service
      *
-     * @param  string  $serviceName Name of the service to fetch a logo for
+     * @param  string  $serviceName  Name of the service to fetch a logo for
      * @return string|null The logo filename or null if no logo has been found
      */
     protected function getLogo($serviceName)
@@ -114,7 +114,7 @@ class LogoService
     /**
      * Fetch and cache a logo from 2fa.Directory repository
      *
-     * @param  string  $logoFile Logo filename to fetch
+     * @param  string  $logoFile  Logo filename to fetch
      */
     protected function fetchLogo(string $logoFile) : void
     {

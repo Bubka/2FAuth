@@ -130,9 +130,9 @@ class UserManagerController extends Controller
         $tokens = $tokenRepository->forUser($user->getAuthIdentifier());
 
         $tokens->load('client')->filter(function ($token) {
-            return $token->client->personal_access_client && ! $token->revoked;
+            return $token->client->personal_access_client && ! $token->revoked; /** @phpstan-ignore-line */
         })->each(function ($token) {
-            $token->revoke();
+            $token->revoke(); /** @phpstan-ignore-line */
         });
 
         Log::info(sprintf('All personal access tokens for User ID #%s have been revoked', $user->id));
@@ -188,7 +188,7 @@ class UserManagerController extends Controller
     /**
      * Promote (or demote) a user
      *
-     * @return \App\Api\v1\Resources\UserManagerResource
+     * @return \App\Api\v1\Resources\UserManagerResource|\Illuminate\Http\JsonResponse
      */
     public function promote(UserManagerPromoteRequest $request, User $user)
     {
@@ -209,7 +209,7 @@ class UserManagerController extends Controller
     /**
      * Get the user's authentication logs
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
     public function authentications(Request $request, User $user)
     {
@@ -217,7 +217,7 @@ class UserManagerController extends Controller
 
         $validated = $this->validate($request, [
             'period' => 'sometimes|numeric',
-            'limit' => 'sometimes|numeric',
+            'limit'  => 'sometimes|numeric',
         ]);
 
         $authentications = $request->has('period') ? $user->authenticationsByPeriod($validated['period']) : $user->authentications;

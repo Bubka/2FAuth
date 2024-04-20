@@ -58,7 +58,7 @@ class OpenId extends AbstractProvider
      */
     public function refreshToken($refreshToken)
     {
-        return $this->getHttpClient()->post($this->getTokenUrl(), [
+        return $this->getHttpClient()->post($this->getTokenUrl(), [/** @phpstan-ignore-line */
             RequestOptions::FORM_PARAMS => [
                 'client_id'     => $this->clientId,
                 'client_secret' => $this->clientSecret,

@@ -46,15 +46,9 @@ use Laravel\Passport\HasApiTokens;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Bubka\LaravelAuthenticationLog\Models\AuthenticationLog> $authentications
  * @property-read int|null $authentications_count
  * @property-read \Bubka\LaravelAuthenticationLog\Models\AuthenticationLog|null $latestAuthentication
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|User admins()
- * @method \Illuminate\Support\Carbon|null latestAuthentication()
- * @method \Illuminate\Support\Carbon|null lastLoginAt()
- * @method \Illuminate\Support\Carbon|null lastSuccessfulLoginAt()
- * @method \Illuminate\Support\Carbon|null lastLoginIp()
- * @method \Illuminate\Support\Carbon|null lastSuccessfulLoginIp()
- * @method \Illuminate\Support\Carbon|null previousLoginAt()
- * @method \Illuminate\Support\Carbon|null previousLoginIp()
- * @method \Illuminate\Support\Collection<int, \Bubka\LaravelAuthenticationLog\Models\AuthenticationLog> authenticationsByPeriod()
+ *
  * @mixin \Eloquent
  */
 class User extends Authenticatable implements HasLocalePreference, WebAuthnAuthenticatable
@@ -66,7 +60,7 @@ class User extends Authenticatable implements HasLocalePreference, WebAuthnAuthe
     /**
      * The attributes that are mass assignable.
      *
-     * @var string[]
+     * @var array<int,string>
      */
     protected $fillable = [
         'name', 'email', 'password', 'oauth_id', 'oauth_provider',
@@ -148,15 +142,13 @@ class User extends Authenticatable implements HasLocalePreference, WebAuthnAuthe
     /**
      * Say if the user is the only registered administrator
      *
-     * @return void
+     * @return bool
      */
     public function isLastAdministrator()
     {
         $admins = User::admins()->get();
 
-        $toto = $admins->contains($this->id) && $admins->count() === 1;
-
-        return $toto;
+        return $admins->contains($this->id) && $admins->count() === 1;
     }
 
     /**

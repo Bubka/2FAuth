@@ -15,7 +15,7 @@ class QrCodeService
     /**
      * Encode a string into a QR code image
      *
-     * @param  string  $data The string to encode
+     * @param  string  $data  The string to encode
      * @return mixed
      */
     public static function encode(string $data)
@@ -55,19 +55,12 @@ class QrCodeService
             switch (get_class($qrcode->getError())) {
                 case NotFoundException::class:
                     throw new \App\Exceptions\InvalidQrCodeException(__('errors.cannot_detect_qrcode_in_image'));
-                    break;
-
                 case FormatException::class:
                     throw new \App\Exceptions\InvalidQrCodeException(__('errors.cannot_decode_detected_qrcode'));
-                    break;
-
                 case ChecksumException::class:
                     throw new \App\Exceptions\InvalidQrCodeException(__('errors.qrcode_has_invalid_checksum'));
-                    break;
-
                 default:
                     throw new \App\Exceptions\InvalidQrCodeException(__('errors.no_readable_qrcode'));
-                    break;
             }
         }
 

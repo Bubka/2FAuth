@@ -80,7 +80,7 @@ class RemoteUserProvider implements UserProvider
     /**
      * Set a fake email address
      *
-     * @param    $id mixed
+     * @param  $id  mixed
      * @return string
      */
     protected function fakeRemoteEmail(mixed $id)

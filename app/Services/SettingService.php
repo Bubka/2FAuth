@@ -46,7 +46,7 @@ class SettingService
     /**
      * Get a setting
      *
-     * @param  string  $setting A single setting name
+     * @param  string  $setting  A single setting name
      * @return mixed string|int|boolean|null
      */
     public function get($setting)
@@ -67,8 +67,8 @@ class SettingService
     /**
      * Set a setting
      *
-     * @param  string|array  $setting A single setting name or an associative array of name:value settings
-     * @param  string|int|bool|null  $value The value for single setting
+     * @param  string|array  $setting  A single setting name or an associative array of name:value settings
+     * @param  string|int|bool|null  $value  The value for single setting
      */
     public function set($setting, $value = null) : void
     {
@@ -93,7 +93,7 @@ class SettingService
     /**
      * Delete a setting
      *
-     * @param  string  $name The setting name
+     * @param  string  $name  The setting name
      */
     public function delete(string $name) : void
     {
@@ -200,7 +200,7 @@ class SettingService
     /**
      * Encrypt/Decrypt accounts in database
      *
-     * @param  bool  $encrypted Whether the record should be encrypted or not
+     * @param  bool  $encrypted  Whether the record should be encrypted or not
      * @return bool Whether the operation completed successfully
      */
     private function updateRecords(bool $encrypted) : bool

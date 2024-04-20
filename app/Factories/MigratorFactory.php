@@ -19,7 +19,7 @@ class MigratorFactory implements MigratorFactoryInterface
     /**
      * Infer the type of migrator needed from a payload and create the migrator
      *
-     * @param  string  $migrationPayload The migration payload used to infer the migrator type
+     * @param  string  $migrationPayload  The migration payload used to infer the migrator type
      */
     public function create(string $migrationPayload) : Migrator
     {
@@ -41,7 +41,7 @@ class MigratorFactory implements MigratorFactoryInterface
     /**
      * Determine if a payload comes from Google Authenticator
      *
-     * @param  string  $migrationPayload The payload to analyse
+     * @param  string  $migrationPayload  The payload to analyse
      */
     private function isGoogleAuth(string $migrationPayload) : bool
     {
@@ -59,7 +59,7 @@ class MigratorFactory implements MigratorFactoryInterface
     /**
      * Determine if a payload is a plain text content
      *
-     * @param  string  $migrationPayload The payload to analyse
+     * @param  string  $migrationPayload  The payload to analyse
      */
     private function isPlainText(string $migrationPayload) : bool
     {
@@ -77,7 +77,7 @@ class MigratorFactory implements MigratorFactoryInterface
     /**
      * Determine if a payload comes from 2FAuth in JSON format
      *
-     * @param  string  $migrationPayload The payload to analyse
+     * @param  string  $migrationPayload  The payload to analyse
      */
     private function isTwoFAuthJSON(string $migrationPayload) : bool
     {
@@ -105,7 +105,7 @@ class MigratorFactory implements MigratorFactoryInterface
     /**
      * Determine if a payload comes from Aegis Authenticator in JSON format
      *
-     * @param  string  $migrationPayload The payload to analyse
+     * @param  string  $migrationPayload  The payload to analyse
      * @return bool
      */
     private function isAegisJSON(string $migrationPayload) : mixed
@@ -150,7 +150,7 @@ class MigratorFactory implements MigratorFactoryInterface
     /**
      * Determine if a payload comes from 2FAS Authenticator
      *
-     * @param  string  $migrationPayload The payload to analyse
+     * @param  string  $migrationPayload  The payload to analyse
      * @return bool
      */
     private function is2FASv2(string $migrationPayload) : mixed

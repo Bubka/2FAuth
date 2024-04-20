@@ -20,13 +20,13 @@ class GoogleAuthMigrator extends Migrator
     /**
      * Convert Google Authenticator migration URI to a set of TwoFAccount objects.
      *
-     * @param  mixed  $migrationPayload migration uri provided by Google Authenticator export feature
+     * @param  mixed  $migrationPayload  migration uri provided by Google Authenticator export feature
      * @return \Illuminate\Support\Collection<int|string, \App\Models\TwoFAccount> The converted accounts
      */
     public function migrate(mixed $migrationPayload) : Collection
     {
         try {
-            $migrationData = base64_decode(urldecode(Str::replace('otpauth-migration://offline?data=', '', $migrationPayload)));
+            $migrationData = base64_decode(urldecode(Str::replace('otpauth-migration://offline?data=', '', strval($migrationPayload))));
             $protobuf      = new Payload();
             $protobuf->mergeFromString($migrationData);
             $otpParameters = $protobuf->getOtpParameters();

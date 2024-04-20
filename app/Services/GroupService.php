@@ -14,8 +14,8 @@ class GroupService
     /**
      * Assign one or more accounts to a group
      *
-     * @param  array|int  $ids accounts ids to assign
-     * @param  \App\Models\Group|null  $group The group the accounts will be assigned to
+     * @param  array|int  $ids  accounts ids to assign
+     * @param  \App\Models\Group|null  $group  The group the accounts will be assigned to
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */

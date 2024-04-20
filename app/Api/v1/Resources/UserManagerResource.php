@@ -55,7 +55,7 @@ class UserManagerResource extends UserResource
         $tokens          = $tokenRepository->forUser($this->resource->getAuthIdentifier());
 
         $PATs_count = $tokens->load('client')->filter(function ($token) {
-            return $token->client->personal_access_client && ! $token->revoked;
+            return $token->client->personal_access_client && ! $token->revoked; /** @phpstan-ignore-line */
         })->count();
 
         $this->with = [

@@ -311,7 +311,7 @@ class TwoFAccountController extends Controller
     /**
      * Checks ids length
      *
-     * @param  string  $ids comma-separated ids
+     * @param  string  $ids  comma-separated ids
      * @return bool whether or not the number of ids is acceptable
      */
     private function tooManyIds(string $ids) : bool

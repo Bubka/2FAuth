@@ -28,7 +28,7 @@ class TwoFAccountService
     /**
      * Withdraw one or more twofaccounts from their group
      *
-     * @param  int|array|string  $ids twofaccount ids to free
+     * @param  int|array|string  $ids  twofaccount ids to free
      */
     public static function withdraw($ids) : void
     {
@@ -50,7 +50,7 @@ class TwoFAccountService
     /**
      * Convert a migration payload to a set of TwoFAccount objects
      *
-     * @param  string  $migrationPayload Migration payload from 2FA apps export feature
+     * @param  string  $migrationPayload  Migration payload from 2FA apps export feature
      * @return \Illuminate\Support\Collection<int|string, TwoFAccount> The converted accounts
      */
     public function migrate(string $migrationPayload) : Collection
@@ -64,7 +64,7 @@ class TwoFAccountService
     /**
      * Export one or more twofaccounts
      *
-     * @param  int|array|string  $ids twofaccount ids to delete
+     * @param  int|array|string  $ids  twofaccount ids to delete
      * @return \Illuminate\Support\Collection<int, TwoFAccount> The converted accounts
      */
     public static function export($ids) : Collection
@@ -80,7 +80,7 @@ class TwoFAccountService
     /**
      * Delete one or more twofaccounts
      *
-     * @param  int|array|string  $ids twofaccount ids to delete
+     * @param  int|array|string  $ids  twofaccount ids to delete
      * @return int The number of deleted
      */
     public static function delete($ids) : int

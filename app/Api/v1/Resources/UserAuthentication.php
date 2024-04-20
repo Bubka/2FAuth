@@ -9,11 +9,15 @@ use Jenssegers\Agent\Agent;
 
 /**
  * @property mixed $id
- * @property string $name
- * @property string $email
- * @property string $oauth_provider
- * @property \Illuminate\Support\Collection<array-key, mixed> $preferences
- * @property string $is_admin
+ * @property string $ip_address
+ * @property string $user_agent
+ * @property string $browser
+ * @property string $platform
+ * @property string $device
+ * @property Carbon|null $login_at
+ * @property Carbon|null $logout_at
+ * @property bool $login_successful
+ * @property string|null $duration
  */
 class UserAuthentication extends JsonResource
 {
@@ -47,16 +51,16 @@ class UserAuthentication extends JsonResource
     public function toArray($request)
     {
         return [
-            'id'               => $this->id,
-            'ip_address'       => $this->ip_address,
-            'user_agent'       => $this->user_agent,
-            'browser'          => $this->agent->browser(),
-            'platform'         => $this->agent->platform(),
-            'device'           => $this->agent->deviceType(),
-            'login_at'         => $this->login_at
+            'id'         => $this->id,
+            'ip_address' => $this->ip_address,
+            'user_agent' => $this->user_agent,
+            'browser'    => $this->agent->browser(),
+            'platform'   => $this->agent->platform(),
+            'device'     => $this->agent->deviceType(),
+            'login_at'   => $this->login_at
                                       ? Carbon::parse($this->login_at)->toDayDateTimeString()
                                       : null,
-            'logout_at'        => $this->logout_at
+            'logout_at' => $this->logout_at
                                       ? Carbon::parse($this->logout_at)->toDayDateTimeString()
                                       : null,
             'login_successful' => $this->login_successful,

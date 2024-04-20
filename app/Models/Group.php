@@ -27,14 +27,14 @@ class Group extends Model
     /**
      * model's array form.
      *
-     * @var string[]
+     * @var array<int, string>
      */
     protected $fillable = ['name'];
 
     /**
      * The accessors to append to the model's array form.
      *
-     * @var array
+     * @var array<int, string>
      */
     protected $appends = [];
 

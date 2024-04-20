@@ -95,7 +95,7 @@ class TwoFAccount extends Model implements Sortable
     /**
      * model's array form.
      *
-     * @var string[]
+     * @var array<int, string>
      */
     protected $fillable = [
         // 'service',
@@ -119,7 +119,7 @@ class TwoFAccount extends Model implements Sortable
     /**
      * The accessors to append to the model's array form.
      *
-     * @var array
+     * @var array<int, string>
      */
     public $appends = [];
 
@@ -611,7 +611,7 @@ class TwoFAccount extends Model implements Sortable
      * Store and set the provided icon
      *
      * @param  \Psr\Http\Message\StreamInterface|\Illuminate\Http\File|\Illuminate\Http\UploadedFile|string|resource  $data
-     * @param  string|null  $extension The resource extension, without the dot
+     * @param  string|null  $extension  The resource extension, without the dot
      */
     public function setIcon($data, $extension = null) : void
     {
@@ -633,7 +633,7 @@ class TwoFAccount extends Model implements Sortable
      * Store img data as an icon file.
      *
      * @param  \Psr\Http\Message\StreamInterface|\Illuminate\Http\File|\Illuminate\Http\UploadedFile|string|resource  $content
-     * @param  string  $extension The file extension, without the dot
+     * @param  string  $extension  The file extension, without the dot
      * @return string|null The filename of the stored icon or null if the operation fails
      */
     private function storeFileDataAsIcon($content, $extension) : ?string

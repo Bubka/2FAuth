@@ -561,7 +561,7 @@ class UserManagerControllerTest extends FeatureTestCase
     public function test_authentications_returns_all_entries() : void
     {
         $created = $this->feedAuthenticationLog();
-        
+
         $this->actingAs($this->admin, 'api-guard')
             ->json('GET', '/api/v1/users/' . $this->user->id . '/authentications')
             ->assertOk()
@@ -574,7 +574,7 @@ class UserManagerControllerTest extends FeatureTestCase
     public function test_authentications_returns_expected_resource() : void
     {
         $this->user->authentications()->create(AuthenticationLogData::duringLastMonth());
-        
+
         $this->actingAs($this->admin, 'api-guard')
             ->json('GET', '/api/v1/users/' . $this->user->id . '/authentications')
             ->assertJsonStructure([
@@ -589,7 +589,7 @@ class UserManagerControllerTest extends FeatureTestCase
                     'logout_at',
                     'login_successful',
                     'duration',
-                ]
+                ],
             ]);
     }
 
@@ -599,12 +599,12 @@ class UserManagerControllerTest extends FeatureTestCase
     public function test_authentications_returns_no_login_entry() : void
     {
         $this->user->authentications()->create(AuthenticationLogData::noLogin());
-        
+
         $this->actingAs($this->admin, 'api-guard')
             ->json('GET', '/api/v1/users/' . $this->user->id . '/authentications?period=1')
             ->assertJsonCount(1)
             ->assertJsonFragment([
-                'login_at' => null
+                'login_at' => null,
             ]);
     }
 
@@ -614,12 +614,12 @@ class UserManagerControllerTest extends FeatureTestCase
     public function test_authentications_returns_no_logout_entry() : void
     {
         $this->user->authentications()->create(AuthenticationLogData::noLogout());
-        
+
         $this->actingAs($this->admin, 'api-guard')
             ->json('GET', '/api/v1/users/' . $this->user->id . '/authentications?period=1')
             ->assertJsonCount(1)
             ->assertJsonFragment([
-                'logout_at' => null
+                'logout_at' => null,
             ]);
     }
 
@@ -630,12 +630,12 @@ class UserManagerControllerTest extends FeatureTestCase
     {
         $this->user->authentications()->create(AuthenticationLogData::failedLogin());
         $expected = Carbon::parse(AuthenticationLogData::failedLogin()['login_at'])->toDayDateTimeString();
-        
+
         $this->actingAs($this->admin, 'api-guard')
             ->json('GET', '/api/v1/users/' . $this->user->id . '/authentications?period=1')
             ->assertJsonCount(1)
             ->assertJsonFragment([
-                'login_at' => $expected,
+                'login_at'         => $expected,
                 'login_successful' => false,
             ]);
     }
@@ -647,12 +647,12 @@ class UserManagerControllerTest extends FeatureTestCase
     {
         $this->feedAuthenticationLog();
         $expected = Carbon::parse(AuthenticationLogData::duringLastMonth()['login_at'])->toDayDateTimeString();
-        
+
         $this->actingAs($this->admin, 'api-guard')
             ->json('GET', '/api/v1/users/' . $this->user->id . '/authentications?period=1')
             ->assertJsonCount(3)
             ->assertJsonFragment([
-                'login_at' => $expected
+                'login_at' => $expected,
             ]);
     }
 
@@ -662,17 +662,17 @@ class UserManagerControllerTest extends FeatureTestCase
     public function test_authentications_returns_last_three_months_entries() : void
     {
         $this->feedAuthenticationLog();
-        $expectedOneMonth = Carbon::parse(AuthenticationLogData::duringLastMonth()['login_at'])->toDayDateTimeString();
+        $expectedOneMonth   = Carbon::parse(AuthenticationLogData::duringLastMonth()['login_at'])->toDayDateTimeString();
         $expectedThreeMonth = Carbon::parse(AuthenticationLogData::duringLastThreeMonth()['login_at'])->toDayDateTimeString();
-        
+
         $this->actingAs($this->admin, 'api-guard')
             ->json('GET', '/api/v1/users/' . $this->user->id . '/authentications?period=3')
             ->assertJsonCount(4)
             ->assertJsonFragment([
-                'login_at' => $expectedOneMonth
+                'login_at' => $expectedOneMonth,
             ])
             ->assertJsonFragment([
-                'login_at' => $expectedThreeMonth
+                'login_at' => $expectedThreeMonth,
             ]);
     }
 
@@ -682,21 +682,21 @@ class UserManagerControllerTest extends FeatureTestCase
     public function test_authentications_returns_last_six_months_entries() : void
     {
         $this->feedAuthenticationLog();
-        $expectedOneMonth = Carbon::parse(AuthenticationLogData::duringLastMonth()['login_at'])->toDayDateTimeString();
+        $expectedOneMonth   = Carbon::parse(AuthenticationLogData::duringLastMonth()['login_at'])->toDayDateTimeString();
         $expectedThreeMonth = Carbon::parse(AuthenticationLogData::duringLastThreeMonth()['login_at'])->toDayDateTimeString();
-        $expectedSixMonth = Carbon::parse(AuthenticationLogData::duringLastSixMonth()['login_at'])->toDayDateTimeString();
-        
+        $expectedSixMonth   = Carbon::parse(AuthenticationLogData::duringLastSixMonth()['login_at'])->toDayDateTimeString();
+
         $this->actingAs($this->admin, 'api-guard')
             ->json('GET', '/api/v1/users/' . $this->user->id . '/authentications?period=6')
             ->assertJsonCount(5)
             ->assertJsonFragment([
-                'login_at' => $expectedOneMonth
+                'login_at' => $expectedOneMonth,
             ])
             ->assertJsonFragment([
-                'login_at' => $expectedThreeMonth
+                'login_at' => $expectedThreeMonth,
             ])
             ->assertJsonFragment([
-                'login_at' => $expectedSixMonth
+                'login_at' => $expectedSixMonth,
             ]);
     }
 
@@ -706,25 +706,25 @@ class UserManagerControllerTest extends FeatureTestCase
     public function test_authentications_returns_last_year_entries() : void
     {
         $this->feedAuthenticationLog();
-        $expectedOneMonth = Carbon::parse(AuthenticationLogData::duringLastMonth()['login_at'])->toDayDateTimeString();
+        $expectedOneMonth   = Carbon::parse(AuthenticationLogData::duringLastMonth()['login_at'])->toDayDateTimeString();
         $expectedThreeMonth = Carbon::parse(AuthenticationLogData::duringLastThreeMonth()['login_at'])->toDayDateTimeString();
-        $expectedSixMonth = Carbon::parse(AuthenticationLogData::duringLastSixMonth()['login_at'])->toDayDateTimeString();
-        $expectedYear = Carbon::parse(AuthenticationLogData::duringLastYear()['login_at'])->toDayDateTimeString();
-        
+        $expectedSixMonth   = Carbon::parse(AuthenticationLogData::duringLastSixMonth()['login_at'])->toDayDateTimeString();
+        $expectedYear       = Carbon::parse(AuthenticationLogData::duringLastYear()['login_at'])->toDayDateTimeString();
+
         $this->actingAs($this->admin, 'api-guard')
             ->json('GET', '/api/v1/users/' . $this->user->id . '/authentications?period=12')
             ->assertJsonCount(6)
             ->assertJsonFragment([
-                'login_at' => $expectedOneMonth
+                'login_at' => $expectedOneMonth,
             ])
             ->assertJsonFragment([
-                'login_at' => $expectedThreeMonth
+                'login_at' => $expectedThreeMonth,
             ])
             ->assertJsonFragment([
-                'login_at' => $expectedSixMonth
+                'login_at' => $expectedSixMonth,
             ])
             ->assertJsonFragment([
-                'login_at' => $expectedYear
+                'login_at' => $expectedYear,
             ]);
     }
 
@@ -735,7 +735,7 @@ class UserManagerControllerTest extends FeatureTestCase
     public function test_authentications_returns_limited_entries($limit) : void
     {
         $this->feedAuthenticationLog();
-        
+
         $this->actingAs($this->admin, 'api-guard')
             ->json('GET', '/api/v1/users/' . $this->user->id . '/authentications?limit=' . $limit)
             ->assertOk()
@@ -760,21 +760,21 @@ class UserManagerControllerTest extends FeatureTestCase
     public function test_authentications_returns_expected_ip_and_useragent_chunks() : void
     {
         $this->user->authentications()->create([
-            'ip_address' => '127.0.0.1',
-            'user_agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0',
-            'login_at' => now(),
+            'ip_address'       => '127.0.0.1',
+            'user_agent'       => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0',
+            'login_at'         => now(),
             'login_successful' => true,
-            'logout_at' => null,
-            'location' => null,
+            'logout_at'        => null,
+            'location'         => null,
         ]);
-        
+
         $this->actingAs($this->admin, 'api-guard')
             ->json('GET', '/api/v1/users/' . $this->user->id . '/authentications?period=1')
             ->assertJsonFragment([
                 'ip_address' => '127.0.0.1',
-                'browser' => 'Firefox',
-                'platform' => 'Windows',
-                'device' => 'desktop',
+                'browser'    => 'Firefox',
+                'platform'   => 'Windows',
+                'device'     => 'desktop',
             ]);
     }
 
@@ -806,12 +806,11 @@ class UserManagerControllerTest extends FeatureTestCase
     public static function invalidQueryParameterProvider()
     {
         return [
-            'empty' => [''],
-            'null' => ['null'],
+            'empty'   => [''],
+            'null'    => ['null'],
             'boolean' => ['true'],
-            'string' => ['string'],
-            'array' => ['[]'],
+            'string'  => ['string'],
+            'array'   => ['[]'],
         ];
     }
-    
 }
