@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Jenssegers\Agent\Agent;
-use Rappasoft\LaravelAuthenticationLog\Models\AuthenticationLog;
+use Bubka\LaravelAuthenticationLog\Models\AuthenticationLog;
 
 class SignedInWithNewDevice extends Notification implements ShouldQueue
 {
@@ -22,6 +22,9 @@ class SignedInWithNewDevice extends Notification implements ShouldQueue
      */
     protected $agent;
 
+    /**
+     * Create a new SignedInWithNewDevice instance
+     */
     public function __construct(AuthenticationLog $authenticationLog)
     {
         $this->authenticationLog = $authenticationLog;
@@ -29,11 +32,17 @@ class SignedInWithNewDevice extends Notification implements ShouldQueue
         $this->agent->setUserAgent($authenticationLog->user_agent);
     }
 
+    /**
+     * 
+     */
     public function via($notifiable)
     {
         return $notifiable->notifyAuthenticationLogVia();
     }
 
+    /**
+     * Wrap the notification to a mail envelop
+     */
     public function toMail($notifiable)
     {
         return (new MailMessage())

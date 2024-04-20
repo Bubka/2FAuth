@@ -13,14 +13,16 @@ return [
         'login' => \Illuminate\Auth\Events\Login::class,
         'failed' => \Illuminate\Auth\Events\Failed::class,
         'logout' => \Illuminate\Auth\Events\Logout::class,
-        'logout-other-devices' => \Illuminate\Auth\Events\OtherDeviceLogout::class,
+        // 'logout-other-devices' => \Illuminate\Auth\Events\OtherDeviceLogout::class,
+        // 'proxyUserAccess' => \App\Events\VisitedByProxyUser::class,
     ],
 
     'listeners' => [
-        'login' => \Rappasoft\LaravelAuthenticationLog\Listeners\LoginListener::class,
-        'failed' => \Rappasoft\LaravelAuthenticationLog\Listeners\FailedLoginListener::class,
-        'logout' => \Rappasoft\LaravelAuthenticationLog\Listeners\LogoutListener::class,
-        'logout-other-devices' => \Rappasoft\LaravelAuthenticationLog\Listeners\OtherDeviceLogoutListener::class,
+        'login' => \Bubka\LaravelAuthenticationLog\Listeners\LoginListener::class,
+        'failed' => \Bubka\LaravelAuthenticationLog\Listeners\FailedLoginListener::class,
+        'logout' => \Bubka\LaravelAuthenticationLog\Listeners\LogoutListener::class,
+        // 'logout-other-devices' => \Bubka\LaravelAuthenticationLog\Listeners\OtherDeviceLogoutListener::class,
+        // 'proxyUserAccess' => \App\Listeners\VisitedByProxyUserListener::class,
     ],
 
     'notifications' => [
@@ -42,7 +44,7 @@ return [
             'location' => false,
 
             // The Notification class to send
-            'template' => \Rappasoft\LaravelAuthenticationLog\Notifications\FailedLogin::class,
+            'template' => \Bubka\LaravelAuthenticationLog\Notifications\FailedLogin::class,
         ],
     ],
 

@@ -35,11 +35,20 @@
         "laravel/tinker": "^2.8",
         "laravel/ui": "^4.2",
         "paragonie/constant_time_encoding": "^2.6",
-        "rappasoft/laravel-authentication-log": "^4.0",
         "socialiteproviders/manager": "^4.4",
         "spatie/eloquent-sortable": "^4.0.1",
-        "spomky-labs/otphp": "^11.0"
+        "spomky-labs/otphp": "^11.0",
+        "bubka/laravel-authentication-log": "@dev"
     },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../packages/bubka/laravel-authentication-log",
+            "options": {
+                "symlink": true
+            }
+        }
+    ],
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.13",
         "brianium/paratest": "^7.3",

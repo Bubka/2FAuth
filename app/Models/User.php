@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Models\Traits\AuthenticationLoggable;
 use App\Models\Traits\WebAuthnManageCredentials;
+use Bubka\LaravelAuthenticationLog\Traits\AuthenticationLoggable;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Contracts\Translation\HasLocalePreference;
@@ -41,6 +41,21 @@ use Laravel\Passport\HasApiTokens;
  * @property-read int|null $twofaccounts_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\Laragear\WebAuthn\Models\WebAuthnCredential[] $webAuthnCredentials
  * @property-read int|null $web_authn_credentials_count
+ * @property string|null $oauth_id
+ * @property string|null $oauth_provider
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Bubka\LaravelAuthenticationLog\Models\AuthenticationLog> $authentications
+ * @property-read int|null $authentications_count
+ * @property-read \Bubka\LaravelAuthenticationLog\Models\AuthenticationLog|null $latestAuthentication
+ * @method static \Illuminate\Database\Eloquent\Builder|User admins()
+ * @method \Illuminate\Support\Carbon|null latestAuthentication()
+ * @method \Illuminate\Support\Carbon|null lastLoginAt()
+ * @method \Illuminate\Support\Carbon|null lastSuccessfulLoginAt()
+ * @method \Illuminate\Support\Carbon|null lastLoginIp()
+ * @method \Illuminate\Support\Carbon|null lastSuccessfulLoginIp()
+ * @method \Illuminate\Support\Carbon|null previousLoginAt()
+ * @method \Illuminate\Support\Carbon|null previousLoginIp()
+ * @method \Illuminate\Support\Collection<int, \Bubka\LaravelAuthenticationLog\Models\AuthenticationLog> authenticationsByPeriod()
+ * @mixin \Eloquent
  */
 class User extends Authenticatable implements HasLocalePreference, WebAuthnAuthenticatable
 {

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->timestamp('logout_at')->nullable();
             $table->boolean('cleared_by_user')->default(false);
             $table->json('location')->nullable();
+            $table->string('auth_method', 40)->nullable();
         });
     }
 
