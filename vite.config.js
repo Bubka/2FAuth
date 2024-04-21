@@ -78,4 +78,9 @@ export default defineConfig({
             },
         },
     },
+    server: {
+        watch: {
+            followSymlinks: false,
+        }
+    }
 });
