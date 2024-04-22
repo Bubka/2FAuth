@@ -37,18 +37,8 @@
         "paragonie/constant_time_encoding": "^2.6",
         "socialiteproviders/manager": "^4.4",
         "spatie/eloquent-sortable": "^4.0.1",
-        "spomky-labs/otphp": "^11.0",
-        "bubka/laravel-authentication-log": "@dev"
+        "spomky-labs/otphp": "^11.0"
     },
-    "repositories": [
-        {
-            "type": "path",
-            "url": "../packages/bubka/laravel-authentication-log",
-            "options": {
-                "symlink": true
-            }
-        }
-    ],
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.13",
         "brianium/paratest": "^7.3",

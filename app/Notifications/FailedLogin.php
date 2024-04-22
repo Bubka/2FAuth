@@ -7,49 +7,42 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use Jenssegers\Agent\Agent;
 
-class SignedInWithNewDevice extends Notification implements ShouldQueue
+class FailedLogin extends Notification implements ShouldQueue
 {
     use Queueable;
 
+    /**
+     * The AuthenticationLog model instance
+     */
     public AuthenticationLog $authenticationLog;
 
-    /**
-     * A user agent parser instance.
-     *
-     * @var mixed
-     */
-    protected $agent;
-
-    /**
-     * Create a new SignedInWithNewDevice instance
-     */
     public function __construct(AuthenticationLog $authenticationLog)
     {
         $this->authenticationLog = $authenticationLog;
-        $this->agent             = new Agent();
-        $this->agent->setUserAgent($authenticationLog->user_agent);
     }
 
+    /**
+     * Get the notification's channels.
+     */
     public function via(mixed $notifiable) : array|string
     {
         return $notifiable->notifyAuthenticationLogVia();
     }
 
     /**
-     * Wrap the notification to a mail envelop
+     * Build the mail representation of the notification.
      */
     public function toMail(mixed $notifiable) : MailMessage
     {
         return (new MailMessage())
-            ->subject(__('notifications.new_device.subject'))
-            ->markdown('emails.newDevice', [
+            ->subject(__('A failed login to your account'))
+            ->markdown('authentication-log::emails.failed', [
                 'account'   => $notifiable,
                 'time'      => $this->authenticationLog->login_at,
                 'ipAddress' => $this->authenticationLog->ip_address,
-                'browser'   => $this->agent->browser(),
-                'platform'  => $this->agent->platform(),
+                'browser'   => $this->authenticationLog->user_agent,
+                'location'  => $this->authenticationLog->location,
             ]);
     }
 }

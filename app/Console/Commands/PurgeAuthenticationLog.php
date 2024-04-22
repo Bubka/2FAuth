@@ -22,31 +22,36 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+namespace App\Console\Commands;
 
-return new class extends Migration
+use App\Models\AuthenticationLog;
+use Illuminate\Console\Command;
+
+class PurgeAuthenticationLog extends Command
 {
-    public function up(): void
-    {
-        Schema::create(config('authentication-log.table_name'), function (Blueprint $table) {
-            $table->id();
-            $table->morphs('authenticatable');
-            $table->string('ip_address', 45)->nullable();
-            $table->text('user_agent')->nullable();
-            $table->timestamp('login_at')->nullable();
-            $table->boolean('login_successful')->default(false);
-            $table->timestamp('logout_at')->nullable();
-            $table->boolean('cleared_by_user')->default(false);
-            $table->json('location')->nullable();
-            $table->string('guard', 40)->nullable();
-            $table->string('login_method', 40)->nullable();
-        });
-    }
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    public $signature = 'authentication-log:purge';
 
-    public function down(): void
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    public $description = 'Purge all authentication logs older than the configurable amount of days.';
+
+    /**
+     * Execute the console command.
+     */
+    public function handle() : void
     {
-        Schema::dropIfExists(config('authentication-log.table_name'));
+        $this->comment('Clearing authentication log...');
+
+        $deleted = AuthenticationLog::where('login_at', '<', now()->subDays(config('authentication-log.purge'))->format('Y-m-d H:i:s'))->delete();
+
+        $this->info($deleted . ' authentication logs cleared.');
     }
-};
+}

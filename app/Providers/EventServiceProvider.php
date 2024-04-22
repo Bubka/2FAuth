@@ -6,6 +6,9 @@ use App\Events\GroupDeleted;
 use App\Events\GroupDeleting;
 use App\Events\ScanForNewReleaseCalled;
 use App\Events\TwoFAccountDeleted;
+use App\Listeners\Authentication\FailedLoginListener;
+use App\Listeners\Authentication\LoginListener;
+use App\Listeners\Authentication\LogoutListener;
 use App\Listeners\CleanIconStorage;
 use App\Listeners\DissociateTwofaccountFromGroup;
 use App\Listeners\LogNotification;
@@ -14,6 +17,9 @@ use App\Listeners\ReleaseRadar;
 use App\Listeners\ResetUsersPreference;
 use App\Models\User;
 use App\Observers\UserObserver;
+use Illuminate\Auth\Events\Failed;
+use Illuminate\Auth\Events\Login;
+use Illuminate\Auth\Events\Logout;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -48,6 +54,15 @@ class EventServiceProvider extends ServiceProvider
         ],
         NotificationSent::class => [
             LogNotification::class,
+        ],
+        Login::class => [
+            LoginListener::class,
+        ],
+        Failed::class => [
+            FailedLoginListener::class,
+        ],
+        Logout::class => [
+            LogoutListener::class,
         ],
     ];
 

@@ -19,7 +19,7 @@ use Laravel\Passport\Http\Controllers\PersonalAccessTokenController;
 
 // use App\Models\User;
 // use App\Notifications\SignedInWithNewDevice;
-// use Bubka\LaravelAuthenticationLog\Models\AuthenticationLog;
+// use App\Models\AuthenticationLog;
 
 /*
 |--------------------------------------------------------------------------
