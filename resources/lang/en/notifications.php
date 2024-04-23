@@ -27,4 +27,10 @@ return [
         'connection_details' => 'Here are the details of this connection',
         'recommandations' => 'If this was you, you can ignore this alert. If you suspect any suspicious activity on your account, please change your password.'
     ],
+    'failed_login' => [
+        'subject' => 'Failed login to 2FAuth',
+        'resume' => 'There has been a failed login attempt to your 2FAuth account.',
+        'connection_details' => 'Here are the details of this connection attempt',
+        'recommandations' => 'If this was you, you can ignore this alert. If further attempts fail, you should contact the 2FAuth administrator to review security settings and take action against this attacker.'
+    ],
 ];

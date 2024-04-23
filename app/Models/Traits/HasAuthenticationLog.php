@@ -24,32 +24,31 @@
 
 namespace App\Models\Traits;
 
-use App\Models\AuthenticationLog;
+use App\Models\AuthLog;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
 
-trait AuthenticationLoggable
+trait HasAuthenticationLog
 {
     /**
      * Get all user's authentications from the auth log
      *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany<AuthenticationLog>
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany<AuthLog>
      */
     public function authentications()
     {
-        return $this->morphMany(AuthenticationLog::class, 'authenticatable')->latest('id');
+        return $this->morphMany(AuthLog::class, 'authenticatable')->latest('id');
     }
 
     /**
      * Get authentications for the provided timespan (in month)
      *
-     * @return \Illuminate\Database\Eloquent\Collection<int, AuthenticationLog>
+     * @return \Illuminate\Database\Eloquent\Collection<int, AuthLog>
      */
     public function authenticationsByPeriod(int $period = 1)
     {
         $from = Carbon::now()->subMonths($period);
 
-        return $this->authentications->filter(function (AuthenticationLog $authentication) use ($from) {
+        return $this->authentications->filter(function (AuthLog $authentication) use ($from) {
             return $authentication->login_at >= $from || $authentication->logout_at >= $from;
         });
     }
@@ -57,11 +56,11 @@ trait AuthenticationLoggable
     /**
      * Get the user's latest authentication
      * 
-     * @return \Illuminate\Database\Eloquent\Relations\MorphOne<AuthenticationLog>
+     * @return \Illuminate\Database\Eloquent\Relations\MorphOne<AuthLog>
      */
     public function latestAuthentication()
     {
-        return $this->morphOne(AuthenticationLog::class, 'authenticatable')->latestOfMany('login_at');
+        return $this->morphOne(AuthLog::class, 'authenticatable')->latestOfMany('login_at');
     }
 
     /**
@@ -115,7 +114,7 @@ trait AuthenticationLoggable
     /**
      * The notification channels to be used for notifications
      */
-    public function notifyAuthenticationLogVia() : array
+    public function notifyAuthLogVia() : array
     {
         return ['mail'];
     }

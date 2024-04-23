@@ -24,57 +24,44 @@
 
 namespace App\Listeners\Authentication;
 
-use App\Models\Traits\AuthenticationLoggable;
 use App\Notifications\SignedInWithNewDevice;
 use Illuminate\Auth\Events\Login;
-use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 
-class LoginListener extends AccessAbstractListener
+class LoginListener extends AbstractAccessListener
 {
     /**
-     * 
+     * Handle the event.
+     *
+     * @return void
      */
     public function handle(mixed $event) : void
     {
-        $listener = config('authentication-log.events.login', Login::class);
-
-        if (! $event instanceof $listener) {
+        if (! $event instanceof Login) {
             return;
         }
 
-        if ($event->user) {
-            if (! in_array(AuthenticationLoggable::class, class_uses_recursive(get_class($event->user)))) {
-                return;
-            }
+        /**
+         * @var \App\Models\User
+         */
+        $user      = $event->user;
+        $ip = config('2fauth.proxy_headers.forIp') ?? $this->request->ip();
+        $userAgent = $this->request->userAgent();
+        $known     = $user->authentications()->whereIpAddress($ip)->whereUserAgent($userAgent)->whereLoginSuccessful(true)->first();
+        $newUser   = Carbon::parse($user->{$user->getCreatedAtColumn()})->diffInMinutes(Carbon::now()) < 1;
+        $guard     = $event->guard;
 
-            if (config('authentication-log.behind_cdn')) {
-                $ip = $this->request->server(config('authentication-log.behind_cdn.http_header_field'));
-            } else {
-                $ip = $this->request->ip();
-            }
+        $log = $user->authentications()->create([
+            'ip_address'       => $ip,
+            'user_agent'       => $userAgent,
+            'login_at'         => now(),
+            'login_successful' => true,
+            'guard'            => $guard,
+            'login_method'     => $this->loginMethod(),
+        ]);
 
-            $user      = $event->user;
-            $userAgent = $this->request->userAgent();
-            $known     = $user->authentications()->whereIpAddress($ip)->whereUserAgent($userAgent)->whereLoginSuccessful(true)->first();
-            $newUser   = Carbon::parse($user->{$user->getCreatedAtColumn()})->diffInMinutes(Carbon::now()) < 1;
-            $guard     = $event->guard;
-
-            /** @disregard Undefined function */
-            $log = $user->authentications()->create([
-                'ip_address'       => $ip,
-                'user_agent'       => $userAgent,
-                'login_at'         => now(),
-                'login_successful' => true,
-                'location'         => config('authentication-log.notifications.new-device.location') ? optional(geoip()->getLocation($ip))->toArray() : null,
-                'guard'            => $guard,
-                'login_method'     => $this->loginMethod(),
-            ]);
-
-            if (! $known && ! $newUser && config('authentication-log.notifications.new-device.enabled')) {
-                $newDevice = config('authentication-log.notifications.new-device.template') ?? SignedInWithNewDevice::class;
-                $user->notify(new $newDevice($log));
-            }
+        if (! $known && ! $newUser && $user->preferences['notifyOnNewAuthDevice']) {
+            $user->notify(new SignedInWithNewDevice($log));
         }
     }
 }

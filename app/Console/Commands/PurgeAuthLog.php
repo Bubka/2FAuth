@@ -24,17 +24,17 @@
 
 namespace App\Console\Commands;
 
-use App\Models\AuthenticationLog;
+use App\Models\AuthLog;
 use Illuminate\Console\Command;
 
-class PurgeAuthenticationLog extends Command
+class PurgeAuthLog extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    public $signature = 'authentication-log:purge';
+    public $signature = '2fauth:purge-log';
 
     /**
      * The console command description.
@@ -50,7 +50,7 @@ class PurgeAuthenticationLog extends Command
     {
         $this->comment('Clearing authentication log...');
 
-        $deleted = AuthenticationLog::where('login_at', '<', now()->subDays(config('authentication-log.purge'))->format('Y-m-d H:i:s'))->delete();
+        $deleted = AuthLog::where('login_at', '<', now()->subDays(config('2fauth.authLogRetentionTime'))->format('Y-m-d H:i:s'))->delete();
 
         $this->info($deleted . ' authentication logs cleared.');
     }

@@ -524,21 +524,6 @@ class UserManagerControllerTest extends FeatureTestCase
     }
 
     /**
-     * @test
-     */
-    public function test_authLog_events_are_listened_by_authLog_listeners()
-    {
-        Event::fake();
-
-        foreach (config('authentication-log.listeners') as $type => $listenerClass) {
-            Event::assertListening(
-                config('authentication-log.events.' . $type),
-                $listenerClass
-            );
-        }
-    }
-
-    /**
      * Local feeder because Factory cannot be used here
      */
     protected function feedAuthenticationLog() : int

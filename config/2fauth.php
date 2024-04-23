@@ -28,6 +28,18 @@ return [
         'outgoingProxy' => env('PROXY_FOR_OUTGOING_REQUESTS', ''),
         'proxyLogoutUrl' => env('PROXY_LOGOUT_URL', null),
         'appSubdirectory' => env('APP_SUBDIRECTORY', ''),
+        'authLogRetentionTime' => env('AUTHENTICATION_LOG_RETENTION', 365),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Proxy headers
+    |--------------------------------------------------------------------------
+    |
+    */
+    
+    'proxy_headers' => [
+        'forIp' => env('PROXY_HEADER_FOR_IP', null),
     ],
 
     /*
@@ -110,6 +122,8 @@ return [
         'formatPasswordBy' => 0.5,
         'lang' => 'browser',
         'getOtpOnRequest' => true,
+        'notifyOnNewAuthDevice' => true,
+        'notifyOnFailedLogin' => true,
     ],
 
 ];

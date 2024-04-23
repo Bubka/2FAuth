@@ -19,7 +19,7 @@ use Laravel\Passport\Http\Controllers\PersonalAccessTokenController;
 
 // use App\Models\User;
 // use App\Notifications\SignedInWithNewDevice;
-// use App\Models\AuthenticationLog;
+// use App\Models\AuthLog;
 
 /*
 |--------------------------------------------------------------------------
@@ -95,7 +95,7 @@ Route::get('refresh-csrf', function () {
 
 // Route::get('/notification', function () {
 //     $user = User::find(1);
-//     return (new SignedInWithNewDevice(AuthenticationLog::find(9)))
+//     return (new SignedInWithNewDevice(AuthLog::find(9)))
 //         ->toMail($user);
 // });
 

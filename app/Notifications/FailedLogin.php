@@ -2,24 +2,37 @@
 
 namespace App\Notifications;
 
-use App\Models\AuthenticationLog;
+use App\Models\AuthLog;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Jenssegers\Agent\Agent;
 
 class FailedLogin extends Notification implements ShouldQueue
 {
     use Queueable;
 
     /**
-     * The AuthenticationLog model instance
+     * A user agent parser instance.
+     *
+     * @var mixed
      */
-    public AuthenticationLog $authenticationLog;
+    protected $agent;
 
-    public function __construct(AuthenticationLog $authenticationLog)
+    /**
+     * The AuthLog model instance
+     */
+    public AuthLog $authLog;
+
+    /**
+     * Create a new FailedLogin instance
+     */
+    public function __construct(AuthLog $authLog)
     {
-        $this->authenticationLog = $authenticationLog;
+        $this->authLog = $authLog;
+        $this->agent   = new Agent();
+        $this->agent->setUserAgent($authLog->user_agent);
     }
 
     /**
@@ -27,7 +40,7 @@ class FailedLogin extends Notification implements ShouldQueue
      */
     public function via(mixed $notifiable) : array|string
     {
-        return $notifiable->notifyAuthenticationLogVia();
+        return $notifiable->notifyAuthLogVia();
     }
 
     /**
@@ -36,13 +49,13 @@ class FailedLogin extends Notification implements ShouldQueue
     public function toMail(mixed $notifiable) : MailMessage
     {
         return (new MailMessage())
-            ->subject(__('A failed login to your account'))
-            ->markdown('authentication-log::emails.failed', [
+            ->subject(__('notifications.failed_login.subject'))
+            ->markdown('emails.failedLogin', [
                 'account'   => $notifiable,
-                'time'      => $this->authenticationLog->login_at,
-                'ipAddress' => $this->authenticationLog->ip_address,
-                'browser'   => $this->authenticationLog->user_agent,
-                'location'  => $this->authenticationLog->location,
+                'time'      => $this->authLog->login_at,
+                'ipAddress' => $this->authLog->ip_address,
+                'browser'   => $this->authLog->user_agent,
+                'platform'  => $this->agent->platform(),
             ]);
     }
 }

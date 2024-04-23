@@ -30,7 +30,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create(config('authentication-log.table_name'), function (Blueprint $table) {
+        Schema::create('auth_logs', function (Blueprint $table) {
             $table->id();
             $table->morphs('authenticatable');
             $table->string('ip_address', 45)->nullable();
@@ -39,7 +39,6 @@ return new class extends Migration
             $table->boolean('login_successful')->default(false);
             $table->timestamp('logout_at')->nullable();
             $table->boolean('cleared_by_user')->default(false);
-            $table->json('location')->nullable();
             $table->string('guard', 40)->nullable();
             $table->string('login_method', 40)->nullable();
         });
@@ -47,6 +46,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists(config('authentication-log.table_name'));
+        Schema::dropIfExists('auth_logs');
     }
 };

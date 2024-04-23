@@ -11,6 +11,4 @@ parameters:
         analyse:
             - app/Protobuf/*
     ignoreErrors:
-        -
-            message: '#.*geoip.*#'
     checkMissingIterableValueType: false

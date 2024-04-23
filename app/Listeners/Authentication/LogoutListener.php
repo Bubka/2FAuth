@@ -24,56 +24,40 @@
 
 namespace App\Listeners\Authentication;
 
-use App\Models\AuthenticationLog;
-use App\Models\Traits\AuthenticationLoggable;
+use App\Models\AuthLog;
 use Illuminate\Auth\Events\Logout;
-use Illuminate\Http\Request;
 
-class LogoutListener extends AccessAbstractListener
+class LogoutListener extends AbstractAccessListener
 {
-    public Request $request;
-
-    public function __construct(Request $request)
-    {
-        $this->request = $request;
-    }
-
+    /**
+     * Handle the event.
+     *
+     * @return void
+     */
     public function handle(mixed $event) : void
     {
-        $listener = config('authentication-log.events.logout', Logout::class);
-
-        if (! $event instanceof $listener) {
+        if (! $event instanceof Logout) {
             return;
         }
 
-        if ($event->user) {
-            if (! in_array(AuthenticationLoggable::class, class_uses_recursive(get_class($event->user)))) {
-                return;
-            }
+        /**
+         * @var \App\Models\User
+         */
+        $user      = $event->user;
+        $ip        = config('2fauth.proxy_headers.forIp') ?? $this->request->ip();
+        $userAgent = $this->request->userAgent();
+        $log       = $user->authentications()->whereIpAddress($ip)->whereUserAgent($userAgent)->whereGuard($event->guard)->orderByDesc('login_at')->first();
+        $guard     = $event->guard;
 
-            $user = $event->user;
-
-            if (config('authentication-log.behind_cdn')) {
-                $ip = $this->request->server(config('authentication-log.behind_cdn.http_header_field'));
-            } else {
-                $ip = $this->request->ip();
-            }
-
-            $userAgent = $this->request->userAgent();
-            $log       = $user->authentications()->whereIpAddress($ip)->whereUserAgent($userAgent)->whereGuard($event->guard)->orderByDesc('login_at')->first();
-            $guard     = $event->guard;
-
-            if (! $log) {
-                $log = new AuthenticationLog([
-                    'ip_address' => $ip,
-                    'user_agent' => $userAgent,
-                    'guard'      => $guard,
-                ]);
-            }
-
-            $log->logout_at = now();
-
-            $user->authentications()->save($log);
+        if (! $log) {
+            $log = new AuthLog([
+                'ip_address' => $ip,
+                'user_agent' => $userAgent,
+                'guard'      => $guard,
+            ]);
         }
+
+        $log->logout_at = now();
+        $user->authentications()->save($log);
     }
 }

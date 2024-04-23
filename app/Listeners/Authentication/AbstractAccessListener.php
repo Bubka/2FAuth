@@ -4,7 +4,7 @@ namespace App\Listeners\Authentication;
 
 use Illuminate\Http\Request;
 
-abstract class AccessAbstractListener
+abstract class AbstractAccessListener
 {
     /**
      * The current request
@@ -22,6 +22,8 @@ abstract class AccessAbstractListener
     }
 
     /**
+     * Handle the event.
+     *
      * @return void
      */
     abstract public function handle(mixed $event);

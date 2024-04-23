@@ -37,21 +37,15 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property bool $login_successful
  * @property \Illuminate\Support\Carbon|null $logout_at
  * @property bool $cleared_by_user
- * @property array|null $location
  * @property string|null $guard
  * @property string|null $method
  */
-class AuthenticationLog extends Model
+class AuthLog extends Model
 {
     /**
      * Indicates if the model should be timestamped.
      */
     public $timestamps = false;
-
-    /**
-     * The table associated with the model.
-     */
-    protected $table = 'authentication_log';
 
     /**
      * The attributes that are mass assignable.
@@ -63,7 +57,6 @@ class AuthenticationLog extends Model
         'login_successful',
         'logout_at',
         'cleared_by_user',
-        'location',
         'guard',
         'login_method',
     ];
@@ -73,36 +66,15 @@ class AuthenticationLog extends Model
      */
     protected $casts = [
         'cleared_by_user'  => 'boolean',
-        'location'         => 'array',
         'login_successful' => 'boolean',
         'login_at'         => 'datetime',
         'logout_at'        => 'datetime',
     ];
 
     /**
-     * Create a new Eloquent AuthenticationLog instance
-     */
-    public function __construct(array $attributes = [])
-    {
-        if (! isset($this->connection)) {
-            $this->setConnection(config('authentication-log.db_connection'));
-        }
-
-        parent::__construct($attributes);
-    }
-
-    /**
-     * Get the table associated with the model.
-     */
-    public function getTable()
-    {
-        return config('authentication-log.table_name', parent::getTable());
-    }
-
-    /**
      * MorphTo relation to get the associated authenticatable user
      *
-     * @return MorphTo<\Illuminate\Database\Eloquent\Model, AuthenticationLog>
+     * @return MorphTo<\Illuminate\Database\Eloquent\Model, AuthLog>
      */
     public function authenticatable()
     {

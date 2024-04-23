@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Models\Traits\WebAuthnManageCredentials;
-use App\Models\Traits\AuthenticationLoggable;
+use App\Models\Traits\HasAuthenticationLog;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Contracts\Translation\HasLocalePreference;
@@ -43,9 +43,9 @@ use Laravel\Passport\HasApiTokens;
  * @property-read int|null $web_authn_credentials_count
  * @property string|null $oauth_id
  * @property string|null $oauth_provider
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\AuthenticationLog> $authentications
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\AuthLog> $authentications
  * @property-read int|null $authentications_count
- * @property-read \App\Models\AuthenticationLog|null $latestAuthentication
+ * @property-read \App\Models\AuthLog|null $latestAuthentication
  *
  * @method static \Illuminate\Database\Eloquent\Builder|User admins()
  *
@@ -53,7 +53,7 @@ use Laravel\Passport\HasApiTokens;
  */
 class User extends Authenticatable implements HasLocalePreference, WebAuthnAuthenticatable
 {
-    use AuthenticationLoggable;
+    use HasAuthenticationLog;
     use HasApiTokens, HasFactory, Notifiable;
     use WebAuthnAuthentication, WebAuthnManageCredentials;
 

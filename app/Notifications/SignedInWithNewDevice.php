@@ -2,7 +2,7 @@
 
 namespace App\Notifications;
 
-use App\Models\AuthenticationLog;
+use App\Models\AuthLog;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -12,8 +12,11 @@ use Jenssegers\Agent\Agent;
 class SignedInWithNewDevice extends Notification implements ShouldQueue
 {
     use Queueable;
-
-    public AuthenticationLog $authenticationLog;
+    
+    /**
+     * The AuthLog model instance
+     */
+    public AuthLog $authLog;
 
     /**
      * A user agent parser instance.
@@ -25,16 +28,16 @@ class SignedInWithNewDevice extends Notification implements ShouldQueue
     /**
      * Create a new SignedInWithNewDevice instance
      */
-    public function __construct(AuthenticationLog $authenticationLog)
+    public function __construct(AuthLog $authLog)
     {
-        $this->authenticationLog = $authenticationLog;
-        $this->agent             = new Agent();
-        $this->agent->setUserAgent($authenticationLog->user_agent);
+        $this->authLog = $authLog;
+        $this->agent   = new Agent();
+        $this->agent->setUserAgent($authLog->user_agent);
     }
 
     public function via(mixed $notifiable) : array|string
     {
-        return $notifiable->notifyAuthenticationLogVia();
+        return $notifiable->notifyAuthLogVia();
     }
 
     /**
@@ -44,10 +47,10 @@ class SignedInWithNewDevice extends Notification implements ShouldQueue
     {
         return (new MailMessage())
             ->subject(__('notifications.new_device.subject'))
-            ->markdown('emails.newDevice', [
+            ->markdown('emails.SignedInWithNewDevice', [
                 'account'   => $notifiable,
-                'time'      => $this->authenticationLog->login_at,
-                'ipAddress' => $this->authenticationLog->ip_address,
+                'time'      => $this->authLog->login_at,
+                'ipAddress' => $this->authLog->ip_address,
                 'browser'   => $this->agent->browser(),
                 'platform'  => $this->agent->platform(),
             ]);
