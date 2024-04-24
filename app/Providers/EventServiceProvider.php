@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Listeners\Authentication\VisitedByProxyUserListener;
 use App\Events\GroupDeleted;
 use App\Events\GroupDeleting;
 use App\Events\VisitedByProxyUser;
@@ -65,9 +66,9 @@ class EventServiceProvider extends ServiceProvider
         Logout::class => [
             LogoutListener::class,
         ],
-        // VisitedByProxyUser::class => [
-        //     ProxyUserAccessListener::class,
-        // ],
+        VisitedByProxyUser::class => [
+            VisitedByProxyUserListener::class,
+        ],
     ];
 
     /**

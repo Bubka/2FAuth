@@ -7,6 +7,7 @@
     import { UseColorMode } from '@vueuse/components'
 
     const notify = useNotifyStore()
+    const $2fauth = inject('2fauth')
 
     const props = defineProps({
         userId: [Number, String],
@@ -171,6 +172,7 @@
                     <div>
                         <span v-if="isFailedEntry(authentication)" v-html="$t('admin.failed_login_on', { login_at: authentication.login_at })" />
                         <span v-else-if="isSuccessfulLogout(authentication)" v-html="$t('admin.successful_logout_on', { login_at: authentication.logout_at })" />
+                        <span v-else-if="$2fauth.config.proxyAuth" v-html="$t('admin.viewed_on', { login_at: authentication.login_at })" />
                         <span v-else v-html="$t('admin.successful_login_on', { login_at: authentication.login_at })" />
                     </div>
                     <div>

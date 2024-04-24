@@ -16,6 +16,8 @@ use Illuminate\Validation\ValidationException;
 
 class RemoteUserProvider implements UserProvider
 {
+    const FAKE_REMOTE_DOMAIN = '@remote';
+    
     /**
      * The currently authenticated user.
      *
@@ -85,7 +87,7 @@ class RemoteUserProvider implements UserProvider
      */
     protected function fakeRemoteEmail(mixed $id)
     {
-        return substr($id, 0, 184) . '@remote';
+        return substr($id, 0, 184) . self::FAKE_REMOTE_DOMAIN;
     }
 
     /**

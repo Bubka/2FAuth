@@ -11,6 +11,7 @@
     const router = useRouter()
     const user = useUserStore()
     const bus = useBusStore()
+    const $2fauth = inject('2fauth')
 
     const isFetching = ref(false)
     const managedUser = ref(null)
@@ -212,12 +213,14 @@
             <div class="block is-size-6 is-size-7-mobile has-text-grey">
                 {{ $t('admin.registered_on_date', { date: managedUser.info.created_at }) }} - {{ $t('admin.last_seen_on_date', { date: managedUser.info.last_seen_at }) }}
             </div>
+            <!-- isAdmin option -->
             <div class="block">
-                <!-- otp as dot -->
                 <FormCheckbox v-model="managedUser.info.is_admin" @update:model-value="val => saveAdminRole(val === true)" fieldName="is_admin" label="admin.forms.is_admin.label" help="admin.forms.is_admin.help" />
             </div>
-            <h2 class="title is-4 has-text-grey-light">{{ $t('admin.access') }}</h2>
-            <div class="block">
+            <h2 v-if="!$2fauth.config.proxyAuth" class="title is-4 has-text-grey-light">{{ $t('admin.access') }}</h2>
+            <!-- access -->
+            <div v-if="!$2fauth.config.proxyAuth" class="block">
+                <!-- reset password -->
                 <div class="list-item is-size-6 is-size-6-mobile has-text-grey">
                     <div class="mb-3 is-flex is-justify-content-space-between">
                         <div>
@@ -245,6 +248,7 @@
                         <span v-html="$t('admin.reset_password_help')" class="is-block block"></span>
                     </div>
                 </div>
+                <!-- personal access tokens -->
                 <div class="list-item is-size-6 is-size-6-mobile has-text-grey is-flex is-justify-content-space-between">
                     <div>
                         <span class="has-text-weight-bold">{{ $t('settings.personal_access_tokens') }}</span>
@@ -263,6 +267,7 @@
                         </div>
                     </div>
                 </div>
+                <!-- webauthn devices -->
                 <div class="list-item is-size-6 is-size-6-mobile has-text-grey is-flex is-justify-content-space-between">
                     <div>
                         <span class="has-text-weight-bold">{{ $t('auth.webauthn.security_devices') }}</span>
@@ -282,6 +287,7 @@
                     </div>
                 </div>
             </div>
+            <!-- last access -->
             <div class="block">
                 <h3 class="title is-5 has-text-grey-light mb-2">{{ $t('admin.last_accesses') }}</h3>
                 <AccessLogViewer :userId="props.userId" :lastOnly="true" @has-more-entries="showFullLogLink = true"/>

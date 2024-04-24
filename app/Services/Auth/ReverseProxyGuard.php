@@ -5,6 +5,7 @@
 
 namespace App\Services\Auth;
 
+use App\Events\VisitedByProxyUser;
 use Illuminate\Auth\GuardHelpers;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\UserProvider;
@@ -17,14 +18,12 @@ class ReverseProxyGuard implements Guard
     /**
      * The currently authenticated user.
      *
-     * @var \Illuminate\Contracts\Auth\Authenticatable|null
+     * @var \Illuminate\Contracts\Auth\Authenticatable|\App\Models\User|null
      */
     protected $user;
 
     /**
      * Create a new authentication guard.
-     *
-     * @return void
      */
     public function __construct(UserProvider $provider)
     {
@@ -76,7 +75,13 @@ class ReverseProxyGuard implements Guard
             }
         }
 
-        return $this->user = $this->provider->retrieveById($identifier);
+        if ($this->user = $this->provider->retrieveById($identifier)) {
+            if ($this->user->lastLoginAt() < now()->subMinutes(15)) {
+                event(new VisitedByProxyUser($this->user));
+            }
+        }
+
+        return $this->user;
     }
 
     /**

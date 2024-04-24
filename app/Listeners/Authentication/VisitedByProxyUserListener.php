@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Authentication\Listeners;
+namespace App\Listeners\Authentication;
 
 use App\Events\VisitedByProxyUser;
+use App\Extensions\RemoteUserProvider;
 use App\Listeners\Authentication\AbstractAccessListener;
 use App\Notifications\SignedInWithNewDevice;
 use Illuminate\Support\Carbon;
@@ -28,15 +29,17 @@ class VisitedByProxyUserListener extends AbstractAccessListener
         $userAgent = $this->request->userAgent();
         $known     = $user->authentications()->whereIpAddress($ip)->whereUserAgent($userAgent)->whereLoginSuccessful(true)->first();
         $newUser   = Carbon::parse($user->{$user->getCreatedAtColumn()})->diffInMinutes(Carbon::now()) < 1;
+        $guard     = config('auth.defaults.guard');
 
         $log = $user->authentications()->create([
-            'ip_address' => $ip,
-            'user_agent' => $userAgent,
-            'login_at' => now(),
+            'ip_address'       => $ip,
+            'user_agent'       => $userAgent,
+            'login_at'         => now(),
             'login_successful' => true,
+            'guard'            => $guard,
         ]);
 
-        if (! $known && ! $newUser && $user->preferences['notifyOnNewAuthDevice']) {
+        if (! $known && ! $newUser && ! str_ends_with($user->email, RemoteUserProvider::FAKE_REMOTE_DOMAIN) && $user->preferences['notifyOnNewAuthDevice']) {
             $user->notify(new SignedInWithNewDevice($log));
         }
     }

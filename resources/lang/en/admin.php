@@ -71,6 +71,7 @@ return [
     'successful_login_on' => 'Successful login on <span class="light-or-darker">:login_at</span>',
     'successful_logout_on' => 'Successful logout on <span class="light-or-darker">:login_at</span>',
     'failed_login_on' => 'Failed login on <span class="light-or-darker">:login_at</span>',
+    'viewed_on' => 'Viewed on <span class="light-or-darker">:login_at</span>',
     'last_accesses' => 'Last accesses',
     'see_full_log' => 'See full log',
     'browser_on_platform' => ':browser on :platform',
