@@ -57,7 +57,7 @@ class FailedLoginListener extends AbstractAccessListener
                 'login_method'     => $this->loginMethod(),
             ]);
 
-            if ($user->preferences['notifyOnFailedLogin']) {
+            if ($user->preferences['notifyOnFailedLogin'] == true) {
                 $user->notify(new FailedLogin($log));
             }
         }

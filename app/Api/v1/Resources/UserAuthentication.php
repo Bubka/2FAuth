@@ -18,6 +18,7 @@ use Jenssegers\Agent\Agent;
  * @property Carbon|null $logout_at
  * @property bool $login_successful
  * @property string|null $duration
+ * @property string|null $login_method
  */
 class UserAuthentication extends JsonResource
 {
@@ -67,6 +68,7 @@ class UserAuthentication extends JsonResource
             'duration'         => $this->logout_at
                                       ? Carbon::parse($this->logout_at)->diffForHumans(Carbon::parse($this->login_at), ['syntax' => CarbonInterface::DIFF_ABSOLUTE])
                                       : null,
+            'login_method'     => $this->login_method,
         ];
     }
 }

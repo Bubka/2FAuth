@@ -7,9 +7,14 @@ use App\Http\Middleware\RejectIfAuthenticated;
 use App\Http\Middleware\RejectIfDemoMode;
 use App\Http\Middleware\RejectIfReverseProxy;
 use App\Http\Middleware\SkipIfAuthenticated;
+use App\Listeners\Authentication\FailedLoginListener;
+use App\Listeners\Authentication\LoginListener;
 use App\Models\User;
+use App\Notifications\FailedLogin;
+use App\Notifications\SignedInWithNewDevice;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Notification;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\FeatureTestCase;
 
@@ -21,6 +26,8 @@ use Tests\FeatureTestCase;
 #[CoversClass(RejectIfReverseProxy::class)]
 #[CoversClass(RejectIfDemoMode::class)]
 #[CoversClass(SkipIfAuthenticated::class)]
+#[CoversClass(LoginListener::class)]
+#[CoversClass(FailedLoginListener::class)]
 class LoginTest extends FeatureTestCase
 {
     /**
@@ -68,6 +75,63 @@ class LoginTest extends FeatureTestCase
             ->assertJsonStructure([
                 'preferences',
             ]);
+    }
+
+    /**
+     * @test
+     */
+    public function test_login_send_new_device_notification()
+    {
+        Notification::fake();
+
+        $this->json('POST', '/user/login', [
+            'email'    => $this->user->email,
+            'password' => self::PASSWORD,
+        ])->assertOk();
+
+        $this->actingAs($this->user, 'web-guard')
+        ->json('GET', '/user/logout');
+
+        $this->travel(1)->minute();
+
+        $this->json('POST', '/user/login', [
+            'email'    => $this->user->email,
+            'password' => self::PASSWORD,
+        ], [
+            'HTTP_USER_AGENT' => 'NotSymfony'
+        ])->assertOk();
+
+        Notification::assertSentTo($this->user, SignedInWithNewDevice::class);
+    }
+
+    /**
+     * @test
+     */
+    public function test_login_does_not_send_new_device_notification()
+    {
+        Notification::fake();
+
+        $this->user['preferences->notifyOnNewAuthDevice'] = 0;
+        $this->user->save();
+
+        $this->json('POST', '/user/login', [
+            'email'    => $this->user->email,
+            'password' => self::PASSWORD,
+        ])->assertOk();
+
+        $this->actingAs($this->user, 'web-guard')
+        ->json('GET', '/user/logout');
+
+        $this->travel(1)->minute();
+
+        $this->json('POST', '/user/login', [
+            'email'    => $this->user->email,
+            'password' => self::PASSWORD,
+        ], [
+            'HTTP_USER_AGENT' => 'NotSymfony'
+        ])->assertOk();
+
+        Notification::assertNothingSentTo($this->user);
     }
 
     /**
@@ -162,6 +226,39 @@ class LoginTest extends FeatureTestCase
             ->assertJson([
                 'message' => 'unauthorized',
             ]);
+    }
+
+    /**
+     * @test
+     */
+    public function test_login_with_invalid_credentials_send_failed_login_notification()
+    {
+        Notification::fake();
+
+        $this->json('POST', '/user/login', [
+            'email'    => $this->user->email,
+            'password' => self::WRONG_PASSWORD,
+        ])->assertStatus(401);
+
+        Notification::assertSentTo($this->user, FailedLogin::class);
+    }
+
+    /**
+     * @test
+     */
+    public function test_login_with_invalid_credentials_does_not_send_new_device_notification()
+    {
+        Notification::fake();
+
+        $this->user['preferences->notifyOnFailedLogin'] = 0;
+        $this->user->save();
+
+        $this->json('POST', '/user/login', [
+            'email'    => $this->user->email,
+            'password' => self::WRONG_PASSWORD,
+        ])->assertStatus(401);
+
+        Notification::assertNothingSentTo($this->user);
     }
 
     /**

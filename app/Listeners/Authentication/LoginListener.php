@@ -45,7 +45,7 @@ class LoginListener extends AbstractAccessListener
          * @var \App\Models\User
          */
         $user      = $event->user;
-        $ip = config('2fauth.proxy_headers.forIp') ?? $this->request->ip();
+        $ip        = config('2fauth.proxy_headers.forIp') ?? $this->request->ip();
         $userAgent = $this->request->userAgent();
         $known     = $user->authentications()->whereIpAddress($ip)->whereUserAgent($userAgent)->whereLoginSuccessful(true)->first();
         $newUser   = Carbon::parse($user->{$user->getCreatedAtColumn()})->diffInMinutes(Carbon::now()) < 1;
@@ -60,7 +60,7 @@ class LoginListener extends AbstractAccessListener
             'login_method'     => $this->loginMethod(),
         ]);
 
-        if (! $known && ! $newUser && $user->preferences['notifyOnNewAuthDevice']) {
+        if (! $known && ! $newUser && $user->preferences['notifyOnNewAuthDevice'] == true) {
             $user->notify(new SignedInWithNewDevice($log));
         }
     }
