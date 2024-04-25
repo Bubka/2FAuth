@@ -89,47 +89,22 @@ class UserControllerTest extends FeatureTestCase
      */
     public function test_allPreferences_returns_preferences_with_user_values()
     {
-        $userPrefs = [
-            'showOtpAsDot'         => true,
-            'closeOtpOnCopy'       => true,
-            'copyOtpOnDisplay'     => true,
-            'useBasicQrcodeReader' => true,
-            'displayMode'          => 'grid',
-            'showAccountsIcons'    => false,
-            'kickUserAfter'        => 5,
-            'activeGroup'          => 1,
-            'rememberActiveGroup'  => false,
-            'defaultGroup'         => 1,
-            'defaultCaptureMode'   => 'advancedForm',
-            'useDirectCapture'     => true,
-            'useWebauthnOnly'      => true,
-            'getOfficialIcons'     => false,
-            'theme'                => 'dark',
-            'formatPassword'       => false,
-            'formatPasswordBy'     => 1,
-            'lang'                 => 'fr',
-        ];
+        $userPrefs = [];
 
-        $this->user['preferences->showOtpAsDot']         = $userPrefs['showOtpAsDot'];
-        $this->user['preferences->closeOtpOnCopy']       = $userPrefs['closeOtpOnCopy'];
-        $this->user['preferences->copyOtpOnDisplay']     = $userPrefs['copyOtpOnDisplay'];
-        $this->user['preferences->useBasicQrcodeReader'] = $userPrefs['useBasicQrcodeReader'];
-        $this->user['preferences->displayMode']          = $userPrefs['displayMode'];
-        $this->user['preferences->showAccountsIcons']    = $userPrefs['showAccountsIcons'];
-        $this->user['preferences->kickUserAfter']        = $userPrefs['kickUserAfter'];
-        $this->user['preferences->activeGroup']          = $userPrefs['activeGroup'];
-        $this->user['preferences->rememberActiveGroup']  = $userPrefs['rememberActiveGroup'];
-        $this->user['preferences->defaultGroup']         = $userPrefs['defaultGroup'];
-        $this->user['preferences->defaultCaptureMode']   = $userPrefs['defaultCaptureMode'];
-        $this->user['preferences->useDirectCapture']     = $userPrefs['useDirectCapture'];
-        $this->user['preferences->useWebauthnOnly']      = $userPrefs['useWebauthnOnly'];
-        $this->user['preferences->getOfficialIcons']     = $userPrefs['getOfficialIcons'];
-        $this->user['preferences->theme']                = $userPrefs['theme'];
-        $this->user['preferences->formatPassword']       = $userPrefs['formatPassword'];
-        $this->user['preferences->formatPasswordBy']     = $userPrefs['formatPasswordBy'];
-        $this->user['preferences->lang']                 = $userPrefs['lang'];
+        foreach (config('2fauth.preferences') as $pref => $value) {
+            if (is_numeric($value)) {
+                $userPrefs[$pref] = $value + 1;
+            } else if (is_string($value)) {
+                $userPrefs[$pref] = $value . '_';
+            } else if (is_bool($value)) {
+                $userPrefs[$pref] = ! $value;
+            }
+
+            $this->user['preferences->' . $pref] = $userPrefs[$pref];
+        }
+        
         $this->user->save();
-
+        
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('GET', '/api/v1/user/preferences')
             ->assertJsonCount(count(config('2fauth.preferences')), $key = null);
