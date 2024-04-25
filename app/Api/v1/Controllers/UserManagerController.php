@@ -23,7 +23,7 @@ class UserManagerController extends Controller
      */
     public function index(Request $request)
     {
-        return UserManagerResource::collection(User::all());
+        return UserManagerResource::collection(User::withCount('twofaccounts')->get());
     }
 
     /**
