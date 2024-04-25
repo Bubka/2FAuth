@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Models;
 
+use App\Models\AuthLog;
 use App\Models\Group;
 use App\Models\TwoFAccount;
 use App\Models\User;
@@ -113,6 +114,7 @@ class UserModelTest extends FeatureTestCase
     {
         $user = User::factory()->create();
         TwoFAccount::factory()->for($user)->create();
+        AuthLog::factory()->for($user, 'authenticatable')->create();
         Group::factory()->for($user)->create();
 
         DB::table('webauthn_credentials')->insert([
@@ -153,6 +155,9 @@ class UserModelTest extends FeatureTestCase
         ]);
         $this->assertDatabaseMissing(config('auth.passwords.users.table'), [
             'email' => $user->email,
+        ]);
+        $this->assertDatabaseMissing('auth_logs', [
+            'authenticatable_id' => $user->id,
         ]);
     }
 

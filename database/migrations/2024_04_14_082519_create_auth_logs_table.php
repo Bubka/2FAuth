@@ -41,11 +41,20 @@ return new class extends Migration
             $table->boolean('cleared_by_user')->default(false);
             $table->string('guard', 40)->nullable();
             $table->string('login_method', 40)->nullable();
+
+            $table->foreign('authenticatable_id')->references('id')->on('users')->cascadeOnDelete();
         });
     }
 
     public function down(): void
     {
+        Schema::whenTableHasColumn('auth_logs', 'authenticatable_id', function (Blueprint $table) {
+            // cannot drop foreign keys in SQLite:
+            if (DB::getDriverName() !== 'sqlite') {
+                $table->dropForeign(['authenticatable_id']);
+            }
+        });
+
         Schema::dropIfExists('auth_logs');
     }
 };
