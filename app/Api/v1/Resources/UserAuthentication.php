@@ -51,6 +51,8 @@ class UserAuthentication extends JsonResource
      */
     public function toArray($request)
     {
+        $tz = $request->user()->preferences['timezone'];
+
         return [
             'id'         => $this->id,
             'ip_address' => $this->ip_address,
@@ -59,10 +61,10 @@ class UserAuthentication extends JsonResource
             'platform'   => $this->agent->platform(),
             'device'     => $this->agent->deviceType(),
             'login_at'   => $this->login_at
-                                      ? Carbon::parse($this->login_at)->toDayDateTimeString()
+                                      ? Carbon::parse($this->login_at,)->tz($tz)->toDayDateTimeString()
                                       : null,
             'logout_at' => $this->logout_at
-                                      ? Carbon::parse($this->logout_at)->toDayDateTimeString()
+                                      ? Carbon::parse($this->logout_at)->tz($tz)->toDayDateTimeString()
                                       : null,
             'login_successful' => $this->login_successful,
             'duration'         => $this->logout_at

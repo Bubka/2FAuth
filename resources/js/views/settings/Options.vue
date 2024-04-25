@@ -4,6 +4,7 @@
     import { useUserStore } from '@/stores/user'
     import { useGroups } from '@/stores/groups'
     import { useNotifyStore } from '@/stores/notify'
+    import { timezones } from './timezones'
 
     const $2fauth = inject('2fauth')
     const user = useUserStore()
@@ -123,6 +124,8 @@
                                 <FontAwesomeIcon :icon="['fas', 'external-link-alt']" />
                             </a>
                         </div>
+                        <!-- timezone -->
+                        <FormSelect v-model="user.preferences.timezone" @update:model-value="val => savePreference('timezone', val)" :options="timezones" fieldName="timezone" label="settings.forms.timezone.label" help="settings.forms.timezone.help" />
                         <!-- display mode -->
                         <FormToggle v-model="user.preferences.displayMode" @update:model-value="val => savePreference('displayMode', val)" :choices="layouts" fieldName="displayMode" label="settings.forms.display_mode.label" help="settings.forms.display_mode.help"/>
                         <!-- theme -->

@@ -43,6 +43,20 @@ class AuthLogFactory extends Factory
     }
 
     /**
+     * Indicate that the model has a logout date too.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\AuthLog>
+     */
+    public function withLogout()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'logout_at' => now(),
+            ];
+        });
+    }
+
+    /**
      * Indicate that the model has a logout date only, without login date.
      *
      * @return \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\AuthLog>

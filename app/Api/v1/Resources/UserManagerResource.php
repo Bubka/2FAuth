@@ -85,12 +85,14 @@ class UserManagerResource extends UserResource
      */
     public function toArray($request)
     {
+        $tz = $request->user()?->preferences['timezone'];
+
         return array_merge(
             parent::toArray($request),
             [
                 'twofaccounts_count' => is_null($this->twofaccounts_count) ? 0 : $this->twofaccounts_count,
-                'last_seen_at'       => Carbon::parse($this->last_seen_at)->locale(App::getLocale())->diffForHumans(),
-                'created_at'         => Carbon::parse($this->created_at)->locale(App::getLocale())->diffForHumans(),
+                'last_seen_at'       => Carbon::parse($this->last_seen_at)->tz($tz)->locale(App::getLocale())->diffForHumans(),
+                'created_at'         => Carbon::parse($this->created_at)->tz($tz)->locale(App::getLocale())->diffForHumans(),
             ]
         );
     }

@@ -124,6 +124,7 @@ return [
         'getOtpOnRequest' => true,
         'notifyOnNewAuthDevice' => true,
         'notifyOnFailedLogin' => true,
+        'timezone' => env('APP_TIMEZONE', 'UTC'),
     ],
 
 ];

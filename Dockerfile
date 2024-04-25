@@ -114,6 +114,10 @@ ENV \
     # You can leave this on "local". If you change it to production most console commands will ask for extra confirmation.
     # Never set it to "testing".
     APP_ENV=local \
+    # The timezone for your application, which is used to record dates and times to database. This global setting can be
+    # overridden by users via in-app settings for a personalised dates and times display.
+    # If this setting is changed while the application is already running, existing records in the database won't be updated.
+    APP_TIMEZONE=UTC \
     # Set to true if you want to see debug information in error screens.
     APP_DEBUG=false \
     # This should be your email address

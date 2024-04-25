@@ -52,6 +52,10 @@ return [
             'label' => 'Language',
             'help' => 'Language used to translate the 2FAuth user interface. Named languages are complete, set the one of your choice to override your browser preference.'
         ],
+        'timezone' => [
+            'label' => 'Time zone',
+            'help' => 'The time zone applied to all dates and times displayed in the application'
+        ],
         'show_otp_as_dot' => [
             'label' => 'Show generated <abbr title="One-Time Password">OTP</abbr> as dot',
             'help' => 'Replace generated password caracters with *** to ensure confidentiality. Do not affect the copy/paste feature'

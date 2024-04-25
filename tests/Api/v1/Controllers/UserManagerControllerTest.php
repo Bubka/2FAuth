@@ -5,6 +5,7 @@ namespace Tests\Api\v1\Controllers;
 use App\Api\v1\Controllers\UserManagerController;
 use App\Api\v1\Resources\UserManagerResource;
 use App\Models\AuthLog;
+use App\Models\TwoFAccount;
 use App\Models\User;
 use App\Policies\UserPolicy;
 use Database\Factories\UserFactory;
@@ -13,7 +14,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Password;
@@ -40,6 +40,11 @@ class UserManagerControllerTest extends FeatureTestCase
 
     protected $anotherUser;
 
+    /**
+     * @var array
+     */
+    protected $defaultPreferences;
+
     private const USERNAME = 'john doe';
 
     private const EMAIL = 'johndoe@example.org';
@@ -56,6 +61,11 @@ class UserManagerControllerTest extends FeatureTestCase
         $this->admin       = User::factory()->administrator()->create();
         $this->user        = User::factory()->create();
         $this->anotherUser = User::factory()->create();
+        TwoFAccount::factory()->for($this->anotherUser)->create();
+
+        foreach (config('2fauth.preferences') as $pref => $value) {
+            $this->defaultPreferences[$pref] = config('2fauth.preferences.' . $pref);
+        }
     }
 
     /**
@@ -79,61 +89,69 @@ class UserManagerControllerTest extends FeatureTestCase
     /**
      * @test
      */
-    public function test_index_returns_all_users()
+    public function test_index_returns_all_users_with_expected_UserManagerResources() : void
     {
-        $this->actingAs($this->admin, 'api-guard')
+        $response = $this->actingAs($this->admin, 'api-guard')
             ->json('GET', '/api/v1/users')
-            ->assertOk()
             ->assertJsonCount(3)
-            ->assertJsonFragment([
-                'email' => $this->admin->email,
+            ->assertJsonStructure([
+                '*' => [
+                    "last_seen_at",
+                    "created_at",
+                ]
             ])
             ->assertJsonFragment([
-                'email' => $this->user->email,
+                "id" => $this->user->id,
+                "name" => $this->user->name,
+                "email" => $this->user->email,
+                "oauth_provider" => null,
+                "preferences" => $this->defaultPreferences,
+                "is_admin" => false,
+                "twofaccounts_count" => 0,
             ])
             ->assertJsonFragment([
-                'email' => $this->anotherUser->email,
+                "id" => $this->admin->id,
+                "name" => $this->admin->name,
+                "email" => $this->admin->email,
+                "oauth_provider" => null,
+                "preferences" => $this->defaultPreferences,
+                "is_admin" => true,
+                "twofaccounts_count" => 0,
+            ])
+            ->assertJsonFragment([
+                "id" => $this->anotherUser->id,
+                "name" => $this->anotherUser->name,
+                "email" => $this->anotherUser->email,
+                "oauth_provider" => null,
+                "preferences" => $this->defaultPreferences,
+                "is_admin" => false,
+                "twofaccounts_count" => 1,
             ]);
     }
 
     /**
      * @test
      */
-    public function test_index_succeeds_and_returns_UserManagerResource() : void
-    {
-        $path      = '/api/v1/users';
-        $resources = UserManagerResource::collection(User::all());
-        $request   = Request::create($path, 'GET');
-
-        $this->actingAs($this->admin, 'api-guard')
-            ->json('GET', $path)
-            ->assertExactJson($resources->response($request)->getData(true));
-    }
-
-    /**
-     * @test
-     */
-    public function test_show_returns_the_correct_user()
+    public function test_show_returns_the_expected_UserManagerResource() : void
     {
         $this->actingAs($this->admin, 'api-guard')
             ->json('GET', '/api/v1/users/' . $this->user->id)
-            ->assertJsonFragment([
-                'email' => $this->user->email,
+            ->assertJson([
+                "info" => [
+                    "id" => $this->user->id,
+                    "name" => $this->user->name,
+                    "email" => $this->user->email,
+                    "oauth_provider" => null,
+                    "preferences" => $this->defaultPreferences,
+                    "is_admin" => false,
+                    "twofaccounts_count" => 0,
+                    "last_seen_at" => "1 second ago",
+                    "created_at" => "1 second ago"
+                ],
+                "password_reset" => null,
+                "valid_personal_access_tokens" => 0,
+                "webauthn_credentials" => 0
             ]);
-    }
-
-    /**
-     * @test
-     */
-    public function test_show_returns_UserManagerResource() : void
-    {
-        $path      = '/api/v1/users/' . $this->user->id;
-        $resources = UserManagerResource::make($this->user);
-        $request   = Request::create($path, 'GET');
-
-        $this->actingAs($this->admin, 'api-guard')
-            ->json('GET', $path)
-            ->assertExactJson($resources->response($request)->getData(true));
     }
 
     /**
@@ -582,6 +600,35 @@ class UserManagerControllerTest extends FeatureTestCase
                     'login_method',
                 ],
             ]);
+    }
+
+    /**
+     * @test
+     */
+    public function test_authentications_returns_resource_with_timezoned_dates() : void
+    {
+        $timezone = 'Europe/Paris';
+        $this->admin['preferences->timezone'] = $timezone;
+        $this->admin->save();
+
+        $now = now();
+        $timezonedNow = now($timezone);
+
+        AuthLog::factory()->for($this->user, 'authenticatable')->create([
+            'login_at'  => $now,
+            'logout_at' => $now,
+        ]);
+
+        $response = $this->actingAs($this->admin, 'api-guard')
+            ->json('GET', '/api/v1/users/' . $this->user->id . '/authentications');
+
+        $login_at  = Carbon::parse($response->getData()[0]->login_at);
+        $logout_at = Carbon::parse($response->getData()[0]->logout_at);
+
+        $this->assertTrue($login_at->isSameHour($timezonedNow));
+        $this->assertTrue($login_at->isSameMinute($timezonedNow));
+        $this->assertTrue($logout_at->isSameHour($timezonedNow));
+        $this->assertTrue($logout_at->isSameMinute($timezonedNow));
     }
 
     /**
