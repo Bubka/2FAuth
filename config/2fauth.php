@@ -123,7 +123,7 @@ return [
         'lang' => 'browser',
         'getOtpOnRequest' => true,
         'notifyOnNewAuthDevice' => true,
-        'notifyOnFailedLogin' => true,
+        'notifyOnFailedLogin' => false,
         'timezone' => env('APP_TIMEZONE', 'UTC'),
     ],
 
