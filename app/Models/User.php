@@ -90,12 +90,19 @@ class User extends Authenticatable implements HasLocalePreference, WebAuthnAuthe
     ];
 
     /**
-     * These are extra user-defined events observers may subscribe to.
+     * Perform any actions required after the model boots.
+     *
+     * @return void
      */
-    protected $observables = [
-        'demoting',
-    ];
-
+    protected static function booted()
+    {
+        static::creating(function (User $user) {
+            $user->addObservableEvents([
+                'demoting'
+            ]);
+        });
+    }
+    
     /**
      * Get the user's preferred locale.
      */
