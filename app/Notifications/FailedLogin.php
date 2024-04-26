@@ -54,7 +54,7 @@ class FailedLogin extends Notification implements ShouldQueue
                 'account'   => $notifiable,
                 'time'      => $this->authLog->login_at,
                 'ipAddress' => $this->authLog->ip_address,
-                'browser'   => $this->authLog->user_agent,
+                'browser'   => $this->agent->browser(),
                 'platform'  => $this->agent->platform(),
             ]);
     }

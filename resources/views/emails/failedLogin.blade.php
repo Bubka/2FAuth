@@ -1,4 +1,3 @@
-
 @component('mail::message')
 @lang('notifications.hello_user', ['username' => $account->name])
 <br/><br/>
