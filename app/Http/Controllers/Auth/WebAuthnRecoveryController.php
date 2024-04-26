@@ -44,7 +44,7 @@ class WebAuthnRecoveryController extends Controller
                     true,
                 );
 
-                Auth::guard()->setProvider($provider);
+                Auth::setProvider($provider);
 
                 if (Auth::attempt($request->only('email', 'password'))) {
                     if ($this->shouldRevokeAllCredentials($request)) {
