@@ -84,6 +84,9 @@ class LoginTest extends FeatureTestCase
     {
         Notification::fake();
 
+        $this->user['preferences->notifyOnNewAuthDevice'] = 1;
+        $this->user->save();
+
         $this->json('POST', '/user/login', [
             'email'    => $this->user->email,
             'password' => self::PASSWORD,
@@ -234,6 +237,9 @@ class LoginTest extends FeatureTestCase
     public function test_login_with_invalid_credentials_send_failed_login_notification()
     {
         Notification::fake();
+
+        $this->user['preferences->notifyOnFailedLogin'] = 1;
+        $this->user->save();
 
         $this->json('POST', '/user/login', [
             'email'    => $this->user->email,
