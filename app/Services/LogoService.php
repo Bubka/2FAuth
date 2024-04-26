@@ -107,7 +107,7 @@ class LogoService
                 ? Log::info('Fresh tfa.json saved to logos dir')
                 : Log::notice('Cannot save tfa.json to logos dir');
         } catch (\Exception $e) {
-            Log::error('Caching of tfa.json failed');
+            Log::error('Caching of tfa.json failed:' . $e->getMessage());
         }
     }
 
