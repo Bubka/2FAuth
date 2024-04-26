@@ -17,7 +17,7 @@ use Illuminate\Validation\ValidationException;
 class RemoteUserProvider implements UserProvider
 {
     const FAKE_REMOTE_DOMAIN = '@remote';
-    
+
     /**
      * The currently authenticated user.
      *

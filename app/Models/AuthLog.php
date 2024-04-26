@@ -44,7 +44,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 class AuthLog extends Model
 {
     use HasFactory;
-    
+
     /**
      * Indicates if the model should be timestamped.
      */

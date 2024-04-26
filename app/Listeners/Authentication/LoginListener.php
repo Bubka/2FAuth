@@ -32,8 +32,6 @@ class LoginListener extends AbstractAccessListener
 {
     /**
      * Handle the event.
-     *
-     * @return void
      */
     public function handle(mixed $event) : void
     {

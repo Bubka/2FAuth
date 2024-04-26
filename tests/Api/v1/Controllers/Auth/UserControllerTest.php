@@ -94,17 +94,17 @@ class UserControllerTest extends FeatureTestCase
         foreach (config('2fauth.preferences') as $pref => $value) {
             if (is_numeric($value)) {
                 $userPrefs[$pref] = $value + 1;
-            } else if (is_string($value)) {
+            } elseif (is_string($value)) {
                 $userPrefs[$pref] = $value . '_';
-            } else if (is_bool($value)) {
+            } elseif (is_bool($value)) {
                 $userPrefs[$pref] = ! $value;
             }
 
             $this->user['preferences->' . $pref] = $userPrefs[$pref];
         }
-        
+
         $this->user->save();
-        
+
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('GET', '/api/v1/user/preferences')
             ->assertJsonCount(count(config('2fauth.preferences')), $key = null);

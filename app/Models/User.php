@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Models\Traits\WebAuthnManageCredentials;
 use App\Models\Traits\HasAuthenticationLog;
+use App\Models\Traits\WebAuthnManageCredentials;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Contracts\Translation\HasLocalePreference;
@@ -53,8 +53,8 @@ use Laravel\Passport\HasApiTokens;
  */
 class User extends Authenticatable implements HasLocalePreference, WebAuthnAuthenticatable
 {
-    use HasAuthenticationLog;
     use HasApiTokens, HasFactory, Notifiable;
+    use HasAuthenticationLog;
     use WebAuthnAuthentication, WebAuthnManageCredentials;
 
     /**

@@ -3,11 +3,8 @@
 namespace Tests\Unit\Listeners\Authentication;
 
 use App\Listeners\Authentication\LoginListener;
-use App\Models\User;
 use Illuminate\Auth\Events\Login;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Event;
-use Mockery;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\TestCase;
 

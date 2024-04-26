@@ -96,36 +96,36 @@ class UserManagerControllerTest extends FeatureTestCase
             ->assertJsonCount(3)
             ->assertJsonStructure([
                 '*' => [
-                    "last_seen_at",
-                    "created_at",
-                ]
+                    'last_seen_at',
+                    'created_at',
+                ],
             ])
             ->assertJsonFragment([
-                "id" => $this->user->id,
-                "name" => $this->user->name,
-                "email" => $this->user->email,
-                "oauth_provider" => null,
-                "preferences" => $this->defaultPreferences,
-                "is_admin" => false,
-                "twofaccounts_count" => 0,
+                'id'                 => $this->user->id,
+                'name'               => $this->user->name,
+                'email'              => $this->user->email,
+                'oauth_provider'     => null,
+                'preferences'        => $this->defaultPreferences,
+                'is_admin'           => false,
+                'twofaccounts_count' => 0,
             ])
             ->assertJsonFragment([
-                "id" => $this->admin->id,
-                "name" => $this->admin->name,
-                "email" => $this->admin->email,
-                "oauth_provider" => null,
-                "preferences" => $this->defaultPreferences,
-                "is_admin" => true,
-                "twofaccounts_count" => 0,
+                'id'                 => $this->admin->id,
+                'name'               => $this->admin->name,
+                'email'              => $this->admin->email,
+                'oauth_provider'     => null,
+                'preferences'        => $this->defaultPreferences,
+                'is_admin'           => true,
+                'twofaccounts_count' => 0,
             ])
             ->assertJsonFragment([
-                "id" => $this->anotherUser->id,
-                "name" => $this->anotherUser->name,
-                "email" => $this->anotherUser->email,
-                "oauth_provider" => null,
-                "preferences" => $this->defaultPreferences,
-                "is_admin" => false,
-                "twofaccounts_count" => 1,
+                'id'                 => $this->anotherUser->id,
+                'name'               => $this->anotherUser->name,
+                'email'              => $this->anotherUser->email,
+                'oauth_provider'     => null,
+                'preferences'        => $this->defaultPreferences,
+                'is_admin'           => false,
+                'twofaccounts_count' => 1,
             ]);
     }
 
@@ -137,20 +137,20 @@ class UserManagerControllerTest extends FeatureTestCase
         $this->actingAs($this->admin, 'api-guard')
             ->json('GET', '/api/v1/users/' . $this->user->id)
             ->assertJson([
-                "info" => [
-                    "id" => $this->user->id,
-                    "name" => $this->user->name,
-                    "email" => $this->user->email,
-                    "oauth_provider" => null,
-                    "preferences" => $this->defaultPreferences,
-                    "is_admin" => false,
-                    "twofaccounts_count" => 0,
-                    "last_seen_at" => "1 second ago",
-                    "created_at" => "1 second ago"
+                'info' => [
+                    'id'                 => $this->user->id,
+                    'name'               => $this->user->name,
+                    'email'              => $this->user->email,
+                    'oauth_provider'     => null,
+                    'preferences'        => $this->defaultPreferences,
+                    'is_admin'           => false,
+                    'twofaccounts_count' => 0,
+                    'last_seen_at'       => '1 second ago',
+                    'created_at'         => '1 second ago',
                 ],
-                "password_reset" => null,
-                "valid_personal_access_tokens" => 0,
-                "webauthn_credentials" => 0
+                'password_reset'               => null,
+                'valid_personal_access_tokens' => 0,
+                'webauthn_credentials'         => 0,
             ]);
     }
 
@@ -607,11 +607,11 @@ class UserManagerControllerTest extends FeatureTestCase
      */
     public function test_authentications_returns_resource_with_timezoned_dates() : void
     {
-        $timezone = 'Europe/Paris';
+        $timezone                             = 'Europe/Paris';
         $this->admin['preferences->timezone'] = $timezone;
         $this->admin->save();
 
-        $now = now();
+        $now          = now();
         $timezonedNow = now($timezone);
 
         AuthLog::factory()->for($this->user, 'authenticatable')->create([
@@ -789,8 +789,8 @@ class UserManagerControllerTest extends FeatureTestCase
     public function test_authentications_returns_expected_ip_and_useragent_chunks() : void
     {
         AuthLog::factory()->for($this->user, 'authenticatable')->create([
-            'ip_address'       => '127.0.0.1',
-            'user_agent'       => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0',
+            'ip_address' => '127.0.0.1',
+            'user_agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0',
         ]);
 
         $this->actingAs($this->admin, 'api-guard')
@@ -856,7 +856,7 @@ class UserManagerControllerTest extends FeatureTestCase
     protected function logUserOut() : void
     {
         $this->actingAs($this->user, 'web-guard')
-        ->json('GET', '/user/logout');
+            ->json('GET', '/user/logout');
     }
 
     /**

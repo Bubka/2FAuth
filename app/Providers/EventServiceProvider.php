@@ -2,15 +2,15 @@
 
 namespace App\Providers;
 
-use App\Listeners\Authentication\VisitedByProxyUserListener;
 use App\Events\GroupDeleted;
 use App\Events\GroupDeleting;
-use App\Events\VisitedByProxyUser;
 use App\Events\ScanForNewReleaseCalled;
 use App\Events\TwoFAccountDeleted;
+use App\Events\VisitedByProxyUser;
 use App\Listeners\Authentication\FailedLoginListener;
 use App\Listeners\Authentication\LoginListener;
 use App\Listeners\Authentication\LogoutListener;
+use App\Listeners\Authentication\VisitedByProxyUserListener;
 use App\Listeners\CleanIconStorage;
 use App\Listeners\DissociateTwofaccountFromGroup;
 use App\Listeners\LogNotification;

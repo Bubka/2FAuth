@@ -12,7 +12,7 @@ use Jenssegers\Agent\Agent;
 class SignedInWithNewDevice extends Notification implements ShouldQueue
 {
     use Queueable;
-    
+
     /**
      * The AuthLog model instance
      */

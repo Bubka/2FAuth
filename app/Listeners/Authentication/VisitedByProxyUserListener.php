@@ -4,7 +4,6 @@ namespace App\Listeners\Authentication;
 
 use App\Events\VisitedByProxyUser;
 use App\Extensions\RemoteUserProvider;
-use App\Listeners\Authentication\AbstractAccessListener;
 use App\Notifications\SignedInWithNewDevice;
 use Illuminate\Support\Carbon;
 
@@ -12,15 +11,13 @@ class VisitedByProxyUserListener extends AbstractAccessListener
 {
     /**
      * Handle the event.
-     *
-     * @return void
      */
-    public function handle(mixed $event): void
+    public function handle(mixed $event) : void
     {
         if (! $event instanceof VisitedByProxyUser) {
             return;
         }
-        
+
         /**
          * @var \App\Models\User
          */

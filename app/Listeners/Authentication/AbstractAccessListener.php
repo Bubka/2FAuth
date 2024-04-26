@@ -30,7 +30,7 @@ abstract class AbstractAccessListener
 
     /**
      * Get the login method based on the request input parameters
-    */
+     */
     public function loginMethod() : ?string
     {
         if ($this->request->has('response.authenticatorData')) {

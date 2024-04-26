@@ -58,14 +58,17 @@ class OpenId extends AbstractProvider
      */
     public function refreshToken($refreshToken)
     {
-        return $this->getHttpClient()->post($this->getTokenUrl(), [/** @phpstan-ignore-line */
-            RequestOptions::FORM_PARAMS => [
-                'client_id'     => $this->clientId,
-                'client_secret' => $this->clientSecret,
-                'grant_type'    => 'refresh_token',
-                'refresh_token' => $refreshToken,
-            ],
-        ]);
+        return $this->getHttpClient()->post( /** @phpstan-ignore-line */
+            $this->getTokenUrl(),
+            [
+                RequestOptions::FORM_PARAMS => [
+                    'client_id'     => $this->clientId,
+                    'client_secret' => $this->clientSecret,
+                    'grant_type'    => 'refresh_token',
+                    'refresh_token' => $refreshToken,
+                ],
+            ]
+        );
     }
 
     /**

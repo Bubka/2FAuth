@@ -55,7 +55,7 @@ trait HasAuthenticationLog
 
     /**
      * Get the user's latest authentication
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\MorphOne<AuthLog>
      */
     public function latestAuthentication()

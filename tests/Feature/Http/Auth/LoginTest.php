@@ -90,7 +90,7 @@ class LoginTest extends FeatureTestCase
         ])->assertOk();
 
         $this->actingAs($this->user, 'web-guard')
-        ->json('GET', '/user/logout');
+            ->json('GET', '/user/logout');
 
         $this->travel(1)->minute();
 
@@ -98,7 +98,7 @@ class LoginTest extends FeatureTestCase
             'email'    => $this->user->email,
             'password' => self::PASSWORD,
         ], [
-            'HTTP_USER_AGENT' => 'NotSymfony'
+            'HTTP_USER_AGENT' => 'NotSymfony',
         ])->assertOk();
 
         Notification::assertSentTo($this->user, SignedInWithNewDevice::class);
@@ -120,7 +120,7 @@ class LoginTest extends FeatureTestCase
         ])->assertOk();
 
         $this->actingAs($this->user, 'web-guard')
-        ->json('GET', '/user/logout');
+            ->json('GET', '/user/logout');
 
         $this->travel(1)->minute();
 
@@ -128,7 +128,7 @@ class LoginTest extends FeatureTestCase
             'email'    => $this->user->email,
             'password' => self::PASSWORD,
         ], [
-            'HTTP_USER_AGENT' => 'NotSymfony'
+            'HTTP_USER_AGENT' => 'NotSymfony',
         ])->assertOk();
 
         Notification::assertNothingSentTo($this->user);
