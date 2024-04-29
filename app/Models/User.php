@@ -90,18 +90,13 @@ class User extends Authenticatable implements HasLocalePreference, WebAuthnAuthe
     ];
 
     /**
-     * Perform any actions required after the model boots.
+     * User exposed observable events.
      *
-     * @return void
+     * These are extra user-defined events observers may subscribe to.
+     *
+     * @var array
      */
-    protected static function booted()
-    {
-        static::creating(function (User $user) {
-            $user->addObservableEvents([
-                'demoting'
-            ]);
-        });
-    }
+    protected $observables = ['demoting'];
     
     /**
      * Get the user's preferred locale.
@@ -137,7 +132,9 @@ class User extends Authenticatable implements HasLocalePreference, WebAuthnAuthe
      */
     public function promoteToAdministrator(bool $promote = true) : bool
     {
-        if ($promote == false && $this->fireModelEvent('demoting') === false) {
+        $eventResult = $promote ? $this->fireModelEvent('promoting') : $this->fireModelEvent('demoting');
+
+        if ($promote == false && $eventResult === false) {
             return false;
         }
 

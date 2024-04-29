@@ -73,11 +73,15 @@ class UserModelTest extends FeatureTestCase
      */
     public function test_promoteToAdministrator_demote_administrator_status()
     {
-        $user = User::factory()->administrator()->create();
+        $admin = User::factory()->administrator()->create();
+        // We need another admin to prevent demoting event returning false
+        // and blocking the demotion
+        $another_admin = User::factory()->administrator()->create();
 
-        $user->promoteToAdministrator(false);
+        $admin->promoteToAdministrator(false);
+        $admin->save();
 
-        $this->assertEquals($user->isAdministrator(), false);
+        $this->assertFalse($admin->isAdministrator());
     }
 
     /**
