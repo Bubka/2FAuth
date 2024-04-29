@@ -473,4 +473,20 @@ class GroupControllerTest extends FeatureTestCase
         $this->assertEquals(0, $this->user->preferences['defaultGroup']);
         $this->assertEquals(0, $this->user->preferences['activeGroup']);
     }
+
+    /**
+     * @test
+     */
+    public function test_twofaccount_is_released_on_group_destroy()
+    {
+        $this->actingAs($this->user, 'api-guard')
+            ->json('DELETE', '/api/v1/groups/' . $this->userGroupA->id)
+            ->assertNoContent();
+
+        $this->twofaccountA->refresh();
+        $this->twofaccountB->refresh();
+
+        $this->assertNull($this->twofaccountA->group_id);
+        $this->assertNull($this->twofaccountB->group_id);
+    }
 }

@@ -18,12 +18,8 @@ use App\Services\SettingService;
 use Illuminate\Support\Facades\Storage;
 use Mockery;
 use Mockery\MockInterface;
-use ParagonIE\ConstantTime\Base32;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\PreserveGlobalState;
-use PHPUnit\Framework\Attributes\RequiresPhp;
-use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use PHPUnit\Framework\Attributes\UsesClass;
 use Tests\Data\MigrationTestData;
 use Tests\Data\OtpTestData;
@@ -140,6 +136,20 @@ class MigratorTest extends TestCase
 
         $this->fakeTwofaccount     = new TwoFAccount;
         $this->fakeTwofaccount->id = TwoFAccount::FAKE_ID;
+    }
+
+    /**
+     * Clean up the testing environment before the next test.
+     *
+     * @return void
+     *
+     * @throws \Mockery\Exception\InvalidCountException
+     */
+    protected function tearDown() : void
+    {
+        $this->forgetMock(SettingService::class);
+
+        parent::tearDown();
     }
 
     /**
@@ -332,17 +342,14 @@ class MigratorTest extends TestCase
     /**
      * @test
      */
-    #[RunInSeparateProcess]
-    #[PreserveGlobalState(false)]
-    #[RequiresPhp('< 8.3.0')]
     public function test_migrate_gauth_returns_fake_accounts()
     {
-        $this->mock('alias:' . Base32::class, function (MockInterface $baseEncoder) {
-            $baseEncoder->shouldReceive('encodeUpper')
+        $migrator = $this->partialMock(GoogleAuthMigrator::class, function (MockInterface $migrator) {
+            $migrator->shouldAllowMockingProtectedMethods()->shouldReceive('toBase32')
                 ->andThrow(new \Exception());
         });
 
-        $migrator = new GoogleAuthMigrator();
+        /** @disregard Undefined function */
         $accounts = $migrator->migrate(MigrationTestData::GOOGLE_AUTH_MIGRATION_URI);
 
         $this->assertContainsOnlyInstancesOf(TwoFAccount::class, $accounts);
@@ -352,6 +359,8 @@ class MigratorTest extends TestCase
         // in the migration payload) so we do not use get() to retrieve items
         $this->assertEquals($this->fakeTwofaccount->id, $accounts->first()->id);
         $this->assertEquals($this->fakeTwofaccount->id, $accounts->last()->id);
+        
+        $this->forgetMock(GoogleAuthMigrator::class);
     }
 
     /**
@@ -547,10 +556,5 @@ class MigratorTest extends TestCase
                 MigrationTestData::ENCRYPTED_2FAS_MIGRATION_PAYLOAD,
             ],
         ];
-    }
-
-    protected function tearDown() : void
-    {
-        Mockery::close();
     }
 }

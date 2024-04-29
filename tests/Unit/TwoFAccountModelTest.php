@@ -11,9 +11,6 @@ use Illuminate\Support\Facades\Crypt;
 use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\PreserveGlobalState;
-use PHPUnit\Framework\Attributes\RequiresPhp;
-use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use Tests\ModelTestCase;
 
 /**
@@ -63,6 +60,7 @@ class TwoFAccountModelTest extends ModelTestCase
         ]);
 
         $this->assertEquals('STRING==', Crypt::decryptString($twofaccount->getAttributes()[$attribute]));
+        $this->forgetMock(SettingService::class);
     }
 
     /**
@@ -98,6 +96,7 @@ class TwoFAccountModelTest extends ModelTestCase
         $twofaccount = TwoFAccount::factory()->make();
 
         $this->assertEquals($twofaccount->getAttributes()[$attribute], $twofaccount->$attribute);
+        $this->forgetMock(SettingService::class);
     }
 
     /**
@@ -118,14 +117,12 @@ class TwoFAccountModelTest extends ModelTestCase
         $twofaccount = TwoFAccount::factory()->make();
 
         $this->assertEquals(__('errors.indecipherable'), $twofaccount->$attribute);
+        $this->forgetMock(SettingService::class);
     }
 
     /**
      * @test
      */
-    #[RunInSeparateProcess]
-    #[PreserveGlobalState(false)]
-    #[RequiresPhp('< 8.3.0')]
     public function test_secret_is_uppercased_and_padded_at_setup()
     {
         $settingService = $this->mock(SettingService::class, function (MockInterface $settingService) {
@@ -134,7 +131,7 @@ class TwoFAccountModelTest extends ModelTestCase
                 ->andReturn(false);
         });
 
-        $helpers = $this->mock('alias:' . Helpers::class, function (MockInterface $helpers) {
+        $helpers = $this->mock(Helpers::class, function (MockInterface $helpers) {
             $helpers->shouldReceive('PadToBase32Format')
                 ->andReturn('YYYY====');
         });
@@ -144,6 +141,7 @@ class TwoFAccountModelTest extends ModelTestCase
         ]);
 
         $this->assertEquals('YYYY====', $twofaccount->secret);
+        $this->forgetMock(SettingService::class);
     }
 
     /**

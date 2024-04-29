@@ -34,6 +34,7 @@
         </testsuite>
     </testsuites>
     <php>
+        <ini name="memory_limit" value="256M" />
         <env name="APP_ENV" value="testing"/>
         <!-- following values override .env.testing vars -->
     </php>

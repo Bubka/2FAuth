@@ -61,7 +61,7 @@ class QrCodeControllerTest extends FeatureTestCase
             ])
             ->assertOk();
 
-        $this->assertStringStartsWith('data:image/png;base64', $response->getData()->qrcode);
+        $this->assertStringStartsWith('data:image/svg+xml;base64', $response->getData()->qrcode);
     }
 
     /**

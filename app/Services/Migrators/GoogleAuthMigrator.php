@@ -45,7 +45,7 @@ class GoogleAuthMigrator extends Migrator
                 $parameters['otp_type']  = GAuthValueMapping::OTP_TYPE[OtpType::name($otp_parameters->getType())];
                 $parameters['service']   = $otp_parameters->getIssuer();
                 $parameters['account']   = str_replace($parameters['service'] . ':', '', $otp_parameters->getName());
-                $parameters['secret']    = Base32::encodeUpper($otp_parameters->getSecret());
+                $parameters['secret']    = $this->toBase32($otp_parameters->getSecret());
                 $parameters['algorithm'] = GAuthValueMapping::ALGORITHM[Algorithm::name($otp_parameters->getAlgorithm())];
                 $parameters['digits']    = GAuthValueMapping::DIGIT_COUNT[DigitCount::name($otp_parameters->getDigits())];
                 $parameters['counter']   = $parameters['otp_type'] === TwoFAccount::HOTP ? $otp_parameters->getCounter() : null;
@@ -72,5 +72,12 @@ class GoogleAuthMigrator extends Migrator
         }
 
         return collect($twofaccounts);
+    }
+
+    /**
+     * Encode into uppercase Base32
+     */
+    protected function toBase32(string $str) {
+        return Base32::encodeUpper($str);
     }
 }
