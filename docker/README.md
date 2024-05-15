@@ -117,14 +117,14 @@ There are the following build arguments you can use to customize the image using
 
 | Build argument | Recommendation | Description |
 | --- | --- | --- |
-| MAIL_MAILER | SMTP | The driver type |
-| MAIL_HOST | smtp.yourdomain.com | The SMTP hostname |
-| MAIL_PORT | 587 | The corresponding SMTP port (587 with STARTTLS) or (465 with SSL recommended) |
-| MAIL_USERNAME | 2fauth@yourdomain.com | The SMTP username |
-| MAIL_PASSWORD | password1234 | The SMTP password |
-| MAIL_ENCRYPTION | TLS | The encrytion type (TLS -> STARTTLS) or SSL |
-| MAIL_FROM_NAME | 2FAuth | The sender name |
-| MAIL_FROM_ADDRESS | 2fauth@yourdomain.com | The sender adress |
+| `MAIL_MAILER` | `SMTP` | The driver type |
+| `MAIL_HOST` | `smtp.yourdomain.com` | The SMTP hostname |
+| `MAIL_PORT` | 587 | The corresponding SMTP port (587 with STARTTLS) or (465 with SSL recommended) |
+| `MAIL_USERNAME` | `2fauth@yourdomain.com` | The SMTP username |
+| `MAIL_PASSWORD` | `password1234` | The SMTP password |
+| `MAIL_ENCRYPTION` | `TLS` | The encrytion type (TLS -> STARTTLS) or SSL |
+| `MAIL_FROM_NAME` | `2FAuth` | The sender name |
+| `MAIL_FROM_ADDRESS` | `2fauth@yourdomain.com` | The sender adress |
 
 Example:
 

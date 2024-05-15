@@ -9,7 +9,7 @@ A web app to manage your Two-Factor Authentication (2FA) accounts and generate t
 ![screens](https://user-images.githubusercontent.com/858858/100485897-18c21400-3102-11eb-9c72-ea0b1b46ef2e.png)
 
 [**2FAuth Demo**](https://demo.2fauth.app/)  
-Credentials (login - password) : *demo@2fauth.app* - *demo*
+Credentials (login - password) : `demo@2fauth.app` - `demo`
 
 ## Purpose
 
@@ -61,8 +61,8 @@ Sensitive data stored in the database can be encrypted to protect them against d
 ## Requirements
 
 * [![Requires PHP8](https://img.shields.io/badge/php-^8.2-red.svg?style=flat-square)](https://secure.php.net/downloads.php)
-* See [Laravel server requirements](https://laravel.com/docs/7.x/installation#server-requirements)
-* Any database [supported by Laravel](https://laravel.com/docs/7.x/database)
+* See [Laravel server requirements](https://laravel.com/docs/installation#server-requirements)
+* Any database [supported by Laravel](https://laravel.com/docs/database)
 
 ## Installation guides
 
