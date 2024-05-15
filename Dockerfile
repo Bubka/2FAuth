@@ -1,8 +1,8 @@
 ARG BUILDPLATFORM=linux/amd64
 ARG TARGETPLATFORM
-ARG ALPINE_VERSION=3.17
-ARG PHP_VERSION=8.1-alpine${ALPINE_VERSION}
-ARG COMPOSER_VERSION=2.3
+ARG ALPINE_VERSION=3.19
+ARG PHP_VERSION=8.2-alpine${ALPINE_VERSION}
+ARG COMPOSER_VERSION=2.7
 ARG SUPERVISORD_VERSION=v0.7.3
 
 ARG UID=1000
@@ -46,28 +46,28 @@ COPY --from=supervisord --chown=${UID}:${GID} /bin /usr/local/bin/supervisord
 # Install PHP and PHP system dependencies
 RUN apk add --update --no-cache \
     # PHP
-    php81 \
+    php82 \
     # Composer dependencies
-    php81-phar \
+    php82-phar \
     # PHP SQLite, MySQL/MariaDB & Postgres drivers
-    php81-pdo_sqlite php81-sqlite3 php81-pdo_mysql php81-pdo_pgsql php81-pgsql \
+    php82-pdo_sqlite php82-sqlite3 php82-pdo_mysql php82-pdo_pgsql php82-pgsql \
     # PHP extensions
-    php81-xml php81-gd php81-mbstring php81-tokenizer php81-fileinfo php81-bcmath php81-ctype php81-dom \
+    php82-xml php82-gd php82-mbstring php82-tokenizer php82-fileinfo php82-bcmath php82-ctype php82-dom \
     # Runtime dependencies
-    php81-session php81-openssl \
+    php82-session php82-openssl \
     # Nginx and PHP FPM to serve over HTTP
-    php81-fpm nginx
+    php82-fpm nginx
 
 # PHP FPM configuration
 # Change username and ownership in php-fpm pool config
-RUN sed -i '/user = nobody/d' /etc/php81/php-fpm.d/www.conf && \
-    sed -i '/group = nobody/d' /etc/php81/php-fpm.d/www.conf && \
-    sed -i '/listen.owner/d' /etc/php81/php-fpm.d/www.conf && \
-    sed -i '/listen.group/d' /etc/php81/php-fpm.d/www.conf
+RUN sed -i '/user = nobody/d' /etc/php82/php-fpm.d/www.conf && \
+    sed -i '/group = nobody/d' /etc/php82/php-fpm.d/www.conf && \
+    sed -i '/listen.owner/d' /etc/php82/php-fpm.d/www.conf && \
+    sed -i '/listen.group/d' /etc/php82/php-fpm.d/www.conf
 # Pre-create files with the correct permissions
 RUN mkdir /run/php && \
-    chown ${UID}:${GID} /run/php /var/log/php81 && \
-    chmod 700 /run/php /var/log/php81
+    chown ${UID}:${GID} /run/php /var/log/php82 && \
+    chmod 700 /run/php /var/log/php82
 
 # NGINX
 # Clean up

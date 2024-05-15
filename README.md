@@ -60,7 +60,7 @@ Sensitive data stored in the database can be encrypted to protect them against d
 
 ## Requirements
 
-* [![Requires PHP8](https://img.shields.io/badge/php-^8.1-red.svg?style=flat-square)](https://secure.php.net/downloads.php)
+* [![Requires PHP8](https://img.shields.io/badge/php-^8.2-red.svg?style=flat-square)](https://secure.php.net/downloads.php)
 * See [Laravel server requirements](https://laravel.com/docs/7.x/installation#server-requirements)
 * Any database [supported by Laravel](https://laravel.com/docs/7.x/database)
 
