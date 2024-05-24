@@ -28,7 +28,7 @@ return [
         'outgoingProxy' => env('PROXY_FOR_OUTGOING_REQUESTS', ''),
         'proxyLogoutUrl' => env('PROXY_LOGOUT_URL', null),
         'appSubdirectory' => env('APP_SUBDIRECTORY', ''),
-        'authLogRetentionTime' => env('AUTHENTICATION_LOG_RETENTION', 365),
+        'authLogRetentionTime' => envUnlessEmpty('AUTHENTICATION_LOG_RETENTION', 365),
     ],
 
     /*

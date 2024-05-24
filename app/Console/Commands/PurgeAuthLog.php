@@ -26,6 +26,7 @@ namespace App\Console\Commands;
 
 use App\Models\AuthLog;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class PurgeAuthLog extends Command
 {
@@ -41,17 +42,23 @@ class PurgeAuthLog extends Command
      *
      * @var string
      */
-    public $description = 'Purge all authentication logs older than the configurable amount of days.';
+    public $description = 'Delete all authentication log entries older than the configurable amount of days (see env vars).';
 
     /**
      * Execute the console command.
      */
     public function handle() : void
     {
-        $this->comment('Clearing authentication log...');
+        $retentionTime = config('2fauth.config.authLogRetentionTime');
+        $retentionTime = is_numeric($retentionTime) ? (int) $retentionTime : 365;
+        $date = now()->subDays($retentionTime)->format('Y-m-d H:i:s');
 
-        $deleted = AuthLog::where('login_at', '<', now()->subDays(config('2fauth.authLogRetentionTime'))->format('Y-m-d H:i:s'))->delete();
+        AuthLog::where('login_at', '<', $date)
+            ->orWhere('logout_at', '<', $date)
+            ->delete();
 
-        $this->info($deleted . ' authentication logs cleared.');
+        Log::info('Authentication log purged');
+
+        $this->components->info('Authentication log purged successfully.');
     }
 }

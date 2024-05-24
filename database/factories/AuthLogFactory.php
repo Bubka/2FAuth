@@ -29,6 +29,24 @@ class AuthLogFactory extends Factory
     }
 
     /**
+     * Indicate that the model has login before last year.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\AuthLog>
+     */
+    public function daysAgo(int $days)
+    {
+        return $this->state(function (array $attributes) use ($days) {
+            $loginDate  = now()->subDays($days);
+            $logoutDate = $loginDate->addHours(1);
+
+            return [
+                'login_at'         => $loginDate,
+                'logout_at'        => $logoutDate,
+            ];
+        });
+    }
+
+    /**
      * Indicate that the model is a failed login.
      *
      * @return \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\AuthLog>

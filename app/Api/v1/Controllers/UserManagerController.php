@@ -9,6 +9,7 @@ use App\Api\v1\Resources\UserManagerResource;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Password;
@@ -214,6 +215,13 @@ class UserManagerController extends Controller
     public function authentications(Request $request, User $user)
     {
         $this->authorize('view', $user);
+
+        // Here we purge the authentication log.
+        // Running the purge command when someone fetchs the auth log
+        // is not very elegant but it's straitforward compared
+        // to a scheduled task, and the delete query is light.
+        // => To enhance.
+        Artisan::call('2fauth:purge-log');
 
         $validated = $this->validate($request, [
             'period' => 'sometimes|numeric',
