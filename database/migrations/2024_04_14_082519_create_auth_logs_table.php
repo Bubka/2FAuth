@@ -35,9 +35,9 @@ return new class extends Migration
             $table->morphs('authenticatable');
             $table->string('ip_address', 45)->nullable();
             $table->text('user_agent')->nullable();
-            $table->timestamp('login_at')->nullable();
-            $table->boolean('login_successful')->default(false);
-            $table->timestamp('logout_at')->nullable();
+            $table->timestamp('login_at')->nullable()->index();
+            $table->boolean('login_successful')->default(false)->index();
+            $table->timestamp('logout_at')->nullable()->index();
             $table->boolean('cleared_by_user')->default(false);
             $table->string('guard', 40)->nullable();
             $table->string('login_method', 40)->nullable();
