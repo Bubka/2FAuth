@@ -34,7 +34,7 @@ class LogoutListener extends AbstractAccessListener
      */
     public function handle(mixed $event) : void
     {
-        if (! $event instanceof Logout) {
+        if (! $event instanceof Logout || $event->user == null) {
             return;
         }
 
