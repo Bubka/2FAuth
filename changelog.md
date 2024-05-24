@@ -1,5 +1,39 @@
 # Change log
 
+## [5.2.0] - 2024-05-24
+
+⚠️ This version drops PHP 8.1 support ⚠️
+
+### Added
+
+- When [installed](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Guides/Installing), 2FAuth now offers shortcuts to common actions.
+- User authentication logs (See user management pages in the admin area)
+- A user preference to set the timezone applied to dates and times displayed in the app.
+
+#### New env vars
+
+- `APP_TIMEZONE`: The timezone applied to dates and times recorded to database ([doc](https://docs.2fauth.app/getting-started/configuration/#app_timezone)).
+- `AUTHENTICATION_LOG_RETENTION`: The authentication log retention time, in days ([doc](https://docs.2fauth.app/getting-started/configuration/#authentication_log_retention)).
+- `PROXY_HEADER_FOR_IP`: Name of the HTTP header sent by a reverse proxy to pass the original visitor IP address. ([doc](https://docs.2fauth.app/getting-started/configuration/#proxy_header_for_ip)).
+
+### Changed
+
+- `MAIL_DRIVER` env var renamed to `MAIL_MAILER`.  
+  This is not a breaking change as the former name is still supported. This is just to stick to Laravel defaults.
+- NGINX server now also listens to ipv6 in Docker image ([#336](https://github.com/Bubka/2FAuth/issues/336)).
+
+### Fixed
+
+- [issue #192](https://github.com/Bubka/2FAuth/issues/192) `DB_DATABASE` path not respected by entrypoint script
+- [issue #244](https://github.com/Bubka/2FAuth/issues/244) gauth qr code can't be imported
+- [issue #255](https://github.com/Bubka/2FAuth/issues/255) Only one Webauthn Device functioning
+- [issue #295](https://github.com/Bubka/2FAuth/issues/295) Add support for PHP 8.3
+- [issue #331](https://github.com/Bubka/2FAuth/issues/311) Last admin can demote to user, leaving the instance administratorless
+
+### API [1.4.0]
+
+- `/api/v1/users/{id}/authentications` GET path added
+
 ## [5.1.1] - 2024-03-21
 
 ### Fixed
