@@ -170,8 +170,8 @@ return [
         ],
         'email' => [
             'exists' => 'このメールアドレスを使用するアカウントは見つかりませんでした。',
-            'ComplyWithEmailRestrictionPolicy' => 'This email address does not comply with the registration policy',
-            'IsValidEmailList' => 'All emails must be valid and separated with a pipe'
+            'ComplyWithEmailRestrictionPolicy' => 'このメールアドレスは登録ルールに適合していません',
+            'IsValidEmailList' => 'すべてのアドレスは有効かつ、パイプ (|) で区切られている必要があります'
         ],
         'secret' => [
             'isBase32Encoded' => ':attributeは base32 エンコード文字列を指定してください。',

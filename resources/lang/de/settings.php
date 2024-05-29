@@ -14,8 +14,8 @@ return [
     */
 
     'settings' => 'Einstellungen',
-    'preferences' => 'Vorlieben',
-    'account' => 'Account',
+    'preferences' => 'Voreinstellungen',
+    'account' => 'Benutzerkonto',
     'oauth' => 'OAuth',
     'webauthn' => 'WebAuthn',
     'tokens' => 'Token',
@@ -25,16 +25,17 @@ return [
     'confirm' => [
 
     ],
-    'you_are_administrator' => 'Du bist ein Administrator',
-    'account_linked_to_sso_x_provider' => 'Sie haben sich mit Ihrem :provider-Konto via SSO angemeldet. Ihre Daten können hier nicht geändert werden, sondern auf :provider.',
+    'you_are_administrator' => 'Sie sind ein Administrator',
+    'account_linked_to_sso_x_provider' => 'Sie haben sich mit Ihrem :provider -Konto via SSO angemeldet. Ihre Daten können hier nicht geändert werden, sondern auf :provider.',
     'general' => 'Allgemein',
     'security' => 'Sicherheit',
+    'notifications' => 'Notifications',
     'profile' => 'Profil',
     'change_password' => 'Passwort ändern',
-    'personal_access_tokens' => 'Persönliche Zugriffsstokens',
+    'personal_access_tokens' => 'Persönliche Zugriffsstoken',
     'token_legend' => 'Persönliche Zugriffstoken ermöglichen es jeder Anwendung, sich bei der 2Fauth-API zu authentifizieren. Sie sollten das Zugriffs-Token als Bearer-Token im Autorisierungs-Header der Anfragen von Verbraucher-Apps angeben.',
-    'generate_new_token' => 'Neuen Token generieren',
-    'revoke' => 'Zurückziehen',
+    'generate_new_token' => 'Neuen Token erzeugen',
+    'revoke' => 'Widerrufen',
     'token_revoked' => 'Token erfolgreich widerrufen',
     'revoking_a_token_is_permanent' => 'Widerruf eines Token ist dauerhaft',
     'confirm' => [
@@ -45,43 +46,47 @@ return [
     'forms' => [
         'edit_settings' => 'Einstellungen bearbeiten',
         'setting_saved' => 'Einstellungen gespeichert',
-        'new_token' => 'Neues Token',
+        'new_token' => 'Neuer Token',
         'some_translation_are_missing' => 'Einige Übersetzungen fehlen bei Verwendung der bevorzugten Sprache des Browsers?',
-        'help_translate_2fauth' => 'Hilf 2FAuth zu übersetzen',
+        'help_translate_2fauth' => 'Helfen Sie 2FAuth zu übersetzen',
         'language' => [
             'label' => 'Sprache',
-            'help' => 'Sprache, die zur Übersetzung der 2FAuth-Benutzeroberfläche verwendet wird. Benannte Sprachen sind vollständig, stellen Sie die Sprache Ihrer Wahl ein, um Ihre Browserpräferenz zu überschreiben.'
+            'help' => 'Sprache, die zur Übersetzung der 2FAuth-Benutzeroberfläche verwendet wird. Benannte Sprachen sind vollständig. Stellen Sie die Sprache Ihrer Wahl ein, um Ihre Browserpräferenz zu überschreiben.'
+        ],
+        'timezone' => [
+            'label' => 'Zeitzone',
+            'help' => 'Die Zeitzone wird auf alle in der Anwendung angezeigten Daten und Zeiten angewendet'
         ],
         'show_otp_as_dot' => [
-            'label' => 'Generierte Einmalpasswörter als Punkte anzeigen',
-            'help' => 'Passwortzeichen werden als *** angezeigt, um die Vertraulichkeit zu gewährleisten. Dies beeinflusst nicht die Kopieren/Einfügen Funktion'
+            'label' => 'Erzeugte <abbr title="One-Time Password">OTP</abbr> als Punkt anzeigen',
+            'help' => 'Passwortzeichen werden als *** angezeigt, um die Vertraulichkeit zu gewährleisten. Dies beeinflusst nicht die Kopieren/Einfügen-Funktion'
         ],
         'reveal_dotted_otp' => [
-            'label' => 'Decke verdecktes <abbr title="One-Time Password">OTP</abbr> auf',
-            'help' => 'Lass die Fähigkeit Punkt-verdeckte Passwörter temporär freigeben'
+            'label' => 'Verdecktes <abbr title="One-Time Password">OTP</abbr> aufdecken',
+            'help' => 'Die Fähigkeit Punkt-verdeckte Passwörter temporär freigeben'
         ],
         'close_otp_on_copy' => [
-            'label' => 'Schließe <abbr title="One-Time Password">OTP</abbr> nach dem Kopieren',
-            'help' => 'Bei einem Klick auf das generierte Passwort wird es automatisch auf dem Bildschirm ausgeblendet'
+            'label' => '<abbr title="One-Time Password">OTP</abbr> nach dem Kopieren schließen',
+            'help' => 'Bei einem Klick auf das erzeugte Passwort wird es automatisch auf dem Bildschirm ausgeblendet'
         ],
         'clear_search_on_copy' => [
             'label' => 'Suche beim Kopieren löschen',
-            'help' => 'Leeren das Suchfeld, nachdem ein Code in die Zwischenablage kopiert wurde'
+            'help' => 'Das Suchfeld leeren, nachdem ein Code in die Zwischenablage kopiert wurde'
         ],
         'copy_otp_on_display' => [
-            'label' => 'Das angezeigte, einmaliges Passwort (OTP) kopieren',
-            'help' => 'Kopiert automatisch ein generiertes Passwort bei Anzeige auf dem Bildschirm. Aufgrund der Einschränkungen des Browsers wird nur das erste <abbr title="Time-based One-Time Password">TOTP</abbr> Passwort kopiert, nicht das rotierende Passwort'
+            'label' => '<abbr title="One-Time Password">OTP</abbr> auf Anzeige kopieren',
+            'help' => 'Kopiert automatisch ein generiertes Passwort bei Anzeige auf dem Bildschirm. Aufgrund der Einschränkungen des Browsers, wird nur das erste <abbr title="Time-based One-Time Password">TOTP</abbr> Passwort kopiert, nicht das rotierende Passwort'
         ],
         'use_basic_qrcode_reader' => [
-            'label' => 'Benutze den einfachen QR-Codeleser',
-            'help' => 'Wenn bei der Erfassung von QR-Codes Probleme auftreten können Sie mit dieser Option zu einem einfacheren, aber zuverlässigeren QR-Codeleser wechseln'
+            'label' => 'Einfachen QR-Codeleser benutzen',
+            'help' => 'Wenn bei der Erfassung von QR-Codes Probleme auftreten, können Sie mit dieser Option zu einem einfacheren, aber zuverlässigeren QR-Codeleser wechseln'
         ],
         'display_mode' => [
             'label' => 'Anzeigemodus',
-            'help' => 'Wählen Sie, ob Konten als Liste oder als Raster angezeigt werden sollen'
+            'help' => 'Wählen Sie aus, ob Konten als Liste oder als Raster angezeigt werden sollen'
         ],
         'password_format' => [
-            'label' => 'Passwortformatierung',
+            'label' => 'Passwort-Formatierung',
             'help' => 'Anzeige der Passwörter ändern durch Gruppierung der Ziffern. Verbessert die Lesbarkeit und Passwörter lassen sich einfacher merken'
         ],
         'pair' => 'nach Paar',
@@ -93,8 +98,8 @@ return [
         'grid' => 'Raster',
         'list' => 'Liste',
         'theme' => [
-            'label' => 'Erscheinungsbild',
-            'help' => 'Erzwinge eine bestimmte Darstellung oder wende die in deinen System/Browser-Einstellungen definierte Darstellung an'
+            'label' => 'Design',
+            'help' => 'Eine bestimmte Darstellung erzwingen oder die in Ihren System-/Browsereinstellungen definierte Darstellung anwenden'
         ],
         'light' => 'Hell',
         'dark' => 'Dunkel',
@@ -104,12 +109,12 @@ return [
             'help' => 'Kontosymbole in der Hauptansicht anzeigen'
         ],
         'get_official_icons' => [
-            'label' => 'Offizielle Icons erhalten',
-            'help' => '(Versuch) Das offizielle Symbol des 2FA-Ausstellers beim Hinzufügen eines Kontos zu erhalten'
+            'label' => 'Offizielle Symbole abrufen',
+            'help' => '(Versuch) Das offizielle Symbol des 2FA-Ausstellers beim Hinzufügen eines Kontos erhalten'
         ],
         'auto_lock' => [
             'label' => 'Automatische Sperrung',
-            'help' => 'Meldet den Benutzer bei Inaktivität automatisch ab. Hat keine Auswirkung, wenn die Authentifizierung über einen Proxy erfolgt und keine benutzerdefinierte Logout-URL angegeben ist.'
+            'help' => 'Den Benutzer bei Inaktivität automatisch abmelden. Hat keine Auswirkung, wenn die Authentifizierung über einen Proxy erfolgt und keine benutzerdefinierte Logout-URL angegeben ist'
         ],
         'default_group' => [
             'label' => 'Standardgruppe',
@@ -129,20 +134,28 @@ return [
         ],
         'remember_active_group' => [
             'label' => 'Gruppenfilter merken',
-            'help' => 'Speichert den letzten Gruppenfilter und stellt ihn bei Ihrem nächsten Besuch wieder her',
+            'help' => 'Den letzten Gruppenfilter speichern und ihn beim nächsten Besuch wiederherstellen',
         ],
         'otp_generation' => [
             'label' => 'Passwort zeigen',
-            'help' => 'Legelt fest, wie und wann <abbr title="One-Time Passwords">OTPs</abbr> angezeigt werden.<br/>',
+            'help' => 'Festlegen, wie und wann <abbr title="One-Time Passwords">OTPs</abbr> angezeigt werden.<br/>',
+        ],
+        'notify_on_new_auth_device' => [
+            'label' => 'On new device',
+            'help' => 'Get an email when a new device connects to your 2FAuth account for the first time'
+        ],
+        'notify_on_failed_login' => [
+            'label' => 'On failed login',
+            'help' => 'Get an email each time an attempt to connect to your 2FAuth account fails'
         ],
         'otp_generation_on_request' => 'Nach einem Klick/Tippen',
         'otp_generation_on_request_legend' => 'Einzeln, in eigener Ansicht',
-        'otp_generation_on_request_title' => 'Konto anklicken um ein Passwort in einer eigenen Ansicht zu erhalten',
+        'otp_generation_on_request_title' => 'Konto anklicken, um ein Passwort in einer eigenen Ansicht zu erhalten',
         'otp_generation_on_home' => 'Ständig',
         'otp_generation_on_home_legend' => 'Alle auf dem Startbildschirm anzeigen',
         'otp_generation_on_home_title' => 'Alle Passwörter auf dem Startbildschirm anzeigen, ohne etwas tun zu müssen',
         'never' => 'Niemals',
-        'on_otp_copy' => 'Beim Kopieren des Tokens',
+        'on_otp_copy' => 'Beim Kopieren des Token',
         '1_minutes' => 'Nach 1 Minute',
         '5_minutes' => 'Nach 5 Minuten',
         '10_minutes' => 'Nach 10 Minuten',

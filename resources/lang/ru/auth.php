@@ -22,7 +22,7 @@ return [
     'sign_out' => 'Выйти',
     'sign_in' => 'Войти',
     'sign_in_using' => 'Войти с помощью',
-    'or_continue_with' => 'Вы также можете продолжить с:',
+    'or_continue_with' => 'Также вы можете продолжить с:',
     'sign_in_using_security_device' => 'Войти, используя устройство безопасности',
     'login_and_password' => 'имени пользователя и пароля',
     'register' => 'Регистрация',

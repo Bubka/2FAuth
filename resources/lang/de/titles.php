@@ -13,7 +13,7 @@ return [
     'capture' => 'QR blinken',
     'accounts' => 'Konten',
     'createAccount' => 'Konto erstellen',
-    'importAccounts' => 'Importiere Konten',
+    'importAccounts' => 'Konten importieren',
     'editAccount' => 'Konto bearbeiten',
     'showQRcode' => 'Konto als QR-Code',
     'groups' => 'Gruppen',
@@ -23,16 +23,16 @@ return [
         'options' => 'Einstellungen',
         'account' => 'Benutzerkonto',
         'oauth' => [
-            'tokens' => 'OAuth Tokens',
-            'generatePAT' => 'Neues persönliches Token',
+            'tokens' => 'OAuth-Token',
+            'generatePAT' => 'Neuer persönlicher Token',
         ],
         'webauthn' => [
             'editCredential' => 'Gerät bearbeiten',
-            'devices' => 'WebAuthn Geräte',
+            'devices' => 'WebAuthn-Geräte',
         ],
     ],
-    'login' => 'Login',
-    'register' => 'Anmelden',
+    'login' => 'Anmelden',
+    'register' => 'Registrieren',
     'autolock' => 'Automatische Sperrung',
     'password' => [
         'request' => 'Passwort zurücksetzen',
@@ -44,12 +44,15 @@ return [
     ],
     'flooded' => 'Überschwemmung',
     'genericError' => 'Fehler',
-    '404' => 'Artikel nicht gefunden',
+    '404' => 'Objekt nicht gefunden',
     'about' => 'Über',
     'admin' =>  [
-        'appSetup' => 'App setup',
+        'appSetup' => 'App-Einrichtung',
         'users' => 'Benutzerverwaltung',
         'createUser' => 'Benutzer erstellen',
         'manageUser' => 'Benutzer verwalten',
+        'logs' => [
+            'access' => 'Zugriffsprotokoll'
+        ]
     ]
 ];

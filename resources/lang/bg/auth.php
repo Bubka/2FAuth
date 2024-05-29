@@ -22,7 +22,7 @@ return [
     'sign_out' => 'Изход',
     'sign_in' => 'Вход',
     'sign_in_using' => 'Влизане с',
-    'or_continue_with' => 'You an also continue with:',
+    'or_continue_with' => 'You can also continue with:',
     'sign_in_using_security_device' => 'Влезте с помощта на защитно устройство',
     'login_and_password' => 'потребител и парола',
     'register' => 'Регистрация',
@@ -94,7 +94,7 @@ return [
         'reset_your_password' => 'Нулиране на паролата',
         'reset_password' => 'Нулиране на парола',
         'disabled_in_demo' => 'Функцията е деактивирана в демо режима',
-        'new_password' => 'Нова парола',
+        'new_password' => 'New password',
         'current_password' => [
             'label' => 'Текуща парола',
             'help' => 'Попълнете текущата си парола, за да потвърдите, че това сте вие'

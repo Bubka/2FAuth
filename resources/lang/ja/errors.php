@@ -57,6 +57,7 @@ return [
     'unauthorized' => '許可されていません',
     'unauthorized_legend' => 'このリソースを表示したり、このアクションを実行する権限がありません。',
     'cannot_delete_the_only_admin' => '唯一の管理者アカウントは削除できません',
+    'cannot_demote_the_only_admin' => '唯一の管理者アカウントは降格できません',
     'error_during_data_fetching' => '💀 データ取得中に問題が発生しました',
     'check_failed_try_later' => 'チェックが失敗しました。後ほどもう一度お試しください',
     'sso_disabled' => 'SSOが無効です',
@@ -66,5 +67,9 @@ return [
     'sso_email_already_used' => '同じメールアドレスを持つユーザーアカウントは既に存在しますが、あなたの外部アカウントIDと一致しません。 このアドレスで 2FAuth に登録済みの場合は、SSOを使用しないでください。',
     'account_managed_by_external_provider' => '外部プロバイダが管理するアカウント',
     'data_cannot_be_refreshed_from_server' => 'データをサーバーから更新できません',
-    'no_pwd_reset_for_this_user_type' => 'Password reset unavailable for this user',
+    'no_pwd_reset_for_this_user_type' => 'このユーザーにパスワードリセットはできません',
+    'cannot_detect_qrcode_in_image' => '画像内にQRコードを検出できません。画像をトリミングしてください',
+    'cannot_decode_detected_qrcode' => '検出されたQRコードをデコードできません。画像をトリミングまたはシャープにしてください。',
+    'qrcode_has_invalid_checksum' => 'QRコードのチェックサムが不正です',
+    'no_readable_qrcode' => '読み取り可能なQRコードがありません',
 ];

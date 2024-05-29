@@ -22,7 +22,7 @@ return [
     'sign_out' => 'साइन आउट करें',
     'sign_in' => 'साइन इन करें',
     'sign_in_using' => 'साइन इन के लिए चाहिए',
-    'or_continue_with' => 'आप ऐसे भी इसे जारी रख सकते हैं:',
+    'or_continue_with' => 'आप ऐसे भी आगे जा सकते हैं:',
     'sign_in_using_security_device' => 'सुरक्षा उपकरण का उपयोग करके साइन इन करें',
     'login_and_password' => 'लॉग इन और पासवर्ड',
     'register' => 'रजिस्टर',

@@ -29,6 +29,7 @@ return [
     'account_linked_to_sso_x_provider' => 'Ha iniciado sesión a través de SSO usando su cuenta :provider. Su información no se puede cambiar aquí, sino en :provider.',
     'general' => 'General',
     'security' => 'Seguridad',
+    'notifications' => 'Notifications',
     'profile' => 'Perfil',
     'change_password' => 'Cambiar contraseña',
     'personal_access_tokens' => 'Tokens de acceso personal',
@@ -51,6 +52,10 @@ return [
         'language' => [
             'label' => 'Idioma',
             'help' => 'Idioma utilizado para traducir la interfaz de usuario de 2FAuth. Los idiomas listados están completos, establezca el idioma de su elección para reemplazar las preferencias de su navegador.'
+        ],
+        'timezone' => [
+            'label' => 'Time zone',
+            'help' => 'The time zone applied to all dates and times displayed in the application'
         ],
         'show_otp_as_dot' => [
             'label' => 'Mostrar contraseñas generadas de un solo uso como punto',
@@ -134,6 +139,14 @@ return [
         'otp_generation' => [
             'label' => 'Mostrar contraseña',
             'help' => 'Establezca cómo y cuándo se muestran las <abbr title="Contraseñas de un solo uso">OTP</abbr>.<br/>',
+        ],
+        'notify_on_new_auth_device' => [
+            'label' => 'On new device',
+            'help' => 'Get an email when a new device connects to your 2FAuth account for the first time'
+        ],
+        'notify_on_failed_login' => [
+            'label' => 'On failed login',
+            'help' => 'Get an email each time an attempt to connect to your 2FAuth account fails'
         ],
         'otp_generation_on_request' => 'Después de un clic/toque',
         'otp_generation_on_request_legend' => 'Solo, en su propia vista',

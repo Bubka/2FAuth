@@ -67,7 +67,7 @@ return [
         ],
         'plain_text' => 'プレーンテキスト',
         'otp_type' => [
-            'label' => '作成する <abbr title="ワンタイムパスワード">OTP</abbr> の種類を選択',
+            'label' => '作成する<abbr title="ワンタイムパスワード">OTP</abbr>の種類を選択',
             'help' => '時間ベースのOTPか、HMACベースのOTPか、Steam OTP'
         ],
         'digits' => [
@@ -96,7 +96,7 @@ return [
         ],
         'options_help' => '以下の項目は、必要がない限り空白のままで結構です。最も一般的な値が使用されます。',
         'alternative_methods' => 'または',
-        'spaces_are_ignored' => 'Unwanted spaces will be automatically removed'
+        'spaces_are_ignored' => '不要なスペースは自動的に削除されます'
     ],
     'stream' => [
         'live_scan_cant_start' => 'スキャンできません (´・ω・`)',
@@ -143,11 +143,11 @@ return [
         'scan' => 'スキャン',
         'supported_formats_for_qrcode_upload' => '対応形式：jpg, jpeg, png, bmp, gif, svg, webp',
         'supported_formats_for_file_upload' => '対応形式：プレーンテキスト, json, 2fas',
-        'expected_format_for_direct_input' => 'Expected: A list of otpauth URI, one by line',
+        'expected_format_for_direct_input' => '形式：1 行につき otpauth URI 1 件',
         'supported_migration_formats' => '対応する移行用フォーマット',
         'qr_code' => 'QRコード',
         'text_file' => 'テキストファイル',
-        'direct_input' => 'Direct input',
+        'direct_input' => '直接入力',
         'plain_text' => 'プレーンテキスト',
         'parsing_data' => 'データを解析中...',
         'issuer' => '発行者',

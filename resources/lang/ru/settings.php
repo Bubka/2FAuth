@@ -29,6 +29,7 @@ return [
     'account_linked_to_sso_x_provider' => 'Вы вошли через SSO с помощью учётной записи :provider. Ваша информация не может быть изменена здесь, измените данные в :provider.',
     'general' => 'Общие',
     'security' => 'Безопасность',
+    'notifications' => 'Notifications',
     'profile' => 'Профиль',
     'change_password' => 'Изменить пароль',
     'personal_access_tokens' => 'Персональные токены доступа',
@@ -51,6 +52,10 @@ return [
         'language' => [
             'label' => 'Язык',
             'help' => 'Язык, используемый для пользовательского интерфейса 2FAuth. Именованные языки полны, выберите язык, чтобы переопределить настройки браузера по умолчанию.'
+        ],
+        'timezone' => [
+            'label' => 'Часовой пояс',
+            'help' => 'Часовой пояс применяется ко всем датам и временам, отображаемым в приложении'
         ],
         'show_otp_as_dot' => [
             'label' => 'Показать сгенерированный код <abbr title="One-Time Password">OTP</abbr> как звёздочки',
@@ -134,6 +139,14 @@ return [
         'otp_generation' => [
             'label' => 'Показывать пароль',
             'help' => 'Установка того, как и когда отображаются <abbr title="One-Time Passwords">OTP</abbr> .<br/>',
+        ],
+        'notify_on_new_auth_device' => [
+            'label' => 'On new device',
+            'help' => 'Get an email when a new device connects to your 2FAuth account for the first time'
+        ],
+        'notify_on_failed_login' => [
+            'label' => 'On failed login',
+            'help' => 'Get an email each time an attempt to connect to your 2FAuth account fails'
         ],
         'otp_generation_on_request' => 'После щелчка/касания',
         'otp_generation_on_request_legend' => 'По одиночке, в отдельном окне',

@@ -88,4 +88,7 @@ return [
     'time' => 'Heure',
     'ip_address' => 'Adresse IP',
     'device' => 'Appareil',
+    'one_month' => '1 mo.',
+    'x_month' => ':x mo.',
+    'one_year' => '1 an',
 ];

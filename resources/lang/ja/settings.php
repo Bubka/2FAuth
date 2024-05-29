@@ -19,7 +19,7 @@ return [
     'oauth' => 'OAuth',
     'webauthn' => 'WebAuthn',
     'tokens' => 'トークン',
-    'options' => '動作設定',
+    'options' => '個人設定',
     'user_preferences' => 'ユーザー設定',
     'admin_settings' => '管理者設定',
     'confirm' => [
@@ -29,6 +29,7 @@ return [
     'account_linked_to_sso_x_provider' => 'あなたは :provider アカウントのSSO経由でサインインしています。ここでは、:provider 以外の情報は変更できません。',
     'general' => '全般',
     'security' => 'セキュリティ',
+    'notifications' => 'Notifications',
     'profile' => 'プロフィール',
     'change_password' => 'パスワード変更',
     'personal_access_tokens' => '個人アクセストークン',
@@ -52,6 +53,10 @@ return [
             'label' => '言語',
             'help' => '2FAuth のUIを表示するための言語。リストにある言語は翻訳済みです。いずれかを選択してブラウザ設定を上書きできます。'
         ],
+        'timezone' => [
+            'label' => 'タイムゾーン',
+            'help' => 'このアプリケーションで表示するすべての日付と時刻に適用されるタイムゾーン'
+        ],
         'show_otp_as_dot' => [
             'label' => '生成された<abbr title="ワンタイムパスワード">OTP</abbr>を●で表示',
             'help' => '生成されたパスワード文字を見られないよう ● に置き換えます。コピーペーストには影響しません。'
@@ -65,12 +70,12 @@ return [
             'help' => '生成されたパスワードをクリックすると、自動的に画面から非表示になります。'
         ],
         'clear_search_on_copy' => [
-            'label' => 'Clear Search on copy',
-            'help' => 'Empty the Search box right after a code has been copied to the clipboard'
+            'label' => 'コピー後に検索欄を消去',
+            'help' => 'コードがクリップボードにコピーされた直後に検索欄を空にします'
         ],
         'copy_otp_on_display' => [
-            'label' => '表示時に<abbr title="ワンタイムパスワード">OTP</abbr> をコピー',
-            'help' => '画面に表示された瞬間に生成されたパスワードを自動的にコピーします。 ブラウザの制約により、最初の <abbr title="時間ベースワンタイムパスワード">TOTP</abbr>パスワードのみがコピーされ、更新後のものはコピーされません。'
+            'label' => '表示時に<abbr title="ワンタイムパスワード">OTP</abbr>をコピー',
+            'help' => '画面に表示された瞬間に生成されたパスワードを自動的にコピーします。 ブラウザの制約により、最初の<abbr title="時間ベースワンタイムパスワード">TOTP</abbr>パスワードのみがコピーされ、更新後のものはコピーされません。'
         ],
         'use_basic_qrcode_reader' => [
             'label' => '簡略版QRコードリーダーを使用',
@@ -116,8 +121,8 @@ return [
             'help' => '新規作成したアカウントが所属するグループ',
         ],
         'view_default_group_on_copy' => [
-            'label' => 'View default group on copy',
-            'help' => 'Always return to the default group when an OTP is copied',
+            'label' => 'コピー後に既定のグループを表示',
+            'help' => 'OTPをコピーした後、常に既定のグループに戻ります',
         ],
         'useDirectCapture' => [
             'label' => '選択画面を飛ばす',
@@ -134,6 +139,14 @@ return [
         'otp_generation' => [
             'label' => 'パスワードの表示方式',
             'help' => '<abbr title="ワンタイムパスワード">OTP</abbr>をいつどのように表示するか設定します。<br/>',
+        ],
+        'notify_on_new_auth_device' => [
+            'label' => 'On new device',
+            'help' => 'Get an email when a new device connects to your 2FAuth account for the first time'
+        ],
+        'notify_on_failed_login' => [
+            'label' => 'On failed login',
+            'help' => 'Get an email each time an attempt to connect to your 2FAuth account fails'
         ],
         'otp_generation_on_request' => 'クリック/タップで',
         'otp_generation_on_request_legend' => '個別の画面で開く',

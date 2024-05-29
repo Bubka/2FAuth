@@ -29,6 +29,7 @@ return [
     'account_linked_to_sso_x_provider' => 'Vous vous êtes connecté via SSO avec votre compte :provider. Vos informations ne peuvent être modifiées ici mais sur :provider.',
     'general' => 'General',
     'security' => 'Sécurité',
+    'notifications' => 'Notifications',
     'profile' => 'Profil',
     'change_password' => 'Changer le mot de passe',
     'personal_access_tokens' => 'Jetons d\'accès personnel',
@@ -51,6 +52,10 @@ return [
         'language' => [
             'label' => 'Langue',
             'help' => 'Langue utilisée pour traduire l\'interface utilisateur de 2FAuth. Les langues proposées sont complètes, vous pouvez les utiliser pour remplacer la langue de référence de votre navigateur.'
+        ],
+        'timezone' => [
+            'label' => 'Fuseau horaire',
+            'help' => 'Fuseau horaire appliqué à toutes les dates et heures affichées dans l\'application'
         ],
         'show_otp_as_dot' => [
             'label' => 'Afficher les mots de passe générés sous forme de point',
@@ -134,6 +139,14 @@ return [
         'otp_generation' => [
             'label' => 'Affichage des mots de passe',
             'help' => 'Définit quand et comment sont affichés les <abbr title="One-Time Passwords">OTPs</abbr>.<br/>',
+        ],
+        'notify_on_new_auth_device' => [
+            'label' => 'Pour un nouvel appareil',
+            'help' => 'Recevez un email quand un nouvel appareil se connecte à votre compte 2FAuth pour la première fois'
+        ],
+        'notify_on_failed_login' => [
+            'label' => 'Après une connexion échouée',
+            'help' => 'Recevez un e-mail chaque fois qu\'une tentative de connexion à votre compte 2FAuth échoue'
         ],
         'otp_generation_on_request' => 'Après un clic/tap',
         'otp_generation_on_request_legend' => 'Seul, dans un écran dédié',

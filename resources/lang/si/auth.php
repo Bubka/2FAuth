@@ -22,7 +22,7 @@ return [
     'sign_out' => 'වරන්න',
     'sign_in' => 'පුරන්න',
     'sign_in_using' => 'Sign in using',
-    'or_continue_with' => 'You an also continue with:',
+    'or_continue_with' => 'You can also continue with:',
     'sign_in_using_security_device' => 'Sign in using a security device',
     'login_and_password' => 'login & password',
     'register' => 'ලියාපදිංචි වන්න',
@@ -94,7 +94,7 @@ return [
         'reset_your_password' => 'Reset your password',
         'reset_password' => 'මුරපදය නැවත සකසන්න',
         'disabled_in_demo' => 'Feature disabled in Demo mode',
-        'new_password' => 'නව මුරපදය',
+        'new_password' => 'New password',
         'current_password' => [
             'label' => 'වත්මන් මුරපදය',
             'help' => 'Fill in your current password to confirm that it\'s you'

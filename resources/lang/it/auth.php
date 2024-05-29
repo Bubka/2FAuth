@@ -22,7 +22,7 @@ return [
     'sign_out' => 'Disconnettiti',
     'sign_in' => 'Accedi',
     'sign_in_using' => 'Accedi con',
-    'or_continue_with' => 'Si continua anche con:',
+    'or_continue_with' => 'You can also continue with:',
     'sign_in_using_security_device' => 'Accedi tramite un dispositivo di sicurezza',
     'login_and_password' => 'nome utente e password',
     'register' => 'Registrati',
@@ -94,7 +94,7 @@ return [
         'reset_your_password' => 'Reimposta la password',
         'reset_password' => 'Ripristina password',
         'disabled_in_demo' => 'Funzione disabilitata in modalità demo',
-        'new_password' => 'Nuova password',
+        'new_password' => 'New password',
         'current_password' => [
             'label' => 'Password attuale',
             'help' => 'Inserisci la tua password attuale per confermare che sei tu'

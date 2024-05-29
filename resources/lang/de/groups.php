@@ -21,7 +21,7 @@ return [
     'x_accounts' => ':count Konten',
     'manage_groups' => 'Gruppen verwalten',
     'active_group' => 'Aktive Gruppe',
-    'manage_groups_legend' => 'Sie können Gruppen erstellen, um Ihre Konten so zu organisieren wie Sie wollen. Alle Konten bleiben in der Pseudo-Gruppe mit dem Namen "Alle" sichtbar, unabhängig davon, zu welcher Gruppe sie gehören.',
+    'manage_groups_legend' => 'Sie können Gruppen erstellen, um Ihre Konten so zu organisieren wie Sie möchten. Alle Konten bleiben in der Pseudo-Gruppe mit dem Namen "Alle" sichtbar, unabhängig davon, zu welcher Gruppe sie gehören.',
     'deleting_group_does_not_delete_accounts' => 'Konten bleiben beim Löschen der Gruppe erhalten',
     'move_selected_to' => 'Ausgewählte verschieben',
     'move_selected_to_group' => 'Auswahl in eine Gruppe verschieben',
@@ -36,6 +36,6 @@ return [
         'rename_group' => 'Gruppe umbenennen',
     ],
     'confirm' => [
-        'delete' => 'Sind Sie sicher, dass Sie diese Gruppe löschen möchten?',
+        'delete' => 'Möchten Sie diese Gruppe wirklich löschen?',
     ],
 ];

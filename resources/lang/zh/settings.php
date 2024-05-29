@@ -29,6 +29,7 @@ return [
     'account_linked_to_sso_x_provider' => '您通过SSO使用您的 :provider 帐户登录。您的信息不能在这里更改，只能在 :provider 。',
     'general' => '常规',
     'security' => '安全',
+    'notifications' => 'Notifications',
     'profile' => '配置文件',
     'change_password' => '更改密码',
     'personal_access_tokens' => '个人访问令牌',
@@ -51,6 +52,10 @@ return [
         'language' => [
             'label' => '语言',
             'help' => '用来翻译 2FAuth 用户界面的语言。列出的语言已完成翻译，请设置你选择的语言来覆盖你的浏览器偏好。'
+        ],
+        'timezone' => [
+            'label' => 'Time zone',
+            'help' => 'The time zone applied to all dates and times displayed in the application'
         ],
         'show_otp_as_dot' => [
             'label' => '用 *** 来显示生成的一次性密码',
@@ -134,6 +139,14 @@ return [
         'otp_generation' => [
             'label' => '显示密码',
             'help' => '设置 <abbr title="One-Time Passwords">OTPs</abbr> 的显示方式和时间。<br/>',
+        ],
+        'notify_on_new_auth_device' => [
+            'label' => 'On new device',
+            'help' => 'Get an email when a new device connects to your 2FAuth account for the first time'
+        ],
+        'notify_on_failed_login' => [
+            'label' => 'On failed login',
+            'help' => 'Get an email each time an attempt to connect to your 2FAuth account fails'
         ],
         'otp_generation_on_request' => '点击/单击账户后',
         'otp_generation_on_request_legend' => '在专用视图中显示密码',

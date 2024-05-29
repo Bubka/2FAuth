@@ -19,10 +19,10 @@ return [
     'throttle' => 'ログインの試行回数が多すぎます。:seconds 秒後にお試しください。',
 
     // 2FAuth
-    'sign_out' => 'ログアウト',
-    'sign_in' => 'ログイン',
+    'sign_out' => 'サインアウト',
+    'sign_in' => 'サインイン',
     'sign_in_using' => 'ログイン方式：',
-    'or_continue_with' => 'You an also continue with:',
+    'or_continue_with' => 'または外部認証を利用：',
     'sign_in_using_security_device' => 'セキュリティデバイスでログイン',
     'login_and_password' => 'IDとパスワード',
     'register' => '新規登録',
@@ -101,7 +101,7 @@ return [
         ],
         'change_password' => 'パスワードを変更',
         'send_password_reset_link' => 'リセット用リンクを送信',
-        'password_successfully_reset' => 'Password successfully reset',
+        'password_successfully_reset' => 'パスワードがリセットされました',
         'edit_account' => 'アカウント編集',
         'profile_saved' => 'プロフィールを更新しました！',
         'welcome_to_demo_app_use_those_credentials' => '2FAuth デモへようこそ。<br><br>メールアドレス <strong>demo@2fauth.app</strong> とパスワード <strong>demo</strong> で接続できます',

@@ -22,7 +22,7 @@ return [
     'sign_out' => 'Keluar',
     'sign_in' => 'Masuk',
     'sign_in_using' => 'Masuk dengan',
-    'or_continue_with' => 'You an also continue with:',
+    'or_continue_with' => 'You can also continue with:',
     'sign_in_using_security_device' => 'Masuk menggunakan sebuah perangkat keamanan',
     'login_and_password' => 'masuk & kata sandi',
     'register' => 'Mendaftar',

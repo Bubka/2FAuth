@@ -22,7 +22,7 @@ return [
     'sign_out' => '登出',
     'sign_in' => '登录',
     'sign_in_using' => '登录使用',
-    'or_continue_with' => '您也可以：',
+    'or_continue_with' => 'You can also continue with:',
     'sign_in_using_security_device' => '使用安全设备登录',
     'login_and_password' => '用户名和密码',
     'register' => '注册',
@@ -94,7 +94,7 @@ WebAuthn允许您使用受信任的设备 (如Yubikeys 或具有生物识别能�
         'reset_your_password' => '重置你的密码',
         'reset_password' => '重置密码',
         'disabled_in_demo' => '此功能将在演示模式下禁用。',
-        'new_password' => '新密码',
+        'new_password' => 'New password',
         'current_password' => [
             'label' => '当前密码',
             'help' => '填写您当前设置的密码以确认是您本人'

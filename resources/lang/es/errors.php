@@ -57,6 +57,7 @@ return [
     'unauthorized' => 'No autorizado',
     'unauthorized_legend' => 'No tiene permisos para ver este recurso o para realizar esta acción',
     'cannot_delete_the_only_admin' => 'No se puede eliminar la única cuenta de administrador',
+    'cannot_demote_the_only_admin' => 'Cannot demote the only admin account',
     'error_during_data_fetching' => '💀 Algo salió mal durante la obtención de datos',
     'check_failed_try_later' => 'Comprobación fallida, por favor inténtelo más tarde',
     'sso_disabled' => 'SSO está desactivado',
@@ -67,4 +68,8 @@ return [
     'account_managed_by_external_provider' => 'Cuenta administrada por un proveedor externo',
     'data_cannot_be_refreshed_from_server' => 'Los datos no se pueden actualizar desde el servidor',
     'no_pwd_reset_for_this_user_type' => 'Password reset unavailable for this user',
+    'cannot_detect_qrcode_in_image' => 'Cannot detect a QR code in the image, try to crop the image',
+    'cannot_decode_detected_qrcode' => 'Cannot decode detected QR code, try to crop or sharpen the image',
+    'qrcode_has_invalid_checksum' => 'QR code has invalid checksum',
+    'no_readable_qrcode' => 'No readable QR code',
 ];

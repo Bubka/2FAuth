@@ -47,9 +47,12 @@ return [
     '404' => '見つかりません',
     'about' => 'このアプリについて',
     'admin' =>  [
-        'appSetup' => 'App setup',
-        'users' => 'Users management',
-        'createUser' => 'Create user',
-        'manageUser' => 'Manage user',
+        'appSetup' => 'アプリの機能',
+        'users' => 'ユーザー管理',
+        'createUser' => 'ユーザー作成',
+        'manageUser' => 'ユーザー管理',
+        'logs' => [
+            'access' => 'アクセスログ'
+        ]
     ]
 ];

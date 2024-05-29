@@ -57,6 +57,7 @@ return [
     'unauthorized' => 'Неразрешено',
     'unauthorized_legend' => 'Нямате права да видите този ресурс или да извършите това действие',
     'cannot_delete_the_only_admin' => 'Не може да изтрие единствения администраторски акаунт',
+    'cannot_demote_the_only_admin' => 'Cannot demote the only admin account',
     'error_during_data_fetching' => '💀 Something went wrong during data fetching',
     'check_failed_try_later' => 'Check failed, please retry later',
     'sso_disabled' => 'SSO is disabled',
@@ -67,4 +68,8 @@ return [
     'account_managed_by_external_provider' => 'Account managed by an external provider',
     'data_cannot_be_refreshed_from_server' => 'Data cannot be refreshed from server',
     'no_pwd_reset_for_this_user_type' => 'Password reset unavailable for this user',
+    'cannot_detect_qrcode_in_image' => 'Cannot detect a QR code in the image, try to crop the image',
+    'cannot_decode_detected_qrcode' => 'Cannot decode detected QR code, try to crop or sharpen the image',
+    'qrcode_has_invalid_checksum' => 'QR code has invalid checksum',
+    'no_readable_qrcode' => 'No readable QR code',
 ];

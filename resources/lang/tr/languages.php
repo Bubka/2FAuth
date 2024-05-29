@@ -10,14 +10,14 @@ return [
     |
     */
 
-    'browser_preference' => 'Tarayıcı tercihleri',
-    'en' => 'English (English)',
-    'fr' => 'Français (French)',
-    'de' => 'Deutsch (German)',
-    'es' => 'Español (Spanish)',
-    'zh' => '简体中文 (Chinese Simplified)',
-    'ru' => 'Русский (Russian)',
-    'bg' => 'Български (Bulgarian)',
-    'ja' => '日本語 (Japanese)',
-    'hi' => 'हिंदी (Hindi)',
+    'browser_preference' => 'Tarayıcı önayarı',
+    'en' => 'English (İngilizce)',
+    'fr' => 'Français (Fransızca)',
+    'de' => 'Deutsch (Almanca)',
+    'es' => 'Español (İspanyolca)',
+    'zh' => '简体中文 (Basitleştirilmiş Çince)',
+    'ru' => 'Русский (Rusça)',
+    'bg' => 'Български (Bulgarca)',
+    'ja' => '日本語 (Japonca)',
+    'hi' => 'हिंदी (Hintçe)',
 ];

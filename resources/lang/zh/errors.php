@@ -57,6 +57,7 @@ return [
     'unauthorized' => '无权限',
     'unauthorized_legend' => '您无权查看此资源或执行此操作',
     'cannot_delete_the_only_admin' => '无法删除唯一的管理员账户',
+    'cannot_demote_the_only_admin' => 'Cannot demote the only admin account',
     'error_during_data_fetching' => '💀 在获取数据过程中出了问题',
     'check_failed_try_later' => '检查失败，请稍后重试',
     'sso_disabled' => 'SSO 已禁用',
@@ -67,4 +68,8 @@ return [
     'account_managed_by_external_provider' => '由外部提供商管理的帐户',
     'data_cannot_be_refreshed_from_server' => '无法从服务器刷新数据',
     'no_pwd_reset_for_this_user_type' => '此用户无法重置密码',
+    'cannot_detect_qrcode_in_image' => 'Cannot detect a QR code in the image, try to crop the image',
+    'cannot_decode_detected_qrcode' => 'Cannot decode detected QR code, try to crop or sharpen the image',
+    'qrcode_has_invalid_checksum' => 'QR code has invalid checksum',
+    'no_readable_qrcode' => 'No readable QR code',
 ];

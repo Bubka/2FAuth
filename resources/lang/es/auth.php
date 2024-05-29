@@ -22,7 +22,7 @@ return [
     'sign_out' => 'Cerrar sesión',
     'sign_in' => 'Iniciar sesión',
     'sign_in_using' => 'Inicia sesión, usando',
-    'or_continue_with' => 'También puede continuar con:',
+    'or_continue_with' => 'You can also continue with:',
     'sign_in_using_security_device' => 'Iniciar sesión usando un dispositivo de seguridad',
     'login_and_password' => 'usuario y contraseña',
     'register' => 'Registrarse',
@@ -94,7 +94,7 @@ return [
         'reset_your_password' => 'Reestablecer tu contraseña',
         'reset_password' => 'Restablecer contraseña',
         'disabled_in_demo' => 'Característica desactivada en el modo Demo',
-        'new_password' => 'Nueva contraseña',
+        'new_password' => 'New password',
         'current_password' => [
             'label' => 'Contraseña actual',
             'help' => 'Introduzca su contraseña actual para confirmar que es usted'

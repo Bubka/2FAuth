@@ -10,7 +10,7 @@ return [
     |
     */
 
-    'browser_preference' => 'ブラウザの設定言語',
+    'browser_preference' => 'ブラウザの設定',
     'en' => 'English (英語)',
     'fr' => 'Français (フランス語)',
     'de' => 'Deutsch (ドイツ語)',
@@ -19,5 +19,5 @@ return [
     'ru' => 'Русский (ロシア語)',
     'bg' => 'Български (ブルガリア語)',
     'ja' => '日本語 (日本語)',
-    'hi' => 'हिंदी (Hindi)',
+    'hi' => 'हिंदी (ヒンディー語)',
 ];

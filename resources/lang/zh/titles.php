@@ -51,5 +51,8 @@ return [
         'users' => '用户管理',
         'createUser' => '创建用户',
         'manageUser' => '管理用户',
+        'logs' => [
+            'access' => 'Access log'
+        ]
     ]
 ];

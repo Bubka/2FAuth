@@ -13,24 +13,24 @@ return [
     |
     */
 
-    'service' => 'Service',
-    'account' => 'Account',
-    'icon' => 'Icon',
-    'icon_for_account_x_at_service_y' => 'Icon of the :account account at :service',
-    'icon_to_illustrate_the_account' => 'Icon that illustrates the account',
-    'remove_icon' => 'Remove icon',
-    'no_account_here' => 'No 2FA here!',
-    'add_first_account' => 'Pick a method and add your first account',
-    'use_full_form' => 'Or use the full form',
-    'add_one' => 'Add one',
-    'show_qrcode' => 'Show QR code',
-    'no_service' => '- no service -',
-    'account_created' => 'Account successfully created',
-    'account_updated' => 'Account successfully updated',
-    'accounts_deleted' => 'Account(s) successfully deleted',
-    'accounts_moved' => 'Account(s) successfully moved',
-    'export_selected_to_json' => 'Download a json export of selected accounts',
-    'reveal' => 'reveal',
+    'service' => 'Servis',
+    'account' => 'Hesap',
+    'icon' => 'Simge',
+    'icon_for_account_x_at_service_y' => ':account hesabının :service üzerindeki simgesi',
+    'icon_to_illustrate_the_account' => 'Hesabı gösteren simge',
+    'remove_icon' => 'Simgeyi kaldır',
+    'no_account_here' => 'Burada 2FA yok!',
+    'add_first_account' => 'Bir metod seç ve ilk hesabını ekle',
+    'use_full_form' => 'Veya detaylı formu kullan',
+    'add_one' => 'Ekle',
+    'show_qrcode' => 'QR kodu göster',
+    'no_service' => '- servis yok -',
+    'account_created' => 'Hesap başarıyla oluşturuldu',
+    'account_updated' => 'Hesap başarı ile güncellendi',
+    'accounts_deleted' => 'Hesap(lar) başarıyla silindi',
+    'accounts_moved' => 'Hesap(lar) başarıyla taşındı',
+    'export_selected_to_json' => 'Seçilen hesapların json çıktısını indir',
+    'reveal' => 'göster',
     'forms' => [
         'service' => [
             'placeholder' => 'Google, Twitter, Apple',
@@ -38,134 +38,134 @@ return [
         'account' => [
             'placeholder' => 'John DOE',
         ],
-        'new_account' => 'New account',
-        'edit_account' => 'Edit account',
+        'new_account' => 'Yeni hesap',
+        'edit_account' => 'Hesabı düzenle',
         'otp_uri' => 'OTP Uri',
-        'scan_qrcode' => 'Scan a QR code',
-        'upload_qrcode' => 'Upload a QR code',
-        'use_advanced_form' => 'Use the advanced form',
-        'prefill_using_qrcode' => 'Prefill using a QR Code',
+        'scan_qrcode' => 'QR kod tara',
+        'upload_qrcode' => 'QR kod yükle',
+        'use_advanced_form' => 'Detaylı formu kullan',
+        'prefill_using_qrcode' => 'QR kod kullanarak doldur',
         'use_qrcode' => [
-            'val' => 'Use a qrcode',
-            'title' => 'Use a QR code to fill the form magically',
+            'val' => 'QR kod kullan',
+            'title' => 'Formu sihirli bir şekilde doldurmak için QR kod kullan',
         ],
         'unlock' => [
-            'val' => 'Unlock',
-            'title' => 'Unlock it (at your own risk)',
+            'val' => 'Kilidi aç',
+            'title' => 'Kilidi aç (risk size ait)',
         ],
         'lock' => [
-            'val' => 'Lock',
-            'title' => 'Lock it',
+            'val' => 'Kilitle',
+            'title' => 'Kilitle',
         ],
-        'choose_image' => 'Upload',
-        'i_m_lucky' => 'Try my luck',
-        'i_m_lucky_legend' => 'The "Try my luck" button try to get the official icon of the given service. Enter actual service name without ".xyz" extension and try to avoid typo. (beta feature)',
-        'test' => 'Test',
+        'choose_image' => 'Yükle',
+        'i_m_lucky' => 'Şansımı dene',
+        'i_m_lucky_legend' => '"Şansımı dene" butonu söz konusu servisin özgün simgesini almaya çalışır. Hizmetin gerçek adını ".xyz" uzantısı olmadan girin ve yazım hatalarından kaçınmaya çalışın. (beta özelliği)',
+        'test' => 'Deneme',
         'secret' => [
-            'label' => 'Secret',
-            'help' => 'The key used to generate your security codes'
+            'label' => 'Anahtar',
+            'help' => 'Güvenlik kodlarınızın oluşturulması için gereken anahtar'
         ],
-        'plain_text' => 'Plain text',
+        'plain_text' => 'Düz metin',
         'otp_type' => [
-            'label' => 'Choose the type of <abbr title="One-Time Password">OTP</abbr> to create',
-            'help' => 'Time-based OTP or HMAC-based OTP or Steam OTP'
+            'label' => 'Oluşturulacak <abbr title="One-Time Password">OTP\'nin</abbr> türünü seçin',
+            'help' => 'Zamana dayalı OTP veya HMAC dayalı OTP veya Steam OTP'
         ],
         'digits' => [
-            'label' => 'Digits',
-            'help' => 'The number of digits of the generated security codes'
+            'label' => 'Hane sayısı',
+            'help' => 'Oluşturulacak güvenlik kodunun kaç haneden oluşacağı'
         ],
         'algorithm' => [
-            'label' => 'Algorithm',
-            'help' => 'The algorithm used to secure your security codes'
+            'label' => 'Algoritma',
+            'help' => 'Güvenlik kodlarının oluşturulması için kullanılacak algoritma'
         ],
         'period' => [
-            'label' => 'Period',
-            'placeholder' => 'Default is 30',
-            'help' => 'The period of validity of the generated security codes in second'
+            'label' => 'Süre',
+            'placeholder' => 'Varsayılan 30',
+            'help' => 'Oluşturulan güvenlik kodlarının, saniye cinsinden, geçerli olduğu süre'
         ],
         'counter' => [
-            'label' => 'Counter',
-            'placeholder' => 'Default is 0',
-            'help' => 'The initial counter value',
-            'help_lock' => 'It is risky to edit the counter as you can desynchronize the account with the verification server of the service. Use the lock icon to enable modification, but only if you know for you are doing'
+            'label' => 'Sayaç',
+            'placeholder' => 'Varsayılan değer 0',
+            'help' => 'Başlangıç sayaç değeri',
+            'help_lock' => 'Sayaç değerini düzenlemek risklidir çünkü hesabı hizmetin doğrulama sunucusuyla senkronize etmeyi bozabilirsiniz. Değişiklik yapmak için kilit simgesini kullanın, ancak ne yaptığınızı biliyorsanız sadece değiştirin'
         ],
         'image' => [
-            'label' => 'Image',
+            'label' => 'Görüntü',
             'placeholder' => 'http://...',
-            'help' => 'The url of an external image to use as the account icon'
+            'help' => 'Dış bir resmin URL\'i, hesap simgesi olarak kullanılacak'
         ],
-        'options_help' => 'You can leave the following options blank if you don\'t know how to set them. The most commonly used values will be applied.',
-        'alternative_methods' => 'Alternative methods',
-        'spaces_are_ignored' => 'Unwanted spaces will be automatically removed'
+        'options_help' => 'Aşağıdaki seçenekleri boş bırakabilirsiniz eğer nasıl ayarlanacağını bilmiyorsanız. En yaygın kullanılan değerler uygulanacaktır.',
+        'alternative_methods' => 'Alternatif yöntem',
+        'spaces_are_ignored' => 'İstenmeyen boşluklar otomatik olarak kaldırılacaktır'
     ],
     'stream' => [
-        'live_scan_cant_start' => 'Live scan can\'t start :(',
+        'live_scan_cant_start' => 'Canlı tarama başlatılamıyor :(',
         'need_grant_permission' => [
-            'reason' => '2FAuth does not have permission to access your camera',
-            'solution' => 'You need to grant permission to use your device camera. If you already denied and your browser do not prompt you again, please refers to the browser documentation to find out how to grant permission.',
-            'click_camera_icon' => 'It is usually done by clicking on a slashed camera icon in or next to the browser\'s address bar',
+            'reason' => '2FAuth\'un kameranıza ulaşmak için izni yok',
+            'solution' => 'Cihaz kamerasını kullanma izni vermeniz gerekiyor. Eğer zaten reddettiyseniz ve tarayıcınız tekrar sormuyorsa, izni nasıl vereceğiniz hakkında tarayıcı belgelerine başvurun.',
+            'click_camera_icon' => 'Genellikle tarayıcının adres çubuğunun yanında veya içinde çizili bir kamera simgesine tıklayarak yapılır',
         ],
         'not_readable' => [
-            'reason' => 'Fail to load scanner',
-            'solution' => 'Is the camera already in use? Ensure that no other app use your camera and try again'
+            'reason' => 'Tarayıcı yüklenemedi',
+            'solution' => 'Kamera zaten kullanımda mı? Başka bir uygulamanın kameranızı kullanmadığından emin olun ve tekrar deneyin'
         ],
         'no_cam_on_device' => [
-            'reason' => 'No camera on this device',
-            'solution' => 'Maybe you forgot to plug in your webcam'
+            'reason' => 'Bu cihazda kamera yok',
+            'solution' => 'Belki web kamerasını takmayı unuttunuz'
         ],
         'secured_context_required' => [
-            'reason' => 'Secure context required',
-            'solution' => 'HTTPS is required for live scan. If you run 2FAuth from your computer, do not use virtual host other than localhost'
+            'reason' => 'Güvenli bağlam gereklidir',
+            'solution' => 'Canlı tarama için HTTPS gereklidir. Eğer 2FAuth\'u bilgisayarınızdan çalıştırıyorsanız, localhost dışında sanal bir ana bilgisayar kullanmayın'
         ],
-        'https_required' => 'HTTPS required for camera streaming',
+        'https_required' => 'Kamera yayını için HTTPS gereklidir',
         'camera_not_suitable' => [
-            'reason' => 'Installed cameras are not suitable',
-            'solution' => 'Please use another device/camera'
+            'reason' => 'Yüklenen kameralar uygun değil',
+            'solution' => 'Lütfen başka bir cihaz/kamera kullanın'
         ],
         'stream_api_not_supported' => [
-            'reason' => 'Stream API is not supported in this browser',
-            'solution' => 'You should use a modern browser'
+            'reason' => 'Bu tarayıcıda Akış API\'si desteklenmiyor',
+            'solution' => 'Modern bir tarayıcı kullanmalısınız'
         ],
     ],
     'confirm' => [
-        'delete' => 'Are you sure you want to delete this account?',
-        'cancel' => 'Changes will be lost. Are you sure?',
-        'discard' => 'Are you sure you want to discard this account?',
-        'discard_all' => 'Are you sure you want to discard all accounts?',
-        'discard_duplicates' => 'Are you sure you want to discard all duplicates?',
+        'delete' => 'Bu hesabı silmek istediğinizden emin misiniz?',
+        'cancel' => 'Değişiklikler kaybolacak. Emin misiniz?',
+        'discard' => 'Bu hesabı silmek istediğinizden emin misiniz?',
+        'discard_all' => 'Tüm hesapları silmek istediğinizden emin misiniz?',
+        'discard_duplicates' => 'Tüm kopyaları silmek istediğinizden emin misiniz?',
     ],
     'import' => [
-        'import' => 'Import',
-        'to_import' => 'Import',
-        'import_legend' => '2FAuth can import data from various 2FA apps.',
-        'import_legend_afterpart' => 'Use the Export feature of these apps to get a migration resource like a QR code or a JSON file then load it here.',
-        'upload' => 'Upload',
-        'scan' => 'Scan',
-        'supported_formats_for_qrcode_upload' => 'Accepted: jpg, jpeg, png, bmp, gif, svg, or webp',
-        'supported_formats_for_file_upload' => 'Accepted: Plain text, json, 2fas',
-        'expected_format_for_direct_input' => 'Expected: A list of otpauth URI, one by line',
-        'supported_migration_formats' => 'Supported migration formats',
-        'qr_code' => 'QR Code',
-        'text_file' => 'Text file',
-        'direct_input' => 'Direct input',
-        'plain_text' => 'Plain text',
-        'parsing_data' => 'Parsing data...',
-        'issuer' => 'Issuer',
-        'imported' => 'Imported',
-        'failure' => 'Failure',
-        'x_valid_accounts_found' => ':count valid accounts found',
-        'submitted_data_parsed_now_accounts_are_awaiting_import' => 'The following 2FA accounts were found in the migration resource. So far none of them have been added to 2FAuth.',
-        'use_buttons_to_save_or_discard' => 'Use the available buttons to permanently save them to your 2FA collection or discard them.',
-        'import_all' => 'Import all',
-        'import_this_account' => 'Import this account',
-        'discard_all' => 'Discard all',
-        'discard_duplicates' => 'Discard duplicates',
-        'discard_this_account' => 'Discard this account',
-        'generate_a_test_password' => 'Generate a test pasword',
-        'possible_duplicate' => 'An account with the exact same data already exists',
-        'invalid_account' => '- invalid account -',
-        'invalid_service' => '- invalid service -',
-        'do_not_set_password_or_encryption' => 'Do NOT enable Password protection or Encryption when you export data from a 2FA app otherwise 2FAuth will not be able to decipher them.',
+        'import' => 'İçe Aktar',
+        'to_import' => 'İçe Aktar',
+        'import_legend' => '2FAuth, çeşitli 2FA uygulamalarından veri alabilir.',
+        'import_legend_afterpart' => 'Bu uygulamaların Dışa Aktarma özelliğini kullanarak bir QR kodu veya JSON dosyası gibi bir göç kaynağı alın ve buraya yükleyin.',
+        'upload' => 'Yükle',
+        'scan' => 'Tara',
+        'supported_formats_for_qrcode_upload' => 'Kabul Edilen: jpg, jpeg, png, bmp, gif, svg veya webp',
+        'supported_formats_for_file_upload' => 'Kabul Edilen: Düz metin, json, 2fas',
+        'expected_format_for_direct_input' => 'Beklenen: Her biri bir satırda bir otpauth URI listesi',
+        'supported_migration_formats' => 'Desteklenen taşıma biçimleri',
+        'qr_code' => 'QR Kodu',
+        'text_file' => 'Metin dosyası',
+        'direct_input' => 'Doğrudan giriş',
+        'plain_text' => 'Düz metin',
+        'parsing_data' => 'Veri analiz ediliyor...',
+        'issuer' => 'Yayınlayan',
+        'imported' => 'İçe aktarıldı',
+        'failure' => 'Başarısız',
+        'x_valid_accounts_found' => 'Toplam geçerli hesap sayısı: :count',
+        'submitted_data_parsed_now_accounts_are_awaiting_import' => 'Taşıma kaynağında aşağıdaki 2FA hesapları bulundu. Şimdiye kadar hiçbiri 2FAuth\'a eklenmedi.',
+        'use_buttons_to_save_or_discard' => 'Kullanılabilir düğmeleri kullanarak bunları 2FA koleksiyonunuza kalıcı olarak kaydedin veya bunları silin.',
+        'import_all' => 'Tümünü içe aktar',
+        'import_this_account' => 'Hesabı içe aktar',
+        'discard_all' => 'Hepsini iptal et',
+        'discard_duplicates' => 'Aynı olanları yoksay',
+        'discard_this_account' => 'Bu hesabı yoksay',
+        'generate_a_test_password' => 'Bir deneme parolası oluştur',
+        'possible_duplicate' => 'Birebir aynı verilere sahip başkan bir hesap mevcut',
+        'invalid_account' => '- geçersiz hesap -',
+        'invalid_service' => '- geçersiz servis -',
+        'do_not_set_password_or_encryption' => 'Başka bir 2FA uygulamasından verileri dışarı aktarırken şifreleme veya şifre ile koruma seçeneklerini kullanmayın, aksi takdirde 2FAuth bu verileri açamaz.',
     ],
 
 ];

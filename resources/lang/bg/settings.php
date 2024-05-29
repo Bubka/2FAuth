@@ -29,6 +29,7 @@ return [
     'account_linked_to_sso_x_provider' => 'You signed-in via SSO using your :provider account. Your information cannot be changed here but on :provider.',
     'general' => 'Общи',
     'security' => 'Сигурност',
+    'notifications' => 'Notifications',
     'profile' => 'Профил',
     'change_password' => 'Промяна на паролата',
     'personal_access_tokens' => 'Персонални токени за достъп',
@@ -51,6 +52,10 @@ return [
         'language' => [
             'label' => 'Език',
             'help' => 'Език, използван за превод на потребителския интерфейс 2FAuth. Наименуваните езици са завършени, задайте този по ваш избор, който да замени предпочитанията на браузъра ви.'
+        ],
+        'timezone' => [
+            'label' => 'Time zone',
+            'help' => 'The time zone applied to all dates and times displayed in the application'
         ],
         'show_otp_as_dot' => [
             'label' => 'Показване на генерираните еднократни пароли като точка',
@@ -134,6 +139,14 @@ return [
         'otp_generation' => [
             'label' => 'Покажи паролата',
             'help' => 'Задайте как и кога <abbr title="One-Time Passwords">OTPs</abbr> да се показват.<br/>',
+        ],
+        'notify_on_new_auth_device' => [
+            'label' => 'On new device',
+            'help' => 'Get an email when a new device connects to your 2FAuth account for the first time'
+        ],
+        'notify_on_failed_login' => [
+            'label' => 'On failed login',
+            'help' => 'Get an email each time an attempt to connect to your 2FAuth account fails'
         ],
         'otp_generation_on_request' => 'След клик/тап',
         'otp_generation_on_request_legend' => 'Самостоятелно, в отделен изглед',

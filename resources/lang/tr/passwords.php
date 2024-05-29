@@ -14,13 +14,13 @@ return [
     */
 
     // Laravel
-    'reset' => 'Şifreniz sıfırlandı!',
-    'sent' => 'E-posta adresinize şifre sıfırlama bağlantısı gönderdik!',
-    'throttled' => 'Please wait before retrying.',
-    'token' => 'This password reset token is invalid.',
-    'user' => "We can't find a user with that email address.",
+    'reset' => 'Parolanız sıfırlandı!',
+    'sent' => 'ePosta adresinize parola sıfırlama bağlantısı gönderdik!',
+    'throttled' => 'Lütfen tekrar denemeden önce bekleyin.',
+    'token' => 'Şifre sıfırlama token\'i geçersiz.',
+    'user' => "Bu ePosta adresine sahip bir kullanıcı bulamadık.",
 
     // 2FAuth
-    'password' => 'Passwords must be at least eight characters and match the confirmation.',
+    'password' => 'Parolalar en az sekiz karakterden oluşmalı ve şifre doğrulaması ile eşleşmelidir.',
     
 ];

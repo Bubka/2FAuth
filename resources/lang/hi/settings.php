@@ -29,6 +29,7 @@ return [
     'account_linked_to_sso_x_provider' => 'आपने अपने :provider खाते का उपयोग करके SSO के माध्यम से साइन-इन किया है। आपकी जानकारी यहां :provider के अलावा नहीं बदली जा सकती।',
     'general' => 'सामान्य',
     'security' => 'सुरक्षा',
+    'notifications' => 'Notifications',
     'profile' => 'प्रोफ़ाइल',
     'change_password' => 'पासवर्ड बदलें',
     'personal_access_tokens' => 'प्रवेश के व्यक्तिगत टोकन',
@@ -51,6 +52,10 @@ return [
         'language' => [
             'label' => 'भाषा ',
             'help' => '2FAuth उपयोगकर्ता इंटरफ़ेस का अनुवाद करने के लिए उपयोग की जाने वाली भाषा। नामित भाषाएँ पूर्ण हैं, अपनी ब्राउज़र प्राथमिकता को ओवरराइड करने के लिए अपनी पसंद में से एक भाषा को चुनें।'
+        ],
+        'timezone' => [
+            'label' => 'टाइम ज़ोन',
+            'help' => 'एप में दिखाए गए सभी समय और तारीखों पर यह टाइम ज़ोन लागू होगा'
         ],
         'show_otp_as_dot' => [
             'label' => 'जनरेट किए गए <abbr title="वन-टाइम पासवर्ड">OTP</abbr> को डॉट के रूप में दिखाएं',
@@ -134,6 +139,14 @@ return [
         'otp_generation' => [
             'label' => 'पासवर्ड दिखाएँ',
             'help' => 'सेट करें कि <abbr title="वन-टाइम पासवर्ड">OTP</abbr> कैसे और कब प्रदर्शित हों।<br/>',
+        ],
+        'notify_on_new_auth_device' => [
+            'label' => 'On new device',
+            'help' => 'Get an email when a new device connects to your 2FAuth account for the first time'
+        ],
+        'notify_on_failed_login' => [
+            'label' => 'On failed login',
+            'help' => 'Get an email each time an attempt to connect to your 2FAuth account fails'
         ],
         'otp_generation_on_request' => 'क्लिक / टैप के बाद',
         'otp_generation_on_request_legend' => 'अपने दृश्य में अकेला',
