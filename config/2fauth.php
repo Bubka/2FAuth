@@ -122,7 +122,7 @@ return [
         'formatPasswordBy' => 0.5,
         'lang' => 'browser',
         'getOtpOnRequest' => true,
-        'notifyOnNewAuthDevice' => true,
+        'notifyOnNewAuthDevice' => false,
         'notifyOnFailedLogin' => false,
         'timezone' => env('APP_TIMEZONE', 'UTC'),
     ],
