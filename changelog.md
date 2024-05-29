@@ -1,6 +1,6 @@
 # Change log
 
-## [5.2.0] - 2024-05-24
+## [5.2.0] - 2024-05-29
 
 ⚠️ This version drops PHP 8.1 support ⚠️
 
@@ -32,7 +32,7 @@
 
 ### API [1.4.0]
 
-- `/api/v1/users/{id}/authentications` GET path added
+- `/api/v1/users/{id}/authentications` GET path added ([doc](https://docs.2fauth.app/resources/rapidoc.html#get-/api/v1/users/-id-/authentications)).
 
 ## [5.1.1] - 2024-03-21
 
