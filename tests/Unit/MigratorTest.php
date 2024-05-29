@@ -16,7 +16,6 @@ use App\Services\Migrators\TwoFASMigrator;
 use App\Services\Migrators\TwoFAuthMigrator;
 use App\Services\SettingService;
 use Illuminate\Support\Facades\Storage;
-use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -141,7 +140,6 @@ class MigratorTest extends TestCase
     /**
      * Clean up the testing environment before the next test.
      *
-     * @return void
      *
      * @throws \Mockery\Exception\InvalidCountException
      */
@@ -359,7 +357,7 @@ class MigratorTest extends TestCase
         // in the migration payload) so we do not use get() to retrieve items
         $this->assertEquals($this->fakeTwofaccount->id, $accounts->first()->id);
         $this->assertEquals($this->fakeTwofaccount->id, $accounts->last()->id);
-        
+
         $this->forgetMock(GoogleAuthMigrator::class);
     }
 

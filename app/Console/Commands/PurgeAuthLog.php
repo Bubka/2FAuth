@@ -51,7 +51,7 @@ class PurgeAuthLog extends Command
     {
         $retentionTime = config('2fauth.config.authLogRetentionTime');
         $retentionTime = is_numeric($retentionTime) ? (int) $retentionTime : 365;
-        $date = now()->subDays($retentionTime)->format('Y-m-d H:i:s');
+        $date          = now()->subDays($retentionTime)->format('Y-m-d H:i:s');
 
         AuthLog::where('login_at', '<', $date)
             ->orWhere('logout_at', '<', $date)

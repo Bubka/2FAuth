@@ -77,7 +77,8 @@ class GoogleAuthMigrator extends Migrator
     /**
      * Encode into uppercase Base32
      */
-    protected function toBase32(string $str) {
+    protected function toBase32(string $str)
+    {
         return Base32::encodeUpper($str);
     }
 }

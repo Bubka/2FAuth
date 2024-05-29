@@ -39,16 +39,16 @@ class PurgeLogTest extends FeatureTestCase
      */
     public function test_purgeLog_defaults_to_one_year()
     {
-        $oneYearOldLog = AuthLog::factory()->daysAgo(366)->for($this->user, 'authenticatable')->create();
+        $oneYearOldLog   = AuthLog::factory()->daysAgo(366)->for($this->user, 'authenticatable')->create();
         $sixMonthsOldLog = AuthLog::factory()->daysAgo(364)->for($this->user, 'authenticatable')->create();
 
         $this->artisan('2fauth:purge-log');
 
         $this->assertDatabaseHas('auth_logs', [
-            'id' => $sixMonthsOldLog->id
+            'id' => $sixMonthsOldLog->id,
         ]);
         $this->assertDatabaseMissing('auth_logs', [
-            'id' => $oneYearOldLog->id
+            'id' => $oneYearOldLog->id,
         ]);
     }
 
@@ -64,7 +64,7 @@ class PurgeLogTest extends FeatureTestCase
         $this->artisan('2fauth:purge-log');
 
         $this->assertDatabaseMissing('auth_logs', [
-            'id' => $log->id
+            'id' => $log->id,
         ]);
     }
 
@@ -81,7 +81,7 @@ class PurgeLogTest extends FeatureTestCase
         $this->artisan('2fauth:purge-log');
 
         $this->assertDatabaseMissing('auth_logs', [
-            'id' => $log->id
+            'id' => $log->id,
         ]);
     }
 
@@ -97,7 +97,7 @@ class PurgeLogTest extends FeatureTestCase
         $this->artisan('2fauth:purge-log');
 
         $this->assertDatabaseHas('auth_logs', [
-            'id' => $log->id
+            'id' => $log->id,
         ]);
     }
 
@@ -108,16 +108,16 @@ class PurgeLogTest extends FeatureTestCase
     public function test_purgeLog_with_invalid_config_defaults_to_one_year($config)
     {
         config(['2fauth.config.authLogRetentionTime' => $config]);
-        $oneYearOldLog = AuthLog::factory()->daysAgo(366)->for($this->user, 'authenticatable')->create();
+        $oneYearOldLog   = AuthLog::factory()->daysAgo(366)->for($this->user, 'authenticatable')->create();
         $sixMonthsOldLog = AuthLog::factory()->daysAgo(364)->for($this->user, 'authenticatable')->create();
 
         $this->artisan('2fauth:purge-log');
 
         $this->assertDatabaseHas('auth_logs', [
-            'id' => $sixMonthsOldLog->id
+            'id' => $sixMonthsOldLog->id,
         ]);
         $this->assertDatabaseMissing('auth_logs', [
-            'id' => $oneYearOldLog->id
+            'id' => $oneYearOldLog->id,
         ]);
     }
 
@@ -128,15 +128,14 @@ class PurgeLogTest extends FeatureTestCase
     {
         return [
             'NULL' => [
-                null
+                null,
             ],
             'EMPTY' => [
-                ''
+                '',
             ],
             'STRING' => [
-                'ljhkjh'
+                'ljhkjh',
             ],
         ];
     }
-    
 }

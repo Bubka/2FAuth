@@ -97,7 +97,7 @@ class User extends Authenticatable implements HasLocalePreference, WebAuthnAuthe
      * @var array
      */
     protected $observables = ['demoting'];
-    
+
     /**
      * Get the user's preferred locale.
      */
