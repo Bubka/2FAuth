@@ -2,12 +2,23 @@
 
 ## [5.2.0] - 2024-05-29
 
+2FAuth v5.2 offers a new notification feature. Each user can now decide whether they want to receive an email after a successful login from a new device, or after a failed login.
+
+For now, both notifications are __disabled__ by default. Why this choice when this feature increases security? Because if the email configuration of your 2FAuth instance is not set up correctly, such login attempts will take a while (until all email sending attempts have failed).
+
+If you never set up email sending on your instance, do it. It is the only way to recover your account, whether you use a password or a passkey to authenticate. To help you in this task, all required environment variables are described [here](https://docs.2fauth.app/getting-started/configuration/#email-setting). Since v5.1, administrators also have access to a test email button to validate the email configuration from the UI.
+
+Notifications will be enabled by default in a future version.
+
+Last but not least :
+
 ⚠️ This version drops PHP 8.1 support ⚠️
 
 ### Added
 
 - When [installed](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Guides/Installing), 2FAuth now offers shortcuts to common actions.
-- User authentication logs (See user management pages in the admin area)
+- User authentication logs (See user management pages in the admin area).
+- Two user preferences to control the notifications sent when authentication events occur.
 - A user preference to set the timezone applied to dates and times displayed in the app.
 
 #### New env vars
@@ -164,7 +175,7 @@ v5 also comes with the following.
 
 ---
 
-**Full Changelog**: [v4.2.4...v5.0.0](https://github.com/Bubka/2FAuth/compare/v4.2.4...v5.0.0)
+__Full Changelog__: [v4.2.4...v5.0.0](https://github.com/Bubka/2FAuth/compare/v4.2.4...v5.0.0)
 
 ## [4.2.4] - 2023-11-21
 
@@ -205,7 +216,7 @@ v5 also comes with the following.
 
 ### Changed
 
-- Navigation with the **Back** and **Close** buttons is now fully consistent with their labeling, even when browsing back through successive views using those buttons.
+- Navigation with the __Back__ and __Close__ buttons is now fully consistent with their labeling, even when browsing back through successive views using those buttons.
 - The length of the email submitted during registration is now limited to 191 characters ([#214](https://github.com/Bubka/2FAuth/issues/214)).
 - Upgrade to Laravel 10
 
@@ -216,7 +227,7 @@ v5 also comes with the following.
 
 ---
 
-**Full Changelog**: [v4.1.0...v4.2.0](https://github.com/Bubka/2FAuth/compare/v4.1.0...v4.2.0)
+__Full Changelog__: [v4.1.0...v4.2.0](https://github.com/Bubka/2FAuth/compare/v4.1.0...v4.2.0)
 
 ## [4.1.0] - 2023-07-07
 
