@@ -544,9 +544,8 @@ class UserManagerControllerTest extends FeatureTestCase
     /**
      * @test
      */
-    public function test_authentications_returns_all_entries() : void
+    public function test_authentications_returns_all_preserved_entries() : void
     {
-        AuthLog::factory()->for($this->user, 'authenticatable')->beforeLastYear()->create();
         AuthLog::factory()->for($this->user, 'authenticatable')->duringLastYear()->create();
         AuthLog::factory()->for($this->user, 'authenticatable')->duringLastSixMonth()->create();
         AuthLog::factory()->for($this->user, 'authenticatable')->duringLastThreeMonth()->create();
@@ -558,7 +557,20 @@ class UserManagerControllerTest extends FeatureTestCase
         $this->actingAs($this->admin, 'api-guard')
             ->json('GET', '/api/v1/users/' . $this->user->id . '/authentications')
             ->assertOk()
-            ->assertJsonCount(8);
+            ->assertJsonCount(7);
+    }
+
+    /**
+     * @test
+     */
+    public function test_authentications_does_not_return_old_entries() : void
+    {
+        AuthLog::factory()->for($this->user, 'authenticatable')->beforeLastYear()->create();
+
+        $this->actingAs($this->admin, 'api-guard')
+            ->json('GET', '/api/v1/users/' . $this->user->id . '/authentications')
+            ->assertOk()
+            ->assertJsonCount(0);
     }
 
     /**
