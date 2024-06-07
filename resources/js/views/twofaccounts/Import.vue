@@ -401,7 +401,7 @@
                     <div class="is-flex is-justify-content-space-between">
                         <!-- Account name -->
                         <div v-if="account.id > -2 && account.imported !== 0" class="is-flex-grow-1 has-ellipsis is-clickable" @click="previewAccount(index)" :title="$t('twofaccounts.import.generate_a_test_password')">
-                            <img v-if="account.icon && user.preferences.showAccountsIcons" class="import-icon" :src="$2fauth.config.subdirectory + '/storage/icons/' + account.icon" :alt="$t('twofaccounts.icon_for_account_x_at_service_y', {account: account.account, service: account.service})">
+                            <img role="presentation" v-if="account.icon && user.preferences.showAccountsIcons" class="import-icon" :src="$2fauth.config.subdirectory + '/storage/icons/' + account.icon" alt="">
                             {{ account.account }}
                         </div>
                         <div v-else class="is-flex-grow-1 has-ellipsis">{{ account.account }}</div>
