@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -20,7 +21,13 @@ class SocialiteController extends Controller
      */
     public function redirect(Request $request, string $driver)
     {
+        // Generic SSO provider definition check
         if (! config('services.' . $driver . '.client_id') || ! config('services.' . $driver . '.client_secret')) {
+            return redirect('/error?err=sso_bad_provider_setup');
+        }
+
+        // OpenID SSO provider definition check
+        if ($driver == 'openid' && (! config('services.openid.token_url') || ! config('services.openid.authorize_url') || ! config('services.openid.userinfo_url'))) {
             return redirect('/error?err=sso_bad_provider_setup');
         }
 
@@ -39,6 +46,8 @@ class SocialiteController extends Controller
         try {
             $socialiteUser = Socialite::driver($driver)->user();
         } catch (\Exception $e) {
+            Log::error($e);
+
             return redirect('/error?err=sso_failed');
         }
 
