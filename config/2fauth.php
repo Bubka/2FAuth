@@ -125,6 +125,7 @@ return [
         'notifyOnNewAuthDevice' => false,
         'notifyOnFailedLogin' => false,
         'timezone' => env('APP_TIMEZONE', 'UTC'),
+        'sortCaseSensitive' => false,
     ],
 
 ];

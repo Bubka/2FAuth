@@ -73,6 +73,10 @@ return [
             'label' => 'Clear Search on copy',
             'help' => 'Empty the Search box right after a code has been copied to the clipboard'
         ],
+        'sort_case_sensitive' => [
+            'label' => 'Sort case sensitive',
+            'help' => 'When invoked, force the Sort function to sort accounts on a case-sensitive basis'
+        ],
         'copy_otp_on_display' => [
             'label' => 'Copy <abbr title="One-Time Password">OTP</abbr> on display',
             'help' => 'Automatically copy a generated password right after it appears on screen. Due to browsers limitations, only the first <abbr title="Time-based One-Time Password">TOTP</abbr> password will be copied, not the rotating ones'

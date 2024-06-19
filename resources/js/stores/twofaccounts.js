@@ -181,7 +181,10 @@ export const useTwofaccounts = defineStore({
          * Sorts accounts ascending
          */
         sortAsc() {
-            this.items.sort((a, b) => a.service > b.service ? 1 : -1)
+            if (useUserStore().preferences.sortCaseSensitive) {
+                this.items.sort((a, b) => a.service > b.service ? 1 : -1)
+            }
+            else this.items.sort((a, b) => a.service.toLowerCase() > b.service.toLowerCase() ? 1 : -1)
             this.saveOrder()
         },
 
@@ -189,7 +192,10 @@ export const useTwofaccounts = defineStore({
          * Sorts accounts descending
         */
         sortDesc() {
-            this.items.sort((a, b) => a.service < b.service ? 1 : -1)
+            if (useUserStore().preferences.sortCaseSensitive) {
+                this.items.sort((a, b) => a.service < b.service ? 1 : -1)
+            }
+            else this.items.sort((a, b) => a.service.toLowerCase() < b.service.toLowerCase() ? 1 : -1)
             this.saveOrder()
         },
         
