@@ -132,6 +132,10 @@ return [
             'label' => 'View default group on copy',
             'help' => 'Always return to the default group when an OTP is copied',
         ],
+        'auto_save_qrcoded_account' => [
+            'label' => 'Auto-save accounts',
+            'help' => 'New accounts are automatically registered after scanning or uploading a QR code, no need to click a Save button',
+        ],
         'useDirectCapture' => [
             'label' => 'Direct input',
             'help' => 'Choose whether you want to be prompted to choose an input mode among those available or if you want to directly use the default input mode',

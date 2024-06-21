@@ -35,6 +35,12 @@
     const iconForm = reactive(new Form({
         icon: null
     }))
+    const otpDisplayProps = ref({
+        otp_type: '',
+        account : '',
+        service : '',
+        icon : '',
+    })
     const otp_types = [
         { text: 'TOTP', value: 'totp' },
         { text: 'HOTP', value: 'hotp' },
@@ -57,12 +63,14 @@
     const tempIcon = ref('')
     const showQuickForm = ref(false)
     const showAlternatives = ref(false)
+    const showOtpInModal = ref(false)
     const showAdvancedForm = ref(false)
     const ShowTwofaccountInModal = ref(false)
     const fetchingLogo = ref(false)
 
     // $refs
     const iconInput = ref(null)
+    const OtpDisplayForAutoSave = ref(null)
     const OtpDisplayForQuickForm = ref(null)
     const OtpDisplayForAdvancedForm = ref(null)
     const qrcodeInputLabel = ref(null)
@@ -88,24 +96,40 @@
             })
         }
         else if( bus.decodedUri ) {
-            // the Start view provided an uri via the bus store so we parse it and prefill the quick form
+            // The Start|Capture view provided an uri via the bus store.
             uri.value = bus.decodedUri
             bus.decodedUri = null
 
-            twofaccountService.preview(uri.value).then(response => {
-                form.fill(response.data)
-                tempIcon.value = response.data.icon ? response.data.icon : ''
-                showQuickForm.value = true
-                nextTick().then(() => {
-                    OtpDisplayForQuickForm.value.show()
+            if (user.preferences.AutoSaveQrcodedAccount) {
+                // The user wants the account to be saved automatically.
+                // We save it now and we show him a fresh otp
+                twofaccountService.storeFromUri(uri.value).then(response => {
+                    showOTP(response.data)
                 })
-            })
-            .catch(error => {
-                if( error.response.data.errors.uri ) {
-                    showAlternatives.value = true
-                    showAdvancedForm.value = true
-                }
-            })
+                .catch(error => {
+                    if( error.response.data.errors.uri ) {
+                        showAlternatives.value = true
+                        showAdvancedForm.value = true
+                    }
+                })
+            }
+            else {
+                // We prefill and show the quick form
+                twofaccountService.preview(uri.value).then(response => {
+                    form.fill(response.data)
+                    tempIcon.value = response.data.icon ? response.data.icon : ''
+                    showQuickForm.value = true
+                    nextTick().then(() => {
+                        OtpDisplayForQuickForm.value.show()
+                    })
+                })
+                .catch(error => {
+                    if( error.response.data.errors.uri ) {
+                        showAlternatives.value = true
+                        showAdvancedForm.value = true
+                    }
+                })
+            }
         } else {
             showAdvancedForm.value = true
         }
@@ -123,6 +147,13 @@
         if (val == false) {
             OtpDisplayForAdvancedForm.value?.clearOTP()
             OtpDisplayForQuickForm.value?.clearOTP()
+        }
+    })
+
+    watch(showOtpInModal, (val) => {
+        if (val == false) {
+            OtpDisplayForAutoSave.value?.clearOTP()
+            router.push({ name: 'accounts' })
         }
     })
 
@@ -195,6 +226,23 @@
         form.clear()
         ShowTwofaccountInModal.value = true
         OtpDisplayForAdvancedForm.value.show()
+    }
+
+    /**
+     * Shows rotating OTP for the provided account
+     */
+    function showOTP(otp) {
+        // Data that should be displayed quickly by the OtpDisplay
+        // component are passed using props.
+        otpDisplayProps.value.otp_type = otp.otp_type
+        otpDisplayProps.value.service = otp.service
+        otpDisplayProps.value.account = otp.account
+        otpDisplayProps.value.icon = otp.icon
+
+        nextTick().then(() => {
+            showOtpInModal.value = true
+            OtpDisplayForAutoSave.value.show(otp.id);
+        })
     }
 
     /**
@@ -351,6 +399,14 @@
 
 <template>
     <div>
+        <!-- otp display modal -->
+        <Modal v-if="user.preferences.AutoSaveQrcodedAccount" v-model="showOtpInModal">
+            <OtpDisplay
+                ref="OtpDisplayForAutoSave"
+                v-bind="otpDisplayProps"
+                @please-close-me="router.push({ name: 'accounts' })">
+            </OtpDisplay>
+        </Modal>
         <!-- Quick form -->
         <form @submit.prevent="createAccount" @keydown="form.onKeydown($event)" v-if="!isEditMode && showQuickForm">
             <div class="container preview has-text-centered">

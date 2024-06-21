@@ -179,6 +179,8 @@
                         <FormCheckbox v-model="user.preferences.notifyOnFailedLogin" @update:model-value="val => savePreference('notifyOnFailedLogin', val)" fieldName="notifyOnFailedLogin" label="settings.forms.notify_on_failed_login.label" help="settings.forms.notify_on_failed_login.help" />
                             
                         <h4 class="title is-4 pt-4 has-text-grey-light">{{ $t('settings.data_input') }}</h4>
+                        <!-- auto-save QrCoded account -->
+                        <FormCheckbox v-model="user.preferences.AutoSaveQrcodedAccount" @update:model-value="val => savePreference('AutoSaveQrcodedAccount', val)" fieldName="AutoSaveQrcodedAccount" label="settings.forms.auto_save_qrcoded_account.label" help="settings.forms.auto_save_qrcoded_account.help" />
                         <!-- basic qrcode -->
                         <FormCheckbox v-model="user.preferences.useBasicQrcodeReader" @update:model-value="val => savePreference('useBasicQrcodeReader', val)" fieldName="useBasicQrcodeReader" label="settings.forms.use_basic_qrcode_reader.label" help="settings.forms.use_basic_qrcode_reader.help" />
                         <!-- direct capture -->

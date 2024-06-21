@@ -127,6 +127,7 @@ return [
         'timezone' => env('APP_TIMEZONE', 'UTC'),
         'sortCaseSensitive' => false,
         'autoCloseTimeout' => 2,
+        'AutoSaveQrcodedAccount' => false,
     ],
 
 ];

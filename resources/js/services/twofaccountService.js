@@ -19,6 +19,10 @@ export default {
         return apiClient.post('/twofaccounts/preview', { uri: uri }, { ...config })
     },
 
+    storeFromUri(uri, config = {}) {
+        return apiClient.post('/twofaccounts', { uri: uri }, { ...config })
+    },
+
     getLogo(service, config = {}) {
         return apiClient.post('/icons/default', { service: service }, { ...config })
     },
