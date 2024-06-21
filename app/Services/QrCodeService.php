@@ -29,7 +29,7 @@ class QrCodeService
 
         Log::info('data encoded to QR code');
 
-        return $qrcode->render('stringToEncode');
+        return $qrcode->render($data);
     }
 
     /**
