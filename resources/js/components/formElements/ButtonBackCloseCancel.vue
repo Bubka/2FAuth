@@ -26,12 +26,17 @@
             type: Boolean,
             default: false
         },
+        isRounded: {
+            type: Boolean,
+            default: true
+        },
     })
 
-    const classes = 'button is-rounded'
+    const classes = 'button'
         + (mode.value === 'dark' && ! props.isText && ! props.isCapture ? ' is-dark' : '')
         + (props.isText ? ' is-text' : '')
         + (props.isCapture ? ' is-large is-warning' : '')
+        + (props.isRounded ? ' is-rounded' : '')
 </script>
 
 <template>
