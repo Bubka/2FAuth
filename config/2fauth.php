@@ -70,6 +70,7 @@ return [
         'ru',
         'ja',
         'hi',
+        'tr'
     ],
 
     /*
