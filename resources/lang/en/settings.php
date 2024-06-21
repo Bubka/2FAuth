@@ -67,7 +67,11 @@ return [
         ],
         'close_otp_on_copy' => [
             'label' => 'Close <abbr title="One-Time Password">OTP</abbr> after copy',
-            'help' => 'Clicking a generated password to copy it automatically hide it from the screen'
+            'help' => 'Click on a generated password to copy it automatically hides it from the screen'
+        ],
+        'auto_close_timeout' => [
+            'label' => 'Auto close <abbr title="One-Time Password">OTP</abbr>',
+            'help' => 'Automatically hide on-screen password after a timeout. This avoids unnecessary requests for fresh passwords if you forget to close the password view.'
         ],
         'clear_search_on_copy' => [
             'label' => 'Clear Search on copy',
@@ -161,6 +165,7 @@ return [
         'never' => 'Never',
         'on_otp_copy' => 'On security code copy',
         '1_minutes' => 'After 1 minute',
+        '2_minutes' => 'After 2 minutes',
         '5_minutes' => 'After 5 minutes',
         '10_minutes' => 'After 10 minutes',
         '15_minutes' => 'After 15 minutes',

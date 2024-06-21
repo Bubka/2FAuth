@@ -53,6 +53,7 @@
     const dots = ref()
     const totpLooper = ref()
     const otpSpanTag = ref()
+    const autoCloseTimeout = ref(null)
 
     watch(
         () => props.icon,
@@ -121,6 +122,10 @@
         try {
             await getOtp()
             focusOnOTP()
+
+            if (user.preferences.getOtpOnRequest && parseInt(user.preferences.autoCloseTimeout) > 0) {
+                startAutoCloseTimer()
+            }
         }
         catch(error) {
             clearOTP()
@@ -192,6 +197,15 @@
     }
 
     /**
+     * Triggers the component closing
+     */
+    function closeMe() {
+        emit("please-close-me");
+        revealPassword.value = false
+        clearOTP()
+    }
+
+    /**
      * Reset component's refs
      */
     function clearOTP() {
@@ -199,6 +213,7 @@
         otpauthParams.value.service = otpauthParams.value.account = otpauthParams.value.icon = otpauthParams.value.otp_type = otpauthParams.value.secret = ''
         password.value = '... ...'
         hasTOTP.value = false
+        clearTimeout(autoCloseTimeout.value)
 
         totpLooper.value?.clearLooper();
     }
@@ -226,9 +241,7 @@
                 user.logout({ kicked: true})
             }
             else if(user.preferences.closeOtpOnCopy && (permit_closing || false) === true) {
-                emit("please-close-me");
-                revealPassword.value = false
-                clearOTP()
+                closeMe()
             }
 
             if(user.preferences.clearSearchOnCopy) {
@@ -273,6 +286,17 @@
         show,
         clearOTP
     })
+    
+    /**
+     * Starts an auto close timer
+     */
+    function startAutoCloseTimer() {
+        let duration = parseInt(user.preferences.autoCloseTimeout) // in minutes
+        
+        autoCloseTimeout.value = setTimeout(function() {
+            closeMe()
+        }, duration * 60 * 1000);
+    }
 
 </script>
 

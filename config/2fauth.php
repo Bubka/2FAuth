@@ -126,6 +126,7 @@ return [
         'notifyOnFailedLogin' => false,
         'timezone' => env('APP_TIMEZONE', 'UTC'),
         'sortCaseSensitive' => false,
+        'autoCloseTimeout' => 2,
     ],
 
 ];

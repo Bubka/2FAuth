@@ -37,6 +37,12 @@
         { text: 'settings.forms.1_hour', value: 60 },
         { text: 'settings.forms.1_day', value: 1440 }, 
     ]
+    const autoCloseTimeout = [
+        { text: 'settings.forms.never', value: 0 },
+        { text: 'settings.forms.1_minutes', value: 1 },
+        { text: 'settings.forms.2_minutes', value: 2 },
+        { text: 'settings.forms.5_minutes', value: 5 },
+    ]
     const groupsList = ref([
         { text: 'groups.no_group', value: 0 },
         { text: 'groups.active_group', value: -1 },
@@ -157,6 +163,8 @@
                         <FormToggle v-model="user.preferences.getOtpOnRequest" @update:model-value="val => savePreference('getOtpOnRequest', val)" :choices="getOtpTriggers" fieldName="getOtpOnRequest" label="settings.forms.otp_generation.label" help="settings.forms.otp_generation.help"/>
                             <!-- close otp on copy -->
                             <FormCheckbox v-model="user.preferences.closeOtpOnCopy" @update:model-value="val => savePreference('closeOtpOnCopy', val)" fieldName="closeOtpOnCopy" label="settings.forms.close_otp_on_copy.label" help="settings.forms.close_otp_on_copy.help" :isDisabled="!user.preferences.getOtpOnRequest" :isIndented="true" />
+                            <!-- auto-close timeout -->
+                            <FormSelect v-model="user.preferences.autoCloseTimeout" @update:model-value="val => savePreference('autoCloseTimeout', val)" :options="autoCloseTimeout" fieldName="autoCloseTimeout" label="settings.forms.auto_close_timeout.label" help="settings.forms.auto_close_timeout.help"  :isDisabled="!user.preferences.getOtpOnRequest" :isIndented="true" />
                             <!-- clear search on copy -->
                             <FormCheckbox v-model="user.preferences.copyOtpOnDisplay" @update:model-value="val => savePreference('copyOtpOnDisplay', val)" fieldName="copyOtpOnDisplay" label="settings.forms.copy_otp_on_display.label" help="settings.forms.copy_otp_on_display.help" :isDisabled="!user.preferences.getOtpOnRequest" :isIndented="true" />
                         <!-- otp as dot -->
