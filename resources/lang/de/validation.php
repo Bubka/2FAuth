@@ -186,7 +186,7 @@ return [
             'required' => 'Der URI muss ein Label haben.',
         ],
         'ids' => [
-            'regex' => 'IDs müssen durch Komma getrennt werden, ohne am Ende Komma.',
+            'regex' => 'IDs müssen durch Komma getrennt werden, ohne Komma am Ende.',
         ]
     ],
 

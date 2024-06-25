@@ -29,7 +29,7 @@ return [
     'account_linked_to_sso_x_provider' => 'Вы вошли через SSO с помощью учётной записи :provider. Ваша информация не может быть изменена здесь, измените данные в :provider.',
     'general' => 'Общие',
     'security' => 'Безопасность',
-    'notifications' => 'Notifications',
+    'notifications' => 'Уведомления',
     'profile' => 'Профиль',
     'change_password' => 'Изменить пароль',
     'personal_access_tokens' => 'Персональные токены доступа',
@@ -69,9 +69,17 @@ return [
             'label' => 'Закрыть <abbr title="One-Time Password">OTP</abbr> после копирования',
             'help' => 'Нажатие на сгенерированный код, чтобы скопировать его, автоматически скроет его с экрана'
         ],
+        'auto_close_timeout' => [
+            'label' => 'Авто закрытие <abbr title="One-Time Password">OTP</abbr>',
+            'help' => 'Автоматически скрывать пароль с экрана после таймаута. Это позволяет избежать ненужных запросов свежих паролей, если вы забыли закрыть просмотр пароля.'
+        ],
         'clear_search_on_copy' => [
             'label' => 'Очистить поиск при копировании',
             'help' => 'Очистить строку поиска сразу после копирования кода в буфер обмена'
+        ],
+        'sort_case_sensitive' => [
+            'label' => 'Учитывать регистр символов',
+            'help' => 'При вызове принудительно сортировать учётные записи с учетом регистра символов'
         ],
         'copy_otp_on_display' => [
             'label' => 'Копировать <abbr title="One-Time Password">OTP</abbr> при отображении',
@@ -124,6 +132,10 @@ return [
             'label' => 'Показывать группу по умолчанию при копировании',
             'help' => 'Всегда возвращаться в группу по умолчанию когда код OTP скопирован',
         ],
+        'auto_save_qrcoded_account' => [
+            'label' => 'Автосохранение аккаунтов',
+            'help' => 'Новые учетные записи автоматически регистрируются после сканирования или загрузки QR-кода без необходимости нажимать кнопку "Сохранить"',
+        ],
         'useDirectCapture' => [
             'label' => 'Быстрый ввод',
             'help' => 'Автоматически использовать способ ввода по умолчанию или предлагать выбор из доступных способов ввода',
@@ -141,12 +153,12 @@ return [
             'help' => 'Установка того, как и когда отображаются <abbr title="One-Time Passwords">OTP</abbr> .<br/>',
         ],
         'notify_on_new_auth_device' => [
-            'label' => 'On new device',
-            'help' => 'Get an email when a new device connects to your 2FAuth account for the first time'
+            'label' => 'При входе с нового устройства',
+            'help' => 'Получать email при первом подключении нового устройства к вашей учётной записи 2FAuth'
         ],
         'notify_on_failed_login' => [
-            'label' => 'On failed login',
-            'help' => 'Get an email each time an attempt to connect to your 2FAuth account fails'
+            'label' => 'При неудачной попытке входа',
+            'help' => 'Получать email при каждой неудачной попытке войти в вашу учётную запись 2FAuth'
         ],
         'otp_generation_on_request' => 'После щелчка/касания',
         'otp_generation_on_request_legend' => 'По одиночке, в отдельном окне',
@@ -157,6 +169,7 @@ return [
         'never' => 'Никогда',
         'on_otp_copy' => 'При копировании кода',
         '1_minutes' => 'Через 1 минуту',
+        '2_minutes' => 'Через 2 минуты',
         '5_minutes' => 'Через 5 минут',
         '10_minutes' => 'Через 10 минут',
         '15_minutes' => 'Через 15 минут',

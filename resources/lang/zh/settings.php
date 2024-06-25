@@ -67,11 +67,19 @@ return [
         ],
         'close_otp_on_copy' => [
             'label' => '复制后关闭 <abbr title="One-Time Password">OTP</abbr>',
-            'help' => '点击生成的密码进行复制，并自动将其从屏幕上隐藏'
+            'help' => 'Click on a generated password to copy it automatically hides it from the screen'
+        ],
+        'auto_close_timeout' => [
+            'label' => 'Auto close <abbr title="One-Time Password">OTP</abbr>',
+            'help' => 'Automatically hide on-screen password after a timeout. This avoids unnecessary requests for fresh passwords if you forget to close the password view.'
         ],
         'clear_search_on_copy' => [
             'label' => '复制后清空搜索框',
             'help' => '代码复制到剪贴板后立即清空搜索框'
+        ],
+        'sort_case_sensitive' => [
+            'label' => 'Sort case sensitive',
+            'help' => 'When invoked, force the Sort function to sort accounts on a case-sensitive basis'
         ],
         'copy_otp_on_display' => [
             'label' => '在显示时复制 <abbr title="One-Time Password">OTP</abbr>',
@@ -124,6 +132,10 @@ return [
             'label' => '在复制后查看默认组',
             'help' => '复制OTP后总是返回到默认组',
         ],
+        'auto_save_qrcoded_account' => [
+            'label' => 'Auto-save accounts',
+            'help' => 'New accounts are automatically registered after scanning or uploading a QR code, no need to click a Save button',
+        ],
         'useDirectCapture' => [
             'label' => '直接输入',
             'help' => '选择您是否想要在可用的输入模式中选择输入模式，或者直接使用默认输入模式',
@@ -157,6 +169,7 @@ return [
         'never' => '从不',
         'on_otp_copy' => '在复制安全代码后',
         '1_minutes' => '1分钟后',
+        '2_minutes' => 'After 2 minutes',
         '5_minutes' => '5分钟后',
         '10_minutes' => '10 分钟后',
         '15_minutes' => '15分钟后',

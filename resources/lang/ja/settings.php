@@ -29,7 +29,7 @@ return [
     'account_linked_to_sso_x_provider' => 'あなたは :provider アカウントのSSO経由でサインインしています。ここでは、:provider 以外の情報は変更できません。',
     'general' => '全般',
     'security' => 'セキュリティ',
-    'notifications' => 'Notifications',
+    'notifications' => '通知',
     'profile' => 'プロフィール',
     'change_password' => 'パスワード変更',
     'personal_access_tokens' => '個人アクセストークン',
@@ -67,11 +67,19 @@ return [
         ],
         'close_otp_on_copy' => [
             'label' => 'コピー後に<abbr title="ワンタイムパスワード">OTP</abbr>を隠す',
-            'help' => '生成されたパスワードをクリックすると、自動的に画面から非表示になります。'
+            'help' => 'Click on a generated password to copy it automatically hides it from the screen'
+        ],
+        'auto_close_timeout' => [
+            'label' => 'Auto close <abbr title="One-Time Password">OTP</abbr>',
+            'help' => 'Automatically hide on-screen password after a timeout. This avoids unnecessary requests for fresh passwords if you forget to close the password view.'
         ],
         'clear_search_on_copy' => [
             'label' => 'コピー後に検索欄を消去',
             'help' => 'コードがクリップボードにコピーされた直後に検索欄を空にします'
+        ],
+        'sort_case_sensitive' => [
+            'label' => 'Sort case sensitive',
+            'help' => 'When invoked, force the Sort function to sort accounts on a case-sensitive basis'
         ],
         'copy_otp_on_display' => [
             'label' => '表示時に<abbr title="ワンタイムパスワード">OTP</abbr>をコピー',
@@ -124,6 +132,10 @@ return [
             'label' => 'コピー後に既定のグループを表示',
             'help' => 'OTPをコピーした後、常に既定のグループに戻ります',
         ],
+        'auto_save_qrcoded_account' => [
+            'label' => 'Auto-save accounts',
+            'help' => 'New accounts are automatically registered after scanning or uploading a QR code, no need to click a Save button',
+        ],
         'useDirectCapture' => [
             'label' => '選択画面を飛ばす',
             'help' => '読み込み方式を選択する画面を表示するか、直接既定の読み込み画面を開くかを選択します。',
@@ -157,6 +169,7 @@ return [
         'never' => 'しない',
         'on_otp_copy' => 'セキュリティコードをコピー後',
         '1_minutes' => '1 分で',
+        '2_minutes' => 'After 2 minutes',
         '5_minutes' => '5 分で',
         '10_minutes' => '10 分で',
         '15_minutes' => '15 分で',

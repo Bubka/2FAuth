@@ -20,4 +20,5 @@ return [
     'bg' => 'Български (Búlgaro)',
     'ja' => '日本語 (Japonês)',
     'hi' => 'हिंदी (Indiano)',
+    'tr' => 'Türkçe (Turkish)',
 ];

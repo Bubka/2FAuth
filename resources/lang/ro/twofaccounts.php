@@ -16,7 +16,6 @@ return [
     'service' => 'Service',
     'account' => 'Account',
     'icon' => 'Icon',
-    'icon_for_account_x_at_service_y' => 'Icon of the :account account at :service',
     'icon_to_illustrate_the_account' => 'Icon that illustrates the account',
     'remove_icon' => 'Remove icon',
     'no_account_here' => 'No 2FA here!',

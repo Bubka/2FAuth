@@ -16,7 +16,6 @@ return [
     'service' => 'サービス',
     'account' => 'アカウント',
     'icon' => 'アイコン',
-    'icon_for_account_x_at_service_y' => ':service の :account アカウント用アイコン',
     'icon_to_illustrate_the_account' => 'このアカウントを表すアイコン',
     'remove_icon' => 'アイコンを削除',
     'no_account_here' => '初めてですか？',

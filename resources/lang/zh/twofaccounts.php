@@ -16,7 +16,6 @@ return [
     'service' => '服务',
     'account' => '账户',
     'icon' => '图标',
-    'icon_for_account_x_at_service_y' => '{account} 在 {service} 的帐户图标',
     'icon_to_illustrate_the_account' => '说明账户的图标',
     'remove_icon' => '移除图标',
     'no_account_here' => '这里没有两步验证！',

@@ -16,7 +16,6 @@ return [
     'service' => 'Servicio',
     'account' => 'Cuenta',
     'icon' => 'Icono',
-    'icon_for_account_x_at_service_y' => 'Icono de la cuenta {account} en {service}',
     'icon_to_illustrate_the_account' => 'Icono que representa a la cuenta',
     'remove_icon' => 'Eliminar icono',
     'no_account_here' => '¡No hay 2FA aquí!',

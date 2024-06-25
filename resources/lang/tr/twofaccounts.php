@@ -16,7 +16,6 @@ return [
     'service' => 'Servis',
     'account' => 'Hesap',
     'icon' => 'Simge',
-    'icon_for_account_x_at_service_y' => ':account hesabının :service üzerindeki simgesi',
     'icon_to_illustrate_the_account' => 'Hesabı gösteren simge',
     'remove_icon' => 'Simgeyi kaldır',
     'no_account_here' => 'Burada 2FA yok!',

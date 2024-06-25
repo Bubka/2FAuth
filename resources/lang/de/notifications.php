@@ -22,7 +22,7 @@ return [
         'success' => 'Gute Nachricht, es funktioniert :)'
     ],
     'new_device' => [
-        'subject' => 'Connection to 2FAuth from a new device',
+        'subject' => 'Verbindung zu 2FAuth von einem neuen Gerät',
         'resume' => 'Ein neues Gerät hat sich gerade mit Ihrem 2FAuth-Konto verbunden.',
         'connection_details' => 'Hier sind die Details dieser Verbindung',
         'recommandations' => 'Wenn dies auf Sie zutrifft, können Sie diese Meldung ignorieren. Wenn Sie eine verdächtige Aktivität in Ihrem Konto vermuten, ändern Sie bitte Ihr Passwort.'

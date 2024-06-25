@@ -16,7 +16,6 @@ return [
     'service' => 'सर्विस',
     'account' => 'अकाउंट',
     'icon' => 'आइकॉन',
-    'icon_for_account_x_at_service_y' => ':account खाते का आइकान :service पर',
     'icon_to_illustrate_the_account' => 'वह आइकान जो खाते को दर्शाता है',
     'remove_icon' => 'आइकन हटाएं',
     'no_account_here' => 'यहाँ 2FA नहीं है',

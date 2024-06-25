@@ -16,7 +16,6 @@ return [
     'service' => 'Услуга',
     'account' => 'Профил',
     'icon' => 'Икона',
-    'icon_for_account_x_at_service_y' => 'Икона на профил {account} в {service}',
     'icon_to_illustrate_the_account' => 'Икона, илюстрираща акаунта',
     'remove_icon' => 'Премахни икона',
     'no_account_here' => 'Тук няма 2FA!',

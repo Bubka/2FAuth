@@ -67,11 +67,19 @@ return [
         ],
         'close_otp_on_copy' => [
             'label' => 'कॉपी करने के बाद <abbr title="वन-टाइम पासवर्ड">OTP</abbr> बंद करें',
-            'help' => 'जेनरेट किए गए पासवर्ड को कॉपी करने के लिए उस पर क्लिक करने से वह स्वचालित रूप से स्क्रीन से छिप जाता है'
+            'help' => 'Click on a generated password to copy it automatically hides it from the screen'
+        ],
+        'auto_close_timeout' => [
+            'label' => 'Auto close <abbr title="One-Time Password">OTP</abbr>',
+            'help' => 'Automatically hide on-screen password after a timeout. This avoids unnecessary requests for fresh passwords if you forget to close the password view.'
         ],
         'clear_search_on_copy' => [
             'label' => 'कॉपी होने पर खोज मिटा दें',
             'help' => 'क्लिपबोर्ड पर कोड कॉपी होने के ठीक बाद सर्च बॉक्स को खाली कर दें'
+        ],
+        'sort_case_sensitive' => [
+            'label' => 'Sort case sensitive',
+            'help' => 'When invoked, force the Sort function to sort accounts on a case-sensitive basis'
         ],
         'copy_otp_on_display' => [
             'label' => 'डिस्प्ले पर <abbr title="वन-टाइम पासवर्ड">OTP</abbr> कॉपी करें',
@@ -124,6 +132,10 @@ return [
             'label' => 'कॉपी होने पर डिफ़ॉल्ट ग्रुप देखें',
             'help' => 'जब भी OTP कॉपी हो जाए तो हमेशा डिफ़ॉल्ट ग्रुप पर वापस आ जाएं',
         ],
+        'auto_save_qrcoded_account' => [
+            'label' => 'Auto-save accounts',
+            'help' => 'New accounts are automatically registered after scanning or uploading a QR code, no need to click a Save button',
+        ],
         'useDirectCapture' => [
             'label' => 'सीधे दर्ज करें',
             'help' => 'चुनें कि क्या आप उपलब्ध इनपुट मोड में से एक इनपुट मोड चुनने की सुविधा चाहते हैं या आप सीधे डिफ़ॉल्ट इनपुट मोड का उपयोग करना चाहते हैं',
@@ -157,6 +169,7 @@ return [
         'never' => 'कभी नहीं',
         'on_otp_copy' => 'सुरक्षा कोड कॉपी होने पर',
         '1_minutes' => '१ मिनट बाद',
+        '2_minutes' => 'After 2 minutes',
         '5_minutes' => '५ मिनट बाद',
         '10_minutes' => '10 मिनट बाद',
         '15_minutes' => '15 मिनट बाद',

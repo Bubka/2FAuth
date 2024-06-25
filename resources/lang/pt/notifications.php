@@ -13,24 +13,24 @@ return [
     |
     */
 
-    'hello' => 'Hello',
-    'hello_user' => 'Hello :username,',
-    'regards' => 'Regards',
+    'hello' => 'Olá',
+    'hello_user' => 'Olá :username,',
+    'regards' => 'Atenciosamente',
     'test_email_settings' => [
-        'subject' => '2FAuth test email',
-        'reason' => 'You are receiving this email because you requested a test email to validate the email settings of your 2FAuth instance.',
-        'success' => 'Good news, it works :)'
+        'subject' => 'E-mail de teste 2FAuth',
+        'reason' => 'Você está recebendo este e-mail porque você solicitou um e-mail de teste para validar as configurações de e-mail da sua instância 2FAuth.',
+        'success' => 'Boas notícias, funcionou :)'
     ],
     'new_device' => [
-        'subject' => 'Connection to 2FAuth from a new device',
-        'resume' => 'A new device has just connected to your 2FAuth account.',
-        'connection_details' => 'Here are the details of this connection',
-        'recommandations' => 'If this was you, you can ignore this alert. If you suspect any suspicious activity on your account, please change your password.'
+        'subject' => 'Conexão com o 2FAuth de um novo dispositivo',
+        'resume' => 'Um novo dispositivo acabou de se conectar à sua conta 2FAuth.',
+        'connection_details' => 'Aqui estão os detalhes desta conexão',
+        'recommandations' => 'Se foi você, você pode ignorar este alerta. Se suspeitar de qualquer atividade suspeita em sua conta, altere sua senha imediatamente.'
     ],
     'failed_login' => [
-        'subject' => 'Failed login to 2FAuth',
-        'resume' => 'There has been a failed login attempt to your 2FAuth account.',
-        'connection_details' => 'Here are the details of this connection attempt',
-        'recommandations' => 'If this was you, you can ignore this alert. If further attempts fail, you should contact the 2FAuth administrator to review security settings and take action against this attacker.'
+        'subject' => 'Falha no login para 2FAuth',
+        'resume' => 'Houve uma tentativa de login falhada em sua conta 2FAuth.',
+        'connection_details' => 'Aqui estão os detalhes desta tentativa de conexão',
+        'recommandations' => 'Se foi você, pode ignorar este alerta. Se outras tentativas falharem, você deve entrar em contato com o administrador do 2FAuth para rever as configurações de segurança e tomar ações contra este atacante.'
     ],
 ];

@@ -16,7 +16,6 @@ return [
     'service' => 'Layanan',
     'account' => 'Akun',
     'icon' => 'Ikon',
-    'icon_for_account_x_at_service_y' => 'Ikon dari akun {account} pada {service}',
     'icon_to_illustrate_the_account' => 'Ikon yang menggambarkan akun',
     'remove_icon' => 'Hapus ikon',
     'no_account_here' => 'Tidak ada 2FA disini!',

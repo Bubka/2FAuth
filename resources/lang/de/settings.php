@@ -29,7 +29,7 @@ return [
     'account_linked_to_sso_x_provider' => 'Sie haben sich mit Ihrem :provider -Konto via SSO angemeldet. Ihre Daten können hier nicht geändert werden, sondern auf :provider.',
     'general' => 'Allgemein',
     'security' => 'Sicherheit',
-    'notifications' => 'Notifications',
+    'notifications' => 'Benachrichtigungen',
     'profile' => 'Profil',
     'change_password' => 'Passwort ändern',
     'personal_access_tokens' => 'Persönliche Zugriffsstoken',
@@ -69,9 +69,17 @@ return [
             'label' => '<abbr title="One-Time Password">OTP</abbr> nach dem Kopieren schließen',
             'help' => 'Bei einem Klick auf das erzeugte Passwort wird es automatisch auf dem Bildschirm ausgeblendet'
         ],
+        'auto_close_timeout' => [
+            'label' => '<abbr title="One-Time Password">OTP</abbr> automatisch schließen',
+            'help' => 'Passwort automatisch nach einem Timeout auf dem Bildschirm ausblenden. Dies vermeidet unnötige Anfragen nach neuen Passwörtern, wenn Sie die Passwortansicht nicht schließen.'
+        ],
         'clear_search_on_copy' => [
             'label' => 'Suche beim Kopieren löschen',
             'help' => 'Das Suchfeld leeren, nachdem ein Code in die Zwischenablage kopiert wurde'
+        ],
+        'sort_case_sensitive' => [
+            'label' => 'Groß-/Kleinschreibung beachten',
+            'help' => 'Erzwingt bei Aufruf der Funktion Sortieren die Sortierung der Konten unter Berücksichtigung der Groß- und Kleinschreibung'
         ],
         'copy_otp_on_display' => [
             'label' => '<abbr title="One-Time Password">OTP</abbr> auf Anzeige kopieren',
@@ -93,7 +101,7 @@ return [
         'pair_legend' => 'Ziffern in zweistellige Gruppen aufteilen',
         'trio_legend' => 'Ziffern in dreistellige Gruppen aufteilen',
         'half_legend' => 'Ziffern in zwei gleiche Gruppen aufteilen',
-        'trio' => 'durch Trio',
+        'trio' => 'nach Trio',
         'half' => 'nach Hälfte',
         'grid' => 'Raster',
         'list' => 'Liste',
@@ -124,6 +132,10 @@ return [
             'label' => 'Standardgruppe beim Kopieren anzeigen',
             'help' => 'Immer zur Standardgruppe zurückkehren, wenn ein OTP kopiert wird',
         ],
+        'auto_save_qrcoded_account' => [
+            'label' => 'Konten automatisch speichern',
+            'help' => 'Neue Konten werden automatisch nach dem Scannen oder Hochladen eines QR-Codes registriert, ohne dass Sie auf den Speichern-Tastr klicken müssen',
+        ],
         'useDirectCapture' => [
             'label' => 'Direkteingabe',
             'help' => 'Wählen Sie aus, ob Sie einen Eingabemodus unter den Verfügbaren wählen möchten oder ob Sie direkt den Standard-Eingabemodus verwenden möchten',
@@ -141,12 +153,12 @@ return [
             'help' => 'Festlegen, wie und wann <abbr title="One-Time Passwords">OTPs</abbr> angezeigt werden.<br/>',
         ],
         'notify_on_new_auth_device' => [
-            'label' => 'On new device',
-            'help' => 'Get an email when a new device connects to your 2FAuth account for the first time'
+            'label' => 'Auf neuem Gerät',
+            'help' => 'Erhalten Sie eine E-Mail, wenn sich ein neues Gerät zum ersten Mal mit Ihrem 2FAuth Konto verbindet'
         ],
         'notify_on_failed_login' => [
-            'label' => 'On failed login',
-            'help' => 'Get an email each time an attempt to connect to your 2FAuth account fails'
+            'label' => 'Bei fehlgeschlagener Anmeldung',
+            'help' => 'Erhalten Sie jedes Mal eine E-Mail, wenn ein Verbindungsversuch zu Ihrem 2FAuth-Konto fehlschlägt'
         ],
         'otp_generation_on_request' => 'Nach einem Klick/Tippen',
         'otp_generation_on_request_legend' => 'Einzeln, in eigener Ansicht',
@@ -157,6 +169,7 @@ return [
         'never' => 'Niemals',
         'on_otp_copy' => 'Beim Kopieren des Token',
         '1_minutes' => 'Nach 1 Minute',
+        '2_minutes' => 'Nach 2 Minuten',
         '5_minutes' => 'Nach 5 Minuten',
         '10_minutes' => 'Nach 10 Minuten',
         '15_minutes' => 'Nach 15 Minuten',

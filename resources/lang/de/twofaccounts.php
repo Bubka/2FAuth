@@ -16,7 +16,6 @@ return [
     'service' => 'Dienst',
     'account' => 'Benutzerkonto',
     'icon' => 'Symbol',
-    'icon_for_account_x_at_service_y' => 'Symbol des :account -Kontos unter :service',
     'icon_to_illustrate_the_account' => 'Symbol, das den Account darstellt',
     'remove_icon' => 'Symbol entfernen',
     'no_account_here' => 'Noch keine 2FA vorhanden!',

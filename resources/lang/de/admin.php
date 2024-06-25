@@ -25,7 +25,7 @@ return [
     'quick_filters_colons' => 'Schnellfilter:',
     'user_created' => 'Benutzer erfolgreich erstellt',
     'confirm' => [
-        'delete_user' => 'Sind Sie sicher, dass Sie diesen Benutzer löschen möchten? Es gibt kein Zurück mehr.',
+        'delete_user' => 'Sind Sie sicher, dass Sie diesen Benutzer löschen möchten? Es gibt kein zurück mehr.',
         'request_password_reset' => 'Sind Sie sicher, dass Sie das Passwort dieses Benutzers zurücksetzen möchten?',
         'purge_password_reset_request' => 'Sind Sie sicher, dass Sie die vorherige Anfrage widerrufen möchten?',
         'delete_account' => 'Sind Sie sicher, dass Sie diesen Benutzer löschen möchten?',
@@ -102,15 +102,15 @@ return [
         ],
         'disable_registration' => [
             'label' => 'Registrierung deaktivieren',
-            'help' => 'Verhindert eine neue Benutzerregistrierung. Sofern nicht überschrieben (siehe unten) wirkt sich dies auch auf SSO aus, so dass neue Benutzer sich nicht via SSO anmelden können',
+            'help' => 'Verhindert eine neue Benutzerregistrierung. Sofern nicht überschrieben (siehe unten) wirkt sich dies auch auf SSO aus, so dass neue Benutzer sich nicht via SSO anmelden können.',
         ],
         'enable_sso' => [
             'label' => 'Single Sign-On (SSO) aktivieren',
-            'help' => 'Besuchern die Authentifizierung mit einer externen ID über das Single Sign-On Schema erlauben',
+            'help' => 'Besuchern die Authentifizierung mit einer externen ID über das Single Sign-On Schema erlauben.',
         ],
         'keep_sso_registration_enabled' => [
             'label' => 'SSO-Registrierung aktiviert lassen',
-            'help' => 'Neuen Benutzern erlauben, sich zum ersten Mal über SSO anzumelden, während die Registrierung deaktiviert ist',
+            'help' => 'Neuen Benutzern erlauben, sich zum ersten Mal über SSO anzumelden, während die Registrierung deaktiviert ist.',
         ],
         'is_admin' => [
             'label' => 'Ist Admininstrator',
@@ -119,7 +119,7 @@ return [
         'test_email' => [
             'label' => 'E-Mail-Konfigurationstest',
             'help' => 'Senden Sie eine Test-E-Mail, um die E-Mail-Konfiguration Ihrer Instanz zu kontrollieren. Es ist wichtig, eine funktionierende Konfiguration zu haben, sonst können Benutzer kein Zurücksetzen des Passworts anfordern.',
-            'email_will_be_send_to_x' => 'Diese E-Mail wird an <span class="is-family-code has-text-info">:email</span> gesendet',
+            'email_will_be_send_to_x' => 'Diese E-Mail wird an <span class="is-family-code has-text-info">:email</span> gesendet.',
         ],
         'cache_management' => [
             'label' => 'Cache-Verwaltung',

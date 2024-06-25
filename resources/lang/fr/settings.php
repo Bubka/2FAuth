@@ -69,9 +69,17 @@ return [
             'label' => 'Cacher les mots de passe <abbr title="One-Time Password">OTP</abbr> copiés',
             'help' => 'Les mots de passe qui viennent d\'être copiés ne restent pas visibles à l\'écran'
         ],
+        'auto_close_timeout' => [
+            'label' => 'Cacher les <abbr title="One-Time Password">OTP</abbr> automatiquement',
+            'help' => 'Cache automatiquement le mot de passe à l\'écran après un certain temps. Cela évite les générations inutiles de nouveaux OTP si la vue dédiée à leur affichage est restée ouverte.'
+        ],
         'clear_search_on_copy' => [
             'label' => 'Effacer la recherche après copie',
             'help' => 'Vide le champ de recherche dès qu\'un code a été copié dans le presse-papier'
+        ],
+        'sort_case_sensitive' => [
+            'label' => 'Trier en tenant compte de la casse',
+            'help' => 'Force la fonction de tri à tenir compte de la casse des lettres (majuscule/minuscule) pour ordonner les éléments'
         ],
         'copy_otp_on_display' => [
             'label' => 'Copier le mot de passe <abbr title="One-Time Password">OTP</abbr> dès qu\'il s\'affiche',
@@ -124,6 +132,10 @@ return [
             'label' => 'Afficher le groupe par défaut après copie',
             'help' => 'Bascule systématiquement l\'affichage sur le groupe par défaut dès qu\'un code a été copié dans le presse-papier',
         ],
+        'auto_save_qrcoded_account' => [
+            'label' => 'Sauvegarde automatique des comptes',
+            'help' => 'Les nouveaux comptes sont automatiquement enregistrés après le scan ou le téléchargement d\'un code QR, il n\'est plus nécessaire de cliquer sur le bouton Enregistrer',
+        ],
         'useDirectCapture' => [
             'label' => 'Saisie directe',
             'help' => 'Choisissez si vous voulez être invité à choisir un mode de saisie parmi ceux disponibles ou si vous voulez utiliser directement le mode de saisie par défaut',
@@ -157,6 +169,7 @@ return [
         'never' => 'Jamais',
         'on_otp_copy' => 'Après copie d\'un mot de passe',
         '1_minutes' => 'Après 1 minute',
+        '2_minutes' => 'Après 2 minutes',
         '5_minutes' => 'Après 5 minutes',
         '10_minutes' => 'Après 10 minutes',
         '15_minutes' => 'Après 15 minutes',

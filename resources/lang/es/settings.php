@@ -67,11 +67,19 @@ return [
         ],
         'close_otp_on_copy' => [
             'label' => 'Cerrar <abbr title="One-Time Password">OTP</abbr> después de copiar',
-            'help' => 'Haciendo clic en la contraseña generada para copiarla, la oculta automáticamente de la pantalla'
+            'help' => 'Click on a generated password to copy it automatically hides it from the screen'
+        ],
+        'auto_close_timeout' => [
+            'label' => 'Auto close <abbr title="One-Time Password">OTP</abbr>',
+            'help' => 'Automatically hide on-screen password after a timeout. This avoids unnecessary requests for fresh passwords if you forget to close the password view.'
         ],
         'clear_search_on_copy' => [
             'label' => 'Clear Search on copy',
             'help' => 'Empty the Search box right after a code has been copied to the clipboard'
+        ],
+        'sort_case_sensitive' => [
+            'label' => 'Sort case sensitive',
+            'help' => 'When invoked, force the Sort function to sort accounts on a case-sensitive basis'
         ],
         'copy_otp_on_display' => [
             'label' => 'Copiar <abbr title="One-Time Password">OTP</abbr> en pantalla',
@@ -124,6 +132,10 @@ return [
             'label' => 'View default group on copy',
             'help' => 'Always return to the default group when an OTP is copied',
         ],
+        'auto_save_qrcoded_account' => [
+            'label' => 'Auto-save accounts',
+            'help' => 'New accounts are automatically registered after scanning or uploading a QR code, no need to click a Save button',
+        ],
         'useDirectCapture' => [
             'label' => 'Entrada directa',
             'help' => 'Elija si desea que se le pida que elija un modo de entrada entre los disponibles o si desea utilizar directamente el modo de entrada por defecto',
@@ -157,6 +169,7 @@ return [
         'never' => 'Nunca',
         'on_otp_copy' => 'Al copiar código de seguridad',
         '1_minutes' => 'Después de 1 minuto',
+        '2_minutes' => 'After 2 minutes',
         '5_minutes' => 'Después de 5 minutos',
         '10_minutes' => 'Después de 10 minutos',
         '15_minutes' => 'Después de 15 minutos',

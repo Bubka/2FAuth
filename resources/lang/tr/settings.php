@@ -67,11 +67,19 @@ return [
         ],
         'close_otp_on_copy' => [
             'label' => 'Kopyaladıktan sonra <abbr title="One-Time Password">OTP\'yi</abbr> kapat',
-            'help' => 'Oluşturulan parolayı kopyalamak için tıkladıktan sonra parolanın ekrandan kaldırılmasını sağlar'
+            'help' => 'Click on a generated password to copy it automatically hides it from the screen'
+        ],
+        'auto_close_timeout' => [
+            'label' => 'Auto close <abbr title="One-Time Password">OTP</abbr>',
+            'help' => 'Automatically hide on-screen password after a timeout. This avoids unnecessary requests for fresh passwords if you forget to close the password view.'
         ],
         'clear_search_on_copy' => [
             'label' => 'Kopyaladıktan sonra Aramayı Temizle',
             'help' => 'Bir kod panoya kopyalandıktan hemen sonra Arama kutusunu temizler'
+        ],
+        'sort_case_sensitive' => [
+            'label' => 'Sort case sensitive',
+            'help' => 'When invoked, force the Sort function to sort accounts on a case-sensitive basis'
         ],
         'copy_otp_on_display' => [
             'label' => '<abbr title="One-Time Password">OTP\'yi</abbr> görününce kopyala',
@@ -124,6 +132,10 @@ return [
             'label' => 'Kopyalarken varsayılan grubu göster',
             'help' => 'OTP kopyalandığında her zaman varsayılan gruba döner',
         ],
+        'auto_save_qrcoded_account' => [
+            'label' => 'Auto-save accounts',
+            'help' => 'New accounts are automatically registered after scanning or uploading a QR code, no need to click a Save button',
+        ],
         'useDirectCapture' => [
             'label' => 'Doğrudan giriş',
             'help' => 'Mevcut olanlar arasından bir giriş modu seçmeniz istenip istenmeyeceğini veya doğrudan varsayılan giriş modunu kullanmak isteyip istemediğinizi seçin',
@@ -157,6 +169,7 @@ return [
         'never' => 'Asla',
         'on_otp_copy' => 'Güvenlik kodu kopyalandığında',
         '1_minutes' => '1 dakika sonra',
+        '2_minutes' => 'After 2 minutes',
         '5_minutes' => '5 dakika sonra',
         '10_minutes' => '10 dakika sonra',
         '15_minutes' => '15 dakika sonra',

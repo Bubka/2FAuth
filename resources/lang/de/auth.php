@@ -40,7 +40,7 @@ return [
         'delete_account' => 'Möchten Sie Ihr Konto wirklich löschen?',
     ],
     'webauthn' => [
-        'security_device' => 'ein Sicherheitsgerät',
+        'security_device' => 'einem Sicherheitsgerät',
         'security_devices' => 'Sicherheitsgeräte',
         'security_devices_legend' => 'Authentifizierungsgeräte, mit denen Sie sich in 2FAuth anmelden können, wie z.B. Sicherheitsschlüssel (z.B. Yubikey) oder Smartphones mit biometrischen Fähigkeiten (z.B. Apple FaceID/TouchID)',
         'enhance_security_using_webauthn' => 'Sie können die Sicherheit Ihres 2FAuth-Accounts verbessern, indem Sie die WebAuthn-Authentifizierung aktivieren.<br /><br />

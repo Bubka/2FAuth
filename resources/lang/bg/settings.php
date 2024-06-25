@@ -67,11 +67,19 @@ return [
         ],
         'close_otp_on_copy' => [
             'label' => 'Затворете <abbr title="One-Time Password">OTP</abbr> след копиране',
-            'help' => 'Кликването върху генерираната парола ще я копира и автоматично ще я скрива от екрана'
+            'help' => 'Click on a generated password to copy it automatically hides it from the screen'
+        ],
+        'auto_close_timeout' => [
+            'label' => 'Auto close <abbr title="One-Time Password">OTP</abbr>',
+            'help' => 'Automatically hide on-screen password after a timeout. This avoids unnecessary requests for fresh passwords if you forget to close the password view.'
         ],
         'clear_search_on_copy' => [
             'label' => 'Clear Search on copy',
             'help' => 'Empty the Search box right after a code has been copied to the clipboard'
+        ],
+        'sort_case_sensitive' => [
+            'label' => 'Sort case sensitive',
+            'help' => 'When invoked, force the Sort function to sort accounts on a case-sensitive basis'
         ],
         'copy_otp_on_display' => [
             'label' => 'Копирайте <abbr title="One-Time Password">OTP</abbr> при показване',
@@ -124,6 +132,10 @@ return [
             'label' => 'View default group on copy',
             'help' => 'Always return to the default group when an OTP is copied',
         ],
+        'auto_save_qrcoded_account' => [
+            'label' => 'Auto-save accounts',
+            'help' => 'New accounts are automatically registered after scanning or uploading a QR code, no need to click a Save button',
+        ],
         'useDirectCapture' => [
             'label' => 'Директно въвеждане',
             'help' => 'Изберете дали искате да бъдете подканени да изберете режим на въвеждане сред наличните или искате директно да използвате режима на въвеждане по подразбиране',
@@ -157,6 +169,7 @@ return [
         'never' => 'Никога',
         'on_otp_copy' => 'При копиране на кода',
         '1_minutes' => 'След 1 минута',
+        '2_minutes' => 'After 2 minutes',
         '5_minutes' => 'След 5 минути',
         '10_minutes' => 'След 10 минути',
         '15_minutes' => 'След 15 минути',
