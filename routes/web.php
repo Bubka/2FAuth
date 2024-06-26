@@ -14,6 +14,11 @@ use App\Http\Controllers\Auth\WebAuthnRecoveryController;
 use App\Http\Controllers\Auth\WebAuthnRegisterController;
 use App\Http\Controllers\SinglePageController;
 use App\Http\Controllers\SystemController;
+use App\Http\Middleware\CustomCreateFreshApiToken;
+use App\Http\Middleware\SetLanguage;
+use Illuminate\Routing\Middleware\SubstituteBindings;
+// use Illuminate\Foundation\Events\DiagnosingHealth;
+// use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
 use Laravel\Passport\Http\Controllers\PersonalAccessTokenController;
 
@@ -91,6 +96,15 @@ Route::get('system/latestRelease', [SystemController::class, 'latestRelease'])->
 
 Route::get('refresh-csrf', function () {
     return csrf_token();
+});
+
+Route::withoutMiddleware([
+        SubstituteBindings::class,
+        SetLanguage::class,
+        CustomCreateFreshApiToken::class
+    ])->get('/up', function () {
+    //Event::dispatch(new DiagnosingHealth);
+    return view('health');
 });
 
 // Route::get('/notification', function () {
