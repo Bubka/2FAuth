@@ -6,13 +6,12 @@ use App\Http\Middleware\AdminOnly;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\FeatureTestCase;
 
 class AdminOnlyMiddlewareTest extends FeatureTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function test_users_are_rejected()
     {
         $this->expectException(AuthorizationException::class);
@@ -31,9 +30,7 @@ class AdminOnlyMiddlewareTest extends FeatureTestCase
         });
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_admins_pass()
     {
         /**

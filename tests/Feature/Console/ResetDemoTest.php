@@ -4,13 +4,12 @@ namespace Tests\Feature\Console;
 
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\FeatureTestCase;
 
 class ResetDemoTest extends FeatureTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function test_reset_demo_without_demo_mode_succeeded()
     {
         $this->artisan('2fauth:reset-demo')
@@ -18,9 +17,7 @@ class ResetDemoTest extends FeatureTestCase
             ->assertSuccessful();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_reset_demo_succeeded()
     {
         Artisan::call('passport:install', [
@@ -138,9 +135,7 @@ class ResetDemoTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_reset_demo_with_invalid_confirmation_succeeded()
     {
         Config::set('2fauth.config.isDemoApp', true);
@@ -151,9 +146,7 @@ class ResetDemoTest extends FeatureTestCase
             ->assertSuccessful();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_reset_demo_with_no_confirm_option_succeeded()
     {
         Config::set('2fauth.config.isDemoApp', true);

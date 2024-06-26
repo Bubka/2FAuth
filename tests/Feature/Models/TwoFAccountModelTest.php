@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Storage;
 use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\Data\HttpRequestTestData;
 use Tests\Data\OtpTestData;
 use Tests\FeatureTestCase;
@@ -42,9 +43,6 @@ class TwoFAccountModelTest extends FeatureTestCase
      */
     protected $helpers;
 
-    /**
-     * @test
-     */
     public function setUp() : void
     {
         parent::setUp();
@@ -92,9 +90,7 @@ class TwoFAccountModelTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_fill_with_custom_totp_uri_returns_correct_value()
     {
         $file = (new FileFactory)->image('file.png', 10, 10);
@@ -125,9 +121,7 @@ class TwoFAccountModelTest extends FeatureTestCase
         Storage::disk('imagesLink')->assertMissing($twofaccount->icon);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_fill_with_basic_totp_uri_returns_default_value()
     {
         $twofaccount = new TwoFAccount;
@@ -145,9 +139,7 @@ class TwoFAccountModelTest extends FeatureTestCase
         $this->assertEquals(null, $twofaccount->icon);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_fill_with_ms_corporate_totp_uri_returns_correct_value()
     {
         $twofaccount = new TwoFAccount;
@@ -164,9 +156,7 @@ class TwoFAccountModelTest extends FeatureTestCase
         $this->assertEquals(OtpTestData::ALGORITHM_DEFAULT, $twofaccount->algorithm);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_fill_with_custom_hotp_uri_returns_correct_value()
     {
         $file = (new FileFactory)->image('file.png', 10, 10);
@@ -197,9 +187,7 @@ class TwoFAccountModelTest extends FeatureTestCase
         Storage::disk('imagesLink')->assertMissing($twofaccount->icon);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_fill_with_basic_hotp_uri_returns_default_value()
     {
         $twofaccount = new TwoFAccount;
@@ -217,9 +205,7 @@ class TwoFAccountModelTest extends FeatureTestCase
         $this->assertEquals(null, $twofaccount->icon);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_filled_with_uri_persists_correct_values_to_db()
     {
         $twofaccount = new TwoFAccount;
@@ -240,9 +226,7 @@ class TwoFAccountModelTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_fill_with_invalid_uri_returns_ValidationException()
     {
         $this->expectException(\Illuminate\Validation\ValidationException::class);
@@ -250,9 +234,7 @@ class TwoFAccountModelTest extends FeatureTestCase
         $twofaccount->fillWithURI(OtpTestData::INVALID_OTPAUTH_URI);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_fill_with_invalid_uri_with_mismatching_issuer_returns_ValidationException()
     {
         $this->expectException(\Illuminate\Validation\ValidationException::class);
@@ -260,9 +242,7 @@ class TwoFAccountModelTest extends FeatureTestCase
         $twofaccount->fillWithURI(OtpTestData::INVALID_OTPAUTH_URI_MISMATCHING_ISSUER);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_fill_with_uri_without_label_returns_ValidationException()
     {
         $this->expectException(\Illuminate\Validation\ValidationException::class);
@@ -270,9 +250,7 @@ class TwoFAccountModelTest extends FeatureTestCase
         $twofaccount->fillWithURI('otpauth://totp/?secret=' . OtpTestData::SECRET);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_fill_with_getOfficialIcons_On_triggers_icon_fetching()
     {
         // Set the getOfficialIcons preference On
@@ -291,9 +269,7 @@ class TwoFAccountModelTest extends FeatureTestCase
         $twofaccount->fillWithOtpParameters(OtpTestData::ARRAY_OF_FULL_VALID_PARAMETERS_FOR_CUSTOM_TOTP_NO_ICON);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_fill_with_getOfficialIcons_Off_skips_icon_fetching()
     {
         // Set the getOfficialIcons preference Off
@@ -311,9 +287,7 @@ class TwoFAccountModelTest extends FeatureTestCase
         $twofaccount->fillWithOtpParameters(OtpTestData::ARRAY_OF_FULL_VALID_PARAMETERS_FOR_CUSTOM_TOTP);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_create_custom_totp_from_parameters_returns_correct_value()
     {
         $twofaccount = new TwoFAccount;
@@ -330,9 +304,7 @@ class TwoFAccountModelTest extends FeatureTestCase
         $this->assertStringEndsWith('.png', $twofaccount->icon);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_create_basic_totp_from_parameters_returns_correct_value()
     {
         $twofaccount = new TwoFAccount;
@@ -349,9 +321,7 @@ class TwoFAccountModelTest extends FeatureTestCase
         $this->assertEquals(null, $twofaccount->icon);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_create_custom_hotp_from_parameters_returns_correct_value()
     {
         $twofaccount = new TwoFAccount;
@@ -368,9 +338,7 @@ class TwoFAccountModelTest extends FeatureTestCase
         $this->assertStringEndsWith('.png', $twofaccount->icon);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_create_basic_hotp_from_parameters_returns_correct_value()
     {
         $twofaccount = new TwoFAccount;
@@ -387,9 +355,7 @@ class TwoFAccountModelTest extends FeatureTestCase
         $this->assertEquals(null, $twofaccount->icon);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_create_from_parameters_persists_correct_values_to_db()
     {
         $twofaccount = new TwoFAccount;
@@ -410,9 +376,7 @@ class TwoFAccountModelTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_create_from_unsupported_parameters_returns_unsupportedOtpTypeException()
     {
         $this->expectException(\App\Exceptions\UnsupportedOtpTypeException::class);
@@ -420,9 +384,7 @@ class TwoFAccountModelTest extends FeatureTestCase
         $twofaccount->fillWithOtpParameters(OtpTestData::ARRAY_OF_PARAMETERS_FOR_UNSUPPORTED_OTP_TYPE);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_create_from_invalid_parameters_type_returns_InvalidOtpParameterException()
     {
         $this->expectException(\App\Exceptions\InvalidOtpParameterException::class);
@@ -434,9 +396,7 @@ class TwoFAccountModelTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_create_from_invalid_parameters_returns_InvalidOtpParameterException()
     {
         $this->expectException(\App\Exceptions\InvalidOtpParameterException::class);
@@ -448,9 +408,7 @@ class TwoFAccountModelTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_update_totp_returns_updated_model()
     {
         $twofaccount = $this->customTotpTwofaccount;
@@ -468,9 +426,7 @@ class TwoFAccountModelTest extends FeatureTestCase
         $this->assertEquals(null, $twofaccount->icon);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_update_hotp_returns_updated_model()
     {
         $twofaccount = $this->customTotpTwofaccount;
@@ -488,9 +444,7 @@ class TwoFAccountModelTest extends FeatureTestCase
         $this->assertEquals(null, $twofaccount->icon);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_update_totp_persists_updated_model()
     {
         $twofaccount = $this->customTotpTwofaccount;
@@ -510,9 +464,7 @@ class TwoFAccountModelTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_getOTP_for_totp_returns_the_same_password()
     {
         Http::preventStrayRequests();
@@ -540,9 +492,7 @@ class TwoFAccountModelTest extends FeatureTestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_getOTP_for_hotp_returns_the_same_password()
     {
         Http::preventStrayRequests();
@@ -565,9 +515,7 @@ class TwoFAccountModelTest extends FeatureTestCase
         $this->assertEquals($otp_from_model, $otp_from_parameters);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_getOTP_for_steamtotp_returns_the_same_password()
     {
         $twofaccount = new TwoFAccount;
@@ -587,9 +535,7 @@ class TwoFAccountModelTest extends FeatureTestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_getOTP_for_totp_with_invalid_secret_returns_InvalidSecretException()
     {
         $twofaccount = new TwoFAccount;
@@ -598,9 +544,7 @@ class TwoFAccountModelTest extends FeatureTestCase
         $otp_from_uri = $twofaccount->fillWithURI('otpauth://totp/' . OtpTestData::ACCOUNT . '?secret=1.0')->getOTP();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_getOTP_for_totp_with_undecipherable_secret_returns_UndecipherableException()
     {
         $twofaccount = new TwoFAccount;
@@ -613,9 +557,7 @@ class TwoFAccountModelTest extends FeatureTestCase
         ])->getOTP();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_getURI_for_custom_totp_model_returns_uri()
     {
         $uri = $this->customTotpTwofaccount->getURI();
@@ -629,9 +571,7 @@ class TwoFAccountModelTest extends FeatureTestCase
         $this->assertStringContainsString('algorithm=' . OtpTestData::ALGORITHM_CUSTOM, $uri);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_getURI_for_custom_hotp_model_returns_uri()
     {
         $uri = $this->customHotpTwofaccount->getURI();
@@ -645,9 +585,7 @@ class TwoFAccountModelTest extends FeatureTestCase
         $this->assertStringContainsString('algorithm=' . OtpTestData::ALGORITHM_CUSTOM, $uri);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_fill_succeed_when_image_fetching_fails()
     {
         Http::preventStrayRequests();
@@ -662,9 +600,7 @@ class TwoFAccountModelTest extends FeatureTestCase
         Storage::disk('imagesLink')->assertDirectoryEmpty('/');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_saving_totp_without_period_set_default_one()
     {
         $twofaccount           = new TwoFAccount;
@@ -680,9 +616,7 @@ class TwoFAccountModelTest extends FeatureTestCase
         $this->assertEquals(TwoFAccount::DEFAULT_PERIOD, $account->period);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_saving_hotp_without_counter_set_default_one()
     {
         $twofaccount           = new TwoFAccount;
@@ -698,9 +632,7 @@ class TwoFAccountModelTest extends FeatureTestCase
         $this->assertEquals(TwoFAccount::DEFAULT_COUNTER, $account->counter);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_equals_returns_true()
     {
         $twofaccount             = new TwoFAccount;
@@ -719,9 +651,7 @@ class TwoFAccountModelTest extends FeatureTestCase
         $this->assertTrue($twofaccount->equals($this->customTotpTwofaccount));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_equals_returns_false()
     {
         $twofaccount             = new TwoFAccount;
@@ -740,9 +670,7 @@ class TwoFAccountModelTest extends FeatureTestCase
         $this->assertFalse($twofaccount->equals($this->customHotpTwofaccount));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     #[DataProvider('iconResourceProvider')]
     public function test_set_icon_stores_and_set_the_icon($res, $ext)
     {
@@ -787,9 +715,7 @@ class TwoFAccountModelTest extends FeatureTestCase
         ];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     #[DataProvider('invalidIconResourceProvider')]
     public function test_set_invalid_icon_ends_without_error($res, $ext)
     {

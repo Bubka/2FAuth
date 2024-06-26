@@ -9,6 +9,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\FeatureTestCase;
 
 /**
@@ -41,9 +42,6 @@ class SettingControllerTest extends FeatureTestCase
 
     private const USER_DEFINED_SETTING_CHANGED_VALUE = 'mySetting';
 
-    /**
-     * @test
-     */
     public function setUp() : void
     {
         parent::setUp();
@@ -52,9 +50,7 @@ class SettingControllerTest extends FeatureTestCase
         $this->admin = User::factory()->administrator()->create();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_all_controller_routes_are_protected_by_admin_middleware()
     {
         $routes = Route::getRoutes()->getRoutes();
@@ -70,9 +66,7 @@ class SettingControllerTest extends FeatureTestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_index_returns_setting_collection()
     {
         $response = $this->actingAs($this->admin, 'api-guard')
@@ -83,9 +77,7 @@ class SettingControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_index_is_forbidden_to_users()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -96,9 +88,7 @@ class SettingControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_show_native_unchanged_setting_returns_consistent_value()
     {
         $response = $this->actingAs($this->admin, 'api-guard')
@@ -110,9 +100,7 @@ class SettingControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_show_native_changed_setting_returns_consistent_value()
     {
         Settings::set(self::TWOFAUTH_NATIVE_SETTING, self::TWOFAUTH_NATIVE_SETTING_CHANGED_VALUE);
@@ -126,9 +114,7 @@ class SettingControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_show_custom_user_setting_returns_consistent_value()
     {
         Settings::set(self::USER_DEFINED_SETTING, self::USER_DEFINED_SETTING_VALUE);
@@ -142,9 +128,7 @@ class SettingControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_show_missing_setting_returns_not_found()
     {
         $response = $this->actingAs($this->admin, 'api-guard')
@@ -152,9 +136,7 @@ class SettingControllerTest extends FeatureTestCase
             ->assertNotFound();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_show_setting_is_forbidden_to_users()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -165,9 +147,7 @@ class SettingControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_store_custom_user_setting_returns_success()
     {
         $response = $this->actingAs($this->admin, 'api-guard')
@@ -182,9 +162,7 @@ class SettingControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_store_invalid_custom_user_setting_returns_validation_error()
     {
         $response = $this->actingAs($this->admin, 'api-guard')
@@ -195,9 +173,7 @@ class SettingControllerTest extends FeatureTestCase
             ->assertStatus(422);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_store_existing_custom_user_setting_returns_validation_error()
     {
         Settings::set(self::USER_DEFINED_SETTING, self::USER_DEFINED_SETTING_VALUE);
@@ -210,9 +186,7 @@ class SettingControllerTest extends FeatureTestCase
             ->assertStatus(422);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_update_unchanged_native_setting_returns_updated_setting()
     {
         $response = $this->actingAs($this->admin, 'api-guard')
@@ -226,9 +200,7 @@ class SettingControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_update_custom_user_setting_returns_updated_setting()
     {
         Settings::set(self::USER_DEFINED_SETTING, self::USER_DEFINED_SETTING_VALUE);
@@ -244,9 +216,7 @@ class SettingControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_update_missing_user_setting_returns_created_setting()
     {
         $response = $this->actingAs($this->admin, 'api-guard')
@@ -260,9 +230,7 @@ class SettingControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_destroy_user_setting_returns_success()
     {
         Settings::set(self::USER_DEFINED_SETTING, self::USER_DEFINED_SETTING_VALUE);
@@ -272,9 +240,7 @@ class SettingControllerTest extends FeatureTestCase
             ->assertNoContent();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_destroy_native_setting_returns_bad_request()
     {
         $response = $this->actingAs($this->admin, 'api-guard')
@@ -286,9 +252,7 @@ class SettingControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_destroy_missing_user_setting_returns_not_found()
     {
         $response = $this->actingAs($this->admin, 'api-guard')
@@ -296,9 +260,7 @@ class SettingControllerTest extends FeatureTestCase
             ->assertNotFound();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_destroy_is_forbidden_to_users()
     {
         Settings::set(self::USER_DEFINED_SETTING, self::USER_DEFINED_SETTING_VALUE);

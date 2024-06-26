@@ -6,6 +6,7 @@ use App\Listeners\Authentication\FailedLoginListener;
 use Illuminate\Auth\Events\Failed;
 use Illuminate\Support\Facades\Event;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 /**
@@ -14,9 +15,7 @@ use Tests\TestCase;
 #[CoversClass(FailedLoginListener::class)]
 class FailedLoginListenerTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function test_FailedLoginListener_listen_to_Failed_event()
     {
         Event::fake();

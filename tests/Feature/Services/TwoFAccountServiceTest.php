@@ -8,6 +8,7 @@ use App\Models\TwoFAccount;
 use App\Models\User;
 use App\Services\TwoFAccountService;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\Data\MigrationTestData;
 use Tests\Data\OtpTestData;
 use Tests\FeatureTestCase;
@@ -38,9 +39,6 @@ class TwoFAccountServiceTest extends FeatureTestCase
 
     protected $userGroupB;
 
-    /**
-     * @test
-     */
     public function setUp() : void
     {
         parent::setUp();
@@ -76,9 +74,7 @@ class TwoFAccountServiceTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_withdraw_comma_separated_ids_deletes_relation()
     {
         $twofaccounts = collect([$this->customHotpTwofaccount, $this->customTotpTwofaccount]);
@@ -107,9 +103,7 @@ class TwoFAccountServiceTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_withdraw_array_of_ids_deletes_relation()
     {
         $twofaccounts = collect([$this->customHotpTwofaccount, $this->customTotpTwofaccount]);
@@ -137,9 +131,7 @@ class TwoFAccountServiceTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_withdraw_single_id_deletes_relation()
     {
         $twofaccounts = collect([$this->customHotpTwofaccount, $this->customTotpTwofaccount]);
@@ -158,17 +150,13 @@ class TwoFAccountServiceTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_withdraw_missing_ids_returns_void()
     {
         $this->assertNull(TwoFAccounts::withdraw(null));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_migrate_from_gauth_returns_correct_accounts()
     {
         $this->actingAs($this->user);
@@ -196,9 +184,7 @@ class TwoFAccountServiceTest extends FeatureTestCase
         $this->assertEquals(OtpTestData::ALGORITHM_DEFAULT, $twofaccounts->last()->algorithm);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_migrate_from_gauth_returns_flagged_duplicates()
     {
         $this->actingAs($this->user, 'api-guard');
@@ -227,18 +213,14 @@ class TwoFAccountServiceTest extends FeatureTestCase
         $this->assertEquals(-1, $twofaccounts->last()->id);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_migrate_invalid_migration_from_gauth_returns_InvalidMigrationData_exception()
     {
         $this->expectException(\App\Exceptions\InvalidMigrationDataException::class);
         $twofaccounts = TwoFAccounts::migrate(MigrationTestData::GOOGLE_AUTH_MIGRATION_URI_WITH_INVALID_DATA);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_export_single_id_returns_collection()
     {
         $twofaccounts = TwoFAccounts::export($this->customTotpTwofaccount->id);
@@ -247,9 +229,7 @@ class TwoFAccountServiceTest extends FeatureTestCase
         $this->assertObjectEquals($this->customTotpTwofaccount, $twofaccounts->first());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_export_comma_separated_ids_returns_collection()
     {
         $twofaccounts = TwoFAccounts::export($this->customTotpTwofaccount->id . ',' . $this->customHotpTwofaccount->id);
@@ -259,9 +239,7 @@ class TwoFAccountServiceTest extends FeatureTestCase
         $this->assertObjectEquals($this->customHotpTwofaccount, $twofaccounts->last());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_export_array_of_ids_returns_collection()
     {
         $twofaccounts = TwoFAccounts::export([$this->customTotpTwofaccount->id, $this->customHotpTwofaccount->id]);
@@ -271,9 +249,7 @@ class TwoFAccountServiceTest extends FeatureTestCase
         $this->assertObjectEquals($this->customHotpTwofaccount, $twofaccounts->last());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_delete_comma_separated_ids()
     {
         $twofaccounts = TwoFAccount::factory()->count(2)->for($this->user)->create();
@@ -295,9 +271,7 @@ class TwoFAccountServiceTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_delete_array_of_ids()
     {
         $twofaccounts = TwoFAccount::factory()->count(2)->for($this->user)->create();
@@ -319,9 +293,7 @@ class TwoFAccountServiceTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_delete_single_id()
     {
         $twofaccount = TwoFAccount::factory()->for($this->user)->create();

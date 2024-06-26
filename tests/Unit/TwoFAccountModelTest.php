@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Crypt;
 use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\ModelTestCase;
 
 /**
@@ -19,9 +20,7 @@ use Tests\ModelTestCase;
 #[CoversClass(TwoFAccount::class)]
 class TwoFAccountModelTest extends ModelTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function test_model_configuration()
     {
         $this->runConfigurationAssertions(
@@ -43,9 +42,7 @@ class TwoFAccountModelTest extends ModelTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     #[DataProvider('provideSensitiveAttributes')]
     public function test_sensitive_attributes_are_stored_encrypted(string $attribute)
     {
@@ -81,9 +78,7 @@ class TwoFAccountModelTest extends ModelTestCase
         ];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     #[DataProvider('provideSensitiveAttributes')]
     public function test_sensitive_attributes_are_returned_clear(string $attribute)
     {
@@ -99,9 +94,7 @@ class TwoFAccountModelTest extends ModelTestCase
         $this->forgetMock(SettingService::class);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     #[DataProvider('provideSensitiveAttributes')]
     public function test_indecipherable_attributes_returns_masked_value(string $attribute)
     {
@@ -120,9 +113,7 @@ class TwoFAccountModelTest extends ModelTestCase
         $this->forgetMock(SettingService::class);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_secret_is_uppercased_and_padded_at_setup()
     {
         $settingService = $this->mock(SettingService::class, function (MockInterface $settingService) {
@@ -144,9 +135,7 @@ class TwoFAccountModelTest extends ModelTestCase
         $this->forgetMock(SettingService::class);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_user_relation()
     {
         $model    = new TwoFAccount();

@@ -3,6 +3,7 @@
 namespace Tests\Feature\Http\Middlewares;
 
 use Illuminate\Support\Facades\Config;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\FeatureTestCase;
 
 class AuthenticateMiddlewareTest extends FeatureTestCase
@@ -11,9 +12,7 @@ class AuthenticateMiddlewareTest extends FeatureTestCase
 
     private const USER_EMAIL = 'john@example.com';
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_it_always_authenticates_with_reverse_proxy_guard()
     {
         Config::set('auth.auth_proxy_headers.user', 'HTTP_REMOTE_USER');
@@ -24,9 +23,7 @@ class AuthenticateMiddlewareTest extends FeatureTestCase
         $this->assertAuthenticated('reverse-proxy-guard');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_it_does_not_authenticate_with_empty_header()
     {
         Config::set('auth.auth_proxy_headers.user', 'HTTP_REMOTE_USER');
@@ -40,9 +37,7 @@ class AuthenticateMiddlewareTest extends FeatureTestCase
         ])->assertStatus(407);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_it_does_not_authenticate_with_missing_header()
     {
         $this->app['auth']->shouldUse('reverse-proxy-guard');

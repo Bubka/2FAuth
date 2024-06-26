@@ -2,7 +2,10 @@
 
 namespace Tests\Feature\Http\Auth;
 
+use App\Exceptions\Handler;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Middleware\KickOutInactiveUser;
+use App\Http\Middleware\LogUserLastSeen;
 use App\Http\Middleware\RejectIfAuthenticated;
 use App\Http\Middleware\RejectIfDemoMode;
 use App\Http\Middleware\RejectIfReverseProxy;
@@ -12,10 +15,13 @@ use App\Listeners\Authentication\LoginListener;
 use App\Models\User;
 use App\Notifications\FailedLogin;
 use App\Notifications\SignedInWithNewDevice;
+use App\Rules\CaseInsensitiveEmailExists;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Notification;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\FeatureTestCase;
 
 /**
@@ -25,9 +31,13 @@ use Tests\FeatureTestCase;
 #[CoversClass(RejectIfAuthenticated::class)]
 #[CoversClass(RejectIfReverseProxy::class)]
 #[CoversClass(RejectIfDemoMode::class)]
-#[CoversClass(SkipIfAuthenticated::class)]
 #[CoversClass(LoginListener::class)]
 #[CoversClass(FailedLoginListener::class)]
+#[CoversMethod(CaseInsensitiveEmailExists::class, 'handle')]
+#[CoversMethod(SkipIfAuthenticated::class, 'handle')]
+#[CoversMethod(Handler::class, 'register')]
+#[CoversMethod(KickOutInactiveUser::class, 'handle')]
+#[CoversMethod(LogUserLastSeen::class, 'handle')]
 class LoginTest extends FeatureTestCase
 {
     /**
@@ -44,9 +54,6 @@ class LoginTest extends FeatureTestCase
 
     private const WRONG_PASSWORD = 'wrong_password';
 
-    /**
-     * @test
-     */
     public function setUp() : void
     {
         parent::setUp();
@@ -55,9 +62,7 @@ class LoginTest extends FeatureTestCase
         $this->admin = User::factory()->administrator()->create();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_user_login_returns_success()
     {
         $response = $this->json('POST', '/user/login', [
@@ -77,9 +82,7 @@ class LoginTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_login_send_new_device_notification()
     {
         Notification::fake();
@@ -107,9 +110,7 @@ class LoginTest extends FeatureTestCase
         Notification::assertSentTo($this->user, SignedInWithNewDevice::class);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_login_does_not_send_new_device_notification()
     {
         Notification::fake();
@@ -137,9 +138,7 @@ class LoginTest extends FeatureTestCase
         Notification::assertNothingSentTo($this->user);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_admin_login_returns_admin_role()
     {
         $response = $this->json('POST', '/user/login', [
@@ -152,11 +151,7 @@ class LoginTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     *
-     * @covers  \App\Rules\CaseInsensitiveEmailExists
-     */
+    #[Test]
     public function test_user_login_with_uppercased_email_returns_success()
     {
         $response = $this->json('POST', '/user/login', [
@@ -175,11 +170,7 @@ class LoginTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     *
-     * @covers  \App\Http\Middleware\SkipIfAuthenticated
-     */
+    #[Test]
     public function test_user_login_already_authenticated_is_rejected()
     {
         $response = $this->json('POST', '/user/login', [
@@ -198,9 +189,7 @@ class LoginTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_user_login_with_missing_data_returns_validation_error()
     {
         $response = $this->json('POST', '/user/login', [
@@ -214,11 +203,7 @@ class LoginTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     *
-     * @covers  \App\Exceptions\Handler
-     */
+    #[Test]
     public function test_user_login_with_invalid_credentials_returns_unauthorized()
     {
         $response = $this->json('POST', '/user/login', [
@@ -231,9 +216,7 @@ class LoginTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_login_with_invalid_credentials_send_failed_login_notification()
     {
         Notification::fake();
@@ -249,9 +232,7 @@ class LoginTest extends FeatureTestCase
         Notification::assertSentTo($this->user, FailedLogin::class);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_login_with_invalid_credentials_does_not_send_new_device_notification()
     {
         Notification::fake();
@@ -267,9 +248,7 @@ class LoginTest extends FeatureTestCase
         Notification::assertNothingSentTo($this->user);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_too_many_login_attempts_with_invalid_credentials_returns_too_many_request_error()
     {
         $throttle = 8;
@@ -291,9 +270,7 @@ class LoginTest extends FeatureTestCase
             ->assertStatus(429);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_user_logout_returns_validation_success()
     {
         $response = $this->json('POST', '/user/login', [
@@ -309,12 +286,7 @@ class LoginTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     *
-     * @covers  \App\Http\Middleware\KickOutInactiveUser
-     * @covers  \App\Http\Middleware\LogUserLastSeen
-     */
+    #[Test]
     public function test_user_logout_after_inactivity_returns_teapot()
     {
         // Set the autolock period to 1 minute

@@ -24,6 +24,7 @@ use Laravel\Passport\TokenRepository;
 use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\FeatureTestCase;
 
 #[CoversClass(UserManagerController::class)]
@@ -52,9 +53,6 @@ class UserManagerControllerTest extends FeatureTestCase
 
     private const PASSWORD = 'password';
 
-    /**
-     * @test
-     */
     public function setUp() : void
     {
         parent::setUp();
@@ -69,9 +67,7 @@ class UserManagerControllerTest extends FeatureTestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_all_controller_routes_are_protected_by_admin_middleware()
     {
         $routes = Route::getRoutes()->getRoutes();
@@ -87,9 +83,7 @@ class UserManagerControllerTest extends FeatureTestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_index_returns_all_users_with_expected_UserManagerResources() : void
     {
         $response = $this->actingAs($this->admin, 'api-guard')
@@ -130,9 +124,7 @@ class UserManagerControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_show_returns_the_expected_UserManagerResource() : void
     {
         $this->actingAs($this->admin, 'api-guard')
@@ -155,9 +147,7 @@ class UserManagerControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_resetPassword_resets_password_and_sends_password_reset_to_user()
     {
         Notification::fake();
@@ -181,9 +171,7 @@ class UserManagerControllerTest extends FeatureTestCase
         });
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_resetPassword_returns_UserManagerResource()
     {
         Notification::fake();
@@ -199,9 +187,7 @@ class UserManagerControllerTest extends FeatureTestCase
         $response->assertExactJson($resources->response($request)->getData(true));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_resetPassword_does_not_notify_when_reset_failed_and_returns_error()
     {
         Notification::fake();
@@ -228,9 +214,7 @@ class UserManagerControllerTest extends FeatureTestCase
         Notification::assertNothingSent();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_resetPassword_returns_error_when_notify_send_failed()
     {
         Notification::fake();
@@ -259,9 +243,7 @@ class UserManagerControllerTest extends FeatureTestCase
         Notification::assertNothingSent();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_store_creates_the_user_and_returns_success()
     {
         $this->actingAs($this->admin, 'api-guard')
@@ -280,9 +262,7 @@ class UserManagerControllerTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_store_returns_UserManagerResource_of_created_user() : void
     {
         $path                                    = '/api/v1/users';
@@ -300,9 +280,7 @@ class UserManagerControllerTest extends FeatureTestCase
         $response->assertExactJson($resource->response($request)->getData(true));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_store_returns_UserManagerResource_of_created_admin() : void
     {
         $path                                    = '/api/v1/users';
@@ -321,9 +299,7 @@ class UserManagerControllerTest extends FeatureTestCase
         $response->assertExactJson($resource->response($request)->getData(true));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_revokePATs_flushes_pats()
     {
         Artisan::call('passport:install', [
@@ -350,9 +326,7 @@ class UserManagerControllerTest extends FeatureTestCase
         $this->assertCount(0, $tokens);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_revokePATs_returns_no_content()
     {
         $this->actingAs($this->admin, 'api-guard')
@@ -360,9 +334,7 @@ class UserManagerControllerTest extends FeatureTestCase
             ->assertNoContent();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_revokePATs_always_returns_no_content()
     {
         // a fresh user has no token
@@ -373,9 +345,7 @@ class UserManagerControllerTest extends FeatureTestCase
             ->assertNoContent();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_revokeWebauthnCredentials_flushes_credentials()
     {
         DB::table('webauthn_credentials')->insert([
@@ -401,9 +371,7 @@ class UserManagerControllerTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_revokeWebauthnCredentials_returns_no_content()
     {
         DB::table('webauthn_credentials')->insert([
@@ -426,9 +394,7 @@ class UserManagerControllerTest extends FeatureTestCase
             ->assertNoContent();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_revokeWebauthnCredentials_always_returns_no_content()
     {
         DB::table('webauthn_credentials')->delete();
@@ -438,9 +404,7 @@ class UserManagerControllerTest extends FeatureTestCase
             ->assertNoContent();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_revokeWebauthnCredentials_resets_useWebauthnOnly_user_preference()
     {
         $this->user['preferences->useWebauthnOnly'] = true;
@@ -455,9 +419,7 @@ class UserManagerControllerTest extends FeatureTestCase
         $this->assertFalse($this->user->preferences['useWebauthnOnly']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_destroy_returns_no_content()
     {
         $user = User::factory()->create();
@@ -467,9 +429,7 @@ class UserManagerControllerTest extends FeatureTestCase
             ->assertNoContent();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_destroy_the_only_admin_returns_forbidden()
     {
         $this->actingAs($this->admin, 'api-guard')
@@ -477,9 +437,7 @@ class UserManagerControllerTest extends FeatureTestCase
             ->assertForbidden();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_promote_changes_admin_status() : void
     {
         $this->actingAs($this->admin, 'api-guard')
@@ -493,9 +451,7 @@ class UserManagerControllerTest extends FeatureTestCase
         $this->assertTrue($this->user->isAdministrator());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_promote_returns_UserManagerResource() : void
     {
         $path    = '/api/v1/users/' . $this->user->id . '/promote';
@@ -512,9 +468,7 @@ class UserManagerControllerTest extends FeatureTestCase
         $response->assertExactJson($resources->response($request)->getData(true));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_demote_returns_UserManagerResource() : void
     {
         $anotherAdmin = User::factory()->administrator()->create();
@@ -533,9 +487,7 @@ class UserManagerControllerTest extends FeatureTestCase
         $response->assertExactJson($resources->response($request)->getData(true));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_demote_the_only_admin_returns_forbidden() : void
     {
         $this->assertTrue(User::admins()->count() == 1);
@@ -547,9 +499,7 @@ class UserManagerControllerTest extends FeatureTestCase
             ->assertForbidden();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_authentications_returns_all_preserved_entries() : void
     {
         AuthLog::factory()->for($this->user, 'authenticatable')->duringLastYear()->create();
@@ -566,9 +516,7 @@ class UserManagerControllerTest extends FeatureTestCase
             ->assertJsonCount(7);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_authentications_does_not_return_old_entries() : void
     {
         AuthLog::factory()->for($this->user, 'authenticatable')->beforeLastYear()->create();
@@ -579,9 +527,7 @@ class UserManagerControllerTest extends FeatureTestCase
             ->assertJsonCount(0);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_authentications_returns_user_entries_only() : void
     {
         AuthLog::factory()->for($this->admin, 'authenticatable')->create();
@@ -594,9 +540,7 @@ class UserManagerControllerTest extends FeatureTestCase
         $this->assertEquals($response->getData()[0]->id, $this->user->id);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_authentications_returns_expected_resource() : void
     {
         AuthLog::factory()->for($this->user, 'authenticatable')->create();
@@ -620,9 +564,7 @@ class UserManagerControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_authentications_returns_resource_with_timezoned_dates() : void
     {
         $timezone                             = 'Europe/Paris';
@@ -649,9 +591,7 @@ class UserManagerControllerTest extends FeatureTestCase
         $this->assertTrue($logout_at->isSameMinute($timezonedNow));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_authentications_returns_loginless_entries() : void
     {
         $this->logUserOut();
@@ -664,9 +604,7 @@ class UserManagerControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_authentications_returns_logoutless_entries() : void
     {
         $this->logUserIn();
@@ -679,9 +617,7 @@ class UserManagerControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_authentications_returns_failed_entry() : void
     {
         $this->json('POST', '/user/login', [
@@ -697,9 +633,7 @@ class UserManagerControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_authentications_returns_last_month_entries() : void
     {
         $this->travel(-2)->months();
@@ -714,9 +648,7 @@ class UserManagerControllerTest extends FeatureTestCase
         $this->assertTrue(Carbon::parse($response->getData()[0]->login_at)->isSameDay(now()));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_authentications_returns_last_three_months_entries() : void
     {
         $this->travel(-100)->days();
@@ -733,9 +665,7 @@ class UserManagerControllerTest extends FeatureTestCase
         $this->assertTrue(Carbon::parse($response->getData()[0]->login_at)->isSameDay(now()->subDays(80)));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_authentications_returns_last_six_months_entries() : void
     {
         $this->travel(-7)->months();
@@ -752,9 +682,7 @@ class UserManagerControllerTest extends FeatureTestCase
         $this->assertTrue(Carbon::parse($response->getData()[0]->login_at)->isSameDay(now()->subMonths(5)));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_authentications_returns_last_year_entries() : void
     {
         $this->travel(-13)->months();
@@ -771,9 +699,7 @@ class UserManagerControllerTest extends FeatureTestCase
         $this->assertTrue(Carbon::parse($response->getData()[0]->login_at)->isSameDay(now()->subMonths(11)));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     #[DataProvider('LimitProvider')]
     public function test_authentications_returns_limited_entries($limit) : void
     {
@@ -801,9 +727,7 @@ class UserManagerControllerTest extends FeatureTestCase
         ];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_authentications_returns_expected_ip_and_useragent_chunks() : void
     {
         AuthLog::factory()->for($this->user, 'authenticatable')->create([
@@ -821,9 +745,7 @@ class UserManagerControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     #[DataProvider('invalidQueryParameterProvider')]
     public function test_authentications_with_invalid_limit_returns_validation_error($limit) : void
     {
@@ -832,9 +754,7 @@ class UserManagerControllerTest extends FeatureTestCase
             ->assertInvalid(['limit']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     #[DataProvider('invalidQueryParameterProvider')]
     public function test_authentications_with_invalid_period_returns_validation_error($period) : void
     {

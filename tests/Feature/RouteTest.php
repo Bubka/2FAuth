@@ -2,15 +2,12 @@
 
 namespace Tests\Feature;
 
+use PHPUnit\Framework\Attributes\Test;
 use Tests\FeatureTestCase;
 
 class RouteTest extends FeatureTestCase
 {
-    /**
-     * test return main web view
-     *
-     * @test
-     */
+    #[Test]
     public function test_landing_view_is_returned()
     {
         $response = $this->get(route('landing', ['any' => '/']));
@@ -19,11 +16,7 @@ class RouteTest extends FeatureTestCase
             ->assertViewIs('landing');
     }
 
-    /**
-     * test return main web view
-     *
-     * @test
-     */
+    #[Test]
     public function test_exception_handler_with_web_route()
     {
         $response = $this->post('/');

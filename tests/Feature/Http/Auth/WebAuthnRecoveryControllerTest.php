@@ -11,6 +11,7 @@ use Database\Factories\UserFactory;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\FeatureTestCase;
 
 /**
@@ -35,9 +36,6 @@ class WebAuthnRecoveryControllerTest extends FeatureTestCase
 
     const CREDENTIAL_ID = '-VOLFKPY-_FuMI_sJ7gMllK76L3VoRUINj6lL_Z3qDg';
 
-    /**
-     * @test
-     */
     public function setUp() : void
     {
         parent::setUp();
@@ -53,9 +51,7 @@ class WebAuthnRecoveryControllerTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_recover_fails_if_no_recovery_is_set()
     {
         DB::table(config('auth.passwords.webauthn.table'))->delete();
@@ -69,9 +65,7 @@ class WebAuthnRecoveryControllerTest extends FeatureTestCase
             ->assertJsonValidationErrors('token');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_recover_with_wrong_token_returns_validation_error()
     {
         $response = $this->json('POST', '/webauthn/recover', [
@@ -84,9 +78,7 @@ class WebAuthnRecoveryControllerTest extends FeatureTestCase
             ->assertJsonValidationErrors('token');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_recover_with_expired_token_returns_validation_error()
     {
         Date::setTestNow($now = Date::create(2020, 01, 01, 16, 30));
@@ -107,9 +99,7 @@ class WebAuthnRecoveryControllerTest extends FeatureTestCase
             ->assertJsonValidationErrors('token');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_recover_with_invalid_password_returns_authentication_error()
     {
         $this->json('POST', '/webauthn/recover', [
@@ -120,9 +110,7 @@ class WebAuthnRecoveryControllerTest extends FeatureTestCase
             ->assertStatus(401);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_recover_returns_validation_error_when_no_user_exists()
     {
         $this->json('POST', '/webauthn/recover', [
@@ -136,9 +124,7 @@ class WebAuthnRecoveryControllerTest extends FeatureTestCase
             ->assertJsonValidationErrors('email');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_recover_returns_success()
     {
         $response = $this->json('POST', '/webauthn/recover', [
@@ -153,9 +139,7 @@ class WebAuthnRecoveryControllerTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_recover_resets_useWebauthnOnly_user_preference()
     {
         $this->user['preferences->useWebauthnOnly'] = true;
@@ -173,9 +157,7 @@ class WebAuthnRecoveryControllerTest extends FeatureTestCase
         $this->assertFalse($this->user->preferences['useWebauthnOnly']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_revoke_all_credentials_clear_registered_credentials()
     {
         DB::table('webauthn_credentials')->insert([

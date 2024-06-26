@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\FeatureTestCase;
 
 /**
@@ -62,9 +63,6 @@ class SettingServiceTest extends FeatureTestCase
 
     private const TOTP_FULL_CUSTOM_URI = 'otpauth://totp/' . self::SERVICE . ':' . self::ACCOUNT . '?secret=' . self::SECRET . '&issuer=' . self::SERVICE . '&digits=' . self::DIGITS_CUSTOM . '&period=' . self::PERIOD_CUSTOM . '&algorithm=' . self::ALGORITHM_CUSTOM . '&image=' . self::IMAGE;
 
-    /**
-     * @test
-     */
     public function setUp() : void
     {
         parent::setUp();
@@ -96,9 +94,7 @@ class SettingServiceTest extends FeatureTestCase
         $this->twofaccountTwo->save();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_get_string_setting_returns_correct_value()
     {
         Settings::set(self::SETTING_NAME, self::SETTING_VALUE_STRING);
@@ -106,9 +102,7 @@ class SettingServiceTest extends FeatureTestCase
         $this->assertEquals(self::SETTING_VALUE_STRING, Settings::get(self::SETTING_NAME));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_get_boolean_setting_returns_true()
     {
         Settings::set(self::SETTING_NAME, self::SETTING_VALUE_TRUE_TRANSFORMED);
@@ -116,9 +110,7 @@ class SettingServiceTest extends FeatureTestCase
         $this->assertEquals(true, Settings::get(self::SETTING_NAME));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_get_boolean_setting_returns_false()
     {
         Settings::set(self::SETTING_NAME, self::SETTING_VALUE_FALSE_TRANSFORMED);
@@ -126,9 +118,7 @@ class SettingServiceTest extends FeatureTestCase
         $this->assertEquals(false, Settings::get(self::SETTING_NAME));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_get_int_setting_returns_int()
     {
         Settings::set(self::SETTING_NAME, self::SETTING_VALUE_INT);
@@ -139,9 +129,7 @@ class SettingServiceTest extends FeatureTestCase
         $this->assertIsInt($value);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_get_float_setting_returns_float()
     {
         Settings::set(self::SETTING_NAME, self::SETTING_VALUE_FLOAT);
@@ -152,9 +140,7 @@ class SettingServiceTest extends FeatureTestCase
         $this->assertIsFloat($value);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_all_returns_default_and_overloaded_settings()
     {
         $default_options = config('2fauth.settings');
@@ -172,9 +158,7 @@ class SettingServiceTest extends FeatureTestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_set_setting_persist_correct_value_in_db_and_cache()
     {
         $value  = Settings::set(self::SETTING_NAME, self::SETTING_VALUE_STRING);
@@ -188,9 +172,7 @@ class SettingServiceTest extends FeatureTestCase
         $this->assertEquals($cached->get(self::SETTING_NAME), self::SETTING_VALUE_STRING);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_set_useEncryption_on_encrypts_all_accounts()
     {
         Settings::set('useEncryption', true);
@@ -204,9 +186,7 @@ class SettingServiceTest extends FeatureTestCase
         });
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_set_useEncryption_on_twice_prevents_successive_encryption()
     {
         Settings::set('useEncryption', true);
@@ -221,9 +201,7 @@ class SettingServiceTest extends FeatureTestCase
         });
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_set_useEncryption_off_decrypts_all_accounts()
     {
         Settings::set('useEncryption', true);
@@ -238,9 +216,7 @@ class SettingServiceTest extends FeatureTestCase
         });
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     #[DataProvider('provideUndecipherableData')]
     public function test_set_useEncryption_off_returns_exception_when_data_are_undecipherable(array $data)
     {
@@ -275,9 +251,7 @@ class SettingServiceTest extends FeatureTestCase
         ];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_set_array_of_settings_persist_correct_values()
     {
         $value = Settings::set([
@@ -300,9 +274,7 @@ class SettingServiceTest extends FeatureTestCase
         $this->assertEquals($cached->get(self::SETTING_NAME_ALT), self::SETTING_VALUE_INT);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_set_true_setting_persist_transformed_boolean()
     {
         $value = Settings::set(self::SETTING_NAME, true);
@@ -313,9 +285,7 @@ class SettingServiceTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_set_false_setting_persist_transformed_boolean()
     {
         $value = Settings::set(self::SETTING_NAME, false);
@@ -326,9 +296,7 @@ class SettingServiceTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_del_remove_setting_from_db_and_cache()
     {
         DB::table('options')->insert(
@@ -345,9 +313,7 @@ class SettingServiceTest extends FeatureTestCase
         $this->assertFalse($cached->has(self::SETTING_NAME));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_isEdited_returns_true()
     {
         DB::table('options')->insert(
@@ -357,9 +323,7 @@ class SettingServiceTest extends FeatureTestCase
         $this->assertTrue(Settings::isEdited('showOtpAsDot'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_isEdited_returns_false()
     {
         DB::table('options')->where(self::KEY, 'showOtpAsDot')->delete();
@@ -367,9 +331,7 @@ class SettingServiceTest extends FeatureTestCase
         $this->assertFalse(Settings::isEdited('showOtpAsDot'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_cache_is_requested_at_instanciation()
     {
         Cache::shouldReceive('remember')
@@ -380,9 +342,7 @@ class SettingServiceTest extends FeatureTestCase
         Cache::shouldHaveReceived('remember');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_cache_is_updated_when_setting_is_set()
     {
         Cache::shouldReceive('remember', 'put')
@@ -394,9 +354,7 @@ class SettingServiceTest extends FeatureTestCase
         Cache::shouldHaveReceived('put');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_cache_is_updated_when_setting_is_deleted()
     {
         Cache::shouldReceive('remember', 'put')

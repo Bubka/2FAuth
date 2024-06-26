@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\Classes\LocalFile;
 use Tests\Data\MigrationTestData;
 use Tests\Data\OtpTestData;
@@ -178,9 +179,6 @@ class TwoFAccountControllerTest extends FeatureTestCase
         'secret'   => OtpTestData::SECRET,
     ];
 
-    /**
-     * @test
-     */
     public function setUp() : void
     {
         parent::setUp();
@@ -208,9 +206,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     #[DataProvider('indexUrlParameterProvider')]
     public function test_index_returns_user_twofaccounts_only($urlParameter, $expected)
     {
@@ -252,9 +248,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         ];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_show_returns_twofaccount_resource_with_secret()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -263,9 +257,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->assertJsonStructure(self::VALID_RESOURCE_STRUCTURE_WITH_SECRET);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_show_returns_twofaccount_resource_without_secret()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -274,9 +266,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->assertJsonStructure(self::VALID_RESOURCE_STRUCTURE_WITHOUT_SECRET);
     }
 
-    /**
-     * @test
-     */
+    //#[Test]
     // public function test_show_twofaccount_with_indeciphered_data_returns_replaced_data()
     // {
     //     $dbEncryptionService = resolve('App\Services\DbEncryptionService');
@@ -299,9 +289,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
     //         ]);
     // }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_show_missing_twofaccount_returns_not_found()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -312,9 +300,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_show_twofaccount_of_another_user_is_forbidden()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -325,9 +311,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     #[DataProvider('accountCreationProvider')]
     public function test_store_without_encryption_returns_success_with_consistent_resource_structure($payload, $expected)
     {
@@ -341,9 +325,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->assertJsonFragment($expected);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     #[DataProvider('accountCreationProvider')]
     public function test_store_with_encryption_returns_success_with_consistent_resource_structure($payload, $expected)
     {
@@ -406,9 +388,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         ];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_store_with_invalid_uri_returns_validation_error()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -418,9 +398,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->assertStatus(422);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_store_assigns_created_account_when_default_group_is_a_specific_one()
     {
         // Set the default group to a specific one
@@ -436,9 +414,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_store_assigns_created_account_when_default_group_is_the_active_one()
     {
         // Set the default group to be the active one
@@ -456,9 +432,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_store_assigns_created_account_when_default_group_is_no_group()
     {
         // Set the default group to No group
@@ -474,9 +448,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_store_assigns_created_account_when_default_group_does_not_exist()
     {
         // Set the default group to a non-existing one
@@ -492,9 +464,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_update_totp_returns_success_with_updated_resource()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -503,9 +473,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->assertJsonFragment(self::JSON_FRAGMENTS_FOR_CUSTOM_TOTP);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_update_hotp_returns_success_with_updated_resource()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -514,9 +482,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->assertJsonFragment(self::JSON_FRAGMENTS_FOR_CUSTOM_HOTP);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_update_missing_twofaccount_returns_not_found()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -524,9 +490,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->assertNotFound();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_update_twofaccount_with_invalid_data_returns_validation_error()
     {
         $twofaccount = TwoFAccount::factory()->create();
@@ -536,9 +500,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->assertStatus(422);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_update_twofaccount_of_another_user_is_forbidden()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -549,9 +511,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_migrate_valid_gauth_payload_returns_success_with_consistent_resources()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -585,9 +545,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_migrate_with_invalid_gauth_payload_returns_validation_error()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -597,9 +555,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->assertStatus(422);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_migrate_payload_with_duplicates_returns_negative_ids()
     {
         $twofaccount = TwoFAccount::factory()->for($this->user)->create([
@@ -643,9 +599,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_migrate_identify_duplicates_in_authenticated_user_twofaccounts_only()
     {
         $twofaccount = TwoFAccount::factory()->for($this->anotherUser)->create([
@@ -689,9 +643,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_migrate_invalid_gauth_payload_returns_bad_request()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -704,9 +656,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_migrate_valid_aegis_json_file_returns_success()
     {
         $file = LocalFile::fake()->validAegisJsonFile();
@@ -754,9 +704,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     #[DataProvider('invalidAegisJsonFileProvider')]
     public function test_migrate_invalid_aegis_json_file_returns_bad_request($file)
     {
@@ -783,9 +731,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         ];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     #[DataProvider('validPlainTextFileProvider')]
     public function test_migrate_valid_plain_text_file_returns_success($file)
     {
@@ -847,9 +793,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         ];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     #[DataProvider('invalidPlainTextFileProvider')]
     public function test_migrate_invalid_plain_text_file_returns_bad_request($file)
     {
@@ -882,9 +826,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         ];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_reorder_returns_success()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -897,9 +839,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_reorder_with_invalid_data_returns_validation_error()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -909,9 +849,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->assertStatus(422);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_reorder_twofaccounts_of_another_user_is_forbidden()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -924,9 +862,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_preview_returns_success_with_resource()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -937,9 +873,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->assertJsonFragment(self::JSON_FRAGMENTS_FOR_CUSTOM_TOTP);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_preview_with_invalid_data_returns_validation_error()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -949,9 +883,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->assertStatus(422);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_preview_with_unreachable_image_returns_success()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -964,9 +896,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_export_returns_json_migration_resource()
     {
         $this->twofaccountA = TwoFAccount::factory()->for($this->user)->create(self::JSON_FRAGMENTS_FOR_DEFAULT_TOTP);
@@ -980,9 +910,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->assertJsonFragment(self::JSON_FRAGMENTS_FOR_DEFAULT_HOTP);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_export_too_many_ids_returns_bad_request()
     {
         TwoFAccount::factory()->count(102)->for($this->user)->create();
@@ -998,9 +926,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_export_missing_twofaccount_returns_existing_ones_only()
     {
         $this->twofaccountA = TwoFAccount::factory()->for($this->user)->create(self::JSON_FRAGMENTS_FOR_DEFAULT_TOTP);
@@ -1010,9 +936,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->assertJsonFragment(self::JSON_FRAGMENTS_FOR_DEFAULT_TOTP);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_export_twofaccount_of_another_user_is_forbidden()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -1023,9 +947,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_get_otp_using_totp_twofaccount_id_returns_consistent_resource()
     {
         $twofaccount = TwoFAccount::factory()->for($this->user)->create([
@@ -1050,9 +972,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_get_otp_by_posting_totp_uri_returns_consistent_resource()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -1067,9 +987,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_get_otp_by_posting_totp_parameters_returns_consistent_resource()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -1082,9 +1000,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_get_otp_using_hotp_twofaccount_id_returns_consistent_resource()
     {
         $twofaccount = TwoFAccount::factory()->for($this->user)->create([
@@ -1109,9 +1025,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_get_otp_by_posting_hotp_uri_returns_consistent_resource()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -1126,9 +1040,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_get_otp_by_posting_hotp_parameters_returns_consistent_resource()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -1141,9 +1053,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_get_otp_by_posting_multiple_inputs_returns_bad_request()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -1158,9 +1068,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_get_otp_using_indecipherable_twofaccount_id_returns_bad_request()
     {
         Settings::set('useEncryption', true);
@@ -1181,9 +1089,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_get_otp_using_missing_twofaccount_id_returns_not_found()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -1191,9 +1097,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->assertNotFound();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_get_otp_by_posting_invalid_uri_returns_validation_error()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -1203,9 +1107,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->assertStatus(422);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_get_otp_by_posting_invalid_parameters_returns_validation_error()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -1213,9 +1115,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->assertStatus(422);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_get_otp_of_another_user_twofaccount_is_forbidden()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -1226,9 +1126,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_count_returns_right_number_of_twofaccounts()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -1239,9 +1137,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_withdraw_returns_success()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -1252,9 +1148,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_withdraw_too_many_ids_returns_bad_request()
     {
         TwoFAccount::factory()->count(102)->for($this->user)->create();
@@ -1270,9 +1164,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_destroy_twofaccount_returns_success()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -1280,9 +1172,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->assertNoContent();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_destroy_missing_twofaccount_returns_not_found()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -1290,9 +1180,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->assertNotFound();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_destroy_twofaccount_of_another_user_is_forbidden()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -1303,9 +1191,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_batch_destroy_twofaccount_returns_success()
     {
         TwoFAccount::factory()->count(3)->for($this->user)->create();
@@ -1315,9 +1201,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->assertNoContent();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_batch_destroy_too_many_twofaccounts_returns_bad_request()
     {
         TwoFAccount::factory()->count(102)->for($this->user)->create();
@@ -1333,9 +1217,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_batch_destroy_twofaccount_of_another_user_is_forbidden()
     {
         TwoFAccount::factory()->count(2)->for($this->anotherUser)->create();

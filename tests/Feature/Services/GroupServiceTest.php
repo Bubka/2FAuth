@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Services\GroupService;
 use Illuminate\Auth\Access\AuthorizationException;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\FeatureTestCase;
 
 /**
@@ -48,9 +49,6 @@ class GroupServiceTest extends FeatureTestCase
 
     private const NEW_GROUP_NAME = 'MyNewGroup';
 
-    /**
-     * @test
-     */
     public function setUp() : void
     {
         parent::setUp();
@@ -76,9 +74,7 @@ class GroupServiceTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_assign_a_twofaccount_to_a_group_persists_the_relation()
     {
         Groups::assign($this->twofaccountOne->id, $this->user, $this->groupTwo);
@@ -89,9 +85,7 @@ class GroupServiceTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_assign_multiple_twofaccounts_to_group_persists_the_relation()
     {
         Groups::assign([$this->twofaccountOne->id, $this->twofaccountTwo->id], $this->user, $this->groupTwo);
@@ -106,9 +100,7 @@ class GroupServiceTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_assign_a_twofaccount_to_no_group_assigns_to_user_default_group()
     {
         $this->user['preferences->defaultGroup'] = $this->groupTwo->id;
@@ -122,9 +114,7 @@ class GroupServiceTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_assign_a_twofaccount_to_no_group_assigns_to_user_active_group()
     {
         $this->user['preferences->defaultGroup'] = -1;
@@ -139,9 +129,7 @@ class GroupServiceTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_assign_a_twofaccount_to_missing_active_group_returns_not_found()
     {
         $orginalGroup = $this->twofaccountOne->group_id;
@@ -158,9 +146,7 @@ class GroupServiceTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_user_can_assign_an_account()
     {
         $this->expectException(AuthorizationException::class);
@@ -168,9 +154,7 @@ class GroupServiceTest extends FeatureTestCase
         Groups::assign($this->twofaccountThree->id, $this->user, $this->user->groups()->first());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_user_can_assign_multiple_accounts()
     {
         $this->expectException(AuthorizationException::class);
@@ -178,9 +162,7 @@ class GroupServiceTest extends FeatureTestCase
         Groups::assign([$this->twofaccountOne->id, $this->twofaccountThree->id], $this->user, $this->user->groups()->first());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_prependTheAllGroup_add_the_group_on_top_of_groups()
     {
         $groups = Groups::prependTheAllGroup($this->user->groups, $this->user);

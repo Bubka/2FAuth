@@ -7,6 +7,7 @@ use App\Models\TwoFAccount;
 use App\Services\SettingService;
 use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 /**
@@ -15,9 +16,7 @@ use Tests\TestCase;
 #[CoversClass(TwoFAccountDeleted::class)]
 class TwoFAccountDeletedTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function test_event_constructor()
     {
         $settingService = $this->mock(SettingService::class, function (MockInterface $settingService) {

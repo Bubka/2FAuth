@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 /**
@@ -20,9 +21,7 @@ class TwoFAccountUpdateRequestTest extends TestCase
 {
     use WithoutMiddleware;
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_user_is_authorized()
     {
         Auth::shouldReceive('check')
@@ -34,9 +33,7 @@ class TwoFAccountUpdateRequestTest extends TestCase
         $this->assertTrue($request->authorize());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     #[DataProvider('provideValidData')]
     public function test_valid_data(array $data) : void
     {
@@ -86,9 +83,7 @@ class TwoFAccountUpdateRequestTest extends TestCase
         ];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     #[DataProvider('provideInvalidData')]
     public function test_invalid_data(array $data) : void
     {

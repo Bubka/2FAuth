@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Config;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\FeatureTestCase;
 
 /**
@@ -14,9 +15,7 @@ use Tests\FeatureTestCase;
 #[CoversClass(RouteServiceProvider::class)]
 class ThrottlingTest extends FeatureTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function test_api_calls_are_throttled_using_config()
     {
         /**

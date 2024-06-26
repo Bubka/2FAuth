@@ -5,6 +5,7 @@ namespace Tests\Feature\Http\Auth;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Models\User;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\FeatureTestCase;
 
 /**
@@ -22,9 +23,6 @@ class PasswordControllerTest extends FeatureTestCase
 
     private const NEW_PASSWORD = 'newPassword';
 
-    /**
-     * @test
-     */
     public function setUp() : void
     {
         parent::setUp();
@@ -32,9 +30,7 @@ class PasswordControllerTest extends FeatureTestCase
         $this->user = User::factory()->create();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_update_return_success()
     {
         $response = $this->actingAs($this->user, 'web-guard')
@@ -49,9 +45,7 @@ class PasswordControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_update_passing_bad_current_pwd_return_bad_request()
     {
         $response = $this->actingAs($this->user, 'web-guard')
@@ -66,9 +60,7 @@ class PasswordControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_update_passing_invalid_data_return_validation_error()
     {
         $response = $this->actingAs($this->user, 'web-guard')

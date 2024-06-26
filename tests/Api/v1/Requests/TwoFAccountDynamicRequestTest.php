@@ -8,6 +8,7 @@ use App\Api\v1\Requests\TwoFAccountUriRequest;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Auth;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 /**
@@ -18,9 +19,7 @@ class TwoFAccountDynamicRequestTest extends TestCase
 {
     use WithoutMiddleware;
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_user_is_authorized()
     {
         Auth::shouldReceive('check')
@@ -32,9 +31,7 @@ class TwoFAccountDynamicRequestTest extends TestCase
         $this->assertTrue($request->authorize());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_returns_TwoFAccountUriRequest_rules_when_has_uri_input()
     {
         $twofaccountUriRequest = new TwoFAccountUriRequest();
@@ -44,9 +41,7 @@ class TwoFAccountDynamicRequestTest extends TestCase
         $this->assertEquals($twofaccountUriRequest->rules(), $request->rules());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_returns_TwoFAccountStoreRequest_rules_otherwise()
     {
         $twofaccountStoreRequest = new TwoFAccountStoreRequest();

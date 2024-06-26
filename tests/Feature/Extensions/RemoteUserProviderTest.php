@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Services\Auth\ReverseProxyGuard;
 use Illuminate\Support\Facades\Config;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\FeatureTestCase;
 
 /**
@@ -37,9 +38,7 @@ class RemoteUserProviderTest extends FeatureTestCase
         $this->assertEquals($dbUser->id, $user->id);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_user_is_set_from_proxy_headers()
     {
         Config::set('auth.auth_proxy_headers.user', 'HTTP_REMOTE_USER');
@@ -61,9 +60,7 @@ class RemoteUserProviderTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_user_is_set_from_proxy_headers_with_an_email()
     {
         Config::set('auth.auth_proxy_headers.user', 'HTTP_REMOTE_USER');
@@ -87,9 +84,7 @@ class RemoteUserProviderTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_user_is_set_from_proxy_headers_even_if_name_is_long()
     {
         Config::set('auth.auth_proxy_headers.user', 'HTTP_REMOTE_USER');
@@ -116,9 +111,7 @@ class RemoteUserProviderTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_user_is_not_set_from_proxy_headers_when_name_is_missing()
     {
         Config::set('auth.auth_proxy_headers.user', 'HTTP_REMOTE_USER');
@@ -137,9 +130,7 @@ class RemoteUserProviderTest extends FeatureTestCase
         $this->assertDatabaseCount('users', 0);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_user_email_is_synced_with_email_from_proxy_headers()
     {
         Config::set('auth.auth_proxy_headers.user', 'HTTP_REMOTE_USER');
@@ -164,9 +155,7 @@ class RemoteUserProviderTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_user_email_is_not_synced_when_email_from_proxy_headers_is_missing()
     {
         Config::set('auth.auth_proxy_headers.user', 'HTTP_REMOTE_USER');
@@ -191,9 +180,7 @@ class RemoteUserProviderTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_user_email_is_not_synced_when_email_from_proxy_headers_is_invalid()
     {
         Config::set('auth.auth_proxy_headers.user', 'HTTP_REMOTE_USER');
@@ -218,9 +205,7 @@ class RemoteUserProviderTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_user_email_is_not_sync_when_email_from_proxy_headers_is_already_in_use()
     {
         Config::set('auth.auth_proxy_headers.user', 'HTTP_REMOTE_USER');

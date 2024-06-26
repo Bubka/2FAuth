@@ -5,6 +5,7 @@ namespace Tests\Feature\Console;
 use App\Console\Commands\CheckDbConnection;
 use Illuminate\Support\Facades\DB;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\FeatureTestCase;
 
 /**
@@ -13,18 +14,14 @@ use Tests\FeatureTestCase;
 #[CoversClass(CheckDbConnection::class)]
 class CheckDbConnectionTest extends FeatureTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function test_CheckDbConnection_ends_successfully()
     {
         $this->artisan('2fauth:check-db-connection')
             ->assertExitCode(1);
     }
 
-    /**
-     * @test
-     */
+    // #[Test]
     // public function test_CheckDbConnection_without_db_returns_false()
     // {
     //     DB::shouldReceive('connection', 'getPDO')

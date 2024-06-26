@@ -8,6 +8,7 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Validator;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\FeatureTestCase;
 
 /**
@@ -18,9 +19,7 @@ class UserStoreRequestTest extends FeatureTestCase
 {
     use WithoutMiddleware;
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_user_is_authorized()
     {
         $request = new UserStoreRequest();
@@ -28,9 +27,7 @@ class UserStoreRequestTest extends FeatureTestCase
         $this->assertTrue($request->authorize());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     #[DataProvider('provideValidData')]
     public function test_valid_data(array $data) : void
     {
@@ -66,9 +63,7 @@ class UserStoreRequestTest extends FeatureTestCase
         ];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     #[DataProvider('provideInvalidData')]
     public function test_invalid_data(array $data) : void
     {

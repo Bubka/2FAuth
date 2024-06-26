@@ -6,6 +6,7 @@ use App\Listeners\Authentication\LogoutListener;
 use Illuminate\Auth\Events\Logout;
 use Illuminate\Support\Facades\Event;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 /**
@@ -14,9 +15,7 @@ use Tests\TestCase;
 #[CoversClass(LogoutListener::class)]
 class LogoutListenerTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function test_LogoutListener_listen_to_Logout_event()
     {
         Event::fake();

@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Storage;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\Data\OtpTestData;
 use Tests\FeatureTestCase;
 
@@ -22,9 +23,7 @@ use Tests\FeatureTestCase;
 #[CoversClass(User::class)]
 class UserModelTest extends FeatureTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function test_admin_scope_returns_only_admin()
     {
         User::factory()->count(4)->create();
@@ -45,9 +44,7 @@ class UserModelTest extends FeatureTestCase
         $this->assertEquals($admins[1]->name, $secondAdmin->name);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_isAdministrator_returns_correct_state()
     {
         $user  = User::factory()->create();
@@ -57,9 +54,7 @@ class UserModelTest extends FeatureTestCase
         $this->assertEquals($admin->isAdministrator(), true);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_promoteToAdministrator_sets_administrator_status()
     {
         $user = User::factory()->create();
@@ -69,9 +64,7 @@ class UserModelTest extends FeatureTestCase
         $this->assertEquals($user->isAdministrator(), true);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_promoteToAdministrator_demote_administrator_status()
     {
         $admin = User::factory()->administrator()->create();
@@ -85,9 +78,7 @@ class UserModelTest extends FeatureTestCase
         $this->assertFalse($admin->isAdministrator());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_resetPassword_resets_password_with_success()
     {
         $user        = User::factory()->create();
@@ -98,9 +89,7 @@ class UserModelTest extends FeatureTestCase
         $this->assertNotEquals($user->password, $oldPassword);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_resetPassword_dispatch_event()
     {
         Event::fake();
@@ -112,9 +101,7 @@ class UserModelTest extends FeatureTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_delete_removes_user_data()
     {
         Artisan::call('passport:install', [
@@ -171,9 +158,7 @@ class UserModelTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_delete_flushes_icons_of_user_twofaccounts()
     {
         Storage::fake('icons');
@@ -190,9 +175,7 @@ class UserModelTest extends FeatureTestCase
         Storage::disk('icons')->assertMissing($twofaccount->icon);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_delete_does_not_delete_the_only_admin()
     {
         $admin = User::factory()->administrator()->create();

@@ -8,6 +8,7 @@ use App\Models\Group;
 use App\Models\TwoFAccount;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\ModelTestCase;
 
 /**
@@ -16,9 +17,7 @@ use Tests\ModelTestCase;
 #[CoversClass(Group::class)]
 class GroupModelTest extends ModelTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function test_model_configuration()
     {
         $this->runConfigurationAssertions(
@@ -39,9 +38,7 @@ class GroupModelTest extends ModelTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_twofaccounts_relation()
     {
         $group    = new Group();
@@ -49,9 +46,7 @@ class GroupModelTest extends ModelTestCase
         $this->assertHasManyRelation($accounts, $group, new TwoFAccount());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_user_relation()
     {
         $model    = new Group;

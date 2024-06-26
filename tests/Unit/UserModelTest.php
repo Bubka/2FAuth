@@ -6,6 +6,7 @@ use App\Models\Group;
 use App\Models\TwoFAccount;
 use App\Models\User;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\ModelTestCase;
 
 /**
@@ -14,9 +15,7 @@ use Tests\ModelTestCase;
 #[CoversClass(User::class)]
 class UserModelTest extends ModelTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function test_model_configuration()
     {
         $this->runConfigurationAssertions(new User(),
@@ -35,9 +34,7 @@ class UserModelTest extends ModelTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_email_is_set_lowercased()
     {
         $user = User::factory()->make([
@@ -47,9 +44,7 @@ class UserModelTest extends ModelTestCase
         $this->assertEquals(strtolower('UPPERCASE@example.COM'), $user->email);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_twofaccounts_relation()
     {
         $user     = new User();
@@ -57,9 +52,7 @@ class UserModelTest extends ModelTestCase
         $this->assertHasManyRelation($accounts, $user, new TwoFAccount());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_groups_relation()
     {
         $user   = new User();
