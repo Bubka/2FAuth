@@ -85,7 +85,7 @@ class UserManagerResource extends UserResource
      */
     public function toArray($request)
     {
-        $tz = $request->user()?->preferences['timezone'];
+        $tz = $request->user()?->preferences['timezone'] ?? config('app.timezone');
 
         return array_merge(
             parent::toArray($request),
