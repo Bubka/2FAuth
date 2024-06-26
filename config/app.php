@@ -170,10 +170,11 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
-        'QrCode' => App\Facades\QrCode::class,
-        'Groups' => App\Facades\Groups::class,
+        'QrCode'       => App\Facades\QrCode::class,
+        'Groups'       => App\Facades\Groups::class,
         'TwoFAccounts' => App\Facades\TwoFAccounts::class,
-        'Helpers' => App\Helpers\Helpers::class,
+        'Settings'     => App\Facades\Settings::class,
+        'Helpers'      => App\Helpers\Helpers::class,
     ])->toArray(),
 
 ];

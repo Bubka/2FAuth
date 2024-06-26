@@ -18213,6 +18213,64 @@ namespace App\Facades {
                         return \App\Services\TwoFAccountService::setUser($twofaccounts, $user);
         }
             }
+            /**
+     * 
+     *
+     * @see \App\Services\SettingService
+     */        class Settings {
+                    /**
+         * Get a setting
+         *
+         * @param string $setting A single setting name
+         * @return mixed string|int|boolean|null
+         * @static 
+         */        public static function get($setting)
+        {
+                        /** @var \App\Services\SettingService $instance */
+                        return $instance->get($setting);
+        }
+                    /**
+         * Get all settings
+         *
+         * @return \App\Services\Collection<string, mixed> the Settings collection
+         * @static 
+         */        public static function all()
+        {
+                        /** @var \App\Services\SettingService $instance */
+                        return $instance->all();
+        }
+                    /**
+         * Set a setting
+         *
+         * @param string|array $setting A single setting name or an associative array of name:value settings
+         * @param string|int|bool|null $value The value for single setting
+         * @static 
+         */        public static function set($setting, $value = null)
+        {
+                        /** @var \App\Services\SettingService $instance */
+                        return $instance->set($setting, $value);
+        }
+                    /**
+         * Delete a setting
+         *
+         * @param string $name The setting name
+         * @static 
+         */        public static function delete($name)
+        {
+                        /** @var \App\Services\SettingService $instance */
+                        return $instance->delete($name);
+        }
+                    /**
+         * Determine if the given setting has been edited
+         *
+         * @param string $key
+         * @static 
+         */        public static function isEdited($key)
+        {
+                        /** @var \App\Services\SettingService $instance */
+                        return $instance->isEdited($key);
+        }
+            }
     }
 
 namespace Jackiedo\DotenvEditor\Facades {
@@ -22836,6 +22894,7 @@ namespace  {
             class QrCode extends \App\Facades\QrCode {}
             class Groups extends \App\Facades\Groups {}
             class TwoFAccounts extends \App\Facades\TwoFAccounts {}
+            class Settings extends \App\Facades\Settings {}
             class Helpers extends \App\Helpers\Helpers {}
             class DotenvEditor extends \Jackiedo\DotenvEditor\Facades\DotenvEditor {}
             class Agent extends \Jenssegers\Agent\Facades\Agent {}
@@ -22843,6 +22902,35 @@ namespace  {
     }
 
 
+namespace Facades\App\Services {
+    /**
+     * @mixin \App\Services\ReleaseRadarService     */
+    class ReleaseRadarService extends \App\Services\ReleaseRadarService {}
+}
 
 
+namespace Illuminate\Support {
+    /**
+     * Methods commonly used in migrations
+     *
+     * @method Fluent after(string $column) Add the after modifier
+     * @method Fluent charset(string $charset) Add the character set modifier
+     * @method Fluent collation(string $collation) Add the collation modifier
+     * @method Fluent comment(string $comment) Add comment
+     * @method Fluent default($value) Add the default modifier
+     * @method Fluent first() Select first row
+     * @method Fluent index(string $name = null) Add the in dex clause
+     * @method Fluent on(string $table) `on` of a foreign key
+     * @method Fluent onDelete(string $action) `on delete` of a foreign key
+     * @method Fluent onUpdate(string $action) `on update` of a foreign key
+     * @method Fluent primary() Add the primary key modifier
+     * @method Fluent references(string $column) `references` of a foreign key
+     * @method Fluent nullable(bool $value = true) Add the nullable modifier
+     * @method Fluent unique(string $name = null) Add unique index clause
+     * @method Fluent unsigned() Add the unsigned modifier
+     * @method Fluent useCurrent() Add the default timestamp value
+     * @method Fluent change() Add the change modifier
+     */
+    class Fluent {}
+}
 

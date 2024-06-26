@@ -147,7 +147,7 @@ class SettingServiceTest extends FeatureTestCase
 
         Settings::set(self::SETTING_NAME, self::SETTING_VALUE_STRING);
 
-        $all = Settings::all();
+        $all = Settings::all()->toArray();
 
         $this->assertArrayHasKey(self::SETTING_NAME, $all);
         $this->assertEquals($all[self::SETTING_NAME], self::SETTING_VALUE_STRING);
