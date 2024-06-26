@@ -4,9 +4,15 @@
     "description": "Two-Factor authentication generator",
     "keywords": [
         "2fauth",
-        "two-actor authentication"
+        "two-factor authentication"
     ],
     "license": "MIT",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/Bubka/Laravel-Dotenv-Editor.git"
+        }
+    ],
     "require": {
         "php": "^8.2",
         "ext-bcmath": "*",
@@ -22,17 +28,15 @@
         "ext-xml": "*",
         "chillerlan/php-qrcode": "^5.0",
         "doctormckay/steam-totp": "^1.0",
-        "doctrine/dbal": "^3.4",
         "google/protobuf": "^4.26",
-        "guzzlehttp/guzzle": "^7.2",
-        "jackiedo/dotenv-editor": "^2.1",
+        "jackiedo/dotenv-editor": "dev-master",
         "jenssegers/agent": "^2.6",
         "khanamiryan/qrcode-detector-decoder": "^2.0.2",
         "laragear/webauthn": "^2.0",
-        "laravel/framework": "^10.10",
-        "laravel/passport": "^11.2",
+        "laravel/framework": "^11.9",
+        "laravel/passport": "^12.0",
         "laravel/socialite": "^5.10",
-        "laravel/tinker": "^2.8",
+        "laravel/tinker": "^2.9",
         "laravel/ui": "^4.2",
         "paragonie/constant_time_encoding": "^2.6",
         "socialiteproviders/manager": "^4.4",
@@ -40,21 +44,24 @@
         "spomky-labs/otphp": "^11.0"
     },
     "require-dev": {
-        "barryvdh/laravel-ide-helper": "^2.13",
-        "brianium/paratest": "^7.3",
+        "barryvdh/laravel-ide-helper": "^3.0",
+        "brianium/paratest": "^7.5",
         "fakerphp/faker": "^1.21",
-        "larastan/larastan": "^2.0",
-        "laravel/pint": "^1.6",
-        "mockery/mockery": "^1.5",
-        "nunomaduro/collision": "^7.0",
+        "larastan/larastan": "^2.9",
+        "laravel/pint": "^1.16",
+        "mockery/mockery": "^1.6",
+        "nunomaduro/collision": "^8.1",
         "phpstan/phpstan": "^1.10",
-        "phpunit/phpunit": "^10.1",
-        "spatie/laravel-ignition": "^2.0"
+        "phpunit/phpunit": "^11.0.10"
     },
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "php-http/discovery": true
+        }
     },
     "extra": {
         "laravel": {
