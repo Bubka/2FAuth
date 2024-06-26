@@ -7,6 +7,7 @@ use App\Models\Group;
 use App\Models\TwoFAccount;
 use App\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Password;
@@ -116,6 +117,11 @@ class UserModelTest extends FeatureTestCase
      */
     public function test_delete_removes_user_data()
     {
+        Artisan::call('passport:install', [
+            '--verbose' => 2,
+            '--no-interaction' => 1
+        ]);
+        
         $user = User::factory()->create();
         TwoFAccount::factory()->for($user)->create();
         AuthLog::factory()->for($user, 'authenticatable')->create();

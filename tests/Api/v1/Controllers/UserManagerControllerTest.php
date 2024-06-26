@@ -13,6 +13,7 @@ use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
@@ -325,6 +326,11 @@ class UserManagerControllerTest extends FeatureTestCase
      */
     public function test_revokePATs_flushes_pats()
     {
+        Artisan::call('passport:install', [
+            '--verbose' => 2,
+            '--no-interaction' => 1
+        ]);
+        
         $tokenRepository = app(TokenRepository::class);
 
         $this->actingAs($this->user, 'api-guard')

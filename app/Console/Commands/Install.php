@@ -142,7 +142,7 @@ class Install extends Command
     protected function installPassport() : void
     {
         $this->components->task('Setting up Passport', function () : void {
-            $this->callSilently('passport:install');
+            $this->callSilently('passport:install', ['--no-interaction' => true]);
         });
     }
 

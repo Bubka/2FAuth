@@ -22,6 +22,6 @@ abstract class FeatureTestCase extends BaseTestCase
      */
     protected function afterRefreshingDatabase()
     {
-        Artisan::call('passport:install', ['--verbose' => 2]);
+        // 
     }
 }

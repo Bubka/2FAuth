@@ -55,7 +55,7 @@ if [ -f /2fauth/installed ]; then
   fi
 else
   php artisan migrate:refresh --force
-  php artisan passport:install
+  php artisan passport:install --no-interaction
 fi
 
 echo "${COMMIT}" > /2fauth/installed
