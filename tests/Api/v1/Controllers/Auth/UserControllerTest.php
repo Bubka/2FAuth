@@ -6,6 +6,7 @@ use App\Api\v1\Controllers\UserController;
 use App\Api\v1\Resources\UserResource;
 use App\Models\User;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\FeatureTestCase;
 
 /**
@@ -25,9 +26,6 @@ class UserControllerTest extends FeatureTestCase
         'value',
     ];
 
-    /**
-     * @test
-     */
     public function setUp() : void
     {
         parent::setUp();
@@ -35,9 +33,7 @@ class UserControllerTest extends FeatureTestCase
         $this->user = User::factory()->create();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_show_existing_user_when_authenticated_returns_success()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -54,9 +50,7 @@ class UserControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_allPreferences_returns_consistent_json_structure()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -67,9 +61,7 @@ class UserControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_allPreferences_returns_preferences_with_default_values()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -84,9 +76,7 @@ class UserControllerTest extends FeatureTestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_allPreferences_returns_preferences_with_user_values()
     {
         $userPrefs = [];
@@ -117,9 +107,7 @@ class UserControllerTest extends FeatureTestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_showPreference_returns_preference_with_default_value()
     {
         /**
@@ -136,9 +124,7 @@ class UserControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_showPreference_returns_preference_with_custom_value()
     {
         $showOtpAsDot                            = ! config('2fauth.preferences.showOtpAsDot');
@@ -153,9 +139,7 @@ class UserControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_showPreference_for_missing_preference_returns_not_found()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -163,9 +147,7 @@ class UserControllerTest extends FeatureTestCase
             ->assertNotFound();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_setPreference_returns_updated_preference()
     {
         /**
@@ -187,9 +169,7 @@ class UserControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_setPreference_for_missing_preference_returns_not_found()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -200,9 +180,7 @@ class UserControllerTest extends FeatureTestCase
             ->assertNotFound();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_setPreference_with_invalid_data_returns_validation_error()
     {
         $response = $this->actingAs($this->user, 'api-guard')

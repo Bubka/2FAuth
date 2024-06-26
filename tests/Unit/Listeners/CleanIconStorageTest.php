@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
 use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 /**
@@ -18,9 +19,7 @@ use Tests\TestCase;
 #[CoversClass(CleanIconStorage::class)]
 class CleanIconStorageTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function test_it_deletes_icon_file_using_storage_facade()
     {
         $settingService = $this->mock(SettingService::class, function (MockInterface $settingService) {
@@ -39,9 +38,7 @@ class CleanIconStorageTest extends TestCase
         $this->assertNull($listener->handle($event));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_CleanIconStorage_listen_to_TwoFAccountDeleted_event()
     {
         Event::fake();

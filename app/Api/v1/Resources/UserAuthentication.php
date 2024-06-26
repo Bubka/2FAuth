@@ -51,7 +51,7 @@ class UserAuthentication extends JsonResource
      */
     public function toArray($request)
     {
-        $tz = $request->user()->preferences['timezone'];
+        $tz = $request->user()?->preferences['timezone'] ?? config('app.timezone');
 
         return [
             'id'         => $this->id,

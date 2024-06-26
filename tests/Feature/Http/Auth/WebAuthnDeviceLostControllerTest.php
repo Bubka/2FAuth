@@ -8,9 +8,12 @@ use App\Http\Requests\WebauthnDeviceLostRequest;
 use App\Models\User;
 use App\Notifications\WebauthnRecoveryNotification;
 use App\Providers\AuthServiceProvider;
+use App\Rules\CaseInsensitiveEmailExists;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Notification;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\FeatureTestCase;
 
 /**
@@ -21,6 +24,7 @@ use Tests\FeatureTestCase;
 #[CoversClass(WebauthnCredentialBroker::class)]
 #[CoversClass(WebauthnDeviceLostRequest::class)]
 #[CoversClass(AuthServiceProvider::class)]
+#[CoversMethod(CaseInsensitiveEmailExists::class, 'validate')]
 class WebAuthnDeviceLostControllerTest extends FeatureTestCase
 {
     /**
@@ -28,9 +32,6 @@ class WebAuthnDeviceLostControllerTest extends FeatureTestCase
      */
     protected $user;
 
-    /**
-     * @test
-     */
     public function setUp() : void
     {
         parent::setUp();
@@ -38,11 +39,7 @@ class WebAuthnDeviceLostControllerTest extends FeatureTestCase
         $this->user = User::factory()->create();
     }
 
-    /**
-     * @test
-     *
-     * @covers  \App\Models\Traits\WebAuthnManageCredentials
-     */
+    #[Test]
     public function test_sendRecoveryEmail_sends_notification_on_success()
     {
         Notification::fake();
@@ -63,9 +60,7 @@ class WebAuthnDeviceLostControllerTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_WebauthnRecoveryNotification_renders_to_email()
     {
         $mail = (new WebauthnRecoveryNotification('test_token'))->toMail($this->user)->render();
@@ -101,9 +96,7 @@ class WebAuthnDeviceLostControllerTest extends FeatureTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_sendRecoveryEmail_does_not_send_anything_to_unknown_email()
     {
         Notification::fake();
@@ -124,9 +117,7 @@ class WebAuthnDeviceLostControllerTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_sendRecoveryEmail_does_not_send_anything_to_invalid_email()
     {
         Notification::fake();
@@ -147,9 +138,7 @@ class WebAuthnDeviceLostControllerTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_sendRecoveryEmail_does_not_send_anything_to_not_WebAuthnAuthenticatable()
     {
         $mock = $this->mock(\App\Extensions\WebauthnCredentialBroker::class)->makePartial();
@@ -170,9 +159,7 @@ class WebAuthnDeviceLostControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_sendRecoveryEmail_is_throttled()
     {
         Notification::fake();
@@ -202,9 +189,7 @@ class WebAuthnDeviceLostControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_error_if_no_broker_is_set()
     {
         $this->app['config']->set('auth.passwords.webauthn', null);

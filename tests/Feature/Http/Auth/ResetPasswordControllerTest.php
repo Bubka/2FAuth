@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Password;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\FeatureTestCase;
 
 /**
@@ -22,9 +23,7 @@ class ResetPasswordControllerTest extends FeatureTestCase
      */
     protected $user;
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_submit_reset_password_without_input_returns_validation_error()
     {
         $response = $this->json('POST', '/user/password/reset', [
@@ -38,9 +37,7 @@ class ResetPasswordControllerTest extends FeatureTestCase
             ->assertJsonValidationErrors(['email', 'password', 'token']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_submit_reset_password_with_invalid_data_returns_validation_error()
     {
         $response = $this->json('POST', '/user/password/reset', [
@@ -54,9 +51,7 @@ class ResetPasswordControllerTest extends FeatureTestCase
             ->assertJsonValidationErrors(['email', 'password']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_submit_reset_password_with_too_short_pwd_returns_validation_error()
     {
         $response = $this->json('POST', '/user/password/reset', [
@@ -70,9 +65,7 @@ class ResetPasswordControllerTest extends FeatureTestCase
             ->assertJsonValidationErrors(['password']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_submit_reset_password_returns_success()
     {
         Notification::fake();

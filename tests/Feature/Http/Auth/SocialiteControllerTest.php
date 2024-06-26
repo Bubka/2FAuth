@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Laravel\Socialite\Facades\Socialite;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\FeatureTestCase;
 
 /**
@@ -36,9 +37,6 @@ class SocialiteControllerTest extends FeatureTestCase
 
     private const USER_EMAIL = 'john@provider.com';
 
-    /**
-     * @test
-     */
     public function setUp() : void
     {
         parent::setUp();
@@ -60,9 +58,7 @@ class SocialiteControllerTest extends FeatureTestCase
         $this->socialiteUser->nickname = self::USER_NICKNAME;
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_redirect_redirects_to_provider_url()
     {
         Settings::set('enableSso', true);
@@ -72,9 +68,7 @@ class SocialiteControllerTest extends FeatureTestCase
         $response->assertRedirectContains('https://github.com/login/oauth/authorize');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_redirect_returns_error_when_registrations_are_disabled()
     {
         Settings::set('enableSso', false);
@@ -84,9 +78,7 @@ class SocialiteControllerTest extends FeatureTestCase
         $response->assertRedirect('/error?err=sso_disabled');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_callback_authenticates_the_user()
     {
         Socialite::shouldReceive('driver->user')
@@ -97,9 +89,7 @@ class SocialiteControllerTest extends FeatureTestCase
         $this->assertAuthenticatedAs($this->user, 'web-guard');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_callback_redirects_authenticated_user_to_accounts()
     {
         Socialite::shouldReceive('driver->user')
@@ -110,9 +100,7 @@ class SocialiteControllerTest extends FeatureTestCase
         $response->assertRedirect('/accounts');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_callback_updates_user_informations()
     {
         $socialiteUpdatedUser           = new \Laravel\Socialite\Two\User;
@@ -132,9 +120,7 @@ class SocialiteControllerTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_callback_updates_username_with_fallback_value()
     {
         $socialiteUpdatedUser        = new \Laravel\Socialite\Two\User;
@@ -154,9 +140,7 @@ class SocialiteControllerTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_callback_registers_new_user()
     {
         $newSocialiteUser        = new \Laravel\Socialite\Two\User;
@@ -177,9 +161,7 @@ class SocialiteControllerTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_callback_registers_new_user_with_existing_name()
     {
         $socialiteUserWithSameName           = new \Laravel\Socialite\Two\User;
@@ -200,9 +182,7 @@ class SocialiteControllerTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_callback_always_registers_first_user_as_admin()
     {
         DB::table('users')->delete();
@@ -221,9 +201,7 @@ class SocialiteControllerTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_callback_returns_error_when_email_is_already_used()
     {
         $userWithSameEmail = User::factory()->create([
@@ -250,9 +228,7 @@ class SocialiteControllerTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_callback_redirects_to_error_when_registrations_are_closed()
     {
         Settings::set('disableRegistration', true);
@@ -271,9 +247,7 @@ class SocialiteControllerTest extends FeatureTestCase
         $response->assertRedirect('/error?err=sso_no_register');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_callback_skips_registration_when_all_registrations_are_closed()
     {
         Settings::set('disableRegistration', true);
@@ -295,9 +269,7 @@ class SocialiteControllerTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_callback_registers_new_user_when_sso_registrations_are_enabled()
     {
         Settings::set('disableRegistration', true);

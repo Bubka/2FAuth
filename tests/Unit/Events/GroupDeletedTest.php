@@ -5,6 +5,7 @@ namespace Tests\Unit\Events;
 use App\Events\GroupDeleted;
 use App\Models\Group;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 /**
@@ -13,9 +14,7 @@ use Tests\TestCase;
 #[CoversClass(GroupDeleted::class)]
 class GroupDeletedTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function test_event_constructor()
     {
         $group = Group::factory()->make();

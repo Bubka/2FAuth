@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Rules\ComplyWithEmailRestrictionPolicy;
 use Illuminate\Support\Facades\DB;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\FeatureTestCase;
 
 /**
@@ -33,17 +34,12 @@ class RegisterControllerTest extends FeatureTestCase
 
     private const EMAIL_FILTERING_RULE = '^[A-Za-z0-9._%+-]+@example\.org';
 
-    /**
-     * @test
-     */
     public function setUp() : void
     {
         parent::setUp();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_register_returns_success()
     {
         DB::table('users')->delete();
@@ -69,9 +65,7 @@ class RegisterControllerTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_register_with_uppercased_email_returns_success()
     {
         DB::table('users')->delete();
@@ -97,9 +91,7 @@ class RegisterControllerTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_register_with_invalid_data_returns_validation_error()
     {
         $response = $this->json('POST', '/user', [
@@ -111,9 +103,7 @@ class RegisterControllerTest extends FeatureTestCase
             ->assertStatus(422);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_register_first_user_only_as_admin()
     {
         $this->assertDatabaseCount('users', 0);
@@ -142,9 +132,7 @@ class RegisterControllerTest extends FeatureTestCase
         $this->assertEquals(1, User::admins()->count());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_register_is_forbidden_when_registration_is_disabled()
     {
         Settings::set('disableRegistration', true);
@@ -158,9 +146,7 @@ class RegisterControllerTest extends FeatureTestCase
             ->assertStatus(403);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_register_succeeds_when_email_is_in_restricted_list()
     {
         Settings::set('restrictRegistration', true);
@@ -176,9 +162,7 @@ class RegisterControllerTest extends FeatureTestCase
             ->assertStatus(201);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_register_fails_when_email_is_not_in_restricted_list()
     {
         Settings::set('restrictRegistration', true);
@@ -194,9 +178,7 @@ class RegisterControllerTest extends FeatureTestCase
             ->assertStatus(422);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_register_succeeds_when_email_matchs_filtering_rule()
     {
         Settings::set('restrictRegistration', true);
@@ -212,9 +194,7 @@ class RegisterControllerTest extends FeatureTestCase
             ->assertStatus(201);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_register_fails_when_email_does_not_match_filtering_rule()
     {
         Settings::set('restrictRegistration', true);
@@ -230,9 +210,7 @@ class RegisterControllerTest extends FeatureTestCase
             ->assertStatus(422);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_register_succeeds_when_email_is_allowed_by_list_over_regex()
     {
         Settings::set('restrictRegistration', true);
@@ -248,9 +226,7 @@ class RegisterControllerTest extends FeatureTestCase
             ->assertStatus(201);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_register_succeeds_when_email_is_allowed_by_regex_over_list()
     {
         Settings::set('restrictRegistration', true);

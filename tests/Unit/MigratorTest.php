@@ -20,6 +20,7 @@ use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\UsesClass;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\Data\MigrationTestData;
 use Tests\Data\OtpTestData;
 use Tests\TestCase;
@@ -150,9 +151,7 @@ class MigratorTest extends TestCase
         parent::tearDown();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     #[DataProvider('validMigrationsProvider')]
     public function test_migrate_returns_consistent_accounts(Migrator $migrator, mixed $payload, string $expected, bool $hasSteam)
     {
@@ -226,9 +225,7 @@ class MigratorTest extends TestCase
         ];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     #[DataProvider('invalidMigrationsProvider')]
     public function test_migrate_with_invalid_payload_returns_InvalidMigrationDataException(Migrator $migrator, mixed $payload)
     {
@@ -295,9 +292,7 @@ class MigratorTest extends TestCase
         ];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     #[DataProvider('migrationWithInvalidAccountsProvider')]
     public function test_migrate_returns_fake_accounts(Migrator $migrator, mixed $payload)
     {
@@ -337,9 +332,7 @@ class MigratorTest extends TestCase
         ];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_migrate_gauth_returns_fake_accounts()
     {
         $migrator = $this->partialMock(GoogleAuthMigrator::class, function (MockInterface $migrator) {
@@ -361,9 +354,7 @@ class MigratorTest extends TestCase
         $this->forgetMock(GoogleAuthMigrator::class);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     #[DataProvider('AegisWithIconMigrationProvider')]
     public function test_migrate_aegis_payload_with_icon_sets_and_stores_the_icon($migration)
     {
@@ -396,9 +387,7 @@ class MigratorTest extends TestCase
         ];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_migrate_aegis_payload_with_unsupported_icon_does_not_fail()
     {
         Storage::fake('icons');
@@ -413,9 +402,7 @@ class MigratorTest extends TestCase
         Storage::disk('icons')->assertDirectoryEmpty('/');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     #[DataProvider('TwoFAuthWithIconMigrationProvider')]
     public function test_migrate_2fauth_payload_with_icon_sets_and_stores_the_icon($migration)
     {
@@ -454,9 +441,7 @@ class MigratorTest extends TestCase
         ];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_migrate_2fauth_payload_with_unsupported_icon_does_not_fail()
     {
         Storage::fake('icons');
@@ -471,9 +456,7 @@ class MigratorTest extends TestCase
         Storage::disk('icons')->assertDirectoryEmpty('/');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     #[DataProvider('factoryProvider')]
     public function test_factory_returns_relevant_migrator($payload, $migratorClass)
     {
@@ -517,9 +500,7 @@ class MigratorTest extends TestCase
         ];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_factory_throw_UnsupportedMigrationException()
     {
         $this->expectException(UnsupportedMigrationException::class);
@@ -528,9 +509,7 @@ class MigratorTest extends TestCase
         $migrator = $factory->create('not_a_valid_payload');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     #[DataProvider('encryptedMigrationDataProvider')]
     public function test_factory_throw_EncryptedMigrationException($payload)
     {

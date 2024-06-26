@@ -6,6 +6,7 @@ use App\Api\v1\Controllers\QrCodeController;
 use App\Models\TwoFAccount;
 use App\Models\User;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\Classes\LocalFile;
 use Tests\FeatureTestCase;
 
@@ -27,9 +28,6 @@ class QrCodeControllerTest extends FeatureTestCase
      */
     protected $twofaccount;
 
-    /**
-     * @test
-     */
     public function setUp() : void
     {
         parent::setUp();
@@ -49,9 +47,7 @@ class QrCodeControllerTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_show_qrcode_returns_base64_image()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -64,9 +60,7 @@ class QrCodeControllerTest extends FeatureTestCase
         $this->assertStringStartsWith('data:image/svg+xml;base64', $response->getData()->qrcode);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_show_missing_qrcode_returns_not_found()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -77,9 +71,7 @@ class QrCodeControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_show_qrcode_of_another_user_is_forbidden()
     {
         $response = $this->actingAs($this->anotherUser, 'api-guard')
@@ -90,9 +82,7 @@ class QrCodeControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_decode_qrcode_return_success()
     {
         $file = LocalFile::fake()->validQrcode();
@@ -109,9 +99,7 @@ class QrCodeControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_decode_missing_qrcode_return_validation_error()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -121,9 +109,7 @@ class QrCodeControllerTest extends FeatureTestCase
             ->assertStatus(422);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_decode_invalid_qrcode_return_bad_request()
     {
         $file = LocalFile::fake()->invalidQrcode();

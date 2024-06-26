@@ -25,7 +25,7 @@ class VisitedByProxyUserListener extends AbstractAccessListener
         $ip        = config('2fauth.proxy_headers.forIp') ?? $this->request->ip();
         $userAgent = $this->request->userAgent();
         $known     = $user->authentications()->whereIpAddress($ip)->whereUserAgent($userAgent)->whereLoginSuccessful(true)->first();
-        $newUser   = Carbon::parse($user->{$user->getCreatedAtColumn()})->diffInMinutes(Carbon::now()) < 1;
+        $newUser   = Carbon::parse($user->{$user->getCreatedAtColumn()})->diffInMinutes(Carbon::now(), true) < 1;
         $guard     = config('auth.defaults.guard');
 
         $log = $user->authentications()->create([

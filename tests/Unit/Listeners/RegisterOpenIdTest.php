@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Event;
 use Laravel\Socialite\Contracts\Factory as SocialiteFactory;
 use Laravel\Socialite\SocialiteManager;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use SocialiteProviders\Manager\SocialiteWasCalled;
 use Tests\TestCase;
 
@@ -17,9 +18,7 @@ use Tests\TestCase;
 #[CoversClass(RegisterOpenId::class)]
 class RegisterOpenIdTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function test_it_registers_openId_driver()
     {
         /** @var SocialiteManager $socialite */
@@ -30,9 +29,7 @@ class RegisterOpenIdTest extends TestCase
         $this->assertInstanceOf(OpenId::class, $driver);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_RegisterOpenId_listen_to_SocialiteWasCalled_event()
     {
         Event::fake();

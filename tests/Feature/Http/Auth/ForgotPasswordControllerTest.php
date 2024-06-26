@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\FeatureTestCase;
 
 /**
@@ -27,9 +28,7 @@ class ForgotPasswordControllerTest extends FeatureTestCase
      */
     protected $user;
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_submit_email_password_request_without_email_returns_validation_error()
     {
         $response = $this->json('POST', '/user/password/lost', [
@@ -40,9 +39,7 @@ class ForgotPasswordControllerTest extends FeatureTestCase
             ->assertJsonValidationErrors(['email']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_submit_email_password_request_with_invalid_email_returns_validation_error()
     {
         $response = $this->json('POST', '/user/password/lost', [
@@ -53,9 +50,7 @@ class ForgotPasswordControllerTest extends FeatureTestCase
             ->assertJsonValidationErrors(['email']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_submit_email_password_request_with_unknown_email_returns_validation_error()
     {
         $response = $this->json('POST', '/user/password/lost', [
@@ -66,9 +61,7 @@ class ForgotPasswordControllerTest extends FeatureTestCase
             ->assertJsonValidationErrors(['email']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_submit_email_password_request_returns_success()
     {
         Notification::fake();
@@ -89,9 +82,7 @@ class ForgotPasswordControllerTest extends FeatureTestCase
         });
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_submit_email_password_request_in_demo_mode_returns_unauthorized()
     {
         Config::set('2fauth.config.isDemoApp', true);
@@ -103,9 +94,7 @@ class ForgotPasswordControllerTest extends FeatureTestCase
         $response->assertStatus(401);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_submit_email_password_request_when_authenticated_returns_bad_request()
     {
         /**

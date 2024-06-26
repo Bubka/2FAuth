@@ -129,4 +129,17 @@ class RemoteUserProvider implements UserProvider
     {
         throw new Exception(sprintf('No implementation for %s', __METHOD__));
     }
+
+    /**
+     * Rehash the user's password if required and supported.
+     *
+     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
+     * @param  array  $credentials
+     * @param  bool  $force
+     * @return void
+     */
+    public function rehashPasswordIfRequired(Authenticatable $user, array $credentials, bool $force = false)
+    {
+        throw new Exception(sprintf('No implementation for %s', __METHOD__));
+    }
 }

@@ -29,6 +29,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 /**
+ * 
+ *
  * @property int $id
  * @property string $authenticatable_type
  * @property int $authenticatable_id
@@ -40,6 +42,24 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property bool $cleared_by_user
  * @property string|null $guard
  * @property string|null $method
+ * @property string|null $login_method
+ * @property-read Model|\Eloquent $authenticatable
+ * @method static \Database\Factories\AuthLogFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder|AuthLog newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|AuthLog newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|AuthLog query()
+ * @method static \Illuminate\Database\Eloquent\Builder|AuthLog whereAuthenticatableId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AuthLog whereAuthenticatableType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AuthLog whereClearedByUser($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AuthLog whereGuard($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AuthLog whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AuthLog whereIpAddress($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AuthLog whereLoginAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AuthLog whereLoginMethod($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AuthLog whereLoginSuccessful($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AuthLog whereLogoutAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AuthLog whereUserAgent($value)
+ * @mixin \Eloquent
  */
 class AuthLog extends Model
 {

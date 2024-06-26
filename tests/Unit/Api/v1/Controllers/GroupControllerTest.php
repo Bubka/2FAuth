@@ -14,6 +14,7 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Http\Request;
 use Mockery;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 /**
@@ -41,9 +42,7 @@ class GroupControllerTest extends TestCase
         $this->app['auth']->shouldUse(null);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_index_returns_api_resources()
     {
         $user       = Mockery::mock(User::class);
@@ -67,9 +66,7 @@ class GroupControllerTest extends TestCase
         $this->assertContainsOnlyInstancesOf(GroupResource::class, $response->collection);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_store_uses_validated_data_and_returns_api_resource()
     {
         $request    = Mockery::mock(GroupStoreRequest::class);
@@ -88,9 +85,7 @@ class GroupControllerTest extends TestCase
         // $this->assertInstanceOf(GroupResource::class, $response);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_show_returns_api_resource()
     {
         $controller = Mockery::mock(GroupController::class)->makePartial();
@@ -101,9 +96,7 @@ class GroupControllerTest extends TestCase
         $this->assertInstanceOf(GroupResource::class, $response);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_update_validates_data_and_returns_api_resource()
     {
         $request    = Mockery::mock(GroupStoreRequest::class);
@@ -120,9 +113,7 @@ class GroupControllerTest extends TestCase
         $this->assertInstanceOf(GroupResource::class, $response);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_assignAccounts_returns_api_resource_assigned_using_groupService()
     {
         $request    = Mockery::mock(GroupAssignRequest::class);
@@ -144,9 +135,7 @@ class GroupControllerTest extends TestCase
         $this->assertInstanceOf(GroupResource::class, $response);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_accounts_returns_api_resources()
     {
         $controller = Mockery::mock(GroupController::class)->makePartial();
@@ -157,9 +146,7 @@ class GroupControllerTest extends TestCase
         $this->assertContainsOnlyInstancesOf(TwoFAccountReadResource::class, $response->collection);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_destroy_uses_group_service()
     {
         $controller = Mockery::mock(GroupController::class)->makePartial();

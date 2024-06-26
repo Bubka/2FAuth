@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
     backupGlobals="false"
     backupStaticProperties="false"
     bootstrap="vendor/autoload.php"
@@ -10,8 +11,7 @@
     processIsolation="false"
     stopOnFailure="false"
     stopOnError="false"
-    beStrictAboutTestsThatDoNotTestAnything="false"
-    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+    beStrictAboutTestsThatDoNotTestAnything="false">
     <source>
         <include>
             <directory suffix=".php">app</directory>
@@ -34,7 +34,7 @@
         </testsuite>
     </testsuites>
     <php>
-        <ini name="memory_limit" value="256M" />
+        <ini name="memory_limit" value="2048M" />
         <env name="APP_ENV" value="testing"/>
         <!-- following values override .env.testing vars -->
     </php>

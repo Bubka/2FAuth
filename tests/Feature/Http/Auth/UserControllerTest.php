@@ -10,6 +10,7 @@ use App\Observers\UserObserver;
 use App\Policies\UserPolicy;
 use Illuminate\Support\Facades\Config;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\FeatureTestCase;
 
 /**
@@ -33,9 +34,6 @@ class UserControllerTest extends FeatureTestCase
 
     private const PASSWORD = 'password';
 
-    /**
-     * @test
-     */
     public function setUp() : void
     {
         parent::setUp();
@@ -43,9 +41,7 @@ class UserControllerTest extends FeatureTestCase
         $this->user = User::factory()->create();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_update_user_returns_success()
     {
         $response = $this->actingAs($this->user, 'web-guard')
@@ -73,9 +69,7 @@ class UserControllerTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_update_user_without_changing_email_returns_success()
     {
         $response = $this->actingAs($this->user, 'web-guard')
@@ -100,9 +94,7 @@ class UserControllerTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_update_user_without_changing_name_returns_success()
     {
         $response = $this->actingAs($this->user, 'web-guard')
@@ -127,9 +119,7 @@ class UserControllerTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_update_user_with_uppercased_email_returns_success()
     {
         $response = $this->actingAs($this->user, 'web-guard')
@@ -154,9 +144,7 @@ class UserControllerTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_update_user_in_demo_mode_returns_unchanged_user()
     {
         Config::set('2fauth.config.isDemoApp', true);
@@ -185,9 +173,7 @@ class UserControllerTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_update_user_passing_wrong_password_returns_bad_request()
     {
         $response = $this->actingAs($this->user, 'web-guard')
@@ -199,9 +185,7 @@ class UserControllerTest extends FeatureTestCase
             ->assertStatus(400);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_update_user_with_invalid_data_returns_validation_error()
     {
         $response = $this->actingAs($this->user, 'web-guard')
@@ -213,9 +197,7 @@ class UserControllerTest extends FeatureTestCase
             ->assertStatus(422);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_delete_user_returns_success()
     {
         $this->actingAs($this->user, 'web-guard')
@@ -225,9 +207,7 @@ class UserControllerTest extends FeatureTestCase
             ->assertNoContent();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_delete_user_in_demo_mode_returns_unauthorized()
     {
         Config::set('2fauth.config.isDemoApp', true);
@@ -246,9 +226,7 @@ class UserControllerTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_delete_user_passing_wrong_password_returns_bad_request()
     {
         $response = $this->actingAs($this->user, 'web-guard')
@@ -262,9 +240,7 @@ class UserControllerTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_delete_the_only_admin_returns_bad_request()
     {
         /**

@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use App\Helpers\Helpers;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 /**
@@ -13,9 +14,7 @@ use Tests\TestCase;
 #[CoversClass(Helpers::class)]
 class HelpersTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     #[DataProvider('versionNumberProvider')]
     public function test_cleanVersionNumber_returns_cleaned_version($dirtyVersion, $expected)
     {
@@ -49,9 +48,7 @@ class HelpersTest extends TestCase
         ];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     #[DataProvider('invalidVersionNumberProvider')]
     public function test_cleanVersionNumber_returns_false_with_invalid_semver($dirtyVersion)
     {
@@ -84,9 +81,7 @@ class HelpersTest extends TestCase
         ];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     #[DataProvider('toBase32PaddedStringProvider')]
     public function test_toBase32Format_returns_base32_formated_string($str, $expected)
     {
@@ -136,9 +131,7 @@ class HelpersTest extends TestCase
         ];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     #[DataProvider('commaSeparatedToArrayProvider')]
     public function test_commaSeparatedToArray_returns_ids_in_array($str, $expected)
     {
@@ -164,9 +157,7 @@ class HelpersTest extends TestCase
         ];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     #[DataProvider('invalidCommaSeparatedToArrayProvider')]
     public function test_commaSeparatedToArray_returns_unchanged_ids($str, $expected)
     {

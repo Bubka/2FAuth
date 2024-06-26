@@ -7,6 +7,7 @@ use App\Models\TwoFAccount;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\FeatureTestCase;
 
 /**
@@ -27,9 +28,7 @@ class IconControllerTest extends FeatureTestCase
         $this->user = User::factory()->create();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_upload_icon_returns_filename()
     {
         $file = UploadedFile::fake()->image('testIcon.jpg');
@@ -44,9 +43,7 @@ class IconControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_upload_with_invalid_data_returns_validation_error()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -56,9 +53,7 @@ class IconControllerTest extends FeatureTestCase
             ->assertStatus(422);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_fetch_logo_returns_filename()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -71,9 +66,7 @@ class IconControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_fetch_unknown_logo_returns_nothing()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -83,9 +76,7 @@ class IconControllerTest extends FeatureTestCase
             ->assertNoContent();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_delete_icon_returns_success()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -93,9 +84,7 @@ class IconControllerTest extends FeatureTestCase
             ->assertNoContent(204);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_delete_invalid_icon_returns_success()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -103,9 +92,7 @@ class IconControllerTest extends FeatureTestCase
             ->assertNoContent(204);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_delete_icon_of_another_user_is_forbidden()
     {
         $anotherUser = User::factory()->create();

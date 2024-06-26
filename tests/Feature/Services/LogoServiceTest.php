@@ -7,6 +7,7 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\Data\HttpRequestTestData;
 use Tests\TestCase;
 
@@ -18,17 +19,12 @@ class LogoServiceTest extends TestCase
 {
     use WithoutMiddleware;
 
-    /**
-     * @test
-     */
     public function setUp() : void
     {
         parent::setUp();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_getIcon_returns_stored_icon_file_when_logo_exists()
     {
         $svgLogo     = HttpRequestTestData::SVG_LOGO_BODY;
@@ -50,9 +46,7 @@ class LogoServiceTest extends TestCase
         Storage::disk('icons')->assertExists($icon);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_getIcon_returns_null_when_github_request_fails()
     {
         Http::preventStrayRequests();
@@ -69,9 +63,7 @@ class LogoServiceTest extends TestCase
         $this->assertEquals(null, $icon);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_getIcon_returns_null_when_logo_fetching_fails()
     {
         $tfaJsonBody = HttpRequestTestData::TFA_JSON_BODY;
@@ -90,9 +82,7 @@ class LogoServiceTest extends TestCase
         $this->assertEquals(null, $icon);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_getIcon_returns_null_when_no_logo_exists()
     {
         $logoService = new LogoService();
@@ -102,9 +92,7 @@ class LogoServiceTest extends TestCase
         $this->assertEquals(null, $icon);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_logoService_loads_empty_collection_when_tfajson_fetching_fails()
     {
         $svgLogo = HttpRequestTestData::SVG_LOGO_BODY;

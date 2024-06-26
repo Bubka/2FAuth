@@ -4,12 +4,15 @@ namespace Tests\Feature\Http\Auth;
 
 use App\Extensions\WebauthnTwoFAuthUserProvider;
 use App\Http\Controllers\Auth\WebAuthnLoginController;
+use App\Http\Middleware\SkipIfAuthenticated;
 use App\Models\User;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Laragear\WebAuthn\Assertion\Validator\AssertionValidator;
 use Laragear\WebAuthn\Enums\UserVerification;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\FeatureTestCase;
 
 /**
@@ -18,6 +21,7 @@ use Tests\FeatureTestCase;
 #[CoversClass(WebAuthnLoginController::class)]
 #[CoversClass(User::class)]
 #[CoversClass(WebauthnTwoFAuthUserProvider::class)]
+#[CoversMethod(SkipIfAuthenticated::class, 'handle')]
 class WebAuthnLoginControllerTest extends FeatureTestCase
 {
     /**
@@ -85,9 +89,6 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
 
     const ASSERTION_CHALLENGE = 'iXozmynKi+YD2iRvKNbSPA==';
 
-    /**
-     * @test
-     */
     public function setUp() : void
     {
         parent::setUp();
@@ -95,9 +96,7 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
         DB::table('users')->delete();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_webauthn_login_returns_success()
     {
         $this->user = User::factory()->create(['email' => self::EMAIL]);
@@ -141,9 +140,7 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_webauthn_admin_login_returns_admin_role()
     {
         $this->admin = User::factory()->administrator()->create(['email' => self::EMAIL]);
@@ -180,9 +177,7 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_webauthn_login_merge_handle_if_missing()
     {
         $this->user = User::factory()->create(['email' => self::EMAIL]);
@@ -225,9 +220,7 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_legacy_login_is_rejected_when_webauthn_only_is_enable()
     {
         $this->user = User::factory()->create([
@@ -245,11 +238,7 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
             ->assertUnauthorized();
     }
 
-    /**
-     * @test
-     *
-     * @covers  \App\Http\Middleware\SkipIfAuthenticated
-     */
+    #[Test]
     public function test_webauthn_login_already_authenticated_is_rejected()
     {
         $this->user = User::factory()->create(['email' => self::EMAIL]);
@@ -289,9 +278,7 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_webauthn_login_with_missing_data_returns_validation_error()
     {
         $this->user = User::factory()->create(['email' => self::EMAIL]);
@@ -320,9 +307,7 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_webauthn_invalid_login_returns_unauthorized()
     {
         $this->user = User::factory()->create(['email' => self::EMAIL]);
@@ -337,9 +322,7 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
             ->assertUnauthorized();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_too_many_invalid_login_attempts_returns_too_many_request_error()
     {
         $throttle = 8;
@@ -364,9 +347,7 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
             ->assertStatus(429);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_get_options_returns_success()
     {
         Config::set('webauthn.user_verification', UserVerification::PREFERRED);
@@ -404,9 +385,7 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_get_options_for_securelogin_returns_required_userVerification()
     {
         Config::set('webauthn.user_verification', UserVerification::REQUIRED);
@@ -446,9 +425,7 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_get_options_for_fastlogin_returns_discouraged_userVerification()
     {
         Config::set('webauthn.user_verification', UserVerification::DISCOURAGED);
@@ -488,9 +465,7 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_get_options_with_capitalized_email_returns_success()
     {
         $this->user = User::factory()->create(['email' => self::EMAIL]);
@@ -501,9 +476,7 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
             ->assertOk();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_get_options_with_missing_email_returns_validation_errors()
     {
         $this->json('POST', '/webauthn/login/options', [
@@ -515,9 +488,7 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_get_options_with_invalid_email_returns_validation_errors()
     {
         $this->json('POST', '/webauthn/login/options', [
@@ -529,9 +500,7 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_get_options_with_unknown_email_returns_validation_errors()
     {
         $this->json('POST', '/webauthn/login/options', [

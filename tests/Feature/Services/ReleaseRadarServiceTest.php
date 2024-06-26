@@ -8,6 +8,7 @@ use Facades\App\Services\ReleaseRadarService;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Http;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\Data\HttpRequestTestData;
 use Tests\FeatureTestCase;
 
@@ -19,9 +20,7 @@ class ReleaseRadarServiceTest extends FeatureTestCase
 {
     use WithoutMiddleware;
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_manualScan_returns_no_new_release()
     {
         $url = config('2fauth.latestReleaseUrl');
@@ -41,9 +40,7 @@ class ReleaseRadarServiceTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_manualScan_returns_new_release()
     {
         $url = config('2fauth.latestReleaseUrl');
@@ -63,9 +60,7 @@ class ReleaseRadarServiceTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_manualScan_complete_when_http_call_fails()
     {
         // We do not fake the http request so an exception will be thrown
@@ -74,9 +69,7 @@ class ReleaseRadarServiceTest extends FeatureTestCase
         $this->assertNull(ReleaseRadarService::manualScan());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_manualScan_succeed_when_github_is_unreachable()
     {
         $url = config('2fauth.latestReleaseUrl');
@@ -89,9 +82,7 @@ class ReleaseRadarServiceTest extends FeatureTestCase
         $this->assertNull(ReleaseRadarService::manualScan());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_scheduleScan_runs_after_one_week()
     {
         $url = config('2fauth.latestReleaseUrl');
@@ -119,9 +110,7 @@ class ReleaseRadarServiceTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_scheduleScan_does_not_run_before_one_week()
     {
         $url = config('2fauth.latestReleaseUrl');
@@ -149,9 +138,7 @@ class ReleaseRadarServiceTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_scheduleScan_complete_when_http_call_fails()
     {
         // We do not fake the http request so an exception will be thrown

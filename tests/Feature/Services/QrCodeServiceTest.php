@@ -5,6 +5,7 @@ namespace Tests\Feature\Services;
 use App\Facades\QrCode;
 use App\Services\QrCodeService;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\Classes\LocalFile;
 use Tests\FeatureTestCase;
 
@@ -21,25 +22,18 @@ class QrCodeServiceTest extends FeatureTestCase
 
     private const DECODED_IMAGE = 'otpauth://totp/test@test.com?secret=A4GRFHVIRBGY7UIW';
 
-    /**
-     * @test
-     */
     public function setUp() : void
     {
         parent::setUp();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_encode_returns_correct_value()
     {
         $this->assertEquals(self::STRING_ENCODED, QrCode::encode(self::STRING_TO_ENCODE));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_decode_valid_image_returns_correct_value()
     {
         $file = LocalFile::fake()->validQrcode();
@@ -47,9 +41,7 @@ class QrCodeServiceTest extends FeatureTestCase
         $this->assertEquals(self::DECODED_IMAGE, QrCode::decode($file));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_decode_invalid_image_returns_correct_value()
     {
         $this->expectException(\App\Exceptions\InvalidQrCodeException::class);
