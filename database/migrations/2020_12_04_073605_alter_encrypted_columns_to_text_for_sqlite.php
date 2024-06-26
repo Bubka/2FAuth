@@ -18,7 +18,7 @@ class AlterEncryptedColumnsToTextForSqlite extends Migration
         if ('sqlite' === $driver) {
             
             Schema::table('twofaccounts', function (Blueprint $table) {
-                $table->text('account')->change();
+                $table->text('account')->nullable()->change();
             });
         }
     }
