@@ -30,14 +30,13 @@ class HandlerTest extends TestCase
     #[DataProvider('provideExceptionsforBadRequest')]
     public function test_exceptions_returns_badRequest_json_response($exception)
     {
-        $request  = $this->createMock(Request::class);
         $instance = new Handler($this->createMock(Container::class));
         $class    = new \ReflectionClass(Handler::class);
 
         $method = $class->getMethod('render');
         $method->setAccessible(true);
 
-        $response = $method->invokeArgs($instance, [$request, $this->createMock($exception)]);
+        $response = $method->invokeArgs($instance, [new Request(), $this->createMock($exception)]);
 
         $this->assertInstanceOf(JsonResponse::class, $response);
 
@@ -88,14 +87,13 @@ class HandlerTest extends TestCase
     #[DataProvider('provideExceptionsforNotFound')]
     public function test_exceptions_returns_notFound_json_response($exception)
     {
-        $request  = $this->createMock(Request::class);
         $instance = new Handler($this->createMock(Container::class));
         $class    = new \ReflectionClass(Handler::class);
 
         $method = $class->getMethod('render');
         $method->setAccessible(true);
 
-        $response = $method->invokeArgs($instance, [$request, $this->createMock($exception)]);
+        $response = $method->invokeArgs($instance, [new Request(), $this->createMock($exception)]);
 
         $this->assertInstanceOf(JsonResponse::class, $response);
 
@@ -124,7 +122,6 @@ class HandlerTest extends TestCase
     #[Test]
     public function test_authenticationException_returns_unauthorized_json_response()
     {
-        $request  = $this->createMock(Request::class);
         $instance = new Handler($this->createMock(Container::class));
         $class    = new \ReflectionClass(Handler::class);
 
@@ -134,7 +131,7 @@ class HandlerTest extends TestCase
         $mockException = $this->createMock(\Illuminate\Auth\AuthenticationException::class);
         $mockException->method('guards')->willReturn(['web-guard']);
 
-        $response = $method->invokeArgs($instance, [$request, $mockException]);
+        $response = $method->invokeArgs($instance, [new Request(), $mockException]);
 
         $this->assertInstanceOf(JsonResponse::class, $response);
 
@@ -148,7 +145,6 @@ class HandlerTest extends TestCase
     #[Test]
     public function test_authenticationException_returns_proxyAuthRequired_json_response_with_proxy_guard()
     {
-        $request  = $this->createMock(Request::class);
         $instance = new Handler($this->createMock(Container::class));
         $class    = new \ReflectionClass(Handler::class);
 
@@ -158,7 +154,7 @@ class HandlerTest extends TestCase
         $mockException = $this->createMock(\Illuminate\Auth\AuthenticationException::class);
         $mockException->method('guards')->willReturn(['reverse-proxy-guard']);
 
-        $response = $method->invokeArgs($instance, [$request, $mockException]);
+        $response = $method->invokeArgs($instance, [new Request(), $mockException]);
 
         $this->assertInstanceOf(JsonResponse::class, $response);
 
@@ -172,7 +168,6 @@ class HandlerTest extends TestCase
     #[Test]
     public function test_AccessDeniedException_returns_forbidden_json_response()
     {
-        $request  = $this->createMock(Request::class);
         $instance = new Handler($this->createMock(Container::class));
         $class    = new \ReflectionClass(Handler::class);
 
@@ -181,7 +176,7 @@ class HandlerTest extends TestCase
 
         $mockException = $this->createMock(\Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException::class);
 
-        $response = $method->invokeArgs($instance, [$request, $mockException]);
+        $response = $method->invokeArgs($instance, [new Request(), $mockException]);
 
         $this->assertInstanceOf(JsonResponse::class, $response);
 
