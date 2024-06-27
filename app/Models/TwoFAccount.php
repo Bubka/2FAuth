@@ -53,28 +53,7 @@ use SteamTotp\SteamTotp;
  * @property int|null $counter
  * @property int|null $user_id
  * @property-read \App\Models\User|null $user
- * @method static \Database\Factories\TwoFAccountFactory factory($count = null, $state = [])
- * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount ordered(string $direction = 'asc')
- * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount orphans()
- * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount query()
- * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereAccount($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereAlgorithm($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereCounter($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereDigits($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereGroupId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereIcon($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereLegacyUri($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereOrderColumn($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereOtpType($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount wherePeriod($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereSecret($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereService($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereUserId($value)
+ * 
  * @mixin \Eloquent
  */
 class TwoFAccount extends Model implements Sortable

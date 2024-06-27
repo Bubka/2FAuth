@@ -107,6 +107,12 @@
         "test-coverage-html": [
             "@putenv XDEBUG_MODE=coverage",
             "vendor/bin/phpunit --coverage-html tests/Coverage/"
+        ],
+        "ide-helper": [
+            "php artisan config:clear",
+            "php artisan clear-compiled",
+            "php artisan ide-helper:generate",
+            "php artisan ide-helper:models"
         ]
     }
 }
