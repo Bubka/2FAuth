@@ -62,7 +62,7 @@ class UserObserver
 
         // Deleting user's twofaccounts icon
         $iconPathes = $user->twofaccounts->filter(function ($twofaccount, $key) {
-            return $twofaccount->icon;
+            return filled($twofaccount->icon);
         })->map(function ($twofaccount, $key) {
             return $twofaccount->icon;
         });

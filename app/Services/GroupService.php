@@ -45,10 +45,10 @@ class GroupService
     /**
      * Prepends the pseudo group named 'All' to a group collection
      *
-     * @param  Collection<int, Group>  $groups
-     * @return Collection<int, Group>
+     * @param  \Illuminate\Database\Eloquent\Collection<int, Group>  $groups
+     * @return \Illuminate\Database\Eloquent\Collection<int, Group>
      */
-    public static function prependTheAllGroup(Collection $groups, User $user) : Collection
+    public static function prependTheAllGroup(Collection $groups, User $user)
     {
         $theAllGroup = new Group([
             'name' => __('commons.all'),
@@ -63,7 +63,7 @@ class GroupService
     /**
      * Set owner of given groups
      *
-     * @param  Collection<int, Group>  $groups
+     * @param  \Illuminate\Database\Eloquent\Collection<int, Group>  $groups
      */
     public static function setUser(Collection $groups, User $user) : void
     {

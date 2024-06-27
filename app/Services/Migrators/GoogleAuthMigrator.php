@@ -14,6 +14,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use ParagonIE\ConstantTime\Base32;
+use TypeError;
 
 class GoogleAuthMigrator extends Migrator
 {
@@ -76,8 +77,10 @@ class GoogleAuthMigrator extends Migrator
 
     /**
      * Encode into uppercase Base32
+     * 
+     * @throws TypeError
      */
-    protected function toBase32(string $str)
+    protected function toBase32(string $str) : string
     {
         return Base32::encodeUpper($str);
     }
