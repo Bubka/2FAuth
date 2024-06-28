@@ -4,6 +4,7 @@ namespace Tests\Api\v1\Controllers;
 
 use App\Api\v1\Controllers\GroupController;
 use App\Api\v1\Resources\GroupResource;
+use App\Listeners\DissociateTwofaccountFromGroup;
 use App\Listeners\ResetUsersPreference;
 use App\Models\Group;
 use App\Models\TwoFAccount;
@@ -18,6 +19,7 @@ use Tests\FeatureTestCase;
 #[CoversClass(ResetUsersPreference::class)]
 #[CoversClass(GroupPolicy::class)]
 #[CoversClass(Group::class)]
+#[CoversClass(DissociateTwofaccountFromGroup::class)]
 class GroupControllerTest extends FeatureTestCase
 {
     /**
@@ -101,6 +103,27 @@ class GroupControllerTest extends FeatureTestCase
                     'twofaccounts_count' => 0,
                 ],
             ]);
+    }
+
+    #[Test]
+    public function test_orphan_groups_are_reassign_to_the_only_user()
+    {
+        config(['auth.defaults.guard' => 'reverse-proxy-guard']);
+
+        $this->anotherUser->delete();
+        $this->userGroupA->user_id = null;
+        $this->userGroupA->save();
+
+        $this->assertCount(1, User::all());
+        $this->assertNull($this->userGroupA->user_id);
+
+        $this->actingAs($this->user, 'reverse-proxy-guard')
+            ->json('GET', '/api/v1/groups')
+            ->assertOk();
+
+        $this->userGroupA->refresh();
+
+        $this->assertNotNull($this->userGroupA->user_id);
     }
 
     #[Test]

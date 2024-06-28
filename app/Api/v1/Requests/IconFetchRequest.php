@@ -25,7 +25,7 @@ class IconFetchRequest extends FormRequest
     public function rules()
     {
         return [
-            'service' => 'string|regex:/^[^:]+$/i',
+            'service' => 'string',
         ];
     }
 
@@ -39,7 +39,7 @@ class IconFetchRequest extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge([
-            'service' => strip_tags($this->service),
+            'service' => strip_tags(strval($this->service)),
         ]);
     }
 }

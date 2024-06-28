@@ -12,9 +12,12 @@ use App\Http\Middleware\RejectIfReverseProxy;
 use App\Http\Middleware\SkipIfAuthenticated;
 use App\Listeners\Authentication\FailedLoginListener;
 use App\Listeners\Authentication\LoginListener;
+use App\Listeners\Authentication\LogoutListener;
+use App\Listeners\LogNotificationListener;
+use App\Models\AuthLog;
 use App\Models\User;
-use App\Notifications\FailedLogin;
-use App\Notifications\SignedInWithNewDevice;
+use App\Notifications\FailedLoginNotification;
+use App\Notifications\SignedInWithNewDeviceNotification;
 use App\Rules\CaseInsensitiveEmailExists;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
@@ -32,12 +35,16 @@ use Tests\FeatureTestCase;
 #[CoversClass(RejectIfReverseProxy::class)]
 #[CoversClass(RejectIfDemoMode::class)]
 #[CoversClass(LoginListener::class)]
+#[CoversClass(LogoutListener::class)]
 #[CoversClass(FailedLoginListener::class)]
-#[CoversMethod(CaseInsensitiveEmailExists::class, 'handle')]
+#[CoversMethod(CaseInsensitiveEmailExists::class, 'validate')]
 #[CoversMethod(SkipIfAuthenticated::class, 'handle')]
 #[CoversMethod(Handler::class, 'register')]
 #[CoversMethod(KickOutInactiveUser::class, 'handle')]
 #[CoversMethod(LogUserLastSeen::class, 'handle')]
+#[CoversClass(LogNotificationListener::class)]
+#[CoversClass(SignedInWithNewDeviceNotification::class)]
+#[CoversClass(FailedLoginNotification::class)]
 class LoginTest extends FeatureTestCase
 {
     /**
@@ -49,6 +56,8 @@ class LoginTest extends FeatureTestCase
      * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
      */
     protected $admin;
+
+    private const WEB_GUARD = 'web-guard';
 
     private const PASSWORD = 'password';
 
@@ -65,6 +74,8 @@ class LoginTest extends FeatureTestCase
     #[Test]
     public function test_user_login_returns_success()
     {
+        Notification::fake();
+
         $response = $this->json('POST', '/user/login', [
             'email'    => $this->user->email,
             'password' => self::PASSWORD,
@@ -95,7 +106,7 @@ class LoginTest extends FeatureTestCase
             'password' => self::PASSWORD,
         ])->assertOk();
 
-        $this->actingAs($this->user, 'web-guard')
+        $this->actingAs($this->user, self::WEB_GUARD)
             ->json('GET', '/user/logout');
 
         $this->travel(1)->minute();
@@ -107,7 +118,7 @@ class LoginTest extends FeatureTestCase
             'HTTP_USER_AGENT' => 'NotSymfony',
         ])->assertOk();
 
-        Notification::assertSentTo($this->user, SignedInWithNewDevice::class);
+        Notification::assertSentTo($this->user, SignedInWithNewDeviceNotification::class);
     }
 
     #[Test]
@@ -123,7 +134,7 @@ class LoginTest extends FeatureTestCase
             'password' => self::PASSWORD,
         ])->assertOk();
 
-        $this->actingAs($this->user, 'web-guard')
+        $this->actingAs($this->user, self::WEB_GUARD)
             ->json('GET', '/user/logout');
 
         $this->travel(1)->minute();
@@ -171,6 +182,40 @@ class LoginTest extends FeatureTestCase
     }
 
     #[Test]
+    public function test_successful_web_login_with_password_is_logged()
+    {
+        $this->json('POST', '/user/login', [
+            'email'    => $this->user->email,
+            'password' => self::PASSWORD,
+        ])->assertOk();
+
+        $this->assertDatabaseHas('auth_logs', [
+            'authenticatable_id' => $this->user->id,
+            'login_successful'   => true,
+            'guard'              => self::WEB_GUARD,
+            'login_method'       => self::PASSWORD,
+            'logout_at'          => null,
+        ]);
+    }
+
+    #[Test]
+    public function test_failed_web_login_with_password_is_logged()
+    {
+        $this->json('POST', '/user/login', [
+            'email'    => $this->user->email,
+            'password' => self::WRONG_PASSWORD,
+        ])->assertStatus(401);
+
+        $this->assertDatabaseHas('auth_logs', [
+            'authenticatable_id' => $this->user->id,
+            'login_successful'   => false,
+            'guard'              => self::WEB_GUARD,
+            'login_method'       => self::PASSWORD,
+            'logout_at'          => null,
+        ]);
+    }
+
+    #[Test]
     public function test_user_login_already_authenticated_is_rejected()
     {
         $response = $this->json('POST', '/user/login', [
@@ -178,7 +223,7 @@ class LoginTest extends FeatureTestCase
             'password' => self::PASSWORD,
         ]);
 
-        $response = $this->actingAs($this->user, 'web-guard')
+        $response = $this->actingAs($this->user, self::WEB_GUARD)
             ->json('POST', '/user/login', [
                 'email'    => $this->user->email,
                 'password' => self::PASSWORD,
@@ -229,7 +274,7 @@ class LoginTest extends FeatureTestCase
             'password' => self::WRONG_PASSWORD,
         ])->assertStatus(401);
 
-        Notification::assertSentTo($this->user, FailedLogin::class);
+        Notification::assertSentTo($this->user, FailedLoginNotification::class);
     }
 
     #[Test]
@@ -278,7 +323,7 @@ class LoginTest extends FeatureTestCase
             'password' => self::PASSWORD,
         ]);
 
-        $response = $this->actingAs($this->user, 'web-guard')
+        $response = $this->actingAs($this->user, self::WEB_GUARD)
             ->json('GET', '/user/logout')
             ->assertOk()
             ->assertExactJson([
@@ -307,5 +352,42 @@ class LoginTest extends FeatureTestCase
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('GET', '/api/v1/twofaccounts')
             ->assertStatus(418);
+    }
+
+    #[Test]
+    public function test_successful_web_logout_is_logged()
+    {
+        $this->json('POST', '/user/login', [
+            'email'    => $this->user->email,
+            'password' => self::PASSWORD,
+        ])->assertOk();
+
+        $this->actingAs($this->user, self::WEB_GUARD)
+            ->json('GET', '/user/logout')
+            ->assertOk();
+
+        $authlog = AuthLog::first();
+
+        $this->assertEquals($this->user->id, $authlog->authenticatable_id);
+        $this->assertTrue($authlog->login_successful);
+        $this->assertEquals(self::WEB_GUARD, $authlog->guard);
+        $this->assertEquals(self::PASSWORD, $authlog->login_method);
+        $this->assertNotNull($authlog->logout_at);
+    }
+
+    #[Test]
+    public function test_orphan_web_logout_is_logged()
+    {
+        $this->actingAs($this->user, self::WEB_GUARD)
+            ->json('GET', '/user/logout')
+            ->assertOk();
+
+        $authlog = AuthLog::first();
+
+        $this->assertEquals($this->user->id, $authlog->authenticatable_id);
+        $this->assertFalse($authlog->login_successful);
+        $this->assertEquals(self::WEB_GUARD, $authlog->guard);
+        $this->assertNull($authlog->login_method);
+        $this->assertNotNull($authlog->logout_at);
     }
 }

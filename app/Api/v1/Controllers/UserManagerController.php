@@ -4,7 +4,7 @@ namespace App\Api\v1\Controllers;
 
 use App\Api\v1\Requests\UserManagerPromoteRequest;
 use App\Api\v1\Requests\UserManagerStoreRequest;
-use App\Api\v1\Resources\UserAuthentication;
+use App\Api\v1\Resources\UserAuthenticationResource;
 use App\Api\v1\Resources\UserManagerResource;
 use App\Http\Controllers\Controller;
 use App\Models\User;
@@ -231,7 +231,7 @@ class UserManagerController extends Controller
         $authentications = $request->has('period') ? $user->authenticationsByPeriod($validated['period']) : $user->authentications;
         $authentications = $request->has('limit') ? $authentications->take($validated['limit']) : $authentications;
 
-        return UserAuthentication::collection($authentications);
+        return UserAuthenticationResource::collection($authentications);
     }
 
     /**

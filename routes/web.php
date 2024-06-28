@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\Route;
 use Laravel\Passport\Http\Controllers\PersonalAccessTokenController;
 
 // use App\Models\User;
-// use App\Notifications\SignedInWithNewDevice;
+// use App\Notifications\SignedInWithNewDeviceNotification;
 // use App\Models\AuthLog;
 
 /*
@@ -109,7 +109,7 @@ Route::withoutMiddleware([
 
 // Route::get('/notification', function () {
 //     $user = User::find(1);
-//     return (new SignedInWithNewDevice(AuthLog::find(9)))
+//     return (new SignedInWithNewDeviceNotification(AuthLog::find(9)))
 //         ->toMail($user);
 // });
 

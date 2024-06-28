@@ -24,7 +24,7 @@
 
 namespace App\Listeners\Authentication;
 
-use App\Notifications\SignedInWithNewDevice;
+use App\Notifications\SignedInWithNewDeviceNotification;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Support\Carbon;
 
@@ -59,7 +59,7 @@ class LoginListener extends AbstractAccessListener
         ]);
 
         if (! $known && ! $newUser && $user->preferences['notifyOnNewAuthDevice'] == true) {
-            $user->notify(new SignedInWithNewDevice($log));
+            $user->notify(new SignedInWithNewDeviceNotification($log));
         }
     }
 }

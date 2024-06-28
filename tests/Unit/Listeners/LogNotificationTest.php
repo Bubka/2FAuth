@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Listeners;
 
-use App\Listeners\LogNotification;
+use App\Listeners\LogNotificationListener;
 use Illuminate\Notifications\Events\NotificationSent;
 use Illuminate\Support\Facades\Event;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -10,9 +10,9 @@ use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 /**
- * ResetUsersPreferenceTest test class
+ * LogNotificationTest test class
  */
-#[CoversClass(LogNotification::class)]
+#[CoversClass(LogNotificationListener::class)]
 class LogNotificationTest extends TestCase
 {
     #[Test]
@@ -22,7 +22,7 @@ class LogNotificationTest extends TestCase
 
         Event::assertListening(
             NotificationSent::class,
-            LogNotification::class
+            LogNotificationListener::class
         );
     }
 }

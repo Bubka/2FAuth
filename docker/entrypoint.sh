@@ -60,9 +60,11 @@ fi
 
 echo "${COMMIT}" > /2fauth/installed
 php artisan storage:link --quiet
-php artisan optimize:clear
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
+
+# Clearing compiled, cache has already been cleared
+php artisan clear-compiled
+
+# Clearing and Caching config, events, routes, views
+php artisan optimize
 
 supervisord

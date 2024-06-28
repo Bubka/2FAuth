@@ -2,7 +2,8 @@
 
 namespace Tests\Api\v1\Requests;
 
-use App\Api\v1\Requests\SettingUpdateRequest;
+use App\Api\v1\Requests\GroupAssignRequest;
+use App\Api\v1\Requests\IconFetchRequest;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -12,10 +13,10 @@ use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 /**
- * SettingUpdateRequestTest test class
+ * IconFetchRequestTest test class
  */
-#[CoversClass(SettingUpdateRequest::class)]
-class SettingUpdateRequestTest extends TestCase
+#[CoversClass(IconFetchRequest::class)]
+class IconFetchRequestTest extends TestCase
 {
     use WithoutMiddleware;
 
@@ -26,7 +27,7 @@ class SettingUpdateRequestTest extends TestCase
             ->once()
             ->andReturn(true);
 
-        $request = new SettingUpdateRequest();
+        $request = new IconFetchRequest();
 
         $this->assertTrue($request->authorize());
     }
@@ -35,7 +36,7 @@ class SettingUpdateRequestTest extends TestCase
     #[DataProvider('provideValidData')]
     public function test_valid_data(array $data) : void
     {
-        $request   = new SettingUpdateRequest();
+        $request   = new IconFetchRequest();
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->fails());
@@ -48,13 +49,13 @@ class SettingUpdateRequestTest extends TestCase
     {
         return [
             [[
-                'value' => true,
+                'service' => 'validWord',
             ]],
             [[
-                'value' => 'MyValue',
+                'service' => '0',
             ]],
             [[
-                'value' => 10,
+                'service' => '~string.with-sp3ci@l-ch4rs',
             ]],
         ];
     }
@@ -63,7 +64,7 @@ class SettingUpdateRequestTest extends TestCase
     #[DataProvider('provideInvalidData')]
     public function test_invalid_data(array $data) : void
     {
-        $request   = new SettingUpdateRequest();
+        $request   = new IconFetchRequest();
         $validator = Validator::make($data, $request->rules());
 
         $this->assertTrue($validator->fails());
@@ -76,10 +77,16 @@ class SettingUpdateRequestTest extends TestCase
     {
         return [
             [[
-                'value' => '', // required
+                'service' => null,
             ]],
             [[
-                'value' => null, // required
+                'service' => 0,
+            ]],
+            [[
+                'service' => true,
+            ]],
+            [[
+                'service' => [],
             ]],
         ];
     }

@@ -24,7 +24,7 @@
 
 namespace App\Listeners\Authentication;
 
-use App\Notifications\FailedLogin;
+use App\Notifications\FailedLoginNotification;
 use Illuminate\Auth\Events\Failed;
 
 class FailedLoginListener extends AbstractAccessListener
@@ -56,7 +56,7 @@ class FailedLoginListener extends AbstractAccessListener
             ]);
 
             if ($user->preferences['notifyOnFailedLogin'] == true) {
-                $user->notify(new FailedLogin($log));
+                $user->notify(new FailedLoginNotification($log));
             }
         }
     }

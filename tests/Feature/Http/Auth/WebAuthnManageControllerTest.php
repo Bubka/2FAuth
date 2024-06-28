@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\DB;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversTrait;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\FeatureTestCase;
 
@@ -17,7 +18,7 @@ use Tests\FeatureTestCase;
  */
 #[CoversClass(WebAuthnManageController::class)]
 #[CoversClass(RejectIfReverseProxy::class)]
-#[CoversClass(WebAuthnManageCredentials::class)]
+#[CoversTrait(WebAuthnManageCredentials::class)]
 class WebAuthnManageControllerTest extends FeatureTestCase
 {
     // use WithoutMiddleware;

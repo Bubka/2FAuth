@@ -68,6 +68,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
 
     protected $twofaccountD;
 
+    protected $twofaccountE;
+
     private const VALID_RESOURCE_STRUCTURE_WITHOUT_SECRET = [
         'id',
         'group_id',
@@ -102,10 +104,44 @@ class TwoFAccountControllerTest extends FeatureTestCase
         'period',
     ];
 
+    private const VALID_EMBEDDED_OTP_RESOURCE_STRUCTURE_FOR_TOTP = [
+        'generated_at',
+        'password',
+    ];
+
     private const VALID_OTP_RESOURCE_STRUCTURE_FOR_HOTP = [
         'otp_type',
         'password',
         'counter',
+    ];
+
+    private const VALID_RESOURCE_STRUCTURE_WITH_OTP = [
+        'id',
+        'group_id',
+        'service',
+        'account',
+        'icon',
+        'otp_type',
+        'secret',
+        'digits',
+        'algorithm',
+        'period',
+        'counter',
+        'otp' => self::VALID_EMBEDDED_OTP_RESOURCE_STRUCTURE_FOR_TOTP
+    ];
+
+    private const VALID_COLLECTION_RESOURCE_STRUCTURE_WITH_OTP = [
+        'id',
+        'group_id',
+        'service',
+        'account',
+        'icon',
+        'otp_type',
+        'digits',
+        'algorithm',
+        'period',
+        'counter',
+        'otp' => self::VALID_EMBEDDED_OTP_RESOURCE_STRUCTURE_FOR_TOTP
     ];
 
     private const VALID_EXPORT_STRUTURE = [
@@ -204,10 +240,13 @@ class TwoFAccountControllerTest extends FeatureTestCase
         $this->twofaccountD = TwoFAccount::factory()->for($this->anotherUser)->create([
             'group_id' => $this->anotherUserGroupB->id,
         ]);
+        $this->twofaccountE = TwoFAccount::factory()->for($this->anotherUser)->create([
+            'group_id' => $this->anotherUserGroupB->id,
+        ]);
     }
 
     #[Test]
-    #[DataProvider('indexUrlParameterProvider')]
+    #[DataProvider('validResourceStructureProvider')]
     public function test_index_returns_user_twofaccounts_only($urlParameter, $expected)
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -234,7 +273,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
     /**
      * Provide data for index tests
      */
-    public static function indexUrlParameterProvider()
+    public static function validResourceStructureProvider()
     {
         return [
             'VALID_RESOURCE_STRUCTURE_WITHOUT_SECRET' => [
@@ -245,7 +284,69 @@ class TwoFAccountControllerTest extends FeatureTestCase
                 '?withSecret=1',
                 self::VALID_RESOURCE_STRUCTURE_WITH_SECRET,
             ],
+            'VALID_COLLECTION_RESOURCE_STRUCTURE_WITH_OTP' => [
+                '?withOtp=1',
+                self::VALID_COLLECTION_RESOURCE_STRUCTURE_WITH_OTP,
+            ],
         ];
+    }
+
+    #[Test]
+    public function test_index_returns_user_accounts_with_given_ids()
+    {
+        $response = $this->actingAs($this->anotherUser, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts?ids=' . $this->twofaccountC->id . ',' . $this->twofaccountE->id)
+            ->assertOk()
+            ->assertJsonCount(2, $key = null)
+            ->assertJsonStructure([
+                '*' => self::VALID_RESOURCE_STRUCTURE_WITHOUT_SECRET,
+            ])
+            ->assertJsonFragment([
+                'id' => $this->twofaccountC->id,
+            ])
+            ->assertJsonFragment([
+                'id' => $this->twofaccountE->id,
+            ]);
+    }
+
+    #[Test]
+    public function test_index_returns_only_user_accounts_in_given_ids()
+    {
+        $response = $this->actingAs($this->anotherUser, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts?ids=' . $this->twofaccountA->id . ',' . $this->twofaccountE->id)
+            ->assertOk()
+            ->assertJsonCount(1, $key = null)
+            ->assertJsonStructure([
+                '*' => self::VALID_RESOURCE_STRUCTURE_WITHOUT_SECRET,
+            ])
+            ->assertJsonMissing([
+                'id' => $this->twofaccountA->id,
+            ])
+            ->assertJsonFragment([
+                'id' => $this->twofaccountE->id,
+            ]);
+    }
+
+    #[Test]
+    public function test_orphan_accounts_are_reassign_to_the_only_user()
+    {
+        config(['auth.defaults.guard' => 'reverse-proxy-guard']);
+
+        $this->anotherUser->delete();
+        $this->twofaccountA->user_id = null;
+        $this->twofaccountA->save();
+
+        $this->assertCount(1, User::all());
+        $this->assertNull($this->twofaccountA->user_id);
+        $this->assertCount(1, TwoFAccount::orphans()->get());
+
+        $this->actingAs($this->user, 'reverse-proxy-guard')
+            ->json('GET', '/api/v1/twofaccounts')
+            ->assertOk();
+
+        $this->twofaccountA->refresh();
+
+        $this->assertNotNull($this->twofaccountA->user_id);
     }
 
     #[Test]
@@ -288,6 +389,24 @@ class TwoFAccountControllerTest extends FeatureTestCase
     //             'account' => '*indecipherable*',
     //         ]);
     // }
+
+    #[Test]
+    public function test_show_returns_twofaccount_resource_with_otp()
+    {
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccountA->id . '?withOtp=1')
+            ->assertOk()
+            ->assertJsonStructure(self::VALID_RESOURCE_STRUCTURE_WITH_OTP);
+    }
+
+    #[Test]
+    public function test_show_returns_twofaccount_resource_without_otp()
+    {
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccountA->id . '?withOtp=0')
+            ->assertOk()
+            ->assertJsonStructure(self::VALID_RESOURCE_STRUCTURE_WITHOUT_SECRET);
+    }
 
     #[Test]
     public function test_show_missing_twofaccount_returns_not_found()

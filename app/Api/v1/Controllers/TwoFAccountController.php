@@ -42,10 +42,6 @@ class TwoFAccountController extends Controller
 
         $validated = $request->validated();
 
-        // if ($request->has('withOtp')) {
-        //     $request->merge(['at' => time()]);
-        // }
-
         return Arr::has($validated, 'ids')
             ? new TwoFAccountCollection($request->user()->twofaccounts()->whereIn('id', Helpers::commaSeparatedToArray($validated['ids']))->get()->sortBy('order_column'))
             : new TwoFAccountCollection($request->user()->twofaccounts->sortBy('order_column'));

@@ -6,6 +6,7 @@ use App\Models\AuthLog;
 use App\Models\Group;
 use App\Models\TwoFAccount;
 use App\Models\User;
+use App\Observers\UserObserver;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
@@ -21,6 +22,7 @@ use Tests\FeatureTestCase;
  * UserModelTest test class
  */
 #[CoversClass(User::class)]
+#[CoversClass(UserObserver::class)]
 class UserModelTest extends FeatureTestCase
 {
     #[Test]

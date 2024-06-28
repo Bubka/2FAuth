@@ -3,12 +3,14 @@
 namespace Tests\Api\v1\Controllers;
 
 use App\Api\v1\Controllers\SettingController;
+use App\Api\v1\Requests\SettingUpdateRequest;
 use App\Facades\Settings;
 use App\Models\User;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\FeatureTestCase;
 
@@ -16,6 +18,7 @@ use Tests\FeatureTestCase;
  * SettingController test class
  */
 #[CoversClass(SettingController::class)]
+#[CoversMethod(SettingUpdateRequest::class, 'rules')]
 class SettingControllerTest extends FeatureTestCase
 {
     /**
@@ -228,6 +231,16 @@ class SettingControllerTest extends FeatureTestCase
                 'key'   => self::USER_DEFINED_SETTING,
                 'value' => self::USER_DEFINED_SETTING_CHANGED_VALUE,
             ]);
+    }
+
+    #[Test]
+    public function test_update_restrictList_setting_rejects_invalid_email_list()
+    {
+        $response = $this->actingAs($this->admin, 'api-guard')
+            ->json('PUT', '/api/v1/settings/restrictList', [
+                'value' => 'johndoe@example.com|janedoeexamplecom',
+            ])
+            ->assertJsonValidationErrorFor('value');
     }
 
     #[Test]

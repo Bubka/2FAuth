@@ -2,7 +2,7 @@
 
 namespace Tests\Api\v1\Requests;
 
-use App\Api\v1\Requests\TwoFAccountBatchRequest;
+use App\Api\v1\Requests\TwoFAccountIndexRequest;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -13,10 +13,10 @@ use Tests\Api\v1\Requests\DataProviders\TwoFAccountDataProvider;
 use Tests\TestCase;
 
 /**
- * TwoFAccountBatchRequestTest test class
+ * TwoFAccountIndexRequestTestTest test class
  */
-#[CoversClass(TwoFAccountBatchRequest::class)]
-class TwoFAccountBatchRequestTest extends TestCase
+#[CoversClass(TwoFAccountIndexRequest::class)]
+class TwoFAccountIndexRequestTest extends TestCase
 {
     use WithoutMiddleware;
 
@@ -27,16 +27,16 @@ class TwoFAccountBatchRequestTest extends TestCase
             ->once()
             ->andReturn(true);
 
-        $request = new TwoFAccountBatchRequest();
+        $request = new TwoFAccountIndexRequest();
 
         $this->assertTrue($request->authorize());
     }
-
+    
     #[Test]
     #[DataProviderExternal(TwoFAccountDataProvider::class, 'validIdsProvider')]
     public function test_valid_data(array $data) : void
     {
-        $request   = new TwoFAccountBatchRequest();
+        $request   = new TwoFAccountIndexRequest();
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->fails());
@@ -46,7 +46,7 @@ class TwoFAccountBatchRequestTest extends TestCase
     #[DataProviderExternal(TwoFAccountDataProvider::class, 'invalidIdsProvider')]
     public function test_invalid_data(array $data) : void
     {
-        $request   = new TwoFAccountBatchRequest();
+        $request   = new TwoFAccountIndexRequest();
         $validator = Validator::make($data, $request->rules());
 
         $this->assertTrue($validator->fails());

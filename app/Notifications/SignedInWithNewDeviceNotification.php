@@ -9,9 +9,14 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Jenssegers\Agent\Agent;
 
-class FailedLogin extends Notification implements ShouldQueue
+class SignedInWithNewDeviceNotification extends Notification implements ShouldQueue
 {
     use Queueable;
+
+    /**
+     * The AuthLog model instance
+     */
+    public AuthLog $authLog;
 
     /**
      * A user agent parser instance.
@@ -21,12 +26,7 @@ class FailedLogin extends Notification implements ShouldQueue
     protected $agent;
 
     /**
-     * The AuthLog model instance
-     */
-    public AuthLog $authLog;
-
-    /**
-     * Create a new FailedLogin instance
+     * Create a new SignedInWithNewDeviceNotification instance
      */
     public function __construct(AuthLog $authLog)
     {
@@ -35,22 +35,19 @@ class FailedLogin extends Notification implements ShouldQueue
         $this->agent->setUserAgent($authLog->user_agent);
     }
 
-    /**
-     * Get the notification's channels.
-     */
     public function via(mixed $notifiable) : array|string
     {
         return $notifiable->notifyAuthLogVia();
     }
 
     /**
-     * Build the mail representation of the notification.
+     * Wrap the notification to a mail envelop
      */
     public function toMail(mixed $notifiable) : MailMessage
     {
         return (new MailMessage())
-            ->subject(__('notifications.failed_login.subject'))
-            ->markdown('emails.failedLogin', [
+            ->subject(__('notifications.new_device.subject'))
+            ->markdown('emails.signedInWithNewDevice', [
                 'account'   => $notifiable,
                 'time'      => $this->authLog->login_at,
                 'ipAddress' => $this->authLog->ip_address,

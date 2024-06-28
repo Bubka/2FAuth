@@ -4,7 +4,7 @@ namespace App\Listeners\Authentication;
 
 use App\Events\VisitedByProxyUser;
 use App\Extensions\RemoteUserProvider;
-use App\Notifications\SignedInWithNewDevice;
+use App\Notifications\SignedInWithNewDeviceNotification;
 use Illuminate\Support\Carbon;
 
 class VisitedByProxyUserListener extends AbstractAccessListener
@@ -37,7 +37,7 @@ class VisitedByProxyUserListener extends AbstractAccessListener
         ]);
 
         if (! $known && ! $newUser && ! str_ends_with($user->email, RemoteUserProvider::FAKE_REMOTE_DOMAIN) && $user->preferences['notifyOnNewAuthDevice']) {
-            $user->notify(new SignedInWithNewDevice($log));
+            $user->notify(new SignedInWithNewDeviceNotification($log));
         }
     }
 }

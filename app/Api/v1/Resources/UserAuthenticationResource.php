@@ -20,7 +20,7 @@ use Jenssegers\Agent\Agent;
  * @property string|null $duration
  * @property string|null $login_method
  */
-class UserAuthentication extends JsonResource
+class UserAuthenticationResource extends JsonResource
 {
     /**
      * A user agent parser instance.

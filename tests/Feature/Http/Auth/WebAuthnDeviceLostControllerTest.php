@@ -61,42 +61,6 @@ class WebAuthnDeviceLostControllerTest extends FeatureTestCase
     }
 
     #[Test]
-    public function test_WebauthnRecoveryNotification_renders_to_email()
-    {
-        $mail = (new WebauthnRecoveryNotification('test_token'))->toMail($this->user)->render();
-
-        $this->assertStringContainsString(
-            'http://localhost/webauthn/recover?token=test_token&amp;email=' . urlencode($this->user->email),
-            $mail
-        );
-
-        $this->assertStringContainsString(
-            Lang::get('Recover Account'),
-            $mail
-        );
-
-        $this->assertStringContainsString(
-            Lang::get(
-                'You are receiving this email because we received an account recovery request for your account.'
-            ),
-            $mail
-        );
-
-        $this->assertStringContainsString(
-            Lang::get(
-                'This recovery link will expire in :count minutes.',
-                ['count' => config('auth.passwords.webauthn.expire')]
-            ),
-            $mail
-        );
-
-        $this->assertStringContainsString(
-            Lang::get('If you did not request an account recovery, no further action is required.'),
-            $mail
-        );
-    }
-
-    #[Test]
     public function test_sendRecoveryEmail_does_not_send_anything_to_unknown_email()
     {
         Notification::fake();

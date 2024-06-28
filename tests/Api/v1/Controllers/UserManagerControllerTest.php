@@ -3,10 +3,12 @@
 namespace Tests\Api\v1\Controllers;
 
 use App\Api\v1\Controllers\UserManagerController;
+use App\Api\v1\Resources\UserAuthenticationResource;
 use App\Api\v1\Resources\UserManagerResource;
 use App\Models\AuthLog;
 use App\Models\TwoFAccount;
 use App\Models\User;
+use App\Observers\UserObserver;
 use App\Policies\UserPolicy;
 use Database\Factories\UserFactory;
 use Illuminate\Auth\Notifications\ResetPassword;
@@ -29,8 +31,10 @@ use Tests\FeatureTestCase;
 
 #[CoversClass(UserManagerController::class)]
 #[CoversClass(UserManagerResource::class)]
-#[CoversClass(UserPolicy::class)]
+#[CoversClass(UserAuthenticationResource::class)]
 #[CoversClass(User::class)]
+#[CoversClass(UserObserver::class)]
+#[CoversClass(UserPolicy::class)]
 class UserManagerControllerTest extends FeatureTestCase
 {
     /**
@@ -144,6 +148,17 @@ class UserManagerControllerTest extends FeatureTestCase
                 'password_reset'               => null,
                 'valid_personal_access_tokens' => 0,
                 'webauthn_credentials'         => 0,
+            ]);
+    }
+
+    #[Test]
+    public function test_show_returns_forbidden_to_non_admin_user() : void
+    {
+        $this->actingAs($this->user, 'api-guard')
+            ->json('GET', '/api/v1/users/' . $this->anotherUser->id)
+            ->assertForbidden()
+            ->assertJsonStructure([
+                'message',
             ]);
     }
 
@@ -300,6 +315,23 @@ class UserManagerControllerTest extends FeatureTestCase
     }
 
     #[Test]
+    public function test_store_another_user_returns_forbidden() : void
+    {
+        $this->actingAs($this->user, 'api-guard')
+            ->json('POST', '/api/v1/users', [
+                'name'                  => self::USERNAME,
+                'email'                 => self::EMAIL,
+                'password'              => self::PASSWORD,
+                'password_confirmation' => self::PASSWORD,
+                'is_admin'              => false,
+            ])
+            ->assertForbidden()
+            ->assertJsonStructure([
+                'message',
+            ]);
+    }
+
+    #[Test]
     public function test_revokePATs_flushes_pats()
     {
         Artisan::call('passport:install', [
@@ -438,6 +470,17 @@ class UserManagerControllerTest extends FeatureTestCase
     }
 
     #[Test]
+    public function test_destroy_another_user_returns_forbidden() : void
+    {
+        $this->actingAs($this->user, 'api-guard')
+            ->json('DELETE', '/api/v1/users/' . $this->anotherUser->id)
+            ->assertForbidden()
+            ->assertJsonStructure([
+                'message',
+            ]);
+    }
+
+    #[Test]
     public function test_promote_changes_admin_status() : void
     {
         $this->actingAs($this->admin, 'api-guard')
@@ -466,6 +509,19 @@ class UserManagerControllerTest extends FeatureTestCase
         $resources = UserManagerResource::make($this->user);
 
         $response->assertExactJson($resources->response($request)->getData(true));
+    }
+
+    #[Test]
+    public function test_promote_another_user_returns_forbidden() : void
+    {
+        $this->actingAs($this->user, 'api-guard')
+            ->json('PATCH', '/api/v1/users/' . $this->anotherUser->id . '/promote', [
+                'is_admin' => true,
+            ])
+            ->assertForbidden()
+            ->assertJsonStructure([
+                'message',
+            ]);
     }
 
     #[Test]

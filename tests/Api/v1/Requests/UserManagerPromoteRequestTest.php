@@ -2,7 +2,7 @@
 
 namespace Tests\Api\v1\Requests;
 
-use App\Api\v1\Requests\SettingUpdateRequest;
+use App\Api\v1\Requests\UserManagerPromoteRequest;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -12,21 +12,21 @@ use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 /**
- * SettingUpdateRequestTest test class
+ * UserManagerPromoteRequestTest test class
  */
-#[CoversClass(SettingUpdateRequest::class)]
-class SettingUpdateRequestTest extends TestCase
+#[CoversClass(UserManagerPromoteRequest::class)]
+class UserManagerPromoteRequestTest extends TestCase
 {
     use WithoutMiddleware;
 
     #[Test]
     public function test_user_is_authorized()
     {
-        Auth::shouldReceive('check')
+        Auth::shouldReceive('user->isAdministrator')
             ->once()
             ->andReturn(true);
 
-        $request = new SettingUpdateRequest();
+        $request = new UserManagerPromoteRequest();
 
         $this->assertTrue($request->authorize());
     }
@@ -35,7 +35,7 @@ class SettingUpdateRequestTest extends TestCase
     #[DataProvider('provideValidData')]
     public function test_valid_data(array $data) : void
     {
-        $request   = new SettingUpdateRequest();
+        $request   = new UserManagerPromoteRequest();
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->fails());
@@ -48,13 +48,16 @@ class SettingUpdateRequestTest extends TestCase
     {
         return [
             [[
-                'value' => true,
+                'is_admin' => true,
             ]],
             [[
-                'value' => 'MyValue',
+                'is_admin' => false,
             ]],
             [[
-                'value' => 10,
+                'is_admin' => 0,
+            ]],
+            [[
+                'is_admin' => 1,
             ]],
         ];
     }
@@ -63,7 +66,7 @@ class SettingUpdateRequestTest extends TestCase
     #[DataProvider('provideInvalidData')]
     public function test_invalid_data(array $data) : void
     {
-        $request   = new SettingUpdateRequest();
+        $request   = new UserManagerPromoteRequest();
         $validator = Validator::make($data, $request->rules());
 
         $this->assertTrue($validator->fails());
@@ -76,10 +79,19 @@ class SettingUpdateRequestTest extends TestCase
     {
         return [
             [[
-                'value' => '', // required
+                'is_admin' => [],
             ]],
             [[
-                'value' => null, // required
+                'is_admin' => null,
+            ]],
+            [[
+                'is_admin' => 'string',
+            ]],
+            [[
+                'is_admin' => '',
+            ]],
+            [[
+                'is_admin' => 5,
             ]],
         ];
     }

@@ -13,7 +13,7 @@ use App\Listeners\Authentication\LogoutListener;
 use App\Listeners\Authentication\VisitedByProxyUserListener;
 use App\Listeners\CleanIconStorage;
 use App\Listeners\DissociateTwofaccountFromGroup;
-use App\Listeners\LogNotification;
+use App\Listeners\LogNotificationListener;
 use App\Listeners\RegisterOpenId;
 use App\Listeners\ReleaseRadar;
 use App\Listeners\ResetUsersPreference;
@@ -55,7 +55,7 @@ class EventServiceProvider extends ServiceProvider
             RegisterOpenId::class,
         ],
         NotificationSent::class => [
-            LogNotification::class,
+            LogNotificationListener::class,
         ],
         Login::class => [
             LoginListener::class,
