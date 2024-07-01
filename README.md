@@ -48,7 +48,7 @@ You can sign in 2FAuth using a security key like a Yubikey or a Titan key and di
 
 ### Data encryption
 
-Sensitive data stored in the database can be encrypted to protect them against db compromise. Encryption is provided as an option which is disabled by default. It is strongly recommanded to backup the APP_KEY value of your .env file (or the whole file) when encryption is On.
+Sensitive data stored in the database can be encrypted to protect them against db compromise. Encryption is provided as an option which is disabled by default. It is strongly recommended to backup the APP_KEY value of your .env file (or the whole file) when encryption is On.
 
 ### Auto logout
 
