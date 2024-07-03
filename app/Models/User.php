@@ -232,4 +232,16 @@ class User extends Authenticatable implements HasLocalePreference, WebAuthnAuthe
     {
         return $this->hasMany(\App\Models\Group::class);
     }
+
+    /**
+     * Compare 2 Users
+     */
+    public function equals(self $other) : bool
+    {
+        return $this->name === $other->name &&
+            $this->email === $other->email &&
+            $this->oauth_id == $other->oauth_id &&
+            $this->oauth_provider == $other->oauth_provider;
+    }
+
 }

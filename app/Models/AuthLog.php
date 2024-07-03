@@ -89,4 +89,19 @@ class AuthLog extends Model
     {
         return $this->morphTo();
     }
+
+    /**
+     * Compare 2 Authentications
+     */
+    public function equals(self $other) : bool
+    {
+        return $this->ip_address === $other->ip_address &&
+            $this->user_agent === $other->user_agent &&
+            $this->login_at == $other->login_at &&
+            $this->login_successful == $other->login_successful &&
+            $this->logout_at == $other->logout_at &&
+            $this->cleared_by_user == $other->cleared_by_user &&
+            $this->guard == $other->guard &&
+            $this->login_method == $other->login_method;
+    }
 }
