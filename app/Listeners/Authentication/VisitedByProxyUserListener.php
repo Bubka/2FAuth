@@ -6,6 +6,8 @@ use App\Events\VisitedByProxyUser;
 use App\Extensions\RemoteUserProvider;
 use App\Notifications\SignedInWithNewDeviceNotification;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
+use TypeError;
 
 class VisitedByProxyUserListener extends AbstractAccessListener
 {
@@ -15,7 +17,7 @@ class VisitedByProxyUserListener extends AbstractAccessListener
     public function handle(mixed $event) : void
     {
         if (! $event instanceof VisitedByProxyUser) {
-            return;
+            throw new TypeError(self::class . '::handle(): Argument #1 ($event) must be of type ' . VisitedByProxyUser::class);
         }
 
         /**
@@ -24,9 +26,14 @@ class VisitedByProxyUserListener extends AbstractAccessListener
         $user      = $event->user;
         $ip        = config('2fauth.proxy_headers.forIp') ?? $this->request->ip();
         $userAgent = $this->request->userAgent();
-        $known     = $user->authentications()->whereIpAddress($ip)->whereUserAgent($userAgent)->whereLoginSuccessful(true)->first();
-        $newUser   = Carbon::parse($user->{$user->getCreatedAtColumn()})->diffInMinutes(Carbon::now(), true) < 1;
         $guard     = config('auth.defaults.guard');
+        $known     = $user->authentications()
+                          ->whereIpAddress($ip)
+                          ->whereUserAgent($userAgent)
+                          ->whereLoginSuccessful(true)
+                          ->whereGuard($guard)
+                          ->first();
+        $newUser   = Carbon::parse($user->{$user->getCreatedAtColumn()})->diffInMinutes(Carbon::now(), true) < 1;
 
         $log = $user->authentications()->create([
             'ip_address'       => $ip,
@@ -34,9 +41,10 @@ class VisitedByProxyUserListener extends AbstractAccessListener
             'login_at'         => now(),
             'login_successful' => true,
             'guard'            => $guard,
+            'login_method'     => null,
         ]);
 
-        if (! $known && ! $newUser && ! str_ends_with($user->email, RemoteUserProvider::FAKE_REMOTE_DOMAIN) && $user->preferences['notifyOnNewAuthDevice']) {
+        if (! $known && ! $newUser && Str::endsWith($user->email, RemoteUserProvider::FAKE_REMOTE_DOMAIN) && $user->preferences['notifyOnNewAuthDevice']) {
             $user->notify(new SignedInWithNewDeviceNotification($log));
         }
     }

@@ -26,6 +26,7 @@ namespace App\Listeners\Authentication;
 
 use App\Models\AuthLog;
 use Illuminate\Auth\Events\OtherDeviceLogout;
+use TypeError;
 
 class OtherDeviceLogoutListener extends AbstractAccessListener
 {
@@ -35,7 +36,7 @@ class OtherDeviceLogoutListener extends AbstractAccessListener
     public function handle(mixed $event) : void
     {
         if (! $event instanceof OtherDeviceLogout) {
-            return;
+            throw new TypeError(self::class . '::handle(): Argument #1 ($event) must be of type ' . OtherDeviceLogout::class);
         }
 
         /**
@@ -44,7 +45,11 @@ class OtherDeviceLogoutListener extends AbstractAccessListener
         $user      = $event->user;
         $ip        = config('2fauth.proxy_headers.forIp') ?? $this->request->ip();
         $userAgent = $this->request->userAgent();
-        $authLog   = $user->authentications()->whereIpAddress($ip)->whereUserAgent($userAgent)->first();
+        $authLog   = $user->authentications()
+                          ->whereIpAddress($ip)
+                          ->whereUserAgent($userAgent)
+                          ->whereLoginMethod($this->loginMethod())
+                          ->first();
         $guard     = $event->guard;
 
         if (! $authLog) {

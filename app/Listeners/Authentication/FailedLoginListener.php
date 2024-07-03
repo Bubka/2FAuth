@@ -26,6 +26,8 @@ namespace App\Listeners\Authentication;
 
 use App\Notifications\FailedLoginNotification;
 use Illuminate\Auth\Events\Failed;
+use Illuminate\Support\Facades\Log;
+use TypeError;
 
 class FailedLoginListener extends AbstractAccessListener
 {
@@ -35,23 +37,22 @@ class FailedLoginListener extends AbstractAccessListener
     public function handle(mixed $event) : void
     {
         if (! $event instanceof Failed) {
-            return;
+            throw new TypeError(self::class . '::handle(): Argument #1 ($event) must be of type ' . Failed::class);
         }
 
         if ($event->user) {
             /**
              * @var \App\Models\User
              */
-            $user  = $event->user;
-            $guard = $event->guard;
-            $ip    = config('2fauth.proxy_headers.forIp') ?? $this->request->ip();
+            $user = $event->user;
+            $ip   = config('2fauth.proxy_headers.forIp') ?? $this->request->ip();
 
             $log = $user->authentications()->create([
                 'ip_address'       => $ip,
                 'user_agent'       => $this->request->userAgent(),
                 'login_at'         => now(),
                 'login_successful' => false,
-                'guard'            => $guard,
+                'guard'            => $event->guard,
                 'login_method'     => $this->loginMethod(),
             ]);
 
@@ -59,5 +60,6 @@ class FailedLoginListener extends AbstractAccessListener
                 $user->notify(new FailedLoginNotification($log));
             }
         }
+        else Log::info(sprintf('%s received an event with a null $user member. Nothing has been written to the auth log', self::class));
     }
 }

@@ -9,6 +9,7 @@ use App\Events\VisitedByProxyUser;
 use Illuminate\Auth\GuardHelpers;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\UserProvider;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 
 class ReverseProxyGuard implements Guard
@@ -75,13 +76,7 @@ class ReverseProxyGuard implements Guard
             }
         }
 
-        if ($this->user = $this->provider->retrieveById($identifier)) {
-            if ($this->user->lastLoginAt() < now()->subMinutes(15)) {
-                event(new VisitedByProxyUser($this->user));
-            }
-        }
-
-        return $this->user;
+        return $this->user = $this->provider->retrieveById($identifier);
     }
 
     /**

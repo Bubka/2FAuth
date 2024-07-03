@@ -27,6 +27,7 @@ namespace App\Listeners\Authentication;
 use App\Notifications\SignedInWithNewDeviceNotification;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Support\Carbon;
+use TypeError;
 
 class LoginListener extends AbstractAccessListener
 {
@@ -36,7 +37,7 @@ class LoginListener extends AbstractAccessListener
     public function handle(mixed $event) : void
     {
         if (! $event instanceof Login) {
-            return;
+            throw new TypeError(self::class . '::handle(): Argument #1 ($event) must be of type ' . Login::class);
         }
 
         /**
@@ -45,16 +46,21 @@ class LoginListener extends AbstractAccessListener
         $user      = $event->user;
         $ip        = config('2fauth.proxy_headers.forIp') ?? $this->request->ip();
         $userAgent = $this->request->userAgent();
-        $known     = $user->authentications()->whereIpAddress($ip)->whereUserAgent($userAgent)->whereLoginSuccessful(true)->first();
+        $known     = $user->authentications()
+                          ->whereIpAddress($ip)
+                          ->whereUserAgent($userAgent)
+                          ->whereLoginSuccessful(true)
+                          ->whereGuard($event->guard)
+                          ->whereLoginMethod($this->loginMethod())
+                          ->first();
         $newUser   = Carbon::parse($user->{$user->getCreatedAtColumn()})->diffInMinutes(Carbon::now(), true) < 1;
-        $guard     = $event->guard;
 
         $log = $user->authentications()->create([
             'ip_address'       => $ip,
             'user_agent'       => $userAgent,
             'login_at'         => now(),
             'login_successful' => true,
-            'guard'            => $guard,
+            'guard'            => $event->guard,
             'login_method'     => $this->loginMethod(),
         ]);
 
