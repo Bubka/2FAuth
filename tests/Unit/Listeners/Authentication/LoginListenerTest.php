@@ -4,10 +4,14 @@ namespace Tests\Unit\Listeners\Authentication;
 
 use App\Listeners\Authentication\LoginListener;
 use Illuminate\Auth\Events\Login;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Event;
+use Mockery;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Classes\unexpectedEvent;
 use Tests\TestCase;
+use TypeError;
 
 /**
  * LoginListenerTest test class
@@ -25,4 +29,17 @@ class LoginListenerTest extends TestCase
             LoginListener::class
         );
     }
+
+    #[Test]
+    public function test_handle_throws_exception_with_unexpected_event_type()
+    {
+        $this->expectException(TypeError::class);
+        
+        $request  = Mockery::mock(Request::class);
+        $event    = Mockery::mock(unexpectedEvent::class);
+        $listener = new LoginListener($request);
+
+        $listener->handle($event);
+    }
+    
 }

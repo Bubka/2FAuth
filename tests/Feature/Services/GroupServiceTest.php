@@ -163,6 +163,21 @@ class GroupServiceTest extends FeatureTestCase
     }
 
     #[Test]
+    public function test_setUser_sets_twfaccounts_user()
+    {
+        $this->groupOne   = Group::factory()->create();
+        $this->groupTwo   = Group::factory()->create();
+
+        $this->assertEquals(null, $this->groupOne->user_id);
+        $this->assertEquals(null, $this->groupTwo->user_id);
+
+        Groups::setUser(Group::all(), $this->user);
+
+        $this->assertEquals($this->user->id, $this->groupOne->refresh()->user_id);
+        $this->assertEquals($this->user->id, $this->groupTwo->refresh()->user_id);
+    }
+
+    #[Test]
     public function test_prependTheAllGroup_add_the_group_on_top_of_groups()
     {
         $groups = Groups::prependTheAllGroup($this->user->groups, $this->user);

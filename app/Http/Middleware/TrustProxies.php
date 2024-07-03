@@ -8,6 +8,8 @@ class TrustProxies extends Middleware
 {
     /**
      * TrustProxies constructor.
+     * 
+     * @codeCoverageIgnore
      */
     public function __construct()
     {

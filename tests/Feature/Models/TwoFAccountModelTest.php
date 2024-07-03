@@ -731,6 +731,19 @@ class TwoFAccountModelTest extends FeatureTestCase
         Storage::disk('imagesLink')->assertMissing($this->customTotpTwofaccount->icon);
     }
 
+    #[Test]
+    public function test_scopeOrphans_retreives_accounts_without_owner()
+    {
+        $orphan = new TwoFAccount;
+        $orphan->fillWithURI(OtpTestData::HOTP_FULL_CUSTOM_URI);
+        $orphan->save();
+
+        $orphans = TwoFAccount::orphans()->get();
+
+        $this->assertCount(1, $orphans);
+        $this->assertEquals($orphan->id, $orphans[0]->id);
+    }
+
     /**
      * Provide data for Icon store tests
      */

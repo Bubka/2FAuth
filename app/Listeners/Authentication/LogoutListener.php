@@ -49,7 +49,6 @@ class LogoutListener extends AbstractAccessListener
                           ->whereIpAddress($ip)
                           ->whereUserAgent($userAgent)
                           ->whereGuard($event->guard)
-                          ->whereLoginMethod($this->loginMethod())
                           ->orderByDesc('login_at')
                           ->first();
 

@@ -20,8 +20,8 @@ class PasswordController extends Controller
         $user      = $request->user();
         $validated = $request->validated();
 
-        if (config('auth.defaults.guard') === 'reverse-proxy-guard' || $user->oauth_provider) {
-            Log::notice('Password update rejected: reverse-proxy-guard enabled or account from external sso provider');
+        if ($user->oauth_provider) {
+            Log::notice('Password update rejected: external account from a sso provider');
 
             return response()->json(['message' => __('errors.account_managed_by_external_provider')], 400);
         }

@@ -51,7 +51,6 @@ class LoginListener extends AbstractAccessListener
                           ->whereUserAgent($userAgent)
                           ->whereLoginSuccessful(true)
                           ->whereGuard($event->guard)
-                          ->whereLoginMethod($this->loginMethod())
                           ->first();
         $newUser   = Carbon::parse($user->{$user->getCreatedAtColumn()})->diffInMinutes(Carbon::now(), true) < 1;
 

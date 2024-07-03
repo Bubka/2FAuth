@@ -9,10 +9,10 @@ use App\Http\Middleware\LogUserLastSeen;
 use App\Http\Middleware\RejectIfAuthenticated;
 use App\Http\Middleware\RejectIfDemoMode;
 use App\Http\Middleware\RejectIfReverseProxy;
-use App\Http\Middleware\SkipIfAuthenticated;
 use App\Listeners\Authentication\FailedLoginListener;
 use App\Listeners\Authentication\LoginListener;
 use App\Listeners\Authentication\LogoutListener;
+use App\Listeners\Authentication\VisitedByProxyUserListener;
 use App\Listeners\LogNotificationListener;
 use App\Models\AuthLog;
 use App\Models\User;
@@ -37,8 +37,8 @@ use Tests\FeatureTestCase;
 #[CoversClass(LoginListener::class)]
 #[CoversClass(LogoutListener::class)]
 #[CoversClass(FailedLoginListener::class)]
+#[CoversClass(VisitedByProxyUserListener::class)]
 #[CoversMethod(CaseInsensitiveEmailExists::class, 'validate')]
-#[CoversMethod(SkipIfAuthenticated::class, 'handle')]
 #[CoversMethod(Handler::class, 'register')]
 #[CoversMethod(KickOutInactiveUser::class, 'handle')]
 #[CoversMethod(LogUserLastSeen::class, 'handle')]
@@ -59,9 +59,15 @@ class LoginTest extends FeatureTestCase
 
     private const WEB_GUARD = 'web-guard';
 
+    private const REVERSE_PROXY_GUARD = 'reverse-proxy-guard';
+
     private const PASSWORD = 'password';
 
     private const WRONG_PASSWORD = 'wrong_password';
+    
+    private const USER_NAME = 'John';
+
+    private const USER_EMAIL = 'john@example.com';
 
     public function setUp() : void
     {
@@ -115,14 +121,14 @@ class LoginTest extends FeatureTestCase
             'email'    => $this->user->email,
             'password' => self::PASSWORD,
         ], [
-            'HTTP_USER_AGENT' => 'NotSymfony',
+            'HTTP_USER_AGENT' => 'another_useragent_to_be_identified_as_new_device',
         ])->assertOk();
 
         Notification::assertSentTo($this->user, SignedInWithNewDeviceNotification::class);
     }
 
     #[Test]
-    public function test_login_does_not_send_new_device_notification()
+    public function test_login_does_not_send_new_device_notification_if_user_disabled_it()
     {
         Notification::fake();
 
@@ -143,7 +149,23 @@ class LoginTest extends FeatureTestCase
             'email'    => $this->user->email,
             'password' => self::PASSWORD,
         ], [
-            'HTTP_USER_AGENT' => 'NotSymfony',
+            'HTTP_USER_AGENT' => 'another_useragent_to_be_identified_as_new_device',
+        ])->assertOk();
+
+        Notification::assertNothingSentTo($this->user);
+    }
+
+    #[Test]
+    public function test_login_does_not_send_new_device_notification_if_user_is_considered_new()
+    {
+        Notification::fake();
+
+        $this->user['preferences->notifyOnNewAuthDevice'] = 1;
+        $this->user->save();
+
+        $this->json('POST', '/user/login', [
+            'email'    => $this->user->email,
+            'password' => self::PASSWORD,
         ])->assertOk();
 
         Notification::assertNothingSentTo($this->user);
@@ -361,12 +383,12 @@ class LoginTest extends FeatureTestCase
             'email'    => $this->user->email,
             'password' => self::PASSWORD,
         ])->assertOk();
-
+        
         $this->actingAs($this->user, self::WEB_GUARD)
             ->json('GET', '/user/logout')
             ->assertOk();
-
-        $authlog = AuthLog::first();
+            
+        $authlog = $this->user->latestAuthentication()->first();
 
         $this->assertEquals($this->user->id, $authlog->authenticatable_id);
         $this->assertTrue($authlog->login_successful);
@@ -389,5 +411,139 @@ class LoginTest extends FeatureTestCase
         $this->assertEquals(self::WEB_GUARD, $authlog->guard);
         $this->assertNull($authlog->login_method);
         $this->assertNotNull($authlog->logout_at);
+    }
+
+    #[Test]
+    public function test_reverse_proxy_access_is_logged()
+    {
+        Config::set('auth.auth_proxy_headers.user', 'HTTP_REMOTE_USER');
+
+        $user = User::factory()->create([
+            'name'  => self::USER_NAME,
+            'email' => strtolower(self::USER_NAME) . '@remote',
+        ]);
+
+        $this->app['auth']->shouldUse(self::REVERSE_PROXY_GUARD);
+
+        $this->json('GET', '/api/v1/groups', [], [
+            'HTTP_REMOTE_USER'  => self::USER_NAME,
+        ]);
+
+        $this->assertDatabaseHas('auth_logs', [
+            'authenticatable_id' => $user->id,
+            'login_successful'   => true,
+            'guard'              => self::REVERSE_PROXY_GUARD,
+            'login_method'       => null,
+            'logout_at'          => null,
+        ]);
+    }
+
+    #[Test]
+    public function test_reverse_proxy_access_is_logged_only_once_during_a_quarter()
+    {
+        Config::set('auth.auth_proxy_headers.user', 'HTTP_REMOTE_USER');
+
+        $user = User::factory()->create([
+            'name'  => self::USER_NAME,
+            'email' => strtolower(self::USER_NAME) . '@remote',
+        ]);
+
+        $this->app['auth']->shouldUse(self::REVERSE_PROXY_GUARD);
+
+        $this->json('GET', '/api/v1/groups', [], [
+            'HTTP_REMOTE_USER'  => self::USER_NAME,
+        ]);
+
+        $this->json('GET', '/api/v1/groups', [], [
+            'HTTP_REMOTE_USER'  => self::USER_NAME,
+        ]);
+
+        $this->assertDatabaseCount('auth_logs', 1);
+
+        $this->travel(16)->minutes();
+
+        $this->json('GET', '/api/v1/groups', [], [
+            'HTTP_REMOTE_USER'  => self::USER_NAME,
+        ]);
+
+        $this->assertDatabaseCount('auth_logs', 2);
+    }
+
+    #[Test]
+    public function test_reverse_proxy_access_sends_new_device_notification()
+    {
+        Notification::fake();
+        
+        Config::set('auth.auth_proxy_headers.user', 'HTTP_REMOTE_USER');
+
+        $user = User::factory()->create([
+            'name'  => self::USER_NAME,
+            'email' => strtolower(self::USER_NAME) . '@remote',
+        ]);
+        $user['preferences->notifyOnNewAuthDevice'] = true;
+        $user->save();
+        $user->refresh();
+
+        $this->app['auth']->shouldUse(self::REVERSE_PROXY_GUARD);
+
+        // We travel back for 2 minutes to avoid the user being considered as a new user
+        $this->travelTo(Carbon::now()->subMinutes(2));
+
+        $this->json('GET', '/api/v1/groups', [], [
+            'HTTP_REMOTE_USER'  => self::USER_NAME,
+        ]);
+
+        Notification::assertSentTo($user, SignedInWithNewDeviceNotification::class);
+    }
+
+    #[Test]
+    public function test_reverse_proxy_access_does_not_send_new_device_notification_if_user_disabled_it()
+    {
+        Notification::fake();
+        
+        Config::set('auth.auth_proxy_headers.user', 'HTTP_REMOTE_USER');
+
+        $user = User::factory()->create([
+            'name'  => self::USER_NAME,
+            'email' => strtolower(self::USER_NAME) . '@remote',
+        ]);
+        $user['preferences->notifyOnNewAuthDevice'] = false;
+        $user->save();
+        $user->refresh();
+
+        $this->app['auth']->shouldUse(self::REVERSE_PROXY_GUARD);
+
+        // We travel back for 2 minutes to avoid the user being considered as a new user
+        $this->travelTo(Carbon::now()->subMinutes(2));
+
+        $this->json('GET', '/api/v1/groups', [], [
+            'HTTP_REMOTE_USER'  => self::USER_NAME,
+        ]);
+
+        Notification::assertNothingSentTo($user);
+    }
+
+    #[Test]
+    public function test_reverse_proxy_does_not_send_new_device_notification_if_user_is_considered_new()
+    {
+        Notification::fake();
+        
+        Config::set('auth.auth_proxy_headers.user', 'HTTP_REMOTE_USER');
+
+        $user = User::factory()->create([
+            'name'  => self::USER_NAME,
+            'email' => strtolower(self::USER_NAME) . '@remote',
+        ]);
+        $user['preferences->notifyOnNewAuthDevice'] = true;
+        $user->save();
+        $user->refresh();
+
+        $this->app['auth']->shouldUse(self::REVERSE_PROXY_GUARD);
+
+        $this->json('GET', '/api/v1/groups', [], [
+            'HTTP_REMOTE_USER'  => self::USER_NAME,
+        ]);
+
+        Notification::assertNothingSentTo($user);
     }
 }

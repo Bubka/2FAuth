@@ -28,6 +28,12 @@ use App\Models\AuthLog;
 use Illuminate\Auth\Events\OtherDeviceLogout;
 use TypeError;
 
+/**
+ * @codeCoverageIgnore
+ * 
+ * Excluded from test coverage as long as 2FAuth does not offer a logout Other Devices feature
+ * See \Illuminate\Auth\SessionGuard::logoutOtherDevices when the time comes
+ */
 class OtherDeviceLogoutListener extends AbstractAccessListener
 {
     /**
@@ -48,7 +54,6 @@ class OtherDeviceLogoutListener extends AbstractAccessListener
         $authLog   = $user->authentications()
                           ->whereIpAddress($ip)
                           ->whereUserAgent($userAgent)
-                          ->whereLoginMethod($this->loginMethod())
                           ->first();
         $guard     = $event->guard;
 

@@ -6,9 +6,11 @@ use App\Http\Middleware\AdminOnly;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\FeatureTestCase;
 
+#[CoversClass(AdminOnly::class)]
 class AdminOnlyMiddlewareTest extends FeatureTestCase
 {
     #[Test]

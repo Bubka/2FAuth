@@ -9,6 +9,7 @@ use App\Services\SettingService;
 use App\Services\TwoFAccountService;
 use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Support\ServiceProvider;
+use Zxing\QrReader;
 
 class TwoFAuthServiceProvider extends ServiceProvider implements DeferrableProvider
 {
@@ -33,6 +34,10 @@ class TwoFAuthServiceProvider extends ServiceProvider implements DeferrableProvi
 
         $this->app->singleton(ReleaseRadarService::class, function () {
             return new ReleaseRadarService();
+        });
+
+        $this->app->bind(QrReader::class, function ($app, $parameters) {
+            return new QrReader($parameters['imgSource'], $parameters['sourceType']);
         });
     }
 

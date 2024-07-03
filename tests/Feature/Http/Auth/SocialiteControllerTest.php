@@ -5,9 +5,11 @@ namespace Tests\Feature\Http\Auth;
 use App\Facades\Settings;
 use App\Http\Controllers\Auth\SocialiteController;
 use App\Models\User;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Laravel\Socialite\Facades\Socialite;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\FeatureTestCase;
 
@@ -76,6 +78,53 @@ class SocialiteControllerTest extends FeatureTestCase
         $response = $this->get('/socialite/redirect/github');
 
         $response->assertRedirect('/error?err=sso_disabled');
+    }
+
+    #[Test]
+    public function test_redirect_returns_error_when_sso_provider_client_id_is_missing()
+    {
+        //Settings::set('enableSso', true);
+        config(['services.github.client_id' => null], true);
+
+        $response = $this->get('/socialite/redirect/github');
+
+        $response->assertRedirect('/error?err=sso_bad_provider_setup');
+    }
+
+    #[Test]
+    public function test_redirect_returns_error_when_sso_provider_client_secret_is_missing()
+    {
+        config(['services.github.client_secret' => null]);
+
+        $response = $this->get('/socialite/redirect/github');
+
+        $response->assertRedirect('/error?err=sso_bad_provider_setup');
+    }
+
+    #[Test]
+    #[DataProvider('ssoConfigVarProvider')]
+    public function test_redirect_returns_error_when_openid_provider_client_secret_is_missing($ssoConfigVar)
+    {
+        config(['services.openid.' . $ssoConfigVar => null]);
+
+        $response = $this->get('/socialite/redirect/openid');
+
+        $response->assertRedirect('/error?err=sso_bad_provider_setup');
+    }
+
+    public static function ssoConfigVarProvider()
+    {
+        return [
+            'TOKEN_URL' => [
+                'token_url'
+            ],
+            'AUTHORIZE_URL' => [
+                'authorize_url'
+            ],
+            'USERINFO_URL' => [
+                'userinfo_url'
+            ],
+        ];
     }
 
     #[Test]
@@ -226,6 +275,22 @@ class SocialiteControllerTest extends FeatureTestCase
             'oauth_id'       => '666',
             'oauth_provider' => self::USER_OAUTH_PROVIDER,
         ]);
+    }
+
+    #[Test]
+    public function test_callback_redirects_to_error_when_sso_provider_reject_auth()
+    {
+        $newSocialiteUser        = new \Laravel\Socialite\Two\User;
+        $newSocialiteUser->id    = 'rejected_id';
+        $newSocialiteUser->name  = 'jane';
+        $newSocialiteUser->email = 'jane@provider.com';
+
+        Socialite::shouldReceive('driver->user')
+            ->andThrow(new Exception());
+
+        $response = $this->get('/socialite/callback/github', ['driver' => 'github']);
+
+        $response->assertRedirect('/error?err=sso_failed');
     }
 
     #[Test]

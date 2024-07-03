@@ -4,10 +4,13 @@ namespace Tests\Feature\Http\Auth;
 
 use App\Extensions\WebauthnTwoFAuthUserProvider;
 use App\Http\Controllers\Auth\WebAuthnLoginController;
-use App\Http\Middleware\SkipIfAuthenticated;
+use App\Listeners\Authentication\FailedLoginListener;
+use App\Listeners\Authentication\LoginListener;
 use App\Models\User;
+use App\Notifications\SignedInWithNewDeviceNotification;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 use Laragear\WebAuthn\Assertion\Validator\AssertionValidator;
 use Laragear\WebAuthn\Enums\UserVerification;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -21,18 +24,14 @@ use Tests\FeatureTestCase;
 #[CoversClass(WebAuthnLoginController::class)]
 #[CoversClass(User::class)]
 #[CoversClass(WebauthnTwoFAuthUserProvider::class)]
-#[CoversMethod(SkipIfAuthenticated::class, 'handle')]
+#[CoversClass(LoginListener::class)]
+#[CoversClass(FailedLoginListener::class)]
 class WebAuthnLoginControllerTest extends FeatureTestCase
 {
     /**
-     * @var \App\Models\User
+     * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
      */
     protected $user;
-
-    /**
-     * @var \App\Models\User
-     */
-    protected $admin;
 
     const CREDENTIAL_ID = 's06aG41wsIYh5X1YUhB-SlH8y3F2RzdJZVse8iXRXOCd3oqQdEyCOsBawzxrYBtJRQA2azAMEN_q19TUp6iMgg';
 
@@ -47,6 +46,10 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
     const USER_ID_ALT = 'e8af6f703f8042aa91c30cf72289aa07';
 
     const EMAIL = 'john.doe@example.com';
+
+    private const GUARD = 'web-guard';
+
+    private const AUTH_METHOD = 'webauthn';
 
     const ASSERTION_RESPONSE = [
         'id'       => self::CREDENTIAL_ID_ALT,
@@ -94,37 +97,19 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
         parent::setUp();
 
         DB::table('users')->delete();
+
+        $this->user = User::factory()->create(['email' => self::EMAIL]);
+
+        $this->mock(AssertionValidator::class)
+            ->shouldReceive('send->thenReturn')
+            ->andReturn();
     }
 
     #[Test]
     public function test_webauthn_login_returns_success()
     {
-        $this->user = User::factory()->create(['email' => self::EMAIL]);
-
-        DB::table('webauthn_credentials')->insert([
-            'id'                   => self::CREDENTIAL_ID_ALT,
-            'authenticatable_type' => \App\Models\User::class,
-            'authenticatable_id'   => $this->user->id,
-            'user_id'              => self::USER_ID_ALT,
-            'counter'              => 0,
-            'rp_id'                => 'http://localhost',
-            'origin'               => 'http://localhost',
-            'aaguid'               => '00000000-0000-0000-0000-000000000000',
-            'attestation_format'   => 'none',
-            'public_key'           => self::PUBLIC_KEY,
-            'updated_at'           => now(),
-            'created_at'           => now(),
-        ]);
-
-        $this->session(['_webauthn' => new \Laragear\WebAuthn\Challenge(
-            new \Laragear\WebAuthn\ByteBuffer(base64_decode(self::ASSERTION_CHALLENGE)),
-            60,
-            false,
-        )]);
-
-        $this->mock(AssertionValidator::class)
-            ->expects('send->thenReturn')
-            ->andReturn();
+        $this->createWebauthnCredential(self::CREDENTIAL_ID_ALT, $this->user->id, self::USER_ID_ALT);
+        $this->addWebauthnChallengeToSession();
 
         $this->json('POST', '/webauthn/login', self::ASSERTION_RESPONSE)
             ->assertOk()
@@ -141,34 +126,73 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
     }
 
     #[Test]
+    public function test_webauthn_login_sends_new_device_notification_to_existing_user()
+    {
+        Notification::fake();
+        
+        $this->user['preferences->notifyOnNewAuthDevice'] = 1;
+        $this->user->save();
+
+        $this->createWebauthnCredential(self::CREDENTIAL_ID_ALT, $this->user->id, self::USER_ID_ALT);
+        $this->addWebauthnChallengeToSession();
+
+        $this->json('POST', '/webauthn/login', self::ASSERTION_RESPONSE)
+            ->assertOk();
+
+        $this->actingAs($this->user, self::GUARD)
+            ->json('GET', '/user/logout');
+
+        $this->travel(1)->minute();
+
+        $this->json('POST', '/webauthn/login', self::ASSERTION_RESPONSE, [
+            'HTTP_USER_AGENT' => 'another_useragent_to_be_identified_as_new_device',
+        ])->assertOk();
+
+        Notification::assertSentTo($this->user, SignedInWithNewDeviceNotification::class);
+    }
+
+    #[Test]
+    public function test_webauthn_login_does_not_send_new_device_notification_to_new_user()
+    {
+        Notification::fake();
+        
+        $this->user['preferences->notifyOnNewAuthDevice'] = 1;
+        $this->user->save();
+
+        $this->createWebauthnCredential(self::CREDENTIAL_ID_ALT, $this->user->id, self::USER_ID_ALT);
+        $this->addWebauthnChallengeToSession();
+
+        $this->json('POST', '/webauthn/login', self::ASSERTION_RESPONSE)
+            ->assertOk();
+
+        Notification::assertNothingSentTo($this->user);
+    }
+
+    #[Test]
+    public function test_webauthn_login_does_not_send_new_device_notification_if_user_disabled_it()
+    {
+        Notification::fake();
+        
+        $this->user['preferences->notifyOnNewAuthDevice'] =01;
+        $this->user->save();
+
+        $this->createWebauthnCredential(self::CREDENTIAL_ID_ALT, $this->user->id, self::USER_ID_ALT);
+        $this->addWebauthnChallengeToSession();
+
+        $this->json('POST', '/webauthn/login', self::ASSERTION_RESPONSE)
+            ->assertOk();
+
+        Notification::assertNothingSentTo($this->user);
+    }
+
+    #[Test]
     public function test_webauthn_admin_login_returns_admin_role()
     {
-        $this->admin = User::factory()->administrator()->create(['email' => self::EMAIL]);
+        DB::table('users')->delete();
+        $this->user = User::factory()->administrator()->create(['email' => self::EMAIL]);
 
-        DB::table('webauthn_credentials')->insert([
-            'id'                   => self::CREDENTIAL_ID_ALT,
-            'authenticatable_type' => \App\Models\User::class,
-            'authenticatable_id'   => $this->admin->id,
-            'user_id'              => self::USER_ID_ALT,
-            'counter'              => 0,
-            'rp_id'                => 'http://localhost',
-            'origin'               => 'http://localhost',
-            'aaguid'               => '00000000-0000-0000-0000-000000000000',
-            'attestation_format'   => 'none',
-            'public_key'           => self::PUBLIC_KEY,
-            'updated_at'           => now(),
-            'created_at'           => now(),
-        ]);
-
-        $this->session(['_webauthn' => new \Laragear\WebAuthn\Challenge(
-            new \Laragear\WebAuthn\ByteBuffer(base64_decode(self::ASSERTION_CHALLENGE)),
-            60,
-            false,
-        )]);
-
-        $this->mock(AssertionValidator::class)
-            ->expects('send->thenReturn')
-            ->andReturn();
+        $this->createWebauthnCredential(self::CREDENTIAL_ID_ALT, $this->user->id, self::USER_ID_ALT);
+        $this->addWebauthnChallengeToSession();
 
         $this->json('POST', '/webauthn/login', self::ASSERTION_RESPONSE)
             ->assertOk()
@@ -180,32 +204,8 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
     #[Test]
     public function test_webauthn_login_merge_handle_if_missing()
     {
-        $this->user = User::factory()->create(['email' => self::EMAIL]);
-
-        DB::table('webauthn_credentials')->insert([
-            'id'                   => self::CREDENTIAL_ID_ALT,
-            'authenticatable_type' => \App\Models\User::class,
-            'authenticatable_id'   => $this->user->id,
-            'user_id'              => self::USER_ID_ALT,
-            'counter'              => 0,
-            'rp_id'                => 'http://localhost',
-            'origin'               => 'http://localhost',
-            'aaguid'               => '00000000-0000-0000-0000-000000000000',
-            'attestation_format'   => 'none',
-            'public_key'           => self::PUBLIC_KEY,
-            'updated_at'           => now(),
-            'created_at'           => now(),
-        ]);
-
-        $this->session(['_webauthn' => new \Laragear\WebAuthn\Challenge(
-            new \Laragear\WebAuthn\ByteBuffer(base64_decode(self::ASSERTION_CHALLENGE)),
-            60,
-            false,
-        )]);
-
-        $this->mock(AssertionValidator::class)
-            ->expects('send->thenReturn')
-            ->andReturn();
+        $this->createWebauthnCredential(self::CREDENTIAL_ID_ALT, $this->user->id, self::USER_ID_ALT);
+        $this->addWebauthnChallengeToSession();
 
         $this->json('POST', '/webauthn/login', self::ASSERTION_RESPONSE_NO_HANDLE)
             ->assertOk()
@@ -223,10 +223,6 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
     #[Test]
     public function test_legacy_login_is_rejected_when_webauthn_only_is_enable()
     {
-        $this->user = User::factory()->create([
-            'email' => self::EMAIL,
-        ]);
-
         // Set to webauthn only
         $this->user['preferences->useWebauthnOnly'] = true;
         $this->user->save();
@@ -241,32 +237,8 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
     #[Test]
     public function test_webauthn_login_already_authenticated_is_rejected()
     {
-        $this->user = User::factory()->create(['email' => self::EMAIL]);
-
-        DB::table('webauthn_credentials')->insert([
-            'id'                   => self::CREDENTIAL_ID_ALT,
-            'authenticatable_type' => \App\Models\User::class,
-            'authenticatable_id'   => $this->user->id,
-            'user_id'              => self::USER_ID_ALT,
-            'counter'              => 0,
-            'rp_id'                => 'http://localhost',
-            'origin'               => 'http://localhost',
-            'aaguid'               => '00000000-0000-0000-0000-000000000000',
-            'attestation_format'   => 'none',
-            'public_key'           => self::PUBLIC_KEY,
-            'updated_at'           => now(),
-            'created_at'           => now(),
-        ]);
-
-        $this->session(['_webauthn' => new \Laragear\WebAuthn\Challenge(
-            new \Laragear\WebAuthn\ByteBuffer(base64_decode(self::ASSERTION_CHALLENGE)),
-            60,
-            false,
-        )]);
-
-        $this->mock(AssertionValidator::class)
-            ->expects('send->thenReturn')
-            ->andReturn();
+        $this->createWebauthnCredential(self::CREDENTIAL_ID_ALT, $this->user->id, self::USER_ID_ALT);
+        $this->addWebauthnChallengeToSession();
 
         $this->json('POST', '/webauthn/login', self::ASSERTION_RESPONSE)
             ->assertOk();
@@ -281,8 +253,6 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
     #[Test]
     public function test_webauthn_login_with_missing_data_returns_validation_error()
     {
-        $this->user = User::factory()->create(['email' => self::EMAIL]);
-
         $data = [
             'id'       => '',
             'rawId'    => '',
@@ -310,13 +280,7 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
     #[Test]
     public function test_webauthn_invalid_login_returns_unauthorized()
     {
-        $this->user = User::factory()->create(['email' => self::EMAIL]);
-
-        $this->session(['_webauthn' => new \Laragear\WebAuthn\Challenge(
-            new \Laragear\WebAuthn\ByteBuffer(base64_decode(self::ASSERTION_CHALLENGE)),
-            60,
-            false,
-        )]);
+        $this->addWebauthnChallengeToSession();
 
         $this->json('POST', '/webauthn/login', self::ASSERTION_RESPONSE_INVALID)
             ->assertUnauthorized();
@@ -328,13 +292,7 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
         $throttle = 8;
         Config::set('auth.throttle.login', $throttle);
 
-        $this->user = User::factory()->create(['email' => self::EMAIL]);
-
-        $this->session(['_webauthn' => new \Laragear\WebAuthn\Challenge(
-            new \Laragear\WebAuthn\ByteBuffer(base64_decode(self::ASSERTION_CHALLENGE)),
-            60,
-            false,
-        )]);
+        $this->addWebauthnChallengeToSession();
 
         for ($i = 0; $i < $throttle - 1; $i++) {
             $this->json('POST', '/webauthn/login', self::ASSERTION_RESPONSE_INVALID);
@@ -352,22 +310,7 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
     {
         Config::set('webauthn.user_verification', UserVerification::PREFERRED);
 
-        $this->user = User::factory()->create(['email' => self::EMAIL]);
-
-        DB::table('webauthn_credentials')->insert([
-            'id'                   => self::CREDENTIAL_ID,
-            'authenticatable_type' => \App\Models\User::class,
-            'authenticatable_id'   => $this->user->id,
-            'user_id'              => self::USER_ID,
-            'counter'              => 0,
-            'rp_id'                => 'http://localhost',
-            'origin'               => 'http://localhost',
-            'aaguid'               => '00000000-0000-0000-0000-000000000000',
-            'attestation_format'   => 'none',
-            'public_key'           => self::PUBLIC_KEY,
-            'updated_at'           => now(),
-            'created_at'           => now(),
-        ]);
+        $this->createWebauthnCredential(self::CREDENTIAL_ID, $this->user->id, self::USER_ID);
 
         $response = $this->json('POST', '/webauthn/login/options', [
             'email' => $this->user->email,
@@ -390,22 +333,7 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
     {
         Config::set('webauthn.user_verification', UserVerification::REQUIRED);
 
-        $this->user = User::factory()->create(['email' => self::EMAIL]);
-
-        DB::table('webauthn_credentials')->insert([
-            'id'                   => self::CREDENTIAL_ID,
-            'authenticatable_type' => \App\Models\User::class,
-            'authenticatable_id'   => $this->user->id,
-            'user_id'              => self::USER_ID,
-            'counter'              => 0,
-            'rp_id'                => 'http://localhost',
-            'origin'               => 'http://localhost',
-            'aaguid'               => '00000000-0000-0000-0000-000000000000',
-            'attestation_format'   => 'none',
-            'public_key'           => self::PUBLIC_KEY,
-            'updated_at'           => now(),
-            'created_at'           => now(),
-        ]);
+        $this->createWebauthnCredential(self::CREDENTIAL_ID, $this->user->id, self::USER_ID);
 
         $response = $this->json('POST', '/webauthn/login/options', [
             'email' => $this->user->email,
@@ -430,22 +358,7 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
     {
         Config::set('webauthn.user_verification', UserVerification::DISCOURAGED);
 
-        $this->user = User::factory()->create(['email' => self::EMAIL]);
-
-        DB::table('webauthn_credentials')->insert([
-            'id'                   => self::CREDENTIAL_ID,
-            'authenticatable_type' => \App\Models\User::class,
-            'authenticatable_id'   => $this->user->id,
-            'user_id'              => self::USER_ID,
-            'counter'              => 0,
-            'rp_id'                => 'http://localhost',
-            'origin'               => 'http://localhost',
-            'aaguid'               => '00000000-0000-0000-0000-000000000000',
-            'attestation_format'   => 'none',
-            'public_key'           => self::PUBLIC_KEY,
-            'updated_at'           => now(),
-            'created_at'           => now(),
-        ]);
+        $this->createWebauthnCredential(self::CREDENTIAL_ID, $this->user->id, self::USER_ID);
 
         $response = $this->json('POST', '/webauthn/login/options', [
             'email' => $this->user->email,
@@ -468,8 +381,6 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
     #[Test]
     public function test_get_options_with_capitalized_email_returns_success()
     {
-        $this->user = User::factory()->create(['email' => self::EMAIL]);
-
         $this->json('POST', '/webauthn/login/options', [
             'email' => strtoupper($this->user->email),
         ])
@@ -510,5 +421,73 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
             ->assertJsonValidationErrors([
                 'email',
             ]);
+    }
+
+    #[Test]
+    public function test_successful_webauthn_login_is_logged()
+    {
+        $this->createWebauthnCredential(self::CREDENTIAL_ID_ALT, $this->user->id, self::USER_ID_ALT);
+        $this->addWebauthnChallengeToSession();
+
+        $this->json('POST', '/webauthn/login', self::ASSERTION_RESPONSE)
+            ->assertOk();
+
+        $this->assertDatabaseHas('auth_logs', [
+            'authenticatable_id' => $this->user->id,
+            'login_successful'   => true,
+            'guard'              => self::GUARD,
+            'login_method'       => self::AUTH_METHOD,
+            'logout_at'          => null,
+        ]);
+    }
+
+    #[Test]
+    public function test_failed_webauthn_login_is_not_logged()
+    {
+        $this->addWebauthnChallengeToSession();
+
+        $this->json('POST', '/webauthn/login', self::ASSERTION_RESPONSE_INVALID)
+            ->assertUnauthorized();
+
+        // When webauthn fails, the fireFailedEvent() of the sessionGuard returns
+        // a null $user so nothing should be logged
+        $this->assertDatabaseMissing('auth_logs', [
+            'authenticatable_id' => $this->user->id,
+            'guard'              => self::GUARD,
+            'login_method'       => self::AUTH_METHOD,
+        ]);
+    }
+
+    /**
+     * Set a session
+     */
+    protected function addWebauthnChallengeToSession() : void
+    {
+        $this->session(['_webauthn' => new \Laragear\WebAuthn\Challenge(
+            new \Laragear\WebAuthn\ByteBuffer(base64_decode(self::ASSERTION_CHALLENGE)),
+            60,
+            false,
+        )]);
+    }
+
+    /**
+     * Inserts a webauthn credential in database
+     */
+    protected function createWebauthnCredential(string $credentialId, int $authenticatableId, string $userId) : void
+    {
+        DB::table('webauthn_credentials')->insert([
+            'id'                   => $credentialId,
+            'authenticatable_type' => \App\Models\User::class,
+            'authenticatable_id'   => $authenticatableId,
+            'user_id'              => $userId,
+            'counter'              => 0,
+            'rp_id'                => 'http://localhost',
+            'origin'               => 'http://localhost',
+            'aaguid'               => '00000000-0000-0000-0000-000000000000',
+            'attestation_format'   => 'none',
+            'public_key'           => self::PUBLIC_KEY,
+            'updated_at'           => now(),
+            'created_at'           => now(),
+        ]);
     }
 }

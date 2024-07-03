@@ -3,6 +3,8 @@
 namespace Tests\Feature\Services;
 
 use App\Facades\Settings;
+use App\Providers\TwoFAuthServiceProvider;
+use App\Services\ReleaseRadarService as ServicesReleaseRadarService;
 // use App\Services\ReleaseRadarService;
 use Facades\App\Services\ReleaseRadarService;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
@@ -15,7 +17,8 @@ use Tests\FeatureTestCase;
 /**
  * ReleaseRadarServiceTest test class
  */
-#[CoversClass(\App\Services\ReleaseRadarService::class)]
+#[CoversClass(ServicesReleaseRadarService::class)]
+#[CoversClass(TwoFAuthServiceProvider::class)]
 class ReleaseRadarServiceTest extends FeatureTestCase
 {
     use WithoutMiddleware;

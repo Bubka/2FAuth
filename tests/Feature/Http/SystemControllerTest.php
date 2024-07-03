@@ -6,8 +6,8 @@ use App\Http\Controllers\SystemController;
 use App\Models\User;
 use App\Notifications\TestEmailSettingNotification;
 use App\Services\ReleaseRadarService;
-use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Support\Facades\Lang;
+use Exception;
+use Illuminate\Contracts\Notifications\Dispatcher;
 use Illuminate\Support\Facades\Notification;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -136,6 +136,21 @@ class SystemControllerTest extends FeatureTestCase
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('GET', '/system/infos')
             ->assertForbidden();
+    }
+
+    #[Test]
+    public function test_testEmail_returns_success_even_if_sending_fails()
+    {
+        Notification::fake();
+
+        $this->mock(Dispatcher::class)->shouldReceive('send')->andThrow(new Exception());
+
+        $response = $this->actingAs($this->admin, 'web-guard')
+            ->json('POST', '/system/test-email', []);
+
+        $response->assertStatus(200);
+
+        Notification::assertNothingSentTo($this->admin);
     }
 
     #[Test]

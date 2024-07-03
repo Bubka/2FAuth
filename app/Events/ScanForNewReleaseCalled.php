@@ -18,6 +18,6 @@ class ScanForNewReleaseCalled
      */
     public function __construct()
     {
-        Log::debug('ReleaseRadarActivated event dispatched');
+        Log::debug('ReleaseRadarActivated event dispatched'); // @codeCoverageIgnore
     }
 }

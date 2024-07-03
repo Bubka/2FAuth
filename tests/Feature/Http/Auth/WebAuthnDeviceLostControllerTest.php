@@ -9,7 +9,6 @@ use App\Models\User;
 use App\Notifications\WebauthnRecoveryNotification;
 use App\Providers\AuthServiceProvider;
 use App\Rules\CaseInsensitiveEmailExists;
-use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Notification;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversMethod;
@@ -19,6 +18,7 @@ use Tests\FeatureTestCase;
 /**
  * WebAuthnDeviceLostControllerTest test class
  */
+#[CoversMethod(User::class, 'sendWebauthnRecoveryNotification')]
 #[CoversClass(WebAuthnDeviceLostController::class)]
 #[CoversClass(WebauthnRecoveryNotification::class)]
 #[CoversClass(WebauthnCredentialBroker::class)]
