@@ -49,8 +49,10 @@ class SetLanguage
             arsort($prefLocales);
 
             // We take the first accepted language available
+            $availableLocales = config('2fauth.locales');
+
             foreach ($prefLocales as $locale => $weight) {
-                if (in_array($locale, config('2fauth.locales'))) {
+                if (in_array($locale, $availableLocales)) {
                     $lang = $locale;
                     break;
                 }
@@ -58,8 +60,8 @@ class SetLanguage
         }
 
         $user = $request->user();
-        if (! is_null($user) && $request->user()->preferences['lang'] != 'browser') {
-            $lang = $request->user()->preferences['lang'];
+        if (! is_null($user) && $user->preferences['lang'] != 'browser') {
+            $lang = $user->preferences['lang'];
         }
 
         // If the language is not available (or partial), strings will be translated using the fallback language.
