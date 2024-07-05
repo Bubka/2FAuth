@@ -68,7 +68,7 @@ class QrCodeService
             }
         }
 
-        $data = urldecode($qrcode->text());
+        $data = urldecode($text);
 
         Log::info('QR code decoded');
 
