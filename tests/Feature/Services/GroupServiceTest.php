@@ -163,7 +163,7 @@ class GroupServiceTest extends FeatureTestCase
     }
 
     #[Test]
-    public function test_setUser_sets_twfaccounts_user()
+    public function test_setUser_sets_groups_user()
     {
         $this->groupOne   = Group::factory()->create();
         $this->groupTwo   = Group::factory()->create();

@@ -308,4 +308,19 @@ class TwoFAccountServiceTest extends FeatureTestCase
             'id' => $twofaccount->id,
         ]);
     }
+
+    #[Test]
+    public function test_setUser_sets_twofaccounts_user()
+    {
+        $twofaccountA   = TwoFAccount::factory()->create();
+        $twofaccountB   = TwoFAccount::factory()->create();
+
+        $this->assertEquals(null, $twofaccountA->user_id);
+        $this->assertEquals(null, $twofaccountB->user_id);
+
+        TwoFAccounts::setUser(TwoFAccount::all(), $this->user);
+
+        $this->assertEquals($this->user->id, $twofaccountA->refresh()->user_id);
+        $this->assertEquals($this->user->id, $twofaccountB->refresh()->user_id);
+    }
 }

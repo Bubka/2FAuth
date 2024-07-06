@@ -47,11 +47,12 @@ class ReverseProxyGuard implements Guard
         $remoteUserHeader = config('auth.auth_proxy_headers.user');
         $remoteUserHeader = $remoteUserHeader ?: 'REMOTE_USER';
         $identifier       = [];
+        $identifier['id'] = null;
 
         try {
             $identifier['id'] = request()->server($remoteUserHeader) ?? apache_request_headers()[$remoteUserHeader] ?? null;
-        } catch (\Throwable $e) {
-            $identifier['id'] = null;
+        } catch (\Throwable $e) { //@codeCoverageIgnore
+            // Do nothing
         }
 
         if (! $identifier['id'] || is_array($identifier['id'])) {

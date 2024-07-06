@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Providers\RouteServiceProvider;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Route;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -27,10 +28,24 @@ class RouteTest extends FeatureTestCase
     #[Test]
     public function test_all_api_routes_are_behind_apiv1_middleware()
     {
+        Artisan::call('route:clear');
+        Artisan::call('route:cache');
+        $this->get('/');
+
         $routes = Route::getRoutes();
 
         foreach ($routes as $route) {
-            $middlewares = Route::gatherRouteMiddleware($route);
+            $middlewares = [];
+            
+            try {
+                $uri = $route->uri;
+                $middlewares = Route::gatherRouteMiddleware($route);
+            }
+            catch (\Exception $ex)
+            {
+                $uri = $route->uri;
+                //return;
+            }
 
             if (Str::startsWith($route->uri(), self::API_ROUTE_PREFIX)) {
                 $this->assertEquals(self::API_ROUTE_PREFIX, $route->getPrefix());

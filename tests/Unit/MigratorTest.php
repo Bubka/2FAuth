@@ -8,6 +8,7 @@ use App\Exceptions\UnsupportedMigrationException;
 use App\Factories\MigratorFactory;
 use App\Models\TwoFAccount;
 use App\Providers\MigrationServiceProvider;
+use App\Providers\TwoFAuthServiceProvider;
 use App\Services\Migrators\AegisMigrator;
 use App\Services\Migrators\GoogleAuthMigrator;
 use App\Services\Migrators\Migrator;
@@ -29,6 +30,7 @@ use Tests\TestCase;
  * MigratorTest test class
  */
 #[CoversClass(MigrationServiceProvider::class)]
+#[CoversClass(TwoFAuthServiceProvider::class)]
 #[CoversClass(MigratorFactory::class)]
 #[CoversClass(Migrator::class)]
 #[CoversClass(AegisMigrator::class)]
@@ -434,6 +436,9 @@ class MigratorTest extends TestCase
             ],
             'BMP' => [
                 MigrationTestData::VALID_2FAUTH_JSON_MIGRATION_PAYLOAD_WITH_BMP_ICON,
+            ],
+            'XBMP' => [
+                MigrationTestData::VALID_2FAUTH_JSON_MIGRATION_PAYLOAD_WITH_XBMP_ICON,
             ],
             'WEBP' => [
                 MigrationTestData::VALID_2FAUTH_JSON_MIGRATION_PAYLOAD_WITH_WEBP_ICON,

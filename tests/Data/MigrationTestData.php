@@ -590,7 +590,7 @@ class MigrationTestData
                     "account": "' . OtpTestData::ACCOUNT . '",
                     "service": "' . OtpTestData::SERVICE . '",
                     "icon": "' . OtpTestData::ICON_JPEG . '",
-                    "icon_mime": "image\/svg+xml",
+                    "icon_mime": "image\/jpeg",
                     "icon_file": "' . OtpTestData::ICON_JPEG_DATA . '",
                     "secret": "' . OtpTestData::SECRET . '",
                     "digits": ' . OtpTestData::DIGITS_CUSTOM . ',
@@ -614,7 +614,7 @@ class MigrationTestData
                     "account": "' . OtpTestData::ACCOUNT . '",
                     "service": "' . OtpTestData::SERVICE . '",
                     "icon": "' . OtpTestData::ICON_PNG . '",
-                    "icon_mime": "image\/svg+xml",
+                    "icon_mime": "image\/png",
                     "icon_file": "' . OtpTestData::ICON_PNG_DATA . '",
                     "secret": "' . OtpTestData::SECRET . '",
                     "digits": ' . OtpTestData::DIGITS_CUSTOM . ',
@@ -638,7 +638,31 @@ class MigrationTestData
                     "account": "' . OtpTestData::ACCOUNT . '",
                     "service": "' . OtpTestData::SERVICE . '",
                     "icon": "' . OtpTestData::ICON_BMP . '",
-                    "icon_mime": "image\/svg+xml",
+                    "icon_mime": "image\/bmp",
+                    "icon_file": "' . OtpTestData::ICON_BMP_DATA . '",
+                    "secret": "' . OtpTestData::SECRET . '",
+                    "digits": ' . OtpTestData::DIGITS_CUSTOM . ',
+                    "algorithm": "' . OtpTestData::ALGORITHM_CUSTOM . '",
+                    "period": ' . OtpTestData::PERIOD_CUSTOM . ',
+                    "counter": null,
+                    "legacy_uri": "' . OtpTestData::TOTP_FULL_CUSTOM_URI_NO_IMG . '"
+                }
+            ]
+        }';
+
+    const VALID_2FAUTH_JSON_MIGRATION_PAYLOAD_WITH_XBMP_ICON = '
+        {
+            "app": "2fauth_v3.4.1",
+            "schema": 1,
+            "datetime": "2022-12-14T14:53:06.173939Z",
+            "data":
+            [
+                {
+                    "otp_type": "totp",
+                    "account": "' . OtpTestData::ACCOUNT . '",
+                    "service": "' . OtpTestData::SERVICE . '",
+                    "icon": "' . OtpTestData::ICON_BMP . '",
+                    "icon_mime": "image\/x-ms-bmp",
                     "icon_file": "' . OtpTestData::ICON_BMP_DATA . '",
                     "secret": "' . OtpTestData::SECRET . '",
                     "digits": ' . OtpTestData::DIGITS_CUSTOM . ',
@@ -662,7 +686,7 @@ class MigrationTestData
                     "account": "' . OtpTestData::ACCOUNT . '",
                     "service": "' . OtpTestData::SERVICE . '",
                     "icon": "' . OtpTestData::ICON_WEBP . '",
-                    "icon_mime": "image\/svg+xml",
+                    "icon_mime": "image\/webp",
                     "icon_file": "' . OtpTestData::ICON_WEBP_DATA . '",
                     "secret": "' . OtpTestData::SECRET . '",
                     "digits": ' . OtpTestData::DIGITS_CUSTOM . ',
