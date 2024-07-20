@@ -3,6 +3,7 @@
 namespace App\Providers\Socialite;
 
 use GuzzleHttp\RequestOptions;
+use Illuminate\Http\Request;
 use SocialiteProviders\Manager\OAuth2\AbstractProvider;
 use SocialiteProviders\Manager\OAuth2\User;
 
@@ -14,6 +15,16 @@ class OpenId extends AbstractProvider
      * {@inheritdoc}
      */
     protected $scopes = ['openid profile email'];
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __construct(Request $request, $clientId, $clientSecret, $redirectUrl, $guzzle = [])
+    {
+        parent::__construct($request, $clientId, $clientSecret, $redirectUrl, [
+            'proxy' => config('2fauth.config.outgoingProxy')
+        ]);
+    }
 
     /**
      * {@inheritdoc}
