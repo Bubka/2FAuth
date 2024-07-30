@@ -50,3 +50,7 @@ export function useDisplayablePassword(pwd, reveal = false) {
 
 	return user.preferences.showOtpAsDot && !reveal ? pwd.replace(/[0-9]/g, '●') : pwd
 }
+
+export function startsWithUppercase(str) {
+    return str.substr(0, 1).match(/[A-Z\u00C0-\u00DC]/);
+}

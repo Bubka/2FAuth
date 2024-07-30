@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { startsWithUppercase } from '@/composables/helpers'
 import { useUserStore } from '@/stores/user'
 import { useNotifyStore } from '@/stores/notify'
 import twofaccountService from '@/services/twofaccountService'
@@ -181,10 +182,16 @@ export const useTwofaccounts = defineStore({
          * Sorts accounts ascending
          */
         sortAsc() {
-            if (useUserStore().preferences.sortCaseSensitive) {
-                this.items.sort((a, b) => a.service > b.service ? 1 : -1)
-            }
-            else this.items.sort((a, b) => a.service.toLowerCase() > b.service.toLowerCase() ? 1 : -1)
+            this.items.sort(function(a, b) {
+                if (useUserStore().preferences.sortCaseSensitive) {
+                    if (startsWithUppercase(a.service) && !startsWithUppercase(b.service)) {
+                        return -1;
+                    } else if (startsWithUppercase(b.service) && !startsWithUppercase(a.service)) {
+                        return 1;
+                    }
+                }
+                return a.service.localeCompare(b.service, useUserStore().preferences.lang)
+            });
             this.saveOrder()
         },
 
@@ -192,10 +199,16 @@ export const useTwofaccounts = defineStore({
          * Sorts accounts descending
         */
         sortDesc() {
-            if (useUserStore().preferences.sortCaseSensitive) {
-                this.items.sort((a, b) => a.service < b.service ? 1 : -1)
-            }
-            else this.items.sort((a, b) => a.service.toLowerCase() < b.service.toLowerCase() ? 1 : -1)
+            this.items.sort(function(a, b) {
+                if (useUserStore().preferences.sortCaseSensitive) {
+                    if (startsWithUppercase(a.service) && !startsWithUppercase(b.service)) {
+                        return 1;
+                    } else if (startsWithUppercase(b.service) && !startsWithUppercase(a.service)) {
+                        return -1;
+                    }
+                }
+                return b.service.localeCompare(a.service, useUserStore().preferences.lang)
+            });
             this.saveOrder()
         },
         
