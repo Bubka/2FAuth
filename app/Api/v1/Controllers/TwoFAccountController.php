@@ -85,7 +85,7 @@ class TwoFAccountController extends Controller
         $request->user()->twofaccounts()->save($twofaccount);
 
         // Possible group association
-        Groups::assign($twofaccount->id, $request->user());
+        Groups::assign($twofaccount->id, $request->user(), Arr::get($validated, 'group_id', null));
 
         return (new TwoFAccountReadResource($twofaccount->refresh()))
             ->response()
@@ -105,6 +105,16 @@ class TwoFAccountController extends Controller
 
         $twofaccount->fillWithOtpParameters($validated);
         $request->user()->twofaccounts()->save($twofaccount);
+
+        // Possible group change
+        $groupId = Arr::get($validated, 'group_id', null);
+        if ($twofaccount->group_id != $groupId) {
+            if ((int) $groupId === 0) {
+                TwoFAccounts::withdraw($twofaccount->id);
+            }
+            else Groups::assign($twofaccount->id, $request->user(), $groupId);
+            $twofaccount->refresh();
+        }
 
         return (new TwoFAccountReadResource($twofaccount))
             ->response()

@@ -15,12 +15,39 @@ class GroupService
      * Assign one or more accounts to a group
      *
      * @param  array|int  $ids  accounts ids to assign
-     * @param  \App\Models\Group|null  $group  The group the accounts will be assigned to
+     * @param  mixed  $targetGroup  The group the accounts should be assigned to
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public static function assign($ids, User $user, ?Group $group = null) : void
+    public static function assign($ids, User $user, mixed $targetGroup = null) : void
     {
+        // targetGroup == 0 == The pseudo group named 'All' == No group
+        // It means we do not want the accounts to be associated to a group, either a
+        // specific group or the default group from user preferences.
+        // If you need to release the accounts from an existing association, use the
+        // TwoFAccountService::withdraw() method.
+        if ($targetGroup === 0 || $targetGroup === '0') {
+            Log::info('Group assignment skipped, no group explicitly requested');
+            
+            return;
+        }
+
+        // Two main cases :
+        // - A group (or group id) is passed as parameter => It has priority for use, if the group is valid
+        // - No group is passed => We try to identify a destination group through user preferences
+        $group = null;
+
+        if(! is_null($targetGroup)) {
+            if ($targetGroup instanceof Group && $targetGroup->exists && $targetGroup->user_id == $user->id) {
+                $group = $targetGroup;
+            }
+            else {
+                $group = Group::where('id', (int) $targetGroup)
+                    ->where('user_id', $user->id)
+                    ->first();
+            }
+        }
+
         if (! $group) {
             $group = self::defaultGroup($user);
         }

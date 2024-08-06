@@ -518,6 +518,102 @@ class TwoFAccountControllerTest extends FeatureTestCase
     }
 
     #[Test]
+    public function test_store_assigns_created_account_to_provided_groupid()
+    {
+        // Set the default group to No group
+        $this->user['preferences->defaultGroup'] = 0;
+        $this->user->save();
+
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('POST', '/api/v1/twofaccounts', array_merge(
+                OtpTestData::ARRAY_OF_FULL_VALID_PARAMETERS_FOR_CUSTOM_TOTP,
+                ['group_id'  => $this->userGroupA->id]
+            ))
+            ->assertJsonFragment([
+                'group_id' => $this->userGroupA->id,
+            ]);
+    }
+
+    #[Test]
+    public function test_store_with_assignement_to_missing_groupid_returns_validation_error()
+    {
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('POST', '/api/v1/twofaccounts', array_merge(
+                OtpTestData::ARRAY_OF_FULL_VALID_PARAMETERS_FOR_CUSTOM_TOTP,
+                ['group_id'  => 9999999]
+            ))
+            ->assertJsonValidationErrorFor('group_id');
+    }
+
+    #[Test]
+    public function test_store_with_assignement_to_null_groupid_does_not_assign_account_to_group()
+    {
+        // Set the default group to No group
+        $this->user['preferences->defaultGroup'] = 0;
+        $this->user->save();
+
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('POST', '/api/v1/twofaccounts', array_merge(
+                OtpTestData::ARRAY_OF_FULL_VALID_PARAMETERS_FOR_CUSTOM_TOTP,
+                ['group_id'  => null]
+            ))
+            ->assertJsonFragment([
+                'group_id' => null,
+            ]);
+    }
+
+    #[Test]
+    public function test_store_with_assignement_to_null_groupid_is_overriden_by_specific_default_group()
+    {
+        // Set the default group to a specific group
+        $this->user['preferences->defaultGroup'] = $this->userGroupA->id;
+        $this->user->save();
+
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('POST', '/api/v1/twofaccounts', array_merge(
+                OtpTestData::ARRAY_OF_FULL_VALID_PARAMETERS_FOR_CUSTOM_TOTP,
+                ['group_id'  => null]
+            ))
+            ->assertJsonFragment([
+                'group_id' => $this->user->preferences['defaultGroup'],
+            ]);
+    }
+
+    #[Test]
+    public function test_store_with_assignement_to_zero_groupid_overrides_specific_default_group()
+    {
+        // Set the default group to a specific group
+        $this->user['preferences->defaultGroup'] = $this->userGroupA->id;
+        $this->user->save();
+
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('POST', '/api/v1/twofaccounts', array_merge(
+                OtpTestData::ARRAY_OF_FULL_VALID_PARAMETERS_FOR_CUSTOM_TOTP,
+                ['group_id'  => 0]
+            ))
+            ->assertJsonFragment([
+                'group_id' => null,
+            ]);
+    }
+
+    #[Test]
+    public function test_store_with_assignement_to_provided_groupid_overrides_specific_default_group()
+    {
+        // Set the default group to a specific group
+        $this->user['preferences->defaultGroup'] = $this->userGroupA->id;
+        $this->user->save();
+
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('POST', '/api/v1/twofaccounts', array_merge(
+                OtpTestData::ARRAY_OF_FULL_VALID_PARAMETERS_FOR_CUSTOM_TOTP,
+                ['group_id'  => $this->userGroupB->id]
+            ))
+            ->assertJsonFragment([
+                'group_id' => $this->userGroupB->id,
+            ]);
+    }
+
+    #[Test]
     public function test_store_assigns_created_account_when_default_group_is_a_specific_one()
     {
         // Set the default group to a specific one
@@ -529,7 +625,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
                 'uri' => OtpTestData::TOTP_SHORT_URI,
             ])
             ->assertJsonFragment([
-                'group_id' => $this->userGroupA->id,
+                'group_id' => $this->user->preferences['defaultGroup'],
             ]);
     }
 
@@ -547,7 +643,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
                 'uri' => OtpTestData::TOTP_SHORT_URI,
             ])
             ->assertJsonFragment([
-                'group_id' => $this->userGroupA->id,
+                'group_id' => $this->user->preferences['activeGroup'],
             ]);
     }
 
@@ -607,6 +703,68 @@ class TwoFAccountControllerTest extends FeatureTestCase
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('PUT', '/api/v1/twofaccounts/1000', OtpTestData::ARRAY_OF_FULL_VALID_PARAMETERS_FOR_CUSTOM_TOTP)
             ->assertNotFound();
+    }
+
+    #[Test]
+    public function test_update_with_assignement_to_null_group_returns_success_with_updated_resource()
+    {
+        $this->assertNotEquals(null, $this->twofaccountA->group_id);
+        
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('PUT', '/api/v1/twofaccounts/' . $this->twofaccountA->id, array_merge(
+                OtpTestData::ARRAY_OF_FULL_VALID_PARAMETERS_FOR_CUSTOM_TOTP,
+                ['group_id'  => null]
+            ))
+            ->assertOk()
+            ->assertJsonFragment([
+                'group_id' => null
+            ])
+            ->assertJsonFragment(self::JSON_FRAGMENTS_FOR_CUSTOM_TOTP);
+    }
+
+    #[Test]
+    public function test_update_with_assignement_to_zero_group_returns_success_with_updated_resource()
+    {
+        $this->assertNotEquals(null, $this->twofaccountA->group_id);
+        
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('PUT', '/api/v1/twofaccounts/' . $this->twofaccountA->id, array_merge(
+                OtpTestData::ARRAY_OF_FULL_VALID_PARAMETERS_FOR_CUSTOM_TOTP,
+                ['group_id'  => 0]
+            ))
+            ->assertOk()
+            ->assertJsonFragment([
+                'group_id' => null
+            ])
+            ->assertJsonFragment(self::JSON_FRAGMENTS_FOR_CUSTOM_TOTP);
+    }
+
+    #[Test]
+    public function test_update_with_assignement_to_new_groupid_returns_success_with_updated_resource()
+    {
+        $this->assertEquals($this->userGroupA->id, $this->twofaccountA->group_id);
+        
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('PUT', '/api/v1/twofaccounts/' . $this->twofaccountA->id, array_merge(
+                OtpTestData::ARRAY_OF_FULL_VALID_PARAMETERS_FOR_CUSTOM_TOTP,
+                ['group_id'  => $this->userGroupB->id]
+            ))
+            ->assertOk()
+            ->assertJsonFragment([
+                'group_id' => $this->userGroupB->id
+            ])
+            ->assertJsonFragment(self::JSON_FRAGMENTS_FOR_CUSTOM_TOTP);
+    }
+
+    #[Test]
+    public function test_update_with_assignement_to_missing_groupid_returns_validation_error()
+    {
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('PUT', '/api/v1/twofaccounts/' . $this->twofaccountA->id, array_merge(
+                OtpTestData::ARRAY_OF_FULL_VALID_PARAMETERS_FOR_CUSTOM_TOTP,
+                ['group_id'  => 9999999]
+            ))
+            ->assertJsonValidationErrorFor('group_id');
     }
 
     #[Test]

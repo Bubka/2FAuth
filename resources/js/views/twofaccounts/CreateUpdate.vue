@@ -6,6 +6,7 @@
     import twofaccountService from '@/services/twofaccountService'
     import { useUserStore } from '@/stores/user'
     import { useTwofaccounts } from '@/stores/twofaccounts'
+    import { useGroups } from '@/stores/groups'
     import { useBusStore } from '@/stores/bus'
     import { useNotifyStore } from '@/stores/notify'
     import { UseColorMode } from '@vueuse/components'
@@ -22,6 +23,7 @@
         account: '',
         otp_type: '',
         icon: '',
+        group_id: user.preferences.defaultGroup == -1 ? user.preferences.activeGroup : user.preferences.defaultGroup,
         secret: '',
         algorithm: '',
         digits: null,
@@ -85,10 +87,19 @@
         return props.twofaccountId != undefined
     })
 
+    const groups = computed(() => {
+        return useGroups().items.map((item) => {
+            return { text: item.id > 0 ? item.name : '- ' + trans('groups.no_group') + ' -', value: item.id }
+        })
+    })
+
     onMounted(() => {
         if (route.name == 'editAccount') {
             twofaccountService.get(props.twofaccountId).then(response => {
                 form.fill(response.data)
+                if (form.group_id == null) {
+                    form.group_id = 0
+                }
                 form.setOriginal()
                 // set account icon as temp icon
                 tempIcon.value = form.icon
@@ -513,6 +524,8 @@
                     <FieldError v-if="iconForm.errors.hasAny('icon')" :error="iconForm.errors.get('icon')" :field="'icon'" class="help-for-file" />
                     <p v-if="user.preferences.getOfficialIcons" class="help" v-html="$t('twofaccounts.forms.i_m_lucky_legend')"></p>
                 </div>
+                <!-- group -->
+                <FormSelect v-if="groups.length > 0" v-model="form.group_id" :options="groups" fieldName="group_id" label="twofaccounts.forms.group.label" help="twofaccounts.forms.group.help" />
                 <!-- otp type -->
                 <FormToggle v-model="form.otp_type" :isDisabled="isEditMode" :choices="otp_types" fieldName="otp_type" :fieldError="form.errors.get('otp_type')" label="twofaccounts.forms.otp_type.label" help="twofaccounts.forms.otp_type.help" :hasOffset="true" />
                 <div v-if="form.otp_type != ''">
