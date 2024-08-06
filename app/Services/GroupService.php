@@ -15,6 +15,7 @@ class GroupService
      * Assign one or more accounts to a group
      *
      * @param  array|int  $ids  accounts ids to assign
+     * @param  User  $user  The user who owns the accounts & the target group
      * @param  mixed  $targetGroup  The group the accounts should be assigned to
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
@@ -109,6 +110,8 @@ class GroupService
     {
         $id = $user->preferences['defaultGroup'] === -1 ? (int) $user->preferences['activeGroup'] : (int) $user->preferences['defaultGroup'];
 
-        return Group::find($id);
+        return Group::where('id', $id)
+            ->where('user_id', $user->id)
+            ->first();
     }
 }
