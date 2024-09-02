@@ -73,7 +73,7 @@ class FixUnsplittedAccounts extends Command
             return;
         }
 
-        $this->line('Try to fix them...');
+        $this->line('Trying to fix them...');
 
         foreach ($twofaccounts as $twofaccount) {
             if ($twofaccount->legacy_uri === __('errors.indecipherable')) {
