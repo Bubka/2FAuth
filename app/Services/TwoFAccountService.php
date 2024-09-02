@@ -39,12 +39,15 @@ class TwoFAccountService
         // whereIn() expects an array
         $ids = is_array($ids) ? $ids : func_get_args();
 
-        TwoFAccount::whereIn('id', $ids)
+        $affectedCount = TwoFAccount::whereIn('id', $ids)
             ->update(
                 ['group_id' => null]
             );
 
-        Log::info(sprintf('TwoFAccounts IDs #%s withdrawn', implode(',', $ids)));
+        if ($affectedCount) {
+            Log::info(sprintf('TwoFAccounts with IDs #%s withdrawn', implode(',', $ids)));
+        }
+        else Log::info(sprintf('Cannot find TwoFAccounts to withdraw using ids #%s', implode(',', $ids)));
     }
 
     /**

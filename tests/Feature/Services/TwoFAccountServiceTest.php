@@ -7,6 +7,7 @@ use App\Models\Group;
 use App\Models\TwoFAccount;
 use App\Models\User;
 use App\Services\TwoFAccountService;
+use Illuminate\Support\Facades\Exceptions;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Data\MigrationTestData;
@@ -151,9 +152,21 @@ class TwoFAccountServiceTest extends FeatureTestCase
     }
 
     #[Test]
-    public function test_withdraw_missing_ids_returns_void()
+    public function test_withdraw_missing_ids_does_not_throw_exception()
     {
-        $this->assertNull(TwoFAccounts::withdraw(null));
+        Exceptions::fake();
+        Exceptions::assertNothingReported();
+
+        TwoFAccounts::withdraw(9999999);
+    }
+
+    #[Test]
+    public function test_withdraw_null_id_does_not_throw_exception()
+    {
+        Exceptions::fake();
+        Exceptions::assertNothingReported();
+
+        TwoFAccounts::withdraw(null);
     }
 
     #[Test]
