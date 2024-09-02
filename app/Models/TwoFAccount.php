@@ -300,6 +300,29 @@ class TwoFAccount extends Model implements Sortable
     }
 
     /**
+     * Get service attribute
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getServiceAttribute($value)
+    {
+        return $this->decryptOrReturn($value);
+    }
+
+    /**
+     * Set service attribute
+     *
+     * @param  string  $value
+     * @return void
+     */
+    public function setServiceAttribute($value)
+    {
+        // Encrypt when needed
+        $this->attributes['service'] = $this->encryptOrReturn($value);
+    }
+
+    /**
      * Get secret attribute
      *
      * @param  string  $value
@@ -775,6 +798,7 @@ class TwoFAccount extends Model implements Sortable
             try {
                 return Crypt::decryptString($value);
             } catch (Exception $ex) {
+                Log::debug(sprintf('Service field of twofaccount with id #%s cannot be deciphered', $this->id));
                 return __('errors.indecipherable');
             }
         } else {

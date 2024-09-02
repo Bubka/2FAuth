@@ -210,6 +210,7 @@ class SettingService
 
         $twofaccounts->each(function ($item, $key) use (&$success, $encrypted) {
             try {
+                $item->service    = $encrypted ? Crypt::encryptString($item->service) : Crypt::decryptString($item->service);
                 $item->legacy_uri = $encrypted ? Crypt::encryptString($item->legacy_uri) : Crypt::decryptString($item->legacy_uri);
                 $item->account    = $encrypted ? Crypt::encryptString($item->account) : Crypt::decryptString($item->account);
                 $item->secret     = $encrypted ? Crypt::encryptString($item->secret) : Crypt::decryptString($item->secret);
@@ -231,6 +232,7 @@ class SettingService
                     DB::table('twofaccounts')
                         ->where('id', $item->id)
                         ->update([
+                            'service'    => $item->service,
                             'legacy_uri' => $item->legacy_uri,
                             'account'    => $item->account,
                             'secret'     => $item->secret,
