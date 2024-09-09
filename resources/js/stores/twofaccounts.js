@@ -184,14 +184,12 @@ export const useTwofaccounts = defineStore({
         sortAsc() {
             this.items.sort(function(a, b) {
                 if (useUserStore().preferences.sortCaseSensitive) {
-                    if (startsWithUppercase(a.service) && !startsWithUppercase(b.service)) {
-                        return -1;
-                    } else if (startsWithUppercase(b.service) && !startsWithUppercase(a.service)) {
-                        return 1;
-                    }
+                    return a.service.normalize("NFD").replace(/[\u0300-\u036f]/g, "") > b.service.normalize("NFD").replace(/[\u0300-\u036f]/g, "") ? 1 : -1
                 }
+                
                 return a.service.localeCompare(b.service, useUserStore().preferences.lang)
             });
+
             this.saveOrder()
         },
 
@@ -201,14 +199,12 @@ export const useTwofaccounts = defineStore({
         sortDesc() {
             this.items.sort(function(a, b) {
                 if (useUserStore().preferences.sortCaseSensitive) {
-                    if (startsWithUppercase(a.service) && !startsWithUppercase(b.service)) {
-                        return 1;
-                    } else if (startsWithUppercase(b.service) && !startsWithUppercase(a.service)) {
-                        return -1;
-                    }
+                    return a.service.normalize("NFD").replace(/[\u0300-\u036f]/g, "") < b.service.normalize("NFD").replace(/[\u0300-\u036f]/g, "") ? 1 : -1
                 }
+
                 return b.service.localeCompare(a.service, useUserStore().preferences.lang)
             });
+
             this.saveOrder()
         },
         
