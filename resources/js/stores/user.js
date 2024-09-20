@@ -16,6 +16,7 @@ export const useUserStore = defineStore({
             name: undefined,
             email: undefined,
             oauth_provider: undefined,
+            authenticated_by_proxy: undefined,
             preferences: window.defaultPreferences,
             isAdmin: false,
         }

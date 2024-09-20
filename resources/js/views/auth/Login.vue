@@ -37,6 +37,7 @@
                 name: response.data.name,
                 email: response.data.email,
                 oauth_provider: response.data.oauth_provider,
+                authenticated_by_proxy: false,
                 preferences: response.data.preferences,
                 isAdmin: response.data.is_admin,
             })
@@ -67,6 +68,7 @@
                 name: response.data.name,
                 email: response.data.email,
                 oauth_provider: response.data.oauth_provider,
+                authenticated_by_proxy: false,
                 preferences: response.data.preferences,
                 isAdmin: response.data.is_admin,
             })

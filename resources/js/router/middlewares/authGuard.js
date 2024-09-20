@@ -13,6 +13,7 @@ export default async function authGuard({ to, next, nextMiddleware, stores }) {
                 name: currentUser.name,
                 email: currentUser.email,
                 oauth_provider: currentUser.oauth_provider,
+                authenticated_by_proxy: currentUser.authenticated_by_proxy,
                 preferences: currentUser.preferences,
                 isAdmin: currentUser.is_admin,
             })
