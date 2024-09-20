@@ -26,7 +26,8 @@ class Authenticate extends Middleware
             // Will retreive the default guard
             $guards = [null];
         } else {
-            // We replace routes guard by the reverse proxy guard if necessary
+            // If reverse proxy is defined as the default guard, we force the
+            // authentication against this only guard.
             if (config('auth.defaults.guard') === $proxyGuard) {
                 $guards = [$proxyGuard];
             }

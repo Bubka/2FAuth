@@ -107,7 +107,7 @@
                 <div v-if="user.isAdmin" class="notification is-warning">
                     {{ $t('settings.you_are_administrator') }}
                 </div>
-                <div v-if="user.oauth_provider" class="notification is-info">
+                <div v-if="user.oauth_provider" class="notification is-info has-text-centered">
                     {{ $t('settings.account_linked_to_sso_x_provider', { provider: user.oauth_provider }) }}
                 </div>
                 <form @submit.prevent="submitProfile" @keydown="formProfile.onKeydown($event)">

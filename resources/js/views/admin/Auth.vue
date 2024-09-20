@@ -78,6 +78,8 @@
                     <h4 class="title is-4 pt-4 has-text-grey-light">{{ $t('admin.single_sign_on') }}</h4>
                     <!-- enable SSO -->
                     <FormCheckbox v-model="appSettings.enableSso" @update:model-value="val => useAppSettingsUpdater('enableSso', val)" fieldName="enableSso" label="admin.forms.enable_sso.label" help="admin.forms.enable_sso.help" />
+                        <!-- use SSO only -->
+                        <FormCheckbox v-model="appSettings.useSsoOnly" @update:model-value="val => useAppSettingsUpdater('useSsoOnly', val)" fieldName="useSsoOnly" label="admin.forms.use_sso_only.label" help="admin.forms.use_sso_only.help" :isDisabled="!appSettings.enableSso" :isIndented="true" />
                     <h4 class="title is-4 pt-4 has-text-grey-light">{{ $t('admin.registrations') }}</h4>
                     <!-- restrict registration -->
                     <FormCheckbox v-model="appSettings.restrictRegistration" @update:model-value="val => useAppSettingsUpdater('restrictRegistration', val)" fieldName="restrictRegistration" :isDisabled="appSettings.disableRegistration" label="admin.forms.restrict_registration.label" help="admin.forms.restrict_registration.help" />

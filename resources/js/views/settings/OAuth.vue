@@ -4,19 +4,24 @@
     import SettingTabs from '@/layouts/SettingTabs.vue'
     import { useNotifyStore } from '@/stores/notify'
     import { UseColorMode } from '@vueuse/components'
+    import { useUserStore } from '@/stores/user'
     import Spinner from '@/components/Spinner.vue'
 
     const $2fauth = inject('2fauth')
     const notify = useNotifyStore()
+    const user = useUserStore()
     const returnTo = useStorage($2fauth.prefix + 'returnTo', 'accounts')
     const { copy } = useClipboard({ legacy: true })
 
     const tokens = ref([])
     const isFetching = ref(false)
-    const isRemoteUser = ref(false)
     const createPATModalIsVisible = ref(false)
     const visibleToken = ref(null)
     const visibleTokenId = ref(null)
+
+    const isDisabled = computed(() => {
+        return (appSettings.enableSso && appSettings.useSsoOnly) || user.authenticated_by_proxy
+    })
 
     onMounted(() => {
         fetchTokens()
@@ -47,9 +52,9 @@
         })
         .catch(error => {
             if( error.response.status === 405 ) {
-                // The backend returns a 405 response for routes with the
-                // rejectIfReverseProxy middleware
-                isRemoteUser.value = true
+                // The backend returns a 405 response if the user is authenticated by a reverse proxy
+                // or if SSO only is enabled.
+                // The form is already disabled (see isDisabled) so we do nothing more here
             }
             else {
                 notify.error(error)
@@ -69,7 +74,7 @@
     function showPATcreationForm() {
         clearTokenValues()
 
-        if (isRemoteUser.value) {
+        if (isDisabled.value) {
             notify.warn({ text: trans('errors.unsupported_with_reverseproxy') })
         }
         else createPATModalIsVisible.value = true
@@ -141,7 +146,10 @@
         <SettingTabs :activeTab="'settings.oauth.tokens'" />
         <div class="options-tabs">
             <FormWrapper>
-                <div v-if="isRemoteUser" class="notification is-warning has-text-centered" v-html="$t('auth.auth_handled_by_proxy')" />
+                <div v-if="isDisabled && user.oauth_provider" class="notification is-warning has-text-centered">
+                    {{ $t('auth.sso_only_x_settings_are_disabled', { auth_method: 'OAuth' }) }}
+                </div>
+                <div v-if="isDisabled && user.authenticated_by_proxy" class="notification is-warning has-text-centered" v-html="$t('auth.auth_handled_by_proxy')" />
                 <h4 class="title is-4 has-text-grey-light">{{ $t('settings.personal_access_tokens') }}</h4>
                 <div class="is-size-7-mobile">
                     {{ $t('settings.token_legend')}}

@@ -89,6 +89,7 @@ return [
         'latestRelease' => false,
         'disableRegistration' => false,
         'enableSso' => true,
+        'useSsoOnly' => false,
         'restrictRegistration' => false,
         'restrictList' => '',
         'restrictRule' => '',

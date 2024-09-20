@@ -3,7 +3,9 @@
 namespace Tests\Feature\Http\Auth;
 
 use App\Extensions\WebauthnTwoFAuthUserProvider;
+use App\Facades\Settings;
 use App\Http\Controllers\Auth\WebAuthnLoginController;
+use App\Http\Middleware\RejectIfSsoOnlyAndNotForAdmin;
 use App\Listeners\Authentication\FailedLoginListener;
 use App\Listeners\Authentication\LoginListener;
 use App\Models\User;
@@ -26,6 +28,7 @@ use Tests\FeatureTestCase;
 #[CoversClass(WebauthnTwoFAuthUserProvider::class)]
 #[CoversClass(LoginListener::class)]
 #[CoversClass(FailedLoginListener::class)]
+#[CoversMethod(RejectIfSsoOnlyAndNotForAdmin::class, 'handle')]
 class WebAuthnLoginControllerTest extends FeatureTestCase
 {
     /**
@@ -123,6 +126,34 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
             ->assertJsonStructure([
                 'preferences',
             ]);
+    }
+
+    #[Test]
+    public function test_webauthn_login_of_admin_returns_success_even_with_sso_only_enabled()
+    {
+        Settings::set('useSsoOnly', true);
+        
+        $this->user->promoteToAdministrator(true);
+        $this->user->save();
+
+        $this->createWebauthnCredential(self::CREDENTIAL_ID_ALT, $this->user->id, self::USER_ID_ALT);
+        $this->addWebauthnChallengeToSession();
+
+        $this->json('POST', '/webauthn/login', self::ASSERTION_RESPONSE)
+            ->assertOk()
+            ->assertJsonFragment([
+                'message'  => 'authenticated',
+                'id'       => $this->user->id,
+                'name'     => $this->user->name,
+                'email'    => $this->user->email,
+                'is_admin' => true,
+            ])
+            ->assertJsonStructure([
+                'preferences',
+            ]);
+        
+        $this->user->promoteToAdministrator(false);
+        $this->user->save();
     }
 
     #[Test]

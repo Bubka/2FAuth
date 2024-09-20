@@ -1,5 +1,6 @@
 <script setup>
     import Form from '@/components/formElements/Form'
+    import SsoConnectLink from '@/components/SsoConnectLink.vue'
     import { useUserStore } from '@/stores/user'
     import { useNotifyStore } from '@/stores/notify'
     import { useAppSettingsStore } from '@/stores/appSettings'
@@ -16,13 +17,29 @@
         password: ''
     }))
     const isBusy = ref(false)
+    const activeForm = ref()
+
+    onMounted(() => {
+        if (appSettings.enableSso == true && appSettings.useSsoOnly == true) {
+            activeForm.value = 'sso'
+        }
+        else if (showWebauthnForm.value == true) {
+            activeForm.value = 'webauthn'
+        }
+        else activeForm.value = 'legacy'
+
+        // showWebauthnForm && appSettings.useSsoOnly != true
+    })
+
+    
 
     /**
      * Toggle the form between legacy and webauthn method
      */
-    function toggleForm() {
+    function switchToForm(formName) {
         form.clear()
-        showWebauthnForm.value = ! showWebauthnForm.value
+        activeForm.value = formName
+        showWebauthnForm.value = activeForm.value == 'webauthn'
     }
 
     /**
@@ -101,7 +118,8 @@
 
 <template>
     <!-- webauthn authentication -->
-    <FormWrapper v-if="showWebauthnForm" title="auth.forms.webauthn_login" punchline="auth.welcome_to_2fauth">
+    <FormWrapper v-if="activeForm == 'webauthn'" title="auth.forms.webauthn_login" punchline="auth.welcome_to_2fauth">
+        <div v-if="appSettings.enableSso == true && appSettings.useSsoOnly == true" class="notification is-warning has-text-centered" v-html="$t('auth.forms.sso_only_form_restricted_to_admin')" />
         <div class="field">
             {{ $t('auth.webauthn.use_security_device_to_sign_in') }}
         </div>
@@ -116,36 +134,64 @@
                     {{ $t('auth.webauthn.recover_your_account') }}
                 </RouterLink>
             </p>
-            <p v-if="!user.preferences.useWebauthnOnly">{{ $t('auth.sign_in_using') }}&nbsp;
-                <a id="lnkSignWithLegacy" role="button" class="is-link" @keyup.enter="toggleForm" @click="toggleForm" tabindex="0">
+            <p>{{ $t('auth.sign_in_using') }}&nbsp;
+                <a id="lnkSignWithLegacy" role="button" class="is-link" @keyup.enter="switchToForm('legacy')" @click="switchToForm('legacy')" tabindex="0">
                     {{ $t('auth.login_and_password') }}
                 </a>
             </p>
-            <p v-if="appSettings.disableRegistration == false" class="mt-4">
+            <p v-if="appSettings.disableRegistration == false && appSettings.useSsoOnly == false" class="mt-4">
                 {{ $t('auth.forms.dont_have_account_yet') }}&nbsp;
                 <RouterLink id="lnkRegister" :to="{ name: 'register' }" class="is-link">
                     {{ $t('auth.register') }}
                 </RouterLink>
             </p>
-            <div v-if="appSettings.enableSso && Object.values($2fauth.config.sso).includes(true)" class="columns mt-4 is-variable is-1">
+            <div v-if="appSettings.enableSso == true && Object.values($2fauth.config.sso).includes(true)" class="columns mt-4 is-variable is-1">
                 <div class="column is-narrow py-1">
                     {{ $t('auth.or_continue_with') }}
                 </div>
                 <div class="column py-1">
-                    <a v-if="$2fauth.config.sso.openid" id="lnkSignWithOpenID" class="button is-link is-outlined is-small ml-2" href="/socialite/redirect/openid">
-                        OpenID<FontAwesomeIcon class="ml-2" :icon="['fab', 'openid']" />
-                    </a>
-                    <a v-if="$2fauth.config.sso.github" id="lnkSignWithGithub" class="button is-link is-outlined is-small ml-2" href="/socialite/redirect/github">
-                        Github<FontAwesomeIcon class="ml-2" :icon="['fab', 'github-alt']" />
-                    </a>
+                    <div class="buttons">
+                        <template v-for="(isEnabled, provider) in $2fauth.config.sso">
+                            <SsoConnectLink v-if="isEnabled" :class="'is-outlined is-small'" :provider="provider" />
+                        </template>
+                    </div>
                 </div>
             </div>
         </div>
     </FormWrapper>
-    <!-- login/password legacy form -->
-    <FormWrapper v-else title="auth.forms.login" punchline="auth.welcome_to_2fauth">
+    <!-- SSO only links -->
+    <FormWrapper v-else-if="activeForm == 'sso'" title="auth.forms.sso_login" punchline="auth.welcome_to_2fauth">
         <div v-if="$2fauth.isDemoApp" class="notification is-info has-text-centered is-radiusless" v-html="$t('auth.forms.welcome_to_demo_app_use_those_credentials')" />
         <div v-if="$2fauth.isTestingApp" class="notification is-warning has-text-centered is-radiusless" v-html="$t('auth.forms.welcome_to_testing_app_use_those_credentials')" />
+        <div class="nav-links">
+            <p class="">{{ $t('auth.password_login_and_webauthn_are_disabled') }}</p>
+            <p class="">{{ $t('auth.sign_in_using_sso') }}</p>
+        </div>
+        <div v-if="Object.values($2fauth.config.sso).includes(true)" class="buttons mt-4">
+            <template v-for="(isEnabled, provider) in $2fauth.config.sso">
+                <SsoConnectLink v-if="isEnabled" :provider="provider" />
+            </template>
+        </div>
+        <p v-else class="is-italic">- {{ $t('auth.no_provider') }} -</p>
+        <div class="nav-links">
+            <p>
+                {{ $t('auth.no_sso_provider_or_provider_is_missing') }}&nbsp;
+                <a id="lnkSsoDocs" class="is-link" tabindex="0" :href="$2fauth.urls.ssoDocUrl" target="_blank">
+                    {{ $t('auth.see_how_to_enable_sso') }}
+                </a>
+            </p>
+            <p >{{ $t('auth.if_administrator') }}&nbsp;
+                <a id="lnkSignWithLegacy" role="button" class="is-link" @keyup.enter="switchToForm('legacy')" @click="switchToForm('legacy')" tabindex="0">
+                    {{ $t('auth.sign_in_here') }}
+                </a>
+            </p>
+        </div>
+    </FormWrapper>
+    <!-- login/password legacy form -->
+    <FormWrapper v-else-if="activeForm == 'legacy'" title="auth.forms.login" punchline="auth.welcome_to_2fauth">
+        <div v-if="$2fauth.isDemoApp" class="notification is-info has-text-centered is-radiusless" v-html="$t('auth.forms.welcome_to_demo_app_use_those_credentials')" />
+        <div v-if="$2fauth.isTestingApp" class="notification is-warning has-text-centered is-radiusless" v-html="$t('auth.forms.welcome_to_testing_app_use_those_credentials')" />
+        <div v-if="appSettings.enableSso == true && appSettings.useSsoOnly == true" class="notification is-warning has-text-centered" v-html="$t('auth.forms.sso_only_form_restricted_to_admin')" />
         <form id="frmLegacyLogin" @submit.prevent="LegacysignIn" @keydown="form.onKeydown($event)">
             <FormField v-model="form.email" fieldName="email" :fieldError="form.errors.get('email')" inputType="email" label="auth.forms.email" autofocus />
             <FormPasswordField v-model="form.password" fieldName="password" :fieldError="form.errors.get('password')" label="auth.forms.password" />
@@ -158,11 +204,11 @@
                 </RouterLink>
             </p>
             <p >{{ $t('auth.sign_in_using') }}&nbsp;
-                <a id="lnkSignWithWebauthn" role="button" class="is-link" @keyup.enter="toggleForm" @click="toggleForm" tabindex="0" :aria-label="$t('auth.sign_in_using_security_device')">
+                <a id="lnkSignWithWebauthn" role="button" class="is-link" @keyup.enter="switchToForm('webauthn')" @click="switchToForm('webauthn')" tabindex="0" :aria-label="$t('auth.sign_in_using_security_device')">
                     {{ $t('auth.webauthn.security_device') }}
                 </a>
             </p>
-            <p v-if="appSettings.disableRegistration == false" class="mt-4">
+            <p v-if="appSettings.disableRegistration == false && appSettings.useSsoOnly == false" class="mt-4">
                 {{ $t('auth.forms.dont_have_account_yet') }}&nbsp;
                 <RouterLink id="lnkRegister" :to="{ name: 'register' }" class="is-link">
                     {{ $t('auth.register') }}
@@ -173,12 +219,11 @@
                     {{ $t('auth.or_continue_with') }}
                 </div>
                 <div class="column py-1">
-                    <a v-if="$2fauth.config.sso.openid" id="lnkSignWithOpenID" class="button is-link is-outlined is-small mr-2" href="/socialite/redirect/openid">
-                        OpenID<FontAwesomeIcon class="ml-2" :icon="['fab', 'openid']" />
-                    </a>
-                    <a v-if="$2fauth.config.sso.github" id="lnkSignWithGithub" class="button is-link is-outlined is-small mr-2" href="/socialite/redirect/github">
-                        Github<FontAwesomeIcon class="ml-2" :icon="['fab', 'github-alt']" />
-                    </a>
+                    <div class="buttons">
+                        <template v-for="(isEnabled, provider) in $2fauth.config.sso">
+                            <SsoConnectLink v-if="isEnabled" :class="'is-outlined is-small'" :provider="provider" />
+                        </template>
+                    </div>
                 </div>
             </div>
         </div>

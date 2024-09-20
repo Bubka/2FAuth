@@ -110,6 +110,10 @@ return [
             'label' => 'Enable SSO',
             'help' => 'Allow visitors to authenticate using an external ID via the Single Sign-On scheme',
         ],
+        'use_sso_only' => [
+            'label' => 'Use SSO only',
+            'help' => 'Make SSO the only available method to log in to 2FAuth. Password login and Webauthn are then disabled for regular users. Administrators are not affected by this restriction.',
+        ],
         'keep_sso_registration_enabled' => [
             'label' => 'Keep SSO registration enabled',
             'help' => 'Allow new users to sign in for the first time via SSO whereas registration is disabled',

@@ -35,7 +35,7 @@ use Laravel\Passport\Http\Controllers\PersonalAccessTokenController;
 /**
  * Routes that only work for unauthenticated user (return an error otherwise)
  */
-Route::group(['middleware' => ['guest', 'rejectIfDemoMode']], function () {
+Route::group(['middleware' => ['guest', 'rejectIfDemoMode', 'RejectIfSsoOnlyAndNotForAdmin']], function () {
     Route::post('user', [RegisterController::class, 'register'])->name('user.register');
     Route::post('user/password/lost', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('user.password.lost');
     Route::post('user/password/reset', [ResetPasswordController::class, 'reset'])->name('password.reset');
@@ -46,7 +46,7 @@ Route::group(['middleware' => ['guest', 'rejectIfDemoMode']], function () {
 /**
  * Routes that can be requested max 10 times per minute by the same IP
  */
-Route::group(['middleware' => ['rejectIfDemoMode', 'throttle:10,1']], function () {
+Route::group(['middleware' => ['rejectIfDemoMode', 'throttle:10,1', 'RejectIfSsoOnlyAndNotForAdmin']], function () {
     Route::post('webauthn/recover', [WebAuthnRecoveryController::class, 'recover'])->name('webauthn.recover');
 });
 
@@ -55,15 +55,16 @@ Route::group(['middleware' => ['rejectIfDemoMode', 'throttle:10,1']], function (
  * that can be requested max 10 times per minute by the same IP
  */
 Route::group(['middleware' => ['guest', 'throttle:10,1']], function () {
-    Route::post('user/login', [LoginController::class, 'login'])->name('user.login');
-    Route::post('webauthn/login', [WebAuthnLoginController::class, 'login'])->name('webauthn.login');
+    Route::post('user/login', [LoginController::class, 'login'])->name('user.login')->middleware('RejectIfSsoOnlyAndNotForAdmin');;
+    Route::post('webauthn/login', [WebAuthnLoginController::class, 'login'])->name('webauthn.login')->middleware('RejectIfSsoOnlyAndNotForAdmin');
 
     Route::get('/socialite/redirect/{driver}', [SocialiteController::class, 'redirect'])->name('socialite.redirect');
     Route::get('/socialite/callback/{driver}', [SocialiteController::class, 'callback'])->name('socialite.callback');
 });
 
 /**
- * Routes protected by an authentication guard but rejected when reverse-proxy guard is enabled
+ * Routes protected by an authentication guard but rejected when the reverse-proxy
+ * guard is enabled or SSO only is enabled
  */
 Route::group(['middleware' => ['behind-auth', 'rejectIfReverseProxy']], function () {
     Route::put('user', [UserController::class, 'update'])->name('user.update');
@@ -71,15 +72,15 @@ Route::group(['middleware' => ['behind-auth', 'rejectIfReverseProxy']], function
     Route::get('user/logout', [LoginController::class, 'logout'])->name('user.logout');
     Route::delete('user', [UserController::class, 'delete'])->name('user.delete')->middleware('rejectIfDemoMode');
 
-    Route::get('oauth/personal-access-tokens', [PersonalAccessTokenController::class, 'forUser'])->name('passport.personal.tokens.index');
-    Route::post('oauth/personal-access-tokens', [PersonalAccessTokenController::class, 'store'])->name('passport.personal.tokens.store');
-    Route::delete('oauth/personal-access-tokens/{token_id}', [PersonalAccessTokenController::class, 'destroy'])->name('passport.personal.tokens.destroy');
+    Route::get('oauth/personal-access-tokens', [PersonalAccessTokenController::class, 'forUser'])->name('passport.personal.tokens.index')->middleware('RejectIfSsoOnlyAndNotForAdmin');
+    Route::post('oauth/personal-access-tokens', [PersonalAccessTokenController::class, 'store'])->name('passport.personal.tokens.store')->middleware('RejectIfSsoOnlyAndNotForAdmin');
+    Route::delete('oauth/personal-access-tokens/{token_id}', [PersonalAccessTokenController::class, 'destroy'])->name('passport.personal.tokens.destroy')->middleware('RejectIfSsoOnlyAndNotForAdmin');
 
-    Route::post('webauthn/register/options', [WebAuthnRegisterController::class, 'options'])->name('webauthn.register.options');
-    Route::post('webauthn/register', [WebAuthnRegisterController::class, 'register'])->name('webauthn.register');
-    Route::get('webauthn/credentials', [WebAuthnManageController::class, 'index'])->name('webauthn.credentials.index');
-    Route::patch('webauthn/credentials/{credential}/name', [WebAuthnManageController::class, 'rename'])->name('webauthn.credentials.rename');
-    Route::delete('webauthn/credentials/{credential}', [WebAuthnManageController::class, 'delete'])->name('webauthn.credentials.delete');
+    Route::post('webauthn/register/options', [WebAuthnRegisterController::class, 'options'])->name('webauthn.register.options')->middleware('RejectIfSsoOnlyAndNotForAdmin');
+    Route::post('webauthn/register', [WebAuthnRegisterController::class, 'register'])->name('webauthn.register')->middleware('RejectIfSsoOnlyAndNotForAdmin');
+    Route::get('webauthn/credentials', [WebAuthnManageController::class, 'index'])->name('webauthn.credentials.index')->middleware('RejectIfSsoOnlyAndNotForAdmin');
+    Route::patch('webauthn/credentials/{credential}/name', [WebAuthnManageController::class, 'rename'])->name('webauthn.credentials.rename')->middleware('RejectIfSsoOnlyAndNotForAdmin');
+    Route::delete('webauthn/credentials/{credential}', [WebAuthnManageController::class, 'delete'])->name('webauthn.credentials.delete')->middleware('RejectIfSsoOnlyAndNotForAdmin');
 });
 
 /**
