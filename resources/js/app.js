@@ -16,6 +16,7 @@ const $2fauth = {
     isDemoApp: window.isDemoApp,
     isTestingApp: window.isTestingApp,
     langs: window.appLocales,
+    urls: window.urls,
 }
 app.provide('2fauth', readonly($2fauth))
 

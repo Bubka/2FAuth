@@ -29,6 +29,8 @@ class SinglePageController extends Controller
         $locales            = collect(config('2fauth.locales'))->toJson(); /** @phpstan-ignore-line */
         $openidAuth         = config('services.openid.client_secret') ? true : false;
         $githubAuth         = config('services.github.client_secret') ? true : false;
+        $installDocUrl      = config('2fauth.installDocUrl');
+        $ssoDocUrl          = config('2fauth.ssoDocUrl');
 
         // if (Auth::user()->preferences)
 
@@ -43,6 +45,10 @@ class SinglePageController extends Controller
                 ],
                 'subdirectory' => $subdir,
             ])->toJson(),
+            'urls'               => collect([
+                'installDocUrl' => $installDocUrl,
+                'ssoDocUrl'     => $ssoDocUrl
+            ]),
             'defaultPreferences' => $defaultPreferences,
             'subdirectory'       => $subdir,
             'isDemoApp'          => $isDemoApp,

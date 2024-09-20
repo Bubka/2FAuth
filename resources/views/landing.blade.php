@@ -25,6 +25,7 @@
     <script type="text/javascript">
         var appSettings = {!! $appSettings !!};
         var appConfig = {!! $appConfig !!};
+        var urls = {!! $urls !!};
         var defaultPreferences = {!! $defaultPreferences->toJson() !!};
         var appVersion = '{{ config("2fauth.version") }}';
         var isDemoApp = {!! $isDemoApp !!};
