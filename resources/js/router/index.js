@@ -36,6 +36,7 @@ const router = createRouter({
         { path: '/settings/webauthn', name: 'settings.webauthn.devices', component: () => import('../views/settings/WebAuthn.vue'), meta: { middlewares: [authGuard], watchedByKicker: true, showAbout: true } },
 
         { path: '/admin/app', name: 'admin.appSetup', component: () => import('../views/admin/AppSetup.vue'), meta: { middlewares: [authGuard, adminOnly], watchedByKicker: true, showAbout: true } },
+        { path: '/admin/auth', name: 'admin.auth', component: () => import('../views/admin/Auth.vue'), meta: { middlewares: [authGuard, adminOnly], watchedByKicker: true, showAbout: true } },
         { path: '/admin/users', name: 'admin.users', component: () => import('../views/admin/Users.vue'), meta: { middlewares: [authGuard, adminOnly], watchedByKicker: true, showAbout: true } },
         { path: '/admin/users/create', name: 'admin.createUser', component: () => import('../views/admin/users/Create.vue'), meta: { middlewares: [authGuard, adminOnly], watchedByKicker: true, showAbout: true } },
         { path: '/admin/users/:userId/manage', name: 'admin.manageUser', component: () => import('../views/admin/users/Manage.vue'), meta: { middlewares: [authGuard, adminOnly], watchedByKicker: true, showAbout: true }, props: true },

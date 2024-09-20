@@ -6,6 +6,11 @@
             'id'   : 'lnkTabApp'
         },
         {
+            'name' : 'admin.auth',
+            'view' : 'admin.auth',
+            'id'   : 'lnkTabAuth'
+        },
+        {
             'name' : 'admin.users',
             'view' : 'admin.users',
             'id'   : 'lnkTabUsers'
