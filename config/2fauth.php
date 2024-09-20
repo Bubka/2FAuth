@@ -89,6 +89,8 @@ return [
         'disableRegistration' => false,
         'enableSso' => true,
         'restrictRegistration' => false,
+        'restrictList' => '',
+        'restrictRule' => '',
         'keepSsoRegistrationEnabled' => false,
     ],
 

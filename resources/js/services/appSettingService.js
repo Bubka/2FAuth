@@ -7,7 +7,7 @@ export default {
      * 
      * @returns 
      */
-    get(config = {}) {
+    getAll(config = {}) {
         return apiClient.get('/settings', { ...config })
     },
 
@@ -15,8 +15,8 @@ export default {
      * 
      * @returns 
      */
-    update(name, value) {
-        return apiClient.put('/settings/' + name, { value: value })
+    update(name, value, config = {}) {
+        return apiClient.put('/settings/' + name, { value: value }, { ...config })
     },
     
     /**

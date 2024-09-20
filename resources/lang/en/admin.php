@@ -15,6 +15,7 @@ return [
 
     'admin' => 'Admin',
     'app_setup' => 'App setup',
+    'auth' => 'Auth',
     'registrations' => 'Registrations',
     'users' => 'Users',
     'users_legend' => 'Manage users registered on your instance or create new ones.',
@@ -83,6 +84,7 @@ return [
     'show_one_year_log' => 'Show entries from the last year',
     'sort_by_date_asc' => 'Show least recent first',
     'sort_by_date_desc' => 'Show most recent first',
+    'single_sign_on' => 'Single Sign-On (SSO)',
     'forms' => [
         'use_encryption' => [
             'label' => 'Protect sensitive data',
@@ -105,7 +107,7 @@ return [
             'help' => 'Prevent new user registration. Unless overridden (see below), this affects SSO as well, so new users won\'t be able to sign in via SSO',
         ],
         'enable_sso' => [
-            'label' => 'Enable Single Sign-On (SSO)',
+            'label' => 'Enable SSO',
             'help' => 'Allow visitors to authenticate using an external ID via the Single Sign-On scheme',
         ],
         'keep_sso_registration_enabled' => [

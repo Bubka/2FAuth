@@ -6,6 +6,7 @@ use App\Api\v1\Requests\SettingStoreRequest;
 use App\Api\v1\Requests\SettingUpdateRequest;
 use App\Facades\Settings;
 use App\Http\Controllers\Controller;
+use Illuminate\Validation\ValidationException;
 
 class SettingController extends Controller
 {
@@ -95,8 +96,18 @@ class SettingController extends Controller
             abort(404);
         }
 
-        $appSettings = config('2fauth.settings');
-        if (array_key_exists($settingName, $appSettings)) {
+        $defaultAppSettings = config('2fauth.settings');
+
+        // When deleting a setting, it may be an original or an additional one:
+        // - Additional settings are created by administrators to extend 2FAuth, they are not registered in the laravel config object.
+        //   They are not nullable so empty string is not allowed.They only exist in the Options table, so it is possible to delete them. 
+        // - Original settings are part of 2FAuth, they are registered in the laravel config object with their default value.
+        //   When set by an admin, their custom value is stored in the Options table too. Deleting a custom value in the Options table from here
+        //   won't delete the setting at all, so we reject all requests that ask for.
+        //   But there is an exception with the restrictRule and restrictList settings:
+        //     Unlike other settings, these two have to support empty strings. Because the Options table does not allow empty strings,
+        //     the only way to set them like so is to restore their original value, an empty string.
+        if (array_key_exists($settingName, $defaultAppSettings) && $defaultAppSettings[$settingName] !== '') {
             return response()->json(
                 ['message'   => 'bad request',
                     'reason' => [__('errors.delete_user_setting_only')],
