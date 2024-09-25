@@ -14,15 +14,15 @@ class OpenIdProviderStub extends OpenId
      */
     public $http;
 
-    protected function getAuthUrl($state)
-    {
-        return $this->buildAuthUrlFromBase('http://auth.url', $state);
-    }
+    // protected function getAuthUrl($state)
+    // {
+    //     return $this->buildAuthUrlFromBase('http://auth.url', $state);
+    // }
 
-    protected function getTokenUrl()
-    {
-        return 'http://token.url';
-    }
+    // protected function getTokenUrl()
+    // {
+    //     return 'http://token.url';
+    // }
 
     /**
      * Get the access token response for the given code.
