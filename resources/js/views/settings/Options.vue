@@ -186,7 +186,7 @@
                         <!-- direct capture -->
                         <FormCheckbox v-model="user.preferences.useDirectCapture" @update:model-value="val => savePreference('useDirectCapture', val)" fieldName="useDirectCapture" label="settings.forms.useDirectCapture.label" help="settings.forms.useDirectCapture.help" />
                         <!-- default capture mode -->
-                        <FormSelect v-model="user.preferences.defaultCaptureMode" @update:model-value="val => savePreference('defaultCaptureMode', val)" :options="captureModes" fieldName="defaultCaptureMode" label="settings.forms.defaultCaptureMode.label" help="settings.forms.defaultCaptureMode.help" />
+                        <FormSelect v-model="user.preferences.defaultCaptureMode" @update:model-value="val => savePreference('defaultCaptureMode', val)" :options="captureModes" fieldName="defaultCaptureMode" label="settings.forms.defaultCaptureMode.label" help="settings.forms.defaultCaptureMode.help" :isDisabled="!user.preferences.useDirectCapture" :isIndented="true" />
                     </div>
                 </form>
             </FormWrapper>
