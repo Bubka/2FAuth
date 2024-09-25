@@ -8,7 +8,6 @@ use Carbon\Carbon;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Log;
 
@@ -90,10 +89,13 @@ class LoginController extends Controller
      */
     public function logout(Request $request)
     {
-        $user = $request->user();
-        Auth::logout();
+        $userId = $request->user()->id;
 
-        Log::info(sprintf('User ID #%s logged out', $user->id));
+        $this->guard()->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        Log::info(sprintf('User ID #%s logged out', $userId));
 
         return response()->json(['message' => 'signed out'], Response::HTTP_OK);
     }
