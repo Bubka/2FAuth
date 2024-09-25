@@ -319,7 +319,7 @@ class TwoFAccount extends Model implements Sortable
     public function setServiceAttribute($value)
     {
         // Encrypt when needed
-        $this->attributes['service'] = $this->encryptOrReturn($value);
+        $this->attributes['service'] = $value ? $this->encryptOrReturn($value) : $value;
     }
 
     /**

@@ -210,7 +210,12 @@ class SettingService
 
         $twofaccounts->each(function ($item, $key) use (&$success, $encrypted) {
             try {
-                $item->service    = $encrypted ? Crypt::encryptString($item->service) : Crypt::decryptString($item->service);
+                // encrypting a null value generate a hash which once decrypted gives an empty string.
+                // As Service is nullable, we handle it only if the fiel contains a value
+                if ($item->service) {
+                    $item->service = $encrypted ? Crypt::encryptString($item->service) : Crypt::decryptString($item->service);
+                }
+
                 $item->legacy_uri = $encrypted ? Crypt::encryptString($item->legacy_uri) : Crypt::decryptString($item->legacy_uri);
                 $item->account    = $encrypted ? Crypt::encryptString($item->account) : Crypt::decryptString($item->account);
                 $item->secret     = $encrypted ? Crypt::encryptString($item->secret) : Crypt::decryptString($item->secret);
