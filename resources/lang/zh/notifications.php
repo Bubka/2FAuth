@@ -14,23 +14,23 @@ return [
     */
 
     'hello' => '您好',
-    'hello_user' => 'Hello :username,',
-    'regards' => 'Regards',
+    'hello_user' => '您好，:username，',
+    'regards' => '此致',
     'test_email_settings' => [
-        'subject' => '2FAuth 测试电子邮件',
-        'reason' => '您收到这封邮件是因为您请求了一封测试电子邮件来验证您的2FAuth 实例的电子邮件设置。',
-        'success' => '好消息是，它正常工作:)'
+        'subject' => '2FAuth 测试邮件',
+        'reason' => '之所以您会收到这封邮件，是因为您请求了一封测试邮件来验证您 2FAuth 的电子邮件送信配置。',
+        'success' => '恭喜您，功能正常 :)'
     ],
     'new_device' => [
-        'subject' => 'Connection to 2FAuth from a new device',
-        'resume' => 'A new device has just connected to your 2FAuth account.',
-        'connection_details' => 'Here are the details of this connection',
-        'recommandations' => 'If this was you, you can ignore this alert. If you suspect any suspicious activity on your account, please change your password.'
+        'subject' => '来自新设备的访问',
+        'resume' => '一台新设备刚被添加到您的 2FAuth 账户上。',
+        'connection_details' => '这是本次事件的相关信息',
+        'recommandations' => '如果是您操作的，您可以忽略此告警。如果您怀疑您的账户有任何可疑活动，请立即更改您的密码。'
     ],
     'failed_login' => [
-        'subject' => 'Failed login to 2FAuth',
-        'resume' => 'There has been a failed login attempt to your 2FAuth account.',
-        'connection_details' => 'Here are the details of this connection attempt',
-        'recommandations' => 'If this was you, you can ignore this alert. If further attempts fail, you should contact the 2FAuth administrator to review security settings and take action against this attacker.'
+        'subject' => '2FAuth 登录失败',
+        'resume' => '您的 2FAuth 账户触发了一次登录失败。',
+        'connection_details' => '这是本次事件的相关信息',
+        'recommandations' => '如果是您操作的，您可以忽略此告警。如果持续有失败的登录尝试，您应立即通知 2FAuth 的管理员去检查相关的安全设置，并对此攻击者采取措施。'
     ],
 ];

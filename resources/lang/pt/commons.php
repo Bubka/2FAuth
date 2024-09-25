@@ -17,7 +17,7 @@ return [
     'update' => 'Atualizar',
     'copy' => 'Copiar',
     'copy_to_clipboard' => 'Copiar para área de transferência',
-    'copied_to_clipboard' => 'Copiado para área de transferência',
+    'copied_to_clipboard' => 'Copiado para a área de transferência',
     'profile' => 'Perfil',
     'edit' => 'Editar',
     'delete' => 'Excluir',

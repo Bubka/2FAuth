@@ -15,6 +15,7 @@ return [
 
     'admin' => 'Administrator',
     'app_setup' => 'App-Einstellungen',
+    'auth' => 'Auth',
     'registrations' => 'Registrierungen',
     'users' => 'Benutzer',
     'users_legend' => 'Benutzer verwalten, die bereits registriert sind, oder neue Benutzer erstellen.',
@@ -83,6 +84,7 @@ return [
     'show_one_year_log' => 'Einträge aus dem letzten Jahr anzeigen',
     'sort_by_date_asc' => 'Älteste zuerst anzeigen',
     'sort_by_date_desc' => 'Aktuellste zuerst anzeigen',
+    'single_sign_on' => 'Single Sign-On (SSO)',
     'forms' => [
         'use_encryption' => [
             'label' => 'Sensible Daten schützen',
@@ -105,8 +107,12 @@ return [
             'help' => 'Verhindert eine neue Benutzerregistrierung. Sofern nicht überschrieben (siehe unten) wirkt sich dies auch auf SSO aus, so dass neue Benutzer sich nicht via SSO anmelden können.',
         ],
         'enable_sso' => [
-            'label' => 'Single Sign-On (SSO) aktivieren',
+            'label' => 'Enable SSO',
             'help' => 'Besuchern die Authentifizierung mit einer externen ID über das Single Sign-On Schema erlauben.',
+        ],
+        'use_sso_only' => [
+            'label' => 'Use SSO only',
+            'help' => 'Make SSO the only available method to log in to 2FAuth. Password login and Webauthn are then disabled for regular users. Administrators are not affected by this restriction.',
         ],
         'keep_sso_registration_enabled' => [
             'label' => 'SSO-Registrierung aktiviert lassen',

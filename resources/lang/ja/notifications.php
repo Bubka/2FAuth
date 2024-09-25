@@ -22,7 +22,7 @@ return [
         'success' => '届いているようですね！'
     ],
     'new_device' => [
-        'subject' => 'Connection to 2FAuth from a new device',
+        'subject' => '新しいデバイスから 2FAuth に接続しました',
         'resume' => '新しいデバイスがあなたの2FAuthアカウントに接続されました。',
         'connection_details' => 'この接続の詳細は以下の通りです',
         'recommandations' => '心当たりがある場合は、この通知を無視しても構いません。アカウントへの不審な行為が疑われる場合は、パスワードをご変更ください。'

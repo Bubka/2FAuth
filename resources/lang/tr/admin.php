@@ -15,6 +15,7 @@ return [
 
     'admin' => 'Yönetici',
     'app_setup' => 'Uygulama Kurulumu',
+    'auth' => 'Auth',
     'registrations' => 'Kayıt',
     'users' => 'Kullanıcılar',
     'users_legend' => 'Uygulamanızda kayıtlı kullanıcılar yönetin veya yeni kullanıcı oluşturun.',
@@ -83,6 +84,7 @@ return [
     'show_one_year_log' => 'Geçen yıldan girdiler göster',
     'sort_by_date_asc' => 'Eskileri önce göster',
     'sort_by_date_desc' => 'Yenileri önce göster',
+    'single_sign_on' => 'Single Sign-On (SSO)',
     'forms' => [
         'use_encryption' => [
             'label' => 'Hassas verileri koru',
@@ -105,8 +107,12 @@ return [
             'help' => 'Yeni kullanıcı kaydını kapatır. Geçersiz kılınmadığı sürece (aşağıya bakın), bu seçenek SSO\'yu da etkiler ve yeni kullanıcıların SSO ile girişini engeller',
         ],
         'enable_sso' => [
-            'label' => 'Single Sign-On (SSO) etkileştir',
+            'label' => 'Enable SSO',
             'help' => 'Kullanıcıların Single Sign-On ile harici bir hesap üzerinden oturum açmasını sağlar',
+        ],
+        'use_sso_only' => [
+            'label' => 'Use SSO only',
+            'help' => 'Make SSO the only available method to log in to 2FAuth. Password login and Webauthn are then disabled for regular users. Administrators are not affected by this restriction.',
         ],
         'keep_sso_registration_enabled' => [
             'label' => 'SSO ile kayıt olmayı açık tut',

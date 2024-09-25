@@ -15,6 +15,7 @@ return [
 
     'admin' => '管理者',
     'app_setup' => 'アプリの機能',
+    'auth' => 'Auth',
     'registrations' => '登録',
     'users' => 'ユーザー',
     'users_legend' => 'インスタンス上の登録ユーザーの管理や、新規作成を行います。',
@@ -83,6 +84,7 @@ return [
     'show_one_year_log' => '昨年からのエントリを表示',
     'sort_by_date_asc' => '古い順',
     'sort_by_date_desc' => '新しい順',
+    'single_sign_on' => 'Single Sign-On (SSO)',
     'forms' => [
         'use_encryption' => [
             'label' => '機密データを保護',
@@ -105,8 +107,12 @@ return [
             'help' => '新規ユーザー登録を禁止します。上書き（下記参照）されない限り、SSOにも影響し、新規ユーザーはSSOでもサインインできなくなります。',
         ],
         'enable_sso' => [
-            'label' => 'シングルサインオン (SSO) を有効化',
+            'label' => 'Enable SSO',
             'help' => '訪問者が外部 ID のシングルサインオンを利用して認証できるようにします。',
+        ],
+        'use_sso_only' => [
+            'label' => 'Use SSO only',
+            'help' => 'Make SSO the only available method to log in to 2FAuth. Password login and Webauthn are then disabled for regular users. Administrators are not affected by this restriction.',
         ],
         'keep_sso_registration_enabled' => [
             'label' => 'SSO登録は許可する',

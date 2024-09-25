@@ -143,6 +143,7 @@ return [
 
     'single' => ':attribute kullanıldığında, istek gövdesindeki tek parametre bu olmalıdır',
     'onlyCustomOtpWithUri' => 'Uri parametresi tek başına veya yalnızca \'custom_otp\' parametresiyle birlikte sağlanmalıdır',
+    'IsValidRegex' => 'The :attribute must be a valid regex pattern.',
 
     /*
     |--------------------------------------------------------------------------
@@ -187,7 +188,7 @@ return [
         ],
         'ids' => [
             'regex' => 'IDler virgül ile ayrılmalı, en sonda ise virgül olmamalıdır.',
-        ]
+        ],
     ],
 
     /*

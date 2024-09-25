@@ -22,7 +22,14 @@ return [
     'sign_out' => 'Déconnexion',
     'sign_in' => 'Se connecter',
     'sign_in_using' => 'Se connecter en utilisant',
+    'if_administrator' => 'Administrateur ?',
+    'sign_in_here' => 'Connectez-vous sans SSO',
     'or_continue_with' => 'Vous pouvez aussi continuer avec :',
+    'password_login_and_webauthn_are_disabled' => 'La connexion par mot de passe ou WebAuthn est désactivée.',
+    'sign_in_using_sso' => 'Choisissez un fournisseur SSO pour vous connecter :',
+    'no_provider' => 'aucun fournisseur',
+    'no_sso_provider_or_provider_is_missing' => 'Fournisseur manquant ?',
+    'see_how_to_enable_sso' => 'Voir comment activer un fournisseur',
     'sign_in_using_security_device' => 'Se connecter en utilisant un périphérique de sécurité',
     'login_and_password' => 'login & mot de passe',
     'register' => 'Créer un compte',
@@ -34,6 +41,7 @@ return [
     'maybe_later' => 'Peut-être plus tard',
     'user_account_controlled_by_proxy' => 'Compte utilisateur mis à disposition par un proxy d\'authentification.<br />Gérer le compte au niveau du proxy.',
     'auth_handled_by_proxy' => 'Authentification gérée par un proxy inverse, les paramètres ci-dessous sont désactivés.<br />Gérer l\'authentification au niveau du proxy.',
+    'sso_only_x_settings_are_disabled' => 'L\'authentification n\'est possible qu\'avec SSO, :auth_method est désactivé',
     'confirm' => [
         'logout' => 'Etes-vous sûrs de vouloir vous déconnecter ?',
         'revoke_device' => 'Voulez-vous vraiment supprimer cet appareil ?',
@@ -79,6 +87,7 @@ return [
         'name' => 'Nom',
         'login' => 'Connexion',
         'webauthn_login' => 'Connexion WebAuthn',
+        'sso_login' => 'Connexion SSO',
         'email' => 'Email',
         'password' => 'Mot de passe',
         'reveal_password' => 'Afficher le mot de passe',
@@ -94,6 +103,7 @@ return [
         'reset_your_password' => 'Réinitialiser votre mot de passe',
         'reset_password' => 'Mot de passe oublié',
         'disabled_in_demo' => 'Fonctionnalité désactivée en mode Démo',
+        'sso_only_form_restricted_to_admin' => 'Les utilisateurs doivent se connecter avec SSO. Les autres méthodes sont réservées aux administrateurs.',
         'new_password' => 'Nouveau mot de passe',
         'current_password' => [
             'label' => 'Mot de passe actuel',
@@ -124,5 +134,9 @@ return [
         'optional_rules_you_should_follow' => 'Recommandé (fortement)',
         'caps_lock_is_on' => 'Verr Maj est activé',
     ],
-
+    'sso_providers' => [
+        'unknown' => 'inconnu',
+        'github' => 'Github',
+        'openid' => 'OpenID'
+    ]
 ];

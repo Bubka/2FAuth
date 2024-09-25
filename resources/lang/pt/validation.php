@@ -13,24 +13,24 @@ return [
     |
     */
 
-    'accepted' => 'The :attribute must be accepted.',
-    'accepted_if' => 'The :attribute must be accepted when :other is :value.',
-    'active_url' => 'The :attribute is not a valid URL.',
-    'after' => 'The :attribute must be a date after :date.',
-    'after_or_equal' => 'The :attribute must be a date after or equal to :date.',
-    'alpha' => 'The :attribute must only contain letters.',
-    'alpha_dash' => 'The :attribute must only contain letters, numbers, dashes and underscores.',
-    'alpha_num' => 'The :attribute must only contain letters and numbers.',
-    'array' => 'The :attribute must be an array.',
-    'before' => 'The :attribute must be a date before :date.',
-    'before_or_equal' => 'The :attribute must be a date before or equal to :date.',
+    'accepted' => 'O campo :attribute deve ser aceito.',
+    'accepted_if' => 'O :attribute deve ser aceito quando :other for :value.',
+    'active_url' => 'O :attribute não é um URL válida.',
+    'after' => 'A :attribute deve ser uma data posterior a :date.',
+    'after_or_equal' => 'O :attribute deve ser uma data posterior ou igual a :date.',
+    'alpha' => 'O :attribute deve conter apenas letras.',
+    'alpha_dash' => 'O :attribute deve conter apenas letras, números, traços e sublinhados.',
+    'alpha_num' => 'O :attribute deve conter apenas letras e números.',
+    'array' => 'O :attribute deve ser uma matriz.',
+    'before' => 'O :attribute deve ser inferior a :date.',
+    'before_or_equal' => 'O :attribute deve ser uma data anterior ou igual a :date.',
     'between' => [
-        'array' => 'The :attribute must have between :min and :max items.',
-        'file' => 'The :attribute must be between :min and :max kilobytes.',
-        'numeric' => 'The :attribute must be between :min and :max.',
-        'string' => 'The :attribute must be between :min and :max characters.',
+        'array' => 'O :attribute deve ter entre :min e :max itens.',
+        'file' => 'O :attribute deve ter entre :min e :max kilobytes.',
+        'numeric' => 'O :attribute deve estar entre :min e :max.',
+        'string' => 'O :attribute deve ter entre :min e :max caracteres.',
     ],
-    'boolean' => 'The :attribute field must be true or false.',
+    'boolean' => 'O campo ":attribute" deve ser verdadeiro ou falso.',
     'confirmed' => 'The :attribute confirmation does not match.',
     'current_password' => 'The password is incorrect.',
     'date' => 'The :attribute is not a valid date.',
@@ -143,6 +143,7 @@ return [
 
     'single' => 'When using :attribute it must be the only parameter in this request body',
     'onlyCustomOtpWithUri' => 'The uri parameter must be provided alone or only in combination with the \'custom_otp\' parameter',
+    'IsValidRegex' => 'The :attribute must be a valid regex pattern.',
 
     /*
     |--------------------------------------------------------------------------
@@ -187,7 +188,7 @@ return [
         ],
         'ids' => [
             'regex' => 'IDs must be comma separated, without trailing comma.',
-        ]
+        ],
     ],
 
     /*

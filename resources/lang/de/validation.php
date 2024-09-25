@@ -143,6 +143,7 @@ return [
 
     'single' => 'Bei Verwendung von :attribute muss es der einzige Parameter in diesem Anfragetext sein',
     'onlyCustomOtpWithUri' => 'Der uri Parameter muss allein oder nur in Kombination mit dem \'custom_otp\' Parameter angegeben werden',
+    'IsValidRegex' => 'The :attribute must be a valid regex pattern.',
 
     /*
     |--------------------------------------------------------------------------
@@ -187,7 +188,7 @@ return [
         ],
         'ids' => [
             'regex' => 'IDs müssen durch Komma getrennt werden, ohne Komma am Ende.',
-        ]
+        ],
     ],
 
     /*

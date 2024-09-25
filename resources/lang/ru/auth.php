@@ -22,7 +22,14 @@ return [
     'sign_out' => 'Выйти',
     'sign_in' => 'Войти',
     'sign_in_using' => 'Войти с помощью',
+    'if_administrator' => 'Administrator?',
+    'sign_in_here' => 'You can sign without SSO',
     'or_continue_with' => 'Также вы можете продолжить с:',
+    'password_login_and_webauthn_are_disabled' => 'Password login and WebAuthn are disabled.',
+    'sign_in_using_sso' => 'Pick an SSO provider to sign in with:',
+    'no_provider' => 'no provider',
+    'no_sso_provider_or_provider_is_missing' => 'Provider is missing?',
+    'see_how_to_enable_sso' => 'See how to enable a provider',
     'sign_in_using_security_device' => 'Войти, используя устройство безопасности',
     'login_and_password' => 'имени пользователя и пароля',
     'register' => 'Регистрация',
@@ -34,6 +41,7 @@ return [
     'maybe_later' => 'Не сейчас',
     'user_account_controlled_by_proxy' => 'Учётная запись создана через прокси-аунтификацию.<br />Управляйте учётной записью на уровне прокси.',
     'auth_handled_by_proxy' => 'Аутентификация осуществляется на обратном прокси, настройки ниже не доступны.<br />Управление аутентификацией осуществляется на прокси.',
+    'sso_only_x_settings_are_disabled' => 'Authentication is restricted to SSO only, :auth_method is disabled',
     'confirm' => [
         'logout' => 'Вы уверены, что хотите выйти?',
         'revoke_device' => 'Вы уверены, что хотите удалить это устройство?',
@@ -79,6 +87,7 @@ return [
         'name' => 'Имя',
         'login' => 'Вход',
         'webauthn_login' => 'WebAuthn вход',
+        'sso_login' => 'SSO login',
         'email' => 'Email',
         'password' => 'Пароль',
         'reveal_password' => 'Показать пароль',
@@ -94,6 +103,7 @@ return [
         'reset_your_password' => 'Восстановить пароль',
         'reset_password' => 'Восстановить пароль',
         'disabled_in_demo' => 'Функция отключена в демонастрационном режиме',
+        'sso_only_form_restricted_to_admin' => 'Regular users must sign in with SSO. Other methods are for administrators only.',
         'new_password' => 'Новый пароль',
         'current_password' => [
             'label' => 'Текущий пароль',
@@ -124,5 +134,9 @@ return [
         'optional_rules_you_should_follow' => 'Рекомендуется (настоятельно)',
         'caps_lock_is_on' => 'Caps lock включен',
     ],
-
+    'sso_providers' => [
+        'unknown' => 'unknown',
+        'github' => 'Github',
+        'openid' => 'OpenID'
+    ]
 ];

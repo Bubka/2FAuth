@@ -13,11 +13,12 @@ return [
     |
     */
 
-    'admin' => 'Admin',
-    'app_setup' => 'Configuração do App',
-    'registrations' => 'Cadastros',
+    'admin' => 'Administrador',
+    'app_setup' => 'Configuração da Aplicação',
+    'auth' => 'Auth',
+    'registrations' => 'Registos',
     'users' => 'Usuários',
-    'users_legend' => 'Gerenciar usuários registrados em sua instância ou criar novos.',
+    'users_legend' => 'Gerenciar usuários registrados ou criar  em sua instância.',
     'admin_settings' => 'Configurações de administração',
     'create_new_user' => 'Criar usuário',
     'new_user' => 'Novo usuário',
@@ -46,7 +47,7 @@ return [
     'password_request_expired' => 'Uma solicitação de redefinição de senha existe para este usuário, mas expirou, o que significa que o usuário não alterou sua senha a tempo. Esta pode ser uma requisição do próprio usuário ou de um administrador.',
     'resend_email' => 'Reenviar e-mail',
     'resend_email_title' => 'Reenviar um e-mail de redefinição de senha ao usuário',
-    'resend_email_help' => 'Use <b>Reenviar e-mail</b> para enviar um novo e-mail de redefinição de senha para o usuário para que ele possa definir uma nova senha. Isso deixará sua senha atual como está e qualquer pedido anterior será revogado.',
+    'resend_email_help' => 'Use <b>Reenviar e-mail</b> para enviar um novo e-mail de redefinição de senha para o usuário para ele definir uma nova senha. Isso deixará sua senha atual como está e qualquer pedido anterior será revogado.',
     'reset_password' => 'Redefinir senha',
     'reset_password_help' => 'Use <b>Redefinir senha</b> para forçar uma redefinição de senha (isso irá definir uma senha temporária) antes de enviar um e-mail de redefinição de senha para o usuário para que eles possam definir uma nova senha. Qualquer solicitação anterior será revogada.',
     'reset_password_title' => 'Redefinir a senha do usuário',
@@ -57,11 +58,11 @@ return [
     'revoke_all_devices_for_user' => 'Revogar os dispositivos de segurança de todos os usuários',
     'danger_zone' => 'Zona de perigo',
     'delete_this_user_legend' => 'A conta de usuário será excluída assim como todos os seus dados de 2FA.',
-    'this_is_not_soft_delete' => 'Não se trata de uma exclusão suave, não se pode voltar atrás.',
+    'this_is_not_soft_delete' => 'Não se trata de uma exclusão suave, não se pode retroceder.',
     'delete_this_user' => 'Excluir este usuário',
     'user_role_updated' => 'Função do usuário atualizada',
-    'pats_succesfully_revoked' => 'PATs do usuário revogados com sucesso',
-    'security_devices_succesfully_revoked' => 'Dispositivos de segurança do usuário revogados com sucesso',
+    'pats_succesfully_revoked' => 'PATs do usuário revogado com sucesso',
+    'security_devices_succesfully_revoked' => 'Dispositivos de segurança do usuário revogado com sucesso',
     'variables' => 'Variáveis',
     'cache_cleared' => 'Cache apagado',
     'cache_optimized' => 'Cache otimizado',
@@ -83,6 +84,7 @@ return [
     'show_one_year_log' => 'Mostrar entradas do último ano',
     'sort_by_date_asc' => 'Mostrar o mais antigo primeiro',
     'sort_by_date_desc' => 'Mostrar o mais recente primeiro',
+    'single_sign_on' => 'Single Sign-On (SSO)',
     'forms' => [
         'use_encryption' => [
             'label' => 'Proteja dados confidenciais',
@@ -105,8 +107,12 @@ return [
             'help' => 'Impedir novos registros. A menos que sobrescrito (veja abaixo), isto afeta SSO também, então novos usuários não serão capazes de entrar via SSO',
         ],
         'enable_sso' => [
-            'label' => 'Ativando o logon único (SSO)',
+            'label' => 'Enable SSO',
             'help' => 'Permitir que os visitantes autentiquem usando um ID externo por meio do esquema de logon SSO',
+        ],
+        'use_sso_only' => [
+            'label' => 'Use SSO only',
+            'help' => 'Make SSO the only available method to log in to 2FAuth. Password login and Webauthn are then disabled for regular users. Administrators are not affected by this restriction.',
         ],
         'keep_sso_registration_enabled' => [
             'label' => 'Mantenha o registro SSO ativado',

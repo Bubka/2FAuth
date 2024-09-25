@@ -60,6 +60,10 @@ return [
         'i_m_lucky' => 'Şansımı dene',
         'i_m_lucky_legend' => '"Şansımı dene" butonu söz konusu servisin özgün simgesini almaya çalışır. Hizmetin gerçek adını ".xyz" uzantısı olmadan girin ve yazım hatalarından kaçınmaya çalışın. (beta özelliği)',
         'test' => 'Deneme',
+        'group' => [
+            'label' => 'Group',
+            'help' => 'The group to which the account is to be assigned'
+        ],
         'secret' => [
             'label' => 'Anahtar',
             'help' => 'Güvenlik kodlarınızın oluşturulması için gereken anahtar'

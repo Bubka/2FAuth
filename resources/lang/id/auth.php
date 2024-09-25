@@ -22,7 +22,14 @@ return [
     'sign_out' => 'Keluar',
     'sign_in' => 'Masuk',
     'sign_in_using' => 'Masuk dengan',
+    'if_administrator' => 'Administrator?',
+    'sign_in_here' => 'You can sign without SSO',
     'or_continue_with' => 'You can also continue with:',
+    'password_login_and_webauthn_are_disabled' => 'Password login and WebAuthn are disabled.',
+    'sign_in_using_sso' => 'Pick an SSO provider to sign in with:',
+    'no_provider' => 'no provider',
+    'no_sso_provider_or_provider_is_missing' => 'Provider is missing?',
+    'see_how_to_enable_sso' => 'See how to enable a provider',
     'sign_in_using_security_device' => 'Masuk menggunakan sebuah perangkat keamanan',
     'login_and_password' => 'masuk & kata sandi',
     'register' => 'Mendaftar',
@@ -34,6 +41,7 @@ return [
     'maybe_later' => 'Mungkin nanti',
     'user_account_controlled_by_proxy' => 'User account made available by an authentication proxy.<br />Manage the account at proxy level.',
     'auth_handled_by_proxy' => 'Otentikasi ditangani oleh sebuah reverse proxy, pengaturan dibawah dimatikan.<br />Atur otentikasi pada level proxy.',
+    'sso_only_x_settings_are_disabled' => 'Authentication is restricted to SSO only, :auth_method is disabled',
     'confirm' => [
         'logout' => 'Apakah Anda yakin ingin keluar?',
         'revoke_device' => 'Anda yakin ingin menghapus perangkat ini?',
@@ -78,6 +86,7 @@ return [
         'name' => 'Name',
         'login' => 'Login',
         'webauthn_login' => 'WebAuthn login',
+        'sso_login' => 'SSO login',
         'email' => 'Email',
         'password' => 'Password',
         'reveal_password' => 'Reveal password',
@@ -93,6 +102,7 @@ return [
         'reset_your_password' => 'Reset your password',
         'reset_password' => 'Reset password',
         'disabled_in_demo' => 'Feature disabled in Demo mode',
+        'sso_only_form_restricted_to_admin' => 'Regular users must sign in with SSO. Other methods are for administrators only.',
         'new_password' => 'New password',
         'current_password' => [
             'label' => 'Current password',
@@ -123,5 +133,9 @@ return [
         'optional_rules_you_should_follow' => 'Recommanded (highly)',
         'caps_lock_is_on' => 'Caps lock is On',
     ],
-
+    'sso_providers' => [
+        'unknown' => 'unknown',
+        'github' => 'Github',
+        'openid' => 'OpenID'
+    ]
 ];

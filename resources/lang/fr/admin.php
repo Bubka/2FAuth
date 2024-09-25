@@ -15,6 +15,7 @@ return [
 
     'admin' => 'Admin',
     'app_setup' => 'Configuration',
+    'auth' => 'Auth',
     'registrations' => 'Inscriptions',
     'users' => 'Utilisateurs',
     'users_legend' => 'Gérer les utilisateurs de votre instance ou créer de nouveaux utilisateurs.',
@@ -83,6 +84,7 @@ return [
     'show_one_year_log' => 'Afficher les entrées sur un an',
     'sort_by_date_asc' => 'Afficher les plus anciens en premier',
     'sort_by_date_desc' => 'Afficher les plus récents en premier',
+    'single_sign_on' => 'Single Sign-On (SSO)',
     'forms' => [
         'use_encryption' => [
             'label' => 'Protéger les données sensibles',
@@ -105,8 +107,12 @@ return [
             'help' => 'Empêche l\'inscription de nouveaux utilisateurs. A moins que ce réglage ne soit surchargé (voir ci-après), cela affecte également l\'inscription (c\'est à dire la première connexion) via SSO',
         ],
         'enable_sso' => [
-            'label' => 'Activer l\'authentification unique (SSO)',
+            'label' => 'Activer SSO',
             'help' => 'Permet aux visiteurs de s\'authentifier avec un compte externe grâce à la méthode Single Sign-On',
+        ],
+        'use_sso_only' => [
+            'label' => 'Utiliser uniquement SSO',
+            'help' => 'Définir SSO comme la seule méthode disponible pour se connecter à 2FAuth. La connexion par mot de passe ou Webauthn est alors désactivée pour les utilisateurs. Les administrateurs ne sont pas affectés par cette restriction.',
         ],
         'keep_sso_registration_enabled' => [
             'label' => 'Garder l\'inscription via SSO activée',

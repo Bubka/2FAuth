@@ -10,7 +10,7 @@ return [
     |
     */
 
-    'browser_preference' => 'Preferência do navegador',
+    'browser_preference' => 'Padrão do navegador',
     'en' => 'English (Inglês)',
     'fr' => 'Français (Francês)',
     'de' => 'Deutsch (Alemão)',
@@ -20,5 +20,5 @@ return [
     'bg' => 'Български (Búlgaro)',
     'ja' => '日本語 (Japonês)',
     'hi' => 'हिंदी (Indiano)',
-    'tr' => 'Türkçe (Turkish)',
+    'tr' => 'Türkçe (Turco)',
 ];

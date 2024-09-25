@@ -16,12 +16,12 @@ return [
     'importAccounts' => '导入账户',
     'editAccount' => '编辑账户',
     'showQRcode' => '二维码形式的账户',
-    'groups' => '组',
-    'createGroup' => '创建组',
-    'editGroup' => '编辑组',
+    'groups' => '分组',
+    'createGroup' => '创建分组',
+    'editGroup' => '编辑分组',
     'settings' => [
         'options' => '选项',
-        'account' => '用户帐户',
+        'account' => '用户账户',
         'oauth' => [
             'tokens' => 'OAuth 令牌',
             'generatePAT' => '新建个人令牌',
@@ -52,7 +52,7 @@ return [
         'createUser' => '创建用户',
         'manageUser' => '管理用户',
         'logs' => [
-            'access' => 'Access log'
+            'access' => '访问日志'
         ]
     ]
 ];

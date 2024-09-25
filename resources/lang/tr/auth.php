@@ -22,7 +22,14 @@ return [
     'sign_out' => 'Çıkış',
     'sign_in' => 'Oturum aç',
     'sign_in_using' => 'Oturum açma yöntemi',
+    'if_administrator' => 'Administrator?',
+    'sign_in_here' => 'You can sign without SSO',
     'or_continue_with' => 'Ayrıca şununla da devam edebilirsiniz:',
+    'password_login_and_webauthn_are_disabled' => 'Password login and WebAuthn are disabled.',
+    'sign_in_using_sso' => 'Pick an SSO provider to sign in with:',
+    'no_provider' => 'no provider',
+    'no_sso_provider_or_provider_is_missing' => 'Provider is missing?',
+    'see_how_to_enable_sso' => 'See how to enable a provider',
     'sign_in_using_security_device' => 'Güvenlik cihazı kullanarak oturum aç',
     'login_and_password' => 'kullanıcı & şifre',
     'register' => 'Kayıt',
@@ -34,6 +41,7 @@ return [
     'maybe_later' => 'Belki daha sonra',
     'user_account_controlled_by_proxy' => 'Kimlik doğrulama proxy\'si tarafından kullanıma sunulan kullanıcı hesabı.<br />Hesabı proxy düzeyinde yönetin.',
     'auth_handled_by_proxy' => 'Kimlik doğrulama ters proxy tarafından gerçekleştirilmiş, aşağıdaki ayarlar devre dışı.<br />Kimlik doğrulamayı proxy düzeyinde yönetin.',
+    'sso_only_x_settings_are_disabled' => 'Authentication is restricted to SSO only, :auth_method is disabled',
     'confirm' => [
         'logout' => 'Çıkış yapmak istediğinizden emin misiniz?',
         'revoke_device' => 'Bu cihazın yetkilerini iptal etmek istediğinizden emin misiniz?',
@@ -79,6 +87,7 @@ return [
         'name' => 'İsim',
         'login' => 'Giriş',
         'webauthn_login' => 'WebAuthn girişi',
+        'sso_login' => 'SSO login',
         'email' => 'ePosta',
         'password' => 'Parola',
         'reveal_password' => 'Parolayı göster',
@@ -94,6 +103,7 @@ return [
         'reset_your_password' => 'Parolanızı sıfırlayın',
         'reset_password' => 'Parola sıfırlama',
         'disabled_in_demo' => 'Bu özellik Demo modunda geçerli değil',
+        'sso_only_form_restricted_to_admin' => 'Regular users must sign in with SSO. Other methods are for administrators only.',
         'new_password' => 'Yeni parola',
         'current_password' => [
             'label' => 'Mevcut parola',
@@ -124,5 +134,9 @@ return [
         'optional_rules_you_should_follow' => 'Önerilen (şiddetle)',
         'caps_lock_is_on' => 'Caps lock Açık',
     ],
-
+    'sso_providers' => [
+        'unknown' => 'unknown',
+        'github' => 'Github',
+        'openid' => 'OpenID'
+    ]
 ];

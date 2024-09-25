@@ -15,6 +15,7 @@ return [
 
     'admin' => 'Администратор',
     'app_setup' => 'Настройки приложения',
+    'auth' => 'Auth',
     'registrations' => 'Регистрации',
     'users' => 'Пользователи',
     'users_legend' => 'Управление пользователями, зарегистрированными на вашем экземпляре приложения или создание новых.',
@@ -83,6 +84,7 @@ return [
     'show_one_year_log' => 'Показать записи за последний год',
     'sort_by_date_asc' => 'Показать сначала первые',
     'sort_by_date_desc' => 'Показать сначала последние',
+    'single_sign_on' => 'Single Sign-On (SSO)',
     'forms' => [
         'use_encryption' => [
             'label' => 'Защитить конфиденциальные данные',
@@ -105,8 +107,12 @@ return [
             'help' => 'Запретить регистрацию новых пользователей. Если не переопределено (см. ниже), это также влияет на SSO, так что новые пользователи не смогут войти через SSO',
         ],
         'enable_sso' => [
-            'label' => 'Включить Single Sign-On (SSO)',
+            'label' => 'Enable SSO',
             'help' => 'Разрешить посетителям аутентифицироваться с использованием внешнего ID через схему Single Sign-On',
+        ],
+        'use_sso_only' => [
+            'label' => 'Use SSO only',
+            'help' => 'Make SSO the only available method to log in to 2FAuth. Password login and Webauthn are then disabled for regular users. Administrators are not affected by this restriction.',
         ],
         'keep_sso_registration_enabled' => [
             'label' => 'Сохранить SSO регистрацию включенной',

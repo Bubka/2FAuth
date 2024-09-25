@@ -15,6 +15,7 @@ return [
 
     'admin' => 'ऐडमिन',
     'app_setup' => 'ऐप का सेटअप',
+    'auth' => 'Auth',
     'registrations' => 'रजिस्ट्रेशन',
     'users' => 'उपयोगकर्ता',
     'users_legend' => 'अपने इंस्टेंस पर पंजीकृत उपयोगकर्ताओं को प्रबंधित करें या नए बनाएं।',
@@ -83,6 +84,7 @@ return [
     'show_one_year_log' => 'पिछले साल की एंट्री दिखाएं',
     'sort_by_date_asc' => 'सबसे कम नई पहले दिखाएं',
     'sort_by_date_desc' => 'सबसे नई पहले दिखाएं',
+    'single_sign_on' => 'Single Sign-On (SSO)',
     'forms' => [
         'use_encryption' => [
             'label' => 'संवेदनशील डेटा को सुरक्षित करें',
@@ -105,8 +107,12 @@ return [
             'help' => 'नए उपयोगकर्ता रेजिस्ट्रेशन रोकें। जब तक इसे ओवरराइड नहीं किया जाता (नीचे देखें), यह SSO को भी प्रभावित करता है, इसलिए नए उपयोगकर्ता SSO के माध्यम से साइन इन नहीं कर पाएंगे',
         ],
         'enable_sso' => [
-            'label' => 'सिंगल साइन-ऑन (SSO) सक्रिय करें',
+            'label' => 'Enable SSO',
             'help' => 'आगंतुकों को सिंगल साइन-ऑन योजना के माध्यम से बाहरी ID का उपयोग करके प्रमाणित करने की अनुमति दें',
+        ],
+        'use_sso_only' => [
+            'label' => 'Use SSO only',
+            'help' => 'Make SSO the only available method to log in to 2FAuth. Password login and Webauthn are then disabled for regular users. Administrators are not affected by this restriction.',
         ],
         'keep_sso_registration_enabled' => [
             'label' => 'SSO द्वारा रेजिस्ट्रेशन को सक्रिय रखें',

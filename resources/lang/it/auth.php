@@ -22,7 +22,14 @@ return [
     'sign_out' => 'Disconnettiti',
     'sign_in' => 'Accedi',
     'sign_in_using' => 'Accedi con',
+    'if_administrator' => 'Administrator?',
+    'sign_in_here' => 'You can sign without SSO',
     'or_continue_with' => 'You can also continue with:',
+    'password_login_and_webauthn_are_disabled' => 'Password login and WebAuthn are disabled.',
+    'sign_in_using_sso' => 'Pick an SSO provider to sign in with:',
+    'no_provider' => 'no provider',
+    'no_sso_provider_or_provider_is_missing' => 'Provider is missing?',
+    'see_how_to_enable_sso' => 'See how to enable a provider',
     'sign_in_using_security_device' => 'Accedi tramite un dispositivo di sicurezza',
     'login_and_password' => 'nome utente e password',
     'register' => 'Registrati',
@@ -34,6 +41,7 @@ return [
     'maybe_later' => 'Magari più tardi',
     'user_account_controlled_by_proxy' => 'Account utente reso disponibile da un proxy di autenticazione.<br />Gestisci l\'account a livello di proxy.',
     'auth_handled_by_proxy' => 'Autenticazione gestita da un proxy inverso, le impostazioni sottostanti sono disabilitate.<br />Gestisci l\'autenticazione a livello di proxy.',
+    'sso_only_x_settings_are_disabled' => 'Authentication is restricted to SSO only, :auth_method is disabled',
     'confirm' => [
         'logout' => 'Sei sicuro di volerti disconnettere?',
         'revoke_device' => 'Sei sicuro di voler eliminare questo dispositivo?',
@@ -79,6 +87,7 @@ return [
         'name' => 'Nome',
         'login' => 'Login',
         'webauthn_login' => 'WebAuthn login',
+        'sso_login' => 'SSO login',
         'email' => 'Email',
         'password' => 'Password',
         'reveal_password' => 'Mostra password',
@@ -94,6 +103,7 @@ return [
         'reset_your_password' => 'Reimposta la password',
         'reset_password' => 'Ripristina password',
         'disabled_in_demo' => 'Funzione disabilitata in modalità demo',
+        'sso_only_form_restricted_to_admin' => 'Regular users must sign in with SSO. Other methods are for administrators only.',
         'new_password' => 'New password',
         'current_password' => [
             'label' => 'Password attuale',
@@ -124,5 +134,9 @@ return [
         'optional_rules_you_should_follow' => 'Raccomandato (fortemente)',
         'caps_lock_is_on' => 'Il blocco maiuscole è attivo',
     ],
-
+    'sso_providers' => [
+        'unknown' => 'unknown',
+        'github' => 'Github',
+        'openid' => 'OpenID'
+    ]
 ];

@@ -60,6 +60,10 @@ return [
         'i_m_lucky' => '適当に取得',
         'i_m_lucky_legend' => '「適当に取得」ボタンは、指定したサービスの公式アイコンの取得を試みます。 ".xyz" といった語尾を除く実際のサービス名を、誤字のないよう入力してください。（ベータ機能）',
         'test' => 'テスト',
+        'group' => [
+            'label' => 'Group',
+            'help' => 'The group to which the account is to be assigned'
+        ],
         'secret' => [
             'label' => 'シークレット',
             'help' => 'セキュリティコードの生成に使用されるキー'

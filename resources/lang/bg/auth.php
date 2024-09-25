@@ -22,7 +22,14 @@ return [
     'sign_out' => 'Изход',
     'sign_in' => 'Вход',
     'sign_in_using' => 'Влизане с',
+    'if_administrator' => 'Administrator?',
+    'sign_in_here' => 'You can sign without SSO',
     'or_continue_with' => 'You can also continue with:',
+    'password_login_and_webauthn_are_disabled' => 'Password login and WebAuthn are disabled.',
+    'sign_in_using_sso' => 'Pick an SSO provider to sign in with:',
+    'no_provider' => 'no provider',
+    'no_sso_provider_or_provider_is_missing' => 'Provider is missing?',
+    'see_how_to_enable_sso' => 'See how to enable a provider',
     'sign_in_using_security_device' => 'Влезте с помощта на защитно устройство',
     'login_and_password' => 'потребител и парола',
     'register' => 'Регистрация',
@@ -34,6 +41,7 @@ return [
     'maybe_later' => 'Може би по-късно',
     'user_account_controlled_by_proxy' => 'Потребителски акаунт, предоставен от прокси за удостоверяване.<br />Управлявайте акаунта на ниво прокси.',
     'auth_handled_by_proxy' => 'Удостоверяването се обработва от ревърс прокси, настройките по-долу са деактивирани.<br />Управлявайте удостоверяването на ниво прокси.',
+    'sso_only_x_settings_are_disabled' => 'Authentication is restricted to SSO only, :auth_method is disabled',
     'confirm' => [
         'logout' => 'Сигурни ли сте, че искате да излезете?',
         'revoke_device' => 'Сигурни ли сте, че искате да анулирате това устройство?',
@@ -79,6 +87,7 @@ return [
         'name' => 'Име',
         'login' => 'Вход',
         'webauthn_login' => 'WebAuthn вход',
+        'sso_login' => 'SSO login',
         'email' => 'Имейл',
         'password' => 'Парола',
         'reveal_password' => 'Покажи паролата',
@@ -94,6 +103,7 @@ return [
         'reset_your_password' => 'Нулиране на паролата',
         'reset_password' => 'Нулиране на парола',
         'disabled_in_demo' => 'Функцията е деактивирана в демо режима',
+        'sso_only_form_restricted_to_admin' => 'Regular users must sign in with SSO. Other methods are for administrators only.',
         'new_password' => 'New password',
         'current_password' => [
             'label' => 'Текуща парола',
@@ -124,5 +134,9 @@ return [
         'optional_rules_you_should_follow' => 'Силно препоръчително',
         'caps_lock_is_on' => 'Главните букви са включени',
     ],
-
+    'sso_providers' => [
+        'unknown' => 'unknown',
+        'github' => 'Github',
+        'openid' => 'OpenID'
+    ]
 ];

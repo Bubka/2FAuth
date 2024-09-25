@@ -22,7 +22,14 @@ return [
     'sign_out' => 'Cerrar sesión',
     'sign_in' => 'Iniciar sesión',
     'sign_in_using' => 'Inicia sesión, usando',
+    'if_administrator' => 'Administrator?',
+    'sign_in_here' => 'You can sign without SSO',
     'or_continue_with' => 'You can also continue with:',
+    'password_login_and_webauthn_are_disabled' => 'Password login and WebAuthn are disabled.',
+    'sign_in_using_sso' => 'Pick an SSO provider to sign in with:',
+    'no_provider' => 'no provider',
+    'no_sso_provider_or_provider_is_missing' => 'Provider is missing?',
+    'see_how_to_enable_sso' => 'See how to enable a provider',
     'sign_in_using_security_device' => 'Iniciar sesión usando un dispositivo de seguridad',
     'login_and_password' => 'usuario y contraseña',
     'register' => 'Registrarse',
@@ -34,6 +41,7 @@ return [
     'maybe_later' => 'Quizás más tarde',
     'user_account_controlled_by_proxy' => 'Cuenta de usuario disponible por un proxy de autenticación.<br />Administra la cuenta a nivel de proxy.',
     'auth_handled_by_proxy' => 'Autenticación administrada por un proxy inverso, las configuraciones de abajo están deshabilitadas.<br />Gestionar autenticación a nivel proxy.',
+    'sso_only_x_settings_are_disabled' => 'Authentication is restricted to SSO only, :auth_method is disabled',
     'confirm' => [
         'logout' => '¿Seguro que quieres cerrar la sesión?',
         'revoke_device' => '¿Está seguro que quiere eliminar este dispositivo?',
@@ -79,6 +87,7 @@ return [
         'name' => 'Nombre',
         'login' => 'Iniciar sesión',
         'webauthn_login' => 'Inicio de sesión WebAuthn',
+        'sso_login' => 'SSO login',
         'email' => 'E-mail',
         'password' => 'Contraseña',
         'reveal_password' => 'Revelar contraseña',
@@ -94,6 +103,7 @@ return [
         'reset_your_password' => 'Reestablecer tu contraseña',
         'reset_password' => 'Restablecer contraseña',
         'disabled_in_demo' => 'Característica desactivada en el modo Demo',
+        'sso_only_form_restricted_to_admin' => 'Regular users must sign in with SSO. Other methods are for administrators only.',
         'new_password' => 'New password',
         'current_password' => [
             'label' => 'Contraseña actual',
@@ -124,5 +134,9 @@ return [
         'optional_rules_you_should_follow' => 'Recomendado (altamente)',
         'caps_lock_is_on' => 'Bloqueo de mayúsculas está Activado',
     ],
-
+    'sso_providers' => [
+        'unknown' => 'unknown',
+        'github' => 'Github',
+        'openid' => 'OpenID'
+    ]
 ];

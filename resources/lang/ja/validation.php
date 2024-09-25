@@ -143,6 +143,7 @@ return [
 
     'single' => ':attributeを使用する場合、このリクエスト本文の唯一のパラメータにする必要があります。',
     'onlyCustomOtpWithUri' => 'uri パラメータは単独または「custom_otp」パラメータと組み合わせて指定する必要があります。',
+    'IsValidRegex' => 'The :attribute must be a valid regex pattern.',
 
     /*
     |--------------------------------------------------------------------------
@@ -187,7 +188,7 @@ return [
         ],
         'ids' => [
             'regex' => 'IDはコンマで区切り、最後にはコンマを入れないでください。',
-        ]
+        ],
     ],
 
     /*

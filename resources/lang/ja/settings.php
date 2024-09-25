@@ -67,19 +67,19 @@ return [
         ],
         'close_otp_on_copy' => [
             'label' => 'コピー後に<abbr title="ワンタイムパスワード">OTP</abbr>を隠す',
-            'help' => 'Click on a generated password to copy it automatically hides it from the screen'
+            'help' => '生成されたパスワードをクリックしてコピー後、自動的に非表示にします。'
         ],
         'auto_close_timeout' => [
-            'label' => 'Auto close <abbr title="One-Time Password">OTP</abbr>',
-            'help' => 'Automatically hide on-screen password after a timeout. This avoids unnecessary requests for fresh passwords if you forget to close the password view.'
+            'label' => '<abbr title="One-Time Password">OTP</abbr> を自動で隠す',
+            'help' => '一定時間後に画面上のパスワードを自動で非表示にします。うっかりパスワードを表示させたまま、無駄なパスワード更新リクエストが送られるのを防ぎます。'
         ],
         'clear_search_on_copy' => [
             'label' => 'コピー後に検索欄を消去',
             'help' => 'コードがクリップボードにコピーされた直後に検索欄を空にします'
         ],
         'sort_case_sensitive' => [
-            'label' => 'Sort case sensitive',
-            'help' => 'When invoked, force the Sort function to sort accounts on a case-sensitive basis'
+            'label' => '並び替えで大文字小文字を区別',
+            'help' => 'オンにすると、並び替えで大文字と小文字のアカウント名を分離させます。'
         ],
         'copy_otp_on_display' => [
             'label' => '表示時に<abbr title="ワンタイムパスワード">OTP</abbr>をコピー',
@@ -133,8 +133,8 @@ return [
             'help' => 'OTPをコピーした後、常に既定のグループに戻ります',
         ],
         'auto_save_qrcoded_account' => [
-            'label' => 'Auto-save accounts',
-            'help' => 'New accounts are automatically registered after scanning or uploading a QR code, no need to click a Save button',
+            'label' => 'アカウントの自動保存',
+            'help' => 'スキャンまたはQRコードをアップロードすると、「保存」ボタンを押さなくても新しいアカウントを自動的に登録します。',
         ],
         'useDirectCapture' => [
             'label' => '選択画面を飛ばす',
@@ -153,12 +153,12 @@ return [
             'help' => '<abbr title="ワンタイムパスワード">OTP</abbr>をいつどのように表示するか設定します。<br/>',
         ],
         'notify_on_new_auth_device' => [
-            'label' => 'On new device',
-            'help' => 'Get an email when a new device connects to your 2FAuth account for the first time'
+            'label' => '新規デバイス接続時',
+            'help' => '新しいデバイスから 2FAuth アカウントに接続した時にメールを受け取る'
         ],
         'notify_on_failed_login' => [
-            'label' => 'On failed login',
-            'help' => 'Get an email each time an attempt to connect to your 2FAuth account fails'
+            'label' => 'ログイン失敗時',
+            'help' => '2FAuth アカウントへの接続失敗があった時にメールを受け取る'
         ],
         'otp_generation_on_request' => 'クリック/タップで',
         'otp_generation_on_request_legend' => '個別の画面で開く',
@@ -169,7 +169,7 @@ return [
         'never' => 'しない',
         'on_otp_copy' => 'セキュリティコードをコピー後',
         '1_minutes' => '1 分で',
-        '2_minutes' => 'After 2 minutes',
+        '2_minutes' => '2 分後',
         '5_minutes' => '5 分で',
         '10_minutes' => '10 分で',
         '15_minutes' => '15 分で',

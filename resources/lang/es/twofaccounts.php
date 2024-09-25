@@ -60,6 +60,10 @@ return [
         'i_m_lucky' => 'Probar suerte',
         'i_m_lucky_legend' => 'El botón "Probar suerte" intenta obtener el icono oficial del servicio dado. Introduzca el nombre del servicio sin la extensión ".xyz" e intente evitar errores tipográficos. (función beta)',
         'test' => 'Test',
+        'group' => [
+            'label' => 'Group',
+            'help' => 'The group to which the account is to be assigned'
+        ],
         'secret' => [
             'label' => 'Secreto',
             'help' => 'La clave utilizada para generar sus códigos de seguridad'

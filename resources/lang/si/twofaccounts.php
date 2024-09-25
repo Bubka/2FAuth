@@ -60,6 +60,10 @@ return [
         'i_m_lucky' => 'Try my luck',
         'i_m_lucky_legend' => 'The "Try my luck" button try to get the official icon of the given service. Enter actual service name without ".xyz" extension and try to avoid typo. (beta feature)',
         'test' => 'අත්හදා බලන්න',
+        'group' => [
+            'label' => 'Group',
+            'help' => 'The group to which the account is to be assigned'
+        ],
         'secret' => [
             'label' => 'රහස',
             'help' => 'The key used to generate your security codes'

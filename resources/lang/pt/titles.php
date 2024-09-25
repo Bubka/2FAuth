@@ -10,7 +10,7 @@ return [
     */
 
     'start' => 'Nova conta',
-    'capture' => 'Escanear QR code',
+    'capture' => 'Ler código QR',
     'accounts' => 'Contas',
     'createAccount' => 'Criar conta',
     'importAccounts' => 'Importar contas',

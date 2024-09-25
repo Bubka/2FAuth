@@ -60,6 +60,10 @@ return [
         'i_m_lucky' => 'J\'ai de la chance',
         'i_m_lucky_legend' => 'Le bouton "J\'ai de la chance" essaie d\'obtenir l\'icône officielle du service renseigné. Entrez le nom exact du service, sans l\'extension ".xyz" et avec la bonne orthographe. (fonctionnalité bêta)',
         'test' => 'Tester',
+        'group' => [
+            'label' => 'Groupe',
+            'help' => 'Le groupe auquel assigner le compte'
+        ],
         'secret' => [
             'label' => 'Secret',
             'help' => 'La clé utilisée pour générer vos codes de sécurité'

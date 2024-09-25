@@ -143,6 +143,7 @@ return [
 
     'single' => 'Lors de l\'utilisation de :attribut, il doit être le seul paramètre dans le corps de la requête',
     'onlyCustomOtpWithUri' => 'Le paramètre uri doit être fourni seul ou seulement avec le paramètre \'custom_otp\'',
+    'IsValidRegex' => 'Le champ :attribute doit être une expression régulière valide.',
 
     /*
     |--------------------------------------------------------------------------
@@ -187,7 +188,7 @@ return [
         ],
         'ids' => [
             'regex' => 'Les IDs doivent être séparés par des virgules, sans virgule en fin de chaîne.',
-        ]
+        ],
     ],
 
     /*

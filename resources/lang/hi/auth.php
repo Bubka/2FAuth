@@ -22,7 +22,14 @@ return [
     'sign_out' => 'साइन आउट करें',
     'sign_in' => 'साइन इन करें',
     'sign_in_using' => 'साइन इन के लिए चाहिए',
+    'if_administrator' => 'Administrator?',
+    'sign_in_here' => 'You can sign without SSO',
     'or_continue_with' => 'आप ऐसे भी आगे जा सकते हैं:',
+    'password_login_and_webauthn_are_disabled' => 'Password login and WebAuthn are disabled.',
+    'sign_in_using_sso' => 'Pick an SSO provider to sign in with:',
+    'no_provider' => 'no provider',
+    'no_sso_provider_or_provider_is_missing' => 'Provider is missing?',
+    'see_how_to_enable_sso' => 'See how to enable a provider',
     'sign_in_using_security_device' => 'सुरक्षा उपकरण का उपयोग करके साइन इन करें',
     'login_and_password' => 'लॉग इन और पासवर्ड',
     'register' => 'रजिस्टर',
@@ -34,6 +41,7 @@ return [
     'maybe_later' => 'शायद बाद में',
     'user_account_controlled_by_proxy' => 'उपयोगकर्ता का खाता प्रमाणीकरण प्रॉक्सी द्वारा उपलब्ध कराया गया है।<br />खाते को प्रॉक्सी स्तर पर प्रबंधित करें।',
     'auth_handled_by_proxy' => 'प्रमाणीकरण को रिवर्स प्रॉक्सी द्वारा नियंत्रित किया गया है, नीचे दी गई सेटिंग्स अक्षम हैं।<br />प्रॉक्सी स्तर पर प्रमाणीकरण प्रबंधित करें।',
+    'sso_only_x_settings_are_disabled' => 'Authentication is restricted to SSO only, :auth_method is disabled',
     'confirm' => [
         'logout' => 'क्या आप वास्तव में लॉग आउट करना चाहते हैं?',
         'revoke_device' => 'क्या आप वास्तव में इस डिवाइस को निरस्त करना चाहते हैं?',
@@ -79,6 +87,7 @@ return [
         'name' => 'नाम',
         'login' => 'लॉग इन करें',
         'webauthn_login' => 'WebAuthn लॉगिन',
+        'sso_login' => 'SSO login',
         'email' => 'ईमेल',
         'password' => 'पासवर्ड',
         'reveal_password' => 'पासवर्ड प्रकट करें',
@@ -94,6 +103,7 @@ return [
         'reset_your_password' => 'अपना पासवर्ड रीसेट करें',
         'reset_password' => 'पासवर्ड रीसेट करें',
         'disabled_in_demo' => 'डेमो मोड में यह सुविधा अक्षम है',
+        'sso_only_form_restricted_to_admin' => 'Regular users must sign in with SSO. Other methods are for administrators only.',
         'new_password' => 'नया पासवर्ड',
         'current_password' => [
             'label' => 'वर्तमान पासवर्ड',
@@ -124,5 +134,9 @@ return [
         'optional_rules_you_should_follow' => 'अनुशंसित (अत्यधिक)',
         'caps_lock_is_on' => 'कैप्स लॉक ऑन है',
     ],
-
+    'sso_providers' => [
+        'unknown' => 'unknown',
+        'github' => 'Github',
+        'openid' => 'OpenID'
+    ]
 ];

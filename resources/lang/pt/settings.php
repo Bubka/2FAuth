@@ -67,19 +67,19 @@ return [
         ],
         'close_otp_on_copy' => [
             'label' => 'Fechar <abbr title="One-Time Password">OTP</abbr> após copiar',
-            'help' => 'Click on a generated password to copy it automatically hides it from the screen'
+            'help' => 'Clicar para copiar uma senha gerada a ocultará automaticamente da tela'
         ],
         'auto_close_timeout' => [
-            'label' => 'Auto close <abbr title="One-Time Password">OTP</abbr>',
-            'help' => 'Automatically hide on-screen password after a timeout. This avoids unnecessary requests for fresh passwords if you forget to close the password view.'
+            'label' => 'Fechar automaticamente <abbr title="One-Time Password">OTP</abbr>',
+            'help' => 'Ocultar automaticamente a senha na tela após um tempo limite. Isso evita solicitações desnecessárias de novas senhas se você esquecer de fechar a tela de senha.'
         ],
         'clear_search_on_copy' => [
             'label' => 'Limpar pesquisa ao copiar',
             'help' => 'Limpar a caixa de pesquisa logo após um código ser copiado para a área de transferência'
         ],
         'sort_case_sensitive' => [
-            'label' => 'Sort case sensitive',
-            'help' => 'When invoked, force the Sort function to sort accounts on a case-sensitive basis'
+            'label' => 'Ordenar com distinção entre maiúsculas e minúsculas',
+            'help' => 'Quando acionado, forçar a função Ordenar a organizar as contas de forma que diferencie entre maiúsculas e minúsculas'
         ],
         'copy_otp_on_display' => [
             'label' => 'Copiar <abbr title="One-Time Password">OTP</abbr> na tela',
@@ -133,8 +133,8 @@ return [
             'help' => 'Sempre retornar ao grupo padrão quando um OTP for copiado',
         ],
         'auto_save_qrcoded_account' => [
-            'label' => 'Auto-save accounts',
-            'help' => 'New accounts are automatically registered after scanning or uploading a QR code, no need to click a Save button',
+            'label' => 'Salvar contas automaticamente',
+            'help' => 'Novas contas são registradas automaticamente após a verificação ou envio de um código QR, não é necessário clicar num botão Salvar',
         ],
         'useDirectCapture' => [
             'label' => 'Entrada direta',
@@ -169,7 +169,7 @@ return [
         'never' => 'Nunca',
         'on_otp_copy' => 'Quando copiar código de segurança',
         '1_minutes' => 'Após 1 minuto',
-        '2_minutes' => 'After 2 minutes',
+        '2_minutes' => 'Após 2 minutos',
         '5_minutes' => 'Após 5 minutos',
         '10_minutes' => 'Após 10 minutos',
         '15_minutes' => 'Após 15 minutos',
