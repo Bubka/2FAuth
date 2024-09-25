@@ -4,10 +4,11 @@ namespace App\Providers\Socialite;
 
 use GuzzleHttp\RequestOptions;
 use Illuminate\Http\Request;
+use Laravel\Socialite\Two\ProviderInterface;
 use SocialiteProviders\Manager\OAuth2\AbstractProvider;
 use SocialiteProviders\Manager\OAuth2\User;
 
-class OpenId extends AbstractProvider
+class OpenId extends AbstractProvider implements ProviderInterface
 {
     public const IDENTIFIER = 'OPENID';
 
@@ -21,9 +22,11 @@ class OpenId extends AbstractProvider
      */
     public function __construct(Request $request, $clientId, $clientSecret, $redirectUrl, $guzzle = [])
     {
-        parent::__construct($request, $clientId, $clientSecret, $redirectUrl, [
+        $guzzle = array_merge([
             'proxy' => config('2fauth.config.outgoingProxy')
-        ]);
+        ], $guzzle);
+
+        parent::__construct($request, $clientId, $clientSecret, $redirectUrl, $guzzle);
     }
 
     /**
@@ -62,24 +65,6 @@ class OpenId extends AbstractProvider
         ]);
 
         return json_decode((string) $response->getBody(), true);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function refreshToken($refreshToken)
-    {
-        return $this->getHttpClient()->post( /** @phpstan-ignore-line */
-            $this->getTokenUrl(),
-            [
-                RequestOptions::FORM_PARAMS => [
-                    'client_id'     => $this->clientId,
-                    'client_secret' => $this->clientSecret,
-                    'grant_type'    => 'refresh_token',
-                    'refresh_token' => $refreshToken,
-                ],
-            ]
-        );
     }
 
     /**
