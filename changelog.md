@@ -1,5 +1,29 @@
 # Change log
 
+## [5.3.0] - 2024-09-25
+
+### Added
+
+- The `/up` healthcheck endpoint ([#271](https://github.com/Bubka/2FAuth/issues/271)).
+- A user preference to close the On-Demand OTP after a predefined delay
+- A user preference to automatically register an account when a QR code is scanned. When enabled, there is no need to click the Save button to save the account to the database.
+- An admin setting to make SSO the only authentication method available for users (does not apply to admins). ([#368](https://github.com/Bubka/2FAuth/issues/368)).
+- The ability to select a destination group directly from the advanced form ([#372](https://github.com/Bubka/2FAuth/issues/372)).
+- A new Auth tab in the admin panel to gather settings related to authentication
+- Proxy support for the OpenID connector (using `PROXY_FOR_OUTGOING_REQUESTS`), thanks to [@rstefko](https://github.com/rstefko) ([PR #367](https://github.com/Bubka/2FAuth/pull/367))
+
+### Changed
+
+- The Service data field is now encrypted in the database ([#365](https://github.com/Bubka/2FAuth/issues/365)).
+- Upgrade to Laravel 11
+
+### Fixed
+
+- [issue #347](https://github.com/Bubka/2FAuth/issues/347) Sort with ignore case
+- [issue #349](https://github.com/Bubka/2FAuth/issues/349) "Show QR Code" feature returns wrong QR code
+- [issue #360](https://github.com/Bubka/2FAuth/issues/360) Can’t import QR Codes from Confluence 2FA
+- [issue #362](https://github.com/Bubka/2FAuth/issues/362) Cannot use SSO if app runs in subdirectory
+
 ## [5.2.0] - 2024-05-29
 
 2FAuth v5.2 offers a new notification feature. Each user can now decide whether they want to receive an email after a successful login from a new device, or after a failed login.
