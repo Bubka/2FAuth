@@ -127,6 +127,10 @@ return [
             'help' => 'インスタンスのメール設定を確認するためのテストメールを送信します。 メール設定が正しくないと、ユーザーはパスワードリセットを要求できなくなります。',
             'email_will_be_send_to_x' => '<span class="is-family-code has-text-info">:email</span> にメールを送信',
         ],
+        'health_endpoint' => [
+            'label' => 'Health endpoint',
+            'help' => 'URL you can visit to check the health of this 2FAuth instance. This URL can be used to set up a Docker HEALTHCHECK or a Kubernetes HTTPS Liveness probe.',
+        ],
         'cache_management' => [
             'label' => 'キャッシュ管理',
             'help' => '環境変数の変更や更新の後などにキャッシュのクリアが必要になる場合があります。ここから実行できます。',

@@ -127,6 +127,10 @@ return [
             'help' => 'Envie um e-mail de teste para verificar a capacidade da sua instância de usar e-mail. É importante ter uma configuração funcional, caso contrário os usuários não poderão solicitar redefinição de senha, por exemplo.',
             'email_will_be_send_to_x' => 'O e-mail será enviado para <span class="is-family-code has-text-info">:email</span>',
         ],
+        'health_endpoint' => [
+            'label' => 'Health endpoint',
+            'help' => 'URL you can visit to check the health of this 2FAuth instance. This URL can be used to set up a Docker HEALTHCHECK or a Kubernetes HTTPS Liveness probe.',
+        ],
         'cache_management' => [
             'label' => 'Gerenciamento de Cache',
             'help' => 'Às vezes, o cache precisa ser limpo, por exemplo, após uma alteração de variáveis de ambiente ou de uma atualização. Você pode fazer isso a partir daqui.',

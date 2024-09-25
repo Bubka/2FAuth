@@ -127,6 +127,10 @@ return [
             'help' => 'Stuur een test e-mail om de e-mailconfiguratie van uw instantie te beheren. Het is belangrijk om een werkende configuratie te hebben, anders kunnen gebruikers geen nieuw wachtwoord aanvragen.',
             'email_will_be_send_to_x' => 'De e-mail zal worden verzonden naar <span class="is-family-code has-text-info">:email</span>',
         ],
+        'health_endpoint' => [
+            'label' => 'Health endpoint',
+            'help' => 'URL you can visit to check the health of this 2FAuth instance. This URL can be used to set up a Docker HEALTHCHECK or a Kubernetes HTTPS Liveness probe.',
+        ],
         'cache_management' => [
             'label' => 'Cachebeheer',
             'help' => 'Soms moet de cache worden geleegd, bijvoorbeeld na een wijziging in omgevingsvariabelen of een update. Je kunt dit hier doen.',

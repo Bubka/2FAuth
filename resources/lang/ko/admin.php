@@ -127,6 +127,10 @@ return [
             'help' => '인스턴스의 이메일 설정을 확인하기 위해 테스트 이메일을 보내세요. 설정이 정상적으로 되어 있지 않으면, 사용자가 비밀번호 재설정을 요청할 수 없습니다.',
             'email_will_be_send_to_x' => '이메일이 <span class="is-family-code has-text-info">:email</span>로 전송됩니다.',
         ],
+        'health_endpoint' => [
+            'label' => 'Health endpoint',
+            'help' => 'URL you can visit to check the health of this 2FAuth instance. This URL can be used to set up a Docker HEALTHCHECK or a Kubernetes HTTPS Liveness probe.',
+        ],
         'cache_management' => [
             'label' => '캐시 관리',
             'help' => '환경 변수를 변경하거나 업데이트한 후와 같은 경우 캐시를 삭제해야 할 수 있습니다. 아래에서 삭제할 수 있습니다.',

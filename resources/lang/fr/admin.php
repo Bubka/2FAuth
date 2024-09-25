@@ -127,6 +127,10 @@ return [
             'help' => 'Envoyez un email de test pour contrôler la capacité de votre instance à utiliser l\'email. Il est important d\'avoir une configuration fonctionnelle, sans quoi les utilisateurs ne pourront pas demander de réinitialisation de leur mot de passe par exemple.',
             'email_will_be_send_to_x' => 'L\'email sera envoyé à <span class="is-family-code has-text-info">:email</span>',
         ],
+        'health_endpoint' => [
+            'label' => 'État de santé',
+            'help' => 'URL que vous pouvez visiter pour vérifier l\'état de santé de cette instance 2FAuth. Cette URL peut être utilisée pour configurer une sonde Docker HEALTHCHECK ou une sonde Kubernetes HTTPS Liveness.',
+        ],
         'cache_management' => [
             'label' => 'Gestion du cache',
             'help' => 'Parfois le cache doit être effacé, par exemple après une modification de variable d\'environnement ou une mise à jour. Vous pouvez le faire ici.',

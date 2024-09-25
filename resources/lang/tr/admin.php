@@ -127,6 +127,10 @@ return [
             'help' => 'Uygulamadaki ePosta ayarlarını kontrol etmek için bir kontrol ePostası gönder. Çalışan bir sistemin olması önemlidir aksi takdirde kullanıcılar parola sıfırlama talebi gönderemezler.',
             'email_will_be_send_to_x' => 'ePosta <span class="is-family-code has-text-info">:email</span> adresine iletilecektir',
         ],
+        'health_endpoint' => [
+            'label' => 'Health endpoint',
+            'help' => 'URL you can visit to check the health of this 2FAuth instance. This URL can be used to set up a Docker HEALTHCHECK or a Kubernetes HTTPS Liveness probe.',
+        ],
         'cache_management' => [
             'label' => 'Önbellek yönetimi',
             'help' => 'Önbelleğin zaman zaman, örneğin bir değişkenin değiştirilmesinden veya uygulamanın güncellenmesinden sonra, temizlenmesi gerekir. Buradan yapabilirsiniz.',

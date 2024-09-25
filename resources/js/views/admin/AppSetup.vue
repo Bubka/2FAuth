@@ -18,6 +18,8 @@
     const listInfos = ref(null)
     const isSendingTestEmail = ref(false)
     const isClearingCache = ref(false)
+    const healthEndPoint = $2fauth.config.subdirectory + '/up'
+    const healthEndPointFullPath = location.hostname + $2fauth.config.subdirectory + '/up'
 
     /**
      * Sends a test email
@@ -76,7 +78,6 @@
                     <VersionChecker />
                     <!-- email config test -->
                     <div class="field">
-                        <!-- <h5 class="title is-5">{{ $t('settings.security') }}</h5> -->
                         <label class="label"  v-html="$t('admin.forms.test_email.label')" />
                         <p class="help" v-html="$t('admin.forms.test_email.help')" />
                         <p class="help" v-html="$t('admin.forms.test_email.email_will_be_send_to_x', { email: user.email })" />
@@ -90,9 +91,16 @@
                                 <span>{{ $t('commons.send') }}</span>
                             </button>   
                         </div>
-                    </div>    
-
-                    <h4 class="title is-4 pt-4 has-text-grey-light">{{ $t('settings.security') }}</h4>
+                    </div>
+                    <!-- healthcheck -->
+                    <div class="field">
+                        <label class="label"  v-html="$t('admin.forms.health_endpoint.label')" />
+                        <p class="help" v-html="$t('admin.forms.health_endpoint.help')" />
+                    </div>
+                    <div>
+                        <a target="_blank" :href="healthEndPoint">{{ healthEndPointFullPath }}</a>
+                    </div>
+                    <h4 class="title is-4 pt-5 has-text-grey-light">{{ $t('settings.security') }}</h4>
                     <!-- protect db -->
                     <FormCheckbox v-model="appSettings.useEncryption" @update:model-value="val => useAppSettingsUpdater('useEncryption', val)" fieldName="useEncryption" label="admin.forms.use_encryption.label" help="admin.forms.use_encryption.help" />
                 </form>

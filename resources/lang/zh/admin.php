@@ -127,6 +127,10 @@ return [
             'help' => '发送测试邮件来验证送信配置是否正确。如果发送邮件的配置不正确，用户将无法请求重置密码。',
             'email_will_be_send_to_x' => '邮件将被发送到 <span class="is-family-code has-text-info">:email</span>',
         ],
+        'health_endpoint' => [
+            'label' => 'Health endpoint',
+            'help' => 'URL you can visit to check the health of this 2FAuth instance. This URL can be used to set up a Docker HEALTHCHECK or a Kubernetes HTTPS Liveness probe.',
+        ],
         'cache_management' => [
             'label' => '缓存管理',
             'help' => '某些情况下需要清除缓存，例如更改了环境变量，或更新了应用。您可以在此处进行缓存清理。',

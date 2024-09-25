@@ -127,6 +127,10 @@ return [
             'help' => 'Senden Sie eine Test-E-Mail, um die E-Mail-Konfiguration Ihrer Instanz zu kontrollieren. Es ist wichtig, eine funktionierende Konfiguration zu haben, sonst können Benutzer kein Zurücksetzen des Passworts anfordern.',
             'email_will_be_send_to_x' => 'Diese E-Mail wird an <span class="is-family-code has-text-info">:email</span> gesendet.',
         ],
+        'health_endpoint' => [
+            'label' => 'Health endpoint',
+            'help' => 'URL you can visit to check the health of this 2FAuth instance. This URL can be used to set up a Docker HEALTHCHECK or a Kubernetes HTTPS Liveness probe.',
+        ],
         'cache_management' => [
             'label' => 'Cache-Verwaltung',
             'help' => 'Manchmal muss der Cache geleert werden, zum Beispiel nach einer Änderung an Umgebungsvariablen oder einer Aktualisierung. Sie können es von hier aus tun.',

@@ -127,6 +127,10 @@ return [
             'help' => 'Отправить тестовое письмо для проверки конфигурации электронной почты вашего экземпляра 2FAuth. Важно иметь работающую конфигурацию, иначе пользователи не смогут запросить пароль для сброса.',
             'email_will_be_send_to_x' => 'Письмо будет отправлено на адрес <span class="is-family-code has-text-info">:email</span>',
         ],
+        'health_endpoint' => [
+            'label' => 'Health endpoint',
+            'help' => 'URL you can visit to check the health of this 2FAuth instance. This URL can be used to set up a Docker HEALTHCHECK or a Kubernetes HTTPS Liveness probe.',
+        ],
         'cache_management' => [
             'label' => 'Управление кэшем',
             'help' => 'Иногда кэш должен быть очищен, например, после изменения переменных окружения или обновления приложения. Вы можете сделать это отсюда.',

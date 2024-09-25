@@ -127,6 +127,10 @@ return [
             'help' => 'अपने इंस्टेंस के ईमेल कॉन्फ़िगरेशन को नियंत्रित करने के लिए एक परीक्षण ईमेल भेजें। कार्यशील कॉन्फ़िगरेशन होना महत्वपूर्ण है, अन्यथा उपयोगकर्ता रीसेट पासवर्ड का अनुरोध नहीं कर पाएंगे।',
             'email_will_be_send_to_x' => 'ईमेल <span class=\'is-family-code has-text-info\'>:email</span> पर भेजा जाएगा',
         ],
+        'health_endpoint' => [
+            'label' => 'Health endpoint',
+            'help' => 'URL you can visit to check the health of this 2FAuth instance. This URL can be used to set up a Docker HEALTHCHECK or a Kubernetes HTTPS Liveness probe.',
+        ],
         'cache_management' => [
             'label' => 'कैश का मैनेजमेन्ट',
             'help' => 'कभी-कभी कैश को साफ़ करने की आवश्यकता होती है, उदाहरण के लिए एनवायरनमेंट वेरीएबल में बदलाव या अपडेट के बाद। आप इसे यहां से कर सकते हैं.',
