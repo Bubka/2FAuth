@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Event;
 use Mockery;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
-use Tests\Classes\unexpectedEvent;
+use Tests\Classes\UnexpectedEvent;
 use Tests\TestCase;
 use TypeError;
 
@@ -36,7 +36,7 @@ class LogoutListenerTest extends TestCase
         $this->expectException(TypeError::class);
         
         $request  = Mockery::mock(Request::class);
-        $event    = Mockery::mock(unexpectedEvent::class);
+        $event    = Mockery::mock(UnexpectedEvent::class);
         $listener = new LogoutListener($request);
 
         $listener->handle($event);

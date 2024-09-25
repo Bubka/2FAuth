@@ -3,6 +3,7 @@
 namespace Tests\Feature\Services;
 
 use App\Facades\QrCode;
+use App\Providers\TwoFAuthServiceProvider;
 use App\Services\QrCodeService;
 use Exception;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -20,6 +21,7 @@ use Zxing\QrReader;
  */
 #[CoversClass(QrCodeService::class)]
 #[CoversClass(QrCode::class)]
+#[CoversClass(TwoFAuthServiceProvider::class)]
 class QrCodeServiceTest extends FeatureTestCase
 {
     private const STRING_TO_ENCODE = 'stringToEncode';

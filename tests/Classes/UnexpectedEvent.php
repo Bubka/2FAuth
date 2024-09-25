@@ -2,7 +2,7 @@
 
 namespace Tests\Classes;
 
-class unexpectedEvent
+class UnexpectedEvent
 {
     //
 }

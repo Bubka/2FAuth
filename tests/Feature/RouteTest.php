@@ -28,28 +28,20 @@ class RouteTest extends FeatureTestCase
     #[Test]
     public function test_all_api_routes_are_behind_apiv1_middleware()
     {
-        Artisan::call('route:clear');
         Artisan::call('route:cache');
         $this->get('/');
 
         $routes = Route::getRoutes();
 
         foreach ($routes as $route) {
-            $middlewares = [];
-            
-            try {
-                $uri = $route->uri;
-                $middlewares = Route::gatherRouteMiddleware($route);
-            }
-            catch (\Exception $ex)
-            {
-                $uri = $route->uri;
-                //return;
-            }
-
             if (Str::startsWith($route->uri(), self::API_ROUTE_PREFIX)) {
+                // Route middlewares can be set via action or controllers.
+                // Using $route->middleware() fetches middlewares from action only.
+                // Route::gatherRouteMiddleware($route) would have fetch middlewares from
+                // both action & controllers but the "Route is not bound" exception is thrown then.
+                // $route->middleware() is acceptable as no middleware is set from controllers in 2FAuth.
                 $this->assertEquals(self::API_ROUTE_PREFIX, $route->getPrefix());
-                $this->assertTrue(in_array(self::API_MIDDLEWARE, $middlewares));
+                $this->assertTrue(in_array(self::API_MIDDLEWARE, $route->middleware()));
             }
         }
     }

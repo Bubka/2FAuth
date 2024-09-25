@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Notification;
 use Mockery;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
-use Tests\Classes\unexpectedEvent;
+use Tests\Classes\UnexpectedEvent;
 use Tests\TestCase;
 use TypeError;
 
@@ -37,7 +37,7 @@ class FailedLoginListenerTest extends TestCase
         $this->expectException(TypeError::class);
         
         $request  = Mockery::mock(Request::class);
-        $event    = Mockery::mock(unexpectedEvent::class);
+        $event    = Mockery::mock(UnexpectedEvent::class);
         $listener = new FailedLoginListener($request);
 
         $listener->handle($event);
