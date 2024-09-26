@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Traits\HasAuthenticationLog;
 use App\Models\Traits\WebAuthnManageCredentials;
+use Database\Factories\UserFactory;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Contracts\Translation\HasLocalePreference;
@@ -46,8 +47,8 @@ use Laravel\Passport\HasApiTokens;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\AuthLog> $authentications
  * @property-read int|null $authentications_count
  * @property-read \App\Models\AuthLog|null $latestAuthentication
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|User admins()
- * 
  * @method static \Database\Factories\UserFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
@@ -63,13 +64,18 @@ use Laravel\Passport\HasApiTokens;
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePreferences($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
- * 
+ *
  * @mixin \Eloquent
  */
 class User extends Authenticatable implements HasLocalePreference, WebAuthnAuthenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, Notifiable;
+
     use HasAuthenticationLog;
+    /**
+     * @use HasFactory<UserFactory>
+     */
+    use HasFactory;
     use WebAuthnAuthentication, WebAuthnManageCredentials;
 
     /**
@@ -259,5 +265,4 @@ class User extends Authenticatable implements HasLocalePreference, WebAuthnAuthe
             $this->oauth_id == $other->oauth_id &&
             $this->oauth_provider == $other->oauth_provider;
     }
-
 }

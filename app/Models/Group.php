@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Events\GroupDeleted;
 use App\Events\GroupDeleting;
+use Database\Factories\GroupFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
@@ -19,7 +20,7 @@ use Illuminate\Support\Facades\Log;
  * @property int|null $user_id
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TwoFAccount[] $twofaccounts
  * @property-read \App\Models\User|null $user
- * 
+ *
  * @method static \Database\Factories\GroupFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Group newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Group newQuery()
@@ -29,11 +30,14 @@ use Illuminate\Support\Facades\Log;
  * @method static \Illuminate\Database\Eloquent\Builder|Group whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Group whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Group whereUserId($value)
- * 
+ *
  * @mixin \Eloquent
  */
 class Group extends Model
 {
+    /**
+     * @use HasFactory<GroupFactory>
+     */
     use HasFactory;
 
     /**
@@ -127,5 +131,4 @@ class Group extends Model
     {
         return $query->where('user_id', null);
     }
-
 }

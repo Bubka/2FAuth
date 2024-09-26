@@ -12,6 +12,7 @@ use App\Helpers\Helpers;
 use App\Models\Dto\HotpDto;
 use App\Models\Dto\TotpDto;
 use App\Services\LogoService;
+use Database\Factories\TwoFAccountFactory;
 use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -53,7 +54,7 @@ use SteamTotp\SteamTotp;
  * @property int|null $counter
  * @property int|null $user_id
  * @property-read \App\Models\User|null $user
- * 
+ *
  * @method static \Database\Factories\TwoFAccountFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount newQuery()
@@ -75,12 +76,17 @@ use SteamTotp\SteamTotp;
  * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereService($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereUserId($value)
- * 
+ *
  * @mixin \Eloquent
  */
 class TwoFAccount extends Model implements Sortable
 {
-    use HasFactory, SortableTrait;
+    /**
+     * @use HasFactory<TwoFAccountFactory>
+     */
+    use HasFactory;
+
+    use SortableTrait;
 
     const TOTP = 'totp';
 
@@ -407,14 +413,14 @@ class TwoFAccount extends Model implements Sortable
         if (strtolower($this->secret) === __('errors.indecipherable')) {
             Log::error('Secret cannot be deciphered, OTP generation aborted');
 
-            throw new UndecipherableException();
+            throw new UndecipherableException;
         }
 
         $this->initGenerator();
 
         try {
             if ($this->otp_type === self::HOTP) {
-                $OtpDto           = new HotpDto();
+                $OtpDto           = new HotpDto;
                 $OtpDto->otp_type = $this->otp_type;
                 $counter          = $this->generator->getParameter('counter');
                 $OtpDto->password = $this->generator->at($counter);
@@ -425,7 +431,7 @@ class TwoFAccount extends Model implements Sortable
                     $this->save();
                 }
             } else {
-                $OtpDto               = new TotpDto();
+                $OtpDto               = new TotpDto;
                 $OtpDto->otp_type     = $this->otp_type;
                 $OtpDto->generated_at = $time ?: time();
                 $OtpDto->password     = $this->otp_type === self::TOTP
@@ -637,7 +643,7 @@ class TwoFAccount extends Model implements Sortable
                     break;
 
                 default:
-                    throw new UnsupportedOtpTypeException();
+                    throw new UnsupportedOtpTypeException;
             }
 
             if ($this->service) {
@@ -799,6 +805,7 @@ class TwoFAccount extends Model implements Sortable
                 return Crypt::decryptString($value);
             } catch (Exception $ex) {
                 Log::debug(sprintf('Service field of twofaccount with id #%s cannot be deciphered', $this->id));
+
                 return __('errors.indecipherable');
             }
         } else {

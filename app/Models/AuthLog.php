@@ -24,13 +24,12 @@
 
 namespace App\Models;
 
+use Database\Factories\AuthLogFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 /**
- * 
- *
  * @property int $id
  * @property string $authenticatable_type
  * @property int $authenticatable_id
@@ -44,11 +43,14 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property string|null $method
  * @property string|null $login_method
  * @property-read Model|\Eloquent $authenticatable
- * 
+ *
  * @mixin \Eloquent
  */
 class AuthLog extends Model
 {
+    /**
+     * @use HasFactory<AuthLogFactory>
+     */
     use HasFactory;
 
     /**
