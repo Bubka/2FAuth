@@ -59,7 +59,8 @@ class FailedLoginListener extends AbstractAccessListener
             if ($user->preferences['notifyOnFailedLogin'] == true) {
                 $user->notify(new FailedLoginNotification($log));
             }
+        } else {
+            Log::info(sprintf('%s received an event with a null $user member. Nothing has been written to the auth log', self::class));
         }
-        else Log::info(sprintf('%s received an event with a null $user member. Nothing has been written to the auth log', self::class));
     }
 }

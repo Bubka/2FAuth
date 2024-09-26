@@ -21,7 +21,7 @@ class FixServiceFieldEncryptionTest extends FeatureTestCase
      * The name of the migration that changed the data this command will try to fix
      */
     protected string $relatedMigration = '2024_08_08_133136_encrypt_twofaccount_service_field';
-    
+
     /**
      * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
      */
@@ -123,10 +123,10 @@ class FixServiceFieldEncryptionTest extends FeatureTestCase
         Settings::set('useEncryption', true);
 
         $expectedServiceName = 'myService';
-        $twofaccounts = TwoFAccount::factory()->for($this->user)->count(3)->create([
-            'service' => $expectedServiceName
+        $twofaccounts        = TwoFAccount::factory()->for($this->user)->count(3)->create([
+            'service' => $expectedServiceName,
         ]);
-                
+
         $testedAccount = $twofaccounts[2];
         DB::table('twofaccounts')->where('id', $testedAccount->id)->update(['service' => $expectedServiceName]);
 
@@ -141,7 +141,7 @@ class FixServiceFieldEncryptionTest extends FeatureTestCase
             ->assertSuccessful();
 
         $testedAccount->refresh();
-        
+
         $this->assertEquals($expectedServiceName, $twofaccounts[0]->service);
         $this->assertEquals($expectedServiceName, $twofaccounts[1]->service);
         $this->assertEquals($expectedServiceName, $testedAccount->service);
@@ -153,10 +153,10 @@ class FixServiceFieldEncryptionTest extends FeatureTestCase
         Settings::set('useEncryption', true);
 
         $expectedServiceName = 'myService';
-        $twofaccounts = TwoFAccount::factory()->for($this->user)->count(3)->create([
-            'service' => $expectedServiceName
+        $twofaccounts        = TwoFAccount::factory()->for($this->user)->count(3)->create([
+            'service' => $expectedServiceName,
         ]);
-                
+
         $testedAccount = $twofaccounts[2];
 
         DB::table('twofaccounts')->where('id', $testedAccount->id)->update(['legacy_uri' => 'indecipherable_payload']);
@@ -173,7 +173,7 @@ class FixServiceFieldEncryptionTest extends FeatureTestCase
             ->expectsOutput('1 record could not be fixed, see log above for details.');
 
         $testedAccount->refresh();
-        
+
         $this->assertEquals($expectedServiceName, $twofaccounts[0]->service);
         $this->assertEquals($expectedServiceName, $twofaccounts[1]->service);
         $this->assertEquals(__('errors.indecipherable'), $testedAccount->service);

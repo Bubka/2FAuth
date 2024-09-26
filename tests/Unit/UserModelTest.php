@@ -18,7 +18,7 @@ class UserModelTest extends ModelTestCase
     #[Test]
     public function test_model_configuration()
     {
-        $this->runConfigurationAssertions(new User(),
+        $this->runConfigurationAssertions(new User,
             ['name', 'email', 'password', 'oauth_id', 'oauth_provider'],
             ['password', 'remember_token'],
             ['*'],
@@ -47,17 +47,17 @@ class UserModelTest extends ModelTestCase
     #[Test]
     public function test_twofaccounts_relation()
     {
-        $user     = new User();
+        $user     = new User;
         $accounts = $user->twofaccounts();
-        $this->assertHasManyRelation($accounts, $user, new TwoFAccount());
+        $this->assertHasManyRelation($accounts, $user, new TwoFAccount);
     }
 
     #[Test]
     public function test_groups_relation()
     {
-        $user   = new User();
+        $user   = new User;
         $groups = $user->groups();
-        $this->assertHasManyRelation($groups, $user, new Group());
+        $this->assertHasManyRelation($groups, $user, new Group);
     }
 
     #[Test]

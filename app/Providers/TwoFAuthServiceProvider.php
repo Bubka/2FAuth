@@ -25,15 +25,15 @@ class TwoFAuthServiceProvider extends ServiceProvider implements DeferrableProvi
         });
 
         $this->app->singleton(SettingService::class, function () {
-            return new SettingService();
+            return new SettingService;
         });
 
         $this->app->singleton(LogoService::class, function () {
-            return new LogoService();
+            return new LogoService;
         });
 
         $this->app->singleton(ReleaseRadarService::class, function () {
-            return new ReleaseRadarService();
+            return new ReleaseRadarService;
         });
 
         $this->app->bind(QrReader::class, function ($app, $parameters) {

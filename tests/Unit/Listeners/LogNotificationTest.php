@@ -32,8 +32,8 @@ class LogNotificationTest extends TestCase
     #[Test]
     public function test_handle_logs_notification_sending()
     {
-        $event = new NotificationSent((new User()), (new TestEmailSettingNotification()), 'channel');
-        $listener = new LogNotificationListener();
+        $event    = new NotificationSent((new User), (new TestEmailSettingNotification), 'channel');
+        $listener = new LogNotificationListener;
 
         Log::shouldReceive('info')->once();
 

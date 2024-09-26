@@ -31,7 +31,7 @@ class FailedLoginNotification extends Notification implements ShouldQueue
     public function __construct(AuthLog $authLog)
     {
         $this->authLog = $authLog;
-        $this->agent   = new Agent();
+        $this->agent   = new Agent;
         $this->agent->setUserAgent($authLog->user_agent);
     }
 
@@ -48,7 +48,7 @@ class FailedLoginNotification extends Notification implements ShouldQueue
      */
     public function toMail(mixed $notifiable) : MailMessage
     {
-        return (new MailMessage())
+        return (new MailMessage)
             ->subject(__('notifications.failed_login.subject'))
             ->markdown('emails.failedLogin', [
                 'account'   => $notifiable,

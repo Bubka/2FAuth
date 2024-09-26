@@ -9,6 +9,4 @@ use Exception;
  *
  * @codeCoverageIgnore
  */
-class InvalidOtpParameterException extends Exception
-{
-}
+class InvalidOtpParameterException extends Exception {}

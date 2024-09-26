@@ -24,7 +24,7 @@ class TwoFAccountModelTest extends ModelTestCase
     public function test_model_configuration()
     {
         $this->runConfigurationAssertions(
-            new TwoFAccount(),
+            new TwoFAccount,
             [],
             [],
             ['*'],
@@ -138,7 +138,7 @@ class TwoFAccountModelTest extends ModelTestCase
     #[Test]
     public function test_user_relation()
     {
-        $model    = new TwoFAccount();
+        $model    = new TwoFAccount;
         $relation = $model->user();
 
         $this->assertInstanceOf(BelongsTo::class, $relation);

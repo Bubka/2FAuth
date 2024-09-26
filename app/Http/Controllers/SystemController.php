@@ -70,7 +70,7 @@ class SystemController extends Controller
     public function testEmail(Request $request)
     {
         try {
-            $request->user()->notify(new TestEmailSettingNotification());
+            $request->user()->notify(new TestEmailSettingNotification);
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
         }

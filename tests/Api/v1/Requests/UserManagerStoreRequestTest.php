@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\DataProviderExternal;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\FeatureTestCase;
 
@@ -28,7 +27,7 @@ class UserManagerStoreRequestTest extends FeatureTestCase
             ->once()
             ->andReturn(true);
 
-        $request = new UserManagerStoreRequest();
+        $request = new UserManagerStoreRequest;
 
         $this->assertTrue($request->authorize());
     }
@@ -41,8 +40,8 @@ class UserManagerStoreRequestTest extends FeatureTestCase
             'name'  => 'Jane',
             'email' => 'jane@example.com',
         ]);
-        
-        $request   = new UserManagerStoreRequest();
+
+        $request   = new UserManagerStoreRequest;
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->fails());
@@ -80,7 +79,7 @@ class UserManagerStoreRequestTest extends FeatureTestCase
             'email' => 'john@example.com',
         ]);
 
-        $request   = new UserManagerStoreRequest();
+        $request   = new UserManagerStoreRequest;
         $validator = Validator::make($data, $request->rules());
 
         $this->assertTrue($validator->fails());

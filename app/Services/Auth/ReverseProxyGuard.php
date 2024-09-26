@@ -5,11 +5,9 @@
 
 namespace App\Services\Auth;
 
-use App\Events\VisitedByProxyUser;
 use Illuminate\Auth\GuardHelpers;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\UserProvider;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 
 class ReverseProxyGuard implements Guard

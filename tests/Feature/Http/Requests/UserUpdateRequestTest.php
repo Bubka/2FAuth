@@ -28,7 +28,7 @@ class UserUpdateRequestTest extends FeatureTestCase
             ->once()
             ->andReturn(true);
 
-        $request = new UserUpdateRequest();
+        $request = new UserUpdateRequest;
 
         $this->assertTrue($request->authorize());
     }

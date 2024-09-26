@@ -107,7 +107,7 @@ class WebAuthnDeviceLostControllerTest extends FeatureTestCase
     {
         $mock = $this->mock(\App\Extensions\WebauthnCredentialBroker::class)->makePartial();
         $mock->shouldReceive('getUser')
-            ->andReturn(new \Illuminate\Foundation\Auth\User());
+            ->andReturn(new \Illuminate\Foundation\Auth\User);
 
         Notification::fake();
 

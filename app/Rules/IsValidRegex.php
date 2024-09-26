@@ -14,12 +14,11 @@ class IsValidRegex implements ValidationRule
     {
         try {
             preg_match('/' . $value . '/', '');
-	
+
             if (preg_last_error() !== PREG_NO_ERROR) {
                 $fail('validation.IsValidRegex')->translate();
             }
-        }
-        catch (\Throwable $ex) {
+        } catch (\Throwable $ex) {
             $fail('validation.IsValidRegex')->translate();
         }
     }

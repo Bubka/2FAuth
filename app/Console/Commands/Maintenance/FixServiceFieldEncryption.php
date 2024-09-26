@@ -4,12 +4,8 @@ namespace App\Console\Commands\Maintenance;
 
 use App\Facades\Settings;
 use App\Models\TwoFAccount;
-use Exception;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use Throwable;
 
 /**
  * @codeCoverageIgnore
@@ -75,16 +71,15 @@ class FixServiceFieldEncryption extends Command
      */
     protected function encryptServiceField() : void
     {
-        $twofaccounts = TwoFAccount::all();
-        $fullyEncryptedTwofaccounts = $twofaccounts->whereNotIn('service', [__('errors.indecipherable')]);
+        $twofaccounts                   = TwoFAccount::all();
+        $fullyEncryptedTwofaccounts     = $twofaccounts->whereNotIn('service', [__('errors.indecipherable')]);
         $partiallyEncryptedTwofaccounts = $twofaccounts->where('service', __('errors.indecipherable'));
 
         if ($fullyEncryptedTwofaccounts->count() === $twofaccounts->count()) {
             $this->components->info('The Service field is fully encrypted');
 
             return;
-        }
-        else {
+        } else {
             $this->newLine();
             $this->components->warn('The Service field is not fully encrypted, although it should be.');
             $this->line('ID of corresponding records in the twofaccounts table:');
@@ -95,16 +90,17 @@ class FixServiceFieldEncryption extends Command
                 $partiallyEncryptedTwofaccounts->each(function (TwoFAccount $twofaccount, int $key) use (&$error) {
                     // We don't want to encrypt the Service field with a different APP_KEY
                     // than the one used to encrypt the legacy_uri, account and secret fields, the
-                    // model would be inconsistent. 
+                    // model would be inconsistent.
                     if (str_starts_with($twofaccount->legacy_uri, 'otpauth://')) {
-                        $rawServiceValue = $twofaccount->getRawOriginal('service');
+                        $rawServiceValue      = $twofaccount->getRawOriginal('service');
                         $twofaccount->service = $rawServiceValue;
                         $twofaccount->save();
                         $this->components->task(sprintf('Fixing twofaccount record with ID #%s', $twofaccount->id));
-                    }
-                    else {
+                    } else {
                         $error += 1;
-                        $this->components->task(sprintf('Fixing twofaccount record with ID #%s', $twofaccount->id), function() { return false; });
+                        $this->components->task(sprintf('Fixing twofaccount record with ID #%s', $twofaccount->id), function () {
+                            return false;
+                        });
                         $this->components->error('Wrong encryption key: The current APP_KEY cannot decipher already encrypted fields, encrypting the Service field with this key would lead to inconsistent data encryption');
                     }
                 });
@@ -116,8 +112,7 @@ class FixServiceFieldEncryption extends Command
                 }
 
                 //$this->line('Task completed');
-            }
-            else {
+            } else {
                 $this->components->warn('No fix applied.');
                 $this->line('You can re-run this command at any time to fix inconsistent records.');
             }

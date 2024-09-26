@@ -46,11 +46,11 @@ class LogoutListener extends AbstractAccessListener
         $ip        = config('2fauth.proxy_headers.forIp') ?? $this->request->ip();
         $userAgent = $this->request->userAgent();
         $log       = $user->authentications()
-                          ->whereIpAddress($ip)
-                          ->whereUserAgent($userAgent)
-                          ->whereGuard($event->guard)
-                          ->orderByDesc('login_at')
-                          ->first();
+            ->whereIpAddress($ip)
+            ->whereUserAgent($userAgent)
+            ->whereGuard($event->guard)
+            ->orderByDesc('login_at')
+            ->first();
 
         if (! $log) {
             $log = new AuthLog([

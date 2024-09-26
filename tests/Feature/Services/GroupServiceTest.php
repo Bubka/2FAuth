@@ -165,8 +165,8 @@ class GroupServiceTest extends FeatureTestCase
     #[Test]
     public function test_setUser_sets_groups_user()
     {
-        $this->groupOne   = Group::factory()->create();
-        $this->groupTwo   = Group::factory()->create();
+        $this->groupOne = Group::factory()->create();
+        $this->groupTwo = Group::factory()->create();
 
         $this->assertEquals(null, $this->groupOne->user_id);
         $this->assertEquals(null, $this->groupTwo->user_id);

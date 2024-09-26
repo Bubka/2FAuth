@@ -55,7 +55,7 @@ Route::group(['middleware' => ['rejectIfDemoMode', 'throttle:10,1', 'RejectIfSso
  * that can be requested max 10 times per minute by the same IP
  */
 Route::group(['middleware' => ['guest', 'throttle:10,1']], function () {
-    Route::post('user/login', [LoginController::class, 'login'])->name('user.login')->middleware('RejectIfSsoOnlyAndNotForAdmin');;
+    Route::post('user/login', [LoginController::class, 'login'])->name('user.login')->middleware('RejectIfSsoOnlyAndNotForAdmin');
     Route::post('webauthn/login', [WebAuthnLoginController::class, 'login'])->name('webauthn.login')->middleware('RejectIfSsoOnlyAndNotForAdmin');
 
     Route::get('/socialite/redirect/{driver}', [SocialiteController::class, 'redirect'])->name('socialite.redirect');
@@ -100,10 +100,10 @@ Route::get('refresh-csrf', function () {
 });
 
 Route::withoutMiddleware([
-        SubstituteBindings::class,
-        SetLanguage::class,
-        CustomCreateFreshApiToken::class
-    ])->get('/up', function () {
+    SubstituteBindings::class,
+    SetLanguage::class,
+    CustomCreateFreshApiToken::class,
+])->get('/up', function () {
     //Event::dispatch(new DiagnosingHealth);
     return view('health');
 });

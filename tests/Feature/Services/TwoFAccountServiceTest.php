@@ -325,8 +325,8 @@ class TwoFAccountServiceTest extends FeatureTestCase
     #[Test]
     public function test_setUser_sets_twofaccounts_user()
     {
-        $twofaccountA   = TwoFAccount::factory()->create();
-        $twofaccountB   = TwoFAccount::factory()->create();
+        $twofaccountA = TwoFAccount::factory()->create();
+        $twofaccountB = TwoFAccount::factory()->create();
 
         $this->assertEquals(null, $twofaccountA->user_id);
         $this->assertEquals(null, $twofaccountB->user_id);

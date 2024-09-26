@@ -81,8 +81,8 @@ trait ResetTrait
     protected function seedDB(string $seeder) : void
     {
         $this->callSilent('db:seed', [
-            '--class' => $seeder,
-            '--no-interaction' => 1
+            '--class'          => $seeder,
+            '--no-interaction' => 1,
         ]);
 
         $this->line('Database seeded');

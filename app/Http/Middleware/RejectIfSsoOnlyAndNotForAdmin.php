@@ -24,15 +24,16 @@ class RejectIfSsoOnlyAndNotForAdmin
         if (Settings::get('useSsoOnly')) {
             if ($email = $request->input('email', null)) {
                 $user = User::whereEmail($email)->first();
+            } else {
+                $user = Auth::user();
             }
-            else $user = Auth::user();
-    
+
             if ($user?->isAdministrator()) {
                 return $next($request);
             }
-    
+
             Log::notice(sprintf('Request to %s rejected, only Admins can request it while authentication is restricted to SSO only', $request->getPathInfo()));
-            
+
             return response()->json(['message' => __('errors.unsupported_with_sso_only')], Response::HTTP_METHOD_NOT_ALLOWED);
         }
 

@@ -3,7 +3,6 @@
 namespace Tests\Feature\Console;
 
 use App\Console\Commands\Install;
-use Illuminate\Support\Facades\Artisan;
 use Jackiedo\DotenvEditor\DotenvEditor;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -20,7 +19,7 @@ class InstallTest extends FeatureTestCase
     const PASSPORT_CREATE_CLIENTS_CONFIRMATION = 'Would you like to create the "personal access" and "password grant" clients?';
 
     const TWOFAUTH_REVIEW_ENV_VAR_CONFIRMATION = 'Existing .env file found. Do you wish to review its vars?';
-    
+
     #[Test]
     public function test_install_completes()
     {
@@ -101,7 +100,7 @@ class InstallTest extends FeatureTestCase
     {
         $mock = $this->mock(DotenvEditor::class);
         $mock->shouldReceive('load')
-            ->andThrow(new \Exception());
+            ->andThrow(new \Exception);
 
         $this->artisan('2fauth:install')
             ->expectsOutputToContain(config('2fauth.installDocUrl'))

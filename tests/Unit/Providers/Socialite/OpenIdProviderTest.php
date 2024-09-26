@@ -29,7 +29,7 @@ class OpenIdProviderTest extends TestCase
         $provider->stateless();
 
         $provider->http = Mockery::mock(stdClass::class);
-        $provider->http->expects('get')->with(NULL, [
+        $provider->http->expects('get')->with(null, [
             RequestOptions::HEADERS => [
                 'Authorization' => 'Bearer access_token',
             ],
@@ -49,7 +49,7 @@ class OpenIdProviderTest extends TestCase
         $this->assertSame('true', $user->email_verified);
         $this->assertSame('myGroup', $user->groups);
     }
-    
+
     #[Test]
     public function test_it_can_map_a_user_from_an_access_token_with_missing_fields()
     {
@@ -59,7 +59,7 @@ class OpenIdProviderTest extends TestCase
         $provider->stateless();
 
         $provider->http = Mockery::mock(stdClass::class);
-        $provider->http->expects('get')->with(NULL, [
+        $provider->http->expects('get')->with(null, [
             RequestOptions::HEADERS => [
                 'Authorization' => 'Bearer access_token',
             ],
@@ -87,18 +87,18 @@ class OpenIdProviderTest extends TestCase
         config(['services.openid.token_url' => $tokenUrl]);
         $request = Request::create('/');
 
-        $provider = new OpenIdProviderStub($request, 'client_id', 'client_secret', 'redirect_uri');
+        $provider       = new OpenIdProviderStub($request, 'client_id', 'client_secret', 'redirect_uri');
         $provider->http = Mockery::mock(stdClass::class);
 
         $config = (new ConfigRetriever)->fromServices('openid', $provider->additionalConfigKeys());
         $provider->setConfig($config);
 
         $provider->http->expects('post')->with($tokenUrl, [
-            RequestOptions::HEADERS => ['Accept' => 'application/json'],
+            RequestOptions::HEADERS     => ['Accept' => 'application/json'],
             RequestOptions::FORM_PARAMS => [
-                'grant_type' => 'refresh_token',
+                'grant_type'    => 'refresh_token',
                 'refresh_token' => 'refresh_token',
-                'client_id' => null,
+                'client_id'     => null,
                 'client_secret' => null,
             ],
         ])->andReturns($response = Mockery::mock(stdClass::class));
@@ -116,7 +116,7 @@ class OpenIdProviderTest extends TestCase
         config(['services.openid.authorize_url' => $authUrl]);
         $request = Request::create('/');
 
-        $provider = new OpenIdProviderStub($request, 'client_id', 'client_secret', 'redirect_uri');
+        $provider       = new OpenIdProviderStub($request, 'client_id', 'client_secret', 'redirect_uri');
         $provider->http = Mockery::mock(stdClass::class);
         $provider->stateless();
 

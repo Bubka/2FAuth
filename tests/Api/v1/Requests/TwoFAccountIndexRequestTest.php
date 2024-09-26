@@ -27,16 +27,16 @@ class TwoFAccountIndexRequestTest extends TestCase
             ->once()
             ->andReturn(true);
 
-        $request = new TwoFAccountIndexRequest();
+        $request = new TwoFAccountIndexRequest;
 
         $this->assertTrue($request->authorize());
     }
-    
+
     #[Test]
     #[DataProviderExternal(TwoFAccountDataProvider::class, 'validIdsProvider')]
     public function test_valid_data(array $data) : void
     {
-        $request   = new TwoFAccountIndexRequest();
+        $request   = new TwoFAccountIndexRequest;
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->fails());
@@ -46,7 +46,7 @@ class TwoFAccountIndexRequestTest extends TestCase
     #[DataProviderExternal(TwoFAccountDataProvider::class, 'invalidIdsProvider')]
     public function test_invalid_data(array $data) : void
     {
-        $request   = new TwoFAccountIndexRequest();
+        $request   = new TwoFAccountIndexRequest;
         $validator = Validator::make($data, $request->rules());
 
         $this->assertTrue($validator->fails());

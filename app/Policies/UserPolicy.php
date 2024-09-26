@@ -31,7 +31,7 @@ class UserPolicy
 
     /**
      * Determine whether the user can view the model.
-     * 
+     *
      * @codeCoverageIgnore
      * Ignored as long as the before() method restrict the access to admins only
      */
@@ -48,7 +48,7 @@ class UserPolicy
 
     /**
      * Determine whether the user can create models.
-     * 
+     *
      * @codeCoverageIgnore
      * Ignored as long as the before() method restrict the access to admins only
      */
@@ -59,7 +59,7 @@ class UserPolicy
 
     /**
      * Determine whether the user can update the model.
-     * 
+     *
      * Not ignored because the user can update itself
      */
     public function update(User $user, User $model) : bool
@@ -75,7 +75,7 @@ class UserPolicy
 
     /**
      * Determine whether the user can delete the model.
-     * 
+     *
      * @codeCoverageIgnore
      * Ignored as long as the before() method restrict the access to admins only
      */
@@ -92,7 +92,7 @@ class UserPolicy
 
     /**
      * Determine whether the user can promote the model.
-     * 
+     *
      * @codeCoverageIgnore
      * Ignored as long as the before() method restrict the access to admins only
      */

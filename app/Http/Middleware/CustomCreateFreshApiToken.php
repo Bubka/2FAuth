@@ -11,7 +11,7 @@ class CustomCreateFreshApiToken extends CreateFreshApiToken
      *
      * @param  \Illuminate\Http\Request  $request
      * @return bool
-     * 
+     *
      * @codeCoverageIgnore
      */
     protected function requestShouldReceiveFreshToken($request)

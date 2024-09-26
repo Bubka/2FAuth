@@ -9,6 +9,4 @@ use Exception;
  *
  * @codeCoverageIgnore
  */
-class UndecipherableException extends Exception
-{
-}
+class UndecipherableException extends Exception {}

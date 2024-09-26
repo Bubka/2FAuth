@@ -30,13 +30,13 @@ class WebauthnRecoveryNotificationTest extends FeatureTestCase
     {
         parent::setUp();
 
-        $this->user = User::factory()->create();
+        $this->user                         = User::factory()->create();
         $this->webauthnRecoveryNotification = new WebauthnRecoveryNotification('test_token');
     }
 
     #[Test]
     public function test_it_renders_to_email()
-    {        
+    {
         $mail = $this->webauthnRecoveryNotification->toMail($this->user);
 
         $this->assertInstanceOf(MailMessage::class, $mail);
@@ -77,5 +77,4 @@ class WebauthnRecoveryNotificationTest extends FeatureTestCase
             $mail
         );
     }
-
 }

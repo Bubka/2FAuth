@@ -9,6 +9,4 @@ use Exception;
  *
  * @codeCoverageIgnore
  */
-class UnsupportedMigrationException extends Exception
-{
-}
+class UnsupportedMigrationException extends Exception {}

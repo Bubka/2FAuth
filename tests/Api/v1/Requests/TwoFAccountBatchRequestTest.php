@@ -27,7 +27,7 @@ class TwoFAccountBatchRequestTest extends TestCase
             ->once()
             ->andReturn(true);
 
-        $request = new TwoFAccountBatchRequest();
+        $request = new TwoFAccountBatchRequest;
 
         $this->assertTrue($request->authorize());
     }
@@ -36,7 +36,7 @@ class TwoFAccountBatchRequestTest extends TestCase
     #[DataProviderExternal(TwoFAccountDataProvider::class, 'validIdsProvider')]
     public function test_valid_data(array $data) : void
     {
-        $request   = new TwoFAccountBatchRequest();
+        $request   = new TwoFAccountBatchRequest;
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->fails());
@@ -46,7 +46,7 @@ class TwoFAccountBatchRequestTest extends TestCase
     #[DataProviderExternal(TwoFAccountDataProvider::class, 'invalidIdsProvider')]
     public function test_invalid_data(array $data) : void
     {
-        $request   = new TwoFAccountBatchRequest();
+        $request   = new TwoFAccountBatchRequest;
         $validator = Validator::make($data, $request->rules());
 
         $this->assertTrue($validator->fails());

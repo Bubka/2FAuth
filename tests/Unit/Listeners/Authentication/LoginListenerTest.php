@@ -34,12 +34,11 @@ class LoginListenerTest extends TestCase
     public function test_handle_throws_exception_with_unexpected_event_type()
     {
         $this->expectException(TypeError::class);
-        
+
         $request  = Mockery::mock(Request::class);
         $event    = Mockery::mock(UnexpectedEvent::class);
         $listener = new LoginListener($request);
 
         $listener->handle($event);
     }
-    
 }

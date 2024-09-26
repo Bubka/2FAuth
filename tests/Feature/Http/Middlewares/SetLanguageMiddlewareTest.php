@@ -67,7 +67,7 @@ class SetLanguageMiddlewareTest extends TestCase
 
         $this->assertEquals(self::IS_FR, App::getLocale());
     }
-    
+
     #[Test]
     public function test_it_applies_fallback_locale_if_header_ask_for_wildcard()
     {
@@ -121,9 +121,9 @@ class SetLanguageMiddlewareTest extends TestCase
     #[Test]
     public function test_user_preference_overrides_header()
     {
-        $this->user = new User;
+        $this->user                      = new User;
         $this->user['preferences->lang'] = self::IS_FR;
-        
+
         $this->actingAs($this->user)->json('GET', '/', [], ['Accept-Language' => self::IS_DE]);
 
         $this->assertEquals(self::IS_FR, App::getLocale());
@@ -132,9 +132,9 @@ class SetLanguageMiddlewareTest extends TestCase
     #[Test]
     public function test_user_preference_applies_header()
     {
-        $this->user = new User;
+        $this->user                      = new User;
         $this->user['preferences->lang'] = 'browser';
-        
+
         $this->actingAs($this->user)->json('GET', '/', [], ['Accept-Language' => self::IS_DE]);
 
         $this->assertEquals(self::IS_DE, App::getLocale());
@@ -145,9 +145,9 @@ class SetLanguageMiddlewareTest extends TestCase
     {
         Config::set('app.fallback_locale', self::IS_DE);
 
-        $this->user = new User;
+        $this->user                      = new User;
         $this->user['preferences->lang'] = self::IS_FR;
-        
+
         $this->actingAs($this->user)->json('GET', '/', [], ['Accept-Language' => null]);
 
         $this->assertEquals(self::IS_FR, App::getLocale());

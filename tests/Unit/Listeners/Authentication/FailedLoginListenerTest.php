@@ -35,7 +35,7 @@ class FailedLoginListenerTest extends TestCase
     public function test_handle_throws_exception_with_unexpected_event_type()
     {
         $this->expectException(TypeError::class);
-        
+
         $request  = Mockery::mock(Request::class);
         $event    = Mockery::mock(UnexpectedEvent::class);
         $listener = new FailedLoginListener($request);
@@ -47,13 +47,12 @@ class FailedLoginListenerTest extends TestCase
     public function test_handle_send_nothing_if_user_is_null()
     {
         Notification::fake();
-        
-        $request  = Mockery::mock(Request::class);
-        $event = Mockery::mock(Failed::class);
+
+        $request = Mockery::mock(Request::class);
+        $event   = Mockery::mock(Failed::class);
 
         (new FailedLoginListener($request))->handle($event);
 
         Notification::assertNothingSent();
     }
-
 }

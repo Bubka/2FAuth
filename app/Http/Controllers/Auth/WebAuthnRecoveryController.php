@@ -54,7 +54,7 @@ class WebAuthnRecoveryController extends Controller
                     $user->save();
                     Log::notice(sprintf('Legacy login restored for user ID #%s', $user->id));
                 } else {
-                    throw new AuthenticationException();
+                    throw new AuthenticationException;
                 }
             }
         );

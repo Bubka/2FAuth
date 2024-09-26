@@ -30,7 +30,7 @@ use TypeError;
 
 /**
  * @codeCoverageIgnore
- * 
+ *
  * Excluded from test coverage as long as 2FAuth does not offer a logout Other Devices feature
  * See \Illuminate\Auth\SessionGuard::logoutOtherDevices when the time comes
  */
@@ -52,10 +52,10 @@ class OtherDeviceLogoutListener extends AbstractAccessListener
         $ip        = config('2fauth.proxy_headers.forIp') ?? $this->request->ip();
         $userAgent = $this->request->userAgent();
         $authLog   = $user->authentications()
-                          ->whereIpAddress($ip)
-                          ->whereUserAgent($userAgent)
-                          ->first();
-        $guard     = $event->guard;
+            ->whereIpAddress($ip)
+            ->whereUserAgent($userAgent)
+            ->first();
+        $guard = $event->guard;
 
         if (! $authLog) {
             $authLog = new AuthLog([

@@ -17,7 +17,7 @@ class VisitedByProxyUserTest extends TestCase
     #[Test]
     public function test_event_constructor()
     {
-        $user = new User();
+        $user  = new User;
         $event = new VisitedByProxyUser($user);
 
         $this->assertSame($user, $event->user);

@@ -108,10 +108,10 @@ class UserModelTest extends FeatureTestCase
     public function test_delete_removes_user_data()
     {
         Artisan::call('passport:install', [
-            '--verbose' => 2,
-            '--no-interaction' => 1
+            '--verbose'        => 2,
+            '--no-interaction' => 1,
         ]);
-        
+
         $user = User::factory()->create();
         TwoFAccount::factory()->for($user)->create();
         AuthLog::factory()->for($user, 'authenticatable')->create();
@@ -234,10 +234,10 @@ class UserModelTest extends FeatureTestCase
     #[Test]
     public function test_authentications_returns_user_auth_logs_only()
     {
-        $user = User::factory()->create();
+        $user        = User::factory()->create();
         $anotherUser = User::factory()->create();
 
-        $userAuthLog  = AuthLog::factory()->daysAgo(10)->for($user, 'authenticatable')->create();
+        $userAuthLog = AuthLog::factory()->daysAgo(10)->for($user, 'authenticatable')->create();
         AuthLog::factory()->daysAgo(5)->for($anotherUser, 'authenticatable')->create();
 
         $authentications = $user->authentications()->get();
@@ -268,7 +268,7 @@ class UserModelTest extends FeatureTestCase
         $sixMonthsAgoAuthLog    = AuthLog::factory()->duringLastSixMonth()->for($user, 'authenticatable')->create();
         $threeMonthsAgoAuthLog  = AuthLog::factory()->duringLastThreeMonth()->for($user, 'authenticatable')->create();
         $duringLastMonthAuthLog = AuthLog::factory()->duringLastMonth()->for($user, 'authenticatable')->create();
-        
+
         $authentications = $user->authenticationsByPeriod(3);
 
         $this->assertCount(2, $authentications);
@@ -293,7 +293,7 @@ class UserModelTest extends FeatureTestCase
     #[Test]
     public function test_latestAuthentication_returns_user_latest_auth_logs_only()
     {
-        $user = User::factory()->create();
+        $user        = User::factory()->create();
         $anotherUser = User::factory()->create();
 
         $userAuthLog        = AuthLog::factory()->duringLastThreeMonth()->for($user, 'authenticatable')->create();
@@ -309,7 +309,7 @@ class UserModelTest extends FeatureTestCase
     public function test_lastLoginAt_returns_user_last_auth_date()
     {
         $user = User::factory()->create();
-        $now = now();
+        $now  = now();
 
         $tenDaysAgoAuthLog  = AuthLog::factory()->daysAgo(10)->for($user, 'authenticatable')->create();
         $fiveDaysAgoAuthLog = AuthLog::factory()->daysAgo(5)->for($user, 'authenticatable')->create();
@@ -335,7 +335,7 @@ class UserModelTest extends FeatureTestCase
     public function test_lastSuccessfulLoginAt_returns_user_last_successful_login_date()
     {
         $user = User::factory()->create();
-        $now = now();
+        $now  = now();
         AuthLog::factory()->at($now)->for($user, 'authenticatable')->create();
 
         $lastSuccessfulLoginAt = $user->lastSuccessfulLoginAt();
@@ -347,7 +347,7 @@ class UserModelTest extends FeatureTestCase
     public function test_lastSuccessfulLoginAt_returns_null_if_user_has_no_successful_login()
     {
         $user = User::factory()->create();
-        $now = now();
+        $now  = now();
         AuthLog::factory()->at($now)->failedLogin()->for($user, 'authenticatable')->create();
 
         $lastSuccessfulLoginAt = $user->lastSuccessfulLoginAt();
@@ -401,12 +401,12 @@ class UserModelTest extends FeatureTestCase
     #[Test]
     public function test_previousLoginAt_returns_user_last_auth_date()
     {
-        $user = User::factory()->create();
-        $now = now();
+        $user      = User::factory()->create();
+        $now       = now();
         $yesterday = now()->subDay();
 
-        $yesterdayAuthLog   = AuthLog::factory()->at($yesterday)->for($user, 'authenticatable')->create();
-        $lastAuthLog        = AuthLog::factory()->at($now)->for($user, 'authenticatable')->create();
+        $yesterdayAuthLog = AuthLog::factory()->at($yesterday)->for($user, 'authenticatable')->create();
+        $lastAuthLog      = AuthLog::factory()->at($now)->for($user, 'authenticatable')->create();
 
         $previousLoginAt = $user->previousLoginAt();
 
@@ -426,7 +426,7 @@ class UserModelTest extends FeatureTestCase
     #[Test]
     public function test_previousLoginIp_returns_user_last_auth_ip()
     {
-        $user = User::factory()->create();
+        $user      = User::factory()->create();
         $yesterday = now()->subDay();
 
         AuthLog::factory()->for($user, 'authenticatable')->create();
@@ -446,6 +446,4 @@ class UserModelTest extends FeatureTestCase
 
         $this->assertNull($previousLoginIp);
     }
-
-    
 }

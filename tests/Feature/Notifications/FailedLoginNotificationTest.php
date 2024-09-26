@@ -31,7 +31,6 @@ class FailedLoginNotificationTest extends FeatureTestCase
      */
     protected $failedLogin;
 
-
     public function setUp() : void
     {
         parent::setUp();
@@ -39,15 +38,15 @@ class FailedLoginNotificationTest extends FeatureTestCase
         $this->user = User::factory()->create();
 
         AuthLog::factory()->for($this->user, 'authenticatable')->failedLogin()->create();
-        
-        $this->authLog = AuthLog::first();
+
+        $this->authLog     = AuthLog::first();
         $this->failedLogin = new FailedLoginNotification($this->authLog);
     }
 
     #[Test]
     public function test_it_renders_to_email()
     {
-        
+
         $mail = $this->failedLogin->toMail($this->user);
 
         $this->assertInstanceOf(MailMessage::class, $mail);
@@ -78,5 +77,4 @@ class FailedLoginNotificationTest extends FeatureTestCase
             $mail
         );
     }
-
 }

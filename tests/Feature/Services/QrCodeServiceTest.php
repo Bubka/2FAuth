@@ -66,27 +66,24 @@ class QrCodeServiceTest extends FeatureTestCase
         // QrReader is a final class, so we need to mock it here with a new object instance
         // to then bind it to the container
         $fileContent = LocalFile::fake()->validQrcode()->get();
-        $qrReader = \Mockery::mock(new QrReader($fileContent, QrReader::SOURCE_TYPE_BLOB))->makePartial();
+        $qrReader    = \Mockery::mock(new QrReader($fileContent, QrReader::SOURCE_TYPE_BLOB))->makePartial();
         $qrReader->shouldReceive('text')->andReturn('');
         $qrReader->shouldReceive('getError')->andReturn($exception);
-         
-        $this->app->bind(QrReader::class, function() use($qrReader) {
+
+        $this->app->bind(QrReader::class, function () use ($qrReader) {
             return $qrReader;
         });
 
         QrCode::decode(LocalFile::fake()->validQrcode());
     }
 
-    /**
-     * 
-     */
     public static function QrReaderExceptionProvider()
     {
         return [
-            'NotFoundException' => [new NotFoundException()],
-            'FormatException'   => [new FormatException()],
-            'ChecksumException' => [new ChecksumException()],
-            'default'           => [new Exception()],
+            'NotFoundException' => [new NotFoundException],
+            'FormatException'   => [new FormatException],
+            'ChecksumException' => [new ChecksumException],
+            'default'           => [new Exception],
         ];
     }
 }

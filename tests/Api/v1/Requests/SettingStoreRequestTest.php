@@ -29,7 +29,7 @@ class SettingStoreRequestTest extends FeatureTestCase
             ->once()
             ->andReturn(true);
 
-        $request = new SettingStoreRequest();
+        $request = new SettingStoreRequest;
 
         $this->assertTrue($request->authorize());
     }
@@ -38,7 +38,7 @@ class SettingStoreRequestTest extends FeatureTestCase
     #[DataProvider('provideValidData')]
     public function test_valid_data(array $data) : void
     {
-        $request   = new SettingStoreRequest();
+        $request   = new SettingStoreRequest;
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->fails());
@@ -71,7 +71,7 @@ class SettingStoreRequestTest extends FeatureTestCase
     {
         Settings::set(self::UNIQUE_KEY, 'uniqueValue');
 
-        $request   = new SettingStoreRequest();
+        $request   = new SettingStoreRequest;
         $validator = Validator::make($data, $request->rules());
 
         $this->assertTrue($validator->fails());

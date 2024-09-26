@@ -4,8 +4,8 @@ namespace Tests\Feature;
 
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
@@ -15,6 +15,7 @@ use Tests\FeatureTestCase;
 class RouteTest extends FeatureTestCase
 {
     const API_ROUTE_PREFIX = 'api/v1';
+
     const API_MIDDLEWARE = 'api.v1';
 
     #[Test]
@@ -61,9 +62,7 @@ class RouteTest extends FeatureTestCase
     public static function wherePatternProvider()
     {
         return [
-            'SETTING_NAME' => ['settingName']
+            'SETTING_NAME' => ['settingName'],
         ];
     }
-
-    
 }

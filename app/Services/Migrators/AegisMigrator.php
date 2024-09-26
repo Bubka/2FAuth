@@ -76,7 +76,7 @@ class AegisMigrator extends Migrator
                             break;
 
                         default:
-                            throw new \Exception();
+                            throw new \Exception;
                     }
                     $parameters['iconData'] = base64_decode($otp_parameters['icon']);
                 }
@@ -95,7 +95,7 @@ class AegisMigrator extends Migrator
                 Log::debug($exception->getMessage());
 
                 // The token failed to generate a valid account so we create a fake account to be returned.
-                $fakeAccount           = new TwoFAccount();
+                $fakeAccount           = new TwoFAccount;
                 $fakeAccount->id       = TwoFAccount::FAKE_ID;
                 $fakeAccount->otp_type = $otp_parameters['type'] ?? TwoFAccount::TOTP;
                 // Only basic fields are filled to limit the risk of another exception.

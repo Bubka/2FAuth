@@ -46,8 +46,9 @@ class TwoFAccountService
 
         if ($affectedCount) {
             Log::info(sprintf('TwoFAccounts with IDs #%s withdrawn', implode(',', $ids)));
+        } else {
+            Log::info(sprintf('Cannot find TwoFAccounts to withdraw using ids #%s', implode(',', $ids)));
         }
-        else Log::info(sprintf('Cannot find TwoFAccounts to withdraw using ids #%s', implode(',', $ids)));
     }
 
     /**

@@ -70,12 +70,13 @@ use Laravel\Passport\HasApiTokens;
 class User extends Authenticatable implements HasLocalePreference, WebAuthnAuthenticatable
 {
     use HasApiTokens, Notifiable;
-
     use HasAuthenticationLog;
+
     /**
      * @use HasFactory<UserFactory>
      */
     use HasFactory;
+
     use WebAuthnAuthentication, WebAuthnManageCredentials;
 
     /**

@@ -132,7 +132,7 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
     public function test_webauthn_login_of_admin_returns_success_even_with_sso_only_enabled()
     {
         Settings::set('useSsoOnly', true);
-        
+
         $this->user->promoteToAdministrator(true);
         $this->user->save();
 
@@ -151,7 +151,7 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
             ->assertJsonStructure([
                 'preferences',
             ]);
-        
+
         $this->user->promoteToAdministrator(false);
         $this->user->save();
     }
@@ -160,7 +160,7 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
     public function test_webauthn_login_sends_new_device_notification_to_existing_user()
     {
         Notification::fake();
-        
+
         $this->user['preferences->notifyOnNewAuthDevice'] = 1;
         $this->user->save();
 
@@ -186,7 +186,7 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
     public function test_webauthn_login_does_not_send_new_device_notification_to_new_user()
     {
         Notification::fake();
-        
+
         $this->user['preferences->notifyOnNewAuthDevice'] = 1;
         $this->user->save();
 
@@ -203,8 +203,8 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
     public function test_webauthn_login_does_not_send_new_device_notification_if_user_disabled_it()
     {
         Notification::fake();
-        
-        $this->user['preferences->notifyOnNewAuthDevice'] =01;
+
+        $this->user['preferences->notifyOnNewAuthDevice'] = 0;
         $this->user->save();
 
         $this->createWebauthnCredential(self::CREDENTIAL_ID_ALT, $this->user->id, self::USER_ID_ALT);

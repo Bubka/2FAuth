@@ -59,7 +59,7 @@ class AuthenticateMiddlewareTest extends FeatureTestCase
     {
         Config::set('auth.auth_proxy_headers.user', 'HTTP_REMOTE_USER');
         Config::set('auth.auth_proxy_headers.email', 'HTTP_REMOTE_EMAIL');
-        
+
         $this->app['auth']->shouldUse('reverse-proxy-guard');
 
         $lang = 'fr';
@@ -71,7 +71,7 @@ class AuthenticateMiddlewareTest extends FeatureTestCase
         $user->save();
 
         $this->json('GET', '/api/v1/groups', [], [
-            'HTTP_REMOTE_USER'  => self::USER_NAME,
+            'HTTP_REMOTE_USER' => self::USER_NAME,
         ]);
 
         $this->assertEquals($lang, App::getLocale());

@@ -28,7 +28,7 @@ class TwoFAccountStoreRequestTest extends TestCase
             ->once()
             ->andReturn(true);
 
-        $request = new TwoFAccountStoreRequest();
+        $request = new TwoFAccountStoreRequest;
 
         $this->assertTrue($request->authorize());
     }
@@ -37,7 +37,7 @@ class TwoFAccountStoreRequestTest extends TestCase
     #[DataProvider('provideValidData')]
     public function test_valid_data(array $data) : void
     {
-        $request   = new TwoFAccountStoreRequest();
+        $request   = new TwoFAccountStoreRequest;
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->fails());
@@ -111,7 +111,7 @@ class TwoFAccountStoreRequestTest extends TestCase
     #[DataProvider('provideInvalidData')]
     public function test_invalid_data(array $data) : void
     {
-        $request   = new TwoFAccountStoreRequest();
+        $request   = new TwoFAccountStoreRequest;
         $validator = Validator::make($data, $request->rules());
 
         $this->assertTrue($validator->fails());

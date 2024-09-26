@@ -143,7 +143,7 @@ class SystemControllerTest extends FeatureTestCase
     {
         Notification::fake();
 
-        $this->mock(Dispatcher::class)->shouldReceive('send')->andThrow(new Exception());
+        $this->mock(Dispatcher::class)->shouldReceive('send')->andThrow(new Exception);
 
         $response = $this->actingAs($this->admin, 'web-guard')
             ->json('POST', '/system/test-email', []);

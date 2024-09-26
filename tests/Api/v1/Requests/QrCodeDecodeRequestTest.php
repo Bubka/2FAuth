@@ -27,7 +27,7 @@ class QrCodeDecodeRequestTest extends TestCase
             ->once()
             ->andReturn(true);
 
-        $request = new QrCodeDecodeRequest();
+        $request = new QrCodeDecodeRequest;
 
         $this->assertTrue($request->authorize());
     }
@@ -36,7 +36,7 @@ class QrCodeDecodeRequestTest extends TestCase
     #[DataProvider('provideValidData')]
     public function test_valid_data(array $data) : void
     {
-        $request   = new QrCodeDecodeRequest();
+        $request   = new QrCodeDecodeRequest;
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->fails());
@@ -60,7 +60,7 @@ class QrCodeDecodeRequestTest extends TestCase
     #[DataProvider('provideInvalidData')]
     public function test_invalid_data(array $data) : void
     {
-        $request   = new QrCodeDecodeRequest();
+        $request   = new QrCodeDecodeRequest;
         $validator = Validator::make($data, $request->rules());
 
         $this->assertTrue($validator->fails());

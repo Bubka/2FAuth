@@ -25,12 +25,11 @@ class TestEmailSettingNotificationTest extends FeatureTestCase
      */
     protected $testEmailSettingNotification;
 
-
     public function setUp() : void
     {
         parent::setUp();
 
-        $this->user = User::factory()->create();
+        $this->user                         = User::factory()->create();
         $this->testEmailSettingNotification = new TestEmailSettingNotification('test_token');
     }
 

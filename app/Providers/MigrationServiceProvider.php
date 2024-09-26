@@ -20,19 +20,19 @@ class MigrationServiceProvider extends ServiceProvider
         $this->app->bind(MigratorFactoryInterface::class, MigratorFactory::class);
 
         $this->app->singleton(GoogleAuthMigrator::class, function () {
-            return new GoogleAuthMigrator();
+            return new GoogleAuthMigrator;
         });
 
         $this->app->singleton(AegisMigrator::class, function () {
-            return new AegisMigrator();
+            return new AegisMigrator;
         });
 
         $this->app->singleton(TwoFASMigrator::class, function () {
-            return new TwoFASMigrator();
+            return new TwoFASMigrator;
         });
 
         $this->app->singleton(PlainTextMigrator::class, function () {
-            return new PlainTextMigrator();
+            return new PlainTextMigrator;
         });
     }
 

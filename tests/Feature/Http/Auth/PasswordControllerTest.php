@@ -23,7 +23,7 @@ class PasswordControllerTest extends FeatureTestCase
     private const PASSWORD = 'password';
 
     private const NEW_PASSWORD = 'newPassword';
-    
+
     private const USER_NAME = 'John';
 
     private const USER_EMAIL = 'john@example.com';
@@ -90,14 +90,14 @@ class PasswordControllerTest extends FeatureTestCase
         ]);
 
         $this->app['auth']->shouldUse(self::REVERSE_PROXY_GUARD);
-        
+
         $response = $this->json('PATCH', '/user/password', [
-                'currentPassword'       => self::NEW_PASSWORD,
-                'password'              => self::NEW_PASSWORD,
-                'password_confirmation' => self::NEW_PASSWORD,
-            ], [
-                'HTTP_REMOTE_USER'  => self::USER_NAME,
-            ])
+            'currentPassword'       => self::NEW_PASSWORD,
+            'password'              => self::NEW_PASSWORD,
+            'password_confirmation' => self::NEW_PASSWORD,
+        ], [
+            'HTTP_REMOTE_USER' => self::USER_NAME,
+        ])
             ->assertStatus(405)
             ->assertJsonStructure([
                 'message',

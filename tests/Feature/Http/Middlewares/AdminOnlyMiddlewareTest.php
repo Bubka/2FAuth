@@ -28,8 +28,7 @@ class AdminOnlyMiddlewareTest extends FeatureTestCase
         $request    = Request::create('/admin', 'GET');
         $middleware = new AdminOnly;
 
-        $response = $middleware->handle($request, function () {
-        });
+        $response = $middleware->handle($request, function () {});
     }
 
     #[Test]
@@ -45,8 +44,7 @@ class AdminOnlyMiddlewareTest extends FeatureTestCase
         $request    = Request::create('/admin', 'GET');
         $middleware = new AdminOnly;
 
-        $response = $middleware->handle($request, function () {
-        });
+        $response = $middleware->handle($request, function () {});
 
         $this->assertNull($response);
     }

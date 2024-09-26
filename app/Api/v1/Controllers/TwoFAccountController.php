@@ -111,8 +111,9 @@ class TwoFAccountController extends Controller
         if ($twofaccount->group_id != $groupId) {
             if ((int) $groupId === 0) {
                 TwoFAccounts::withdraw($twofaccount->id);
+            } else {
+                Groups::assign($twofaccount->id, $request->user(), $groupId);
             }
-            else Groups::assign($twofaccount->id, $request->user(), $groupId);
             $twofaccount->refresh();
         }
 
@@ -151,7 +152,7 @@ class TwoFAccountController extends Controller
         $validated = $request->validated();
 
         $twofaccounts = TwoFAccount::whereIn('id', $validated['orderedIds'])->get();
-        $this->authorize('updateEach', [new TwoFAccount(), $twofaccounts]);
+        $this->authorize('updateEach', [new TwoFAccount, $twofaccounts]);
 
         TwoFAccount::setNewOrder($validated['orderedIds']);
         $orderedIds = $request->user()->twofaccounts->sortBy('order_column')->pluck('id');
@@ -192,7 +193,7 @@ class TwoFAccountController extends Controller
         }
 
         $twofaccounts = TwoFAccounts::export($validated['ids']);
-        $this->authorize('viewEach', [new TwoFAccount(), $twofaccounts]);
+        $this->authorize('viewEach', [new TwoFAccount, $twofaccounts]);
 
         return new TwoFAccountExportCollection($twofaccounts);
     }
@@ -231,7 +232,7 @@ class TwoFAccountController extends Controller
         // The request inputs should define an account
         else {
             $validatedData = $request->validate((new TwoFAccountStoreRequest)->rules());
-            $twofaccount   = new TwoFAccount();
+            $twofaccount   = new TwoFAccount;
             $twofaccount->fillWithOtpParameters($validatedData, true);
         }
 
@@ -267,7 +268,7 @@ class TwoFAccountController extends Controller
         $ids          = Helpers::commaSeparatedToArray($validated['ids']);
         $twofaccounts = TwoFAccount::whereIn('id', $ids)->get();
 
-        $this->authorize('updateEach', [new TwoFAccount(), $twofaccounts]);
+        $this->authorize('updateEach', [new TwoFAccount, $twofaccounts]);
 
         TwoFAccounts::withdraw($ids);
 
@@ -307,7 +308,7 @@ class TwoFAccountController extends Controller
         $ids          = Helpers::commaSeparatedToArray($validated['ids']);
         $twofaccounts = TwoFAccount::whereIn('id', $ids)->get();
 
-        $this->authorize('deleteEach', [new TwoFAccount(), $twofaccounts]);
+        $this->authorize('deleteEach', [new TwoFAccount, $twofaccounts]);
 
         TwoFAccounts::delete($validated['ids']);
 

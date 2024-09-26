@@ -34,7 +34,7 @@ class MigratorFactory implements MigratorFactoryInterface
         } elseif ($this->isPlainText($migrationPayload)) {
             return App::make(PlainTextMigrator::class);
         } else {
-            throw new UnsupportedMigrationException();
+            throw new UnsupportedMigrationException;
         }
     }
 
@@ -130,7 +130,7 @@ class MigratorFactory implements MigratorFactoryInterface
 
         if (Arr::has($json, 'db')) {
             if (is_string($json['db']) && is_array(Arr::get($json, 'header.slots'))) {
-                throw new EncryptedMigrationException();
+                throw new EncryptedMigrationException;
             } else {
                 return count(Validator::validate(
                     $json,
@@ -180,7 +180,7 @@ class MigratorFactory implements MigratorFactoryInterface
 
         if (Arr::has($json, 'schemaVersion') && (Arr::has($json, 'services') || Arr::has($json, 'servicesEncrypted'))) {
             if (Arr::has($json, 'servicesEncrypted')) {
-                throw new EncryptedMigrationException();
+                throw new EncryptedMigrationException;
             } else {
                 return count(Validator::validate(
                     $json,

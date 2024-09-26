@@ -29,7 +29,7 @@ class GroupService
         // TwoFAccountService::withdraw() method.
         if ($targetGroup === 0 || $targetGroup === '0') {
             Log::info('Group assignment skipped, no group explicitly requested');
-            
+
             return;
         }
 
@@ -38,11 +38,10 @@ class GroupService
         // - No group is passed => We try to identify a destination group through user preferences
         $group = null;
 
-        if(! is_null($targetGroup)) {
+        if (! is_null($targetGroup)) {
             if ($targetGroup instanceof Group && $targetGroup->exists && $targetGroup->user_id == $user->id) {
                 $group = $targetGroup;
-            }
-            else {
+            } else {
                 $group = Group::where('id', (int) $targetGroup)
                     ->where('user_id', $user->id)
                     ->first();
@@ -58,7 +57,7 @@ class GroupService
             $twofaccounts = TwoFAccount::find($ids);
 
             if ($user->cannot('updateEach', [(new TwoFAccount), $twofaccounts])) {
-                throw new AuthorizationException();
+                throw new AuthorizationException;
             }
 
             $group->twofaccounts()->saveMany($twofaccounts);

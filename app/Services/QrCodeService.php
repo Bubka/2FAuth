@@ -40,11 +40,11 @@ class QrCodeService
     public static function decode(\Illuminate\Http\UploadedFile $file)
     {
         $qrcode = app()->make(QrReader::class, [
-            'imgSource' => $file->get(),
-            'sourceType' => QrReader::SOURCE_TYPE_BLOB
+            'imgSource'  => $file->get(),
+            'sourceType' => QrReader::SOURCE_TYPE_BLOB,
         ]);
 
-        $text   = $qrcode->text();
+        $text = $qrcode->text();
 
         if (! $text) {
             $text = $qrcode->text([

@@ -37,7 +37,7 @@ class UserAuthenticationResource extends JsonResource
      */
     public function __construct($resource)
     {
-        $this->agent = new Agent();
+        $this->agent = new Agent;
         $this->agent->setUserAgent($resource->user_agent);
 
         parent::__construct($resource);

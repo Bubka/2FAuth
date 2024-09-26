@@ -39,7 +39,7 @@ class LogoServiceTest extends TestCase
         Storage::fake('icons');
         Storage::fake('logos');
 
-        $logoService = new LogoService();
+        $logoService = new LogoService;
         $icon        = $logoService->getIcon('twitter');
 
         $this->assertNotNull($icon);
@@ -56,7 +56,7 @@ class LogoServiceTest extends TestCase
 
         Storage::fake('icons');
         Storage::fake('logos');
-        $logoService = new LogoService();
+        $logoService = new LogoService;
 
         $icon = $logoService->getIcon('twitter');
 
@@ -75,7 +75,7 @@ class LogoServiceTest extends TestCase
 
         Storage::fake('icons');
         Storage::fake('logos');
-        $logoService = new LogoService();
+        $logoService = new LogoService;
 
         $icon = $logoService->getIcon('twitter');
 
@@ -85,7 +85,7 @@ class LogoServiceTest extends TestCase
     #[Test]
     public function test_getIcon_returns_null_when_no_logo_exists()
     {
-        $logoService = new LogoService();
+        $logoService = new LogoService;
 
         $icon = $logoService->getIcon('no_logo_should_exists_with_this_name');
 
@@ -105,7 +105,7 @@ class LogoServiceTest extends TestCase
         Storage::fake('icons');
         Storage::fake('logos');
 
-        $logoService = new LogoService();
+        $logoService = new LogoService;
         $icon        = $logoService->getIcon('twitter');
 
         $this->assertNull($icon);

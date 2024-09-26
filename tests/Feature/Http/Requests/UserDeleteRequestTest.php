@@ -26,7 +26,7 @@ class UserDeleteRequestTest extends FeatureTestCase
             ->once()
             ->andReturn(true);
 
-        $request = new UserDeleteRequest();
+        $request = new UserDeleteRequest;
 
         $this->assertTrue($request->authorize());
     }
@@ -35,7 +35,7 @@ class UserDeleteRequestTest extends FeatureTestCase
     #[DataProvider('provideValidData')]
     public function test_valid_data(array $data) : void
     {
-        $request   = new UserDeleteRequest();
+        $request   = new UserDeleteRequest;
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->fails());
@@ -57,7 +57,7 @@ class UserDeleteRequestTest extends FeatureTestCase
     #[DataProvider('provideInvalidData')]
     public function test_invalid_data(array $data) : void
     {
-        $request   = new UserDeleteRequest();
+        $request   = new UserDeleteRequest;
         $validator = Validator::make($data, $request->rules());
 
         $this->assertTrue($validator->fails());

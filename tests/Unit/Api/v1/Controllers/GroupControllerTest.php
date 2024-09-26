@@ -34,7 +34,7 @@ class GroupControllerTest extends TestCase
     {
         parent::setUp();
 
-        $this->user = new User();
+        $this->user = new User;
 
         // We do not use $this->actingAs($this->user) to prevent intelephense
         // static analysis error. Dumb, but I don't like errors...
@@ -48,7 +48,7 @@ class GroupControllerTest extends TestCase
         $user       = Mockery::mock(User::class);
         $request    = Mockery::mock(Request::class);
         $groups     = Group::factory()->count(3)->make();
-        $controller = new GroupController();
+        $controller = new GroupController;
 
         $user->shouldReceive('groups->withCount->get')
             ->once()
@@ -70,7 +70,7 @@ class GroupControllerTest extends TestCase
     public function test_store_uses_validated_data_and_returns_api_resource()
     {
         $request    = Mockery::mock(GroupStoreRequest::class);
-        $controller = new GroupController();
+        $controller = new GroupController;
         $group      = Group::factory()->for($this->user)->make();
         $validated  = ['name' => $group->name];
 

@@ -36,7 +36,7 @@ class HandlerTest extends TestCase
         $method = $class->getMethod('render');
         $method->setAccessible(true);
 
-        $response = $method->invokeArgs($instance, [new Request(), $this->createMock($exception)]);
+        $response = $method->invokeArgs($instance, [new Request, $this->createMock($exception)]);
 
         $this->assertInstanceOf(JsonResponse::class, $response);
 
@@ -93,7 +93,7 @@ class HandlerTest extends TestCase
         $method = $class->getMethod('render');
         $method->setAccessible(true);
 
-        $response = $method->invokeArgs($instance, [new Request(), $this->createMock($exception)]);
+        $response = $method->invokeArgs($instance, [new Request, $this->createMock($exception)]);
 
         $this->assertInstanceOf(JsonResponse::class, $response);
 
@@ -131,7 +131,7 @@ class HandlerTest extends TestCase
         $mockException = $this->createMock(\Illuminate\Auth\AuthenticationException::class);
         $mockException->method('guards')->willReturn(['web-guard']);
 
-        $response = $method->invokeArgs($instance, [new Request(), $mockException]);
+        $response = $method->invokeArgs($instance, [new Request, $mockException]);
 
         $this->assertInstanceOf(JsonResponse::class, $response);
 
@@ -154,7 +154,7 @@ class HandlerTest extends TestCase
         $mockException = $this->createMock(\Illuminate\Auth\AuthenticationException::class);
         $mockException->method('guards')->willReturn(['reverse-proxy-guard']);
 
-        $response = $method->invokeArgs($instance, [new Request(), $mockException]);
+        $response = $method->invokeArgs($instance, [new Request, $mockException]);
 
         $this->assertInstanceOf(JsonResponse::class, $response);
 
@@ -176,7 +176,7 @@ class HandlerTest extends TestCase
 
         $mockException = $this->createMock(\Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException::class);
 
-        $response = $method->invokeArgs($instance, [new Request(), $mockException]);
+        $response = $method->invokeArgs($instance, [new Request, $mockException]);
 
         $this->assertInstanceOf(JsonResponse::class, $response);
 

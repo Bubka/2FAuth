@@ -116,13 +116,13 @@ class SocialiteControllerTest extends FeatureTestCase
     {
         return [
             'TOKEN_URL' => [
-                'token_url'
+                'token_url',
             ],
             'AUTHORIZE_URL' => [
-                'authorize_url'
+                'authorize_url',
             ],
             'USERINFO_URL' => [
-                'userinfo_url'
+                'userinfo_url',
             ],
         ];
     }
@@ -286,7 +286,7 @@ class SocialiteControllerTest extends FeatureTestCase
         $newSocialiteUser->email = 'jane@provider.com';
 
         Socialite::shouldReceive('driver->user')
-            ->andThrow(new Exception());
+            ->andThrow(new Exception);
 
         $response = $this->get('/socialite/callback/github', ['driver' => 'github']);
 

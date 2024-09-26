@@ -20,8 +20,8 @@ use Illuminate\Support\Facades\Storage;
 use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
 use Tests\Data\MigrationTestData;
 use Tests\Data\OtpTestData;
 use Tests\TestCase;
@@ -189,37 +189,37 @@ class MigratorTest extends TestCase
     {
         return [
             'PLAIN_TEXT_PAYLOAD' => [
-                new PlainTextMigrator(),
+                new PlainTextMigrator,
                 MigrationTestData::VALID_PLAIN_TEXT_PAYLOAD,
                 'custom',
                 $hasSteam = true,
             ],
             'PLAIN_TEXT_PAYLOAD_WITH_INTRUDER' => [
-                new PlainTextMigrator(),
+                new PlainTextMigrator,
                 MigrationTestData::VALID_PLAIN_TEXT_PAYLOAD_WITH_INTRUDER,
                 'custom',
                 $hasSteam = true,
             ],
             'AEGIS_JSON_MIGRATION_PAYLOAD' => [
-                new AegisMigrator(),
+                new AegisMigrator,
                 MigrationTestData::VALID_AEGIS_JSON_MIGRATION_PAYLOAD,
                 'custom',
                 $hasSteam = true,
             ],
             '2FAS_MIGRATION_PAYLOAD' => [
-                new TwoFASMigrator(),
+                new TwoFASMigrator,
                 MigrationTestData::VALID_2FAS_MIGRATION_PAYLOAD,
                 'custom',
                 $hasSteam = false,
             ],
             'GOOGLE_AUTH_MIGRATION_PAYLOAD' => [
-                new GoogleAuthMigrator(),
+                new GoogleAuthMigrator,
                 MigrationTestData::GOOGLE_AUTH_MIGRATION_URI,
                 'gauth',
                 $hasSteam = false,
             ],
             '2FAUTH_MIGRATION_PAYLOAD' => [
-                new TwoFAuthMigrator(),
+                new TwoFAuthMigrator,
                 MigrationTestData::VALID_2FAUTH_JSON_MIGRATION_PAYLOAD,
                 'custom',
                 $hasSteam = true,
@@ -243,51 +243,51 @@ class MigratorTest extends TestCase
     {
         return [
             'INVALID_PLAIN_TEXT_NO_URI' => [
-                new PlainTextMigrator(),
+                new PlainTextMigrator,
                 MigrationTestData::INVALID_PLAIN_TEXT_NO_URI,
             ],
             'INVALID_PLAIN_TEXT_ONLY_EMPTY_LINES' => [
-                new PlainTextMigrator(),
+                new PlainTextMigrator,
                 MigrationTestData::INVALID_PLAIN_TEXT_ONLY_EMPTY_LINES,
             ],
             'INVALID_PLAIN_TEXT_NULL' => [
-                new PlainTextMigrator(),
+                new PlainTextMigrator,
                 null,
             ],
             'INVALID_PLAIN_TEXT_EMPTY_STRING' => [
-                new PlainTextMigrator(),
+                new PlainTextMigrator,
                 '',
             ],
             'INVALID_PLAIN_TEXT_INT' => [
-                new PlainTextMigrator(),
+                new PlainTextMigrator,
                 10,
             ],
             'INVALID_PLAIN_TEXT_BOOL' => [
-                new PlainTextMigrator(),
+                new PlainTextMigrator,
                 true,
             ],
             'INVALID_AEGIS_JSON_MIGRATION_PAYLOAD' => [
-                new AegisMigrator(),
+                new AegisMigrator,
                 MigrationTestData::INVALID_AEGIS_JSON_MIGRATION_PAYLOAD,
             ],
             'ENCRYPTED_AEGIS_JSON_MIGRATION_PAYLOAD' => [
-                new AegisMigrator(),
+                new AegisMigrator,
                 MigrationTestData::ENCRYPTED_AEGIS_JSON_MIGRATION_PAYLOAD,
             ],
             'INVALID_2FAS_MIGRATION_PAYLOAD' => [
-                new TwoFASMigrator(),
+                new TwoFASMigrator,
                 MigrationTestData::INVALID_2FAS_MIGRATION_PAYLOAD,
             ],
             'INVALID_GOOGLE_AUTH_MIGRATION_URI' => [
-                new GoogleAuthMigrator(),
+                new GoogleAuthMigrator,
                 MigrationTestData::INVALID_GOOGLE_AUTH_MIGRATION_URI,
             ],
             'GOOGLE_AUTH_MIGRATION_URI_WITH_INVALID_DATA' => [
-                new GoogleAuthMigrator(),
+                new GoogleAuthMigrator,
                 MigrationTestData::GOOGLE_AUTH_MIGRATION_URI_WITH_INVALID_DATA,
             ],
             'INVALID_2FAUTH_JSON_MIGRATION_PAYLOAD' => [
-                new TwoFAuthMigrator(),
+                new TwoFAuthMigrator,
                 MigrationTestData::INVALID_2FAUTH_JSON_MIGRATION_PAYLOAD,
             ],
 
@@ -316,19 +316,19 @@ class MigratorTest extends TestCase
     {
         return [
             'PLAIN_TEXT_PAYLOAD_WITH_INVALID_URI' => [
-                new PlainTextMigrator(),
+                new PlainTextMigrator,
                 MigrationTestData::PLAIN_TEXT_PAYLOAD_WITH_INVALID_URI,
             ],
             'VALID_AEGIS_JSON_MIGRATION_PAYLOAD_WITH_UNSUPPORTED_OTP_TYPE' => [
-                new AegisMigrator(),
+                new AegisMigrator,
                 MigrationTestData::VALID_AEGIS_JSON_MIGRATION_PAYLOAD_WITH_UNSUPPORTED_OTP_TYPE,
             ],
             'VALID_2FAS_MIGRATION_PAYLOAD_WITH_UNSUPPORTED_OTP_TYPE' => [
-                new TwoFASMigrator(),
+                new TwoFASMigrator,
                 MigrationTestData::VALID_2FAS_MIGRATION_PAYLOAD_WITH_UNSUPPORTED_OTP_TYPE,
             ],
             'VALID_2FAUTH_MIGRATION_PAYLOAD_WITH_UNSUPPORTED_OTP_TYPE' => [
-                new TwoFAuthMigrator(),
+                new TwoFAuthMigrator,
                 MigrationTestData::VALID_2FAUTH_MIGRATION_PAYLOAD_WITH_UNSUPPORTED_OTP_TYPE,
             ],
         ];
@@ -339,7 +339,7 @@ class MigratorTest extends TestCase
     {
         $migrator = $this->partialMock(GoogleAuthMigrator::class, function (MockInterface $migrator) {
             $migrator->shouldAllowMockingProtectedMethods()->shouldReceive('toBase32')
-                ->andThrow(new \Exception());
+                ->andThrow(new \Exception);
         });
 
         /** @disregard Undefined function */
@@ -362,7 +362,7 @@ class MigratorTest extends TestCase
     {
         Storage::fake('icons');
 
-        $migrator = new AegisMigrator();
+        $migrator = new AegisMigrator;
         $accounts = $migrator->migrate($migration);
 
         $this->assertContainsOnlyInstancesOf(TwoFAccount::class, $accounts);
@@ -394,7 +394,7 @@ class MigratorTest extends TestCase
     {
         Storage::fake('icons');
 
-        $migrator = new AegisMigrator();
+        $migrator = new AegisMigrator;
         $accounts = $migrator->migrate(MigrationTestData::VALID_AEGIS_JSON_MIGRATION_PAYLOAD_WITH_UNSUPPORTED_ICON);
 
         $this->assertContainsOnlyInstancesOf(TwoFAccount::class, $accounts);
@@ -410,7 +410,7 @@ class MigratorTest extends TestCase
     {
         Storage::fake('icons');
 
-        $migrator = new TwoFAuthMigrator();
+        $migrator = new TwoFAuthMigrator;
         $accounts = $migrator->migrate($migration);
 
         $this->assertContainsOnlyInstancesOf(TwoFAccount::class, $accounts);
@@ -451,7 +451,7 @@ class MigratorTest extends TestCase
     {
         Storage::fake('icons');
 
-        $migrator = new TwoFAuthMigrator();
+        $migrator = new TwoFAuthMigrator;
         $accounts = $migrator->migrate(MigrationTestData::VALID_2FAUTH_JSON_MIGRATION_PAYLOAD_WITH_UNSUPPORTED_ICON);
 
         $this->assertContainsOnlyInstancesOf(TwoFAccount::class, $accounts);
@@ -465,7 +465,7 @@ class MigratorTest extends TestCase
     #[DataProvider('factoryProvider')]
     public function test_factory_returns_relevant_migrator($payload, $migratorClass)
     {
-        $factory = new MigratorFactory();
+        $factory = new MigratorFactory;
 
         $migrator = $factory->create($payload);
 
@@ -509,7 +509,7 @@ class MigratorTest extends TestCase
     public function test_factory_throw_UnsupportedMigrationException()
     {
         $this->expectException(UnsupportedMigrationException::class);
-        $factory = new MigratorFactory();
+        $factory = new MigratorFactory;
 
         $migrator = $factory->create('not_a_valid_payload');
     }
@@ -520,7 +520,7 @@ class MigratorTest extends TestCase
     {
         $this->expectException(EncryptedMigrationException::class);
 
-        $factory = new MigratorFactory();
+        $factory = new MigratorFactory;
 
         $migrator = $factory->create($payload);
     }

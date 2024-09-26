@@ -16,7 +16,7 @@ class SinglePageController extends Controller
      */
     public function index()
     {
-        event(new ScanForNewReleaseCalled());
+        event(new ScanForNewReleaseCalled);
 
         $settings           = Settings::all()->toJson();
         $proxyAuth          = config('auth.defaults.guard') === 'reverse-proxy-guard' ? true : false;
@@ -45,9 +45,9 @@ class SinglePageController extends Controller
                 ],
                 'subdirectory' => $subdir,
             ])->toJson(),
-            'urls'               => collect([
+            'urls' => collect([
                 'installDocUrl' => $installDocUrl,
-                'ssoDocUrl'     => $ssoDocUrl
+                'ssoDocUrl'     => $ssoDocUrl,
             ]),
             'defaultPreferences' => $defaultPreferences,
             'subdirectory'       => $subdir,

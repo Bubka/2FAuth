@@ -21,10 +21,10 @@ class ResetDemoTest extends FeatureTestCase
     public function test_reset_demo_succeeded()
     {
         Artisan::call('passport:install', [
-            '--verbose' => 2,
-            '--no-interaction' => 1
+            '--verbose'        => 2,
+            '--no-interaction' => 1,
         ]);
-        
+
         Config::set('2fauth.config.isDemoApp', true);
 
         $this->artisan('2fauth:reset-demo')

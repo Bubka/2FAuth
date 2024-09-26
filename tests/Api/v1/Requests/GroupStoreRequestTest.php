@@ -43,7 +43,7 @@ class GroupStoreRequestTest extends FeatureTestCase
             ->once()
             ->andReturn(true);
 
-        $request = new GroupStoreRequest();
+        $request = new GroupStoreRequest;
 
         $this->assertTrue($request->authorize());
     }

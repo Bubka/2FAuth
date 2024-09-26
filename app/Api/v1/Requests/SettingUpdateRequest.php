@@ -34,15 +34,13 @@ class SettingUpdateRequest extends FormRequest
                     new IsValidEmailList,
                 ],
             ];
-        }
-        else if ($routeParam == 'restrictRule') {
+        } elseif ($routeParam == 'restrictRule') {
             $rule = [
                 'value' => [
                     new IsValidRegex,
                 ],
             ];
-        }
-        else {
+        } else {
             $rule = [
                 'value' => [
                     'required',

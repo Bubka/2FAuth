@@ -35,7 +35,7 @@ class ViewTest extends FeatureTestCase
         $response->assertViewHas('lang');
         $response->assertViewHas('locales');
     }
-    
+
     #[Test]
     public function test_calling_index_fires_ScanForNewReleaseCalled_event()
     {
@@ -45,6 +45,4 @@ class ViewTest extends FeatureTestCase
 
         Event::assertDispatched(ScanForNewReleaseCalled::class);
     }
-
-    
 }

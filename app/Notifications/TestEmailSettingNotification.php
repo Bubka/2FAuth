@@ -26,10 +26,7 @@ class TestEmailSettingNotification extends Notification
     /**
      * TestEmailSettingNotification constructor.
      */
-    public function __construct()
-    {
-
-    }
+    public function __construct() {}
 
     /**
      * Get the notification's delivery channels.

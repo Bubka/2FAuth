@@ -127,7 +127,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         'algorithm',
         'period',
         'counter',
-        'otp' => self::VALID_EMBEDDED_OTP_RESOURCE_STRUCTURE_FOR_TOTP
+        'otp' => self::VALID_EMBEDDED_OTP_RESOURCE_STRUCTURE_FOR_TOTP,
     ];
 
     private const VALID_COLLECTION_RESOURCE_STRUCTURE_WITH_OTP = [
@@ -141,7 +141,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         'algorithm',
         'period',
         'counter',
-        'otp' => self::VALID_EMBEDDED_OTP_RESOURCE_STRUCTURE_FOR_TOTP
+        'otp' => self::VALID_EMBEDDED_OTP_RESOURCE_STRUCTURE_FOR_TOTP,
     ];
 
     private const VALID_EXPORT_STRUTURE = [
@@ -527,7 +527,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts', array_merge(
                 OtpTestData::ARRAY_OF_FULL_VALID_PARAMETERS_FOR_CUSTOM_TOTP,
-                ['group_id'  => $this->userGroupA->id]
+                ['group_id' => $this->userGroupA->id]
             ))
             ->assertJsonFragment([
                 'group_id' => $this->userGroupA->id,
@@ -540,7 +540,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts', array_merge(
                 OtpTestData::ARRAY_OF_FULL_VALID_PARAMETERS_FOR_CUSTOM_TOTP,
-                ['group_id'  => 9999999]
+                ['group_id' => 9999999]
             ))
             ->assertJsonValidationErrorFor('group_id');
     }
@@ -555,7 +555,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts', array_merge(
                 OtpTestData::ARRAY_OF_FULL_VALID_PARAMETERS_FOR_CUSTOM_TOTP,
-                ['group_id'  => null]
+                ['group_id' => null]
             ))
             ->assertJsonFragment([
                 'group_id' => null,
@@ -572,7 +572,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts', array_merge(
                 OtpTestData::ARRAY_OF_FULL_VALID_PARAMETERS_FOR_CUSTOM_TOTP,
-                ['group_id'  => null]
+                ['group_id' => null]
             ))
             ->assertJsonFragment([
                 'group_id' => $this->user->preferences['defaultGroup'],
@@ -589,7 +589,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts', array_merge(
                 OtpTestData::ARRAY_OF_FULL_VALID_PARAMETERS_FOR_CUSTOM_TOTP,
-                ['group_id'  => 0]
+                ['group_id' => 0]
             ))
             ->assertJsonFragment([
                 'group_id' => null,
@@ -606,7 +606,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts', array_merge(
                 OtpTestData::ARRAY_OF_FULL_VALID_PARAMETERS_FOR_CUSTOM_TOTP,
-                ['group_id'  => $this->userGroupB->id]
+                ['group_id' => $this->userGroupB->id]
             ))
             ->assertJsonFragment([
                 'group_id' => $this->userGroupB->id,
@@ -709,15 +709,15 @@ class TwoFAccountControllerTest extends FeatureTestCase
     public function test_update_with_assignement_to_null_group_returns_success_with_updated_resource()
     {
         $this->assertNotEquals(null, $this->twofaccountA->group_id);
-        
+
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('PUT', '/api/v1/twofaccounts/' . $this->twofaccountA->id, array_merge(
                 OtpTestData::ARRAY_OF_FULL_VALID_PARAMETERS_FOR_CUSTOM_TOTP,
-                ['group_id'  => null]
+                ['group_id' => null]
             ))
             ->assertOk()
             ->assertJsonFragment([
-                'group_id' => null
+                'group_id' => null,
             ])
             ->assertJsonFragment(self::JSON_FRAGMENTS_FOR_CUSTOM_TOTP);
     }
@@ -726,15 +726,15 @@ class TwoFAccountControllerTest extends FeatureTestCase
     public function test_update_with_assignement_to_zero_group_returns_success_with_updated_resource()
     {
         $this->assertNotEquals(null, $this->twofaccountA->group_id);
-        
+
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('PUT', '/api/v1/twofaccounts/' . $this->twofaccountA->id, array_merge(
                 OtpTestData::ARRAY_OF_FULL_VALID_PARAMETERS_FOR_CUSTOM_TOTP,
-                ['group_id'  => 0]
+                ['group_id' => 0]
             ))
             ->assertOk()
             ->assertJsonFragment([
-                'group_id' => null
+                'group_id' => null,
             ])
             ->assertJsonFragment(self::JSON_FRAGMENTS_FOR_CUSTOM_TOTP);
     }
@@ -743,15 +743,15 @@ class TwoFAccountControllerTest extends FeatureTestCase
     public function test_update_with_assignement_to_new_groupid_returns_success_with_updated_resource()
     {
         $this->assertEquals($this->userGroupA->id, $this->twofaccountA->group_id);
-        
+
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('PUT', '/api/v1/twofaccounts/' . $this->twofaccountA->id, array_merge(
                 OtpTestData::ARRAY_OF_FULL_VALID_PARAMETERS_FOR_CUSTOM_TOTP,
-                ['group_id'  => $this->userGroupB->id]
+                ['group_id' => $this->userGroupB->id]
             ))
             ->assertOk()
             ->assertJsonFragment([
-                'group_id' => $this->userGroupB->id
+                'group_id' => $this->userGroupB->id,
             ])
             ->assertJsonFragment(self::JSON_FRAGMENTS_FOR_CUSTOM_TOTP);
     }
@@ -762,7 +762,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('PUT', '/api/v1/twofaccounts/' . $this->twofaccountA->id, array_merge(
                 OtpTestData::ARRAY_OF_FULL_VALID_PARAMETERS_FOR_CUSTOM_TOTP,
-                ['group_id'  => 9999999]
+                ['group_id' => 9999999]
             ))
             ->assertJsonValidationErrorFor('group_id');
     }

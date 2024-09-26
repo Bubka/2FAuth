@@ -17,7 +17,7 @@ class AuthLogModelTest extends FeatureTestCase
     #[Test]
     public function test_equals_returns_true()
     {
-        $user = User::factory()->create();
+        $user        = User::factory()->create();
         $lastAuthLog = AuthLog::factory()->for($user, 'authenticatable')->create();
 
         $this->assertTrue($lastAuthLog->equals($lastAuthLog));

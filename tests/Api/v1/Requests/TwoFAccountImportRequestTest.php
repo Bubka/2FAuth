@@ -26,7 +26,7 @@ class TwoFAccountImportRequestTest extends TestCase
             ->once()
             ->andReturn(true);
 
-        $request = new TwoFAccountImportRequest();
+        $request = new TwoFAccountImportRequest;
 
         $this->assertTrue($request->authorize());
     }
@@ -35,7 +35,7 @@ class TwoFAccountImportRequestTest extends TestCase
     #[DataProvider('provideValidData')]
     public function test_valid_data(array $data) : void
     {
-        $request   = new TwoFAccountImportRequest();
+        $request   = new TwoFAccountImportRequest;
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->fails());
@@ -57,7 +57,7 @@ class TwoFAccountImportRequestTest extends TestCase
     #[DataProvider('provideInvalidData')]
     public function test_invalid_data(array $data) : void
     {
-        $request   = new TwoFAccountImportRequest();
+        $request   = new TwoFAccountImportRequest;
         $validator = Validator::make($data, $request->rules());
 
         $this->assertTrue($validator->fails());

@@ -29,7 +29,7 @@ class CleanIconStorageTest extends TestCase
 
         $twofaccount = TwoFAccount::factory()->make();
         $event       = new TwoFAccountDeleted($twofaccount);
-        $listener    = new CleanIconStorage();
+        $listener    = new CleanIconStorage;
 
         Storage::shouldReceive('disk->delete')
             ->with($event->twofaccount->icon)

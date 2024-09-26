@@ -47,12 +47,12 @@ class LoginListener extends AbstractAccessListener
         $ip        = config('2fauth.proxy_headers.forIp') ?? $this->request->ip();
         $userAgent = $this->request->userAgent();
         $known     = $user->authentications()
-                          ->whereIpAddress($ip)
-                          ->whereUserAgent($userAgent)
-                          ->whereLoginSuccessful(true)
-                          ->whereGuard($event->guard)
-                          ->first();
-        $newUser   = Carbon::parse($user->{$user->getCreatedAtColumn()})->diffInMinutes(Carbon::now(), true) < 1;
+            ->whereIpAddress($ip)
+            ->whereUserAgent($userAgent)
+            ->whereLoginSuccessful(true)
+            ->whereGuard($event->guard)
+            ->first();
+        $newUser = Carbon::parse($user->{$user->getCreatedAtColumn()})->diffInMinutes(Carbon::now(), true) < 1;
 
         $log = $user->authentications()->create([
             'ip_address'       => $ip,

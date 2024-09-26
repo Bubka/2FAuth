@@ -2,7 +2,6 @@
 
 namespace Tests\Api\v1\Requests;
 
-use App\Api\v1\Requests\GroupAssignRequest;
 use App\Api\v1\Requests\IconFetchRequest;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Auth;
@@ -27,7 +26,7 @@ class IconFetchRequestTest extends TestCase
             ->once()
             ->andReturn(true);
 
-        $request = new IconFetchRequest();
+        $request = new IconFetchRequest;
 
         $this->assertTrue($request->authorize());
     }
@@ -36,7 +35,7 @@ class IconFetchRequestTest extends TestCase
     #[DataProvider('provideValidData')]
     public function test_valid_data(array $data) : void
     {
-        $request   = new IconFetchRequest();
+        $request   = new IconFetchRequest;
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->fails());
@@ -64,7 +63,7 @@ class IconFetchRequestTest extends TestCase
     #[DataProvider('provideInvalidData')]
     public function test_invalid_data(array $data) : void
     {
-        $request   = new IconFetchRequest();
+        $request   = new IconFetchRequest;
         $validator = Validator::make($data, $request->rules());
 
         $this->assertTrue($validator->fails());

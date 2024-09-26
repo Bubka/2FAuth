@@ -22,7 +22,7 @@ class LoginRequestTest extends FeatureTestCase
     #[Test]
     public function test_user_is_authorized()
     {
-        $request = new LoginRequest();
+        $request = new LoginRequest;
 
         $this->assertTrue($request->authorize());
     }
@@ -35,7 +35,7 @@ class LoginRequestTest extends FeatureTestCase
             'email' => 'JOHN.DOE@example.com',
         ]);
 
-        $request   = new LoginRequest();
+        $request   = new LoginRequest;
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->fails());
@@ -66,7 +66,7 @@ class LoginRequestTest extends FeatureTestCase
             'email' => 'JOHN.DOE@example.com',
         ]);
 
-        $request   = new LoginRequest();
+        $request   = new LoginRequest;
         $validator = Validator::make($data, $request->rules());
 
         $this->assertTrue($validator->fails());

@@ -36,7 +36,7 @@ class RejectIfSsoOnlyAndNotForAdminMiddlewareTest extends FeatureTestCase
 
         $this->user  = User::factory()->create();
         $this->admin = User::factory()->administrator()->create([
-            'password' => self::PASSWORD
+            'password' => self::PASSWORD,
         ]);
 
         Settings::set('useSsoOnly', true);

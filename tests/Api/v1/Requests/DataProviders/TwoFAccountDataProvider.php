@@ -1,13 +1,12 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Tests\Api\v1\Requests\DataProviders;
 
 final class TwoFAccountDataProvider
 {
-    /**
-     * 
-     */
-    public static function validIdsProvider(): array
+    public static function validIdsProvider() : array
     {
         return [
             [[
@@ -19,10 +18,7 @@ final class TwoFAccountDataProvider
         ];
     }
 
-    /**
-     * 
-     */
-    public static function invalidIdsProvider(): array
+    public static function invalidIdsProvider() : array
     {
         return [
             [[
@@ -64,10 +60,7 @@ final class TwoFAccountDataProvider
         ];
     }
 
-    /**
-     * 
-     */
-    public static function validIsAdminProvider(): array
+    public static function validIsAdminProvider() : array
     {
         return [
             [[
@@ -85,10 +78,7 @@ final class TwoFAccountDataProvider
         ];
     }
 
-    /**
-     * 
-     */
-    public static function invalidIsAdminProvider(): array
+    public static function invalidIsAdminProvider() : array
     {
         return [
             [[

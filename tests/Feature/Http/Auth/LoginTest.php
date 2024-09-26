@@ -64,7 +64,7 @@ class LoginTest extends FeatureTestCase
     private const PASSWORD = 'password';
 
     private const WRONG_PASSWORD = 'wrong_password';
-    
+
     private const USER_NAME = 'John';
 
     private const USER_EMAIL = 'john@example.com';
@@ -383,11 +383,11 @@ class LoginTest extends FeatureTestCase
             'email'    => $this->user->email,
             'password' => self::PASSWORD,
         ])->assertOk();
-        
+
         $this->actingAs($this->user, self::WEB_GUARD)
             ->json('GET', '/user/logout')
             ->assertOk();
-            
+
         $authlog = $this->user->latestAuthentication()->first();
 
         $this->assertEquals($this->user->id, $authlog->authenticatable_id);
@@ -426,7 +426,7 @@ class LoginTest extends FeatureTestCase
         $this->app['auth']->shouldUse(self::REVERSE_PROXY_GUARD);
 
         $this->json('GET', '/api/v1/groups', [], [
-            'HTTP_REMOTE_USER'  => self::USER_NAME,
+            'HTTP_REMOTE_USER' => self::USER_NAME,
         ]);
 
         $this->assertDatabaseHas('auth_logs', [
@@ -451,11 +451,11 @@ class LoginTest extends FeatureTestCase
         $this->app['auth']->shouldUse(self::REVERSE_PROXY_GUARD);
 
         $this->json('GET', '/api/v1/groups', [], [
-            'HTTP_REMOTE_USER'  => self::USER_NAME,
+            'HTTP_REMOTE_USER' => self::USER_NAME,
         ]);
 
         $this->json('GET', '/api/v1/groups', [], [
-            'HTTP_REMOTE_USER'  => self::USER_NAME,
+            'HTTP_REMOTE_USER' => self::USER_NAME,
         ]);
 
         $this->assertDatabaseCount('auth_logs', 1);
@@ -463,7 +463,7 @@ class LoginTest extends FeatureTestCase
         $this->travel(16)->minutes();
 
         $this->json('GET', '/api/v1/groups', [], [
-            'HTTP_REMOTE_USER'  => self::USER_NAME,
+            'HTTP_REMOTE_USER' => self::USER_NAME,
         ]);
 
         $this->assertDatabaseCount('auth_logs', 2);
@@ -473,7 +473,7 @@ class LoginTest extends FeatureTestCase
     public function test_reverse_proxy_access_sends_new_device_notification()
     {
         Notification::fake();
-        
+
         Config::set('auth.auth_proxy_headers.user', 'HTTP_REMOTE_USER');
 
         $user = User::factory()->create([
@@ -490,7 +490,7 @@ class LoginTest extends FeatureTestCase
         $this->travelTo(Carbon::now()->subMinutes(2));
 
         $this->json('GET', '/api/v1/groups', [], [
-            'HTTP_REMOTE_USER'  => self::USER_NAME,
+            'HTTP_REMOTE_USER' => self::USER_NAME,
         ]);
 
         Notification::assertSentTo($user, SignedInWithNewDeviceNotification::class);
@@ -500,7 +500,7 @@ class LoginTest extends FeatureTestCase
     public function test_reverse_proxy_access_does_not_send_new_device_notification_if_user_disabled_it()
     {
         Notification::fake();
-        
+
         Config::set('auth.auth_proxy_headers.user', 'HTTP_REMOTE_USER');
 
         $user = User::factory()->create([
@@ -517,7 +517,7 @@ class LoginTest extends FeatureTestCase
         $this->travelTo(Carbon::now()->subMinutes(2));
 
         $this->json('GET', '/api/v1/groups', [], [
-            'HTTP_REMOTE_USER'  => self::USER_NAME,
+            'HTTP_REMOTE_USER' => self::USER_NAME,
         ]);
 
         Notification::assertNothingSentTo($user);
@@ -527,7 +527,7 @@ class LoginTest extends FeatureTestCase
     public function test_reverse_proxy_does_not_send_new_device_notification_if_user_is_considered_new()
     {
         Notification::fake();
-        
+
         Config::set('auth.auth_proxy_headers.user', 'HTTP_REMOTE_USER');
 
         $user = User::factory()->create([
@@ -541,7 +541,7 @@ class LoginTest extends FeatureTestCase
         $this->app['auth']->shouldUse(self::REVERSE_PROXY_GUARD);
 
         $this->json('GET', '/api/v1/groups', [], [
-            'HTTP_REMOTE_USER'  => self::USER_NAME,
+            'HTTP_REMOTE_USER' => self::USER_NAME,
         ]);
 
         Notification::assertNothingSentTo($user);

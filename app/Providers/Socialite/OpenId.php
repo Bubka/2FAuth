@@ -23,7 +23,7 @@ class OpenId extends AbstractProvider implements ProviderInterface
     public function __construct(Request $request, $clientId, $clientSecret, $redirectUrl, $guzzle = [])
     {
         $guzzle = array_merge([
-            'proxy' => config('2fauth.config.outgoingProxy')
+            'proxy' => config('2fauth.config.outgoingProxy'),
         ], $guzzle);
 
         parent::__construct($request, $clientId, $clientSecret, $redirectUrl, $guzzle);
@@ -72,7 +72,7 @@ class OpenId extends AbstractProvider implements ProviderInterface
      */
     protected function mapUserToObject(array $user)
     {
-        return (new User())->setRaw($user)->map([
+        return (new User)->setRaw($user)->map([
             'email'              => $user['email'] ?? null,
             'email_verified'     => $user['email_verified'] ?? null,
             'name'               => $user['name'] ?? null,

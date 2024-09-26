@@ -39,7 +39,7 @@ class WebAuthnRegisterControllerTest extends FeatureTestCase
         $request = $this->mock(AttestationRequest::class);
 
         $request->expects('fastRegistration')->andReturnSelf();
-        $request->expects('toCreate')->andReturn(new JsonTransport());
+        $request->expects('toCreate')->andReturn(new JsonTransport);
 
         $this->actingAs($this->user, 'web-guard')
             ->json('POST', '/webauthn/register/options')
@@ -54,7 +54,7 @@ class WebAuthnRegisterControllerTest extends FeatureTestCase
         $request = $this->mock(AttestationRequest::class);
 
         $request->expects('secureRegistration')->andReturnSelf();
-        $request->expects('toCreate')->andReturn(new JsonTransport());
+        $request->expects('toCreate')->andReturn(new JsonTransport);
 
         $this->actingAs($this->user, 'web-guard')
             ->json('POST', '/webauthn/register/options')

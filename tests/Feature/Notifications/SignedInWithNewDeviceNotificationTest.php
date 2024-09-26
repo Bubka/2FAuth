@@ -31,7 +31,6 @@ class SignedInWithNewDeviceNotificationTest extends FeatureTestCase
      */
     protected $signedInWithNewDevice;
 
-
     public function setUp() : void
     {
         parent::setUp();
@@ -39,14 +38,14 @@ class SignedInWithNewDeviceNotificationTest extends FeatureTestCase
         $this->user = User::factory()->create();
 
         AuthLog::factory()->for($this->user, 'authenticatable')->failedLogin()->create();
-        
-        $this->authLog = AuthLog::first();
+
+        $this->authLog               = AuthLog::first();
         $this->signedInWithNewDevice = new SignedInWithNewDeviceNotification($this->authLog);
     }
 
     #[Test]
     public function test_it_renders_to_email()
-    {        
+    {
         $mail = $this->signedInWithNewDevice->toMail($this->user);
 
         $this->assertInstanceOf(MailMessage::class, $mail);
@@ -77,5 +76,4 @@ class SignedInWithNewDeviceNotificationTest extends FeatureTestCase
             $mail
         );
     }
-
 }

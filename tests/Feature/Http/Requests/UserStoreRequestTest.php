@@ -22,7 +22,7 @@ class UserStoreRequestTest extends FeatureTestCase
     #[Test]
     public function test_user_is_authorized()
     {
-        $request = new UserStoreRequest();
+        $request = new UserStoreRequest;
 
         $this->assertTrue($request->authorize());
     }
@@ -36,7 +36,7 @@ class UserStoreRequestTest extends FeatureTestCase
             'email' => 'jane@example.com',
         ]);
 
-        $request   = new UserStoreRequest();
+        $request   = new UserStoreRequest;
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->fails());
@@ -72,7 +72,7 @@ class UserStoreRequestTest extends FeatureTestCase
             'email' => 'john@example.com',
         ]);
 
-        $request   = new UserStoreRequest();
+        $request   = new UserStoreRequest;
         $validator = Validator::make($data, $request->rules());
 
         $this->assertTrue($validator->fails());

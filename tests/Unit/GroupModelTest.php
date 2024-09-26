@@ -21,7 +21,7 @@ class GroupModelTest extends ModelTestCase
     public function test_model_configuration()
     {
         $this->runConfigurationAssertions(
-            new Group(),
+            new Group,
             ['name'],
             ['created_at', 'updated_at'],
             ['*'],
@@ -41,9 +41,9 @@ class GroupModelTest extends ModelTestCase
     #[Test]
     public function test_twofaccounts_relation()
     {
-        $group    = new Group();
+        $group    = new Group;
         $accounts = $group->twofaccounts();
-        $this->assertHasManyRelation($accounts, $group, new TwoFAccount());
+        $this->assertHasManyRelation($accounts, $group, new TwoFAccount);
     }
 
     #[Test]

@@ -3,8 +3,8 @@
 namespace Tests\Unit\Providers\Socialite;
 
 use App\Providers\Socialite\OpenId;
-use SocialiteProviders\Manager\OAuth2\User;
 use Mockery;
+use SocialiteProviders\Manager\OAuth2\User;
 use stdClass;
 
 class OpenIdProviderStub extends OpenId

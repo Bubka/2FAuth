@@ -28,12 +28,12 @@ class VisitedByProxyUserListener extends AbstractAccessListener
         $userAgent = $this->request->userAgent();
         $guard     = config('auth.defaults.guard');
         $known     = $user->authentications()
-                          ->whereIpAddress($ip)
-                          ->whereUserAgent($userAgent)
-                          ->whereLoginSuccessful(true)
-                          ->whereGuard($guard)
-                          ->first();
-        $newUser   = Carbon::parse($user->{$user->getCreatedAtColumn()})->diffInMinutes(Carbon::now(), true) < 1;
+            ->whereIpAddress($ip)
+            ->whereUserAgent($userAgent)
+            ->whereLoginSuccessful(true)
+            ->whereGuard($guard)
+            ->first();
+        $newUser = Carbon::parse($user->{$user->getCreatedAtColumn()})->diffInMinutes(Carbon::now(), true) < 1;
 
         $log = $user->authentications()->create([
             'ip_address'       => $ip,

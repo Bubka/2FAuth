@@ -31,7 +31,7 @@ class SignedInWithNewDeviceNotification extends Notification implements ShouldQu
     public function __construct(AuthLog $authLog)
     {
         $this->authLog = $authLog;
-        $this->agent   = new Agent();
+        $this->agent   = new Agent;
         $this->agent->setUserAgent($authLog->user_agent);
     }
 
@@ -45,7 +45,7 @@ class SignedInWithNewDeviceNotification extends Notification implements ShouldQu
      */
     public function toMail(mixed $notifiable) : MailMessage
     {
-        return (new MailMessage())
+        return (new MailMessage)
             ->subject(__('notifications.new_device.subject'))
             ->markdown('emails.signedInWithNewDevice', [
                 'account'   => $notifiable,
