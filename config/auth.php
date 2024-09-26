@@ -19,7 +19,8 @@ return [
 
     'defaults' => [
         'guard' => env('AUTH_GUARD', env('AUTHENTICATION_GUARD', 'web-guard')),
-        'passwords' => env('AUTH_PASSWORD_BROKER', 'users'),
+        'passwords' => 'users',
+        // 'passwords' => env('AUTH_PASSWORD_BROKER', 'users'),
     ],
 
     /*
@@ -92,7 +93,8 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent-webauthn',
-            'model' => env('AUTH_MODEL', App\Models\User::class),
+            'model' => App\Models\User::class,
+            // 'model' => env('AUTH_MODEL', App\Models\User::class),
             // 'password_fallback' => true,
         ],
         'remote-user' => [
@@ -123,7 +125,8 @@ return [
     'passwords' => [
         'users' => [
             'provider' => 'users',
-            'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_resets'),
+            'table' => 'password_resets',
+            // 'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_resets'),
             'expire' => 60,
             'throttle' => 60,
         ],
