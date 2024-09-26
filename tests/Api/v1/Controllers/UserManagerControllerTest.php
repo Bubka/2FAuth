@@ -593,7 +593,8 @@ class UserManagerControllerTest extends FeatureTestCase
             ->json('GET', '/api/v1/users/' . $this->user->id . '/authentications')
             ->assertJsonCount(1);
 
-        $this->assertEquals($response->getData()[0]->id, $this->user->id);
+        $userAuthLog = AuthLog::find($response->getData()[0]->id);
+        $this->assertEquals($userAuthLog->authenticatable_id, $this->user->id);
     }
 
     #[Test]

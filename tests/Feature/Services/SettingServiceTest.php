@@ -144,6 +144,7 @@ class SettingServiceTest extends FeatureTestCase
     public function test_all_returns_default_and_overloaded_settings()
     {
         $default_options = config('2fauth.settings');
+        unset($default_options['lastRadarScan']);
 
         Settings::set(self::SETTING_NAME, self::SETTING_VALUE_STRING);
 
