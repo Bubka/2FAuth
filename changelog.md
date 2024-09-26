@@ -4,13 +4,33 @@
 
 ### Added
 
-- The `/up` healthcheck endpoint ([#271](https://github.com/Bubka/2FAuth/issues/271)).
-- A user preference to close the On-Demand OTP after a predefined delay
-- A user preference to automatically register an account when a QR code is scanned. When enabled, there is no need to click the Save button to save the account to the database.
-- An admin setting to make SSO the only authentication method available for users (does not apply to admins). ([#368](https://github.com/Bubka/2FAuth/issues/368)).
-- The ability to select a destination group directly from the advanced form ([#372](https://github.com/Bubka/2FAuth/issues/372)).
-- A new Auth tab in the admin panel to gather settings related to authentication
+- The `/up` endpoint for health checks ([#271](https://github.com/Bubka/2FAuth/issues/271)).
+- A user preference to close the on-screen OTP after a predefined delay
+- A user preference to automatically register a 2FA account immediately after a QR code scan. When enabled, there is no need to click the Save button anymore to save the account to the database.
+- An admin setting to make SSO the only authentication method available (does not apply to admins). ([#368](https://github.com/Bubka/2FAuth/issues/368)).
+- The ability to assign a 2FA account to a specific group directly from the advanced form ([#372](https://github.com/Bubka/2FAuth/issues/372)).
+- A new _Auth_ tab in the admin panel to gather settings related to authentication
 - Proxy support for the OpenID connector (using `PROXY_FOR_OUTGOING_REQUESTS`), thanks to [@rstefko](https://github.com/rstefko) ([PR #367](https://github.com/Bubka/2FAuth/pull/367))
+
+#### New env vars
+
+A lot of new environment variables are available thanks to the Laravel 11 upgrade. They give more control over various features of the application:
+
+- `ARGON_THREADS`: Number of threads that Argon2 will use to compute a hash.
+- `ARGON_TIME`: Maximum amount of time it may take to compute an Argon2 hash.
+- `ARGON_MEMORY`: Maximum memory (in kibibytes) that may be used to compute an Argon2 hash.
+- `DB_CHARSET`: The character set of the database.
+- `DB_COLLATION`: The collation of the database.
+- `HASH_DRIVER`: The hash algorithm used to hash user passwords.
+- `LOG_STACK`: The stack of log channels used when the log channel is set to `stack`.
+- `LOG_DAILY_DAYS`: Number of log files to generate/rotate when using the `daily` log channel.
+- `LOG_SLACK_USERNAME`: The name of the user sending the log messages when using the `slack` log channel.
+- `LOG_SLACK_EMOJI`: The Emoji code of the emoji used to illustrate log messages when using the `slack` log channel.
+- `LOG_SYSLOG_FACILITY`: The syslog facility that provides a rough clue of where in a system the message originated.
+- `SESSION_TABLE`: Name of the table to be used to store sessions when using the database `session` driver.
+- `SESSION_ENCRYPT`: Whether or not session data are encrypted before it is stored.
+
+Please refer to the [Configuration doc](https://docs.2fauth.app/getting-started/configuration/) to find out when and how to use them.
 
 ### Changed
 
