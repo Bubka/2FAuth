@@ -44,7 +44,7 @@ jobs:
         uses: peter-evans/dockerhub-description@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          password: ${{ secrets.DOCKERHUB_RWD_TOKEN }}
           repository: 2fauth/2fauth
           short-description: A web app to manage your Two-Factor Authentication (2FA) accounts and generate their security codes
           readme-filepath: docker/README.md
