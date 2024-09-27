@@ -61,8 +61,8 @@ return [
         'i_m_lucky_legend' => 'Durch "Mein Glück versuchen" können Sie das offizielle Symbol des jeweiligen Dienstes erhalten. Geben Sie den tatsächlichen Namen des Dienstes ohne die Erweiterung ".xyz" ein und versuchen Sie, Tippfehler zu vermeiden (Beta-Funktion)',
         'test' => 'Test',
         'group' => [
-            'label' => 'Group',
-            'help' => 'The group to which the account is to be assigned'
+            'label' => 'Gruppe',
+            'help' => 'Die Gruppe, der das Konto zugeordnet werden soll'
         ],
         'secret' => [
             'label' => 'Geheimnis',

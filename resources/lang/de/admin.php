@@ -84,7 +84,7 @@ return [
     'show_one_year_log' => 'Einträge aus dem letzten Jahr anzeigen',
     'sort_by_date_asc' => 'Älteste zuerst anzeigen',
     'sort_by_date_desc' => 'Aktuellste zuerst anzeigen',
-    'single_sign_on' => 'Single Sign-On (SSO)',
+    'single_sign_on' => 'Single-Sign-On (SSO)',
     'forms' => [
         'use_encryption' => [
             'label' => 'Sensible Daten schützen',
@@ -107,12 +107,12 @@ return [
             'help' => 'Verhindert eine neue Benutzerregistrierung. Sofern nicht überschrieben (siehe unten) wirkt sich dies auch auf SSO aus, so dass neue Benutzer sich nicht via SSO anmelden können.',
         ],
         'enable_sso' => [
-            'label' => 'Enable SSO',
+            'label' => 'SSO aktivieren',
             'help' => 'Besuchern die Authentifizierung mit einer externen ID über das Single Sign-On Schema erlauben.',
         ],
         'use_sso_only' => [
-            'label' => 'Use SSO only',
-            'help' => 'Make SSO the only available method to log in to 2FAuth. Password login and Webauthn are then disabled for regular users. Administrators are not affected by this restriction.',
+            'label' => 'Nur SSO verwenden',
+            'help' => 'Machen Sie SSO die einzige verfügbare Methode, um sich bei 2FAuth anzumelden. Passwort-Login und Webauthn sind dann für normale Benutzer deaktiviert. Administratoren sind von dieser Einschränkung nicht betroffen.',
         ],
         'keep_sso_registration_enabled' => [
             'label' => 'SSO-Registrierung aktiviert lassen',
@@ -128,8 +128,8 @@ return [
             'email_will_be_send_to_x' => 'Diese E-Mail wird an <span class="is-family-code has-text-info">:email</span> gesendet.',
         ],
         'health_endpoint' => [
-            'label' => 'Health endpoint',
-            'help' => 'URL you can visit to check the health of this 2FAuth instance. This URL can be used to set up a Docker HEALTHCHECK or a Kubernetes HTTPS Liveness probe.',
+            'label' => 'Gesicherter Endpunkt',
+            'help' => 'URL die Sie besuchen können, um die Unversehrtheit dieser 2FAuth Instanz zu überprüfen. Diese URL kann verwendet werden, um eine Docker HEALTHECK oder eine Kubernetes HTTPS Liveness Sonde einzurichten.',
         ],
         'cache_management' => [
             'label' => 'Cache-Verwaltung',

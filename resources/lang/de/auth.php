@@ -23,13 +23,13 @@ return [
     'sign_in' => 'Anmelden',
     'sign_in_using' => 'Anmelden mit',
     'if_administrator' => 'Administrator?',
-    'sign_in_here' => 'You can sign without SSO',
+    'sign_in_here' => 'Sie können sich ohne SSO anmelden',
     'or_continue_with' => 'Sie können auch fortfahren mit:',
-    'password_login_and_webauthn_are_disabled' => 'Password login and WebAuthn are disabled.',
-    'sign_in_using_sso' => 'Pick an SSO provider to sign in with:',
-    'no_provider' => 'no provider',
-    'no_sso_provider_or_provider_is_missing' => 'Provider is missing?',
-    'see_how_to_enable_sso' => 'See how to enable a provider',
+    'password_login_and_webauthn_are_disabled' => 'Passwort-Login und WebAuthn sind deaktiviert.',
+    'sign_in_using_sso' => 'Wählen Sie einen SSO-Anbieter zum Anmelden:',
+    'no_provider' => 'kein Anbieter',
+    'no_sso_provider_or_provider_is_missing' => 'Anbieter fehlt?',
+    'see_how_to_enable_sso' => 'Wie man einen Anbieter aktiviert',
     'sign_in_using_security_device' => 'Mit einem Sicherheitsgerät anmelden',
     'login_and_password' => 'Benutzername & Passwort',
     'register' => 'Registrieren',
@@ -41,7 +41,7 @@ return [
     'maybe_later' => 'Vielleicht später',
     'user_account_controlled_by_proxy' => 'Benutzerkonto, das von einem Authentifizierungsproxy zur Verfügung gestellt wurde.<br />Verwalten Sie das Konto auf Proxy-Ebene.',
     'auth_handled_by_proxy' => 'Authentifizierung von einem Reverse-Proxy verwaltet, unten sind die Einstellungen deaktiviert.<br />Authentifizierung auf Proxy-Ebene verwalten.',
-    'sso_only_x_settings_are_disabled' => 'Authentication is restricted to SSO only, :auth_method is disabled',
+    'sso_only_x_settings_are_disabled' => 'Authentifizierung ist nur auf SSO beschränkt, :auth_method ist deaktiviert',
     'confirm' => [
         'logout' => 'Sind Sie sicher, dass Sie sich abmelden möchten?',
         'revoke_device' => 'Möchten Sie das Gerät wirklich entfernen?',
@@ -87,7 +87,7 @@ return [
         'name' => 'Name',
         'login' => 'Anmeldung',
         'webauthn_login' => 'WebAuthn-Anmeldung',
-        'sso_login' => 'SSO login',
+        'sso_login' => 'SSO-Login',
         'email' => 'E-Mail',
         'password' => 'Passwort',
         'reveal_password' => 'Passwort anzeigen',
@@ -103,7 +103,7 @@ return [
         'reset_your_password' => 'Passwort zurücksetzen',
         'reset_password' => 'Password zurücksetzen',
         'disabled_in_demo' => 'Funktion im Demo-Modus deaktiviert',
-        'sso_only_form_restricted_to_admin' => 'Regular users must sign in with SSO. Other methods are for administrators only.',
+        'sso_only_form_restricted_to_admin' => 'Normale Benutzer müssen sich mit SSO anmelden. Andere Methoden sind nur für Administratoren gedacht.',
         'new_password' => 'Neues Passwort',
         'current_password' => [
             'label' => 'Aktuelles Passwort',
@@ -135,8 +135,8 @@ return [
         'caps_lock_is_on' => 'Die Feststelltaste ist aktiviert',
     ],
     'sso_providers' => [
-        'unknown' => 'unknown',
-        'github' => 'Github',
+        'unknown' => 'unbekannt',
+        'github' => 'GitHub',
         'openid' => 'OpenID'
     ]
 ];

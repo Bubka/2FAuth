@@ -15,7 +15,7 @@ return [
 
     'admin' => '管理员',
     'app_setup' => '应用设置',
-    'auth' => 'Auth',
+    'auth' => '鉴权',
     'registrations' => '注册',
     'users' => '用户',
     'users_legend' => '管理此实例上的已注册用户，或创建新的用户。',
@@ -84,7 +84,7 @@ return [
     'show_one_year_log' => '显示上一年的条目',
     'sort_by_date_asc' => '倒序显示最近访问',
     'sort_by_date_desc' => '顺序显示最近访问',
-    'single_sign_on' => 'Single Sign-On (SSO)',
+    'single_sign_on' => '单点登录（SSO）',
     'forms' => [
         'use_encryption' => [
             'label' => '保护敏感数据',
@@ -107,11 +107,11 @@ return [
             'help' => '防止新用户注册。除非被覆盖 (见下文)。此设置也会影响到 SSO 的注册流程，所以新用户将无法通过 SSO 登录',
         ],
         'enable_sso' => [
-            'label' => 'Enable SSO',
+            'label' => '启用 SSO',
             'help' => '允许访客通过单点登录的方式，使用外部 ID 进行身份验证',
         ],
         'use_sso_only' => [
-            'label' => 'Use SSO only',
+            'label' => '仅使用 SSO',
             'help' => 'Make SSO the only available method to log in to 2FAuth. Password login and Webauthn are then disabled for regular users. Administrators are not affected by this restriction.',
         ],
         'keep_sso_registration_enabled' => [
