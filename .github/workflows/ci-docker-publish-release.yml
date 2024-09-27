@@ -41,7 +41,7 @@ jobs:
           echo "platforms=linux/amd64,linux/386,linux/arm64,linux/arm/v6,linux/arm/v7" >> $GITHUB_OUTPUT
 
       - name: Update Docker Hub Description
-        uses: peter-evans/dockerhub-description@v3
+        uses: peter-evans/dockerhub-description@v4
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_RWD_TOKEN }}
