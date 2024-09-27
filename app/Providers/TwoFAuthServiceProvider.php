@@ -36,7 +36,7 @@ class TwoFAuthServiceProvider extends ServiceProvider implements DeferrableProvi
             return new ReleaseRadarService;
         });
 
-        $this->app->bind(QrReader::class, function ($app, $parameters) {
+        $this->app->bind(QrReader::class, function ($app, array $parameters) {
             return new QrReader($parameters['imgSource'], $parameters['sourceType']);
         });
     }
