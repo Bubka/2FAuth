@@ -1,6 +1,6 @@
 # Change log
 
-## [5.3.0] - 2024-09-25
+## [5.3.0] - 2024-09-27
 
 ### Added
 
@@ -43,6 +43,10 @@ Please refer to the [Configuration doc](https://docs.2fauth.app/getting-started/
 - [issue #349](https://github.com/Bubka/2FAuth/issues/349) "Show QR Code" feature returns wrong QR code
 - [issue #360](https://github.com/Bubka/2FAuth/issues/360) Can’t import QR Codes from Confluence 2FA
 - [issue #362](https://github.com/Bubka/2FAuth/issues/362) Cannot use SSO if app runs in subdirectory
+
+### API [1.5.0]
+
+- New `group_id` property for POST and PUT operations of the `/api/v1/twofaccounts` path
 
 ## [5.2.0] - 2024-05-29
 
