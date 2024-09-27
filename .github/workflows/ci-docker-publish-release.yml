@@ -20,7 +20,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Set tags
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         id: set_tags
         with:
           # context.ref: For workflows triggered by release, this is the release tag created.
