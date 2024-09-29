@@ -52,7 +52,7 @@ RUN apk add --update --no-cache \
     # PHP SQLite, MySQL/MariaDB & Postgres drivers
     php82-pdo_sqlite php82-sqlite3 php82-pdo_mysql php82-pdo_pgsql php82-pgsql \
     # PHP extensions
-    php82-xml php82-gd php82-mbstring php82-tokenizer php82-fileinfo php82-bcmath php82-ctype php82-dom \
+    php82-xml php82-gd php82-mbstring php82-tokenizer php82-fileinfo php82-bcmath php82-ctype php82-dom php-redis \
     # Runtime dependencies
     php82-session php82-openssl \
     # Nginx and PHP FPM to serve over HTTP
