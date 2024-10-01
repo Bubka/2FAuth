@@ -33,10 +33,10 @@ class LogoService
     /**
      * Fetch a logo for the given service and save it as an icon
      *
-     * @param  string  $serviceName  Name of the service to fetch a logo for
+     * @param  string|null  $serviceName  Name of the service to fetch a logo for
      * @return string|null The icon filename or null if no logo has been found
      */
-    public function getIcon($serviceName)
+    public function getIcon(?string $serviceName)
     {
         $logoFilename = $this->getLogo(strval($serviceName));
 
@@ -55,7 +55,7 @@ class LogoService
      * @param  string  $serviceName  Name of the service to fetch a logo for
      * @return string|null The logo filename or null if no logo has been found
      */
-    protected function getLogo($serviceName)
+    protected function getLogo(string $serviceName)
     {
         $domain       = $this->tfas->get($this->cleanDomain(strval($serviceName)));
         $logoFilename = $domain . '.svg';

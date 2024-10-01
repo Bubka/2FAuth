@@ -11,7 +11,7 @@ use App\Facades\Settings;
 use App\Helpers\Helpers;
 use App\Models\Dto\HotpDto;
 use App\Models\Dto\TotpDto;
-use App\Services\LogoService;
+use App\Services\IconService;
 use Database\Factories\TwoFAccountFactory;
 use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -20,11 +20,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use OTPHP\Factory;
 use OTPHP\HOTP;
@@ -127,17 +123,7 @@ class TwoFAccount extends Model implements Sortable
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        // 'service',
-        // 'account',
-        // 'otp_type',
-        // 'digits',
-        // 'secret',
-        // 'algorithm',
-        // 'counter',
-        // 'period',
-        // 'icon'
-    ];
+    protected $fillable = [];
 
     /**
      * The table associated with the model.
@@ -154,7 +140,7 @@ class TwoFAccount extends Model implements Sortable
     public $appends = [];
 
     /**
-     * The model's default values for attributes.
+     * The model's attributes.
      *
      * @var array
      */
@@ -480,8 +466,8 @@ class TwoFAccount extends Model implements Sortable
             $this->enforceAsSteam();
         }
 
-        if (! $this->icon && ! $skipIconFetching) {
-            $this->icon = $this->getDefaultIcon();
+        if (! $this->icon && ! $skipIconFetching && Auth::user()?->preferences['getOfficialIcons']) {
+            $this->icon = App::make(IconService::class)->buildFromOfficialLogo($this->service);
         }
 
         Log::info(sprintf('TwoFAccount filled with OTP parameters'));
@@ -548,11 +534,11 @@ class TwoFAccount extends Model implements Sortable
             $this->enforceAsSteam();
         }
         if ($this->generator->hasParameter('image')) {
-            self::setIcon($this->generator->getParameter('image'));
+            $this->icon = App::make(IconService::class)->buildFromRemoteImage($this->generator->getParameter('image'));
         }
 
-        if (! $this->icon && ! $skipIconFetching) {
-            $this->icon = $this->getDefaultIcon();
+        if (! $this->icon && ! $skipIconFetching && Auth::user()?->preferences['getOfficialIcons']) {
+            $this->icon = App::make(IconService::class)->buildFromOfficialLogo($this->service);
         }
 
         Log::info(sprintf('TwoFAccount filled with an URI'));
@@ -658,140 +644,6 @@ class TwoFAccount extends Model implements Sortable
         } catch (\Exception|\Throwable $exception) {
             throw new InvalidOtpParameterException($exception->getMessage());
         }
-    }
-
-    /**
-     * Store and set the provided icon
-     *
-     * @param  \Psr\Http\Message\StreamInterface|\Illuminate\Http\File|\Illuminate\Http\UploadedFile|string|resource  $data
-     * @param  string|null  $extension  The resource extension, without the dot
-     */
-    public function setIcon($data, $extension = null) : void
-    {
-        $isRemoteData = Str::startsWith($data, ['http://', 'https://']) && Validator::make(
-            [$data],
-            ['url']
-        )->passes();
-
-        if ($isRemoteData) {
-            $icon = $this->storeRemoteImageAsIcon($data);
-        } else {
-            $icon = $extension ? $this->storeFileDataAsIcon($data, $extension) : null;
-        }
-
-        $this->icon = $icon ?: $this->icon;
-    }
-
-    /**
-     * Store img data as an icon file.
-     *
-     * @param  \Psr\Http\Message\StreamInterface|\Illuminate\Http\File|\Illuminate\Http\UploadedFile|string|resource  $content
-     * @param  string  $extension  The file extension, without the dot
-     * @return string|null The filename of the stored icon or null if the operation fails
-     */
-    private function storeFileDataAsIcon($content, $extension) : ?string
-    {
-        $filename = self::getUniqueFilename($extension);
-
-        if (Storage::disk('icons')->put($filename, $content)) {
-            if (self::isValidIcon($filename, 'icons')) {
-                Log::info(sprintf('Image "%s" successfully stored for import', $filename));
-
-                return $filename;
-            } else {
-                Storage::disk('icons')->delete($filename);
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Generate a unique filename
-     *
-     * @return string The filename
-     */
-    private function getUniqueFilename(string $extension) : string
-    {
-        return Str::random(40) . '.' . $extension;
-    }
-
-    /**
-     * Validate a file is a valid image
-     *
-     * @param  string  $filename
-     * @param  string  $disk
-     */
-    private function isValidIcon($filename, $disk) : bool
-    {
-        return in_array(Storage::disk($disk)->mimeType($filename), [
-            'image/png',
-            'image/jpeg',
-            'image/webp',
-            'image/bmp',
-            'image/x-ms-bmp',
-            'image/svg+xml',
-        ]) && (Storage::disk($disk)->mimeType($filename) !== 'image/svg+xml' ? getimagesize(Storage::disk($disk)->path($filename)) : true);
-    }
-
-    /**
-     * Gets the image resource pointed by the image url and store it as an icon
-     *
-     * @return string|null The filename of the stored icon or null if the operation fails
-     */
-    private function storeRemoteImageAsIcon(string $url) : ?string
-    {
-        try {
-            $path_parts  = pathinfo($url);
-            $newFilename = self::getUniqueFilename($path_parts['extension']);
-
-            try {
-                $response = Http::withOptions([
-                    'proxy' => config('2fauth.config.outgoingProxy'),
-                ])->retry(3, 100)->get($url);
-
-                if ($response->successful()) {
-                    Storage::disk('imagesLink')->put($newFilename, $response->body());
-                }
-            } catch (\Exception $exception) {
-                Log::error(sprintf('Cannot fetch imageLink at "%s"', $url));
-            }
-
-            if (self::isValidIcon($newFilename, 'imagesLink')) {
-                // Should be a valid image, we move it to the icons disk
-                if (Storage::disk('icons')->put($newFilename, Storage::disk('imagesLink')->get($newFilename))) {
-                    Storage::disk('imagesLink')->delete($newFilename);
-                }
-
-                Log::info(sprintf('Icon file "%s" stored', $newFilename));
-            } else {
-                Storage::disk('imagesLink')->delete($newFilename);
-                throw new \Exception('Unsupported mimeType or missing image on storage');
-            }
-
-            return Storage::disk('icons')->exists($newFilename) ? $newFilename : null;
-        }
-        // @codeCoverageIgnoreStart
-        catch (\Exception|\Throwable $ex) {
-            Log::error(sprintf('Icon storage failed: %s', $ex->getMessage()));
-
-            return null;
-        }
-        // @codeCoverageIgnoreEnd
-    }
-
-    /**
-     * Triggers logo fetching if necessary
-     *
-     * @return string|null The icon
-     */
-    private function getDefaultIcon()
-    {
-        // $logoService = App::make(LogoService::class);
-
-        return (bool) Auth::user()?->preferences['getOfficialIcons']
-            ? App::make(LogoService::class)->getIcon($this->service)
-            : null;
     }
 
     /**

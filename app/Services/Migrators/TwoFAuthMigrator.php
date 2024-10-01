@@ -3,9 +3,11 @@
 namespace App\Services\Migrators;
 
 use App\Exceptions\InvalidMigrationDataException;
+use App\Services\IconService;
 use App\Models\TwoFAccount;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
 
 class TwoFAuthMigrator extends Migrator
@@ -40,6 +42,7 @@ class TwoFAuthMigrator extends Migrator
      */
     public function migrate(mixed $migrationPayload) : Collection
     {
+        $iconService = App::make(IconService::class);
         $json = json_decode(htmlspecialchars_decode($migrationPayload), true);
 
         if (is_null($json)) {
@@ -105,7 +108,7 @@ class TwoFAuthMigrator extends Migrator
                 $twofaccounts[$key] = new TwoFAccount;
                 $twofaccounts[$key]->fillWithOtpParameters($parameters, Arr::has($parameters, 'iconExt'));
                 if (Arr::has($parameters, 'iconExt')) {
-                    $twofaccounts[$key]->setIcon($parameters['icon_file'], $parameters['iconExt']);
+                    $twofaccounts[$key]->icon = $iconService->buildFromResource($parameters['icon_file'], $parameters['iconExt']);
                 }
             } catch (\Exception $exception) {
                 Log::error(sprintf('Cannot instanciate a TwoFAccount object with 2FAS imported item #%s', $key));

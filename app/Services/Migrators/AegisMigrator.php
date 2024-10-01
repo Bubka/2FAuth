@@ -4,9 +4,11 @@ namespace App\Services\Migrators;
 
 use App\Exceptions\InvalidMigrationDataException;
 use App\Facades\TwoFAccounts;
+use App\Services\IconService;
 use App\Models\TwoFAccount;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
 
 class AegisMigrator extends Migrator
@@ -37,6 +39,7 @@ class AegisMigrator extends Migrator
      */
     public function migrate(mixed $migrationPayload) : Collection
     {
+        $iconService = App::make(IconService::class);
         $json = json_decode(htmlspecialchars_decode($migrationPayload), true);
 
         if (is_null($json) || Arr::has($json, 'db.entries') == false) {
@@ -88,7 +91,7 @@ class AegisMigrator extends Migrator
                 $twofaccounts[$key] = new TwoFAccount;
                 $twofaccounts[$key]->fillWithOtpParameters($parameters);
                 if (Arr::has($parameters, 'iconExt') && Arr::has($parameters, 'iconData')) {
-                    $twofaccounts[$key]->setIcon($parameters['iconData'], $parameters['iconExt']);
+                    $twofaccounts[$key]->icon = $iconService->buildFromResource($parameters['iconData'], $parameters['iconExt']);
                 }
             } catch (\Exception $exception) {
                 Log::error(sprintf('Cannot instanciate a TwoFAccount object with OTP parameters from imported item #%s', $key));
