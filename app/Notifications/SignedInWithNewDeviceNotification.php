@@ -3,16 +3,12 @@
 namespace App\Notifications;
 
 use App\Models\AuthLog;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Jenssegers\Agent\Agent;
 
-class SignedInWithNewDeviceNotification extends Notification implements ShouldQueue
+class SignedInWithNewDeviceNotification extends Notification
 {
-    use Queueable;
-
     /**
      * The AuthLog model instance
      */
