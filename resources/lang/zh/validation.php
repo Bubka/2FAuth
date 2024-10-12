@@ -143,7 +143,7 @@ return [
 
     'single' => '当使用 :attribute 时，请求的数据包中只能包含这一种参数。',
     'onlyCustomOtpWithUri' => '“uri” 参数必须单独提供，或与 “custom_otp” 参数同时提供。',
-    'IsValidRegex' => 'The :attribute must be a valid regex pattern.',
+    'IsValidRegex' => ':attribute 必须是正确的 regex 表达式。',
 
     /*
     |--------------------------------------------------------------------------

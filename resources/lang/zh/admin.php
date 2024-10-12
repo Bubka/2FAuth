@@ -112,7 +112,7 @@ return [
         ],
         'use_sso_only' => [
             'label' => '仅使用 SSO',
-            'help' => 'Make SSO the only available method to log in to 2FAuth. Password login and Webauthn are then disabled for regular users. Administrators are not affected by this restriction.',
+            'help' => '仅允许通过 SSO。启用此功能后，普通用户将无法使用密码和 WebAuthn 登录到 2FAuth，但管理员不受此限制的影响。',
         ],
         'keep_sso_registration_enabled' => [
             'label' => '保持启用 SSO 注册',
@@ -128,8 +128,8 @@ return [
             'email_will_be_send_to_x' => '邮件将被发送到 <span class="is-family-code has-text-info">:email</span>',
         ],
         'health_endpoint' => [
-            'label' => 'Health endpoint',
-            'help' => 'URL you can visit to check the health of this 2FAuth instance. This URL can be used to set up a Docker HEALTHCHECK or a Kubernetes HTTPS Liveness probe.',
+            'label' => '节点健康检查',
+            'help' => '您可以访问此 URL 来检查此 2FAuth 实例的健康状况。您可以在 Docker 的 HEALTHCKECK，或 Kubernetes 的 HTTPS Liveness 探针中使用此 URL 来进行健康检查。',
         ],
         'cache_management' => [
             'label' => '缓存管理',

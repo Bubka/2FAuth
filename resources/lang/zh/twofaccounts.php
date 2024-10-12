@@ -61,8 +61,8 @@ return [
         'i_m_lucky_legend' => '“手气不错” 功能可以尝试获取此服务的官方图标。若要提高成功率，请在 “服务名称” 栏中以英文输入服务名。(测试中的功能)',
         'test' => '测试',
         'group' => [
-            'label' => 'Group',
-            'help' => 'The group to which the account is to be assigned'
+            'label' => '分组',
+            'help' => '此账户要移动到的组'
         ],
         'secret' => [
             'label' => '密钥',
