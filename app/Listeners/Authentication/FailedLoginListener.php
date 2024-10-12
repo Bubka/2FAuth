@@ -45,7 +45,7 @@ class FailedLoginListener extends AbstractAccessListener
              * @var \App\Models\User
              */
             $user = $event->user;
-            $ip   = config('2fauth.proxy_headers.forIp') ?? $this->request->ip();
+            $ip   = $this->request->header(config('2fauth.proxy_headers.forIp'), $this->request->ip());
 
             $log = $user->authentications()->create([
                 'ip_address'       => $ip,
