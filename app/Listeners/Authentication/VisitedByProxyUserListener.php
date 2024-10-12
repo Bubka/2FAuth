@@ -23,8 +23,10 @@ class VisitedByProxyUserListener extends AbstractAccessListener
         /**
          * @var \App\Models\User
          */
-        $user      = $event->user;
-        $ip        = $this->request->header(config('2fauth.proxy_headers.forIp'), $this->request->ip());
+        $user = $event->user;
+        $ip   = config('2fauth.proxy_headers.forIp')
+            ? $this->request->header(config('2fauth.proxy_headers.forIp'), $this->request->ip())
+            : $this->request->ip();
         $userAgent = $this->request->userAgent();
         $guard     = config('auth.defaults.guard');
         $known     = $user->authentications()

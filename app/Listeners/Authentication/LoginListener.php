@@ -43,8 +43,10 @@ class LoginListener extends AbstractAccessListener
         /**
          * @var \App\Models\User
          */
-        $user      = $event->user;
-        $ip        = $this->request->header(config('2fauth.proxy_headers.forIp'), $this->request->ip());
+        $user = $event->user;
+        $ip   = config('2fauth.proxy_headers.forIp')
+            ? $this->request->header(config('2fauth.proxy_headers.forIp'), $this->request->ip())
+            : $this->request->ip();
         $userAgent = $this->request->userAgent();
         $known     = $user->authentications()
             ->whereIpAddress($ip)
