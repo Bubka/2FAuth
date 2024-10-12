@@ -1,5 +1,13 @@
 # Change log
 
+## [5.3.1] - 2024-10-12
+
+### Fixed
+
+- [issue #396](https://github.com/Bubka/2FAuth/issues/396) PROXY_HEADER_FOR_IP not working as intended
+- [issue #397](https://github.com/Bubka/2FAuth/issues/397) Base table or view not found: 1146 Table '2fauth.jobs' doesn't exist
+- [issue #399](https://github.com/Bubka/2FAuth/issues/399) Cannot set CACHE_DRIVER and SESSION_DRIVER to database
+
 ## [5.3.0] - 2024-09-27
 
 ### Added
