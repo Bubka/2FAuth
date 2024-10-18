@@ -13,10 +13,10 @@ class HttpRequestTestData
     const TFA_JSON_BODY = '
     [
         [
-            "Twitch",
+            "Service",
             {
-                "domain": "twitch.tv",
-                "url": "https://www.twitch.tv/",
+                "domain": "service.com",
+                "url": "https://www.service.com/",
                 "tfa":
                 [
                     "sms",
@@ -27,45 +27,32 @@ class HttpRequestTestData
                 [
                     "Authy"
                 ],
-                "documentation": "https://help.twitch.tv/s/article/two-factor-authentication",
+                "documentation": "https://service.com/doc",
                 "notes": "To activate two factor authentication, you must provide a mobile phone number.",
                 "keywords":
                 [
                     "entertainment"
                 ]
-            }
-        ],
-        [
-            "Twitter",
+            },
+            "FakeService",
             {
-                "domain": "twitter.com",
+                "domain": "fakeservice.com",
+                "url": "https://www.fakeservice.com/",
                 "tfa":
                 [
                     "sms",
-                    "totp",
-                    "u2f"
-                ],
-                "documentation": "https://help.twitter.com/en/managing-your-account/two-factor-authentication",
-                "recovery": "https://help.twitter.com/en/managing-your-account/issues-with-login-authentication",
-                "notes": "SMS only available on select providers.",
-                "keywords":
-                [
-                    "social"
-                ]
-            }
-        ],
-        [
-            "Txbit",
-            {
-                "domain": "txbit.io",
-                "tfa":
-                [
+                    "custom-software",
                     "totp"
                 ],
-                "documentation": "https://support.txbit.io/support/solutions/articles/44000447137",
+                "custom-software":
+                [
+                    "Authy"
+                ],
+                "documentation": "https://fakeservice.com/doc",
+                "notes": "To activate two factor authentication, you must provide a mobile phone number.",
                 "keywords":
                 [
-                    "cryptocurrencies"
+                    "entertainment"
                 ]
             }
         ]

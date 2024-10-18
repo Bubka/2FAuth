@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Models;
 
+use App\Facades\Icons;
 use App\Models\TwoFAccount;
 use App\Models\User;
 use App\Services\LogoService;
@@ -10,7 +11,6 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Data\HttpRequestTestData;
 use Tests\Data\OtpTestData;
@@ -95,9 +95,10 @@ class TwoFAccountModelTest extends FeatureTestCase
     {
         $file = (new FileFactory)->image('file.png', 10, 10);
 
+        // TODO: set preventStrayRequests in parent class to ensure all tests use a fake
         Http::preventStrayRequests();
         Http::fake([
-            'https://en.opensuse.org/images/4/44/Button-filled-colour.png' => Http::response($file->tempFile, 200),
+            OtpTestData::EXTERNAL_IMAGE_URL_DECODED => Http::response($file->tempFile, 200),
         ]);
 
         Storage::fake('imagesLink');
@@ -163,7 +164,7 @@ class TwoFAccountModelTest extends FeatureTestCase
 
         Http::preventStrayRequests();
         Http::fake([
-            'https://en.opensuse.org/images/4/44/Button-filled-colour.png' => Http::response($file->tempFile, 200),
+            OtpTestData::EXTERNAL_IMAGE_URL_DECODED => Http::response($file->tempFile, 200),
         ]);
 
         Storage::fake('imagesLink');
@@ -251,18 +252,14 @@ class TwoFAccountModelTest extends FeatureTestCase
     }
 
     #[Test]
-    public function test_fill_with_getOfficialIcons_On_triggers_icon_fetching()
+    public function test_fill_with_getOfficialIcons_On_fetches_icon_using_Icons_facade()
     {
-        // Set the getOfficialIcons preference On
         $this->user['preferences->getOfficialIcons'] = true;
         $this->user->save();
 
-        $this->mock(LogoService::class, function (MockInterface $logoService) {
-            $logoService->expects()
-                ->getIcon(OtpTestData::SERVICE)
-                ->twice()
-                ->andReturn(null);
-        });
+        Icons::shouldReceive('buildFromOfficialLogo')
+            ->twice()
+            ->andReturn('file.png');
 
         $twofaccount = new TwoFAccount;
         $twofaccount->fillWithURI(OtpTestData::TOTP_FULL_CUSTOM_URI_NO_IMG);
@@ -469,7 +466,7 @@ class TwoFAccountModelTest extends FeatureTestCase
     {
         Http::preventStrayRequests();
         Http::fake([
-            'https://en.opensuse.org/images/4/44/Button-filled-colour.png' => Http::response(HttpRequestTestData::ICON_PNG, 200),
+            OtpTestData::EXTERNAL_IMAGE_URL_DECODED => Http::response(HttpRequestTestData::ICON_PNG, 200),
         ]);
 
         Storage::fake('imagesLink');
@@ -497,7 +494,7 @@ class TwoFAccountModelTest extends FeatureTestCase
     {
         Http::preventStrayRequests();
         Http::fake([
-            'https://en.opensuse.org/images/4/44/Button-filled-colour.png' => Http::response(HttpRequestTestData::ICON_PNG, 200),
+            OtpTestData::EXTERNAL_IMAGE_URL_DECODED => Http::response(HttpRequestTestData::ICON_PNG, 200),
         ]);
 
         Storage::fake('imagesLink');
@@ -589,6 +586,9 @@ class TwoFAccountModelTest extends FeatureTestCase
     public function test_fill_succeed_when_image_fetching_fails()
     {
         Http::preventStrayRequests();
+        Http::fake([
+            OtpTestData::EXTERNAL_IMAGE_URL_DECODED => new \Exception,
+        ]);
 
         Storage::fake('imagesLink');
         Storage::fake('icons');
@@ -598,6 +598,17 @@ class TwoFAccountModelTest extends FeatureTestCase
 
         Storage::disk('icons')->assertDirectoryEmpty('/');
         Storage::disk('imagesLink')->assertDirectoryEmpty('/');
+    }
+
+    #[Test]
+    public function test_fillWithURI_uses_Icons_facade_to_get_the_icon()
+    {
+        Icons::shouldReceive('buildFromRemoteImage')
+            ->once()
+            ->andReturn('file.png');
+
+        $twofaccount = new TwoFAccount;
+        $twofaccount->fillWithURI(OtpTestData::TOTP_FULL_CUSTOM_URI);
     }
 
     #[Test]

@@ -1,7 +1,7 @@
 <?php
 
-use App\Facades\Settings;
 use App\Models\TwoFAccount;
+use App\Services\SettingService;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
@@ -33,7 +33,8 @@ return new class extends Migration
      */
     protected function dbIsEncrypted() : bool
     {
-        return Settings::get('useEncryption');
+        $settingService = new SettingService;
+        return $settingService->get('useEncryption');
     }
 
     /**

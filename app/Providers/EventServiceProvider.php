@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Events\GroupDeleted;
 use App\Events\GroupDeleting;
+use App\Events\storeIconsInDatabaseSettingChanged;
 use App\Events\ScanForNewReleaseCalled;
 use App\Events\TwoFAccountDeleted;
 use App\Events\VisitedByProxyUser;
@@ -14,6 +15,7 @@ use App\Listeners\Authentication\VisitedByProxyUserListener;
 use App\Listeners\CleanIconStorage;
 use App\Listeners\DissociateTwofaccountFromGroup;
 use App\Listeners\LogNotificationListener;
+use App\Listeners\ToggleIconReplicationToDatabase;
 use App\Listeners\RegisterOpenId;
 use App\Listeners\ReleaseRadar;
 use App\Listeners\ResetUsersPreference;
@@ -69,6 +71,9 @@ class EventServiceProvider extends ServiceProvider
         VisitedByProxyUser::class => [
             VisitedByProxyUserListener::class,
         ],
+        storeIconsInDatabaseSettingChanged::class => [
+            ToggleIconReplicationToDatabase::class,
+        ],
     ];
 
     /**
@@ -76,6 +81,7 @@ class EventServiceProvider extends ServiceProvider
      *
      * @var array<string, string|object|array<int, string|object>>
      */
+    // TODO: bind the observer using the ObservedBy attribute (https://laravel.com/docs/11.x/eloquent#defining-observers)
     protected $observers = [
         User::class => [UserObserver::class],
     ];

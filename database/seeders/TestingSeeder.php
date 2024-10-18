@@ -3,8 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use App\Models\Group;
-use App\Models\TwoFAccount;
 use Illuminate\Database\Seeder;
 
 class TestingSeeder extends Seeder

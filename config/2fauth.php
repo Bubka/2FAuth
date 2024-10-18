@@ -94,6 +94,7 @@ return [
         'restrictList' => '',
         'restrictRule' => '',
         'keepSsoRegistrationEnabled' => false,
+        'storeIconsInDatabase' => false,
     ],
 
     /*

@@ -89,6 +89,12 @@ class Handler extends ExceptionHandler
             ], 400);
         });
 
+        $this->renderable(function (FailedIconStoreDatabaseTogglingException $exception, $request) {
+            return response()->json([
+                'message' => __('errors.failed_icon_store_database_toggling'),
+            ], 400);
+        });
+
         $this->renderable(function (\Illuminate\Auth\AuthenticationException $exception, $request) {
             if ($exception->guards() === ['reverse-proxy-guard']) {
                 return response()->json([

@@ -2,6 +2,7 @@
 
 namespace App\Api\v1\Resources;
 
+use App\Facades\IconStore;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
 
@@ -33,8 +34,8 @@ class TwoFAccountExportResource extends JsonResource
             'account'    => $this->account,
             'service'    => $this->service,
             'icon'       => $this->icon,
-            'icon_mime'  => $this->icon ? Storage::disk('icons')->mimeType((string) $this->icon) : null,
-            'icon_file'  => $this->icon ? base64_encode(Storage::disk('icons')->get((string) $this->icon)) : null,
+            'icon_mime'  => $this->icon && IconStore::exists($this->icon) ? IconStore::mimeType($this->icon) : null,
+            'icon_file'  => $this->icon && IconStore::exists($this->icon) ? base64_encode(IconStore::get($this->icon)) : null,
             'secret'     => $this->secret,
             'digits'     => (int) $this->digits,
             'algorithm'  => $this->algorithm,

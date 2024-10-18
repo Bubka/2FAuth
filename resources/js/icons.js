@@ -120,7 +120,7 @@ library.add(
     faTabletScreenButton,
     faDisplay,
     faCalendar,
-    faArrowUpLong
+    faArrowUpLong,
 );
 
 export default FontAwesomeIcon

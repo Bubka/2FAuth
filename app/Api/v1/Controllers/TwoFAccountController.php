@@ -56,6 +56,9 @@ class TwoFAccountController extends Controller
     {
         $this->authorize('view', $twofaccount);
 
+        // $icon = $twofaccount->icon;
+        // $iconRes = $twofaccount->icon()->get();
+
         return new TwoFAccountReadResource($twofaccount);
     }
 

@@ -3,11 +3,18 @@
 namespace Tests\Api\v1\Controllers;
 
 use App\Api\v1\Controllers\IconController;
+use App\Facades\IconStore;
 use App\Models\TwoFAccount;
 use App\Models\User;
+use App\Services\LogoService;
+use Illuminate\Http\Testing\FileFactory;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Data\HttpRequestTestData;
+use Tests\Data\OtpTestData;
 use Tests\FeatureTestCase;
 
 /**
@@ -25,13 +32,26 @@ class IconControllerTest extends FeatureTestCase
     {
         parent::setUp();
 
+        Storage::fake('icons');
+        Storage::fake('logos');
+        
+        Http::preventStrayRequests();
+        Http::fake([
+            LogoService::TFA_IMG_URL . '*' => Http::response(HttpRequestTestData::SVG_LOGO_BODY, 200),
+            LogoService::TFA_URL           => Http::response(HttpRequestTestData::TFA_JSON_BODY, 200),
+        ]);
+        Http::fake([
+            OtpTestData::EXTERNAL_IMAGE_URL_DECODED => Http::response((new FileFactory)->image('file.png', 10, 10)->tempFile, 200),
+        ]);
+
         $this->user = User::factory()->create();
     }
 
     #[Test]
-    public function test_upload_icon_returns_filename()
+    public function test_upload_icon_returns_filename_using_the_iconStore()
     {
-        $file = UploadedFile::fake()->image('testIcon.jpg');
+        $iconName = 'testIcon.jpg';
+        $file = UploadedFile::fake()->image($iconName);
 
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/icons', [
@@ -40,6 +60,17 @@ class IconControllerTest extends FeatureTestCase
             ->assertCreated()
             ->assertJsonStructure([
                 'filename',
+            ]);
+    }
+
+    #[Test]
+    public function test_upload_icon_stores_it_to_database()
+    {
+        $file = UploadedFile::fake()->image('testIcon.jpg');
+
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('POST', '/api/v1/icons', [
+                'icon' => $file,
             ]);
     }
 
@@ -58,7 +89,7 @@ class IconControllerTest extends FeatureTestCase
     {
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/icons/default', [
-                'service' => 'dropbox',
+                'service' => 'service',
             ])
             ->assertStatus(201)
             ->assertJsonStructure([
@@ -77,11 +108,17 @@ class IconControllerTest extends FeatureTestCase
     }
 
     #[Test]
-    public function test_delete_icon_returns_success()
+    public function test_delete_icon_returns_success_using_the_iconStore()
     {
+        IconStore::spy();
+        
+        $iconName = 'testIcon.jpg';
+
         $response = $this->actingAs($this->user, 'api-guard')
-            ->json('DELETE', '/api/v1/icons/testIcon.jpg')
+            ->json('DELETE', '/api/v1/icons/' . $iconName)
             ->assertNoContent(204);
+
+        IconStore::shouldHaveReceived('delete')->once()->with($iconName);
     }
 
     #[Test]

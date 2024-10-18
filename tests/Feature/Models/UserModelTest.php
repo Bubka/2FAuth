@@ -2,7 +2,9 @@
 
 namespace Tests\Feature\Models;
 
+use App\Facades\IconStore;
 use App\Models\AuthLog;
+use App\Models\Dto\IconDto;
 use App\Models\Group;
 use App\Models\TwoFAccount;
 use App\Models\User;
@@ -168,9 +170,11 @@ class UserModelTest extends FeatureTestCase
 
         $user = User::factory()->create();
 
-        $twofaccount = TwoFAccount::factory()->for($user)->create();
-        $twofaccount->setIcon(base64_decode(OtpTestData::ICON_PNG_DATA), 'png');
-        $twofaccount->save();
+        $twofaccount = TwoFAccount::factory()->for($user)->create([
+            'icon' => OtpTestData::ICON_PNG,
+        ]);
+        IconStore::store(OtpTestData::ICON_PNG, base64_decode(OtpTestData::ICON_PNG_DATA));
+        
         Storage::disk('icons')->assertExists($twofaccount->icon);
 
         $user->delete();

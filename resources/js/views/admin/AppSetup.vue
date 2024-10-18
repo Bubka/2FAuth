@@ -97,9 +97,12 @@
                         <label class="label"  v-html="$t('admin.forms.health_endpoint.label')" />
                         <p class="help" v-html="$t('admin.forms.health_endpoint.help')" />
                     </div>
-                    <div>
+                    <div class="field mb-5">
                         <a target="_blank" :href="healthEndPoint">{{ healthEndPointFullPath }}</a>
                     </div>
+                    <h4 class="title is-4 pt-5 has-text-grey-light">{{ $t('admin.storage') }}</h4>
+                    <!-- store icons in database -->
+                    <FormCheckbox v-model="appSettings.storeIconsInDatabase" @update:model-value="val => useAppSettingsUpdater('storeIconsInDatabase', val)" fieldName="storeIconsInDatabase" label="admin.forms.store_icon_to_database.label" help="admin.forms.store_icon_to_database.help" />
                     <h4 class="title is-4 pt-5 has-text-grey-light">{{ $t('settings.security') }}</h4>
                     <!-- protect db -->
                     <FormCheckbox v-model="appSettings.useEncryption" @update:model-value="val => useAppSettingsUpdater('useEncryption', val)" fieldName="useEncryption" label="admin.forms.use_encryption.label" help="admin.forms.use_encryption.help" />

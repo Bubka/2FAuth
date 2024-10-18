@@ -3,7 +3,6 @@
 namespace Tests\Feature\Console;
 
 use App\Console\Commands\CheckDbConnection;
-use Illuminate\Support\Facades\DB;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\FeatureTestCase;

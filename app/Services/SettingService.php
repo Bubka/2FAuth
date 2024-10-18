@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Events\storeIconsInDatabaseSettingChanged;
 use App\Exceptions\DbEncryptionException;
 use App\Models\Option;
 use Exception;
@@ -67,25 +68,22 @@ class SettingService
     /**
      * Set a setting
      *
-     * @param  string|array  $setting  A single setting name or an associative array of name:value settings
-     * @param  string|int|bool|null  $value  The value for single setting
+     * @param  string  $setting  A single setting name
+     * @param  string|int|bool  $value  The value for single setting
      */
-    public function set($setting, $value = null) : void
+    public function set($setting, $value) : void
     {
-        $settings = is_array($setting) ? $setting : [$setting => $value];
-
-        foreach ($settings as $setting => $value) {
-            if ($setting === 'useEncryption') {
-                $this->setEncryptionTo($value);
-            }
-
-            $settings[$setting] = $this->replaceBoolean($value);
+        // TODO: Move setEncryptionTo() logic to a dedicated class
+        if ($setting === 'useEncryption') {
+            $this->setEncryptionTo($value);
         }
 
-        foreach ($settings as $setting => $value) {
-            Option::updateOrCreate(['key' => $setting], ['value' => $value]);
-            Log::notice(sprintf('App setting %s set to %s', var_export($setting, true), var_export($this->restoreType($value), true)));
+        if ($setting === 'storeIconsInDatabase') {
+            storeIconsInDatabaseSettingChanged::dispatch($value);
         }
+
+        Option::updateOrCreate(['key' => $setting], ['value' => $this->replaceBoolean($value)]);
+        Log::notice(sprintf('App setting %s set to %s', var_export($setting, true), var_export($this->restoreType($value), true)));
 
         self::buildAndCache();
     }
@@ -207,6 +205,7 @@ class SettingService
     {
         $success      = true;
         $twofaccounts = DB::table('twofaccounts')->get();
+        $icons        = DB::table('icons')->get();
 
         $twofaccounts->each(function ($item, $key) use (&$success, $encrypted) {
             try {
@@ -219,6 +218,17 @@ class SettingService
                 $item->legacy_uri = $encrypted ? Crypt::encryptString($item->legacy_uri) : Crypt::decryptString($item->legacy_uri);
                 $item->account    = $encrypted ? Crypt::encryptString($item->account) : Crypt::decryptString($item->account);
                 $item->secret     = $encrypted ? Crypt::encryptString($item->secret) : Crypt::decryptString($item->secret);
+            } catch (Exception $ex) {
+                $success = false;
+
+                // Exit the each iteration
+                return false;
+            }
+        });
+
+        $icons->each(function ($item, $key) use (&$success, $encrypted) {
+            try {
+                $item->content = $encrypted ? Crypt::encryptString($item->content) : Crypt::decryptString($item->content);
             } catch (Exception $ex) {
                 $success = false;
 
@@ -241,6 +251,14 @@ class SettingService
                             'legacy_uri' => $item->legacy_uri,
                             'account'    => $item->account,
                             'secret'     => $item->secret,
+                        ]);
+                });
+
+                $icons->each(function ($item, $key) {
+                    DB::table('icons')
+                        ->where('name', $item->name)
+                        ->update([
+                            'content' => $item->content,
                         ]);
                 });
 

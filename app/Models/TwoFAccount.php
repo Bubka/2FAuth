@@ -7,19 +7,17 @@ use App\Exceptions\InvalidOtpParameterException;
 use App\Exceptions\InvalidSecretException;
 use App\Exceptions\UndecipherableException;
 use App\Exceptions\UnsupportedOtpTypeException;
-use App\Facades\Settings;
+use App\Facades\Icons;
 use App\Helpers\Helpers;
 use App\Models\Dto\HotpDto;
 use App\Models\Dto\TotpDto;
-use App\Services\IconService;
+use App\Models\Traits\CanEncryptField;
 use Database\Factories\TwoFAccountFactory;
-use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use OTPHP\Factory;
@@ -72,17 +70,16 @@ use SteamTotp\SteamTotp;
  * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereService($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereUserId($value)
- *
  * @mixin \Eloquent
+ * @property-read \App\Models\Icon|null $iconResource
+ * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount orphans()
  */
 class TwoFAccount extends Model implements Sortable
 {
     /**
      * @use HasFactory<TwoFAccountFactory>
      */
-    use HasFactory;
-
-    use SortableTrait;
+    use HasFactory, SortableTrait, CanEncryptField;
 
     const TOTP = 'totp';
 
@@ -232,6 +229,16 @@ class TwoFAccount extends Model implements Sortable
     public function user()
     {
         return $this->belongsTo(\App\Models\User::class);
+    }
+
+    /**
+     * Get the relation between the icon resource and the model.
+     * 
+     * @return HasOne<\App\Models\Icon>
+     */
+    public function iconResource(): HasOne
+    {
+        return $this->hasOne(Icon::class, 'name', 'icon');
     }
 
     /**
@@ -467,7 +474,7 @@ class TwoFAccount extends Model implements Sortable
         }
 
         if (! $this->icon && ! $skipIconFetching && Auth::user()?->preferences['getOfficialIcons']) {
-            $this->icon = App::make(IconService::class)->buildFromOfficialLogo($this->service);
+            $this->icon = Icons::buildFromOfficialLogo($this->service);
         }
 
         Log::info(sprintf('TwoFAccount filled with OTP parameters'));
@@ -534,11 +541,12 @@ class TwoFAccount extends Model implements Sortable
             $this->enforceAsSteam();
         }
         if ($this->generator->hasParameter('image')) {
-            $this->icon = App::make(IconService::class)->buildFromRemoteImage($this->generator->getParameter('image'));
+            $this->icon = Icons::buildFromRemoteImage($this->generator->getParameter('image'));
         }
 
+        $uuu = Auth::user()?->preferences;
         if (! $this->icon && ! $skipIconFetching && Auth::user()?->preferences['getOfficialIcons']) {
-            $this->icon = App::make(IconService::class)->buildFromOfficialLogo($this->service);
+            $this->icon = Icons::buildFromOfficialLogo($this->service);
         }
 
         Log::info(sprintf('TwoFAccount filled with an URI'));
@@ -644,34 +652,6 @@ class TwoFAccount extends Model implements Sortable
         } catch (\Exception|\Throwable $exception) {
             throw new InvalidOtpParameterException($exception->getMessage());
         }
-    }
-
-    /**
-     * Returns an acceptable value
-     */
-    private function decryptOrReturn(mixed $value) : mixed
-    {
-        // Decipher when needed
-        if (Settings::get('useEncryption') && $value) {
-            try {
-                return Crypt::decryptString($value);
-            } catch (Exception $ex) {
-                Log::debug(sprintf('Service field of twofaccount with id #%s cannot be deciphered', $this->id));
-
-                return __('errors.indecipherable');
-            }
-        } else {
-            return $value;
-        }
-    }
-
-    /**
-     * Encrypt a value
-     */
-    private function encryptOrReturn(mixed $value) : mixed
-    {
-        // should be replaced by laravel 8 attribute encryption casting
-        return Settings::get('useEncryption') ? Crypt::encryptString($value) : $value;
     }
 
     /**

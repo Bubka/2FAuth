@@ -2,15 +2,23 @@
 
 namespace Tests\Feature\Services;
 
+use App\Events\storeIconsInDatabaseSettingChanged;
+use App\Exceptions\FailedIconStoreDatabaseTogglingException;
+use App\Facades\IconStore;
 use App\Facades\Settings;
+use App\Models\Icon;
 use App\Models\TwoFAccount;
+use App\Services\IconStoreService;
 use App\Services\SettingService;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Event;
+use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Data\OtpTestData;
 use Tests\FeatureTestCase;
 
 /**
@@ -57,11 +65,11 @@ class SettingServiceTest extends FeatureTestCase
 
     private const PERIOD_CUSTOM = 40;
 
-    private const IMAGE = 'https%3A%2F%2Fen.opensuse.org%2Fimages%2F4%2F44%2FButton-filled-colour.png';
+    private const EXTERNAL_IMAGE_URL_ENCODED = 'https%3A%2F%2Fen.opensuse.org%2Fimages%2F4%2F44%2FButton-filled-colour.png';
 
     private const ICON = 'test.png';
 
-    private const TOTP_FULL_CUSTOM_URI = 'otpauth://totp/' . self::SERVICE . ':' . self::ACCOUNT . '?secret=' . self::SECRET . '&issuer=' . self::SERVICE . '&digits=' . self::DIGITS_CUSTOM . '&period=' . self::PERIOD_CUSTOM . '&algorithm=' . self::ALGORITHM_CUSTOM . '&image=' . self::IMAGE;
+    private const TOTP_FULL_CUSTOM_URI = 'otpauth://totp/' . self::SERVICE . ':' . self::ACCOUNT . '?secret=' . self::SECRET . '&issuer=' . self::SERVICE . '&digits=' . self::DIGITS_CUSTOM . '&period=' . self::PERIOD_CUSTOM . '&algorithm=' . self::ALGORITHM_CUSTOM . '&image=' . self::EXTERNAL_IMAGE_URL_ENCODED;
 
     public function setUp() : void
     {
@@ -174,52 +182,70 @@ class SettingServiceTest extends FeatureTestCase
     }
 
     #[Test]
-    public function test_set_useEncryption_on_encrypts_all_accounts()
+    public function test_set_useEncryption_On_encrypts_all_data()
     {
         Settings::set('useEncryption', true);
 
         $twofaccounts = DB::table('twofaccounts')->get();
+        Icon::factory()->create();
+        $icons = DB::table('icons')->get();
 
         $twofaccounts->each(function ($item, $key) {
             $this->assertEquals(self::ACCOUNT, Crypt::decryptString($item->account));
             $this->assertEquals(self::SECRET, Crypt::decryptString($item->secret));
             $this->assertEquals(self::TOTP_FULL_CUSTOM_URI, Crypt::decryptString($item->legacy_uri));
         });
+
+        $icons->each(function ($item, $key) {
+            $this->assertEquals(OtpTestData::ICON_PNG_DATA, Crypt::decryptString($item->content));
+        });
     }
 
     #[Test]
-    public function test_set_useEncryption_on_twice_prevents_successive_encryption()
+    public function test_set_useEncryption_On_twice_prevents_successive_encryption()
     {
         Settings::set('useEncryption', true);
         Settings::set('useEncryption', true);
 
         $twofaccounts = DB::table('twofaccounts')->get();
+        Icon::factory()->create();
+        $icons = DB::table('icons')->get();
 
         $twofaccounts->each(function ($item, $key) {
             $this->assertEquals(self::ACCOUNT, Crypt::decryptString($item->account));
             $this->assertEquals(self::SECRET, Crypt::decryptString($item->secret));
             $this->assertEquals(self::TOTP_FULL_CUSTOM_URI, Crypt::decryptString($item->legacy_uri));
         });
+
+        $icons->each(function ($item, $key) {
+            $this->assertEquals(OtpTestData::ICON_PNG_DATA, Crypt::decryptString($item->content));
+        });
     }
 
     #[Test]
-    public function test_set_useEncryption_off_decrypts_all_accounts()
+    public function test_set_useEncryption_Off_decrypts_all_accounts()
     {
         Settings::set('useEncryption', true);
         Settings::set('useEncryption', false);
 
         $twofaccounts = DB::table('twofaccounts')->get();
+        Icon::factory()->create();
+        $icons = DB::table('icons')->get();
 
         $twofaccounts->each(function ($item, $key) {
             $this->assertEquals(self::ACCOUNT, $item->account);
             $this->assertEquals(self::SECRET, $item->secret);
             $this->assertEquals(self::TOTP_FULL_CUSTOM_URI, $item->legacy_uri);
         });
+
+        $icons->each(function ($item, $key) {
+            $this->assertEquals(OtpTestData::ICON_PNG_DATA, $item->content);
+        });
     }
 
     #[Test]
     #[DataProvider('provideUndecipherableData')]
-    public function test_set_useEncryption_off_returns_exception_when_data_are_undecipherable(array $data)
+    public function test_set_useEncryption_Off_returns_exception_when_data_are_undecipherable(array $data)
     {
         $this->expectException(\App\Exceptions\DbEncryptionException::class);
 
@@ -250,29 +276,6 @@ class SettingServiceTest extends FeatureTestCase
                 'legacy_uri' => 'undecipherableString',
             ]],
         ];
-    }
-
-    #[Test]
-    public function test_set_array_of_settings_persist_correct_values()
-    {
-        $value = Settings::set([
-            self::SETTING_NAME     => self::SETTING_VALUE_STRING,
-            self::SETTING_NAME_ALT => self::SETTING_VALUE_INT,
-        ]);
-        $cached = Cache::get(SettingService::CACHE_ITEM_NAME); // returns a Collection
-
-        $this->assertDatabaseHas('options', [
-            self::KEY   => self::SETTING_NAME,
-            self::VALUE => self::SETTING_VALUE_STRING,
-        ]);
-
-        $this->assertDatabaseHas('options', [
-            self::KEY   => self::SETTING_NAME_ALT,
-            self::VALUE => self::SETTING_VALUE_INT,
-        ]);
-
-        $this->assertEquals($cached->get(self::SETTING_NAME), self::SETTING_VALUE_STRING);
-        $this->assertEquals($cached->get(self::SETTING_NAME_ALT), self::SETTING_VALUE_INT);
     }
 
     #[Test]
@@ -365,5 +368,46 @@ class SettingServiceTest extends FeatureTestCase
         $settingService->delete(self::SETTING_NAME);
 
         Cache::shouldHaveReceived('put');
+    }
+
+    #[Test]
+    public function test_set_storeIconsInDatabase_setting_dispatches_storeIconsInDatabaseSettingChanged()
+    {
+        Event::fake([
+            storeIconsInDatabaseSettingChanged::class,
+        ]);
+
+        Settings::set('storeIconsInDatabase', true);
+
+        Event::assertDispatched(storeIconsInDatabaseSettingChanged::class);
+    }
+
+    #[Test]
+    public function test_set_storeIconsInDatabase_setting_impacts_the_icon_store()
+    {
+        Settings::set('storeIconsInDatabase', false);
+
+        $this->assertFalse(IconStore::usesDatabase());
+
+        Settings::set('storeIconsInDatabase', true);
+
+        $this->assertTrue(IconStore::usesDatabase());
+    }
+
+    #[Test]
+    public function test_set_storeIconsInDatabase_is_cancelled_if_database_toggling_failed()
+    {
+        $this->expectException(FailedIconStoreDatabaseTogglingException::class);
+        
+        $newValue = true;
+
+        IconStore::shouldReceive('setDatabaseReplication')
+            ->once()
+            ->with($newValue)
+            ->andThrow(FailedIconStoreDatabaseTogglingException::class);
+
+        Settings::set('storeIconsInDatabase', $newValue);
+
+        $this->assertFalse(Settings::get('storeIconsInDatabase'));
     }
 }

@@ -15,12 +15,16 @@ use App\Models\User;
 use App\Policies\TwoFAccountPolicy;
 use App\Providers\MigrationServiceProvider;
 use App\Providers\TwoFAuthServiceProvider;
+use App\Services\LogoService;
+use Illuminate\Http\Testing\FileFactory;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Classes\LocalFile;
+use Tests\Data\HttpRequestTestData;
 use Tests\Data\MigrationTestData;
 use Tests\Data\OtpTestData;
 use Tests\FeatureTestCase;
@@ -218,6 +222,19 @@ class TwoFAccountControllerTest extends FeatureTestCase
     public function setUp() : void
     {
         parent::setUp();
+
+        Storage::fake('icons');
+        Storage::fake('logos');
+        Storage::fake('imagesLink');
+        
+        Http::preventStrayRequests();
+        Http::fake([
+            LogoService::TFA_IMG_URL . '*' => Http::response(HttpRequestTestData::SVG_LOGO_BODY, 200),
+            LogoService::TFA_URL           => Http::response(HttpRequestTestData::TFA_JSON_BODY, 200),
+        ]);
+        Http::fake([
+            OtpTestData::EXTERNAL_IMAGE_URL_DECODED => Http::response((new FileFactory)->image('file.png', 10, 10)->tempFile, 200),
+        ]);
 
         $this->user       = User::factory()->create();
         $this->userGroupA = Group::factory()->for($this->user)->create();
@@ -435,7 +452,6 @@ class TwoFAccountControllerTest extends FeatureTestCase
     public function test_store_without_encryption_returns_success_with_consistent_resource_structure($payload, $expected)
     {
         Settings::set('useEncryption', false);
-        Storage::put('test.png', 'emptied to prevent missing resource replaced by null by the model getter');
 
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts', $payload)
@@ -449,7 +465,6 @@ class TwoFAccountControllerTest extends FeatureTestCase
     public function test_store_with_encryption_returns_success_with_consistent_resource_structure($payload, $expected)
     {
         Settings::set('useEncryption', true);
-        Storage::put('test.png', 'emptied to prevent missing resource replaced by null by the model getter');
 
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts', $payload)
@@ -1161,8 +1176,24 @@ class TwoFAccountControllerTest extends FeatureTestCase
     }
 
     #[Test]
-    public function test_preview_with_unreachable_image_returns_success()
+    public function test_preview_with_unreachable_image_but_official_logo_returns_success()
     {
+        $this->user['preferences->getOfficialIcons'] = true;
+
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('POST', '/api/v1/twofaccounts/preview', [
+                'uri' => OtpTestData::TOTP_URI_WITH_UNREACHABLE_IMAGE,
+            ])
+            ->assertOk();
+
+        $this->assertNotNull($response->json('icon'));
+    }
+
+    #[Test]
+    public function test_preview_with_unreachable_image_returns_success_with_no_icon()
+    {
+        $this->user['preferences->getOfficialIcons'] = false;
+        
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts/preview', [
                 'uri' => OtpTestData::TOTP_URI_WITH_UNREACHABLE_IMAGE,
@@ -1221,6 +1252,25 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->assertForbidden()
             ->assertJsonStructure([
                 'message',
+            ]);
+    }
+
+    #[Test]
+    public function test_export_returns_nulled_icon_resource_when_icon_file_is_missing()
+    {
+        $this->twofaccountA = TwoFAccount::factory()->for($this->user)->create(array_merge(
+            self::JSON_FRAGMENTS_FOR_DEFAULT_HOTP,
+            [
+                'icon' => 'icon_without_file_on_disk.png',
+            ]
+        ));
+
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/export?ids=' . $this->twofaccountA->id)
+            ->assertJsonFragment([
+                'icon'      => 'icon_without_file_on_disk.png',
+                'icon_file' => null,
+                'icon_mime' => null,
             ]);
     }
 

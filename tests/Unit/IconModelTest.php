@@ -2,44 +2,40 @@
 
 namespace Tests\Unit;
 
-use App\Events\TwoFAccountDeleted;
-use App\Helpers\Helpers;
 use App\Models\Icon;
 use App\Models\TwoFAccount;
 use App\Services\SettingService;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Crypt;
 use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Data\OtpTestData;
 use Tests\ModelTestCase;
 
 /**
- * TwoFAccountModelTest test class
+ * IconModelTest test class
  */
-#[CoversClass(TwoFAccount::class)]
-class TwoFAccountModelTest extends ModelTestCase
+#[CoversClass(Icon::class)]
+class IconModelTest extends ModelTestCase
 {
     #[Test]
     public function test_model_configuration()
     {
         $this->runConfigurationAssertions(
-            new TwoFAccount,
-            [],
-            [],
+            new Icon,
+            ['name'],
+            ['created_at', 'updated_at'],
             ['*'],
             [],
-            [
-                'id'      => 'int',
-                'user_id' => 'integer',
-            ],
-            ['deleted' => TwoFAccountDeleted::class],
+            [],
+            [],
             ['created_at', 'updated_at'],
             \Illuminate\Database\Eloquent\Collection::class,
-            'twofaccounts',
-            'id',
-            true
+            'icons',
+            'name',
+            false
         );
     }
 
@@ -53,11 +49,11 @@ class TwoFAccountModelTest extends ModelTestCase
                 ->andReturn(true);
         });
 
-        $twofaccount = TwoFAccount::factory()->make([
-            $attribute => 'STRING==',
+        $icon = Icon::factory()->make([
+            $attribute => base64_decode(OtpTestData::ICON_PNG_DATA),
         ]);
 
-        $this->assertEquals('STRING==', Crypt::decryptString($twofaccount->getAttributes()[$attribute]));
+        $this->assertEquals(OtpTestData::ICON_PNG_DATA, Crypt::decryptString($icon->getAttributes()[$attribute]));
         $this->forgetMock(SettingService::class);
     }
 
@@ -68,13 +64,7 @@ class TwoFAccountModelTest extends ModelTestCase
     {
         return [
             [
-                'legacy_uri',
-            ],
-            [
-                'secret',
-            ],
-            [
-                'account',
+                'content',
             ],
         ];
     }
@@ -89,9 +79,11 @@ class TwoFAccountModelTest extends ModelTestCase
                 ->andReturn(false);
         });
 
-        $twofaccount = TwoFAccount::factory()->make();
+        $icon = Icon::factory()->make([
+            $attribute => base64_decode(OtpTestData::ICON_PNG_DATA),
+        ]);
 
-        $this->assertEquals($twofaccount->getAttributes()[$attribute], $twofaccount->$attribute);
+        $this->assertEquals($icon->getAttributes()[$attribute], base64_encode($icon->$attribute));
         $this->forgetMock(SettingService::class);
     }
 
@@ -108,51 +100,19 @@ class TwoFAccountModelTest extends ModelTestCase
         Crypt::shouldReceive('encryptString')
             ->andReturn('indecipherableString');
 
-        $twofaccount = TwoFAccount::factory()->make();
+        $icon = Icon::factory()->make();
 
-        $this->assertEquals(__('errors.indecipherable'), $twofaccount->$attribute);
+        $this->assertEquals(__('errors.indecipherable'), $icon->$attribute);
         $this->forgetMock(SettingService::class);
-    }
-
-    #[Test]
-    public function test_secret_is_uppercased_and_padded_at_setup()
-    {
-        $settingService = $this->mock(SettingService::class, function (MockInterface $settingService) {
-            $settingService->shouldReceive('get')
-                ->with('useEncryption')
-                ->andReturn(false);
-        });
-
-        $helpers = $this->mock(Helpers::class, function (MockInterface $helpers) {
-            $helpers->shouldReceive('PadToBase32Format')
-                ->andReturn('YYYY====');
-        });
-
-        $twofaccount = TwoFAccount::factory()->make([
-            'secret' => 'yyyy',
-        ]);
-
-        $this->assertEquals('YYYY====', $twofaccount->secret);
-        $this->forgetMock(SettingService::class);
-    }
-
-    #[Test]
-    public function test_user_relation()
-    {
-        $model    = new TwoFAccount;
-        $relation = $model->user();
-
-        $this->assertInstanceOf(BelongsTo::class, $relation);
-        $this->assertEquals('user_id', $relation->getForeignKeyName());
     }
 
     #[Test]
     public function test_twofaccount_relation()
     {
-        $model    = new Icon();
-        $relation = $model->twofaccount();
+        $model    = new TwoFAccount;
+        $relation = $model->iconResource();
 
-        $this->assertInstanceOf(BelongsTo::class, $relation);
+        $this->assertInstanceOf(HasOne::class, $relation);
         $this->assertEquals('name', $relation->getForeignKeyName());
     }
 }

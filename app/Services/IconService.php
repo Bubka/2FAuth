@@ -2,7 +2,8 @@
 
 namespace App\Services;
 
-use App\Services\LogoService;
+use App\Facades\IconStore;
+use App\Helpers\Helpers;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -10,9 +11,6 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
-/**
- * App\Services\IconService
- */
 class IconService
 {
     /**
@@ -31,16 +29,19 @@ class IconService
      */
     public function buildFromResource($resource, $extension) : ?string
     {
-        // TODO : controller la valeur de $extension
-        $filename = self::getRandomName($extension);
+        if (! $resource || ! $extension) {
+            return null;
+        }
 
-        if (Storage::disk('icons')->put($filename, $resource)) {
-            if (self::isValidImageFile($filename, 'icons')) {
+        $filename = Helpers::getRandomFilename($extension);
+
+        if (IconStore::store($filename, $resource)) {
+            if (self::isValidImageResource($filename, $resource)) {
                 Log::info(sprintf('Image "%s" successfully stored for import', $filename));
 
                 return $filename;
             } else {
-                Storage::disk('icons')->delete($filename);
+                IconStore::delete($filename);
             }
         }
 
@@ -52,10 +53,10 @@ class IconService
      */
     public function buildFromRemoteImage(string $url) : ?string
     {
-        $isRemoteData = Str::startsWith($url, ['http://', 'https://']) && Validator::make(
+        $isRemoteData = Validator::make(
             [$url],
             ['url']
-        )->passes();
+        )->passes() && Str::startsWith($url, ['http://', 'https://']);
 
         return $isRemoteData ? $this->storeRemoteImage($url) : null;
     }
@@ -67,7 +68,7 @@ class IconService
     {
         try {
             $path_parts  = pathinfo($url);
-            $filename = $this->getRandomName($path_parts['extension']);
+            $filename = Helpers::getRandomFilename($path_parts['extension']);
 
             try {
                 $response = Http::withOptions([
@@ -83,9 +84,10 @@ class IconService
                 return null;
             }
 
-            if (self::isValidImageFile($filename, 'imagesLink')) {
+            $imagesLinkResource = Storage::disk('imagesLink')->get($filename);
+            if ($imagesLinkResource && self::isValidImageResource($filename, $imagesLinkResource)) {
                 // Should be a valid image, we move it to the icons disk
-                if (Storage::disk('icons')->put($filename, Storage::disk('imagesLink')->get($filename))) {
+                if (IconStore::store($filename, $imagesLinkResource)) {
                     Storage::disk('imagesLink')->delete($filename);
                 }
 
@@ -95,7 +97,7 @@ class IconService
                 throw new \Exception('Unsupported mimeType or missing image on storage');
             }
 
-            if (Storage::disk('icons')->exists($filename)) {
+            if (IconStore::exists($filename)) {
                 return $filename;
             }
         }
@@ -109,29 +111,31 @@ class IconService
     }
 
     /**
-     * Generate a unique filename
-     *
-     */
-    private static function getRandomName(string $extension) : string
-    {
-        return Str::random(40) . '.' . $extension;
-    }
-
-    /**
      * Validate a file is a valid image
      *
      * @param  string  $filename
-     * @param  string  $disk
+     * @param  string  $content
      */
-    public static function isValidImageFile($filename, $disk) : bool
+    public static function isValidImageResource($filename, $content) : bool
     {
-        return in_array(Storage::disk($disk)->mimeType($filename), [
+        Storage::disk('temp')->put($filename, $content);
+        $extension         = Str::replace('jpg', 'jpeg', pathinfo($filename, PATHINFO_EXTENSION), false);
+        $mimeType          = Storage::disk('temp')->mimeType($filename);
+        $acceptedMimeTypes = [
             'image/png',
             'image/jpeg',
             'image/webp',
             'image/bmp',
             'image/x-ms-bmp',
             'image/svg+xml',
-        ]) && (Storage::disk($disk)->mimeType($filename) !== 'image/svg+xml' ? getimagesize(Storage::disk($disk)->path($filename)) : true);
+        ];
+        
+        $isValid = in_array($mimeType, $acceptedMimeTypes)
+            && ($mimeType !== 'image/svg+xml' ? getimagesize(Storage::disk('temp')->path($filename)) : true)
+            && Str::contains($mimeType, $extension, true);
+
+        Storage::disk('temp')->delete($filename);
+
+        return $isValid;
     }
 }

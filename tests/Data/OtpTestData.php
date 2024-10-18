@@ -32,7 +32,9 @@ class OtpTestData
 
     const COUNTER_CUSTOM = 5;
 
-    const IMAGE = 'https%3A%2F%2Fen.opensuse.org%2Fimages%2F4%2F44%2FButton-filled-colour.png';
+    const EXTERNAL_IMAGE_URL_DECODED = 'https://en.opensuse.org/images/4/44/Button-filled-colour.png';
+
+    const EXTERNAL_IMAGE_URL_ENCODED = 'https%3A%2F%2Fen.opensuse.org%2Fimages%2F4%2F44%2FButton-filled-colour.png';
 
     const ICON_PNG = 'test.png';
 
@@ -56,6 +58,10 @@ class OtpTestData
 
     const ICON_SVG_DATA_ENCODED = 'PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDI0IDEwMjQiPg0KICAgPGNpcmNsZSBjeD0iNTEyIiBjeT0iNTEyIiByPSI1MTIiIHN0eWxlPSJmaWxsOiMwMDBlOWMiLz4NCiAgIDxwYXRoIGQ9Im03MDAuMiA0NjYuNSA2MS4yLTEwNi4zYzIzLjYgNDEuNiAzNy4yIDg5LjggMzcuMiAxNDEuMSAwIDY4LjgtMjQuMyAxMzEuOS02NC43IDE4MS40SDU3NS44bDQ4LjctODQuNmgtNjQuNGw3NS44LTEzMS43IDY0LjMuMXptLTU1LjQtMTI1LjJMNDQ4LjMgNjgyLjVsLjEuMkgyOTAuMWMtNDAuNS00OS41LTY0LjctMTEyLjYtNjQuNy0xODEuNCAwLTUxLjQgMTMuNi05OS42IDM3LjMtMTQxLjNsMTAyLjUgMTc4LjIgMTEzLjMtMTk3aDE2Ni4zeiIgc3R5bGU9ImZpbGw6I2ZmZiIvPg0KPC9zdmc+DQo=';
 
+    const ICON_GIF = 'test.gif';
+
+    const ICON_GIF_DATA = 'R0lGODlhAQACAPcAAAAAAAAAMwAAZgAAmQAAzAAA/wArAAArMwArZgArmQArzAAr/wBVAABVMwBVZgBVmQBVzABV/wCAAACAMwCAZgCAmQCAzACA/wCqAACqMwCqZgCqmQCqzACq/wDVAADVMwDVZgDVmQDVzADV/wD/AAD/MwD/ZgD/mQD/zAD//zMAADMAMzMAZjMAmTMAzDMA/zMrADMrMzMrZjMrmTMrzDMr/zNVADNVMzNVZjNVmTNVzDNV/zOAADOAMzOAZjOAmTOAzDOA/zOqADOqMzOqZjOqmTOqzDOq/zPVADPVMzPVZjPVmTPVzDPV/zP/ADP/MzP/ZjP/mTP/zDP//2YAAGYAM2YAZmYAmWYAzGYA/2YrAGYrM2YrZmYrmWYrzGYr/2ZVAGZVM2ZVZmZVmWZVzGZV/2aAAGaAM2aAZmaAmWaAzGaA/2aqAGaqM2aqZmaqmWaqzGaq/2bVAGbVM2bVZmbVmWbVzGbV/2b/AGb/M2b/Zmb/mWb/zGb//5kAAJkAM5kAZpkAmZkAzJkA/5krAJkrM5krZpkrmZkrzJkr/5lVAJlVM5lVZplVmZlVzJlV/5mAAJmAM5mAZpmAmZmAzJmA/5mqAJmqM5mqZpmqmZmqzJmq/5nVAJnVM5nVZpnVmZnVzJnV/5n/AJn/M5n/Zpn/mZn/zJn//8wAAMwAM8wAZswAmcwAzMwA/8wrAMwrM8wrZswrmcwrzMwr/8xVAMxVM8xVZsxVmcxVzMxV/8yAAMyAM8yAZsyAmcyAzMyA/8yqAMyqM8yqZsyqmcyqzMyq/8zVAMzVM8zVZszVmczVzMzV/8z/AMz/M8z/Zsz/mcz/zMz///8AAP8AM/8AZv8Amf8AzP8A//8rAP8rM/8rZv8rmf8rzP8r//9VAP9VM/9VZv9Vmf9VzP9V//+AAP+AM/+AZv+Amf+AzP+A//+qAP+qM/+qZv+qmf+qzP+q///VAP/VM//VZv/Vmf/VzP/V////AP//M///Zv//mf//zP///wAAAAAAAAAAAAAAACH5BAEAAPwALAAAAAABAAIAAAgFAPftCwgAOw==';
+
     const TOTP_FULL_CUSTOM_URI_NO_IMG = 'otpauth://totp/' . self::SERVICE . ':' . self::ACCOUNT . '?secret=' . self::SECRET . '&issuer=' . self::SERVICE . '&digits=' . self::DIGITS_CUSTOM . '&period=' . self::PERIOD_CUSTOM . '&algorithm=' . self::ALGORITHM_CUSTOM;
 
     const MICROSOFT = 'Microsoft';
@@ -64,17 +70,21 @@ class OtpTestData
 
     const TOTP_MICROSOFT_CORPORATE_URI_MISMATCHING_ISSUER = 'otpauth://totp/' . self::ORGANIZATION . ':' . self::ACCOUNT . '?secret=' . self::SECRET . '&issuer=' . self::MICROSOFT;
 
-    const TOTP_FULL_CUSTOM_URI = self::TOTP_FULL_CUSTOM_URI_NO_IMG . '&image=' . self::IMAGE;
+    const TOTP_FULL_CUSTOM_URI = self::TOTP_FULL_CUSTOM_URI_NO_IMG . '&image=' . self::EXTERNAL_IMAGE_URL_ENCODED;
 
     const HOTP_FULL_CUSTOM_URI_NO_IMG = 'otpauth://hotp/' . self::SERVICE . ':' . self::ACCOUNT . '?secret=' . self::SECRET . '&issuer=' . self::SERVICE . '&digits=' . self::DIGITS_CUSTOM . '&counter=' . self::COUNTER_CUSTOM . '&algorithm=' . self::ALGORITHM_CUSTOM;
 
-    const HOTP_FULL_CUSTOM_URI = self::HOTP_FULL_CUSTOM_URI_NO_IMG . '&image=' . self::IMAGE;
+    const HOTP_FULL_CUSTOM_URI = self::HOTP_FULL_CUSTOM_URI_NO_IMG . '&image=' . self::EXTERNAL_IMAGE_URL_ENCODED;
 
     const TOTP_SHORT_URI = 'otpauth://totp/' . self::ACCOUNT . '?secret=' . self::SECRET;
 
     const HOTP_SHORT_URI = 'otpauth://hotp/' . self::ACCOUNT . '?secret=' . self::SECRET;
 
-    const TOTP_URI_WITH_UNREACHABLE_IMAGE = 'otpauth://totp/service:account?secret=A4GRFHVVRBGY7UIW&image=https%3A%2F%2Fen.opensuse.org%2Fimage.png';
+    const UNREACHABLE_IMAGE_URL = 'https%3A%2F%2Fen.opensuse.org%2Fimage.png';
+
+    const UNREACHABLE_IMAGE_URL_DECODED = 'https://en.opensuse.or/image.png';
+
+    const TOTP_URI_WITH_UNREACHABLE_IMAGE = 'otpauth://totp/service:account?secret=A4GRFHVVRBGY7UIW&image=' . self::UNREACHABLE_IMAGE_URL;
 
     const INVALID_OTPAUTH_URI = 'otpauth://Xotp/' . self::ACCOUNT . '?secret=' . self::SECRET;
 

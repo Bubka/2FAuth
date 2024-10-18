@@ -13,6 +13,7 @@ return [
     |
     */
 
+    // TODO : disable this env var and make driver be set from admin panel
     'default' => env('FILESYSTEM_DISK', env('FILESYSTEM_DRIVER', 'local')),
 
     /*
@@ -41,6 +42,18 @@ return [
             'root' => storage_path('app/public/icons'),
             'url' => env('APP_URL').'/storage/icons',
             'visibility' => 'public',
+            'throw' => false,
+        ],
+
+        // 'tempicons' => [
+        //     'driver' => 'local',
+        //     'root' => storage_path('app/tempicons'),
+        //     'throw' => false,
+        // ],
+
+        'temp' => [
+            'driver' => 'local',
+            'root' => storage_path('app/temp'),
             'throw' => false,
         ],
 

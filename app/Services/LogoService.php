@@ -2,14 +2,14 @@
 
 namespace App\Services;
 
+use App\Facades\IconStore;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 class LogoService
-{
+{    
     /**
      * @var \Illuminate\Support\Collection<string, string>
      */
@@ -25,6 +25,14 @@ class LogoService
      */
     const TFA_URL = 'https://2fa.directory/api/v3/tfa.json';
 
+    /**
+     * @var string
+     */
+    const TFA_IMG_URL = 'https://raw.githubusercontent.com/2factorauth/twofactorauth/master/img/';
+
+    /**
+     * 
+     */
     public function __construct()
     {
         $this->setTfaCollection();
@@ -41,9 +49,10 @@ class LogoService
         $logoFilename = $this->getLogo(strval($serviceName));
 
         if ($logoFilename) {
-            $iconFilename = Str::random(40) . '.svg';
+            // $iconFilename = IconService::getRandomName('svg');
+            $iconFilename = \Illuminate\Support\Str::random(40) . '.svg';
 
-            return $this->copyToIcons($logoFilename, $iconFilename) ? $iconFilename : null;
+            return $this->copyToIconStore($logoFilename, $iconFilename) ? $iconFilename : null;
         } else {
             return null;
         }
@@ -121,7 +130,7 @@ class LogoService
         try {
             $response = Http::withOptions([
                 'proxy' => config('2fauth.config.outgoingProxy'),
-            ])->retry(3, 100)->get('https://raw.githubusercontent.com/2factorauth/twofactorauth/master/img/' . $logoFile[0] . '/' . $logoFile);
+            ])->retry(3, 100)->get(self::TFA_IMG_URL . $logoFile[0] . '/' . $logoFile);
 
             if ($response->successful()) {
                 Storage::disk('logos')->put($logoFile, $response->body())
@@ -144,14 +153,18 @@ class LogoService
     }
 
     /**
-     * Copy a logo file to the icons disk with a new name
+     * Copy a logo file to the icons store with a new name
      *
      * @param  string  $logoFilename
      * @param  string  $iconFilename
-     * @return bool Weither the copy succed or not
+     * @return bool  Whether the copy succeed or not
      */
-    protected function copyToIcons($logoFilename, $iconFilename) : bool
+    protected function copyToIconStore($logoFilename, $iconFilename) : bool
     {
-        return Storage::disk('icons')->put($iconFilename, Storage::disk('logos')->get($logoFilename));
+        if ($content = Storage::disk('logos')->get($logoFilename)) {
+            return IconStore::store($iconFilename, $content);
+        }
+
+        return false;
     }
 }

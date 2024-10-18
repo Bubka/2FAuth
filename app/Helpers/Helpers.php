@@ -2,6 +2,8 @@
 
 namespace App\Helpers;
 
+use Illuminate\Support\Str;
+
 class Helpers
 {
     /**
@@ -38,5 +40,13 @@ class Helpers
         }
 
         return $ids;
+    }
+
+    /**
+     * Generate a unique filename with the given extension
+     */
+    public static function getRandomFilename(string $extension, int $length = 40) : string
+    {
+        return Str::random($length) . '.' . $extension;
     }
 }
