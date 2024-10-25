@@ -24,8 +24,6 @@ class CleanIconStorageTest extends TestCase
     #[Test]
     public function test_it_deletes_icon_file_using_the_iconstore()
     {
-        // TODO : Reuse the following mock as a global read-only
-        // SettingService mock for all tests, or create a dedicated stub
         $this->mock(SettingService::class, function (MockInterface $iconStore) {
             foreach (config('2fauth.settings') as $setting => $value) {
                 $iconStore->shouldReceive('get')

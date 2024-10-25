@@ -4,6 +4,7 @@ namespace Tests\Unit\Exceptions;
 
 use App\Exceptions\DbEncryptionException;
 use App\Exceptions\EncryptedMigrationException;
+use App\Exceptions\FailedIconStoreDatabaseTogglingException;
 use App\Exceptions\Handler;
 use App\Exceptions\InvalidMigrationDataException;
 use App\Exceptions\InvalidOtpParameterException;
@@ -54,6 +55,18 @@ class HandlerTest extends TestCase
     {
         return [
             [
+                DbEncryptionException::class,
+            ],
+            [
+                EncryptedMigrationException::class,
+            ],
+            [
+                FailedIconStoreDatabaseTogglingException::class,
+            ],
+            [
+                InvalidMigrationDataException::class,
+            ],
+            [
                 InvalidOtpParameterException::class,
             ],
             [
@@ -63,12 +76,6 @@ class HandlerTest extends TestCase
                 InvalidSecretException::class,
             ],
             [
-                DbEncryptionException::class,
-            ],
-            [
-                InvalidMigrationDataException::class,
-            ],
-            [
                 UndecipherableException::class,
             ],
             [
@@ -76,9 +83,6 @@ class HandlerTest extends TestCase
             ],
             [
                 UnsupportedOtpTypeException::class,
-            ],
-            [
-                EncryptedMigrationException::class,
             ],
         ];
     }
