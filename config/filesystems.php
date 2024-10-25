@@ -13,7 +13,6 @@ return [
     |
     */
 
-    // TODO : disable this env var and make driver be set from admin panel
     'default' => env('FILESYSTEM_DISK', env('FILESYSTEM_DRIVER', 'local')),
 
     /*
