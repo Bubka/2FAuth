@@ -47,6 +47,11 @@ class TwoFAccountModelTest extends FeatureTestCase
     {
         parent::setUp();
 
+        Storage::fake('imagesLink');
+        Storage::fake('icons');
+        
+        Http::preventStrayRequests();
+
         /** @var \Illuminate\Contracts\Auth\Authenticatable $user */
         $this->user = User::factory()->create();
         $this->actingAs($this->user, 'api-guard');
@@ -95,14 +100,9 @@ class TwoFAccountModelTest extends FeatureTestCase
     {
         $file = (new FileFactory)->image('file.png', 10, 10);
 
-        // TODO: set preventStrayRequests in parent class to ensure all tests use a fake
-        Http::preventStrayRequests();
         Http::fake([
             OtpTestData::EXTERNAL_IMAGE_URL_DECODED => Http::response($file->tempFile, 200),
         ]);
-
-        Storage::fake('imagesLink');
-        Storage::fake('icons');
 
         $twofaccount = new TwoFAccount;
         $twofaccount->fillWithURI(OtpTestData::TOTP_FULL_CUSTOM_URI);
@@ -162,13 +162,9 @@ class TwoFAccountModelTest extends FeatureTestCase
     {
         $file = (new FileFactory)->image('file.png', 10, 10);
 
-        Http::preventStrayRequests();
         Http::fake([
             OtpTestData::EXTERNAL_IMAGE_URL_DECODED => Http::response($file->tempFile, 200),
         ]);
-
-        Storage::fake('imagesLink');
-        Storage::fake('icons');
 
         $twofaccount = new TwoFAccount;
         $twofaccount->fillWithURI(OtpTestData::HOTP_FULL_CUSTOM_URI);
@@ -464,13 +460,9 @@ class TwoFAccountModelTest extends FeatureTestCase
     #[Test]
     public function test_getOTP_for_totp_returns_the_same_password()
     {
-        Http::preventStrayRequests();
         Http::fake([
             OtpTestData::EXTERNAL_IMAGE_URL_DECODED => Http::response(HttpRequestTestData::ICON_PNG, 200),
         ]);
-
-        Storage::fake('imagesLink');
-        Storage::fake('icons');
 
         $twofaccount = new TwoFAccount;
 
@@ -492,13 +484,9 @@ class TwoFAccountModelTest extends FeatureTestCase
     #[Test]
     public function test_getOTP_for_hotp_returns_the_same_password()
     {
-        Http::preventStrayRequests();
         Http::fake([
             OtpTestData::EXTERNAL_IMAGE_URL_DECODED => Http::response(HttpRequestTestData::ICON_PNG, 200),
         ]);
-
-        Storage::fake('imagesLink');
-        Storage::fake('icons');
 
         $twofaccount = new TwoFAccount;
 
@@ -585,13 +573,9 @@ class TwoFAccountModelTest extends FeatureTestCase
     #[Test]
     public function test_fill_succeed_when_image_fetching_fails()
     {
-        Http::preventStrayRequests();
         Http::fake([
             OtpTestData::EXTERNAL_IMAGE_URL_DECODED => new \Exception,
         ]);
-
-        Storage::fake('imagesLink');
-        Storage::fake('icons');
 
         $twofaccount = new TwoFAccount;
         $twofaccount->fillWithURI(OtpTestData::TOTP_FULL_CUSTOM_URI);
@@ -684,6 +668,10 @@ class TwoFAccountModelTest extends FeatureTestCase
     #[Test]
     public function test_scopeOrphans_retreives_accounts_without_owner()
     {
+        Http::fake([
+            OtpTestData::EXTERNAL_IMAGE_URL_DECODED => Http::response(HttpRequestTestData::ICON_PNG, 200),
+        ]);
+        
         $orphan = new TwoFAccount;
         $orphan->fillWithURI(OtpTestData::HOTP_FULL_CUSTOM_URI);
         $orphan->save();

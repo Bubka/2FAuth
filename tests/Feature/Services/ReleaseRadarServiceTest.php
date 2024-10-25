@@ -23,12 +23,18 @@ class ReleaseRadarServiceTest extends FeatureTestCase
 {
     use WithoutMiddleware;
 
+    public function setUp() : void
+    {
+        parent::setUp();
+
+        Http::preventStrayRequests();
+    }
+
     #[Test]
     public function test_manualScan_returns_no_new_release()
     {
         $url = config('2fauth.latestReleaseUrl');
 
-        Http::preventStrayRequests();
         Http::fake([
             $url => Http::response(HttpRequestTestData::LATEST_RELEASE_BODY_NO_NEW_RELEASE, 200),
         ]);
@@ -48,7 +54,6 @@ class ReleaseRadarServiceTest extends FeatureTestCase
     {
         $url = config('2fauth.latestReleaseUrl');
 
-        Http::preventStrayRequests();
         Http::fake([
             $url => Http::response(HttpRequestTestData::LATEST_RELEASE_BODY_NEW_RELEASE, 200),
         ]);
@@ -66,8 +71,9 @@ class ReleaseRadarServiceTest extends FeatureTestCase
     #[Test]
     public function test_manualScan_complete_when_http_call_fails()
     {
-        // We do not fake the http request so an exception will be thrown
-        Http::preventStrayRequests();
+        Http::fake([
+            config('2fauth.latestReleaseUrl') => Http::response('not found', 404),
+        ]);
 
         $this->assertNull(ReleaseRadarService::manualScan());
     }
@@ -77,9 +83,8 @@ class ReleaseRadarServiceTest extends FeatureTestCase
     {
         $url = config('2fauth.latestReleaseUrl');
 
-        Http::preventStrayRequests();
         Http::fake([
-            $url => Http::response(null, 400),
+            $url => Http::response(null, 404),
         ]);
 
         $this->assertNull(ReleaseRadarService::manualScan());
@@ -90,7 +95,6 @@ class ReleaseRadarServiceTest extends FeatureTestCase
     {
         $url = config('2fauth.latestReleaseUrl');
 
-        Http::preventStrayRequests();
         Http::fake([
             $url => Http::response(HttpRequestTestData::LATEST_RELEASE_BODY_NEW_RELEASE, 200),
         ]);
@@ -118,7 +122,6 @@ class ReleaseRadarServiceTest extends FeatureTestCase
     {
         $url = config('2fauth.latestReleaseUrl');
 
-        Http::preventStrayRequests();
         Http::fake([
             $url => Http::response(HttpRequestTestData::LATEST_RELEASE_BODY_NEW_RELEASE, 200),
         ]);
@@ -144,8 +147,11 @@ class ReleaseRadarServiceTest extends FeatureTestCase
     #[Test]
     public function test_scheduleScan_complete_when_http_call_fails()
     {
-        // We do not fake the http request so an exception will be thrown
-        Http::preventStrayRequests();
+        $url = config('2fauth.latestReleaseUrl');
+
+        Http::fake([
+            $url => Http::response(null, 404),
+        ]);
 
         $this->assertNull(ReleaseRadarService::scheduledScan());
     }

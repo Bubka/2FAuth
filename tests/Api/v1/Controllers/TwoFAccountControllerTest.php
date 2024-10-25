@@ -235,6 +235,9 @@ class TwoFAccountControllerTest extends FeatureTestCase
         Http::fake([
             OtpTestData::EXTERNAL_IMAGE_URL_DECODED => Http::response((new FileFactory)->image('file.png', 10, 10)->tempFile, 200),
         ]);
+        Http::fake([
+            'example.com/*' => Http::response(null, 400),
+        ]);
 
         $this->user       = User::factory()->create();
         $this->userGroupA = Group::factory()->for($this->user)->create();
@@ -1193,7 +1196,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
     public function test_preview_with_unreachable_image_returns_success_with_no_icon()
     {
         $this->user['preferences->getOfficialIcons'] = false;
-        
+
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts/preview', [
                 'uri' => OtpTestData::TOTP_URI_WITH_UNREACHABLE_IMAGE,

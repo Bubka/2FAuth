@@ -5,13 +5,25 @@ namespace Tests\Feature;
 use App\Events\ScanForNewReleaseCalled;
 use App\Http\Controllers\SinglePageController;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Http;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Data\HttpRequestTestData;
 use Tests\FeatureTestCase;
 
 #[CoversClass(SinglePageController::class)]
 class ViewTest extends FeatureTestCase
 {
+    public function setUp() : void
+    {
+        parent::setUp();
+
+        Http::preventStrayRequests();
+        Http::fake([
+            config('2fauth.latestReleaseUrl') => Http::response(HttpRequestTestData::LATEST_RELEASE_BODY_NO_NEW_RELEASE),
+        ]);
+    }
+
     #[Test]
     public function test_landing_view_is_returned()
     {

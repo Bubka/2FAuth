@@ -200,7 +200,11 @@ class IconServiceTest extends FeatureTestCase
     #[Test]
     public function test_buildFromRemoteImage_returns_null_when_remote_img_is_unreachable()
     {
-        $imageUrl = 'https://icon.png';
+        Http::fake([
+            'example.com/*' => Http::response(null, 400),
+        ]);
+        
+        $imageUrl = 'https://www.example.com/image.png';
 
         $this->iconService = $this->app->make(IconService::class);
         $iconName = $this->iconService->buildFromRemoteImage($imageUrl);

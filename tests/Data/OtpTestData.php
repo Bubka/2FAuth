@@ -80,9 +80,9 @@ class OtpTestData
 
     const HOTP_SHORT_URI = 'otpauth://hotp/' . self::ACCOUNT . '?secret=' . self::SECRET;
 
-    const UNREACHABLE_IMAGE_URL = 'https%3A%2F%2Fen.opensuse.org%2Fimage.png';
+    const UNREACHABLE_IMAGE_URL = 'https%3A%2F%2Fwww.example.com%2Fimage.png';
 
-    const UNREACHABLE_IMAGE_URL_DECODED = 'https://en.opensuse.or/image.png';
+    const UNREACHABLE_IMAGE_URL_DECODED = 'https://www.example.com/image.png';
 
     const TOTP_URI_WITH_UNREACHABLE_IMAGE = 'otpauth://totp/service:account?secret=A4GRFHVVRBGY7UIW&image=' . self::UNREACHABLE_IMAGE_URL;
 
