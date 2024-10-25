@@ -3,7 +3,6 @@
 namespace App\Services\Migrators;
 
 use App\Exceptions\InvalidMigrationDataException;
-use App\Facades\TwoFAccounts;
 use App\Services\IconService;
 use App\Models\TwoFAccount;
 use Illuminate\Support\Arr;

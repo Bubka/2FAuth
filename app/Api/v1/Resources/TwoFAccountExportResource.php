@@ -4,7 +4,6 @@ namespace App\Api\v1\Resources;
 
 use App\Facades\IconStore;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Storage;
 
 /**
  * @property mixed $otp_type

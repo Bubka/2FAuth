@@ -95,15 +95,6 @@
         })
     }
 
-    /**
-     * Deletes a user
-     */
-    function deleteUser(userId) {
-        if(confirm(trans('admin.confirm.delete_user'))) {
-            // TODO
-        }
-    }
-
     onBeforeRouteLeave((to) => {
         if (! to.name.startsWith('admin.')) {
             notify.clear()

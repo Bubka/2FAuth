@@ -3,7 +3,6 @@
 namespace App\Rules;
 
 use Closure;
-use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Support\Facades\DB;
 

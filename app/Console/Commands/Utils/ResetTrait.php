@@ -3,7 +3,6 @@
 namespace App\Console\Commands\Utils;
 
 use App\Facades\IconStore;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 
 trait ResetTrait
