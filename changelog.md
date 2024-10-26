@@ -1,5 +1,11 @@
 # Change log
 
+## [5.3.2] - 2024-10-26
+
+### Fixed
+
+- [issue #402](https://github.com/Bubka/2FAuth/issues/402) Error asking me to log out when using multiple devices, pressing back logs me in anyway
+
 ## [5.3.1] - 2024-10-12
 
 ### Fixed
