@@ -34,8 +34,9 @@ use Laravel\Passport\Http\Controllers\PersonalAccessTokenController;
 
 /**
  * Routes that only work for unauthenticated user (return an error otherwise)
+ * 'kickOutInactiveUser', 
  */
-Route::group(['middleware' => ['guest', 'rejectIfDemoMode', 'RejectIfSsoOnlyAndNotForAdmin']], function () {
+Route::group(['middleware' => ['rejectIfDemoMode', 'RejectIfSsoOnlyAndNotForAdmin', 'forceLogout']], function () {
     Route::post('user', [RegisterController::class, 'register'])->name('user.register');
     Route::post('user/password/lost', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('user.password.lost');
     Route::post('user/password/reset', [ResetPasswordController::class, 'reset'])->name('password.reset');
@@ -46,15 +47,15 @@ Route::group(['middleware' => ['guest', 'rejectIfDemoMode', 'RejectIfSsoOnlyAndN
 /**
  * Routes that can be requested max 10 times per minute by the same IP
  */
-Route::group(['middleware' => ['rejectIfDemoMode', 'throttle:10,1', 'RejectIfSsoOnlyAndNotForAdmin']], function () {
+Route::group(['middleware' => ['rejectIfDemoMode', 'throttle:10,1', 'RejectIfSsoOnlyAndNotForAdmin', 'forceLogout']], function () {
     Route::post('webauthn/recover', [WebAuthnRecoveryController::class, 'recover'])->name('webauthn.recover');
 });
 
 /**
  * Routes that only work for unauthenticated user (return an error otherwise)
- * that can be requested max 10 times per minute by the same IP
+ * that can be requested max 10 times per minute by the same IP 'kickOutInactiveUser', 
  */
-Route::group(['middleware' => ['guest', 'throttle:10,1']], function () {
+Route::group(['middleware' => ['forceLogout', 'throttle:10,1']], function () {
     Route::post('user/login', [LoginController::class, 'login'])->name('user.login')->middleware('RejectIfSsoOnlyAndNotForAdmin');
     Route::post('webauthn/login', [WebAuthnLoginController::class, 'login'])->name('webauthn.login')->middleware('RejectIfSsoOnlyAndNotForAdmin');
 

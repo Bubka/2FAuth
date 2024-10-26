@@ -250,10 +250,7 @@ class LoginTest extends FeatureTestCase
                 'email'    => $this->user->email,
                 'password' => self::PASSWORD,
             ])
-            ->assertStatus(400)
-            ->assertJsonStructure([
-                'message',
-            ]);
+            ->assertStatus(200);
     }
 
     #[Test]

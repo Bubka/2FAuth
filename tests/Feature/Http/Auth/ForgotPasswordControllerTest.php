@@ -95,7 +95,7 @@ class ForgotPasswordControllerTest extends FeatureTestCase
     }
 
     #[Test]
-    public function test_submit_email_password_request_when_authenticated_returns_bad_request()
+    public function test_submit_email_password_request_when_authenticated_returns_ok()
     {
         /**
          * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
@@ -106,7 +106,7 @@ class ForgotPasswordControllerTest extends FeatureTestCase
             ->json('POST', '/user/password/lost', [
                 'email' => $user->email,
             ])
-            ->assertStatus(400)
+            ->assertStatus(200)
             ->assertJsonStructure([
                 'message',
             ]);
