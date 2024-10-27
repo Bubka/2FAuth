@@ -45,7 +45,7 @@ class LogoutListener extends AbstractAccessListener
         $user = $event->user;
 
         if ($user != null) {
-            $ip   = config('2fauth.proxy_headers.forIp')
+            $ip = config('2fauth.proxy_headers.forIp')
                 ? $this->request->header(config('2fauth.proxy_headers.forIp'), $this->request->ip())
                 : $this->request->ip();
             $userAgent = $this->request->userAgent();
@@ -66,7 +66,7 @@ class LogoutListener extends AbstractAccessListener
             }
 
             $log->logout_at = now();
-            $user->authentications()->save($log);  
+            $user->authentications()->save($log);
         }
     }
 }

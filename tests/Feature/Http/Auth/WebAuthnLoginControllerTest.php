@@ -275,7 +275,7 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
             ->assertOk();
 
         $this->json('POST', '/webauthn/login', self::ASSERTION_RESPONSE)
-            ->assertStatus(200);;
+            ->assertStatus(200);
     }
 
     #[Test]

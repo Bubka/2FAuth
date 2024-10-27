@@ -33,8 +33,7 @@ use Laravel\Passport\Http\Controllers\PersonalAccessTokenController;
 */
 
 /**
- * Routes that only work for unauthenticated user (return an error otherwise)
- * 'kickOutInactiveUser', 
+ * Routes that only work for unauthenticated user (otherwise, the user is logged out)
  */
 Route::group(['middleware' => ['rejectIfDemoMode', 'RejectIfSsoOnlyAndNotForAdmin', 'forceLogout']], function () {
     Route::post('user', [RegisterController::class, 'register'])->name('user.register');
@@ -52,8 +51,8 @@ Route::group(['middleware' => ['rejectIfDemoMode', 'throttle:10,1', 'RejectIfSso
 });
 
 /**
- * Routes that only work for unauthenticated user (return an error otherwise)
- * that can be requested max 10 times per minute by the same IP 'kickOutInactiveUser', 
+ * Routes that only work for unauthenticated user (otherwise, the user is logged out)
+ * that can be requested max 10 times per minute by the same IP
  */
 Route::group(['middleware' => ['forceLogout', 'throttle:10,1']], function () {
     Route::post('user/login', [LoginController::class, 'login'])->name('user.login')->middleware('RejectIfSsoOnlyAndNotForAdmin');
