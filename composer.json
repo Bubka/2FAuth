@@ -98,16 +98,24 @@
         ],
         "test": [
             "php artisan config:clear",
-            "php artisan test --parallel"
+            "vendor/bin/phpunit",
+            "php artisan config:clear"
+        ],
+        "test-para": [
+            "php artisan config:clear",
+            "php artisan test --parallel",
+            "php artisan config:clear"
         ],
         "test-mysql": [
             "php artisan config:clear",
-            "vendor/bin/phpunit -c phpunit-mysql.xml"
+            "vendor/bin/phpunit -c phpunit-mysql.xml",
+            "php artisan config:clear"
         ],
         "test-coverage-html": [
             "@putenv XDEBUG_MODE=coverage",
             "php artisan config:clear",
-            "vendor/bin/phpunit --coverage-html tests/Coverage/"
+            "vendor/bin/phpunit --coverage-html tests/Coverage/",
+            "php artisan config:clear"
         ],
         "ide-helper": [
             "php artisan config:clear",
