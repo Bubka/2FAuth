@@ -14,7 +14,7 @@ class ResetTesting extends Command
      *
      * @var string
      */
-    protected $signature = '2fauth:reset-testing {--no-confirm}';
+    protected $signature = '2fauth:reset-testing {--no-confirm} {--force}';
 
     /**
      * The console command description.
@@ -47,7 +47,9 @@ class ResetTesting extends Command
      */
     public function handle()
     {
-        if (! config('2fauth.config.isTestingApp')) {
+        $this->callSilently('config:clear');
+        
+        if (! config('2fauth.config.isTestingApp') && ! $this->option('force')) {
             $this->comment('2fauth:reset-testing can only run when isTestingApp option is On');
 
             return;
