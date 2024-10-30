@@ -11,7 +11,7 @@ return [
 
     'start' => 'Nieuw account',
     'capture' => 'Flash QR',
-    'accounts' => 'Accountss',
+    'accounts' => 'Accounts',
     'createAccount' => 'Account aanmaken',
     'importAccounts' => 'Importeer accounts',
     'editAccount' => 'Account wijzigen',
