@@ -134,6 +134,7 @@ return [
         'sortCaseSensitive' => false,
         'autoCloseTimeout' => 2,
         'AutoSaveQrcodedAccount' => false,
+        'showEmailInFooter' => true,
     ],
 
 ];

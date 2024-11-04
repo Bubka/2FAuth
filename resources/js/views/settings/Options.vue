@@ -147,6 +147,8 @@
                         <FormCheckbox v-model="user.preferences.clearSearchOnCopy" @update:model-value="val => savePreference('clearSearchOnCopy', val)" fieldName="clearSearchOnCopy" label="settings.forms.clear_search_on_copy.label" help="settings.forms.clear_search_on_copy.help" />
                         <!-- sort case sensitive -->
                         <FormCheckbox v-model="user.preferences.sortCaseSensitive" @update:model-value="val => savePreference('sortCaseSensitive', val)" fieldName="sortCaseSensitive" label="settings.forms.sort_case_sensitive.label" help="settings.forms.sort_case_sensitive.help" />
+                        <!-- show email in footer -->
+                        <FormCheckbox v-model="user.preferences.showEmailInFooter" @update:model-value="val => savePreference('showEmailInFooter', val)" fieldName="showEmailInFooter" label="settings.forms.show_email_in_footer.label" help="settings.forms.show_email_in_footer.help" />
                         
                         <h4 class="title is-4 pt-4 has-text-grey-light">{{ $t('groups.groups') }}</h4>
                         <!-- default group -->
