@@ -7,6 +7,10 @@
             type: Boolean,
             default: true
         },
+        isFullHeight:  {
+            type: Boolean,
+            default: false
+        }
     })
 
     const emit = defineEmits(['update:modelValue'])
@@ -29,7 +33,12 @@
 <template>
     <div class="modal modal-otp" v-bind:class="{ 'is-active': isActive }">
         <div class="modal-background" @click.stop="closeModal"></div>
-        <div class="modal-content">
+        <div v-if="isFullHeight" class="modal-content modal-with-footer">
+            <div class="modal-slot p-4 has-text-centered">
+                <slot></slot>
+            </div>
+        </div>
+        <div v-else class="modal-content modal-with-footer">
             <section class="section">
                 <div class="columns is-centered">
                     <div class="column is-three-quarters">

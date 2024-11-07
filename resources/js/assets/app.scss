@@ -109,6 +109,13 @@ a:hover {
   z-index: 2000;
 }
 
+@media screen and (max-height: 700px) {
+  .modal-with-footer {
+    margin-bottom: 9rem;
+    max-height: none !important;
+  }
+}
+
 .otp:focus-visible {
   outline-offset: 3px;
   outline: 2px dotted $dark;
