@@ -4,6 +4,7 @@ namespace App\Api\v1\Controllers;
 
 use App\Api\v1\Requests\TwoFAccountBatchRequest;
 use App\Api\v1\Requests\TwoFAccountDynamicRequest;
+use App\Api\v1\Requests\TwoFAccountExportRequest;
 use App\Api\v1\Requests\TwoFAccountImportRequest;
 use App\Api\v1\Requests\TwoFAccountIndexRequest;
 use App\Api\v1\Requests\TwoFAccountReorderRequest;
@@ -184,7 +185,7 @@ class TwoFAccountController extends Controller
      *
      * @return TwoFAccountExportCollection|\Illuminate\Http\JsonResponse
      */
-    public function export(TwoFAccountBatchRequest $request)
+    public function export(TwoFAccountExportRequest $request)
     {
         $validated = $request->validated();
 

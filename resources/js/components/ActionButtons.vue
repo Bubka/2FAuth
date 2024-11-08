@@ -71,7 +71,7 @@
                 :disabled='areDisabled' class="button is-rounded"
                 :class="[{ 'is-outlined': mode == 'dark' || areDisabled }, areDisabled ? 'is-dark': 'is-link']"
                 @click="$emit('export-button-clicked')"
-                :title="$t('twofaccounts.export_selected_to_json')" >
+                :title="$t('twofaccounts.export_selected_accounts')" >
                     {{ $t('commons.export') }}
             </button>
         </p>

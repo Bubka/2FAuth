@@ -7,6 +7,7 @@
     import Toolbar from '@/components/Toolbar.vue'
     import OtpDisplay from '@/components/OtpDisplay.vue'
     import ActionButtons from '@/components/ActionButtons.vue'
+    import ExportButtons from '@/components/ExportButtons.vue'
     import Dots from '@/components/Dots.vue'
     import { UseColorMode } from '@vueuse/components'
     import { useUserStore } from '@/stores/user'
@@ -29,6 +30,7 @@
     const groups = useGroups()
 
     const showOtpInModal = ref(false)
+    const showExportFormatSelector = ref(false)
     const showGroupSwitch = ref(false)
     const showDestinationGroupSelector = ref(false)
     const isDragging = ref(false)
@@ -357,7 +359,14 @@
                 </div>
             </div>
         </div>
-        <!-- modal -->
+        <!-- export modal -->
+        <Modal v-model="showExportFormatSelector" :isFullHeight="true">
+            <ExportButtons
+                @export-twofauth-format="twofaccounts.export()"
+                @export-otpauth-format="twofaccounts.export('otpauth')">
+            </ExportButtons>
+        </Modal>
+        <!-- otp modal -->
         <Modal v-model="showOtpInModal">
             <OtpDisplay
                 ref="otpDisplay"
@@ -467,7 +476,7 @@
                     :areDisabled="twofaccounts.hasNoneSelected"
                     @move-button-clicked="showDestinationGroupSelector = true"
                     @delete-button-clicked="deleteAccounts"
-                    @export-button-clicked="twofaccounts.export()">
+                    @export-button-clicked="showExportFormatSelector = true">
                 </ActionButtons>
             </VueFooter>
         </div>

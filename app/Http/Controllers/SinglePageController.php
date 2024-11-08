@@ -31,6 +31,7 @@ class SinglePageController extends Controller
         $githubAuth         = config('services.github.client_secret') ? true : false;
         $installDocUrl      = config('2fauth.installDocUrl');
         $ssoDocUrl          = config('2fauth.ssoDocUrl');
+        $exportSchemaUrl    = config('2fauth.exportSchemaUrl');
 
         // if (Auth::user()->preferences)
 
@@ -46,8 +47,9 @@ class SinglePageController extends Controller
                 'subdirectory' => $subdir,
             ])->toJson(),
             'urls' => collect([
-                'installDocUrl' => $installDocUrl,
-                'ssoDocUrl'     => $ssoDocUrl,
+                'installDocUrl'   => $installDocUrl,
+                'ssoDocUrl'       => $ssoDocUrl,
+                'exportSchemaUrl' => $exportSchemaUrl,
             ]),
             'defaultPreferences' => $defaultPreferences,
             'subdirectory'       => $subdir,

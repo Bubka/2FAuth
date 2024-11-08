@@ -163,12 +163,25 @@ export const useTwofaccounts = defineStore({
         /**
          * Exports selected accounts to a json file
          */
-        export() {
-            twofaccountService.export(this.selectedIds.join(), {responseType: 'blob'})
-            .then((response) => {
-                var blob = new Blob([response.data], {type: "application/json;charset=utf-8"});
-                saveAs.saveAs(blob, "2fauth_export.json");
-            })
+        export(format = '2fauth') {
+            if (format == 'otpauth') {
+                twofaccountService.export(this.selectedIds.join(), true)
+                .then((response) => {
+                    let uris = []
+                    response.data.data.forEach(account => {
+                        uris.push(account.uri)
+                    });
+                    var blob = new Blob([uris.join('\n')], {type: "text/plain;charset=utf-8"});
+                    saveAs.saveAs(blob, "2fauth_export_otpauth.txt");
+                })
+            }
+            else {
+                twofaccountService.export(this.selectedIds.join(), false, {responseType: 'blob'})
+                .then((response) => {
+                    var blob = new Blob([response.data], {type: "application/json;charset=utf-8"});
+                    saveAs.saveAs(blob, "2fauth_export.json");
+                })
+            }
         },
 
         /**

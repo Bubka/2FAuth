@@ -166,7 +166,18 @@ class TwoFAccountControllerTest extends FeatureTestCase
                 'period',
                 'counter',
                 'legacy_uri',
-            ], ],
+            ],
+        ],
+    ];
+
+    private const VALID_EXPORT_AS_URIS_STRUTURE = [
+        'app',
+        'datetime',
+        'data' => [
+            '*' => [
+                'uri',
+            ],
+        ],
     ];
 
     private const JSON_FRAGMENTS_FOR_CUSTOM_TOTP = [
@@ -1215,6 +1226,34 @@ class TwoFAccountControllerTest extends FeatureTestCase
 
         $this->actingAs($this->user, 'api-guard')
             ->json('GET', '/api/v1/twofaccounts/export?ids=' . $this->twofaccountA->id . ',' . $this->twofaccountB->id)
+            ->assertOk()
+            ->assertJsonStructure(self::VALID_EXPORT_STRUTURE)
+            ->assertJsonFragment(self::JSON_FRAGMENTS_FOR_DEFAULT_TOTP)
+            ->assertJsonFragment(self::JSON_FRAGMENTS_FOR_DEFAULT_HOTP);
+    }
+
+    #[Test]
+    public function test_export_returns_plain_text_with_otpauth_uris()
+    {
+        $this->twofaccountA = TwoFAccount::factory()->for($this->user)->create(self::JSON_FRAGMENTS_FOR_DEFAULT_TOTP);
+        $this->twofaccountB = TwoFAccount::factory()->for($this->user)->create(self::JSON_FRAGMENTS_FOR_DEFAULT_HOTP);
+
+        $this->actingAs($this->user, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/export?ids=' . $this->twofaccountA->id . ',' . $this->twofaccountB->id . '&otpauth=1')
+            ->assertOk()
+            ->assertJsonStructure(self::VALID_EXPORT_AS_URIS_STRUTURE)
+            ->assertJsonFragment(['uri' => $this->twofaccountA->getURI()])
+            ->assertJsonFragment(['uri' => $this->twofaccountB->getURI()]);
+    }
+
+    #[Test]
+    public function test_export_returns_json_migration_resource_when_otpauth_param_is_off()
+    {
+        $this->twofaccountA = TwoFAccount::factory()->for($this->user)->create(self::JSON_FRAGMENTS_FOR_DEFAULT_TOTP);
+        $this->twofaccountB = TwoFAccount::factory()->for($this->user)->create(self::JSON_FRAGMENTS_FOR_DEFAULT_HOTP);
+
+        $this->actingAs($this->user, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/export?ids=' . $this->twofaccountA->id . ',' . $this->twofaccountB->id . '&otpauth=0')
             ->assertOk()
             ->assertJsonStructure(self::VALID_EXPORT_STRUTURE)
             ->assertJsonFragment(self::JSON_FRAGMENTS_FOR_DEFAULT_TOTP)

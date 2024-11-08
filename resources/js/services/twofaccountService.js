@@ -55,8 +55,8 @@ export default {
         return apiClient.delete('/twofaccounts?ids=' + ids, { ...config })
     },
 
-    export(ids, config = {}) {
-        return apiClient.get('/twofaccounts/export?ids=' + ids, { ...config })
+    export(ids, otpauthFormat, config = {}) {
+        return apiClient.get('/twofaccounts/export?ids=' + ids + (otpauthFormat ? '&otpauth=1' : ''), { ...config })
     },
 
     getQrcode(id, config = {}) {

@@ -14,6 +14,7 @@ return [
     'latestReleaseUrl' => 'https://api.github.com/repos/Bubka/2FAuth/releases/latest',
     'installDocUrl' => 'https://docs.2fauth.app/getting-started/installation/self-hosted-server/',
     'ssoDocUrl' => 'https://docs.2fauth.app/security/authentication/sso/',
+    'exportSchemaUrl' => 'https://docs.2fauth.app/usage/migration/#export-schema',
 
     /*
     |--------------------------------------------------------------------------
