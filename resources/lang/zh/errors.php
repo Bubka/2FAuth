@@ -73,4 +73,5 @@ return [
     'cannot_decode_detected_qrcode' => '二维码已识别，但解码失败，请裁切或锐化图像后再试',
     'qrcode_has_invalid_checksum' => '二维码的校验码错误',
     'no_readable_qrcode' => '没有可识别的二维码',
+    'failed_icon_store_database_toggling' => '图标迁移失败，相关设置已恢复为先前的值。',
 ];

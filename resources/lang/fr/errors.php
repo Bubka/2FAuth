@@ -73,4 +73,5 @@ return [
     'cannot_decode_detected_qrcode' => 'Impossible de décoder le QR code détecté, essayez de rogner ou d\'améliorer l\'image',
     'qrcode_has_invalid_checksum' => 'La somme de contrôle du QR code est invalide',
     'no_readable_qrcode' => 'Aucun QR code lisible',
+    'failed_icon_store_database_toggling' => 'La migration des icônes a échoué. Le paramètre a été restaurée à sa précédente valeur.',
 ];

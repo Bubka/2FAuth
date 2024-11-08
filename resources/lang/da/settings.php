@@ -13,29 +13,29 @@ return [
     |
     */
 
-    'settings' => 'Settings',
-    'preferences' => 'Preferences',
-    'account' => 'Account',
+    'settings' => 'Indstillinger',
+    'preferences' => 'Præferencer',
+    'account' => 'Konto',
     'oauth' => 'OAuth',
     'webauthn' => 'WebAuthn',
     'tokens' => 'Tokens',
-    'options' => 'Options',
-    'user_preferences' => 'User preferences',
-    'admin_settings' => 'Admin settings',
+    'options' => 'Valgmuligheder',
+    'user_preferences' => 'Præferencer',
+    'admin_settings' => 'Admin indstillinger',
     'confirm' => [
 
     ],
     'you_are_administrator' => 'You are an administrator',
     'account_linked_to_sso_x_provider' => 'You signed-in via SSO using your :provider account. Your information cannot be changed here but on :provider.',
-    'general' => 'General',
-    'security' => 'Security',
-    'notifications' => 'Notifications',
-    'profile' => 'Profile',
-    'change_password' => 'Change password',
-    'personal_access_tokens' => 'Personal access tokens',
+    'general' => 'Generelt',
+    'security' => 'Sikkerhed',
+    'notifications' => 'Notifikationer',
+    'profile' => 'Profil',
+    'change_password' => 'Skift adgangskode',
+    'personal_access_tokens' => 'personlige adgangstokens',
     'token_legend' => 'Personal Access Tokens allow any app to authenticate to the 2Fauth API. You should specify the access token as a Bearer token in the authorization header of consumer apps requests.',
     'generate_new_token' => 'Generate a new token',
-    'revoke' => 'Revoke',
+    'revoke' => 'Ophæv',
     'token_revoked' => 'Token successfully revoked',
     'revoking_a_token_is_permanent' => 'Revoking a token is permanent',
     'confirm' => [
@@ -45,12 +45,12 @@ return [
     'data_input' => 'Data input',
     'forms' => [
         'edit_settings' => 'Edit settings',
-        'setting_saved' => 'Settings saved',
-        'new_token' => 'New token',
+        'setting_saved' => 'Indstillingerne er gemt!',
+        'new_token' => 'Ny token',
         'some_translation_are_missing' => 'Some translations are missing using the browser preferred language?',
-        'help_translate_2fauth' => 'Help translate 2FAuth',
+        'help_translate_2fauth' => 'Hjælp med at oversætte 2FAuth',
         'language' => [
-            'label' => 'Language',
+            'label' => 'Sprog',
             'help' => 'Language used to translate the 2FAuth user interface. Named languages are complete, set the one of your choice to override your browser preference.'
         ],
         'timezone' => [
@@ -63,11 +63,11 @@ return [
         ],
         'reveal_dotted_otp' => [
             'label' => 'Reveal obscured <abbr title="One-Time Password">OTP</abbr>',
-            'help' => 'Let the ability to temporarily reveal Dot-Obscured passwords'
+            'help' => 'Lad muligheden for midlertidigt at afsløre Dot-Obscured adgangskoder'
         ],
         'close_otp_on_copy' => [
-            'label' => 'Close <abbr title="One-Time Password">OTP</abbr> after copy',
-            'help' => 'Click on a generated password to copy it automatically hides it from the screen'
+            'label' => 'Luk <abbr title="One-Time Password">OTP</abbr> efter kopi',
+            'help' => 'Klik på en genereret adgangskode for at kopiere den automatisk skjuler den fra skærmen'
         ],
         'auto_close_timeout' => [
             'label' => 'Auto close <abbr title="One-Time Password">OTP</abbr>',
@@ -82,39 +82,39 @@ return [
             'help' => 'When invoked, force the Sort function to sort accounts on a case-sensitive basis'
         ],
         'copy_otp_on_display' => [
-            'label' => 'Copy <abbr title="One-Time Password">OTP</abbr> on display',
+            'label' => 'Kopier <abbr title="One-Time Password">OTP</abbr> på skærmen',
             'help' => 'Automatically copy a generated password right after it appears on screen. Due to browsers limitations, only the first <abbr title="Time-based One-Time Password">TOTP</abbr> password will be copied, not the rotating ones'
         ],
         'use_basic_qrcode_reader' => [
-            'label' => 'Use basic QR code reader',
-            'help' => 'If you experiences issues when capturing QR codes enables this option to switch to a more basic but more reliable QR code reader'
+            'label' => 'Brug grundlæggende QR-kode læser',
+            'help' => 'Hvis du oplever problemer, når du optager QR-koder, kan du skifte til en mere basal, men mere pålidelig QR-kodelæser'
         ],
         'display_mode' => [
-            'label' => 'Display mode',
-            'help' => 'Choose whether you want accounts to be displayed as a list or as a grid'
+            'label' => 'Visnings tilstand',
+            'help' => 'Vælg om du vil have konti vist som en liste eller som et gitter'
         ],
         'password_format' => [
-            'label' => 'Password formatting',
+            'label' => 'Formatering af adgangskode',
             'help' => 'Change how the passwords are displayed by grouping digits to ease readability and memorization'
         ],
-        'pair' => 'by Pair',
-        'pair_legend' => 'Group digits two by two',
-        'trio_legend' => 'Group digits three by three',
-        'half_legend' => 'Split digits into two equals groups',
-        'trio' => 'by Trio',
-        'half' => 'by Half',
-        'grid' => 'Grid',
-        'list' => 'List',
+        'pair' => 'efter par',
+        'pair_legend' => 'Grupper cifre to med to',
+        'trio_legend' => 'Grupper cifre tre og tre',
+        'half_legend' => 'Opdel cifre i to lige store grupper',
+        'trio' => 'af Trio',
+        'half' => 'ved halv',
+        'grid' => 'Gitter',
+        'list' => 'Liste',
         'theme' => [
-            'label' => 'Theme',
+            'label' => 'Tema',
             'help' => 'Force a specific theme or apply the theme defined in your system/browser preferences'
         ],
-        'light' => 'Light',
-        'dark' => 'Dark',
-        'automatic' => 'Auto',
+        'light' => 'Lys',
+        'dark' => 'Mørk',
+        'automatic' => 'Automatisk',
         'show_accounts_icons' => [
-            'label' => 'Show icons',
-            'help' => 'Show icons accounts in the main view'
+            'label' => 'Vis ikoner',
+            'help' => 'Show account icons in the main view'
         ],
         'get_official_icons' => [
             'label' => 'Get official icons',
@@ -149,8 +149,8 @@ return [
             'help' => 'Save the last group filter applied and restore it on your next visit',
         ],
         'otp_generation' => [
-            'label' => 'Show Password',
-            'help' => 'Set how and when <abbr title="One-Time Passwords">OTPs</abbr> are displayed.<br/>',
+            'label' => 'Vis adgangskode',
+            'help' => 'Indstil hvordan og hvornår <abbr title="One-Time Passwords">OTP\'er</abbr> vises.<br/>',
         ],
         'notify_on_new_auth_device' => [
             'label' => 'On new device',
@@ -160,11 +160,15 @@ return [
             'label' => 'On failed login',
             'help' => 'Get an email each time an attempt to connect to your 2FAuth account fails'
         ],
-        'otp_generation_on_request' => 'After a click/tap',
-        'otp_generation_on_request_legend' => 'Alone, in its own view',
+        'show_email_in_footer' => [
+            'label' => 'Show email in footer',
+            'help' => 'Display the logged-in user\'s email in the footer instead of direct navigation links. The links are then available in a menu behind a click/tap on the email address.'
+        ],
+        'otp_generation_on_request' => 'Efter et klik/tryk',
+        'otp_generation_on_request_legend' => 'Alene i sin egen visning',
         'otp_generation_on_request_title' => 'Click an account to get a password in a dedicated view',
-        'otp_generation_on_home' => 'Constantly',
-        'otp_generation_on_home_legend' => 'All of them, on home',
+        'otp_generation_on_home' => 'Konstant',
+        'otp_generation_on_home_legend' => 'Allesammen, på hovedskærmen',
         'otp_generation_on_home_title' => 'Show all passwords in the main view, without doing anything',
         'never' => 'Never',
         'on_otp_copy' => 'On security code copy',

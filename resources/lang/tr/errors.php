@@ -73,4 +73,5 @@ return [
     'cannot_decode_detected_qrcode' => 'Algılanan QR kodu çözülemiyor, görüntüyü kırpmayı veya netleştirmeyi deneyin',
     'qrcode_has_invalid_checksum' => 'QR kodu geçersiz bir checksum\'a sahip',
     'no_readable_qrcode' => 'Okunabilir bir QR kodu yok',
+    'failed_icon_store_database_toggling' => 'Migration of icons failed. The setting has been restored to its previous value.',
 ];

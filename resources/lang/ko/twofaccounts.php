@@ -28,7 +28,15 @@ return [
     'account_updated' => '계정이 업데이트되었습니다',
     'accounts_deleted' => '계정이 삭제되었습니다',
     'accounts_moved' => '계정이 이동되었습니다',
-    'export_selected_to_json' => '선택한 계정을 JSON으로 다운로드',
+    'export_selected_accounts' => 'Export selected accounts',
+    'twofauth_export_format' => '2FAuth format',
+    'twofauth_export_format_sub' => 'Export data using the 2FAuth json schema',
+    'twofauth_export_format_desc' => 'You should prefer this option if you need to create a backup that can be restored. This format takes care of the icons.',
+    'twofauth_export_format_url' => 'The schema definition is described here:',
+    'twofauth_export_schema' => '2FAuth export schema',
+    'otpauth_export_format' => 'otpauth URIs',
+    'otpauth_export_format_sub' => 'Export data as a list of otpauth URIs',
+    'otpauth_export_format_desc' => 'otpauth URI is the most common format used to exchange 2FA data, for example in the form of a QR code when you enable 2FA on a web site. Select this if you want to switch from 2FAuth.',
     'reveal' => '표시',
     'forms' => [
         'service' => [

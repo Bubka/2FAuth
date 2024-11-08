@@ -28,7 +28,28 @@ return [
     'account_updated' => 'Conta atualizada com sucesso',
     'accounts_deleted' => 'Conta(s) excluídas com êxito',
     'accounts_moved' => 'Conta(s) movidas com sucesso',
-    'export_selected_to_json' => 'Baixar uma exportação em json das contas selecionadas',
+    'export_selected_accounts' => 'Exportar contas selecionadas',
+    'twofauth_export_format' => 'Formato 2FAuth',
+    'twofauth_export_format_sub' => 'Exporte dados usando o esquema JSON do 2FAuth
+
+
+
+
+
+
+',
+    'twofauth_export_format_desc' => 'Você pode optar por esta opção caso você precisar criar um backup que possa ser restaurado. Este formato inclui ícones.',
+    'twofauth_export_format_url' => 'A descrição de definição do esquema:',
+    'twofauth_export_schema' => 'Esquema de exportação do 2FAuth',
+    'otpauth_export_format' => 'Parametros da URIs de otpauth',
+    'otpauth_export_format_sub' => 'Exporte dados em lista de URIs otpauth',
+    'otpauth_export_format_desc' => 'A URI otpauth é um formato padronizado para compartilhar dados de autenticação de dois fatores (2FA). Esse formato é amplamente utilizado por serviços e aplicativos para facilitar a configuração do 2FA por meio de QR codes. Quando você ativa o 2FA em um site, ele normalmente exibe um código QR que encapsula uma URI otpauth, permitindo que o aplicativo de autenticação (como Google Authenticator, Authy, ou Microsoft Authenticator) escaneie o código e configure automaticamente o 2FA para sua conta.
+
+Estrutura da URI otpauth
+A URI otpauth é composta de informações essenciais para a configuração do 2FA e segue este formato básico:
+
+Exemplo:
+otpauth://TYPE/LABEL?secret=SECRET&issuer=ISSUER&digits=DIGITS&period=PERIOD',
     'reveal' => 'revelar',
     'forms' => [
         'service' => [
@@ -61,8 +82,8 @@ return [
         'i_m_lucky_legend' => 'O botão "Tente a minha sorte" tenta obter o ícone oficial do serviço fornecido. Digite o nome do serviço atual sem a extensão ".xyz" e tente evitar erros de digitação. (recurso beta)',
         'test' => 'Testar',
         'group' => [
-            'label' => 'Group',
-            'help' => 'The group to which the account is to be assigned'
+            'label' => 'Grupo',
+            'help' => 'O grupo ao qual a conta deve ser atribuída'
         ],
         'secret' => [
             'label' => 'Chave',

@@ -28,7 +28,15 @@ return [
     'account_updated' => 'Compte mis à jour avec succès',
     'accounts_deleted' => 'Compte·s supprimé·s avec succès',
     'accounts_moved' => 'Compte·s déplacé·s avec succès',
-    'export_selected_to_json' => 'Télécharger un export json des comptes sélectionnés',
+    'export_selected_accounts' => 'Exporter les comptes sélectionnés',
+    'twofauth_export_format' => 'Format 2FAuth',
+    'twofauth_export_format_sub' => 'Exporter les comptes en utilisant le format json de 2FAuth',
+    'twofauth_export_format_desc' => 'Utilisez cette option si vous avez besoin de créer une sauvegarde qui peut être restaurée. Ce format prend en charge les icônes.',
+    'twofauth_export_format_url' => 'Le schéma de données est décrit ici :',
+    'twofauth_export_schema' => 'Schéma d\'export 2FAuth',
+    'otpauth_export_format' => 'URIs otpauth',
+    'otpauth_export_format_sub' => 'Exporter les données sous forme de liste d\'URIs otpauth',
+    'otpauth_export_format_desc' => 'L\'URI otpauth est le format le plus couramment utilisé pour échanger des données 2FA, par exemple sous la forme d\'un code QR lorsque vous activez l\'authentification 2FA sur un site Web. Préférez ce format si vous souhaitez quitter 2FAuth pour une solution alternative.',
     'reveal' => 'révéler',
     'forms' => [
         'service' => [

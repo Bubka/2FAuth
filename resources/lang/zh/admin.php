@@ -14,6 +14,7 @@ return [
     */
 
     'admin' => '管理员',
+    'admin_panel' => 'Admin panel',
     'app_setup' => '应用设置',
     'auth' => '鉴权',
     'registrations' => '注册',
@@ -85,6 +86,9 @@ return [
     'sort_by_date_asc' => '倒序显示最近访问',
     'sort_by_date_desc' => '顺序显示最近访问',
     'single_sign_on' => '单点登录（SSO）',
+    'database' => '数据库',
+    'file_system' => '文件系统',
+    'storage' => '存储',
     'forms' => [
         'use_encryption' => [
             'label' => '保护敏感数据',
@@ -134,7 +138,11 @@ return [
         'cache_management' => [
             'label' => '缓存管理',
             'help' => '某些情况下需要清除缓存，例如更改了环境变量，或更新了应用。您可以在此处进行缓存清理。',
-        ]
+        ],
+        'store_icon_to_database' => [
+            'label' => '保存图标至数据库',
+            'help' => '除了储存到文件系统外，上传的图标还会被注册到数据库中充当缓存。这种方式可以令备份 2FAuth 更便捷，因为仅有数据库需要备份。<br /><br />但要注意的是，这可能会产生负面效果：如果保存了大量的大体积图标，那么数据库的体积也会显著增大。这同时也可能会影响应用的性能，因为需要频繁地读写文件系统，来保证图标数据与数据库保持同步。',
+        ],
     ],
 
 ];

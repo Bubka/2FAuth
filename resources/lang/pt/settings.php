@@ -114,11 +114,11 @@ return [
         'automatic' => 'Automático',
         'show_accounts_icons' => [
             'label' => 'Mostrar Ícones',
-            'help' => 'Exibir ícones de conta na visualização principal'
+            'help' => 'Exibir ícones das contas na visão das contas'
         ],
         'get_official_icons' => [
             'label' => 'Obter ícones oficiais',
-            'help' => '(Tentar) Obter o ícone oficial do emissor do 2FA ao adicionar uma conta'
+            'help' => '(Tentar) Obter o ícone oficial do emissor do 2FA ao adicionar uma conta?'
         ],
         'auto_lock' => [
             'label' => 'Logoff automático',
@@ -159,6 +159,10 @@ return [
         'notify_on_failed_login' => [
             'label' => 'Ao acessar com falha',
             'help' => 'Receber um e-mail sempre que uma tentativa de conectar sua conta 2FAuth falhar'
+        ],
+        'show_email_in_footer' => [
+            'label' => 'Exibir e-mail no rodapé?',
+            'help' => 'Exiba o e-mail do usuário logado no rodapé em vez de links de navegação diretos. Neste caso os links ficam disponíveis em um menu acessível ao clicar/tocar no endereço de e-mail.'
         ],
         'otp_generation_on_request' => 'Após clicar/tocar',
         'otp_generation_on_request_legend' => 'Sozinho, na sua própria exibição',

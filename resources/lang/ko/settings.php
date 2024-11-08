@@ -114,7 +114,7 @@ return [
         'automatic' => '자동',
         'show_accounts_icons' => [
             'label' => '아이콘 표시',
-            'help' => '메인 화면에 계정 아이콘 표시'
+            'help' => 'Show account icons in the main view'
         ],
         'get_official_icons' => [
             'label' => '공식 아이콘 불러오기',
@@ -159,6 +159,10 @@ return [
         'notify_on_failed_login' => [
             'label' => '로그인 실패 시',
             'help' => '2FAuth 계정에 로그인 시도가 실패할 때마다 이메일 받기'
+        ],
+        'show_email_in_footer' => [
+            'label' => 'Show email in footer',
+            'help' => 'Display the logged-in user\'s email in the footer instead of direct navigation links. The links are then available in a menu behind a click/tap on the email address.'
         ],
         'otp_generation_on_request' => '클릭/탭 후',
         'otp_generation_on_request_legend' => '개별 화면으로 열기',

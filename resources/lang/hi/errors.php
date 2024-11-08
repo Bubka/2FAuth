@@ -73,4 +73,5 @@ return [
     'cannot_decode_detected_qrcode' => 'QR Code डिकोड नहीं हो रहा है, कृपया चित्र को क्रॉप करें या ठीक करें',
     'qrcode_has_invalid_checksum' => 'QR Code का चेकसम अमान्य है',
     'no_readable_qrcode' => 'कोई QR Code पाठ्य नहीं है',
+    'failed_icon_store_database_toggling' => 'Migration of icons failed. The setting has been restored to its previous value.',
 ];

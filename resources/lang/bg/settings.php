@@ -114,7 +114,7 @@ return [
         'automatic' => 'Авто',
         'show_accounts_icons' => [
             'label' => 'Показвай иконите',
-            'help' => 'Показва иконите на профилите в основният екран'
+            'help' => 'Show account icons in the main view'
         ],
         'get_official_icons' => [
             'label' => 'Взимане на официални икони',
@@ -159,6 +159,10 @@ return [
         'notify_on_failed_login' => [
             'label' => 'On failed login',
             'help' => 'Get an email each time an attempt to connect to your 2FAuth account fails'
+        ],
+        'show_email_in_footer' => [
+            'label' => 'Show email in footer',
+            'help' => 'Display the logged-in user\'s email in the footer instead of direct navigation links. The links are then available in a menu behind a click/tap on the email address.'
         ],
         'otp_generation_on_request' => 'След клик/тап',
         'otp_generation_on_request_legend' => 'Самостоятелно, в отделен изглед',

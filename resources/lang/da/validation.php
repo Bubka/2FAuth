@@ -54,7 +54,7 @@ return [
     'enum' => 'De valgte :attribute er ugyldige.',
     'exists' => 'Valgte :attribute er ugyldig.',
     'extensions' => 'Feltet :attribute skal have en af ​​følgende udvidelser: :values.',
-    'failed' => 'De angivne oplysninger er ugyldige.',
+    'file' => ':attribute skal være en fil.',
     'filled' => ':Attribute skal udfyldes.',
     'gt' => [
         'array' => ':Attribute skal være mere end :value elementer.',
@@ -138,7 +138,7 @@ return [
     'required_array_keys' => 'Feltet :attribute skal indeholde poster for: :values.',
     'required_if' => ':Attribute skal udfyldes når :other er :value.',
     'required_if_accepted' => ':Attribute-feltet er påkrævet, når :other accepteres.',
-    'required_if_declined' => 'The :attribute field is required when :other is declined.',
+    'required_if_declined' => 'Feltet :attribute er påkrævet, når :other afvises.',
     'required_unless' => ':Attribute er påkrævet med mindre :other findes i :values.',
     'required_with' => ':Attribute skal udfyldes når :values er udfyldt.',
     'required_with_all' => ':Attribute skal udfyldes når :values er udfyldt.',
@@ -158,12 +158,12 @@ return [
     'uploaded' => ':Attribute fejlede i upload.',
     'uppercase' => 'De :attribute skal være store bogstaver.',
     'url' => ':Attribute formatet er ugyldigt.',
-    'ulid' => 'The :attribute field must be a valid ULID.',
+    'ulid' => ':attribute skal være et gyldigt ULID.',
     'uuid' => ':Attribute skal være en gyldig UUID.',
 
-    'single' => 'When using :attribute it must be the only parameter in this request body',
-    'onlyCustomOtpWithUri' => 'The uri parameter must be provided alone or only in combination with the \'custom_otp\' parameter',
-    'IsValidRegex' => 'The :attribute field must be a valid regex pattern.',
+    'single' => 'Når du bruger :attribut skal det være den eneste parameter',
+    'onlyCustomOtpWithUri' => 'uri-parameteren skal leveres alene eller kun i kombination med \'custom_otp\'-parameteren',
+    'IsValidRegex' => 'Attributfeltet skal være et gyldigt regex.',
 
     /*
     |--------------------------------------------------------------------------
@@ -178,36 +178,36 @@ return [
 
     'custom' => [
         'icon' => [
-            'image' => 'Supported format are jpeg, png, bmp, gif, svg, or webp.',
+            'image' => 'Understøttet format er jpeg, png, bmp, gif, svg eller webp.',
         ],
         'qrcode' => [
-            'image' => 'Supported format are jpeg, png, bmp, gif, svg, or webp.',
+            'image' => 'Understøttet format er jpeg, png, bmp, gif, svg eller webp.',
         ],
         'uri' => [
-            'regex' => 'The :attribute field is not a valid otpauth uri.',
+            'regex' => 'Attributfeltet er ikke en gyldig otpauth uri.',
         ],
         'otp_type' => [
-            'in' => 'The :attribute field is not supported.',
+            'in' => 'Attributfeltet understøttes ikke.',
         ],
         'email' => [
-            'exists' => 'No account found using this email.',
-            'ComplyWithEmailRestrictionPolicy' => 'This email address does not comply with the registration policy',
-            'IsValidEmailList' => 'All emails must be valid and separated with a pipe'
+            'exists' => 'Ingen konto fundet med denne e-mail.',
+            'ComplyWithEmailRestrictionPolicy' => 'Denne e-mailadresse overholder ikke registreringspolitikken',
+            'IsValidEmailList' => 'Alle e-mails skal være gyldige og adskilt med et pipesymbol'
         ],
         'secret' => [
-            'isBase32Encoded' => 'The :attribute field must be a base32 encoded string.',
+            'isBase32Encoded' => 'Attributfeltet skal være en base32 kodet streng.',
         ],
         'account' => [
-            'regex' => 'The :attribute field must not contain colon.',
+            'regex' => 'Attributfeltet må ikke indeholde kolon.',
         ],
         'service' => [
-            'regex' => 'The :attribute field must not contain colon.',
+            'regex' => 'Attributfeltet må ikke indeholde kolon.',
         ],
         'label' => [
-            'required' => 'The uri must have a label.',
+            'required' => 'uri skal have en etiket.',
         ],
         'ids' => [
-            'regex' => 'IDs must be comma separated, without trailing comma.',
+            'regex' => 'ID\'er skal være kommaseparerede, uden efterfølgende komma.',
         ],
     ],
 

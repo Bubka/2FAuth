@@ -73,4 +73,5 @@ return [
     'cannot_decode_detected_qrcode' => '감지된 QR 코드를 인식할 수 없습니다. 이미지를 자르거나 선명한 이미지를 사용해보세요.',
     'qrcode_has_invalid_checksum' => 'QR 코드에 잘못된 체크섬이 있습니다.',
     'no_readable_qrcode' => '인식 가능한 QR 코드 없음',
+    'failed_icon_store_database_toggling' => 'Migration of icons failed. The setting has been restored to its previous value.',
 ];

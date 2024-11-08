@@ -73,4 +73,5 @@ return [
     'cannot_decode_detected_qrcode' => '検出されたQRコードをデコードできません。画像をトリミングまたはシャープにしてください。',
     'qrcode_has_invalid_checksum' => 'QRコードのチェックサムが不正です',
     'no_readable_qrcode' => '読み取り可能なQRコードがありません',
+    'failed_icon_store_database_toggling' => 'Migration of icons failed. The setting has been restored to its previous value.',
 ];

@@ -73,4 +73,5 @@ return [
     'cannot_decode_detected_qrcode' => 'Kan QR-code niet decoderen, probeer de afbeelding bij te snijden of te verscherpen',
     'qrcode_has_invalid_checksum' => 'QR code heeft een ongeldige controlesom',
     'no_readable_qrcode' => 'Geen leesbare QR- code',
+    'failed_icon_store_database_toggling' => 'Migration of icons failed. The setting has been restored to its previous value.',
 ];

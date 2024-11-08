@@ -14,6 +14,7 @@ return [
     */
 
     'admin' => 'Admin',
+    'admin_panel' => 'Admin panel',
     'app_setup' => 'App setup',
     'auth' => 'Auth',
     'registrations' => 'Registrations',
@@ -42,8 +43,8 @@ return [
     'last_seen_on_date' => 'Last seen :date',
     'registered_on_date' => 'Registered :date',
     'updated_on_date' => 'Updated :date',
-    'access' => 'Access',
-    'password_requested_on_t' => 'A password reset request exists for this user (request sent at :datetime), which means that the user has not yet changed their password but the link they received is still valid. This may be a request from the user themselves or from an administrator.',
+    'access' => 'Accesso',
+    'password_requested_on_t' => '.',
     'password_request_expired' => 'A password reset request exists for this user but has expired, meaning that the user has not changed their password in time. This may be a request from the user themselves or from an administrator.',
     'resend_email' => 'Resend email',
     'resend_email_title' => 'Resend a password reset email to the user',
@@ -85,6 +86,9 @@ return [
     'sort_by_date_asc' => 'Show least recent first',
     'sort_by_date_desc' => 'Show most recent first',
     'single_sign_on' => 'Single Sign-On (SSO)',
+    'database' => 'Database',
+    'file_system' => 'File system',
+    'storage' => 'Storage',
     'forms' => [
         'use_encryption' => [
             'label' => 'Protect sensitive data',
@@ -134,7 +138,11 @@ return [
         'cache_management' => [
             'label' => 'Cache management',
             'help' => 'Sometimes cache needs to be cleared, for instance after a change to environment variables or an update. You can do it from here.',
-        ]
+        ],
+        'store_icon_to_database' => [
+            'label' => 'Store icons to database',
+            'help' => 'Uploaded icons are registered in the database in addition to the file system storage, which is then used only as a cache. This makes creating a 2FAuth backup much easier, as only the database has to be backed up.<br /><br />But beware, this may has some drawbacks: The database size may increase significantly if the instance hosts many large icons. It may also affect the application performance because the file system is hit more often to ensure it is synchronised with the database.',
+        ],
     ],
 
 ];

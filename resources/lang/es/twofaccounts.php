@@ -28,7 +28,15 @@ return [
     'account_updated' => 'Cuenta actualizada correctamente',
     'accounts_deleted' => 'Cuenta(s) eliminada(s) correctamente',
     'accounts_moved' => 'Cuenta(s) movida(s) correctamente',
-    'export_selected_to_json' => 'Descargar un fichero json con el contenido de las cuentas seleccionadas',
+    'export_selected_accounts' => 'Export selected accounts',
+    'twofauth_export_format' => '2FAuth format',
+    'twofauth_export_format_sub' => 'Export data using the 2FAuth json schema',
+    'twofauth_export_format_desc' => 'You should prefer this option if you need to create a backup that can be restored. This format takes care of the icons.',
+    'twofauth_export_format_url' => 'The schema definition is described here:',
+    'twofauth_export_schema' => '2FAuth export schema',
+    'otpauth_export_format' => 'otpauth URIs',
+    'otpauth_export_format_sub' => 'Export data as a list of otpauth URIs',
+    'otpauth_export_format_desc' => 'otpauth URI is the most common format used to exchange 2FA data, for example in the form of a QR code when you enable 2FA on a web site. Select this if you want to switch from 2FAuth.',
     'reveal' => 'mostrar',
     'forms' => [
         'service' => [

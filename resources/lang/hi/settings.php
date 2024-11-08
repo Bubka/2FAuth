@@ -114,7 +114,7 @@ return [
         'automatic' => 'ऑटो',
         'show_accounts_icons' => [
             'label' => 'आइकन दिखाएं',
-            'help' => 'मुख्य दृश्य में आइकान के अकाउंट दिखाएँ'
+            'help' => 'Show account icons in the main view'
         ],
         'get_official_icons' => [
             'label' => 'आधिकारिक आइकान प्राप्त करें',
@@ -159,6 +159,10 @@ return [
         'notify_on_failed_login' => [
             'label' => 'On failed login',
             'help' => 'Get an email each time an attempt to connect to your 2FAuth account fails'
+        ],
+        'show_email_in_footer' => [
+            'label' => 'Show email in footer',
+            'help' => 'Display the logged-in user\'s email in the footer instead of direct navigation links. The links are then available in a menu behind a click/tap on the email address.'
         ],
         'otp_generation_on_request' => 'क्लिक / टैप के बाद',
         'otp_generation_on_request_legend' => 'अपने दृश्य में अकेला',

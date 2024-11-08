@@ -43,8 +43,8 @@ return [
     '2fauth_has_not_a_valid_domain' => 'Домен 2FAuth не является допустимым доменом',
     'user_id_not_between_1_64' => 'Идентификатор пользователя не был от 1 до 64 символов',
     'no_entry_was_of_type_public_key' => 'Запись типа "Публичный ключ" не найдена',
-    'unsupported_with_reverseproxy' => 'Not applicable when using an auth proxy or SSO',
-    'unsupported_with_sso_only' => 'This authentication method is for administrators only. Users must log in with SSO.',
+    'unsupported_with_reverseproxy' => 'Не применимо при использовании прокси-аутентификации или SSO',
+    'unsupported_with_sso_only' => 'Этот метод аутентификации предназначен только для администраторов. Пользователи должны войти в систему с помощью SSO.',
     'user_deletion_failed' => 'Не удалось удалить учётную запись пользователя, данные не были удалены',
     'auth_proxy_failed' => 'Прокси-аунтификация не удалась',
     'auth_proxy_failed_legend' => '2Fauth настроен на работу за прокси-аутентификацией, но ваш прокси не возвращает ожидаемый заголовок. Проверьте настройки и повторите попытку.',
@@ -73,4 +73,5 @@ return [
     'cannot_decode_detected_qrcode' => 'Не удается декодировать обнаруженный QR-код, попробуйте обрезать или сделать изображение более резким',
     'qrcode_has_invalid_checksum' => 'QR-код имеет некорректную контрольную сумму',
     'no_readable_qrcode' => 'Нет читаемого QR кода',
+    'failed_icon_store_database_toggling' => 'Не удалось перенести значки. Настройки были восстановлены в предыдущее значение.',
 ];

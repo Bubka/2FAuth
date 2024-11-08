@@ -114,7 +114,7 @@ return [
         'automatic' => '自动',
         'show_accounts_icons' => [
             'label' => '显示图标',
-            'help' => '在主视图中显示应用图标'
+            'help' => 'Show account icons in the main view'
         ],
         'get_official_icons' => [
             'label' => '获取官方图标',
@@ -159,6 +159,10 @@ return [
         'notify_on_failed_login' => [
             'label' => '登录失败时',
             'help' => '每次登录失败时都发送邮件通知'
+        ],
+        'show_email_in_footer' => [
+            'label' => 'Show email in footer',
+            'help' => 'Display the logged-in user\'s email in the footer instead of direct navigation links. The links are then available in a menu behind a click/tap on the email address.'
         ],
         'otp_generation_on_request' => '点击 / 单击账户后',
         'otp_generation_on_request_legend' => '在独立页面中显示',

@@ -14,6 +14,7 @@ return [
     */
 
     'admin' => 'ऐडमिन',
+    'admin_panel' => 'Admin panel',
     'app_setup' => 'ऐप का सेटअप',
     'auth' => 'Auth',
     'registrations' => 'रजिस्ट्रेशन',
@@ -85,6 +86,9 @@ return [
     'sort_by_date_asc' => 'सबसे कम नई पहले दिखाएं',
     'sort_by_date_desc' => 'सबसे नई पहले दिखाएं',
     'single_sign_on' => 'Single Sign-On (SSO)',
+    'database' => 'Database',
+    'file_system' => 'File system',
+    'storage' => 'Storage',
     'forms' => [
         'use_encryption' => [
             'label' => 'संवेदनशील डेटा को सुरक्षित करें',
@@ -134,7 +138,11 @@ return [
         'cache_management' => [
             'label' => 'कैश का मैनेजमेन्ट',
             'help' => 'कभी-कभी कैश को साफ़ करने की आवश्यकता होती है, उदाहरण के लिए एनवायरनमेंट वेरीएबल में बदलाव या अपडेट के बाद। आप इसे यहां से कर सकते हैं.',
-        ]
+        ],
+        'store_icon_to_database' => [
+            'label' => 'Store icons to database',
+            'help' => 'Uploaded icons are registered in the database in addition to the file system storage, which is then used only as a cache. This makes creating a 2FAuth backup much easier, as only the database has to be backed up.<br /><br />But beware, this may has some drawbacks: The database size may increase significantly if the instance hosts many large icons. It may also affect the application performance because the file system is hit more often to ensure it is synchronised with the database.',
+        ],
     ],
 
 ];

@@ -14,6 +14,7 @@ return [
     */
 
     'admin' => 'Beheerder',
+    'admin_panel' => 'Admin panel',
     'app_setup' => 'App instellingen',
     'auth' => 'Auth',
     'registrations' => 'Registraties',
@@ -85,6 +86,9 @@ return [
     'sort_by_date_asc' => 'Toon minst recent eerst',
     'sort_by_date_desc' => 'Toon meest recente eerst',
     'single_sign_on' => 'Single Sign-On (SSO)',
+    'database' => 'Database',
+    'file_system' => 'File system',
+    'storage' => 'Storage',
     'forms' => [
         'use_encryption' => [
             'label' => 'Bescherm gevoelige gegevens',
@@ -134,7 +138,11 @@ return [
         'cache_management' => [
             'label' => 'Cachebeheer',
             'help' => 'Soms moet de cache worden geleegd, bijvoorbeeld na een wijziging in omgevingsvariabelen of een update. Je kunt dit hier doen.',
-        ]
+        ],
+        'store_icon_to_database' => [
+            'label' => 'Store icons to database',
+            'help' => 'Uploaded icons are registered in the database in addition to the file system storage, which is then used only as a cache. This makes creating a 2FAuth backup much easier, as only the database has to be backed up.<br /><br />But beware, this may has some drawbacks: The database size may increase significantly if the instance hosts many large icons. It may also affect the application performance because the file system is hit more often to ensure it is synchronised with the database.',
+        ],
     ],
 
 ];

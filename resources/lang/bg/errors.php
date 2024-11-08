@@ -73,4 +73,5 @@ return [
     'cannot_decode_detected_qrcode' => 'Cannot decode detected QR code, try to crop or sharpen the image',
     'qrcode_has_invalid_checksum' => 'QR code has invalid checksum',
     'no_readable_qrcode' => 'No readable QR code',
+    'failed_icon_store_database_toggling' => 'Migration of icons failed. The setting has been restored to its previous value.',
 ];

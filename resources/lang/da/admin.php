@@ -14,6 +14,7 @@ return [
     */
 
     'admin' => 'Admin',
+    'admin_panel' => 'Admin panel',
     'app_setup' => 'App setup',
     'auth' => 'Auth',
     'registrations' => 'Registrations',

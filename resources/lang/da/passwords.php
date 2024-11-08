@@ -14,13 +14,13 @@ return [
     */
 
     // Laravel
-    'reset' => 'Your password has been reset!',
-    'sent' => 'We have emailed your password reset link!',
-    'throttled' => 'Please wait before retrying.',
-    'token' => 'This password reset token is invalid.',
-    'user' => "We can't find a user with that email address.",
+    'reset' => 'Dit kodeord er blevet nulstillet!',
+    'sent' => 'Vi har sendt dig en e-mail til at nulstille din adgangskode!',
+    'throttled' => 'Vent venligst inden du prøver igen.',
+    'token' => 'Denne adgangskode nulstillings-token er ugyldig.',
+    'user' => "Vi kan ikke finde en bruger med den e-mailadresse.",
 
     // 2FAuth
-    'password' => 'Passwords must be at least eight characters and match the confirmation.',
+    'password' => 'Adgangskoder skal være på mindst otte tegn og svare til gentagelsen.',
     
 ];

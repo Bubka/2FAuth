@@ -114,11 +114,11 @@ return [
         'automatic' => 'Авто',
         'show_accounts_icons' => [
             'label' => 'Показать значки',
-            'help' => 'Показывать значки учётных записей на главной'
+            'help' => 'Show account icons in the main view'
         ],
         'get_official_icons' => [
             'label' => 'Получить официальные значки',
-            'help' => '(Пробовать) Получать официальную иконку эмитента 2FA при добавлении учётной записи'
+            'help' => '(Пробовать) Получать официальные значки эмитента 2FA при добавлении учётной записи'
         ],
         'auto_lock' => [
             'label' => 'Автоблокировка',
@@ -133,8 +133,8 @@ return [
             'help' => 'Всегда возвращаться в группу по умолчанию когда код OTP скопирован',
         ],
         'auto_save_qrcoded_account' => [
-            'label' => 'Автосохранение аккаунтов',
-            'help' => 'Новые учетные записи автоматически регистрируются после сканирования или загрузки QR-кода без необходимости нажимать кнопку "Сохранить"',
+            'label' => 'Автосохранение учётных записей',
+            'help' => 'Новые учётные записи автоматически регистрируются после сканирования или загрузки QR-кода без необходимости нажимать кнопку "Сохранить"',
         ],
         'useDirectCapture' => [
             'label' => 'Быстрый ввод',
@@ -159,6 +159,10 @@ return [
         'notify_on_failed_login' => [
             'label' => 'При неудачном входе',
             'help' => 'Получать email при каждой неудачной попытке войти в вашу учётную запись 2FAuth'
+        ],
+        'show_email_in_footer' => [
+            'label' => 'Show email in footer',
+            'help' => 'Display the logged-in user\'s email in the footer instead of direct navigation links. The links are then available in a menu behind a click/tap on the email address.'
         ],
         'otp_generation_on_request' => 'После щелчка/касания',
         'otp_generation_on_request_legend' => 'По одиночке, в отдельном окне',

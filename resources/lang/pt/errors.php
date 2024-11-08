@@ -43,8 +43,8 @@ return [
     '2fauth_has_not_a_valid_domain' => 'O domínio de 2FAuth não é um domínio válido',
     'user_id_not_between_1_64' => 'O ID do usuário não estava entre 1 e 64 caracteres',
     'no_entry_was_of_type_public_key' => 'Nenhuma entrada é do tipo "chave pública"',
-    'unsupported_with_reverseproxy' => 'Not applicable when using an auth proxy or SSO',
-    'unsupported_with_sso_only' => 'This authentication method is for administrators only. Users must log in with SSO.',
+    'unsupported_with_reverseproxy' => 'Não aplicável ao usar um proxy de autenticação ou SSO.',
+    'unsupported_with_sso_only' => 'Este método de autenticação é apenas para administradores. Usuários devem fazer login com SSO.',
     'user_deletion_failed' => 'A exclusão da conta do usuário falhou, nenhum dado foi excluído',
     'auth_proxy_failed' => 'Falha na autenticação do proxy',
     'auth_proxy_failed_legend' => '2Fauth está configurado para ser executado atrás de um proxy autenticado, mas seu proxy não retorna o cabeçalho esperado. Verifique sua configuração e tente novamente.',
@@ -73,4 +73,5 @@ return [
     'cannot_decode_detected_qrcode' => 'Não é possível decodificar o código QR detectado, tentar cortar ou desembaçar a imagem',
     'qrcode_has_invalid_checksum' => 'QR code possui checksum inválido',
     'no_readable_qrcode' => 'Nenhum código QR legível',
+    'failed_icon_store_database_toggling' => 'Houve um erro ao migrar os ícones. A configuração foi restaurada para o valor anterior.',
 ];

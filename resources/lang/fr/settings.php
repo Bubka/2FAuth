@@ -114,7 +114,7 @@ return [
         'automatic' => 'Auto',
         'show_accounts_icons' => [
             'label' => 'Afficher les icônes',
-            'help' => 'Affiche les icônes des comptes dans la vue principale'
+            'help' => 'Afficher les icônes des comptes dans la vue principale'
         ],
         'get_official_icons' => [
             'label' => 'Récupérer les icônes officielles',
@@ -159,6 +159,10 @@ return [
         'notify_on_failed_login' => [
             'label' => 'Après une connexion échouée',
             'help' => 'Recevez un e-mail chaque fois qu\'une tentative de connexion à votre compte 2FAuth échoue'
+        ],
+        'show_email_in_footer' => [
+            'label' => 'Afficher l\'email dans le pied de page',
+            'help' => 'Affiche l\'email de l\'utilisateur connecté dans le pied de page, en lieu et place des liens de navigation. Les liens sont alors accessibles dans un menu de navigation que l\'on affiche en cliquant/tapotant sur l\'email.'
         ],
         'otp_generation_on_request' => 'Après un clic/tap',
         'otp_generation_on_request_legend' => 'Seul, dans un écran dédié',

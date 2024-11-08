@@ -114,7 +114,7 @@ return [
         'automatic' => 'Auto',
         'show_accounts_icons' => [
             'label' => 'Toon symbolen',
-            'help' => 'Toon iconen accounts in het hoofdscherm'
+            'help' => 'Show account icons in the main view'
         ],
         'get_official_icons' => [
             'label' => 'Officiële iconen verkrijgen',
@@ -159,6 +159,10 @@ return [
         'notify_on_failed_login' => [
             'label' => 'Bij mislukte aanmelding',
             'help' => 'Ontvang een e-mail telkens wanneer een poging om verbinding te maken met je 2FAuth account mislukt'
+        ],
+        'show_email_in_footer' => [
+            'label' => 'Show email in footer',
+            'help' => 'Display the logged-in user\'s email in the footer instead of direct navigation links. The links are then available in a menu behind a click/tap on the email address.'
         ],
         'otp_generation_on_request' => 'Na een klik/tik',
         'otp_generation_on_request_legend' => 'Alleen, in zijn eigen weergave',

@@ -114,7 +114,7 @@ return [
         'automatic' => 'Automático',
         'show_accounts_icons' => [
             'label' => 'Mostrar iconos',
-            'help' => 'Mostar iconos de aplicaciones en la vista principal'
+            'help' => 'Show account icons in the main view'
         ],
         'get_official_icons' => [
             'label' => 'Obtener iconos oficiales',
@@ -159,6 +159,10 @@ return [
         'notify_on_failed_login' => [
             'label' => 'On failed login',
             'help' => 'Get an email each time an attempt to connect to your 2FAuth account fails'
+        ],
+        'show_email_in_footer' => [
+            'label' => 'Show email in footer',
+            'help' => 'Display the logged-in user\'s email in the footer instead of direct navigation links. The links are then available in a menu behind a click/tap on the email address.'
         ],
         'otp_generation_on_request' => 'Después de un clic/toque',
         'otp_generation_on_request_legend' => 'Solo, en su propia vista',

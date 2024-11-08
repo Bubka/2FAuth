@@ -28,7 +28,15 @@ return [
     'account_updated' => 'Учётная запись успешно обновлена.',
     'accounts_deleted' => 'Учётная(ые) запись(и) успешно удалена(ы)',
     'accounts_moved' => 'Учётная(ые) запись(и) успешно перемещена(ы)',
-    'export_selected_to_json' => 'Скачать json экспорт выбранных учётных записей',
+    'export_selected_accounts' => 'Export selected accounts',
+    'twofauth_export_format' => '2FAuth format',
+    'twofauth_export_format_sub' => 'Export data using the 2FAuth json schema',
+    'twofauth_export_format_desc' => 'You should prefer this option if you need to create a backup that can be restored. This format takes care of the icons.',
+    'twofauth_export_format_url' => 'The schema definition is described here:',
+    'twofauth_export_schema' => '2FAuth export schema',
+    'otpauth_export_format' => 'otpauth URIs',
+    'otpauth_export_format_sub' => 'Export data as a list of otpauth URIs',
+    'otpauth_export_format_desc' => 'otpauth URI is the most common format used to exchange 2FA data, for example in the form of a QR code when you enable 2FA on a web site. Select this if you want to switch from 2FAuth.',
     'reveal' => 'показать',
     'forms' => [
         'service' => [
@@ -58,11 +66,11 @@ return [
         ],
         'choose_image' => 'Загрузить',
         'i_m_lucky' => 'Мне повезёт!',
-        'i_m_lucky_legend' => 'Кнопка "Мне повезёт!" попытается получить официальную иконку данной службы. Введите фактическое имя службы без расширения ".xyz" и попытайтесь избежать опечаток. (бета-функция)',
+        'i_m_lucky_legend' => 'Кнопка "Мне повезёт!" попытается получить официальный значок данной службы. Введите фактическое имя службы без расширения ".xyz" и попытайтесь избежать опечаток. (бета-функция)',
         'test' => 'Проверка',
         'group' => [
-            'label' => 'Group',
-            'help' => 'The group to which the account is to be assigned'
+            'label' => 'Группа',
+            'help' => 'Группа, к которой будет привязана учётная запись'
         ],
         'secret' => [
             'label' => 'Секрет',

@@ -14,6 +14,7 @@ return [
     */
 
     'admin' => '관리자',
+    'admin_panel' => 'Admin panel',
     'app_setup' => '앱 설정',
     'auth' => 'Auth',
     'registrations' => '가입',
@@ -85,6 +86,9 @@ return [
     'sort_by_date_asc' => '오래된 순으로 표시',
     'sort_by_date_desc' => '최신 순으로 표시',
     'single_sign_on' => 'Single Sign-On (SSO)',
+    'database' => 'Database',
+    'file_system' => 'File system',
+    'storage' => 'Storage',
     'forms' => [
         'use_encryption' => [
             'label' => '민감한 데이터 보호',
@@ -134,7 +138,11 @@ return [
         'cache_management' => [
             'label' => '캐시 관리',
             'help' => '환경 변수를 변경하거나 업데이트한 후와 같은 경우 캐시를 삭제해야 할 수 있습니다. 아래에서 삭제할 수 있습니다.',
-        ]
+        ],
+        'store_icon_to_database' => [
+            'label' => 'Store icons to database',
+            'help' => 'Uploaded icons are registered in the database in addition to the file system storage, which is then used only as a cache. This makes creating a 2FAuth backup much easier, as only the database has to be backed up.<br /><br />But beware, this may has some drawbacks: The database size may increase significantly if the instance hosts many large icons. It may also affect the application performance because the file system is hit more often to ensure it is synchronised with the database.',
+        ],
     ],
 
 ];

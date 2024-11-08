@@ -14,8 +14,9 @@ return [
     */
 
     'admin' => 'Administrador',
+    'admin_panel' => 'Administração',
     'app_setup' => 'Configuração da Aplicação',
-    'auth' => 'Auth',
+    'auth' => 'Atutenticação',
     'registrations' => 'Registos',
     'users' => 'Usuários',
     'users_legend' => 'Gerenciar usuários registrados ou criar  em sua instância.',
@@ -84,7 +85,10 @@ return [
     'show_one_year_log' => 'Mostrar entradas do último ano',
     'sort_by_date_asc' => 'Mostrar o mais antigo primeiro',
     'sort_by_date_desc' => 'Mostrar o mais recente primeiro',
-    'single_sign_on' => 'Single Sign-On (SSO)',
+    'single_sign_on' => 'Sistema de login único',
+    'database' => 'Banco de Dados',
+    'file_system' => 'Sistema de arquivo',
+    'storage' => 'Armazenamento de dados',
     'forms' => [
         'use_encryption' => [
             'label' => 'Proteja dados confidenciais',
@@ -107,12 +111,12 @@ return [
             'help' => 'Impedir novos registros. A menos que sobrescrito (veja abaixo), isto afeta SSO também, então novos usuários não serão capazes de entrar via SSO',
         ],
         'enable_sso' => [
-            'label' => 'Enable SSO',
+            'label' => 'Habilitar sistema de login únicio',
             'help' => 'Permitir que os visitantes autentiquem usando um ID externo por meio do esquema de logon SSO',
         ],
         'use_sso_only' => [
-            'label' => 'Use SSO only',
-            'help' => 'Make SSO the only available method to log in to 2FAuth. Password login and Webauthn are then disabled for regular users. Administrators are not affected by this restriction.',
+            'label' => 'Usar somente sistema de login único',
+            'help' => 'Faça do SSO o único método disponível para fazer login no 2FAuth. O login por senha e o Webauth são então desativados para usuários comuns. Os administradores não são afetados por essa restrição.',
         ],
         'keep_sso_registration_enabled' => [
             'label' => 'Mantenha o registro SSO ativado',
@@ -128,13 +132,19 @@ return [
             'email_will_be_send_to_x' => 'O e-mail será enviado para <span class="is-family-code has-text-info">:email</span>',
         ],
         'health_endpoint' => [
-            'label' => 'Health endpoint',
-            'help' => 'URL you can visit to check the health of this 2FAuth instance. This URL can be used to set up a Docker HEALTHCHECK or a Kubernetes HTTPS Liveness probe.',
+            'label' => 'Status do endpoint',
+            'help' => 'URL que você pode verificar o status de saúde desta instância do 2FAuth. A URL pode ser usada para configurar um **HEALTHCHECK** no Docker ou uma **Sondagem de logs ao vivo de HTTPS** no Kubernetes.',
         ],
         'cache_management' => [
             'label' => 'Gerenciamento de Cache',
             'help' => 'Às vezes, o cache precisa ser limpo, por exemplo, após uma alteração de variáveis de ambiente ou de uma atualização. Você pode fazer isso a partir daqui.',
-        ]
+        ],
+        'store_icon_to_database' => [
+            'label' => 'Armazenar ícones no banco de dados',
+            'help' => 'Ícones enviados são registrados no banco de dados além de serem armazenados no sistema de arquivos, que então é usado apenas como cache. Isso facilita muito a criação de um backup do 2FAuth, pois apenas o banco de dados precisa ser incluído no backup.
+
+No entanto, cuidado, pois isso pode ter algumas desvantagens: o tamanho do banco de dados pode aumentar significativamente se a instância hospedar muitos ícones grandes. Também pode afetar o desempenho da aplicação, pois o sistema de arquivos é acessado com mais frequência para garantir a sincronização com o banco de dados.',
+        ],
     ],
 
 ];

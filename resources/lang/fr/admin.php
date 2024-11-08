@@ -14,6 +14,7 @@ return [
     */
 
     'admin' => 'Admin',
+    'admin_panel' => 'Administration',
     'app_setup' => 'Configuration',
     'auth' => 'Auth',
     'registrations' => 'Inscriptions',
@@ -85,6 +86,9 @@ return [
     'sort_by_date_asc' => 'Afficher les plus anciens en premier',
     'sort_by_date_desc' => 'Afficher les plus récents en premier',
     'single_sign_on' => 'Single Sign-On (SSO)',
+    'database' => 'Base de données',
+    'file_system' => 'Système de fichiers',
+    'storage' => 'Stockage',
     'forms' => [
         'use_encryption' => [
             'label' => 'Protéger les données sensibles',
@@ -134,7 +138,11 @@ return [
         'cache_management' => [
             'label' => 'Gestion du cache',
             'help' => 'Parfois le cache doit être effacé, par exemple après une modification de variable d\'environnement ou une mise à jour. Vous pouvez le faire ici.',
-        ]
+        ],
+        'store_icon_to_database' => [
+            'label' => 'Enregistrer les icônes dans la base de données',
+            'help' => 'Les icônes sont enregistrées dans la base de données en plus de leur stockage dans le système de fichiers. Celui-ci est alors utilisé uniquement comme cache. Cela facilite la création de backup de votre instance 2FAuth car seule sa base de données est à sauvegarder.<br /><br />Attention toutefois, certains effets négatifs sont possibles : La taille de la base de données va augmenter significativement et rapidement si l\'instance héberge beaucoup d\'icônes de grandes résolutions. Cela peut également affecter les performances de l\'application car le système de fichiers est plus souvent intéroggé pour s\'assurer que son état reflète bien celui de la base de données.',
+        ],
     ],
 
 ];
