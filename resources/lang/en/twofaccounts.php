@@ -29,8 +29,6 @@ return [
     'accounts_deleted' => 'Account(s) successfully deleted',
     'accounts_moved' => 'Account(s) successfully moved',
     'export_selected_accounts' => 'Export selected accounts',
-    'export_selected_to_json' => 'Export accounts using the 2FAuth json format',
-    'export_selected_to_otpauth_uri' => 'Export accounts to plain text otpauth URIs',
     'twofauth_export_format' => '2FAuth format',
     'twofauth_export_format_sub' => 'Export data using the 2FAuth json schema',
     'twofauth_export_format_desc' => 'You should prefer this option if you need to create a backup that can be restored. This format takes care of the icons.',
