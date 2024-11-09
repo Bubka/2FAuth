@@ -129,9 +129,11 @@ class IconStoreService
      */
     public function get(string $name) : ?string
     {
-        return $this->usesDatabase
-            ? Icon::find($name)?->content
-            : $this->disk()->get($name);
+        if ($this->usesDatabase) {
+            return Icon::find($name)?->content;
+        } else {
+            return $this->disk()->get($name) ?: null;
+        }
     }
 
     /**
