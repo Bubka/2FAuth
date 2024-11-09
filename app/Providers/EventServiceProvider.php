@@ -5,7 +5,7 @@ namespace App\Providers;
 use App\Events\GroupDeleted;
 use App\Events\GroupDeleting;
 use App\Events\ScanForNewReleaseCalled;
-use App\Events\storeIconsInDatabaseSettingChanged;
+use App\Events\StoreIconsInDatabaseSettingChanged;
 use App\Events\TwoFAccountDeleted;
 use App\Events\VisitedByProxyUser;
 use App\Listeners\Authentication\FailedLoginListener;
@@ -71,7 +71,7 @@ class EventServiceProvider extends ServiceProvider
         VisitedByProxyUser::class => [
             VisitedByProxyUserListener::class,
         ],
-        storeIconsInDatabaseSettingChanged::class => [
+        StoreIconsInDatabaseSettingChanged::class => [
             ToggleIconReplicationToDatabase::class,
         ],
     ];

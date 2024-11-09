@@ -5,7 +5,7 @@ namespace App\Events;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Support\Facades\Log;
 
-class storeIconsInDatabaseSettingChanged
+class StoreIconsInDatabaseSettingChanged
 {
     use Dispatchable;
 
@@ -22,6 +22,6 @@ class storeIconsInDatabaseSettingChanged
     public function __construct(bool $newValue)
     {
         $this->newValue = $newValue;
-        Log::info('storeIconsInDatabaseSettingChanged event dispatched');
+        Log::info('StoreIconsInDatabaseSettingChanged event dispatched');
     }
 }

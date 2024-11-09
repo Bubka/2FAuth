@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Events\storeIconsInDatabaseSettingChanged;
+use App\Events\StoreIconsInDatabaseSettingChanged;
 use App\Exceptions\DbEncryptionException;
 use App\Models\Option;
 use Exception;
@@ -79,7 +79,7 @@ class SettingService
         }
 
         if ($setting === 'storeIconsInDatabase') {
-            storeIconsInDatabaseSettingChanged::dispatch($value);
+            StoreIconsInDatabaseSettingChanged::dispatch($value);
         }
 
         Option::updateOrCreate(['key' => $setting], ['value' => $this->replaceBoolean($value)]);

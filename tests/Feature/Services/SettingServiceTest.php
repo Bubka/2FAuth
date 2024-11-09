@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Services;
 
-use App\Events\storeIconsInDatabaseSettingChanged;
+use App\Events\StoreIconsInDatabaseSettingChanged;
 use App\Exceptions\FailedIconStoreDatabaseTogglingException;
 use App\Facades\IconStore;
 use App\Facades\Settings;
@@ -370,12 +370,12 @@ class SettingServiceTest extends FeatureTestCase
     public function test_set_storeIconsInDatabase_setting_dispatches_storeIconsInDatabaseSettingChanged()
     {
         Event::fake([
-            storeIconsInDatabaseSettingChanged::class,
+            StoreIconsInDatabaseSettingChanged::class,
         ]);
 
         Settings::set('storeIconsInDatabase', true);
 
-        Event::assertDispatched(storeIconsInDatabaseSettingChanged::class);
+        Event::assertDispatched(StoreIconsInDatabaseSettingChanged::class);
     }
 
     #[Test]

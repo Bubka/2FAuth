@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Listeners;
 
-use App\Events\storeIconsInDatabaseSettingChanged;
+use App\Events\StoreIconsInDatabaseSettingChanged;
 use App\Listeners\ToggleIconReplicationToDatabase;
 use Illuminate\Support\Facades\Event;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -21,7 +21,7 @@ class ToggleIconReplicationToDatabaseTest extends TestCase
         Event::fake();
 
         Event::assertListening(
-            storeIconsInDatabaseSettingChanged::class,
+            StoreIconsInDatabaseSettingChanged::class,
             ToggleIconReplicationToDatabase::class
         );
     }

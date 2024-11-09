@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Events\storeIconsInDatabaseSettingChanged;
+use App\Events\StoreIconsInDatabaseSettingChanged;
 use App\Facades\IconStore;
 
 class ToggleIconReplicationToDatabase
@@ -15,7 +15,7 @@ class ToggleIconReplicationToDatabase
     /**
      * Handle the event.
      */
-    public function handle(storeIconsInDatabaseSettingChanged $event) : void
+    public function handle(StoreIconsInDatabaseSettingChanged $event) : void
     {
         IconStore::setDatabaseReplication($event->newValue);
     }
