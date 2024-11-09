@@ -62,7 +62,8 @@
                     <!-- admin link -->
                     <li v-if="user.isAdmin" class="column">
                         <router-link id="lnkAdmin" :to="{ name: 'admin.appSetup' }" >
-                            {{ $t('admin.admin_panel') }}<span v-if="appSettings.latestRelease && appSettings.checkForUpdate" class="release-flag"></span>
+                            <span v-if="appSettings.latestRelease && appSettings.checkForUpdate" class="release-flag"></span>
+                            {{ $t('admin.admin_panel') }}
                         </router-link>
                     </li>
                     <!-- sign-out button -->
@@ -76,6 +77,7 @@
                 </ul>
                 <!-- email link -->
                 <button id="btnEmailMenu" @click="showMenu = !showMenu" class="button is-text is-like-text has-text-grey" style="width: 100%;">
+                    <span v-if="appSettings.latestRelease && appSettings.checkForUpdate" class="release-flag"></span>
                     <span class="mx-2 has-ellipsis">{{ user.email }}</span>
                     <FontAwesomeIcon v-if="!showMenu" :icon="['fas', 'bars']" class="mr-2" />
                     <!-- <button v-else class="delete ml-3"></button> -->
