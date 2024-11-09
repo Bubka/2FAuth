@@ -10,14 +10,12 @@ class ToggleIconReplicationToDatabase
     /**
      * Create the event listener.
      */
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     /**
      * Handle the event.
      */
-    public function handle(storeIconsInDatabaseSettingChanged $event): void
+    public function handle(storeIconsInDatabaseSettingChanged $event) : void
     {
         IconStore::setDatabaseReplication($event->newValue);
     }

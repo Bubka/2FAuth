@@ -40,7 +40,7 @@ class IconStoreServiceTest extends FeatureTestCase
         Storage::fake('icons');
         $this->iconStore = $this->app->make(IconStoreService::class);
     }
-    
+
     #[Test]
     public function test_get_returns_icon_content()
     {
@@ -90,7 +90,7 @@ class IconStoreServiceTest extends FeatureTestCase
 
         $this->assertStringContainsStringIgnoringCase($mimeType, $expected);
     }
-    
+
     /**
      * Provide data for index tests
      */
@@ -115,7 +115,7 @@ class IconStoreServiceTest extends FeatureTestCase
             'BPM' => [
                 OtpTestData::ICON_BMP,
                 OtpTestData::ICON_BMP_DATA,
-                'image/bmp|image/x-ms-bmp'
+                'image/bmp|image/x-ms-bmp',
             ],
             'SVG' => [
                 OtpTestData::ICON_SVG,
@@ -140,7 +140,7 @@ class IconStoreServiceTest extends FeatureTestCase
     {
         $this->assertFalse($this->iconStore->mimeType(OtpTestData::ICON_PNG));
     }
-    
+
     #[Test]
     public function test_mimeType_returns_null_when_nothing_is_requested()
     {
@@ -183,10 +183,10 @@ class IconStoreServiceTest extends FeatureTestCase
         Storage::disk('icons')->assertExists(OtpTestData::ICON_PNG);
         Storage::disk('icons')->assertExists(OtpTestData::ICON_JPEG);
         $this->assertDatabaseHas('icons', [
-            'name'    => OtpTestData::ICON_PNG,
+            'name' => OtpTestData::ICON_PNG,
         ]);
         $this->assertDatabaseHas('icons', [
-            'name'    => OtpTestData::ICON_JPEG,
+            'name' => OtpTestData::ICON_JPEG,
         ]);
 
         $result = $this->iconStore->clear();
@@ -218,10 +218,10 @@ class IconStoreServiceTest extends FeatureTestCase
         ]);
 
         $this->assertDatabaseHas('icons', [
-            'name'    => OtpTestData::ICON_PNG,
+            'name' => OtpTestData::ICON_PNG,
         ]);
         $this->assertDatabaseHas('icons', [
-            'name'    => OtpTestData::ICON_JPEG,
+            'name' => OtpTestData::ICON_JPEG,
         ]);
 
         $result = $this->iconStore->clear();
@@ -272,23 +272,23 @@ class IconStoreServiceTest extends FeatureTestCase
     public function test_delete_deletes_provided_icon_in_database_and_returns_true()
     {
         Settings::set('storeIconsInDatabase', true);
-    
+
         Storage::disk('icons')->put(OtpTestData::ICON_PNG, base64_decode(OtpTestData::ICON_PNG_DATA));
         DB::table('icons')->insert([
             'name'    => OtpTestData::ICON_PNG,
             'content' => OtpTestData::ICON_PNG_DATA,
         ]);
-        
+
         Storage::disk('icons')->assertExists(OtpTestData::ICON_PNG);
         $this->assertDatabaseHas('icons', [
-            'name'    => OtpTestData::ICON_PNG,
+            'name' => OtpTestData::ICON_PNG,
         ]);
 
         $this->iconStore->delete(OtpTestData::ICON_PNG);
 
         Storage::disk('icons')->assertMissing(OtpTestData::ICON_PNG);
         $this->assertDatabaseMissing('icons', [
-            'name'    => OtpTestData::ICON_PNG,
+            'name' => OtpTestData::ICON_PNG,
         ]);
     }
 
@@ -296,21 +296,21 @@ class IconStoreServiceTest extends FeatureTestCase
     public function test_delete_deletes_provided_icon_in_database_when_disk_is_empty()
     {
         Settings::set('storeIconsInDatabase', true);
-    
+
         DB::table('icons')->insert([
             'name'    => OtpTestData::ICON_PNG,
             'content' => OtpTestData::ICON_PNG_DATA,
         ]);
-        
+
         Storage::disk('icons')->assertMissing(OtpTestData::ICON_PNG);
         $this->assertDatabaseHas('icons', [
-            'name'    => OtpTestData::ICON_PNG,
+            'name' => OtpTestData::ICON_PNG,
         ]);
 
         $this->iconStore->delete(OtpTestData::ICON_PNG);
 
         $this->assertDatabaseMissing('icons', [
-            'name'    => OtpTestData::ICON_PNG,
+            'name' => OtpTestData::ICON_PNG,
         ]);
     }
 
@@ -336,7 +336,7 @@ class IconStoreServiceTest extends FeatureTestCase
     public function test_delete_deletes_provided_icons_in_database_and_returns_true()
     {
         Settings::set('storeIconsInDatabase', true);
-    
+
         Storage::disk('icons')->put(OtpTestData::ICON_PNG, base64_decode(OtpTestData::ICON_PNG_DATA));
         Storage::disk('icons')->put(OtpTestData::ICON_JPEG, base64_decode(OtpTestData::ICON_JPEG_DATA));
         DB::table('icons')->insert([
@@ -351,10 +351,10 @@ class IconStoreServiceTest extends FeatureTestCase
         Storage::disk('icons')->assertExists(OtpTestData::ICON_PNG);
         Storage::disk('icons')->assertExists(OtpTestData::ICON_JPEG);
         $this->assertDatabaseHas('icons', [
-            'name'    => OtpTestData::ICON_PNG,
+            'name' => OtpTestData::ICON_PNG,
         ]);
         $this->assertDatabaseHas('icons', [
-            'name'    => OtpTestData::ICON_JPEG,
+            'name' => OtpTestData::ICON_JPEG,
         ]);
 
         $this->iconStore->delete([
@@ -365,10 +365,10 @@ class IconStoreServiceTest extends FeatureTestCase
         Storage::disk('icons')->assertMissing(OtpTestData::ICON_PNG);
         Storage::disk('icons')->assertMissing(OtpTestData::ICON_JPEG);
         $this->assertDatabaseMissing('icons', [
-            'name'    => OtpTestData::ICON_PNG,
+            'name' => OtpTestData::ICON_PNG,
         ]);
         $this->assertDatabaseMissing('icons', [
-            'name'    => OtpTestData::ICON_JPEG,
+            'name' => OtpTestData::ICON_JPEG,
         ]);
     }
 
@@ -376,7 +376,7 @@ class IconStoreServiceTest extends FeatureTestCase
     public function test_delete_deletes_provided_icons_in_database_when_disk_is_empty()
     {
         Settings::set('storeIconsInDatabase', true);
-    
+
         DB::table('icons')->insert([
             'name'    => OtpTestData::ICON_PNG,
             'content' => OtpTestData::ICON_PNG_DATA,
@@ -389,10 +389,10 @@ class IconStoreServiceTest extends FeatureTestCase
         Storage::disk('icons')->assertMissing(OtpTestData::ICON_PNG);
         Storage::disk('icons')->assertMissing(OtpTestData::ICON_JPEG);
         $this->assertDatabaseHas('icons', [
-            'name'    => OtpTestData::ICON_PNG,
+            'name' => OtpTestData::ICON_PNG,
         ]);
         $this->assertDatabaseHas('icons', [
-            'name'    => OtpTestData::ICON_JPEG,
+            'name' => OtpTestData::ICON_JPEG,
         ]);
 
         $this->iconStore->delete([
@@ -401,10 +401,10 @@ class IconStoreServiceTest extends FeatureTestCase
         ]);
 
         $this->assertDatabaseMissing('icons', [
-            'name'    => OtpTestData::ICON_PNG,
+            'name' => OtpTestData::ICON_PNG,
         ]);
         $this->assertDatabaseMissing('icons', [
-            'name'    => OtpTestData::ICON_JPEG,
+            'name' => OtpTestData::ICON_JPEG,
         ]);
     }
 
@@ -458,7 +458,7 @@ class IconStoreServiceTest extends FeatureTestCase
 
         Storage::disk('icons')->assertMissing(OtpTestData::ICON_PNG);
         $this->assertDatabaseMissing('icons', [
-            'name'    => OtpTestData::ICON_PNG,
+            'name' => OtpTestData::ICON_PNG,
         ]);
 
         $result = $this->iconStore->store(OtpTestData::ICON_PNG, base64_decode(OtpTestData::ICON_PNG_DATA));
@@ -466,7 +466,7 @@ class IconStoreServiceTest extends FeatureTestCase
         $this->assertTrue($result);
         Storage::disk('icons')->assertExists(OtpTestData::ICON_PNG);
         $this->assertDatabaseHas('icons', [
-            'name'    => OtpTestData::ICON_PNG,
+            'name' => OtpTestData::ICON_PNG,
         ]);
     }
 
@@ -481,7 +481,7 @@ class IconStoreServiceTest extends FeatureTestCase
         Storage::shouldReceive('disk->put')
             ->with($iconName, $iconContent)
             ->andReturn(false);
-        
+
         $result = $this->iconStore->store($iconName, $iconContent);
 
         $this->assertFalse($result);
@@ -553,7 +553,7 @@ class IconStoreServiceTest extends FeatureTestCase
     #[Test]
     public function test_setDatabaseReplication_stores_only_registered_icon_to_database()
     {
-        $user  = User::factory()->create();
+        $user = User::factory()->create();
 
         TwoFAccount::factory()->for($user)->create([
             'icon' => OtpTestData::ICON_PNG,
@@ -594,7 +594,7 @@ class IconStoreServiceTest extends FeatureTestCase
     #[Test]
     public function test_setDatabaseReplication_skips_icon_when_file_is_missing()
     {
-        $user  = User::factory()->create();
+        $user = User::factory()->create();
 
         TwoFAccount::factory()->for($user)->create([
             'icon' => OtpTestData::ICON_PNG,
@@ -644,7 +644,7 @@ class IconStoreServiceTest extends FeatureTestCase
     {
         Settings::set('storeIconsInDatabase', true);
 
-        $user  = User::factory()->create();
+        $user = User::factory()->create();
 
         TwoFAccount::factory()->for($user)->create([
             'icon' => OtpTestData::ICON_PNG,
@@ -721,9 +721,9 @@ class IconStoreServiceTest extends FeatureTestCase
         ]);
 
         Storage::shouldReceive('disk->put')
-        ->once()
-        ->andThrow(new FailedIconStoreDatabaseTogglingException);
-        
+            ->once()
+            ->andThrow(new FailedIconStoreDatabaseTogglingException);
+
         $this->expectException(FailedIconStoreDatabaseTogglingException::class);
 
         Settings::set('storeIconsInDatabase', false);

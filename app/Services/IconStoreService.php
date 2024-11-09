@@ -19,7 +19,7 @@ class IconStoreService
     /**
      * The storage disk to use
      */
-    protected string|null $disk;
+    protected ?string $disk;
 
     /**
      * Icon replication to database to ease backup
@@ -73,8 +73,7 @@ class IconStoreService
             if ($usesDatabase) {
                 $this->clearDatabase();
                 $this->mirrorDiskToDatabase();
-            }
-            else {
+            } else {
                 $this->mirrorDatabaseToDisk();
                 $this->clearDatabase();
             }
@@ -98,7 +97,7 @@ class IconStoreService
             DB::commit();
         } catch (\Exception $e) {
             DB::rollback();
-            
+
             throw new FailedIconStoreDatabaseTogglingException;
         }
     }
@@ -117,14 +116,14 @@ class IconStoreService
 
     /**
      * Get the list of all icon names registered in the TwoFAccount table
-     * 
+     *
      * @return Collection<array-key, mixed>
      */
     protected function registeredIcons()
     {
         return TwoFAccount::whereNotNull('icon')->pluck('icon');
     }
-    
+
     /**
      * Get the content of a given icon resource, prior to the database record
      */
@@ -189,7 +188,7 @@ class IconStoreService
         $names = is_array($names) ? $names : func_get_args();
 
         $deletedFromDisk = $this->disk()->delete($names);
-        
+
         if ($deletedFromDisk && $this->usesDatabase) {
             Icon::destroy($names);
 
@@ -206,7 +205,7 @@ class IconStoreService
     {
         $storedToDisk = $this->storeToDisk($name, $content);
 
-        if ($this->usesDatabase) {    
+        if ($this->usesDatabase) {
             return $this->storeToDatabase($name, $content);
         }
 

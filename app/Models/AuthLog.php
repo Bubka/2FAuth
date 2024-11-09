@@ -43,7 +43,9 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property string|null $method
  * @property string|null $login_method
  * @property-read Model|\Eloquent $authenticatable
+ *
  * @mixin \Eloquent
+ *
  * @method static \Database\Factories\AuthLogFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|AuthLog newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|AuthLog newQuery()

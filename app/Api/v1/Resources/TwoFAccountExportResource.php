@@ -17,6 +17,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property int|null $period
  * @property int|null $counter
  * @property string $legacy_uri
+ *
  * @method string getURI()
  */
 class TwoFAccountExportResource extends JsonResource

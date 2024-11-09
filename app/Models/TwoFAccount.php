@@ -70,8 +70,11 @@ use SteamTotp\SteamTotp;
  * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereService($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereUserId($value)
+ *
  * @mixin \Eloquent
+ *
  * @property-read \App\Models\Icon|null $iconResource
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount orphans()
  */
 class TwoFAccount extends Model implements Sortable
@@ -79,7 +82,7 @@ class TwoFAccount extends Model implements Sortable
     /**
      * @use HasFactory<TwoFAccountFactory>
      */
-    use HasFactory, SortableTrait, CanEncryptField;
+    use CanEncryptField, HasFactory, SortableTrait;
 
     const TOTP = 'totp';
 
@@ -233,10 +236,10 @@ class TwoFAccount extends Model implements Sortable
 
     /**
      * Get the relation between the icon resource and the model.
-     * 
+     *
      * @return HasOne<\App\Models\Icon>
      */
-    public function iconResource(): HasOne
+    public function iconResource() : HasOne
     {
         return $this->hasOne(Icon::class, 'name', 'icon');
     }

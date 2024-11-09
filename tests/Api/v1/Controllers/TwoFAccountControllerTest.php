@@ -237,7 +237,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         Storage::fake('icons');
         Storage::fake('logos');
         Storage::fake('imagesLink');
-        
+
         Http::preventStrayRequests();
         Http::fake([
             LogoService::TFA_IMG_URL . '*' => Http::response(HttpRequestTestData::SVG_LOGO_BODY, 200),

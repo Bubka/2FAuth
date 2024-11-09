@@ -34,7 +34,7 @@ class IconControllerTest extends FeatureTestCase
 
         Storage::fake('icons');
         Storage::fake('logos');
-        
+
         Http::preventStrayRequests();
         Http::fake([
             LogoService::TFA_IMG_URL . '*' => Http::response(HttpRequestTestData::SVG_LOGO_BODY, 200),
@@ -51,7 +51,7 @@ class IconControllerTest extends FeatureTestCase
     public function test_upload_icon_returns_filename_using_the_iconStore()
     {
         $iconName = 'testIcon.jpg';
-        $file = UploadedFile::fake()->image($iconName);
+        $file     = UploadedFile::fake()->image($iconName);
 
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/icons', [
@@ -111,7 +111,7 @@ class IconControllerTest extends FeatureTestCase
     public function test_delete_icon_returns_success_using_the_iconStore()
     {
         IconStore::spy();
-        
+
         $iconName = 'testIcon.jpg';
 
         $response = $this->actingAs($this->user, 'api-guard')

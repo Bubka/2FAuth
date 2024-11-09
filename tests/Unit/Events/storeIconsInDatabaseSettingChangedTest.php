@@ -17,7 +17,7 @@ class storeIconsInDatabaseSettingChangedTest extends TestCase
     public function test_event_constructor()
     {
         $newValue = true;
-        $event = new storeIconsInDatabaseSettingChanged($newValue);
+        $event    = new storeIconsInDatabaseSettingChanged($newValue);
 
         $this->assertSame($newValue, $event->newValue);
     }

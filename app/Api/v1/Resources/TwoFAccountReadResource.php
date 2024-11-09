@@ -5,7 +5,7 @@ namespace App\Api\v1\Resources;
 /**
  * @property mixed $id
  * @property mixed $group_id
- * 
+ *
  * @method App\Models\Dto\TotpDto|App\Models\Dto\HotpDto getOtp(int $time)
  */
 class TwoFAccountReadResource extends TwoFAccountStoreResource

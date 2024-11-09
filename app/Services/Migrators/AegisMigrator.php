@@ -3,8 +3,8 @@
 namespace App\Services\Migrators;
 
 use App\Exceptions\InvalidMigrationDataException;
-use App\Services\IconService;
 use App\Models\TwoFAccount;
+use App\Services\IconService;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
@@ -39,7 +39,7 @@ class AegisMigrator extends Migrator
     public function migrate(mixed $migrationPayload) : Collection
     {
         $iconService = App::make(IconService::class);
-        $json = json_decode(htmlspecialchars_decode($migrationPayload), true);
+        $json        = json_decode(htmlspecialchars_decode($migrationPayload), true);
 
         if (is_null($json) || Arr::has($json, 'db.entries') == false) {
             Log::error('Aegis JSON migration data cannot be read');

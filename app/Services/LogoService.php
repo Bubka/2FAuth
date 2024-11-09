@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class LogoService
-{    
+{
     /**
      * @var \Illuminate\Support\Collection<string, string>
      */
@@ -157,7 +157,7 @@ class LogoService
      *
      * @param  string  $logoFilename
      * @param  string  $iconFilename
-     * @return bool  Whether the copy succeed or not
+     * @return bool Whether the copy succeed or not
      */
     protected function copyToIconStore($logoFilename, $iconFilename) : bool
     {

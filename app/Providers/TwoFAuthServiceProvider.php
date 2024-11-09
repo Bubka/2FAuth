@@ -3,8 +3,8 @@
 namespace App\Providers;
 
 use App\Factories\MigratorFactoryInterface;
-use App\Services\IconStoreService;
 use App\Services\IconService;
+use App\Services\IconStoreService;
 use App\Services\LogoService;
 use App\Services\ReleaseRadarService;
 use App\Services\SettingService;

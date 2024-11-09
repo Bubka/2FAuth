@@ -149,7 +149,7 @@ class TwoFAccountModelTest extends ModelTestCase
     #[Test]
     public function test_twofaccount_relation()
     {
-        $model    = new Icon();
+        $model    = new Icon;
         $relation = $model->twofaccount();
 
         $this->assertInstanceOf(BelongsTo::class, $relation);

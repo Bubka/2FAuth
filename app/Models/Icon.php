@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\App;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\TwoFAccount|null $twofaccount
+ *
  * @method static \Database\Factories\IconFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Icon newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Icon newQuery()
@@ -31,7 +32,7 @@ class Icon extends Model
     /**
      * @use HasFactory<IconFactory>
      */
-    use HasFactory, CanEncryptField;
+    use CanEncryptField, HasFactory;
 
     /**
      * The primary key for the model.
@@ -39,7 +40,6 @@ class Icon extends Model
      * @var string
      */
     protected $primaryKey = 'name';
-
 
     /**
      * The "type" of the primary key ID.
@@ -57,7 +57,7 @@ class Icon extends Model
 
     /**
      * Get the twofaccount that owns the icon.
-     * 
+     *
      * @return BelongsTo<\App\Models\TwoFAccount, \App\Models\Icon>
      */
     public function twofaccount() : BelongsTo
@@ -71,7 +71,7 @@ class Icon extends Model
      * @var array
      */
     protected $attributes = [];
-    
+
     /**
      * The attributes that should be hidden for arrays.
      *

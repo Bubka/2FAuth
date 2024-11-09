@@ -34,8 +34,8 @@ class IconController extends Controller
                     $name     = Helpers::getRandomFilename($icon->extension());
                     $isStored = IconStore::store($name, $content);
                 }
+            } catch (Exception) {
             }
-            catch (Exception) { }
         }
 
         return $isStored

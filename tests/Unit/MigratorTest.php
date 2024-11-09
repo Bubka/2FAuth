@@ -6,7 +6,6 @@ use App\Exceptions\EncryptedMigrationException;
 use App\Exceptions\InvalidMigrationDataException;
 use App\Exceptions\UnsupportedMigrationException;
 use App\Facades\Icons;
-use App\Facades\IconStore;
 use App\Factories\MigratorFactory;
 use App\Models\TwoFAccount;
 use App\Providers\MigrationServiceProvider;
@@ -416,13 +415,13 @@ class MigratorTest extends TestCase
     {
         Icons::spy();
         Storage::fake('icons');
-        
+
         $migrator = new TwoFAuthMigrator;
         $accounts = $migrator->migrate($migration);
-        
+
         $this->assertContainsOnlyInstancesOf(TwoFAccount::class, $accounts);
         $this->assertCount(1, $accounts);
-        
+
         Icons::shouldHaveReceived('buildFromResource')->once();
         Storage::disk('icons')->assertExists($accounts->first()->icon);
     }

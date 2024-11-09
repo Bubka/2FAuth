@@ -48,7 +48,7 @@ class ResetTesting extends Command
     public function handle()
     {
         $this->callSilently('config:clear');
-        
+
         if (! config('2fauth.config.isTestingApp') && ! $this->option('force')) {
             $this->comment('2fauth:reset-testing can only run when isTestingApp option is On');
 

@@ -34,11 +34,11 @@ class IconServiceTest extends FeatureTestCase
     public function setUp() : void
     {
         parent::setUp();
-        
+
         Storage::fake('icons');
         Storage::fake('logos');
         Storage::fake('imagesLink');
-        
+
         Http::preventStrayRequests();
         Http::fake([
             LogoService::TFA_IMG_URL . '*' => Http::response(HttpRequestTestData::SVG_LOGO_BODY, 200),
@@ -63,11 +63,11 @@ class IconServiceTest extends FeatureTestCase
     #[Test]
     public function test_buildFromResource_stores_icon_and_returns_name()
     {
-        $resource = base64_decode(OtpTestData::ICON_PNG_DATA);
+        $resource  = base64_decode(OtpTestData::ICON_PNG_DATA);
         $extension = 'png';
 
         $this->iconService = $this->app->make(IconService::class);
-        $iconName = $this->iconService->buildFromResource($resource, $extension);
+        $iconName          = $this->iconService->buildFromResource($resource, $extension);
 
         Storage::disk('icons')->assertExists($iconName);
         $this->assertEquals($resource, Storage::disk('icons')->get($iconName));
@@ -80,7 +80,7 @@ class IconServiceTest extends FeatureTestCase
             ->andReturn(false);
 
         $this->iconService = $this->app->make(IconService::class);
-        $iconName = $this->iconService->buildFromResource('lorem', 'ipsum');
+        $iconName          = $this->iconService->buildFromResource('lorem', 'ipsum');
 
         $this->assertNull($iconName);
     }
@@ -90,7 +90,7 @@ class IconServiceTest extends FeatureTestCase
     public function test_buildFromResource_with_bad_inputs_returns_null($resource, $extension)
     {
         $this->iconService = $this->app->make(IconService::class);
-        $iconName = $this->iconService->buildFromResource($resource, $extension);
+        $iconName          = $this->iconService->buildFromResource($resource, $extension);
 
         $this->assertNull($iconName);
     }
@@ -149,7 +149,7 @@ class IconServiceTest extends FeatureTestCase
         ]);
 
         $this->iconService = $this->app->make(IconService::class);
-        $iconName = $this->iconService->buildFromRemoteImage($imageUrl);
+        $iconName          = $this->iconService->buildFromRemoteImage($imageUrl);
 
         Storage::disk('icons')->assertExists($iconName);
         Storage::disk('imagesLink')->assertMissing($iconName);
@@ -174,7 +174,7 @@ class IconServiceTest extends FeatureTestCase
             ->andReturn(false);
 
         $this->iconService = $this->app->make(IconService::class);
-        $iconName = $this->iconService->buildFromRemoteImage($imageUrl);
+        $iconName          = $this->iconService->buildFromRemoteImage($imageUrl);
 
         $this->assertNull($iconName);
     }
@@ -203,11 +203,11 @@ class IconServiceTest extends FeatureTestCase
         Http::fake([
             'example.com/*' => Http::response(null, 400),
         ]);
-        
+
         $imageUrl = 'https://www.example.com/image.png';
 
         $this->iconService = $this->app->make(IconService::class);
-        $iconName = $this->iconService->buildFromRemoteImage($imageUrl);
+        $iconName          = $this->iconService->buildFromRemoteImage($imageUrl);
 
         $this->assertNull($iconName);
     }
@@ -223,7 +223,7 @@ class IconServiceTest extends FeatureTestCase
         ]);
 
         $this->iconService = $this->app->make(IconService::class);
-        $iconName = $this->iconService->buildFromRemoteImage($imageUrl);
+        $iconName          = $this->iconService->buildFromRemoteImage($imageUrl);
 
         $this->assertNull($iconName);
     }
@@ -240,7 +240,7 @@ class IconServiceTest extends FeatureTestCase
         ]);
 
         $this->iconService = $this->app->make(IconService::class);
-        $iconName = $this->iconService->buildFromRemoteImage($imageUrl);
+        $iconName          = $this->iconService->buildFromRemoteImage($imageUrl);
 
         $this->assertNull($iconName);
     }

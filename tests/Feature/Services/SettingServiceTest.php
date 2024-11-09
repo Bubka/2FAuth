@@ -8,13 +8,11 @@ use App\Facades\IconStore;
 use App\Facades\Settings;
 use App\Models\Icon;
 use App\Models\TwoFAccount;
-use App\Services\IconStoreService;
 use App\Services\SettingService;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
-use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
@@ -396,7 +394,7 @@ class SettingServiceTest extends FeatureTestCase
     public function test_set_storeIconsInDatabase_is_cancelled_if_database_toggling_failed()
     {
         $this->expectException(FailedIconStoreDatabaseTogglingException::class);
-        
+
         $newValue = true;
 
         IconStore::shouldReceive('setDatabaseReplication')

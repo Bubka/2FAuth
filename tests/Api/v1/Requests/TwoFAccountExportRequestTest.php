@@ -48,30 +48,30 @@ class TwoFAccountExportRequestTest extends TestCase
     {
         return [
             [[
-                'ids' => '1',
+                'ids'     => '1',
                 'otpauth' => '1',
             ]],
             [[
-                'ids' => '1',
+                'ids'     => '1',
                 'otpauth' => 1,
             ]],
             [[
-                'ids' => '1',
+                'ids'     => '1',
                 'otpauth' => true,
             ]],
             [[
                 'ids' => '1',
             ]],
             [[
-                'ids' => '1',
+                'ids'     => '1',
                 'otpauth' => '0',
             ]],
             [[
-                'ids' => '1',
+                'ids'     => '1',
                 'otpauth' => 0,
             ]],
             [[
-                'ids' => '1',
+                'ids'     => '1',
                 'otpauth' => false,
             ]],
         ];
@@ -94,31 +94,31 @@ class TwoFAccountExportRequestTest extends TestCase
     {
         return [
             [[
-                'ids' => '1',
+                'ids'     => '1',
                 'otpauth' => null,
             ]],
             [[
-                'ids' => '1',
+                'ids'     => '1',
                 'otpauth' => '',
             ]],
             [[
-                'ids' => '1',
+                'ids'     => '1',
                 'otpauth' => 2,
             ]],
             [[
-                'ids' => '1',
+                'ids'     => '1',
                 'otpauth' => 'string',
             ]],
             [[
-                'ids' => '1',
+                'ids'     => '1',
                 'otpauth' => 0.1,
             ]],
             [[
-                'ids' => '1',
+                'ids'     => '1',
                 'otpauth' => '01/01/2020',
             ]],
             [[
-                'ids' => '1',
+                'ids'     => '1',
                 'otpauth' => '01',
             ]],
         ];

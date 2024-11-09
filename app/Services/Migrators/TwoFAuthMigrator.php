@@ -3,8 +3,8 @@
 namespace App\Services\Migrators;
 
 use App\Exceptions\InvalidMigrationDataException;
-use App\Services\IconService;
 use App\Models\TwoFAccount;
+use App\Services\IconService;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
@@ -43,7 +43,7 @@ class TwoFAuthMigrator extends Migrator
     public function migrate(mixed $migrationPayload) : Collection
     {
         $iconService = App::make(IconService::class);
-        $json = json_decode(htmlspecialchars_decode($migrationPayload), true);
+        $json        = json_decode(htmlspecialchars_decode($migrationPayload), true);
 
         if (is_null($json)) {
             Log::error('2FAuth JSON migration data cannot be read');

@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Log;
  * @property int|null $user_id
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TwoFAccount[] $twofaccounts
  * @property-read \App\Models\User|null $user
+ *
  * @method static \Database\Factories\GroupFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Group newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Group newQuery()
@@ -29,7 +30,9 @@ use Illuminate\Support\Facades\Log;
  * @method static \Illuminate\Database\Eloquent\Builder|Group whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Group whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Group whereUserId($value)
+ *
  * @mixin \Eloquent
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Group orphans()
  */
 class Group extends Model

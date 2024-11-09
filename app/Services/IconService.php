@@ -23,7 +23,7 @@ class IconService
 
     /**
      * Build an icon from an image resource
-     * 
+     *
      * @param  \Psr\Http\Message\StreamInterface|\Illuminate\Http\File|\Illuminate\Http\UploadedFile|string|resource  $resource
      * @param  string  $extension  The file extension, without the dot
      */
@@ -49,7 +49,7 @@ class IconService
     }
 
     /**
-     * Build an icon by fetching an image file on the internet 
+     * Build an icon by fetching an image file on the internet
      */
     public function buildFromRemoteImage(string $url) : ?string
     {
@@ -67,8 +67,8 @@ class IconService
     protected function storeRemoteImage(string $url) : ?string
     {
         try {
-            $path_parts  = pathinfo($url);
-            $filename = Helpers::getRandomFilename($path_parts['extension']);
+            $path_parts = pathinfo($url);
+            $filename   = Helpers::getRandomFilename($path_parts['extension']);
 
             try {
                 $response = Http::withOptions([
@@ -80,7 +80,7 @@ class IconService
                 }
             } catch (\Exception $exception) {
                 Log::error(sprintf('Cannot fetch imageLink at "%s"', $url));
-                
+
                 return null;
             }
 
@@ -129,7 +129,7 @@ class IconService
             'image/x-ms-bmp',
             'image/svg+xml',
         ];
-        
+
         $isValid = in_array($mimeType, $acceptedMimeTypes)
             && ($mimeType !== 'image/svg+xml' ? getimagesize(Storage::disk('temp')->path($filename)) : true)
             && Str::contains($mimeType, $extension, true);

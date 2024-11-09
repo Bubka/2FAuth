@@ -3,7 +3,6 @@
 namespace Tests\Unit\Listeners;
 
 use App\Events\TwoFAccountDeleted;
-use App\Facades\Settings;
 use App\Listeners\CleanIconStorage;
 use App\Models\TwoFAccount;
 use App\Services\IconStoreService;
@@ -42,7 +41,7 @@ class CleanIconStorageTest extends TestCase
                 ->with($event->twofaccount->icon)
                 ->andReturn(true);
         });
-        
+
         /**
          * @disregard P1009 Undefined type
          */

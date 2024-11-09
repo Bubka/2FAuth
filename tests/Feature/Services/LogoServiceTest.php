@@ -52,7 +52,7 @@ class LogoServiceTest extends FeatureTestCase
         Http::preventStrayRequests();
         Http::fake([
             LogoService::TFA_IMG_URL . '*' => Http::response(HttpRequestTestData::SVG_LOGO_BODY, 200),
-            LogoService::TFA_URL => Http::response('not found', 404),
+            LogoService::TFA_URL           => Http::response('not found', 404),
         ]);
 
         $this->logoService = $this->app->make(LogoService::class);
@@ -97,7 +97,7 @@ class LogoServiceTest extends FeatureTestCase
         Http::preventStrayRequests();
         Http::fake([
             LogoService::TFA_IMG_URL . '*' => Http::response(HttpRequestTestData::SVG_LOGO_BODY, 200),
-            LogoService::TFA_URL => Http::response('not found', 404),
+            LogoService::TFA_URL           => Http::response('not found', 404),
         ]);
 
         $this->logoService = $this->app->make(LogoService::class);

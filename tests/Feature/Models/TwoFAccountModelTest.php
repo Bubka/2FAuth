@@ -49,7 +49,7 @@ class TwoFAccountModelTest extends FeatureTestCase
 
         Storage::fake('imagesLink');
         Storage::fake('icons');
-        
+
         Http::preventStrayRequests();
 
         /** @var \Illuminate\Contracts\Auth\Authenticatable $user */
@@ -671,7 +671,7 @@ class TwoFAccountModelTest extends FeatureTestCase
         Http::fake([
             OtpTestData::EXTERNAL_IMAGE_URL_DECODED => Http::response(HttpRequestTestData::ICON_PNG, 200),
         ]);
-        
+
         $orphan = new TwoFAccount;
         $orphan->fillWithURI(OtpTestData::HOTP_FULL_CUSTOM_URI);
         $orphan->save();
