@@ -14,9 +14,9 @@ return [
     */
 
     'admin' => '管理者',
-    'admin_panel' => 'Admin panel',
+    'admin_panel' => '管理者パネル',
     'app_setup' => 'アプリの機能',
-    'auth' => 'Auth',
+    'auth' => '認証',
     'registrations' => '登録',
     'users' => 'ユーザー',
     'users_legend' => 'インスタンス上の登録ユーザーの管理や、新規作成を行います。',
@@ -85,10 +85,10 @@ return [
     'show_one_year_log' => '昨年からのエントリを表示',
     'sort_by_date_asc' => '古い順',
     'sort_by_date_desc' => '新しい順',
-    'single_sign_on' => 'Single Sign-On (SSO)',
-    'database' => 'Database',
-    'file_system' => 'File system',
-    'storage' => 'Storage',
+    'single_sign_on' => 'シングルサインオン (SSO)',
+    'database' => 'データベース',
+    'file_system' => 'ファイルシステム',
+    'storage' => 'ストレージ',
     'forms' => [
         'use_encryption' => [
             'label' => '機密データを保護',
@@ -111,12 +111,12 @@ return [
             'help' => '新規ユーザー登録を禁止します。上書き（下記参照）されない限り、SSOにも影響し、新規ユーザーはSSOでもサインインできなくなります。',
         ],
         'enable_sso' => [
-            'label' => 'Enable SSO',
+            'label' => 'SSO を有効化',
             'help' => '訪問者が外部 ID のシングルサインオンを利用して認証できるようにします。',
         ],
         'use_sso_only' => [
-            'label' => 'Use SSO only',
-            'help' => 'Make SSO the only available method to log in to 2FAuth. Password login and Webauthn are then disabled for regular users. Administrators are not affected by this restriction.',
+            'label' => 'SSO のみ',
+            'help' => '2FAuth にログインできる手段を SSO 限定にします。通常ユーザーはパスワードと Webauthn によるログインができなくなります。管理者はこの制限の影響を受けません。',
         ],
         'keep_sso_registration_enabled' => [
             'label' => 'SSO登録は許可する',
@@ -132,16 +132,16 @@ return [
             'email_will_be_send_to_x' => '<span class="is-family-code has-text-info">:email</span> にメールを送信',
         ],
         'health_endpoint' => [
-            'label' => 'Health endpoint',
-            'help' => 'URL you can visit to check the health of this 2FAuth instance. This URL can be used to set up a Docker HEALTHCHECK or a Kubernetes HTTPS Liveness probe.',
+            'label' => '稼働状況エンドポイント',
+            'help' => 'この 2FAuth インスタンスの稼動状態を確認できる URL です。この URL は Docker HEALTHCHECK や Kubernetes HTTPS Liveness プローブの設定に使用できます。',
         ],
         'cache_management' => [
             'label' => 'キャッシュ管理',
             'help' => '環境変数の変更や更新の後などにキャッシュのクリアが必要になる場合があります。ここから実行できます。',
         ],
         'store_icon_to_database' => [
-            'label' => 'Store icons to database',
-            'help' => 'Uploaded icons are registered in the database in addition to the file system storage, which is then used only as a cache. This makes creating a 2FAuth backup much easier, as only the database has to be backed up.<br /><br />But beware, this may has some drawbacks: The database size may increase significantly if the instance hosts many large icons. It may also affect the application performance because the file system is hit more often to ensure it is synchronised with the database.',
+            'label' => 'アイコンをデータベースに保存',
+            'help' => 'アップロードされたアイコンは、ファイルシステム内だけでなくデータベースにも格納され、前者はキャッシュとしてのみ使用されます。これにより、バックアップする必要があるのがデータベースのみになるため、2FAuth バックアップの作成がはるかに簡単になります。<br /><br />※注意：欠点として、大きなアイコンを多数格納している場合、データベースのサイズが大幅に増加します。また、データベースとの同期を確認するため、より頻繁にファイルシステムにアクセスするため、パフォーマンスに影響を与える可能性もあります。',
         ],
     ],
 

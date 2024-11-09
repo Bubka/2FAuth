@@ -28,15 +28,15 @@ return [
     'account_updated' => 'アカウントを更新されました',
     'accounts_deleted' => 'アカウントを削除しました',
     'accounts_moved' => 'アカウントを移動しました',
-    'export_selected_accounts' => 'Export selected accounts',
-    'twofauth_export_format' => '2FAuth format',
-    'twofauth_export_format_sub' => 'Export data using the 2FAuth json schema',
-    'twofauth_export_format_desc' => 'You should prefer this option if you need to create a backup that can be restored. This format takes care of the icons.',
-    'twofauth_export_format_url' => 'The schema definition is described here:',
-    'twofauth_export_schema' => '2FAuth export schema',
-    'otpauth_export_format' => 'otpauth URIs',
-    'otpauth_export_format_sub' => 'Export data as a list of otpauth URIs',
-    'otpauth_export_format_desc' => 'otpauth URI is the most common format used to exchange 2FA data, for example in the form of a QR code when you enable 2FA on a web site. Select this if you want to switch from 2FAuth.',
+    'export_selected_accounts' => '選択したアカウントをエクスポート',
+    'twofauth_export_format' => '2FAuth 形式',
+    'twofauth_export_format_sub' => '2FAuth の JSON スキーマでデータをエクスポート',
+    'twofauth_export_format_desc' => '復元可能なバックアップを作成する必要がある場合は、このオプションを選択してください。この形式はアイコンにも対応しています。',
+    'twofauth_export_format_url' => 'スキーマ定義の説明は：',
+    'twofauth_export_schema' => '2FAuth エクスポートスキーマ',
+    'otpauth_export_format' => 'otpauth URI',
+    'otpauth_export_format_sub' => 'データを otpauth URI のリストとしてエクスポート',
+    'otpauth_export_format_desc' => 'otpauth URI は 2FA データの交換に使用される最も一般的な形式で、ウェブサイトで 2FA を有効にした時に QR コードなど形で表示されるものです。2FAuth から移行したい場合は、これを選択します。',
     'reveal' => '表示',
     'forms' => [
         'service' => [
@@ -69,8 +69,8 @@ return [
         'i_m_lucky_legend' => '「適当に取得」ボタンは、指定したサービスの公式アイコンの取得を試みます。 ".xyz" といった語尾を除く実際のサービス名を、誤字のないよう入力してください。（ベータ機能）',
         'test' => 'テスト',
         'group' => [
-            'label' => 'Group',
-            'help' => 'The group to which the account is to be assigned'
+            'label' => 'グループ',
+            'help' => 'アカウントに割り当てるグループ'
         ],
         'secret' => [
             'label' => 'シークレット',

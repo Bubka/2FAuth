@@ -114,7 +114,7 @@ return [
         'automatic' => '自動',
         'show_accounts_icons' => [
             'label' => 'アイコンを表示',
-            'help' => 'Show account icons in the main view'
+            'help' => 'メイン画面にアカウントのアイコンを表示します。'
         ],
         'get_official_icons' => [
             'label' => '公式アイコンを取得',
@@ -161,8 +161,8 @@ return [
             'help' => '2FAuth アカウントへの接続失敗があった時にメールを受け取る'
         ],
         'show_email_in_footer' => [
-            'label' => 'Show email in footer',
-            'help' => 'Display the logged-in user\'s email in the footer instead of direct navigation links. The links are then available in a menu behind a click/tap on the email address.'
+            'label' => 'フッターにメールを表示',
+            'help' => '直接メニューのリンクを表示する代わりに、ログイン中のユーザーのメールをフッターに表示します。メールアドレスをクリック/タップすると、リンクへのメニューが表示されます。'
         ],
         'otp_generation_on_request' => 'クリック/タップで',
         'otp_generation_on_request_legend' => '個別の画面で開く',

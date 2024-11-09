@@ -43,8 +43,8 @@ return [
     '2fauth_has_not_a_valid_domain' => '2FAuth のドメインが有効なドメインではありません',
     'user_id_not_between_1_64' => 'ユーザー ID は 1 文字以上 64 文字以内でなければなりません',
     'no_entry_was_of_type_public_key' => '"public-key" 型の項目がありません',
-    'unsupported_with_reverseproxy' => 'Not applicable when using an auth proxy or SSO',
-    'unsupported_with_sso_only' => 'This authentication method is for administrators only. Users must log in with SSO.',
+    'unsupported_with_reverseproxy' => '認証プロキシまたは SSO を使用する場合は適用されません',
+    'unsupported_with_sso_only' => 'この認証手段は管理者専用です。ユーザーは SSO でログインしてください。',
     'user_deletion_failed' => 'ユーザーアカウントを削除できませんでした。データは保存されたままです',
     'auth_proxy_failed' => 'プロキシ認証に失敗しました',
     'auth_proxy_failed_legend' => '2FAuth は認証プロキシ経由で動作するよう設定されていますが、プロキシは必要なヘッダーを返しませんでした。設定をご確認のうえ再度お試しください。',
@@ -73,5 +73,5 @@ return [
     'cannot_decode_detected_qrcode' => '検出されたQRコードをデコードできません。画像をトリミングまたはシャープにしてください。',
     'qrcode_has_invalid_checksum' => 'QRコードのチェックサムが不正です',
     'no_readable_qrcode' => '読み取り可能なQRコードがありません',
-    'failed_icon_store_database_toggling' => 'Migration of icons failed. The setting has been restored to its previous value.',
+    'failed_icon_store_database_toggling' => 'アイコンの移行に失敗しました。設定を元の値に戻しました。',
 ];
