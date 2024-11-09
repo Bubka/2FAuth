@@ -4,13 +4,12 @@
 
 ### Changed
 
-- The links in the footer (Settings, [Admin,] Sign out) have been replaced by the email address of the logged in user. Clicking on this email shows a navigation menu containing the links that were previously visible in the footer. The former display is still available if you don't like the new one, just uncheck the new _Show email in footer_ user option in Settings.
+- The links in the footer (Settings, [Admin,] Sign out) have been replaced by the email address of the logged in user. Clicking on this email shows a navigation menu containing the links that were previously visible in the footer. The former display is still available if you don't like the new one, just uncheck the new _Show email in footer_ user option in Settings. ([#404](https://github.com/Bubka/2FAuth/issues/404))
 
 ### Added
 
 - Administrators can now configure 2FAuth to register 2FA icons in the database (see the new _Store icons to database_ setting in the admin panel). When enabled, existing icons in the local file system are automatically registered in the database. These files are retained and then used for caching purposes only. 2FAuth will automatically re-create cache files if they are missing, so you only have to consider the database when backing up your instance. When disabled, 2FAuth will check that all registered icons in the database have a corresponding local file before flushing out the db icons table. ([#364](https://github.com/Bubka/2FAuth/issues/364)).
 - The ability to export 2FA accounts as a list of otpauth URIs ([#386](https://github.com/Bubka/2FAuth/issues/386)).
-- A _Show email in footer_ user option  ([#404](https://github.com/Bubka/2FAuth/issues/404)).
 
 ### Fixed
 
