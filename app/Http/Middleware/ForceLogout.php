@@ -17,7 +17,7 @@ class ForceLogout
     public function handle($request, Closure $next, ...$guards)
     {
         if (Auth::user() != null) {
-            Auth::guard('web-guard')->logoutCurrentDevice();
+            Auth::logoutCurrentDevice();
         }
 
         return $next($request);

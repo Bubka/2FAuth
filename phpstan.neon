@@ -11,4 +11,5 @@ parameters:
         analyse:
             - app/Protobuf/*
     ignoreErrors:
-    checkMissingIterableValueType: false
+        -
+            identifier: missingType.iterableValue
