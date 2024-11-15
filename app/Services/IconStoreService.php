@@ -42,6 +42,7 @@ class IconStoreService
 
         $this->svgSanitizer = $svgSanitizer;
         $this->svgSanitizer->removeRemoteReferences(true);
+        $this->svgSanitizer->minify(true);
     }
 
     /**

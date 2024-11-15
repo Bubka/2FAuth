@@ -8,6 +8,7 @@
     displayDetailsOnTestsThatTriggerErrors="true"
     displayDetailsOnTestsThatTriggerNotices="true"
     displayDetailsOnTestsThatTriggerWarnings="true"
+    displayDetailsOnPhpunitDeprecations="true"
     processIsolation="false"
     stopOnFailure="false"
     stopOnError="false"
@@ -20,7 +21,7 @@
             <directory suffix=".php">app/Protobuf</directory>
         </exclude>
     </source>
-    <coverage includeUncoveredFiles="true">
+    <coverage>
     </coverage>
     <testsuites>
         <testsuite name="Unit">
@@ -34,7 +35,7 @@
         </testsuite>
     </testsuites>
     <php>
-        <ini name="memory_limit" value="2048M" />
+        <ini name="memory_limit" value="2048M"/>
         <env name="APP_ENV" value="testing"/>
         <!-- following values override .env.testing vars -->
     </php>

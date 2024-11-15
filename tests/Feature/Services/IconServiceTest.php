@@ -76,6 +76,9 @@ class IconServiceTest extends FeatureTestCase
     #[Test]
     public function test_buildFromResource_returns_null_when_store_fails()
     {
+        Storage::shouldReceive('disk->mimeType')
+            ->andReturn('image/png');
+
         Storage::shouldReceive('disk->put')
             ->andReturn(false);
 
