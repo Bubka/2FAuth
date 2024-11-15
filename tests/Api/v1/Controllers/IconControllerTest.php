@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Classes\LocalFile;
 use Tests\Data\HttpRequestTestData;
 use Tests\Data\OtpTestData;
 use Tests\FeatureTestCase;
@@ -41,7 +42,7 @@ class IconControllerTest extends FeatureTestCase
             LogoService::TFA_URL           => Http::response(HttpRequestTestData::TFA_JSON_BODY, 200),
         ]);
         Http::fake([
-            OtpTestData::EXTERNAL_IMAGE_URL_DECODED => Http::response((new FileFactory)->image('file.png', 10, 10)->tempFile, 200),
+            OtpTestData::EXTERNAL_IMAGE_URL_DECODED          => Http::response((new FileFactory)->image('file.png', 10, 10)->tempFile, 200),
         ]);
 
         $this->user = User::factory()->create();
@@ -85,6 +86,21 @@ class IconControllerTest extends FeatureTestCase
     }
 
     #[Test]
+    public function test_upload_infected_svg_data_stores_stores_sanitized_svg_content()
+    {
+        $file = LocalFile::fake()->infectedSvgIconFile();
+
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('POST', '/api/v1/icons', [
+                'icon' => $file,
+            ])
+            ->assertCreated();
+
+        $svgContent = IconStore::get($response->getData()->filename);
+        $this->assertStringNotContainsString(OtpTestData::ICON_SVG_MALICIOUS_CODE, $svgContent);
+    }
+
+    #[Test]
     public function test_fetch_logo_returns_filename()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -95,6 +111,22 @@ class IconControllerTest extends FeatureTestCase
             ->assertJsonStructure([
                 'filename',
             ]);
+    }
+
+    #[Test]
+    public function test_fetch_logo_with_infected_svg_data_stores_sanitized_svg_content()
+    {
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('POST', '/api/v1/icons/default', [
+                'service' => 'service',
+            ])
+            ->assertStatus(201)
+            ->assertJsonStructure([
+                'filename',
+            ]);
+
+        $svgContent = IconStore::get($response->getData()->filename);
+        $this->assertStringNotContainsString(OtpTestData::ICON_SVG_MALICIOUS_CODE, $svgContent);
     }
 
     #[Test]

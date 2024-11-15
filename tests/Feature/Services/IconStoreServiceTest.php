@@ -482,9 +482,56 @@ class IconStoreServiceTest extends FeatureTestCase
             ->with($iconName, $iconContent)
             ->andReturn(false);
 
+        Storage::shouldReceive('disk->mimeType')
+            ->with($iconName)
+            ->andReturn('image/png');
+
         $result = $this->iconStore->store($iconName, $iconContent);
 
         $this->assertFalse($result);
+    }
+
+    #[Test]
+    public function test_store_stores_sanitized_svg_content()
+    {
+        Settings::set('storeIconsInDatabase', true);
+        
+        $result = $this->iconStore->store(OtpTestData::ICON_SVG, OtpTestData::ICON_SVG_DATA_INFECTED);
+
+        $this->assertTrue($result);
+
+        $this->assertStringNotContainsString(
+            OtpTestData::ICON_SVG_MALICIOUS_CODE,
+            Storage::disk('icons')->get(OtpTestData::ICON_SVG)
+        );
+        
+        $dbRecord = DB::table('icons')->where('name', OtpTestData::ICON_SVG)->first();
+        
+        $this->assertStringNotContainsString(
+            OtpTestData::ICON_SVG_MALICIOUS_CODE,
+            $dbRecord->content,
+        );
+    }
+
+    #[Test]
+    public function test_store_returns_false_when_svg_sanitize_failed()
+    {
+        $result = $this->iconStore->store(OtpTestData::ICON_SVG, 'this_will_make_svg_data_invalid' . OtpTestData::ICON_SVG_DATA);
+
+        $this->assertFalse($result);
+    }
+
+    #[Test]
+    public function test_store_deletes_svg_icon_that_cannot_be_sanitized()
+    {
+        Settings::set('storeIconsInDatabase', true);
+        
+        $result = $this->iconStore->store(OtpTestData::ICON_SVG, 'this_will_make_svg_data_invalid' . OtpTestData::ICON_SVG_DATA);
+
+        Storage::disk('icons')->assertMissing(OtpTestData::ICON_SVG);
+        $this->assertDatabaseMissing('icons', [
+            'name' => OtpTestData::ICON_SVG,
+        ]);
     }
 
     #[Test]

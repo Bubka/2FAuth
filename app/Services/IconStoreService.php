@@ -6,6 +6,7 @@ use App\Exceptions\FailedIconStoreDatabaseTogglingException;
 use App\Facades\Settings;
 use App\Models\Icon;
 use App\Models\TwoFAccount;
+use enshrined\svgSanitize\Sanitizer;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
@@ -27,12 +28,20 @@ class IconStoreService
     protected bool $usesDatabase;
 
     /**
+     * The SVG sanitizer
+     */
+    protected Sanitizer $svgSanitizer;
+
+    /**
      * 
      */
-    public function __construct()
+    public function __construct(Sanitizer $svgSanitizer)
     {
         $this->usesDatabase = Settings::get('storeIconsInDatabase');
         $this->setDisk();
+
+        $this->svgSanitizer = $svgSanitizer;
+        $this->svgSanitizer->removeRemoteReferences(true);
     }
 
     /**
@@ -207,11 +216,34 @@ class IconStoreService
     {
         $storedToDisk = $this->storeToDisk($name, $content);
 
+        if ($this->mimeType($name) == 'image/svg+xml') {
+            $sanitized = $this->sanitize($content);
+
+            if (! $sanitized) {
+                $this->delete($name);
+
+                return false;
+            }
+
+            if ($content != $sanitized) {
+                $content = $sanitized;
+                $storedToDisk = $this->storeToDisk($name, $content);
+            }
+        }
+
         if ($this->usesDatabase) {
             return $this->storeToDatabase($name, $content);
         }
 
         return $storedToDisk;
+    }
+
+    /**
+     * Sanitize the given content (when icon is an svg image)
+     */
+    protected function sanitize(string $content) : string
+    {
+        return $this->svgSanitizer->sanitize($content);
     }
 
     /**

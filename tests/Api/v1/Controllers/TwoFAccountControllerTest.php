@@ -8,6 +8,7 @@ use App\Api\v1\Resources\TwoFAccountExportCollection;
 use App\Api\v1\Resources\TwoFAccountExportResource;
 use App\Api\v1\Resources\TwoFAccountReadResource;
 use App\Api\v1\Resources\TwoFAccountStoreResource;
+use App\Facades\IconStore;
 use App\Facades\Settings;
 use App\Models\Group;
 use App\Models\TwoFAccount;
@@ -242,11 +243,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
         Http::fake([
             LogoService::TFA_IMG_URL . '*' => Http::response(HttpRequestTestData::SVG_LOGO_BODY, 200),
             LogoService::TFA_URL           => Http::response(HttpRequestTestData::TFA_JSON_BODY, 200),
-        ]);
-        Http::fake([
             OtpTestData::EXTERNAL_IMAGE_URL_DECODED => Http::response((new FileFactory)->image('file.png', 10, 10)->tempFile, 200),
-        ]);
-        Http::fake([
+            OtpTestData::EXTERNAL_INFECTED_IMAGE_URL_DECODED => Http::response((new FileFactory)->createWithContent('infected.svg', OtpTestData::ICON_SVG_DATA_INFECTED)->tempFile, 200),
             'example.com/*' => Http::response(null, 400),
         ]);
 
@@ -1216,6 +1214,21 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->assertJsonFragment([
                 'icon' => null,
             ]);
+    }
+
+    #[Test]
+    public function test_preview_with_infected_svg_image_stores_sanitized_image()
+    {
+        $this->user['preferences->getOfficialIcons'] = true;
+
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('POST', '/api/v1/twofaccounts/preview', [
+                'uri' => OtpTestData::TOTP_URI_WITH_INFECTED_SVG_IMAGE,
+            ])
+            ->assertOk();
+
+        $svgContent = IconStore::get($response->getData()->icon);
+        $this->assertStringNotContainsString(OtpTestData::ICON_SVG_MALICIOUS_CODE, $svgContent);
     }
 
     #[Test]

@@ -36,6 +36,10 @@ class OtpTestData
 
     const EXTERNAL_IMAGE_URL_ENCODED = 'https%3A%2F%2Fen.opensuse.org%2Fimages%2F4%2F44%2FButton-filled-colour.png';
 
+    const EXTERNAL_INFECTED_IMAGE_URL_DECODED = 'https://image.com/infected.svg';
+
+    const EXTERNAL_INFECTED_IMAGE_URL_ENCODED = 'https%3A%2F%2Fimage.com%2Finfected.svg';
+
     const ICON_PNG = 'test.png';
 
     const ICON_PNG_DATA = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAC0lEQVQImWP4DwQACfsD/eNV8pwAAAAASUVORK5CYII=';
@@ -57,6 +61,10 @@ class OtpTestData
     const ICON_SVG_DATA = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024"><circle cx="512" cy="512" r="512" style="fill:#000e9c"/><path d="m700.2 466.5 61.2-106.3c23.6 41.6 37.2 89.8 37.2 141.1 0 68.8-24.3 131.9-64.7 181.4H575.8l48.7-84.6h-64.4l75.8-131.7 64.3.1zm-55.4-125.2L448.3 682.5l.1.2H290.1c-40.5-49.5-64.7-112.6-64.7-181.4 0-51.4 13.6-99.6 37.3-141.3l102.5 178.2 113.3-197h166.3z" style="fill:#fff"/></svg>';
 
     const ICON_SVG_DATA_ENCODED = 'PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDI0IDEwMjQiPg0KICAgPGNpcmNsZSBjeD0iNTEyIiBjeT0iNTEyIiByPSI1MTIiIHN0eWxlPSJmaWxsOiMwMDBlOWMiLz4NCiAgIDxwYXRoIGQ9Im03MDAuMiA0NjYuNSA2MS4yLTEwNi4zYzIzLjYgNDEuNiAzNy4yIDg5LjggMzcuMiAxNDEuMSAwIDY4LjgtMjQuMyAxMzEuOS02NC43IDE4MS40SDU3NS44bDQ4LjctODQuNmgtNjQuNGw3NS44LTEzMS43IDY0LjMuMXptLTU1LjQtMTI1LjJMNDQ4LjMgNjgyLjVsLjEuMkgyOTAuMWMtNDAuNS00OS41LTY0LjctMTEyLjYtNjQuNy0xODEuNCAwLTUxLjQgMTMuNi05OS42IDM3LjMtMTQxLjNsMTAyLjUgMTc4LjIgMTEzLjMtMTk3aDE2Ni4zeiIgc3R5bGU9ImZpbGw6I2ZmZiIvPg0KPC9zdmc+DQo=';
+
+    const ICON_SVG_MALICIOUS_CODE = '<script>alert("XSS");</script>';
+
+    const ICON_SVG_DATA_INFECTED = '<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="100" height="100" version="1.1" xmlns="http://www..w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">' . self::ICON_SVG_MALICIOUS_CODE . '</svg>';
 
     const ICON_GIF = 'test.gif';
 
@@ -85,6 +93,8 @@ class OtpTestData
     const UNREACHABLE_IMAGE_URL_DECODED = 'https://www.example.com/image.png';
 
     const TOTP_URI_WITH_UNREACHABLE_IMAGE = 'otpauth://totp/service:account?secret=A4GRFHVVRBGY7UIW&image=' . self::UNREACHABLE_IMAGE_URL;
+
+    const TOTP_URI_WITH_INFECTED_SVG_IMAGE = 'otpauth://totp/service:account?secret=A4GRFHVVRBGY7UIW&image=' . self::EXTERNAL_INFECTED_IMAGE_URL_ENCODED;
 
     const INVALID_OTPAUTH_URI = 'otpauth://Xotp/' . self::ACCOUNT . '?secret=' . self::SECRET;
 

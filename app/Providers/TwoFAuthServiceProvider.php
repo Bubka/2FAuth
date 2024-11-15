@@ -9,6 +9,7 @@ use App\Services\LogoService;
 use App\Services\ReleaseRadarService;
 use App\Services\SettingService;
 use App\Services\TwoFAccountService;
+use enshrined\svgSanitize\Sanitizer;
 use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Support\ServiceProvider;
 use Zxing\QrReader;
@@ -30,8 +31,8 @@ class TwoFAuthServiceProvider extends ServiceProvider implements DeferrableProvi
             return new SettingService;
         });
 
-        $this->app->singleton(IconStoreService::class, function () {
-            return new IconStoreService;
+        $this->app->singleton(IconStoreService::class, function ($app) {
+            return new IconStoreService($app->make(Sanitizer::class));
         });
 
         $this->app->singleton(LogoService::class, function ($app) {
