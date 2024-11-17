@@ -495,7 +495,7 @@ class IconStoreServiceTest extends FeatureTestCase
     public function test_store_stores_sanitized_svg_content()
     {
         Settings::set('storeIconsInDatabase', true);
-        
+
         $result = $this->iconStore->store(OtpTestData::ICON_SVG, OtpTestData::ICON_SVG_DATA_INFECTED);
 
         $this->assertTrue($result);
@@ -504,9 +504,9 @@ class IconStoreServiceTest extends FeatureTestCase
             OtpTestData::ICON_SVG_MALICIOUS_CODE,
             Storage::disk('icons')->get(OtpTestData::ICON_SVG)
         );
-        
+
         $dbRecord = DB::table('icons')->where('name', OtpTestData::ICON_SVG)->first();
-        
+
         $this->assertStringNotContainsString(
             OtpTestData::ICON_SVG_MALICIOUS_CODE,
             $dbRecord->content,
@@ -525,7 +525,7 @@ class IconStoreServiceTest extends FeatureTestCase
     public function test_store_deletes_svg_icon_that_cannot_be_sanitized()
     {
         Settings::set('storeIconsInDatabase', true);
-        
+
         $result = $this->iconStore->store(OtpTestData::ICON_SVG, 'this_will_make_svg_data_invalid' . OtpTestData::ICON_SVG_DATA);
 
         Storage::disk('icons')->assertMissing(OtpTestData::ICON_SVG);

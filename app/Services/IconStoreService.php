@@ -227,7 +227,7 @@ class IconStoreService
             }
 
             if ($content != $sanitized) {
-                $content = $sanitized;
+                $content      = $sanitized;
                 $storedToDisk = $this->storeToDisk($name, $content);
             }
         }

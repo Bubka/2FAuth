@@ -42,7 +42,7 @@ class IconControllerTest extends FeatureTestCase
             LogoService::TFA_URL           => Http::response(HttpRequestTestData::TFA_JSON_BODY, 200),
         ]);
         Http::fake([
-            OtpTestData::EXTERNAL_IMAGE_URL_DECODED          => Http::response((new FileFactory)->image('file.png', 10, 10)->tempFile, 200),
+            OtpTestData::EXTERNAL_IMAGE_URL_DECODED => Http::response((new FileFactory)->image('file.png', 10, 10)->tempFile, 200),
         ]);
 
         $this->user = User::factory()->create();
