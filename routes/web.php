@@ -14,6 +14,7 @@ use App\Http\Controllers\Auth\WebAuthnRecoveryController;
 use App\Http\Controllers\Auth\WebAuthnRegisterController;
 use App\Http\Controllers\SinglePageController;
 use App\Http\Controllers\SystemController;
+use App\Http\Middleware\AddContentSecurityPolicyHeaders;
 use App\Http\Middleware\CustomCreateFreshApiToken;
 use App\Http\Middleware\SetLanguage;
 use Illuminate\Routing\Middleware\SubstituteBindings;
@@ -117,4 +118,4 @@ Route::withoutMiddleware([
 /**
  * Route for the main landing view
  */
-Route::get('/{any}', [SinglePageController::class, 'index'])->where('any', '.*')->name('landing');
+Route::get('/{any}', [SinglePageController::class, 'index'])->where('any', '.*')->name('landing')->middleware(AddContentSecurityPolicyHeaders::class);

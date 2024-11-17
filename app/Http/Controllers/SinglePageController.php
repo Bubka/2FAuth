@@ -6,6 +6,7 @@ use App\Events\ScanForNewReleaseCalled;
 use App\Facades\Settings;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Vite;
 
 class SinglePageController extends Controller
 {
@@ -32,6 +33,7 @@ class SinglePageController extends Controller
         $installDocUrl      = config('2fauth.installDocUrl');
         $ssoDocUrl          = config('2fauth.ssoDocUrl');
         $exportSchemaUrl    = config('2fauth.exportSchemaUrl');
+        $cspNonce           = Vite::cspNonce();
 
         // if (Auth::user()->preferences)
 
@@ -57,6 +59,7 @@ class SinglePageController extends Controller
             'isTestingApp'       => $isTestingApp,
             'lang'               => $lang,
             'locales'            => $locales,
+            'cspNonce'           => $cspNonce,
         ]);
     }
 }

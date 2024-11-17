@@ -22,7 +22,7 @@
     <div id="app">
         <app></app>
     </div>
-    <script type="text/javascript">
+    <script type="text/javascript" nonce="{{ $cspNonce }}">
         var appSettings = {!! $appSettings !!};
         var appConfig = {!! $appConfig !!};
         var urls = {!! $urls !!};
