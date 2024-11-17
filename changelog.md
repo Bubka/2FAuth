@@ -1,5 +1,13 @@
 # Change log
 
+## [5.4.1] - 2024-11-17
+
+### Security release
+
+- Fix XSS & SSRF vulnerabilities (thx to the XBOW team).
+- Content Security Policy is now available and enable by default. CSP helps to prevent or minimize the risk of certain types of security threats.  
+  If CSP is already enable on your server, you can set the `CONTENT_SECURITY_POLICY` environment variable to `false` to disable it at 2FAuth level.
+
 ## [5.4.0] - 2024-11-08
 
 ### Changed
