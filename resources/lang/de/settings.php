@@ -114,7 +114,7 @@ return [
         'automatic' => 'Automatisch',
         'show_accounts_icons' => [
             'label' => 'Symbole anzeigen',
-            'help' => 'Show account icons in the main view'
+            'help' => 'Kontosymbole in der Hauptansicht anzeigen'
         ],
         'get_official_icons' => [
             'label' => 'Offizielle Symbole abrufen',
@@ -161,8 +161,8 @@ return [
             'help' => 'Erhalten Sie jedes Mal eine E-Mail, wenn ein Verbindungsversuch zu Ihrem 2FAuth-Konto fehlschlägt'
         ],
         'show_email_in_footer' => [
-            'label' => 'Show email in footer',
-            'help' => 'Display the logged-in user\'s email in the footer instead of direct navigation links. The links are then available in a menu behind a click/tap on the email address.'
+            'label' => 'E-Mail in Fußzeile anzeigen',
+            'help' => 'Die E-Mail des angemeldeten Benutzers in der Fußzeile anstelle von direkten Navigationslinks anzeigen. Die Links stehen dann im Menü hinter einem Klick/Tippen auf die E-Mail-Adresse zur Verfügung.'
         ],
         'otp_generation_on_request' => 'Nach einem Klick/Tippen',
         'otp_generation_on_request_legend' => 'Einzeln, in eigener Ansicht',

@@ -114,7 +114,7 @@ return [
         'automatic' => '自动',
         'show_accounts_icons' => [
             'label' => '显示图标',
-            'help' => 'Show account icons in the main view'
+            'help' => '在主视图中显示图标'
         ],
         'get_official_icons' => [
             'label' => '获取官方图标',
@@ -161,8 +161,8 @@ return [
             'help' => '每次登录失败时都发送邮件通知'
         ],
         'show_email_in_footer' => [
-            'label' => 'Show email in footer',
-            'help' => 'Display the logged-in user\'s email in the footer instead of direct navigation links. The links are then available in a menu behind a click/tap on the email address.'
+            'label' => '在底部显示邮箱地址',
+            'help' => '在页面底部显示当前登录用户的邮箱地址，而非直接显示导航链接。当点击邮箱地址时，再跳转到导航链接。'
         ],
         'otp_generation_on_request' => '点击 / 单击账户后',
         'otp_generation_on_request_legend' => '在独立页面中显示',

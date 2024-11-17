@@ -73,5 +73,5 @@ return [
     'cannot_decode_detected_qrcode' => 'Kann den QR-Code nicht dekodieren. Bitte das Bild zuschneiden oder schärfen',
     'qrcode_has_invalid_checksum' => 'QR-Code hat eine ungültige Prüfsumme',
     'no_readable_qrcode' => 'Kein lesbarer QR-Code',
-    'failed_icon_store_database_toggling' => 'Migration of icons failed. The setting has been restored to its previous value.',
+    'failed_icon_store_database_toggling' => 'Migration von Symbolen fehlgeschlagen. Die Einstellung wurde auf ihren vorherigen Wert zurückgesetzt.',
 ];

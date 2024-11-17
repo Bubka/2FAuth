@@ -107,7 +107,7 @@ WebAuthn 允许您使用受信任的设备 (如 Yubikeys 或具有生物识别�
         'new_password' => '新密码',
         'current_password' => [
             'label' => '当前密码',
-            'help' => '输入您当前的密码以确认是您本人'
+            'help' => '为了确认您是此账户的所有人，请输入当前的密码'
         ],
         'change_password' => '修改密码',
         'send_password_reset_link' => '发送密码重置链接',
@@ -122,7 +122,7 @@ WebAuthn 允许您使用受信任的设备 (如 Yubikeys 或具有生物识别�
         'delete_account' => '删除账户',
         'delete_your_account' => '删除您的账户',
         'delete_your_account_and_reset_all_data' => '您所有的 2FA 数据将与此账户被一同删除，此操作无法恢复。',
-        'reset_your_password_to_delete_your_account' => '如果您经常使用 SSO 登录，您可以在退出登录后，使用 “重置密码” 功能获取密码来填写此表格中的对应项目。',
+        'reset_your_password_to_delete_your_account' => '如果您此前使用的是 SSO 登录，请在退出登录后，使用 “重置密码” 功能设置密码。',
         'deleting_2fauth_account_does_not_impact_provider' => '删除 2FAuth 账户不会影响您的外部 SSO 账户。',
         'user_account_successfully_deleted' => '账号删除成功',
         'has_lower_case' => '包含小写字母',

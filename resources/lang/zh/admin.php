@@ -14,7 +14,7 @@ return [
     */
 
     'admin' => '管理员',
-    'admin_panel' => 'Admin panel',
+    'admin_panel' => '管理面板',
     'app_setup' => '应用设置',
     'auth' => '鉴权',
     'registrations' => '注册',

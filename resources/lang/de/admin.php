@@ -14,7 +14,7 @@ return [
     */
 
     'admin' => 'Administrator',
-    'admin_panel' => 'Admin panel',
+    'admin_panel' => 'Admin-Panel',
     'app_setup' => 'App-Einstellungen',
     'auth' => 'Auth',
     'registrations' => 'Registrierungen',
@@ -86,9 +86,9 @@ return [
     'sort_by_date_asc' => 'Älteste zuerst anzeigen',
     'sort_by_date_desc' => 'Aktuellste zuerst anzeigen',
     'single_sign_on' => 'Single-Sign-On (SSO)',
-    'database' => 'Database',
-    'file_system' => 'File system',
-    'storage' => 'Storage',
+    'database' => 'Datenbank',
+    'file_system' => 'Dateisystem',
+    'storage' => 'Speicher',
     'forms' => [
         'use_encryption' => [
             'label' => 'Sensible Daten schützen',
@@ -140,8 +140,8 @@ return [
             'help' => 'Manchmal muss der Cache geleert werden, zum Beispiel nach einer Änderung an Umgebungsvariablen oder einer Aktualisierung. Sie können es von hier aus tun.',
         ],
         'store_icon_to_database' => [
-            'label' => 'Store icons to database',
-            'help' => 'Uploaded icons are registered in the database in addition to the file system storage, which is then used only as a cache. This makes creating a 2FAuth backup much easier, as only the database has to be backed up.<br /><br />But beware, this may has some drawbacks: The database size may increase significantly if the instance hosts many large icons. It may also affect the application performance because the file system is hit more often to ensure it is synchronised with the database.',
+            'label' => 'Symbole in Datenbank speichern',
+            'help' => 'Hochgeladene Symbole werden zusätzlich zum Dateisystemspeicher in der Datenbank registriert, die dann nur als Cache verwendet wird. Dies macht die Erstellung eines 2FAuth-Sicherung sehr viel einfacher, da nur die Datenbank gesichert werden muss.<br /><br />Aber Vorsicht, dies kann einige Nachteile haben: Die Größe der Datenbank kann erheblich ansteigen, wenn die Instanz viele große Symbole hostet. Es kann auch die Leistung der Anwendung beeinträchtigen, da das Dateisystem häufiger angegriffen wird, um sicherzustellen, dass es mit der Datenbank synchronisiert ist.',
         ],
     ],
 
