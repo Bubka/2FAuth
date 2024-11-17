@@ -135,6 +135,11 @@ services:
       # You can provide a proxy URL that contains a scheme, username, and password.
       # For example, "http://username:password@192.168.16.1:10".
       - PROXY_FOR_OUTGOING_REQUESTS=null
+      # Set this to true to enable Content-Security-Policy (CSP).
+      # CSP helps to prevent or minimize the risk of certain types of security threats.
+      # This is mainly used as a defense against cross-site scripting (XSS) attacks, in which
+      # an attacker is able to inject malicious code into the web app
+      - CONTENT_SECURITY_POLICY=true
       # Leave the following configuration vars as is.
       # Unless you like to tinker and know what you're doing.
       - BROADCAST_DRIVER=log
