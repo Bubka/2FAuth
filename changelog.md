@@ -1,5 +1,11 @@
 # Change log
 
+## [5.4.2] - 2024-11-18
+
+### Changed
+
+- CSP has been turned off (for now) since it breaks the app under Google Chrome. ([#417](https://github.com/Bubka/2FAuth/issues/417))
+
 ## [5.4.1] - 2024-11-17
 
 ### Security release
