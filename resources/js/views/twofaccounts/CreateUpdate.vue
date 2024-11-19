@@ -425,7 +425,7 @@
                     <div class="column">
                         <FieldError v-if="iconForm.errors.hasAny('icon')" :error="iconForm.errors.get('icon')" :field="'icon'" class="help-for-file" />
                         <label class="add-icon-button" v-if="!tempIcon">
-                            <input class="file-input" type="file" accept="image/*" v-on:change="uploadIcon" ref="iconInput">
+                            <input inert class="file-input" type="file" accept="image/*" v-on:change="uploadIcon" ref="iconInput">
                             <FontAwesomeIcon :icon="['fas', 'image']" size="2x" />
                         </label>
                         <button class="delete delete-icon-button is-medium" v-if="tempIcon" @click.prevent="deleteTempIcon"></button>
@@ -468,7 +468,7 @@
                         <UseColorMode v-slot="{ mode }">
                             <div role="button" tabindex="0" class="file is-small" :class="{ 'is-black': mode == 'dark' }" @keyup.enter="qrcodeInputLabel.click()">
                                 <label class="file-label" :title="$t('twofaccounts.forms.use_qrcode.title')" ref="qrcodeInputLabel">
-                                    <input aria-hidden="true" tabindex="-1" class="file-input" type="file" accept="image/*" v-on:change="uploadQrcode" ref="qrcodeInput">
+                                    <input inert tabindex="-1" class="file-input" type="file" accept="image/*" v-on:change="uploadQrcode" ref="qrcodeInput">
                                     <span class="file-cta">
                                         <span class="file-icon">
                                             <FontAwesomeIcon :icon="['fas', 'qrcode']" size="lg" />

@@ -278,8 +278,8 @@
                                     <RouterLink id="btnCapture" :to="{ name: 'capture' }" class="card-footer-item">
                                         {{ $t('twofaccounts.import.scan') }}
                                     </RouterLink>
-                                    <a role="button" tabindex="0" class="card-footer-item is-relative" @keyup.enter="qrcodeInput.click()">
-                                        <input aria-hidden="true" tabindex="-1" class="file-input" type="file" accept="image/*" v-on:change="submitQrCode" ref="qrcodeInput">
+                                    <a role="button" tabindex="0" class="card-footer-item is-relative" @click="qrcodeInput.click()" @keyup.enter="qrcodeInput.click()">
+                                        <input inert tabindex="-1" class="file-input" type="file" accept="image/*" v-on:change="submitQrCode" ref="qrcodeInput">
                                         {{ $t('twofaccounts.import.upload') }}
                                     </a>
                                 </footer>
@@ -304,8 +304,8 @@
                                     <FieldError v-if="fileForm.errors.hasAny('file')" :error="fileForm.errors.get('file')" :field="'file'" />
                                 </div>
                                 <footer class="card-footer">
-                                    <a role="button" tabindex="0" class="card-footer-item is-relative" @keyup.enter="fileInput.click()">
-                                        <input aria-hidden="true" tabindex="-1" class="file-input" type="file" accept="text/plain,application/json,text/csv,.2fas" v-on:change="submitFile" ref="fileInput">
+                                    <a role="button" tabindex="0" class="card-footer-item is-relative" @click="fileInput.click()" @keyup.enter="fileInput.click()">
+                                        <input inert tabindex="-1" class="file-input" type="file" accept="text/plain,application/json,text/csv,.2fas" v-on:change="submitFile" ref="fileInput">
                                         {{ $t('twofaccounts.import.upload') }}
                                     </a>
                                 </footer>
