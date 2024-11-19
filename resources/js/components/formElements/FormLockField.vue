@@ -59,7 +59,7 @@
     const hasBeenTrimmed = ref(false)
     const componentKey = ref(0);
 
-    const emit = defineEmits(['input:modelValue'])
+    const emit = defineEmits(['update:modelValue'])
 
     /**
      * Removes spaces from the input string
