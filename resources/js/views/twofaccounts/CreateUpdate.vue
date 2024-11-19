@@ -504,7 +504,7 @@
                         <UseColorMode v-slot="{ mode }">
                             <div role="button" tabindex="0" class="file mr-3" :class="mode == 'dark' ? 'is-dark' : 'is-white'" @keyup.enter="iconInputLabel.click()">
                                 <label class="file-label" ref="iconInputLabel">
-                                    <input aria-hidden="true" tabindex="-1" class="file-input" type="file" accept="image/*" v-on:change="uploadIcon" ref="iconInput">
+                                    <input tabindex="-1" class="file-input" type="file" accept="image/*" v-on:change="uploadIcon" ref="iconInput">
                                     <span class="file-cta">
                                         <span class="file-icon">
                                             <FontAwesomeIcon :icon="['fas', 'upload']" />
