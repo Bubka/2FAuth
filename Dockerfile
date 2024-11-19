@@ -242,7 +242,7 @@ ENV \
     # CSP helps to prevent or minimize the risk of certain types of security threats.
     # This is mainly used as a defense against cross-site scripting (XSS) attacks, in which
     # an attacker is able to inject malicious code into the web app
-    CONTENT_SECURITY_POLICY=false \
+    CONTENT_SECURITY_POLICY=true \
     # Leave the following configuration vars as is.
     # Unless you like to tinker and know what you're doing.
     BROADCAST_DRIVER=log \

@@ -31,7 +31,7 @@ return [
         'proxyLogoutUrl' => env('PROXY_LOGOUT_URL', null),
         'appSubdirectory' => env('APP_SUBDIRECTORY', ''),
         'authLogRetentionTime' => envUnlessEmpty('AUTHENTICATION_LOG_RETENTION', 365),
-        'contentSecurityPolicy' => envUnlessEmpty('CONTENT_SECURITY_POLICY', false),
+        'contentSecurityPolicy' => envUnlessEmpty('CONTENT_SECURITY_POLICY', true),
     ],
 
     /*

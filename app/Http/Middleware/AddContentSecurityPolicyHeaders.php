@@ -16,13 +16,24 @@ class AddContentSecurityPolicyHeaders
      */
     public function handle(Request $request, Closure $next) : Response
     {
-        // if (config('2fauth.config.contentSecurityPolicy')) {
-        //     Vite::useCspNonce();
+        if (config('2fauth.config.contentSecurityPolicy')) {
+            Vite::useCspNonce();
 
-        //     return $next($request)->withHeaders([
-        //         'Content-Security-Policy' => "script-src 'nonce-" . Vite::cspNonce() . "';style-src 'self' 'unsafe-inline';connect-src 'self';img-src 'self' data:;object-src 'none';",
-        //     ]);
-        // }
+            $assetUrl = config('app.asset_url') != config('app.url') ? config('app.asset_url') : '';
+
+            $directives['script-src'] = "script-src 'nonce-" . Vite::cspNonce() . "' " . $assetUrl . ";";
+            $directives['script-src-elem'] = "script-src-elem 'nonce-" . Vite::cspNonce() . "' " . $assetUrl . " 'strict-dynamic';";
+            $directives['style-src'] = "style-src 'self' " . $assetUrl . " 'unsafe-inline';";
+            $directives['connect-src'] = "connect-src 'self';";
+            $directives['img-src'] = "img-src 'self' data: " . $assetUrl . ";";
+            $directives['object-src'] = "object-src 'none';";
+
+            $csp = implode(' ', $directives);
+
+            return $next($request)->withHeaders([
+                'Content-Security-Policy' => $csp,
+            ]);
+        }
 
         return $next($request);
     }
