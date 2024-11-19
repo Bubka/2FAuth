@@ -64,7 +64,9 @@
     })
 
     function checkCapsLock(event) {
-        hasCapsLockOn.value = event.getModifierState('CapsLock') ? true : false
+        if (typeof event.getModifierState === 'function') {
+            hasCapsLockOn.value = event.getModifierState('CapsLock') ? true : false
+        }
     }
 
     function setFieldType(event) {
