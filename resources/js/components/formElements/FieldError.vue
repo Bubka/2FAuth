@@ -1,4 +1,6 @@
 <script setup>
+    import { useValidationErrorIdGenerator } from '@/composables/helpers'
+
     const props = defineProps({
         error: {
             type: String,
@@ -13,11 +15,13 @@
             default: 'is-danger'
         }
     })
+
+    const { valErrorId } = useValidationErrorIdGenerator(props.field)
 </script>
 
 <template>
     <div role="alert">
-        <p :id="'valError' + field[0].toUpperCase() + field.toLowerCase().slice(1)"
+        <p :id="valErrorId"
             class="help"
             :class="alertType"
             v-html="error" />

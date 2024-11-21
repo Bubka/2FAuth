@@ -78,13 +78,13 @@
                     <VersionChecker />
                     <!-- email config test -->
                     <div class="field">
-                        <label class="label"  v-html="$t('admin.forms.test_email.label')" />
+                        <label class="label" for="btnTestEmail" v-html="$t('admin.forms.test_email.label')" />
                         <p class="help" v-html="$t('admin.forms.test_email.help')" />
                         <p class="help" v-html="$t('admin.forms.test_email.email_will_be_send_to_x', { email: user.email })" />
                     </div>
                     <div class="columns is-mobile is-vcentered">
                         <div class="column is-narrow">
-                            <button type="button" :class="isSendingTestEmail ? 'is-loading' : ''" class="button is-link is-rounded is-small" @click="sendTestEmail">
+                            <button id="btnTestEmail" type="button" :class="isSendingTestEmail ? 'is-loading' : ''" class="button is-link is-rounded is-small" @click="sendTestEmail" >
                                 <span class="icon is-small">
                                     <FontAwesomeIcon :icon="['far', 'paper-plane']" />
                                 </span>
@@ -94,11 +94,11 @@
                     </div>
                     <!-- healthcheck -->
                     <div class="field">
-                        <label class="label"  v-html="$t('admin.forms.health_endpoint.label')" />
+                        <label class="label" for="lnkHealthCheck" v-html="$t('admin.forms.health_endpoint.label')" />
                         <p class="help" v-html="$t('admin.forms.health_endpoint.help')" />
                     </div>
                     <div class="field mb-5">
-                        <a target="_blank" :href="healthEndPoint">{{ healthEndPointFullPath }}</a>
+                        <a id="lnkHealthCheck" target="_blank" :href="healthEndPoint">{{ healthEndPointFullPath }}</a>
                     </div>
                     <h4 class="title is-4 pt-5 has-text-grey-light">{{ $t('admin.storage') }}</h4>
                     <!-- store icons in database -->
@@ -112,19 +112,19 @@
                 <!-- cache management -->
                 <div class="field">
                     <!-- <h5 class="title is-5">{{ $t('settings.security') }}</h5> -->
-                    <label class="label"  v-html="$t('admin.forms.cache_management.label')" />
+                    <label for="btnClearCache" class="label" v-html="$t('admin.forms.cache_management.label')" />
                     <p class="help" v-html="$t('admin.forms.cache_management.help')" />
                 </div>
                 <div class="field mb-5 is-grouped">
                     <p class="control">
-                        <button type="button" :class="isClearingCache ? 'is-loading' : ''" class="button is-link is-rounded is-small" @click="clearCache">
+                        <button id="btnClearCache" type="button" :class="isClearingCache ? 'is-loading' : ''" class="button is-link is-rounded is-small" @click="clearCache">
                             {{ $t('commons.clear') }}
                         </button>
                     </p>
                 </div>
                 <!-- env vars -->
                 <div class="field">
-                    <label class="label"  v-html="$t('admin.variables')" />
+                    <label for="btnCopyEnvVars" class="label"  v-html="$t('admin.variables')" />
                 </div>
                 <div v-if="infos" class="about-debug box is-family-monospace is-size-7">
                     <CopyButton id="btnCopyEnvVars" :token="listInfos?.innerText" />

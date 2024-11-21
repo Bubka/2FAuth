@@ -498,7 +498,7 @@ figure.no-icon {
 :root[data-theme="dark"] .select select,
 :root[data-theme="dark"] .textarea {
   background-color: $grey-darker;
-  border-color: hsl(0, 0%, 29%);
+  border-color: $grey-dark;
   color: hsl(0, 0%, 100%);
 }
 
@@ -867,9 +867,13 @@ button.button.tag.is-white,
 
 .is-checkradio[type="checkbox"]+label:focus::before,
 .is-checkradio[type="checkbox"]+label:focus-visible::before {
-  outline: none;
-  border: 1px solid $input-focus-border-color;
-  box-shadow: $input-focus-box-shadow-size $input-focus-box-shadow-color;
+  outline-offset: 2px;
+  outline: 1px solid $dark;
+}
+
+:root[data-theme="dark"] .is-checkradio[type="checkbox"]+label:focus::before,
+:root[data-theme="dark"] .is-checkradio[type="checkbox"]+label:focus-visible::before {
+  outline: 1px solid $grey-light;
 }
 
 .is-checkradio[type="checkbox"]+label::before {
@@ -894,6 +898,18 @@ button.button.tag.is-white,
 
 .label {
   color: hsl(0, 0%, 48%);
+}
+
+.select select:focus,
+.select select:focus-visible {
+  outline: 2px solid $grey-dark;
+  outline-offset: 3px;
+  box-shadow: none;
+}
+
+:root[data-theme="dark"] .select select:focus,
+:root[data-theme="dark"] .select select:focus-visible {
+  outline: 2px solid $grey-dark;
 }
 
 .is-underscored {

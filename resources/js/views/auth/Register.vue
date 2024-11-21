@@ -100,9 +100,9 @@
         <!-- User registration form -->
         <FormWrapper v-else title="auth.register" punchline="auth.forms.register_punchline">
             <form @submit.prevent="register" @keydown="registerForm.onKeydown($event)">
-                <FormField v-model="registerForm.name" fieldName="name" :fieldError="registerForm.errors.get('name')" inputType="text" label="auth.forms.name" :maxLength="255" autofocus />
-                <FormField v-model="registerForm.email" fieldName="email" :fieldError="registerForm.errors.get('email')" inputType="email" label="auth.forms.email" :maxLength="255" />
-                <FormPasswordField v-model="registerForm.password" fieldName="password" :fieldError="registerForm.errors.get('password')" :showRules="true" label="auth.forms.password" />
+                <FormField v-model="registerForm.name" fieldName="name" :fieldError="registerForm.errors.get('name')" inputType="text" label="auth.forms.name" autocomplete="username" :maxLength="255" autofocus />
+                <FormField v-model="registerForm.email" fieldName="email" :fieldError="registerForm.errors.get('email')" inputType="email" label="auth.forms.email" autocomplete="email" :maxLength="255" />
+                <FormPasswordField v-model="registerForm.password" fieldName="password" :fieldError="registerForm.errors.get('password')" :showRules="true" autocomplete="new-password" label="auth.forms.password" />
                 <FormButtons :isBusy="registerForm.isBusy" :isDisabled="registerForm.isDisabled" caption="auth.register" submitId="btnRegister" />
             </form>
             <div class="nav-links">

@@ -46,7 +46,7 @@
     <FormWrapper :title="$t('auth.forms.new_password')">
         <form @submit.prevent="resetPassword" @keydown="form.onKeydown($event)">
             <FormField v-model="form.email" :isDisabled="true" fieldName="email" :fieldError="form.errors.get('email')" label="auth.forms.email" autofocus />
-            <FormPasswordField v-model="form.password" fieldName="password" :fieldError="form.errors.get('password')" :autocomplete="'new-password'" :showRules="true" label="auth.forms.new_password" />
+            <FormPasswordField v-model="form.password" fieldName="password" :fieldError="form.errors.get('password')" autocomplete="new-password" :showRules="true" label="auth.forms.new_password" />
             <FieldError v-if="form.errors.get('token') != undefined" :error="form.errors.get('token')" :field="form.token" />
             <FormButtons
                 v-if="isPending"

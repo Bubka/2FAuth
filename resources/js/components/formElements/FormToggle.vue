@@ -1,5 +1,5 @@
 <script setup>
-    import { useIdGenerator } from '@/composables/helpers'
+    import { useIdGenerator, useValidationErrorIdGenerator } from '@/composables/helpers'
     import { UseColorMode } from '@vueuse/components'
 
     const props = defineProps({
@@ -27,6 +27,8 @@
 
     // defines what events our component emits
     const emit = defineEmits(['update:modelValue'])
+    const { valErrorId } = useValidationErrorIdGenerator(props.fieldName)
+    const legendId = useIdGenerator('legend', props.fieldName).inputId
 
     function setRadio(event) {
         emit('update:modelValue', event)
@@ -35,10 +37,16 @@
 </script>
 
 <template>
-    <div class="field" :class="{ 'pt-3': hasOffset }" role="radiogroup"
-        :aria-labelledby="useIdGenerator('label',fieldName).inputId">
-        <label v-if="label" :id="useIdGenerator('label',fieldName).inputId" class="label" v-html="$t(label)" />
-        <div class="is-toggle buttons">
+    <div class="field" :class="{ 'pt-3': hasOffset }">
+        <span v-if="label" class="label" v-html="$t(label)" />
+        <div
+            id="rdoGroup"
+            role="radiogroup"
+            :aria-describedby="help ? legendId : undefined"
+            :aria-invalid="fieldError != undefined"
+            :aria-errormessage="fieldError != undefined ? valErrorId : undefined" 
+            class="is-toggle buttons"
+        >
             <UseColorMode v-slot="{ mode }">
                 <button
                     v-for="choice in choices"
@@ -54,21 +62,24 @@
                         'is-dark': mode==='dark',
                         'is-multiline': choice.legend,
                     }"
-                    v-on:click.stop="setRadio(choice.value)"
-                    :title="choice.title? choice.title:''">
+                    v-on:click.stop="setRadio(choice.value)">
                     <input
                         :id="useIdGenerator('radio',choice.value).inputId"
                         type="radio"
                         class="is-hidden"
                         :checked="modelValue===choice.value"
                         :value="choice.value"
-                        :disabled="isDisabled" />
+                        :disabled="isDisabled"
+                    />
                     <span v-if="choice.legend" v-html="$t(choice.legend)" class="is-block is-size-7" />
-                    <FontAwesomeIcon :icon="['fas',choice.icon]" v-if="choice.icon" class="mr-2" /> {{ $t(choice.text) }}
+                    <FontAwesomeIcon :icon="['fas',choice.icon]" v-if="choice.icon" class="mr-2" />
+                    <label :for="useIdGenerator('button',fieldName+choice.value).inputId" class="is-clickable">
+                        {{ $t(choice.text) }}
+                    </label>
                 </button>
             </UseColorMode>
         </div>
         <FieldError v-if="fieldError != undefined" :error="fieldError" :field="fieldName" />
-        <p class="help" v-html="$t(help)" v-if="help" />
+        <p :id="legendId" class="help" v-html="$t(help)" v-if="help" />
     </div>
 </template>

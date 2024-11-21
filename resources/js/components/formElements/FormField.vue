@@ -1,5 +1,5 @@
 <script setup>
-    import { useIdGenerator } from '@/composables/helpers'
+    import { useIdGenerator, useValidationErrorIdGenerator } from '@/composables/helpers'
 
     defineOptions({
         inheritAttrs: false
@@ -44,9 +44,15 @@
         isIndented: Boolean,
         leftIcon: '',
         rightIcon: '',
+        idSuffix: {
+            type: String,
+            default: ''
+        },
     })
 
-    const { inputId } = useIdGenerator(props.inputType, props.fieldName)
+    const { inputId } = useIdGenerator(props.inputType, props.fieldName + props.idSuffix)
+    const { valErrorId } = useValidationErrorIdGenerator(props.fieldName)
+    const legendId = useIdGenerator('legend', props.fieldName).inputId
 </script>
 
 <template>
@@ -68,6 +74,9 @@
                     v-on:input="$emit('update:modelValue', $event.target.value)"
                     v-on:change="$emit('change:modelValue', $event.target.value)"
                     :maxlength="maxLength"
+                    :aria-describedby="help ? legendId : undefined"
+                    :aria-invalid="fieldError != undefined"
+                    :aria-errormessage="fieldError != undefined ? valErrorId : undefined" 
                 />
                 <span v-if="leftIcon" class="icon is-small is-left">
                     <FontAwesomeIcon :icon="['fas', leftIcon]" transform="rotate-75" size="xs" />
@@ -77,7 +86,7 @@
                 </span>
             </div>
             <FieldError v-if="fieldError != undefined" :error="fieldError" :field="fieldName" />
-            <p class="help" v-html="$t(help)" v-if="help"></p>
+            <p :id="legendId" class="help" v-html="$t(help)" v-if="help"></p>
         </div>
     </div> 
 </template>

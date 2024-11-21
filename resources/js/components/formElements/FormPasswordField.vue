@@ -1,5 +1,5 @@
 <script setup>
-    import { useIdGenerator } from '@/composables/helpers'
+    import { useIdGenerator, useValidationErrorIdGenerator } from '@/composables/helpers'
 
     defineOptions({
         inheritAttrs: true
@@ -41,9 +41,15 @@
             type: Boolean,
             default: false
         },
+        idSuffix: {
+            type: String,
+            default: ''
+        },
     })
 
-    const { inputId } = useIdGenerator(props.inputType, props.fieldName)
+    const { inputId } = useIdGenerator(props.inputType, props.fieldName + props.idSuffix)
+    const { valErrorId } = useValidationErrorIdGenerator(props.fieldName)
+    const legendId = useIdGenerator('legend', props.fieldName).inputId
     const currentType = ref(props.inputType)
     const hasCapsLockOn = ref(false)
 
@@ -90,6 +96,9 @@
                 v-bind="$attrs" 
                 v-on:input="$emit('update:modelValue', $event.target.value)"
                 v-on:keyup="checkCapsLock"
+                :aria-describedby="help ? legendId : undefined"
+                :aria-invalid="fieldError != undefined"
+                :aria-errormessage="fieldError != undefined ? valErrorId : undefined" 
             />
             <span v-if="currentType == 'password'" role="button" id="btnTogglePassword" tabindex="0" class="icon is-small is-right is-clickable" @keyup.enter="setFieldType('text')" @click="setFieldType('text')" :title="$t('auth.forms.reveal_password')">
                 <font-awesome-icon :icon="['fas', 'eye-slash']" />
@@ -101,7 +110,7 @@
         <p class="help is-warning" v-if="hasCapsLockOn" v-html="$t('auth.forms.caps_lock_is_on')" />
         <FieldError v-if="fieldError != undefined" :error="fieldError" :field="fieldName" />
         <p class="help" v-html="$t(help)" v-if="help" />
-        <div v-if="showRules" class="columns is-mobile is-size-7 mt-0">
+        <div v-if="showRules" :id="legendId" class="columns is-mobile is-size-7 mt-0">
             <div class="column is-one-third">
                 <span class="has-text-weight-semibold">{{ $t("auth.forms.mandatory_rules") }}</span><br />
                 <span class="is-underscored" id="valPwdIsLongEnough" :class="{'is-dot' : IsLongEnough}"></span>{{ $t('auth.forms.is_long_enough') }}<br/>

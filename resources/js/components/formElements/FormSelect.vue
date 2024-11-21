@@ -1,4 +1,6 @@
 <script setup>
+    import { useIdGenerator, useValidationErrorIdGenerator } from '@/composables/helpers'
+
     const props = defineProps({
         modelValue: [String, Number, Boolean],
         label: {
@@ -21,9 +23,16 @@
         },
         isIndented: Boolean,
         isDisabled: Boolean,
+        idSuffix: {
+            type: String,
+            default: ''
+        },
     })
 
     const selected = ref(props.modelValue)
+    const { inputId } = useIdGenerator('select', props.fieldName + props.idSuffix)
+    const { valErrorId } = useValidationErrorIdGenerator(props.fieldName)
+    const legendId = useIdGenerator('legend', props.fieldName + props.idSuffix).inputId
 </script>
 
 <template>
@@ -32,16 +41,24 @@
             <FontAwesomeIcon class="has-text-grey" :icon="['fas', 'chevron-right']" transform="rotate-135"/>
         </div>
         <div>
-            <label class="label" v-html="$t(label)" :style="{ 'opacity': isDisabled ? '0.5' : '1' }"></label>
+            <label :for="inputId" class="label" v-html="$t(label)" :style="{ 'opacity': isDisabled ? '0.5' : '1' }"></label>
             <div class="control">
                 <div class="select">
-                    <select v-model="selected" v-on:change="$emit('update:modelValue', $event.target.value)" :disabled="isDisabled">
+                    <select
+                        :id="inputId"
+                        v-model="selected"
+                        v-on:change="$emit('update:modelValue', $event.target.value)"
+                        :disabled="isDisabled"
+                        :aria-describedby="help ? legendId : undefined"
+                        :aria-invalid="fieldError != undefined"
+                        :aria-errormessage="fieldError != undefined ? valErrorId : undefined" 
+                    >
                         <option v-for="option in options" :value="option.value">{{ $t(option.text) }}</option>
                     </select>
                 </div>
             </div>
             <FieldError v-if="fieldError != undefined" :error="fieldError" :field="fieldName" />
-            <p class="help" v-html="$t(help)" v-if="help"></p>
+            <p :id="legendId" class="help" v-html="$t(help)" v-if="help"></p>
         </div>
     </div>
 </template>

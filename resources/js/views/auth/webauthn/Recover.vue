@@ -48,7 +48,7 @@
         <div>
             <form @submit.prevent="recover" @keydown="form.onKeydown($event)">
                 <FormCheckbox v-model="form.revokeAll" fieldName="revokeAll" label="auth.webauthn.disable_all_security_devices" help="auth.webauthn.disable_all_security_devices_help" />
-                <FormPasswordField v-model="form.password" fieldName="password" :fieldError="form.errors.get('password')" :autocomplete="'current-password'" :showRules="false" label="auth.forms.current_password.label" help="auth.forms.current_password.help" />
+                <FormPasswordField v-model="form.password" fieldName="password" :fieldError="form.errors.get('password')" autocomplete="current-password" :showRules="false" label="auth.forms.current_password.label" help="auth.forms.current_password.help" />
                 <div class="field">
                     <p>
                         {{ $t('auth.forms.forgot_your_password') }}&nbsp;

@@ -486,12 +486,12 @@
                 <!-- account -->
                 <FormField v-model="form.account" fieldName="account" :fieldError="form.errors.get('account')" label="twofaccounts.account" :placeholder="$t('twofaccounts.forms.account.placeholder')" />
                 <!-- icon upload -->
-                <label class="label">{{ $t('twofaccounts.icon') }}</label>
+                <label for="filUploadIcon" class="label">{{ $t('twofaccounts.icon') }}</label>
                 <div class="field is-grouped">
                     <!-- Try my luck button -->
                     <div class="control" v-if="user.preferences.getOfficialIcons">
                         <UseColorMode v-slot="{ mode }">
-                            <VueButton @click="fetchLogo" :color="mode == 'dark' ? 'is-dark' : ''" :nativeType="'button'" :is-loading="fetchingLogo" :isDisabled="!form.service">
+                            <VueButton @click="fetchLogo" :color="mode == 'dark' ? 'is-dark' : ''" :nativeType="'button'" :is-loading="fetchingLogo" :isDisabled="!form.service" aria-describedby="lgdTryMyLuck">
                                 <span class="icon is-small">
                                     <FontAwesomeIcon :icon="['fas', 'globe']" />
                                 </span>
@@ -503,8 +503,8 @@
                     <div class="control is-flex">
                         <UseColorMode v-slot="{ mode }">
                             <div role="button" tabindex="0" class="file mr-3" :class="mode == 'dark' ? 'is-dark' : 'is-white'" @keyup.enter="iconInputLabel.click()">
-                                <label class="file-label" ref="iconInputLabel">
-                                    <input tabindex="-1" class="file-input" type="file" accept="image/*" v-on:change="uploadIcon" ref="iconInput">
+                                <label for="filUploadIcon" class="file-label" ref="iconInputLabel">
+                                    <input id="filUploadIcon" tabindex="-1" class="file-input" type="file" accept="image/*" v-on:change="uploadIcon" ref="iconInput">
                                     <span class="file-cta">
                                         <span class="file-icon">
                                             <FontAwesomeIcon :icon="['fas', 'upload']" />
@@ -522,7 +522,7 @@
                 </div>
                 <div class="field">
                     <FieldError v-if="iconForm.errors.hasAny('icon')" :error="iconForm.errors.get('icon')" :field="'icon'" class="help-for-file" />
-                    <p v-if="user.preferences.getOfficialIcons" class="help" v-html="$t('twofaccounts.forms.i_m_lucky_legend')"></p>
+                    <p id="lgdTryMyLuck" v-if="user.preferences.getOfficialIcons" class="help" v-html="$t('twofaccounts.forms.i_m_lucky_legend')"></p>
                 </div>
                 <!-- group -->
                 <FormSelect v-if="groups.length > 0" v-model="form.group_id" :options="groups" fieldName="group_id" label="twofaccounts.forms.group.label" help="twofaccounts.forms.group.help" />

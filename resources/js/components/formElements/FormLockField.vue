@@ -1,5 +1,5 @@
 <script setup>
-    import { useIdGenerator } from '@/composables/helpers'
+    import { useIdGenerator, useValidationErrorIdGenerator } from '@/composables/helpers'
     import { UseColorMode } from '@vueuse/components'
 
     defineOptions({
@@ -50,10 +50,16 @@
         maxLength: {
             type: Number,
             default: null
+        },
+        idSuffix: {
+            type: String,
+            default: ''
         }
     })
 
-    const { inputId } = useIdGenerator(props.inputType, props.fieldName)
+    const { inputId } = useIdGenerator(props.inputType, props.fieldName + props.idSuffix)
+    const { valErrorId } = useValidationErrorIdGenerator(props.fieldName)
+    const legendId = useIdGenerator('legend', props.fieldName).inputId
 
     const fieldIsLocked = ref(props.isDisabled || props.isEditMode)
     const hasBeenTrimmed = ref(false)
@@ -106,6 +112,9 @@
                 v-on:change="emitValue"
                 v-on:blur="forceRefresh"
                 :maxlength="maxLength" 
+                :aria-describedby="help ? legendId : undefined"
+                :aria-invalid="fieldError != undefined"
+                :aria-errormessage="fieldError != undefined ? valErrorId : undefined" 
             />
         </div>
         <UseColorMode v-slot="{ mode }" v-if="isEditMode">
@@ -127,5 +136,5 @@
     </div>
     <FieldError v-if="hasBeenTrimmed" :error="$t('twofaccounts.forms.spaces_are_ignored')" :field="'spaces'" :alertType="'is-warning'" />
     <FieldError v-if="fieldError != undefined" :error="fieldError" :field="fieldName" />
-    <p class="help" v-html="$t(help)" v-if="help"></p>
+    <p :id="legendId" class="help" v-html="$t(help)" v-if="help"></p>
 </template>

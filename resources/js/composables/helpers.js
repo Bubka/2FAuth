@@ -24,6 +24,15 @@ export function useIdGenerator(fieldType, fieldName) {
 		case 'label':
 			prefix = 'lbl'
 			break
+		case 'select':
+			prefix = 'sel'
+			break
+		case 'legend':
+			prefix = 'leg'
+			break
+		case 'error':
+			prefix = 'err'
+			break
 		default:
 			prefix = 'txt'
 			break
@@ -31,6 +40,12 @@ export function useIdGenerator(fieldType, fieldName) {
 
 	return {
 		inputId: prefix + fieldName[0].toUpperCase() + fieldName.toLowerCase().slice(1)
+	}
+}
+
+export function useValidationErrorIdGenerator(field) {
+	return {
+		valErrorId: 'valError' + field[0].toUpperCase() + field.toLowerCase().slice(1)
 	}
 }
 
