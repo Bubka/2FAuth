@@ -106,8 +106,8 @@ class TwoFAccountController extends Controller
         $this->authorize('update', $twofaccount);
 
         $validated = $request->validated();
-
-        $twofaccount->fillWithOtpParameters($validated);
+        
+        $twofaccount->fillWithOtpParameters($validated, $twofaccount->icon && is_null(Arr::get($validated, 'icon', null)));
         $request->user()->twofaccounts()->save($twofaccount);
 
         // Possible group change

@@ -816,6 +816,29 @@ class TwoFAccountControllerTest extends FeatureTestCase
     }
 
     #[Test]
+    public function test_update_with_removed_icon_prevents_official_logo_fetching()
+    {
+        $attributes = ([
+            'otp_type'   => 'totp',
+            'account'    => OtpTestData::ACCOUNT,
+            'service'    => OtpTestData::SERVICE,
+            'secret'     => OtpTestData::SECRET,
+            'algorithm'  => OtpTestData::ALGORITHM_DEFAULT,
+            'digits'     => OtpTestData::DIGITS_DEFAULT,
+            'period'     => OtpTestData::PERIOD_DEFAULT,
+            'legacy_uri' => OtpTestData::TOTP_SHORT_URI,
+            'icon'       => 'icon.png',
+        ]);
+        $twofaccount = TwoFAccount::factory()->for($this->user)->create($attributes);
+        $attributes['icon'] = '';
+
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('PUT', '/api/v1/twofaccounts/' . $twofaccount->id, $attributes);
+            
+        $this->assertNull($response->json('icon'));
+    }
+
+    #[Test]
     public function test_migrate_valid_gauth_payload_returns_success_with_consistent_resources()
     {
         $response = $this->actingAs($this->user, 'api-guard')
