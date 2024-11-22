@@ -195,6 +195,15 @@ a:hover {
   background-color: $grey-darker !important;
 }
 
+img.qrcode {
+  max-width: 320px;
+}
+@media screen and (max-height: 500px) {
+  img.qrcode {
+    max-height: 50vh;
+  }
+}
+
 .tfa-grid {
   border-radius: 6px;
   text-align: center;

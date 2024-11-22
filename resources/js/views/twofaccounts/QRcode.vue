@@ -22,9 +22,9 @@
 <template>
     <div class="modal modal-otp is-active">
         <div class="modal-background"></div>
-        <div class="modal-content">
+        <div class="modal-content modal-with-footer">
             <p class="has-text-centered m-5">
-                <img v-if="qrcode" :src="qrcode" class="has-background-light" :alt="$t('commons.image_of_qrcode_to_scan')">
+                <img v-if="qrcode" :src="qrcode" class="qrcode has-background-light" :alt="$t('commons.image_of_qrcode_to_scan')">
                 <Spinner :isVisible="!qrcode" :type="'raw'" class="is-size-1" />
             </p>
         </div>
