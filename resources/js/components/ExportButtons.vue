@@ -21,7 +21,7 @@
                 {{ $t('twofaccounts.twofauth_export_schema') }}
             </a>
         </p>
-        <button id="btnExport2FAuth" class="button is-link is-rounded is-focus my-3" @click="$emit('export-twofauth-format')" :title="$t('twofaccounts.twofauth_export_format_sub')">
+        <button type="button" id="btnExport2FAuth" class="button is-link is-rounded is-focus my-3" @click="$emit('export-twofauth-format')" :title="$t('twofaccounts.twofauth_export_format_sub')">
             {{ $t('twofaccounts.twofauth_export_format') }}
         </button>
     </div>
@@ -32,7 +32,7 @@
         <p class="is-size-7-mobile">
             {{ $t('twofaccounts.otpauth_export_format_desc') }}
         </p>
-        <button id="btnExportOtpauth" class="button is-link is-rounded is-focus my-3" @click="$emit('export-otpauth-format')" :title="$t('twofaccounts.otpauth_export_format_sub')">
+        <button type="button" id="btnExportOtpauth" class="button is-link is-rounded is-focus my-3" @click="$emit('export-otpauth-format')" :title="$t('twofaccounts.otpauth_export_format_sub')">
             {{ $t('twofaccounts.otpauth_export_format') }}
         </button>
     </div>

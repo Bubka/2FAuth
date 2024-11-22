@@ -409,12 +409,12 @@
                         <div v-if="account.imported === -1" class="tags is-flex-wrap-nowrap">
                             <!-- discard button -->
                             <UseColorMode v-slot="{ mode }">
-                                <button class="button tag" :class="{'is-dark has-text-grey-light' : mode == 'dark'}" @click="discardAccount(index)"  :title="$t('twofaccounts.import.discard_this_account')">
+                                <button type="button" class="button tag" :class="{'is-dark has-text-grey-light' : mode == 'dark'}" @click="discardAccount(index)"  :title="$t('twofaccounts.import.discard_this_account')">
                                     <FontAwesomeIcon :icon="['fas', 'trash']" />
                                 </button>
                             </UseColorMode>
                             <!-- import button -->
-                            <button v-if="account.id > -2" class="button tag is-link" @click="createAccount(index)"  :title="$t('twofaccounts.import.import_this_account')">
+                            <button v-if="account.id > -2" type="button" class="button tag is-link" @click="createAccount(index)"  :title="$t('twofaccounts.import.import_this_account')">
                                 {{ $t('twofaccounts.import.to_import') }}
                             </button>
                         </div>
@@ -447,18 +447,18 @@
                 </div>
                 <!-- discard links -->
                 <div v-if="importableCount > 0" class="mt-2 is-size-7 is-pulled-right">
-                    <button v-if="duplicateCount" @click="discardDuplicates()" class="has-text-grey button is-small is-ghost">{{ $t('twofaccounts.import.discard_duplicates') }} ({{duplicateCount}})</button>
-                    <button @click="discardAccounts()" class="has-text-grey button is-small is-ghost">{{ $t('twofaccounts.import.discard_all') }}</button>
+                    <button v-if="duplicateCount" @click="discardDuplicates()" type="button" class="has-text-grey button is-small is-ghost">{{ $t('twofaccounts.import.discard_duplicates') }} ({{duplicateCount}})</button>
+                    <button @click="discardAccounts()" type="button" class="has-text-grey button is-small is-ghost">{{ $t('twofaccounts.import.discard_all') }}</button>
                 </div>
                 <div v-if="importedCount == exportedAccounts.length"  class="mt-2 is-size-7 is-pulled-right">
-                    <button @click="exportedAccounts = []" class="has-text-grey button is-small is-ghost">{{ $t('commons.clear') }}</button>
+                    <button @click="exportedAccounts = []" type="button" class="has-text-grey button is-small is-ghost">{{ $t('commons.clear') }}</button>
                 </div>
             </div>
             <!-- footer -->
             <VueFooter :showButtons="true">
                 <!-- Import all button -->
                 <p class="control" v-if="importableCount > 0">
-                    <button class="button is-link is-rounded is-focus" @click="createAccounts">
+                    <button type="button" class="button is-link is-rounded is-focus" @click="createAccounts">
                         <span>{{ $t('twofaccounts.import.import_all') }} ({{ importableCount }})</span>
                         <!-- <span class="icon is-small">
                             <FontAwesomeIcon :icon="['fas', 'qrcode']" />

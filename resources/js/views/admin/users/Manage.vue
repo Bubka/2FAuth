@@ -230,11 +230,11 @@
                             <div class="tags ml-3 is-right">
                                 <UseColorMode v-slot="{ mode }">
                                     <!-- resend email button -->
-                                    <button v-if="managedUser.password_reset" class="button tag is-pulled-right" :class="mode == 'dark' ? 'is-dark has-background-link' : 'is-white'" @click="resendPasswordEmail" :title="$t('admin.resend_email_title')">
+                                    <button type="button" v-if="managedUser.password_reset" class="button tag is-pulled-right" :class="mode == 'dark' ? 'is-dark has-background-link' : 'is-white'" @click="resendPasswordEmail" :title="$t('admin.resend_email_title')">
                                         {{ $t('admin.resend_email') }}
                                     </button>
                                     <!-- reset password button -->
-                                    <button class="button tag is-pulled-right " :class="mode == 'dark' ? 'is-dark has-background-link' : 'is-white'" @click="resetPassword" :title="$t('admin.reset_password_title')">
+                                    <button type="button" class="button tag is-pulled-right " :class="mode == 'dark' ? 'is-dark has-background-link' : 'is-white'" @click="resetPassword" :title="$t('admin.reset_password_title')">
                                         {{ $t('admin.reset_password') }}
                                     </button>
                                 </UseColorMode>
@@ -260,7 +260,7 @@
                         <div class="tags ml-3 is-right">
                             <UseColorMode v-slot="{ mode }">
                                 <!-- manage link -->
-                                <button class="button tag is-pulled-right" :class="mode == 'dark' ? 'is-dark has-background-link' : 'is-white'" @click="revokePATs" :title="$t('admin.revoke_all_pat_for_user')">
+                                <button type="button" class="button tag is-pulled-right" :class="mode == 'dark' ? 'is-dark has-background-link' : 'is-white'" @click="revokePATs" :title="$t('admin.revoke_all_pat_for_user')">
                                     {{ $t('settings.revoke') }}
                                 </button>
                             </UseColorMode>
@@ -279,7 +279,7 @@
                         <div class="tags ml-3 is-right">
                             <UseColorMode v-slot="{ mode }">
                                 <!-- manage link -->
-                                <button class="button tag is-pulled-right" :class="mode == 'dark' ? 'is-dark has-background-link' : 'is-white'" :title="$t('admin.revoke_all_devices_for_user')">
+                                <button type="button" class="button tag is-pulled-right" :class="mode == 'dark' ? 'is-dark has-background-link' : 'is-white'" :title="$t('admin.revoke_all_devices_for_user')">
                                     {{ $t('settings.revoke') }}
                                 </button>
                             </UseColorMode>
@@ -316,7 +316,7 @@
                         {{  $t('admin.this_is_not_soft_delete') }}
                     </span>
                 </div>
-                <button class="button is-danger" @click="deleteUser" title="delete">
+                <button type="button" class="button is-danger" @click="deleteUser" title="delete">
                     {{  $t('admin.delete_this_user') }}
                 </button>
             </div>

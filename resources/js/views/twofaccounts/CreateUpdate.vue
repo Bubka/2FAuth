@@ -428,7 +428,7 @@
                             <input inert class="file-input" type="file" accept="image/*" v-on:change="uploadIcon" ref="iconInput">
                             <FontAwesomeIcon :icon="['fas', 'image']" size="2x" />
                         </label>
-                        <button class="delete delete-icon-button is-medium" v-if="tempIcon" @click.prevent="deleteTempIcon"></button>
+                        <button type="button" class="delete delete-icon-button is-medium" v-if="tempIcon" @click.prevent="deleteTempIcon"></button>
                         <OtpDisplay
                             ref="OtpDisplayForQuickForm"
                             v-bind="form.data()"
@@ -515,7 +515,7 @@
                             </div>
                             <span class="tag is-large" :class="mode =='dark' ? 'is-dark' : 'is-white'" v-if="tempIcon">
                                 <img class="icon-preview" :src="$2fauth.config.subdirectory + '/storage/icons/' + tempIcon" :alt="$t('twofaccounts.icon_to_illustrate_the_account')">
-                                <button class="clear-selection delete is-small" @click.prevent="deleteTempIcon" :aria-label="$t('twofaccounts.remove_icon')"></button>
+                                <button type="button" class="clear-selection delete is-small" @click.prevent="deleteTempIcon" :aria-label="$t('twofaccounts.remove_icon')"></button>
                             </span>
                         </UseColorMode>
                     </div>

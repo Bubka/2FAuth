@@ -36,7 +36,7 @@
         <!-- sub-links -->
         <div v-if="internalFooterType == 'doneButton'" class="content has-text-centered">
             <!-- done link -->
-            <button id="lnkExitEdit" class="button is-ghost is-like-text" @click.stop="$emit('doneButtonClicked', true)">{{ $t('commons.done') }}</button>
+            <button type="button" id="lnkExitEdit" class="button is-ghost is-like-text" @click.stop="$emit('doneButtonClicked', true)">{{ $t('commons.done') }}</button>
         </div>
         <div v-else-if="internalFooterType == 'modal'" class="content has-text-centered">
             <!-- back to home link -->
@@ -69,7 +69,7 @@
                     <!-- sign-out button -->
                     <li v-if="!$2fauth.config.proxyAuth || ($2fauth.config.proxyAuth && $2fauth.config.proxyLogoutUrl)" class="column">
                         <UseColorMode v-slot="{ mode }">
-                            <button id="lnkSignOut" class="button is-text is-like-text" :class="mode == 'dark' ? 'has-text-grey-lighter' : 'has-text-grey-darker'" @click="logout">
+                            <button type="button" id="lnkSignOut" class="button is-text is-like-text" :class="mode == 'dark' ? 'has-text-grey-lighter' : 'has-text-grey-darker'" @click="logout">
                                 {{ $t('auth.sign_out') }}
                             </button>
                         </UseColorMode>
@@ -98,7 +98,7 @@
                 </span>
                 <!-- sign-out button -->
                 <span v-if="!$2fauth.config.proxyAuth || ($2fauth.config.proxyAuth && $2fauth.config.proxyLogoutUrl)">
-                    - <button id="lnkSignOut" class="button is-text is-like-text has-text-grey" @click="logout">{{ $t('auth.sign_out') }}</button>
+                    - <button type="button" id="lnkSignOut" class="button is-text is-like-text has-text-grey" @click="logout">{{ $t('auth.sign_out') }}</button>
                 </span>
             </div>
         </div>

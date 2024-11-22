@@ -143,7 +143,7 @@
                         {{ displayName(credential) }}
                         <!-- revoke link -->
                         <UseColorMode v-slot="{ mode }">
-                            <button class="button tag is-pulled-right" :class="mode === 'dark' ? 'is-dark':'is-white'" @click="revokeCredential(credential.id)" :title="$t('settings.revoke')">
+                            <button type="button" class="button tag is-pulled-right" :class="mode === 'dark' ? 'is-dark':'is-white'" @click="revokeCredential(credential.id)" :title="$t('settings.revoke')">
                                 {{ $t('settings.revoke') }}
                             </button>
                         </UseColorMode>

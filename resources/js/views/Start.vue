@@ -76,7 +76,7 @@
                         {{ $t('twofaccounts.forms.upload_qrcode') }}
                     </label>
                     <!-- scan button that launch camera stream -->
-                    <button v-else class="button is-link is-medium is-rounded is-main" @click="capture()">
+                    <button v-else type="button" class="button is-link is-medium is-rounded is-main" @click="capture()">
                         {{ $t('twofaccounts.forms.scan_qrcode') }}
                     </button>
                 </div>

@@ -32,7 +32,7 @@
     <UseColorMode v-slot="{ mode }">
         <!-- New item buttons -->
         <p class="control" v-if="!inManagementMode">
-            <button class="button is-link is-rounded is-focus" @click="goAddNewAccount">
+            <button type="button" class="button is-link is-rounded is-focus" @click="goAddNewAccount">
                 <span>{{ $t('commons.new') }}</span>
                 <span class="icon is-small">
                     <FontAwesomeIcon :icon="['fas', 'qrcode']" />
@@ -41,7 +41,7 @@
         </p>
         <!-- Manage button -->
         <p class="control" v-if="!inManagementMode">
-            <button id="btnManage" class="button is-rounded" :class="{'is-dark' : mode == 'dark'}" @click="$emit('update:inManagementMode', true)">{{ $t('commons.manage') }}</button>
+            <button type="button" id="btnManage" class="button is-rounded" :class="{'is-dark' : mode == 'dark'}" @click="$emit('update:inManagementMode', true)">{{ $t('commons.manage') }}</button>
         </p>
         <!-- move button -->
         <p class="control" v-if="inManagementMode">

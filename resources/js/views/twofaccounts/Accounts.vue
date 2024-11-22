@@ -343,12 +343,12 @@
                         <div class="columns">
                             <UseColorMode v-slot="{ mode }">
                                 <div class="column" v-if="showGroupSwitch">
-                                    <button id="btnHideGroupSwitch" :title="$t('groups.hide_group_selector')" tabindex="1" class="button is-text is-like-text" :class="{'has-text-grey' : mode != 'dark'}" @click.stop="showGroupSwitch = !showGroupSwitch">
+                                    <button type="button" id="btnHideGroupSwitch" :title="$t('groups.hide_group_selector')" tabindex="1" class="button is-text is-like-text" :class="{'has-text-grey' : mode != 'dark'}" @click.stop="showGroupSwitch = !showGroupSwitch">
                                         {{ $t('groups.select_accounts_to_show') }}
                                     </button>
                                 </div>
                                 <div class="column" v-else>
-                                    <button id="btnShowGroupSwitch" :title="$t('groups.show_group_selector')" tabindex="1" class="button is-text is-like-text" :class="{'has-text-grey' : mode != 'dark'}" @click.stop="showGroupSwitch = !showGroupSwitch">
+                                    <button type="button" id="btnShowGroupSwitch" :title="$t('groups.show_group_selector')" tabindex="1" class="button is-text is-like-text" :class="{'has-text-grey' : mode != 'dark'}" @click.stop="showGroupSwitch = !showGroupSwitch">
                                         {{ groups.current }} ({{ twofaccounts.filteredCount }})&nbsp;
                                         <FontAwesomeIcon  :icon="['fas', 'caret-down']" />
                                     </button>
@@ -432,7 +432,7 @@
                                     <span v-else>
                                         <!-- get hotp button -->
                                         <UseColorMode v-slot="{ mode }">
-                                            <button class="button tag" :class="mode == 'dark' ? 'is-dark' : 'is-white'" @click="showOTP(account)" :title="$t('twofaccounts.import.import_this_account')">
+                                            <button type="button" class="button tag" :class="mode == 'dark' ? 'is-dark' : 'is-white'" @click="showOTP(account)" :title="$t('twofaccounts.import.import_this_account')">
                                                 {{ $t('commons.generate') }}
                                             </button>
                                         </UseColorMode>
@@ -441,10 +441,10 @@
                             </transition>
                             <transition name="popLater" v-if="user.preferences.showOtpAsDot && user.preferences.revealDottedOTP">
                                 <div v-show="user.preferences.getOtpOnRequest == false && !bus.inManagementMode" class="has-text-right">
-                                    <button v-if="revealPassword == account.id" class="pr-0 button is-ghost has-text-grey-dark" @click.stop="revealPassword = null">
+                                    <button v-if="revealPassword == account.id" type="button" class="pr-0 button is-ghost has-text-grey-dark" @click.stop="revealPassword = null">
                                         <font-awesome-icon :icon="['fas', 'eye']" />
                                     </button>
-                                    <button v-else class="pr-0 button is-ghost has-text-grey-dark" @click.stop="revealPassword = account.id">
+                                    <button v-else type="button" class="pr-0 button is-ghost has-text-grey-dark" @click.stop="revealPassword = account.id">
                                         <font-awesome-icon :icon="['fas', 'eye-slash']" />
                                     </button>
                                 </div>

@@ -131,9 +131,9 @@
                     </div>
                     <div class="level-item has-text-centered is-justify-content-start">
                         <div class="buttons">
-                            <button class="button is-small is-ghost p-0" @click="addFilter('admin:1')">admin</button>
-                            <button class="button is-small is-ghost p-0" @click="addFilter('oauth:github')">github</button>
-                            <button class="button is-small is-ghost p-0" @click="addFilter('oauth:openid')">openId</button>
+                            <button type="button" class="button is-small is-ghost p-0" @click="addFilter('admin:1')">admin</button>
+                            <button type="button" class="button is-small is-ghost p-0" @click="addFilter('oauth:github')">github</button>
+                            <button type="button" class="button is-small is-ghost p-0" @click="addFilter('oauth:openid')">openId</button>
                         </div>
                     </div>
                 </div>

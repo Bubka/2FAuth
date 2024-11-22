@@ -50,13 +50,13 @@
     <div class="block mb-6 light-or-darker">{{ qrContent ? qrContent : '[' + trans('commons.nothing') + ']' }}</div>
     <!-- Copy to clipboard -->
     <div class="block has-text-link" v-if="qrContent">
-        <button class="button is-link is-outlined is-rounded" @click.stop="copyToClipboard(qrContent)">
+        <button type="button" class="button is-link is-outlined is-rounded" @click.stop="copyToClipboard(qrContent)">
             {{ $t('commons.copy_to_clipboard') }}
         </button>
     </div>
     <!-- Open in browser -->
     <div class="block has-text-link" v-if="isUrl(qrContent)" @click="openInBrowser(qrContent)">
-        <button class="button is-link is-outlined is-rounded">
+        <button type="button" class="button is-link is-outlined is-rounded">
             <span>{{ $t('commons.open_in_browser') }}</span>
             <span class="icon is-small">
                 <FontAwesomeIcon :icon="['fas', 'external-link-alt']" />

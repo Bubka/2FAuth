@@ -333,7 +333,7 @@
             {{ $t('twofaccounts.forms.counter.label') }}: {{ otpauthParams.counter }}
         </p>
         <p v-if="user.preferences.showOtpAsDot && user.preferences.revealDottedOTP" class="mt-3">
-            <button class="button is-ghost has-text-grey-dark" @click.stop="revealPassword = !revealPassword">
+            <button type="button" class="button is-ghost has-text-grey-dark" @click.stop="revealPassword = !revealPassword">
                 <font-awesome-icon v-if="revealPassword" :icon="['fas', 'eye']" />
                 <font-awesome-icon v-else :icon="['fas', 'eye-slash']" />
             </button>

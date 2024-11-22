@@ -39,7 +39,7 @@
                 <div class="columns is-multiline">
                     <div class="column is-full" v-for="group in groups" :key="group.id">
                         <UseColorMode v-slot="{ mode }">
-                            <button class="button is-fullwidth" :class="{'is-link' : destinationGroupId === group.id, 'is-dark has-text-light is-outlined': mode == 'dark'}" @click="destinationGroupId = group.id">
+                            <button type="button" class="button is-fullwidth" :class="{'is-link' : destinationGroupId === group.id, 'is-dark has-text-light is-outlined': mode == 'dark'}" @click="destinationGroupId = group.id">
                                 <span v-if="group.id === 0" class="is-italic">
                                     {{ $t('groups.no_group') }}
                                 </span>
@@ -60,7 +60,7 @@
         <VueFooter :showButtons="true">
             <!-- Move to selected group button -->
             <p class="control">
-                <button class="button is-link is-rounded" @click="moveAccounts">{{ $t('commons.move') }}</button>
+                <button type="button" class="button is-link is-rounded" @click="moveAccounts">{{ $t('commons.move') }}</button>
             </p>
             <ButtonBackCloseCancel action="cancel" :useLinkTag="false" @canceled="$emit('update:showDestinationGroupSelector', false)" />
         </VueFooter>

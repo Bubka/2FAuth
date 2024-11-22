@@ -33,7 +33,7 @@
                 <div class="columns is-multiline">
                     <div class="column is-full" v-for="group in groups" :key="group.id">
                         <UseColorMode v-slot="{ mode }">
-                            <button class="button is-fullwidth" :class="{'is-dark has-text-light is-outlined': mode == 'dark'}" @click="setActiveGroup(group.id)">{{ group.name }}</button>
+                            <button type="button" class="button is-fullwidth" :class="{'is-dark has-text-light is-outlined': mode == 'dark'}" @click="setActiveGroup(group.id)">{{ group.name }}</button>
                         </UseColorMode>
                     </div>
                 </div>

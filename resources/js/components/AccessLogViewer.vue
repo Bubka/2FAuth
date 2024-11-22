@@ -142,23 +142,23 @@
     <nav v-if="props.showSearch" class="level is-mobile mb-2">
         <div class="level-item has-text-centered">
             <div class="buttons"> 
-                <button id="btnShowOneMonth" :title="$t('admin.show_last_month_log')" v-on:click="setPeriod(periods.aMonth)" :class="{ 'has-text-grey' : period !== periods.aMonth }" class="button is-ghost p-1">
+                <button id="btnShowOneMonth" :title="$t('admin.show_last_month_log')" v-on:click="setPeriod(periods.aMonth)" :class="{ 'has-text-grey' : period !== periods.aMonth }" type="button" class="button is-ghost p-1">
                     {{ $t('commons.one_month') }}
                 </button>
-                <button id="btnShowThreeMonths" :title="$t('admin.show_three_months_log')" v-on:click="setPeriod(periods.threeMonths)" :class="{ 'has-text-grey' : period !== periods.threeMonths }" class="button is-ghost p-1">
+                <button id="btnShowThreeMonths" :title="$t('admin.show_three_months_log')" v-on:click="setPeriod(periods.threeMonths)" :class="{ 'has-text-grey' : period !== periods.threeMonths }" type="button" class="button is-ghost p-1">
                     {{ $t('commons.x_month', { 'x' : '3' }) }}
                 </button>
-                <button id="btnShowSixMonths" :title="$t('admin.show_six_months_log')" v-on:click="setPeriod(periods.halfYear)" :class="{ 'has-text-grey' : period !== periods.halfYear }" class="button is-ghost p-1">
+                <button id="btnShowSixMonths" :title="$t('admin.show_six_months_log')" v-on:click="setPeriod(periods.halfYear)" :class="{ 'has-text-grey' : period !== periods.halfYear }" type="button" class="button is-ghost p-1">
                     {{ $t('commons.x_month', { 'x' : '6' }) }}
                 </button>
-                <button id="btnShowOneYear" :title="$t('admin.show_one_year_log')" v-on:click="setPeriod(periods.aYear)" :class="{ 'has-text-grey' : period !== periods.aYear }" class="button is-ghost p-1 mr-5">
+                <button id="btnShowOneYear" :title="$t('admin.show_one_year_log')" v-on:click="setPeriod(periods.aYear)" :class="{ 'has-text-grey' : period !== periods.aYear }" type="button" class="button is-ghost p-1 mr-5">
                     {{ $t('commons.one_year') }}
                 </button>
-                <button id="btnSortLogDesc" v-on:click="setDesc" :title="$t('admin.sort_by_date_desc')" :class="{ 'has-text-grey' : !orderIsDesc }" class="button p-1 is-ghost">
+                <button id="btnSortLogDesc" v-on:click="setDesc" :title="$t('admin.sort_by_date_desc')" :class="{ 'has-text-grey' : !orderIsDesc }" type="button" class="button p-1 is-ghost">
                     <FontAwesomeIcon :icon="['fas', 'arrow-up-long']" flip="vertical" />
                     <FontAwesomeIcon :icon="['far', 'calendar']" />
                 </button>
-                <button id="btnSortLogAsc" v-on:click="setAsc" :title="$t('admin.sort_by_date_asc')" :class="{ 'has-text-grey' : orderIsDesc }" class="button p-1 is-ghost">
+                <button id="btnSortLogAsc" v-on:click="setAsc" :title="$t('admin.sort_by_date_asc')" :class="{ 'has-text-grey' : orderIsDesc }" type="button" class="button p-1 is-ghost">
                     <FontAwesomeIcon :icon="['fas', 'arrow-up-long']" />
                     <FontAwesomeIcon :icon="['far', 'calendar']" />
                 </button>

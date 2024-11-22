@@ -44,7 +44,7 @@
                 :value="keyword"
                 v-on:keyup="$emit('update:keyword', $event.target.value)">
             <span class="icon is-small is-right">
-                <button v-if="keyword != ''" id="btnClearSearch" tabindex="1" :title="$t('commons.clear_search')" class="clear-selection delete" @click="$emit('update:keyword','')"></button>
+                <button type="button" v-if="keyword != ''" id="btnClearSearch" tabindex="1" :title="$t('commons.clear_search')" class="clear-selection delete" @click="$emit('update:keyword','')"></button>
                 <FontAwesomeIcon v-else :icon="['fas', 'search']" />
             </span>
         </div>
