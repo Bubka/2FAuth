@@ -139,28 +139,27 @@
                 </div>
                 <div v-if="visibleUsers.length > 0">
                     <div v-for="user in visibleUsers" :key="user.id" class="list-item is-size-5 is-size-6-mobile is-flex is-justify-content-space-between">
-                        <div class="has-ellipsis">
-                            <span>{{ user.name }}</span>
-                            <!-- <FontAwesomeIcon v-if="token.value" class="has-text-success" :icon="['fas', 'check']" /> {{ token.name }} -->
-                            <!-- set as admin link -->
-                            <!-- admin tag -->
-                            <span class="is-block has-ellipsis is-family-primary is-size-6 is-size-7-mobile has-text-grey">{{ user.email }}</span>
-                            <!-- tag -->
-                            <UseColorMode v-slot="{ mode }">
+                        <UseColorMode v-slot="{ mode }">
+                            <div class="has-ellipsis">
+                                <span>{{ user.name }}</span>
+                                <!-- <FontAwesomeIcon v-if="token.value" class="has-text-success" :icon="['fas', 'check']" /> {{ token.name }} -->
+                                <!-- set as admin link -->
+                                <!-- admin tag -->
+                                <span class="is-block has-ellipsis is-family-primary is-size-6 is-size-7-mobile has-text-grey">{{ user.email }}</span>
+                                <!-- tag -->
                                 <div class="tags mt-2">
                                     <span v-if="user.is_admin" class="tag is-rounded has-text-warning-dark" :class="mode == 'dark' ? 'has-background-black-bis' : 'has-background-grey-lighter'" >admin</span>
                                     <span v-if="user.oauth_provider" class="tag is-rounded  has-text-grey" :class="mode == 'dark' ? 'has-background-black-bis' : 'has-background-grey-lighter'" >oauth: {{ user.oauth_provider }}</span>
                                 </div>
-                            </UseColorMode>
-                        </div>
-                        <div class="ml-3">
-                            <UseColorMode v-slot="{ mode }">
+                            </div>
+                            <div class="ml-3">
                                 <!-- manage link -->
                                 <RouterLink :to="{ name: 'admin.manageUser', params: { userId: user.id }}" class="button is-small has-normal-radius" :class="{'is-dark' : mode == 'dark'}" :title="$t('commons.manage')">
                                     {{ $t('commons.manage') }}
                                 </RouterLink>
-                            </UseColorMode>
-                        </div>
+
+                            </div>
+                        </UseColorMode>
                     </div>
                     <!-- <div class="mt-2 is-size-7 is-pulled-right">
                         {{ $t('settings.revoking_a_token_is_permanent')}}

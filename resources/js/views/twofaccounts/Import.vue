@@ -244,6 +244,7 @@
 </script>
 
 <template>
+    <UseColorMode v-slot="{ mode }">
     <div>
         <ResponsiveWidthWrapper>
             <h1 class="title has-text-grey-dark">
@@ -262,9 +263,7 @@
                                     <div class="media">
                                         <div class="media-left">
                                             <figure class="image is-32x32">
-                                                <UseColorMode v-slot="{ mode }">
-                                                    <FontAwesomeIcon :icon="['fas', 'qrcode']" size="2x" :class="mode == 'dark' ? 'has-text-grey-darker' : 'has-text-grey-lighter'" />
-                                                </UseColorMode>
+                                                <FontAwesomeIcon :icon="['fas', 'qrcode']" size="2x" :class="mode == 'dark' ? 'has-text-grey-darker' : 'has-text-grey-lighter'" />
                                             </figure>
                                         </div>
                                         <div class="media-content">
@@ -291,9 +290,7 @@
                                     <div class="media">
                                         <div class="media-left">
                                             <figure class="image is-32x32">
-                                                <UseColorMode v-slot="{ mode }">
-                                                    <FontAwesomeIcon :icon="['fas', 'file-lines']" size="2x" :class="mode == 'dark' ? 'has-text-grey-darker' : 'has-text-grey-lighter'" />
-                                                </UseColorMode>
+                                                <FontAwesomeIcon :icon="['fas', 'file-lines']" size="2x" :class="mode == 'dark' ? 'has-text-grey-darker' : 'has-text-grey-lighter'" />
                                             </figure>
                                         </div>
                                         <div class="media-content">
@@ -317,9 +314,7 @@
                                     <div class="media">
                                         <div class="media-left">
                                             <figure class="image is-32x32">
-                                                <UseColorMode v-slot="{ mode }">
-                                                    <FontAwesomeIcon :icon="['fas', 'align-left']" size="2x" :class="mode == 'dark' ? 'has-text-grey-darker' : 'has-text-grey-lighter'" />
-                                                </UseColorMode>
+                                                <FontAwesomeIcon :icon="['fas', 'align-left']" size="2x" :class="mode == 'dark' ? 'has-text-grey-darker' : 'has-text-grey-lighter'" />
                                             </figure>
                                         </div>
                                         <div class="media-content">
@@ -408,11 +403,9 @@
                         <!-- buttons -->
                         <div v-if="account.imported === -1" class="tags is-flex-wrap-nowrap">
                             <!-- discard button -->
-                            <UseColorMode v-slot="{ mode }">
-                                <button type="button" class="button tag" :class="{'is-dark has-text-grey-light' : mode == 'dark'}" @click="discardAccount(index)"  :title="$t('twofaccounts.import.discard_this_account')">
-                                    <FontAwesomeIcon :icon="['fas', 'trash']" />
-                                </button>
-                            </UseColorMode>
+                            <button type="button" class="button tag" :class="{'is-dark has-text-grey-light' : mode == 'dark'}" @click="discardAccount(index)"  :title="$t('twofaccounts.import.discard_this_account')">
+                                <FontAwesomeIcon :icon="['fas', 'trash']" />
+                            </button>
                             <!-- import button -->
                             <button v-if="account.id > -2" type="button" class="button tag is-link" @click="createAccount(index)"  :title="$t('twofaccounts.import.import_this_account')">
                                 {{ $t('twofaccounts.import.to_import') }}
@@ -479,4 +472,5 @@
             </OtpDisplay>
         </modal>
     </div>
+    </UseColorMode>
 </template>

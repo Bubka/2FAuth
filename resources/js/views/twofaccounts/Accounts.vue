@@ -315,6 +315,7 @@
 </script>
 
 <template>
+    <UseColorMode v-slot="{ mode }">
     <div>
         <GroupSwitch v-if="showGroupSwitch" v-model:showGroupSwitch="showGroupSwitch" v-model:groups="groups.items" />
         <DestinationGroupSelector
@@ -341,19 +342,17 @@
                     <!-- group switch toggle -->
                     <div v-else class="has-text-centered">
                         <div class="columns">
-                            <UseColorMode v-slot="{ mode }">
-                                <div class="column" v-if="showGroupSwitch">
-                                    <button type="button" id="btnHideGroupSwitch" :title="$t('groups.hide_group_selector')" tabindex="1" class="button is-text is-like-text" :class="{'has-text-grey' : mode != 'dark'}" @click.stop="showGroupSwitch = !showGroupSwitch">
-                                        {{ $t('groups.select_accounts_to_show') }}
-                                    </button>
-                                </div>
-                                <div class="column" v-else>
-                                    <button type="button" id="btnShowGroupSwitch" :title="$t('groups.show_group_selector')" tabindex="1" class="button is-text is-like-text" :class="{'has-text-grey' : mode != 'dark'}" @click.stop="showGroupSwitch = !showGroupSwitch">
-                                        {{ groups.current }} ({{ twofaccounts.filteredCount }})&nbsp;
-                                        <FontAwesomeIcon  :icon="['fas', 'caret-down']" />
-                                    </button>
-                                </div>
-                            </UseColorMode>
+                            <div class="column" v-if="showGroupSwitch">
+                                <button type="button" id="btnHideGroupSwitch" :title="$t('groups.hide_group_selector')" tabindex="1" class="button is-text is-like-text" :class="{'has-text-grey' : mode != 'dark'}" @click.stop="showGroupSwitch = !showGroupSwitch">
+                                    {{ $t('groups.select_accounts_to_show') }}
+                                </button>
+                            </div>
+                            <div class="column" v-else>
+                                <button type="button" id="btnShowGroupSwitch" :title="$t('groups.show_group_selector')" tabindex="1" class="button is-text is-like-text" :class="{'has-text-grey' : mode != 'dark'}" @click.stop="showGroupSwitch = !showGroupSwitch">
+                                    {{ groups.current }} ({{ twofaccounts.filteredCount }})&nbsp;
+                                    <FontAwesomeIcon  :icon="['fas', 'caret-down']" />
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -399,9 +398,7 @@
                             <transition name="slideCheckbox">
                                 <div class="tfa-cell tfa-checkbox" v-if="bus.inManagementMode">
                                     <div class="field">
-                                        <UseColorMode v-slot="{ mode }">
-                                            <input class="is-checkradio is-small" :class="mode == 'dark' ? 'is-white':'is-info'" :id="'ckb_' + account.id" :value="account.id" type="checkbox" :name="'ckb_' + account.id" v-model="twofaccounts.selectedIds">
-                                        </UseColorMode>
+                                        <input class="is-checkradio is-small" :class="mode == 'dark' ? 'is-white':'is-info'" :id="'ckb_' + account.id" :value="account.id" type="checkbox" :name="'ckb_' + account.id" v-model="twofaccounts.selectedIds">
                                         <label tabindex="0" :for="'ckb_' + account.id" v-on:keypress.space.prevent="twofaccounts.select(account.id)"></label>
                                     </div>
                                 </div>
@@ -431,11 +428,9 @@
                                     </span>
                                     <span v-else>
                                         <!-- get hotp button -->
-                                        <UseColorMode v-slot="{ mode }">
-                                            <button type="button" class="button tag" :class="mode == 'dark' ? 'is-dark' : 'is-white'" @click="showOTP(account)" :title="$t('twofaccounts.import.import_this_account')">
-                                                {{ $t('commons.generate') }}
-                                            </button>
-                                        </UseColorMode>
+                                        <button type="button" class="button tag" :class="mode == 'dark' ? 'is-dark' : 'is-white'" @click="showOTP(account)" :title="$t('twofaccounts.import.import_this_account')">
+                                            {{ $t('commons.generate') }}
+                                        </button>
                                     </span>
                                 </div>
                             </transition>
@@ -451,14 +446,12 @@
                             </transition>
                             <transition name="fadeInOut">
                                 <div class="tfa-cell tfa-edit has-text-grey" v-if="bus.inManagementMode">
-                                    <UseColorMode v-slot="{ mode }">
-                                        <RouterLink :to="{ name: 'editAccount', params: { twofaccountId: account.id }}" class="tag is-rounded mr-1" :class="mode == 'dark' ? 'is-dark' : 'is-white'">
-                                            {{ $t('commons.edit') }}
-                                        </RouterLink>
-                                        <RouterLink :to="{ name: 'showQRcode', params: { twofaccountId: account.id }}" class="tag is-rounded" :class="mode == 'dark' ? 'is-dark' : 'is-white'" :title="$t('twofaccounts.show_qrcode')">
-                                            <FontAwesomeIcon :icon="['fas', 'qrcode']" />
-                                        </RouterLink>
-                                    </UseColorMode>
+                                    <RouterLink :to="{ name: 'editAccount', params: { twofaccountId: account.id }}" class="tag is-rounded mr-1" :class="mode == 'dark' ? 'is-dark' : 'is-white'">
+                                        {{ $t('commons.edit') }}
+                                    </RouterLink>
+                                    <RouterLink :to="{ name: 'showQRcode', params: { twofaccountId: account.id }}" class="tag is-rounded" :class="mode == 'dark' ? 'is-dark' : 'is-white'" :title="$t('twofaccounts.show_qrcode')">
+                                        <FontAwesomeIcon :icon="['fas', 'qrcode']" />
+                                    </RouterLink>
                                 </div>
                             </transition>
                             <transition name="fadeInOut">
@@ -481,4 +474,5 @@
             </VueFooter>
         </div>
     </div>
+    </UseColorMode>
 </template>

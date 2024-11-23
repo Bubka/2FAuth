@@ -188,6 +188,7 @@
 
 
 <template>
+    <UseColorMode v-slot="{ mode }">
     <ResponsiveWidthWrapper>
         <h1 class="title has-text-grey-dark mb-6">
             {{ $t('admin.user_management') }}
@@ -200,10 +201,8 @@
         </div>
         <div v-else>
             <div class="mb-6" :class="managedUser.info.is_admin ? 'is-left-bordered-warning' : 'is-left-bordered-link'">
-                <UseColorMode v-slot="{ mode }">
-                    <p class="title is-4" :class="{ 'has-text-grey-lighter' : mode == 'dark' }">
-                    <span class="has-text-weight-light has-text-grey-dark is-pulled-right">#{{ managedUser.info.id }}</span>{{ managedUser.info.name }}</p>
-                </UseColorMode>
+                <p class="title is-4" :class="{ 'has-text-grey-lighter' : mode == 'dark' }">
+                <span class="has-text-weight-light has-text-grey-dark is-pulled-right">#{{ managedUser.info.id }}</span>{{ managedUser.info.name }}</p>
                 <p class="subtitle is-6 block">{{ managedUser.info.email }}</p>
             </div>
             <!-- oauth banner -->
@@ -228,16 +227,14 @@
                         </div>
                         <div>
                             <div class="tags ml-3 is-right">
-                                <UseColorMode v-slot="{ mode }">
-                                    <!-- resend email button -->
-                                    <button type="button" v-if="managedUser.password_reset" class="button tag is-pulled-right" :class="mode == 'dark' ? 'is-dark has-background-link' : 'is-white'" @click="resendPasswordEmail" :title="$t('admin.resend_email_title')">
-                                        {{ $t('admin.resend_email') }}
-                                    </button>
-                                    <!-- reset password button -->
-                                    <button type="button" class="button tag is-pulled-right " :class="mode == 'dark' ? 'is-dark has-background-link' : 'is-white'" @click="resetPassword" :title="$t('admin.reset_password_title')">
-                                        {{ $t('admin.reset_password') }}
-                                    </button>
-                                </UseColorMode>
+                                <!-- resend email button -->
+                                <button type="button" v-if="managedUser.password_reset" class="button tag is-pulled-right" :class="mode == 'dark' ? 'is-dark has-background-link' : 'is-white'" @click="resendPasswordEmail" :title="$t('admin.resend_email_title')">
+                                    {{ $t('admin.resend_email') }}
+                                </button>
+                                <!-- reset password button -->
+                                <button type="button" class="button tag is-pulled-right " :class="mode == 'dark' ? 'is-dark has-background-link' : 'is-white'" @click="resetPassword" :title="$t('admin.reset_password_title')">
+                                    {{ $t('admin.reset_password') }}
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -258,12 +255,10 @@
                     </div>
                     <div v-if="managedUser.valid_personal_access_tokens > 0">
                         <div class="tags ml-3 is-right">
-                            <UseColorMode v-slot="{ mode }">
-                                <!-- manage link -->
-                                <button type="button" class="button tag is-pulled-right" :class="mode == 'dark' ? 'is-dark has-background-link' : 'is-white'" @click="revokePATs" :title="$t('admin.revoke_all_pat_for_user')">
-                                    {{ $t('settings.revoke') }}
-                                </button>
-                            </UseColorMode>
+                            <!-- manage link -->
+                            <button type="button" class="button tag is-pulled-right" :class="mode == 'dark' ? 'is-dark has-background-link' : 'is-white'" @click="revokePATs" :title="$t('admin.revoke_all_pat_for_user')">
+                                {{ $t('settings.revoke') }}
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -277,12 +272,10 @@
                     </div>
                     <div v-if="managedUser.webauthn_credentials > 0">
                         <div class="tags ml-3 is-right">
-                            <UseColorMode v-slot="{ mode }">
-                                <!-- manage link -->
-                                <button type="button" class="button tag is-pulled-right" :class="mode == 'dark' ? 'is-dark has-background-link' : 'is-white'" :title="$t('admin.revoke_all_devices_for_user')">
-                                    {{ $t('settings.revoke') }}
-                                </button>
-                            </UseColorMode>
+                            <!-- manage link -->
+                            <button type="button" class="button tag is-pulled-right" :class="mode == 'dark' ? 'is-dark has-background-link' : 'is-white'" :title="$t('admin.revoke_all_devices_for_user')">
+                                {{ $t('settings.revoke') }}
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -327,4 +320,5 @@
             <ButtonBackCloseCancel :returnTo="{ name: 'accounts' }" action="close" />
         </VueFooter>
     </ResponsiveWidthWrapper>
+    </UseColorMode>
 </template>

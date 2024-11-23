@@ -409,6 +409,7 @@
 </script>
 
 <template>
+    <UseColorMode v-slot="{ mode }">
     <div>
         <!-- otp display modal -->
         <Modal v-if="user.preferences.AutoSaveQrcodedAccount" v-model="showOtpInModal">
@@ -465,19 +466,17 @@
                 <!-- qcode fileupload -->
                 <div v-if="!isEditMode" class="field is-grouped">
                     <div class="control">
-                        <UseColorMode v-slot="{ mode }">
-                            <div role="button" tabindex="0" class="file is-small" :class="{ 'is-black': mode == 'dark' }" @keyup.enter="qrcodeInputLabel.click()">
-                                <label class="file-label" :title="$t('twofaccounts.forms.use_qrcode.title')" ref="qrcodeInputLabel">
-                                    <input inert tabindex="-1" class="file-input" type="file" accept="image/*" v-on:change="uploadQrcode" ref="qrcodeInput">
-                                    <span class="file-cta">
-                                        <span class="file-icon">
-                                            <FontAwesomeIcon :icon="['fas', 'qrcode']" size="lg" />
-                                        </span>
-                                        <span class="file-label">{{ $t('twofaccounts.forms.prefill_using_qrcode') }}</span>
+                        <div role="button" tabindex="0" class="file is-small" :class="{ 'is-black': mode == 'dark' }" @keyup.enter="qrcodeInputLabel.click()">
+                            <label class="file-label" :title="$t('twofaccounts.forms.use_qrcode.title')" ref="qrcodeInputLabel">
+                                <input inert tabindex="-1" class="file-input" type="file" accept="image/*" v-on:change="uploadQrcode" ref="qrcodeInput">
+                                <span class="file-cta">
+                                    <span class="file-icon">
+                                        <FontAwesomeIcon :icon="['fas', 'qrcode']" size="lg" />
                                     </span>
-                                </label>
-                            </div>
-                        </UseColorMode>
+                                    <span class="file-label">{{ $t('twofaccounts.forms.prefill_using_qrcode') }}</span>
+                                </span>
+                            </label>
+                        </div>
                     </div>
                 </div>
                 <FieldError v-if="qrcodeForm.errors.hasAny('qrcode')" :error="qrcodeForm.errors.get('qrcode')" :field="'qrcode'" class="help-for-file" />
@@ -490,34 +489,30 @@
                 <div class="field is-grouped">
                     <!-- Try my luck button -->
                     <div class="control" v-if="user.preferences.getOfficialIcons">
-                        <UseColorMode v-slot="{ mode }">
-                            <VueButton @click="fetchLogo" :color="mode == 'dark' ? 'is-dark' : ''" :nativeType="'button'" :is-loading="fetchingLogo" :isDisabled="!form.service" aria-describedby="lgdTryMyLuck">
-                                <span class="icon is-small">
-                                    <FontAwesomeIcon :icon="['fas', 'globe']" />
-                                </span>
-                                <span>{{ $t('twofaccounts.forms.i_m_lucky') }}</span>
-                            </VueButton>
-                        </UseColorMode>
+                        <VueButton @click="fetchLogo" :color="mode == 'dark' ? 'is-dark' : ''" :nativeType="'button'" :is-loading="fetchingLogo" :isDisabled="!form.service" aria-describedby="lgdTryMyLuck">
+                            <span class="icon is-small">
+                                <FontAwesomeIcon :icon="['fas', 'globe']" />
+                            </span>
+                            <span>{{ $t('twofaccounts.forms.i_m_lucky') }}</span>
+                        </VueButton>
                     </div>
                     <!-- upload icon button -->
                     <div class="control is-flex">
-                        <UseColorMode v-slot="{ mode }">
-                            <div role="button" tabindex="0" class="file mr-3" :class="mode == 'dark' ? 'is-dark' : 'is-white'" @keyup.enter="iconInputLabel.click()">
-                                <label for="filUploadIcon" class="file-label" ref="iconInputLabel">
-                                    <input id="filUploadIcon" tabindex="-1" class="file-input" type="file" accept="image/*" v-on:change="uploadIcon" ref="iconInput">
-                                    <span class="file-cta">
-                                        <span class="file-icon">
-                                            <FontAwesomeIcon :icon="['fas', 'upload']" />
-                                        </span>
-                                        <span class="file-label">{{ $t('twofaccounts.forms.choose_image') }}</span>
+                        <div role="button" tabindex="0" class="file mr-3" :class="mode == 'dark' ? 'is-dark' : 'is-white'" @keyup.enter="iconInputLabel.click()">
+                            <label for="filUploadIcon" class="file-label" ref="iconInputLabel">
+                                <input id="filUploadIcon" tabindex="-1" class="file-input" type="file" accept="image/*" v-on:change="uploadIcon" ref="iconInput">
+                                <span class="file-cta">
+                                    <span class="file-icon">
+                                        <FontAwesomeIcon :icon="['fas', 'upload']" />
                                     </span>
-                                </label>
-                            </div>
-                            <span class="tag is-large" :class="mode =='dark' ? 'is-dark' : 'is-white'" v-if="tempIcon">
-                                <img class="icon-preview" :src="$2fauth.config.subdirectory + '/storage/icons/' + tempIcon" :alt="$t('twofaccounts.icon_to_illustrate_the_account')">
-                                <button type="button" class="clear-selection delete is-small" @click.prevent="deleteTempIcon" :aria-label="$t('twofaccounts.remove_icon')"></button>
-                            </span>
-                        </UseColorMode>
+                                    <span class="file-label">{{ $t('twofaccounts.forms.choose_image') }}</span>
+                                </span>
+                            </label>
+                        </div>
+                        <span class="tag is-large" :class="mode =='dark' ? 'is-dark' : 'is-white'" v-if="tempIcon">
+                            <img class="icon-preview" :src="$2fauth.config.subdirectory + '/storage/icons/' + tempIcon" :alt="$t('twofaccounts.icon_to_illustrate_the_account')">
+                            <button type="button" class="clear-selection delete is-small" @click.prevent="deleteTempIcon" :aria-label="$t('twofaccounts.remove_icon')"></button>
+                        </span>
                     </div>
                 </div>
                 <div class="field">
@@ -573,4 +568,5 @@
             <QrContentDisplay :qrContent="uri" />
         </modal>
     </div>
+    </UseColorMode>
 </template>

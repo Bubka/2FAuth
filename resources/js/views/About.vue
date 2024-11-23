@@ -8,11 +8,10 @@
 
 <template>
     <ResponsiveWidthWrapper>
+    <UseColorMode v-slot="{ mode }">
         <h1 class="title has-text-grey-dark">{{ $t('commons.about') }}</h1>
         <p class="block">
-            <UseColorMode v-slot="{ mode }">
-                <span :class="mode == 'dark' ? 'has-text-white':'has-text-black'"><span class="is-size-5">2FAuth</span> v{{ $2fauth.version }}</span>
-            </UseColorMode>
+            <span :class="mode == 'dark' ? 'has-text-white':'has-text-black'"><span class="is-size-5">2FAuth</span> v{{ $2fauth.version }}</span>
             <br />
             {{ $t('commons.2fauth_teaser')}}
         </p>
@@ -24,32 +23,30 @@
             {{ $t('commons.resources') }}
         </h2>
         <div class="buttons">
-            <UseColorMode v-slot="{ mode }">
-                <a class="button" :class="{'is-dark' : mode == 'dark'}" href="https://github.com/Bubka/2FAuth" target="_blank">
-                    <span class="icon is-small">
-                        <FontAwesomeIcon :icon="['fab', 'github-alt']" />
-                    </span>
-                    <span>Github</span>
-                </a>
-                <a class="button" :class="{'is-dark' : mode == 'dark'}" href="https://docs.2fauth.app/" target="_blank">
-                    <span class="icon is-small">
-                        <FontAwesomeIcon :icon="['fas', 'book']" />
-                    </span>
-                    <span>Docs</span>
-                </a>
-                <a class="button" :class="{'is-dark' : mode == 'dark'}" href="https://demo.2fauth.app/" target="_blank">
-                    <span class="icon is-small">
-                        <FontAwesomeIcon :icon="['fas', 'flask']" />
-                    </span>
-                    <span>Demo</span>
-                </a>
-                <a class="button" :class="{'is-dark' : mode == 'dark'}" href="https://docs.2fauth.app/resources/rapidoc.html" target="_blank">
-                    <span class="icon is-small">
-                        <FontAwesomeIcon :icon="['fas', 'code']" />
-                    </span>
-                    <span>API</span>
-                </a>
-            </UseColorMode>
+            <a class="button" :class="{'is-dark' : mode == 'dark'}" href="https://github.com/Bubka/2FAuth" target="_blank">
+                <span class="icon is-small">
+                    <FontAwesomeIcon :icon="['fab', 'github-alt']" />
+                </span>
+                <span>Github</span>
+            </a>
+            <a class="button" :class="{'is-dark' : mode == 'dark'}" href="https://docs.2fauth.app/" target="_blank">
+                <span class="icon is-small">
+                    <FontAwesomeIcon :icon="['fas', 'book']" />
+                </span>
+                <span>Docs</span>
+            </a>
+            <a class="button" :class="{'is-dark' : mode == 'dark'}" href="https://demo.2fauth.app/" target="_blank">
+                <span class="icon is-small">
+                    <FontAwesomeIcon :icon="['fas', 'flask']" />
+                </span>
+                <span>Demo</span>
+            </a>
+            <a class="button" :class="{'is-dark' : mode == 'dark'}" href="https://docs.2fauth.app/resources/rapidoc.html" target="_blank">
+                <span class="icon is-small">
+                    <FontAwesomeIcon :icon="['fas', 'code']" />
+                </span>
+                <span>API</span>
+            </a>
         </div>
         <h2 class="title is-5 has-text-grey-light">
             {{ $t('commons.credits') }}
@@ -65,5 +62,6 @@
         <VueFooter :showButtons="true">
             <ButtonBackCloseCancel :returnTo="{ path: returnTo }" action="back" />
         </VueFooter>
+    </UseColorMode>
     </ResponsiveWidthWrapper>
 </template>

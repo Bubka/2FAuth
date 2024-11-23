@@ -140,41 +140,39 @@
                 <div class="columns is-centered">
                     <div class="column is-three-quarters">
                         <div class="modal-slot has-text-centered is-shadowless">
-                            <div v-if="errorPhrase">
-                                <p class="block is-size-5">{{ $t('twofaccounts.stream.live_scan_cant_start') }}</p>
-                                <UseColorMode v-slot="{ mode }">
+                            <UseColorMode v-slot="{ mode }">
+                                <div v-if="errorPhrase">
+                                    <p class="block is-size-5">{{ $t('twofaccounts.stream.live_scan_cant_start') }}</p>
                                     <p class="block" :class="{'has-text-light': mode == 'dark'}">{{ $t('twofaccounts.stream.' + errorPhrase + '.reason') }}</p>
-                                </UseColorMode>
-                                <div v-if="errorPhrase == 'need_grant_permission'" >
-                                    <p class="is-size-7 mb-3">{{ $t('twofaccounts.stream.need_grant_permission.solution') }}</p>
-                                    <p class="is-size-7 mb-3">{{ $t('twofaccounts.stream.need_grant_permission.click_camera_icon') }}</p>
-                                    
-                                    <div class="addressbar columns is-mobile is-gapless">
-                                        <div class="column is-narrow has-text-left circled">
-                                            <FontAwesomeIcon :icon="['fas', 'lock']" class="ml-1" size="xs" />
-                                            <FontAwesomeIcon :icon="['fas', 'video-slash']" class="ml-3" size="xs" />
+                                    <div v-if="errorPhrase == 'need_grant_permission'" >
+                                        <p class="is-size-7 mb-3">{{ $t('twofaccounts.stream.need_grant_permission.solution') }}</p>
+                                        <p class="is-size-7 mb-3">{{ $t('twofaccounts.stream.need_grant_permission.click_camera_icon') }}</p>
+                                        
+                                        <div class="addressbar columns is-mobile is-gapless">
+                                            <div class="column is-narrow has-text-left circled">
+                                                <FontAwesomeIcon :icon="['fas', 'lock']" class="ml-1" size="xs" />
+                                                <FontAwesomeIcon :icon="['fas', 'video-slash']" class="ml-3" size="xs" />
+                                            </div>
+                                            <div class="column has-text-left ml-3">
+                                                http://my.2fauth.app/...
+                                            </div>
+                                            <div class="column is-narrow has-text-right">
+                                                <FontAwesomeIcon :icon="['far', 'star']" class="mr-1" />
+                                            </div>
                                         </div>
-                                        <div class="column has-text-left ml-3">
-                                            http://my.2fauth.app/...
-                                        </div>
-                                        <div class="column is-narrow has-text-right">
-                                            <FontAwesomeIcon :icon="['far', 'star']" class="mr-1" />
-                                        </div>
+                                        <p>
+                                            <a @click.stop="reloadLocation">{{ $t('commons.refresh') }}</a>
+                                        </p>
+                                        
+                                        <!-- <div class="addressbar">
+                                            <FontAwesomeIcon :icon="['fas', 'video-slash']" class="mr-3 ml-2" size="xs" />
+                                            <span class="circled">http://my.2fauth.app/...</span>
+                                            <FontAwesomeIcon :icon="['far', 'star']" class="mr-3" size="xs" />
+                                        </div> -->
                                     </div>
-                                    <p>
-                                        <a @click.stop="reloadLocation">{{ $t('commons.refresh') }}</a>
-                                    </p>
-                                    
-                                    <!-- <div class="addressbar">
-                                        <FontAwesomeIcon :icon="['fas', 'video-slash']" class="mr-3 ml-2" size="xs" />
-                                        <span class="circled">http://my.2fauth.app/...</span>
-                                        <FontAwesomeIcon :icon="['far', 'star']" class="mr-3" size="xs" />
-                                    </div> -->
+                                    <p v-else class="is-size-7">{{ $t('twofaccounts.stream.' + errorPhrase + '.solution') }}</p>
                                 </div>
-                                <p v-else class="is-size-7">{{ $t('twofaccounts.stream.' + errorPhrase + '.solution') }}</p>
-                            </div>
-                            <UseColorMode v-else v-slot="{ mode }">
-                                <span class="is-size-4" :class="mode == 'dark' ? 'has-text-light':'has-text-grey-dark'">
+                                <span v-else class="is-size-4" :class="mode == 'dark' ? 'has-text-light':'has-text-grey-dark'">
                                     <Spinner :isVisible="true" :type="'raw'" class="is-size-1" />
                                 </span>
                             </UseColorMode>
