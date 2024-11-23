@@ -32,7 +32,7 @@ trait HasAuthenticationLog
     /**
      * Get all user's authentications from the auth log
      *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany<AuthLog>
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany<\App\Models\AuthLog, $this>
      */
     public function authentications()
     {
@@ -56,7 +56,7 @@ trait HasAuthenticationLog
     /**
      * Get the user's latest authentication
      *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphOne<AuthLog>
+     * @return \Illuminate\Database\Eloquent\Relations\MorphOne<\App\Models\AuthLog, $this>
      */
     public function latestAuthentication()
     {

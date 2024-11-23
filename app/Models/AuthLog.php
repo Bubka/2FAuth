@@ -101,7 +101,7 @@ class AuthLog extends Model
     /**
      * MorphTo relation to get the associated authenticatable user
      *
-     * @return MorphTo<\Illuminate\Database\Eloquent\Model, AuthLog>
+     * @return \Illuminate\Database\Eloquent\Relations\MorphTo<\Illuminate\Database\Eloquent\Model, $this>
      */
     public function authenticatable()
     {

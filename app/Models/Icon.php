@@ -58,7 +58,7 @@ class Icon extends Model
     /**
      * Get the twofaccount that owns the icon.
      *
-     * @return BelongsTo<\App\Models\TwoFAccount, \App\Models\Icon>
+     * @return BelongsTo<\App\Models\TwoFAccount, $this>
      */
     public function twofaccount() : BelongsTo
     {

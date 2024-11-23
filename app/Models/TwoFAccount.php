@@ -227,7 +227,7 @@ class TwoFAccount extends Model implements Sortable
     /**
      * Get the user that owns the twofaccount.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Models\User, \App\Models\TwoFAccount>
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Models\User, $this>
      */
     public function user()
     {
@@ -237,7 +237,7 @@ class TwoFAccount extends Model implements Sortable
     /**
      * Get the relation between the icon resource and the model.
      *
-     * @return HasOne<\App\Models\Icon>
+     * @return HasOne<\App\Models\Icon, $this>
      */
     public function iconResource() : HasOne
     {
@@ -658,7 +658,7 @@ class TwoFAccount extends Model implements Sortable
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Builder<TwoFAccount>
+     * @return \Illuminate\Database\Eloquent\Builder<static>
      */
     public function buildSortQuery()
     {

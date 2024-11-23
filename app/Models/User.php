@@ -242,7 +242,7 @@ class User extends Authenticatable implements HasLocalePreference, WebAuthnAuthe
     /**
      * Get the TwoFAccounts of the user.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<TwoFAccount>
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\App\Models\TwoFAccount, $this>
      */
     public function twofaccounts()
     {
@@ -252,7 +252,7 @@ class User extends Authenticatable implements HasLocalePreference, WebAuthnAuthe
     /**
      * Get the Groups of the user.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Group>
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\App\Models\Group, $this>
      */
     public function groups()
     {

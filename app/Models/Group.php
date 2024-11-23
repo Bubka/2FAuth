@@ -106,7 +106,7 @@ class Group extends Model
     /**
      * Get the TwoFAccounts of the group.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<TwoFAccount>
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\App\Models\TwoFAccount, $this>
      */
     public function twofaccounts()
     {
@@ -116,7 +116,7 @@ class Group extends Model
     /**
      * Get the user that owns the group.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Models\User, \App\Models\Group>
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Models\User, $this>
      */
     public function user()
     {

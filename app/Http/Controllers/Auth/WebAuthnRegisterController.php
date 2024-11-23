@@ -39,7 +39,7 @@ class WebAuthnRegisterController extends Controller
     {
         $request->save();
 
-        Log::info(sprintf('User ID #%s registered a new security device', $request->user()->id));
+        Log::info(sprintf('User ID #%s registered a new security device', $request->user()->id)); /** @phpstan-ignore property.notFound */
 
         return response()->noContent();
     }
