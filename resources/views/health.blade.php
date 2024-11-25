@@ -3,27 +3,9 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-
         <title>{{ config('app.name', 'Laravel') }}</title>
-
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
-
         <!-- Styles -->
-        <script src="https://cdn.tailwindcss.com"></script>
-
-        <script>
-            tailwind.config = {
-                theme: {
-                    extend: {
-                        fontFamily: {
-                            sans: ['Figtree', 'ui-sans-serif', 'system-ui', 'sans-serif', "Apple Color Emoji", "Segoe UI Emoji"],
-                        }
-                    }
-                }
-            }
-        </script>
+        <link rel="stylesheet" href="/healthcheck.css"></link>
     </head>
     <body class="antialiased">
         <div class="relative sm:flex sm:justify-center sm:items-center min-h-screen bg-gray-100 selection:bg-red-500 selection:text-white">
