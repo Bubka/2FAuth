@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{{ config('app.name', 'Laravel') }}</title>
         <!-- Styles -->
-        <link rel="stylesheet" href="/healthcheck.css"></link>
+        <link rel="stylesheet" href="{{ url('healthcheck.css') }}"></link>
     </head>
     <body class="antialiased">
         <div class="relative sm:flex sm:justify-center sm:items-center min-h-screen bg-gray-100 selection:bg-red-500 selection:text-white">
