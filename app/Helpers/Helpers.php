@@ -49,4 +49,22 @@ class Helpers
     {
         return Str::random($length) . '.' . $extension;
     }
+
+    /**
+     * Defines preferences locked for change.
+     * This helper is only intended to be called from the 2FAuth config file.
+     */
+    public static function lockedPreferences(array $preferences) : array
+    {
+        foreach ($preferences as $key => $value) {
+            $_key = $key === 'revealDottedOTP' ? 'revealDottedOtp' : $key;
+            $isLocked = envUnlessEmpty(Str::of($_key)->snake('_')->upper()->prepend('USERPREF_LOCKED__')->toString(), false);
+            
+            if ($isLocked) {
+                $lockedPreferences[] = $key;
+            }
+        }
+    
+        return $lockedPreferences ?? [];
+    }
 }

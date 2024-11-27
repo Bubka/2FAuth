@@ -23,6 +23,7 @@
         },
         isIndented: Boolean,
         isDisabled: Boolean,
+        isLocked: Boolean,
         idSuffix: {
             type: String,
             default: ''
@@ -37,18 +38,20 @@
 
 <template>
     <div class="field is-flex">
-        <div v-if="isIndented" class="mx-2 pr-1" :style="{ 'opacity': isDisabled ? '0.5' : '1' }">
+        <div v-if="isIndented" class="mx-2 pr-1" :class="{ 'is-opacity-5' : isDisabled || isLocked }">
             <FontAwesomeIcon class="has-text-grey" :icon="['fas', 'chevron-right']" transform="rotate-135"/>
         </div>
         <div>
-            <label :for="inputId" class="label" v-html="$t(label)" :style="{ 'opacity': isDisabled ? '0.5' : '1' }"></label>
+            <label :for="inputId" class="label" :class="{ 'is-opacity-5' : isDisabled || isLocked }">
+                {{ $t(label) }}<FontAwesomeIcon v-if="isLocked" :icon="['fas', 'lock']" class="ml-2" size="xs" />
+            </label>
             <div class="control">
                 <div class="select">
                     <select
                         :id="inputId"
                         v-model="selected"
                         v-on:change="$emit('update:modelValue', $event.target.value)"
-                        :disabled="isDisabled"
+                        :disabled="isDisabled || isLocked"
                         :aria-describedby="help ? legendId : undefined"
                         :aria-invalid="fieldError != undefined"
                         :aria-errormessage="fieldError != undefined ? valErrorId : undefined" 

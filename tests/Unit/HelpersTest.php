@@ -218,4 +218,42 @@ class HelpersTest extends TestCase
             ],
         ];
     }
+
+    #[Test]
+    public function test_lockedPreferences_returns_locked_preferences()
+    {
+        // See .env.testing which sets USERPREF_DEFAULT__THEME=light
+        // while config/2fauth.php sets the default value to 'system' 
+        $lockedPreferences = Helpers::lockedPreferences(config('2fauth.preferences'));
+
+        $this->assertContains('theme', $lockedPreferences);
+    }
+
+    #[Test]
+    public function test_lockedPreferences_returns_empty_array_when_empty_array_is_provided()
+    {
+        $param = [];
+
+        $lockedPreferences = Helpers::lockedPreferences($param);
+
+        $this->assertEquals([], $lockedPreferences);
+    }
+
+    #[Test]
+    public function test_lockedPreferences_excludes_preference_when_env_var_is_empty()
+    {
+        // See .env.testing which sets USERPREF_LOCKED__DISPLAY_MODE=
+        $lockedPreferences = Helpers::lockedPreferences(config('2fauth.preferences'));
+
+        $this->assertNotContains('displayMode', $lockedPreferences);
+    }
+
+    #[Test]
+    public function test_lockedPreferences_excludes_preference_when_env_var_is_malformed()
+    {
+        // See .env.testing which sets USERPREF_LOCKED___FORMAT_PASSWORD=false
+        $lockedPreferences = Helpers::lockedPreferences(config('2fauth.preferences'));
+
+        $this->assertNotContains('formatPassword', $lockedPreferences);
+    }
 }

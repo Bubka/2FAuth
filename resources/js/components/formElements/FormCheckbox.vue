@@ -26,6 +26,7 @@
         },
         isIndented: Boolean,
         isDisabled: Boolean,
+        isLocked: Boolean,
     })
 
     const emit = defineEmits(['update:modelValue'])
@@ -49,12 +50,14 @@
 
 <template>
     <div class="field is-flex">
-        <div v-if="isIndented" class="mx-2 pr-1" :style="{ 'opacity': isDisabled ? '0.5' : '1' }">
+        <div v-if="isIndented" class="mx-2 pr-1" :class="{ 'is-opacity-5' : isDisabled || isLocked }">
             <FontAwesomeIcon class="has-text-grey" :icon="['fas', 'chevron-right']" transform="rotate-135"/>
         </div>
         <div>
-            <input :id="fieldName" type="checkbox" :name="fieldName" class="is-checkradio is-info" v-model="model" :disabled="isDisabled" :aria-describedby="help ? legendId : undefined" />
-            <label tabindex="0" :for="fieldName" class="label" :class="labelClass" v-html="$t(label)" v-on:keypress.space.prevent="toggleModel" />
+            <input :id="fieldName" type="checkbox" :name="fieldName" class="is-checkradio is-info" v-model="model" :disabled="isDisabled || isLocked" :aria-describedby="help ? legendId : undefined" />
+            <label tabindex="0" :for="fieldName" class="label" :class="labelClass" v-on:keypress.space.prevent="toggleModel">
+                {{ $t(label) }}<FontAwesomeIcon v-if="isLocked" :icon="['fas', 'lock']" class="ml-2" size="xs" />
+            </label>
             <p :id="legendId" class="help" v-html="$t(help)" v-if="help" />
         </div>
     </div>

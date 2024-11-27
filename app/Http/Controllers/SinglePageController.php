@@ -38,6 +38,7 @@ class SinglePageController extends Controller
         $proxyLogoutUrl     = config('2fauth.config.proxyLogoutUrl') ? config('2fauth.config.proxyLogoutUrl') : false;
         $subdir             = config('2fauth.config.appSubdirectory') ? '/' . config('2fauth.config.appSubdirectory') : '';
         $defaultPreferences = collect(config('2fauth.preferences')); /** @phpstan-ignore-line */
+        $lockedPreferences  = collect(config('2fauth.lockedPreferences')); /** @phpstan-ignore-line */
         $isDemoApp          = config('2fauth.config.isDemoApp') ? 'true' : 'false';
         $isTestingApp       = config('2fauth.config.isTestingApp') ? 'true' : 'false';
         $lang               = App::getLocale();
@@ -69,6 +70,7 @@ class SinglePageController extends Controller
                 'exportSchemaUrl' => $exportSchemaUrl,
             ]),
             'defaultPreferences' => $defaultPreferences,
+            'lockedPreferences'  => $lockedPreferences,
             'subdirectory'       => $subdir,
             'isDemoApp'          => $isDemoApp,
             'isTestingApp'       => $isTestingApp,

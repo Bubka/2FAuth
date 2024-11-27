@@ -212,7 +212,7 @@ class User extends Authenticatable implements HasLocalePreference, WebAuthnAuthe
     public function getPreferencesAttribute($value)
     {
         $preferences = collect(config('2fauth.preferences'))->merge(json_decode($value));  /** @phpstan-ignore-line */
-
+        
         return $preferences;
     }
 

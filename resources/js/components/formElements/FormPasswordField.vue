@@ -45,6 +45,7 @@
             type: String,
             default: ''
         },
+        isLocked: Boolean,
     })
 
     const { inputId } = useIdGenerator(props.inputType, props.fieldName + props.idSuffix)
@@ -84,10 +85,12 @@
 
 <template>
     <div class="field" :class="{ 'pt-3' : hasOffset }">
-        <label :for="inputId" class="label" v-html="$t(label)" />
+        <label :for="inputId" class="label">
+            {{ $t(label) }}<FontAwesomeIcon v-if="isLocked" :icon="['fas', 'lock']" class="ml-2" size="xs" />
+        </label>
         <div class="control has-icons-right">
             <input
-                :disabled="isDisabled"
+                :disabled="isDisabled || isLocked"
                 :id="inputId"
                 :type="currentType" 
                 class="input" 

@@ -27,6 +27,7 @@
         var appConfig = {!! $appConfig !!};
         var urls = {!! $urls !!};
         var defaultPreferences = {!! $defaultPreferences->toJson() !!};
+        var lockedPreferences = {!! $lockedPreferences->toJson() !!};
         var appVersion = '{{ config("2fauth.version") }}';
         var isDemoApp = {!! $isDemoApp !!};
         var isTestingApp = {!! $isTestingApp !!};

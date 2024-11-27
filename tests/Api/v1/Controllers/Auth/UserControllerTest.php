@@ -24,6 +24,7 @@ class UserControllerTest extends FeatureTestCase
     private const PREFERENCE_JSON_STRUCTURE = [
         'key',
         'value',
+        'locked',
     ];
 
     public function setUp() : void
@@ -62,7 +63,7 @@ class UserControllerTest extends FeatureTestCase
     }
 
     #[Test]
-    public function test_allPreferences_returns_preferences_with_default_values()
+    public function test_allPreferences_returns_preferences_with_default_config_values()
     {
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('GET', '/api/v1/user/preferences')
@@ -108,7 +109,7 @@ class UserControllerTest extends FeatureTestCase
     }
 
     #[Test]
-    public function test_showPreference_returns_preference_with_default_value()
+    public function test_showPreference_returns_preference_with_default_config_value()
     {
         /**
          * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
@@ -121,6 +122,28 @@ class UserControllerTest extends FeatureTestCase
             ->assertExactJson([
                 'key'   => 'showOtpAsDot',
                 'value' => config('2fauth.preferences.showOtpAsDot'),
+                'locked' => false,
+            ]);
+    }
+
+    #[Test]
+    public function test_showPreference_returns_preference_with_locked_default_env_value()
+    {
+        // See .env.testing which sets USERPREF_DEFAULT__THEME=light
+        // while config/2fauth.php sets the default value to 'system' 
+
+        /**
+         * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
+         */
+        $this->user = User::factory()->create();
+
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('GET', '/api/v1/user/preferences/theme')
+            ->assertOk()
+            ->assertExactJson([
+                'key'   => 'theme',
+                'value' => 'light',
+                'locked' => true,
             ]);
     }
 
@@ -189,5 +212,17 @@ class UserControllerTest extends FeatureTestCase
                 'value' => null,
             ])
             ->assertStatus(422);
+    }
+
+    #[Test]
+    public function test_setPreference_on_locked_preference_returns_forbidden()
+    {
+        // See .env.testing which sets USERPREF_LOCKED__THEME=true
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('PUT', '/api/v1/user/preferences/theme', [
+                'key'   => 'theme',
+                'value' => 'system',
+            ])
+            ->assertStatus(403);
     }
 }

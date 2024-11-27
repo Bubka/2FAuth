@@ -12,6 +12,6 @@ const parser = new Engine({
 
 const phpFile = fs.readFileSync("./config/2fauth.php")
 const phpContent = parser.parseCode(phpFile)
-const version = phpContent.children[0].expr.items[0].value.value
+const version = phpContent.children[4].expr.items[0].value.value
 
 export default version

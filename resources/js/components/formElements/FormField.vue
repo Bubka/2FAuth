@@ -42,6 +42,7 @@
             default: null
         },
         isIndented: Boolean,
+        isLocked: Boolean,
         leftIcon: '',
         rightIcon: '',
         idSuffix: {
@@ -57,14 +58,16 @@
 
 <template>
     <div class="mb-3" :class="{ 'pt-3' : hasOffset, 'is-flex' : isIndented }">
-        <div v-if="isIndented" class="mx-2 pr-1" :style="{ 'opacity': isDisabled ? '0.5' : '1' }">
+        <div v-if="isIndented" class="mx-2 pr-1" :class="{ 'is-opacity-5' : isDisabled || isLocked }">
             <FontAwesomeIcon class="has-text-grey" :icon="['fas', 'chevron-right']" transform="rotate-135"/>
         </div>
         <div class="field" :class="{ 'is-flex-grow-5' : isIndented }">
-            <label :for="inputId" class="label" :style="{ 'opacity': isDisabled ? '0.5' : '1' }" v-html="$t(label)"></label>
+            <label :for="inputId" class="label" :class="{ 'is-opacity-5' : isDisabled || isLocked }">
+                {{ $t(label) }}<FontAwesomeIcon v-if="isLocked" :icon="['fas', 'lock']" class="ml-2" size="xs" />
+            </label>
             <div class="control" :class="{ 'has-icons-left' : leftIcon, 'has-icons-right': rightIcon }">
                 <input 
-                    :disabled="isDisabled" 
+                    :disabled="isDisabled || isLocked" 
                     :id="inputId" 
                     :type="inputType" 
                     class="input" 

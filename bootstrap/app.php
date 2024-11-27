@@ -13,15 +13,12 @@
 
 if (! function_exists('envUnlessEmpty')) {
     /**
-     * @param  string  $key
-     * @param  null  $default
-     *
      * @return mixed|null
      */
-    function envUnlessEmpty(string $key, $default = null)
+    function envUnlessEmpty(string $key, string|int|bool|float|null $default = null)
     {
         $result = env($key, $default);
-        if (is_string($result) && '' === $result) {
+        if ('' === $result) {
             $result = $default;
         }
 

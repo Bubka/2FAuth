@@ -33,8 +33,9 @@ class UserController extends Controller
 
         $preferences->each(function (mixed $item, string $key) use ($jsonPrefs) {
             $jsonPrefs->push([
-                'key'   => $key,
-                'value' => $item,
+                'key'    => $key,
+                'value'  => $item,
+                'locked' => in_array($key, config('2fauth.lockedPreferences')),
             ]);
         });
 
@@ -53,8 +54,9 @@ class UserController extends Controller
         }
 
         return response()->json([
-            'key'   => $preferenceName,
-            'value' => $request->user()->preferences[$preferenceName],
+            'key'    => $preferenceName,
+            'value'  => $request->user()->preferences[$preferenceName],
+            'locked' => in_array($preferenceName, config('2fauth.lockedPreferences')),
         ], 200);
     }
 
@@ -67,6 +69,10 @@ class UserController extends Controller
     {
         if (! Arr::exists($request->user()->preferences, $preferenceName)) {
             abort(404);
+        }
+
+        if (in_array($preferenceName, config('2fauth.lockedPreferences'))) {
+            abort(403);
         }
 
         $validated = $request->validated();

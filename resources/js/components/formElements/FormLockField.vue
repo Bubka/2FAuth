@@ -54,14 +54,15 @@
         idSuffix: {
             type: String,
             default: ''
-        }
+        },
+        isLocked: Boolean,
     })
 
     const { inputId } = useIdGenerator(props.inputType, props.fieldName + props.idSuffix)
     const { valErrorId } = useValidationErrorIdGenerator(props.fieldName)
     const legendId = useIdGenerator('legend', props.fieldName).inputId
 
-    const fieldIsLocked = ref(props.isDisabled || props.isEditMode)
+    const fieldIsLocked = ref(props.isDisabled || props.isEditMode || props.isLocked)
     const hasBeenTrimmed = ref(false)
     const componentKey = ref(0);
 
@@ -96,7 +97,9 @@
 </script>
 
 <template>
-    <label :for="inputId" class="label" v-html="$t(label)" />
+    <label :for="inputId" class="label">
+        {{ $t(label) }}<FontAwesomeIcon v-if="isLocked" :icon="['fas', 'lock']" class="ml-2" size="xs" />
+    </label>
     <div class="field has-addons mb-0" :class="{ 'pt-3' : hasOffset }">
         <div class="control" :class="{ 'is-expanded': isExpanded }">
             <input 

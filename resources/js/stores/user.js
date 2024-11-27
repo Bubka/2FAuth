@@ -137,10 +137,20 @@ export const useUserStore = defineStore({
          * Refresh user preferences with backend state
          */
         refreshPreferences() {
+            const appSettings = useAppSettingsStore()
+
             userService.getPreferences({returnError: true})
             .then(response => {
                 response.data.forEach(preference => {
                     this.preferences[preference.key] = preference.value
+                    let index = appSettings.lockedPreferences.indexOf(preference.key)
+
+                    if (preference.locked == true && index === -1) {
+                        appSettings.lockedPreferences.push(preference.key)
+                    }
+                    else if (preference.locked == false && index > 0) {
+                        appSettings.lockedPreferences.splice(index, 1)
+                    }
                 })
             })
             .catch(error => {

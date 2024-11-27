@@ -6,7 +6,10 @@ export const useAppSettingsStore = defineStore({
     id: 'appSettings',
 
     state: () => {
-        return { ...window.appSettings }
+        return {
+            lockedPreferences: window.lockedPreferences,
+            ...window.appSettings
+        }
     },
 
     getters: {

@@ -15,6 +15,7 @@
         fieldError: [String],
         hasOffset: Boolean,
         isDisabled: Boolean,
+        isLocked: Boolean,
         label: {
             type: String,
             default: ''
@@ -38,7 +39,9 @@
 
 <template>
     <div class="field" :class="{ 'pt-3': hasOffset }">
-        <span v-if="label" class="label" v-html="$t(label)" />
+        <span v-if="label" class="label" :class="{ 'is-opacity-5' : isDisabled || isLocked }">
+            {{ $t(label) }}<FontAwesomeIcon v-if="isLocked" :icon="['fas', 'lock']" class="ml-2" size="xs" />
+        </span>
         <div
             id="rdoGroup"
             role="radiogroup"
@@ -56,7 +59,7 @@
                     type="button"
                     class="button"
                     :aria-checked="modelValue===choice.value"
-                    :disabled="isDisabled"
+                    :disabled="isDisabled || isLocked"
                     :class="{
                         'is-link': modelValue===choice.value,
                         'is-dark': mode==='dark',
@@ -69,7 +72,7 @@
                         class="is-hidden"
                         :checked="modelValue===choice.value"
                         :value="choice.value"
-                        :disabled="isDisabled"
+                        :disabled="isDisabled || isLocked"
                     />
                     <span v-if="choice.legend" v-html="$t(choice.legend)" class="is-block is-size-7" />
                     <FontAwesomeIcon :icon="['fas',choice.icon]" v-if="choice.icon" class="mr-2" />
