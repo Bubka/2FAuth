@@ -9,7 +9,7 @@ return [
     |
     */
 
-    'version' => '5.4.2',
+    'version' => '5.4.3',
     'repository' => 'https://github.com/Bubka/2FAuth',
     'latestReleaseUrl' => 'https://api.github.com/repos/Bubka/2FAuth/releases/latest',
     'installDocUrl' => 'https://docs.2fauth.app/getting-started/installation/self-hosted-server/',

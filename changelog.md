@@ -1,5 +1,20 @@
 # Change log
 
+## [5.4.3] - 2024-11-27
+
+### Changed
+
+- [issue #408](https://github.com/Bubka/2FAuth/issues/408) Deleted icon is back after saving from the advanced form
+- [issue #417](https://github.com/Bubka/2FAuth/issues/417) Login page does not load after v5.4.1 update
+- [issue #418](https://github.com/Bubka/2FAuth/issues/418) Opening of the footer menu submits the advanced form
+- [issue #420](https://github.com/Bubka/2FAuth/issues/420) QR codes are cropped on small screens
+- [issue #421](https://github.com/Bubka/2FAuth/issues/421) Freeze when switching to Manage mode
+- [issue #423](https://github.com/Bubka/2FAuth/issues/423) Icon for accounts without an icon doesn't exist
+
+### Changed
+
+- CSS styles are no longer loaded from tailwindcss.com in the /up view
+
 ## [5.4.2] - 2024-11-18
 
 ### Changed
