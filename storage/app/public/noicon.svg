@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" fill="none">
+<rect x="2" y="2" width="252" height="252" style="fill: none; stroke-dashoffset: -100px; stroke: rgb(255, 255, 255); paint-order: fill; stroke-width: 4px; stroke-dasharray: 20; stroke: rgb(128, 128, 128);"></rect>
+<line style="stroke: rgb(128, 128, 128); stroke-width: 4px; stroke-dasharray: 20; transform-origin: 128px 128px; fill: none;" x1="0" y1="0" x2="256" y2="256"></line>
+<line style="stroke: rgb(128, 128, 128); stroke-width: 4px; stroke-dasharray: 20; fill: none; transform-origin: 128px 128px;" x1="256" y1="0" x2="0" y2="256"></line>
+</svg>
