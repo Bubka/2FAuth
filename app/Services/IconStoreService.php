@@ -32,9 +32,6 @@ class IconStoreService
      */
     protected Sanitizer $svgSanitizer;
 
-    /**
-     * 
-     */
     public function __construct(Sanitizer $svgSanitizer)
     {
         $this->usesDatabase = Settings::get('storeIconsInDatabase');

@@ -829,12 +829,12 @@ class TwoFAccountControllerTest extends FeatureTestCase
             'legacy_uri' => OtpTestData::TOTP_SHORT_URI,
             'icon'       => 'icon.png',
         ]);
-        $twofaccount = TwoFAccount::factory()->for($this->user)->create($attributes);
+        $twofaccount        = TwoFAccount::factory()->for($this->user)->create($attributes);
         $attributes['icon'] = '';
 
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('PUT', '/api/v1/twofaccounts/' . $twofaccount->id, $attributes);
-            
+
         $this->assertNull($response->json('icon'));
     }
 

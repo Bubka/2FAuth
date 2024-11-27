@@ -26,9 +26,6 @@ class IconServiceTest extends FeatureTestCase
 {
     use WithoutMiddleware;
 
-    /**
-     * 
-     */
     protected IconService $iconService;
 
     public function setUp() : void
