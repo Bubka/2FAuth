@@ -106,7 +106,9 @@ Route::withoutMiddleware([
     CustomCreateFreshApiToken::class,
 ])->get('/up', function () {
     //Event::dispatch(new DiagnosingHealth);
-    return view('health');
+    return view('health', [
+        'isSecure' => str_starts_with(config('app.url'), 'https'),
+    ]);
 });
 
 // Route::get('/notification', function () {

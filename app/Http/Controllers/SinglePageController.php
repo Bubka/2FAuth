@@ -34,6 +34,7 @@ class SinglePageController extends Controller
         $ssoDocUrl          = config('2fauth.ssoDocUrl');
         $exportSchemaUrl    = config('2fauth.exportSchemaUrl');
         $cspNonce           = Vite::cspNonce();
+        $isSecure           = str_starts_with(config('app.url'), 'https');
 
         // if (Auth::user()->preferences)
 
@@ -60,6 +61,7 @@ class SinglePageController extends Controller
             'lang'               => $lang,
             'locales'            => $locales,
             'cspNonce'           => $cspNonce,
+            'isSecure'           => $isSecure,
         ]);
     }
 }

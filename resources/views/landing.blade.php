@@ -15,7 +15,7 @@
     <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}" />
     <link rel="apple-touch-icon" href="{{ asset('favicon_lg.png') }}" />
     <link rel="apple-touch-icon-precomposed" href="{{ asset('favicon_lg.png') }}" />
-    <link rel="manifest" href="{{ url('manifest.json') }}">
+    <link rel="manifest" href="{{ url('manifest.json', [], $isSecure) }}">
 
 </head>
 <body>
