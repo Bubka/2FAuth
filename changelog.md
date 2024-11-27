@@ -2,7 +2,7 @@
 
 ## [5.4.3] - 2024-11-27
 
-### Changed
+### Fixed
 
 - [issue #408](https://github.com/Bubka/2FAuth/issues/408) Deleted icon is back after saving from the advanced form
 - [issue #417](https://github.com/Bubka/2FAuth/issues/417) Login page does not load after v5.4.1 update
@@ -13,7 +13,7 @@
 
 ### Changed
 
-- CSS styles are no longer loaded from tailwindcss.com in the /up view
+- CSS styles are no longer loaded from tailwindcss.com in the `/up` view
 
 ## [5.4.2] - 2024-11-18
 
