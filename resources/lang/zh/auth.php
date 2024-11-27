@@ -21,7 +21,7 @@ return [
     // 2FAuth
     'sign_out' => '退出',
     'sign_in' => '登录',
-    'sign_in_using' => '登录方式：',
+    'sign_in_using' => '切换登录方式：',
     'if_administrator' => '您是管理员吗？',
     'sign_in_here' => '您可以不使用 SSO 登录',
     'or_continue_with' => '您也可以使用：',
