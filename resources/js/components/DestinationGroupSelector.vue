@@ -21,7 +21,7 @@
         if (destinationGroupId.value === 0) {
             await twofaccountService.withdraw(props.selectedAccountsIds)
         }
-        else await groupService.assign(props.selectedAccountsIds, destinationGroupId.value)
+        else groupService.assign(props.selectedAccountsIds, destinationGroupId.value, { returnError: true })
 
         emit('accounts-moved')
     }

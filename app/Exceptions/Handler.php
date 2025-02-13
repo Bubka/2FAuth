@@ -106,5 +106,14 @@ class Handler extends ExceptionHandler
                 ], 401);
             }
         });
+
+        $this->renderable(function (ConflictException $exception, $request) {
+            return response()->json([
+                'message' => 'conflict',
+                'reason'  => [$exception->getMessage()],
+            ], 409);
+        });
+
+        
     }
 }

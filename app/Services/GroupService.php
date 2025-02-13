@@ -2,11 +2,13 @@
 
 namespace App\Services;
 
+use App\Exceptions\ConflictException;
 use App\Models\Group;
 use App\Models\TwoFAccount;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class GroupService
@@ -19,6 +21,7 @@ class GroupService
      * @param  mixed  $targetGroup  The group the accounts should be assigned to
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws App\Exceptions\ConflictException
      */
     public static function assign($ids, User $user, mixed $targetGroup = null) : void
     {
@@ -53,17 +56,28 @@ class GroupService
         }
 
         if ($group) {
-            $ids          = is_array($ids) ? $ids : [$ids];
-            $twofaccounts = TwoFAccount::find($ids);
+            $ids = is_array($ids) ? $ids : [$ids];
 
-            if ($user->cannot('updateEach', [(new TwoFAccount), $twofaccounts])) {
-                throw new AuthorizationException;
-            }
+            DB::transaction(function () use ($group, $ids, $user) {
+                // Check if group still exists within transaction
+                $group        = Group::lockForUpdate()->find($group->id);
+                $twofaccounts = TwoFAccount::sharedLock()->find($ids);
 
-            $group->twofaccounts()->saveMany($twofaccounts);
-            $group->loadCount('twofaccounts');
+                if ($user->cannot('updateEach', [(new TwoFAccount), $twofaccounts])) {
+                    throw new AuthorizationException;
+                }
+    
+                if (! $group) {
+                    throw new ConflictException(__('errors.resource_not_found'));
+                }
 
-            Log::info(sprintf('Twofaccounts #%s assigned to group %s (ID #%s)', implode(',', $ids), var_export($group->name, true), $group->id));
+                // Proceed with assignment
+                $group->twofaccounts()->saveMany($twofaccounts);
+                $group->loadCount('twofaccounts');
+    
+                Log::info(sprintf('Twofaccounts #%s assigned to group %s (ID #%s)', implode(',', $ids), var_export($group->name, true), $group->id));
+            });
+
         } else {
             Log::info('Cannot find a group to assign the TwoFAccounts to');
         }
