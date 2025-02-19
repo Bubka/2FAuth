@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Exceptions\ConflictException;
 use App\Models\Group;
 use App\Models\TwoFAccount;
 use App\Models\User;
@@ -21,7 +20,6 @@ class GroupService
      * @param  mixed  $targetGroup  The group the accounts should be assigned to
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
-     * @throws App\Exceptions\ConflictException
      */
     public static function assign($ids, User $user, mixed $targetGroup = null) : void
     {
@@ -65,10 +63,6 @@ class GroupService
 
                 if ($user->cannot('updateEach', [(new TwoFAccount), $twofaccounts])) {
                     throw new AuthorizationException;
-                }
-    
-                if (! $group) {
-                    throw new ConflictException(__('errors.resource_not_found'));
                 }
 
                 // Proceed with assignment
