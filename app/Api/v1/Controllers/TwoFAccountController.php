@@ -21,6 +21,7 @@ use App\Helpers\Helpers;
 use App\Http\Controllers\Controller;
 use App\Models\TwoFAccount;
 use App\Models\User;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 
@@ -89,7 +90,12 @@ class TwoFAccountController extends Controller
         $request->user()->twofaccounts()->save($twofaccount);
 
         // Possible group association
-        Groups::assign($twofaccount->id, $request->user(), Arr::get($validated, 'group_id', null));
+        try {
+            Groups::assign($twofaccount->id, $request->user(), Arr::get($validated, 'group_id', null));
+        } catch (\Throwable $th) {
+            // The group association might fail but we don't want the twofaccount
+            // creation to be reverted so we do nothing here.
+        }
 
         return (new TwoFAccountReadResource($twofaccount->refresh()))
             ->response()
@@ -116,7 +122,12 @@ class TwoFAccountController extends Controller
             if ((int) $groupId === 0) {
                 TwoFAccounts::withdraw($twofaccount->id);
             } else {
-                Groups::assign($twofaccount->id, $request->user(), $groupId);
+                try {
+                    Groups::assign($twofaccount->id, $request->user(), $groupId);
+                } catch (ModelNotFoundException $exc) {
+                    // The destination group no longer exists, the twofaccount is withdrawn
+                    TwoFAccounts::withdraw($twofaccount->id);
+                }
             }
             $twofaccount->refresh();
         }

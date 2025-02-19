@@ -10,6 +10,7 @@ use App\Facades\Groups;
 use App\Http\Controllers\Controller;
 use App\Models\Group;
 use App\Models\User;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
 class GroupController extends Controller
@@ -93,7 +94,11 @@ class GroupController extends Controller
 
         $validated = $request->validated();
 
-        Groups::assign($validated['ids'], $request->user(), $group);
+        try {
+            Groups::assign($validated['ids'], $request->user(), $group);
+        } catch (ModelNotFoundException $exc) {
+            abort(404);
+        }
 
         return new GroupResource($group);
     }
