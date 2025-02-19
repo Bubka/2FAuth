@@ -60,9 +60,17 @@ class GroupController extends Controller
      *
      * @return \App\Api\v1\Resources\GroupResource
      */
-    public function show(Group $group)
+    public function show(Request $request, Group $group)
     {
         $this->authorize('view', $group);
+
+        // group with id==0 is the 'All' virtual group.
+        // Eloquent specifically returns a non-persisted Group instance
+        // with just the name property. The twofaccounts_count has to be
+        // set here.
+        if ($group->id === 0) {
+            $group->twofaccounts_count = $request->user()->twofaccounts->count();
+        }
 
         return new GroupResource($group);
     }
@@ -108,11 +116,21 @@ class GroupController extends Controller
      *
      * @return \App\Api\v1\Resources\TwoFAccountCollection
      */
-    public function accounts(Group $group)
+    public function accounts(Request $request, Group $group)
     {
         $this->authorize('view', $group);
 
-        return new TwoFAccountCollection($group->twofaccounts);
+        // group with id==0 is the 'All' virtual group that lists
+        // all the user's twofaccounts. From the db pov the accounts
+        // are not assigned to any group record.
+        if ($group->id === 0) {
+            $twofaccounts = $request->user()->twofaccounts;
+        }
+        else {
+            $twofaccounts = $group->twofaccounts;
+        }
+
+        return new TwoFAccountCollection($twofaccounts);
     }
 
     /**
