@@ -3,7 +3,6 @@
 namespace Tests\Unit;
 
 use App\Events\GroupDeleted;
-use App\Events\GroupDeleting;
 use App\Models\Group;
 use App\Models\TwoFAccount;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -32,7 +31,6 @@ class GroupModelTest extends ModelTestCase
                 'user_id'            => 'integer',
             ],
             [
-                'deleting' => GroupDeleting::class,
                 'deleted'  => GroupDeleted::class,
             ]
         );

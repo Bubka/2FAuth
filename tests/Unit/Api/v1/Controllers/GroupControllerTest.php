@@ -88,10 +88,11 @@ class GroupControllerTest extends TestCase
     #[Test]
     public function test_show_returns_api_resource()
     {
+        $request    = Mockery::mock(GroupStoreRequest::class);
         $controller = Mockery::mock(GroupController::class)->makePartial();
         $group      = Group::factory()->make();
 
-        $response = $controller->show($group);
+        $response = $controller->show($request, $group);
 
         $this->assertInstanceOf(GroupResource::class, $response);
     }
@@ -138,10 +139,11 @@ class GroupControllerTest extends TestCase
     #[Test]
     public function test_accounts_returns_api_resources()
     {
+        $request    = Mockery::mock(GroupStoreRequest::class);
         $controller = Mockery::mock(GroupController::class)->makePartial();
         $group      = Group::factory()->make();
 
-        $response = $controller->accounts($group);
+        $response = $controller->accounts($request, $group);
 
         $this->assertContainsOnlyInstancesOf(TwoFAccountReadResource::class, $response->collection);
     }

@@ -146,6 +146,26 @@ class GroupControllerTest extends FeatureTestCase
     }
 
     #[Test]
+    public function test_store_with_existing_group_name_returns_validation_error()
+    {
+        $this->actingAs($this->user, 'api-guard')
+            ->json('POST', '/api/v1/groups', [
+                'name' => $this->userGroupA->name,
+            ])
+            ->assertStatus(422);
+    }
+
+    #[Test]
+    public function test_store_with_all_group_name_returns_validation_error()
+    {
+        $this->actingAs($this->user, 'api-guard')
+            ->json('POST', '/api/v1/groups', [
+                'name' => __('commons.all'),
+            ])
+            ->assertStatus(422);
+    }
+
+    #[Test]
     public function test_store_invalid_data_returns_validation_error()
     {
         $this->actingAs($this->user, 'api-guard')
@@ -190,6 +210,20 @@ class GroupControllerTest extends FeatureTestCase
             ->assertForbidden()
             ->assertJsonStructure([
                 'message',
+            ]);
+    }
+
+    #[Test]
+    public function test_show_missing_group_with_id_0_returns_the_virtual_all_group_resource()
+    {
+        $userTwofaccounts = $this->user->twofaccounts;
+
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('GET', '/api/v1/groups/0')
+            ->assertOk()
+            ->assertJsonFragment([
+                'name'               => __('commons.all'),
+                'twofaccounts_count' => $userTwofaccounts->count(),
             ]);
     }
 
@@ -392,6 +426,15 @@ class GroupControllerTest extends FeatureTestCase
             ]);
     }
 
+    #[Test]
+    public function test_accounts_of_the_all_group_returns_user_twofaccounts_collection()
+    {
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('GET', '/api/v1/groups/0/twofaccounts')
+            ->assertOk()
+            ->assertJsonCount(2);
+    }
+
     /**
      * test Group deletion via API
      */
@@ -424,6 +467,17 @@ class GroupControllerTest extends FeatureTestCase
     {
         $response = $this->actingAs($this->anotherUser, 'api-guard')
             ->json('DELETE', '/api/v1/groups/' . $this->userGroupA->id)
+            ->assertForbidden()
+            ->assertJsonStructure([
+                'message',
+            ]);
+    }
+
+    #[Test]
+    public function test_destroy_the_all_group_is_forbidden()
+    {
+        $response = $this->actingAs($this->anotherUser, 'api-guard')
+            ->json('DELETE', '/api/v1/groups/0')
             ->assertForbidden()
             ->assertJsonStructure([
                 'message',
