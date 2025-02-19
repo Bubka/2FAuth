@@ -98,9 +98,6 @@ class Group extends Model
         static::updated(function (object $model) {
             Log::info(sprintf('Group %s (id #%d) updated by user ID #%s', var_export($model->name, true), $model->id, $model->user_id));
         });
-        static::deleted(function (object $model) {
-            Log::info(sprintf('Group %s (id #%d) deleted ', var_export($model->name, true), $model->id));
-        });
     }
     
     /**
