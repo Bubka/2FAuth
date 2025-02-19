@@ -102,6 +102,31 @@ class Group extends Model
             Log::info(sprintf('Group %s (id #%d) deleted ', var_export($model->name, true), $model->id));
         });
     }
+    
+    /**
+     * Retrieve the model for a bound value.
+     *
+     * @param  mixed  $value
+     * @param  string|null  $field
+     * @return \Illuminate\Database\Eloquent\Model|null
+     */
+    public function resolveRouteBinding($value, $field = null)
+    {
+        // The All group is a virtual group with id==0.
+        // It never exists in database so we enforce the route binding
+        // resolution logic to return an instance instead of not found.
+        if ($value === '0') {
+            $group = new self([
+                'name' => __('commons.all'),
+            ]);
+            $group->id = 0;
+
+            return $group;
+        }
+        else {
+            return parent::resolveRouteBinding($value, $field);
+        }
+    }
 
     /**
      * Get the TwoFAccounts of the group.
