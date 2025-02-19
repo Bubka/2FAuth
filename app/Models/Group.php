@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Events\GroupDeleted;
-use App\Events\GroupDeleting;
 use Database\Factories\GroupFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -79,7 +78,6 @@ class Group extends Model
      * @var array
      */
     protected $dispatchesEvents = [
-        'deleting' => GroupDeleting::class,
         'deleted'  => GroupDeleted::class,
     ];
 
