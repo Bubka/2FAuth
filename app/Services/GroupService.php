@@ -59,7 +59,7 @@ class GroupService
             $ids = is_array($ids) ? $ids : [$ids];
 
             DB::transaction(function () use ($group, $ids, $user) {
-                $group        = Group::lockForUpdate()->find($group->id);
+                $group        = Group::sharedLock()->find($group->id);
                 $twofaccounts = TwoFAccount::sharedLock()->find($ids);
                 
                 if (! $group) {
@@ -73,7 +73,7 @@ class GroupService
                 $group->twofaccounts()->saveMany($twofaccounts);
     
                 Log::info(sprintf('Twofaccounts #%s assigned to group %s (ID #%s)', implode(',', $ids), var_export($group->name, true), $group->id));
-            });
+            }, 5);
         } else {
             Log::info('Cannot find a group to assign the TwoFAccounts to');
         }

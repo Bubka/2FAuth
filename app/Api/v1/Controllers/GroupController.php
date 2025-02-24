@@ -107,6 +107,8 @@ class GroupController extends Controller
             $group->loadCount('twofaccounts');
         } catch (ModelNotFoundException $exc) {
             abort(404);
+        } catch (\Throwable $th) {
+            abort(409, 'Conflict');
         }
 
         return new GroupResource($group);
