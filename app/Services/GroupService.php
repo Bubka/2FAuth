@@ -74,8 +74,6 @@ class GroupService
     
                 Log::info(sprintf('Twofaccounts #%s assigned to group %s (ID #%s)', implode(',', $ids), var_export($group->name, true), $group->id));
             });
-
-            $group->loadCount('twofaccounts');
         } else {
             Log::info('Cannot find a group to assign the TwoFAccounts to');
         }

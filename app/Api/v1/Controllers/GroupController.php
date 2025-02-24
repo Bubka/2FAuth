@@ -104,6 +104,7 @@ class GroupController extends Controller
 
         try {
             Groups::assign($validated['ids'], $request->user(), $group);
+            $group->loadCount('twofaccounts');
         } catch (ModelNotFoundException $exc) {
             abort(404);
         }
