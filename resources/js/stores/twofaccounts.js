@@ -196,11 +196,14 @@ export const useTwofaccounts = defineStore({
          */
         sortAsc() {
             this.items.sort(function(a, b) {
+                const serviceA = a.service ?? ''
+                const serviceB = b.service ?? ''
+
                 if (useUserStore().preferences.sortCaseSensitive) {
-                    return a.service.normalize("NFD").replace(/[\u0300-\u036f]/g, "") > b.service.normalize("NFD").replace(/[\u0300-\u036f]/g, "") ? 1 : -1
+                    return serviceA.normalize("NFD").replace(/[\u0300-\u036f]/g, "") > serviceB.normalize("NFD").replace(/[\u0300-\u036f]/g, "") ? 1 : -1
                 }
                 
-                return a.service.localeCompare(b.service, useUserStore().preferences.lang)
+                return serviceA.localeCompare(serviceB, useUserStore().preferences.lang)
             });
 
             this.saveOrder()
@@ -211,11 +214,14 @@ export const useTwofaccounts = defineStore({
         */
         sortDesc() {
             this.items.sort(function(a, b) {
+                const serviceA = a.service ?? ''
+                const serviceB = b.service ?? ''
+
                 if (useUserStore().preferences.sortCaseSensitive) {
-                    return a.service.normalize("NFD").replace(/[\u0300-\u036f]/g, "") < b.service.normalize("NFD").replace(/[\u0300-\u036f]/g, "") ? 1 : -1
+                    return serviceA.normalize("NFD").replace(/[\u0300-\u036f]/g, "") < serviceB.normalize("NFD").replace(/[\u0300-\u036f]/g, "") ? 1 : -1
                 }
 
-                return b.service.localeCompare(a.service, useUserStore().preferences.lang)
+                return serviceB.localeCompare(serviceA, useUserStore().preferences.lang)
             });
 
             this.saveOrder()
