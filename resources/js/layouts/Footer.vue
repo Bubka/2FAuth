@@ -46,9 +46,11 @@
         <div v-else class="content has-text-centered">
             <div v-if="$route.meta.showAbout === true">
                 <!-- about link -->
-                <router-link id="lnkAbout" :to="{ name: 'about' }" class="has-text-grey">
-                    2FAuth – <span class="has-text-weight-bold">v{{ $2fauth.version }}</span>
+                <router-link v-if="$route.name != 'about'" id="lnkAbout" :to="{ name: 'about' }" class="has-text-grey">
+                    <span v-if="user.isAuthenticated && $route.meta.watchedByKicker" class="has-text-weight-bold">2FAuth – v{{ $2fauth.version }}</span>
+                    <span v-else class="">{{ $t('commons.about') }}</span>
                 </router-link>
+                <span v-else>&nbsp;</span>
             </div>
             <!-- email + menu links -->
             <div v-else-if="user.preferences.showEmailInFooter">

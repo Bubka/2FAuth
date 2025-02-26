@@ -1,7 +1,9 @@
 <script setup>
     import { UseColorMode } from '@vueuse/components'
+    import { useUserStore } from '@/stores/user'
 
     const $2fauth = inject('2fauth')
+    const user = useUserStore()
     const router = useRouter()
     const returnTo = router.options.history.state.back
 </script>
@@ -11,7 +13,10 @@
     <UseColorMode v-slot="{ mode }">
         <h1 class="title has-text-grey-dark">{{ $t('commons.about') }}</h1>
         <p class="block">
-            <span :class="mode == 'dark' ? 'has-text-white':'has-text-black'"><span class="is-size-5">2FAuth</span> v{{ $2fauth.version }}</span>
+            <span :class="mode == 'dark' ? 'has-text-white':'has-text-black'">
+                <span class="is-size-5">2FAuth</span>
+                <span v-if="user.isAuthenticated"> v{{ $2fauth.version }}</span>
+            </span>
             <br />
             {{ $t('commons.2fauth_teaser')}}
         </p>
