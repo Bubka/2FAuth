@@ -33,6 +33,7 @@
                 email: response.data.email,
                 preferences: response.data.preferences,
                 isAdmin: response.data.is_admin ?? false,
+                // TODO : add 'id' to the response
             })
             user.applyTheme()
 

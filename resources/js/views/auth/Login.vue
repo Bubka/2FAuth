@@ -27,8 +27,6 @@
             activeForm.value = 'webauthn'
         }
         else activeForm.value = 'legacy'
-
-        // showWebauthnForm && appSettings.useSsoOnly != true
     })
 
     
@@ -47,6 +45,7 @@
      */
     function LegacysignIn(e) {
         notify.clear()
+        isBusy.value = true
 
         form.post('/user/login', {returnError: true}).then(async (response) => {
             await user.loginAs({
@@ -68,6 +67,9 @@
             else if( error.response.status !== 422 ) {
                 notify.error(error)
             }
+        })
+        .finally(() => {
+            isBusy.value = false
         })
     }
 
@@ -195,7 +197,7 @@
         <form id="frmLegacyLogin" @submit.prevent="LegacysignIn" @keydown="form.onKeydown($event)">
             <FormField v-model="form.email" fieldName="email" :fieldError="form.errors.get('email')" inputType="email" label="auth.forms.email" autocomplete="username" autofocus />
             <FormPasswordField v-model="form.password" fieldName="password" :fieldError="form.errors.get('password')" label="auth.forms.password" autocomplete="current-password" />
-            <FormButtons :isBusy="form.isBusy" caption="auth.sign_in" submitId="btnSignIn"/>
+            <FormButtons :isBusy="isBusy" caption="auth.sign_in" submitId="btnSignIn"/>
         </form>
         <div class="nav-links">
             <p>{{ $t('auth.forms.forgot_your_password') }}&nbsp;

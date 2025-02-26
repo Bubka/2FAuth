@@ -19,7 +19,19 @@ class SinglePageController extends Controller
     {
         event(new ScanForNewReleaseCalled);
 
-        $settings           = Settings::all()->toJson();
+        // We only share necessary and acceptable values with the HTML front-end.
+        // But all the properties have to be pushed to init the appSetting store state correctly,
+        // so we set them to null, they will be fed later by the front-end
+        $appSettings = Settings::all();
+        $publicSettings = $appSettings->only([
+            'disableRegistration',
+            'enableSso',
+            'useSsoOnly'
+        ]);
+        $settings = $appSettings->map(function (mixed $item, string $key) {
+            return null;
+        })->merge($publicSettings)->toJson();
+
         $proxyAuth          = config('auth.defaults.guard') === 'reverse-proxy-guard' ? true : false;
         $proxyLogoutUrl     = config('2fauth.config.proxyLogoutUrl') ? config('2fauth.config.proxyLogoutUrl') : false;
         $subdir             = config('2fauth.config.appSubdirectory') ? '/' . config('2fauth.config.appSubdirectory') : '';

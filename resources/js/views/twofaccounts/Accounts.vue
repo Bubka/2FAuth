@@ -15,7 +15,6 @@
     import { useBusStore } from '@/stores/bus'
     import { useTwofaccounts } from '@/stores/twofaccounts'
     import { useGroups } from '@/stores/groups'
-    import { useAppSettingsStore } from '@/stores/appSettings'
     import { useDisplayablePassword } from '@/composables/helpers'
     import { useSortable, moveArrayElement } from '@vueuse/integrations/useSortable'
 
@@ -24,7 +23,6 @@
     const notify = useNotifyStore()
     const user = useUserStore()
     const bus = useBusStore()
-    const appSettings = useAppSettingsStore()
     const { copy, copied } = useClipboard({ legacy: true })
     const twofaccounts = useTwofaccounts()
     const groups = useGroups()
@@ -407,7 +405,7 @@
                                 <div class="tfa-text has-ellipsis">
                                     <img v-if="account.icon && user.preferences.showAccountsIcons" role="presentation" class="tfa-icon" :src="$2fauth.config.subdirectory + '/storage/icons/' + account.icon" alt="">
                                     <img v-else-if="account.icon == null && user.preferences.showAccountsIcons" role="presentation" class="tfa-icon" :src="$2fauth.config.subdirectory + '/storage/noicon.svg'" alt="">
-                                    {{ account.service ? account.service : $t('twofaccounts.no_service') }}<FontAwesomeIcon class="has-text-danger is-size-5 ml-2" v-if="appSettings.useEncryption && account.account === $t('errors.indecipherable')" :icon="['fas', 'exclamation-circle']" />
+                                    {{ account.service ? account.service : $t('twofaccounts.no_service') }}<FontAwesomeIcon class="has-text-danger is-size-5 ml-2" v-if="account.account === $t('errors.indecipherable')" :icon="['fas', 'exclamation-circle']" />
                                     <span class="has-ellipsis is-family-primary is-size-6 is-size-7-mobile has-text-grey ">{{ account.account }}</span>
                                 </div>
                             </div>

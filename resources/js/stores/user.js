@@ -6,6 +6,7 @@ import { useColorMode } from '@vueuse/core'
 import { useTwofaccounts } from '@/stores/twofaccounts'
 import { useGroups } from '@/stores/groups'
 import { useNotifyStore } from '@/stores/notify'
+import { useAppSettingsStore } from '@/stores/appSettings'
 
 export const useUserStore = defineStore({
     id: 'user',
@@ -98,6 +99,7 @@ export const useUserStore = defineStore({
             this.$reset()
             this.initDataStores()
             this.applyUserPrefs()
+            useAppSettingsStore().$reset()
             router.push({ name: 'login' })
         },
 

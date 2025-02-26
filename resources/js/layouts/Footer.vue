@@ -79,7 +79,7 @@
                 </ul>
                 <!-- email link -->
                 <button type="button" id="btnEmailMenu" @click="showMenu = !showMenu" class="button is-text is-like-text has-text-grey" style="width: 100%;">
-                    <span v-if="appSettings.latestRelease && appSettings.checkForUpdate" class="release-flag"></span>
+                    <span v-if="user.isAdmin && appSettings.latestRelease && appSettings.checkForUpdate" class="release-flag"></span>
                     <span class="mx-2 has-ellipsis">{{ user.email }}</span>
                     <FontAwesomeIcon v-if="!showMenu" :icon="['fas', 'bars']" class="mr-2" />
                     <!-- <button v-else class="delete ml-3"></button> -->
