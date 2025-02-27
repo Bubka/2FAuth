@@ -103,11 +103,20 @@ class SystemControllerTest extends FeatureTestCase
             ->once()
             ->andReturn('new_release');
 
-        $response = $this->json('GET', '/system/latestRelease')
+        $response = $this->actingAs($this->admin, 'web-guard')
+            ->json('GET', '/system/latestRelease')
             ->assertOk()
             ->assertJson([
                 'newRelease' => 'new_release',
             ]);
+    }
+
+    #[Test]
+    public function test_latestrelease_is_forbidden_to_user()
+    {
+        $response = $this->actingAs($this->user, 'web-guard')
+            ->json('GET', '/system/latestRelease')
+            ->assertForbidden();
     }
 
     #[Test]
@@ -156,16 +165,36 @@ class SystemControllerTest extends FeatureTestCase
     #[Test]
     public function test_clearCache_returns_success()
     {
-        $response = $this->json('GET', '/system/clear-cache');
+        $response = $this->actingAs($this->admin, 'web-guard')
+            ->json('GET', '/system/clear-cache');
 
         $response->assertStatus(200);
     }
 
     #[Test]
+    public function test_clearCache_is_forbidden_to_user()
+    {
+        $response = $this->actingAs($this->user, 'web-guard')
+            ->json('GET', '/system/clear-cache');
+
+        $response->assertForbidden();
+    }
+
+    #[Test]
     public function test_optimize_returns_success()
     {
-        $response = $this->json('GET', '/system/optimize');
+        $response = $this->actingAs($this->admin, 'web-guard')
+            ->json('GET', '/system/optimize');
 
         $response->assertStatus(200);
+    }
+
+    #[Test]
+    public function test_optimize_is_forbidden_to_user()
+    {
+        $response = $this->actingAs($this->user, 'web-guard')
+            ->json('GET', '/system/optimize');
+
+        $response->assertForbidden();
     }
 }
