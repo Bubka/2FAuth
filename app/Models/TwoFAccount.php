@@ -427,12 +427,19 @@ class TwoFAccount extends Model implements Sortable
                     $this->save();
                 }
             } else {
-                $OtpDto               = new TotpDto;
-                $OtpDto->otp_type     = $this->otp_type;
-                $OtpDto->generated_at = $time ?: time();
-                $OtpDto->password     = $this->otp_type === self::TOTP
-                    ? $this->generator->at($OtpDto->generated_at)
-                    : SteamTotp::getAuthCode(base64_encode(Base32::decodeUpper($this->secret)));
+                $OtpDto                = new TotpDto;
+                $OtpDto->otp_type      = $this->otp_type;
+                $OtpDto->generated_at  = $time ?: time();
+                $expires_in            = $this->generator->expiresIn(); /** @phpstan-ignore-line - expiresIn() is in the TOTPInterface only */
+
+                if ($this->otp_type === self::TOTP) {
+                    $OtpDto->password      = $this->generator->at($OtpDto->generated_at);
+                    $OtpDto->next_password = $this->generator->at($OtpDto->generated_at + $expires_in + 2);
+                }
+                else {
+                    $OtpDto->password      = SteamTotp::getAuthCode(base64_encode(Base32::decodeUpper($this->secret)));
+                    $OtpDto->next_password = SteamTotp::getAuthCode(base64_encode(Base32::decodeUpper($this->secret)), $expires_in + 2);
+                }
                 $OtpDto->period = $this->period;
             }
 

@@ -59,7 +59,7 @@ return [
         ],
         'show_otp_as_dot' => [
             'label' => 'Show generated <abbr title="One-Time Password">OTP</abbr> as dot',
-            'help' => 'Replace generated password caracters with *** to ensure confidentiality. Do not affect the copy/paste feature'
+            'help' => 'Replace generated password characters with *** to ensure confidentiality. Does not affect the copy/paste feature'
         ],
         'reveal_dotted_otp' => [
             'label' => 'Reveal obscured <abbr title="One-Time Password">OTP</abbr>',
@@ -68,6 +68,10 @@ return [
         'close_otp_on_copy' => [
             'label' => 'Close <abbr title="One-Time Password">OTP</abbr> after copy',
             'help' => 'Click on a generated password to copy it automatically hides it from the screen'
+        ],
+        'show_next_otp' => [
+            'label' => 'Show next <abbr title="One-Time Password">OTP</abbr>',
+            'help' => 'Preview the next password, i.e. the password that will replace the current password when it expires. Preferences set for the current OTP also apply to the next one (formatting, show as dot)'
         ],
         'auto_close_timeout' => [
             'label' => 'Auto close <abbr title="One-Time Password">OTP</abbr>',

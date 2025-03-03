@@ -109,6 +109,7 @@ return [
 
     'preferences' => [
         'showOtpAsDot' => false,
+        'showNextOtp' => false,
         'revealDottedOTP' => false,
         'closeOtpOnCopy' => false,
         'copyOtpOnDisplay' => false,

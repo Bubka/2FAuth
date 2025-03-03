@@ -112,6 +112,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
     private const VALID_EMBEDDED_OTP_RESOURCE_STRUCTURE_FOR_TOTP = [
         'generated_at',
         'password',
+        'next_password',
     ];
 
     private const VALID_OTP_RESOURCE_STRUCTURE_FOR_HOTP = [

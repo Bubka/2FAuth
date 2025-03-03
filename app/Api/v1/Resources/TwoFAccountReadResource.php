@@ -33,7 +33,11 @@ class TwoFAccountReadResource extends TwoFAccountStoreResource
                          */
                         $otp = $this->getOtp($request->at);
 
-                        return collect(['password' => $otp->password, 'generated_at' => $otp->generated_at]);
+                        return collect([
+                            'password'      => $otp->password,
+                            'generated_at'  => $otp->generated_at,
+                            'next_password' => $otp->next_password,
+                        ]);
                     }
                 ),
             ],

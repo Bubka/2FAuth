@@ -173,6 +173,8 @@
                         <FormCheckbox v-model="user.preferences.showOtpAsDot" @update:model-value="val => savePreference('showOtpAsDot', val)" fieldName="showOtpAsDot" label="settings.forms.show_otp_as_dot.label" help="settings.forms.show_otp_as_dot.help" />
                             <!-- reveal dotted OTPs -->
                             <FormCheckbox v-model="user.preferences.revealDottedOTP" @update:model-value="val => savePreference('revealDottedOTP', val)" fieldName="revealDottedOTP" label="settings.forms.reveal_dotted_otp.label" help="settings.forms.reveal_dotted_otp.help" :isDisabled="!user.preferences.showOtpAsDot" :isIndented="true" />
+                        <!-- show next OTP -->
+                        <FormCheckbox v-model="user.preferences.showNextOtp" @update:model-value="val => savePreference('showNextOtp', val)" fieldName="showNextOtp" label="settings.forms.show_next_otp.label" help="settings.forms.show_next_otp.help" />
                         
                         <h4 class="title is-4 pt-4 has-text-grey-light">{{ $t('settings.notifications') }}</h4>
                         <!-- on new device -->

@@ -9,4 +9,7 @@ class TotpDto extends OtpDto
 
     /* @var integer */
     public int $period;
+
+    /* @var string */
+    public string $next_password;
 }
