@@ -28,7 +28,7 @@ class GroupPolicy
      */
     public function view(User $user, Group $group)
     {
-        $can = $this->isOwnerOf($user, $group);
+        $can = $this->isOwnerOf($user, $group) || $group->id === 0;
 
         if (! $can) {
             Log::notice(sprintf('User ID #%s cannot view group %s (ID #%s)', $user->id, var_export($group->name, true), $group->id));

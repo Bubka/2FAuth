@@ -30,8 +30,21 @@ class GroupStoreRequest extends FormRequest
                 'required',
                 'regex:/^[A-zÀ-ú0-9\s\-_]+$/',
                 'max:32',
+                Rule::notIn([__('commons.all')]),
                 Rule::unique('groups')->where(fn ($query) => $query->where('user_id', $this->user()->id)),
             ],
+        ];
+    }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'name.not_in' => __('errors.reserved_name_please_choose_something_else'),
         ];
     }
 }

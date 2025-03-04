@@ -7,6 +7,8 @@ use App\Models\TwoFAccount;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class GroupService
@@ -19,6 +21,7 @@ class GroupService
      * @param  mixed  $targetGroup  The group the accounts should be assigned to
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
     public static function assign($ids, User $user, mixed $targetGroup = null) : void
     {
@@ -53,17 +56,24 @@ class GroupService
         }
 
         if ($group) {
-            $ids          = is_array($ids) ? $ids : [$ids];
-            $twofaccounts = TwoFAccount::find($ids);
+            $ids = is_array($ids) ? $ids : [$ids];
 
-            if ($user->cannot('updateEach', [(new TwoFAccount), $twofaccounts])) {
-                throw new AuthorizationException;
-            }
+            DB::transaction(function () use ($group, $ids, $user) {
+                $group        = Group::sharedLock()->find($group->id);
+                $twofaccounts = TwoFAccount::sharedLock()->find($ids);
+                
+                if (! $group) {
+                    throw new ModelNotFoundException('group no longer exists');
+                }
 
-            $group->twofaccounts()->saveMany($twofaccounts);
-            $group->loadCount('twofaccounts');
+                if ($user->cannot('updateEach', [(new TwoFAccount), $twofaccounts])) {
+                    throw new AuthorizationException;
+                }
 
-            Log::info(sprintf('Twofaccounts #%s assigned to group %s (ID #%s)', implode(',', $ids), var_export($group->name, true), $group->id));
+                $group->twofaccounts()->saveMany($twofaccounts);
+    
+                Log::info(sprintf('Twofaccounts #%s assigned to group %s (ID #%s)', implode(',', $ids), var_export($group->name, true), $group->id));
+            }, 5);
         } else {
             Log::info('Cannot find a group to assign the TwoFAccounts to');
         }

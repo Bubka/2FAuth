@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Listeners;
 
-use App\Events\GroupDeleting;
+use App\Events\GroupDeleted;
 use App\Listeners\DissociateTwofaccountFromGroup;
 use Illuminate\Support\Facades\Event;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -16,12 +16,12 @@ use Tests\TestCase;
 class DissociateTwofaccountFromGroupTest extends TestCase
 {
     #[Test]
-    public function test_DissociateTwofaccountFromGroup_listen_to_groupDeleting_event()
+    public function test_DissociateTwofaccountFromGroup_listen_to_groupDeleted_event()
     {
         Event::fake();
 
         Event::assertListening(
-            GroupDeleting::class,
+            GroupDeleted::class,
             DissociateTwofaccountFromGroup::class
         );
     }

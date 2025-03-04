@@ -3,7 +3,6 @@
 namespace App\Providers;
 
 use App\Events\GroupDeleted;
-use App\Events\GroupDeleting;
 use App\Events\ScanForNewReleaseCalled;
 use App\Events\StoreIconsInDatabaseSettingChanged;
 use App\Events\TwoFAccountDeleted;
@@ -44,10 +43,8 @@ class EventServiceProvider extends ServiceProvider
         TwoFAccountDeleted::class => [
             CleanIconStorage::class,
         ],
-        GroupDeleting::class => [
-            DissociateTwofaccountFromGroup::class,
-        ],
         GroupDeleted::class => [
+            DissociateTwofaccountFromGroup::class,
             ResetUsersPreference::class,
         ],
         ScanForNewReleaseCalled::class => [
