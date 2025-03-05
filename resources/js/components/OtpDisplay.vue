@@ -317,7 +317,7 @@
 
 <template>
     <div>
-        <figure class="image is-64x64" :class="{ 'no-icon': !otpauthParams.icon }" style="display: inline-block">
+        <figure class="image is-64x64" :class="{ 'no-icon': !otpauthParams.icon }" style="display: inline-flex">
             <img :src="$2fauth.config.subdirectory + '/storage/icons/' + otpauthParams.icon" v-if="otpauthParams.icon" :alt="$t('twofaccounts.icon_to_illustrate_the_account')">
         </figure>
         <UseColorMode v-slot="{ mode }">
