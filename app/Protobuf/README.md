@@ -42,3 +42,9 @@ Protoc will generate the files in `app/Protobuf` while we want them to be in `Ap
 - Update the namespace of the moved files to match their new location
 
 >Reference: [protocol-buffers/docs/php-generated](https://developers.google.com/protocol-buffers/docs/reference/php-generated#invocation)
+
+command to decode an otpauth uri using protoc cli
+
+```bash
+echo "otpauth-migration://offline?data=[BASE32_ENCODED_DATA]" | sed 's/QR-Code://' | sed 's/otpauth-migration:\/\/offline?data=//' | sed -e 's/%2B/+/ig' -e 's/%2F/\//ig' -e 's/%3D/=/ig' | base64 -d | protoc --decode_raw
+```

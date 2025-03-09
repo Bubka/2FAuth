@@ -6,9 +6,9 @@ use App\Exceptions\InvalidMigrationDataException;
 use App\Models\TwoFAccount;
 use App\Protobuf\GAuthValueMapping;
 use App\Protobuf\GoogleAuth\Payload;
-use App\Protobuf\GoogleAuth\Payload\Algorithm;
-use App\Protobuf\GoogleAuth\Payload\DigitCount;
-use App\Protobuf\GoogleAuth\Payload\OtpType;
+use App\Protobuf\GoogleAuth\Payload\OtpParameters\Algorithm;
+use App\Protobuf\GoogleAuth\Payload\OtpParameters\DigitCount;
+use App\Protobuf\GoogleAuth\Payload\OtpParameters\OtpType;
 use Exception;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
@@ -29,6 +29,21 @@ class GoogleAuthMigrator extends Migrator
         try {
             $migrationData = base64_decode(urldecode(Str::replace('otpauth-migration://offline?data=', '', strval($migrationPayload))));
             $protobuf      = new Payload;
+
+            // $input = new CodedInputStream($migrationData);
+            // while (true) {
+            //     $tag = $input->readTag();
+            //     // End of input.  This is a valid place to end, so return true.
+            //     if ($tag === 0) {
+            //         return true;
+            //     }
+
+            //     $number = GPBWire::getTagFieldNumber($tag);
+            //     $field  = $protobuf->desc->getFieldByNumber($number);
+
+            //     $protobuf->parseFieldFromStream($tag, $input, $field);
+            // }
+
             $protobuf->mergeFromString($migrationData);
             $otpParameters = $protobuf->getOtpParameters();
         } catch (Exception $ex) {
