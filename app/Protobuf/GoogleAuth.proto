@@ -1,6 +1,5 @@
 syntax = "proto3";
 
-import "google/protobuf/any.proto";
 
 package app.Protobuf.GoogleAuth;
 option php_metadata_namespace = "App\\Protobuf\\GPBMetadata";
@@ -30,8 +29,8 @@ message Payload {
     Algorithm algorithm = 4;
     DigitCount digits = 5;
     OtpType type = 6;
-    optional int32 counter = 7;
-    optional google.protobuf.Any period = 8;
+    optional uint64 counter = 7;
+    optional string period = 8;
   }
   repeated OtpParameters otp_parameters = 1;
   int32 version = 2;

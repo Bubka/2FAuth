@@ -38,11 +38,11 @@ class OtpParameters extends \Google\Protobuf\Internal\Message
      */
     protected $type = 0;
     /**
-     * Generated from protobuf field <code>optional int32 counter = 7;</code>
+     * Generated from protobuf field <code>optional uint64 counter = 7;</code>
      */
     protected $counter = null;
     /**
-     * Generated from protobuf field <code>optional .google.protobuf.Any period = 8;</code>
+     * Generated from protobuf field <code>optional string period = 8;</code>
      */
     protected $period = null;
 
@@ -58,8 +58,8 @@ class OtpParameters extends \Google\Protobuf\Internal\Message
      *     @type int $algorithm
      *     @type int $digits
      *     @type int $type
-     *     @type int $counter
-     *     @type \Google\Protobuf\Any $period
+     *     @type int|string $counter
+     *     @type string $period
      * }
      */
     public function __construct($data = NULL) {
@@ -200,8 +200,8 @@ class OtpParameters extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>optional int32 counter = 7;</code>
-     * @return int
+     * Generated from protobuf field <code>optional uint64 counter = 7;</code>
+     * @return int|string
      */
     public function getCounter()
     {
@@ -219,25 +219,25 @@ class OtpParameters extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>optional int32 counter = 7;</code>
-     * @param int $var
+     * Generated from protobuf field <code>optional uint64 counter = 7;</code>
+     * @param int|string $var
      * @return $this
      */
     public function setCounter($var)
     {
-        GPBUtil::checkInt32($var);
+        GPBUtil::checkUint64($var);
         $this->counter = $var;
 
         return $this;
     }
 
     /**
-     * Generated from protobuf field <code>optional .google.protobuf.Any period = 8;</code>
-     * @return \Google\Protobuf\Any|null
+     * Generated from protobuf field <code>optional string period = 8;</code>
+     * @return string
      */
     public function getPeriod()
     {
-        return $this->period;
+        return isset($this->period) ? $this->period : '';
     }
 
     public function hasPeriod()
@@ -251,13 +251,13 @@ class OtpParameters extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>optional .google.protobuf.Any period = 8;</code>
-     * @param \Google\Protobuf\Any $var
+     * Generated from protobuf field <code>optional string period = 8;</code>
+     * @param string $var
      * @return $this
      */
     public function setPeriod($var)
     {
-        GPBUtil::checkMessage($var, \Google\Protobuf\Any::class);
+        GPBUtil::checkString($var, True);
         $this->period = $var;
 
         return $this;
