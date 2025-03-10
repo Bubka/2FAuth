@@ -17,7 +17,9 @@ use App\Http\Controllers\SystemController;
 use App\Http\Middleware\AddContentSecurityPolicyHeaders;
 use App\Http\Middleware\CustomCreateFreshApiToken;
 use App\Http\Middleware\SetLanguage;
+use App\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
+use Illuminate\Session\Middleware\StartSession;
 // use Illuminate\Foundation\Events\DiagnosingHealth;
 // use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
@@ -100,6 +102,8 @@ Route::get('refresh-csrf', function () {
 });
 
 Route::withoutMiddleware([
+    StartSession::class,
+    VerifyCsrfToken::class,
     SubstituteBindings::class,
     SetLanguage::class,
     CustomCreateFreshApiToken::class,
