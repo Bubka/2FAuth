@@ -40,12 +40,15 @@ class ViewTest extends FeatureTestCase
 
         $response->assertViewHas('appSettings');
         $response->assertViewHas('appConfig');
+        $response->assertViewHas('urls');
         $response->assertViewHas('defaultPreferences');
         $response->assertViewHas('subdirectory');
         $response->assertViewHas('isDemoApp');
         $response->assertViewHas('isTestingApp');
         $response->assertViewHas('lang');
         $response->assertViewHas('locales');
+        $response->assertViewHas('cspNonce');
+        $response->assertViewHas('isSecure');
     }
 
     #[Test]
