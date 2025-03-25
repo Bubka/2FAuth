@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Events\ScanForNewReleaseCalled;
+use App\Facades\Settings;
 use App\Http\Controllers\SinglePageController;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Http;
@@ -59,5 +60,16 @@ class ViewTest extends FeatureTestCase
         $this->get('/');
 
         Event::assertDispatched(ScanForNewReleaseCalled::class);
+    }
+
+    #[Test]
+    public function test_calling_index_does_not_fire_ScanForNewReleaseCalled_event()
+    {
+        Event::fake();
+        Settings::set('checkForUpdate', false);
+
+        $this->get('/');
+
+        Event::assertNotDispatched(ScanForNewReleaseCalled::class);
     }
 }

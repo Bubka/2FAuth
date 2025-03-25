@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Events\ScanForNewReleaseCalled;
 use App\Facades\Settings;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Vite;
 
 class SinglePageController extends Controller
@@ -17,12 +16,15 @@ class SinglePageController extends Controller
      */
     public function index()
     {
-        event(new ScanForNewReleaseCalled);
+        $appSettings = Settings::all();
+
+        if ($appSettings['checkForUpdate'] == true) {
+            event(new ScanForNewReleaseCalled);
+        }
 
         // We only share necessary and acceptable values with the HTML front-end.
         // But all the properties have to be pushed to init the appSetting store state correctly,
         // so we set them to null, they will be fed later by the front-end
-        $appSettings = Settings::all();
         $publicSettings = $appSettings->only([
             'disableRegistration',
             'enableSso',
