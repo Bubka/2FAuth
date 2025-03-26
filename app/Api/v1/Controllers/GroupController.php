@@ -10,6 +10,7 @@ use App\Facades\Groups;
 use App\Http\Controllers\Controller;
 use App\Models\Group;
 use App\Models\User;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
@@ -107,6 +108,8 @@ class GroupController extends Controller
             $group->loadCount('twofaccounts');
         } catch (ModelNotFoundException $exc) {
             abort(404);
+        } catch (AuthorizationException $exc) {
+            abort(403);
         } catch (\Throwable $th) {
             abort(409, 'Conflict');
         }
