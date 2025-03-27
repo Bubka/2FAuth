@@ -43,6 +43,7 @@ return [
     ],
     'make_sure_copy_token' => 'Copier votre jeton d\'accès personnel dès maintenant. Vous ne pourrez pas l\'afficher à nouveau !',
     'data_input' => 'Saisie des données',
+    'settings_managed_by_administrator' => 'Certains réglages sont gérés par votre administrateur',
     'forms' => [
         'edit_settings' => 'Modifier les réglages',
         'setting_saved' => 'Réglages sauvegardés',
@@ -58,20 +59,24 @@ return [
             'help' => 'Fuseau horaire appliqué à toutes les dates et heures affichées dans l\'application'
         ],
         'show_otp_as_dot' => [
-            'label' => 'Afficher les mots de passe générés sous forme de point',
-            'help' => 'Remplace les caractères des mots de passe générés par des ●●● pour garantir leur confidentialité. N\'affecte pas la fonction de copier/coller qui reste utilisable.'
+            'label' => 'Rendre illisibles les codes générés',
+            'help' => 'Remplace les caractères des codes OTP générés par des ●●● pour garantir leur confidentialité. N\'affecte pas la fonction de copier/coller qui reste utilisable.'
         ],
         'reveal_dotted_otp' => [
-            'label' => 'Révéler les <abbr title="One-Time Passwords">OTPs</abbr> masqués',
-            'help' => 'Permet à l\'utilisateur de réveler temporairement les mots de passe masqués derrière des ●●●'
+            'label' => 'Révéler les codes OTP illisibles',
+            'help' => 'Permet à l\'utilisateur de réveler temporairement les code OTP dont les caractères ont été remplacés par des ●●●'
         ],
         'close_otp_on_copy' => [
-            'label' => 'Cacher les mots de passe <abbr title="One-Time Password">OTP</abbr> copiés',
-            'help' => 'Les mots de passe qui viennent d\'être copiés ne restent pas visibles à l\'écran'
+            'label' => 'Fermer la vue OTP une fois le code copié',
+            'help' => 'Le code OTP qui vient d\'être copié ne reste pas visible à l\'écran'
+        ],
+        'show_next_otp' => [
+            'label' => 'Afficher le prochain code OTP',
+            'help' => 'Prévisualiser le prochain code OTP, c\'est-à-dire le code qui remplacera le code actuel après son expiration. Les préférences définies pour le code OTP actuel s\'appliquent également au prochain code (mise en forme, affichage en point)'
         ],
         'auto_close_timeout' => [
-            'label' => 'Cacher les <abbr title="One-Time Password">OTP</abbr> automatiquement',
-            'help' => 'Cache automatiquement le mot de passe à l\'écran après un certain temps. Cela évite les générations inutiles de nouveaux OTP si la vue dédiée à leur affichage est restée ouverte.'
+            'label' => 'Fermeture automatique de la vue OTP',
+            'help' => 'Cache automatiquement le code OTP à l\'écran après un certain temps. Cela évite les générations inutiles de nouveaux codes si la vue dédiée à leur affichage est restée ouverte.'
         ],
         'clear_search_on_copy' => [
             'label' => 'Effacer la recherche après copie',
@@ -82,8 +87,8 @@ return [
             'help' => 'Force la fonction de tri à tenir compte de la casse des lettres (majuscule/minuscule) pour ordonner les éléments'
         ],
         'copy_otp_on_display' => [
-            'label' => 'Copier le mot de passe <abbr title="One-Time Password">OTP</abbr> dès qu\'il s\'affiche',
-            'help' => 'Copie automatiquement dans le presse-papier un mot de passe qui vient de s\'afficher à l\'écran. A cause de restrictions des navigateurs, seul le premier mot de passe <abbr title="Time-based One-Time Password">TOTP</abbr> à s\'afficher est copié, pas les mots de passe successifs'
+            'label' => 'Copier le code OTP dès qu\'il s\'affiche',
+            'help' => 'Copie automatiquement dans le presse-papier le code OTP qui vient de s\'afficher à l\'écran. A cause de restrictions des navigateurs, seul le premier code à s\'afficher est copié, pas les codes suivants'
         ],
         'use_basic_qrcode_reader' => [
             'label' => 'Utiliser le lecteur de QR code basique',
@@ -94,8 +99,8 @@ return [
             'help' => 'Change le mode d\'affichage des comptes, soit sous forme de liste, soit sous forme de grille'
         ],
         'password_format' => [
-            'label' => 'Mise en forme des mots de passe',
-            'help' => 'Modifie l\'affichage des mots de passe en regroupement les chiffres afin de faciliter la lisibilité et leur mémorisation'
+            'label' => 'Mise en forme des codes OTP',
+            'help' => 'Modifie l\'affichage des codes OTP en regroupement les chiffres afin de faciliter la lisibilité et leur mémorisation'
         ],
         'pair' => 'par Paire',
         'pair_legend' => 'Groupe les chiffres deux par deux',
@@ -149,7 +154,7 @@ return [
             'help' => 'Enregistre le dernier groupe affiché et le restaure lors de votre prochaine visite',
         ],
         'otp_generation' => [
-            'label' => 'Affichage des mots de passe',
+            'label' => 'Affichage des codes OTP',
             'help' => 'Définit quand et comment sont affichés les <abbr title="One-Time Passwords">OTPs</abbr>.<br/>',
         ],
         'notify_on_new_auth_device' => [
@@ -166,12 +171,12 @@ return [
         ],
         'otp_generation_on_request' => 'Après un clic/tap',
         'otp_generation_on_request_legend' => 'Seul, dans un écran dédié',
-        'otp_generation_on_request_title' => 'Cliquer sur un compte pour obtenir un mot de passe dans un écran dédié',
+        'otp_generation_on_request_title' => 'Cliquer sur un compte pour obtenir un code OTP dans un écran dédié',
         'otp_generation_on_home' => 'En permanence',
         'otp_generation_on_home_legend' => 'Tous, sur l\'écran d\'accueil',
-        'otp_generation_on_home_title' => 'Montrer tous les mots de passe sur l\'écran d\'accueil sans aucune action de l\'utilisateur',
+        'otp_generation_on_home_title' => 'Montrer tous les codes OTP sur l\'écran d\'accueil sans aucune action de l\'utilisateur',
         'never' => 'Jamais',
-        'on_otp_copy' => 'Après copie d\'un mot de passe',
+        'on_otp_copy' => 'Après copie d\'un code OTP',
         '1_minutes' => 'Après 1 minute',
         '2_minutes' => 'Après 2 minutes',
         '5_minutes' => 'Après 5 minutes',

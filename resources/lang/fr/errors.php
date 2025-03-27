@@ -74,4 +74,6 @@ return [
     'qrcode_has_invalid_checksum' => 'La somme de contrôle du QR code est invalide',
     'no_readable_qrcode' => 'Aucun QR code lisible',
     'failed_icon_store_database_toggling' => 'La migration des icônes a échoué. Le paramètre a été restaurée à sa précédente valeur.',
+    'failed_to_retrieve_app_settings' => 'Impossible de récupérer les paramètres de l\'application',
+    'reserved_name_please_choose_something_else' => 'Nom réservé, veuillez en choisir un autre',
 ];

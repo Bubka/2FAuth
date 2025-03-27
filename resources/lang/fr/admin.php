@@ -116,7 +116,7 @@ return [
         ],
         'use_sso_only' => [
             'label' => 'Utiliser uniquement SSO',
-            'help' => 'Définir SSO comme la seule méthode disponible pour se connecter à 2FAuth. La connexion par mot de passe ou Webauthn est alors désactivée pour les utilisateurs. Les administrateurs ne sont pas affectés par cette restriction.',
+            'help' => 'Définir SSO comme la seule méthode disponible pour se connecter à 2FAuth. La connexion par mot de passe ou Webauthn est alors désactivée pour les utilisateurs. Les administrateurs ne sont pas impactés par cette restriction.',
         ],
         'keep_sso_registration_enabled' => [
             'label' => 'Garder l\'inscription via SSO activée',

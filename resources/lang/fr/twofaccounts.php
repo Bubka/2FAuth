@@ -78,7 +78,7 @@ return [
         ],
         'plain_text' => 'Texte brut',
         'otp_type' => [
-            'label' => 'Choisissez le type d\'<abbr title="One-Time Password">OTP</abbr> à créer',
+            'label' => 'Choisissez le type de code OTP à créer',
             'help' => 'Time-based OTP ou HMAC-based OTP ou Steam OTP'
         ],
         'digits' => [
@@ -172,7 +172,7 @@ return [
         'discard_all' => 'Tout retirer',
         'discard_duplicates' => 'Retirer les doublons',
         'discard_this_account' => 'Retirer ce compte',
-        'generate_a_test_password' => 'Générer un mot de passe de test',
+        'generate_a_test_password' => 'Générer un code OTP de test',
         'possible_duplicate' => 'Un compte avec les mêmes informations existe déjà',
         'invalid_account' => '- compte non valide -',
         'invalid_service' => '- service non valide -',
