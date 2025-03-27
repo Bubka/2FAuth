@@ -41,7 +41,7 @@ class GroupStoreRequest extends FormRequest
      *
      * @return array<string, string>
      */
-    public function messages(): array
+    public function messages() : array
     {
         return [
             'name.not_in' => __('errors.reserved_name_please_choose_something_else'),

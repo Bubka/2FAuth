@@ -31,7 +31,7 @@ class GroupModelTest extends ModelTestCase
                 'user_id'            => 'integer',
             ],
             [
-                'deleted'  => GroupDeleted::class,
+                'deleted' => GroupDeleted::class,
             ]
         );
     }

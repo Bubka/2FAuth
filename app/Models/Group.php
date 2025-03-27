@@ -78,7 +78,7 @@ class Group extends Model
      * @var array
      */
     protected $dispatchesEvents = [
-        'deleted'  => GroupDeleted::class,
+        'deleted' => GroupDeleted::class,
     ];
 
     /**
@@ -97,7 +97,7 @@ class Group extends Model
             Log::info(sprintf('Group %s (id #%d) updated by user ID #%s', var_export($model->name, true), $model->id, $model->user_id));
         });
     }
-    
+
     /**
      * Retrieve the model for a bound value.
      *
@@ -117,8 +117,7 @@ class Group extends Model
             $group->id = 0;
 
             return $group;
-        }
-        else {
+        } else {
             return parent::resolveRouteBinding($value, $field);
         }
     }

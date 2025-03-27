@@ -131,8 +131,7 @@ class GroupController extends Controller
         // are not assigned to any group record.
         if ($group->id === 0) {
             $twofaccounts = $request->user()->twofaccounts;
-        }
-        else {
+        } else {
             $twofaccounts = $group->twofaccounts;
         }
 

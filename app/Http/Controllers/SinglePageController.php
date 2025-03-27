@@ -28,7 +28,7 @@ class SinglePageController extends Controller
         $publicSettings = $appSettings->only([
             'disableRegistration',
             'enableSso',
-            'useSsoOnly'
+            'useSsoOnly',
         ]);
         $settings = $appSettings->map(function (mixed $item, string $key) {
             return null;

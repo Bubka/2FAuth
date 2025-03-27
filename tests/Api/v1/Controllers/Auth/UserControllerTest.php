@@ -120,8 +120,8 @@ class UserControllerTest extends FeatureTestCase
             ->json('GET', '/api/v1/user/preferences/showOtpAsDot')
             ->assertOk()
             ->assertExactJson([
-                'key'   => 'showOtpAsDot',
-                'value' => config('2fauth.preferences.showOtpAsDot'),
+                'key'    => 'showOtpAsDot',
+                'value'  => config('2fauth.preferences.showOtpAsDot'),
                 'locked' => false,
             ]);
     }
@@ -130,7 +130,7 @@ class UserControllerTest extends FeatureTestCase
     public function test_showPreference_returns_preference_with_locked_default_env_value()
     {
         // See .env.testing which sets USERPREF_DEFAULT__THEME=light
-        // while config/2fauth.php sets the default value to 'system' 
+        // while config/2fauth.php sets the default value to 'system'
 
         /**
          * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
@@ -141,8 +141,8 @@ class UserControllerTest extends FeatureTestCase
             ->json('GET', '/api/v1/user/preferences/theme')
             ->assertOk()
             ->assertExactJson([
-                'key'   => 'theme',
-                'value' => 'light',
+                'key'    => 'theme',
+                'value'  => 'light',
                 'locked' => true,
             ]);
     }

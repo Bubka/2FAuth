@@ -57,14 +57,14 @@ class Helpers
     public static function lockedPreferences(array $preferences) : array
     {
         foreach ($preferences as $key => $value) {
-            $_key = $key === 'revealDottedOTP' ? 'revealDottedOtp' : $key;
+            $_key     = $key === 'revealDottedOTP' ? 'revealDottedOtp' : $key;
             $isLocked = envUnlessEmpty(Str::of($_key)->snake('_')->upper()->prepend('USERPREF_LOCKED__')->toString(), false);
-            
+
             if ($isLocked) {
                 $lockedPreferences[] = $key;
             }
         }
-    
+
         return $lockedPreferences ?? [];
     }
 }
