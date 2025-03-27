@@ -106,16 +106,21 @@ return [
     */
 
     'locales' => [
+        'bg',
+        'zh-CN',
+        'da',
+        'nl',
         'en',
         'fr',
         'de',
-        'zh',
-        'es',
-        'bg',
-        'ru',
-        'ja',
         'hi',
-        'tr'
+        'it',
+        'ja',
+        'ko',
+        'pt-BR',
+        'ru',
+        'es-ES',
+        'tr',
     ],
 
     /*

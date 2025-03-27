@@ -118,11 +118,24 @@ export const useUserStore = defineStore({
          */
         applyLanguage() {
             const { isSupported, language } = useNavigatorLanguage()
+            let lang = 'en'
 
             if (isSupported) {
-                loadLanguageAsync(this.preferences.lang == 'browser' ? language.value.slice(0, 2)  : this.preferences.lang)
+                if (this.preferences.lang == 'browser') {
+                    if (this.$2fauth.langs.includes(language.value)) {
+                        lang = language.value
+                    }
+                    // If the language tag pushed by the browser is composed of
+                    // multiple subtags (ex: fr-FR) we need to retry but only with
+                    // the "language subtag" (ex: fr)
+                    else if (this.$2fauth.langs.includes(language.value.slice(0, 2))) {
+                        lang = language.value.slice(0, 2)
+                    }
+                }
+                else lang = this.preferences.lang
             }
-            else loadLanguageAsync('en')
+
+            loadLanguageAsync(lang)
         },
 
         /**

@@ -32,7 +32,7 @@ app.use(router)
 
 // Localization
 app.use(i18nVue, {
-    lang: document.documentElement.lang.substring(0, 2),
+    lang: document.documentElement.lang,
     resolve: async lang => {
         const langs = import.meta.glob('../lang/*.json');
         if (lang.includes('php_')) {
