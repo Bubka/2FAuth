@@ -1,5 +1,51 @@
 # Change log
 
+## [5.5.0] - 2025-03-27
+
+### Announcement
+
+Did you know that the 2FAuth official web browser extension has been released!?
+
+The goal of this web extension is to offer an alternative way to interact with your 2FAuth server and to make 2FA account registration and OTP generation even easier and faster.
+
+It's still in early (and beta) stage, but it's functional. For now, only OTP generation is supported, as well as the Search & Group features. Next step is to be able to capture QR codes in the browser pages. This will allow to register a 2FA account in 2FAuth during the 2FA enrollment process on the service website.
+
+- [2FAuth web extension for Firefox](https://addons.mozilla.org/en-US/firefox/addon/2fauth-addon/)
+- [2FAuth web extension for Chrome](https://chromewebstore.google.com/detail/2fauth-beta/kokhpbhfeokchmbimdlaldcmlinjpipm?hl=en)
+- [2FAuth web extension for Edge](https://microsoftedge.microsoft.com/addons/detail/2fauth-beta/kgfofcnddpapmmhibkbaljffnpmcmlde)
+
+Feedback and bug reports (in this repository please) are very welcome.
+
+<hr/>
+
+⚠️ This release drops PHP 8.2 support ⚠️
+
+### Added
+
+- It is now possible to define custom defaults for user preferences as well as to lock the preferences from being changed by users. This feature requires a bit of configuration, a [dedicated page](https://docs.2fauth.app/getting-started/config/user-preferences/) has been added to the documentation site to guide you through the process. ([#413](https://github.com/Bubka/2FAuth/issues/413))
+- A user preference to enable precalculation and display of the next OTP code.  
+  Don't be surprised if you don't see the next code right after enabling this option, the code fades in slowly in order to maintain good readability of the current code. ([#416](https://github.com/Bubka/2FAuth/issues/416))
+- New languages: Danish, Dutch, Italian, Korean, Portuguese (Brazilian)
+
+### Changed
+
+- The version number has been removed from the footer and from the About page for unauthenticated users. ([#432](https://github.com/Bubka/2FAuth/issues/432))
+- 2FAuth now starts searching as soon as the user starts typing, without having to explicitly give focus to the search field. ([#441](https://github.com/Bubka/2FAuth/issues/441))
+
+### Fixed
+
+- [issue #438](https://github.com/Bubka/2FAuth/issues/438) Sorting not working if "Service" is null
+- [issue #458](https://github.com/Bubka/2FAuth/issues/458) The `/up` route no longer creates sessions
+- [issue #462](https://github.com/Bubka/2FAuth/issues/462) The check for new versions is no longer triggered whereas the _Check for new version_ setting is disabled
+- [PR #455](https://github.com/Bubka/2FAuth/pull/455) Logo size overflow, by [@BitSleek](https://github.com/BitSleek)
+- Multiple Race Condition in Group Management Feature. Credits to [@bugdiscole](https://github.com/bugdisclose)
+
+### API [1.7.0]
+
+- New `403` response for the PUT operation of path `/api/v1/user/preferences/{name}`
+- New `409` response for the POST operation of path `/api/v1/groups/{id}/assign`
+- New `locked` property in the `userPreference` model
+
 ## [5.4.3] - 2024-11-27
 
 ### Fixed
