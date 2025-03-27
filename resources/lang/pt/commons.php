@@ -91,4 +91,5 @@ return [
     'one_month' => '1 mês.',
     'x_month' => ':x meses.',
     'one_year' => '1 ano.',
+    'copy_next_password' => 'Copy next password to clipboard',
 ];

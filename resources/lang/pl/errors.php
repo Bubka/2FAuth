@@ -73,5 +73,7 @@ return [
     'cannot_decode_detected_qrcode' => 'Cannot decode detected QR code, try to crop or sharpen the image',
     'qrcode_has_invalid_checksum' => 'QR code has invalid checksum',
     'no_readable_qrcode' => 'No readable QR code',
-    'failed_icon_store_database_toggling' => 'Migration of icons failed. The setting has been restored to its previous value.',
+    'failed_icon_store_database_toggling' => 'Migracja ikon nie powiodła się. Ustawienie zostało przywrócone do poprzedniej wartości.',
+    'failed_to_retrieve_app_settings' => 'Failed to retrieve application settings',
+    'reserved_name_please_choose_something_else' => 'Reserved name, please choose something else',
 ];

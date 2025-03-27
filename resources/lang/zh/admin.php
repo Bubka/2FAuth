@@ -14,12 +14,12 @@ return [
     */
 
     'admin' => '管理员',
-    'admin_panel' => '管理面板',
-    'app_setup' => '应用设置',
+    'admin_panel' => '系统管理',
+    'app_setup' => '程序',
     'auth' => '鉴权',
     'registrations' => '注册',
     'users' => '用户',
-    'users_legend' => '管理此实例上的已注册用户，或创建新的用户。',
+    'users_legend' => '管理当前节点上的已注册用户，或创建一个新的用户。',
     'admin_settings' => '管理员设置',
     'create_new_user' => '创建新用户',
     'new_user' => '新用户',
@@ -92,11 +92,11 @@ return [
     'forms' => [
         'use_encryption' => [
             'label' => '保护敏感数据',
-            'help' => '敏感数据、2FA 秘钥和邮箱地址会以加密形式储存在数据库中。请务必备份您在 .env 中设置的 APP_KEY 的值 (或备份整个 .env 文件)。如果此密钥丢失，那么已加密的数据将无法解密。',
+            'help' => '敏感数据、2FA 秘钥和邮箱地址会以加密形式储存在数据库中。请您务必备份在 .env 中配置的 APP_KEY 的值 (或备份整个 .env 文件)。如果此密钥丢失，那么已加密的数据将无法解密。',
         ],
         'restrict_registration' => [
             'label' => '限制注册',
-            'help' => '只允许范围内的邮箱地址进行注册，下列的两条规则可以同时使用。SSO 注册流程不受此限制的影响。',
+            'help' => '只允许符合规则的邮箱地址进行注册。可以同时使用下方的两条规则来进行限制。SSO 的注册流程不受此限制的影响。',
         ],
         'restrict_list' => [
             'label' => '过滤列表',
@@ -108,19 +108,19 @@ return [
         ],
         'disable_registration' => [
             'label' => '关闭注册',
-            'help' => '防止新用户注册。除非被覆盖 (见下文)。此设置也会影响到 SSO 的注册流程，所以新用户将无法通过 SSO 登录',
+            'help' => '防止新用户注册，除非有例外 (见下方选项)。此选项也会禁用通过 “SSO 登录” 产生的注册行为，所以新用户将无法通过 SSO 登录',
         ],
         'enable_sso' => [
             'label' => '启用 SSO',
             'help' => '允许访客通过单点登录的方式，使用外部 ID 进行身份验证',
         ],
         'use_sso_only' => [
-            'label' => '仅使用 SSO',
-            'help' => '仅允许通过 SSO。启用此功能后，普通用户将无法使用密码和 WebAuthn 登录到 2FAuth，但管理员不受此限制的影响。',
+            'label' => '仅允许 SSO 登录',
+            'help' => '仅允许通过 SSO 进行登录。启用此功能后，普通用户将无法使用密码和 WebAuthn 来登录 2FAuth，但管理员不受此限制的影响。',
         ],
         'keep_sso_registration_enabled' => [
-            'label' => '保持启用 SSO 注册',
-            'help' => '在注册已禁用时允许新用户通过 SSO 登录',
+            'label' => '仍然允许 SSO 注册',
+            'help' => '在注册被禁用时，仍然允许新用户通过 SSO 登录',
         ],
         'is_admin' => [
             'label' => '管理员',
@@ -128,20 +128,21 @@ return [
         ],
         'test_email' => [
             'label' => '测试送信配置',
-            'help' => '发送测试邮件来验证送信配置是否正确。如果发送邮件的配置不正确，用户将无法请求重置密码。',
-            'email_will_be_send_to_x' => '邮件将被发送到 <span class="is-family-code has-text-info">:email</span>',
+            'help' => '发送测试邮件来验证送信配置是否正确。如果没有正确地配置邮件服务器，用户将无法收到 “重置密码” 的邮件。',
+            'email_will_be_send_to_x' => '将发送邮件到此地址： <span class="is-family-code has-text-info">:email</span>',
         ],
         'health_endpoint' => [
             'label' => '节点健康检查',
-            'help' => '您可以访问此 URL 来检查此 2FAuth 实例的健康状况。您可以在 Docker 的 HEALTHCKECK，或 Kubernetes 的 HTTPS Liveness 探针中使用此 URL 来进行健康检查。',
+            'help' => '您可以访问此 URL 来检查当前 2FAuth 应用的健康状况。
+您可以将此 URL 配置在 Docker 的 “HEALTHCHECK”，或是 Kubernetes 的 “livenessProbe” 中，来对服务进行健康检查。',
         ],
         'cache_management' => [
             'label' => '缓存管理',
-            'help' => '某些情况下需要清除缓存，例如更改了环境变量，或更新了应用。您可以在此处进行缓存清理。',
+            'help' => '某些情况下需要清除缓存，例如更改了环境变量，或 2FAuth 进行了升级。您可以在此处手动清理缓存。',
         ],
         'store_icon_to_database' => [
             'label' => '保存图标至数据库',
-            'help' => '除了储存到文件系统外，上传的图标还会被注册到数据库中充当缓存。这种方式可以令备份 2FAuth 更便捷，因为仅有数据库需要备份。<br /><br />但要注意的是，这可能会产生负面效果：如果保存了大量的大体积图标，那么数据库的体积也会显著增大。这同时也可能会影响应用的性能，因为需要频繁地读写文件系统，来保证图标数据与数据库保持同步。',
+            'help' => '上传的图标除了储存到磁盘里，还会被注册到数据库中充当缓存。<br />启用此功能可以令 2FAuth 更便于备份，因为仅备份数据库，即可包含所有的数据与图标。<br />但要注意的是，此功能可能会产生负面效果：如果上传了大量的大体积图标，那么数据库的体积也会显著地增大。这同时也可能会影响应用的性能，因为需要频繁地读写磁盘，来保证图标数据与数据库保持同步。',
         ],
     ],
 

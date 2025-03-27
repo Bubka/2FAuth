@@ -78,7 +78,7 @@ return [
         ],
         'plain_text' => 'Platte tekst',
         'otp_type' => [
-            'label' => 'Kies het type <abbr title="One-Time Password">OTP</abbr> om te maken',
+            'label' => 'Choose the type of OTP to create',
             'help' => 'Op tijd gebaseerde OTP of HMAC-gebaseerde OTP of Steam OTP'
         ],
         'digits' => [

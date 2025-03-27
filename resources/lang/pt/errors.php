@@ -74,4 +74,6 @@ return [
     'qrcode_has_invalid_checksum' => 'QR code possui checksum inválido',
     'no_readable_qrcode' => 'Nenhum código QR legível',
     'failed_icon_store_database_toggling' => 'Houve um erro ao migrar os ícones. A configuração foi restaurada para o valor anterior.',
+    'failed_to_retrieve_app_settings' => 'Failed to retrieve application settings',
+    'reserved_name_please_choose_something_else' => 'Reserved name, please choose something else',
 ];

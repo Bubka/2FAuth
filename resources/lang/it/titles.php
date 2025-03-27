@@ -9,50 +9,50 @@ return [
     |
     */
 
-    'start' => 'New account',
+    'start' => 'Nuovo account',
     'capture' => 'Flash QR',
     'accounts' => 'Accounts',
-    'createAccount' => 'Create account',
-    'importAccounts' => 'Import accounts',
-    'editAccount' => 'Account edit',
-    'showQRcode' => 'Account as QR code',
-    'groups' => 'Groups',
-    'createGroup' => 'Create group',
-    'editGroup' => 'Group edit',
+    'createAccount' => 'Crea account',
+    'importAccounts' => 'Importa accounts',
+    'editAccount' => 'Modifica account',
+    'showQRcode' => 'Account come codice QR',
+    'groups' => 'Gruppi',
+    'createGroup' => 'Crea gruppo',
+    'editGroup' => 'Modifica gruppo',
     'settings' => [
-        'options' => 'Options',
-        'account' => 'User account',
+        'options' => 'Opzioni',
+        'account' => 'Account utente',
         'oauth' => [
-            'tokens' => 'OAuth tokens',
-            'generatePAT' => 'New personal token',
+            'tokens' => 'OAuth Tokens',
+            'generatePAT' => 'Nuovo token personale',
         ],
         'webauthn' => [
-            'editCredential' => 'Device edit',
-            'devices' => 'WebAuthn devices',
+            'editCredential' => 'Modifica dispositivo',
+            'devices' => 'Dispositivi WebAuthn',
         ],
     ],
-    'login' => 'Login',
-    'register' => 'Register',
-    'autolock' => 'Auto lock',
+    'login' => 'Accedi',
+    'register' => 'Registrati',
+    'autolock' => 'Blocco automatico',
     'password' => [
-        'request' => 'Reset password',
-        'reset' => 'New password',
+        'request' => 'Reimposta password',
+        'reset' => 'Nuova password',
     ],
     'webauthn' => [
-        'lost' => 'Account recovery',
-        'recover' => 'Register a new device',
+        'lost' => 'Recupero dell\'account',
+        'recover' => 'Aggiungi dispositivo',
     ],
     'flooded' => 'Flood',
-    'genericError' => 'Error',
-    '404' => 'Item not found',
-    'about' => 'About',
+    'genericError' => 'Errore',
+    '404' => 'Elemento non trovato',
+    'about' => 'Informazioni',
     'admin' =>  [
-        'appSetup' => 'App setup',
-        'users' => 'Users management',
-        'createUser' => 'Create user',
-        'manageUser' => 'Manage user',
+        'appSetup' => 'Impostazioni App',
+        'users' => 'Gestione utenti',
+        'createUser' => 'Crea utente',
+        'manageUser' => 'Gestione utenti',
         'logs' => [
-            'access' => 'Access log'
+            'access' => 'Registro accessi'
         ]
     ]
 ];

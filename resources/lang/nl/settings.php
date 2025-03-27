@@ -43,6 +43,7 @@ return [
     ],
     'make_sure_copy_token' => 'Zorg ervoor dat je het persoonlijke toegangs-token nu kopieert of opschrijft. Je kunt het later niet meer zien!',
     'data_input' => 'Gegevensinvoer',
+    'settings_managed_by_administrator' => 'Some settings are being managed by your administrator',
     'forms' => [
         'edit_settings' => 'Wijzig instellingen',
         'setting_saved' => 'Instellingen opgeslagen',
@@ -58,19 +59,23 @@ return [
             'help' => 'De tijdzone is van toepassing op alle datums en tijden die in de applicatie worden weergegeven'
         ],
         'show_otp_as_dot' => [
-            'label' => 'Toon gegenereerde <abbr title="One-Time Password">OTP</abbr> als punt',
-            'help' => 'Vervang gegenereerde wachtwoordtekens door *** om vertrouwelijkheid te garanderen. Beperk de copy/paste functie niet'
+            'label' => 'Show generated OTP as dot',
+            'help' => 'Replace generated password characters with *** to ensure confidentiality. Does not affect the copy/paste feature'
         ],
         'reveal_dotted_otp' => [
-            'label' => 'Onthullen vervaagd <abbr title="One-Time Password">OTP</abbr>',
+            'label' => 'Reveal obscured OTP',
             'help' => 'Laat de mogelijkheid om tijdelijk Dot-Obscured wachtwoorden te onthullen'
         ],
         'close_otp_on_copy' => [
-            'label' => 'Sluiten <abbr title="One-Time Password">OTP</abbr> na kopiëren',
+            'label' => 'Close OTP after copy',
             'help' => 'Klik op een gegenereerd wachtwoord om het automatisch te kopiëren op het scherm'
         ],
+        'show_next_otp' => [
+            'label' => 'Show next OTP',
+            'help' => 'Preview the next password, i.e. the password that will replace the current password when it expires. Preferences set for the current OTP also apply to the next one (formatting, show as dot)'
+        ],
         'auto_close_timeout' => [
-            'label' => 'Automatisch sluiten <abbr title="One-Time Password">OTP</abbr>',
+            'label' => 'Auto close OTP',
             'help' => 'Automatisch het scherm-wachtwoord verbergen na een time-out. Dit voorkomt onnodige verzoeken voor nieuwe wachtwoorden als u de wachtwoordweergave vergeet te sluiten.'
         ],
         'clear_search_on_copy' => [
@@ -82,7 +87,7 @@ return [
             'help' => 'Wanneer aangedrongen, forceer de sorteerfunctie om rekeningen op een hoofdgevoelige basis te sorteren'
         ],
         'copy_otp_on_display' => [
-            'label' => 'Kopieer <abbr title="One-Time Password">OTP</abbr> bij weergave',
+            'label' => 'Copy OTP on display',
             'help' => 'Automatisch een gegenereerd wachtwoord kopiëren direct nadat het op het scherm verschijnt. Vanwege de beperkingen van browsers wordt alleen het eerste <abbr title="Time-based One-Time Password">TOTP</abbr> wachtwoord gekopieerd, niet de roterende wachtwoord'
         ],
         'use_basic_qrcode_reader' => [

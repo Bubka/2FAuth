@@ -43,6 +43,7 @@ return [
     ],
     'make_sure_copy_token' => 'Уверете се, че сте копирали вашия личен токен за достъп. Няма да можете да го видите отново!',
     'data_input' => 'Въвеждане на данни',
+    'settings_managed_by_administrator' => 'Some settings are being managed by your administrator',
     'forms' => [
         'edit_settings' => 'Редактиране на настройките',
         'setting_saved' => 'Настройките са запазени',
@@ -58,19 +59,23 @@ return [
             'help' => 'The time zone applied to all dates and times displayed in the application'
         ],
         'show_otp_as_dot' => [
-            'label' => 'Показване на генерираните еднократни пароли като точка',
-            'help' => 'Заменете генерираните знаци за парола с ***, за да осигурите поверителност. Не засягайте функцията за копиране/поставяне'
+            'label' => 'Show generated OTP as dot',
+            'help' => 'Replace generated password characters with *** to ensure confidentiality. Does not affect the copy/paste feature'
         ],
         'reveal_dotted_otp' => [
-            'label' => 'Reveal obscured <abbr title="One-Time Password">OTP</abbr>',
+            'label' => 'Reveal obscured OTP',
             'help' => 'Let the ability to temporarily reveal Dot-Obscured passwords'
         ],
         'close_otp_on_copy' => [
-            'label' => 'Затворете <abbr title="One-Time Password">OTP</abbr> след копиране',
+            'label' => 'Close OTP after copy',
             'help' => 'Click on a generated password to copy it automatically hides it from the screen'
         ],
+        'show_next_otp' => [
+            'label' => 'Show next OTP',
+            'help' => 'Preview the next password, i.e. the password that will replace the current password when it expires. Preferences set for the current OTP also apply to the next one (formatting, show as dot)'
+        ],
         'auto_close_timeout' => [
-            'label' => 'Auto close <abbr title="One-Time Password">OTP</abbr>',
+            'label' => 'Auto close OTP',
             'help' => 'Automatically hide on-screen password after a timeout. This avoids unnecessary requests for fresh passwords if you forget to close the password view.'
         ],
         'clear_search_on_copy' => [
@@ -82,7 +87,7 @@ return [
             'help' => 'When invoked, force the Sort function to sort accounts on a case-sensitive basis'
         ],
         'copy_otp_on_display' => [
-            'label' => 'Копирайте <abbr title="One-Time Password">OTP</abbr> при показване',
+            'label' => 'Copy OTP on display',
             'help' => 'Автоматично копиране на генерирана парола веднага след като се появи на екрана. Поради ограниченията на браузърите само първата <abbr title="Time-based One-Time Password">TOTP</abbr> парола ще бъде копирана, а не ротационните'
         ],
         'use_basic_qrcode_reader' => [

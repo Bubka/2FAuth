@@ -14,7 +14,7 @@ return [
     */
 
     'admin' => 'Администратор',
-    'admin_panel' => 'Admin panel',
+    'admin_panel' => 'Административная панель',
     'app_setup' => 'Настройки приложения',
     'auth' => 'Авторизация',
     'registrations' => 'Регистрации',

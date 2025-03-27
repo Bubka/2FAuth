@@ -78,7 +78,7 @@ return [
         ],
         'plain_text' => 'साधारण टेक्स्ट',
         'otp_type' => [
-            'label' => 'बनाने के लिए <abbr title="वन-टाइम पासवर्ड">OTP</abbr> का प्रकार चुनें',
+            'label' => 'Choose the type of OTP to create',
             'help' => 'समय-आधारित OTP या HMAC-आधारित OTP या स्टीम OTP'
         ],
         'digits' => [

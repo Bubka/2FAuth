@@ -184,7 +184,7 @@ return [
             'image' => 'Поддерживаемый формат - jpeg, png, bmp, gif, svg или webp.',
         ],
         'uri' => [
-            'regex' => 'Значение поля :attribute не является корректным OTPauth URI.',
+            'regex' => 'Значение поля :attribute не является корректным OTPAuth URI.',
         ],
         'otp_type' => [
             'in' => 'Значение поля :attribute не поддерживается.',

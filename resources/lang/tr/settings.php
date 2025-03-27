@@ -29,7 +29,7 @@ return [
     'account_linked_to_sso_x_provider' => ':provider hesabınızı kullanarak SSO girişi yaptınız. Bilgilerinizi buradan değil :provider üzerinden değiştirebilirsiniz.',
     'general' => 'Genel',
     'security' => 'Güvenlik',
-    'notifications' => 'Notifications',
+    'notifications' => 'Bildirimler',
     'profile' => 'Profil',
     'change_password' => 'Parola değiştir',
     'personal_access_tokens' => 'Kişisel erişim tokenleri',
@@ -43,6 +43,7 @@ return [
     ],
     'make_sure_copy_token' => 'Kişisel tokeninizi şu anda kopyaladığınızdan emin olun. Bir daha görebilme şansınız olmayacak!',
     'data_input' => 'Veri girişi',
+    'settings_managed_by_administrator' => 'Some settings are being managed by your administrator',
     'forms' => [
         'edit_settings' => 'Ayarları düzenle',
         'setting_saved' => 'Ayarlar kaydedildi',
@@ -54,35 +55,39 @@ return [
             'help' => '2FAuth\'un gösterileceği dili değiştirir. Buradaki diller tamamlanmış olup tarayıcınız tarafından tercih edilen dili değiştirmek için seçim yapabilirsiniz.'
         ],
         'timezone' => [
-            'label' => 'Time zone',
-            'help' => 'The time zone applied to all dates and times displayed in the application'
+            'label' => 'Saat dilimi',
+            'help' => 'Saat dilimi, uygulamada gösterilen tüm tarih ve saatler için uygulandı'
         ],
         'show_otp_as_dot' => [
-            'label' => 'Oluşturulan <abbr title="One-Time Password">OTP\'yi</abbr> noktalar olarak göster',
-            'help' => 'Oluşturulan paroladaki karakterli, güvenliği arttırmak için, *** olarak gösterir. Kopyala/yapıştır özelliğini etkilemez'
+            'label' => 'Show generated OTP as dot',
+            'help' => 'Replace generated password characters with *** to ensure confidentiality. Does not affect the copy/paste feature'
         ],
         'reveal_dotted_otp' => [
-            'label' => 'Gizlenmiş <abbr title="One-Time Password">OTP\'yi</abbr> göster',
+            'label' => 'Reveal obscured OTP',
             'help' => 'Noktalar şeklinde gösterilen parolanın geçici olarak gösterilmesini sağlar'
         ],
         'close_otp_on_copy' => [
-            'label' => 'Kopyaladıktan sonra <abbr title="One-Time Password">OTP\'yi</abbr> kapat',
-            'help' => 'Click on a generated password to copy it automatically hides it from the screen'
+            'label' => 'Close OTP after copy',
+            'help' => 'Oluşturulan kodu kopyalamak için tıkladıktan sonra parolanın ekrandan kaldırılmasını sağlar'
+        ],
+        'show_next_otp' => [
+            'label' => 'Show next OTP',
+            'help' => 'Preview the next password, i.e. the password that will replace the current password when it expires. Preferences set for the current OTP also apply to the next one (formatting, show as dot)'
         ],
         'auto_close_timeout' => [
-            'label' => 'Auto close <abbr title="One-Time Password">OTP</abbr>',
-            'help' => 'Automatically hide on-screen password after a timeout. This avoids unnecessary requests for fresh passwords if you forget to close the password view.'
+            'label' => 'Auto close OTP',
+            'help' => 'Belirli bir süre sonra ekranda gösterilen kodu otomatik olarak sakla. Bu, kod görünümünü kapatmayı unutursanız gereksiz yere yeni kod isteklerinin önüne geçer.'
         ],
         'clear_search_on_copy' => [
             'label' => 'Kopyaladıktan sonra Aramayı Temizle',
             'help' => 'Bir kod panoya kopyalandıktan hemen sonra Arama kutusunu temizler'
         ],
         'sort_case_sensitive' => [
-            'label' => 'Sort case sensitive',
-            'help' => 'When invoked, force the Sort function to sort accounts on a case-sensitive basis'
+            'label' => 'Büyük/küçük harfe duyarlı sıralama',
+            'help' => 'Etkinleştirildiğinde, Sıralama işlevini hesapları büyük/küçük harfe duyarlı bir şekilde sıralayacak şekilde zorlar'
         ],
         'copy_otp_on_display' => [
-            'label' => '<abbr title="One-Time Password">OTP\'yi</abbr> görününce kopyala',
+            'label' => 'Copy OTP on display',
             'help' => 'Oluşturulan parolayı, ekranda görünür görünmez, otomatik olarak kopyalar. Tarayıcı sınırlandırmaları nedeniyle, yenilenenler değil yalnızca ilk <abbr title="Time-based One-Time Password">TOTP</abbr> kopyalanır'
         ],
         'use_basic_qrcode_reader' => [
@@ -91,7 +96,7 @@ return [
         ],
         'display_mode' => [
             'label' => 'Görüntüleme modu',
-            'help' => 'Hesapların liste olarak mı yoksa ızgara olarak mı görüntülenmesini istediğinizi seçin'
+            'help' => 'Hesapların nasıl görünmesini istediğinizi seçin'
         ],
         'password_format' => [
             'label' => 'Parola gösterimi',
@@ -114,7 +119,7 @@ return [
         'automatic' => 'Otomatik',
         'show_accounts_icons' => [
             'label' => 'Simgeleri göster',
-            'help' => 'Show account icons in the main view'
+            'help' => 'Ana görünümde hesap simgelerini göster'
         ],
         'get_official_icons' => [
             'label' => 'Özgün simgeleri al',
@@ -133,8 +138,8 @@ return [
             'help' => 'OTP kopyalandığında her zaman varsayılan gruba döner',
         ],
         'auto_save_qrcoded_account' => [
-            'label' => 'Auto-save accounts',
-            'help' => 'New accounts are automatically registered after scanning or uploading a QR code, no need to click a Save button',
+            'label' => 'Hesapları otomatik kaydet',
+            'help' => 'Yeni hesaplar, tarandıktan veya QR kodu yüklendikten sonra otomatik olarak kaydedilir. "Kaydet" butonuna tıklamanıza gerek kalmaz',
         ],
         'useDirectCapture' => [
             'label' => 'Doğrudan giriş',
@@ -153,16 +158,16 @@ return [
             'help' => '<abbr title="One-Time Passwords">OTP\'lerin</abbr> nasıl ve ne zaman gösterileceğini ayarlar.<br/>',
         ],
         'notify_on_new_auth_device' => [
-            'label' => 'On new device',
-            'help' => 'Get an email when a new device connects to your 2FAuth account for the first time'
+            'label' => 'Yeni cihazda',
+            'help' => 'Yeni bir cihaz 2FAuth hesabınıza ilk kez eriştiğinde bir eposta alın'
         ],
         'notify_on_failed_login' => [
-            'label' => 'On failed login',
-            'help' => 'Get an email each time an attempt to connect to your 2FAuth account fails'
+            'label' => 'Başarısız girişte',
+            'help' => '2FAuth hesabınıza başarısız bir bağlanma denemesi olduğunda eposta alın'
         ],
         'show_email_in_footer' => [
-            'label' => 'Show email in footer',
-            'help' => 'Display the logged-in user\'s email in the footer instead of direct navigation links. The links are then available in a menu behind a click/tap on the email address.'
+            'label' => 'Epostayı alt bilgide göster',
+            'help' => 'Oturum açmış kullanıcının epostasını doğrudan gezinme bağlantıları yerine altbilgide görüntüleyin. Bağlantılara, epostaya tıkladıktan sonra açılan menüden erişilebilir.'
         ],
         'otp_generation_on_request' => 'Tıkladıktan/dokunduktan sonra',
         'otp_generation_on_request_legend' => 'Tek, kendi görünüşünde',
@@ -173,7 +178,7 @@ return [
         'never' => 'Asla',
         'on_otp_copy' => 'Güvenlik kodu kopyalandığında',
         '1_minutes' => '1 dakika sonra',
-        '2_minutes' => 'After 2 minutes',
+        '2_minutes' => '2 dakika sonra',
         '5_minutes' => '5 dakika sonra',
         '10_minutes' => '10 dakika sonra',
         '15_minutes' => '15 dakika sonra',

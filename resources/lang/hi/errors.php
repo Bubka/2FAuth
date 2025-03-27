@@ -74,4 +74,6 @@ return [
     'qrcode_has_invalid_checksum' => 'QR Code का चेकसम अमान्य है',
     'no_readable_qrcode' => 'कोई QR Code पाठ्य नहीं है',
     'failed_icon_store_database_toggling' => 'Migration of icons failed. The setting has been restored to its previous value.',
+    'failed_to_retrieve_app_settings' => 'Failed to retrieve application settings',
+    'reserved_name_please_choose_something_else' => 'Reserved name, please choose something else',
 ];

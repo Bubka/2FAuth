@@ -43,6 +43,7 @@ return [
     ],
     'make_sure_copy_token' => 'Certifique-se de salvar seu token de acesso pessoal agora. Você não poderá vê-lo novamente!',
     'data_input' => 'Entrada de dados',
+    'settings_managed_by_administrator' => 'Some settings are being managed by your administrator',
     'forms' => [
         'edit_settings' => 'Editar configurações',
         'setting_saved' => 'Configurações salvas',
@@ -58,19 +59,23 @@ return [
             'help' => 'O fuso horário aplicado a todas as datas e horas exibidas na aplicação'
         ],
         'show_otp_as_dot' => [
-            'label' => 'Exibir <abbr title="One-Time Password">OTP</abbr> gerado como pontos',
-            'help' => 'Substitua os caracteres de senha gerados com *** para garantir a confidencialidade. Não afete o recurso copiar/colar'
+            'label' => 'Show generated OTP as dot',
+            'help' => 'Replace generated password characters with *** to ensure confidentiality. Does not affect the copy/paste feature'
         ],
         'reveal_dotted_otp' => [
-            'label' => 'Revelar <abbr title="One-Time Password">OTP</abbr> oculto',
+            'label' => 'Reveal obscured OTP',
             'help' => 'Permitir a capacidade de revelar temporariamente senhas obscurecidas por pontos'
         ],
         'close_otp_on_copy' => [
-            'label' => 'Fechar <abbr title="One-Time Password">OTP</abbr> após copiar',
+            'label' => 'Close OTP after copy',
             'help' => 'Clicar para copiar uma senha gerada a ocultará automaticamente da tela'
         ],
+        'show_next_otp' => [
+            'label' => 'Show next OTP',
+            'help' => 'Preview the next password, i.e. the password that will replace the current password when it expires. Preferences set for the current OTP also apply to the next one (formatting, show as dot)'
+        ],
         'auto_close_timeout' => [
-            'label' => 'Fechar automaticamente <abbr title="One-Time Password">OTP</abbr>',
+            'label' => 'Auto close OTP',
             'help' => 'Ocultar automaticamente a senha na tela após um tempo limite. Isso evita solicitações desnecessárias de novas senhas se você esquecer de fechar a tela de senha.'
         ],
         'clear_search_on_copy' => [
@@ -82,7 +87,7 @@ return [
             'help' => 'Quando acionado, forçar a função Ordenar a organizar as contas de forma que diferencie entre maiúsculas e minúsculas'
         ],
         'copy_otp_on_display' => [
-            'label' => 'Copiar <abbr title="One-Time Password">OTP</abbr> na tela',
+            'label' => 'Copy OTP on display',
             'help' => 'Copiar automaticamente uma senha gerada depois que ela aparecer na tela. Devido a limitações de navegadores, apenas a primeira senha <abbr title="Time-based One-Time Password">TOTP</abbr> será copiada, não as rotativas'
         ],
         'use_basic_qrcode_reader' => [

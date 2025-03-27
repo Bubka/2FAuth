@@ -10,8 +10,8 @@ return [
     |
     */
 
-    'browser_preference' => 'Preferencje przeglądarki',
-    'en' => 'Angielski (język angielski)',
+    'browser_preference' => 'Browser preference',
+    'en' => 'English (English)',
     'fr' => 'Français (French)',
     'de' => 'Deutsch (German)',
     'es' => 'Español (Spanish)',

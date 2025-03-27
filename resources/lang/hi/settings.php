@@ -43,6 +43,7 @@ return [
     ],
     'make_sure_copy_token' => 'अपने नए व्यक्तिगत एक्सेस टोकन को अभी कॉपी करना सुनिश्चित करें। आप इसे दोबारा नहीं देख पाएंगे!',
     'data_input' => 'डेटा इनपुट',
+    'settings_managed_by_administrator' => 'Some settings are being managed by your administrator',
     'forms' => [
         'edit_settings' => 'सेटिंग्स बदलें',
         'setting_saved' => 'सेटिंग्स सेव हो गयी',
@@ -58,19 +59,23 @@ return [
             'help' => 'एप में दिखाए गए सभी समय और तारीखों पर यह टाइम ज़ोन लागू होगा'
         ],
         'show_otp_as_dot' => [
-            'label' => 'जनरेट किए गए <abbr title="वन-टाइम पासवर्ड">OTP</abbr> को डॉट के रूप में दिखाएं',
-            'help' => 'गोपनीयता सुनिश्चित करने के लिए जनरेट किए गए पासवर्ड वर्णों को *** से बदलें। कॉपी/पेस्ट सुविधा को प्रभावित न करें'
+            'label' => 'Show generated OTP as dot',
+            'help' => 'Replace generated password characters with *** to ensure confidentiality. Does not affect the copy/paste feature'
         ],
         'reveal_dotted_otp' => [
-            'label' => 'अस्पष्ट <abbr title="वन-टाइम पासवर्ड">OTP</abbr> को प्रकट करें',
+            'label' => 'Reveal obscured OTP',
             'help' => 'डॉट-ऑब्स्क्योर्ड पासवर्ड को अस्थायी रूप से प्रकट करने की क्षमता दें'
         ],
         'close_otp_on_copy' => [
-            'label' => 'कॉपी करने के बाद <abbr title="वन-टाइम पासवर्ड">OTP</abbr> बंद करें',
+            'label' => 'Close OTP after copy',
             'help' => 'Click on a generated password to copy it automatically hides it from the screen'
         ],
+        'show_next_otp' => [
+            'label' => 'Show next OTP',
+            'help' => 'Preview the next password, i.e. the password that will replace the current password when it expires. Preferences set for the current OTP also apply to the next one (formatting, show as dot)'
+        ],
         'auto_close_timeout' => [
-            'label' => 'Auto close <abbr title="One-Time Password">OTP</abbr>',
+            'label' => 'Auto close OTP',
             'help' => 'Automatically hide on-screen password after a timeout. This avoids unnecessary requests for fresh passwords if you forget to close the password view.'
         ],
         'clear_search_on_copy' => [
@@ -82,7 +87,7 @@ return [
             'help' => 'When invoked, force the Sort function to sort accounts on a case-sensitive basis'
         ],
         'copy_otp_on_display' => [
-            'label' => 'डिस्प्ले पर <abbr title="वन-टाइम पासवर्ड">OTP</abbr> कॉपी करें',
+            'label' => 'Copy OTP on display',
             'help' => 'जनरेट किया गया पासवर्ड स्क्रीन पर दिखाई देने के तुरंत बाद स्वचालित रूप से कॉपी हो जाता है। ब्राउज़र की सीमाओं के कारण, बदलने वाले पासवर्ड नहीं, केवल पहला <abbr title="समय-आधारित वन-टाइम पासवर्ड">TOTP</abbr> पासवर्ड कॉपी किया जाएगा'
         ],
         'use_basic_qrcode_reader' => [

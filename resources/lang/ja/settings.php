@@ -43,6 +43,7 @@ return [
     ],
     'make_sure_copy_token' => '今すぐ必ずこの個人アクセストークンをコピーしてください。このトークンは二度と表示されません。',
     'data_input' => 'データの読み込み',
+    'settings_managed_by_administrator' => 'Some settings are being managed by your administrator',
     'forms' => [
         'edit_settings' => '設定を編集',
         'setting_saved' => '設定を保存しました',
@@ -58,19 +59,23 @@ return [
             'help' => 'このアプリケーションで表示するすべての日付と時刻に適用されるタイムゾーン'
         ],
         'show_otp_as_dot' => [
-            'label' => '生成された<abbr title="ワンタイムパスワード">OTP</abbr>を●で表示',
-            'help' => '生成されたパスワード文字を見られないよう ● に置き換えます。コピーペーストには影響しません。'
+            'label' => 'Show generated OTP as dot',
+            'help' => 'Replace generated password characters with *** to ensure confidentiality. Does not affect the copy/paste feature'
         ],
         'reveal_dotted_otp' => [
-            'label' => '隠された<abbr title="ワンタイムパスワード">OTP</abbr>を再表示',
+            'label' => 'Reveal obscured OTP',
             'help' => '●で隠されたパスワードを一時的に表示できるようにします。'
         ],
         'close_otp_on_copy' => [
-            'label' => 'コピー後に<abbr title="ワンタイムパスワード">OTP</abbr>を隠す',
+            'label' => 'Close OTP after copy',
             'help' => '生成されたパスワードをクリックしてコピー後、自動的に非表示にします。'
         ],
+        'show_next_otp' => [
+            'label' => 'Show next OTP',
+            'help' => 'Preview the next password, i.e. the password that will replace the current password when it expires. Preferences set for the current OTP also apply to the next one (formatting, show as dot)'
+        ],
         'auto_close_timeout' => [
-            'label' => '<abbr title="One-Time Password">OTP</abbr> を自動で隠す',
+            'label' => 'Auto close OTP',
             'help' => '一定時間後に画面上のパスワードを自動で非表示にします。うっかりパスワードを表示させたまま、無駄なパスワード更新リクエストが送られるのを防ぎます。'
         ],
         'clear_search_on_copy' => [
@@ -82,7 +87,7 @@ return [
             'help' => 'オンにすると、並び替えで大文字と小文字のアカウント名を分離させます。'
         ],
         'copy_otp_on_display' => [
-            'label' => '表示時に<abbr title="ワンタイムパスワード">OTP</abbr>をコピー',
+            'label' => 'Copy OTP on display',
             'help' => '画面に表示された瞬間に生成されたパスワードを自動的にコピーします。 ブラウザの制約により、最初の<abbr title="時間ベースワンタイムパスワード">TOTP</abbr>パスワードのみがコピーされ、更新後のものはコピーされません。'
         ],
         'use_basic_qrcode_reader' => [

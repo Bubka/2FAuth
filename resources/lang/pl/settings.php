@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'settings' => 'Settings',
+    'settings' => 'Ustawienia',
     'preferences' => 'Preferences',
     'account' => 'Account',
     'oauth' => 'OAuth',
@@ -43,6 +43,7 @@ return [
     ],
     'make_sure_copy_token' => 'Make sure to copy your personal access token now. You won’t be able to see it again!',
     'data_input' => 'Data input',
+    'settings_managed_by_administrator' => 'Some settings are being managed by your administrator',
     'forms' => [
         'edit_settings' => 'Edit settings',
         'setting_saved' => 'Settings saved',
@@ -58,19 +59,23 @@ return [
             'help' => 'The time zone applied to all dates and times displayed in the application'
         ],
         'show_otp_as_dot' => [
-            'label' => 'Show generated <abbr title="One-Time Password">OTP</abbr> as dot',
-            'help' => 'Replace generated password caracters with *** to ensure confidentiality. Do not affect the copy/paste feature'
+            'label' => 'Show generated OTP as dot',
+            'help' => 'Replace generated password characters with *** to ensure confidentiality. Does not affect the copy/paste feature'
         ],
         'reveal_dotted_otp' => [
-            'label' => 'Reveal obscured <abbr title="One-Time Password">OTP</abbr>',
+            'label' => 'Reveal obscured OTP',
             'help' => 'Let the ability to temporarily reveal Dot-Obscured passwords'
         ],
         'close_otp_on_copy' => [
-            'label' => 'Close <abbr title="One-Time Password">OTP</abbr> after copy',
+            'label' => 'Close OTP after copy',
             'help' => 'Click on a generated password to copy it automatically hides it from the screen'
         ],
+        'show_next_otp' => [
+            'label' => 'Show next OTP',
+            'help' => 'Preview the next password, i.e. the password that will replace the current password when it expires. Preferences set for the current OTP also apply to the next one (formatting, show as dot)'
+        ],
         'auto_close_timeout' => [
-            'label' => 'Auto close <abbr title="One-Time Password">OTP</abbr>',
+            'label' => 'Auto close OTP',
             'help' => 'Automatically hide on-screen password after a timeout. This avoids unnecessary requests for fresh passwords if you forget to close the password view.'
         ],
         'clear_search_on_copy' => [
@@ -82,7 +87,7 @@ return [
             'help' => 'When invoked, force the Sort function to sort accounts on a case-sensitive basis'
         ],
         'copy_otp_on_display' => [
-            'label' => 'Copy <abbr title="One-Time Password">OTP</abbr> on display',
+            'label' => 'Copy OTP on display',
             'help' => 'Automatically copy a generated password right after it appears on screen. Due to browsers limitations, only the first <abbr title="Time-based One-Time Password">TOTP</abbr> password will be copied, not the rotating ones'
         ],
         'use_basic_qrcode_reader' => [
@@ -182,7 +187,7 @@ return [
         '1_day' => 'After 1 day',
         'livescan' => 'QR code livescan',
         'upload' => 'QR code upload',
-        'advanced_form' => 'Advanced form',
+        'advanced_form' => 'Zaawansowany formularz',
     ],
 
 ];

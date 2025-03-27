@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'cancel' => 'Cancel',
+    'cancel' => 'Anuluj',
     'update' => 'Update',
     'copy' => 'Copy',
     'copy_to_clipboard' => 'Copy to clipboard',
@@ -45,7 +45,7 @@ return [
     'sort_descending' => 'Sort descending',
     'sort_ascending' => 'Sort ascending',
     'rename' => 'Rename',
-    'new_name' => 'New name',
+    'new_name' => 'Nowa nazwa',
     'options' => 'Options',
     'reload' => 'Reload',
     'refresh' => 'Refresh',
@@ -65,7 +65,7 @@ return [
     'logos_by' => 'Logos by',
     'search' => 'Search',
     'resources' => 'Resources',
-    'check_for_update' => 'Check for new version',
+    'check_for_update' => 'Sprawdź dostępność aktualizacji',
     'check_for_update_help' => 'Automatically check (once a week) and warn when a new release of 2FAuth is published on Github',
     'you_are_up_to_date' => 'This instance is up-to-date',
     '2fauth_description' => 'A web app to manage your Two-Factor Authentication (2FA) accounts and generate their security codes',
@@ -91,4 +91,5 @@ return [
     'one_month' => '1 mo.',
     'x_month' => ':x mos.',
     'one_year' => '1 yr.',
+    'copy_next_password' => 'Copy next password to clipboard',
 ];

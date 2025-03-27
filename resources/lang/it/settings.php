@@ -13,84 +13,89 @@ return [
     |
     */
 
-    'settings' => 'Settings',
-    'preferences' => 'Preferences',
+    'settings' => 'Impostazioni',
+    'preferences' => 'Preferenze',
     'account' => 'Account',
     'oauth' => 'OAuth',
     'webauthn' => 'WebAuthn',
     'tokens' => 'Tokens',
-    'options' => 'Options',
-    'user_preferences' => 'User preferences',
-    'admin_settings' => 'Admin settings',
+    'options' => 'Opzioni',
+    'user_preferences' => 'Preferenze utente',
+    'admin_settings' => 'Impostazioni amministratore',
     'confirm' => [
 
     ],
-    'you_are_administrator' => 'You are an administrator',
-    'account_linked_to_sso_x_provider' => 'You signed-in via SSO using your :provider account. Your information cannot be changed here but on :provider.',
-    'general' => 'General',
-    'security' => 'Security',
-    'notifications' => 'Notifications',
-    'profile' => 'Profile',
-    'change_password' => 'Change password',
-    'personal_access_tokens' => 'Personal access tokens',
-    'token_legend' => 'Personal Access Tokens allow any app to authenticate to the 2Fauth API. You should specify the access token as a Bearer token in the authorization header of consumer apps requests.',
-    'generate_new_token' => 'Generate a new token',
-    'revoke' => 'Revoke',
-    'token_revoked' => 'Token successfully revoked',
-    'revoking_a_token_is_permanent' => 'Revoking a token is permanent',
+    'you_are_administrator' => 'Sei un amministratore',
+    'account_linked_to_sso_x_provider' => 'Hai effettuato l\'accesso tramite SSO utilizzando il tuo account :provider. Le tue informazioni non possono essere modificate qui ma su :provider.',
+    'general' => 'Generale',
+    'security' => 'Sicurezza',
+    'notifications' => 'Notifiche',
+    'profile' => 'Profilo',
+    'change_password' => 'Cambia password',
+    'personal_access_tokens' => 'Token di accesso personali',
+    'token_legend' => 'I token di accesso personale consentono a qualsiasi app di autenticarsi all\'API 2Fauth. È necessario specificare il token di accesso come token Bearer nell\'intestazione di autorizzazione delle richieste delle app consumer.',
+    'generate_new_token' => 'Genera un nuovo token',
+    'revoke' => 'Revoca',
+    'token_revoked' => 'Token revocato con successo',
+    'revoking_a_token_is_permanent' => 'Revocare un token è permanente',
     'confirm' => [
-        'revoke' => 'Are you sure you want to revoke this token?',
+        'revoke' => 'Sei sicuro di voler revocare questo token?',
     ],
-    'make_sure_copy_token' => 'Make sure to copy your personal access token now. You won’t be able to see it again!',
-    'data_input' => 'Data input',
+    'make_sure_copy_token' => 'Assicurati di copiare il tuo token di accesso personale ora. Non sarai in grado di vederlo di nuovo!',
+    'data_input' => 'Inserire i dati',
+    'settings_managed_by_administrator' => 'Some settings are being managed by your administrator',
     'forms' => [
-        'edit_settings' => 'Edit settings',
-        'setting_saved' => 'Settings saved',
-        'new_token' => 'New token',
-        'some_translation_are_missing' => 'Some translations are missing using the browser preferred language?',
-        'help_translate_2fauth' => 'Help translate 2FAuth',
+        'edit_settings' => 'Modifica impostazioni',
+        'setting_saved' => 'Impostazioni salvate!',
+        'new_token' => 'Nuovo token',
+        'some_translation_are_missing' => 'Mancano alcune traduzioni usando la lingua preferita del browser?',
+        'help_translate_2fauth' => 'Aiutaci a tradurre 2FAuth',
         'language' => [
-            'label' => 'Language',
-            'help' => 'Language used to translate the 2FAuth user interface. Named languages are complete, set the one of your choice to override your browser preference.'
+            'label' => 'Lingua',
+            'help' => 'Lingua utilizzata per tradurre l\'interfaccia utente 2FAuth. Le lingue con nome sono complete, imposta quella scelta per sovrascrivere le preferenze del browser.'
         ],
         'timezone' => [
-            'label' => 'Time zone',
-            'help' => 'The time zone applied to all dates and times displayed in the application'
+            'label' => 'Fuso orario',
+            'help' => 'Il fuso orario è applicato a tutte le date e gli orari mostrati nell\'applicazione'
         ],
         'show_otp_as_dot' => [
-            'label' => 'Show generated <abbr title="One-Time Password">OTP</abbr> as dot',
-            'help' => 'Replace generated password caracters with *** to ensure confidentiality. Do not affect the copy/paste feature'
+            'label' => 'Show generated OTP as dot',
+            'help' => 'Replace generated password characters with *** to ensure confidentiality. Does not affect the copy/paste feature'
         ],
         'reveal_dotted_otp' => [
-            'label' => 'Reveal obscured <abbr title="One-Time Password">OTP</abbr>',
-            'help' => 'Let the ability to temporarily reveal Dot-Obscured passwords'
+            'label' => 'Reveal obscured OTP',
+            'help' => 'Lascia la possibilità di rivelare temporaneamente le password oscurate'
         ],
         'close_otp_on_copy' => [
-            'label' => 'Close <abbr title="One-Time Password">OTP</abbr> after copy',
-            'help' => 'Click on a generated password to copy it automatically hides it from the screen'
+            'label' => 'Close OTP after copy',
+            'help' => 'Fare clic su una password generata per copiarla automaticamente nascondendola dallo schermo'
+        ],
+        'show_next_otp' => [
+            'label' => 'Show next OTP',
+            'help' => 'Preview the next password, i.e. the password that will replace the current password when it expires. Preferences set for the current OTP also apply to the next one (formatting, show as dot)'
         ],
         'auto_close_timeout' => [
-            'label' => 'Auto close <abbr title="One-Time Password">OTP</abbr>',
-            'help' => 'Automatically hide on-screen password after a timeout. This avoids unnecessary requests for fresh passwords if you forget to close the password view.'
+            'label' => 'Auto close OTP',
+            'help' => 'Nascondi automaticamente la password sullo schermo dopo un timeout. Questo evita richieste non necessarie di nuove password se dimentichi di chiudere la vista password.'
         ],
         'clear_search_on_copy' => [
-            'label' => 'Clear Search on copy',
-            'help' => 'Empty the Search box right after a code has been copied to the clipboard'
+            'label' => 'Svuota ricerca sulla copia',
+            'help' => 'Svuota la casella di ricerca subito dopo che un codice è stato copiato negli appunti'
         ],
         'sort_case_sensitive' => [
-            'label' => 'Sort case sensitive',
-            'help' => 'When invoked, force the Sort function to sort accounts on a case-sensitive basis'
+            'label' => 'Ordina maiuscole e minuscole',
+            'help' => 'Quando invocato, forza la funzione Ordina per ordinare gli account in base a maiuscolo/minuscolo'
         ],
         'copy_otp_on_display' => [
-            'label' => 'Copy <abbr title="One-Time Password">OTP</abbr> on display',
-            'help' => 'Automatically copy a generated password right after it appears on screen. Due to browsers limitations, only the first <abbr title="Time-based One-Time Password">TOTP</abbr> password will be copied, not the rotating ones'
+            'label' => 'Copy OTP on display',
+            'help' => 'Copia automaticamente una password generata subito dopo che appare sullo schermo. A causa delle limitazioni del browser, solo la prima password <abbr title="Time-based One-Time Password">TOTP</abbr> verrà copiata, non quelle rotanti'
         ],
         'use_basic_qrcode_reader' => [
-            'label' => 'Use basic QR code reader',
-            'help' => 'If you experiences issues when capturing QR codes enables this option to switch to a more basic but more reliable QR code reader'
+            'label' => 'Usa lettore di codice QR di base',
+            'help' => 'Se si verificano problemi durante la cattura di codici QR consente questa opzione di passare a un lettore di codice QR più semplice ma più affidabile'
         ],
         'display_mode' => [
-            'label' => 'Display mode',
+            'label' => 'Modalità Display',
             'help' => 'Choose whether you want accounts to be displayed as a list or as a grid'
         ],
         'password_format' => [
@@ -103,41 +108,41 @@ return [
         'half_legend' => 'Split digits into two equals groups',
         'trio' => 'by Trio',
         'half' => 'by Half',
-        'grid' => 'Grid',
-        'list' => 'List',
+        'grid' => 'Griglia',
+        'list' => 'Lista',
         'theme' => [
-            'label' => 'Theme',
+            'label' => 'Tema',
             'help' => 'Force a specific theme or apply the theme defined in your system/browser preferences'
         ],
-        'light' => 'Light',
-        'dark' => 'Dark',
-        'automatic' => 'Auto',
+        'light' => 'Chiaro',
+        'dark' => 'Scuro',
+        'automatic' => 'Automatico',
         'show_accounts_icons' => [
-            'label' => 'Show icons',
+            'label' => 'Mostra icone',
             'help' => 'Show account icons in the main view'
         ],
         'get_official_icons' => [
-            'label' => 'Get official icons',
+            'label' => 'Ottieni icone ufficiali',
             'help' => '(Try to) Get the official icon of the 2FA issuer when adding an account'
         ],
         'auto_lock' => [
-            'label' => 'Auto lock',
+            'label' => 'Blocco automatico',
             'help' => 'Log out the user automatically in case of inactivity. Has no effect when authentication is handled by a proxy and no custom logout url is specified.'
         ],
         'default_group' => [
-            'label' => 'Default group',
-            'help' => 'The group to which the newly created accounts are associated',
+            'label' => 'Gruppo predefinito',
+            'help' => '',
         ],
         'view_default_group_on_copy' => [
             'label' => 'View default group on copy',
             'help' => 'Always return to the default group when an OTP is copied',
         ],
         'auto_save_qrcoded_account' => [
-            'label' => 'Auto-save accounts',
+            'label' => 'Auto-salvataggio account',
             'help' => 'New accounts are automatically registered after scanning or uploading a QR code, no need to click a Save button',
         ],
         'useDirectCapture' => [
-            'label' => 'Direct input',
+            'label' => 'Input diretto',
             'help' => 'Choose whether you want to be prompted to choose an input mode among those available or if you want to directly use the default input mode',
         ],
         'defaultCaptureMode' => [
@@ -149,7 +154,7 @@ return [
             'help' => 'Save the last group filter applied and restore it on your next visit',
         ],
         'otp_generation' => [
-            'label' => 'Show Password',
+            'label' => 'Mostra Password',
             'help' => 'Set how and when <abbr title="One-Time Passwords">OTPs</abbr> are displayed.<br/>',
         ],
         'notify_on_new_auth_device' => [
@@ -170,19 +175,19 @@ return [
         'otp_generation_on_home' => 'Constantly',
         'otp_generation_on_home_legend' => 'All of them, on home',
         'otp_generation_on_home_title' => 'Show all passwords in the main view, without doing anything',
-        'never' => 'Never',
-        'on_otp_copy' => 'On security code copy',
-        '1_minutes' => 'After 1 minute',
-        '2_minutes' => 'After 2 minutes',
-        '5_minutes' => 'After 5 minutes',
-        '10_minutes' => 'After 10 minutes',
-        '15_minutes' => 'After 15 minutes',
-        '30_minutes' => 'After 30 minutes',
-        '1_hour' => 'After 1 hour',
-        '1_day' => 'After 1 day',
-        'livescan' => 'QR code livescan',
-        'upload' => 'QR code upload',
-        'advanced_form' => 'Advanced form',
+        'never' => 'Mai',
+        'on_otp_copy' => 'Alla copia del codice di sicurezza',
+        '1_minutes' => 'Dopo 1 minuto',
+        '2_minutes' => 'Dopo 2 minuti',
+        '5_minutes' => 'Dopo 5 minuti',
+        '10_minutes' => 'Dopo 10 minuti',
+        '15_minutes' => 'Dopo 15 minuti',
+        '30_minutes' => 'Dopo 30 minuti',
+        '1_hour' => 'Dopo 1 ora',
+        '1_day' => 'Dopo 1 giorno',
+        'livescan' => 'Livescan codice QR',
+        'upload' => 'Caricamento del codice QR',
+        'advanced_form' => 'Modulo avanzato',
     ],
 
 ];

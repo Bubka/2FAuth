@@ -18,7 +18,7 @@ return [
     'regards' => 'Regards',
     'test_email_settings' => [
         'subject' => '2FAuth test email',
-        'reason' => 'You are receiving this email because you requested a test email to validate the email settings of your 2FAuth instance.',
+        'reason' => 'Stai ricevendo questa email perché hai richiesto una email di prova per convalidare le impostazioni di posta elettronica della tua istanza 2FAuth.',
         'success' => 'Good news, it works :)'
     ],
     'new_device' => [

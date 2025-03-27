@@ -11,14 +11,14 @@ return [
     */
 
     'browser_preference' => 'Preferenza del browser',
-    'en' => 'English (English)',
-    'fr' => 'Français (French)',
-    'de' => 'Deutsch (German)',
-    'es' => 'Español (Spanish)',
-    'zh' => '简体中文 (Chinese Simplified)',
-    'ru' => 'Русский (Russian)',
+    'en' => 'English (Inglese)',
+    'fr' => 'Français (Francese)',
+    'de' => 'Deutsch (Tedesco)',
+    'es' => 'Español (Spagnolo)',
+    'zh' => '简体中文 (Cinese Semplificato)',
+    'ru' => 'Русский (russo)',
     'bg' => 'Български (Bulgarian)',
-    'ja' => '日本語 (Japanese)',
+    'ja' => '日本語 (Giapponese)',
     'hi' => 'हिंदी (Hindi)',
-    'tr' => 'Türkçe (Turkish)',
+    'tr' => 'Türkçe (Turco)',
 ];

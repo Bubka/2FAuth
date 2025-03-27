@@ -28,15 +28,15 @@ return [
     'account_updated' => '계정이 업데이트되었습니다',
     'accounts_deleted' => '계정이 삭제되었습니다',
     'accounts_moved' => '계정이 이동되었습니다',
-    'export_selected_accounts' => 'Export selected accounts',
-    'twofauth_export_format' => '2FAuth format',
-    'twofauth_export_format_sub' => 'Export data using the 2FAuth json schema',
-    'twofauth_export_format_desc' => 'You should prefer this option if you need to create a backup that can be restored. This format takes care of the icons.',
-    'twofauth_export_format_url' => 'The schema definition is described here:',
-    'twofauth_export_schema' => '2FAuth export schema',
+    'export_selected_accounts' => '선택한 계정 내보내기',
+    'twofauth_export_format' => '2FAuth 형식',
+    'twofauth_export_format_sub' => '2FAuth json schema를 사용하여 데이터 내보내기',
+    'twofauth_export_format_desc' => '백업 데이터를 저장하는 경우에는 이 형식을 사용하는 것이 좋습니다. 아이콘을 보존합니다.',
+    'twofauth_export_format_url' => 'Schema 정의 서술:',
+    'twofauth_export_schema' => '2FAuth schema 내보냄',
     'otpauth_export_format' => 'otpauth URIs',
-    'otpauth_export_format_sub' => 'Export data as a list of otpauth URIs',
-    'otpauth_export_format_desc' => 'otpauth URI is the most common format used to exchange 2FA data, for example in the form of a QR code when you enable 2FA on a web site. Select this if you want to switch from 2FAuth.',
+    'otpauth_export_format_sub' => '데이터를 otpauth URIs 형식으로 내보내기',
+    'otpauth_export_format_desc' => 'otpauth URI는 웹사이트에서 2FA를 활성화할 때 사용되는 QR 코드와 같이 2FA 데이터를 교환하는 데에 사용되는 가장 보편적인 형식입니다. 2FAuth에서 다른 서비스로 전환하는 경우에 선택하십시오.',
     'reveal' => '표시',
     'forms' => [
         'service' => [
@@ -69,8 +69,8 @@ return [
         'i_m_lucky_legend' => '\'자동으로 불러오기\' 버튼은 이 서비스의 공식 아이콘을 가져오려고 시도합니다. ".xyz"와 같은 도메인을 제외한 실제 서비스 이름을 오타 없이 입력해 주세요. (베타 기능)',
         'test' => '테스트',
         'group' => [
-            'label' => 'Group',
-            'help' => 'The group to which the account is to be assigned'
+            'label' => '그룹',
+            'help' => '계정을 할당할 그룹'
         ],
         'secret' => [
             'label' => '시크릿키',
@@ -78,7 +78,7 @@ return [
         ],
         'plain_text' => '일반 텍스트',
         'otp_type' => [
-            'label' => '생성할 <abbr title="One-Time Password">OTP</abbr> 유형 선택',
+            'label' => 'Choose the type of OTP to create',
             'help' => '시간 기반 OTP, HMAC 기반 OTP, Steam OTP 중 선택 가능'
         ],
         'digits' => [

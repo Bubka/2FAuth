@@ -13,10 +13,10 @@ return [
     |
     */
 
-    'accepted' => 'The :attribute field must be accepted.',
-    'accepted_if' => 'The :attribute field must be accepted when :other is :value.',
+    'accepted' => 'To :attribute pole musi zostać zaakceptowane.',
+    'accepted_if' => 'To atrybut pola musi zostać zaakceptowane gdy :other jest :value.',
     'active_url' => 'The :attribute field must be a valid URL.',
-    'after' => 'The :attribute field must be a date after :date.',
+    'after' => 'Pole :attribute musi być datą po :date.',
     'after_or_equal' => 'The :attribute field must be a date after or equal to :date.',
     'alpha' => 'The :attribute field must only contain letters.',
     'alpha_dash' => 'The :attribute field must only contain letters, numbers, dashes, and underscores.',
@@ -118,7 +118,7 @@ return [
     'not_regex' => 'The :attribute field format is invalid.',
     'numeric' => 'The :attribute field must be a number.',
     'password' => [
-        'letters' => 'The :attribute field must contain at least one letter.',
+        'letters' => ':attribute musi zawierać przynajmniej jedną literę.',
         'mixed' => 'The :attribute field must contain at least one uppercase and one lowercase letter.',
         'numbers' => 'The :attribute field must contain at least one number.',
         'symbols' => 'The :attribute field must contain at least one symbol.',
@@ -207,7 +207,7 @@ return [
             'required' => 'The uri must have a label.',
         ],
         'ids' => [
-            'regex' => 'IDs must be comma separated, without trailing comma.',
+            'regex' => 'Identyfikatory muszą być oddzielone przecinkami.',
         ],
     ],
 

@@ -88,7 +88,8 @@ return [
     'time' => 'Zaman',
     'ip_address' => 'IP Adresi',
     'device' => 'Cihaz',
-    'one_month' => '1 mo.',
-    'x_month' => ':x mos.',
-    'one_year' => '1 yr.',
+    'one_month' => '1 ay',
+    'x_month' => ':x ay',
+    'one_year' => '1 yıl',
+    'copy_next_password' => 'Copy next password to clipboard',
 ];

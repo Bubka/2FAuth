@@ -14,7 +14,7 @@ return [
     */
    
     // Laravel
-    'failed' => 'Wprowadzone poświadczenia są nieprawidłowe.',
+    'failed' => 'These credentials do not match our records.',
     'password' => 'The provided password is incorrect.',
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
 
@@ -131,8 +131,8 @@ return [
         'has_number' => 'Has number',
         'is_long_enough' => '8 characters min.',
         'mandatory_rules' => 'Mandatory',
-        'optional_rules_you_should_follow' => 'Minimum 8 znaków.',
-        'caps_lock_is_on' => 'Caps Lock jest włączony',
+        'optional_rules_you_should_follow' => 'Recommanded (highly)',
+        'caps_lock_is_on' => 'Caps lock is On',
     ],
     'sso_providers' => [
         'unknown' => 'unknown',

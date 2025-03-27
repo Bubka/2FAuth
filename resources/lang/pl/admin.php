@@ -13,8 +13,8 @@ return [
     |
     */
 
-    'admin' => 'Admin',
-    'admin_panel' => 'Admin panel',
+    'admin' => 'Administrator',
+    'admin_panel' => 'Panel administratora',
     'app_setup' => 'App setup',
     'auth' => 'Auth',
     'registrations' => 'Registrations',
@@ -66,8 +66,8 @@ return [
     'security_devices_succesfully_revoked' => 'User\'s security devices successfully revoked',
     'variables' => 'Variables',
     'cache_cleared' => 'Cache cleared',
-    'cache_optimized' => 'Cache optimized',
-    'check_now' => 'Check now',
+    'cache_optimized' => 'Zoptymalizowana pamięć podręczna',
+    'check_now' => 'Sprawdź teraz',
     'view_on_github' => 'View on Github',
     'x_is_available' => ':version is available',
     'successful_login_on' => 'Successful login on <span class="light-or-darker">:login_at</span>',
@@ -141,7 +141,7 @@ return [
         ],
         'store_icon_to_database' => [
             'label' => 'Store icons to database',
-            'help' => 'Uploaded icons are registered in the database in addition to the file system storage, which is then used only as a cache. This makes creating a 2FAuth backup much easier, as only the database has to be backed up.<br /><br />But beware, this may has some drawbacks: The database size may increase significantly if the instance hosts many large icons. It may also affect the application performance because the file system is hit more often to ensure it is synchronised with the database.',
+            'help' => 'Przesłane ikony są rejestrowane w bazie danych poza pamięcią systemową plików, która jest następnie używana tylko jako pamięć podręczna. To sprawia, że tworzenie kopii zapasowej 2FAuth jest znacznie łatwiejsze, ponieważ tylko baza danych musi być w kopii zapasowej.<br /><br />Ale zapamiętaj, może to mieć pewne wady: rozmiar bazy danych może znacznie wzrosnąć, jeśli instancja posiada wiele dużych ikon. Może to również mieć wpływ na wydajność aplikacji.',
         ],
     ],
 

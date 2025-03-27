@@ -78,7 +78,7 @@ return [
         ],
         'plain_text' => 'Чист текст',
         'otp_type' => [
-            'label' => 'Изберете типа на <abbr title="One-Time Password">OTP</abbr> за създаване',
+            'label' => 'Choose the type of OTP to create',
             'help' => 'Временен OTP или HMAC базиран OTP или Steam OTP'
         ],
         'digits' => [

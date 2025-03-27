@@ -43,6 +43,7 @@ return [
     ],
     'make_sure_copy_token' => 'Убедитесь, что вы скопировали ваш персональный токен доступа прямо сейчас. Вы не сможете увидеть его снова!',
     'data_input' => 'Ввод данных',
+    'settings_managed_by_administrator' => 'Some settings are being managed by your administrator',
     'forms' => [
         'edit_settings' => 'Изменить настройки',
         'setting_saved' => 'Настройки сохранены',
@@ -58,19 +59,23 @@ return [
             'help' => 'Часовой пояс применяется ко всем датам и временам, отображаемым в приложении'
         ],
         'show_otp_as_dot' => [
-            'label' => 'Показать сгенерированный код <abbr title="One-Time Password">OTP</abbr> как звёздочки',
-            'help' => 'Заменить сгенерированный код на звёздочки (***) для обеспечения конфиденциальности. Это не повлияет на функцию копирования/вставки'
+            'label' => 'Show generated OTP as dot',
+            'help' => 'Replace generated password characters with *** to ensure confidentiality. Does not affect the copy/paste feature'
         ],
         'reveal_dotted_otp' => [
-            'label' => 'Раскрытие скрытых кодов <abbr title="One-Time Password">OTP</abbr>',
+            'label' => 'Reveal obscured OTP',
             'help' => 'Разрешить временно раскрывать коды, скрытые звёздочками'
         ],
         'close_otp_on_copy' => [
-            'label' => 'Закрыть <abbr title="One-Time Password">OTP</abbr> после копирования',
+            'label' => 'Close OTP after copy',
             'help' => 'Нажатие на сгенерированный код, чтобы скопировать его, автоматически скроет его с экрана'
         ],
+        'show_next_otp' => [
+            'label' => 'Show next OTP',
+            'help' => 'Preview the next password, i.e. the password that will replace the current password when it expires. Preferences set for the current OTP also apply to the next one (formatting, show as dot)'
+        ],
         'auto_close_timeout' => [
-            'label' => 'Авто закрытие <abbr title="One-Time Password">OTP</abbr>',
+            'label' => 'Auto close OTP',
             'help' => 'Автоматически скрывать пароль с экрана после таймаута. Это позволяет избежать ненужных запросов свежих паролей, если вы забыли закрыть просмотр пароля.'
         ],
         'clear_search_on_copy' => [
@@ -82,7 +87,7 @@ return [
             'help' => 'При вызове принудительно сортировать учётные записи с учетом регистра символов'
         ],
         'copy_otp_on_display' => [
-            'label' => 'Копировать <abbr title="One-Time Password">OTP</abbr> при отображении',
+            'label' => 'Copy OTP on display',
             'help' => 'Автоматически копировать сгенерированный код сразу после его появления на экране. Из-за ограничений браузеров, только первый пароль <abbr title="Time-based One-Time Password">TOTP</abbr> будет скопирован, но не последующие'
         ],
         'use_basic_qrcode_reader' => [
@@ -114,7 +119,7 @@ return [
         'automatic' => 'Авто',
         'show_accounts_icons' => [
             'label' => 'Показать значки',
-            'help' => 'Show account icons in the main view'
+            'help' => 'Показывать значки учётных записей на главной'
         ],
         'get_official_icons' => [
             'label' => 'Получить официальные значки',
@@ -161,8 +166,8 @@ return [
             'help' => 'Получать email при каждой неудачной попытке войти в вашу учётную запись 2FAuth'
         ],
         'show_email_in_footer' => [
-            'label' => 'Show email in footer',
-            'help' => 'Display the logged-in user\'s email in the footer instead of direct navigation links. The links are then available in a menu behind a click/tap on the email address.'
+            'label' => 'Показывать email в нижнем колонтитуле',
+            'help' => 'Отображать email пользователя в нижнем колонтитуле вместо прямых ссылок. Ссылки будут доступны в меню при нажатии на адрес email адрес.'
         ],
         'otp_generation_on_request' => 'После щелчка/касания',
         'otp_generation_on_request_legend' => 'По одиночке, в отдельном окне',

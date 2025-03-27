@@ -13,8 +13,8 @@ return [
     |
     */
 
-    'hello' => 'Witaj',
-    'hello_user' => 'Witaj :username,',
+    'hello' => 'Hello',
+    'hello_user' => 'Hello :username,',
     'regards' => 'Regards',
     'test_email_settings' => [
         'subject' => '2FAuth test email',
@@ -31,6 +31,6 @@ return [
         'subject' => 'Failed login to 2FAuth',
         'resume' => 'There has been a failed login attempt to your 2FAuth account.',
         'connection_details' => 'Here are the details of this connection attempt',
-        'recommandations' => 'Jeśli to Ty, możesz zignorować ten alert. Jeśli kolejne próby nie powiodą się, powinieneś skontaktować się z administratorem 2FA w celu sprawdzenia ustawień zabezpieczeń i podjęcia działań przeciwko temu atakującemu.'
+        'recommandations' => 'If this was you, you can ignore this alert. If further attempts fail, you should contact the 2FAuth administrator to review security settings and take action against this attacker.'
     ],
 ];

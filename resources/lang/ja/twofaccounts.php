@@ -78,7 +78,7 @@ return [
         ],
         'plain_text' => 'プレーンテキスト',
         'otp_type' => [
-            'label' => '作成する<abbr title="ワンタイムパスワード">OTP</abbr>の種類を選択',
+            'label' => 'Choose the type of OTP to create',
             'help' => '時間ベースのOTPか、HMACベースのOTPか、Steam OTP'
         ],
         'digits' => [

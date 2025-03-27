@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'service' => 'Service',
+    'service' => 'Usługa',
     'account' => 'Account',
     'icon' => 'Icon',
     'icon_to_illustrate_the_account' => 'Icon that illustrates the account',
@@ -78,11 +78,11 @@ return [
         ],
         'plain_text' => 'Plain text',
         'otp_type' => [
-            'label' => 'Choose the type of <abbr title="One-Time Password">OTP</abbr> to create',
+            'label' => 'Choose the type of OTP to create',
             'help' => 'Time-based OTP or HMAC-based OTP or Steam OTP'
         ],
         'digits' => [
-            'label' => 'Digits',
+            'label' => 'Cyfry',
             'help' => 'The number of digits of the generated security codes'
         ],
         'algorithm' => [
@@ -160,8 +160,8 @@ return [
         'text_file' => 'Text file',
         'direct_input' => 'Direct input',
         'plain_text' => 'Plain text',
-        'parsing_data' => 'Parsing data...',
-        'issuer' => 'Issuer',
+        'parsing_data' => 'Przetwarzanie danych...',
+        'issuer' => 'Wystawca',
         'imported' => 'Imported',
         'failure' => 'Failure',
         'x_valid_accounts_found' => ':count valid accounts found',
@@ -176,7 +176,7 @@ return [
         'possible_duplicate' => 'An account with the exact same data already exists',
         'invalid_account' => '- invalid account -',
         'invalid_service' => '- invalid service -',
-        'do_not_set_password_or_encryption' => 'Do NOT enable Password protection or Encryption when you export data from a 2FA app otherwise 2FAuth will not be able to decipher them.',
+        'do_not_set_password_or_encryption' => 'Nie włączaj ochrony haseł ani szyfrowania podczas eksportowania danych z aplikacji 2FA, w przeciwnym razie 2FA nie będzie w stanie ich rozszyfrować.',
     ],
 
 ];

@@ -91,4 +91,5 @@ return [
     'one_month' => '한 달.',
     'x_month' => ':x 달.',
     'one_year' => '1년.',
+    'copy_next_password' => 'Copy next password to clipboard',
 ];

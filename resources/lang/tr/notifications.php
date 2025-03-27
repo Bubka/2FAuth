@@ -22,7 +22,7 @@ return [
         'success' => 'Haberler iyi, çalışıyor :)'
     ],
     'new_device' => [
-        'subject' => 'Connection to 2FAuth from a new device',
+        'subject' => '2FAuth\'a yeni bir cihazdan erişim',
         'resume' => '2FAuth hesabınıza yeni bir cihaz bağlandı.',
         'connection_details' => 'Bu bağlantının detayları',
         'recommandations' => 'Eğer bu sizseniz, bu uyarı gözardı edebilirsiniz. Eğer hesabınızda şüpheli bir hareket olduğunu düşünüyorsanız, lütfen parolanızı değiştirin.'
@@ -31,6 +31,6 @@ return [
         'subject' => '2FAuth uygulamasına başarısız giriş',
         'resume' => '2FAuth hesabınıza başarısız bir giriş denemesi yapıldı.',
         'connection_details' => 'Bu giriş denemesinin detayları şöyle',
-        'recommandations' => 'If this was you, you can ignore this alert. If further attempts fail, you should contact the 2FAuth administrator to review security settings and take action against this attacker.'
+        'recommandations' => 'Eğer bu sizseniz, bu uyarıyı göz ardı edebilirsiniz. Eğer daha fazla başarısız giriş denemesi görürseniz, güvenlik ayarlarını gözden geçirmek ve bu saldırgana karşı işlem yapmak için 2FAuth yöneticisiyle iletişime geçmelisiniz.'
     ],
 ];

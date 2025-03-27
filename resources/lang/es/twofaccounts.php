@@ -78,7 +78,7 @@ return [
         ],
         'plain_text' => 'Texto plano',
         'otp_type' => [
-            'label' => 'Elige el tipo de <abbr title="One-Time Password">OTP</abbr> a crear',
+            'label' => 'Choose the type of OTP to create',
             'help' => 'Time-based OTP, HMAC-based OTP o Steam OTP'
         ],
         'digits' => [

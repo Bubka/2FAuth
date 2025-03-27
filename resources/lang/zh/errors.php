@@ -57,8 +57,8 @@ return [
     'file_upload_failed' => '文件上传失败',
     'unauthorized' => '无权限',
     'unauthorized_legend' => '您无权查看此资源或执行此操作',
-    'cannot_delete_the_only_admin' => '无法删除唯一的管理员账户',
-    'cannot_demote_the_only_admin' => '无法降级此唯一的管理员账户',
+    'cannot_delete_the_only_admin' => '这是唯一的管理员账户，无法删除',
+    'cannot_demote_the_only_admin' => '这是唯一的管理员账户，无法降级',
     'error_during_data_fetching' => '💀 获取数据时出错',
     'check_failed_try_later' => '检查失败，请稍后重试',
     'sso_disabled' => 'SSO 已禁用',
@@ -74,4 +74,6 @@ return [
     'qrcode_has_invalid_checksum' => '二维码的校验码错误',
     'no_readable_qrcode' => '没有可识别的二维码',
     'failed_icon_store_database_toggling' => '图标迁移失败，相关设置已恢复为先前的值。',
+    'failed_to_retrieve_app_settings' => 'Failed to retrieve application settings',
+    'reserved_name_please_choose_something_else' => 'Reserved name, please choose something else',
 ];

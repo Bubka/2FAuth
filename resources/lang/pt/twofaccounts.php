@@ -91,7 +91,7 @@ otpauth://TYPE/LABEL?secret=SECRET&issuer=ISSUER&digits=DIGITS&period=PERIOD',
         ],
         'plain_text' => 'Texto sem formatação',
         'otp_type' => [
-            'label' => 'Escolha o tipo de <abbr title="One-Time Password">OTP</abbr> para criar',
+            'label' => 'Choose the type of OTP to create',
             'help' => 'OTP baseado no tempo ou HMAC baseado em OTP ou OTP Steam'
         ],
         'digits' => [

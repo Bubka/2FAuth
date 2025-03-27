@@ -14,9 +14,9 @@ return [
     */
 
     'admin' => '관리자',
-    'admin_panel' => 'Admin panel',
+    'admin_panel' => '관리자 패널',
     'app_setup' => '앱 설정',
-    'auth' => 'Auth',
+    'auth' => '인증',
     'registrations' => '가입',
     'users' => '사용자',
     'users_legend' => '인스턴스에 등록된 사용자를 관리하거나 새 사용자를 추가합니다.',
@@ -85,10 +85,10 @@ return [
     'show_one_year_log' => '지난 해 항목 표시',
     'sort_by_date_asc' => '오래된 순으로 표시',
     'sort_by_date_desc' => '최신 순으로 표시',
-    'single_sign_on' => 'Single Sign-On (SSO)',
-    'database' => 'Database',
-    'file_system' => 'File system',
-    'storage' => 'Storage',
+    'single_sign_on' => '통합 인증(SSO)',
+    'database' => '데이터베이스',
+    'file_system' => '파일 시스템',
+    'storage' => '저장공간',
     'forms' => [
         'use_encryption' => [
             'label' => '민감한 데이터 보호',
@@ -111,12 +111,12 @@ return [
             'help' => '새 사용자 가입을 방지합니다. 재정의하지 않는 한(아래 참조), 이 설정은 SSO에도 영향을 미치므로 새 사용자는 SSO를 통해 로그인할 수 없습니다.',
         ],
         'enable_sso' => [
-            'label' => 'Enable SSO',
+            'label' => 'SSO 활성화',
             'help' => '방문자가 Single Sign-On 을 통해 외부 ID를 사용하여 인증할 수 있도록 허용',
         ],
         'use_sso_only' => [
-            'label' => 'Use SSO only',
-            'help' => 'Make SSO the only available method to log in to 2FAuth. Password login and Webauthn are then disabled for regular users. Administrators are not affected by this restriction.',
+            'label' => 'SSO만 사용',
+            'help' => '2FAuth 로그인 수단을 SSO만으로 제한합니다. 일반 사용자의 비밀번호 로그인과 웹 인증(WebAuthn)이 비활성화됩니다. 관리자는 이 제한의 영향을 받지 않습니다.',
         ],
         'keep_sso_registration_enabled' => [
             'label' => 'SSO 가입을 활성화된 상태로 유지',
@@ -132,16 +132,16 @@ return [
             'email_will_be_send_to_x' => '이메일이 <span class="is-family-code has-text-info">:email</span>로 전송됩니다.',
         ],
         'health_endpoint' => [
-            'label' => 'Health endpoint',
-            'help' => 'URL you can visit to check the health of this 2FAuth instance. This URL can be used to set up a Docker HEALTHCHECK or a Kubernetes HTTPS Liveness probe.',
+            'label' => 'Health 엔드포인트',
+            'help' => '2FAuth 인스턴스 상태를 확인하기 위해 방문할 수 있는 URL입니다. 이 URL은 Docker HEALTHCHECK 또는 Kubernetes HTTPS Liveness probe를 설정하는 데에 사용할 수 있습니다.',
         ],
         'cache_management' => [
             'label' => '캐시 관리',
             'help' => '환경 변수를 변경하거나 업데이트한 후와 같은 경우 캐시를 삭제해야 할 수 있습니다. 아래에서 삭제할 수 있습니다.',
         ],
         'store_icon_to_database' => [
-            'label' => 'Store icons to database',
-            'help' => 'Uploaded icons are registered in the database in addition to the file system storage, which is then used only as a cache. This makes creating a 2FAuth backup much easier, as only the database has to be backed up.<br /><br />But beware, this may has some drawbacks: The database size may increase significantly if the instance hosts many large icons. It may also affect the application performance because the file system is hit more often to ensure it is synchronised with the database.',
+            'label' => '데이터베이스에 아이콘 저장',
+            'help' => '업로드된 아이콘은 파일 시스템 저장소 외에도 데이터베이스에 등록되어 캐시로 사용됩니다. 데이터베이스만 백업하면 되므로 2FAuth 백업을 더 간단하게 만들 수 있습니다.<br /><br />하지만 몇 가지 단점에 유의해야 합니다: 인스턴스에 큰 아이콘이 많이 있는 경우 데이터베이스 크기가 증가할 수 있습니다. 또한 파일 시스템이 데이터베이스와 동기화하기 위해 더 자주 접속하므로 애플리케이션 성능에 영향을 미칠 수 있습니다.',
         ],
     ],
 

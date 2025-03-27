@@ -43,6 +43,7 @@ return [
     ],
     'make_sure_copy_token' => '개인 액세스 토큰을 복사해두세요. 다시 확인할 수 없습니다!',
     'data_input' => '데이터 입력',
+    'settings_managed_by_administrator' => 'Some settings are being managed by your administrator',
     'forms' => [
         'edit_settings' => '설정 변경',
         'setting_saved' => '설정 저장됨',
@@ -58,19 +59,23 @@ return [
             'help' => '서비스에 표시되는 모든 날짜와 시간에 적용되는 표준 시간대'
         ],
         'show_otp_as_dot' => [
-            'label' => '생성된 <abbr title="One-Time Password">OTP</abbr>를 점으로 표시합니다.',
-            'help' => '생성된 비밀번호를 ***로 바꾸어 보안을 유지하세요. 복사/붙여넣기 기능에 영향을 미치지 않습니다.'
+            'label' => 'Show generated OTP as dot',
+            'help' => 'Replace generated password characters with *** to ensure confidentiality. Does not affect the copy/paste feature'
         ],
         'reveal_dotted_otp' => [
-            'label' => '가려진 <abbr title="One-Time Password">OTP</abbr> 표시',
+            'label' => 'Reveal obscured OTP',
             'help' => '점으로 가려진 비밀번호를 일시적으로 표시합니다.'
         ],
         'close_otp_on_copy' => [
-            'label' => '복사 후 <abbr title="One-Time Password">OTP</abbr> 닫기',
+            'label' => 'Close OTP after copy',
             'help' => '생성된 비밀번호를 클릭하여 복사하면 화면에서 비밀번호가 자동으로 숨겨집니다.'
         ],
+        'show_next_otp' => [
+            'label' => 'Show next OTP',
+            'help' => 'Preview the next password, i.e. the password that will replace the current password when it expires. Preferences set for the current OTP also apply to the next one (formatting, show as dot)'
+        ],
         'auto_close_timeout' => [
-            'label' => '<abbr title="One-Time Password">OTP</abbr> 자동 닫기',
+            'label' => 'Auto close OTP',
             'help' => '일정 시간이 지나면 화면에 표시된 비밀번호를 자동으로 숨깁니다. 비밀번호 보기를 닫는 것을 잊어버렸을 때 불필요한 비밀번호 요청을 피할 수 있습니다.'
         ],
         'clear_search_on_copy' => [
@@ -82,7 +87,7 @@ return [
             'help' => '정렬 함수가 호출되면 대소문자를 구분하여 계정을 정렬하도록 강제합니다.'
         ],
         'copy_otp_on_display' => [
-            'label' => '화면에 표시된 <abbr title="One-Time Password">OTP</abbr> 복사',
+            'label' => 'Copy OTP on display',
             'help' => '생성된 비밀번호가 화면에 나타난 직후 자동으로 복사됩니다. 브라우저의 제한으로 인해 갱신된 비밀번호는 복사되지 않으며, 처음 <abbr title="Time-based One-Time Password">TOTP</abbr> 비밀번호만 복사됩니다.'
         ],
         'use_basic_qrcode_reader' => [
@@ -114,7 +119,7 @@ return [
         'automatic' => '자동',
         'show_accounts_icons' => [
             'label' => '아이콘 표시',
-            'help' => 'Show account icons in the main view'
+            'help' => '메인 화면에 계정 아이콘을 표시합니다'
         ],
         'get_official_icons' => [
             'label' => '공식 아이콘 불러오기',
@@ -161,8 +166,8 @@ return [
             'help' => '2FAuth 계정에 로그인 시도가 실패할 때마다 이메일 받기'
         ],
         'show_email_in_footer' => [
-            'label' => 'Show email in footer',
-            'help' => 'Display the logged-in user\'s email in the footer instead of direct navigation links. The links are then available in a menu behind a click/tap on the email address.'
+            'label' => '하단 영역에 이메일을 표시합니다',
+            'help' => '하단 영역에 직접 네비게이션 링크 대신 로그인된 사용자의 이메일을 표시합니다. 이메일을 클릭/탭하여 표시되는 메뉴에서 링크에 접근할 수 있습니다.'
         ],
         'otp_generation_on_request' => '클릭/탭 후',
         'otp_generation_on_request_legend' => '개별 화면으로 열기',

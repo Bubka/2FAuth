@@ -43,6 +43,7 @@ return [
     ],
     'make_sure_copy_token' => 'Kopieren Sie Ihren persönlichen Zugangs-Token jetzt. Sie werden ihn nicht mehr sehen können!',
     'data_input' => 'Daten-Eingabe',
+    'settings_managed_by_administrator' => 'Some settings are being managed by your administrator',
     'forms' => [
         'edit_settings' => 'Einstellungen bearbeiten',
         'setting_saved' => 'Einstellungen gespeichert',
@@ -58,19 +59,23 @@ return [
             'help' => 'Die Zeitzone wird auf alle in der Anwendung angezeigten Daten und Zeiten angewendet'
         ],
         'show_otp_as_dot' => [
-            'label' => 'Erzeugte <abbr title="One-Time Password">OTP</abbr> als Punkt anzeigen',
-            'help' => 'Passwortzeichen werden als *** angezeigt, um die Vertraulichkeit zu gewährleisten. Dies beeinflusst nicht die Kopieren/Einfügen-Funktion'
+            'label' => 'Show generated OTP as dot',
+            'help' => 'Replace generated password characters with *** to ensure confidentiality. Does not affect the copy/paste feature'
         ],
         'reveal_dotted_otp' => [
-            'label' => 'Verdecktes <abbr title="One-Time Password">OTP</abbr> aufdecken',
+            'label' => 'Reveal obscured OTP',
             'help' => 'Die Fähigkeit Punkt-verdeckte Passwörter temporär freigeben'
         ],
         'close_otp_on_copy' => [
-            'label' => '<abbr title="One-Time Password">OTP</abbr> nach dem Kopieren schließen',
+            'label' => 'Close OTP after copy',
             'help' => 'Bei einem Klick auf das erzeugte Passwort wird es automatisch auf dem Bildschirm ausgeblendet'
         ],
+        'show_next_otp' => [
+            'label' => 'Show next OTP',
+            'help' => 'Preview the next password, i.e. the password that will replace the current password when it expires. Preferences set for the current OTP also apply to the next one (formatting, show as dot)'
+        ],
         'auto_close_timeout' => [
-            'label' => '<abbr title="One-Time Password">OTP</abbr> automatisch schließen',
+            'label' => 'Auto close OTP',
             'help' => 'Passwort automatisch nach einem Timeout auf dem Bildschirm ausblenden. Dies vermeidet unnötige Anfragen nach neuen Passwörtern, wenn Sie die Passwortansicht nicht schließen.'
         ],
         'clear_search_on_copy' => [
@@ -82,7 +87,7 @@ return [
             'help' => 'Erzwingt bei Aufruf der Funktion Sortieren die Sortierung der Konten unter Berücksichtigung der Groß- und Kleinschreibung'
         ],
         'copy_otp_on_display' => [
-            'label' => '<abbr title="One-Time Password">OTP</abbr> auf Anzeige kopieren',
+            'label' => 'Copy OTP on display',
             'help' => 'Kopiert automatisch ein generiertes Passwort bei Anzeige auf dem Bildschirm. Aufgrund der Einschränkungen des Browsers, wird nur das erste <abbr title="Time-based One-Time Password">TOTP</abbr> Passwort kopiert, nicht das rotierende Passwort'
         ],
         'use_basic_qrcode_reader' => [

@@ -36,6 +36,6 @@ return [
         'rename_group' => 'Rename group',
     ],
     'confirm' => [
-        'delete' => 'Czy na pewno chcesz usunąć tę grupę?',
+        'delete' => 'Are you sure you want to delete this group?',
     ],
 ];

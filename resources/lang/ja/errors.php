@@ -74,4 +74,6 @@ return [
     'qrcode_has_invalid_checksum' => 'QRコードのチェックサムが不正です',
     'no_readable_qrcode' => '読み取り可能なQRコードがありません',
     'failed_icon_store_database_toggling' => 'アイコンの移行に失敗しました。設定を元の値に戻しました。',
+    'failed_to_retrieve_app_settings' => 'Failed to retrieve application settings',
+    'reserved_name_please_choose_something_else' => 'Reserved name, please choose something else',
 ];

@@ -28,15 +28,15 @@ return [
     'account_updated' => 'Hesap başarı ile güncellendi',
     'accounts_deleted' => 'Hesap(lar) başarıyla silindi',
     'accounts_moved' => 'Hesap(lar) başarıyla taşındı',
-    'export_selected_accounts' => 'Export selected accounts',
-    'twofauth_export_format' => '2FAuth format',
-    'twofauth_export_format_sub' => 'Export data using the 2FAuth json schema',
-    'twofauth_export_format_desc' => 'You should prefer this option if you need to create a backup that can be restored. This format takes care of the icons.',
-    'twofauth_export_format_url' => 'The schema definition is described here:',
-    'twofauth_export_schema' => '2FAuth export schema',
-    'otpauth_export_format' => 'otpauth URIs',
-    'otpauth_export_format_sub' => 'Export data as a list of otpauth URIs',
-    'otpauth_export_format_desc' => 'otpauth URI is the most common format used to exchange 2FA data, for example in the form of a QR code when you enable 2FA on a web site. Select this if you want to switch from 2FAuth.',
+    'export_selected_accounts' => 'Seçili hesapları dışa aktar',
+    'twofauth_export_format' => '2FAuth formatı',
+    'twofauth_export_format_sub' => 'Verileri, 2FAuth json formatında dışa aktar',
+    'twofauth_export_format_desc' => 'Geri yüklenebilecek bir yedekleme oluşturmanız gerekiyorsa bu seçeneği tercih etmelisiniz. Bu seçenek simgeleri de halleder.',
+    'twofauth_export_format_url' => 'Bu format açıklaması şöyle açıklanmıştır:',
+    'twofauth_export_schema' => '2FAuth dışa aktarma formatı',
+    'otpauth_export_format' => 'otpauth URI\'leri',
+    'otpauth_export_format_sub' => 'Veriyi, otpauth URI listesi olarak dışa aktar',
+    'otpauth_export_format_desc' => 'otpauth URI, 2FA verilerini değiştirmek için kullanılan en yaygın formattır; örneğin bir web sitesinde 2FA\'yı etkinleştirdiğinizde QR kodu biçimindedir. 2FAuth\'tan geçiş yapmak istiyorsanız bunu seçin.',
     'reveal' => 'göster',
     'forms' => [
         'service' => [
@@ -69,8 +69,8 @@ return [
         'i_m_lucky_legend' => '"Şansımı dene" butonu söz konusu servisin özgün simgesini almaya çalışır. Hizmetin gerçek adını ".xyz" uzantısı olmadan girin ve yazım hatalarından kaçınmaya çalışın. (beta özelliği)',
         'test' => 'Deneme',
         'group' => [
-            'label' => 'Group',
-            'help' => 'The group to which the account is to be assigned'
+            'label' => 'Grup',
+            'help' => 'Hesabın ilişkilendirileceği grup'
         ],
         'secret' => [
             'label' => 'Anahtar',
@@ -78,7 +78,7 @@ return [
         ],
         'plain_text' => 'Düz metin',
         'otp_type' => [
-            'label' => 'Oluşturulacak <abbr title="One-Time Password">OTP\'nin</abbr> türünü seçin',
+            'label' => 'Choose the type of OTP to create',
             'help' => 'Zamana dayalı OTP veya HMAC dayalı OTP veya Steam OTP'
         ],
         'digits' => [
@@ -105,7 +105,7 @@ return [
             'placeholder' => 'http://...',
             'help' => 'Dış bir resmin URL\'i, hesap simgesi olarak kullanılacak'
         ],
-        'options_help' => 'Aşağıdaki seçenekleri boş bırakabilirsiniz eğer nasıl ayarlanacağını bilmiyorsanız. En yaygın kullanılan değerler uygulanacaktır.',
+        'options_help' => 'Neleri seçmeniz gerektiğini bilmiyorsanız aşağıdaki seçenekleri boş bırakabilirsiniz. En yaygın kullanılan değerler uygulanacaktır.',
         'alternative_methods' => 'Alternatif yöntem',
         'spaces_are_ignored' => 'İstenmeyen boşluklar otomatik olarak kaldırılacaktır'
     ],
@@ -149,7 +149,7 @@ return [
         'import' => 'İçe Aktar',
         'to_import' => 'İçe Aktar',
         'import_legend' => '2FAuth, çeşitli 2FA uygulamalarından veri alabilir.',
-        'import_legend_afterpart' => 'Bu uygulamaların Dışa Aktarma özelliğini kullanarak bir QR kodu veya JSON dosyası gibi bir göç kaynağı alın ve buraya yükleyin.',
+        'import_legend_afterpart' => 'Kullandığınız uygulamanın Dışa Aktarma özelliğini kullanarak bir QR kodu veya JSON dosyası oluşturun ve buraya yükleyin.',
         'upload' => 'Yükle',
         'scan' => 'Tara',
         'supported_formats_for_qrcode_upload' => 'Kabul Edilen: jpg, jpeg, png, bmp, gif, svg veya webp',

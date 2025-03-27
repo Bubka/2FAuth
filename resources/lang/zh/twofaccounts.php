@@ -14,20 +14,20 @@ return [
     */
 
     'service' => '服务',
-    'account' => '账户',
+    'account' => '账号',
     'icon' => '图标',
-    'icon_to_illustrate_the_account' => '账户对应的图标',
+    'icon_to_illustrate_the_account' => '账号图标',
     'remove_icon' => '移除图标',
-    'no_account_here' => '无 2FA 账户！',
-    'add_first_account' => '选择一个添加方法，创建您的第一个账户',
+    'no_account_here' => '无任何 2FA 账号！',
+    'add_first_account' => '选择一个添加方式，创建您的第一个账号',
     'use_full_form' => '或通过填写表单创建',
     'add_one' => '添加一个',
     'show_qrcode' => '显示二维码',
     'no_service' => '- 无服务 -',
-    'account_created' => '账户创建成功',
-    'account_updated' => '账户更新成功',
+    'account_created' => '账号创建成功',
+    'account_updated' => '账号更新成功',
     'accounts_deleted' => '账户删除成功',
-    'accounts_moved' => '账户移动成功',
+    'accounts_moved' => '账号移动成功',
     'export_selected_accounts' => '导出选中的账户',
     'twofauth_export_format' => '2FAuth 格式',
     'twofauth_export_format_sub' => '以 2FAuth json 结构导出数据',
@@ -43,18 +43,18 @@ return [
             'placeholder' => '服务名称',
         ],
         'account' => [
-            'placeholder' => '账户名称',
+            'placeholder' => '账号名称',
         ],
-        'new_account' => '新建账户',
-        'edit_account' => '编辑账户',
+        'new_account' => '新建账号',
+        'edit_account' => '编辑账号',
         'otp_uri' => 'OTP Uri',
         'scan_qrcode' => '扫描二维码',
         'upload_qrcode' => '上传二维码',
-        'use_advanced_form' => '使用高级表单',
+        'use_advanced_form' => '手动填写',
         'prefill_using_qrcode' => '使用二维码来填写',
         'use_qrcode' => [
             'val' => '使用二维码',
-            'title' => '使用二维码来自动填写表单',
+            'title' => '扫描二维码，自动填写表单',
         ],
         'unlock' => [
             'val' => '解锁',
@@ -78,7 +78,7 @@ return [
         ],
         'plain_text' => '纯文本',
         'otp_type' => [
-            'label' => '选择要创建的 <abbr title="One-Time Password">OTP</abbr>  令牌类型',
+            'label' => 'Choose the type of OTP to create',
             'help' => 'TOTP，HOTP 或 Steam OTP'
         ],
         'digits' => [
@@ -98,15 +98,15 @@ return [
             'label' => '计数器',
             'placeholder' => '默认为 0',
             'help' => '计数器的初始值',
-            'help_lock' => '如果计数器设置错误，可能会导致此验证码与账户校验失败，如果您不了解此功能，请勿随意编辑。您可以点击 “锁定” 图标来解锁编辑，但请务必小心。'
+            'help_lock' => '如果计数器设置错误，可能会导致验证码失效。如果您不了解此功能，请勿随意编辑。您可以点击 “锁定” 图标来解锁编辑，但操作时请务必小心。'
         ],
         'image' => [
             'label' => '图像',
             'placeholder' => 'http://...',
-            'help' => '图像 URL，用作账户图标'
+            'help' => '用作账号图标的图像 URL 地址'
         ],
         'options_help' => '如果您不了解下列选项，请将对应选项留空来使用默认配置。',
-        'alternative_methods' => '备选方法',
+        'alternative_methods' => '其他创建方式',
         'spaces_are_ignored' => '无用的空格将被自动删除'
     ],
     'stream' => [
@@ -126,7 +126,7 @@ return [
         ],
         'secured_context_required' => [
             'reason' => '需要 secure 字段',
-            'solution' => '扫描需要通过 HTTPS 协议通信。如果您是在电脑上运行 2FAuth 实例，请不要使用除了本地外的其他虚拟主机'
+            'solution' => '扫描需要通过 HTTPS 协议通信。如果您是在电脑上运行 2FAuth 程序，请切换至本地主机，不要使用其他虚拟主机'
         ],
         'https_required' => '摄像机需要 HTTPS',
         'camera_not_suitable' => [
@@ -139,11 +139,11 @@ return [
         ],
     ],
     'confirm' => [
-        'delete' => '您确定要删除此账户吗？',
+        'delete' => '您确定要删除此账号吗？',
         'cancel' => '将放弃所有更改，确定要继续吗？',
-        'discard' => '您确定要丢弃此账户吗？',
-        'discard_all' => '您确定要丢弃所有账户吗？',
-        'discard_duplicates' => '您确定要丢弃所有重复账户吗？',
+        'discard' => '您确定要丢弃此账号吗？',
+        'discard_all' => '您确定要丢弃所有账号吗？',
+        'discard_duplicates' => '您确定要丢弃所有重复的账号吗？',
     ],
     'import' => [
         'import' => '导入',
@@ -153,8 +153,8 @@ return [
         'upload' => '上传',
         'scan' => '扫描',
         'supported_formats_for_qrcode_upload' => '支持格式：jpg、jpeg、png、bmp、gif、svg 或 webp',
-        'supported_formats_for_file_upload' => '支持格式：json，2fas 或纯文本',
-        'expected_format_for_direct_input' => '应为：一个包含 otpauth URI 的列表，每行一条',
+        'supported_formats_for_file_upload' => '支持格式：json、2fas 或纯文本',
+        'expected_format_for_direct_input' => '请填入一个包含 otpauth URI 的列表，每行一条',
         'supported_migration_formats' => '支持的迁移格式',
         'qr_code' => '二维码',
         'text_file' => '文本文件',
@@ -164,17 +164,17 @@ return [
         'issuer' => '签发方',
         'imported' => '已导入',
         'failure' => '失败',
-        'x_valid_accounts_found' => '找到 :count 个有效账户',
-        'submitted_data_parsed_now_accounts_are_awaiting_import' => '在导入的数据中找到了下列 2FA 账户，且没有被添加到 2FAuth 过。',
-        'use_buttons_to_save_or_discard' => '点击亮起的按钮，即可选择丢弃这些账户，或将其保存到您的 2FA 列表中。',
+        'x_valid_accounts_found' => '找到 :count 个有效账号',
+        'submitted_data_parsed_now_accounts_are_awaiting_import' => '在导入的数据中找到了下列 2FA 账号，且没有被添加到 2FAuth 过。',
+        'use_buttons_to_save_or_discard' => '点击对应的按钮，即可选择丢弃这些账号，或将其保存到您的 2FA 列表中。',
         'import_all' => '全部导入',
-        'import_this_account' => '导入此账户',
+        'import_this_account' => '导入此账号',
         'discard_all' => '全部丢弃',
         'discard_duplicates' => '丢弃重复项',
-        'discard_this_account' => '丢弃此账户',
+        'discard_this_account' => '丢弃此账号',
         'generate_a_test_password' => '生成测试密码',
-        'possible_duplicate' => '已存在相同数据的账户',
-        'invalid_account' => '- 无效账户 -',
+        'possible_duplicate' => '已存在相同数据的账号',
+        'invalid_account' => '- 无效账号 -',
         'invalid_service' => '- 无效服务 -',
         'do_not_set_password_or_encryption' => '如果您需要从其他 2FA 应用导出数据到 2FAuth，请务必在导出前关闭加密保护，否则 2FAuth 将无法解密数据。',
     ],

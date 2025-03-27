@@ -9,12 +9,12 @@ return [
     |
     */
 
-    'start' => 'Nowe konto',
-    'capture' => 'Przechwyć QR',
+    'start' => 'New account',
+    'capture' => 'Flash QR',
     'accounts' => 'Accounts',
-    'createAccount' => 'Utwórz konto',
+    'createAccount' => 'Create account',
     'importAccounts' => 'Import accounts',
-    'editAccount' => 'Edycja konta',
+    'editAccount' => 'Account edit',
     'showQRcode' => 'Account as QR code',
     'groups' => 'Groups',
     'createGroup' => 'Create group',
@@ -52,7 +52,7 @@ return [
         'createUser' => 'Create user',
         'manageUser' => 'Manage user',
         'logs' => [
-            'access' => 'Dziennik dostępu'
+            'access' => 'Access log'
         ]
     ]
 ];

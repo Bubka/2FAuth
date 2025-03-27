@@ -74,4 +74,6 @@ return [
     'qrcode_has_invalid_checksum' => 'QR-код имеет некорректную контрольную сумму',
     'no_readable_qrcode' => 'Нет читаемого QR кода',
     'failed_icon_store_database_toggling' => 'Не удалось перенести значки. Настройки были восстановлены в предыдущее значение.',
+    'failed_to_retrieve_app_settings' => 'Failed to retrieve application settings',
+    'reserved_name_please_choose_something_else' => 'Reserved name, please choose something else',
 ];

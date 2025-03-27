@@ -14,9 +14,9 @@ return [
     */
 
     'admin' => 'Yönetici',
-    'admin_panel' => 'Admin panel',
+    'admin_panel' => 'Yönetici paneli',
     'app_setup' => 'Uygulama Kurulumu',
-    'auth' => 'Auth',
+    'auth' => 'Doğrulama',
     'registrations' => 'Kayıt',
     'users' => 'Kullanıcılar',
     'users_legend' => 'Uygulamanızda kayıtlı kullanıcılar yönetin veya yeni kullanıcı oluşturun.',
@@ -70,14 +70,14 @@ return [
     'check_now' => 'Kontrol et',
     'view_on_github' => 'Github\'da görüntüle',
     'x_is_available' => ':version bulunuyor',
-    'successful_login_on' => 'Successful login on <span class="light-or-darker">:login_at</span>',
-    'successful_logout_on' => 'Successful logout on <span class="light-or-darker">:login_at</span>',
-    'failed_login_on' => 'Failed login on <span class="light-or-darker">:login_at</span>',
-    'viewed_on' => 'Viewed on <span class="light-or-darker">:login_at</span>',
+    'successful_login_on' => 'Başarılı giriş <span class="light-or-darker">:login_at</span>',
+    'successful_logout_on' => 'Başarılı çıkış <span class="light-or-darker">:login_at</span>',
+    'failed_login_on' => 'Başarısız giriş denemesi <span class="light-or-darker">:login_at</span>',
+    'viewed_on' => 'Görüntülendi: <span class="light-or-darker">:login_at</span>',
     'last_accesses' => 'Son erişimler',
     'see_full_log' => 'Tüm günlüğü gör',
     'browser_on_platform' => ':platform üzerinde :browser',
-    'access_log_has_more_entries' => 'The access log contains more entries.',
+    'access_log_has_more_entries' => 'Erişim günlüğü daha çok girdi içeriyor.',
     'access_log_legend_for_user' => ':username kullanıcısının tüm erişim günlüğü',
     'show_last_month_log' => 'Geçen aydan girdiler göster',
     'show_three_months_log' => 'Geçen 3 aydan girdiler göster',
@@ -85,10 +85,10 @@ return [
     'show_one_year_log' => 'Geçen yıldan girdiler göster',
     'sort_by_date_asc' => 'Eskileri önce göster',
     'sort_by_date_desc' => 'Yenileri önce göster',
-    'single_sign_on' => 'Single Sign-On (SSO)',
-    'database' => 'Database',
-    'file_system' => 'File system',
-    'storage' => 'Storage',
+    'single_sign_on' => 'Tek Noktadan Giriş (SSO)',
+    'database' => 'Veritabanı',
+    'file_system' => 'Dosya sistemi',
+    'storage' => 'Depolama',
     'forms' => [
         'use_encryption' => [
             'label' => 'Hassas verileri koru',
@@ -111,12 +111,12 @@ return [
             'help' => 'Yeni kullanıcı kaydını kapatır. Geçersiz kılınmadığı sürece (aşağıya bakın), bu seçenek SSO\'yu da etkiler ve yeni kullanıcıların SSO ile girişini engeller',
         ],
         'enable_sso' => [
-            'label' => 'Enable SSO',
+            'label' => 'SSO Etkinleştir',
             'help' => 'Kullanıcıların Single Sign-On ile harici bir hesap üzerinden oturum açmasını sağlar',
         ],
         'use_sso_only' => [
-            'label' => 'Use SSO only',
-            'help' => 'Make SSO the only available method to log in to 2FAuth. Password login and Webauthn are then disabled for regular users. Administrators are not affected by this restriction.',
+            'label' => 'Sadece SSO kullan',
+            'help' => 'SSO\'yu 2FAuth\'a giriş için tek yöntem yapın. Şifre ve Webauthn ile giriş, düz kullanıcılar için devre dışı bırakılacak. Yöneticiler bu durumdan etkilenmez.',
         ],
         'keep_sso_registration_enabled' => [
             'label' => 'SSO ile kayıt olmayı açık tut',
@@ -132,16 +132,16 @@ return [
             'email_will_be_send_to_x' => 'ePosta <span class="is-family-code has-text-info">:email</span> adresine iletilecektir',
         ],
         'health_endpoint' => [
-            'label' => 'Health endpoint',
-            'help' => 'URL you can visit to check the health of this 2FAuth instance. This URL can be used to set up a Docker HEALTHCHECK or a Kubernetes HTTPS Liveness probe.',
+            'label' => 'Sağlık uçnoktası',
+            'help' => '2FAuth\'un doğru çalışıp çalışmadığını kontrol edebileceğiniz URL. Bu URL, Docker HEALTHCHECK veya Kubernetes HTTPS Liveness probe\'u ile ayarlanabilir.',
         ],
         'cache_management' => [
             'label' => 'Önbellek yönetimi',
             'help' => 'Önbelleğin zaman zaman, örneğin bir değişkenin değiştirilmesinden veya uygulamanın güncellenmesinden sonra, temizlenmesi gerekir. Buradan yapabilirsiniz.',
         ],
         'store_icon_to_database' => [
-            'label' => 'Store icons to database',
-            'help' => 'Uploaded icons are registered in the database in addition to the file system storage, which is then used only as a cache. This makes creating a 2FAuth backup much easier, as only the database has to be backed up.<br /><br />But beware, this may has some drawbacks: The database size may increase significantly if the instance hosts many large icons. It may also affect the application performance because the file system is hit more often to ensure it is synchronised with the database.',
+            'label' => 'Simgeleri veritabanında barındır',
+            'help' => 'Yüklenen simgeler, yalnızca önbellek olarak kullanılan dosya sistemine ek olarak veritabanına da kaydedilir. 2FAuth\'u yedeklenmesi bu sayede çok kolaylaşır. Yalnızca veritabanını yedeklemeniz yeterli olur. <br /><br />Ancak bunun bazı dezavantajları olabilir: Örneğin, çok sayıda büyük simgeniz varsa veritabanı boyutu önemli ölçüde artabilir. Ayrıca, veritabanıyla senkronizasyonu nedeniyle dosya sistemine daha sık erişildiği için uygulama performansını da etkilenebilir.',
         ],
     ],
 
