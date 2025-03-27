@@ -14,7 +14,7 @@
         }
     ],
     "require": {
-        "php": "^8.2",
+        "php": "^8.3",
         "ext-bcmath": "*",
         "ext-ctype": "*",
         "ext-dom": "*",
