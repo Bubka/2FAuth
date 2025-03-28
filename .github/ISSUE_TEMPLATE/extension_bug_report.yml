@@ -1,16 +1,35 @@
-name: 2FAuth bug report
-description: Something is not working as expected with 2FAuth
-labels: ["triage"]
+name: Browser extension bug report
+description: Something is not working as expected with the browser extension
+title: "[WebExt]: "
+labels: ["triage", "webextension"]
 projects: Bubka/1
 body:
   - type: input
     id: 2fauth_version
     attributes:
-      label: Version
-      description: The version of 2FAuth on which the issue occurs
+      label: 2FAuth version
+      description: The version of the 2FAuth server bound to the browser extension
       placeholder: ex. 5.3.0
     validations:
       required: true
+  - type: input
+    id: webextension_version
+    attributes:
+      label: Extension version
+      description: The version of the browser extension
+      placeholder: ex. 1.0.2
+    validations:
+      required: true
+  - type: dropdown
+    id: browsers
+    attributes:
+      label: Browsers
+      description: Browsers that have the extension installed and on which you are experiencing the problem
+      multiple: true
+      options:
+        - Firefox (or derivatives)
+        - Chrome (or derivatives)
+        - Microsoft Edge
   - type: textarea
     id: what_happened
     attributes:
@@ -23,7 +42,7 @@ body:
     attributes:
       label: Error & Logs
       description: >-
-        Any execution data you think may help understand and solve your problem: Error message, stack trace, error/access logs from the web server, php or your database system.
+        Any execution data you think may help understand and solve your problem: Error message, stack trace, error/access logs from the web server.
       placeholder: 2FAuth logs can be found in [2FAuth_install_directory]/storage/logs/
       render: shell
   - type: textarea
@@ -42,12 +61,6 @@ body:
       options:
         - label: Docker
           required: false
-  - type: input
-    id: integration
-    attributes:
-      label: Integration
-      description: If you run an integrated version of 2FAuth, tell us the name of the embedding app or server
-      placeholder: ex. Yunohost
   - type: textarea
     id: additional_info
     attributes:
