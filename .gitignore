@@ -12,7 +12,9 @@
 .env
 .env.backup
 .env.production
+.eslintrc-auto-import.mjs
 .phpunit.result.cache
+auto-imports.d.ts
 Homestead.json
 Homestead.yaml
 auth.json

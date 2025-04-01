@@ -34,6 +34,11 @@ export default defineConfig({
         i18n('resources/lang'),
         AutoImport({
             // https://github.com/unplugin/unplugin-auto-import?tab=readme-ov-file#configuration
+            // include: [
+            //     /\.[tj]sx?$/, // .ts, .tsx, .js, .jsx
+            //     /\.vue$/,
+            //     /\.vue\?vue/, // .vue
+            // ],
             imports: [
                 'vue',
                 'vue-router',
@@ -61,9 +66,21 @@ export default defineConfig({
             //     ElementPlusResolver(),
             // ],
             dirs: [
-                '@/composables/**',
+                './resources/js/components/**',
+                './resources/js/composables/**',
+                './resources/js/layouts/**',
+                './resources/js/router/**',
+                './resources/js/services/**',
+                './resources/js/stores/**',
             ],
             vueTemplate: true,
+            vueDirectives: true,
+            dts: './auto-imports.d.ts',
+            eslintrc: {
+                enabled: true,
+                filepath: './.eslintrc-auto-import.mjs',
+                globalsPropValue: true, // 'readonly',
+            },
         }),
     ],
     resolve: {
@@ -75,7 +92,7 @@ export default defineConfig({
         // sourcemap: true,
         rollupOptions: {
             output: {
-                banner: '/*! 2FAuth version ' + version + ' - Copyright (c) 2024 Bubka - https://github.com/Bubka/2FAuth */',
+                banner: '/*! 2FAuth version ' + version + ' - Copyright (c) 2025 Bubka - https://github.com/Bubka/2FAuth */',
             },
         },
     },

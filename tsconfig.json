@@ -1,0 +1,14 @@
+{
+    "include": [
+        "./resources/js/**/*",
+        "./auto-imports.d.ts"
+    ],
+    "compilerOptions": {
+        "allowJs": true,
+        "isolatedModules": true,
+        "paths": {
+            "@/*": ["./resources/js/*"]
+        },
+        "noEmit": true,
+    },
+}
