@@ -48,12 +48,9 @@ class SinglePageController extends Controller
         $installDocUrl      = config('2fauth.installDocUrl');
         $ssoDocUrl          = config('2fauth.ssoDocUrl');
         $exportSchemaUrl    = config('2fauth.exportSchemaUrl');
-        $cspNonce           = Vite::cspNonce();
         $isSecure           = str_starts_with(config('app.url'), 'https');
 
-        // if (Auth::user()->preferences)
-
-        return view('landing')->with([
+        $viewData = [
             'appSettings' => $settings,
             'appConfig'   => collect([
                 'proxyAuth'      => $proxyAuth,
@@ -76,8 +73,13 @@ class SinglePageController extends Controller
             'isTestingApp'       => $isTestingApp,
             'lang'               => $lang,
             'locales'            => $locales,
-            'cspNonce'           => $cspNonce,
             'isSecure'           => $isSecure,
-        ]);
+        ];
+
+        if (config('2fauth.config.contentSecurityPolicy')) {
+            $viewData['cspNonce'] = Vite::cspNonce();
+        }
+
+        return view('landing')->with($viewData);
     }
 }

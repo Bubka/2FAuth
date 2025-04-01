@@ -22,7 +22,8 @@
     <div id="app">
         <app></app>
     </div>
-    <script type="text/javascript" nonce="{{ $cspNonce }}">
+    <script type="text/javascript"
+        {!! isset($cspNonce) ? "nonce='" . $cspNonce . "'" : "" !!} >
         var appSettings = {!! $appSettings !!};
         var appConfig = {!! $appConfig !!};
         var urls = {!! $urls !!};
