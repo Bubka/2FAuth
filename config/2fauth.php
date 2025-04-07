@@ -5,7 +5,7 @@ use Illuminate\Support\Arr;
 
 $preferences = [
     'showOtpAsDot'           => envUnlessEmpty('USERPREF_DEFAULT__SHOW_OTP_AS_DOT', false),
-    'showNextOtp'            => envUnlessEmpty('USERPREF_DEFAULT__SHOW_NEXT_OTP', false),
+    'showNextOtp'            => envUnlessEmpty('USERPREF_DEFAULT__SHOW_NEXT_OTP', true),
     'revealDottedOTP'        => envUnlessEmpty('USERPREF_DEFAULT__REVEAL_DOTTED_OTP', false),
     'closeOtpOnCopy'         => envUnlessEmpty('USERPREF_DEFAULT__CLOSE_OTP_ON_COPY', false),
     'copyOtpOnDisplay'       => envUnlessEmpty('USERPREF_DEFAULT__COPY_OTP_ON_DISPLAY', false),
