@@ -196,7 +196,7 @@
             copyToClipboard(otp.password)
 
             if (otp.otp_type == 'hotp') {
-                let hotpToIncrement = accounts.value.find((acc) => acc.id == account.id)
+                let hotpToIncrement = twofaccounts.items.find((acc) => acc.id == account.id)
                 
                 // TODO : à koi ça sert ?
                 if (hotpToIncrement != undefined) {
