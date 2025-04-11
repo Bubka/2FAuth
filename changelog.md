@@ -1,5 +1,15 @@
 # Change log
 
+## [5.5.1] - 2025-04-11
+
+### Changed
+
+- The _Show next OTP_ user preference is enabled by default
+
+### Fixed
+
+- [issue #472](https://github.com/Bubka/2FAuth/issues/472) QR scan reader blocked by csp
+
 ## [5.5.0] - 2025-03-27
 
 ### Announcement
