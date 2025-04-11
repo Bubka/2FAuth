@@ -40,7 +40,7 @@ class AddContentSecurityPolicyHeaders
 
             $authorizedAddresses = implode(' ', $authorizedAddresses);
 
-            $directives['script-src']  = "script-src 'nonce-" . Vite::cspNonce() . "' 'strict-dynamic'";
+            $directives['script-src']  = "script-src 'nonce-" . Vite::cspNonce() . "' 'wasm-unsafe-eval' 'strict-dynamic'";
             $directives['style-src']   = "style-src 'self' " . $authorizedAddresses . " 'unsafe-inline'";
             $directives['connect-src'] = "connect-src 'self' " . $authorizedAddresses;
             $directives['img-src']     = "img-src 'self' data: " . $authorizedAddresses;
