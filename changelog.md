@@ -1,5 +1,11 @@
 # Change log
 
+## [5.5.2] - 2025-04-11
+
+### Fixed
+
+- [issue #472](https://github.com/Bubka/2FAuth/issues/472) QR scan reader blocked by csp
+
 ## [5.5.1] - 2025-04-11
 
 ### Changed
