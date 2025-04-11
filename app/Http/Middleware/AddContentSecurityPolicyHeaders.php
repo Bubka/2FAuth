@@ -21,6 +21,7 @@ class AddContentSecurityPolicyHeaders
             // We build a space separated list of addresses to be allowed.
             Vite::useCspNonce();
             $authorizedAddresses[] = config('app.url') . ':*';
+            $authorizedAddresses[] = 'https://fastly.jsdelivr.net:*';
 
             // We add custom asset url if defined
             if (config('app.asset_url') && config('app.asset_url') != config('app.url')) {
@@ -42,7 +43,7 @@ class AddContentSecurityPolicyHeaders
             $directives['script-src']  = "script-src 'nonce-" . Vite::cspNonce() . "' 'strict-dynamic'";
             $directives['style-src']   = "style-src 'self' " . $authorizedAddresses . " 'unsafe-inline'";
             $directives['connect-src'] = "connect-src 'self' " . $authorizedAddresses;
-            $directives['img-src']     = "img-src 'self' " . $authorizedAddresses;
+            $directives['img-src']     = "img-src 'self' data: " . $authorizedAddresses;
             $directives['object-src']  = "object-src 'none'";
             $directives['default-src'] = "default-src 'self'";
 
