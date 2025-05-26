@@ -14,7 +14,11 @@
 # Files configuration
 #
 files: [
- {
+  {
+    "source" : "/resources/lang/en.json",
+    "translation" : "/resources/lang/%two_letters_code%.%file_extension%",
+  },
+  {
   #
   # Source files filter
   # e.g. "/resources/en/*.json"
