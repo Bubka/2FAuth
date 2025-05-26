@@ -332,6 +332,8 @@
 <template>
     <UseColorMode v-slot="{ mode }">
     <div>
+        <!-- TODO: Persist the new active group by listening to the active-group-changed event -->
+        <!-- TODO: Add the link to the group management view in the GroupSwitch slot -->
         <GroupSwitch v-if="showGroupSwitch" v-model:showGroupSwitch="showGroupSwitch" v-model:groups="groups.items" />
         <DestinationGroupSelector
             v-if="showDestinationGroupSelector"
