@@ -265,7 +265,7 @@
 
         // We replace the current on screen passwords with the next_password to avoid having loaders.
         // The next_password will be confirmed with a new request to be synced with the backend no matter what.
-        const totpAccountsWithNextPasswordInThePeriod = twofaccounts.items.filter((account) => account.otp_type === 'totp'&& account.period == period && account.otp.next_password)
+        const totpAccountsWithNextPasswordInThePeriod = twofaccounts.items.filter((account) => account.otp_type.includes('totp') && account.period == period && account.otp.next_password)
         
         if (totpAccountsWithNextPasswordInThePeriod.length > 0) {
             totpAccountsWithNextPasswordInThePeriod.forEach((account) => {
@@ -282,7 +282,7 @@
 
             // twofaccounts TOTP updates
             response.data.forEach((account) => {
-                if (account.otp_type === 'totp') {
+                if (account.otp_type.includes('totp')) {
                     const index = twofaccounts.items.findIndex(acc => acc.id === account.id)
                     if (twofaccounts.items[index] == undefined) {
                         twofaccounts.items.push(account)
