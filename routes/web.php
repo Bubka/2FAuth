@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\PasswordController;
+use App\Http\Controllers\Auth\PersonalAccessTokenController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\SocialiteController;
@@ -23,7 +24,6 @@ use Illuminate\Session\Middleware\StartSession;
 // use Illuminate\Foundation\Events\DiagnosingHealth;
 // use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
-use Laravel\Passport\Http\Controllers\PersonalAccessTokenController;
 
 // use App\Models\User;
 // use App\Notifications\SignedInWithNewDeviceNotification;
@@ -67,7 +67,7 @@ Route::group(['middleware' => ['forceLogout', 'throttle:10,1']], function () {
 
 /**
  * Routes protected by an authentication guard but rejected when the reverse-proxy
- * guard is enabled or SSO only is enabled
+ * guard is enabled
  */
 Route::group(['middleware' => ['behind-auth', 'rejectIfReverseProxy']], function () {
     Route::put('user', [UserController::class, 'update'])->name('user.update');
@@ -75,15 +75,16 @@ Route::group(['middleware' => ['behind-auth', 'rejectIfReverseProxy']], function
     Route::get('user/logout', [LoginController::class, 'logout'])->name('user.logout');
     Route::delete('user', [UserController::class, 'delete'])->name('user.delete')->middleware('rejectIfDemoMode');
 
-    Route::get('oauth/personal-access-tokens', [PersonalAccessTokenController::class, 'forUser'])->name('passport.personal.tokens.index')->middleware('RejectIfSsoOnlyAndNotForAdmin');
-    Route::post('oauth/personal-access-tokens', [PersonalAccessTokenController::class, 'store'])->name('passport.personal.tokens.store')->middleware('RejectIfSsoOnlyAndNotForAdmin');
-    Route::delete('oauth/personal-access-tokens/{token_id}', [PersonalAccessTokenController::class, 'destroy'])->name('passport.personal.tokens.destroy')->middleware('RejectIfSsoOnlyAndNotForAdmin');
+    // Following routes are also forbidden to regular users when "SSO only" is enabled, but using Authorization gates
+    Route::get('oauth/personal-access-tokens', [PersonalAccessTokenController::class, 'forUser'])->name('passport.personal.tokens.index');
+    Route::post('oauth/personal-access-tokens', [PersonalAccessTokenController::class, 'store'])->name('passport.personal.tokens.store');
+    Route::delete('oauth/personal-access-tokens/{token_id}', [PersonalAccessTokenController::class, 'destroy'])->name('passport.personal.tokens.destroy');
 
-    Route::post('webauthn/register/options', [WebAuthnRegisterController::class, 'options'])->name('webauthn.register.options')->middleware('RejectIfSsoOnlyAndNotForAdmin');
-    Route::post('webauthn/register', [WebAuthnRegisterController::class, 'register'])->name('webauthn.register')->middleware('RejectIfSsoOnlyAndNotForAdmin');
-    Route::get('webauthn/credentials', [WebAuthnManageController::class, 'index'])->name('webauthn.credentials.index')->middleware('RejectIfSsoOnlyAndNotForAdmin');
-    Route::patch('webauthn/credentials/{credential}/name', [WebAuthnManageController::class, 'rename'])->name('webauthn.credentials.rename')->middleware('RejectIfSsoOnlyAndNotForAdmin');
-    Route::delete('webauthn/credentials/{credential}', [WebAuthnManageController::class, 'delete'])->name('webauthn.credentials.delete')->middleware('RejectIfSsoOnlyAndNotForAdmin');
+    Route::post('webauthn/register/options', [WebAuthnRegisterController::class, 'options'])->name('webauthn.register.options');
+    Route::post('webauthn/register', [WebAuthnRegisterController::class, 'register'])->name('webauthn.register');
+    Route::get('webauthn/credentials', [WebAuthnManageController::class, 'index'])->name('webauthn.credentials.index');
+    Route::patch('webauthn/credentials/{credential}/name', [WebAuthnManageController::class, 'rename'])->name('webauthn.credentials.rename');
+    Route::delete('webauthn/credentials/{credential}', [WebAuthnManageController::class, 'delete'])->name('webauthn.credentials.delete');
 });
 
 /**

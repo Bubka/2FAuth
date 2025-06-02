@@ -3,19 +3,19 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\WebauthnAttestationRequest;
+use App\Http\Requests\WebauthnAttestedRequest;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 use Laragear\WebAuthn\Enums\UserVerification;
-use Laragear\WebAuthn\Http\Requests\AttestationRequest;
-use Laragear\WebAuthn\Http\Requests\AttestedRequest;
 
 class WebAuthnRegisterController extends Controller
 {
     /**
      * Returns a challenge to be verified by the user device.
      */
-    public function options(AttestationRequest $request) : Responsable
+    public function options(WebauthnAttestationRequest $request) : Responsable
     {
         switch (config('webauthn.user_verification')) {
             case UserVerification::DISCOURAGED:
@@ -35,7 +35,7 @@ class WebAuthnRegisterController extends Controller
     /**
      * Registers a device for further WebAuthn authentication.
      */
-    public function register(AttestedRequest $request) : Response
+    public function register(WebauthnAttestedRequest $request) : Response
     {
         $request->save();
 

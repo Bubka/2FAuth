@@ -29,6 +29,7 @@ class SinglePageController extends Controller
             'disableRegistration',
             'enableSso',
             'useSsoOnly',
+            'allowPatWhileSsoOnly',
         ]);
         $settings = $appSettings->map(function (mixed $item, string $key) {
             return null;

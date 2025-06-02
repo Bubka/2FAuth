@@ -139,6 +139,7 @@ return [
         'disableRegistration' => false,
         'enableSso' => true,
         'useSsoOnly' => false,
+        'allowPatWhileSsoOnly' => false,
         'restrictRegistration' => false,
         'restrictList' => '',
         'restrictRule' => '',

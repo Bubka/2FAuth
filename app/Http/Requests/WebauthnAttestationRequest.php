@@ -2,12 +2,12 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable;
+use Laragear\WebAuthn\Http\Requests\AttestationRequest;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
-class WebauthnRenameRequest extends FormRequest
+class WebauthnAttestationRequest extends AttestationRequest
 {
     /**
      * Handle a failed authorization attempt.
@@ -20,26 +20,12 @@ class WebauthnRenameRequest extends FormRequest
     {
         throw new AccessDeniedHttpException(__('errors.unsupported_with_sso_only'));
     }
-
+    
     /**
      * Determine if the user is authorized to make this request.
-     *
-     * @return bool
      */
-    public function authorize()
+    public function authorize(?WebAuthnAuthenticatable $user): bool
     {
-        return Auth::check() && Gate::allows('manage-webauthn-credentials');
-    }
-
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
-    public function rules()
-    {
-        return [
-            'name' => 'required|string',
-        ];
+        return (bool) $user && Gate::allows('manage-webauthn-credentials');
     }
 }

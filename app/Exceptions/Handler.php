@@ -32,7 +32,8 @@ class Handler extends ExceptionHandler
 
         $this->renderable(function (\Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException $exception, $request) {
             return response()->json([
-                'message' => 'unauthorized',
+                'message' => 'forbidden',
+                'reason'  => $exception->getMessage(),
             ], 403);
         });
 

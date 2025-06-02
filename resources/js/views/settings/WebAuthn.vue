@@ -98,8 +98,8 @@
             credentials.value = response.data
         })
         .catch(error => {
-            if( error.response.status === 405 ) {
-                // The backend returns a 405 response if the user is authenticated by a reverse proxy
+            if( error.response.status === 403 ) {
+                // The backend returns a 403 response if the user is authenticated by a reverse proxy
                 // or if SSO only is enabled.
                 // The form is already disabled (see isDisabled) so we do nothing more here
             }

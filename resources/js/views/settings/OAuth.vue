@@ -2,11 +2,13 @@
     import Form from '@/components/formElements/Form'
     import userService from '@/services/userService'
     import SettingTabs from '@/layouts/SettingTabs.vue'
+    import { useAppSettingsStore } from '@/stores/appSettings'
     import { useNotifyStore } from '@/stores/notify'
     import { UseColorMode } from '@vueuse/components'
     import { useUserStore } from '@/stores/user'
     import Spinner from '@/components/Spinner.vue'
 
+    const appSettings = useAppSettingsStore()
     const $2fauth = inject('2fauth')
     const notify = useNotifyStore()
     const user = useUserStore()
@@ -20,7 +22,7 @@
     const visibleTokenId = ref(null)
 
     const isDisabled = computed(() => {
-        return (appSettings.enableSso && appSettings.useSsoOnly) || user.authenticated_by_proxy
+        return (appSettings.enableSso && appSettings.useSsoOnly && ! appSettings.allowPatWhileSsoOnly) || user.authenticated_by_proxy
     })
 
     onMounted(() => {
@@ -51,8 +53,8 @@
             })
         })
         .catch(error => {
-            if( error.response.status === 405 ) {
-                // The backend returns a 405 response if the user is authenticated by a reverse proxy
+            if( error.response.status === 403 ) {
+                // The backend returns a 403 response if the user is authenticated by a reverse proxy
                 // or if SSO only is enabled.
                 // The form is already disabled (see isDisabled) so we do nothing more here
             }
