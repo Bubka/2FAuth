@@ -15,7 +15,7 @@ if (! function_exists('envUnlessEmpty')) {
     /**
      * @return mixed|null
      */
-    function envUnlessEmpty(string $key, string|int|bool|float|null $default = null)
+    function envUnlessEmpty(string $key, string|int|bool|float|array|null $default = null)
     {
         $result = env($key, $default);
         if ('' === $result) {

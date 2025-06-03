@@ -28,6 +28,9 @@ return [
         'client_id' => env('OPENID_CLIENT_ID'),
         'client_secret' => env('OPENID_CLIENT_SECRET'),
         'redirect' => env('APP_URL') . '/socialite/callback/openid',
+        'guzzle' => [
+            'verify' => envUnlessEmpty('OPENID_HTTP_VERIFY_SSL_PEER', true), // https://docs.guzzlephp.org/en/stable/request-options.html#verify
+        ]
     ],
 
     'github' => [

@@ -124,6 +124,10 @@ services:
       # - OPENID_USERINFO_URL=
       # - OPENID_CLIENT_ID=
       # - OPENID_CLIENT_SECRET=
+      # - OPENID_HTTP_VERIFY_SSL_PEER=true
+      # Can also be the path to a custom certificate on disk, i.e
+      # - OPENID_HTTP_VERIFY_SSL_PEER=/path/to/cert.pem
+      #
       # - GITHUB_CLIENT_ID=
       # - GITHUB_CLIENT_SECRET=
       # Use this setting to declare trusted proxied.
