@@ -30,6 +30,7 @@ return [
         'redirect' => env('APP_URL') . '/socialite/callback/openid',
         'guzzle' => [
             'verify' => envUnlessEmpty('OPENID_HTTP_VERIFY_SSL_PEER', true), // https://docs.guzzlephp.org/en/stable/request-options.html#verify
+            'proxy' => env('PROXY_FOR_OUTGOING_REQUESTS', ''),
         ]
     ],
 
@@ -37,6 +38,9 @@ return [
         'client_id' => env('GITHUB_CLIENT_ID'),
         'client_secret' => env('GITHUB_CLIENT_SECRET'),
         'redirect' => env('APP_URL') . '/socialite/callback/github',
+        'guzzle' => [
+            'proxy' => env('PROXY_FOR_OUTGOING_REQUESTS', ''),
+        ]
     ],
 
     // 'google' => [    

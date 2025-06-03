@@ -20,18 +20,6 @@ class OpenId extends AbstractProvider implements ProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function __construct(Request $request, $clientId, $clientSecret, $redirectUrl, $guzzle = [])
-    {
-        $guzzle = array_merge([
-            'proxy' => config('2fauth.config.outgoingProxy'),
-        ], $guzzle);
-
-        parent::__construct($request, $clientId, $clientSecret, $redirectUrl, $guzzle);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public static function additionalConfigKeys()
     {
         return ['token_url', 'authorize_url', 'userinfo_url'];
