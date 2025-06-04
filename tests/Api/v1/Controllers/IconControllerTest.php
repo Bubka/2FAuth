@@ -6,7 +6,7 @@ use App\Api\v1\Controllers\IconController;
 use App\Facades\IconStore;
 use App\Models\TwoFAccount;
 use App\Models\User;
-use App\Services\LogoService;
+use App\Services\LogoLib\TfaLogoLib;
 use Illuminate\Http\Testing\FileFactory;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Http;
@@ -38,8 +38,8 @@ class IconControllerTest extends FeatureTestCase
 
         Http::preventStrayRequests();
         Http::fake([
-            LogoService::TFA_IMG_URL . '*' => Http::response(HttpRequestTestData::SVG_LOGO_BODY, 200),
-            LogoService::TFA_URL           => Http::response(HttpRequestTestData::TFA_JSON_BODY, 200),
+            TfaLogoLib::IMG_URL . '*' => Http::response(HttpRequestTestData::SVG_LOGO_BODY, 200),
+            TfalogoLib::TFA_URL           => Http::response(HttpRequestTestData::TFA_JSON_BODY, 200),
         ]);
         Http::fake([
             OtpTestData::EXTERNAL_IMAGE_URL_DECODED => Http::response((new FileFactory)->image('file.png', 10, 10)->tempFile, 200),

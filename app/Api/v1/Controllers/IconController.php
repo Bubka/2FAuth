@@ -4,10 +4,10 @@ namespace App\Api\v1\Controllers;
 
 use App\Api\v1\Requests\IconFetchRequest;
 use App\Facades\IconStore;
+use App\Facades\LogoLib;
 use App\Helpers\Helpers;
 use App\Http\Controllers\Controller;
 use App\Models\TwoFAccount;
-use App\Services\LogoService;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
@@ -48,12 +48,12 @@ class IconController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function fetch(IconFetchRequest $request, LogoService $logoService)
+    public function fetch(IconFetchRequest $request)
     {
         $validated = $request->validated();
 
-        $icon = $logoService->getIcon($validated['service']);
-
+        $icon = LogoLib::driver('tfa')->getIcon($validated['service']);
+        
         return $icon
             ? response()->json(['filename' => $icon], 201)
             : response()->json(null, 204);

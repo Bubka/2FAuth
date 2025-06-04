@@ -5,7 +5,7 @@ namespace App\Providers;
 use App\Factories\MigratorFactoryInterface;
 use App\Services\IconService;
 use App\Services\IconStoreService;
-use App\Services\LogoService;
+use App\Services\LogoLib\LogoLibManager;
 use App\Services\ReleaseRadarService;
 use App\Services\SettingService;
 use App\Services\TwoFAccountService;
@@ -35,16 +35,16 @@ class TwoFAuthServiceProvider extends ServiceProvider implements DeferrableProvi
             return new IconStoreService($app->make(Sanitizer::class));
         });
 
-        $this->app->singleton(LogoService::class, function ($app) {
-            return new LogoService;
-        });
-
         $this->app->singleton(IconService::class, function ($app) {
             return new IconService;
         });
 
         $this->app->singleton(ReleaseRadarService::class, function () {
             return new ReleaseRadarService;
+        });
+
+        $this->app->singleton('logolib', function ($app) {
+            return new LogoLibManager($app);
         });
 
         $this->app->bind(QrReader::class, function ($app, array $parameters) {
@@ -74,7 +74,7 @@ class TwoFAuthServiceProvider extends ServiceProvider implements DeferrableProvi
         return [
             IconService::class,
             IconStoreService::class,
-            LogoService::class,
+            LogoLibManager::class,
             QrReader::class,
             ReleaseRadarService::class,
         ];

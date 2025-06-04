@@ -5,7 +5,7 @@ namespace Tests\Feature\Models;
 use App\Facades\Icons;
 use App\Models\TwoFAccount;
 use App\Models\User;
-use App\Services\LogoService;
+use App\Services\LogoLib\TfaLogoLib;
 use Illuminate\Http\Testing\FileFactory;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
@@ -269,8 +269,8 @@ class TwoFAccountModelTest extends FeatureTestCase
         $this->user['preferences->getOfficialIcons'] = false;
         $this->user->save();
 
-        $this->mock(LogoService::class, function (MockInterface $logoService) {
-            $logoService->shouldNotReceive('getIcon');
+        $this->mock(TfaLogoLib::class, function (MockInterface $logoLib) {
+            $logoLib->shouldNotReceive('getIcon');
         });
 
         $twofaccount = new TwoFAccount;

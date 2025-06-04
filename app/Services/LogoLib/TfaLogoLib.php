@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\LogoLib;
 
-use App\Facades\IconStore;
+use App\Services\LogoLib\AbstractLogoLib;
+use App\Services\LogoLib\LogoLibInterface;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
-class LogoService
+class TfaLogoLib extends AbstractLogoLib implements LogoLibInterface
 {
     /**
      * @var \Illuminate\Support\Collection<string, string>
@@ -28,8 +29,11 @@ class LogoService
     /**
      * @var string
      */
-    const TFA_IMG_URL = 'https://raw.githubusercontent.com/2factorauth/twofactorauth/master/img/';
+    const IMG_URL = 'https://raw.githubusercontent.com/2factorauth/twofactorauth/master/img/';
 
+    /**
+     * 
+     */
     public function __construct()
     {
         $this->setTfaCollection();
@@ -41,7 +45,7 @@ class LogoService
      * @param  string|null  $serviceName  Name of the service to fetch a logo for
      * @return string|null The icon filename or null if no logo has been found
      */
-    public function getIcon(?string $serviceName)
+    public function getIcon(?string $serviceName) : string|null
     {
         $logoFilename = $this->getLogo(strval($serviceName));
 
@@ -63,7 +67,7 @@ class LogoService
      */
     protected function getLogo(string $serviceName)
     {
-        $domain       = $this->tfas->get($this->cleanDomain(strval($serviceName)));
+        $domain       = $this->tfas->get($this->sanitizeServiceName(strval($serviceName)));
         $logoFilename = $domain . '.svg';
 
         if ($domain && ! Storage::disk('logos')->exists($logoFilename)) {
@@ -118,50 +122,18 @@ class LogoService
     }
 
     /**
-     * Fetch and cache a logo from 2fa.Directory repository
-     *
-     * @param  string  $logoFile  Logo filename to fetch
+     * Url to use in http request to get a specific logo from the logo lib
      */
-    protected function fetchLogo(string $logoFile) : void
+    protected function logoUrl(string $logoFilename) : string
     {
-        try {
-            $response = Http::withOptions([
-                'proxy' => config('2fauth.config.outgoingProxy'),
-            ])->retry(3, 100)->get(self::TFA_IMG_URL . $logoFile[0] . '/' . $logoFile);
-
-            if ($response->successful()) {
-                Storage::disk('logos')->put($logoFile, $response->body())
-                    ? Log::info(sprintf('Logo "%s" saved to logos dir.', $logoFile))
-                    : Log::notice(sprintf('Cannot save logo "%s" to logos dir', $logoFile));
-            }
-        } catch (\Exception $exception) {
-            Log::error(sprintf('Fetching of logo "%s" failed.', $logoFile));
-        }
+        return self::IMG_URL . $logoFilename[0] . '/' . $logoFilename;
     }
 
     /**
-     * Prepare and make some replacement to optimize logo fetching
-     *
-     * @return string Optimized domain name
+     * Prepare service name to match logo libs naming convention
      */
-    protected function cleanDomain(string $domain) : string
+    protected function sanitizeServiceName(string $service) : string
     {
-        return strtolower(str_replace(['+'], ['plus'], $domain));
-    }
-
-    /**
-     * Copy a logo file to the icons store with a new name
-     *
-     * @param  string  $logoFilename
-     * @param  string  $iconFilename
-     * @return bool Whether the copy succeed or not
-     */
-    protected function copyToIconStore($logoFilename, $iconFilename) : bool
-    {
-        if ($content = Storage::disk('logos')->get($logoFilename)) {
-            return IconStore::store($iconFilename, $content);
-        }
-
-        return false;
+        return strtolower(str_replace(['+'], ['plus'], $service));
     }
 }

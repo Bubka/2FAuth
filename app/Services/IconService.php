@@ -3,8 +3,8 @@
 namespace App\Services;
 
 use App\Facades\IconStore;
+use App\Facades\LogoLib;
 use App\Helpers\Helpers;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -18,7 +18,7 @@ class IconService
      */
     public function buildFromOfficialLogo(?string $service) : ?string
     {
-        return App::make(LogoService::class)->getIcon($service);
+        return LogoLib::driver('tfa')->getIcon($service);
     }
 
     /**

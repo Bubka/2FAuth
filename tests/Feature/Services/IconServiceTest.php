@@ -2,8 +2,9 @@
 
 namespace Tests\Feature\Services;
 
+use App\Facades\LogoLib;
 use App\Services\IconService;
-use App\Services\LogoService;
+use App\Services\LogoLib\TfaLogoLib;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Http\Testing\FileFactory;
 use Illuminate\Support\Facades\Http;
@@ -38,8 +39,8 @@ class IconServiceTest extends FeatureTestCase
 
         Http::preventStrayRequests();
         Http::fake([
-            LogoService::TFA_IMG_URL . '*' => Http::response(HttpRequestTestData::SVG_LOGO_BODY, 200),
-            LogoService::TFA_URL           => Http::response(HttpRequestTestData::TFA_JSON_BODY, 200),
+            TfaLogoLib::IMG_URL . '*' => Http::response(HttpRequestTestData::SVG_LOGO_BODY, 200),
+            TfaLogoLib::TFA_URL           => Http::response(HttpRequestTestData::TFA_JSON_BODY, 200),
         ]);
         Http::fake([
             OtpTestData::EXTERNAL_IMAGE_URL_DECODED => Http::response((new FileFactory)->image('file.png', 10, 10)->tempFile, 200),
@@ -47,14 +48,16 @@ class IconServiceTest extends FeatureTestCase
     }
 
     #[Test]
-    public function test_buildFromOfficialLogo_calls_logoservice_to_get_the_icon()
+    public function test_buildFromOfficialLogo_calls_logoLib_to_get_the_icon()
     {
-        $logoServiceSpy = $this->spy(LogoService::class);
+        // LogoLib::spy();
+        LogoLib::shouldReceive('driver->getIcon')
+            ->once()
+            ->with('fakeService')
+            ->andReturn('value');
 
         $this->iconService = $this->app->make(IconService::class);
         $this->iconService->buildFromOfficialLogo('fakeService');
-
-        $logoServiceSpy->shouldHaveReceived('getIcon')->once()->with('fakeService');
     }
 
     #[Test]
