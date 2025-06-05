@@ -25,7 +25,8 @@ class IconFetchRequest extends FormRequest
     public function rules()
     {
         return [
-            'service' => 'string',
+            'service'        => 'string',
+            'iconCollection' => 'nullable|string|in:tfa,selfh,dashboardicons',
         ];
     }
 

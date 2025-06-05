@@ -11,6 +11,7 @@ use App\Models\TwoFAccount;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Arr;
 
 class IconController extends Controller
 {
@@ -52,7 +53,11 @@ class IconController extends Controller
     {
         $validated = $request->validated();
 
-        $icon = LogoLib::driver('tfa')->getIcon($validated['service']);
+        $iconCollection = Arr::has($validated, 'iconCollection') && $validated['iconCollection']
+            ? $validated['iconCollection']
+            : $request->user()->preferences['iconCollection'];
+
+        $icon = LogoLib::driver($iconCollection)->getIcon($validated['service']);
         
         return $icon
             ? response()->json(['filename' => $icon], 201)
