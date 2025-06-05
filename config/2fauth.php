@@ -13,6 +13,7 @@ $preferences = [
     'useBasicQrcodeReader'   => envUnlessEmpty('USERPREF_DEFAULT__USE_BASIC_QRCODE_READER', false),
     'displayMode'            => envUnlessEmpty('USERPREF_DEFAULT__DISPLAY_MODE', 'list'),
     'showAccountsIcons'      => envUnlessEmpty('USERPREF_DEFAULT__SHOW_ACCOUNTS_ICONS', true),
+    'iconCollection'         => envUnlessEmpty('USERPREF_DEFAULT__ICON_COLLECTION', 'selfh'),
     'kickUserAfter'          => envUnlessEmpty('USERPREF_DEFAULT__KICK_USER_AFTER', 15),
     'activeGroup'            => 0,
     'rememberActiveGroup'    => envUnlessEmpty('USERPREF_DEFAULT__REMEMBER_ACTIVE_GROUP', true),

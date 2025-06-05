@@ -125,6 +125,10 @@ return [
             'label' => 'Get official icons',
             'help' => '(Try to) Get the official icon of the 2FA issuer when adding an account'
         ],
+        'icon_collection' => [
+            'label' => 'Preferred icons source',
+            'help' => 'The icons collection to be queried when an official icon is required. Changing this setting does not refresh icons that have already been fetched.'
+        ],
         'auto_lock' => [
             'label' => 'Auto lock',
             'help' => 'Log out the user automatically in case of inactivity. Has no effect when authentication is handled by a proxy and no custom logout url is specified.'

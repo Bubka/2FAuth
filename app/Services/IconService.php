@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Facades\IconStore;
 use App\Facades\LogoLib;
 use App\Helpers\Helpers;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -18,7 +19,7 @@ class IconService
      */
     public function buildFromOfficialLogo(?string $service) : ?string
     {
-        return LogoLib::driver('tfa')->getIcon($service);
+        return LogoLib::driver(Auth::user()->preferences['iconCollection'])->getIcon($service);
     }
 
     /**

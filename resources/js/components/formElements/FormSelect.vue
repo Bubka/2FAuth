@@ -56,9 +56,10 @@
                         :aria-invalid="fieldError != undefined"
                         :aria-errormessage="fieldError != undefined ? valErrorId : undefined" 
                     >
-                        <option v-for="option in options" :value="option.value">{{ $t(option.text) }}</option>
+                        <option v-for="option in options" :key="option.value" :value="option.value">{{ $t(option.text) }}</option>
                     </select>
                 </div>
+                <slot></slot>
             </div>
             <FieldError v-if="fieldError != undefined" :error="fieldError" :field="fieldName" />
             <p :id="legendId" class="help" v-html="$t(help)" v-if="help"></p>

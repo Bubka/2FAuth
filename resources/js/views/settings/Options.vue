@@ -23,6 +23,11 @@
         { text: 'settings.forms.dark', value: 'dark', icon: 'moon' },
         { text: 'settings.forms.automatic', value: 'system', icon: 'desktop' },
     ]
+    const iconCollections = [
+        { text: 'selfh.st', value: 'selfh', url: 'https://selfh.st/icons/' },
+        { text: 'dashboardicons.com', value: 'dashboardicons', url: 'https://dashboardicons.com/' },
+        { text: '2fa.directory', value: 'tfa', url: 'https://2fa.directory/' },
+    ]
     const passwordFormats = [
         { text: '12 34 56', value: 2, legend: 'settings.forms.pair', title: 'settings.forms.pair_legend' },
         { text: '123 456', value: 3, legend: 'settings.forms.trio', title: 'settings.forms.trio_legend' },
@@ -72,6 +77,14 @@
             })
         }
         return locales
+    })
+
+    const iconCollectionUrl = computed(() => {
+        return iconCollections.find(({ value }) => value === user.preferences.iconCollection)?.url
+    })
+
+    const iconCollectionDomain = computed(() => {
+        return iconCollections.find(({ value }) => value === user.preferences.iconCollection)?.text
     })
 
     onMounted(() => {
@@ -145,6 +158,12 @@
                         <FormCheckbox v-model="user.preferences.showAccountsIcons" @update:model-value="val => savePreference('showAccountsIcons', val)" fieldName="showAccountsIcons" :isLocked="appSettings.lockedPreferences.includes('showAccountsIcons')" label="settings.forms.show_accounts_icons.label" help="settings.forms.show_accounts_icons.help" />
                         <!-- Official icons -->
                         <FormCheckbox v-model="user.preferences.getOfficialIcons" @update:model-value="val => savePreference('getOfficialIcons', val)" fieldName="getOfficialIcons" :isLocked="appSettings.lockedPreferences.includes('getOfficialIcons')" label="settings.forms.get_official_icons.label" help="settings.forms.get_official_icons.help" />
+                        <!-- icon collections -->
+                        <FormSelect v-model="user.preferences.iconCollection" @update:model-value="val => savePreference('iconCollection', val)" :options="iconCollections" fieldName="iconCollection" :isLocked="appSettings.lockedPreferences.includes('iconCollection')" :isDisabled="!user.preferences.getOfficialIcons" label="settings.forms.icon_collection.label" help="settings.forms.icon_collection.help" :isIndented="true">
+                            <a class="button is-ghost" :href="iconCollectionUrl" target="_blank" :title="$t('commons.visit_x', { website: iconCollectionDomain})">
+                                <FontAwesomeIcon :icon="['fas', 'external-link-alt']" />
+                            </a>
+                        </FormSelect>
                         <!-- password format -->
                         <FormCheckbox v-model="user.preferences.formatPassword" @update:model-value="val => savePreference('formatPassword', val)" fieldName="formatPassword" :isLocked="appSettings.lockedPreferences.includes('formatPassword')" label="settings.forms.password_format.label" help="settings.forms.password_format.help" />
                         <FormToggle v-model="user.preferences.formatPasswordBy" @update:model-value="val => savePreference('formatPasswordBy', val)" :choices="passwordFormats" fieldName="formatPasswordBy" :isLocked="appSettings.lockedPreferences.includes('formatPasswordBy')" :isDisabled="!user.preferences.formatPassword" />
