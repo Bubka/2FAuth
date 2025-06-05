@@ -2,7 +2,6 @@
 
 namespace App\Services\LogoLib;
 
-use App\Services\LogoLib\TfaLogoLib;
 use Illuminate\Support\Manager;
 
 class LogoLibManager extends Manager
@@ -17,8 +16,13 @@ class LogoLibManager extends Manager
         return new TfaLogoLib();
     }
 
-    // public function createSelfhDriver()
-    // {
-    //     return new SelfhLogoLib();
-    // }
+    public function createSelfhDriver() : SelfhLogoLib
+    {
+        return new SelfhLogoLib();
+    }
+
+    public function createDashboardiconsDriver() : DashboardiconsLogoLib
+    {
+        return new DashboardiconsLogoLib();
+    }
 }

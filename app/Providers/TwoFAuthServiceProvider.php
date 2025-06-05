@@ -74,7 +74,7 @@ class TwoFAuthServiceProvider extends ServiceProvider implements DeferrableProvi
         return [
             IconService::class,
             IconStoreService::class,
-            LogoLibManager::class,
+            'logolib',
             QrReader::class,
             ReleaseRadarService::class,
         ];

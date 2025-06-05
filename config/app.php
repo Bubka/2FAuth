@@ -1,5 +1,6 @@
 <?php
 
+use App\Services\LogoLib\LogoLibManager;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
 
@@ -175,6 +176,7 @@ return [
         'TwoFAccounts' => App\Facades\TwoFAccounts::class,
         'Settings'     => App\Facades\Settings::class,
         'Helpers'      => App\Helpers\Helpers::class,
+        'logolib'      => LogoLibManager::class,
     ])->toArray(),
 
 ];

@@ -29,7 +29,7 @@ class TfaLogoLib extends AbstractLogoLib implements LogoLibInterface
     /**
      * @var string
      */
-    const IMG_URL = 'https://raw.githubusercontent.com/2factorauth/twofactorauth/master/img/';
+    protected string $libUrl = 'https://raw.githubusercontent.com/2factorauth/twofactorauth/master/img/';
 
     /**
      * 
@@ -37,27 +37,7 @@ class TfaLogoLib extends AbstractLogoLib implements LogoLibInterface
     public function __construct()
     {
         $this->setTfaCollection();
-    }
-
-    /**
-     * Fetch a logo for the given service and save it as an icon
-     *
-     * @param  string|null  $serviceName  Name of the service to fetch a logo for
-     * @return string|null The icon filename or null if no logo has been found
-     */
-    public function getIcon(?string $serviceName) : string|null
-    {
-        $logoFilename = $this->getLogo(strval($serviceName));
-
-        if ($logoFilename) {
-            // $iconFilename = IconService::getRandomName('svg');
-            $iconFilename = \Illuminate\Support\Str::random(40) . '.svg';
-
-            return $this->copyToIconStore($logoFilename, $iconFilename) ? $iconFilename : null;
-        } else {
-            return null;
-        }
-    }
+    }    
 
     /**
      * Return the logo's filename for a given service
@@ -67,14 +47,15 @@ class TfaLogoLib extends AbstractLogoLib implements LogoLibInterface
      */
     protected function getLogo(string $serviceName)
     {
-        $domain       = $this->tfas->get($this->sanitizeServiceName(strval($serviceName)));
-        $logoFilename = $domain . '.svg';
+        $referenceName = $this->tfas->get($this->sanitizeServiceName(strval($serviceName)));
+        $logoFilename  = $referenceName . '.svg';
+        $cachedFilename = $this->cachePrefix . $logoFilename;
 
-        if ($domain && ! Storage::disk('logos')->exists($logoFilename)) {
-            $this->fetchLogo($logoFilename);
+        if ($referenceName && ! Storage::disk('logos')->exists($cachedFilename)) {
+            $this->fetchLogo($cachedFilename);
         }
 
-        return Storage::disk('logos')->exists($logoFilename) ? $logoFilename : null;
+        return Storage::disk('logos')->exists($cachedFilename) ? $cachedFilename : null;
     }
 
     /**
@@ -126,7 +107,7 @@ class TfaLogoLib extends AbstractLogoLib implements LogoLibInterface
      */
     protected function logoUrl(string $logoFilename) : string
     {
-        return self::IMG_URL . $logoFilename[0] . '/' . $logoFilename;
+        return $this->libUrl . $logoFilename[0] . '/' . $logoFilename;
     }
 
     /**
