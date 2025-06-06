@@ -40,6 +40,25 @@ class TfaLogoLib extends AbstractLogoLib implements LogoLibInterface
     }    
 
     /**
+     * Fetch a logo for the given service and save it as an icon
+     *
+     * @param  string|null  $serviceName  Name of the service to fetch a logo for
+     * @return string|null The icon filename or null if no logo has been found
+     */
+    public function getIcon(?string $serviceName) : string|null
+    {
+        $logoFilename = $this->getLogo(strval($serviceName));
+
+        if ($logoFilename) {
+            $iconFilename = \Illuminate\Support\Str::random(40) . '.' . $this->format;
+
+            return $this->copyToIconStore($logoFilename, $iconFilename) ? $iconFilename : null;
+        } else {
+            return null;
+        }
+    }
+
+    /**
      * Return the logo's filename for a given service
      *
      * @param  string  $serviceName  Name of the service to fetch a logo for
@@ -48,7 +67,7 @@ class TfaLogoLib extends AbstractLogoLib implements LogoLibInterface
     protected function getLogo(string $serviceName)
     {
         $referenceName = $this->tfas->get($this->sanitizeServiceName(strval($serviceName)));
-        $logoFilename  = $referenceName . '.svg';
+        $logoFilename  = $referenceName . '.' . $this->format;
         $cachedFilename = $this->cachePrefix . $logoFilename;
 
         if ($referenceName && ! Storage::disk('logos')->exists($cachedFilename)) {

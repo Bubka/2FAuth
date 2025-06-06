@@ -21,6 +21,11 @@ abstract class AbstractLogoLib implements LogoLibInterface
     protected string $libUrl = '';
 
     /**
+     * Base url of the icon collection
+     */
+    protected string $format = 'svg';
+
+    /**
      * Fetch a logo for the given service and save it as an icon
      *
      * @param  string|null  $serviceName  Name of the service to fetch a logo for
@@ -30,9 +35,14 @@ abstract class AbstractLogoLib implements LogoLibInterface
     {
         $logoFilename = $this->getLogo(strval($serviceName));
 
+        if (!$logoFilename) {
+            // maybe the svg is not available, we try to get the png format
+            $this->format = 'png';
+            $logoFilename = $this->getLogo(strval($serviceName));
+        }
+
         if ($logoFilename) {
-            // $iconFilename = IconService::getRandomName('svg');
-            $iconFilename = \Illuminate\Support\Str::random(40) . '.svg';
+            $iconFilename = \Illuminate\Support\Str::random(40) . '.' . $this->format;
 
             return $this->copyToIconStore($logoFilename, $iconFilename) ? $iconFilename : null;
         } else {
@@ -49,7 +59,7 @@ abstract class AbstractLogoLib implements LogoLibInterface
     protected function getLogo(string $serviceName)
     {
         $referenceName  = $this->sanitizeServiceName(strval($serviceName));
-        $logoFilename   = $referenceName . '.svg';
+        $logoFilename   = $referenceName . '.' . $this->format;
         $cachedFilename = $this->cachePrefix . $logoFilename;
 
         if ($referenceName && ! Storage::disk('logos')->exists($cachedFilename)) {
@@ -64,7 +74,7 @@ abstract class AbstractLogoLib implements LogoLibInterface
      */
     protected function logoUrl(string $logoFilename) : string
     {
-        return $this->libUrl . $logoFilename;
+        return $this->libUrl . $this->format . '/' . $logoFilename;
     }
 
     /**
