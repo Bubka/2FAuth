@@ -12,8 +12,10 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Classes\LocalFile;
+use Tests\Data\CommonDataProvider;
 use Tests\Data\HttpRequestTestData;
 use Tests\Data\OtpTestData;
 use Tests\FeatureTestCase;
@@ -38,7 +40,9 @@ class IconControllerTest extends FeatureTestCase
 
         Http::preventStrayRequests();
         Http::fake([
-            TfaLogoLib::IMG_URL . '*' => Http::response(HttpRequestTestData::SVG_LOGO_BODY, 200),
+            'https://raw.githubusercontent.com/2factorauth/twofactorauth/master/img/*' => Http::response(HttpRequestTestData::SVG_LOGO_BODY, 200),
+            'https://cdn.jsdelivr.net/gh/selfhst/icons/*' => Http::response(HttpRequestTestData::SVG_LOGO_BODY, 200),
+            'https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/*' => Http::response(HttpRequestTestData::SVG_LOGO_BODY, 200),
             TfalogoLib::TFA_URL           => Http::response(HttpRequestTestData::TFA_JSON_BODY, 200),
         ]);
         Http::fake([
@@ -101,11 +105,13 @@ class IconControllerTest extends FeatureTestCase
     }
 
     #[Test]
-    public function test_fetch_logo_returns_filename()
+    #[DataProviderExternal(CommonDataProvider::class, 'iconsCollectionProvider')]
+    public function test_fetch_logo_returns_filename($iconCollection)
     {
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/icons/default', [
                 'service' => 'service',
+                'iconCollection' => $iconCollection,
             ])
             ->assertStatus(201)
             ->assertJsonStructure([
@@ -119,6 +125,7 @@ class IconControllerTest extends FeatureTestCase
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/icons/default', [
                 'service' => 'service',
+                'iconCollection' => 'tfa',
             ])
             ->assertStatus(201)
             ->assertJsonStructure([

@@ -15,6 +15,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\DataProviderExternal;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Data\CommonDataProvider;
 use Tests\Data\HttpRequestTestData;
 use Tests\Data\OtpTestData;
 use Tests\FeatureTestCase;
@@ -39,7 +40,9 @@ class IconServiceTest extends FeatureTestCase
 
         Http::preventStrayRequests();
         Http::fake([
-            TfaLogoLib::IMG_URL . '*' => Http::response(HttpRequestTestData::SVG_LOGO_BODY, 200),
+            'https://raw.githubusercontent.com/2factorauth/twofactorauth/master/img/*' => Http::response(HttpRequestTestData::SVG_LOGO_BODY, 200),
+            'https://cdn.jsdelivr.net/gh/selfhst/icons/*' => Http::response(HttpRequestTestData::SVG_LOGO_BODY, 200),
+            'https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/*' => Http::response(HttpRequestTestData::SVG_LOGO_BODY, 200),
             TfaLogoLib::TFA_URL           => Http::response(HttpRequestTestData::TFA_JSON_BODY, 200),
         ]);
         Http::fake([
@@ -50,7 +53,6 @@ class IconServiceTest extends FeatureTestCase
     #[Test]
     public function test_buildFromOfficialLogo_calls_logoLib_to_get_the_icon()
     {
-        // LogoLib::spy();
         LogoLib::shouldReceive('driver->getIcon')
             ->once()
             ->with('fakeService')
