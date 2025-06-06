@@ -493,7 +493,7 @@
                 <!-- icon upload -->
                 <label for="filUploadIcon" class="label">{{ $t('twofaccounts.icon') }}</label>
                 <div class="columns is-mobile mb-0">
-                    <div class="column">
+                    <div class="column pt-0">
                         <!-- try my luck -->
                         <fieldset v-if="user.preferences.getOfficialIcons" :disabled="!form.service">
                             <div class="field is-grouped">
