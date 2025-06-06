@@ -19,7 +19,11 @@ class IconService
      */
     public function buildFromOfficialLogo(?string $service) : ?string
     {
-        return LogoLib::driver(Auth::user()->preferences['iconCollection'])->getIcon($service);
+        $iconCollection = Auth::user()
+            ? Auth::user()->preferences['iconCollection']
+            : config('2fauth.preferences.iconCollection');
+
+        return LogoLib::driver($iconCollection)->getIcon($service);
     }
 
     /**
