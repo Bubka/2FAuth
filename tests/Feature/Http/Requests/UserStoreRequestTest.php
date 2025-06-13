@@ -36,7 +36,9 @@ class UserStoreRequestTest extends FeatureTestCase
             'email' => 'jane@example.com',
         ]);
 
-        $request   = new UserStoreRequest;
+        $request = new UserStoreRequest;
+        $request->merge($data);
+        
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->fails());
@@ -72,7 +74,9 @@ class UserStoreRequestTest extends FeatureTestCase
             'email' => 'john@example.com',
         ]);
 
-        $request   = new UserStoreRequest;
+        $request = new UserStoreRequest;
+        $request->merge($data);
+        
         $validator = Validator::make($data, $request->rules());
 
         $this->assertTrue($validator->fails());

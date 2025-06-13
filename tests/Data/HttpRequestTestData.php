@@ -10,6 +10,12 @@ class HttpRequestTestData
 
     const SVG_LOGO_BODY = '<svg xmlns="http://www.w3.org/2000/svg" class="r-k200y r-13gxpu9 r-4qtqp9 r-yyyyoo r-np7d94 r-dnmrzs r-bnwqim r-1plcrui r-lrvibr" width="22.706" height="22.706"><path d="M22.706 4.311c-.835.37-1.732.62-2.675.733a4.67 4.67 0 002.048-2.578 9.3 9.3 0 01-2.958 1.13 4.66 4.66 0 00-7.938 4.25 13.229 13.229 0 01-9.602-4.868c-.4.69-.63 1.49-.63 2.342a4.66 4.66 0 002.072 3.878 4.647 4.647 0 01-2.11-.583v.06a4.66 4.66 0 003.737 4.568 4.692 4.692 0 01-2.104.08 4.661 4.661 0 004.352 3.234 9.348 9.348 0 01-5.786 1.995A9.5 9.5 0 010 18.487a13.175 13.175 0 007.14 2.093c8.57 0 13.255-7.098 13.255-13.254 0-.2-.005-.402-.014-.602a9.47 9.47 0 002.323-2.41z" fill="#1da1f2"/></svg>';
 
+    const SVG_LOGO_BODY_VARIANT_REGULAR = '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 124 124" fill="none"><rect width="124" height="124"></rect></svg>';
+
+    const SVG_LOGO_BODY_VARIANT_LIGHT = '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 124 124" fill="none"><rect width="124" height="124" fill="white"></rect></svg>';
+
+    const SVG_LOGO_BODY_VARIANT_DARK = '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 124 124" fill="none"><rect width="124" height="124" fill="black"></rect></svg>';
+
     const TFA_JSON_BODY = '
     [
         [

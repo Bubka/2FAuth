@@ -139,10 +139,9 @@ abstract class AbstractLogoLib implements LogoLibInterface
         $url = $this->logoUrl($logoFilename);
 
         try {
-            // $response = Http::withOptions([
-            //     'proxy' => config('2fauth.config.outgoingProxy'),
-            // ])->retry(3, 100)->get($url);
-            $response = Http::get($url);
+            $response = Http::withOptions([
+                'proxy' => config('2fauth.config.outgoingProxy'),
+            ])->retry(3, 100)->get($url);
 
             if ($response->successful()) {
                 $filename = $this->cachePrefix . $logoFilename;

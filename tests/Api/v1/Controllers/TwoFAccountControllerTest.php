@@ -25,6 +25,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Classes\LocalFile;
+use Tests\Data\CommonDataProvider;
 use Tests\Data\HttpRequestTestData;
 use Tests\Data\MigrationTestData;
 use Tests\Data\OtpTestData;
@@ -242,8 +243,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
 
         Http::preventStrayRequests();
         Http::fake([
-            TfaLogoLib::IMG_URL . '*'                   => Http::response(HttpRequestTestData::SVG_LOGO_BODY, 200),
-            TfaLogoLib::TFA_URL                             => Http::response(HttpRequestTestData::TFA_JSON_BODY, 200),
+            CommonDataProvider::TFA_URL                     => Http::response(HttpRequestTestData::SVG_LOGO_BODY, 200),
+            TfaLogoLib::TFA_JSON_URL                             => Http::response(HttpRequestTestData::TFA_JSON_BODY, 200),
             OtpTestData::EXTERNAL_IMAGE_URL_DECODED          => Http::response((new FileFactory)->image('file.png', 10, 10)->tempFile, 200),
             OtpTestData::EXTERNAL_INFECTED_IMAGE_URL_DECODED => Http::response((new FileFactory)->createWithContent('infected.svg', OtpTestData::ICON_SVG_DATA_INFECTED)->tempFile, 200),
             'example.com/*'                                  => Http::response(null, 400),

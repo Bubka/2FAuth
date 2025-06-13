@@ -35,7 +35,9 @@ class IconFetchRequestTest extends TestCase
     #[DataProvider('provideValidData')]
     public function test_valid_data(array $data) : void
     {
-        $request   = new IconFetchRequest;
+        $request = new IconFetchRequest;
+        $request->merge($data);
+
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->fails());
@@ -47,14 +49,58 @@ class IconFetchRequestTest extends TestCase
     public static function provideValidData() : array
     {
         return [
-            [[
+            'VALID_SERVICE_AS_STRING' => [[
                 'service' => 'validWord',
             ]],
-            [[
-                'service' => '0',
-            ]],
-            [[
+            'VALID_SERVCE_WITH_SPECIAL_CHARS' => [[
                 'service' => '~string.with-sp3ci@l-ch4rs',
+            ]],
+            'VALID_SELFH_ICON_COLLECTION' => [[
+                'service' => 'validWord',
+                'iconCollection' => 'selfh',
+            ]],
+            'VALID_DASHBOARDICONS_ICON_COLLECTION' => [[
+                'service' => 'validWord',
+                'iconCollection' => 'dashboardicons',
+            ]],
+            'VALID_TFA_ICON_COLLECTION' => [[
+                'service' => 'validWord',
+                'iconCollection' => 'tfa',
+            ]],
+            'VALID_SELFH_ICON_COLLECTION_WITH_VALID_REGULAR_VARIANT' => [[
+                'service' => 'validWord',
+                'iconCollection' => 'selfh',
+                'variant' => 'regular',
+            ]],
+            'VALID_SELFH_ICON_COLLECTION_WITH_VALID_LIGHT_VARIANT' => [[
+                'service' => 'validWord',
+                'iconCollection' => 'selfh',
+                'variant' => 'light',
+            ]],
+            'VALID_SELFH_ICON_COLLECTION_WITH_VALID_DARK_VARIANT' => [[
+                'service' => 'validWord',
+                'iconCollection' => 'selfh',
+                'variant' => 'dark',
+            ]],
+            'VALID_DASHBOARDICONS_ICON_COLLECTION_WITH_VALID_REGULAR_VARIANT' => [[
+                'service' => 'validWord',
+                'iconCollection' => 'dashboardicons',
+                'variant' => 'regular',
+            ]],
+            'VALID_DASHBOARDICONS_ICON_COLLECTION_WITH_VALID_LIGHT_VARIANT' => [[
+                'service' => 'validWord',
+                'iconCollection' => 'dashboardicons',
+                'variant' => 'light',
+            ]],
+            'VALID_DASHBOARDICONS_ICON_COLLECTION_WITH_VALID_DARK_VARIANT' => [[
+                'service' => 'validWord',
+                'iconCollection' => 'dashboardicons',
+                'variant' => 'dark',
+            ]],
+            'VALID_TFA_ICON_COLLECTION_WITH_VALID_REGULAR_VARIANT' => [[
+                'service' => 'validWord',
+                'iconCollection' => 'tfa',
+                'variant' => 'regular',
             ]],
         ];
     }
@@ -63,7 +109,9 @@ class IconFetchRequestTest extends TestCase
     #[DataProvider('provideInvalidData')]
     public function test_invalid_data(array $data) : void
     {
-        $request   = new IconFetchRequest;
+        $request = new IconFetchRequest;
+        $request->merge($data);
+
         $validator = Validator::make($data, $request->rules());
 
         $this->assertTrue($validator->fails());
@@ -75,17 +123,54 @@ class IconFetchRequestTest extends TestCase
     public static function provideInvalidData() : array
     {
         return [
-            [[
+            'NULL_SERVICE' => [[
                 'service' => null,
             ]],
-            [[
+            'NULL_ICON_COLLECTION' => [[
+                'service' => 'validWord',
+                'iconCollection' => null,
+            ]],
+            'NULL_VARIANT' => [[
+                'service' => 'validWord',
+                'iconCollection' => 'tfa',
+                'variant' => null,
+            ]],
+            'EMPTY_ICON_COLLECTION' => [[
+                'service' => 'validWord',
+                'iconCollection' => '',
+            ]],
+            'EMPTY_VARIANT' => [[
+                'service' => 'validWord',
+                'iconCollection' => 'tfa',
+                'variant' => '',
+            ]],
+            'SERVICE_AS_INT' => [[
                 'service' => 0,
             ]],
-            [[
+            'SERVICE_AS_BOOL' => [[
                 'service' => true,
             ]],
-            [[
+            'SERVICE_AS_ARRAY' => [[
                 'service' => [],
+            ]],
+            'NOT_IN_ICON_COLLECTION_LIST' => [[
+                'service' => 'validWord',
+                'iconCollection' => 'string_not_in_icon_collection_list',
+            ]],
+            'NOT_IN_SELFH_VARIANT_LIST' => [[
+                'service' => 'validWord',
+                'iconCollection' => 'selfh',
+                'variant' => 'string_not_in_selfh_variant_list',
+            ]],
+            'NOT_IN_DASHBOARDICONS_VARIANT_LIST' => [[
+                'service' => 'validWord',
+                'iconCollection' => 'dashboardicons',
+                'variant' => 'string_not_in_dashboardicons_variant_list',
+            ]],
+            'NOT_IN_TFA_VARIANT_LIST' => [[
+                'service' => 'validWord',
+                'iconCollection' => 'tfa',
+                'variant' => 'string_not_in_tfa_variant_list',
             ]],
         ];
     }

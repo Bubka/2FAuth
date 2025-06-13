@@ -35,7 +35,9 @@ class UserManagerPromoteRequestTest extends TestCase
     #[DataProvider('provideValidData')]
     public function test_valid_data(array $data) : void
     {
-        $request   = new UserManagerPromoteRequest;
+        $request = new UserManagerPromoteRequest;
+        $request->merge($data);
+        
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->fails());
@@ -66,7 +68,9 @@ class UserManagerPromoteRequestTest extends TestCase
     #[DataProvider('provideInvalidData')]
     public function test_invalid_data(array $data) : void
     {
-        $request   = new UserManagerPromoteRequest;
+        $request = new UserManagerPromoteRequest;
+        $request->merge($data);
+        
         $validator = Validator::make($data, $request->rules());
 
         $this->assertTrue($validator->fails());

@@ -35,7 +35,9 @@ class LoginRequestTest extends FeatureTestCase
             'email' => 'JOHN.DOE@example.com',
         ]);
 
-        $request   = new LoginRequest;
+        $request = new LoginRequest;
+        $request->merge($data);
+        
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->fails());
@@ -66,7 +68,9 @@ class LoginRequestTest extends FeatureTestCase
             'email' => 'JOHN.DOE@example.com',
         ]);
 
-        $request   = new LoginRequest;
+        $request = new LoginRequest;
+        $request->merge($data);
+        
         $validator = Validator::make($data, $request->rules());
 
         $this->assertTrue($validator->fails());

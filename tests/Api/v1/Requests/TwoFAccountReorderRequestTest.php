@@ -35,7 +35,9 @@ class TwoFAccountReorderRequestTest extends TestCase
     #[DataProvider('provideValidData')]
     public function test_valid_data(array $data) : void
     {
-        $request   = new TwoFAccountReorderRequest;
+        $request = new TwoFAccountReorderRequest;
+        $request->merge($data);
+        
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->fails());
@@ -60,7 +62,9 @@ class TwoFAccountReorderRequestTest extends TestCase
     #[DataProvider('provideInvalidData')]
     public function test_invalid_data(array $data) : void
     {
-        $request   = new TwoFAccountReorderRequest;
+        $request = new TwoFAccountReorderRequest;
+        $request->merge($data);
+        
         $validator = Validator::make($data, $request->rules());
 
         $this->assertTrue($validator->fails());

@@ -35,7 +35,9 @@ class TwoFAccountUriRequestTest extends TestCase
     #[DataProvider('provideValidData')]
     public function test_valid_data(array $data) : void
     {
-        $request   = new TwoFAccountUriRequest;
+        $request = new TwoFAccountUriRequest;
+        $request->merge($data);
+        
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->fails());
@@ -64,7 +66,9 @@ class TwoFAccountUriRequestTest extends TestCase
     #[DataProvider('provideInvalidData')]
     public function test_invalid_data(array $data) : void
     {
-        $request   = new TwoFAccountUriRequest;
+        $request = new TwoFAccountUriRequest;
+        $request->merge($data);
+        
         $validator = Validator::make($data, $request->rules());
 
         $this->assertTrue($validator->fails());

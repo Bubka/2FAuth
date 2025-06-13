@@ -38,7 +38,9 @@ class SettingStoreRequestTest extends FeatureTestCase
     #[DataProvider('provideValidData')]
     public function test_valid_data(array $data) : void
     {
-        $request   = new SettingStoreRequest;
+        $request = new SettingStoreRequest;
+        $request->merge($data);
+        
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->fails());
@@ -71,7 +73,9 @@ class SettingStoreRequestTest extends FeatureTestCase
     {
         Settings::set(self::UNIQUE_KEY, 'uniqueValue');
 
-        $request   = new SettingStoreRequest;
+        $request = new SettingStoreRequest;
+        $request->merge($data);
+        
         $validator = Validator::make($data, $request->rules());
 
         $this->assertTrue($validator->fails());

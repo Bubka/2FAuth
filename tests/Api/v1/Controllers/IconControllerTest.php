@@ -6,13 +6,11 @@ use App\Api\v1\Controllers\IconController;
 use App\Facades\IconStore;
 use App\Models\TwoFAccount;
 use App\Models\User;
-use App\Services\LogoLib\TfaLogoLib;
 use Illuminate\Http\Testing\FileFactory;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProviderExternal;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Classes\LocalFile;
 use Tests\Data\CommonDataProvider;
@@ -39,12 +37,6 @@ class IconControllerTest extends FeatureTestCase
         Storage::fake('logos');
 
         Http::preventStrayRequests();
-        Http::fake([
-            'https://raw.githubusercontent.com/2factorauth/twofactorauth/master/img/*' => Http::response(HttpRequestTestData::SVG_LOGO_BODY, 200),
-            'https://cdn.jsdelivr.net/gh/selfhst/icons/*' => Http::response(HttpRequestTestData::SVG_LOGO_BODY, 200),
-            'https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/*' => Http::response(HttpRequestTestData::SVG_LOGO_BODY, 200),
-            TfalogoLib::TFA_URL           => Http::response(HttpRequestTestData::TFA_JSON_BODY, 200),
-        ]);
         Http::fake([
             OtpTestData::EXTERNAL_IMAGE_URL_DECODED => Http::response((new FileFactory)->image('file.png', 10, 10)->tempFile, 200),
         ]);
@@ -105,13 +97,15 @@ class IconControllerTest extends FeatureTestCase
     }
 
     #[Test]
-    #[DataProviderExternal(CommonDataProvider::class, 'iconsCollectionProvider')]
-    public function test_fetch_logo_returns_filename($iconCollection)
+    public function test_fetch_logo_returns_filename()
     {
+        Http::fake([
+            CommonDataProvider::SELFH_URL => Http::response(HttpRequestTestData::SVG_LOGO_BODY, 200),
+        ]);
+
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/icons/default', [
                 'service' => 'service',
-                'iconCollection' => $iconCollection,
             ])
             ->assertStatus(201)
             ->assertJsonStructure([
@@ -120,12 +114,50 @@ class IconControllerTest extends FeatureTestCase
     }
 
     #[Test]
-    public function test_fetch_logo_with_infected_svg_data_stores_sanitized_svg_content()
+    public function test_fetch_logo_using_specified_icon_collection_returns_filename()
+    {
+        Http::fake([
+            CommonDataProvider::SELFH_URL          => Http::response(HttpRequestTestData::SVG_LOGO_BODY, 200),
+            CommonDataProvider::DASHBOARDICONS_URL => Http::response(OtpTestData::ICON_SVG_DATA, 200),
+        ]);
+
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('POST', '/api/v1/icons/default', [
+                'service'        => 'service',
+                'iconCollection' => 'dashboardicons',
+            ])
+            ->assertStatus(201)
+            ->assertJsonStructure([
+                'filename',
+            ]);
+
+        // Don't know why but 'getData()->filename' has some unwanted spaces in it so we trim them
+        $svgContent = trim(str_replace('> <', '><', IconStore::get($response->getData()->filename)));
+
+        $this->assertEquals(OtpTestData::ICON_SVG_DATA, $svgContent);
+    }
+
+    #[Test]
+    public function test_fetch_logo_return_validation_error()
     {
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/icons/default', [
+                'service'        => 'service',
+                'iconCollection' => 'not_a_valid_icon_collection',
+            ])
+            ->assertStatus(422);
+    }
+
+    #[Test]
+    public function test_fetch_logo_with_infected_svg_data_stores_sanitized_svg_content()
+    {
+        Http::fake([
+            CommonDataProvider::SELFH_URL => Http::response(OtpTestData::ICON_SVG_DATA_INFECTED, 200),
+        ]);
+
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('POST', '/api/v1/icons/default', [
                 'service' => 'service',
-                'iconCollection' => 'tfa',
             ])
             ->assertStatus(201)
             ->assertJsonStructure([
@@ -139,9 +171,13 @@ class IconControllerTest extends FeatureTestCase
     #[Test]
     public function test_fetch_unknown_logo_returns_nothing()
     {
+        Http::fake([
+            CommonDataProvider::SELFH_URL => Http::response('not found', 404),
+        ]);
+
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/icons/default', [
-                'service' => 'unknown_company',
+                'service' => 'NameOfAnUnknownServiceForSure',
             ])
             ->assertNoContent();
     }

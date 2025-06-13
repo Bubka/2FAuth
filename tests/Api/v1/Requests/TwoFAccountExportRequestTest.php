@@ -35,7 +35,9 @@ class TwoFAccountExportRequestTest extends TestCase
     #[DataProvider('provideValidData')]
     public function test_valid_data(array $data) : void
     {
-        $request   = new TwoFAccountExportRequest;
+        $request = new TwoFAccountExportRequest;
+        $request->merge($data);
+        
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->fails());
@@ -81,7 +83,9 @@ class TwoFAccountExportRequestTest extends TestCase
     #[DataProvider('provideInvalidData')]
     public function test_invalid_data(array $data) : void
     {
-        $request   = new TwoFAccountExportRequest;
+        $request = new TwoFAccountExportRequest;
+        $request->merge($data);
+        
         $validator = Validator::make($data, $request->rules());
 
         $this->assertTrue($validator->fails());

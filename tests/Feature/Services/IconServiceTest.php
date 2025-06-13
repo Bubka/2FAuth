@@ -40,10 +40,10 @@ class IconServiceTest extends FeatureTestCase
 
         Http::preventStrayRequests();
         Http::fake([
-            'https://raw.githubusercontent.com/2factorauth/twofactorauth/master/img/*' => Http::response(HttpRequestTestData::SVG_LOGO_BODY, 200),
-            'https://cdn.jsdelivr.net/gh/selfhst/icons/*' => Http::response(HttpRequestTestData::SVG_LOGO_BODY, 200),
-            'https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/*' => Http::response(HttpRequestTestData::SVG_LOGO_BODY, 200),
-            TfaLogoLib::TFA_URL           => Http::response(HttpRequestTestData::TFA_JSON_BODY, 200),
+            CommonDataProvider::TFA_URL            => Http::response(HttpRequestTestData::SVG_LOGO_BODY, 200),
+            CommonDataProvider::SELFH_URL          => Http::response(HttpRequestTestData::SVG_LOGO_BODY, 200),
+            CommonDataProvider::DASHBOARDICONS_URL => Http::response(HttpRequestTestData::SVG_LOGO_BODY, 200),
+            TfaLogoLib::TFA_JSON_URL                    => Http::response(HttpRequestTestData::TFA_JSON_BODY, 200),
         ]);
         Http::fake([
             OtpTestData::EXTERNAL_IMAGE_URL_DECODED => Http::response((new FileFactory)->image('file.png', 10, 10)->tempFile, 200),
