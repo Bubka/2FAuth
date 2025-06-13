@@ -4,6 +4,7 @@ namespace App\Services\LogoLib;
 
 use App\Facades\IconStore;
 use App\Services\LogoLib\LogoLibInterface;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -26,13 +27,20 @@ abstract class AbstractLogoLib implements LogoLibInterface
     protected string $format = 'svg';
 
     /**
+     * Suffix to append to the queried resource to get a specific variant
+     */
+    protected string $variant = '';
+
+    /**
      * Fetch a logo for the given service and save it as an icon
      *
      * @param  string|null  $serviceName  Name of the service to fetch a logo for
+     * @param  string|null  $variant  The theme variant to fetch (light, dark, etc...)
      * @return string|null The icon filename or null if no logo has been found
      */
-    public function getIcon(?string $serviceName) : string|null
+    public function getIcon(?string $serviceName, string $variant = null) : string|null
     {
+        $this->setVariant($variant);
         $logoFilename = $this->getLogo(strval($serviceName));
 
         if (!$logoFilename) {
@@ -51,6 +59,20 @@ abstract class AbstractLogoLib implements LogoLibInterface
     }
 
     /**
+     * Sets the variant using passed parameter or default
+     */
+    protected function setVariant(?string $variant) : void
+    {
+        if (! $variant || ! in_array($variant, ['regular', 'dark', 'light'])) {
+            $this->variant = Auth::user()
+                ? Auth::user()->preferences['iconVariant']
+                : 'regular';
+        } else {
+            $this->variant = $variant;
+        }
+    }
+
+    /**
      * Return the logo's filename for a given service
      *
      * @param  string  $serviceName  Name of the service to fetch a logo for
@@ -59,7 +81,7 @@ abstract class AbstractLogoLib implements LogoLibInterface
     protected function getLogo(string $serviceName)
     {
         $referenceName  = $this->sanitizeServiceName(strval($serviceName));
-        $logoFilename   = $referenceName . '.' . $this->format;
+        $logoFilename   = $referenceName . $this->suffix() . '.' . $this->format;
         $cachedFilename = $this->cachePrefix . $logoFilename;
 
         if ($referenceName && ! Storage::disk('logos')->exists($cachedFilename)) {
@@ -67,6 +89,28 @@ abstract class AbstractLogoLib implements LogoLibInterface
         }
 
         return Storage::disk('logos')->exists($cachedFilename) ? $cachedFilename : null;
+    }
+
+    /**
+     * Suffix to append to the reference name to get a specific variant
+     */
+    protected function suffix() : string
+    {
+        switch ($this->variant) {
+            case 'light':
+                $suffix = '-light';
+                break;
+
+            case 'dark':
+                $suffix = '-dark';
+                break;
+            
+            default:
+                $suffix = '';
+                break;
+        }
+
+        return $suffix;
     }
 
     /**
@@ -92,10 +136,13 @@ abstract class AbstractLogoLib implements LogoLibInterface
      */
     protected function fetchLogo(string $logoFilename) : void
     {
+        $url = $this->logoUrl($logoFilename);
+
         try {
-            $response = Http::withOptions([
-                'proxy' => config('2fauth.config.outgoingProxy'),
-            ])->retry(3, 100)->get($this->logoUrl($logoFilename));
+            // $response = Http::withOptions([
+            //     'proxy' => config('2fauth.config.outgoingProxy'),
+            // ])->retry(3, 100)->get($url);
+            $response = Http::get($url);
 
             if ($response->successful()) {
                 $filename = $this->cachePrefix . $logoFilename;

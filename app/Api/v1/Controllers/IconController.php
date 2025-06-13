@@ -57,7 +57,11 @@ class IconController extends Controller
             ? $validated['iconCollection']
             : $request->user()->preferences['iconCollection'];
 
-        $icon = LogoLib::driver($iconCollection)->getIcon($validated['service']);
+        $variant = Arr::has($validated, 'variant') && $validated['variant']
+            ? $validated['variant']
+            : 'regular';
+
+        $icon = LogoLib::driver($iconCollection)->getIcon($validated['service'], $variant);
         
         return $icon
             ? response()->json(['filename' => $icon], 201)

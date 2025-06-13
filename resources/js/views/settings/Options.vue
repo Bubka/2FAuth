@@ -24,10 +24,22 @@
         { text: 'settings.forms.automatic', value: 'system', icon: 'desktop' },
     ]
     const iconCollections = [
-        { text: 'selfh.st', value: 'selfh', url: 'https://selfh.st/icons/' },
-        { text: 'dashboardicons.com', value: 'dashboardicons', url: 'https://dashboardicons.com/' },
-        { text: '2fa.directory', value: 'tfa', url: 'https://2fa.directory/' },
+        { text: 'selfh.st', value: 'selfh', url: 'https://selfh.st/icons/', defaultVariant: 'regular' },
+        { text: 'dashboardicons.com', value: 'dashboardicons', url: 'https://dashboardicons.com/', defaultVariant: 'regular' },
+        { text: '2fa.directory', value: 'tfa', url: 'https://2fa.directory/', defaultVariant: 'regular' },
     ]
+    const iconCollectionVariants = {
+        selfh: [
+            { text: 'commons.regular', value: 'regular' },
+            { text: 'settings.forms.light', value: 'light' },
+            { text: 'settings.forms.dark', value: 'dark' },
+        ],
+        dashboardicons: [
+            { text: 'commons.regular', value: 'regular' },
+            { text: 'settings.forms.light', value: 'light' },
+            { text: 'settings.forms.dark', value: 'dark' },
+        ]
+    }
     const passwordFormats = [
         { text: '12 34 56', value: 2, legend: 'settings.forms.pair', title: 'settings.forms.pair_legend' },
         { text: '123 456', value: 3, legend: 'settings.forms.trio', title: 'settings.forms.trio_legend' },
@@ -118,6 +130,28 @@
         })
     }
 
+    /**
+     * Saves the iconCollection preference on the backend
+     * @param {string} preference 
+     * @param {any} value 
+     */
+    function saveIconCollection(value) {
+        savePreference('iconCollection', value)
+
+        if (! Object.prototype.hasOwnProperty.call(iconCollectionVariants, value)) {
+            if (user.preferences.iconVariant != 'regular') {
+                user.preferences.iconVariant = 'regular'
+                userService.updatePreference('iconVariant', user.preferences.iconVariant)
+            }
+        }
+        else {
+            if (iconCollectionVariants[value].find((variant) => variant.value == user.preferences.iconVariant) == undefined) {
+                user.preferences.iconVariant = iconCollections.find((collection) => collection.value == value).defaultVariant
+                userService.updatePreference('iconVariant', user.preferences.iconVariant)
+            }
+        }
+    }
+
     onBeforeRouteLeave((to) => {
         if (! to.name.startsWith('settings.')) {
             notify.clear()
@@ -159,11 +193,13 @@
                         <!-- Official icons -->
                         <FormCheckbox v-model="user.preferences.getOfficialIcons" @update:model-value="val => savePreference('getOfficialIcons', val)" fieldName="getOfficialIcons" :isLocked="appSettings.lockedPreferences.includes('getOfficialIcons')" label="settings.forms.get_official_icons.label" help="settings.forms.get_official_icons.help" />
                         <!-- icon collections -->
-                        <FormSelect v-model="user.preferences.iconCollection" @update:model-value="val => savePreference('iconCollection', val)" :options="iconCollections" fieldName="iconCollection" :isLocked="appSettings.lockedPreferences.includes('iconCollection')" :isDisabled="!user.preferences.getOfficialIcons" label="settings.forms.icon_collection.label" help="settings.forms.icon_collection.help" :isIndented="true">
+                        <FormSelect v-model="user.preferences.iconCollection" @update:model-value="val => saveIconCollection(val)" :options="iconCollections" fieldName="iconCollection" :isLocked="appSettings.lockedPreferences.includes('iconCollection')" :isDisabled="!user.preferences.getOfficialIcons" label="settings.forms.icon_collection.label" help="settings.forms.icon_collection.help" :isIndented="true">
                             <a class="button is-ghost" :href="iconCollectionUrl" target="_blank" :title="$t('commons.visit_x', { website: iconCollectionDomain})">
                                 <FontAwesomeIcon :icon="['fas', 'external-link-alt']" />
                             </a>
                         </FormSelect>
+                        <!-- icon variant -->
+                        <FormSelect v-if="iconCollectionVariants[user.preferences.iconCollection]" v-model="user.preferences.iconVariant" @update:model-value="val => savePreference('iconVariant', val)" :options="iconCollectionVariants[user.preferences.iconCollection]" fieldName="iconVariant" :isLocked="appSettings.lockedPreferences.includes('iconVariant')" :isDisabled="!user.preferences.getOfficialIcons" label="settings.forms.icon_variant.label" help="settings.forms.icon_variant.help" :isIndented="true" />
                         <!-- password format -->
                         <FormCheckbox v-model="user.preferences.formatPassword" @update:model-value="val => savePreference('formatPassword', val)" fieldName="formatPassword" :isLocked="appSettings.lockedPreferences.includes('formatPassword')" label="settings.forms.password_format.label" help="settings.forms.password_format.help" />
                         <FormToggle v-model="user.preferences.formatPasswordBy" @update:model-value="val => savePreference('formatPasswordBy', val)" :choices="passwordFormats" fieldName="formatPasswordBy" :isLocked="appSettings.lockedPreferences.includes('formatPasswordBy')" :isDisabled="!user.preferences.formatPassword" />

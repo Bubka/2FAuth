@@ -126,8 +126,12 @@ return [
             'help' => '(Try to) Get the official icon of the 2FA issuer when adding an account'
         ],
         'icon_collection' => [
-            'label' => 'Preferred icons source',
-            'help' => 'The icons collection to be queried when an official icon is required. Changing this setting does not refresh icons that have already been fetched.'
+            'label' => 'Favorite icon source',
+            'help' => 'The icons collection to be queried at first when an official icon is required. Changing this setting does not refresh icons that have already been fetched.'
+        ],
+        'icon_variant' => [
+            'label' => 'Icon variant',
+            'help' => 'Some icons may be available in several flavors to best suit dark or light UIs. Set the one you want to look for first.'
         ],
         'auto_lock' => [
             'label' => 'Auto lock',

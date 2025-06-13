@@ -38,10 +38,22 @@
         icon: null
     }))
     const iconCollections = [
-        { text: 'selfh.st', value: 'selfh' },
-        { text: 'dashboardicons.com', value: 'dashboardicons' },
-        { text: '2fa.directory', value: 'tfa' },
+        { text: 'selfh.st', value: 'selfh', asVariant: true },
+        { text: 'dashboardicons.com', value: 'dashboardicons', asVariant: true },
+        { text: '2fa.directory', value: 'tfa', asVariant: false },
     ]
+    const iconCollectionVariants = {
+        selfh: [
+            { text: 'commons.regular', value: 'regular' },
+            { text: 'settings.forms.light', value: 'light' },
+            { text: 'settings.forms.dark', value: 'dark' },
+        ],
+        dashboardicons: [
+            { text: 'commons.regular', value: 'regular' },
+            { text: 'settings.forms.light', value: 'light' },
+            { text: 'settings.forms.dark', value: 'dark' },
+        ]
+    }
     const otpDisplayProps = ref({
         otp_type: '',
         account : '',
@@ -75,6 +87,8 @@
     const ShowTwofaccountInModal = ref(false)
     const fetchingLogo = ref(false)
     const iconCollection = ref(user.preferences.iconCollection)
+    const iconCollectionVariant = ref(user.preferences.iconVariant)
+    
 
     // $refs
     const iconInput = ref(null)
@@ -150,6 +164,12 @@
         } else {
             showAdvancedForm.value = true
         }
+    })
+
+    watch(iconCollection, (val) => {
+        iconCollectionVariant.value = Object.prototype.hasOwnProperty.call(iconCollectionVariants, val)
+            ? iconCollectionVariants[val][0].value
+            : ''
     })
 
     watch(tempIcon, (val) => {
@@ -385,17 +405,17 @@
         if (user.preferences.getOfficialIcons) {
             fetchingLogo.value = true
 
-            twofaccountService.getLogo(form.service, iconCollection.value, { returnError: true })
+            twofaccountService.getLogo(form.service, iconCollection.value, iconCollectionVariant.value, { returnError: true })
             .then(response => {
                 if (response.status === 201) {
                     // clean possible already uploaded temp icon
                     deleteTempIcon()
                     tempIcon.value = response.data.filename;
                 }
-                else notify.warn( {text: trans('errors.no_logo_found_for_x', {service: strip_tags(form.service)}) })
+                else notify.warn( {text: trans('errors.no_icon_for_this_variant') })
             })
             .catch(() => {
-                notify.warn({ text: trans('errors.no_logo_found_for_x', {service: strip_tags(form.service)}) })
+                notify.warn({ text: trans('errors.no_icon_for_this_variant') })
             })
             .finally(() => {
                 fetchingLogo.value = false
@@ -492,52 +512,56 @@
                 <FormField v-model="form.account" fieldName="account" :fieldError="form.errors.get('account')" label="twofaccounts.account" :placeholder="$t('twofaccounts.forms.account.placeholder')" />
                 <!-- icon upload -->
                 <label for="filUploadIcon" class="label">{{ $t('twofaccounts.icon') }}</label>
-                <div class="columns is-mobile mb-0">
-                    <div class="column pt-0">
-                        <!-- try my luck -->
-                        <fieldset v-if="user.preferences.getOfficialIcons" :disabled="!form.service">
-                            <div class="field is-grouped">
-                                <div class="control">
-                                    <VueButton @click="fetchLogo" :color="mode == 'dark' ? 'is-dark' : ''" :nativeType="'button'" :is-loading="fetchingLogo" aria-describedby="lgdTryMyLuck">
-                                        <span class="icon is-small">
-                                            <FontAwesomeIcon :icon="['fas', 'globe']" />
-                                        </span>
-                                        <span>{{ $t('twofaccounts.forms.i_m_lucky') }}</span>
-                                    </VueButton>
-                                </div>
-                                <div class="control">
-                                    <div class="select">
-                                        <select name="icon-collection" v-model="iconCollection">
-                                            <option v-for="collection in iconCollections" :key="collection.text" :value="collection.value">
-                                                {{ collection.text }}
-                                            </option>
-                                        </select>
-                                    </div>
-                                </div>
+                <!-- try my luck -->
+                <!-- <fieldset v-if="user.preferences.getOfficialIcons" :disabled="!form.service"> -->
+                    <div class="field has-addons">
+                        <div class="control">
+                            <div class="select">
+                                <select :disabled="!form.service" name="icon-collection" v-model="iconCollection">
+                                    <option v-for="collection in iconCollections" :key="collection.text" :value="collection.value">
+                                        {{ collection.text }}
+                                    </option>
+                                </select>
                             </div>
-                        </fieldset>
-                        <div class="field is-grouped">
-                            <!-- upload icon button -->
-                            <div class="control is-flex">
-                                <div role="button" tabindex="0" class="file mr-3" :class="mode == 'dark' ? 'is-dark' : 'is-white'" @keyup.enter="iconInputLabel.click()">
-                                    <label for="filUploadIcon" class="file-label" ref="iconInputLabel">
-                                        <input id="filUploadIcon" tabindex="-1" class="file-input" type="file" accept="image/*" v-on:change="uploadIcon" ref="iconInput">
-                                        <span class="file-cta">
-                                            <span class="file-icon">
-                                                <FontAwesomeIcon :icon="['fas', 'upload']" />
-                                            </span>
-                                            <span class="file-label">{{ $t('twofaccounts.forms.choose_image') }}</span>
-                                        </span>
-                                    </label>
-                                </div>
-                                <span class="tag is-large" :class="mode =='dark' ? 'is-dark' : 'is-white'" v-if="tempIcon">
-                                    <img class="icon-preview" :src="$2fauth.config.subdirectory + '/storage/icons/' + tempIcon" :alt="$t('twofaccounts.icon_to_illustrate_the_account')">
-                                    <button type="button" class="clear-selection delete is-small" @click.prevent="deleteTempIcon" :aria-label="$t('twofaccounts.remove_icon')"></button>
-                                </span>
+                        </div>
+                        <div v-if="iconCollectionVariants[iconCollection]" class="control">
+                            <div class="select">
+                                <select :disabled="!form.service" name="icon-collection-variant" v-model="iconCollectionVariant">
+                                    <option v-for="variant in iconCollectionVariants[iconCollection]" :key="variant.value" :value="variant.value">
+                                        {{ $t(variant.text) }}
+                                    </option>
+                                </select>
                             </div>
                         </div>
                     </div>
-                    <div class="column is-narrow" style="width: 200px;">
+                <!-- </fieldset> -->
+                <div class="field is-grouped">
+                    <!-- try my luck button -->
+                    <div class="control">
+                        <VueButton @click="fetchLogo" :color="mode == 'dark' ? 'is-dark' : ''" :nativeType="'button'" :is-loading="fetchingLogo" :disabled="!form.service" aria-describedby="lgdTryMyLuck">
+                            <span class="icon is-small">
+                                <FontAwesomeIcon :icon="['fas', 'globe']" />
+                            </span>
+                            <span>{{ $t('twofaccounts.forms.i_m_lucky') }}</span>
+                        </VueButton>
+                    </div>
+                    <!-- upload icon button -->
+                    <div class="control is-flex">
+                        <div role="button" tabindex="0" class="file mr-3" :class="mode == 'dark' ? 'is-dark' : 'is-white'" @keyup.enter="iconInputLabel.click()">
+                            <label for="filUploadIcon" class="file-label" ref="iconInputLabel">
+                                <input id="filUploadIcon" tabindex="-1" class="file-input" type="file" accept="image/*" v-on:change="uploadIcon" ref="iconInput">
+                                <span class="file-cta">
+                                    <span class="file-icon">
+                                        <FontAwesomeIcon :icon="['fas', 'upload']" />
+                                    </span>
+                                    <span class="file-label">{{ $t('twofaccounts.forms.choose_image') }}</span>
+                                </span>
+                            </label>
+                        </div>
+                        <span class="tag is-large" :class="mode =='dark' ? 'is-dark' : 'is-white'" v-if="tempIcon">
+                            <img class="icon-preview" :src="$2fauth.config.subdirectory + '/storage/icons/' + tempIcon" :alt="$t('twofaccounts.icon_to_illustrate_the_account')">
+                            <button type="button" class="clear-selection delete is-small" @click.prevent="deleteTempIcon" :aria-label="$t('twofaccounts.remove_icon')"></button>
+                        </span>
                     </div>
                 </div>
                 <div class="field">

@@ -24,7 +24,7 @@ class TfaLogoLib extends AbstractLogoLib implements LogoLibInterface
     /**
      * @var string
      */
-    const TFA_URL = 'https://2fa.directory/api/v3/tfa.json';
+    const TFA_JSON_URL = 'https://2fa.directory/api/v3/tfa.json';
 
     /**
      * @var string
@@ -45,7 +45,7 @@ class TfaLogoLib extends AbstractLogoLib implements LogoLibInterface
      * @param  string|null  $serviceName  Name of the service to fetch a logo for
      * @return string|null The icon filename or null if no logo has been found
      */
-    public function getIcon(?string $serviceName) : string|null
+    public function getIcon(?string $serviceName, string $variant =  null) : string|null
     {
         $logoFilename = $this->getLogo(strval($serviceName));
 
@@ -56,6 +56,14 @@ class TfaLogoLib extends AbstractLogoLib implements LogoLibInterface
         } else {
             return null;
         }
+    }
+
+    /**
+     * Suffix to append to the reference name to get a specific variant
+     */
+    protected function suffix() : string
+    {
+        return '';
     }
 
     /**
@@ -104,7 +112,7 @@ class TfaLogoLib extends AbstractLogoLib implements LogoLibInterface
         try {
             $response = Http::withOptions([
                 'proxy' => config('2fauth.config.outgoingProxy'),
-            ])->retry(3, 100)->get(self::TFA_URL);
+            ])->retry(3, 100)->get(self::TFA_JSON_URL);
 
             $coll = collect(json_decode(htmlspecialchars_decode($response->body()), true)) /* @phpstan-ignore-line */
                 ->mapWithKeys(function ($item, $key) {

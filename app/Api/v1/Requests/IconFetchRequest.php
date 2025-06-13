@@ -24,10 +24,29 @@ class IconFetchRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'service'        => 'string',
-            'iconCollection' => 'nullable|string|in:tfa,selfh,dashboardicons',
+            'iconCollection' => 'sometimes|required|string|in:tfa,selfh,dashboardicons',
+            'variant'        => [
+                'sometimes',
+                'required',
+                'string',
+            ]
         ];
+
+        if ($this->input('iconCollection', null) === 'selfh') {
+            $rules['variant'][] = 'in:regular,light,dark';
+        }
+
+        if ($this->input('iconCollection', null) === 'dashboardicons') {
+            $rules['variant'][] = 'in:regular,light,dark';
+        }
+
+        if ($this->input('iconCollection', null) === 'tfa') {
+            $rules['variant'][] = 'in:regular';
+        }
+
+        return $rules;
     }
 
     /**
@@ -40,7 +59,7 @@ class IconFetchRequest extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge([
-            'service' => strip_tags(strval($this->service)),
+            'service' => strip_tags(strval($this->input('service'))),
         ]);
     }
 }
