@@ -1,5 +1,28 @@
 # Change log
 
+## [5.6.0] - 2025-06-16
+
+Unless you are an icon lover, there isn't much to get excited about with 2FAuth v5.6 (see below for details). This is because the web app's front end and the web extension are being refactored to share common UI components. The process is time consuming, but it's a necessary step to optimize future developments and avoid repeating code.
+
+The shared components are ready, as well as a new web extension version that makes use of those components. I plan to migrate the 2FAuth UI as soon as possible so that I can start working on new features again.
+
+### Added
+
+- The icon-fetching feature now includes two new icon providers, [selfh.st](https://selfh.st/icons/) and [dashboardicons.com](https://dashboardicons.com/), as well as the ability to select a preferred variant or to switch between providers directly from the Advanced form. ([#475](https://github.com/Bubka/2FAuth/issues/475)).
+
+#### New env vars
+
+- `OPENID_HTTP_VERIFY_SSL_PEER`: Enable or disable SSL peer verification during OpenID authentication process ([doc](https://docs.2fauth.app/getting-started/configuration/#openid_http_verify_ssl_peer)).
+
+### Changed
+
+- Personal Access Token (PAT) can be used when authentication is restricted to SSO only. This is particularly useful when you want to use the 2FAuth web extension. Check out the new _Allow PAT usage_ setting in the Admin > Auth > SSO section ([#474](https://github.com/Bubka/2FAuth/issues/474)).
+
+### Fixed
+
+- [issue #477](https://github.com/Bubka/2FAuth/issues/477) Steam OTP codes don't refresh when become invalid
+- [PR #482](https://github.com/Bubka/2FAuth/pull/482) Docker entrypoint not calling the right php-fpm version, thanks to [@jkoch22](https://github.com/jkoch22)
+
 ## [5.5.2] - 2025-04-11
 
 ### Fixed
