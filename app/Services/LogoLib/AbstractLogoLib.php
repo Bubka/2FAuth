@@ -43,10 +43,18 @@ abstract class AbstractLogoLib implements LogoLibInterface
         $this->setVariant($variant);
         $logoFilename = $this->getLogo(strval($serviceName));
 
-        if (!$logoFilename) {
+        if (! $logoFilename && $this->format != 'png') {
             // maybe the svg is not available, we try to get the png format
             $this->format = 'png';
             $logoFilename = $this->getLogo(strval($serviceName));
+        }
+
+        if (! $logoFilename && $this->variant != 'regular' && ! $this->strictFetch()) {
+            // maybe the variant is not available, we try to get the regular svg variant
+            $this->format = 'svg';
+            if ($icon = $this->getIcon($serviceName)) {
+                return $icon;
+            }
         }
 
         if ($logoFilename) {
@@ -70,6 +78,16 @@ abstract class AbstractLogoLib implements LogoLibInterface
         } else {
             $this->variant = $variant;
         }
+    }
+
+    /**
+     * Should we fallback to the regular variant
+     */
+    protected function strictFetch() : bool
+    {
+        return Auth::user()
+            ? (bool)Auth::user()->preferences['iconVariantStrictFetch']
+            : false;
     }
 
     /**

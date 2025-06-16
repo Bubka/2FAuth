@@ -123,6 +123,41 @@ class LogoLibsTest extends FeatureTestCase
     }
 
     #[Test]
+    public function test_getIcon_fallbacks_to_regular_when_requested_variant_is_not_available()
+    {
+        Http::preventStrayRequests();
+        Http::fake([
+            CommonDataProvider::SELFH_URL_ROOT . 'svg/myservice-dark.svg'  => Http::response('not found', 404),
+            CommonDataProvider::SELFH_URL_ROOT . 'png/myservice-dark.png'  => Http::response('not found', 404),
+            CommonDataProvider::SELFH_URL_ROOT . 'svg/myservice.svg' => Http::response(HttpRequestTestData::SVG_LOGO_BODY_VARIANT_REGULAR, 200),
+        ]);
+
+        $this->logoLib = $this->app->make(SelfhLogoLib::class);
+        $icon          = $this->logoLib->getIcon('myservice', 'dark');
+
+        $this->assertEquals(trim(Storage::disk('icons')->get($icon)), '<?xml version="1.0" encoding="UTF-8"?> ' . HttpRequestTestData::SVG_LOGO_BODY_VARIANT_REGULAR);
+    }
+
+    #[Test]
+    public function test_getIcon_does_not_fallback_to_regular_when_requested_variant_is_not_available()
+    {
+        $user = User::factory()->create();
+        $user['preferences->iconVariantStrictFetch'] = true;
+        $user->save();
+
+        Http::preventStrayRequests();
+        Http::fake([
+            CommonDataProvider::SELFH_URL_ROOT . 'svg/myservice-dark.svg'  => Http::response('not found', 404),
+            CommonDataProvider::SELFH_URL_ROOT . 'png/myservice-dark.png'  => Http::response('not found', 404),
+        ]);
+
+        $this->logoLib = $this->app->make(SelfhLogoLib::class);
+        $icon          = $this->actingAs($user)->logoLib->getIcon('myservice', 'dark');
+
+        $this->assertNull($icon);
+    }
+
+    #[Test]
     public function test_getIcon_fallbacks_to_user_preferences_when_variant_is_omitted()
     {
         $user = User::factory()->create();
@@ -186,7 +221,7 @@ class LogoLibsTest extends FeatureTestCase
         $this->logoLib = $this->app->make(TfalogoLib::class);
         $icon          = $this->logoLib->getIcon('service');
 
-        $this->assertEquals(null, $icon);
+        $this->assertNull($icon);
     }
 
     #[Test]
@@ -204,7 +239,7 @@ class LogoLibsTest extends FeatureTestCase
         $this->logoLib = $this->app->make($iconProvider['class']);
         $icon          = $this->logoLib->getIcon('service');
 
-        $this->assertEquals(null, $icon);
+        $this->assertNull($icon);
     }
 
     #[Test]
@@ -219,7 +254,7 @@ class LogoLibsTest extends FeatureTestCase
         $this->logoLib = $this->app->make(TfalogoLib::class);
         $icon          = $this->logoLib->getIcon('no_logo_should_exists_with_this_name');
 
-        $this->assertEquals(null, $icon);
+        $this->assertNull($icon);
     }
 
     #[Test]

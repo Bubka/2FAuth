@@ -131,7 +131,11 @@ return [
         ],
         'icon_variant' => [
             'label' => 'Icon variant',
-            'help' => 'Some icons may be available in several flavors to best suit dark or light UIs. Set the one you want to look for first.'
+            'help' => 'Some icons are available in different flavors to best suit dark or light user interfaces. Set the one you want to look for first. The regular variant will automatically be fetched as a fallback.'
+        ],
+        'icon_variant_strict_fetch' => [
+            'label' => 'Strict fetch',
+            'help' => 'Narrow the fetch to the specified variant. If the variant is missing, 2FAuth will not try to fallback to the regular variant.'
         ],
         'auto_lock' => [
             'label' => 'Auto lock',

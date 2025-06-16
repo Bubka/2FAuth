@@ -38,7 +38,10 @@
             { text: 'commons.regular', value: 'regular' },
             { text: 'settings.forms.light', value: 'light' },
             { text: 'settings.forms.dark', value: 'dark' },
-        ]
+        ],
+        tfa: [
+            { text: 'commons.regular', value: 'regular' },
+        ],
     }
     const passwordFormats = [
         { text: '12 34 56', value: 2, legend: 'settings.forms.pair', title: 'settings.forms.pair_legend' },
@@ -199,7 +202,9 @@
                             </a>
                         </FormSelect>
                         <!-- icon variant -->
-                        <FormSelect v-if="iconCollectionVariants[user.preferences.iconCollection]" v-model="user.preferences.iconVariant" @update:model-value="val => savePreference('iconVariant', val)" :options="iconCollectionVariants[user.preferences.iconCollection]" fieldName="iconVariant" :isLocked="appSettings.lockedPreferences.includes('iconVariant')" :isDisabled="!user.preferences.getOfficialIcons" label="settings.forms.icon_variant.label" help="settings.forms.icon_variant.help" :isIndented="true" />
+                        <FormSelect v-model="user.preferences.iconVariant" @update:model-value="val => savePreference('iconVariant', val)" :options="iconCollectionVariants[user.preferences.iconCollection]" fieldName="iconVariant" :isLocked="appSettings.lockedPreferences.includes('iconVariant')" :isDisabled="!user.preferences.getOfficialIcons" label="settings.forms.icon_variant.label" help="settings.forms.icon_variant.help" :isIndented="true" />
+                        <!-- icon variant strict fetch -->
+                        <FormCheckbox v-model="user.preferences.iconVariantStrictFetch" @update:model-value="val => savePreference('iconVariantStrictFetch', val)" fieldName="iconVariantStrictFetch" :isLocked="appSettings.lockedPreferences.includes('iconVariantStrictFetch')" :isDisabled="user.preferences.iconVariant == 'regular'" label="settings.forms.icon_variant_strict_fetch.label" help="settings.forms.icon_variant_strict_fetch.help" :isIndented="true" />
                         <!-- password format -->
                         <FormCheckbox v-model="user.preferences.formatPassword" @update:model-value="val => savePreference('formatPassword', val)" fieldName="formatPassword" :isLocked="appSettings.lockedPreferences.includes('formatPassword')" label="settings.forms.password_format.label" help="settings.forms.password_format.help" />
                         <FormToggle v-model="user.preferences.formatPasswordBy" @update:model-value="val => savePreference('formatPasswordBy', val)" :choices="passwordFormats" fieldName="formatPasswordBy" :isLocked="appSettings.lockedPreferences.includes('formatPasswordBy')" :isDisabled="!user.preferences.formatPassword" />
