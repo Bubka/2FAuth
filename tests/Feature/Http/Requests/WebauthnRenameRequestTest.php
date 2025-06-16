@@ -5,6 +5,7 @@ namespace Tests\Feature\Http\Requests;
 use App\Http\Requests\WebauthnRenameRequest;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -23,6 +24,11 @@ class WebauthnRenameRequestTest extends TestCase
     public function test_user_is_authorized()
     {
         Auth::shouldReceive('check')
+            ->once()
+            ->andReturn(true);
+
+        Gate::shouldReceive('allows')
+            ->with('manage-webauthn-credentials')
             ->once()
             ->andReturn(true);
 

@@ -43,7 +43,7 @@ class IconServiceTest extends FeatureTestCase
             CommonDataProvider::TFA_URL            => Http::response(HttpRequestTestData::SVG_LOGO_BODY, 200),
             CommonDataProvider::SELFH_URL          => Http::response(HttpRequestTestData::SVG_LOGO_BODY, 200),
             CommonDataProvider::DASHBOARDICONS_URL => Http::response(HttpRequestTestData::SVG_LOGO_BODY, 200),
-            TfaLogoLib::TFA_JSON_URL                    => Http::response(HttpRequestTestData::TFA_JSON_BODY, 200),
+            TfaLogoLib::TFA_JSON_URL               => Http::response(HttpRequestTestData::TFA_JSON_BODY, 200),
         ]);
         Http::fake([
             OtpTestData::EXTERNAL_IMAGE_URL_DECODED => Http::response((new FileFactory)->image('file.png', 10, 10)->tempFile, 200),

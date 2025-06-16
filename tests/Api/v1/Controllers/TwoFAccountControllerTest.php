@@ -243,8 +243,10 @@ class TwoFAccountControllerTest extends FeatureTestCase
 
         Http::preventStrayRequests();
         Http::fake([
-            CommonDataProvider::TFA_URL                     => Http::response(HttpRequestTestData::SVG_LOGO_BODY, 200),
-            TfaLogoLib::TFA_JSON_URL                             => Http::response(HttpRequestTestData::TFA_JSON_BODY, 200),
+            CommonDataProvider::TFA_URL                      => Http::response(HttpRequestTestData::SVG_LOGO_BODY, 200),
+            CommonDataProvider::SELFH_URL                    => Http::response(HttpRequestTestData::SVG_LOGO_BODY, 200),
+            CommonDataProvider::DASHBOARDICONS_URL           => Http::response(HttpRequestTestData::SVG_LOGO_BODY, 200),
+            TfaLogoLib::TFA_JSON_URL                         => Http::response(HttpRequestTestData::TFA_JSON_BODY, 200),
             OtpTestData::EXTERNAL_IMAGE_URL_DECODED          => Http::response((new FileFactory)->image('file.png', 10, 10)->tempFile, 200),
             OtpTestData::EXTERNAL_INFECTED_IMAGE_URL_DECODED => Http::response((new FileFactory)->createWithContent('infected.svg', OtpTestData::ICON_SVG_DATA_INFECTED)->tempFile, 200),
             'example.com/*'                                  => Http::response(null, 400),
@@ -929,8 +931,10 @@ class TwoFAccountControllerTest extends FeatureTestCase
     }
 
     #[Test]
-    public function test_migrate_identify_duplicates_in_authenticated_user_twofaccounts_only()
+    public function test_migrate_identifies_duplicates_in_authenticated_user_twofaccounts_only()
     {
+        $this->user['preferences->getOfficialIcons'] = false;
+
         $twofaccount = TwoFAccount::factory()->for($this->anotherUser)->create([
             'otp_type'   => 'totp',
             'account'    => OtpTestData::ACCOUNT,

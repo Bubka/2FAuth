@@ -552,7 +552,6 @@ class TwoFAccount extends Model implements Sortable
             $this->icon = Icons::buildFromRemoteImage($this->generator->getParameter('image'));
         }
 
-        $uuu = Auth::user()?->preferences;
         if (! $this->icon && ! $skipIconFetching && Auth::user()?->preferences['getOfficialIcons']) {
             $this->icon = Icons::buildFromOfficialLogo($this->service);
         }
