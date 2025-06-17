@@ -1,14 +1,14 @@
 # Change log
 
-## [5.6.0] - 2025-06-16
+## [5.6.0] - 2025-06-18
 
-Unless you are an icon lover, there isn't much to get excited about with 2FAuth v5.6 (see below for details). This is because the web app's front end and the web extension are being refactored to share common UI components. The process is time consuming, but it's a necessary step to optimize future developments and avoid repeating code.
+Unless you are an icon lover, there isn't much to get excited about with 2FAuth v5.6 (see below for details). That's because I'm focused on refactoring the web app's front end and the web extension so that they are built using shared components. The process is time consuming, but it's a necessary step to optimize future developments and avoid repeating code.
 
-The shared components are ready, as well as a new web extension version that makes use of those components. I plan to migrate the 2FAuth UI as soon as possible so that I can start working on new features again.
+The shared components are ready, as is a new version of the web extension that makes use of these components. I plan to migrate the 2FAuth web app as soon as possible so that I can start working on new features again.
 
 ### Added
 
-- The icon-fetching feature now includes two new icon providers, [selfh.st](https://selfh.st/icons/) and [dashboardicons.com](https://dashboardicons.com/), as well as the ability to select a preferred variant or to switch between providers directly from the Advanced form. ([#475](https://github.com/Bubka/2FAuth/issues/475)).
+- The _Get official icon_ feature now includes two new icon providers, [selfh.st](https://selfh.st/icons/) and [dashboardicons.com](https://dashboardicons.com/), as well as the ability to select a preferred variant or to switch between providers directly from the Advanced form. ([#475](https://github.com/Bubka/2FAuth/issues/475)).
 
 #### New env vars
 
