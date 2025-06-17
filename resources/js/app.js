@@ -1,4 +1,4 @@
-import '/resources/js/assets/app.scss'; 
+import '@2fauth/styles/src/app.scss';
 
 import Notifications from '@kyvg/vue3-notification'
 import App from './App.vue'

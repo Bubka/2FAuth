@@ -108,7 +108,7 @@ export const useUserStore = defineStore({
          */
         applyTheme() {
             const mode = useColorMode({
-                attribute: 'data-theme',
+                class: 'dark',
             })
             mode.value = this.preferences.theme == 'system' ? 'auto' : this.preferences.theme
         },
