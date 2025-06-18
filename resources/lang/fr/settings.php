@@ -125,6 +125,18 @@ return [
             'label' => 'Récupérer les icônes officielles',
             'help' => '(Essaie de) Récupère automatiquement l\'icône officielle du service émetteur du compte 2FA lors de son ajout à 2FAuth'
         ],
+        'icon_collection' => [
+            'label' => 'Collection d\'icônes favorite',
+            'help' => 'La collection d\'icônes à interroger en priorité quand une icône doit être récupérée. La modification de ce paramètre n\'actualise pas les icônes déjà enregistrées avec vos comptes 2FA existants.'
+        ],
+        'icon_variant' => [
+            'label' => 'Variante d\'icône',
+            'help' => 'Certaines icônes sont disponibles dans plusieurs variantes qui vont s\'intégrer plus ou moins bien dans le thème clair ou dans le thème foncé. Définissez celle qui doit être récupérée en priorité. La variante standard sera automatiquement récupérée si celle spécifiée est indisponible.'
+        ],
+        'icon_variant_strict_fetch' => [
+            'label' => 'Récupération stricte',
+            'help' => 'Restreint la récupération d\'icône à la seule variante spécifiée. 2FAuth ne tentera pas de récupérer la variante standard à la place de la variante spécifiée lorsque celle-ci est indisponible.'
+        ],
         'auto_lock' => [
             'label' => 'Verrouillage automatique',
             'help' => 'Déconnecte automatiquement l\'utilisateur en cas d\'inactivité. Est sans effet lorsque l\'authentification est gérée par un proxy et qu\'aucune URL de déconnexion personnalisée n\'est configurée.'

@@ -53,7 +53,7 @@ return [
     'unsupported_migration' => '対応しているどの形式とも一致しません',
     'unsupported_otp_type' => '未対応のOTPタイプです',
     'encrypted_migration' => '読み込めませんでした。暗号化されたデータのようです',
-    'no_logo_found_for_x' => ':service のロゴがありません',
+    'no_icon_for_this_variant' => 'No icon available in this variant',
     'file_upload_failed' => 'ファイルのアップロードに失敗しました',
     'unauthorized' => '許可されていません',
     'unauthorized_legend' => 'このリソースを表示したり、このアクションを実行する権限がありません。',

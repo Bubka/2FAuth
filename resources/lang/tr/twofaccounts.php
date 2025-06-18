@@ -66,7 +66,7 @@ return [
         ],
         'choose_image' => 'Yükle',
         'i_m_lucky' => 'Şansımı dene',
-        'i_m_lucky_legend' => '"Şansımı dene" butonu söz konusu servisin özgün simgesini almaya çalışır. Hizmetin gerçek adını ".xyz" uzantısı olmadan girin ve yazım hatalarından kaçınmaya çalışın. (beta özelliği)',
+        'i_m_lucky_legend' => 'The "Try my luck" button tries to get a standard icon from the selected icon collection. The simpler the Service field value, the more likely you are to get the expected icon: Do not append any extension (like ".com"), use the exact name of the service, avoid special chars.',
         'test' => 'Deneme',
         'group' => [
             'label' => 'Grup',

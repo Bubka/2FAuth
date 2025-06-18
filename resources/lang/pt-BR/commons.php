@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'cancel' => 'Cancelar',
+    'cancel' => 'Cancelar /Voltar',
     'update' => 'Atualizar',
     'copy' => 'Copiar',
     'copy_to_clipboard' => 'Copiar para área de transferência',
@@ -91,5 +91,7 @@ return [
     'one_month' => '1 mês.',
     'x_month' => ':x meses.',
     'one_year' => '1 ano.',
-    'copy_next_password' => 'Copy next password to clipboard',
+    'copy_next_password' => 'Copiar próxima senha para área de transferência',
+    'visit_x' => 'Visit :website',
+    'regular' => 'Regular',
 ];

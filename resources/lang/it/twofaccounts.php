@@ -66,7 +66,7 @@ return [
         ],
         'choose_image' => 'Carica',
         'i_m_lucky' => 'Prova la mia fortuna',
-        'i_m_lucky_legend' => 'Il pulsante "Prova la mia fortuna" cerca di ottenere l\'icona ufficiale del servizio specificato. Inserisci il nome effettivo del servizio senza l\'estensione ".xyz" e prova a evitare il tipo (funzione beta)',
+        'i_m_lucky_legend' => 'The "Try my luck" button tries to get a standard icon from the selected icon collection. The simpler the Service field value, the more likely you are to get the expected icon: Do not append any extension (like ".com"), use the exact name of the service, avoid special chars.',
         'test' => 'Test',
         'group' => [
             'label' => 'Gruppo',

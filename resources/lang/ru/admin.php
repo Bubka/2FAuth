@@ -118,6 +118,10 @@ return [
             'label' => 'Использовать только SSO',
             'help' => 'Сделать SSO единственным доступным методом для входа в 2FAuth. Вход в систему по паролю и Webauthn будут отключены для обычных пользователей. Это ограничение не затрагивает администраторов.',
         ],
+        'allow_pat_in_sso_only' => [
+            'label' => 'Allow PAT usage',
+            'help' => 'Let users create personal access tokens and use them to authenticate with third party application like the 2FAuth web extension',
+        ],
         'keep_sso_registration_enabled' => [
             'label' => 'Сохранить SSO регистрацию включенной',
             'help' => 'Разрешить новым пользователям входить в систему впервые через SSO, пока регистрация отключена',

@@ -53,7 +53,7 @@ return [
     'unsupported_migration' => 'डेटा किसी भी समर्थित प्रारूप से मेल नहीं खाता',
     'unsupported_otp_type' => 'ओटीपी का प्रकार असमर्थित',
     'encrypted_migration' => 'अपठनीय, डेटा एन्क्रिप्टेड लगता है',
-    'no_logo_found_for_x' => ':service के लिए कोई लोगो उपलब्ध नहीं है',
+    'no_icon_for_this_variant' => 'No icon available in this variant',
     'file_upload_failed' => 'फाइल अपलोड असफल रहा',
     'unauthorized' => 'अनधिकृत',
     'unauthorized_legend' => 'आपको इस संसाधन को देखने या यह क्रिया करने की अनुमति नहीं है',

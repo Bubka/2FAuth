@@ -66,7 +66,7 @@ return [
         ],
         'choose_image' => 'अपलोड',
         'i_m_lucky' => 'अपनी किस्मत आज़माएं',
-        'i_m_lucky_legend' => '"अपनी किस्मत आज़माएं" बटन द्वारा दी गई सेवा का आधिकारिक आइकन प्राप्त करने का प्रयास करें। ".xyz" एक्सटेंशन के बिना वास्तविक सेवा का नाम दर्ज करें और टाइपो से बचने का प्रयास करें। (बीटा सुविधा)',
+        'i_m_lucky_legend' => 'The "Try my luck" button tries to get a standard icon from the selected icon collection. The simpler the Service field value, the more likely you are to get the expected icon: Do not append any extension (like ".com"), use the exact name of the service, avoid special chars.',
         'test' => 'जाँच',
         'group' => [
             'label' => 'Group',

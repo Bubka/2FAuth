@@ -118,6 +118,10 @@ return [
             'label' => 'Utiliser uniquement SSO',
             'help' => 'Définir SSO comme la seule méthode disponible pour se connecter à 2FAuth. La connexion par mot de passe ou Webauthn est alors désactivée pour les utilisateurs. Les administrateurs ne sont pas impactés par cette restriction.',
         ],
+        'allow_pat_in_sso_only' => [
+            'label' => 'Autoriser l\'utilisation des PAT',
+            'help' => 'Permettre aux utilisateurs de créer des jetons d\'accès personnels et de les utiliser pour s\'authentifier avec une application tierce comme par exemple l\'extension por navigateur 2FAuth',
+        ],
         'keep_sso_registration_enabled' => [
             'label' => 'Garder l\'inscription via SSO activée',
             'help' => 'Permet aux nouveaux utilisateurs de se connecter pour la première fois via SSO alors que les inscriptions sont désactivées',

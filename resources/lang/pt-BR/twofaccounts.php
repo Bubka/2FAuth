@@ -79,7 +79,7 @@ otpauth://TYPE/LABEL?secret=SECRET&issuer=ISSUER&digits=DIGITS&period=PERIOD',
         ],
         'choose_image' => 'Enviar',
         'i_m_lucky' => 'Tente a minha sorte',
-        'i_m_lucky_legend' => 'O botão "Tente a minha sorte" tenta obter o ícone oficial do serviço fornecido. Digite o nome do serviço atual sem a extensão ".xyz" e tente evitar erros de digitação. (recurso beta)',
+        'i_m_lucky_legend' => 'The "Try my luck" button tries to get a standard icon from the selected icon collection. The simpler the Service field value, the more likely you are to get the expected icon: Do not append any extension (like ".com"), use the exact name of the service, avoid special chars.',
         'test' => 'Testar',
         'group' => [
             'label' => 'Grupo',
@@ -91,7 +91,7 @@ otpauth://TYPE/LABEL?secret=SECRET&issuer=ISSUER&digits=DIGITS&period=PERIOD',
         ],
         'plain_text' => 'Texto sem formatação',
         'otp_type' => [
-            'label' => 'Choose the type of OTP to create',
+            'label' => 'Escolha o método de OTP que deseja criar',
             'help' => 'OTP baseado no tempo ou HMAC baseado em OTP ou OTP Steam'
         ],
         'digits' => [

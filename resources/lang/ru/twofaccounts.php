@@ -66,7 +66,7 @@ return [
         ],
         'choose_image' => 'Загрузить',
         'i_m_lucky' => 'Мне повезёт!',
-        'i_m_lucky_legend' => 'Кнопка "Мне повезёт!" попытается получить официальный значок данной службы. Введите фактическое имя службы без расширения ".xyz" и попытайтесь избежать опечаток. (бета-функция)',
+        'i_m_lucky_legend' => 'The "Try my luck" button tries to get a standard icon from the selected icon collection. The simpler the Service field value, the more likely you are to get the expected icon: Do not append any extension (like ".com"), use the exact name of the service, avoid special chars.',
         'test' => 'Проверка',
         'group' => [
             'label' => 'Группа',
@@ -78,7 +78,7 @@ return [
         ],
         'plain_text' => 'Обычный текст',
         'otp_type' => [
-            'label' => 'Choose the type of OTP to create',
+            'label' => 'Выберите тип создаваемого OTP',
             'help' => 'OTP на основе времени, OTP на основе HMAC или Steam OTP'
         ],
         'digits' => [

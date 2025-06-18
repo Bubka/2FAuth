@@ -66,7 +66,7 @@ return [
         ],
         'choose_image' => '上传',
         'i_m_lucky' => '手气不错',
-        'i_m_lucky_legend' => '“手气不错” 功能可以尝试获取此服务的官方图标。若要提高成功率，请在 “服务名称” 栏中以英文输入服务名。(测试中的功能)',
+        'i_m_lucky_legend' => 'The "Try my luck" button tries to get a standard icon from the selected icon collection. The simpler the Service field value, the more likely you are to get the expected icon: Do not append any extension (like ".com"), use the exact name of the service, avoid special chars.',
         'test' => '测试',
         'group' => [
             'label' => '分组',
@@ -78,7 +78,7 @@ return [
         ],
         'plain_text' => '纯文本',
         'otp_type' => [
-            'label' => 'Choose the type of OTP to create',
+            'label' => '选择要创建的 OTP 类型',
             'help' => 'TOTP，HOTP 或 Steam OTP'
         ],
         'digits' => [

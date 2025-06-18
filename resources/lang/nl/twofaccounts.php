@@ -66,7 +66,7 @@ return [
         ],
         'choose_image' => 'Upload',
         'i_m_lucky' => 'Probeer mijn geluk',
-        'i_m_lucky_legend' => 'De "Probeer mijn geluk" knop probeert het officiële icoon te krijgen van de gegeven service. Voer de werkelijke servicenaam in zonder ".xyz" extensie en probeer een typefout te vermijden. (bèta-functie)',
+        'i_m_lucky_legend' => 'The "Try my luck" button tries to get a standard icon from the selected icon collection. The simpler the Service field value, the more likely you are to get the expected icon: Do not append any extension (like ".com"), use the exact name of the service, avoid special chars.',
         'test' => 'Test',
         'group' => [
             'label' => 'Group',

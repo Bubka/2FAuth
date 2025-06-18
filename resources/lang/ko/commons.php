@@ -91,5 +91,7 @@ return [
     'one_month' => '한 달.',
     'x_month' => ':x 달.',
     'one_year' => '1년.',
-    'copy_next_password' => 'Copy next password to clipboard',
+    'copy_next_password' => '다음 패스워드를 클립보드에 저장',
+    'visit_x' => 'Visit :website',
+    'regular' => 'Regular',
 ];

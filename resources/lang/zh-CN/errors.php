@@ -53,7 +53,7 @@ return [
     'unsupported_migration' => '不兼容的数据格式',
     'unsupported_otp_type' => '不兼容的 OTP 类型',
     'encrypted_migration' => '无法读取，数据可能已被加密',
-    'no_logo_found_for_x' => '没有为 :service 找到可用的 Logo',
+    'no_icon_for_this_variant' => 'No icon available in this variant',
     'file_upload_failed' => '文件上传失败',
     'unauthorized' => '无权限',
     'unauthorized_legend' => '您无权查看此资源或执行此操作',
@@ -74,6 +74,6 @@ return [
     'qrcode_has_invalid_checksum' => '二维码的校验码错误',
     'no_readable_qrcode' => '没有可识别的二维码',
     'failed_icon_store_database_toggling' => '图标迁移失败，相关设置已恢复为先前的值。',
-    'failed_to_retrieve_app_settings' => 'Failed to retrieve application settings',
-    'reserved_name_please_choose_something_else' => 'Reserved name, please choose something else',
+    'failed_to_retrieve_app_settings' => '获取应用程序设置失败',
+    'reserved_name_please_choose_something_else' => '此名称为保留字符，请选择其他内容',
 ];

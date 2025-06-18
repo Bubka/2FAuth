@@ -43,7 +43,7 @@ return [
     ],
     'make_sure_copy_token' => 'Kopieren Sie Ihren persönlichen Zugangs-Token jetzt. Sie werden ihn nicht mehr sehen können!',
     'data_input' => 'Daten-Eingabe',
-    'settings_managed_by_administrator' => 'Some settings are being managed by your administrator',
+    'settings_managed_by_administrator' => 'Einige Einstellungen werden von Ihrem Administrator verwaltet',
     'forms' => [
         'edit_settings' => 'Einstellungen bearbeiten',
         'setting_saved' => 'Einstellungen gespeichert',
@@ -59,23 +59,23 @@ return [
             'help' => 'Die Zeitzone wird auf alle in der Anwendung angezeigten Daten und Zeiten angewendet'
         ],
         'show_otp_as_dot' => [
-            'label' => 'Show generated OTP as dot',
-            'help' => 'Replace generated password characters with *** to ensure confidentiality. Does not affect the copy/paste feature'
+            'label' => 'Erstellte OTP als Punkt anzeigen',
+            'help' => 'Passwortzeichen werden als *** angezeigt, um die Vertraulichkeit zu gewährleisten. Dies beeinflusst nicht die Kopieren/Einfügen-Funktion'
         ],
         'reveal_dotted_otp' => [
-            'label' => 'Reveal obscured OTP',
+            'label' => 'Verdecktes OTP anzeigen',
             'help' => 'Die Fähigkeit Punkt-verdeckte Passwörter temporär freigeben'
         ],
         'close_otp_on_copy' => [
-            'label' => 'Close OTP after copy',
+            'label' => 'OTP nach dem Kopieren schließen',
             'help' => 'Bei einem Klick auf das erzeugte Passwort wird es automatisch auf dem Bildschirm ausgeblendet'
         ],
         'show_next_otp' => [
-            'label' => 'Show next OTP',
-            'help' => 'Preview the next password, i.e. the password that will replace the current password when it expires. Preferences set for the current OTP also apply to the next one (formatting, show as dot)'
+            'label' => 'Nächstes OTP anzeigen',
+            'help' => 'Vorschau des nächsten Passworts, d.h. des Passworts, welches das aktuelle Passwort ersetzt, wenn es abläuft. Einstellungen für das aktuelle OTP gelten auch für das nächste (Formatieren, als Punkt anzeigen)'
         ],
         'auto_close_timeout' => [
-            'label' => 'Auto close OTP',
+            'label' => 'OTP automatisch schließen',
             'help' => 'Passwort automatisch nach einem Timeout auf dem Bildschirm ausblenden. Dies vermeidet unnötige Anfragen nach neuen Passwörtern, wenn Sie die Passwortansicht nicht schließen.'
         ],
         'clear_search_on_copy' => [
@@ -87,7 +87,7 @@ return [
             'help' => 'Erzwingt bei Aufruf der Funktion Sortieren die Sortierung der Konten unter Berücksichtigung der Groß- und Kleinschreibung'
         ],
         'copy_otp_on_display' => [
-            'label' => 'Copy OTP on display',
+            'label' => 'OTP auf dem Bildschirm kopieren',
             'help' => 'Kopiert automatisch ein generiertes Passwort bei Anzeige auf dem Bildschirm. Aufgrund der Einschränkungen des Browsers, wird nur das erste <abbr title="Time-based One-Time Password">TOTP</abbr> Passwort kopiert, nicht das rotierende Passwort'
         ],
         'use_basic_qrcode_reader' => [
@@ -124,6 +124,18 @@ return [
         'get_official_icons' => [
             'label' => 'Offizielle Symbole abrufen',
             'help' => '(Versuch) Das offizielle Symbol des 2FA-Ausstellers beim Hinzufügen eines Kontos erhalten'
+        ],
+        'icon_collection' => [
+            'label' => 'Favorite icon source',
+            'help' => 'The icons collection to be queried at first when an official icon is required. Changing this setting does not refresh icons that have already been fetched.'
+        ],
+        'icon_variant' => [
+            'label' => 'Icon variant',
+            'help' => 'Some icons are available in different flavors to best suit dark or light user interfaces. Set the one you want to look for first. The regular variant will automatically be fetched as a fallback.'
+        ],
+        'icon_variant_strict_fetch' => [
+            'label' => 'Strict fetch',
+            'help' => 'Narrow the fetch to the specified variant. If the variant is missing, 2FAuth will not try to fallback to the regular variant.'
         ],
         'auto_lock' => [
             'label' => 'Automatische Sperrung',

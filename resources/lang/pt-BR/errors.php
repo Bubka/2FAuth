@@ -53,7 +53,7 @@ return [
     'unsupported_migration' => 'Os dados não correspondem a qualquer formato suportado',
     'unsupported_otp_type' => 'Tipo de OTP não suportado',
     'encrypted_migration' => 'Inlegível, os dados parecem criptografados',
-    'no_logo_found_for_x' => 'Nenhum logotipo disponível para :service',
+    'no_icon_for_this_variant' => 'No icon available in this variant',
     'file_upload_failed' => 'Falha no upload do arquivo',
     'unauthorized' => 'Não autorizado',
     'unauthorized_legend' => 'Você não tem permissão para visualizar este recurso ou para executar esta ação',
@@ -74,6 +74,6 @@ return [
     'qrcode_has_invalid_checksum' => 'QR code possui checksum inválido',
     'no_readable_qrcode' => 'Nenhum código QR legível',
     'failed_icon_store_database_toggling' => 'Houve um erro ao migrar os ícones. A configuração foi restaurada para o valor anterior.',
-    'failed_to_retrieve_app_settings' => 'Failed to retrieve application settings',
-    'reserved_name_please_choose_something_else' => 'Reserved name, please choose something else',
+    'failed_to_retrieve_app_settings' => 'Falha ao obter as configurações do sistema',
+    'reserved_name_please_choose_something_else' => 'Esse nome não pode ser usado, selecione outro nome',
 ];

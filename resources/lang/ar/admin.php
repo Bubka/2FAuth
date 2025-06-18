@@ -118,6 +118,10 @@ return [
             'label' => 'Use SSO only',
             'help' => 'Make SSO the only available method to log in to 2FAuth. Password login and Webauthn are then disabled for regular users. Administrators are not affected by this restriction.',
         ],
+        'allow_pat_in_sso_only' => [
+            'label' => 'Allow PAT usage',
+            'help' => 'Let users create personal access tokens and use them to authenticate with third party application like the 2FAuth web extension',
+        ],
         'keep_sso_registration_enabled' => [
             'label' => 'Keep SSO registration enabled',
             'help' => 'Allow new users to sign in for the first time via SSO whereas registration is disabled',

@@ -125,6 +125,18 @@ return [
             'label' => 'Obtener iconos oficiales',
             'help' => '(Intentar) Obtener el icono oficial del emisor 2FA al añadir una cuenta'
         ],
+        'icon_collection' => [
+            'label' => 'Favorite icon source',
+            'help' => 'The icons collection to be queried at first when an official icon is required. Changing this setting does not refresh icons that have already been fetched.'
+        ],
+        'icon_variant' => [
+            'label' => 'Icon variant',
+            'help' => 'Some icons are available in different flavors to best suit dark or light user interfaces. Set the one you want to look for first. The regular variant will automatically be fetched as a fallback.'
+        ],
+        'icon_variant_strict_fetch' => [
+            'label' => 'Strict fetch',
+            'help' => 'Narrow the fetch to the specified variant. If the variant is missing, 2FAuth will not try to fallback to the regular variant.'
+        ],
         'auto_lock' => [
             'label' => 'Bloqueo automático',
             'help' => 'Cerrar sesión del usuario automáticamente en caso de inactividad. No tiene efecto cuando la autenticación es manejada por un proxy, ni cuando ninguna url de cierre de sesión personalizada se especificada.'

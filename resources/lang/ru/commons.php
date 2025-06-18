@@ -91,5 +91,7 @@ return [
     'one_month' => '1 мес.',
     'x_month' => ':x мес.',
     'one_year' => '1 г.',
-    'copy_next_password' => 'Copy next password to clipboard',
+    'copy_next_password' => 'Скопировать следующий пароль в буфер обмена',
+    'visit_x' => 'Visit :website',
+    'regular' => 'Regular',
 ];

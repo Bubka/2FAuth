@@ -92,4 +92,6 @@ return [
     'x_month' => ':x mdr.',
     'one_year' => '1 år.',
     'copy_next_password' => 'Copy next password to clipboard',
+    'visit_x' => 'Visit :website',
+    'regular' => 'Regular',
 ];

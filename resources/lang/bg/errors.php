@@ -53,7 +53,7 @@ return [
     'unsupported_migration' => 'Данните не отговарят на нито един поддържан формат',
     'unsupported_otp_type' => 'Неподдържан OTP тип',
     'encrypted_migration' => 'Нечетимо, данните изглеждат криптирани',
-    'no_logo_found_for_x' => 'Няма налично лого за {service}',
+    'no_icon_for_this_variant' => 'No icon available in this variant',
     'file_upload_failed' => 'Качването на файл не бе успешно',
     'unauthorized' => 'Неразрешено',
     'unauthorized_legend' => 'Нямате права да видите този ресурс или да извършите това действие',

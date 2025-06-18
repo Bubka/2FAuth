@@ -118,6 +118,10 @@ return [
             'label' => 'SSO のみ',
             'help' => '2FAuth にログインできる手段を SSO 限定にします。通常ユーザーはパスワードと Webauthn によるログインができなくなります。管理者はこの制限の影響を受けません。',
         ],
+        'allow_pat_in_sso_only' => [
+            'label' => 'Allow PAT usage',
+            'help' => 'Let users create personal access tokens and use them to authenticate with third party application like the 2FAuth web extension',
+        ],
         'keep_sso_registration_enabled' => [
             'label' => 'SSO登録は許可する',
             'help' => '新規登録が無効でも、新規ユーザーがSSO経由で初回サインインすることは許可する',

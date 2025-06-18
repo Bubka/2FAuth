@@ -125,6 +125,18 @@ return [
             'label' => '公式アイコンを取得',
             'help' => 'アカウント追加時に2FAプロバイダの公式アイコンを取得（しようと）します。'
         ],
+        'icon_collection' => [
+            'label' => 'Favorite icon source',
+            'help' => 'The icons collection to be queried at first when an official icon is required. Changing this setting does not refresh icons that have already been fetched.'
+        ],
+        'icon_variant' => [
+            'label' => 'Icon variant',
+            'help' => 'Some icons are available in different flavors to best suit dark or light user interfaces. Set the one you want to look for first. The regular variant will automatically be fetched as a fallback.'
+        ],
+        'icon_variant_strict_fetch' => [
+            'label' => 'Strict fetch',
+            'help' => 'Narrow the fetch to the specified variant. If the variant is missing, 2FAuth will not try to fallback to the regular variant.'
+        ],
         'auto_lock' => [
             'label' => '自動ロック',
             'help' => 'この期間操作がないと、自動的にログアウトします。 プロキシが認証を処理していて、ログアウトURLが指定されていない場合は効果がありません。'

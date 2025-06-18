@@ -66,7 +66,7 @@ return [
         ],
         'choose_image' => 'Hochladen',
         'i_m_lucky' => 'Mein Glück versuchen',
-        'i_m_lucky_legend' => 'Durch "Mein Glück versuchen" können Sie das offizielle Symbol des jeweiligen Dienstes erhalten. Geben Sie den tatsächlichen Namen des Dienstes ohne die Erweiterung ".xyz" ein und versuchen Sie, Tippfehler zu vermeiden (Beta-Funktion)',
+        'i_m_lucky_legend' => 'The "Try my luck" button tries to get a standard icon from the selected icon collection. The simpler the Service field value, the more likely you are to get the expected icon: Do not append any extension (like ".com"), use the exact name of the service, avoid special chars.',
         'test' => 'Test',
         'group' => [
             'label' => 'Gruppe',
@@ -78,7 +78,7 @@ return [
         ],
         'plain_text' => 'Klartext',
         'otp_type' => [
-            'label' => 'Choose the type of OTP to create',
+            'label' => 'Wählen Sie den OTP-Typ zum Erstellen aus',
             'help' => 'Zeitbasierte OTP oder HMAC-basierte OTP oder Steam OTP'
         ],
         'digits' => [

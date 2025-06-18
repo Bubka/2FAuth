@@ -43,7 +43,7 @@ return [
     ],
     'make_sure_copy_token' => '请确保您已复制个人访问令牌！此令牌仅展示这一次。',
     'data_input' => '数据录入',
-    'settings_managed_by_administrator' => 'Some settings are being managed by your administrator',
+    'settings_managed_by_administrator' => '部分设置已被您的管理员进行管控',
     'forms' => [
         'edit_settings' => '编辑设置',
         'setting_saved' => '设置已保存',
@@ -59,23 +59,23 @@ return [
             'help' => '为所有的 “日期” 与 “时间” 设置时区'
         ],
         'show_otp_as_dot' => [
-            'label' => 'Show generated OTP as dot',
-            'help' => 'Replace generated password characters with *** to ensure confidentiality. Does not affect the copy/paste feature'
+            'label' => '隐藏生成的验证码',
+            'help' => '用 ”*“ 号来遮挡验证码的显示，以提高安全性。此功能不会影响复制和粘贴操作。'
         ],
         'reveal_dotted_otp' => [
-            'label' => 'Reveal obscured OTP',
+            'label' => '显示被遮挡的验证码',
             'help' => '临时允许验证码以明文显示'
         ],
         'close_otp_on_copy' => [
-            'label' => 'Close OTP after copy',
+            'label' => '复制后关闭验证码页面',
             'help' => '点击某个验证码即可复制并隐藏显示'
         ],
         'show_next_otp' => [
-            'label' => 'Show next OTP',
-            'help' => 'Preview the next password, i.e. the password that will replace the current password when it expires. Preferences set for the current OTP also apply to the next one (formatting, show as dot)'
+            'label' => '显示下一个验证码',
+            'help' => '预览下一个验证码，即当前验证码过期后，会生成的新验证码。当前验证码的相关设置也会同样应用到下一个验证码上（显示格式、是否显示为点）。'
         ],
         'auto_close_timeout' => [
-            'label' => 'Auto close OTP',
+            'label' => '自动关闭验证码页面',
             'help' => '超时后自动隐藏验证码。如果您忘记退出验证码界面，此功能可以减少不必要的验证码刷新请求。'
         ],
         'clear_search_on_copy' => [
@@ -87,7 +87,7 @@ return [
             'help' => '选中时，强制 “排序” 功能以区分大小写的方式对账号进行排序'
         ],
         'copy_otp_on_display' => [
-            'label' => 'Copy OTP on display',
+            'label' => '当验证码显示时自动复制',
             'help' => '当验证码显示时立即复制。由于浏览器的限制，仅能复制第一个 <abbr title="Time-based One-Time Password">TOTP</abbr> 验证码，后续刷新的无法自动复制。'
         ],
         'use_basic_qrcode_reader' => [
@@ -124,6 +124,18 @@ return [
         'get_official_icons' => [
             'label' => '获取官方图标',
             'help' => '在添加账号时，尝试获此账号的官方图标'
+        ],
+        'icon_collection' => [
+            'label' => 'Favorite icon source',
+            'help' => 'The icons collection to be queried at first when an official icon is required. Changing this setting does not refresh icons that have already been fetched.'
+        ],
+        'icon_variant' => [
+            'label' => 'Icon variant',
+            'help' => 'Some icons are available in different flavors to best suit dark or light user interfaces. Set the one you want to look for first. The regular variant will automatically be fetched as a fallback.'
+        ],
+        'icon_variant_strict_fetch' => [
+            'label' => 'Strict fetch',
+            'help' => 'Narrow the fetch to the specified variant. If the variant is missing, 2FAuth will not try to fallback to the regular variant.'
         ],
         'auto_lock' => [
             'label' => '自动锁定',

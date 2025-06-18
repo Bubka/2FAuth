@@ -53,7 +53,7 @@ return [
     'unsupported_migration' => 'Data matcher ikke noget understøttet format',
     'unsupported_otp_type' => 'Ikke understøttet OTP-type',
     'encrypted_migration' => 'Ulæselig, dataene synes krypteret',
-    'no_logo_found_for_x' => 'Intet logo tilgængeligt for :service',
+    'no_icon_for_this_variant' => 'No icon available in this variant',
     'file_upload_failed' => 'Upload af fil mislykkedes',
     'unauthorized' => 'Ikke Godkendt',
     'unauthorized_legend' => 'Du har ikke rettigheder til at se denne ressource eller til at udføre denne handling',

@@ -91,5 +91,7 @@ return [
     'one_month' => '1 Mon.',
     'x_month' => ':x Mon.',
     'one_year' => '1 J.',
-    'copy_next_password' => 'Copy next password to clipboard',
+    'copy_next_password' => 'Nächstes Passwort in die Zwischenablage kopieren',
+    'visit_x' => 'Visit :website',
+    'regular' => 'Regular',
 ];

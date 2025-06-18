@@ -118,6 +118,10 @@ return [
             'label' => 'Nur SSO verwenden',
             'help' => 'Machen Sie SSO die einzige verfügbare Methode, um sich bei 2FAuth anzumelden. Passwort-Login und Webauthn sind dann für normale Benutzer deaktiviert. Administratoren sind von dieser Einschränkung nicht betroffen.',
         ],
+        'allow_pat_in_sso_only' => [
+            'label' => 'Allow PAT usage',
+            'help' => 'Let users create personal access tokens and use them to authenticate with third party application like the 2FAuth web extension',
+        ],
         'keep_sso_registration_enabled' => [
             'label' => 'SSO-Registrierung aktiviert lassen',
             'help' => 'Neuen Benutzern erlauben, sich zum ersten Mal über SSO anzumelden, während die Registrierung deaktiviert ist.',

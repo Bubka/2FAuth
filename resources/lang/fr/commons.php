@@ -92,4 +92,6 @@ return [
     'x_month' => ':x mo.',
     'one_year' => '1 an',
     'copy_next_password' => 'Copier le prochain code OTP dans le presse-papiers',
+    'visit_x' => 'Visiter :website',
+    'regular' => 'Standard',
 ];

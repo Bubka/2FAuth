@@ -118,6 +118,10 @@ return [
             'label' => 'Usar somente sistema de login único',
             'help' => 'Faça do SSO o único método disponível para fazer login no 2FAuth. O login por senha e o Webauth são então desativados para usuários comuns. Os administradores não são afetados por essa restrição.',
         ],
+        'allow_pat_in_sso_only' => [
+            'label' => 'Allow PAT usage',
+            'help' => 'Let users create personal access tokens and use them to authenticate with third party application like the 2FAuth web extension',
+        ],
         'keep_sso_registration_enabled' => [
             'label' => 'Mantenha o registro SSO ativado',
             'help' => 'Permite que novos usuários façam login pela primeira vez via SSO enquanto os registros estão desativados',

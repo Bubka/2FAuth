@@ -66,7 +66,7 @@ return [
         ],
         'choose_image' => '업로드',
         'i_m_lucky' => '자동으로 불러오기',
-        'i_m_lucky_legend' => '\'자동으로 불러오기\' 버튼은 이 서비스의 공식 아이콘을 가져오려고 시도합니다. ".xyz"와 같은 도메인을 제외한 실제 서비스 이름을 오타 없이 입력해 주세요. (베타 기능)',
+        'i_m_lucky_legend' => 'The "Try my luck" button tries to get a standard icon from the selected icon collection. The simpler the Service field value, the more likely you are to get the expected icon: Do not append any extension (like ".com"), use the exact name of the service, avoid special chars.',
         'test' => '테스트',
         'group' => [
             'label' => '그룹',
@@ -78,7 +78,7 @@ return [
         ],
         'plain_text' => '일반 텍스트',
         'otp_type' => [
-            'label' => 'Choose the type of OTP to create',
+            'label' => '생성할 OTP 유형',
             'help' => '시간 기반 OTP, HMAC 기반 OTP, Steam OTP 중 선택 가능'
         ],
         'digits' => [

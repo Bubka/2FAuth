@@ -118,6 +118,10 @@ return [
             'label' => '仅允许 SSO 登录',
             'help' => '仅允许通过 SSO 进行登录。启用此功能后，普通用户将无法使用密码和 WebAuthn 来登录 2FAuth，但管理员不受此限制的影响。',
         ],
+        'allow_pat_in_sso_only' => [
+            'label' => 'Allow PAT usage',
+            'help' => 'Let users create personal access tokens and use them to authenticate with third party application like the 2FAuth web extension',
+        ],
         'keep_sso_registration_enabled' => [
             'label' => '仍然允许 SSO 注册',
             'help' => '在注册被禁用时，仍然允许新用户通过 SSO 登录',
@@ -128,12 +132,12 @@ return [
         ],
         'test_email' => [
             'label' => '测试送信配置',
-            'help' => '发送测试邮件来验证送信配置是否正确。如果没有正确地配置邮件服务器，用户将无法收到 “重置密码” 的邮件。',
-            'email_will_be_send_to_x' => '将发送邮件到此地址： <span class="is-family-code has-text-info">:email</span>',
+            'help' => '发送一封测试邮件，以此验证送信配置是否正确。如果没有正确地配置邮件服务器，用户将无法收到 “重置密码” 的邮件。',
+            'email_will_be_send_to_x' => '邮件将发送到此地址： <span class="is-family-code has-text-info">:email</span>',
         ],
         'health_endpoint' => [
             'label' => '节点健康检查',
-            'help' => '您可以访问此 URL 来检查当前 2FAuth 应用的健康状况。
+            'help' => '此 URL 可以显示当前 2FAuth 应用的健康状况。
 您可以将此 URL 配置在 Docker 的 “HEALTHCHECK”，或是 Kubernetes 的 “livenessProbe” 中，来对服务进行健康检查。',
         ],
         'cache_management' => [
@@ -142,7 +146,7 @@ return [
         ],
         'store_icon_to_database' => [
             'label' => '保存图标至数据库',
-            'help' => '上传的图标除了储存到磁盘里，还会被注册到数据库中充当缓存。<br />启用此功能可以令 2FAuth 更便于备份，因为仅备份数据库，即可包含所有的数据与图标。<br />但要注意的是，此功能可能会产生负面效果：如果上传了大量的大体积图标，那么数据库的体积也会显著地增大。这同时也可能会影响应用的性能，因为需要频繁地读写磁盘，来保证图标数据与数据库保持同步。',
+            'help' => '图标上传后会额外储存一份到数据库中。<br />启用此功能可以令 2FAuth 更易于备份。仅需备份数据库，即可保存 2FAuth 的数据以及所有的图标。<br />但要注意的是，此功能可能会产生负面效果：如果上传了大量的大体积图标，那么数据库的体积也会显著地增大。<br />此功能也可能会影响 2FAuth 的性能，因为需要频繁地读写磁盘来保证 ”图标“ 数据与数据库保持同步。',
         ],
     ],
 

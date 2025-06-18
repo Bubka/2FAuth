@@ -66,7 +66,7 @@ return [
         ],
         'choose_image' => 'Качи',
         'i_m_lucky' => 'На късмет',
-        'i_m_lucky_legend' => 'Бутонът "На късмет" ще опита да изтегли официалната икона на дадената услуга. Въведете действителното име на услугата без разширение ".xyz" и се опитайте да избегнете правописна грешка. (бета функция)',
+        'i_m_lucky_legend' => 'The "Try my luck" button tries to get a standard icon from the selected icon collection. The simpler the Service field value, the more likely you are to get the expected icon: Do not append any extension (like ".com"), use the exact name of the service, avoid special chars.',
         'test' => 'Тест',
         'group' => [
             'label' => 'Group',

@@ -118,6 +118,10 @@ return [
             'label' => 'SSO만 사용',
             'help' => '2FAuth 로그인 수단을 SSO만으로 제한합니다. 일반 사용자의 비밀번호 로그인과 웹 인증(WebAuthn)이 비활성화됩니다. 관리자는 이 제한의 영향을 받지 않습니다.',
         ],
+        'allow_pat_in_sso_only' => [
+            'label' => 'Allow PAT usage',
+            'help' => 'Let users create personal access tokens and use them to authenticate with third party application like the 2FAuth web extension',
+        ],
         'keep_sso_registration_enabled' => [
             'label' => 'SSO 가입을 활성화된 상태로 유지',
             'help' => '등록은 비활성화 되었어도 신규 사용자가 SSO를 통해 처음 로그인할 수 있도록 허용',

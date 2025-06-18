@@ -14,18 +14,18 @@ return [
     */
 
     'admin' => 'Admin',
-    'admin_panel' => 'Admin panel',
-    'app_setup' => 'App setup',
-    'auth' => 'Auth',
-    'registrations' => 'Registrations',
-    'users' => 'Users',
-    'users_legend' => 'Manage users registered on your instance or create new ones.',
-    'admin_settings' => 'Admin settings',
-    'create_new_user' => 'Create a user',
-    'new_user' => 'New user',
-    'search_user_placeholder' => 'User name, email...',
-    'quick_filters_colons' => 'Quick filters:',
-    'user_created' => 'user successfully created',
+    'admin_panel' => 'Painel de administração',
+    'app_setup' => 'Definições da Aplicação',
+    'auth' => 'Autenticação',
+    'registrations' => 'Inscrições',
+    'users' => 'Utilizadores',
+    'users_legend' => 'Gerir utilizadores registados na sua instância ou criar novos.',
+    'admin_settings' => 'Definições de administração',
+    'create_new_user' => 'Criar um utilizador',
+    'new_user' => 'Novo utilizador',
+    'search_user_placeholder' => 'Nome de utilizador, e-mail...',
+    'quick_filters_colons' => 'Filtros rápidos:',
+    'user_created' => 'utilizador criado com sucesso',
     'confirm' => [
         'delete_user' => 'Are you sure you want to delete this user? There is no going back.',
         'request_password_reset' => 'Are you sure you want to reset this user\'s password?',
@@ -117,6 +117,10 @@ return [
         'use_sso_only' => [
             'label' => 'Use SSO only',
             'help' => 'Make SSO the only available method to log in to 2FAuth. Password login and Webauthn are then disabled for regular users. Administrators are not affected by this restriction.',
+        ],
+        'allow_pat_in_sso_only' => [
+            'label' => 'Allow PAT usage',
+            'help' => 'Let users create personal access tokens and use them to authenticate with third party application like the 2FAuth web extension',
         ],
         'keep_sso_registration_enabled' => [
             'label' => 'Keep SSO registration enabled',

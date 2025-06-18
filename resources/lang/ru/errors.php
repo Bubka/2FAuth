@@ -53,7 +53,7 @@ return [
     'unsupported_migration' => 'Данные не соответствуют ни одному поддерживаемому формату',
     'unsupported_otp_type' => 'Неподдерживаемый тип OTP',
     'encrypted_migration' => 'Нечитаемо, данные кажутся зашифрованными',
-    'no_logo_found_for_x' => 'Нет логотипа для :service',
+    'no_icon_for_this_variant' => 'No icon available in this variant',
     'file_upload_failed' => 'Не удалось загрузить файл',
     'unauthorized' => 'Авторизация не выполнена',
     'unauthorized_legend' => 'У вас нет разрешения на просмотр этого ресурса или выполнение этого действия',
@@ -74,6 +74,6 @@ return [
     'qrcode_has_invalid_checksum' => 'QR-код имеет некорректную контрольную сумму',
     'no_readable_qrcode' => 'Нет читаемого QR кода',
     'failed_icon_store_database_toggling' => 'Не удалось перенести значки. Настройки были восстановлены в предыдущее значение.',
-    'failed_to_retrieve_app_settings' => 'Failed to retrieve application settings',
-    'reserved_name_please_choose_something_else' => 'Reserved name, please choose something else',
+    'failed_to_retrieve_app_settings' => 'Ошибка при получении настроек приложения',
+    'reserved_name_please_choose_something_else' => 'Зарезервированное имя, пожалуйста, выберите что-то другое',
 ];

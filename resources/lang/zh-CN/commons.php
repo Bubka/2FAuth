@@ -91,5 +91,7 @@ return [
     'one_month' => '1 个月',
     'x_month' => ':x 个月',
     'one_year' => '1 年',
-    'copy_next_password' => 'Copy next password to clipboard',
+    'copy_next_password' => '复制下一个验证码',
+    'visit_x' => 'Visit :website',
+    'regular' => 'Regular',
 ];

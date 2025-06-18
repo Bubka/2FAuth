@@ -118,6 +118,10 @@ return [
             'label' => 'Sadece SSO kullan',
             'help' => 'SSO\'yu 2FAuth\'a giriş için tek yöntem yapın. Şifre ve Webauthn ile giriş, düz kullanıcılar için devre dışı bırakılacak. Yöneticiler bu durumdan etkilenmez.',
         ],
+        'allow_pat_in_sso_only' => [
+            'label' => 'Allow PAT usage',
+            'help' => 'Let users create personal access tokens and use them to authenticate with third party application like the 2FAuth web extension',
+        ],
         'keep_sso_registration_enabled' => [
             'label' => 'SSO ile kayıt olmayı açık tut',
             'help' => 'Kayıt olma devre dışıyken yeni kullanıcıların SSO ile ilk kez oturum açmasına izin verir',

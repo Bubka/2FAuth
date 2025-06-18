@@ -53,7 +53,7 @@ return [
     'unsupported_migration' => 'Los datos no coinciden con ningún formato soportado',
     'unsupported_otp_type' => 'Tipo de OTP no soportada',
     'encrypted_migration' => 'Ilegíble, los datos parecen estar encriptados',
-    'no_logo_found_for_x' => 'Logo no disponible para {service}',
+    'no_icon_for_this_variant' => 'No icon available in this variant',
     'file_upload_failed' => 'Fallo al subir el archivo',
     'unauthorized' => 'No autorizado',
     'unauthorized_legend' => 'No tiene permisos para ver este recurso o para realizar esta acción',

@@ -53,7 +53,7 @@ return [
     'unsupported_migration' => 'Gegevens komen niet overeen met een ondersteund formaat',
     'unsupported_otp_type' => 'Niet ondersteund OTP type',
     'encrypted_migration' => 'Onleesbaar, de data lijkt versleuteld',
-    'no_logo_found_for_x' => 'Geen logo beschikbaar voor :service',
+    'no_icon_for_this_variant' => 'No icon available in this variant',
     'file_upload_failed' => 'Bestand uploaden mislukt',
     'unauthorized' => 'Niet geautoriseerd',
     'unauthorized_legend' => 'U heeft geen rechten om dit document te bekijken of deze actie uit te voeren',

@@ -66,7 +66,7 @@ return [
         ],
         'choose_image' => 'Unggah',
         'i_m_lucky' => 'Coba keberuntunganku',
-        'i_m_lucky_legend' => 'The "Try my luck" button try to get the official icon of the given service. Enter actual service name without ".xyz" extension and try to avoid typo. (beta feature)',
+        'i_m_lucky_legend' => 'The "Try my luck" button tries to get a standard icon from the selected icon collection. The simpler the Service field value, the more likely you are to get the expected icon: Do not append any extension (like ".com"), use the exact name of the service, avoid special chars.',
         'test' => 'Tes',
         'group' => [
             'label' => 'Group',

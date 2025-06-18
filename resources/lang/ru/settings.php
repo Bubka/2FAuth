@@ -43,7 +43,7 @@ return [
     ],
     'make_sure_copy_token' => 'Убедитесь, что вы скопировали ваш персональный токен доступа прямо сейчас. Вы не сможете увидеть его снова!',
     'data_input' => 'Ввод данных',
-    'settings_managed_by_administrator' => 'Some settings are being managed by your administrator',
+    'settings_managed_by_administrator' => 'Некоторые настройки управляются вашим администратором',
     'forms' => [
         'edit_settings' => 'Изменить настройки',
         'setting_saved' => 'Настройки сохранены',
@@ -59,23 +59,23 @@ return [
             'help' => 'Часовой пояс применяется ко всем датам и временам, отображаемым в приложении'
         ],
         'show_otp_as_dot' => [
-            'label' => 'Show generated OTP as dot',
-            'help' => 'Replace generated password characters with *** to ensure confidentiality. Does not affect the copy/paste feature'
+            'label' => 'Показывать сгенерированный OTP как звёздочки',
+            'help' => 'Заменить сгенерированный код на звёздочки (***) для обеспечения конфиденциальности. Это не повлияет на функцию копирования/вставки'
         ],
         'reveal_dotted_otp' => [
-            'label' => 'Reveal obscured OTP',
+            'label' => 'Показывать скрытый OTP',
             'help' => 'Разрешить временно раскрывать коды, скрытые звёздочками'
         ],
         'close_otp_on_copy' => [
-            'label' => 'Close OTP after copy',
+            'label' => 'Закрыть OTP после копирования',
             'help' => 'Нажатие на сгенерированный код, чтобы скопировать его, автоматически скроет его с экрана'
         ],
         'show_next_otp' => [
-            'label' => 'Show next OTP',
-            'help' => 'Preview the next password, i.e. the password that will replace the current password when it expires. Preferences set for the current OTP also apply to the next one (formatting, show as dot)'
+            'label' => 'Показывать следующий OTP',
+            'help' => 'Предварительный просмотр следующего пароля, т.е. пароль, который заменит текущий пароль, когда тот перестанет работать. Набор настроек для текущего OTP также применим к следующему (форматирование, показывать звёздочки)'
         ],
         'auto_close_timeout' => [
-            'label' => 'Auto close OTP',
+            'label' => 'Автозакрытие OTP',
             'help' => 'Автоматически скрывать пароль с экрана после таймаута. Это позволяет избежать ненужных запросов свежих паролей, если вы забыли закрыть просмотр пароля.'
         ],
         'clear_search_on_copy' => [
@@ -87,7 +87,7 @@ return [
             'help' => 'При вызове принудительно сортировать учётные записи с учетом регистра символов'
         ],
         'copy_otp_on_display' => [
-            'label' => 'Copy OTP on display',
+            'label' => 'Копировать OTP при отображении',
             'help' => 'Автоматически копировать сгенерированный код сразу после его появления на экране. Из-за ограничений браузеров, только первый пароль <abbr title="Time-based One-Time Password">TOTP</abbr> будет скопирован, но не последующие'
         ],
         'use_basic_qrcode_reader' => [
@@ -124,6 +124,18 @@ return [
         'get_official_icons' => [
             'label' => 'Получить официальные значки',
             'help' => '(Пробовать) Получать официальные значки эмитента 2FA при добавлении учётной записи'
+        ],
+        'icon_collection' => [
+            'label' => 'Favorite icon source',
+            'help' => 'The icons collection to be queried at first when an official icon is required. Changing this setting does not refresh icons that have already been fetched.'
+        ],
+        'icon_variant' => [
+            'label' => 'Icon variant',
+            'help' => 'Some icons are available in different flavors to best suit dark or light user interfaces. Set the one you want to look for first. The regular variant will automatically be fetched as a fallback.'
+        ],
+        'icon_variant_strict_fetch' => [
+            'label' => 'Strict fetch',
+            'help' => 'Narrow the fetch to the specified variant. If the variant is missing, 2FAuth will not try to fallback to the regular variant.'
         ],
         'auto_lock' => [
             'label' => 'Автоблокировка',

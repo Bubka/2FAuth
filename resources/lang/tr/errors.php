@@ -53,7 +53,7 @@ return [
     'unsupported_migration' => 'Veriler desteklenen hiçbir formata uymuyor',
     'unsupported_otp_type' => 'Desteklenmeyen OTP türü',
     'encrypted_migration' => 'Okunamaz, veri şifrelenmiş gibi görünüyor',
-    'no_logo_found_for_x' => ':service için logo mevcut değil',
+    'no_icon_for_this_variant' => 'No icon available in this variant',
     'file_upload_failed' => 'Dosya yüklemesi başarısız oldu',
     'unauthorized' => 'Yetkisiz',
     'unauthorized_legend' => 'Bu kaynağı görüntülemek veya bu işlemi gerçekleştirmek için izniniz yok',

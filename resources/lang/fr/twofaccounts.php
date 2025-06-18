@@ -66,7 +66,7 @@ return [
         ],
         'choose_image' => 'Télécharger',
         'i_m_lucky' => 'J\'ai de la chance',
-        'i_m_lucky_legend' => 'Le bouton "J\'ai de la chance" essaie d\'obtenir l\'icône officielle du service renseigné. Entrez le nom exact du service, sans l\'extension ".xyz" et avec la bonne orthographe. (fonctionnalité bêta)',
+        'i_m_lucky_legend' => 'Le bouton "J\'ai de la chance" essaie d\'obtenir une icône standard à partir de la collection d\'icônes sélectionnée. Saisissez une valeur pour le champ Service qui est simple, vous augmenterez vos chances d\'obtenir une icône : N\'ajoutez pas extension comme ".com", utilisez le nom exact du service, évitez les caractères spéciaux.',
         'test' => 'Tester',
         'group' => [
             'label' => 'Groupe',

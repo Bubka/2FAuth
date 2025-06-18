@@ -125,6 +125,18 @@ return [
             'label' => 'आधिकारिक आइकान प्राप्त करें',
             'help' => 'खाता जोड़ते समय 2FA जारीकर्ता का आधिकारिक आइकन प्राप्त करें (कोशिश करें)'
         ],
+        'icon_collection' => [
+            'label' => 'Favorite icon source',
+            'help' => 'The icons collection to be queried at first when an official icon is required. Changing this setting does not refresh icons that have already been fetched.'
+        ],
+        'icon_variant' => [
+            'label' => 'Icon variant',
+            'help' => 'Some icons are available in different flavors to best suit dark or light user interfaces. Set the one you want to look for first. The regular variant will automatically be fetched as a fallback.'
+        ],
+        'icon_variant_strict_fetch' => [
+            'label' => 'Strict fetch',
+            'help' => 'Narrow the fetch to the specified variant. If the variant is missing, 2FAuth will not try to fallback to the regular variant.'
+        ],
         'auto_lock' => [
             'label' => 'ऑटो-लॉक',
             'help' => 'निष्क्रियता की स्थिति में उपयोगकर्ता को स्वचालित रूप से लॉग आउट करें। जब प्रमाणीकरण को प्रॉक्सी द्वारा नियंत्रित किया जाता है और कोई कस्टम लॉगआउट URL निर्दिष्ट नहीं किया जाता है तो इसका कोई प्रभाव नहीं पड़ता है।'
