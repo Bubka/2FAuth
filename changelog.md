@@ -23,6 +23,10 @@ The shared components are ready, as is a new version of the web extension that m
 - [issue #477](https://github.com/Bubka/2FAuth/issues/477) Steam OTP codes don't refresh when become invalid
 - [PR #482](https://github.com/Bubka/2FAuth/pull/482) Docker entrypoint not calling the right php-fpm version, thanks to [@jkoch22](https://github.com/jkoch22)
 
+### API [1.8.0]
+
+- `/api/v1/icons/default` POST path added ([doc](https://docs.2fauth.app/resources/rapidoc.html#get-/api/v1/icons/default)).
+
 ## [5.5.2] - 2025-04-11
 
 ### Fixed
