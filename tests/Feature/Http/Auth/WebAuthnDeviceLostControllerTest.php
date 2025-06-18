@@ -32,7 +32,7 @@ class WebAuthnDeviceLostControllerTest extends FeatureTestCase
      */
     protected $user;
 
-    public function setUp() : void
+    protected function setUp() : void
     {
         parent::setUp();
 
@@ -40,7 +40,7 @@ class WebAuthnDeviceLostControllerTest extends FeatureTestCase
     }
 
     #[Test]
-    public function test_sendRecoveryEmail_sends_notification_on_success()
+    public function test_send_recovery_email_sends_notification_on_success()
     {
         Notification::fake();
 

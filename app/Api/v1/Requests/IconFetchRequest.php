@@ -31,7 +31,7 @@ class IconFetchRequest extends FormRequest
                 'sometimes',
                 'required',
                 'string',
-            ]
+            ],
         ];
 
         if ($this->input('iconCollection', null) === 'selfh') {

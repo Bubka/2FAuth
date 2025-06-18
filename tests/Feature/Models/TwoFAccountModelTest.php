@@ -43,7 +43,7 @@ class TwoFAccountModelTest extends FeatureTestCase
      */
     protected $helpers;
 
-    public function setUp() : void
+    protected function setUp() : void
     {
         parent::setUp();
 

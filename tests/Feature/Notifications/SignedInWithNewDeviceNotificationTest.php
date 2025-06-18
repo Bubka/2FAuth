@@ -31,7 +31,7 @@ class SignedInWithNewDeviceNotificationTest extends FeatureTestCase
      */
     protected $signedInWithNewDevice;
 
-    public function setUp() : void
+    protected function setUp() : void
     {
         parent::setUp();
 

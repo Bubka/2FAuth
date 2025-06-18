@@ -34,7 +34,7 @@ class RegisterControllerTest extends FeatureTestCase
 
     private const EMAIL_FILTERING_RULE = '^[A-Za-z0-9._%+-]+@example\.org';
 
-    public function setUp() : void
+    protected function setUp() : void
     {
         parent::setUp();
     }

@@ -24,7 +24,7 @@ class WebAuthnRegisterControllerTest extends FeatureTestCase
      */
     protected $user;
 
-    public function setUp() : void
+    protected function setUp() : void
     {
         parent::setUp();
 
@@ -32,7 +32,7 @@ class WebAuthnRegisterControllerTest extends FeatureTestCase
     }
 
     #[Test]
-    public function test_uses_attestation_with_fastRegistration_request() : void
+    public function test_uses_attestation_with_fast_registration_request() : void
     {
         Config::set('webauthn.user_verification', UserVerification::DISCOURAGED);
 

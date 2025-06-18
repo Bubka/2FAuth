@@ -31,7 +31,7 @@ class FailedLoginNotificationTest extends FeatureTestCase
      */
     protected $failedLogin;
 
-    public function setUp() : void
+    protected function setUp() : void
     {
         parent::setUp();
 

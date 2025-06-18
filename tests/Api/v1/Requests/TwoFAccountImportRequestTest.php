@@ -37,7 +37,7 @@ class TwoFAccountImportRequestTest extends TestCase
     {
         $request = new TwoFAccountImportRequest;
         $request->merge($data);
-        
+
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->fails());
@@ -61,7 +61,7 @@ class TwoFAccountImportRequestTest extends TestCase
     {
         $request = new TwoFAccountImportRequest;
         $request->merge($data);
-        
+
         $validator = Validator::make($data, $request->rules());
 
         $this->assertTrue($validator->fails());

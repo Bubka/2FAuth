@@ -40,7 +40,7 @@ class SettingStoreRequestTest extends FeatureTestCase
     {
         $request = new SettingStoreRequest;
         $request->merge($data);
-        
+
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->fails());
@@ -75,7 +75,7 @@ class SettingStoreRequestTest extends FeatureTestCase
 
         $request = new SettingStoreRequest;
         $request->merge($data);
-        
+
         $validator = Validator::make($data, $request->rules());
 
         $this->assertTrue($validator->fails());

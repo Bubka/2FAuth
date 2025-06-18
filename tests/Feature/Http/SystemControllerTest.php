@@ -28,7 +28,7 @@ class SystemControllerTest extends FeatureTestCase
 
     protected $admin;
 
-    public function setUp() : void
+    protected function setUp() : void
     {
         parent::setUp();
 

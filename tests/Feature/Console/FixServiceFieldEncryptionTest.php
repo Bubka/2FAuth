@@ -32,7 +32,7 @@ class FixServiceFieldEncryptionTest extends FeatureTestCase
      */
     protected $command = '2fauth:fix-service-encryption';
 
-    public function setUp() : void
+    protected function setUp() : void
     {
         parent::setUp();
 

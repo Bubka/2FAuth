@@ -37,7 +37,7 @@ class TwoFAccountUriRequestTest extends TestCase
     {
         $request = new TwoFAccountUriRequest;
         $request->merge($data);
-        
+
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->fails());
@@ -68,7 +68,7 @@ class TwoFAccountUriRequestTest extends TestCase
     {
         $request = new TwoFAccountUriRequest;
         $request->merge($data);
-        
+
         $validator = Validator::make($data, $request->rules());
 
         $this->assertTrue($validator->fails());

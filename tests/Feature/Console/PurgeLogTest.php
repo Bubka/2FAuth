@@ -16,7 +16,7 @@ class PurgeLogTest extends FeatureTestCase
      */
     protected $user;
 
-    public function setUp() : void
+    protected function setUp() : void
     {
         parent::setUp();
 
@@ -24,14 +24,14 @@ class PurgeLogTest extends FeatureTestCase
     }
 
     #[Test]
-    public function test_purgeLog_completes()
+    public function test_purge_log_completes()
     {
         $this->artisan('2fauth:purge-log')
             ->assertSuccessful();
     }
 
     #[Test]
-    public function test_purgeLog_defaults_to_one_year()
+    public function test_purge_log_defaults_to_one_year()
     {
         $oneYearOldLog   = AuthLog::factory()->daysAgo(366)->for($this->user, 'authenticatable')->create();
         $sixMonthsOldLog = AuthLog::factory()->daysAgo(364)->for($this->user, 'authenticatable')->create();

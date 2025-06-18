@@ -53,7 +53,7 @@ class GroupControllerTest extends FeatureTestCase
 
     private const NEW_GROUP_NAME = 'MyNewGroup';
 
-    public function setUp() : void
+    protected function setUp() : void
     {
         parent::setUp();
 

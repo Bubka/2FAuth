@@ -28,7 +28,7 @@ class QrCodeControllerTest extends FeatureTestCase
      */
     protected $twofaccount;
 
-    public function setUp() : void
+    protected function setUp() : void
     {
         parent::setUp();
 

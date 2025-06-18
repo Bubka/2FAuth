@@ -2,8 +2,6 @@
 
 namespace App\Services\LogoLib;
 
-use App\Services\LogoLib\AbstractLogoLib;
-use App\Services\LogoLib\LogoLibInterface;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -26,9 +24,6 @@ class TfaLogoLib extends AbstractLogoLib implements LogoLibInterface
      */
     const TFA_JSON_URL = 'https://2fa.directory/api/v3/tfa.json';
 
-    /**
-     * @var string
-     */
     protected string $libUrl = 'https://raw.githubusercontent.com/2factorauth/twofactorauth/master/img/';
 
     /**
@@ -37,7 +32,7 @@ class TfaLogoLib extends AbstractLogoLib implements LogoLibInterface
     public function __construct()
     {
         $this->setTfaCollection();
-    }    
+    }
 
     /**
      * Fetch a logo for the given service and save it as an icon
@@ -45,7 +40,7 @@ class TfaLogoLib extends AbstractLogoLib implements LogoLibInterface
      * @param  string|null  $serviceName  Name of the service to fetch a logo for
      * @return string|null The icon filename or null if no logo has been found
      */
-    public function getIcon(?string $serviceName, string $variant =  null) : string|null
+    public function getIcon(?string $serviceName, ?string $variant = null) : ?string
     {
         $logoFilename = $this->getLogo(strval($serviceName));
 
@@ -74,8 +69,8 @@ class TfaLogoLib extends AbstractLogoLib implements LogoLibInterface
      */
     protected function getLogo(string $serviceName)
     {
-        $referenceName = $this->tfas->get($this->sanitizeServiceName(strval($serviceName)));
-        $logoFilename  = $referenceName . '.' . $this->format;
+        $referenceName  = $this->tfas->get($this->sanitizeServiceName(strval($serviceName)));
+        $logoFilename   = $referenceName . '.' . $this->format;
         $cachedFilename = $this->cachePrefix . $logoFilename;
 
         if ($referenceName && ! Storage::disk('logos')->exists($cachedFilename)) {

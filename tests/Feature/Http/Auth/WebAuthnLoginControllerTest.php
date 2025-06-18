@@ -95,7 +95,7 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
 
     const ASSERTION_CHALLENGE = 'iXozmynKi+YD2iRvKNbSPA==';
 
-    public function setUp() : void
+    protected function setUp() : void
     {
         parent::setUp();
 

@@ -45,7 +45,7 @@ class SettingControllerTest extends FeatureTestCase
 
     private const USER_DEFINED_SETTING_CHANGED_VALUE = 'mySetting';
 
-    public function setUp() : void
+    protected function setUp() : void
     {
         parent::setUp();
 

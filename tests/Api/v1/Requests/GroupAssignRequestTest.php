@@ -37,7 +37,7 @@ class GroupAssignRequestTest extends TestCase
     {
         $request = new GroupAssignRequest;
         $request->merge($data);
-        
+
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->fails());

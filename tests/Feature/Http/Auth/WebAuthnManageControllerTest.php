@@ -32,7 +32,7 @@ class WebAuthnManageControllerTest extends FeatureTestCase
 
     public const CREDENTIAL_ID_RAW = '+VOLFKPY+/FuMI/sJ7gMllK76L3VoRUINj6lL/Z3qDg=';
 
-    public function setUp() : void
+    protected function setUp() : void
     {
         parent::setUp();
 

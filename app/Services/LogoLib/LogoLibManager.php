@@ -13,16 +13,16 @@ class LogoLibManager extends Manager
 
     public function createTfaDriver() : TfaLogoLib
     {
-        return new TfaLogoLib();
+        return new TfaLogoLib;
     }
 
     public function createSelfhDriver() : SelfhLogoLib
     {
-        return new SelfhLogoLib();
+        return new SelfhLogoLib;
     }
 
     public function createDashboardiconsDriver() : DashboardiconsLogoLib
     {
-        return new DashboardiconsLogoLib();
+        return new DashboardiconsLogoLib;
     }
 }

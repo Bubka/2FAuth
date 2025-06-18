@@ -3,7 +3,6 @@
 namespace App\Providers\Socialite;
 
 use GuzzleHttp\RequestOptions;
-use Illuminate\Http\Request;
 use Laravel\Socialite\Two\ProviderInterface;
 use SocialiteProviders\Manager\OAuth2\AbstractProvider;
 use SocialiteProviders\Manager\OAuth2\User;

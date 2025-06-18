@@ -11,9 +11,13 @@ use App\Services\LogoLib\TfaLogoLib;
 final class CommonDataProvider
 {
     const TFA_URL = 'https://raw.githubusercontent.com/2factorauth/twofactorauth/master/img/*';
+
     const SELFH_URL_ROOT = 'https://cdn.jsdelivr.net/gh/selfhst/icons/';
+
     const SELFH_URL = self::SELFH_URL_ROOT . '*';
+
     const DASHBOARDICONS_URL_ROOT = 'https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/';
+
     const DASHBOARDICONS_URL = self::DASHBOARDICONS_URL_ROOT . '*';
 
     public static function iconsCollectionProvider() : array
@@ -22,7 +26,7 @@ final class CommonDataProvider
             'TFA' => [[
                 'name'  => 'tfa',
                 'class' => TfaLogoLib::class,
-                
+
             ]],
             'SELFH' => [[
                 'name'  => 'selfh',
@@ -34,5 +38,4 @@ final class CommonDataProvider
             ]],
         ];
     }
-
 }

@@ -29,7 +29,7 @@ class GroupStoreRequestTest extends FeatureTestCase
 
     const UNIQUE_GROUP_NAME = 'MyGroup';
 
-    public function setUp() : void
+    protected function setUp() : void
     {
         parent::setUp();
 

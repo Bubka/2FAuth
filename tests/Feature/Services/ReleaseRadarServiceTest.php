@@ -23,7 +23,7 @@ class ReleaseRadarServiceTest extends FeatureTestCase
 {
     use WithoutMiddleware;
 
-    public function setUp() : void
+    protected function setUp() : void
     {
         parent::setUp();
 

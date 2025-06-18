@@ -36,7 +36,7 @@ class WebAuthnRecoveryControllerTest extends FeatureTestCase
 
     const CREDENTIAL_ID = '-VOLFKPY-_FuMI_sJ7gMllK76L3VoRUINj6lL_Z3qDg';
 
-    public function setUp() : void
+    protected function setUp() : void
     {
         parent::setUp();
 

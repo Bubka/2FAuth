@@ -39,7 +39,7 @@ class SocialiteControllerTest extends FeatureTestCase
 
     private const USER_EMAIL = 'john@provider.com';
 
-    public function setUp() : void
+    protected function setUp() : void
     {
         parent::setUp();
 
@@ -83,7 +83,7 @@ class SocialiteControllerTest extends FeatureTestCase
     #[Test]
     public function test_redirect_returns_error_when_sso_provider_client_id_is_missing()
     {
-        //Settings::set('enableSso', true);
+        // Settings::set('enableSso', true);
         config(['services.github.client_id' => null], true);
 
         $response = $this->get('/socialite/redirect/github');

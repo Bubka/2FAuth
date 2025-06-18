@@ -69,7 +69,7 @@ class LoginTest extends FeatureTestCase
 
     private const USER_EMAIL = 'john@example.com';
 
-    public function setUp() : void
+    protected function setUp() : void
     {
         parent::setUp();
 

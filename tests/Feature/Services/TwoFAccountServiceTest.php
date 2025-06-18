@@ -40,7 +40,7 @@ class TwoFAccountServiceTest extends FeatureTestCase
 
     protected $userGroupB;
 
-    public function setUp() : void
+    protected function setUp() : void
     {
         parent::setUp();
 

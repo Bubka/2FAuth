@@ -26,7 +26,7 @@ class WebauthnRecoveryNotificationTest extends FeatureTestCase
      */
     protected $webauthnRecoveryNotification;
 
-    public function setUp() : void
+    protected function setUp() : void
     {
         parent::setUp();
 

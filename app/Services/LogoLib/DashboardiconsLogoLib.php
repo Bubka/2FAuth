@@ -2,9 +2,6 @@
 
 namespace App\Services\LogoLib;
 
-use App\Services\LogoLib\AbstractLogoLib;
-use App\Services\LogoLib\LogoLibInterface;
-
 class DashboardiconsLogoLib extends AbstractLogoLib implements LogoLibInterface
 {
     /**
@@ -16,5 +13,4 @@ class DashboardiconsLogoLib extends AbstractLogoLib implements LogoLibInterface
      * Base url of the icon collection
      */
     protected string $libUrl = 'https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/';
-
 }

@@ -2,9 +2,6 @@
 
 namespace App\Services\LogoLib;
 
-use App\Services\LogoLib\AbstractLogoLib;
-use App\Services\LogoLib\LogoLibInterface;
-
 class SelfhLogoLib extends AbstractLogoLib implements LogoLibInterface
 {
     /**

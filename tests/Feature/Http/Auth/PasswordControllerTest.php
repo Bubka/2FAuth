@@ -30,7 +30,7 @@ class PasswordControllerTest extends FeatureTestCase
 
     private const REVERSE_PROXY_GUARD = 'reverse-proxy-guard';
 
-    public function setUp() : void
+    protected function setUp() : void
     {
         parent::setUp();
 

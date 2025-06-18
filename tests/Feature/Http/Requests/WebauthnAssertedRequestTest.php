@@ -24,7 +24,7 @@ class WebauthnAssertedRequestTest extends TestCase
     {
         $request = new WebauthnAssertedRequest;
         $request->merge($data);
-        
+
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->fails());
@@ -57,7 +57,7 @@ class WebauthnAssertedRequestTest extends TestCase
     {
         $request = new WebauthnAssertedRequest;
         $request->merge($data);
-        
+
         $validator = Validator::make($data, $request->rules());
 
         $this->assertTrue($validator->fails());

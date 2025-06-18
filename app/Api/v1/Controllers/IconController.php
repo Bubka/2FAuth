@@ -62,7 +62,7 @@ class IconController extends Controller
             : 'regular';
 
         $icon = LogoLib::driver($iconCollection)->getIcon($validated['service'], $variant);
-        
+
         return $icon
             ? response()->json(['filename' => $icon], 201)
             : response()->json(null, 204);

@@ -233,7 +233,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         'secret'   => OtpTestData::SECRET,
     ];
 
-    public function setUp() : void
+    protected function setUp() : void
     {
         parent::setUp();
 
@@ -400,7 +400,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->assertJsonStructure(self::VALID_RESOURCE_STRUCTURE_WITHOUT_SECRET);
     }
 
-    //#[Test]
+    // #[Test]
     // public function test_show_twofaccount_with_indeciphered_data_returns_replaced_data()
     // {
     //     $dbEncryptionService = resolve('App\Services\DbEncryptionService');

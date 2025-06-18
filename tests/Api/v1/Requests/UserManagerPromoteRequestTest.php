@@ -37,7 +37,7 @@ class UserManagerPromoteRequestTest extends TestCase
     {
         $request = new UserManagerPromoteRequest;
         $request->merge($data);
-        
+
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->fails());
@@ -70,7 +70,7 @@ class UserManagerPromoteRequestTest extends TestCase
     {
         $request = new UserManagerPromoteRequest;
         $request->merge($data);
-        
+
         $validator = Validator::make($data, $request->rules());
 
         $this->assertTrue($validator->fails());

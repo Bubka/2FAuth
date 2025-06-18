@@ -111,7 +111,7 @@ class FixServiceFieldEncryption extends Command
                     $this->error(sprintf('%s record%s could not be fixed, see log above for details.', $error, $error > 1 ? 's' : ''));
                 }
 
-                //$this->line('Task completed');
+                // $this->line('Task completed');
             } else {
                 $this->components->warn('No fix applied.');
                 $this->line('You can re-run this command at any time to fix inconsistent records.');

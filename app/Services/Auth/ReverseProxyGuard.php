@@ -49,7 +49,7 @@ class ReverseProxyGuard implements Guard
 
         try {
             $identifier['id'] = request()->server($remoteUserHeader) ?? apache_request_headers()[$remoteUserHeader] ?? null;
-        } catch (\Throwable $e) { //@codeCoverageIgnore
+        } catch (\Throwable $e) { // @codeCoverageIgnore
             // Do nothing
         }
 

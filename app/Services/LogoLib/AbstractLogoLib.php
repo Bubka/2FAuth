@@ -3,7 +3,6 @@
 namespace App\Services\LogoLib;
 
 use App\Facades\IconStore;
-use App\Services\LogoLib\LogoLibInterface;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -38,7 +37,7 @@ abstract class AbstractLogoLib implements LogoLibInterface
      * @param  string|null  $variant  The theme variant to fetch (light, dark, etc...)
      * @return string|null The icon filename or null if no logo has been found
      */
-    public function getIcon(?string $serviceName, string $variant = null) : string|null
+    public function getIcon(?string $serviceName, ?string $variant = null) : ?string
     {
         $this->setVariant($variant);
         $logoFilename = $this->getLogo(strval($serviceName));
@@ -86,7 +85,7 @@ abstract class AbstractLogoLib implements LogoLibInterface
     protected function strictFetch() : bool
     {
         return Auth::user()
-            ? (bool)Auth::user()->preferences['iconVariantStrictFetch']
+            ? (bool) Auth::user()->preferences['iconVariantStrictFetch']
             : false;
     }
 
@@ -122,7 +121,7 @@ abstract class AbstractLogoLib implements LogoLibInterface
             case 'dark':
                 $suffix = '-dark';
                 break;
-            
+
             default:
                 $suffix = '';
                 break;

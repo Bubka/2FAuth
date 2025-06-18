@@ -56,51 +56,51 @@ class IconFetchRequestTest extends TestCase
                 'service' => '~string.with-sp3ci@l-ch4rs',
             ]],
             'VALID_SELFH_ICON_COLLECTION' => [[
-                'service' => 'validWord',
+                'service'        => 'validWord',
                 'iconCollection' => 'selfh',
             ]],
             'VALID_DASHBOARDICONS_ICON_COLLECTION' => [[
-                'service' => 'validWord',
+                'service'        => 'validWord',
                 'iconCollection' => 'dashboardicons',
             ]],
             'VALID_TFA_ICON_COLLECTION' => [[
-                'service' => 'validWord',
+                'service'        => 'validWord',
                 'iconCollection' => 'tfa',
             ]],
             'VALID_SELFH_ICON_COLLECTION_WITH_VALID_REGULAR_VARIANT' => [[
-                'service' => 'validWord',
+                'service'        => 'validWord',
                 'iconCollection' => 'selfh',
-                'variant' => 'regular',
+                'variant'        => 'regular',
             ]],
             'VALID_SELFH_ICON_COLLECTION_WITH_VALID_LIGHT_VARIANT' => [[
-                'service' => 'validWord',
+                'service'        => 'validWord',
                 'iconCollection' => 'selfh',
-                'variant' => 'light',
+                'variant'        => 'light',
             ]],
             'VALID_SELFH_ICON_COLLECTION_WITH_VALID_DARK_VARIANT' => [[
-                'service' => 'validWord',
+                'service'        => 'validWord',
                 'iconCollection' => 'selfh',
-                'variant' => 'dark',
+                'variant'        => 'dark',
             ]],
             'VALID_DASHBOARDICONS_ICON_COLLECTION_WITH_VALID_REGULAR_VARIANT' => [[
-                'service' => 'validWord',
+                'service'        => 'validWord',
                 'iconCollection' => 'dashboardicons',
-                'variant' => 'regular',
+                'variant'        => 'regular',
             ]],
             'VALID_DASHBOARDICONS_ICON_COLLECTION_WITH_VALID_LIGHT_VARIANT' => [[
-                'service' => 'validWord',
+                'service'        => 'validWord',
                 'iconCollection' => 'dashboardicons',
-                'variant' => 'light',
+                'variant'        => 'light',
             ]],
             'VALID_DASHBOARDICONS_ICON_COLLECTION_WITH_VALID_DARK_VARIANT' => [[
-                'service' => 'validWord',
+                'service'        => 'validWord',
                 'iconCollection' => 'dashboardicons',
-                'variant' => 'dark',
+                'variant'        => 'dark',
             ]],
             'VALID_TFA_ICON_COLLECTION_WITH_VALID_REGULAR_VARIANT' => [[
-                'service' => 'validWord',
+                'service'        => 'validWord',
                 'iconCollection' => 'tfa',
-                'variant' => 'regular',
+                'variant'        => 'regular',
             ]],
         ];
     }
@@ -127,22 +127,22 @@ class IconFetchRequestTest extends TestCase
                 'service' => null,
             ]],
             'NULL_ICON_COLLECTION' => [[
-                'service' => 'validWord',
+                'service'        => 'validWord',
                 'iconCollection' => null,
             ]],
             'NULL_VARIANT' => [[
-                'service' => 'validWord',
+                'service'        => 'validWord',
                 'iconCollection' => 'tfa',
-                'variant' => null,
+                'variant'        => null,
             ]],
             'EMPTY_ICON_COLLECTION' => [[
-                'service' => 'validWord',
+                'service'        => 'validWord',
                 'iconCollection' => '',
             ]],
             'EMPTY_VARIANT' => [[
-                'service' => 'validWord',
+                'service'        => 'validWord',
                 'iconCollection' => 'tfa',
-                'variant' => '',
+                'variant'        => '',
             ]],
             'SERVICE_AS_INT' => [[
                 'service' => 0,
@@ -154,23 +154,23 @@ class IconFetchRequestTest extends TestCase
                 'service' => [],
             ]],
             'NOT_IN_ICON_COLLECTION_LIST' => [[
-                'service' => 'validWord',
+                'service'        => 'validWord',
                 'iconCollection' => 'string_not_in_icon_collection_list',
             ]],
             'NOT_IN_SELFH_VARIANT_LIST' => [[
-                'service' => 'validWord',
+                'service'        => 'validWord',
                 'iconCollection' => 'selfh',
-                'variant' => 'string_not_in_selfh_variant_list',
+                'variant'        => 'string_not_in_selfh_variant_list',
             ]],
             'NOT_IN_DASHBOARDICONS_VARIANT_LIST' => [[
-                'service' => 'validWord',
+                'service'        => 'validWord',
                 'iconCollection' => 'dashboardicons',
-                'variant' => 'string_not_in_dashboardicons_variant_list',
+                'variant'        => 'string_not_in_dashboardicons_variant_list',
             ]],
             'NOT_IN_TFA_VARIANT_LIST' => [[
-                'service' => 'validWord',
+                'service'        => 'validWord',
                 'iconCollection' => 'tfa',
-                'variant' => 'string_not_in_tfa_variant_list',
+                'variant'        => 'string_not_in_tfa_variant_list',
             ]],
         ];
     }

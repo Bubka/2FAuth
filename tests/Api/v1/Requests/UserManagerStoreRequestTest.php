@@ -43,7 +43,7 @@ class UserManagerStoreRequestTest extends FeatureTestCase
 
         $request = new UserManagerStoreRequest;
         $request->merge($data);
-        
+
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->fails());
@@ -83,7 +83,7 @@ class UserManagerStoreRequestTest extends FeatureTestCase
 
         $request = new UserManagerStoreRequest;
         $request->merge($data);
-        
+
         $validator = Validator::make($data, $request->rules());
 
         $this->assertTrue($validator->fails());

@@ -32,7 +32,7 @@ class ManagePatPermissionsTest extends FeatureTestCase
 
     private const PASSWORD = 'password';
 
-    public function setUp() : void
+    protected function setUp() : void
     {
         parent::setUp();
 

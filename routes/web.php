@@ -109,7 +109,7 @@ Route::withoutMiddleware([
     SetLanguage::class,
     CustomCreateFreshApiToken::class,
 ])->get('/up', function () {
-    //Event::dispatch(new DiagnosingHealth);
+    // Event::dispatch(new DiagnosingHealth);
     return view('health', [
         'isSecure' => str_starts_with(config('app.url'), 'https'),
     ]);

@@ -20,11 +20,11 @@ class WebauthnAttestedRequest extends AttestedRequest
     {
         throw new AccessDeniedHttpException(__('errors.unsupported_with_sso_only'));
     }
-    
+
     /**
      * Determine if the user is authorized to make this request.
      */
-    public function authorize(?WebAuthnAuthenticatable $user): bool
+    public function authorize(?WebAuthnAuthenticatable $user) : bool
     {
         return (bool) $user && Gate::allows('manage-webauthn-credentials');
     }

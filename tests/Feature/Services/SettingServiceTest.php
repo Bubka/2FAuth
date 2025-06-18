@@ -67,7 +67,7 @@ class SettingServiceTest extends FeatureTestCase
 
     private const TOTP_FULL_CUSTOM_URI = 'otpauth://totp/' . self::SERVICE . ':' . self::ACCOUNT . '?secret=' . self::SECRET . '&issuer=' . self::SERVICE . '&digits=' . self::DIGITS_CUSTOM . '&period=' . self::PERIOD_CUSTOM . '&algorithm=' . self::ALGORITHM_CUSTOM . '&image=' . OtpTestData::EXTERNAL_IMAGE_URL_ENCODED;
 
-    public function setUp() : void
+    protected function setUp() : void
     {
         parent::setUp();
 

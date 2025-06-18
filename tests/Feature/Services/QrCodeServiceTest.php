@@ -30,7 +30,7 @@ class QrCodeServiceTest extends FeatureTestCase
 
     private const DECODED_IMAGE = 'otpauth://totp/test@test.com?secret=A4GRFHVIRBGY7UIW';
 
-    public function setUp() : void
+    protected function setUp() : void
     {
         parent::setUp();
     }

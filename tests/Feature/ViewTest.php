@@ -15,7 +15,7 @@ use Tests\FeatureTestCase;
 #[CoversClass(SinglePageController::class)]
 class ViewTest extends FeatureTestCase
 {
-    public function setUp() : void
+    protected function setUp() : void
     {
         parent::setUp();
 

@@ -38,7 +38,7 @@ class QrCodeDecodeRequestTest extends TestCase
     {
         $request = new QrCodeDecodeRequest;
         $request->merge($data);
-        
+
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->fails());
@@ -64,7 +64,7 @@ class QrCodeDecodeRequestTest extends TestCase
     {
         $request = new QrCodeDecodeRequest;
         $request->merge($data);
-        
+
         $validator = Validator::make($data, $request->rules());
 
         $this->assertTrue($validator->fails());

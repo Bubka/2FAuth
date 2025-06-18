@@ -33,7 +33,7 @@ class LogoLibsTest extends FeatureTestCase
 
     protected LogoLibInterface $logoLib;
 
-    public function setUp() : void
+    protected function setUp() : void
     {
         parent::setUp();
 
@@ -160,14 +160,14 @@ class LogoLibsTest extends FeatureTestCase
     #[Test]
     public function test_getIcon_fallbacks_to_user_preferences_when_variant_is_omitted()
     {
-        $user = User::factory()->create();
+        $user                             = User::factory()->create();
         $user['preferences->iconVariant'] = 'dark';
         $user->save();
 
         Http::preventStrayRequests();
         Http::fake([
-            CommonDataProvider::SELFH_URL_ROOT . 'svg/myservice.svg' => Http::response(HttpRequestTestData::SVG_LOGO_BODY_VARIANT_REGULAR, 200),
-            CommonDataProvider::SELFH_URL_ROOT . 'svg/myservice-dark.svg'  => Http::response(HttpRequestTestData::SVG_LOGO_BODY_VARIANT_DARK, 200),
+            CommonDataProvider::SELFH_URL_ROOT . 'svg/myservice.svg'      => Http::response(HttpRequestTestData::SVG_LOGO_BODY_VARIANT_REGULAR, 200),
+            CommonDataProvider::SELFH_URL_ROOT . 'svg/myservice-dark.svg' => Http::response(HttpRequestTestData::SVG_LOGO_BODY_VARIANT_DARK, 200),
         ]);
 
         $this->logoLib = $this->app->make(SelfhLogoLib::class);
@@ -198,13 +198,13 @@ class LogoLibsTest extends FeatureTestCase
     {
         return [
             'INVALID_VARIANT' => [
-                'not_a_valid_variant'
+                'not_a_valid_variant',
             ],
             'NULL_VARIANT' => [
-                null
+                null,
             ],
             'EMPTY_VARIANT' => [
-                ''
+                '',
             ],
         ];
     }

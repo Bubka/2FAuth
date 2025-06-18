@@ -29,7 +29,7 @@ class IconControllerTest extends FeatureTestCase
      */
     protected $user;
 
-    public function setUp() : void
+    protected function setUp() : void
     {
         parent::setUp();
 
