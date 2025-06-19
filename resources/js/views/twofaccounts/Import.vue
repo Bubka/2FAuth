@@ -1,9 +1,9 @@
 <script setup>
     import Form from '@/components/formElements/Form'
-    import FormTextarea from '@/components/formElements/FormTextarea.vue'
     import twofaccountService from '@/services/twofaccountService'
     import OtpDisplay from '@/components/OtpDisplay.vue'
     import Spinner from '@/components/Spinner.vue'
+    import { FormTextarea } from '@2fauth/formcontrols'
     import { useNotifyStore } from '@/stores/notify'
     import { useUserStore } from '@/stores/user'
     import { useBusStore } from '@/stores/bus'
@@ -271,7 +271,7 @@
                                             <p class="subtitle is-6 is-size-7-mobile">{{ $t('twofaccounts.import.supported_formats_for_qrcode_upload') }}</p>
                                         </div>
                                     </div>
-                                    <FieldError v-if="qrcodeForm.errors.hasAny('qrcode')" :error="qrcodeForm.errors.get('qrcode')" :field="'qrcode'" />
+                                    <FormFieldError v-if="qrcodeForm.errors.hasAny('qrcode')" :error="qrcodeForm.errors.get('qrcode')" :field="'qrcode'" />
                                 </div>
                                 <footer class="card-footer">
                                     <RouterLink id="btnCapture" :to="{ name: 'capture' }" class="card-footer-item">
@@ -298,7 +298,7 @@
                                             <p class="subtitle is-6 is-size-7-mobile">{{ $t('twofaccounts.import.supported_formats_for_file_upload') }}</p>
                                         </div>
                                     </div>
-                                    <FieldError v-if="fileForm.errors.hasAny('file')" :error="fileForm.errors.get('file')" :field="'file'" />
+                                    <FormFieldError v-if="fileForm.errors.hasAny('file')" :error="fileForm.errors.get('file')" :field="'file'" />
                                 </div>
                                 <footer class="card-footer">
                                     <a role="button" tabindex="0" class="card-footer-item is-relative" @click="fileInput.click()" @keyup.enter="fileInput.click()">
@@ -323,7 +323,7 @@
                                         </div>
                                     </div>
                                     <div class="content">
-                                        <FormTextarea v-model="directInput" :fieldError="directInputError" fieldName="payload" rows="5" :size="'is-small'" />
+                                        <FormTextarea v-model="directInput" :errorMessage="directInputError" fieldName="payload" rows="5" :size="'is-small'" />
                                     </div>
                                 </div>
                                 <footer class="card-footer">
@@ -458,7 +458,8 @@
                         </span> -->
                     </button>
                 </p>
-                <ButtonBackCloseCancel :returnTo="{ name: 'accounts' }" :action="importableCount > 0 ? 'cancel' : 'close'" />
+                <NavigationButton v-if="importableCount > 0" action="cancel" @canceled="router.push({ name: 'accounts' })" />
+                <NavigationButton v-else action="close" @closed="router.push({ name: 'accounts' })" :current-page-title="$t('title.importAccounts')" />
             </VueFooter>
         </ResponsiveWidthWrapper>
         <!-- modal -->

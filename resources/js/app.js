@@ -49,16 +49,19 @@ import ResponsiveWidthWrapper from '@/layouts/ResponsiveWidthWrapper.vue'
 import FormWrapper from '@/layouts/FormWrapper.vue'
 import Footer from '@/layouts/Footer.vue'
 import Modal from '@/layouts/Modal.vue'
-import VueButton           from '@/components/formElements/Button.vue'
-import ButtonBackCloseCancel from '@/components/formElements/ButtonBackCloseCancel.vue'
-import FieldError       from '@/components/formElements/FieldError.vue'
-import FormField        from '@/components/formElements/FormField.vue'
-import FormPasswordField        from '@/components/formElements/FormPasswordField.vue'
-import FormSelect       from '@/components/formElements/FormSelect.vue'
-import FormToggle       from '@/components/formElements/FormToggle.vue'
-import FormCheckbox     from '@/components/formElements/FormCheckbox.vue'
-import FormButtons      from '@/components/formElements/FormButtons.vue'
 import Kicker           from '@/components/Kicker.vue'
+
+import {
+    FormField,
+    FormPasswordField,
+    FormFieldError,
+    FormCheckbox,
+    FormSelect,
+    FormToggle,
+    FormButtons,
+    NavigationButton,
+    VueButton
+} from '@2fauth/formcontrols'
 
 app
     .component('FontAwesomeIcon', FontAwesomeIcon)
@@ -67,8 +70,8 @@ app
     .component('VueFooter', Footer)
     .component('Modal', Modal)
     .component('VueButton', VueButton)
-    .component('ButtonBackCloseCancel', ButtonBackCloseCancel)
-    .component('FieldError', FieldError)
+    .component('NavigationButton', NavigationButton)
+    .component('FormFieldError', FormFieldError)
     .component('FormField', FormField)
     .component('FormPasswordField', FormPasswordField)
     .component('FormSelect', FormSelect)

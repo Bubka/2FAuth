@@ -191,7 +191,7 @@
                 <Spinner :isVisible="isFetching && tokens.length === 0" />
                 <!-- footer -->
                 <VueFooter :showButtons="true">
-                    <ButtonBackCloseCancel :returnTo="{ name: returnTo }" action="close" />
+                    <NavigationButton action="close" @closed="router.push({ name: returnTo })" :current-page-title="$t('title.settings.oauth.tokens')" />
                 </VueFooter>
             </FormWrapper>
         </div>
@@ -199,15 +199,15 @@
             <main class="main-section">
                 <FormWrapper title="settings.forms.new_token">
                     <form @submit.prevent="generatePAToken" @keydown="form.onKeydown($event)">
-                        <FormField v-model="form.name" fieldName="name" :fieldError="form.errors.get('name')" inputType="text" label="commons.name" autofocus />
+                        <FormField v-model="form.name" fieldName="name" :errorMessage="form.errors.get('name')" inputType="text" label="commons.name" autofocus />
                         <div class="field is-grouped">
                             <div class="control">
-                                <VueButton :id="'btnGenerateToken'" :isLoading="form.isBusy" >
+                                <VueButton nativeType="submit" :id="'btnGenerateToken'" :isLoading="form.isBusy" >
                                     {{ $t('commons.generate') }}
                                 </VueButton>
                             </div>
                             <div class="control">
-                                <VueButton @click="cancelPATcreation" :nativeType="'button'" id="btnCancel" :color="'is-text'">
+                                <VueButton @click="cancelPATcreation" nativeType="button" id="btnCancel" :color="'is-text'">
                                     {{ $t('commons.cancel') }}
                                 </VueButton>
                             </div>

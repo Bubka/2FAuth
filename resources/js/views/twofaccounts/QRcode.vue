@@ -29,7 +29,7 @@
             </p>
         </div>
         <VueFooter :showButtons="true" :internalFooterType="'modal'">
-            <ButtonBackCloseCancel :returnTo="{ name: 'accounts' }" action="close" />
+            <NavigationButton action="close" @closed="router.push({ name: 'accounts' })" :current-page-title="$t('title.showQRcode')" />
         </VueFooter>
     </div>
 </template>

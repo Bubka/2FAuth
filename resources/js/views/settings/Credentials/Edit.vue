@@ -28,13 +28,13 @@
 <template>
     <FormWrapper title="auth.webauthn.rename_device">
         <form @submit.prevent="updateCredential" @keydown="form.onKeydown($event)">
-            <FormField v-model="form.name" fieldName="name" :fieldError="form.errors.get('name')" inputType="text" label="commons.new_name" autofocus />
+            <FormField v-model="form.name" fieldName="name" :errorMessage="form.errors.get('name')" inputType="text" label="commons.new_name" autofocus />
             <FormButtons
                 :submitId="'btnEditCredential'"
                 :isBusy="form.isBusy"
-                :caption="$t('commons.save')"
+                submitLabel="commons.save"
                 :showCancelButton="true"
-                cancelLandingView="settings.webauthn.devices"
+                @cancel="router.push({ name: 'settings.webauthn.devices' })"
             />
         </form>
     </FormWrapper>

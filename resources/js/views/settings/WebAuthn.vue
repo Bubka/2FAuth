@@ -173,7 +173,7 @@
                 </form>
                 <!-- footer -->
                 <VueFooter :showButtons="true">
-                    <ButtonBackCloseCancel :returnTo="{ name: returnTo }" action="close" />
+                    <NavigationButton action="close" @closed="router.push({ name: returnTo })" :current-page-title="$t('title.settings.webauthn.devices')" />
                 </VueFooter>
             </FormWrapper>
         </div>

@@ -171,7 +171,7 @@
                 <Spinner :isVisible="isFetching && users.length === 0" />
                 <!-- footer -->
                 <VueFooter :showButtons="true">
-                    <ButtonBackCloseCancel :returnTo="{ name: returnTo }" action="close" />
+                    <NavigationButton action="close" @closed="router.push({ name: returnTo })" :current-page-title="$t('title.admin.users')" />
                 </VueFooter>
             </FormWrapper>
         </div>

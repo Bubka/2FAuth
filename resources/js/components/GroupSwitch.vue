@@ -45,7 +45,7 @@
             </div>
         </div>
         <VueFooter :showButtons="true">
-            <ButtonBackCloseCancel action="close" :useLinkTag="false" @closed="$emit('update:showGroupSwitch', false)" />
+            <NavigationButton action="close" :useLinkTag="false" @closed="$emit('update:showGroupSwitch', false)" />
         </VueFooter>
     </div>
 </template>

@@ -207,7 +207,7 @@
             </div>
         </div>
         <div class="fullscreen-footer">
-            <ButtonBackCloseCancel action="cancel" :isCapture="true" :useLinkTag="false" @canceled="exitStream()" />
+            <NavigationButton action="cancel" :isCapture="true" :useLinkTag="false" @canceled="exitStream()" />
         </div>
     </div>
     <modal v-model="showQrContent">

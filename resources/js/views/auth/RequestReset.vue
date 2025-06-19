@@ -38,13 +38,13 @@
 <template>
     <FormWrapper :title="$t(isWebauthnReset ? 'auth.webauthn.account_recovery' : 'auth.forms.reset_password')" :punchline="$t(isWebauthnReset ? 'auth.webauthn.recovery_punchline' : 'auth.forms.reset_punchline')">
         <form @submit.prevent="requestPasswordReset" @keydown="form.onKeydown($event)">
-            <FormField v-model="form.email" fieldName="email" :fieldError="form.errors.get('email')" label="auth.forms.email" autofocus />
+            <FormField v-model="form.email" fieldName="email" :errorMessage="form.errors.get('email')" label="auth.forms.email" autofocus />
             <FormButtons
                 :submitId="'btnSendResetPwd'"
                 :isBusy="form.isBusy"
-                :caption="$t(isWebauthnReset ? 'auth.webauthn.send_recovery_link' : 'auth.forms.send_password_reset_link')"
+                :submitLabel="isWebauthnReset ? 'auth.webauthn.send_recovery_link' : 'auth.forms.send_password_reset_link'"
                 :showCancelButton="true"
-                cancelLandingView="login" />
+                @cancel="router.push({ name: 'login' })" />
         </form>
         <VueFooter />
     </FormWrapper>

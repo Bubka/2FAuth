@@ -140,7 +140,7 @@
             </FormWrapper>
         </div>
         <VueFooter :showButtons="true">
-            <ButtonBackCloseCancel :returnTo="{ name: returnTo }" action="close" />
+            <NavigationButton action="close" @closed="router.push({ name: returnTo })" :current-page-title="$t('title.admin.appSetup')" />
         </VueFooter>
     </div>
 </template>

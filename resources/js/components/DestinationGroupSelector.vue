@@ -62,7 +62,7 @@
             <p class="control">
                 <button type="button" class="button is-link is-rounded" @click="moveAccounts">{{ $t('commons.move') }}</button>
             </p>
-            <ButtonBackCloseCancel action="cancel" :useLinkTag="false" @canceled="$emit('update:showDestinationGroupSelector', false)" />
+            <NavigationButton action="cancel" :useLinkTag="false" @canceled="$emit('update:showDestinationGroupSelector', false)" />
         </VueFooter>
     </div>
 </template>

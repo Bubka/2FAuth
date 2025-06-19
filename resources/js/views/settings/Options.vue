@@ -15,13 +15,13 @@
     const returnTo = useStorage($2fauth.prefix + 'returnTo', 'accounts')
 
     const layouts = [
-        { text: 'settings.forms.grid', value: 'grid', icon: 'th' },
-        { text: 'settings.forms.list', value: 'list', icon: 'list' },
+        { text: 'settings.forms.grid', value: 'grid', icon: 'Grid3X3' },
+        { text: 'settings.forms.list', value: 'list', icon: 'List' },
     ]
     const themes = [
-        { text: 'settings.forms.light', value: 'light', icon: 'sun' },
-        { text: 'settings.forms.dark', value: 'dark', icon: 'moon' },
-        { text: 'settings.forms.automatic', value: 'system', icon: 'desktop' },
+        { text: 'settings.forms.light', value: 'light', icon: 'Sun' },
+        { text: 'settings.forms.dark', value: 'dark', icon: 'Moon' },
+        { text: 'settings.forms.automatic', value: 'system', icon: 'MonitorCheck' },
     ]
     const iconCollections = [
         { text: 'selfh.st', value: 'selfh', url: 'https://selfh.st/icons/', defaultVariant: 'regular' },
@@ -261,7 +261,7 @@
             </FormWrapper>
         </div>
         <VueFooter :showButtons="true">
-            <ButtonBackCloseCancel :returnTo="{ name: returnTo }" action="close" />
+            <NavigationButton action="close" @closed="router.push({ name: returnTo })" :current-page-title="$t('title.settings.options')" />
         </VueFooter>
     </div>
 </template>

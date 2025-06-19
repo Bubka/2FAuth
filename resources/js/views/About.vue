@@ -63,7 +63,7 @@
         </ul>
         <!-- footer -->
         <VueFooter :showButtons="true">
-            <ButtonBackCloseCancel :returnTo="{ path: returnTo }" action="back" />
+            <NavigationButton action="back" @goback="router.push({ name: returnTo })" :previous-page-title="$t('title.' + returnTo)" />
         </VueFooter>
     </UseColorMode>
     </ResponsiveWidthWrapper>

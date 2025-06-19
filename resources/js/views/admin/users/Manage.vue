@@ -316,8 +316,8 @@
         </div>
         <!-- footer -->
         <VueFooter :showButtons="true">
-            <ButtonBackCloseCancel :returnTo="{ name: 'admin.users' }" action="back" />
-            <ButtonBackCloseCancel :returnTo="{ name: 'accounts' }" action="close" />
+            <NavigationButton action="back" @goback="router.push({ name: 'admin.users' })" :previous-page-title="$t('title.admin.users')" />
+            <NavigationButton action="close" @closed="router.push({ name: 'accounts' })" :current-page-title="$t('title.admin.manageUser')" />
         </VueFooter>
     </ResponsiveWidthWrapper>
     </UseColorMode>

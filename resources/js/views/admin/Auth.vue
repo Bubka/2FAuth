@@ -86,9 +86,9 @@
                     <!-- restrict registration -->
                     <FormCheckbox v-model="appSettings.restrictRegistration" @update:model-value="val => useAppSettingsUpdater('restrictRegistration', val)" fieldName="restrictRegistration" :isDisabled="appSettings.disableRegistration" label="admin.forms.restrict_registration.label" help="admin.forms.restrict_registration.help" />
                         <!-- restrict list -->
-                        <FormField v-model="appSettings.restrictList" @change:model-value="val => saveOrDeleteSetting('restrictList', val)" :fieldError="fieldErrors.restrictList" fieldName="restrictList" :isDisabled="!appSettings.restrictRegistration || appSettings.disableRegistration" label="admin.forms.restrict_list.label" help="admin.forms.restrict_list.help" :isIndented="true" />
+                        <FormField v-model="appSettings.restrictList" @change:model-value="val => saveOrDeleteSetting('restrictList', val)" :errorMessage="fieldErrors.restrictList" fieldName="restrictList" :isDisabled="!appSettings.restrictRegistration || appSettings.disableRegistration" label="admin.forms.restrict_list.label" help="admin.forms.restrict_list.help" :isIndented="true" />
                         <!-- restrict rule -->
-                        <FormField v-model="appSettings.restrictRule" @change:model-value="val => saveOrDeleteSetting('restrictRule', val)" :fieldError="fieldErrors.restrictRule" fieldName="restrictRule" :isDisabled="!appSettings.restrictRegistration || appSettings.disableRegistration" label="admin.forms.restrict_rule.label" help="admin.forms.restrict_rule.help" :isIndented="true" leftIcon="slash" rightIcon="slash" />
+                        <FormField v-model="appSettings.restrictRule" @change:model-value="val => saveOrDeleteSetting('restrictRule', val)" :errorMessage="fieldErrors.restrictRule" fieldName="restrictRule" :isDisabled="!appSettings.restrictRegistration || appSettings.disableRegistration" label="admin.forms.restrict_rule.label" help="admin.forms.restrict_rule.help" :isIndented="true" leftIcon="Slash" rightIcon="Slash" />
                     <!-- disable registration -->
                     <FormCheckbox v-model="appSettings.disableRegistration" @update:model-value="val => useAppSettingsUpdater('disableRegistration', val)" fieldName="disableRegistration" label="admin.forms.disable_registration.label" help="admin.forms.disable_registration.help" />
                         <!-- keep sso registration -->
@@ -97,7 +97,7 @@
             </FormWrapper>
         </div>
         <VueFooter :showButtons="true">
-            <ButtonBackCloseCancel :returnTo="{ name: returnTo }" action="close" />
+            <NavigationButton action="close" @closed="router.push({ name: returnTo })" :current-page-title="$t('title.admin.auth')" />
         </VueFooter>
     </div>
 </template>

@@ -114,10 +114,10 @@
                     <div v-if="$2fauth.config.proxyAuth" class="notification is-warning has-text-centered" v-html="$t('auth.user_account_controlled_by_proxy')" />
                     <h4 class="title is-4 has-text-grey-light">{{ $t('settings.profile') }}</h4>
                     <fieldset :disabled="$2fauth.config.proxyAuth || user.oauth_provider">
-                        <FormField v-model="formProfile.name" fieldName="name" :fieldError="formProfile.errors.get('name')" label="auth.forms.name" :maxLength="255" autocomplete="username" autofocus />
-                        <FormField v-model="formProfile.email" fieldName="email" :fieldError="formProfile.errors.get('email')" inputType="email" label="auth.forms.email" autocomplete="email" :maxLength="255" autofocus />
-                        <FormField v-model="formProfile.password" fieldName="password" :fieldError="formProfile.errors.get('password')" inputType="password" label="auth.forms.current_password.label" autocomplete="current-password" help="auth.forms.current_password.help" />
-                        <FormButtons :isBusy="formProfile.isBusy" caption="commons.update" />
+                        <FormField v-model="formProfile.name" fieldName="name" :errorMessage="formProfile.errors.get('name')" label="auth.forms.name" :maxLength="255" autocomplete="username" autofocus />
+                        <FormField v-model="formProfile.email" fieldName="email" :errorMessage="formProfile.errors.get('email')" inputType="email" label="auth.forms.email" autocomplete="email" :maxLength="255" autofocus />
+                        <FormField v-model="formProfile.password" fieldName="password" :errorMessage="formProfile.errors.get('password')" inputType="password" label="auth.forms.current_password.label" autocomplete="current-password" help="auth.forms.current_password.help" />
+                        <FormButtons :isBusy="formProfile.isBusy" submitLabel="commons.update" />
                     </fieldset>
                 </form>
                 <form @submit.prevent="submitPassword" @keydown="formPassword.onKeydown($event)">
@@ -125,10 +125,10 @@
                     <input hidden type="text" name="email" :value="formProfile.email" autocomplete="email" />
                     <h4 class="title is-4 pt-6 has-text-grey-light">{{ $t('settings.change_password') }}</h4>
                     <fieldset :disabled="$2fauth.config.proxyAuth || user.oauth_provider">
-                        <FormPasswordField v-model="formPassword.password" fieldName="password" :fieldError="formPassword.errors.get('password')" idSuffix="ForUpdate" autocomplete="new-password" :showRules="true" label="auth.forms.new_password" />
-                        <FormPasswordField v-model="formPassword.password_confirmation" :showRules="false" fieldName="password_confirmation" :fieldError="formPassword.errors.get('password_confirmation')" inputType="password" autocomplete="new-password" label="auth.forms.confirm_new_password" />
-                        <FormField v-model="formPassword.currentPassword" fieldName="currentPassword" :fieldError="formPassword.errors.get('currentPassword')" inputType="password" label="auth.forms.current_password.label" autocomplete="current-password" help="auth.forms.current_password.help" />
-                        <FormButtons :isBusy="formPassword.isBusy" submitId="btnSubmitChangePwd" caption="auth.forms.change_password" />
+                        <FormPasswordField v-model="formPassword.password" fieldName="password" :errorMessage="formPassword.errors.get('password')" idSuffix="ForUpdate" autocomplete="new-password" :showRules="true" label="auth.forms.new_password" />
+                        <FormPasswordField v-model="formPassword.password_confirmation" :showRules="false" fieldName="password_confirmation" :errorMessage="formPassword.errors.get('password_confirmation')" inputType="password" autocomplete="new-password" label="auth.forms.confirm_new_password" />
+                        <FormField v-model="formPassword.currentPassword" fieldName="currentPassword" :errorMessage="formPassword.errors.get('currentPassword')" inputType="password" label="auth.forms.current_password.label" autocomplete="current-password" help="auth.forms.current_password.help" />
+                        <FormButtons :isBusy="formPassword.isBusy" submitId="btnSubmitChangePwd" submitLabel="auth.forms.change_password" />
                     </fieldset>
                 </form>
                 <form id="frmDeleteAccount" @submit.prevent="submitDelete" @keydown="formDelete.onKeydown($event)">
@@ -141,14 +141,14 @@
                         <p>{{ $t('auth.forms.deleting_2fauth_account_does_not_impact_provider') }}</p>
                     </div>
                     <fieldset :disabled="$2fauth.config.proxyAuth">
-                        <FormField v-model="formDelete.password" fieldName="password" :fieldError="formDelete.errors.get('password')" inputType="password" idSuffix="ForDelete" autocomplete="new-password" label="auth.forms.current_password.label" help="auth.forms.current_password.help" />
-                        <FormButtons :isBusy="formDelete.isBusy" caption="auth.forms.delete_your_account" submitId="btnDeleteAccount" color="is-danger" />
+                        <FormField v-model="formDelete.password" fieldName="password" :errorMessage="formDelete.errors.get('password')" inputType="password" idSuffix="ForDelete" autocomplete="new-password" label="auth.forms.current_password.label" help="auth.forms.current_password.help" />
+                        <FormButtons :isBusy="formDelete.isBusy" submitLabel="auth.forms.delete_your_account" submitId="btnDeleteAccount" color="is-danger" />
                     </fieldset>
                 </form>
             </FormWrapper>
         </div>
         <VueFooter :showButtons="true">
-            <ButtonBackCloseCancel :returnTo="{ name: returnTo }" action="close" />
+            <NavigationButton action="close" @closed="router.push({ name: returnTo })" :current-page-title="$t('title.settings.account')" />
         </VueFooter>
     </div>
 </template>

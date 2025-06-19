@@ -126,8 +126,8 @@
             {{ $t('auth.webauthn.use_security_device_to_sign_in') }}
         </div>
         <form id="frmWebauthnLogin" @submit.prevent="webauthnLogin" @keydown="form.onKeydown($event)">
-            <FormField v-model="form.email" fieldName="email" :fieldError="form.errors.get('email')" inputType="email" label="auth.forms.email" autofocus />
-            <FormButtons :isBusy="isBusy" caption="commons.continue" submitId="btnContinue"/>
+            <FormField v-model="form.email" fieldName="email" :errorMessage="form.errors.get('email')" inputType="email" label="auth.forms.email" autofocus />
+            <FormButtons :isBusy="isBusy" submitLabel="commons.continue" submitId="btnContinue"/>
         </form>
         <div class="nav-links">
             <p>
@@ -195,9 +195,9 @@
         <div v-if="$2fauth.isTestingApp" class="notification is-warning has-text-centered is-radiusless" v-html="$t('auth.forms.welcome_to_testing_app_use_those_credentials')" />
         <div v-if="appSettings.enableSso == true && appSettings.useSsoOnly == true" class="notification is-warning has-text-centered" v-html="$t('auth.forms.sso_only_form_restricted_to_admin')" />
         <form id="frmLegacyLogin" @submit.prevent="LegacysignIn" @keydown="form.onKeydown($event)">
-            <FormField v-model="form.email" fieldName="email" :fieldError="form.errors.get('email')" inputType="email" label="auth.forms.email" autocomplete="username" autofocus />
-            <FormPasswordField v-model="form.password" fieldName="password" :fieldError="form.errors.get('password')" label="auth.forms.password" autocomplete="current-password" />
-            <FormButtons :isBusy="isBusy" caption="auth.sign_in" submitId="btnSignIn"/>
+            <FormField v-model="form.email" fieldName="email" :errorMessage="form.errors.get('email')" inputType="email" label="auth.forms.email" autocomplete="username" autofocus />
+            <FormPasswordField v-model="form.password" fieldName="password" :errorMessage="form.errors.get('password')" label="auth.forms.password" autocomplete="current-password" />
+            <FormButtons :isBusy="isBusy" submitLabel="auth.sign_in" submitId="btnSignIn"/>
         </form>
         <div class="nav-links">
             <p>{{ $t('auth.forms.forgot_your_password') }}&nbsp;

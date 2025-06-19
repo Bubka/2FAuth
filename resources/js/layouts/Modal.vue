@@ -50,7 +50,7 @@
             </section>
         </div>
         <VueFooter v-if="props.closable" :showButtons="true" :internalFooterType="'modal'">
-            <ButtonBackCloseCancel action="close" :useLinkTag="false" @closed="closeModal" />
+            <NavigationButton action="close" :useLinkTag="false" @closed="closeModal" />
         </VueFooter>
     </div>
 </template>

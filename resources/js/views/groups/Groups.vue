@@ -70,7 +70,7 @@
         </div>
         <!-- footer -->
         <VueFooter :showButtons="true">
-            <ButtonBackCloseCancel :returnTo="{ name: 'accounts' }" action="close" />
+            <NavigationButton action="close" @closed="router.push({ name: 'accounts' })" :current-page-title="$t('title.groups')" />
         </VueFooter>
     </ResponsiveWidthWrapper>
 </template>

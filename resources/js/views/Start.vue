@@ -80,7 +80,7 @@
                         {{ $t('twofaccounts.forms.scan_qrcode') }}
                     </button>
                 </div>
-                <FieldError v-if="form.errors.hasAny('qrcode')" :error="form.errors.get('qrcode')" :field="'qrcode'" />
+                <FormFieldError v-if="form.errors.hasAny('qrcode')" :error="form.errors.get('qrcode')" :field="'qrcode'" />
             </div>
             <!-- alternative methods -->
             <div class="column is-full">
@@ -108,7 +108,7 @@
         </div>
         <!-- Footer -->
         <VueFooter :showButtons="true" >
-            <ButtonBackCloseCancel :returnTo="{ name: 'accounts' }" action="back" v-if="!twofaccounts.isEmpty" />
+            <NavigationButton v-if="!twofaccounts.isEmpty" action="back" @goback="router.push({ name: 'accounts' })" :previous-page-title="$t('title.accounts')" />
         </VueFooter>
     </div>
 </template>

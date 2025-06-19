@@ -83,8 +83,8 @@
             <div v-if="deviceId" class="field">
                 <label id="lblDeviceRegistrationSuccess" class="label mb-5">{{ $t('auth.webauthn.device_successfully_registered') }}&nbsp;<font-awesome-icon :icon="['fas', 'check']" /></label>
                 <form @submit.prevent="RenameDevice" @keydown="renameDeviceForm.onKeydown($event)">
-                    <FormField v-model="renameDeviceForm.name" fieldName="name" :fieldError="renameDeviceForm.errors.get('name')" inputType="text" placeholder="iPhone 12, TouchID, Yubikey 5C" label="auth.forms.name_this_device" />
-                    <FormButtons :isBusy="renameDeviceForm.isBusy" :isDisabled="renameDeviceForm.isDisabled" caption="commons.continue" />
+                    <FormField v-model="renameDeviceForm.name" fieldName="name" :errorMessage="renameDeviceForm.errors.get('name')" inputType="text" placeholder="iPhone 12, TouchID, Yubikey 5C" label="auth.forms.name_this_device" />
+                    <FormButtons :isBusy="renameDeviceForm.isBusy" :isDisabled="renameDeviceForm.isDisabled" submitLabel="commons.continue" />
                 </form>
             </div>
             <div v-else class="field is-grouped">
@@ -101,10 +101,10 @@
         <!-- User registration form -->
         <FormWrapper v-else title="auth.register" punchline="auth.forms.register_punchline">
             <form @submit.prevent="register" @keydown="registerForm.onKeydown($event)">
-                <FormField v-model="registerForm.name" fieldName="name" :fieldError="registerForm.errors.get('name')" inputType="text" label="auth.forms.name" autocomplete="username" :maxLength="255" autofocus />
-                <FormField v-model="registerForm.email" fieldName="email" :fieldError="registerForm.errors.get('email')" inputType="email" label="auth.forms.email" autocomplete="email" :maxLength="255" />
-                <FormPasswordField v-model="registerForm.password" fieldName="password" :fieldError="registerForm.errors.get('password')" :showRules="true" autocomplete="new-password" label="auth.forms.password" />
-                <FormButtons :isBusy="registerForm.isBusy" :isDisabled="registerForm.isDisabled" caption="auth.register" submitId="btnRegister" />
+                <FormField v-model="registerForm.name" fieldName="name" :errorMessage="registerForm.errors.get('name')" inputType="text" label="auth.forms.name" autocomplete="username" :maxLength="255" autofocus />
+                <FormField v-model="registerForm.email" fieldName="email" :errorMessage="registerForm.errors.get('email')" inputType="email" label="auth.forms.email" autocomplete="email" :maxLength="255" />
+                <FormPasswordField v-model="registerForm.password" fieldName="password" :errorMessage="registerForm.errors.get('password')" :showRules="true" autocomplete="new-password" label="auth.forms.password" />
+                <FormButtons :isBusy="registerForm.isBusy" :isDisabled="registerForm.isDisabled" submitLabel="auth.register" submitId="btnRegister" />
             </form>
             <div class="nav-links">
                 <p>{{ $t('auth.forms.already_register') }}&nbsp;<RouterLink id="lnkSignIn" :to="{ name: 'login' }" class="is-link">{{ $t('auth.sign_in') }}</RouterLink></p>
