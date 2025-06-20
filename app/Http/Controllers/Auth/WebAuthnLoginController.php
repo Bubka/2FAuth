@@ -164,7 +164,7 @@ class WebAuthnLoginController extends Controller
             $this->throttleKey($request)
         );
 
-        return response()->json(['message' => Lang::get('auth.throttle', ['seconds' => $seconds])], Response::HTTP_TOO_MANY_REQUESTS);
+        return response()->json(['message' => Lang::get('message.auth.throttle', ['seconds' => $seconds])], Response::HTTP_TOO_MANY_REQUESTS);
     }
 
     /**

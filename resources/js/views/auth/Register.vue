@@ -3,7 +3,9 @@
     import { useUserStore } from '@/stores/user'
     import { webauthnService } from '@/services/webauthn/webauthnService'
     import { useNotifyStore } from '@/stores/notify'
+    import { useI18n } from 'vue-i18n'
 
+    const { t } = useI18n()
     const user = useUserStore()
     const notify = useNotifyStore()
     const router = useRouter()
@@ -66,7 +68,7 @@
     function RenameDevice(e) {
         renameDeviceForm.patch('/webauthn/credentials/' + deviceId.value + '/name')
         .then(() => {
-            notify.success({ text: trans('auth.webauthn.device_successfully_registered') })
+            notify.success({ text: t('message.auth.webauthn.device_successfully_registered') })
             router.push({ name: 'accounts' })
         })
     }
@@ -79,35 +81,36 @@
 <template>
     <div>
         <!-- webauthn registration -->
-        <FormWrapper v-if="showWebauthnRegistration" title="auth.authentication" punchline="auth.webauthn.enhance_security_using_webauthn">
+        <FormWrapper v-if="showWebauthnRegistration" title="message.auth.authentication" punchline="message.auth.webauthn.enhance_security_using_webauthn">
             <div v-if="deviceId" class="field">
-                <label id="lblDeviceRegistrationSuccess" class="label mb-5">{{ $t('auth.webauthn.device_successfully_registered') }}&nbsp;<font-awesome-icon :icon="['fas', 'check']" /></label>
+                <label id="lblDeviceRegistrationSuccess" class="label mb-5">{{ $t('message.auth.webauthn.device_successfully_registered') }}&nbsp;<font-awesome-icon :icon="['fas', 'check']" /></label>
                 <form @submit.prevent="RenameDevice" @keydown="renameDeviceForm.onKeydown($event)">
-                    <FormField v-model="renameDeviceForm.name" fieldName="name" :errorMessage="renameDeviceForm.errors.get('name')" inputType="text" placeholder="iPhone 12, TouchID, Yubikey 5C" label="auth.forms.name_this_device" />
-                    <FormButtons :isBusy="renameDeviceForm.isBusy" :isDisabled="renameDeviceForm.isDisabled" submitLabel="commons.continue" />
+                    <FormField v-model="renameDeviceForm.name" fieldName="name" :errorMessage="renameDeviceForm.errors.get('name')" inputType="text" placeholder="iPhone 12, TouchID, Yubikey 5C" label="message.auth.forms.name_this_device" />
+                    <FormButtons :isBusy="renameDeviceForm.isBusy" :isDisabled="renameDeviceForm.isDisabled" submitLabel="message.continue" />
                 </form>
             </div>
             <div v-else class="field is-grouped">
                 <!-- register button -->
                 <div class="control">
-                    <button type="button" id="btnRegisterNewDevice" @click="registerWebauthnDevice()" class="button is-link">{{ $t('auth.webauthn.register_a_device') }}</button>
+                    <button type="button" id="btnRegisterNewDevice" @click="registerWebauthnDevice()" class="button is-link">{{ $t('message.auth.webauthn.register_a_device') }}</button>
                 </div>
                 <!-- dismiss button -->
                 <div class="control">
-                    <RouterLink id="btnMaybeLater" :to="{ name: 'accounts' }" class="button is-text">{{ $t('auth.maybe_later') }}</RouterLink>
+                    <RouterLink id="btnMaybeLater" :to="{ name: 'accounts' }" class="button is-text">{{ $t('message.auth.maybe_later') }}</RouterLink>
                 </div>
             </div>
         </FormWrapper>
         <!-- User registration form -->
-        <FormWrapper v-else title="auth.register" punchline="auth.forms.register_punchline">
+         <!-- TODO: completer la punchline avec la ligne manquante auth.forms.you_need_an_account_to_go_further -->
+        <FormWrapper v-else title="message.auth.register" punchline="message.auth.forms.welcome_to_2fauth">
             <form @submit.prevent="register" @keydown="registerForm.onKeydown($event)">
-                <FormField v-model="registerForm.name" fieldName="name" :errorMessage="registerForm.errors.get('name')" inputType="text" label="auth.forms.name" autocomplete="username" :maxLength="255" autofocus />
-                <FormField v-model="registerForm.email" fieldName="email" :errorMessage="registerForm.errors.get('email')" inputType="email" label="auth.forms.email" autocomplete="email" :maxLength="255" />
-                <FormPasswordField v-model="registerForm.password" fieldName="password" :errorMessage="registerForm.errors.get('password')" :showRules="true" autocomplete="new-password" label="auth.forms.password" />
-                <FormButtons :isBusy="registerForm.isBusy" :isDisabled="registerForm.isDisabled" submitLabel="auth.register" submitId="btnRegister" />
+                <FormField v-model="registerForm.name" fieldName="name" :errorMessage="registerForm.errors.get('name')" inputType="text" label="message.auth.forms.name" autocomplete="username" :maxLength="255" autofocus />
+                <FormField v-model="registerForm.email" fieldName="email" :errorMessage="registerForm.errors.get('email')" inputType="email" label="message.auth.forms.email" autocomplete="email" :maxLength="255" />
+                <FormPasswordField v-model="registerForm.password" fieldName="password" :errorMessage="registerForm.errors.get('password')" :showRules="true" autocomplete="new-password" label="message.auth.forms.password" />
+                <FormButtons :isBusy="registerForm.isBusy" :isDisabled="registerForm.isDisabled" submitLabel="message.auth.register" submitId="btnRegister" />
             </form>
             <div class="nav-links">
-                <p>{{ $t('auth.forms.already_register') }}&nbsp;<RouterLink id="lnkSignIn" :to="{ name: 'login' }" class="is-link">{{ $t('auth.sign_in') }}</RouterLink></p>
+                <p>{{ $t('message.auth.forms.already_register') }}&nbsp;<RouterLink id="lnkSignIn" :to="{ name: 'login' }" class="is-link">{{ $t('message.auth.sign_in') }}</RouterLink></p>
             </div>
         </FormWrapper>
         <!-- footer -->

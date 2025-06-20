@@ -142,23 +142,23 @@
     <nav v-if="props.showSearch" class="level is-mobile mb-2">
         <div class="level-item has-text-centered">
             <div class="buttons"> 
-                <button id="btnShowOneMonth" :title="$t('admin.show_last_month_log')" v-on:click="setPeriod(periods.aMonth)" :class="{ 'has-text-grey' : period !== periods.aMonth }" type="button" class="button is-ghost p-1">
-                    {{ $t('commons.one_month') }}
+                <button id="btnShowOneMonth" :title="$t('message.admin.show_last_month_log')" v-on:click="setPeriod(periods.aMonth)" :class="{ 'has-text-grey' : period !== periods.aMonth }" type="button" class="button is-ghost p-1">
+                    {{ $t('message.one_month') }}
                 </button>
-                <button id="btnShowThreeMonths" :title="$t('admin.show_three_months_log')" v-on:click="setPeriod(periods.threeMonths)" :class="{ 'has-text-grey' : period !== periods.threeMonths }" type="button" class="button is-ghost p-1">
-                    {{ $t('commons.x_month', { 'x' : '3' }) }}
+                <button id="btnShowThreeMonths" :title="$t('message.admin.show_three_months_log')" v-on:click="setPeriod(periods.threeMonths)" :class="{ 'has-text-grey' : period !== periods.threeMonths }" type="button" class="button is-ghost p-1">
+                    {{ $t('message.x_month', { 'x' : '3' }) }}
                 </button>
-                <button id="btnShowSixMonths" :title="$t('admin.show_six_months_log')" v-on:click="setPeriod(periods.halfYear)" :class="{ 'has-text-grey' : period !== periods.halfYear }" type="button" class="button is-ghost p-1">
-                    {{ $t('commons.x_month', { 'x' : '6' }) }}
+                <button id="btnShowSixMonths" :title="$t('message.admin.show_six_months_log')" v-on:click="setPeriod(periods.halfYear)" :class="{ 'has-text-grey' : period !== periods.halfYear }" type="button" class="button is-ghost p-1">
+                    {{ $t('message.x_month', { 'x' : '6' }) }}
                 </button>
-                <button id="btnShowOneYear" :title="$t('admin.show_one_year_log')" v-on:click="setPeriod(periods.aYear)" :class="{ 'has-text-grey' : period !== periods.aYear }" type="button" class="button is-ghost p-1 mr-5">
-                    {{ $t('commons.one_year') }}
+                <button id="btnShowOneYear" :title="$t('message.admin.show_one_year_log')" v-on:click="setPeriod(periods.aYear)" :class="{ 'has-text-grey' : period !== periods.aYear }" type="button" class="button is-ghost p-1 mr-5">
+                    {{ $t('message.one_year') }}
                 </button>
-                <button id="btnSortLogDesc" v-on:click="setDesc" :title="$t('admin.sort_by_date_desc')" :class="{ 'has-text-grey' : !orderIsDesc }" type="button" class="button p-1 is-ghost">
+                <button id="btnSortLogDesc" v-on:click="setDesc" :title="$t('message.admin.sort_by_date_desc')" :class="{ 'has-text-grey' : !orderIsDesc }" type="button" class="button p-1 is-ghost">
                     <FontAwesomeIcon :icon="['fas', 'arrow-up-long']" flip="vertical" />
                     <FontAwesomeIcon :icon="['far', 'calendar']" />
                 </button>
-                <button id="btnSortLogAsc" v-on:click="setAsc" :title="$t('admin.sort_by_date_asc')" :class="{ 'has-text-grey' : orderIsDesc }" type="button" class="button p-1 is-ghost">
+                <button id="btnSortLogAsc" v-on:click="setAsc" :title="$t('message.admin.sort_by_date_asc')" :class="{ 'has-text-grey' : orderIsDesc }" type="button" class="button p-1 is-ghost">
                     <FontAwesomeIcon :icon="['fas', 'arrow-up-long']" />
                     <FontAwesomeIcon :icon="['far', 'calendar']" />
                 </button>
@@ -170,15 +170,31 @@
             <UseColorMode v-slot="{ mode }">
                 <div>
                     <div>
-                        <span v-if="isFailedEntry(authentication)" v-html="$t('admin.failed_login_on', { login_at: authentication.login_at })" />
-                        <span v-else-if="isSuccessfulLogout(authentication)" v-html="$t('admin.successful_logout_on', { login_at: authentication.logout_at })" />
-                        <span v-else-if="$2fauth.config.proxyAuth" v-html="$t('admin.viewed_on', { login_at: authentication.login_at })" />
-                        <span v-else v-html="$t('admin.successful_login_on', { login_at: authentication.login_at })" />
+                        <i18n-t v-if="isFailedEntry(authentication)" keypath="message.admin.failed_login_on" tag="span">
+                            <template v-slot:login_at>
+                                <span class="light-or-darker">{{ authentication.login_at }}</span>
+                            </template>
+                        </i18n-t>
+                        <i18n-t v-else-if="isSuccessfulLogout(authentication)" keypath="message.admin.successful_logout_on" tag="span">
+                            <template v-slot:logout_at>
+                                <span class="light-or-darker">{{ authentication.logout_at }}</span>
+                            </template>
+                        </i18n-t>
+                        <i18n-t v-else-if="$2fauth.config.proxyAuth" keypath="message.admin.viewed_on" tag="span">
+                            <template v-slot:login_at>
+                                <span class="light-or-darker">{{ authentication.login_at }}</span>
+                            </template>
+                        </i18n-t>
+                        <i18n-t v-else keypath="message.admin.successful_login_on" tag="span">
+                            <template v-slot:login_at>
+                                <span class="light-or-darker">{{ authentication.login_at }}</span>
+                            </template>
+                        </i18n-t>
                     </div>
                     <div>
-                        {{ $t('commons.IP') }}: <span class="light-or-darker">{{ authentication.ip_address }}</span> -
-                        {{ $t('commons.browser') }}: <span class="light-or-darker">{{ authentication.browser }}</span> -
-                        {{ $t('commons.operating_system_short') }}: <span class="light-or-darker">{{ authentication.platform }}</span>
+                        {{ $t('message.IP') }}: <span class="light-or-darker">{{ authentication.ip_address }}</span> -
+                        {{ $t('message.browser') }}: <span class="light-or-darker">{{ authentication.browser }}</span> -
+                        {{ $t('message.operating_system_short') }}: <span class="light-or-darker">{{ authentication.platform }}</span>
                     </div>
                 </div>
                 <div :class="mode == 'dark' ? 'has-text-grey-darker' : 'has-text-grey-lighter'" class="is-align-self-center ">
@@ -193,10 +209,10 @@
         </div>
     </div>
     <div v-else-if="authentications.length == 0" class="mt-4">
-        {{ $t('commons.no_entry_yet') }}
+        {{ $t('message.no_entry_yet') }}
     </div>
     <div v-else class="mt-5 pl-3">
-        {{ $t('commons.no_result') }}
+        {{ $t('message.no_result') }}
     </div>
     <Spinner :isVisible="isFetching" />
 </template>

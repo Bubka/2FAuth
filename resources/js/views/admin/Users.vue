@@ -108,25 +108,25 @@
         <AdminTabs activeTab="admin.users" />
         <div class="options-tabs">
             <FormWrapper>
-                <h4 class="title is-4 has-text-grey-light">{{ $t('admin.users') }}</h4>
+                <h4 class="title is-4 has-text-grey-light">{{ $t('message.admin.users') }}</h4>
                 <div class="is-size-7-mobile">
-                    {{ $t('admin.users_legend')}}
+                    {{ $t('message.admin.users_legend')}}
                 </div>
                 <div class="mb-6 mt-3">
                     <RouterLink class="is-link mt-5" :to="{ name: 'admin.createUser' }">
-                        <FontAwesomeIcon :icon="['fas', 'plus-circle']" /> {{ $t('admin.create_new_user') }}
+                        <FontAwesomeIcon :icon="['fas', 'plus-circle']" /> {{ $t('message.admin.create_new_user') }}
                     </RouterLink>
                 </div>
                 <!-- search -->
                 <div class="columns">
                     <div class="column pb-0">
-                        <SearchBox v-model:keyword="searched" :hasNoBackground="true" :placeholder="$t('admin.search_user_placeholder')" />
+                        <SearchBox v-model:keyword="searched" :hasNoBackground="true" :placeholder="$t('message.admin.search_user_placeholder')" />
                     </div>
                 </div>
                 <div class="level is-mobile mb-0">
                     <div class="level-item has-text-centered is-justify-content-end">
                         <p class="subtitle is-7">
-                            {{ $t('admin.quick_filters_colons') }}
+                            {{ $t('message.admin.quick_filters_colons') }}
                         </p>
                     </div>
                     <div class="level-item has-text-centered is-justify-content-start">
@@ -154,19 +154,19 @@
                             </div>
                             <div class="ml-3">
                                 <!-- manage link -->
-                                <RouterLink :to="{ name: 'admin.manageUser', params: { userId: user.id }}" class="button is-small has-normal-radius" :class="{'is-dark' : mode == 'dark'}" :title="$t('commons.manage')">
-                                    {{ $t('commons.manage') }}
+                                <RouterLink :to="{ name: 'admin.manageUser', params: { userId: user.id }}" class="button is-small has-normal-radius" :class="{'is-dark' : mode == 'dark'}" :title="$t('message.manage')">
+                                    {{ $t('message.manage') }}
                                 </RouterLink>
 
                             </div>
                         </UseColorMode>
                     </div>
                     <!-- <div class="mt-2 is-size-7 is-pulled-right">
-                        {{ $t('settings.revoking_a_token_is_permanent')}}
+                        {{ $t('message.settings.revoking_a_token_is_permanent')}}
                     </div> -->
                 </div>
                 <div v-else class="mt-4 pl-3">
-                    {{ $t('commons.no_result') }}
+                    {{ $t('message.no_result') }}
                 </div>
                 <Spinner :isVisible="isFetching && users.length === 0" />
                 <!-- footer -->

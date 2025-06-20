@@ -6,7 +6,9 @@
     import { UseColorMode } from '@vueuse/components'
     import { useNotifyStore } from '@/stores/notify'
     import { QrcodeStream } from 'vue-qrcode-reader'
-    
+    import { useI18n } from 'vue-i18n'
+
+    const { t } = useI18n()
     const router = useRouter()
     const bus = useBusStore()
     const notify = useNotifyStore()
@@ -69,7 +71,7 @@
         form.uri = firstCode.rawValue
 
         if (! form.uri) {
-            notify.warn({ text: trans('errors.qrcode_cannot_be_read') })
+            notify.warn({ text: t('error.qrcode_cannot_be_read') })
         }
         else if (form.uri.slice(0, 33).toLowerCase() == "otpauth-migration://offline?data=") {
             bus.migrationUri = form.uri
@@ -77,7 +79,7 @@
         }
         else if (form.uri.slice(0, 15).toLowerCase() !== "otpauth://totp/" && form.uri.slice(0, 15).toLowerCase() !== "otpauth://hotp/") {
             showQrContent.value = true
-            notify.warn({ text: trans('errors.no_valid_otp') })
+            notify.warn({ text: t('error.no_valid_otp') })
         }
         else {
             bus.decodedUri = form.uri
@@ -142,11 +144,11 @@
                         <div class="modal-slot has-text-centered is-shadowless">
                             <UseColorMode v-slot="{ mode }">
                                 <div v-if="errorPhrase">
-                                    <p class="block is-size-5">{{ $t('twofaccounts.stream.live_scan_cant_start') }}</p>
-                                    <p class="block" :class="{'has-text-light': mode == 'dark'}">{{ $t('twofaccounts.stream.' + errorPhrase + '.reason') }}</p>
+                                    <p class="block is-size-5">{{ $t('message.twofaccounts.stream.live_scan_cant_start') }}</p>
+                                    <p class="block" :class="{'has-text-light': mode == 'dark'}">{{ $t('message.twofaccounts.stream.' + errorPhrase + '.reason') }}</p>
                                     <div v-if="errorPhrase == 'need_grant_permission'" >
-                                        <p class="is-size-7 mb-3">{{ $t('twofaccounts.stream.need_grant_permission.solution') }}</p>
-                                        <p class="is-size-7 mb-3">{{ $t('twofaccounts.stream.need_grant_permission.click_camera_icon') }}</p>
+                                        <p class="is-size-7 mb-3">{{ $t('message.twofaccounts.stream.need_grant_permission.solution') }}</p>
+                                        <p class="is-size-7 mb-3">{{ $t('message.twofaccounts.stream.need_grant_permission.click_camera_icon') }}</p>
                                         
                                         <div class="addressbar columns is-mobile is-gapless">
                                             <div class="column is-narrow has-text-left circled">
@@ -161,7 +163,7 @@
                                             </div>
                                         </div>
                                         <p>
-                                            <a @click.stop="reloadLocation">{{ $t('commons.refresh') }}</a>
+                                            <a @click.stop="reloadLocation">{{ $t('message.refresh') }}</a>
                                         </p>
                                         
                                         <!-- <div class="addressbar">
@@ -170,7 +172,7 @@
                                             <FontAwesomeIcon :icon="['far', 'star']" class="mr-3" size="xs" />
                                         </div> -->
                                     </div>
-                                    <p v-else class="is-size-7">{{ $t('twofaccounts.stream.' + errorPhrase + '.solution') }}</p>
+                                    <p v-else class="is-size-7">{{ $t('message.twofaccounts.stream.' + errorPhrase + '.solution') }}</p>
                                 </div>
                                 <span v-else class="is-size-4" :class="mode == 'dark' ? 'has-text-light':'has-text-grey-dark'">
                                     <Spinner :isVisible="true" :type="'raw'" class="is-size-1" />
@@ -196,7 +198,7 @@
                     <span class="select">
                         <select v-model="selectedCamera">
                             <option v-for="camera in cameras" :key="camera.label" :value="camera">
-                                {{ camera.label ? camera.label : $t('commons.default') }}
+                                {{ camera.label ? camera.label : $t('message.default') }}
                             </option>
                         </select>
                     </span>

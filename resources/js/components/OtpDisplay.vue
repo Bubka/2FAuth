@@ -1,4 +1,5 @@
 <script setup>
+    import { useI18n } from 'vue-i18n'
     import Spinner from '@/components/Spinner.vue'
     import TotpLooper from '@/components/TotpLooper.vue'
     import Dots from '@/components/Dots.vue'
@@ -8,6 +9,7 @@
     import { UseColorMode } from '@vueuse/components'
     import { useDisplayablePassword } from '@/composables/helpers'
 
+    const { t } = useI18n()
     const user = useUserStore()
     const notify = useNotifyStore()
     const $2fauth = inject('2fauth')
@@ -115,10 +117,10 @@
         }
         // Case 3
         else if (! props.secret) {
-            notify.error(new Error(trans('errors.cannot_create_otp_without_secret')))
+            notify.error(new Error(t('error.cannot_create_otp_without_secret')))
         }
         else if (! isTimeBased(otpauthParams.value.otp_type) && ! isHMacBased(otpauthParams.value.otp_type)) {
-            notify.error(new Error(trans('errors.not_a_supported_otp_type')))
+            notify.error(new Error(t('error.not_a_supported_otp_type')))
         }
 
         try {
@@ -267,7 +269,7 @@
                     : user.preferences.defaultGroup
             }
 
-            notify.success({ text: trans('commons.copied_to_clipboard') })
+            notify.success({ text: t('message.copied_to_clipboard') })
         }
     }
 
@@ -318,7 +320,7 @@
 <template>
     <div>
         <figure class="image is-64x64" :class="{ 'no-icon': !otpauthParams.icon }" style="display: inline-flex">
-            <img :src="$2fauth.config.subdirectory + '/storage/icons/' + otpauthParams.icon" v-if="otpauthParams.icon" :alt="$t('twofaccounts.icon_to_illustrate_the_account')">
+            <img :src="$2fauth.config.subdirectory + '/storage/icons/' + otpauthParams.icon" v-if="otpauthParams.icon" :alt="$t('message.twofaccounts.icon_to_illustrate_the_account')">
         </figure>
         <UseColorMode v-slot="{ mode }">
             <p class="is-size-4 has-ellipsis" :class="mode == 'dark' ? 'has-text-grey-light' : 'has-text-grey'">{{ otpauthParams.service }}</p>
@@ -334,7 +336,7 @@
                     :class="mode == 'dark' ? 'has-text-white' : 'has-text-grey-dark'"
                     @click="copyOTP(password, true)"
                     @keyup.enter="copyOTP(password, true)"
-                    :title="$t('commons.copy_to_clipboard')"
+                    :title="$t('message.copy_to_clipboard')"
                 >
                     {{ useDisplayablePassword(password, user.preferences.showOtpAsDot && user.preferences.revealDottedOTP && revealPassword) }}
                 </span>
@@ -345,7 +347,7 @@
         </UseColorMode>
         <Dots v-show="isTimeBased(otpauthParams.otp_type)" ref="dots"></Dots>
         <p v-show="isHMacBased(otpauthParams.otp_type)">
-            {{ $t('twofaccounts.forms.counter.label') }}: {{ otpauthParams.counter }}
+            {{ $t('message.twofaccounts.forms.counter.label') }}: {{ otpauthParams.counter }}
         </p>
         <p v-if="user.preferences.showNextOtp" class="mt-3 is-size-4">
             <span
@@ -354,7 +356,7 @@
                 :class="opacity"
                 @click="copyOTP(next_password, true)"
                 @keyup.enter="copyOTP(next_password, true)"
-                :title="$t('commons.copy_next_password')"
+                :title="$t('message.copy_next_password')"
             >
                 {{ useDisplayablePassword(next_password, user.preferences.showOtpAsDot && user.preferences.revealDottedOTP && revealPassword) }}
             </span>

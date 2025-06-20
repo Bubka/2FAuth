@@ -19,7 +19,7 @@ class RejectIfReverseProxy
             Log::info('Cannot request this action in reverse proxy mode');
 
             return response()->json([
-                'message' => __('errors.unsupported_with_reverseproxy'),
+                'message' => __('error.unsupported_with_reverseproxy'),
             ], 405);
         }
 

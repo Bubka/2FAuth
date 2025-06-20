@@ -1,5 +1,7 @@
 <script setup>
     import { RouterView } from 'vue-router'
+
+    const { t } = useI18n()
     const route = useRoute()
     const kickUser = ref(null)
     const kickUserAfter = ref(null)
@@ -37,6 +39,11 @@
         watch(language, () => {
             user.applyLanguage()
         })
+    })
+
+    router.afterEach((to, from) => {
+        to.meta.title = t('title.' + to.name)
+        document.title = to.meta.title
     })
 
 </script>

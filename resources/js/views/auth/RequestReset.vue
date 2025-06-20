@@ -36,13 +36,14 @@
 </script>
 
 <template>
-    <FormWrapper :title="$t(isWebauthnReset ? 'auth.webauthn.account_recovery' : 'auth.forms.reset_password')" :punchline="$t(isWebauthnReset ? 'auth.webauthn.recovery_punchline' : 'auth.forms.reset_punchline')">
+    <!-- TODO: compléter la punchline avec la ligne manquante de auth.webauthn.ensure_you_open_mail_in_trusted_device -->
+    <FormWrapper :title="isWebauthnReset ? 'message.auth.webauthn.account_recovery' : 'message.auth.forms.reset_password'" :punchline="isWebauthnReset ? 'message.auth.webauthn.recovery_punchline' : 'message.auth.forms.reset_punchline'">
         <form @submit.prevent="requestPasswordReset" @keydown="form.onKeydown($event)">
-            <FormField v-model="form.email" fieldName="email" :errorMessage="form.errors.get('email')" label="auth.forms.email" autofocus />
+            <FormField v-model="form.email" fieldName="email" :errorMessage="form.errors.get('email')" label="message.auth.forms.email" autofocus />
             <FormButtons
                 :submitId="'btnSendResetPwd'"
                 :isBusy="form.isBusy"
-                :submitLabel="isWebauthnReset ? 'auth.webauthn.send_recovery_link' : 'auth.forms.send_password_reset_link'"
+                :submitLabel="isWebauthnReset ? 'message.auth.webauthn.send_recovery_link' : 'message.auth.forms.send_password_reset_link'"
                 :showCancelButton="true"
                 @cancel="router.push({ name: 'login' })" />
         </form>

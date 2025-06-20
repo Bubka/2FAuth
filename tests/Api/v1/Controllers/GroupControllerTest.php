@@ -160,7 +160,7 @@ class GroupControllerTest extends FeatureTestCase
     {
         $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/groups', [
-                'name' => __('commons.all'),
+                'name' => __('message.all'),
             ])
             ->assertStatus(422);
     }
@@ -222,7 +222,7 @@ class GroupControllerTest extends FeatureTestCase
             ->json('GET', '/api/v1/groups/0')
             ->assertOk()
             ->assertJsonFragment([
-                'name'               => __('commons.all'),
+                'name'               => __('message.all'),
                 'twofaccounts_count' => $userTwofaccounts->count(),
             ]);
     }

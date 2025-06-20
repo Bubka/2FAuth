@@ -39,7 +39,7 @@
                 </div>
                 <div class="columns is-centered">
                     <div class="column has-text-centered">
-                        <RouterLink :to="{ name: 'groups' }" >{{ $t('groups.manage_groups') }}</RouterLink>
+                        <RouterLink :to="{ name: 'groups' }" >{{ $t('message.groups.manage_groups') }}</RouterLink>
                     </div>
                 </div>
             </div>

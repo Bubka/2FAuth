@@ -34,14 +34,14 @@
 <template>
     <ResponsiveWidthWrapper>
         <h1 class="title has-text-grey-dark">
-            {{ $t('groups.groups') }}
+            {{ $t('message.groups.groups') }}
         </h1>
         <div class="is-size-7-mobile">
-            {{ $t('groups.manage_groups_legend')}}
+            {{ $t('message.groups.manage_groups_legend')}}
         </div>
         <div class="mt-3 mb-6">
             <RouterLink class="is-link mt-5" :to="{ name: 'createGroup' }">
-                <FontAwesomeIcon :icon="['fas', 'plus-circle']" /> {{ $t('groups.create_group') }}
+                <FontAwesomeIcon :icon="['fas', 'plus-circle']" /> {{ $t('message.groups.create_group') }}
             </RouterLink>
         </div>
         <div v-if="!groups.isEmpty">
@@ -49,18 +49,18 @@
                 {{ group.name }}
                 <!-- delete icon -->
                 <UseColorMode v-slot="{ mode }">
-                    <button type="button" class="button tag is-pulled-right" :class="mode == 'dark' ? 'is-dark' : 'is-white'" @click="groups.delete(group.id)"  :title="$t('commons.delete')">
-                        {{ $t('commons.delete') }}
+                    <button type="button" class="button tag is-pulled-right" :class="mode == 'dark' ? 'is-dark' : 'is-white'" @click="groups.delete(group.id)"  :title="$t('message.delete')">
+                        {{ $t('message.delete') }}
                     </button>
                 </UseColorMode>
                 <!-- edit link -->
-                <RouterLink :to="{ name: 'editGroup', params: { groupId: group.id }}" class="has-text-grey px-1" :title="$t('commons.rename')">
+                <RouterLink :to="{ name: 'editGroup', params: { groupId: group.id }}" class="has-text-grey px-1" :title="$t('message.rename')">
                     <FontAwesomeIcon :icon="['fas', 'pen-square']" />
                 </RouterLink>
-                <span class="is-family-primary is-size-6 is-size-7-mobile has-text-grey">{{ $t('groups.x_accounts', { count: group.twofaccounts_count }) }}</span>
+                <span class="is-family-primary is-size-6 is-size-7-mobile has-text-grey">{{ $t('message.groups.x_accounts', { count: group.twofaccounts_count }) }}</span>
             </div>
             <div class="mt-2 is-size-7 is-pulled-right">
-                {{ $t('groups.deleting_group_does_not_delete_accounts')}}
+                {{ $t('message.groups.deleting_group_does_not_delete_accounts')}}
             </div>
         </div>
         <div v-if="isFetching && groups.isEmpty" class="has-text-centered">

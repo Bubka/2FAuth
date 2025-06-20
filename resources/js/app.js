@@ -1,5 +1,6 @@
 import '@2fauth/styles/src/app.scss';
 
+import i18n from './i18n'
 import Notifications from '@kyvg/vue3-notification'
 import App from './App.vue'
 import router from './router'
@@ -20,26 +21,19 @@ const $2fauth = {
 }
 app.provide('2fauth', readonly($2fauth))
 
+// Localization
+app.use(i18n)
+
 // Stores
 const pinia = createPinia()
 pinia.use(({ store }) => {
     store.$2fauth = $2fauth;
-});
+    store.$i18n = i18n
+})
 app.use(pinia)
 
 // Router
 app.use(router)
-
-// Localization
-app.use(i18nVue, {
-    lang: document.documentElement.lang,
-    resolve: async lang => {
-        const langs = import.meta.glob('../lang/*.json');
-        if (lang.includes('php_')) {
-            return await langs[`../lang/${lang}.json`]();
-        }
-    }
-})
 
 // Notifications
 app.use(Notifications)

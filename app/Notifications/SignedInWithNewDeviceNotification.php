@@ -42,7 +42,7 @@ class SignedInWithNewDeviceNotification extends Notification
     public function toMail(mixed $notifiable) : MailMessage
     {
         return (new MailMessage)
-            ->subject(__('notifications.new_device.subject'))
+            ->subject(__('message.notifications.new_device.subject'))
             ->markdown('emails.signedInWithNewDevice', [
                 'account'   => $notifiable,
                 'time'      => $this->authLog->login_at,

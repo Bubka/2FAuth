@@ -30,7 +30,8 @@ export const useAppSettingsStore = defineStore({
                 })
             })
             .catch(error => {
-                useNotifyStore().alert({ text: trans('errors.failed_to_retrieve_app_settings') })
+                // TODO : move the t() call from the store
+                useNotifyStore().alert({ text: t('error.failed_to_retrieve_app_settings') })
             })
         },
     },

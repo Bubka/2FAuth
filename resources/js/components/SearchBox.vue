@@ -64,13 +64,13 @@
                 id="txtSearch"
                 type="search"
                 tabindex="1"
-                :aria-label="$t('commons.search')"
-                :title="$t('commons.search')"
+                :aria-label="$t('message.search')"
+                :title="$t('message.search')"
                 :placeholder="placeholder"
                 class="input is-rounded is-search"
                 :class="{ 'has-no-background': hasNoBackground }">
             <span class="icon is-small is-right">
-                <button type="button" v-if="keyword != ''" id="btnClearSearch" tabindex="1" :title="$t('commons.clear_search')" class="clear-selection delete" @click="clearSearch"></button>
+                <button type="button" v-if="keyword != ''" id="btnClearSearch" tabindex="1" :title="$t('message.clear_search')" class="clear-selection delete" @click="clearSearch"></button>
                 <FontAwesomeIcon v-else :icon="['fas', 'search']" />
             </span>
         </div>

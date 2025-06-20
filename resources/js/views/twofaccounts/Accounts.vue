@@ -17,7 +17,9 @@
     import { useGroups } from '@/stores/groups'
     import { useDisplayablePassword } from '@/composables/helpers'
     import { useSortable, moveArrayElement } from '@vueuse/integrations/useSortable'
+    import { useI18n } from 'vue-i18n'
 
+    const { t } = useI18n()
     const $2fauth = inject('2fauth')
     const router = useRouter()
     const notify = useNotifyStore()
@@ -92,7 +94,7 @@
         else {
             twofaccounts.fetch().then(() => {
                 if (twofaccounts.backendWasNewer) {
-                    notify.info({ text: trans('commons.data_refreshed_to_reflect_server_changes'), duration: 10000 })
+                    notify.info({ text: t('message.data_refreshed_to_reflect_server_changes'), duration: 10000 })
                 }
             })
         }
@@ -126,7 +128,7 @@
         twofaccounts.fetch()
         twofaccounts.selectNone()
         showDestinationGroupSelector.value = false
-        notify.success({ text: trans('twofaccounts.accounts_moved') })
+        notify.success({ text: t('message.twofaccounts.accounts_moved') })
     }
 
     /**
@@ -183,7 +185,7 @@
                     : user.preferences.defaultGroup
             }
             
-            notify.success({ text: trans('commons.copied_to_clipboard') })
+            notify.success({ text: t('message.copied_to_clipboard') })
         }
     }
 
@@ -360,12 +362,12 @@
                     <div v-else class="has-text-centered">
                         <div class="columns">
                             <div class="column" v-if="showGroupSwitch">
-                                <button type="button" id="btnHideGroupSwitch" :title="$t('groups.hide_group_selector')" tabindex="1" class="button is-text is-like-text" :class="{'has-text-grey' : mode != 'dark'}" @click.stop="showGroupSwitch = !showGroupSwitch">
-                                    {{ $t('groups.select_accounts_to_show') }}
+                                <button type="button" id="btnHideGroupSwitch" :title="$t('message.groups.hide_group_selector')" tabindex="1" class="button is-text is-like-text" :class="{'has-text-grey' : mode != 'dark'}" @click.stop="showGroupSwitch = !showGroupSwitch">
+                                    {{ $t('message.groups.select_accounts_to_show') }}
                                 </button>
                             </div>
                             <div class="column" v-else>
-                                <button type="button" id="btnShowGroupSwitch" :title="$t('groups.show_group_selector')" tabindex="1" class="button is-text is-like-text" :class="{'has-text-grey' : mode != 'dark'}" @click.stop="showGroupSwitch = !showGroupSwitch">
+                                <button type="button" id="btnShowGroupSwitch" :title="$t('message.groups.show_group_selector')" tabindex="1" class="button is-text is-like-text" :class="{'has-text-grey' : mode != 'dark'}" @click.stop="showGroupSwitch = !showGroupSwitch">
                                     {{ groups.current }} ({{ twofaccounts.filteredCount }})&nbsp;
                                     <FontAwesomeIcon  :icon="['fas', 'caret-down']" />
                                 </button>
@@ -424,18 +426,18 @@
                                 <div class="tfa-text has-ellipsis">
                                     <img v-if="account.icon && user.preferences.showAccountsIcons" role="presentation" class="tfa-icon" :src="$2fauth.config.subdirectory + '/storage/icons/' + account.icon" alt="">
                                     <img v-else-if="account.icon == null && user.preferences.showAccountsIcons" role="presentation" class="tfa-icon" :src="$2fauth.config.subdirectory + '/storage/noicon.svg'" alt="">
-                                    {{ account.service ? account.service : $t('twofaccounts.no_service') }}<FontAwesomeIcon class="has-text-danger is-size-5 ml-2" v-if="account.account === $t('errors.indecipherable')" :icon="['fas', 'exclamation-circle']" />
+                                    {{ account.service ? account.service : $t('message.twofaccounts.no_service') }}<FontAwesomeIcon class="has-text-danger is-size-5 ml-2" v-if="account.account === $t('error.indecipherable')" :icon="['fas', 'exclamation-circle']" />
                                     <span class="is-block has-ellipsis is-family-primary is-size-6 is-size-7-mobile has-text-grey ">{{ account.account }}</span>
                                 </div>
                             </div>
                             <transition name="popLater">
                                 <div v-show="user.preferences.getOtpOnRequest == false && !bus.inManagementMode" class="has-text-right">
                                     <div v-if="account.otp != undefined">
-                                        <div class="always-on-otp is-clickable has-nowrap has-text-grey is-size-5 ml-4" @click="copyToClipboard(account.otp.password)" @keyup.enter="copyToClipboard(account.otp.password)" :title="$t('commons.copy_to_clipboard')">
+                                        <div class="always-on-otp is-clickable has-nowrap has-text-grey is-size-5 ml-4" @click="copyToClipboard(account.otp.password)" @keyup.enter="copyToClipboard(account.otp.password)" :title="$t('message.copy_to_clipboard')">
                                             {{ useDisplayablePassword(account.otp.password, user.preferences.showOtpAsDot && user.preferences.revealDottedOTP && revealPassword == account.id) }}
                                         </div>
                                         <div class="has-nowrap" style="line-height: 0.9;">
-                                            <span v-if="user.preferences.showNextOtp" class="always-on-otp is-clickable has-nowrap has-text-grey is-size-7 mr-2" :class="opacities[account.period]" @click="copyToClipboard(account.otp.next_password)" @keyup.enter="copyToClipboard(account.otp.next_password)" :title="$t('commons.copy_next_password')">
+                                            <span v-if="user.preferences.showNextOtp" class="always-on-otp is-clickable has-nowrap has-text-grey is-size-7 mr-2" :class="opacities[account.period]" @click="copyToClipboard(account.otp.next_password)" @keyup.enter="copyToClipboard(account.otp.next_password)" :title="$t('message.copy_next_password')">
                                                 {{ useDisplayablePassword(account.otp.next_password, user.preferences.showOtpAsDot && user.preferences.revealDottedOTP && revealPassword == account.id) }}
                                             </span>
                                             <Dots
@@ -447,8 +449,8 @@
                                     </div>
                                     <div v-else>
                                         <!-- get hotp button -->
-                                        <button type="button" class="button tag" :class="mode == 'dark' ? 'is-dark' : 'is-white'" @click="showOTP(account)" :title="$t('twofaccounts.import.import_this_account')">
-                                            {{ $t('commons.generate') }}
+                                        <button type="button" class="button tag" :class="mode == 'dark' ? 'is-dark' : 'is-white'" @click="showOTP(account)" :title="$t('message.twofaccounts.import.import_this_account')">
+                                            {{ $t('message.generate') }}
                                         </button>
                                     </div>
                                 </div>
@@ -466,9 +468,9 @@
                             <transition name="fadeInOut">
                                 <div class="tfa-cell tfa-edit has-text-grey" v-if="bus.inManagementMode">
                                     <RouterLink :to="{ name: 'editAccount', params: { twofaccountId: account.id }}" class="tag is-rounded mr-1" :class="mode == 'dark' ? 'is-dark' : 'is-white'">
-                                        {{ $t('commons.edit') }}
+                                        {{ $t('message.edit') }}
                                     </RouterLink>
-                                    <RouterLink :to="{ name: 'showQRcode', params: { twofaccountId: account.id }}" class="tag is-rounded" :class="mode == 'dark' ? 'is-dark' : 'is-white'" :title="$t('twofaccounts.show_qrcode')">
+                                    <RouterLink :to="{ name: 'showQRcode', params: { twofaccountId: account.id }}" class="tag is-rounded" :class="mode == 'dark' ? 'is-dark' : 'is-white'" :title="$t('message.twofaccounts.show_qrcode')">
                                         <FontAwesomeIcon :icon="['fas', 'qrcode']" />
                                     </RouterLink>
                                 </div>

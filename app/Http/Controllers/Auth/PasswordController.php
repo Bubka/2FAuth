@@ -23,13 +23,13 @@ class PasswordController extends Controller
         if ($user->oauth_provider) {
             Log::notice('Password update rejected: external account from a sso provider');
 
-            return response()->json(['message' => __('errors.account_managed_by_external_provider')], 400);
+            return response()->json(['message' => __('error.account_managed_by_external_provider')], 400);
         }
 
         if (! Hash::check($validated['currentPassword'], Auth::user()->password)) {
             Log::notice('Password update failed: wrong password provided');
 
-            return response()->json(['message' => __('errors.wrong_current_password')], 400);
+            return response()->json(['message' => __('error.wrong_current_password')], 400);
         }
 
         if (! config('2fauth.config.isDemoApp')) {
@@ -39,6 +39,6 @@ class PasswordController extends Controller
             Log::info(sprintf('Password of user ID #%s updated', $user->id));
         }
 
-        return response()->json(['message' => __('auth.forms.password_successfully_changed')]);
+        return response()->json(['message' => __('message.auth.forms.password_successfully_changed')]);
     }
 }

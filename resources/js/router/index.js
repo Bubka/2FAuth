@@ -77,9 +77,4 @@ router.beforeEach((to, from, next) => {
     });
 })
 
-router.afterEach((to, from) => {
-    to.meta.title = trans('titles.' + to.name)
-    document.title = to.meta.title
-})
-
 export default router

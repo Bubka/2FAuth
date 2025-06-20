@@ -76,7 +76,7 @@ export const useUserStore = defineStore({
                 authService.logout({ returnError: true }).then(() => {
                     if (kicked) {
                         notify.clear()
-                        notify.warn({ text: trans('auth.autolock_triggered_punchline'), duration:-1 })
+                        notify.warn({ text: t('message.auth.autolock_triggered_punchline'), duration:-1 })
                     }
                     this.tossOut()
                 })
@@ -118,24 +118,16 @@ export const useUserStore = defineStore({
          */
         applyLanguage() {
             const { isSupported, language } = useNavigatorLanguage()
-            let lang = 'en'
+            let lang = this.$i18n.fallbackLocale
 
             if (isSupported) {
-                if (this.preferences.lang == 'browser') {
-                    if (this.$2fauth.langs.includes(language.value)) {
-                        lang = language.value
-                    }
-                    // If the language tag pushed by the browser is composed of
-                    // multiple subtags (ex: fr-FR) we need to retry but only with
-                    // the "language subtag" (ex: fr)
-                    else if (this.$2fauth.langs.includes(language.value.slice(0, 2))) {
-                        lang = language.value.slice(0, 2)
-                    }
-                }
-                else lang = this.preferences.lang
+                // The language tag pushed by the browser may be composed of
+                // multiple subtags (ex: fr-FR) so we keep only the
+                // "language subtag" (ex: fr)
+                lang = this.preferences.lang == 'browser' ? language.value.slice(0, 2)  : this.preferences.lang
             }
 
-            loadLanguageAsync(lang)
+            this.$i18n.global.locale = lang
         },
 
         /**
@@ -168,7 +160,7 @@ export const useUserStore = defineStore({
             })
             .catch(error => {
                 const notify = useNotifyStore()
-                notify.alert({ text: trans('errors.data_cannot_be_refreshed_from_server') })
+                notify.alert({ text: t('error.data_cannot_be_refreshed_from_server') })
             })
         }
 

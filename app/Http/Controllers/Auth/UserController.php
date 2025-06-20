@@ -27,13 +27,13 @@ class UserController extends Controller
         if (config('auth.defaults.guard') === 'reverse-proxy-guard' || $user->oauth_provider) {
             Log::notice('Account update rejected: reverse-proxy-guard enabled or account from external sso provider');
 
-            return response()->json(['message' => __('errors.account_managed_by_external_provider')], 400);
+            return response()->json(['message' => __('error.account_managed_by_external_provider')], 400);
         }
 
         if (! Hash::check($request->password, Auth::user()->password)) {
             Log::notice('Account update failed: wrong password provided');
 
-            return response()->json(['message' => __('errors.wrong_current_password')], 400);
+            return response()->json(['message' => __('error.wrong_current_password')], 400);
         }
 
         if (! config('2fauth.config.isDemoApp')) {
@@ -58,14 +58,14 @@ class UserController extends Controller
         $user      = Auth::user();
 
         if (! Hash::check($validated['password'], Auth::user()->password)) {
-            return response()->json(['message' => __('errors.wrong_current_password')], 400);
+            return response()->json(['message' => __('error.wrong_current_password')], 400);
         }
 
         // This will delete the user and all its 2FAs & Groups thanks to the onCascadeDelete constrains.
         // Deletion will not be done (and returns False) if the user is the only existing admin (see UserObserver clas)
         return $user->delete() === false
             ? response()->json([
-                'message' => __('errors.cannot_delete_the_only_admin'),
+                'message' => __('error.cannot_delete_the_only_admin'),
             ], 400)
             : response()->json(null, 204);
     }

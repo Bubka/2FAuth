@@ -1,17 +1,17 @@
 <script setup>
     const tabs = ref([
         {
-            'name' : 'admin.app_setup',
+            'name' : 'message.admin.app_setup',
             'view' : 'admin.appSetup',
             'id'   : 'lnkTabApp'
         },
         {
-            'name' : 'admin.auth',
+            'name' : 'message.admin.auth',
             'view' : 'admin.auth',
             'id'   : 'lnkTabAuth'
         },
         {
-            'name' : 'admin.users',
+            'name' : 'message.admin.users',
             'view' : 'admin.users',
             'id'   : 'lnkTabUsers'
         },

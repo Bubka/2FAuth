@@ -41,7 +41,7 @@ class IconController extends Controller
 
         return $isStored
                 ? response()->json(['filename' => $name], 201)
-                : response()->json(['message' => __('errors.file_upload_failed')], 500);
+                : response()->json(['message' => __('error.file_upload_failed')], 500);
     }
 
     /**

@@ -47,7 +47,7 @@ class TestEmailSettingNotificationTest extends FeatureTestCase
         $mail = $this->testEmailSettingNotification->toMail($this->user)->render();
 
         $this->assertStringContainsString(
-            __('notifications.test_email_settings.success'),
+            __('message.notifications.test_email_settings.success'),
             $mail
         );
     }

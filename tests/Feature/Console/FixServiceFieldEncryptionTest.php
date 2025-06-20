@@ -80,7 +80,7 @@ class FixServiceFieldEncryptionTest extends FeatureTestCase
         DB::table('twofaccounts')->update(['service' => $expectedServiceName]);
         $twofaccounts = TwoFAccount::all();
         foreach ($twofaccounts as $twofaccount) {
-            $this->assertEquals(__('errors.indecipherable'), $twofaccount->service);
+            $this->assertEquals(__('error.indecipherable'), $twofaccount->service);
         }
 
         $this->artisan($this->command)
@@ -104,7 +104,7 @@ class FixServiceFieldEncryptionTest extends FeatureTestCase
         DB::table('twofaccounts')->update(['service' => $expectedServiceName]);
         $twofaccounts = TwoFAccount::all();
         foreach ($twofaccounts as $twofaccount) {
-            $this->assertEquals(__('errors.indecipherable'), $twofaccount->service);
+            $this->assertEquals(__('error.indecipherable'), $twofaccount->service);
         }
 
         $this->artisan($this->command)
@@ -113,7 +113,7 @@ class FixServiceFieldEncryptionTest extends FeatureTestCase
 
         foreach ($twofaccounts as $twofaccount) {
             $twofaccount->refresh();
-            $this->assertEquals(__('errors.indecipherable'), $twofaccount->service);
+            $this->assertEquals(__('error.indecipherable'), $twofaccount->service);
         }
     }
 
@@ -134,7 +134,7 @@ class FixServiceFieldEncryptionTest extends FeatureTestCase
 
         $this->assertEquals($expectedServiceName, $twofaccounts[0]->service);
         $this->assertEquals($expectedServiceName, $twofaccounts[1]->service);
-        $this->assertEquals(__('errors.indecipherable'), $testedAccount->service);
+        $this->assertEquals(__('error.indecipherable'), $testedAccount->service);
 
         $this->artisan($this->command)
             ->expectsConfirmation('Do you want to fix encryption of those records?', 'yes')
@@ -166,7 +166,7 @@ class FixServiceFieldEncryptionTest extends FeatureTestCase
 
         $this->assertEquals($expectedServiceName, $twofaccounts[0]->service);
         $this->assertEquals($expectedServiceName, $twofaccounts[1]->service);
-        $this->assertEquals(__('errors.indecipherable'), $testedAccount->service);
+        $this->assertEquals(__('error.indecipherable'), $testedAccount->service);
 
         $this->artisan($this->command)
             ->expectsConfirmation('Do you want to fix encryption of those records?', 'yes')
@@ -176,6 +176,6 @@ class FixServiceFieldEncryptionTest extends FeatureTestCase
 
         $this->assertEquals($expectedServiceName, $twofaccounts[0]->service);
         $this->assertEquals($expectedServiceName, $twofaccounts[1]->service);
-        $this->assertEquals(__('errors.indecipherable'), $testedAccount->service);
+        $this->assertEquals(__('error.indecipherable'), $testedAccount->service);
     }
 }

@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite'
 import laravel from 'laravel-vite-plugin'
 import vue from '@vitejs/plugin-vue'
-import i18n from 'laravel-vue-i18n/vite'
+import vueI18n from '@intlify/unplugin-vue-i18n/vite'
 import AutoImport from 'unplugin-auto-import/vite'
 import version from './vite.version'
 
@@ -31,14 +31,19 @@ export default defineConfig({
                 },
             },
         }),
-        i18n('resources/lang'),
+        vueI18n({
+            include: [
+                'resources/lang/en.json',
+                'resources/lang/fr.json',
+            ]
+        }),
         AutoImport({
             // https://github.com/unplugin/unplugin-auto-import?tab=readme-ov-file#configuration
-            // include: [
-            //     /\.[tj]sx?$/, // .ts, .tsx, .js, .jsx
-            //     /\.vue$/,
-            //     /\.vue\?vue/, // .vue
-            // ],
+            include: [
+                /\.[tj]sx?$/, // .ts, .tsx, .js, .jsx
+                /\.vue$/,
+                /\.vue\?vue/, // .vue
+            ],
             imports: [
                 'vue',
                 'vue-router',
@@ -48,14 +53,6 @@ export default defineConfig({
                         'useStorage',
                         'useClipboard',
                         'useNavigatorLanguage'
-                    ],
-                    'laravel-vue-i18n': [
-                        'i18nVue',
-                        'trans',
-                        'wTrans',
-                        'getActiveLanguage',
-                        'loadLanguageAsync',
-                        'getActiveLanguage'
                     ],
                     '@kyvg/vue3-notification': [
                         'useNotification'
@@ -76,6 +73,7 @@ export default defineConfig({
             vueTemplate: true,
             vueDirectives: true,
             dts: './auto-imports.d.ts',
+            viteOptimizeDeps: true,
             eslintrc: {
                 enabled: true,
                 filepath: './.eslintrc-auto-import.mjs',

@@ -7,7 +7,7 @@
         },
         message: {
             type: String,
-            default: 'commons.generating_otp'
+            default: 'message.generating_otp'
         }
     })
 </script>

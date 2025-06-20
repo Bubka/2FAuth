@@ -19,18 +19,21 @@ export const useNotifyStore = defineStore({
 
     actions: {
         parseError(err) {
+            // TODO : use the new Notify component
+            // const { t } = useI18n()
+
             this.$reset
             this.err = err
 
             // Hnalde axios response error
             if (err.response) {
                 if (err.response.status === 407) {
-                    this.message = trans('errors.auth_proxy_failed'),
-                    this.originalMessage = trans('errors.auth_proxy_failed_legend')
+                    this.message = t('error.auth_proxy_failed'),
+                    this.originalMessage = t('error.auth_proxy_failed_legend')
                 }
                 else if (err.response.status === 403) {
-                    this.message = trans('errors.unauthorized'),
-                    this.originalMessage = trans('errors.unauthorized_legend')
+                    this.message = t('error.unauthorized'),
+                    this.originalMessage = t('error.unauthorized_legend')
                 }
                 else if(err.response.data) {
                     this.message = err.response.data.message,

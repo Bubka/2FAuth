@@ -17,7 +17,7 @@ export const useGroups = defineStore({
         current(state) {
             const group = state.items.find(item => item.id === parseInt(useUserStore().preferences.activeGroup))
 
-            return group ? group.name : trans('commons.all')
+            return group ? group.name : t('message.all')
         },
 
         withoutTheAllGroup(state) {
@@ -47,11 +47,11 @@ export const useGroups = defineStore({
             
             if (index > -1) {
                 this.items[index] = group
-                useNotifyStore().success({ text: trans('groups.group_name_saved') })
+                useNotifyStore().success({ text: t('message.groups.group_name_saved') })
             }
             else {
                 this.items.push(group)
-                useNotifyStore().success({ text: trans('groups.group_successfully_created') })
+                useNotifyStore().success({ text: t('message.groups.group_successfully_created') })
             }            
         },
 
@@ -78,10 +78,10 @@ export const useGroups = defineStore({
         async delete(id) {
             const user = useUserStore()
 
-            if (confirm(trans('groups.confirm.delete'))) {
+            if (confirm(t('message.groups.confirm.delete'))) {
                 await groupService.delete(id).then(response => {
                     this.items = this.items.filter(a => a.id !== id)
-                    useNotifyStore().success({ text: trans('groups.group_successfully_deleted') })
+                    useNotifyStore().success({ text: t('message.groups.group_successfully_deleted') })
 
                     // Reset group filter to 'All' (groupId=0) since the backend has already made
                     // the change automatically. This prevents a new request.

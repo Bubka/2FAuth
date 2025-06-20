@@ -34,7 +34,7 @@ class RejectIfSsoOnlyAndNotForAdmin
 
             Log::notice(sprintf('Request to %s rejected, only Admins can request it while authentication is restricted to SSO only', $request->getPathInfo()));
 
-            return response()->json(['message' => __('errors.unsupported_with_sso_only')], Response::HTTP_METHOD_NOT_ALLOWED);
+            return response()->json(['message' => __('error.unsupported_with_sso_only')], Response::HTTP_METHOD_NOT_ALLOWED);
         }
 
         return $next($request);

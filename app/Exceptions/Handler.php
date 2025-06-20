@@ -62,37 +62,37 @@ class Handler extends ExceptionHandler
 
         $this->renderable(function (InvalidMigrationDataException $exception, $request) {
             return response()->json([
-                'message' => __('errors.invalid_x_migration', ['appname' => $exception->getMessage()]),
+                'message' => __('error.invalid_x_migration', ['appname' => $exception->getMessage()]),
             ], 400);
         });
 
         $this->renderable(function (UnsupportedMigrationException $exception, $request) {
             return response()->json([
-                'message' => __('errors.unsupported_migration'),
+                'message' => __('error.unsupported_migration'),
             ], 400);
         });
 
         $this->renderable(function (EncryptedMigrationException $exception, $request) {
             return response()->json([
-                'message' => __('errors.encrypted_migration'),
+                'message' => __('error.encrypted_migration'),
             ], 400);
         });
 
         $this->renderable(function (UndecipherableException $exception, $request) {
             return response()->json([
-                'message' => __('errors.cannot_decipher_secret'),
+                'message' => __('error.cannot_decipher_secret'),
             ], 400);
         });
 
         $this->renderable(function (UnsupportedOtpTypeException $exception, $request) {
             return response()->json([
-                'message' => __('errors.unsupported_otp_type'),
+                'message' => __('error.unsupported_otp_type'),
             ], 400);
         });
 
         $this->renderable(function (FailedIconStoreDatabaseTogglingException $exception, $request) {
             return response()->json([
-                'message' => __('errors.failed_icon_store_database_toggling'),
+                'message' => __('error.failed_icon_store_database_toggling'),
             ], 400);
         });
 

@@ -2,7 +2,9 @@
     import { useAppSettingsStore } from '@/stores/appSettings'
     import { useUserStore } from '@/stores/user'
     import { UseColorMode } from '@vueuse/components'
+    import { useI18n } from 'vue-i18n'
 
+    const { t } = useI18n()
     const appSettings = useAppSettingsStore()
     const user = useUserStore()
     const $2fauth = inject('2fauth')
@@ -17,7 +19,7 @@
     })
 
     function logout() {
-        if(confirm(trans('auth.confirm.logout'))) {
+        if(confirm(t('message.auth.confirm.logout'))) {
             user.logout()
         }
     }
@@ -36,11 +38,11 @@
         <!-- sub-links -->
         <div v-if="internalFooterType == 'doneButton'" class="content has-text-centered">
             <!-- done link -->
-            <button type="button" id="lnkExitEdit" class="button is-ghost is-like-text" @click.stop="$emit('doneButtonClicked', true)">{{ $t('commons.done') }}</button>
+            <button type="button" id="lnkExitEdit" class="button is-ghost is-like-text" @click.stop="$emit('doneButtonClicked', true)">{{ $t('message.done') }}</button>
         </div>
         <div v-else-if="internalFooterType == 'modal'" class="content has-text-centered">
             <!-- back to home link -->
-            <router-link v-if="$route.name != 'accounts'" id="lnkBackToHome" :to="{ name: 'accounts' }" class="has-text-grey">{{ $t('commons.back_to_home') }}</router-link>
+            <router-link v-if="$route.name != 'accounts'" id="lnkBackToHome" :to="{ name: 'accounts' }" class="has-text-grey">{{ $t('message.back_to_home') }}</router-link>
             <span v-else>&nbsp;</span>
         </div>
         <div v-else class="content has-text-centered">
@@ -48,7 +50,7 @@
                 <!-- about link -->
                 <router-link v-if="$route.name != 'about'" id="lnkAbout" :to="{ name: 'about' }" class="has-text-grey">
                     <span v-if="user.isAuthenticated && $route.meta.watchedByKicker" class="has-text-weight-bold">2FAuth – v{{ $2fauth.version }}</span>
-                    <span v-else class="">{{ $t('commons.about') }}</span>
+                    <span v-else class="">{{ $t('message.about') }}</span>
                 </router-link>
                 <span v-else>&nbsp;</span>
             </div>
@@ -58,21 +60,21 @@
                     <!-- settings link -->
                     <li class="column">
                         <router-link id="lnkSettings" :to="{ name: 'settings.options' }">
-                            {{ $t('settings.settings') }}
+                            {{ $t('message.settings.settings') }}
                         </router-link>
                     </li>
                     <!-- admin link -->
                     <li v-if="user.isAdmin" class="column">
                         <router-link id="lnkAdmin" :to="{ name: 'admin.appSetup' }" >
                             <span v-if="appSettings.latestRelease && appSettings.checkForUpdate" class="release-flag"></span>
-                            {{ $t('admin.admin_panel') }}
+                            {{ $t('message.admin.admin_panel') }}
                         </router-link>
                     </li>
                     <!-- sign-out button -->
                     <li v-if="!$2fauth.config.proxyAuth || ($2fauth.config.proxyAuth && $2fauth.config.proxyLogoutUrl)" class="column">
                         <UseColorMode v-slot="{ mode }">
                             <button type="button" id="lnkSignOut" class="button is-text is-like-text" :class="mode == 'dark' ? 'has-text-grey-lighter' : 'has-text-grey-darker'" @click="logout">
-                                {{ $t('auth.sign_out') }}
+                                {{ $t('message.auth.sign_out') }}
                             </button>
                         </UseColorMode>
                     </li>
@@ -90,17 +92,17 @@
             <div v-else>
                 <!-- settings link -->
                 <router-link id="lnkSettings" :to="{ name: 'settings.options' }" class="has-text-grey">
-                    {{ $t('settings.settings') }}
+                    {{ $t('message.settings.settings') }}
                 </router-link>
                 <!-- admin link -->
                 <span v-if="user.isAdmin"> -
                     <router-link id="lnkAdmin" :to="{ name: 'admin.appSetup' }" class="has-text-grey">
-                        {{ $t('admin.admin') }}<span v-if="appSettings.latestRelease && appSettings.checkForUpdate" class="release-flag"></span>
+                        {{ $t('message.admin.admin') }}<span v-if="appSettings.latestRelease && appSettings.checkForUpdate" class="release-flag"></span>
                     </router-link>
                 </span>
                 <!-- sign-out button -->
                 <span v-if="!$2fauth.config.proxyAuth || ($2fauth.config.proxyAuth && $2fauth.config.proxyLogoutUrl)">
-                    - <button type="button" id="lnkSignOut" class="button is-text is-like-text has-text-grey" @click="logout">{{ $t('auth.sign_out') }}</button>
+                    - <button type="button" id="lnkSignOut" class="button is-text is-like-text has-text-grey" @click="logout">{{ $t('message.auth.sign_out') }}</button>
                 </span>
             </div>
         </div>

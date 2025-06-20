@@ -17,7 +17,7 @@ trait CanEncryptField
             try {
                 return Crypt::decryptString($value);
             } catch (\Exception $ex) {
-                return __('errors.indecipherable');
+                return __('error.indecipherable');
             }
         } else {
             return $value;

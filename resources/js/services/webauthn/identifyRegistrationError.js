@@ -38,7 +38,7 @@ export function identifyRegistrationError(error, options) {
             // https://www.w3.org/TR/webauthn-2/#sctn-createCredential (Step 16)
 
             return {
-                phrase: 'errors.aborted_by_user',
+                phrase: 'error.aborted_by_user',
                 type: 'is-warning'
             }
         }
@@ -49,7 +49,7 @@ export function identifyRegistrationError(error, options) {
             // https://www.w3.org/TR/webauthn-2/#sctn-op-make-cred (Step 4)
             
             return {
-                phrase: 'errors.authenticator_missing_discoverable_credential_support',
+                phrase: 'error.authenticator_missing_discoverable_credential_support',
                 type: 'is-danger'
             }
 
@@ -58,7 +58,7 @@ export function identifyRegistrationError(error, options) {
             // https://www.w3.org/TR/webauthn-2/#sctn-op-make-cred (Step 5)
 
             return {
-                phrase: 'errors.authenticator_missing_user_verification_support',
+                phrase: 'error.authenticator_missing_user_verification_support',
                 type: 'is-danger'
             }
         }
@@ -69,7 +69,7 @@ export function identifyRegistrationError(error, options) {
         // https://www.w3.org/TR/webauthn-2/#sctn-op-make-cred (Step 3)
         
         return {
-            phrase: 'errors.security_device_already_registered',
+            phrase: 'error.security_device_already_registered',
             type: 'is-danger'
         }
 
@@ -80,7 +80,7 @@ export function identifyRegistrationError(error, options) {
          */
 
         return {
-            phrase: 'errors.not_allowed_operation',
+            phrase: 'error.not_allowed_operation',
             type: 'is-danger'
         }
         
@@ -95,7 +95,7 @@ export function identifyRegistrationError(error, options) {
             // https://www.w3.org/TR/webauthn-2/#sctn-createCredential (Step 10)
 
             return {
-                phrase: 'errors.no_entry_was_of_type_public_key',
+                phrase: 'error.no_entry_was_of_type_public_key',
                 type: 'is-danger'
             }
         }
@@ -104,7 +104,7 @@ export function identifyRegistrationError(error, options) {
         // https://www.w3.org/TR/webauthn-2/#sctn-op-make-cred (Step 2)
 
         return {
-            phrase: 'errors.no_authenticator_support_specified_algorithms',
+            phrase: 'error.no_authenticator_support_specified_algorithms',
             type: 'is-danger'
         }
 
@@ -117,7 +117,7 @@ export function identifyRegistrationError(error, options) {
             // https://www.w3.org/TR/webauthn-2/#sctn-createCredential (Step 7)
 
             return {
-                phrase: 'errors.2fauth_has_not_a_valid_domain',
+                phrase: 'error.2fauth_has_not_a_valid_domain',
                 type: 'is-danger'
             }
 
@@ -126,7 +126,7 @@ export function identifyRegistrationError(error, options) {
             // https://www.w3.org/TR/webauthn-2/#sctn-createCredential (Step 8)
 
             return {
-                phrase: 'errors.security_error_check_rpid',
+                phrase: 'error.security_error_check_rpid',
                 type: 'is-danger'
             }
         }
@@ -137,7 +137,7 @@ export function identifyRegistrationError(error, options) {
             // https://www.w3.org/TR/webauthn-2/#sctn-createCredential (Step 5)
 
             return {
-                phrase: 'errors.user_id_not_between_1_64',
+                phrase: 'error.user_id_not_between_1_64',
                 type: 'is-danger'
             }
         }
@@ -148,13 +148,13 @@ export function identifyRegistrationError(error, options) {
         // https://www.w3.org/TR/webauthn-2/#sctn-op-make-cred (Step 8)
 
         return {
-            phrase: 'errors.unknown_error',
+            phrase: 'error.unknown_error',
             type: 'is-danger'
         }
     }
 
     return {
-        phrase: 'errors.unknown_error',
+        phrase: 'error.unknown_error',
         type: 'is-danger'
     }
 }

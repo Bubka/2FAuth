@@ -9,7 +9,9 @@
     import { useBusStore } from '@/stores/bus'
     import { useTwofaccounts } from '@/stores/twofaccounts'
     import { UseColorMode } from '@vueuse/components'
+    import { useI18n } from 'vue-i18n'
 
+    const { t } = useI18n()
     const $2fauth = inject('2fauth')
     const notify = useNotifyStore()
     const user = useUserStore()
@@ -42,9 +44,9 @@
     const showTwofaccountInModal = ref(false)
     const supportedSources = [
         {app: '2FAuth', format: 'JSON'},
-        {app: 'Google Auth', format: trans('twofaccounts.import.qr_code')},
+        {app: 'Google Auth', format: t('message.twofaccounts.import.qr_code')},
         {app: 'Aegis Auth', format: 'JSON'},
-        {app: 'Aegis Auth', format: trans('twofaccounts.import.plain_text')},
+        {app: 'Aegis Auth', format: t('message.twofaccounts.import.plain_text')},
         {app: '2FAS auth', format: 'JSON'},
     ]
     const exportedAccounts = ref([])
@@ -92,7 +94,7 @@
             directInput.value = directInputError.value = null
         })
         .catch(error => {
-            notify.alert({ text: trans(error.response.data.message) })
+            notify.alert({ text: t(error.response.data.message) })
         });
 
         isFetching.value = false
@@ -102,7 +104,7 @@
      * Removes all duplicates from the accounts list
      */
     function discardDuplicates() {
-        if(confirm(trans('twofaccounts.confirm.discard_duplicates'))) {
+        if(confirm(t('message.twofaccounts.confirm.discard_duplicates'))) {
             notify.clear()
             otpDisplay.value?.clearOTP()
             exportedAccounts.value = exportedAccounts.value.filter(account => account.id !== -1)
@@ -113,7 +115,7 @@
      * Clears the accounts list
      */
     function discardAccounts() {
-        if(confirm(trans('twofaccounts.confirm.discard_all'))) {
+        if(confirm(t('message.twofaccounts.confirm.discard_all'))) {
             notify.clear()
             otpDisplay.value?.clearOTP()
             exportedAccounts.value = []
@@ -124,7 +126,7 @@
      * Removes one duplicate from the accounts list
      */
     function discardAccount(accountIndex) {
-        if(confirm(trans('twofaccounts.confirm.discard'))) {
+        if(confirm(t('message.twofaccounts.confirm.discard'))) {
             exportedAccounts.value.splice(accountIndex, 1)
         }
     }
@@ -190,7 +192,7 @@
         .catch(error => {
             if (error.response.status === 422) {
                 if (error.response.data.errors.file == undefined) {
-                    notify.alert({ text: trans('errors.invalid_2fa_data') })
+                    notify.alert({ text: t('error.invalid_2fa_data') })
                 }
             }
             else notify.alert({ text: error.response.data.message})
@@ -213,7 +215,7 @@
         .catch(error => {
             if( error.response.status === 422 ) {
                 if (error.response.data.errors.qrcode == undefined) {
-                    notify.alert({ text: trans('errors.invalid_2fa_data') })
+                    notify.alert({ text: t('error.invalid_2fa_data') })
                 }
             }
             else notify.alert({ text: error.response.data.message})
@@ -226,7 +228,7 @@
      * Notifies that valid account(s) have been found for import
      */
     function notifyValidAccountFound() {
-        notify.success({ text: trans('twofaccounts.import.x_valid_accounts_found', { count: importableCount.value }) })
+        notify.success({ text: t('message.twofaccounts.import.x_valid_accounts_found', { count: importableCount.value }) })
     }
 
     /**
@@ -236,7 +238,7 @@
         directInputError.value = null
         
         if (! directInput.value) {
-            directInputError.value = trans('validation.required', { attribute: 'Direct input' })
+            directInputError.value = t('validation.required', { attribute: 'Direct input' })
         }
         else migrate(directInput.value)
     }
@@ -248,12 +250,12 @@
     <div>
         <ResponsiveWidthWrapper>
             <h1 class="title has-text-grey-dark">
-                {{ $t('twofaccounts.import.import') }}
+                {{ $t('message.twofaccounts.import.import') }}
             </h1>
             <div v-if="!isFetching && exportedAccounts.length == 0">
                 <div class="block is-size-7-mobile">
-                    <p class="mb-2">{{ $t('twofaccounts.import.import_legend') }}</p>
-                    <p>{{ $t('twofaccounts.import.import_legend_afterpart') }}</p>
+                    <p class="mb-2">{{ $t('message.twofaccounts.import.import_legend') }}</p>
+                    <p>{{ $t('message.twofaccounts.import.import_legend_afterpart') }}</p>
                 </div>
                 <div class="columns">
                     <div class="column">
@@ -267,19 +269,19 @@
                                             </figure>
                                         </div>
                                         <div class="media-content">
-                                            <p class="title is-5 has-text-grey" v-html="$t('twofaccounts.import.qr_code')" />
-                                            <p class="subtitle is-6 is-size-7-mobile">{{ $t('twofaccounts.import.supported_formats_for_qrcode_upload') }}</p>
+                                            <p class="title is-5 has-text-grey" v-html="$t('message.twofaccounts.import.qr_code')" />
+                                            <p class="subtitle is-6 is-size-7-mobile">{{ $t('message.twofaccounts.import.supported_formats_for_qrcode_upload') }}</p>
                                         </div>
                                     </div>
                                     <FormFieldError v-if="qrcodeForm.errors.hasAny('qrcode')" :error="qrcodeForm.errors.get('qrcode')" :field="'qrcode'" />
                                 </div>
                                 <footer class="card-footer">
                                     <RouterLink id="btnCapture" :to="{ name: 'capture' }" class="card-footer-item">
-                                        {{ $t('twofaccounts.import.scan') }}
+                                        {{ $t('message.twofaccounts.import.scan') }}
                                     </RouterLink>
                                     <a role="button" tabindex="0" class="card-footer-item is-relative" @click="qrcodeInput.click()" @keyup.enter="qrcodeInput.click()">
                                         <input inert tabindex="-1" class="file-input" type="file" accept="image/*" v-on:change="submitQrCode" ref="qrcodeInput">
-                                        {{ $t('twofaccounts.import.upload') }}
+                                        {{ $t('message.twofaccounts.import.upload') }}
                                     </a>
                                 </footer>
                             </div>
@@ -294,8 +296,8 @@
                                             </figure>
                                         </div>
                                         <div class="media-content">
-                                            <p class="title is-5 has-text-grey">{{ $t('twofaccounts.import.text_file') }}</p>
-                                            <p class="subtitle is-6 is-size-7-mobile">{{ $t('twofaccounts.import.supported_formats_for_file_upload') }}</p>
+                                            <p class="title is-5 has-text-grey">{{ $t('message.twofaccounts.import.text_file') }}</p>
+                                            <p class="subtitle is-6 is-size-7-mobile">{{ $t('message.twofaccounts.import.supported_formats_for_file_upload') }}</p>
                                         </div>
                                     </div>
                                     <FormFieldError v-if="fileForm.errors.hasAny('file')" :error="fileForm.errors.get('file')" :field="'file'" />
@@ -303,7 +305,7 @@
                                 <footer class="card-footer">
                                     <a role="button" tabindex="0" class="card-footer-item is-relative" @click="fileInput.click()" @keyup.enter="fileInput.click()">
                                         <input inert tabindex="-1" class="file-input" type="file" accept="text/plain,application/json,text/csv,.2fas" v-on:change="submitFile" ref="fileInput">
-                                        {{ $t('twofaccounts.import.upload') }}
+                                        {{ $t('message.twofaccounts.import.upload') }}
                                     </a>
                                 </footer>
                             </div>
@@ -318,8 +320,8 @@
                                             </figure>
                                         </div>
                                         <div class="media-content">
-                                            <p class="title is-5 has-text-grey" v-html="$t('twofaccounts.import.direct_input')" />
-                                            <p class="subtitle is-6 is-size-7-mobile">{{ $t('twofaccounts.import.expected_format_for_direct_input') }}</p>
+                                            <p class="title is-5 has-text-grey" v-html="$t('message.twofaccounts.import.direct_input')" />
+                                            <p class="subtitle is-6 is-size-7-mobile">{{ $t('message.twofaccounts.import.expected_format_for_direct_input') }}</p>
                                         </div>
                                     </div>
                                     <div class="content">
@@ -328,7 +330,7 @@
                                 </div>
                                 <footer class="card-footer">
                                     <a role="button" tabindex="0" class="card-footer-item is-relative" @click.stop="submitDirectInput">
-                                        {{ $t('commons.submit') }}
+                                        {{ $t('message.submit') }}
                                     </a>
                                 </footer>
                             </div>
@@ -336,10 +338,10 @@
                     </div>
                 </div>
                 <!-- Supported migration resources -->
-                <h2 class="title is-5 has-text-grey-dark">{{ $t('twofaccounts.import.supported_migration_formats') }}</h2>
+                <h2 class="title is-5 has-text-grey-dark">{{ $t('message.twofaccounts.import.supported_migration_formats') }}</h2>
                 <div class="block is-size-7-mobile">
                     <FontAwesomeIcon :icon="['fas', 'fa-triangle-exclamation']" class="has-text-warning-dark" />
-                    {{  $t('twofaccounts.import.do_not_set_password_or_encryption') }}
+                    {{  $t('message.twofaccounts.import.do_not_set_password_or_encryption') }}
                 </div>
                 <table class="table is-size-7-mobile is-fullwidth">
                     <thead>
@@ -385,17 +387,17 @@
                 </table>
             </div>
             <div v-else-if="isFetching && exportedAccounts.length === 0">
-                <Spinner :type="'fullscreen-overlay'" :isVisible="true" :message="'twofaccounts.import.parsing_data'" />
+                <Spinner :type="'fullscreen-overlay'" :isVisible="true" :message="'message.twofaccounts.import.parsing_data'" />
             </div>
             <div v-else>
                 <div class="block is-size-7-mobile">
-                    <p class="mb-2">{{ $t('twofaccounts.import.submitted_data_parsed_now_accounts_are_awaiting_import') }}</p>
-                    <p>{{ $t('twofaccounts.import.use_buttons_to_save_or_discard') }}</p>
+                    <p class="mb-2">{{ $t('message.twofaccounts.import.submitted_data_parsed_now_accounts_are_awaiting_import') }}</p>
+                    <p>{{ $t('message.twofaccounts.import.use_buttons_to_save_or_discard') }}</p>
                 </div>
                 <div v-for="(account, index) in exportedAccounts" :key="account.name" class="group-item is-size-5 is-size-6-mobile">
                     <div class="is-flex is-justify-content-space-between">
                         <!-- Account name -->
-                        <div v-if="account.id > -2 && account.imported !== 0" class="is-flex-grow-1 has-ellipsis is-clickable" @click="previewAccount(index)" :title="$t('twofaccounts.import.generate_a_test_password')">
+                        <div v-if="account.id > -2 && account.imported !== 0" class="is-flex-grow-1 has-ellipsis is-clickable" @click="previewAccount(index)" :title="$t('message.twofaccounts.import.generate_a_test_password')">
                             <img role="presentation" v-if="account.icon && user.preferences.showAccountsIcons" class="import-icon" :src="$2fauth.config.subdirectory + '/storage/icons/' + account.icon" alt="">
                             {{ account.account }}
                         </div>
@@ -403,34 +405,34 @@
                         <!-- buttons -->
                         <div v-if="account.imported === -1" class="tags is-flex-wrap-nowrap">
                             <!-- discard button -->
-                            <button type="button" class="button tag" :class="{'is-dark has-text-grey-light' : mode == 'dark'}" @click="discardAccount(index)"  :title="$t('twofaccounts.import.discard_this_account')">
+                            <button type="button" class="button tag" :class="{'is-dark has-text-grey-light' : mode == 'dark'}" @click="discardAccount(index)"  :title="$t('message.twofaccounts.import.discard_this_account')">
                                 <FontAwesomeIcon :icon="['fas', 'trash']" />
                             </button>
                             <!-- import button -->
-                            <button v-if="account.id > -2" type="button" class="button tag is-link" @click="createAccount(index)"  :title="$t('twofaccounts.import.import_this_account')">
-                                {{ $t('twofaccounts.import.to_import') }}
+                            <button v-if="account.id > -2" type="button" class="button tag is-link" @click="createAccount(index)"  :title="$t('message.twofaccounts.import.import_this_account')">
+                                {{ $t('message.twofaccounts.import.to_import') }}
                             </button>
                         </div>
                         <!-- result label -->
                         <div v-else class="has-nowrap">
                             <span v-if="account.imported === 1" class="has-text-success">
-                                {{ $t('twofaccounts.import.imported') }} <FontAwesomeIcon :icon="['fas', 'check']" />
+                                {{ $t('message.twofaccounts.import.imported') }} <FontAwesomeIcon :icon="['fas', 'check']" />
                             </span>
                             <span v-else class="has-text-danger">
-                                {{ $t('twofaccounts.import.failure') }} <FontAwesomeIcon :icon="['fas', 'times']" />
+                                {{ $t('message.twofaccounts.import.failure') }} <FontAwesomeIcon :icon="['fas', 'times']" />
                             </span>
                         </div>
                     </div>
                     <div class="is-size-6 is-size-7-mobile">
                         <!-- service name -->
-                        <div class="is-family-primary has-text-grey">{{ $t('twofaccounts.import.issuer') }}: {{ account.service }}</div>
+                        <div class="is-family-primary has-text-grey">{{ $t('message.twofaccounts.import.issuer') }}: {{ account.service }}</div>
                         <!-- reasons to invalid G-Auth data -->
                         <div v-if="account.id === -2" class="has-text-danger">
                             <FontAwesomeIcon class="mr-1" :icon="['fas', 'times-circle']" />{{ account.secret }}
                         </div>
                         <!-- possible duplicates -->
                         <div v-if="account.id === -1 && account.imported !== 1 && !account.errors" class="has-text-warning">
-                            <FontAwesomeIcon class="mr-1" :icon="['fas', 'exclamation-circle']" />{{ $t('twofaccounts.import.possible_duplicate') }}
+                            <FontAwesomeIcon class="mr-1" :icon="['fas', 'exclamation-circle']" />{{ $t('message.twofaccounts.import.possible_duplicate') }}
                         </div>
                         <!-- errors during account creation -->
                         <ul v-if="account.errors">
@@ -440,11 +442,11 @@
                 </div>
                 <!-- discard links -->
                 <div v-if="importableCount > 0" class="mt-2 is-size-7 is-pulled-right">
-                    <button v-if="duplicateCount" @click="discardDuplicates()" type="button" class="has-text-grey button is-small is-ghost">{{ $t('twofaccounts.import.discard_duplicates') }} ({{duplicateCount}})</button>
-                    <button @click="discardAccounts()" type="button" class="has-text-grey button is-small is-ghost">{{ $t('twofaccounts.import.discard_all') }}</button>
+                    <button v-if="duplicateCount" @click="discardDuplicates()" type="button" class="has-text-grey button is-small is-ghost">{{ $t('message.twofaccounts.import.discard_duplicates') }} ({{duplicateCount}})</button>
+                    <button @click="discardAccounts()" type="button" class="has-text-grey button is-small is-ghost">{{ $t('message.twofaccounts.import.discard_all') }}</button>
                 </div>
                 <div v-if="importedCount == exportedAccounts.length"  class="mt-2 is-size-7 is-pulled-right">
-                    <button @click="exportedAccounts = []" type="button" class="has-text-grey button is-small is-ghost">{{ $t('commons.clear') }}</button>
+                    <button @click="exportedAccounts = []" type="button" class="has-text-grey button is-small is-ghost">{{ $t('message.clear') }}</button>
                 </div>
             </div>
             <!-- footer -->
@@ -452,7 +454,7 @@
                 <!-- Import all button -->
                 <p class="control" v-if="importableCount > 0">
                     <button type="button" class="button is-link is-rounded is-focus" @click="createAccounts">
-                        <span>{{ $t('twofaccounts.import.import_all') }} ({{ importableCount }})</span>
+                        <span>{{ $t('message.twofaccounts.import.import_all') }} ({{ importableCount }})</span>
                         <!-- <span class="icon is-small">
                             <FontAwesomeIcon :icon="['fas', 'qrcode']" />
                         </span> -->

@@ -32,10 +32,10 @@
 <template>
     <ResponsiveWidthWrapper>
         <h1 class="title has-text-grey-dark">
-            {{ $t('titles.admin.logs.access') }}
+            {{ $t('title.admin.logs.access') }}
         </h1>
         <div class="block is-size-7-mobile">
-            {{ $t('admin.access_log_legend_for_user', { username: username }) }} (#{{ props.userId }})
+            {{ $t('message.admin.access_log_legend_for_user', { username: username }) }} (#{{ props.userId }})
         </div>
         <AccessLogViewer :userId="props.userId" :lastOnly="false" :showSearch="true" :period="1" />
         <!-- footer -->

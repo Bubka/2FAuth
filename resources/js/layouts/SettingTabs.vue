@@ -1,22 +1,22 @@
 <script setup>
     const tabs = ref([
         {
-            'name' : 'settings.options',
+            'name' : 'message.settings.options',
             'view' : 'settings.options',
             'id'   : 'lnkTabOptions'
         },
         {
-            'name' : 'settings.account',
+            'name' : 'message.settings.account',
             'view' : 'settings.account',
             'id'   : 'lnkTabAccount'
         },
         {
-            'name' : 'settings.oauth',
+            'name' : 'message.settings.oauth',
             'view' : 'settings.oauth.tokens',
             'id'   : 'lnkTabOAuth'
         },
         {
-            'name' : 'settings.webauthn',
+            'name' : 'message.settings.webauthn',
             'view' : 'settings.webauthn.devices',
             'id'   : 'lnkTabWebauthn'
         },

@@ -45,7 +45,7 @@ class FailedLoginNotification extends Notification
     public function toMail(mixed $notifiable) : MailMessage
     {
         return (new MailMessage)
-            ->subject(__('notifications.failed_login.subject'))
+            ->subject(__('message.notifications.failed_login.subject'))
             ->markdown('emails.failedLogin', [
                 'account'   => $notifiable,
                 'time'      => $this->authLog->login_at,

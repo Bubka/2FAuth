@@ -7,7 +7,9 @@
     import { useNotifyStore } from '@/stores/notify'
     import { UseColorMode } from '@vueuse/components'
     import Spinner from '@/components/Spinner.vue'
+    import { useI18n } from 'vue-i18n'
 
+    const { t } = useI18n()
     const $2fauth = inject('2fauth')
     const user = useUserStore()
     const appSettings = useAppSettingsStore()
@@ -28,7 +30,7 @@
 
     watch(() => user.preferences.useWebauthnOnly, () => {
         userService.updatePreference('useWebauthnOnly', user.preferences.useWebauthnOnly).then(response => {
-            notify.success({ text: trans('settings.forms.setting_saved') })
+            notify.success({ text: t('message.settings.forms.setting_saved') })
         })
     })
 
@@ -37,7 +39,7 @@
      */
     function register() {
         if (isDisabled.value == true) {
-            notify.warn({text: trans('errors.unsupported_with_reverseproxy') })
+            notify.warn({text: t('error.unsupported_with_reverseproxy') })
             return false
         }
 
@@ -47,9 +49,9 @@
         .catch(error => {
             if ('webauthn' in error) {
                 if (error.name == 'is-warning') {
-                    notify.warn({ text: trans(error.message) })
+                    notify.warn({ text: t(error.message) })
                 }
-                else notify.alert({ text: trans(error.message) })
+                else notify.alert({ text: t(error.message) })
             }
             else if( error.response?.status === 422 ) {
                 notify.alert({ text: error.response.data.message })
@@ -64,7 +66,7 @@
      * revoke a credential
      */
     function revokeCredential(credentialId) {
-        if(confirm(trans('auth.confirm.revoke_device'))) {
+        if(confirm(t('message.auth.confirm.revoke_device'))) {
             userService.revokeWebauthnDevice(credentialId).then(response => {
                 // Remove the revoked credential from the collection
                 credentials.value = credentials.value.filter(a => a.id !== credentialId)
@@ -75,7 +77,7 @@
                     user.preferences.useWebauthnOnly = false
                 }
 
-                notify.success({ text: trans('auth.webauthn.device_revoked') })
+                notify.success({ text: t('message.auth.webauthn.device_revoked') })
             });
         }
     }
@@ -84,7 +86,7 @@
      * Always display a printable name
      */
     function displayName(credential) {
-        return credential.alias ? credential.alias : trans('auth.webauthn.my_device') + ' (#' + credential.id.substring(0, 10) + ')'
+        return credential.alias ? credential.alias : t('message.auth.webauthn.my_device') + ' (#' + credential.id.substring(0, 10) + ')'
     }
 
     /**
@@ -125,16 +127,18 @@
         <div class="options-tabs">
             <FormWrapper>
                 <div v-if="isDisabled && user.oauth_provider" class="notification is-warning has-text-centered">
-                    {{ $t('auth.sso_only_x_settings_are_disabled', { auth_method: 'WebAuthn' }) }}
+                    {{ $t('message.auth.sso_only_x_settings_are_disabled', { auth_method: 'WebAuthn' }) }}
                 </div>
-                <div v-if="isDisabled && user.authenticated_by_proxy" class="notification is-warning has-text-centered" v-html="$t('auth.auth_handled_by_proxy')" />
-                <h4 class="title is-4 has-text-grey-light">{{ $t('auth.webauthn.security_devices') }}</h4>
+                <div v-if="isDisabled && user.authenticated_by_proxy" class="notification is-warning has-text-centered">
+                    {{ $t('message.auth.auth_handled_by_proxy') + '<br />' + $t('message.auth.manage_auth_at_proxy_level') }}
+                </div>
+                <h4 class="title is-4 has-text-grey-light">{{ $t('message.auth.webauthn.security_devices') }}</h4>
                 <div class="is-size-7-mobile">
-                    {{ $t('auth.webauthn.security_devices_legend')}}
+                    {{ $t('message.auth.webauthn.security_devices_legend')}}
                 </div>
                 <div class="mt-3">
                     <a tabindex="0" @click="register" @keyup.enter="register">
-                        <FontAwesomeIcon :icon="['fas', 'plus-circle']" />&nbsp;{{ $t('auth.webauthn.register_a_new_device')}}
+                        <FontAwesomeIcon :icon="['fas', 'plus-circle']" />&nbsp;{{ $t('message.auth.webauthn.register_a_new_device')}}
                     </a>
                 </div>
                 <!-- credentials list -->
@@ -143,31 +147,31 @@
                         {{ displayName(credential) }}
                         <!-- revoke link -->
                         <UseColorMode v-slot="{ mode }">
-                            <button type="button" class="button tag is-pulled-right" :class="mode === 'dark' ? 'is-dark':'is-white'" @click="revokeCredential(credential.id)" :title="$t('settings.revoke')">
-                                {{ $t('settings.revoke') }}
+                            <button type="button" class="button tag is-pulled-right" :class="mode === 'dark' ? 'is-dark':'is-white'" @click="revokeCredential(credential.id)" :title="$t('message.settings.revoke')">
+                                {{ $t('message.settings.revoke') }}
                             </button>
                         </UseColorMode>
                         <!-- edit link -->
-                        <!-- <RouterLink :to="{ name: '' }" class="has-text-grey pl-1" :title="$t('commons.rename')">
+                        <!-- <RouterLink :to="{ name: '' }" class="has-text-grey pl-1" :title="$t('message.rename')">
                             <FontAwesomeIcon :icon="['fas', 'pen-square']" />
                         </RouterLink> -->
                     </div>
                     <div class="mt-2 is-size-7 is-pulled-right">
-                        {{ $t('auth.webauthn.revoking_a_device_is_permanent')}}
+                        {{ $t('message.auth.webauthn.revoking_a_device_is_permanent')}}
                     </div>
                 </div>
                 <Spinner :isVisible="isFetching && credentials.length === 0" />
-                <h4 class="title is-4 pt-6 has-text-grey-light">{{ $t('auth.webauthn.options') }}</h4>
+                <h4 class="title is-4 pt-6 has-text-grey-light">{{ $t('message.auth.webauthn.options') }}</h4>
                 <div class="field">
-                    {{ $t('auth.webauthn.need_a_security_device_to_enable_options')}}
+                    {{ $t('message.auth.webauthn.need_a_security_device_to_enable_options')}}
                 </div>
                 <form>
                     <!-- use webauthn only -->
                     <FormCheckbox
                         v-model="user.preferences.useWebauthnOnly"
                         fieldName="useWebauthnOnly"
-                        label="auth.webauthn.use_webauthn_only.label"
-                        help="auth.webauthn.use_webauthn_only.help"
+                        label="message.auth.webauthn.use_webauthn_only.label"
+                        help="message.auth.webauthn.use_webauthn_only.help"
                         :isDisabled="isDisabled || credentials.length === 0"
                     />
                 </form>
