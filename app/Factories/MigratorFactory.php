@@ -29,7 +29,7 @@ class MigratorFactory implements MigratorFactoryInterface
             return App::make(AegisMigrator::class);
         } elseif ($this->is2FASv2($migrationPayload)) {
             return App::make(TwoFASMigrator::class);
-        } elseif ($this->isGoogleAuth($migrationPayload)) {
+        } elseif (self::isGoogleAuth($migrationPayload)) {
             return App::make(GoogleAuthMigrator::class);
         } elseif ($this->isPlainText($migrationPayload)) {
             return App::make(PlainTextMigrator::class);
@@ -43,7 +43,7 @@ class MigratorFactory implements MigratorFactoryInterface
      *
      * @param  string  $migrationPayload  The payload to analyse
      */
-    private function isGoogleAuth(string $migrationPayload) : bool
+    public static function isGoogleAuth(string $migrationPayload) : bool
     {
         // - Google Auth migration URI : a string starting with otpauth-migration://offline?data= on a single line
 

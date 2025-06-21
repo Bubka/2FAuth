@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Factories\MigratorFactory;
 use chillerlan\QRCode\QRCode;
 use chillerlan\QRCode\QROptions;
 use Illuminate\Support\Facades\Log;
@@ -68,7 +69,10 @@ class QrCodeService
             }
         }
 
-        $data = urldecode($text);
+        $data = $text;
+        if (!MigratorFactory::isGoogleAuth($text)) {
+            $data = urldecode($text);
+        }
 
         Log::info('QR code decoded');
 
