@@ -105,6 +105,10 @@ return [
             'placeholder' => 'http://...',
             'help' => 'Dış bir resmin URL\'i, hesap simgesi olarak kullanılacak'
         ],
+        'is_shared' => [
+            'label' => 'Bu hesabı tüm kullanıcılarla paylaş',
+            'help' => 'Etkinleştirildiğinde, bu hesap sistemdeki tüm kullanıcılar tarafından görülebilir olacaktır'
+        ],
         'options_help' => 'Neleri seçmeniz gerektiğini bilmiyorsanız aşağıdaki seçenekleri boş bırakabilirsiniz. En yaygın kullanılan değerler uygulanacaktır.',
         'alternative_methods' => 'Alternatif yöntem',
         'spaces_are_ignored' => 'İstenmeyen boşluklar otomatik olarak kaldırılacaktır'

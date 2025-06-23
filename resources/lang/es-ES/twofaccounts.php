@@ -2,31 +2,15 @@
 
 return [
 
-    /*
-    |--------------------------------------------------------------------------
-    | Authentication Language Lines
-    |--------------------------------------------------------------------------
-    |
-    | The following language lines are used during authentication for various
-    | messages that we need to display to the user. You are free to modify
-    | these language lines according to your application's requirements.
-    |
-    */
-
-    'service' => 'Servicio',
-    'account' => 'Cuenta',
-    'icon' => 'Icono',
-    'icon_to_illustrate_the_account' => 'Icono que representa a la cuenta',
-    'remove_icon' => 'Eliminar icono',
-    'no_account_here' => '¡No hay 2FA aquí!',
-    'add_first_account' => 'Elige un método y añade tu primer cuenta',
-    'use_full_form' => 'O usa el formulario completo',
-    'add_one' => 'Agregar uno',
-    'show_qrcode' => 'Muestra el código QR',
+      'add_one' => 'Añadir una',
+    'show_qrcode' => 'Mostrar código QR',
     'no_service' => '- sin servicio -',
     'account_created' => 'Cuenta creada correctamente',
     'account_updated' => 'Cuenta actualizada correctamente',
     'accounts_deleted' => 'Cuenta(s) eliminada(s) correctamente',
+    'accounts_moved' => 'Cuenta(s) movida(s) correctamente',
+    'shared_account_indicator' => 'Cuenta compartida',
+    'export_selected_accounts' => 'Export selected accounts',
     'accounts_moved' => 'Cuenta(s) movida(s) correctamente',
     'export_selected_accounts' => 'Export selected accounts',
     'twofauth_export_format' => '2FAuth format',
@@ -104,6 +88,10 @@ return [
             'label' => 'Imágen',
             'placeholder' => 'http://...',
             'help' => 'La url de una imagen externa a usar como icono de cuenta'
+        ],
+        'is_shared' => [
+            'label' => 'Compartir esta cuenta con todos los usuarios',
+            'help' => 'Cuando esté habilitado, esta cuenta será visible para todos los usuarios del sistema'
         ],
         'options_help' => 'Puede dejar las siguientes opciones en blanco si no sabe cómo establecerlas. Los valores más utilizados se aplicarán.',
         'alternative_methods' => 'Métodos alternativos',

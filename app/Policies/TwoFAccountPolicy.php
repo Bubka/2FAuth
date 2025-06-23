@@ -28,7 +28,7 @@ class TwoFAccountPolicy
      */
     public function view(User $user, TwoFAccount $twofaccount)
     {
-        $can = $this->isOwnerOf($user, $twofaccount);
+        $can = $this->canAccess($user, $twofaccount);
 
         if (! $can) {
             Log::notice(sprintf('User ID #%s cannot view twofaccount ID #%s', $user->id, $twofaccount->id));
@@ -45,7 +45,7 @@ class TwoFAccountPolicy
      */
     public function viewEach(User $user, TwoFAccount $twofaccount, $twofaccounts)
     {
-        $can = $this->isOwnerOfEach($user, $twofaccounts);
+        $can = $this->canAccessEach($user, $twofaccounts);
 
         if (! $can) {
             $ids = $twofaccounts->map(function ($twofaccount, $key) {
@@ -71,12 +71,13 @@ class TwoFAccountPolicy
 
     /**
      * Determine whether the user can update the model.
+     * For shared accounts, only the creator can update them.
      *
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function update(User $user, TwoFAccount $twofaccount)
     {
-        $can = $this->isOwnerOf($user, $twofaccount);
+        $can = $this->isCreatorOf($user, $twofaccount);
 
         if (! $can) {
             Log::notice(sprintf('User ID #%s cannot update twofaccount ID #%s', $user->id, $twofaccount->id));
@@ -87,6 +88,7 @@ class TwoFAccountPolicy
 
     /**
      * Determine whether the user can update all provided models.
+     * For shared accounts, only the creator can update them.
      *
      * @param  \Illuminate\Support\Collection<int, \App\Models\TwoFAccount>  $twofaccounts
      * @return \Illuminate\Auth\Access\Response|bool
@@ -107,12 +109,13 @@ class TwoFAccountPolicy
 
     /**
      * Determine whether the user can delete the model.
+     * For shared accounts, only the creator can delete them.
      *
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function delete(User $user, TwoFAccount $twofaccount)
     {
-        $can = $this->isOwnerOf($user, $twofaccount);
+        $can = $this->isCreatorOf($user, $twofaccount);
 
         if (! $can) {
             Log::notice(sprintf('User ID #%s cannot delete twofaccount ID #%s', $user->id, $twofaccount->id));
@@ -123,6 +126,7 @@ class TwoFAccountPolicy
 
     /**
      * Determine whether the user can delete all provided models.
+     * For shared accounts, only the creator can delete them.
      *
      * @param  \Illuminate\Support\Collection<int, \App\Models\TwoFAccount>  $twofaccounts
      * @return \Illuminate\Auth\Access\Response|bool

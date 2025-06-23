@@ -52,6 +52,7 @@ import {
     faTabletScreenButton,
     faDisplay,
     faArrowUpLong,
+    faShareAlt,
 } from '@fortawesome/free-solid-svg-icons'
 
 import {
@@ -121,6 +122,7 @@ library.add(
     faDisplay,
     faCalendar,
     faArrowUpLong,
+    faShareAlt,
 );
 
 export default FontAwesomeIcon

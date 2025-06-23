@@ -35,6 +35,7 @@ class TwoFAccountStoreRequest extends FormRequest
             'algorithm' => 'nullable|string|in:sha1,sha256,sha512,md5',
             'period'    => 'nullable|integer|min:1',
             'counter'   => 'nullable|integer|min:0',
+            'is_shared' => 'sometimes|boolean',
         ];
     }
 

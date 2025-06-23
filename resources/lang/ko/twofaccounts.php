@@ -105,6 +105,10 @@ return [
             'placeholder' => 'http://...',
             'help' => '계정 아이콘으로 사용할 외부 이미지의 URL'
         ],
+        'is_shared' => [
+            'label' => '모든 사용자와 이 계정 공유',
+            'help' => '활성화하면 이 계정이 시스템의 모든 사용자에게 표시됩니다'
+        ],
         'options_help' => '설정 방법을 모른다면 다음 옵션을 비워 두어도 됩니다. 가장 일반적으로 사용되는 값이 적용됩니다.',
         'alternative_methods' => '다른 방법',
         'spaces_are_ignored' => '불필요한 공백은 자동으로 제거됩니다.'

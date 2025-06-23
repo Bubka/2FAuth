@@ -105,6 +105,10 @@ return [
             'placeholder' => 'http://...',
             'help' => 'The url of an external image to use as the account icon'
         ],
+        'is_shared' => [
+            'label' => 'Share this account with all users',
+            'help' => 'When enabled, this account will be visible to all users in the system'
+        ],
         'options_help' => 'You can leave the following options blank if you don\'t know how to set them. The most commonly used values will be applied.',
         'alternative_methods' => 'Mètodes alternatius',
         'spaces_are_ignored' => 'Unwanted spaces will be automatically removed'

@@ -129,10 +129,18 @@ export const useTwofaccounts = defineStore({
         },
 
         /**
-         * Selects all accounts
+         * Selects all accounts that the current user can edit
          */
         selectAll() {
-            this.selectedIds = this.items.map(a => a.id)
+            const user = useUserStore()
+            
+            // Only select accounts that the current user can edit
+            this.selectedIds = this.items
+                .filter(account => {
+                    // Only select if user can edit this account (is the creator)
+                    return user.id && parseInt(user.id) === parseInt(account.user_id)
+                })
+                .map(account => account.id)
         },
 
         /**

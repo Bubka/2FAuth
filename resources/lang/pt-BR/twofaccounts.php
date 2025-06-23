@@ -28,6 +28,7 @@ return [
     'account_updated' => 'Conta atualizada com sucesso',
     'accounts_deleted' => 'Conta(s) excluídas com êxito',
     'accounts_moved' => 'Conta(s) movidas com sucesso',
+    'shared_account_indicator' => 'Conta compartilhada',
     'export_selected_accounts' => 'Exportar contas selecionadas',
     'twofauth_export_format' => 'Formato 2FAuth',
     'twofauth_export_format_sub' => 'Exporte dados usando o esquema JSON do 2FAuth
@@ -117,6 +118,10 @@ otpauth://TYPE/LABEL?secret=SECRET&issuer=ISSUER&digits=DIGITS&period=PERIOD',
             'label' => '',
             'placeholder' => 'http://...',
             'help' => 'A URL de uma imagem externa para usar como ícone de conta'
+        ],
+        'is_shared' => [
+            'label' => 'Compartilhar esta conta com todos os usuários',
+            'help' => 'Quando habilitado, esta conta será visível para todos os usuários do sistema'
         ],
         'options_help' => 'Você pode deixar as seguintes opções em branco se você não sabe como configurá-los. Os valores mais usados serão aplicados.',
         'alternative_methods' => 'Métodos alternativos',

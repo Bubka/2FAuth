@@ -47,6 +47,7 @@ use SteamTotp\SteamTotp;
  * @property int|null $period
  * @property int|null $counter
  * @property int|null $user_id
+ * @property bool $is_shared
  * @property-read \App\Models\User|null $user
  *
  * @method static \Database\Factories\TwoFAccountFactory factory(...$parameters)
@@ -163,6 +164,7 @@ class TwoFAccount extends Model implements Sortable
      */
     protected $casts = [
         'user_id' => 'integer',
+        'is_shared' => 'boolean',
     ];
 
     /**
@@ -253,6 +255,32 @@ class TwoFAccount extends Model implements Sortable
     public function scopeOrphans($query)
     {
         return $query->where('user_id', null);
+    }
+
+    /**
+     * Scope a query to only include shared accounts.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder<TwoFAccount>  $query
+     * @return \Illuminate\Database\Eloquent\Builder<TwoFAccount>
+     */
+    public function scopeShared($query)
+    {
+        return $query->where('is_shared', true);
+    }
+
+    /**
+     * Scope a query to include accounts accessible by a user (owned + shared).
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder<TwoFAccount>  $query
+     * @param  \App\Models\User  $user
+     * @return \Illuminate\Database\Eloquent\Builder<TwoFAccount>
+     */
+    public function scopeAccessibleBy($query, $user)
+    {
+        return $query->where(function ($query) use ($user) {
+            $query->where('user_id', $user->id)
+                  ->orWhere('is_shared', true);
+        });
     }
 
     /**
@@ -470,6 +498,7 @@ class TwoFAccount extends Model implements Sortable
         $this->digits    = Arr::get($parameters, 'digits', self::DEFAULT_DIGITS);
         $this->period    = Arr::get($parameters, 'period', $this->otp_type == self::TOTP ? self::DEFAULT_PERIOD : null);
         $this->counter   = Arr::get($parameters, 'counter', $this->otp_type == self::HOTP ? self::DEFAULT_COUNTER : null);
+        $this->is_shared = Arr::get($parameters, 'is_shared', false);
 
         $this->initGenerator();
 

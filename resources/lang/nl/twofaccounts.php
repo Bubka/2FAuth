@@ -105,6 +105,10 @@ return [
             'placeholder' => 'http://...',
             'help' => 'De url van een externe afbeelding om te gebruiken als account icoon'
         ],
+        'is_shared' => [
+            'label' => 'Deel dit account met alle gebruikers',
+            'help' => 'Wanneer ingeschakeld, is dit account zichtbaar voor alle gebruikers van het systeem'
+        ],
         'options_help' => 'Je kunt de volgende opties leeg laten als je niet weet hoe ze in te stellen. De meest gebruikte waarden zullen worden toegepast.',
         'alternative_methods' => 'Alternatieve methodes',
         'spaces_are_ignored' => 'Ongewenste spaties worden automatisch verwijderd'
