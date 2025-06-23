@@ -607,7 +607,7 @@
                 </VueFooter>
             </form>
             <!-- modal -->
-            <modal v-model="ShowTwofaccountInModal">
+            <Modal v-model="ShowTwofaccountInModal">
                 <OtpDisplay
                     ref="OtpDisplayForAdvancedForm"
                     v-bind="form.data()"
@@ -615,12 +615,12 @@
                     @validation-error="mapDisplayerErrors"
                     @please-close-me="ShowTwofaccountInModal = false">
                 </OtpDisplay>
-            </modal>
+            </Modal>
         </FormWrapper>
         <!-- alternatives -->
-        <modal v-model="showAlternatives">
+        <Modal v-model="showAlternatives">
             <QrContentDisplay :qrContent="uri" />
-        </modal>
+        </Modal>
     </div>
     </UseColorMode>
 </template>

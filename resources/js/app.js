@@ -42,7 +42,6 @@ app.use(Notifications)
 import ResponsiveWidthWrapper from '@/layouts/ResponsiveWidthWrapper.vue'
 import FormWrapper from '@/layouts/FormWrapper.vue'
 import Footer from '@/layouts/Footer.vue'
-import Modal from '@/layouts/Modal.vue'
 import Kicker           from '@/components/Kicker.vue'
 
 import {
@@ -56,6 +55,10 @@ import {
     NavigationButton,
     VueButton
 } from '@2fauth/formcontrols'
+
+import {
+    Modal
+} from '@2fauth/ui'
 
 app
     .component('FontAwesomeIcon', FontAwesomeIcon)

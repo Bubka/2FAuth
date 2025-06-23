@@ -465,7 +465,7 @@
             </VueFooter>
         </ResponsiveWidthWrapper>
         <!-- modal -->
-        <modal v-model="showTwofaccountInModal">
+        <Modal v-model="showTwofaccountInModal">
             <OtpDisplay
                 ref="otpDisplay"
                 v-bind="form.data()"
@@ -473,7 +473,7 @@
                 @validation-error=""
                 @please-close-me="showTwofaccountInModal = false">
             </OtpDisplay>
-        </modal>
+        </Modal>
     </div>
     </UseColorMode>
 </template>

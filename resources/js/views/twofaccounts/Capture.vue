@@ -215,7 +215,7 @@
             <NavigationButton action="cancel" :isCapture="true" :useLinkTag="false" @canceled="exitStream()" />
         </div>
     </div>
-    <modal v-model="showQrContent">
+    <Modal v-model="showQrContent">
         <QrContentDisplay :qrContent="form.uri" />
-    </modal>
+    </Modal>
 </template>
