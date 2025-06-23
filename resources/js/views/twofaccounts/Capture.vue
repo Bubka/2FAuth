@@ -4,14 +4,16 @@
     import QrContentDisplay from '@/components/QrContentDisplay.vue'
     import { useBusStore } from '@/stores/bus'
     import { UseColorMode } from '@vueuse/components'
-    import { useNotifyStore } from '@/stores/notify'
+    import { useNotify } from '@2fauth/ui'
     import { QrcodeStream } from 'vue-qrcode-reader'
     import { useI18n } from 'vue-i18n'
+    import { useErrorHandler } from '@2fauth/stores'
 
+    const errorHandler = useErrorHandler()
     const { t } = useI18n()
     const router = useRouter()
     const bus = useBusStore()
-    const notify = useNotifyStore()
+    const notify = useNotify()
 
     const cameraIsOn = ref(false)
     const selectedCamera = ref(null)
@@ -55,7 +57,8 @@
         } else if (error.name === 'StreamApiNotSupportedError') {
             errorPhrase.value = 'stream_api_not_supported'
         } else {
-            notify.error(error)
+            errorHandler.parse(error)
+            router.push({ name: 'genericError' })
         }
     }
 

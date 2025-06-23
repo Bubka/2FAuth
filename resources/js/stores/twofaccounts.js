@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { startsWithUppercase } from '@/composables/helpers'
 import { useUserStore } from '@/stores/user'
-import { useNotifyStore } from '@/stores/notify'
+import { useNotify } from '@2fauth/ui'
 import twofaccountService from '@/services/twofaccountService'
 import { saveAs } from 'file-saver'
 
@@ -155,7 +155,7 @@ export const useTwofaccounts = defineStore({
                     })
                     this.items = remainingItems
                     this.selectNone()
-                    useNotifyStore().success({ text: t('message.twofaccounts.accounts_deleted') })
+                    useNotify().success({ text: t('message.twofaccounts.accounts_deleted') })
                 })
             }
         },

@@ -1,6 +1,6 @@
 import appSettingService from '@/services/appSettingService'
 import { defineStore } from 'pinia'
-import { useNotifyStore } from '@/stores/notify'
+import { useNotify } from '@2fauth/ui'
 
 export const useAppSettingsStore = defineStore({
     id: 'appSettings',
@@ -31,7 +31,7 @@ export const useAppSettingsStore = defineStore({
             })
             .catch(error => {
                 // TODO : move the t() call from the store
-                useNotifyStore().alert({ text: t('error.failed_to_retrieve_app_settings') })
+                useNotify().alert({ text: t('error.failed_to_retrieve_app_settings') })
             })
         },
     },

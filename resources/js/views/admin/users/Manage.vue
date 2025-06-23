@@ -2,14 +2,16 @@
     import CopyButton from '@/components/CopyButton.vue'
     import AccessLogViewer from '@/components/AccessLogViewer.vue'
     import userService from '@/services/userService'
-    import { useNotifyStore } from '@/stores/notify'
+    import { useNotify } from '@2fauth/ui'
     import { UseColorMode } from '@vueuse/components'
     import { useUserStore } from '@/stores/user'
     import { useBusStore } from '@/stores/bus'
     import { useI18n } from 'vue-i18n'
+    import { useErrorHandler } from '@2fauth/stores'
 
+    const errorHandler = useErrorHandler()
     const { t } = useI18n()
-    const notify = useNotifyStore()
+    const notify = useNotify()
     const router = useRouter()
     const user = useUserStore()
     const bus = useBusStore()
@@ -40,7 +42,8 @@
             bus.username = managedUser.value.info.name
         })
         .catch(error => {
-            notify.error(error)
+            errorHandler.parse(error)
+            router.push({ name: 'genericError' })
         })
         .finally(() => {
             isFetching.value = false
@@ -79,7 +82,10 @@
                 if(error.response.status === 400) {
                     notify.alert({ text: error.response.data.reason })
                 }
-                else notify.error(error)
+                else {
+                    errorHandler.parse(error)
+                    router.push({ name: 'genericError' })
+                }
             })
         }
     }
@@ -117,7 +123,9 @@
                 managedUser.value.info.is_admin = true
             }
             else {
-                notify.error(error.response)
+                // TODO : check if we should return error.response or error
+                errorHandler.parse(error.response)
+                router.push({ name: 'genericError' })
             }
         })
     }
@@ -140,7 +148,9 @@
                     notify.alert({ text: error.response.data.message })
                 }
                 else {
-                    notify.error(error.response)
+                    // TODO : check if we should return error.response or error
+                    errorHandler.parse(error)
+                    router.push({ name: 'genericError' })
                 }
             })
         }

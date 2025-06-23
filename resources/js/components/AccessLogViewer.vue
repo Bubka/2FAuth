@@ -2,11 +2,11 @@
     import SearchBox from '@/components/SearchBox.vue'
     import userService from '@/services/userService'
     import Spinner from '@/components/Spinner.vue'
-    import { useNotifyStore } from '@/stores/notify'
     import { FontAwesomeLayers } from '@fortawesome/vue-fontawesome'
     import { UseColorMode } from '@vueuse/components'
+    import { useErrorHandler } from '@2fauth/stores'
 
-    const notify = useNotifyStore()
+    const errorHandler = useErrorHandler()
     const $2fauth = inject('2fauth')
 
     const props = defineProps({
@@ -106,7 +106,8 @@
             orderIsDesc.value == true ? sortDesc() : sortAsc()
         })
         .catch(error => {
-            notify.error(error)
+            errorHandler.parse(error)
+            router.push({ name: 'genericError' })
         })
         .finally(() => {
             isFetching.value = false

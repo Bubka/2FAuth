@@ -1,11 +1,13 @@
 <script setup>
     import Form from '@/components/formElements/Form'
-    import { useNotifyStore } from '@/stores/notify'
+    import { useNotify } from '@2fauth/ui'
     import { useI18n } from 'vue-i18n'
+    import { useErrorHandler } from '@2fauth/stores'
 
+    const errorHandler = useErrorHandler()
     const { t } = useI18n()
     const $2fauth = inject('2fauth')
-    const notify = useNotifyStore()
+    const notify = useNotify()
     const router = useRouter()
     const route = useRoute()
     const showWebauthnForm = useStorage($2fauth.prefix + 'showWebauthnForm', false)
@@ -35,7 +37,8 @@
                 notify.alert({ text: error.response.data.message, duration:-1 })
             }
             else  {
-                notify.error(error)
+                errorHandler.parse(error)
+                router.push({ name: 'genericError' })
             }
         })
     }

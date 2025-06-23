@@ -8,10 +8,12 @@
     import { useTwofaccounts } from '@/stores/twofaccounts'
     import { useGroups } from '@/stores/groups'
     import { useBusStore } from '@/stores/bus'
-    import { useNotifyStore } from '@/stores/notify'
+    import { useNotify } from '@2fauth/ui'
     import { UseColorMode } from '@vueuse/components'
     import { useI18n } from 'vue-i18n'
+    import { useErrorHandler } from '@2fauth/stores'
 
+    const errorHandler = useErrorHandler()
     const { t } = useI18n()
     const $2fauth = inject('2fauth')
     const router = useRouter()
@@ -19,7 +21,7 @@
     const user = useUserStore()
     const twofaccounts = useTwofaccounts()
     const bus = useBusStore()
-    const notify = useNotifyStore()
+    const notify = useNotify()
     const form = reactive(new Form({
         service: '',
         account: '',
@@ -389,7 +391,8 @@
                     }
                     else notify.alert({ text: t(error.response.data.message) })
                 } else {
-                    notify.error(error)
+                    errorHandler.parse(error)
+                    router.push({ name: 'genericError' })
                 }
             })
         })

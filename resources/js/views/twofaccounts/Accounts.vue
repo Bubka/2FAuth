@@ -11,18 +11,20 @@
     import Dots from '@/components/Dots.vue'
     import { UseColorMode } from '@vueuse/components'
     import { useUserStore } from '@/stores/user'
-    import { useNotifyStore } from '@/stores/notify'
+    import { useNotify } from '@2fauth/ui'
     import { useBusStore } from '@/stores/bus'
     import { useTwofaccounts } from '@/stores/twofaccounts'
     import { useGroups } from '@/stores/groups'
     import { useDisplayablePassword } from '@/composables/helpers'
     import { useSortable, moveArrayElement } from '@vueuse/integrations/useSortable'
     import { useI18n } from 'vue-i18n'
+    import { useErrorHandler } from '@2fauth/stores'
 
+    const errorHandler = useErrorHandler()
     const { t } = useI18n()
     const $2fauth = inject('2fauth')
     const router = useRouter()
-    const notify = useNotifyStore()
+    const notify = useNotify()
     const user = useUserStore()
     const bus = useBusStore()
     const { copy, copied } = useClipboard({ legacy: true })

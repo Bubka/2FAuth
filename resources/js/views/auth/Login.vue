@@ -2,16 +2,18 @@
     import Form from '@/components/formElements/Form'
     import SsoConnectLink from '@/components/SsoConnectLink.vue'
     import { useUserStore } from '@/stores/user'
-    import { useNotifyStore } from '@/stores/notify'
+    import { useNotify } from '@2fauth/ui'
     import { useAppSettingsStore } from '@/stores/appSettings'
     import { webauthnService } from '@/services/webauthn/webauthnService'
     import { useI18n } from 'vue-i18n'
+    import { useErrorHandler } from '@2fauth/stores'
 
+    const errorHandler = useErrorHandler()
     const { t } = useI18n()
     const $2fauth = inject('2fauth')
     const router = useRouter()
     const user = useUserStore()
-    const notify = useNotifyStore()
+    const notify = useNotify()
     const appSettings = useAppSettingsStore()
     const showWebauthnForm = user.preferences.useWebauthnOnly ? true : useStorage($2fauth.prefix + 'showWebauthnForm', false) 
     const form = reactive(new Form({
@@ -67,7 +69,8 @@
                 notify.alert({text: t('message.auth.forms.authentication_failed'), duration: 10000 })
             }
             else if( error.response.status !== 422 ) {
-                notify.error(error)
+                errorHandler.parse(error)
+                router.push({ name: 'genericError' })
             }
         })
         .finally(() => {
@@ -110,7 +113,8 @@
                 form.errors.set(form.extractErrors(error.response))
             }
             else {
-                notify.error(error)
+                errorHandler.parse(error)
+                router.push({ name: 'genericError' })
             }
         })
         .finally(() => {

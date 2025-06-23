@@ -1,6 +1,6 @@
 import axios from "axios"
 import { useUserStore } from '@/stores/user'
-import { useNotifyStore } from '@/stores/notify'
+import { useErrorHandler } from '@2fauth/stores'
 
 export const httpClientFactory = (endpoint = 'api') => {
 	let baseURL
@@ -62,7 +62,9 @@ export const httpClientFactory = (endpoint = 'api') => {
             }
             
             if (error.response && [407].includes(error.response.status)) {
-                useNotifyStore().error(error)
+                useErrorHandler().parse(error)
+                // TODO : Check if calling router here works as expected
+                router.push({ name: 'genericError' })
                 return new Promise(() => {})
             }
 
@@ -83,11 +85,14 @@ export const httpClientFactory = (endpoint = 'api') => {
 
             // Not found
             if (error.response.status === 404) {
-                useNotifyStore().notFound()
+                // TODO : Check if calling router here works as expected
+                router.push({ name: '404' })
                 return new Promise(() => {})
             }
 
-            useNotifyStore().error(error)
+            // TODO : Check if calling router here works as expected
+            useErrorHandler().parse(error)
+            router.push({ name: 'genericError' })
             return new Promise(() => {})
         }
     )

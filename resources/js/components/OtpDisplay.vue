@@ -5,13 +5,15 @@
     import Dots from '@/components/Dots.vue'
     import twofaccountService from '@/services/twofaccountService'
     import { useUserStore } from '@/stores/user'
-    import { useNotifyStore } from '@/stores/notify'
+    import { useNotify } from '@2fauth/ui'
     import { UseColorMode } from '@vueuse/components'
     import { useDisplayablePassword } from '@/composables/helpers'
+    import { useErrorHandler } from '@2fauth/stores'
 
+    const errorHandler = useErrorHandler()
     const { t } = useI18n()
     const user = useUserStore()
-    const notify = useNotifyStore()
+    const notify = useNotify()
     const $2fauth = inject('2fauth')
     const { copy, copied } = useClipboard({ legacy: true })
     const route = useRoute()
@@ -117,10 +119,12 @@
         }
         // Case 3
         else if (! props.secret) {
-            notify.error(new Error(t('error.cannot_create_otp_without_secret')))
+            errorHandler.parse(new Error(t('error.cannot_create_otp_without_secret')))
+            router.push({ name: 'genericError' })
         }
         else if (! isTimeBased(otpauthParams.value.otp_type) && ! isHMacBased(otpauthParams.value.otp_type)) {
-            notify.error(new Error(t('error.not_a_supported_otp_type')))
+            errorHandler.parse(new Error(t('error.not_a_supported_otp_type')))
+            router.push({ name: 'genericError' })
         }
 
         try {

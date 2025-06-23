@@ -3,7 +3,7 @@
     import systemService from '@/services/systemService'
     import { useAppSettingsUpdater } from '@/composables/appSettingsUpdater'
     import { useAppSettingsStore } from '@/stores/appSettings'
-    import { useNotifyStore } from '@/stores/notify'
+    import { useNotify } from '@2fauth/ui'
     import { useUserStore } from '@/stores/user'
     import VersionChecker from '@/components/VersionChecker.vue'
     import CopyButton from '@/components/CopyButton.vue'
@@ -12,7 +12,7 @@
     const { t } = useI18n()
     const $2fauth = inject('2fauth')
     const user = useUserStore()
-    const notify = useNotifyStore()
+    const notify = useNotify()
     const appSettings = useAppSettingsStore()
     const returnTo = useStorage($2fauth.prefix + 'returnTo', 'accounts')
 
@@ -42,7 +42,7 @@
         isClearingCache.value = true;
 
         systemService.clearCache().then(response => {
-            useNotifyStore().success({ type: 'is-success', text: t('message.admin.cache_cleared') })
+            useNotify().success({ text: t('message.admin.cache_cleared') })
         })
         .finally(() => {
             isClearingCache.value = false;

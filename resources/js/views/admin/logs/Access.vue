@@ -1,7 +1,7 @@
 <script setup>
     import AccessLogViewer from '@/components/AccessLogViewer.vue'
     import userService from '@/services/userService'
-    import { useNotifyStore } from '@/stores/notify'
+    import { useNotify } from '@2fauth/ui'
     import { useBusStore } from '@/stores/bus'
 
     const bus = useBusStore()

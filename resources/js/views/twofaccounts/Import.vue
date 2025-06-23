@@ -4,7 +4,7 @@
     import OtpDisplay from '@/components/OtpDisplay.vue'
     import Spinner from '@/components/Spinner.vue'
     import { FormTextarea } from '@2fauth/formcontrols'
-    import { useNotifyStore } from '@/stores/notify'
+    import { useNotify } from '@2fauth/ui'
     import { useUserStore } from '@/stores/user'
     import { useBusStore } from '@/stores/bus'
     import { useTwofaccounts } from '@/stores/twofaccounts'
@@ -13,7 +13,7 @@
 
     const { t } = useI18n()
     const $2fauth = inject('2fauth')
-    const notify = useNotifyStore()
+    const notify = useNotify()
     const user = useUserStore()
     const bus = useBusStore()
     const twofaccounts = useTwofaccounts()

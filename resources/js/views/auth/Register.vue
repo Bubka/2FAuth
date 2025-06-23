@@ -2,12 +2,14 @@
     import Form from '@/components/formElements/Form'
     import { useUserStore } from '@/stores/user'
     import { webauthnService } from '@/services/webauthn/webauthnService'
-    import { useNotifyStore } from '@/stores/notify'
+    import { useNotify } from '@2fauth/ui'
     import { useI18n } from 'vue-i18n'
+    import { useErrorHandler } from '@2fauth/stores'
 
+    const errorHandler = useErrorHandler()
     const { t } = useI18n()
     const user = useUserStore()
-    const notify = useNotifyStore()
+    const notify = useNotify()
     const router = useRouter()
     const showWebauthnRegistration = ref(false)
     const deviceId = ref(null)
@@ -57,7 +59,8 @@
                 notify.alert({ text: error.response.data.message })
             }
             else {
-                notify.error(error);
+                errorHandler.parse(error)
+                router.push({ name: 'genericError' })
             }
         })
     }

@@ -2,13 +2,15 @@
     import Form from '@/components/formElements/Form'
     import SettingTabs from '@/layouts/SettingTabs.vue'
     import { useUserStore } from '@/stores/user'
-    import { useNotifyStore } from '@/stores/notify'
+    import { useNotify } from '@2fauth/ui'
     import { useI18n } from 'vue-i18n'
+    import { useErrorHandler } from '@2fauth/stores'
 
+    const errorHandler = useErrorHandler()
     const { t } = useI18n()
     const $2fauth = inject('2fauth')
     const user = useUserStore()
-    const notify = useNotifyStore()
+    const notify = useNotify()
     const router = useRouter()
     const returnTo = useStorage($2fauth.prefix + 'returnTo', 'accounts')
     
@@ -45,7 +47,9 @@
                 notify.alert({ text: error.response.data.message })
             }
             else if( error.response.status !== 422 ) {
-                notify.error(error.response)
+                // TODO : check if we should return error.response or error
+                errorHandler.parse(error.response)
+                router.push({ name: 'genericError' })
             }
         })
     }
@@ -67,7 +71,9 @@
                 notify.alert({ text: error.response.data.message })
             }
             else if( error.response.status !== 422 ) {
-                notify.error(error.response)
+                // TODO : check if we should return error.response or error
+                errorHandler.parse(error.response)
+                router.push({ name: 'genericError' })
             }
         })
     }
@@ -88,7 +94,9 @@
                     notify.alert({ text: error.response.data.message })
                 }
                 else if( error.response.status !== 422 ) {
-                    notify.error(error.response)
+                    // TODO : check if we should return error.response or error
+                    errorHandler.parse(error.response)
+                    router.push({ name: 'genericError' })
                 }
             })
         }

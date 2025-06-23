@@ -1,8 +1,10 @@
 <script setup>
     import Form from '@/components/formElements/Form'
-    import { useNotifyStore } from '@/stores/notify'
+    import { useNotify } from '@2fauth/ui'
+    import { useErrorHandler } from '@2fauth/stores'
 
-    const notify = useNotifyStore()
+    const errorHandler = useErrorHandler()
+    const notify = useNotify()
     const route = useRoute()
 
     const isWebauthnReset = route.name == 'webauthn.lost'
@@ -25,7 +27,8 @@
                 notify.alert({ text: error.response.data.requestFailed, duration:-1 })
             }
             else if( error.response.status !== 422 ) {
-                notify.error(error)
+                errorHandler.parse(error)
+                router.push({ name: 'genericError' })
             }
         })
     }

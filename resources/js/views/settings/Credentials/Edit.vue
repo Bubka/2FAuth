@@ -1,11 +1,11 @@
 <script setup>
     import Form from '@/components/formElements/Form'
-    import { useNotifyStore } from '@/stores/notify'
+    import { useNotify } from '@2fauth/ui'
     import { useI18n } from 'vue-i18n'
 
     const { t } = useI18n()
     const router = useRouter()
-    const notify = useNotifyStore()
+    const notify = useNotify()
     const form = reactive(new Form({
         name: t('message.auth.webauthn.my_device')
     }))

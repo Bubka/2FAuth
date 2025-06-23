@@ -75,10 +75,11 @@ app
     .component('Kicker', Kicker)
 
 // Global error handling
-// import { useNotifyStore } from '@/stores/notify'
+// import { useNotify } from '@2fauth/ui'
 // if (process.env.NODE_ENV != 'development') {
 //     app.config.errorHandler = (err) => {
-//         useNotifyStore().error(err)
+//         useNotify().parse(err)
+//         router.push({ name: 'genericError' })
 //     }
 // }
 

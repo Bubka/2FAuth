@@ -3,7 +3,7 @@
     import userService from '@/services/userService'
     import { useUserStore } from '@/stores/user'
     import { useGroups } from '@/stores/groups'
-    import { useNotifyStore } from '@/stores/notify'
+    import { useNotify } from '@2fauth/ui'
     import { useAppSettingsStore } from '@/stores/appSettings'
     import { timezones } from './timezones'
     import { useI18n } from 'vue-i18n'
@@ -12,7 +12,7 @@
     const $2fauth = inject('2fauth')
     const user = useUserStore()
     const groups = useGroups()
-    const notify = useNotifyStore()
+    const notify = useNotify()
     const appSettings = useAppSettingsStore()
     const returnTo = useStorage($2fauth.prefix + 'returnTo', 'accounts')
 
@@ -124,7 +124,7 @@
      */
     function savePreference(preference, value) {
         userService.updatePreference(preference, value).then(response => {
-            useNotifyStore().success({ type: 'is-success', text: t('message.settings.forms.setting_saved') })
+            useNotify().success({ text: t('message.settings.forms.setting_saved') })
             
             if(preference === 'lang') {
                 user.applyLanguage()

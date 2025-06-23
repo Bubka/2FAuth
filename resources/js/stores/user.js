@@ -5,8 +5,9 @@ import router from '@/router'
 import { useColorMode } from '@vueuse/core'
 import { useTwofaccounts } from '@/stores/twofaccounts'
 import { useGroups } from '@/stores/groups'
-import { useNotifyStore } from '@/stores/notify'
+import { useNotify } from '@2fauth/ui'
 import { useAppSettingsStore } from '@/stores/appSettings'
+import { useErrorHandler } from '@2fauth/stores'
 
 export const useUserStore = defineStore({
     id: 'user',
@@ -63,7 +64,8 @@ export const useUserStore = defineStore({
          */
         logout(options = {}) {
             const { kicked } = options
-            const notify = useNotifyStore()
+            const notify = useNotify()
+            const errorHandler = useErrorHandler()
 
             // async appLogout(evt) {
             if (this.$2fauth.config.proxyAuth) {
@@ -85,7 +87,8 @@ export const useUserStore = defineStore({
                     // backend has already detect inactivity on its side. In this case we
                     // don't want any error to be displayed.
                     if (error.response.status !== 401) {
-                        notify.error(error)
+                        errorHandler.parse(error)
+                        router.push({ name: 'genericError' })
                     }
                     else this.tossOut()
                 })
@@ -159,7 +162,7 @@ export const useUserStore = defineStore({
                 })
             })
             .catch(error => {
-                const notify = useNotifyStore()
+                const notify = useNotify()
                 notify.alert({ text: t('error.data_cannot_be_refreshed_from_server') })
             })
         }

@@ -1,10 +1,10 @@
 <script setup>
     import Form from '@/components/formElements/Form'
-    import { useNotifyStore } from '@/stores/notify'
+    import { useNotify } from '@2fauth/ui'
     import { useI18n } from 'vue-i18n'
 
     const { t } = useI18n()
-    const notify = useNotifyStore()
+    const notify = useNotify()
     const router = useRouter()
     
     const registerForm = reactive(new Form({

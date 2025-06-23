@@ -1,13 +1,15 @@
 <script setup>
     import AdminTabs from '@/layouts/AdminTabs.vue'
     import userService from '@/services/userService'
-    import { useNotifyStore } from '@/stores/notify'
+    import { useNotify } from '@2fauth/ui'
     import { UseColorMode } from '@vueuse/components'
     import Spinner from '@/components/Spinner.vue'
     import SearchBox from '@/components/SearchBox.vue'
+    import { useErrorHandler } from '@2fauth/stores'
 
+    const errorHandler = useErrorHandler()
     const $2fauth = inject('2fauth')
-    const notify = useNotifyStore()
+    const notify = useNotify()
     const returnTo = useStorage($2fauth.prefix + 'returnTo', 'accounts')
 
     const users = ref([])
@@ -88,7 +90,8 @@
             users.value = response.data
         })
         .catch(error => {
-            notify.error(error)
+            errorHandler.parse(error)
+            router.push({ name: 'genericError' })
         })
         .finally(() => {
             isFetching.value = false

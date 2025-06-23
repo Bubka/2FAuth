@@ -2,13 +2,13 @@
     import Form from '@/components/formElements/Form'
     import { useUserStore } from '@/stores/user'
     import { useBusStore } from '@/stores/bus'
-    import { useNotifyStore } from '@/stores/notify'
+    import { useNotify } from '@2fauth/ui'
     import { useTwofaccounts } from '@/stores/twofaccounts'
 
     const router = useRouter()
     const user = useUserStore()
     const bus = useBusStore()
-    const notify = useNotifyStore()
+    const notify = useNotify()
     const twofaccounts = useTwofaccounts()
 
     const qrcodeInput = ref(null)

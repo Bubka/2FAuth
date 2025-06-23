@@ -3,16 +3,18 @@
     import userService from '@/services/userService'
     import SettingTabs from '@/layouts/SettingTabs.vue'
     import { useAppSettingsStore } from '@/stores/appSettings'
-    import { useNotifyStore } from '@/stores/notify'
+    import { useNotify } from '@2fauth/ui'
     import { UseColorMode } from '@vueuse/components'
     import { useUserStore } from '@/stores/user'
     import Spinner from '@/components/Spinner.vue'
     import { useI18n } from 'vue-i18n'
+    import { useErrorHandler } from '@2fauth/stores'
 
+    const errorHandler = useErrorHandler()
     const { t } = useI18n()
     const appSettings = useAppSettingsStore()
     const $2fauth = inject('2fauth')
-    const notify = useNotifyStore()
+    const notify = useNotify()
     const user = useUserStore()
     const returnTo = useStorage($2fauth.prefix + 'returnTo', 'accounts')
     const { copy } = useClipboard({ legacy: true })
@@ -61,7 +63,8 @@
                 // The form is already disabled (see isDisabled) so we do nothing more here
             }
             else {
-                notify.error(error)
+                errorHandler.parse(error)
+                router.push({ name: 'genericError' })
             }
         })
         .finally(() => {

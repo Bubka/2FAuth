@@ -1,6 +1,7 @@
 import appSettingService from '@/services/appSettingService'
-import { useNotifyStore } from '@/stores/notify'
 import { useI18n } from 'vue-i18n'
+import { useErrorHandler } from '@2fauth/stores'
+import { useNotify } from '@2fauth/ui'
 
 /**
  * Saves a setting on the backend
@@ -17,14 +18,15 @@ export async function useAppSettingsUpdater(setting, value, returnValidationErro
     await appSettingService.update(setting, value, { returnError: true })
     .then(response => {
         data = value
-        useNotifyStore().success({ type: 'is-success', text: t('message.settings.forms.setting_saved') })
+        useNotify().success({ text: t('message.settings.forms.setting_saved') })
     })
     .catch(err => {
         if( returnValidationError && err.response.status === 422 ) {
             error = err
         }
         else {
-            useNotifyStore().error(err);
+            useErrorHandler().parse(err)
+            router.push({ name: 'genericError' })
         }
     })
 

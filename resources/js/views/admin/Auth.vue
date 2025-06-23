@@ -3,12 +3,14 @@
     import appSettingService from '@/services/appSettingService'
     import { useAppSettingsUpdater } from '@/composables/appSettingsUpdater'
     import { useAppSettingsStore } from '@/stores/appSettings'
-    import { useNotifyStore } from '@/stores/notify'
+    import { useNotify } from '@2fauth/ui'
     import { useI18n } from 'vue-i18n'
+    import { useErrorHandler } from '@2fauth/stores'
 
+    const errorHandler = useErrorHandler()
     const { t } = useI18n()
     const $2fauth = inject('2fauth')
-    const notify = useNotifyStore()
+    const notify = useNotify()
     const appSettings = useAppSettingsStore()
     const returnTo = useStorage($2fauth.prefix + 'returnTo', 'accounts')
 
@@ -46,7 +48,8 @@
             })
             .catch(error => {
                 if( error.response.status !== 404 ) {
-                    notify.error(error);
+                    errorHandler.parse(error)
+                    router.push({ name: 'genericError' })
                 }
             })
         }

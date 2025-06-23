@@ -1,10 +1,10 @@
 <script setup>
     const { copy } = useClipboard({ legacy: true })
-    import { useNotifyStore } from '@/stores/notify'
+    import { useNotify } from '@2fauth/ui'
     import { useI18n } from 'vue-i18n'
 
     const { t } = useI18n()
-    const notify = useNotifyStore()
+    const notify = useNotify()
 
     const props = defineProps({
         qrContent: String,
