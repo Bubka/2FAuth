@@ -87,6 +87,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         'algorithm',
         'period',
         'counter',
+        'is_shared',
     ];
 
     private const VALID_RESOURCE_STRUCTURE_WITH_SECRET = [
@@ -101,6 +102,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         'algorithm',
         'period',
         'counter',
+        'is_shared',
     ];
 
     private const VALID_OTP_RESOURCE_STRUCTURE_FOR_TOTP = [
@@ -134,6 +136,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         'algorithm',
         'period',
         'counter',
+        'is_shared',
         'otp' => self::VALID_EMBEDDED_OTP_RESOURCE_STRUCTURE_FOR_TOTP,
     ];
 
@@ -148,6 +151,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         'algorithm',
         'period',
         'counter',
+        'is_shared',
         'otp' => self::VALID_EMBEDDED_OTP_RESOURCE_STRUCTURE_FOR_TOTP,
     ];
 
@@ -169,6 +173,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
                 'period',
                 'counter',
                 'legacy_uri',
+                'is_shared',
             ],
         ],
     ];

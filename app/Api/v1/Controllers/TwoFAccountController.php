@@ -44,9 +44,20 @@ class TwoFAccountController extends Controller
 
         $validated = $request->validated();
 
-        return Arr::has($validated, 'ids')
-            ? new TwoFAccountCollection($request->user()->twofaccounts()->whereIn('id', Helpers::commaSeparatedToArray($validated['ids']))->get()->sortBy('order_column'))
-            : new TwoFAccountCollection($request->user()->twofaccounts->sortBy('order_column'));
+        if (Arr::has($validated, 'ids')) {
+            return new TwoFAccountCollection(
+                TwoFAccount::accessibleBy($request->user())
+                    ->whereIn('id', Helpers::commaSeparatedToArray($validated['ids']))
+                    ->get()
+                    ->sortBy('order_column')
+            );
+        }
+
+        return new TwoFAccountCollection(
+            TwoFAccount::accessibleBy($request->user())
+                ->orderBy('order_column')
+                ->get()
+        );
     }
 
     /**

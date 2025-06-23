@@ -28,6 +28,7 @@ return [
     'account_updated' => 'Account successfully updated',
     'accounts_deleted' => 'Account(s) successfully deleted',
     'accounts_moved' => 'Account(s) successfully moved',
+    'shared_account_indicator' => 'Shared account',
     'export_selected_accounts' => 'Export selected accounts',
     'twofauth_export_format' => '2FAuth format',
     'twofauth_export_format_sub' => 'Export data using the 2FAuth json schema',
@@ -104,6 +105,10 @@ return [
             'label' => 'Image',
             'placeholder' => 'http://...',
             'help' => 'The url of an external image to use as the account icon'
+        ],
+        'is_shared' => [
+            'label' => 'Share this account with all users',
+            'help' => 'When enabled, this account will be visible to all users in the system'
         ],
         'options_help' => 'You can leave the following options blank if you don\'t know how to set them. The most commonly used values will be applied.',
         'alternative_methods' => 'Alternative methods',

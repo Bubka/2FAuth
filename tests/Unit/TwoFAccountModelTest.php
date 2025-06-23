@@ -31,8 +31,9 @@ class TwoFAccountModelTest extends ModelTestCase
             ['*'],
             [],
             [
-                'id'      => 'int',
-                'user_id' => 'integer',
+                'id'        => 'int',
+                'user_id'   => 'integer',
+                'is_shared' => 'boolean',
             ],
             ['deleted' => TwoFAccountDeleted::class],
             ['created_at', 'updated_at'],

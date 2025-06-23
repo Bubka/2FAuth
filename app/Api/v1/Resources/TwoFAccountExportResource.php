@@ -47,6 +47,7 @@ class TwoFAccountExportResource extends JsonResource
                 'period'     => is_null($this->period) ? null : (int) $this->period,
                 'counter'    => is_null($this->counter) ? null : (int) $this->counter,
                 'legacy_uri' => $this->legacy_uri,
+                'is_shared'  => (bool) $this->is_shared,
             ];
     }
 }

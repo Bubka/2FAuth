@@ -105,6 +105,10 @@ return [
             'placeholder' => 'http://...',
             'help' => '用作账号图标的图像 URL 地址'
         ],
+        'is_shared' => [
+            'label' => '与所有用户共享此账户',
+            'help' => '启用后，此账户将对系统中的所有用户可见'
+        ],
         'options_help' => '如果您不了解下列选项，请将对应选项留空来使用默认配置。',
         'alternative_methods' => '其他创建方式',
         'spaces_are_ignored' => '无用的空格将被自动删除'

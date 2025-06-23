@@ -81,6 +81,17 @@
         return !twofaccounts.isEmpty && !showGroupSwitch.value && !showDestinationGroupSelector.value
     })
 
+    /**
+     * Returns whether the current user can edit/delete the given account
+     * Only the creator of an account can edit/delete it, even if it's shared
+     */
+    const canEditAccount = (account) => {
+        if (!account || !user.id) {
+            return false
+        }
+        return parseInt(user.id) === parseInt(account.user_id)
+    }
+
     onMounted(async () => {
         // This SFC is reached only if the user has some twofaccounts (see the starter middleware).
         // This allows to display accounts without latency.
@@ -151,8 +162,12 @@
      */
     function showOrCopy(account) {
         // In Management mode, clicking an account does not show/copy, it selects the account
+        // but only if the current user can edit the account
         if(bus.inManagementMode) {
-            twofaccounts.select(account.id)
+            if (canEditAccount(account)) {
+                twofaccounts.select(account.id)
+            }
+            // If user cannot edit the account, do nothing (no selection, no OTP display)
         }
         else {
             if (!user.preferences.getOtpOnRequest && account.otp_type.includes('totp')) {
@@ -409,9 +424,9 @@
             <div class="accounts">
                 <span id="dv" class="columns is-multiline" :class="{ 'is-centered': user.preferences.displayMode === 'grid' }">
                     <div :class="[user.preferences.displayMode === 'grid' ? 'tfa-grid' : 'tfa-list']" class="column is-narrow" v-for="account in twofaccounts.filtered" :key="account.id">
-                        <div class="tfa-container">
+                        <div class="tfa-container" :class="{ 'is-read-only': bus.inManagementMode && !canEditAccount(account) }">
                             <transition name="slideCheckbox">
-                                <div class="tfa-cell tfa-checkbox" v-if="bus.inManagementMode">
+                                <div class="tfa-cell tfa-checkbox" v-if="bus.inManagementMode && canEditAccount(account)">
                                     <div class="field">
                                         <input class="is-checkradio is-small" :class="mode == 'dark' ? 'is-white':'is-info'" :id="'ckb_' + account.id" :value="account.id" type="checkbox" :name="'ckb_' + account.id" v-model="twofaccounts.selectedIds">
                                         <label tabindex="0" :for="'ckb_' + account.id" v-on:keypress.space.prevent="twofaccounts.select(account.id)"></label>
@@ -422,7 +437,9 @@
                                 <div class="tfa-text has-ellipsis">
                                     <img v-if="account.icon && user.preferences.showAccountsIcons" role="presentation" class="tfa-icon" :src="$2fauth.config.subdirectory + '/storage/icons/' + account.icon" alt="">
                                     <img v-else-if="account.icon == null && user.preferences.showAccountsIcons" role="presentation" class="tfa-icon" :src="$2fauth.config.subdirectory + '/storage/noicon.svg'" alt="">
-                                    {{ account.service ? account.service : $t('twofaccounts.no_service') }}<FontAwesomeIcon class="has-text-danger is-size-5 ml-2" v-if="account.account === $t('errors.indecipherable')" :icon="['fas', 'exclamation-circle']" />
+                                    {{ account.service ? account.service : $t('twofaccounts.no_service') }}
+                                    <FontAwesomeIcon class="has-text-danger is-size-5 ml-2" v-if="account.account === $t('errors.indecipherable')" :icon="['fas', 'exclamation-circle']" />
+                                    <FontAwesomeIcon class="has-text-info is-size-6 ml-2" v-if="account.is_shared" :icon="['fas', 'share-alt']" :title="$t('twofaccounts.shared_account_indicator')" />
                                     <span class="is-block has-ellipsis is-family-primary is-size-6 is-size-7-mobile has-text-grey ">{{ account.account }}</span>
                                 </div>
                             </div>
@@ -462,7 +479,7 @@
                                 </div>
                             </transition>
                             <transition name="fadeInOut">
-                                <div class="tfa-cell tfa-edit has-text-grey" v-if="bus.inManagementMode">
+                                <div class="tfa-cell tfa-edit has-text-grey" v-if="bus.inManagementMode && canEditAccount(account)">
                                     <RouterLink :to="{ name: 'editAccount', params: { twofaccountId: account.id }}" class="tag is-rounded mr-1" :class="mode == 'dark' ? 'is-dark' : 'is-white'">
                                         {{ $t('commons.edit') }}
                                     </RouterLink>
@@ -472,7 +489,7 @@
                                 </div>
                             </transition>
                             <transition name="fadeInOut">
-                                <div class="drag-handle tfa-cell tfa-dots has-text-grey" v-if="bus.inManagementMode">
+                                <div class="drag-handle tfa-cell tfa-dots has-text-grey" v-if="bus.inManagementMode && canEditAccount(account)">
                                     <FontAwesomeIcon :icon="['fas', 'bars']" />
                                 </div>
                             </transition>
@@ -493,3 +510,29 @@
     </div>
     </UseColorMode>
 </template>
+
+<style scoped>
+.tfa-container.is-read-only {
+    opacity: 0.6;
+    position: relative;
+}
+
+.tfa-container.is-read-only::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: transparent;
+    pointer-events: none;
+}
+
+.tfa-container.is-read-only .tfa-content {
+    cursor: not-allowed !important;
+}
+
+.tfa-container.is-read-only .tfa-content:hover {
+    background-color: transparent !important;
+}
+</style>

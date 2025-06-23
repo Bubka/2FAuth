@@ -28,6 +28,7 @@ return [
     'account_updated' => 'Konto erfolgreich aktualisiert',
     'accounts_deleted' => 'Konto(en) erfolgreich gelöscht',
     'accounts_moved' => 'Konto(en) erfolgreich verschoben',
+    'shared_account_indicator' => 'Geteiltes Konto',
     'export_selected_accounts' => 'Ausgewählte Konten exportieren',
     'twofauth_export_format' => '2FAuth-Format',
     'twofauth_export_format_sub' => 'Daten mit dem 2FAuth json Schema exportieren',
@@ -104,6 +105,10 @@ return [
             'label' => 'Bild',
             'placeholder' => 'http://...',
             'help' => 'Die Url eines externen Bildes, das als Kontosymbol verwendet werden soll'
+        ],
+        'is_shared' => [
+            'label' => 'Dieses Konto mit allen Benutzern teilen',
+            'help' => 'Wenn aktiviert, ist dieses Konto für alle Benutzer im System sichtbar'
         ],
         'options_help' => 'Sie können die folgenden Einstellungen leer lassen, wenn Sie nicht wissen, wie Sie sie einstellen. In dem Fall werden die Standardwerte verwendet.',
         'alternative_methods' => 'Alternative Methoden',

@@ -3,6 +3,7 @@
     import OtpDisplay from '@/components/OtpDisplay.vue'
     import QrContentDisplay from '@/components/QrContentDisplay.vue'
     import FormLockField from '@/components/formElements/FormLockField.vue'
+    import FormCheckbox from '@/components/formElements/FormCheckbox.vue'
     import twofaccountService from '@/services/twofaccountService'
     import { useUserStore } from '@/stores/user'
     import { useTwofaccounts } from '@/stores/twofaccounts'
@@ -30,6 +31,7 @@
         counter: null,
         period: null,
         image: '',
+        is_shared: false,
     }))
     const qrcodeForm = reactive(new Form({
         qrcode: null
@@ -467,11 +469,11 @@
                 </div>
                 <div class="columns is-mobile" role="alert">
                     <div v-if="form.errors.any()" class="column">
-                        <p v-for="(field, index) in form.errors.errors" :key="index" class="help is-danger">
+                        <div v-for="(field, index) in form.errors.errors" :key="index" class="help is-danger">
                             <ul>
                                 <li v-for="(error, index) in field" :key="index">{{ error }}</li>
                             </ul>
-                        </p>
+                        </div>
                     </div>
                 </div>
                 <div class="columns is-mobile">
@@ -591,6 +593,13 @@
                         <FormLockField v-if="form.otp_type === 'hotp'" pattern="[0-9]{1,4}" :isEditMode="isEditMode" :isExpanded="false" v-model="form.counter" fieldName="counter" :fieldError="form.errors.get('counter')" label="twofaccounts.forms.counter.label" :placeholder="$t('twofaccounts.forms.counter.placeholder')" :help="isEditMode ? 'twofaccounts.forms.counter.help_lock' : 'twofaccounts.forms.counter.help'" />
                     </div>
                 </div>
+                <!-- Share account -->
+                <FormCheckbox 
+                    v-model="form.is_shared" 
+                    fieldName="is_shared" 
+                    label="twofaccounts.forms.is_shared.label" 
+                    help="twofaccounts.forms.is_shared.help" 
+                />
                 <VueFooter :showButtons="true">
                     <p class="control">
                         <VueButton :id="isEditMode ? 'btnUpdate' : 'btnCreate'" :isLoading="form.isBusy" class="is-rounded" >{{ isEditMode ? $t('commons.save') : $t('commons.create') }}</VueButton>
