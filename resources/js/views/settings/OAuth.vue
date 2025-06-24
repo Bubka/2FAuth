@@ -197,8 +197,10 @@
                 </div>
                 <Spinner :isVisible="isFetching && tokens.length === 0" />
                 <!-- footer -->
-                <VueFooter :showButtons="true">
-                    <NavigationButton action="close" @closed="router.push({ name: returnTo })" :current-page-title="$t('title.settings.oauth.tokens')" />
+                <VueFooter>
+                    <template #default>
+                        <NavigationButton action="close" @closed="router.push({ name: returnTo })" :current-page-title="$t('title.settings.oauth.tokens')" />
+                    </template>
                 </VueFooter>
             </FormWrapper>
         </div>

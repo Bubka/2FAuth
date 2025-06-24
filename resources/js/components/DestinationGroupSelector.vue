@@ -57,12 +57,14 @@
                 </div>
             </div>
         </div>
-        <VueFooter :showButtons="true">
-            <!-- Move to selected group button -->
-            <p class="control">
-                <button type="button" class="button is-link is-rounded" @click="moveAccounts">{{ $t('message.move') }}</button>
-            </p>
-            <NavigationButton action="cancel" :useLinkTag="false" @canceled="$emit('update:showDestinationGroupSelector', false)" />
+        <VueFooter>
+            <template #default>
+                <!-- Move to selected group button -->
+                <p class="control">
+                    <button type="button" class="button is-link is-rounded" @click="moveAccounts">{{ $t('message.move') }}</button>
+                </p>
+                <NavigationButton action="cancel" :useLinkTag="false" @canceled="$emit('update:showDestinationGroupSelector', false)" />
+            </template>
         </VueFooter>
     </div>
 </template>

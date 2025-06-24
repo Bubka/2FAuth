@@ -64,8 +64,10 @@
             <li>{{ $t('message.logos_by') }}&nbsp;<a href="https://2fa.directory/">2FA Directory</a>&nbsp;<a class="is-size-7" href="https://github.com/2factorauth/twofactorauth/blob/master/LICENSE.md">(MIT License)</a></li>
         </ul>
         <!-- footer -->
-        <VueFooter :showButtons="true">
-            <NavigationButton action="back" @goback="router.push({ name: returnTo })" :previous-page-title="$t('title.' + returnTo)" />
+        <VueFooter>
+            <template #default>
+                <NavigationButton action="back" @goback="router.push({ name: returnTo })" :previous-page-title="$t('title.' + returnTo)" />
+            </template>
         </VueFooter>
     </UseColorMode>
     </ResponsiveWidthWrapper>

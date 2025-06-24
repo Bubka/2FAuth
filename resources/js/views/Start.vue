@@ -107,8 +107,10 @@
             </div>
         </div>
         <!-- Footer -->
-        <VueFooter :showButtons="true" >
-            <NavigationButton v-if="!twofaccounts.isEmpty" action="back" @goback="router.push({ name: 'accounts' })" :previous-page-title="$t('title.accounts')" />
+        <VueFooter >
+            <template #default>
+                <NavigationButton v-if="!twofaccounts.isEmpty" action="back" @goback="router.push({ name: 'accounts' })" :previous-page-title="$t('title.accounts')" />
+            </template>
         </VueFooter>
     </div>
 </template>

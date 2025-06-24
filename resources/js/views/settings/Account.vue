@@ -159,8 +159,10 @@
                 </form>
             </FormWrapper>
         </div>
-        <VueFooter :showButtons="true">
-            <NavigationButton action="close" @closed="router.push({ name: returnTo })" :current-page-title="$t('title.settings.account')" />
+        <VueFooter>
+            <template #default>
+                <NavigationButton action="close" @closed="router.push({ name: returnTo })" :current-page-title="$t('title.settings.account')" />
+            </template>
         </VueFooter>
     </div>
 </template>

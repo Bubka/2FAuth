@@ -596,14 +596,16 @@
                         <FormProtectedField v-if="form.otp_type === 'hotp'" pattern="[0-9]{1,4}" :enableProtection="isEditMode" :isExpanded="false" v-model="form.counter" fieldName="counter" :errorMessage="form.errors.get('counter')" label="message.twofaccounts.forms.counter.label" :placeholder="$t('message.twofaccounts.forms.counter.placeholder')" :help="isEditMode ? 'message.twofaccounts.forms.counter.help_lock' : 'message.twofaccounts.forms.counter.help'" />
                     </div>
                 </div>
-                <VueFooter :showButtons="true">
-                    <p class="control">
-                        <VueButton nativeType="submit" :id="isEditMode ? 'btnUpdate' : 'btnCreate'" :isLoading="form.isBusy" class="is-rounded" >{{ isEditMode ? $t('message.save') : $t('message.create') }}</VueButton>
-                    </p>
-                    <p class="control" v-if="form.otp_type && form.secret">
-                        <button id="btnPreview" type="button" class="button is-success is-rounded" @click="previewOTP">{{ $t('message.twofaccounts.forms.test') }}</button>
-                    </p>
-                    <NavigationButton action="cancel" :useLinkTag="false" @canceled="cancelCreation" />
+                <VueFooter>
+                    <template #default>
+                        <p class="control">
+                            <VueButton nativeType="submit" :id="isEditMode ? 'btnUpdate' : 'btnCreate'" :isLoading="form.isBusy" class="is-rounded" >{{ isEditMode ? $t('message.save') : $t('message.create') }}</VueButton>
+                        </p>
+                        <p class="control" v-if="form.otp_type && form.secret">
+                            <button id="btnPreview" type="button" class="button is-success is-rounded" @click="previewOTP">{{ $t('message.twofaccounts.forms.test') }}</button>
+                        </p>
+                        <NavigationButton action="cancel" :useLinkTag="false" @canceled="cancelCreation" />
+                    </template>
                 </VueFooter>
             </form>
             <!-- modal -->

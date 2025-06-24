@@ -450,18 +450,20 @@
                 </div>
             </div>
             <!-- footer -->
-            <VueFooter :showButtons="true">
-                <!-- Import all button -->
-                <p class="control" v-if="importableCount > 0">
-                    <button type="button" class="button is-link is-rounded is-focus" @click="createAccounts">
-                        <span>{{ $t('message.twofaccounts.import.import_all') }} ({{ importableCount }})</span>
-                        <!-- <span class="icon is-small">
-                            <FontAwesomeIcon :icon="['fas', 'qrcode']" />
-                        </span> -->
-                    </button>
-                </p>
-                <NavigationButton v-if="importableCount > 0" action="cancel" @canceled="router.push({ name: 'accounts' })" />
-                <NavigationButton v-else action="close" @closed="router.push({ name: 'accounts' })" :current-page-title="$t('title.importAccounts')" />
+            <VueFooter>
+                <template #default>
+                    <!-- Import all button -->
+                    <p class="control" v-if="importableCount > 0">
+                        <button type="button" class="button is-link is-rounded is-focus" @click="createAccounts">
+                            <span>{{ $t('message.twofaccounts.import.import_all') }} ({{ importableCount }})</span>
+                            <!-- <span class="icon is-small">
+                                <FontAwesomeIcon :icon="['fas', 'qrcode']" />
+                            </span> -->
+                        </button>
+                    </p>
+                    <NavigationButton v-if="importableCount > 0" action="cancel" @canceled="router.push({ name: 'accounts' })" />
+                    <NavigationButton v-else action="close" @closed="router.push({ name: 'accounts' })" :current-page-title="$t('title.importAccounts')" />
+                </template>
             </VueFooter>
         </ResponsiveWidthWrapper>
         <!-- modal -->

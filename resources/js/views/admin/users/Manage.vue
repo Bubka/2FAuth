@@ -327,9 +327,11 @@
             </div>
         </div>
         <!-- footer -->
-        <VueFooter :showButtons="true">
-            <NavigationButton action="back" @goback="router.push({ name: 'admin.users' })" :previous-page-title="$t('title.admin.users')" />
-            <NavigationButton action="close" @closed="router.push({ name: 'accounts' })" :current-page-title="$t('title.admin.manageUser')" />
+        <VueFooter>
+            <template #default>
+                <NavigationButton action="back" @goback="router.push({ name: 'admin.users' })" :previous-page-title="$t('title.admin.users')" />
+                <NavigationButton action="close" @closed="router.push({ name: 'accounts' })" :current-page-title="$t('title.admin.manageUser')" />
+            </template>
         </VueFooter>
     </ResponsiveWidthWrapper>
     </UseColorMode>

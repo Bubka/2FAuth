@@ -173,8 +173,10 @@
                 </div>
                 <Spinner :isVisible="isFetching && users.length === 0" />
                 <!-- footer -->
-                <VueFooter :showButtons="true">
-                    <NavigationButton action="close" @closed="router.push({ name: returnTo })" :current-page-title="$t('title.admin.users')" />
+                <VueFooter>
+                    <template #default>
+                        <NavigationButton action="close" @closed="router.push({ name: returnTo })" :current-page-title="$t('title.admin.users')" />
+                    </template>
                 </VueFooter>
             </FormWrapper>
         </div>

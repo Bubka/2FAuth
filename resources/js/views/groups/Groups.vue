@@ -69,8 +69,10 @@
             </span>
         </div>
         <!-- footer -->
-        <VueFooter :showButtons="true">
-            <NavigationButton action="close" @closed="router.push({ name: 'accounts' })" :current-page-title="$t('title.groups')" />
+        <VueFooter>
+            <template #default>
+                <NavigationButton action="close" @closed="router.push({ name: 'accounts' })" :current-page-title="$t('title.groups')" />
+            </template>
         </VueFooter>
     </ResponsiveWidthWrapper>
 </template>

@@ -486,14 +486,24 @@
                     </div>
                 </span>
             </div>
-            <VueFooter :showButtons="true" :internalFooterType="bus.inManagementMode && !showDestinationGroupSelector ? 'doneButton' : 'navLinks'" @done-button-clicked="exitManagementMode">
-                <ActionButtons
-                    v-model:inManagementMode="bus.inManagementMode"
-                    :areDisabled="twofaccounts.hasNoneSelected"
-                    @move-button-clicked="showDestinationGroupSelector = true"
-                    @delete-button-clicked="deleteAccounts"
-                    @export-button-clicked="showExportFormatSelector = true">
-                </ActionButtons>
+            <VueFooter v-if="bus.inManagementMode && !showDestinationGroupSelector">
+                <template #default>
+                    <ActionButtons
+                        v-model:inManagementMode="bus.inManagementMode"
+                        :areDisabled="twofaccounts.hasNoneSelected"
+                        @move-button-clicked="showDestinationGroupSelector = true"
+                        @delete-button-clicked="deleteAccounts"
+                        @export-button-clicked="showExportFormatSelector = true">
+                    </ActionButtons>
+                </template>
+                <template #subpart>
+                    <button type="button" id="lnkExitEdit" class="button is-ghost is-like-text" @click.stop="exitManagementMode">{{ $t('message.done') }}</button>
+                </template>
+            </VueFooter>
+            <VueFooter v-else>
+                <template #default>
+                    <ActionButtons v-model:inManagementMode="bus.inManagementMode" />
+                </template>
             </VueFooter>
         </div>
     </div>

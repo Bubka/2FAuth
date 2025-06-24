@@ -18,6 +18,7 @@ const $2fauth = {
     isTestingApp: window.isTestingApp,
     langs: window.appLocales,
     urls: window.urls,
+    context: 'webapp',
 }
 app.provide('2fauth', readonly($2fauth))
 
@@ -41,7 +42,6 @@ app.use(Notifications)
 // Global components registration
 import ResponsiveWidthWrapper from '@/layouts/ResponsiveWidthWrapper.vue'
 import FormWrapper from '@/layouts/FormWrapper.vue'
-import Footer from '@/layouts/Footer.vue'
 import Kicker           from '@/components/Kicker.vue'
 
 import {
@@ -57,6 +57,7 @@ import {
 } from '@2fauth/formcontrols'
 
 import {
+    VueFooter,
     Modal
 } from '@2fauth/ui'
 
@@ -64,7 +65,7 @@ app
     .component('FontAwesomeIcon', FontAwesomeIcon)
     .component('ResponsiveWidthWrapper', ResponsiveWidthWrapper)
     .component('FormWrapper', FormWrapper)
-    .component('VueFooter', Footer)
+    .component('VueFooter', VueFooter)
     .component('Modal', Modal)
     .component('VueButton', VueButton)
     .component('NavigationButton', NavigationButton)
@@ -92,6 +93,15 @@ app
 // App mounting
 app.mount('#app')
 
-// Theme
+// App inject for footer
+// TODO : Try to avoid those global injection
 import { useUserStore } from '@/stores/user'
-useUserStore().applyUserPrefs()
+import { useAppSettingsStore } from '@/stores/appSettings'
+
+const user = useUserStore()
+const appSettings = useAppSettingsStore()
+
+user.applyUserPrefs()
+
+app.provide('userStore', user)
+app.provide('appSettingsStore', appSettings)

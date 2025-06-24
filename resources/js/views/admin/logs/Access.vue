@@ -39,9 +39,11 @@
         </div>
         <AccessLogViewer :userId="props.userId" :lastOnly="false" :showSearch="true" :period="1" />
         <!-- footer -->
-        <VueFooter :showButtons="true">
-            <NavigationButton action="back" @goback="router.push({ name: 'admin.manageUser', params: { userId: props.userId }})" :previous-page-title="$t('title.admin.manageUser')" />
-            <NavigationButton action="close" @closed="router.push({ name: 'accounts' })" :current-page-title="$t('title.admin.logs.access')" />
+        <VueFooter>
+            <template #default>
+                <NavigationButton action="back" @goback="router.push({ name: 'admin.manageUser', params: { userId: props.userId }})" :previous-page-title="$t('title.admin.manageUser')" />
+                <NavigationButton action="close" @closed="router.push({ name: 'accounts' })" :current-page-title="$t('title.admin.logs.access')" />
+            </template>
         </VueFooter>
     </ResponsiveWidthWrapper>
 </template>

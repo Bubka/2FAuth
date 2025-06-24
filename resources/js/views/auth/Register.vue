@@ -116,7 +116,6 @@
                 <p>{{ $t('message.auth.forms.already_register') }}&nbsp;<RouterLink id="lnkSignIn" :to="{ name: 'login' }" class="is-link">{{ $t('message.auth.sign_in') }}</RouterLink></p>
             </div>
         </FormWrapper>
-        <!-- footer -->
         <VueFooter />
     </div>
 </template>

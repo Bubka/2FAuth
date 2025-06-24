@@ -28,8 +28,15 @@
                 <Spinner :isVisible="!qrcode" :type="'raw'" class="is-size-1" />
             </p>
         </div>
-        <VueFooter :showButtons="true" :internalFooterType="'modal'">
-            <NavigationButton action="close" @closed="router.push({ name: 'accounts' })" :current-page-title="$t('title.showQRcode')" />
+        <VueFooter>
+            <template #default>
+                <NavigationButton action="close" @closed="router.push({ name: 'accounts' })" :current-page-title="$t('title.showQRcode')" />
+            </template>
+            <template #subpart>
+                <!-- we add a subpart to hide the default slot value -->
+                <router-link v-if="$route.name != 'accounts'" id="lnkBackToHome" :to="{ name: 'accounts' }" class="has-text-grey">{{ $t('message.back_to_home') }}</router-link>
+                <span v-else>&nbsp;</span>
+            </template>
         </VueFooter>
     </div>
 </template>

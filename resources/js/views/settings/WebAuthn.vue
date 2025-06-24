@@ -180,8 +180,10 @@
                     />
                 </form>
                 <!-- footer -->
-                <VueFooter :showButtons="true">
-                    <NavigationButton action="close" @closed="router.push({ name: returnTo })" :current-page-title="$t('title.settings.webauthn.devices')" />
+                <VueFooter>
+                    <template #default>
+                        <NavigationButton action="close" @closed="router.push({ name: returnTo })" :current-page-title="$t('title.settings.webauthn.devices')" />
+                    </template>
                 </VueFooter>
             </FormWrapper>
         </div>

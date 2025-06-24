@@ -277,6 +277,5 @@
             </div>
         </div>
     </FormWrapper>
-    <!-- footer -->
-    <VueFooter/>
+    <VueFooter />
 </template>
