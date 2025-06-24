@@ -1,7 +1,7 @@
 <script setup>
-    import AdminTabs from '@/layouts/AdminTabs.vue'
+    import tabs from './tabs'
     import userService from '@/services/userService'
-    import { useNotify } from '@2fauth/ui'
+    import { useNotify, TabBar } from '@2fauth/ui'
     import { UseColorMode } from '@vueuse/components'
     import Spinner from '@/components/Spinner.vue'
     import SearchBox from '@/components/SearchBox.vue'
@@ -108,7 +108,7 @@
 
 <template>
     <div>
-        <AdminTabs activeTab="admin.users" />
+        <TabBar :tabs="tabs" :active-tab="'admin.users'" @tab-selected="(to) => router.push({ name: to })" />
         <div class="options-tabs">
             <FormWrapper>
                 <h4 class="title is-4 has-text-grey-light">{{ $t('message.admin.users') }}</h4>

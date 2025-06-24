@@ -128,7 +128,7 @@
     <!-- webauthn authentication -->
     <FormWrapper v-if="activeForm == 'webauthn'" title="message.auth.forms.webauthn_login" punchline="message.auth.welcome_to_2fauth">
         <div v-if="appSettings.enableSso == true && appSettings.useSsoOnly == true" class="notification is-warning has-text-centered" v-html="$t('message.auth.forms.sso_only_form_restricted_to_admin')" />
-        <div class="field">
+        <div class="block">
             {{ $t('message.auth.webauthn.use_security_device_to_sign_in') }}
         </div>
         <form id="frmWebauthnLogin" @submit.prevent="webauthnLogin" @keydown="form.onKeydown($event)">
@@ -168,7 +168,6 @@
         </div>
     </FormWrapper>
     <!-- SSO only links -->
-     <!-- TODO: compléter la punchline avec les lignes manquantes de auth.webauthn.webauthn_uses_trusted_devices -->
     <FormWrapper v-else-if="activeForm == 'sso'" title="message.auth.forms.sso_login" punchline="message.auth.welcome_to_2fauth">
         <div v-if="$2fauth.isDemoApp" class="notification is-info has-text-centered is-radiusless">
             {{ $t('message.auth.forms.welcome_to_demo_app') }}<br />

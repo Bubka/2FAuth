@@ -1,9 +1,9 @@
 <script setup>
-    import SettingTabs from '@/layouts/SettingTabs.vue'
+    import tabs from './tabs'
     import userService from '@/services/userService'
     import { useUserStore } from '@/stores/user'
     import { useGroups } from '@/stores/groups'
-    import { useNotify } from '@2fauth/ui'
+    import { useNotify, TabBar } from '@2fauth/ui'
     import { useAppSettingsStore } from '@/stores/appSettings'
     import { timezones } from './timezones'
     import { useI18n } from 'vue-i18n'
@@ -167,7 +167,7 @@
 
 <template>
     <div>
-        <SettingTabs activeTab="settings.options" />
+        <TabBar :tabs="tabs" :active-tab="'settings.options'" @tab-selected="(to) => router.push({ name: to })" />
         <div class="options-tabs">
             <FormWrapper>
                 <form>

@@ -1,9 +1,9 @@
 <script setup>
+    import tabs from './tabs'
     import Form from '@/components/formElements/Form'
     import userService from '@/services/userService'
-    import SettingTabs from '@/layouts/SettingTabs.vue'
     import { useAppSettingsStore } from '@/stores/appSettings'
-    import { useNotify } from '@2fauth/ui'
+    import { useNotify, TabBar } from '@2fauth/ui'
     import { UseColorMode } from '@vueuse/components'
     import { useUserStore } from '@/stores/user'
     import Spinner from '@/components/Spinner.vue'
@@ -150,7 +150,7 @@
 
 <template>
     <div>
-        <SettingTabs :activeTab="'settings.oauth.tokens'" />
+        <TabBar :tabs="tabs" :active-tab="'settings.oauth.tokens'" @tab-selected="(to) => router.push({ name: to })" />
         <div class="options-tabs">
             <FormWrapper>
                 <div v-if="isDisabled && user.oauth_provider" class="notification is-warning has-text-centered">

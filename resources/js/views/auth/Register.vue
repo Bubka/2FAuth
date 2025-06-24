@@ -85,6 +85,9 @@
     <div>
         <!-- webauthn registration -->
         <FormWrapper v-if="showWebauthnRegistration" title="message.auth.authentication" punchline="message.auth.webauthn.enhance_security_using_webauthn">
+            <div class="block">
+                {{ $t('message.auth.webauthn.webauthn_uses_trusted_devices') }}
+            </div>
             <div v-if="deviceId" class="field">
                 <label id="lblDeviceRegistrationSuccess" class="label mb-5">{{ $t('message.auth.webauthn.device_successfully_registered') }}&nbsp;<font-awesome-icon :icon="['fas', 'check']" /></label>
                 <form @submit.prevent="RenameDevice" @keydown="renameDeviceForm.onKeydown($event)">
@@ -104,8 +107,10 @@
             </div>
         </FormWrapper>
         <!-- User registration form -->
-         <!-- TODO: completer la punchline avec la ligne manquante auth.forms.you_need_an_account_to_go_further -->
         <FormWrapper v-else title="message.auth.register" punchline="message.auth.forms.welcome_to_2fauth">
+            <div class="block">
+                {{ $t('message.auth.forms.you_need_an_account_to_go_further') }}
+            </div>
             <form @submit.prevent="register" @keydown="registerForm.onKeydown($event)">
                 <FormField v-model="registerForm.name" fieldName="name" :errorMessage="registerForm.errors.get('name')" inputType="text" label="message.auth.forms.name" autocomplete="username" :maxLength="255" autofocus />
                 <FormField v-model="registerForm.email" fieldName="email" :errorMessage="registerForm.errors.get('email')" inputType="email" label="message.auth.forms.email" autocomplete="email" :maxLength="255" />

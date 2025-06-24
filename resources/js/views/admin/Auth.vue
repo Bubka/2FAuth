@@ -1,9 +1,9 @@
 <script setup>
-    import AdminTabs from '@/layouts/AdminTabs.vue'
+    import tabs from './tabs'
     import appSettingService from '@/services/appSettingService'
     import { useAppSettingsUpdater } from '@/composables/appSettingsUpdater'
     import { useAppSettingsStore } from '@/stores/appSettings'
-    import { useNotify } from '@2fauth/ui'
+    import { useNotify, TabBar } from '@2fauth/ui'
     import { useI18n } from 'vue-i18n'
     import { useErrorHandler } from '@2fauth/stores'
 
@@ -76,7 +76,7 @@
 
 <template>
     <div>
-        <AdminTabs activeTab="admin.auth" />
+        <TabBar :tabs="tabs" :active-tab="'admin.auth'" @tab-selected="(to) => router.push({ name: to })" />
         <div class="options-tabs">
             <FormWrapper>
                 <form>

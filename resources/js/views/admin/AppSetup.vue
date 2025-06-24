@@ -1,9 +1,9 @@
 <script setup>
-    import AdminTabs from '@/layouts/AdminTabs.vue'
+    import tabs from './tabs'
     import systemService from '@/services/systemService'
     import { useAppSettingsUpdater } from '@/composables/appSettingsUpdater'
     import { useAppSettingsStore } from '@/stores/appSettings'
-    import { useNotify } from '@2fauth/ui'
+    import { useNotify, TabBar } from '@2fauth/ui'
     import { useUserStore } from '@/stores/user'
     import VersionChecker from '@/components/VersionChecker.vue'
     import CopyButton from '@/components/CopyButton.vue'
@@ -70,7 +70,7 @@
 
 <template>
     <div>
-        <AdminTabs activeTab="admin.appSetup" />
+        <TabBar :tabs="tabs" :active-tab="'admin.appSetup'" @tab-selected="(to) => router.push({ name: to })" />
         <div class="options-tabs">
             <FormWrapper>
                 <form>

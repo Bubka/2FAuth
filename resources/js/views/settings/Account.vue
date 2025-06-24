@@ -1,8 +1,8 @@
 <script setup>
+    import tabs from './tabs'
     import Form from '@/components/formElements/Form'
-    import SettingTabs from '@/layouts/SettingTabs.vue'
     import { useUserStore } from '@/stores/user'
-    import { useNotify } from '@2fauth/ui'
+    import { useNotify, TabBar } from '@2fauth/ui'
     import { useI18n } from 'vue-i18n'
     import { useErrorHandler } from '@2fauth/stores'
 
@@ -111,7 +111,7 @@
 
 <template>
     <div>
-        <SettingTabs :activeTab="'settings.account'" />
+        <TabBar :tabs="tabs" :active-tab="'settings.account'" @tab-selected="(to) => router.push({ name: to })" />
         <div class="options-tabs">
             <FormWrapper>
                 <div v-if="user.isAdmin" class="notification is-warning">

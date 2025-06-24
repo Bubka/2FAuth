@@ -39,8 +39,10 @@
 </script>
 
 <template>
-    <!-- TODO: compléter la punchline avec la ligne manquante de auth.webauthn.ensure_you_open_mail_in_trusted_device -->
     <FormWrapper :title="isWebauthnReset ? 'message.auth.webauthn.account_recovery' : 'message.auth.forms.reset_password'" :punchline="isWebauthnReset ? 'message.auth.webauthn.recovery_punchline' : 'message.auth.forms.reset_punchline'">
+        <div v-if="isWebauthnReset" class="block">
+            {{ $t('message.auth.webauthn.ensure_you_open_mail_in_trusted_device') }}
+        </div>
         <form @submit.prevent="requestPasswordReset" @keydown="form.onKeydown($event)">
             <FormField v-model="form.email" fieldName="email" :errorMessage="form.errors.get('email')" label="message.auth.forms.email" autofocus />
             <FormButtons

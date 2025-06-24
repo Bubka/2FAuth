@@ -1,10 +1,10 @@
 <script setup>
-    import SettingTabs from '@/layouts/SettingTabs.vue'
+    import tabs from './tabs'
     import userService from '@/services/userService'
     import { webauthnService } from '@/services/webauthn/webauthnService'
     import { useAppSettingsStore } from '@/stores/appSettings'
     import { useUserStore } from '@/stores/user'
-    import { useNotify } from '@2fauth/ui'
+    import { useNotify, TabBar } from '@2fauth/ui'
     import { UseColorMode } from '@vueuse/components'
     import Spinner from '@/components/Spinner.vue'
     import { useI18n } from 'vue-i18n'
@@ -127,7 +127,7 @@
 
 <template>
     <div>
-        <SettingTabs :activeTab="'settings.webauthn.devices'" />
+        <TabBar :tabs="tabs" :active-tab="'settings.webauthn.devices'" @tab-selected="(to) => router.push({ name: to })" />
         <div class="options-tabs">
             <FormWrapper>
                 <div v-if="isDisabled && user.oauth_provider" class="notification is-warning has-text-centered">

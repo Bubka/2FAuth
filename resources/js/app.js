@@ -40,8 +40,6 @@ app.use(router)
 app.use(Notifications)
 
 // Global components registration
-import ResponsiveWidthWrapper from '@/layouts/ResponsiveWidthWrapper.vue'
-import FormWrapper from '@/layouts/FormWrapper.vue'
 import Kicker           from '@/components/Kicker.vue'
 
 import {
@@ -57,8 +55,10 @@ import {
 } from '@2fauth/formcontrols'
 
 import {
+    FormWrapper,
+    Modal,
+    ResponsiveWidthWrapper,
     VueFooter,
-    Modal
 } from '@2fauth/ui'
 
 app
