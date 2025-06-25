@@ -1,10 +1,9 @@
 <script setup>
     import tabs from './tabs'
     import userService from '@/services/userService'
-    import { useNotify, TabBar } from '@2fauth/ui'
+    import { useNotify, TabBar, SearchBox } from '@2fauth/ui'
     import { UseColorMode } from '@vueuse/components'
     import Spinner from '@/components/Spinner.vue'
-    import SearchBox from '@/components/SearchBox.vue'
     import { useErrorHandler } from '@2fauth/stores'
 
     const errorHandler = useErrorHandler()

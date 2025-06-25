@@ -49,7 +49,7 @@
                 {{ group.name }}
                 <!-- delete icon -->
                 <UseColorMode v-slot="{ mode }">
-                    <button type="button" class="button tag is-pulled-right" :class="mode == 'dark' ? 'is-dark' : 'is-white'" @click="groups.delete(group.id)"  :title="$t('message.delete')">
+                    <button type="button" class="button tag is-pulled-right" :class="mode == 'dark' ? 'is-dark' : 'is-white'" @click="groups.remove(group.id)"  :title="$t('message.delete')">
                         {{ $t('message.delete') }}
                     </button>
                 </UseColorMode>

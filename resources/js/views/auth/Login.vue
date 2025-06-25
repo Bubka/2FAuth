@@ -65,10 +65,10 @@
             router.push({ name: 'accounts' })
         })
         .catch(error => {
-            if( error.response.status === 401 ) {
+            if( error.response?.status === 401 ) {
                 notify.alert({text: t('message.auth.forms.authentication_failed'), duration: 10000 })
             }
-            else if( error.response.status !== 422 ) {
+            else if( error.response?.status !== 422 ) {
                 errorHandler.parse(error)
                 router.push({ name: 'genericError' })
             }

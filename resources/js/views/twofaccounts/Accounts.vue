@@ -1,9 +1,7 @@
 <script setup>
     import twofaccountService from '@/services/twofaccountService'
     import TotpLooper from '@/components/TotpLooper.vue'
-    import GroupSwitch from '@/components/GroupSwitch.vue'
     import DestinationGroupSelector from '@/components/DestinationGroupSelector.vue'
-    import SearchBox from '@/components/SearchBox.vue'
     import Toolbar from '@/components/Toolbar.vue'
     import OtpDisplay from '@/components/OtpDisplay.vue'
     import ActionButtons from '@/components/ActionButtons.vue'
@@ -11,7 +9,7 @@
     import Dots from '@/components/Dots.vue'
     import { UseColorMode } from '@vueuse/components'
     import { useUserStore } from '@/stores/user'
-    import { useNotify } from '@2fauth/ui'
+    import { useNotify, SearchBox, GroupSwitch } from '@2fauth/ui'
     import { useBusStore } from '@/stores/bus'
     import { useTwofaccounts } from '@/stores/twofaccounts'
     import { useGroups } from '@/stores/groups'
@@ -331,14 +329,28 @@
         twofaccounts.selectNone()
     }
 
+    /**
+     * Saves the active group to the backends
+     */
+    function saveActiveGroup() {
+        if( user.preferences.rememberActiveGroup ) {
+            userService.updatePreference('activeGroup', user.preferences.activeGroup)
+        }
+    }
+
 </script>
 
 <template>
     <UseColorMode v-slot="{ mode }">
     <div>
-        <!-- TODO: Persist the new active group by listening to the active-group-changed event -->
-        <!-- TODO: Add the link to the group management view in the GroupSwitch slot -->
-        <GroupSwitch v-if="showGroupSwitch" v-model:showGroupSwitch="showGroupSwitch" v-model:groups="groups.items" />
+        <GroupSwitch
+            v-if="showGroupSwitch"
+            v-model:is-visible="showGroupSwitch"
+            v-model:active-group="user.preferences.activeGroup"
+            :groups="groups.items"
+            @active-group-changed="saveActiveGroup">
+                <RouterLink :to="{ name: 'groups' }" >{{ $t('message.groups.manage_groups') }}</RouterLink>
+        </GroupSwitch>
         <DestinationGroupSelector
             v-if="showDestinationGroupSelector"
             v-model:showDestinationGroupSelector="showDestinationGroupSelector"
@@ -370,7 +382,7 @@
                             </div>
                             <div class="column" v-else>
                                 <button type="button" id="btnShowGroupSwitch" :title="$t('message.groups.show_group_selector')" tabindex="1" class="button is-text is-like-text" :class="{'has-text-grey' : mode != 'dark'}" @click.stop="showGroupSwitch = !showGroupSwitch">
-                                    {{ groups.current }} ({{ twofaccounts.filteredCount }})&nbsp;
+                                    {{ groups.current ? groups.current : $t('message.all') }} ({{ twofaccounts.filteredCount }})&nbsp;
                                     <FontAwesomeIcon  :icon="['fas', 'caret-down']" />
                                 </button>
                             </div>

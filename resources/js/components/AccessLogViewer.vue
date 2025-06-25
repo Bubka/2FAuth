@@ -1,10 +1,10 @@
 <script setup>
-    import SearchBox from '@/components/SearchBox.vue'
     import userService from '@/services/userService'
     import Spinner from '@/components/Spinner.vue'
     import { FontAwesomeLayers } from '@fortawesome/vue-fontawesome'
     import { UseColorMode } from '@vueuse/components'
     import { useErrorHandler } from '@2fauth/stores'
+    import { SearchBox } from '@2fauth/ui'
 
     const errorHandler = useErrorHandler()
     const $2fauth = inject('2fauth')
