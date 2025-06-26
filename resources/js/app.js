@@ -40,8 +40,6 @@ app.use(router)
 app.use(Notifications)
 
 // Global components registration
-import Kicker           from '@/components/Kicker.vue'
-
 import {
     FormField,
     FormPasswordField,
@@ -76,7 +74,6 @@ app
     .component('FormToggle', FormToggle)
     .component('FormCheckbox', FormCheckbox)
     .component('FormButtons', FormButtons)
-    .component('Kicker', Kicker)
 
 // Global error handling
 // import { useNotify } from '@2fauth/ui'
@@ -90,9 +87,6 @@ app
 // Helpers
 // app.config.globalProperties.$helpers = helpers
 
-// App mounting
-app.mount('#app')
-
 // App inject for footer
 // TODO : Try to avoid those global injection
 import { useUserStore } from '@/stores/user'
@@ -105,3 +99,6 @@ user.applyUserPrefs()
 
 app.provide('userStore', user)
 app.provide('appSettingsStore', appSettings)
+
+// App mounting
+app.mount('#app')

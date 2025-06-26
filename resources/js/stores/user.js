@@ -78,7 +78,7 @@ export const useUserStore = defineStore({
                 authService.logout({ returnError: true }).then(() => {
                     if (kicked) {
                         notify.clear()
-                        notify.warn({ text: t('message.auth.autolock_triggered_punchline'), duration:-1 })
+                        notify.warn({ text: this.$i18n.global.t('message.auth.autolock_triggered_punchline'), duration:-1 })
                     }
                     this.tossOut()
                 })
@@ -163,7 +163,7 @@ export const useUserStore = defineStore({
             })
             .catch(error => {
                 const notify = useNotify()
-                notify.alert({ text: t('error.data_cannot_be_refreshed_from_server') })
+                notify.alert({ text: this.$i18n.global.t('error.data_cannot_be_refreshed_from_server') })
             })
         }
 
