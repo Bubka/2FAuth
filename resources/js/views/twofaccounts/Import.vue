@@ -1,7 +1,6 @@
 <script setup>
     import Form from '@/components/formElements/Form'
     import twofaccountService from '@/services/twofaccountService'
-    import Spinner from '@/components/Spinner.vue'
     import { FormTextarea } from '@2fauth/formcontrols'
     import { useNotify, OtpDisplay } from '@2fauth/ui'
     import { useUserStore } from '@/stores/user'
@@ -94,9 +93,10 @@
         })
         .catch(error => {
             notify.alert({ text: t(error.response.data.message) })
-        });
-
-        isFetching.value = false
+        })
+        .finally(() => {
+            isFetching.value = false
+        })
     }
 
     /**
@@ -196,8 +196,10 @@
             }
             else notify.alert({ text: error.response.data.message})
         })
+        .finally(() => {
+            isFetching.value = false
+        })
         
-        isFetching.value = false
     }
 
     /**
@@ -219,8 +221,9 @@
             }
             else notify.alert({ text: error.response.data.message})
         })
-        
-        isFetching.value = false
+        .finally(() => {
+            isFetching.value = false
+        })
     }
 
     /**
@@ -251,7 +254,7 @@
             <h1 class="title has-text-grey-dark">
                 {{ $t('message.twofaccounts.import.import') }}
             </h1>
-            <div v-if="!isFetching && exportedAccounts.length == 0">
+            <div v-if="!isFetching && exportedAccounts.length === 0">
                 <div class="block is-size-7-mobile">
                     <p class="mb-2">{{ $t('message.twofaccounts.import.import_legend') }}</p>
                     <p>{{ $t('message.twofaccounts.import.import_legend_afterpart') }}</p>
@@ -383,10 +386,10 @@
                             <td><FontAwesomeIcon :icon="['fas', 'circle-check']" /></td>
                         </tr>
                     </tbody>
-                </table>
+                </table>           
             </div>
             <div v-else-if="isFetching && exportedAccounts.length === 0">
-                <Spinner :type="'fullscreen-overlay'" :isVisible="true" :message="'message.twofaccounts.import.parsing_data'" />
+                <Spinner :type="'fullscreen-overlay'" :isVisible="true" message="message.twofaccounts.import.parsing_data" />
             </div>
             <div v-else>
                 <div class="block is-size-7-mobile">

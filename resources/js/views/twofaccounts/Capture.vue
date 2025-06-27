@@ -1,6 +1,5 @@
 <script setup>
     import Form from '@/components/formElements/Form'
-    import Spinner from '@/components/Spinner.vue'
     import QrContentDisplay from '@/components/QrContentDisplay.vue'
     import { useBusStore } from '@/stores/bus'
     import { UseColorMode } from '@vueuse/components'
@@ -177,7 +176,7 @@
                                     <p v-else class="is-size-7">{{ $t('message.twofaccounts.stream.' + errorPhrase + '.solution') }}</p>
                                 </div>
                                 <span v-else class="is-size-4" :class="mode == 'dark' ? 'has-text-light':'has-text-grey-dark'">
-                                    <Spinner :isVisible="true" :type="'raw'" class="is-size-1" />
+                                    <Spinner :isVisible="true" :type="'raw'" :rawSize="32" />
                                 </span>
                             </UseColorMode>
                         </div>

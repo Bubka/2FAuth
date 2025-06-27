@@ -1,6 +1,5 @@
 <script setup>
     import twofaccountService from '@/services/twofaccountService'
-    import Spinner from '@/components/Spinner.vue'
 
     const router = useRouter()
     const route = useRoute()
@@ -25,7 +24,7 @@
         <div class="modal-content modal-with-footer">
             <p class="has-text-centered m-5">
                 <img v-if="qrcode" :src="qrcode" class="qrcode has-background-light" :alt="$t('message.image_of_qrcode_to_scan')">
-                <Spinner :isVisible="!qrcode" :type="'raw'" class="is-size-1" />
+                <Spinner :isVisible="!qrcode" :type="'raw'" :rawSize="32" />
             </p>
         </div>
         <VueFooter>

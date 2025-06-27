@@ -6,7 +6,6 @@
     import { useUserStore } from '@/stores/user'
     import { useNotify, TabBar } from '@2fauth/ui'
     import { UseColorMode } from '@vueuse/components'
-    import Spinner from '@/components/Spinner.vue'
     import { useI18n } from 'vue-i18n'
     import { useErrorHandler } from '@2fauth/stores'
 
@@ -162,7 +161,7 @@
                         {{ $t('message.auth.webauthn.revoking_a_device_is_permanent')}}
                     </div>
                 </div>
-                <Spinner :isVisible="isFetching && credentials.length === 0" />
+                <Spinner :isVisible="isFetching && credentials.length === 0" type="list-loading" />
                 <h4 class="title is-4 pt-6 has-text-grey-light">{{ $t('message.auth.webauthn.options') }}</h4>
                 <div class="field">
                     {{ $t('message.auth.webauthn.need_a_security_device_to_enable_options')}}

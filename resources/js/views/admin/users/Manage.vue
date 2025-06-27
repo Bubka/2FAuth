@@ -202,11 +202,8 @@
             {{ $t('message.admin.user_management') }}
         </h1>
         <!-- loader -->
-        <div v-if="isFetching || ! managedUser" class="has-text-centered">
-            <span class="is-size-4">
-                <FontAwesomeIcon :icon="['fas', 'spinner']" spin />
-            </span>
-        </div>
+        <Spinner v-if="isFetching || ! managedUser" :isVisible="true" type="fullscreen-overlay" message="message.fetching_data" />
+        <!-- user info -->
         <div v-else>
             <div class="mb-6" :class="managedUser.info.is_admin ? 'is-left-bordered-warning' : 'is-left-bordered-link'">
                 <p class="title is-4" :class="{ 'has-text-grey-lighter' : mode == 'dark' }">
@@ -291,7 +288,7 @@
             <!-- last access -->
             <div class="block">
                 <h3 class="title is-5 has-text-grey-light mb-2">{{ $t('message.admin.last_accesses') }}</h3>
-                <AccessLogViewer :userId="props.userId" :lastOnly="true" @has-more-entries="showFullLogLink = true"/>
+                <AccessLogViewer v-if="managedUser" :userId="props.userId" :lastOnly="true" @has-more-entries="showFullLogLink = true"/>
             </div>
             <div v-if="showFullLogLink" class="block is-size-6 is-size-7-mobile has-text-grey">
                 {{ $t('message.admin.access_log_has_more_entries') }} <router-link id="lnkFullLogs" :to="{ name: 'admin.logs.access', params: { userId: props.userId }}" >

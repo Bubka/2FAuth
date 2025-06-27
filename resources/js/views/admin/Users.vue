@@ -3,7 +3,6 @@
     import userService from '@/services/userService'
     import { useNotify, TabBar, SearchBox } from '@2fauth/ui'
     import { UseColorMode } from '@vueuse/components'
-    import Spinner from '@/components/Spinner.vue'
     import { useErrorHandler } from '@2fauth/stores'
 
     const errorHandler = useErrorHandler()
@@ -166,10 +165,10 @@
                         {{ $t('message.settings.revoking_a_token_is_permanent')}}
                     </div> -->
                 </div>
+                <Spinner v-else-if="isFetching" :isVisible="true" type="list-loading" />
                 <div v-else class="mt-4 pl-3">
                     {{ $t('message.no_result') }}
                 </div>
-                <Spinner :isVisible="isFetching && users.length === 0" />
                 <!-- footer -->
                 <VueFooter>
                     <template #default>

@@ -9,11 +9,11 @@
 
     const isFetching = ref(false)
 
-    onMounted(async () => {
+    onMounted(() => {
         // We want the store to be up-to-date to manage the groups
         isFetching.value = groups.isEmpty
 
-        await groups.fetch()
+        groups.fetch()
         .finally(() => {
             isFetching.value = false
         })
@@ -63,11 +63,7 @@
                 {{ $t('message.groups.deleting_group_does_not_delete_accounts')}}
             </div>
         </div>
-        <div v-if="isFetching && groups.isEmpty" class="has-text-centered">
-            <span class="is-size-4">
-                <FontAwesomeIcon :icon="['fas', 'spinner']" spin />
-            </span>
-        </div>
+        <Spinner :isVisible="isFetching && groups.isEmpty" type="list-loading" />
         <!-- footer -->
         <VueFooter>
             <template #default>

@@ -6,7 +6,6 @@
     import { useNotify, TabBar } from '@2fauth/ui'
     import { UseColorMode } from '@vueuse/components'
     import { useUserStore } from '@/stores/user'
-    import Spinner from '@/components/Spinner.vue'
     import { useI18n } from 'vue-i18n'
     import { useErrorHandler } from '@2fauth/stores'
 
@@ -194,7 +193,7 @@
                         {{ $t('message.settings.revoking_a_token_is_permanent')}}
                     </div>
                 </div>
-                <Spinner :isVisible="isFetching && tokens.length === 0" />
+                <Spinner :isVisible="isFetching && tokens.length === 0" type="list-loading" />
                 <!-- footer -->
                 <VueFooter>
                     <template #default>

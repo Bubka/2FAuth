@@ -57,12 +57,14 @@ import {
     FormWrapper,
     Modal,
     ResponsiveWidthWrapper,
+    Spinner,
     VueFooter,
 } from '@2fauth/ui'
 
 app
     .component('FontAwesomeIcon', FontAwesomeIcon)
     .component('ResponsiveWidthWrapper', ResponsiveWidthWrapper)
+    .component('Spinner', Spinner)
     .component('FormWrapper', FormWrapper)
     .component('VueFooter', VueFooter)
     .component('Modal', Modal)

@@ -1,6 +1,5 @@
 <script setup>
     import userService from '@/services/userService'
-    import Spinner from '@/components/Spinner.vue'
     import { FontAwesomeLayers } from '@fortawesome/vue-fontawesome'
     import { UseColorMode } from '@vueuse/components'
     import { useErrorHandler } from '@2fauth/stores'
@@ -165,7 +164,11 @@
             </div>
         </div>
     </nav>
-    <div v-if="visibleAuthentications.length > 0">
+    <Spinner v-if="isFetching" :isVisible="true" :type="'list-loading'" />
+    <div v-else-if="authentications.length == 0" class="mt-4">
+        {{ $t('message.no_entry_yet') }}
+    </div>
+    <div v-else-if="visibleAuthentications.length > 0">
         <div v-for="authentication in visibleAuthentications" :key="authentication.id" class="list-item is-size-6 is-size-7-mobile has-text-grey is-flex is-justify-content-space-between">
             <UseColorMode v-slot="{ mode }">
                 <div>
@@ -208,11 +211,7 @@
             </UseColorMode>
         </div>
     </div>
-    <div v-else-if="authentications.length == 0" class="mt-4">
-        {{ $t('message.no_entry_yet') }}
-    </div>
     <div v-else class="mt-5 pl-3">
         {{ $t('message.no_result') }}
     </div>
-    <Spinner :isVisible="isFetching" />
 </template>
