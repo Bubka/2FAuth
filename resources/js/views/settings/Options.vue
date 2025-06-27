@@ -105,14 +105,16 @@
     })
 
     onMounted(() => {
-        groups.items.forEach((group) => {
-            if( group.id > 0 ) {
-                groupsList.value.push({
-                    text: group.name,
-                    value: group.id
-                })
-            }
-        })
+        if (groups.items) {
+            groups.items.forEach((group) => {
+                if( group.id > 0 ) {
+                    groupsList.value.push({
+                        text: group.name,
+                        value: group.id
+                    })
+                }
+            })
+        }
 
         user.refreshPreferences()
     })
