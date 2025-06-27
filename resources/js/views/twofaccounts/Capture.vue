@@ -57,8 +57,7 @@
         } else if (error.name === 'StreamApiNotSupportedError') {
             errorPhrase.value = 'stream_api_not_supported'
         } else {
-            errorHandler.parse(error)
-            router.push({ name: 'genericError' })
+            errorHandler.show(error)
         }
     }
 

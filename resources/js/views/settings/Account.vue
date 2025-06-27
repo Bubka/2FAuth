@@ -48,8 +48,7 @@
             }
             else if( error.response.status !== 422 ) {
                 // TODO : check if we should return error.response or error
-                errorHandler.parse(error.response)
-                router.push({ name: 'genericError' })
+                errorHandler.show(error.response)
             }
         })
     }
@@ -72,8 +71,7 @@
             }
             else if( error.response.status !== 422 ) {
                 // TODO : check if we should return error.response or error
-                errorHandler.parse(error.response)
-                router.push({ name: 'genericError' })
+                errorHandler.show(error.response)
             }
         })
     }
@@ -95,8 +93,7 @@
                 }
                 else if( error.response.status !== 422 ) {
                     // TODO : check if we should return error.response or error
-                    errorHandler.parse(error.response)
-                    router.push({ name: 'genericError' })
+                    errorHandler.show(error.response)
                 }
             })
         }

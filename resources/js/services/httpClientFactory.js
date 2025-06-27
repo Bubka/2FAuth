@@ -62,9 +62,7 @@ export const httpClientFactory = (endpoint = 'api') => {
             }
             
             if (error.response && [407].includes(error.response.status)) {
-                useErrorHandler().parse(error)
-                // TODO : Check if calling router here works as expected
-                router.push({ name: 'genericError' })
+                useErrorHandler().show(error)
                 return new Promise(() => {})
             }
 
@@ -85,14 +83,11 @@ export const httpClientFactory = (endpoint = 'api') => {
 
             // Not found
             if (error.response.status === 404) {
-                // TODO : Check if calling router here works as expected
-                router.push({ name: '404' })
+                useErrorHandler().notFound()
                 return new Promise(() => {})
             }
 
-            // TODO : Check if calling router here works as expected
-            useErrorHandler().parse(error)
-            router.push({ name: 'genericError' })
+            useErrorHandler().show(error)
             return new Promise(() => {})
         }
     )

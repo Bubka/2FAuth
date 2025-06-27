@@ -89,8 +89,7 @@
             users.value = response.data
         })
         .catch(error => {
-            errorHandler.parse(error)
-            router.push({ name: 'genericError' })
+            errorHandler.show(error)
         })
         .finally(() => {
             isFetching.value = false

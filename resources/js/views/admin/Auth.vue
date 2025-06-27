@@ -48,8 +48,7 @@
             })
             .catch(error => {
                 if( error.response.status !== 404 ) {
-                    errorHandler.parse(error)
-                    router.push({ name: 'genericError' })
+                    errorHandler.show(error)
                 }
             })
         }

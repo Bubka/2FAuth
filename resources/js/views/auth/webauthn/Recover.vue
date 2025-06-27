@@ -37,8 +37,7 @@
                 notify.alert({ text: error.response.data.message, duration:-1 })
             }
             else  {
-                errorHandler.parse(error)
-                router.push({ name: 'genericError' })
+                errorHandler.show(error)
             }
         })
     }

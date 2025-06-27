@@ -34,8 +34,7 @@
                 notify.alert({ text: error.response.data.resetFailed, duration:-1 })
             }
             else if( error.response.status !== 422 ) {
-                errorHandler.parse(error)
-                router.push({ name: 'genericError' })
+                errorHandler.show(error)
             }
         })
     }

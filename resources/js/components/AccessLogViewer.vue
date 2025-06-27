@@ -106,8 +106,7 @@
             orderIsDesc.value == true ? sortDesc() : sortAsc()
         })
         .catch(error => {
-            errorHandler.parse(error)
-            router.push({ name: 'genericError' })
+            errorHandler.show(error)
         })
         .finally(() => {
             isFetching.value = false

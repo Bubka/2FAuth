@@ -42,8 +42,7 @@
             bus.username = managedUser.value.info.name
         })
         .catch(error => {
-            errorHandler.parse(error)
-            router.push({ name: 'genericError' })
+            errorHandler.show(error)
         })
         .finally(() => {
             isFetching.value = false
@@ -83,8 +82,7 @@
                     notify.alert({ text: error.response.data.reason })
                 }
                 else {
-                    errorHandler.parse(error)
-                    router.push({ name: 'genericError' })
+                    errorHandler.show(error)
                 }
             })
         }
@@ -124,8 +122,7 @@
             }
             else {
                 // TODO : check if we should return error.response or error
-                errorHandler.parse(error.response)
-                router.push({ name: 'genericError' })
+                errorHandler.show(error.response)
             }
         })
     }
@@ -149,8 +146,7 @@
                 }
                 else {
                     // TODO : check if we should return error.response or error
-                    errorHandler.parse(error)
-                    router.push({ name: 'genericError' })
+                    errorHandler.show(error)
                 }
             })
         }

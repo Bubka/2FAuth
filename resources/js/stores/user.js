@@ -87,8 +87,7 @@ export const useUserStore = defineStore({
                     // backend has already detect inactivity on its side. In this case we
                     // don't want any error to be displayed.
                     if (error.response.status !== 401) {
-                        errorHandler.parse(error)
-                        router.push({ name: 'genericError' })
+                        errorHandler.show(error)
                     }
                     else this.tossOut()
                 })

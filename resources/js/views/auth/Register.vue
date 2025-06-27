@@ -59,8 +59,7 @@
                 notify.alert({ text: error.response.data.message })
             }
             else {
-                errorHandler.parse(error)
-                router.push({ name: 'genericError' })
+                errorHandler.show(error)
             }
         })
     }

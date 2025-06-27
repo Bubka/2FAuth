@@ -28,8 +28,9 @@ app.use(i18n)
 // Stores
 const pinia = createPinia()
 pinia.use(({ store }) => {
-    store.$2fauth = $2fauth;
+    store.$2fauth = $2fauth
     store.$i18n = i18n
+    store.$router = markRaw(router)
 })
 app.use(pinia)
 

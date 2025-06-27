@@ -59,8 +59,7 @@
                 notify.alert({ text: error.response.data.message })
             }
             else {
-                errorHandler.parse(error)
-                router.push({ name: 'genericError' })
+                errorHandler.show(error)
             }
         })
     }
@@ -109,8 +108,7 @@
                 // The form is already disabled (see isDisabled) so we do nothing more here
             }
             else {
-                errorHandler.parse(error)
-                router.push({ name: 'genericError' })
+                errorHandler.show(error)
             }
         })
         .finally(() => {

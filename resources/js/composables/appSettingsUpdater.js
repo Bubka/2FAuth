@@ -25,8 +25,7 @@ export async function useAppSettingsUpdater(setting, value, returnValidationErro
             error = err
         }
         else {
-            useErrorHandler().parse(err)
-            router.push({ name: 'genericError' })
+            useErrorHandler().show(err)
         }
     })
 

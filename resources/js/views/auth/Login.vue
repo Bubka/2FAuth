@@ -69,8 +69,7 @@
                 notify.alert({text: t('message.auth.forms.authentication_failed'), duration: 10000 })
             }
             else if( error.response?.status !== 422 ) {
-                errorHandler.parse(error)
-                router.push({ name: 'genericError' })
+                errorHandler.show(error)
             }
         })
         .finally(() => {
@@ -113,8 +112,7 @@
                 form.errors.set(form.extractErrors(error.response))
             }
             else {
-                errorHandler.parse(error)
-                router.push({ name: 'genericError' })
+                errorHandler.show(error)
             }
         })
         .finally(() => {
