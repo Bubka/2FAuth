@@ -1,14 +1,12 @@
 <script setup>
     import twofaccountService from '@/services/twofaccountService'
-    import TotpLooper from '@/components/TotpLooper.vue'
     import DestinationGroupSelector from '@/components/DestinationGroupSelector.vue'
     import Toolbar from '@/components/Toolbar.vue'
     import ActionButtons from '@/components/ActionButtons.vue'
     import ExportButtons from '@/components/ExportButtons.vue'
-    import Dots from '@/components/Dots.vue'
     import { UseColorMode } from '@vueuse/components'
     import { useUserStore } from '@/stores/user'
-    import { useNotify, SearchBox, GroupSwitch, OtpDisplay } from '@2fauth/ui'
+    import { useNotify, SearchBox, GroupSwitch, OtpDisplay, Dots, DotsController } from '@2fauth/ui'
     import { useBusStore } from '@/stores/bus'
     import { useTwofaccounts } from '@/stores/twofaccounts'
     import { useGroups } from '@/stores/groups'
@@ -50,7 +48,7 @@
         counter: null,
         image: ''
     })
-    const looperRefs = ref([])
+    const dotsControllers = ref([])
     const dotsRefs = ref([])
 
     let stopSortable
@@ -255,7 +253,7 @@
     }
 
     /**
-     * Updates "Always On" OTPs for all TOTP accounts and (re)starts loopers
+     * Updates "Always On" OTPs for all TOTP accounts and (re)starts dots controllers
      */
     async function updateTotps(period) {
         let fetchPromise
@@ -299,11 +297,11 @@
                 }
             })
 
-            // Loopers restart at new timestamp
-            looperRefs.value.forEach((looper) => {
-                if (looper.props.period == period || period == undefined) {
+            // dots controllers restart at new timestamp
+            dotsControllers.value.forEach((dotsController) => {
+                if (dotsController.props.period == period || period == undefined) {
                     nextTick().then(() => {
-                        looper.startLoop(generatedAt)
+                        dotsController.startStepping(generatedAt)
                     })
                 }
             })
@@ -428,19 +426,19 @@
                 @error="(error) => errorHandler.show(error)"
             />
         </Modal>
-        <!-- totp loopers -->
+        <!-- dots controllers -->
         <span v-if="!user.preferences.getOtpOnRequest">
-            <TotpLooper
+            <DotsController
                 v-for="period in twofaccounts.periods"
+                ref="dotsControllers"
                 :key="period.period"
                 :autostart="false"
                 :period="period.period"
                 :generated_at="period.generated_at"
-                v-on:loop-ended="updateTotps(period.period)"
-                v-on:loop-started="turnDotsOn(period.period, $event)"
-                v-on:stepped-up="turnDotsOn(period.period, $event)"
-                ref="looperRefs"
-            ></TotpLooper>
+                @stepping-ended="updateTotps(period.period)"
+                @stepping-started="turnDotsOn(period.period, $event)"
+                @stepped-up="turnDotsOn(period.period, $event)"
+            ></DotsController>
         </span>
         <!-- show accounts list -->
         <div class="container" v-if="showAccounts" :class="bus.inManagementMode ? 'is-edit-mode' : ''">
@@ -477,8 +475,9 @@
                                             </span>
                                             <Dots
                                                 v-if="account.otp_type.includes('totp')"
-                                                :class="'condensed is-inline-block'"
                                                 ref="dotsRefs"
+                                                :class="'is-inline-block'"
+                                                :isCondensed="true"
                                                 :period="account.period" />
                                         </div>
                                     </div>
