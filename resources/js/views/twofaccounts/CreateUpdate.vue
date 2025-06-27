@@ -1,6 +1,5 @@
 <script setup>
     import Form from '@/components/formElements/Form'
-    import OtpDisplay from '@/components/OtpDisplay.vue'
     import QrContentDisplay from '@/components/QrContentDisplay.vue'
     import { FormProtectedField } from '@2fauth/formcontrols'
     import twofaccountService from '@/services/twofaccountService'
@@ -8,7 +7,7 @@
     import { useTwofaccounts } from '@/stores/twofaccounts'
     import { useGroups } from '@/stores/groups'
     import { useBusStore } from '@/stores/bus'
-    import { useNotify } from '@2fauth/ui'
+    import { useNotify, OtpDisplay } from '@2fauth/ui'
     import { UseColorMode } from '@vueuse/components'
     import { useI18n } from 'vue-i18n'
     import { useErrorHandler } from '@2fauth/stores'
@@ -58,11 +57,17 @@
             { text: 'message.settings.forms.dark', value: 'dark' },
         ]
     }
-    const otpDisplayProps = ref({
+    const accountParams = ref({
         otp_type: '',
-        account : '',
-        service : '',
-        icon : '',
+        account: '',
+        service: '',
+        icon: '',
+        secret: '',
+        digits: null,
+        algorithm: '',
+        period: null,
+        counter: null,
+        image: ''
     })
     const otp_types = [
         { text: 'TOTP', value: 'totp' },
@@ -275,10 +280,10 @@
     function showOTP(otp) {
         // Data that should be displayed quickly by the OtpDisplay
         // component are passed using props.
-        otpDisplayProps.value.otp_type = otp.otp_type
-        otpDisplayProps.value.service = otp.service
-        otpDisplayProps.value.account = otp.account
-        otpDisplayProps.value.icon = otp.icon
+        accountParams.value.otp_type = otp.otp_type
+        accountParams.value.service = otp.service
+        accountParams.value.account = otp.account
+        accountParams.value.icon = otp.icon
 
         nextTick().then(() => {
             showOtpInModal.value = true
@@ -437,21 +442,46 @@
         return str.replace(/(<([^> ]+)>)/ig, "")
     }
 
+    /**
+     * Saves the active group to the backends
+     */
+    // TODO : Delegate this to the store or a global watcher
+    // TODO : make this method unique, see Accounts.vue
+    function saveActiveGroup(newActiveGroupId) {
+        // When invoked by GroupSwitch event,  newActiveGroupId should
+        // be the same as user.preferences.activeGroup because of the v-model
+        // binding.
+        // When invoked by OtpDisplay we have to update the user preference too.
+        if (user.preferences.activeGroup != newActiveGroupId) {
+            user.preferences.activeGroup = newActiveGroupId
+        }
+
+        if( user.preferences.rememberActiveGroup) {
+            userService.updatePreference('activeGroup', user.preferences.activeGroup)
+        }
+    }
+
 </script>
 
 <template>
     <UseColorMode v-slot="{ mode }">
     <div>
-        <!-- otp display modal -->
+        <!-- otp display modal (when auto-save is enabled) -->
         <Modal v-if="user.preferences.AutoSaveQrcodedAccount" v-model="showOtpInModal">
             <OtpDisplay
                 ref="OtpDisplayForAutoSave"
-                v-bind="otpDisplayProps"
-                @please-close-me="router.push({ name: 'accounts' })">
-            </OtpDisplay>
+                :accountParams="accountParams"
+                :preferences="user.preferences"
+                :twofaccountService="twofaccountService"
+                :iconPathPrefix="$2fauth.config.subdirectory"
+                @please-close-me="router.push({ name: 'accounts' })"
+                @please-update-activeGroup="saveActiveGroup"
+                @otp-copied-to-clipboard="notify.success({ text: t('message.copied_to_clipboard') })"
+                @error="(error) => errorHandler.show(error)"
+            />
         </Modal>
-        <!-- Quick form -->
-        <form @submit.prevent="createAccount" @keydown="form.onKeydown($event)" v-if="!isEditMode && showQuickForm">
+        <!-- Quick form (right after a qr code upload) -->
+        <form v-if="!isEditMode && showQuickForm" @submit.prevent="createAccount" @keydown="form.onKeydown($event)">
             <div class="container preview has-text-centered">
                 <div class="columns is-mobile">
                     <div class="column">
@@ -463,11 +493,17 @@
                         <button type="button" class="delete delete-icon-button is-medium" v-if="tempIcon" @click.prevent="deleteTempIcon"></button>
                         <OtpDisplay
                             ref="OtpDisplayForQuickForm"
-                            v-bind="form.data()"
+                            :accountParams="form.data()"
+                            :preferences="user.preferences"
+                            :twofaccountService="twofaccountService"
+                            :iconPathPrefix="$2fauth.config.subdirectory"
                             @increment-hotp="incrementHotp"
+                            @please-close-me="ShowTwofaccountInModal = false"
+                            @please-update-activeGroup="saveActiveGroup"
+                            @otp-copied-to-clipboard="notify.success({ text: t('message.copied_to_clipboard') })"
                             @validation-error="mapDisplayerErrors"
-                            @please-close-me="ShowTwofaccountInModal = false">
-                        </OtpDisplay>
+                            @error="(error) => errorHandler.show(error)"
+                        />
                     </div>
                 </div>
                 <div class="columns is-mobile" role="alert">
@@ -492,7 +528,7 @@
             </div>
         </form>
         <!-- Full form -->
-        <FormWrapper :title="isEditMode ? 'message.twofaccounts.forms.edit_account' : 'message.twofaccounts.forms.new_account'" v-if="showAdvancedForm">
+        <FormWrapper v-if="showAdvancedForm" :title="isEditMode ? 'message.twofaccounts.forms.edit_account' : 'message.twofaccounts.forms.new_account'">
             <form @submit.prevent="handleSubmit" @keydown="form.onKeydown($event)">
                 <!-- qcode fileupload -->
                 <div v-if="!isEditMode" class="field is-grouped">
@@ -608,15 +644,20 @@
                     </template>
                 </VueFooter>
             </form>
-            <!-- modal -->
+            <!-- otp display modal (for previewing) -->
             <Modal v-model="ShowTwofaccountInModal">
                 <OtpDisplay
                     ref="OtpDisplayForAdvancedForm"
-                    v-bind="form.data()"
+                    :accountParams="form.data()"
+                    :preferences="user.preferences"
+                    :twofaccountService="twofaccountService"
+                    :iconPathPrefix="$2fauth.config.subdirectory"
                     @increment-hotp="incrementHotp"
+                    @please-close-me="ShowTwofaccountInModal = false"
+                    @otp-copied-to-clipboard="notify.success({ text: t('message.copied_to_clipboard') })"
                     @validation-error="mapDisplayerErrors"
-                    @please-close-me="ShowTwofaccountInModal = false">
-                </OtpDisplay>
+                    @error="(error) => errorHandler.show(error)"
+                />
             </Modal>
         </FormWrapper>
         <!-- alternatives -->

@@ -3,13 +3,12 @@
     import TotpLooper from '@/components/TotpLooper.vue'
     import DestinationGroupSelector from '@/components/DestinationGroupSelector.vue'
     import Toolbar from '@/components/Toolbar.vue'
-    import OtpDisplay from '@/components/OtpDisplay.vue'
     import ActionButtons from '@/components/ActionButtons.vue'
     import ExportButtons from '@/components/ExportButtons.vue'
     import Dots from '@/components/Dots.vue'
     import { UseColorMode } from '@vueuse/components'
     import { useUserStore } from '@/stores/user'
-    import { useNotify, SearchBox, GroupSwitch } from '@2fauth/ui'
+    import { useNotify, SearchBox, GroupSwitch, OtpDisplay } from '@2fauth/ui'
     import { useBusStore } from '@/stores/bus'
     import { useTwofaccounts } from '@/stores/twofaccounts'
     import { useGroups } from '@/stores/groups'
@@ -39,11 +38,17 @@
     const opacities = ref({})
 
     const otpDisplay = ref(null)
-    const otpDisplayProps = ref({
+    const accountParams = ref({
         otp_type: '',
-        account : '',
-        service : '',
-        icon : '',
+        account: '',
+        service: '',
+        icon: '',
+        secret: '',
+        digits: null,
+        algorithm: '',
+        period: null,
+        counter: null,
+        image: ''
     })
     const looperRefs = ref([])
     const dotsRefs = ref([])
@@ -137,10 +142,10 @@
     function showOTP(account) {
         // Data that should be displayed quickly by the OtpDisplay
         // component are passed using props.
-        otpDisplayProps.value.otp_type = account.otp_type
-        otpDisplayProps.value.service = account.service
-        otpDisplayProps.value.account = account.account
-        otpDisplayProps.value.icon = account.icon
+        accountParams.value.otp_type = account.otp_type
+        accountParams.value.service = account.service
+        accountParams.value.account = account.account
+        accountParams.value.icon = account.icon
 
         nextTick().then(() => {
             showOtpInModal.value = true
@@ -332,8 +337,17 @@
     /**
      * Saves the active group to the backends
      */
-    function saveActiveGroup() {
-        if( user.preferences.rememberActiveGroup ) {
+    // TODO : Delegate this to the store or a global watcher
+    function saveActiveGroup(newActiveGroupId) {
+        // When invoked by GroupSwitch event,  newActiveGroupId should
+        // be the same as user.preferences.activeGroup because of the v-model
+        // binding.
+        // When invoked by OtpDisplay we have to update the user preference too.
+        if (user.preferences.activeGroup != newActiveGroupId) {
+            user.preferences.activeGroup = newActiveGroupId
+        }
+
+        if( user.preferences.rememberActiveGroup) {
             userService.updatePreference('activeGroup', user.preferences.activeGroup)
         }
     }
@@ -402,10 +416,17 @@
         <Modal v-model="showOtpInModal">
             <OtpDisplay
                 ref="otpDisplay"
-                v-bind="otpDisplayProps"
+                :accountParams="accountParams"
+                :preferences="user.preferences"
+                :twofaccountService="twofaccountService"
+                :iconPathPrefix="$2fauth.config.subdirectory"
                 @please-close-me="showOtpInModal = false"
-                @please-clear-search="twofaccounts.filter = ''">
-            </OtpDisplay>
+                @please-clear-search="twofaccounts.filter = ''"
+                @kickme="user.logout({ kicked: true})"
+                @please-update-activeGroup="saveActiveGroup"
+                @otp-copied-to-clipboard="notify.success({ text: t('message.copied_to_clipboard') })"
+                @error="(error) => errorHandler.show(error)"
+            />
         </Modal>
         <!-- totp loopers -->
         <span v-if="!user.preferences.getOtpOnRequest">

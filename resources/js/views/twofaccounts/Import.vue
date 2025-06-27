@@ -1,10 +1,9 @@
 <script setup>
     import Form from '@/components/formElements/Form'
     import twofaccountService from '@/services/twofaccountService'
-    import OtpDisplay from '@/components/OtpDisplay.vue'
     import Spinner from '@/components/Spinner.vue'
     import { FormTextarea } from '@2fauth/formcontrols'
-    import { useNotify } from '@2fauth/ui'
+    import { useNotify, OtpDisplay } from '@2fauth/ui'
     import { useUserStore } from '@/stores/user'
     import { useBusStore } from '@/stores/bus'
     import { useTwofaccounts } from '@/stores/twofaccounts'
@@ -470,11 +469,14 @@
         <Modal v-model="showTwofaccountInModal">
             <OtpDisplay
                 ref="otpDisplay"
-                v-bind="form.data()"
-                @increment-hotp=""
-                @validation-error=""
-                @please-close-me="showTwofaccountInModal = false">
-            </OtpDisplay>
+                :accountParams="form.data()"
+                :preferences="user.preferences"
+                :twofaccountService="twofaccountService"
+                :iconPathPrefix="$2fauth.config.subdirectory"
+                @please-close-me="showTwofaccountInModal = false"
+                @otp-copied-to-clipboard="notify.success({ text: t('message.copied_to_clipboard') })"
+                @error="(error) => errorHandler.show(error)"
+            />
         </Modal>
     </div>
     </UseColorMode>
