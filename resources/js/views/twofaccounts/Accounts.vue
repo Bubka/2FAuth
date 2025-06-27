@@ -6,11 +6,10 @@
     import ExportButtons from '@/components/ExportButtons.vue'
     import { UseColorMode } from '@vueuse/components'
     import { useUserStore } from '@/stores/user'
-    import { useNotify, SearchBox, GroupSwitch, OtpDisplay, Dots, DotsController } from '@2fauth/ui'
+    import { useNotify, SearchBox, GroupSwitch, OtpDisplay, Dots, DotsController, useVisiblePassword } from '@2fauth/ui'
     import { useBusStore } from '@/stores/bus'
     import { useTwofaccounts } from '@/stores/twofaccounts'
     import { useGroups } from '@/stores/groups'
-    import { useDisplayablePassword } from '@/composables/helpers'
     import { useSortable, moveArrayElement } from '@vueuse/integrations/useSortable'
     import { useI18n } from 'vue-i18n'
     import { useErrorHandler } from '@2fauth/stores'
@@ -467,11 +466,25 @@
                                 <div v-show="user.preferences.getOtpOnRequest == false && !bus.inManagementMode" class="has-text-right">
                                     <div v-if="account.otp != undefined">
                                         <div class="always-on-otp is-clickable has-nowrap has-text-grey is-size-5 ml-4" @click="copyToClipboard(account.otp.password)" @keyup.enter="copyToClipboard(account.otp.password)" :title="$t('message.copy_to_clipboard')">
-                                            {{ useDisplayablePassword(account.otp.password, user.preferences.showOtpAsDot && user.preferences.revealDottedOTP && revealPassword == account.id) }}
+                                            {{ useVisiblePassword(
+                                                    account.otp.password,
+                                                    user.preferences.formatPassword,
+                                                    user.preferences.formatPasswordBy,
+                                                    user.preferences.showOtpAsDot,
+                                                    user.preferences.revealDottedOTP && revealPassword == account.id
+                                                )
+                                            }}
                                         </div>
                                         <div class="has-nowrap" style="line-height: 0.9;">
                                             <span v-if="user.preferences.showNextOtp" class="always-on-otp is-clickable has-nowrap has-text-grey is-size-7 mr-2" :class="opacities[account.period]" @click="copyToClipboard(account.otp.next_password)" @keyup.enter="copyToClipboard(account.otp.next_password)" :title="$t('message.copy_next_password')">
-                                                {{ useDisplayablePassword(account.otp.next_password, user.preferences.showOtpAsDot && user.preferences.revealDottedOTP && revealPassword == account.id) }}
+                                                {{ useVisiblePassword(
+                                                        account.otp.next_password,
+                                                        user.preferences.formatPassword,
+                                                        user.preferences.formatPasswordBy,
+                                                        user.preferences.showOtpAsDot,
+                                                        user.preferences.revealDottedOTP && revealPassword == account.id
+                                                    )
+                                                }}
                                             </span>
                                             <Dots
                                                 v-if="account.otp_type.includes('totp')"
