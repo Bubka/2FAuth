@@ -508,11 +508,9 @@
                 </div>
                 <div class="columns is-mobile" role="alert">
                     <div v-if="form.errors.any()" class="column">
-                        <p v-for="(field, index) in form.errors.errors" :key="index" class="help is-danger">
-                            <ul>
-                                <li v-for="(error, index) in field" :key="index">{{ error }}</li>
-                            </ul>
-                        </p>
+                        <ul v-for="(field, index) in form.errors.errors" :key="index" class="help is-danger">
+                            <li v-for="(error, index) in field" :key="index">{{ error }}</li>
+                        </ul>
                     </div>
                 </div>
                 <div class="columns is-mobile">
