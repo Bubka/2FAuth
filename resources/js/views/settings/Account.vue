@@ -47,8 +47,7 @@
                 notify.alert({ text: error.response.data.message })
             }
             else if( error.response.status !== 422 ) {
-                // TODO : check if we should return error.response or error
-                errorHandler.show(error.response)
+                errorHandler.show(error)
             }
         })
     }
@@ -70,8 +69,7 @@
                 notify.alert({ text: error.response.data.message })
             }
             else if( error.response.status !== 422 ) {
-                // TODO : check if we should return error.response or error
-                errorHandler.show(error.response)
+                errorHandler.show(error)
             }
         })
     }
@@ -92,8 +90,7 @@
                     notify.alert({ text: error.response.data.message })
                 }
                 else if( error.response.status !== 422 ) {
-                    // TODO : check if we should return error.response or error
-                    errorHandler.show(error.response)
+                    errorHandler.show(error)
                 }
             })
         }

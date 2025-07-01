@@ -1,5 +1,6 @@
 <script setup>
     import { useErrorHandler } from '@2fauth/stores'
+    import { UseColorMode } from '@vueuse/components'
 
     const errorHandler = useErrorHandler()
     const router = useRouter()
@@ -34,17 +35,24 @@
 <template>
     <div>
         <Modal v-model="showModal">
-            <div class="error-message" v-if="$route.name == '404' || $route.name == 'notFound'">
-                <p class="error-404"></p>
-                <p>{{ $t('error.resource_not_found') }}</p>
-            </div>
-            <div v-else class="error-message" >
-                <p class="error-generic"></p>
-                <p>{{ $t('message.error_occured') }} </p>
-                <p v-if="errorHandler.message" class="has-text-grey-lighter">{{ $t(errorHandler.message) }}</p>
-                <p v-if="errorHandler.originalMessage" class="has-text-grey-lighter">{{ errorHandler.originalMessage }}</p>
-                <p v-if="showDebug && errorHandler.debug" class="is-size-7 is-family-code pt-3"><br>{{ errorHandler.debug }}</p>
-            </div>
+            <UseColorMode v-slot="{ mode }">
+                <div class="error-message" v-if="$route.name == '404' || $route.name == 'notFound'">
+                    <p class="error-404"></p>
+                    <p :class="{ 'has-text-grey' : mode != 'dark' }">{{ $t('error.resource_not_found') }}</p>
+                </div>
+                <div v-else class="error-message" >
+                    <p class="error-generic"></p>
+                    <p :class="{ 'has-text-grey' : mode != 'dark' }">{{ $t('message.error_occured') }} </p>
+                    <p v-if="errorHandler.message" :class="{ 'has-text-grey-lighter' : mode == 'dark' }">{{ $t(errorHandler.message) }}</p>
+                    <template v-if="errorHandler.reasons">
+                        <p v-for="reason in errorHandler.reasons" :key="reason" :class="{ 'has-text-grey-lighter' : mode == 'dark' }">
+                            {{ reason }}
+                        </p>
+                    </template>
+                    <p v-if="errorHandler.originalMessage" :class="{ 'has-text-grey-lighter' : mode == 'dark' }">{{ errorHandler.originalMessage }}</p>
+                    <p v-if="showDebug && errorHandler.debug" class="is-size-7 is-family-code pt-3"><br>{{ errorHandler.debug }}</p>
+                </div>
+            </UseColorMode>
         </Modal>
     </div>
 </template>
