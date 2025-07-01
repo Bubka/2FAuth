@@ -6,8 +6,14 @@
     const user = useUserStore()
 
     const props = defineProps({
-        inManagementMode: Boolean,
-        areDisabled: Boolean
+        inManagementMode: {
+            type: Boolean,
+            default: false
+        },
+        areDisabled: {
+            type: Boolean,
+            default: false
+        },
     }) 
     
     const emit = defineEmits(['update:inManagementMode', 'move-button-clicked', 'delete-button-clicked', 'export-button-clicked'])
