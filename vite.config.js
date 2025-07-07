@@ -85,6 +85,10 @@ export default defineConfig({
         alias: {
             '@': '/resources/js',
         },
+        dedupe: [
+            'pinia',
+            '@kyvg/vue3-notification',
+        ],
     },
     build: {
         // sourcemap: true,
