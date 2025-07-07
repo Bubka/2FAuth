@@ -49,7 +49,7 @@
                             {{ reason }}
                         </p>
                     </template>
-                    <p v-if="errorHandler.originalMessage" :class="{ 'has-text-grey-lighter' : mode == 'dark' }">{{ errorHandler.originalMessage }}</p>
+                    <p v-if="errorHandler.originalMessage" :class="{ 'has-text-grey-lighter' : mode == 'dark' }">{{ $t(errorHandler.originalMessage) }}</p>
                     <p v-if="showDebug && errorHandler.debug" class="is-size-7 is-family-code pt-3"><br>{{ errorHandler.debug }}</p>
                 </div>
             </UseColorMode>
