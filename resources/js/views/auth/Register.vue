@@ -37,7 +37,7 @@
                 email: response.data.email,
                 preferences: response.data.preferences,
                 isAdmin: response.data.is_admin ?? false,
-                // TODO : add 'id' to the response
+                // TODO : Having the created 'id' in the response could be interesting
             })
             user.applyTheme()
 

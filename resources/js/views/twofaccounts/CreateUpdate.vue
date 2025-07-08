@@ -480,51 +480,48 @@
             />
         </Modal>
         <!-- Quick form (right after a qr code upload) -->
-        <form v-if="!isEditMode && showQuickForm" @submit.prevent="createAccount" @keydown="form.onKeydown($event)">
-            <div class="container preview has-text-centered">
-                <div class="columns is-mobile">
-                    <div class="column">
-                        <FormFieldError v-if="iconForm.errors.hasAny('icon')" :error="iconForm.errors.get('icon')" :field="'icon'" class="help-for-file" />
-                        <label class="add-icon-button" v-if="!tempIcon">
-                            <input inert class="file-input" type="file" accept="image/*" v-on:change="uploadIcon" ref="iconInput">
-                            <FontAwesomeIcon :icon="['fas', 'image']" size="2x" />
-                        </label>
-                        <button type="button" class="delete delete-icon-button is-medium" v-if="tempIcon" @click.prevent="deleteTempIcon"></button>
-                        <OtpDisplay
-                            ref="OtpDisplayForQuickForm"
-                            :accountParams="form.data()"
-                            :preferences="user.preferences"
-                            :twofaccountService="twofaccountService"
-                            :iconPathPrefix="$2fauth.config.subdirectory"
-                            :can_autoCloseTimeout="false"
-                            @increment-hotp="incrementHotp"
-                            @please-close-me="ShowTwofaccountInModal = false"
-                            @please-update-activeGroup="saveActiveGroup"
-                            @otp-copied-to-clipboard="notify.success({ text: t('message.copied_to_clipboard') })"
-                            @validation-error="mapDisplayerErrors"
-                            @error="(error) => errorHandler.show(error)"
-                        />
-                    </div>
-                </div>
-                <div class="columns is-mobile" role="alert">
-                    <div v-if="form.errors.any()" class="column">
-                        <ul v-for="(field, index) in form.errors.errors" :key="index" class="help is-danger">
-                            <li v-for="(error, index) in field" :key="index">{{ error }}</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="columns is-mobile">
-                    <div class="column quickform-footer">
+        <div v-if="!isEditMode && showQuickForm" class="modal modal-otp is-active">
+            <div class="modal-background"></div>
+            <div class="modal-content">
+                <div class="modal-slot has-text-centered is-shadowless">
+                    <form @submit.prevent="createAccount" @keydown="form.onKeydown($event)">
+                        <div>
+                            <FormFieldError v-if="iconForm.errors.hasAny('icon')" :error="iconForm.errors.get('icon')" :field="'icon'" class="help-for-file" />
+                            <label for="filUploadIcon" class="add-icon-button" v-if="!tempIcon">
+                                <input id="filUploadIcon" class="file-input" type="file" accept="image/*" v-on:change="uploadIcon" ref="iconInput">
+                                <FontAwesomeIcon :icon="['fas', 'image']" size="2x" />
+                            </label>
+                            <button type="button" class="delete delete-icon-button is-medium" v-if="tempIcon" @click.prevent="deleteTempIcon"></button>
+                            <OtpDisplay
+                                ref="OtpDisplayForQuickForm"
+                                :accountParams="form.data()"
+                                :preferences="user.preferences"
+                                :twofaccountService="twofaccountService"
+                                :iconPathPrefix="$2fauth.config.subdirectory"
+                                :can_autoCloseTimeout="false"
+                                @increment-hotp="incrementHotp"
+                                @please-close-me="ShowTwofaccountInModal = false"
+                                @please-update-activeGroup="saveActiveGroup"
+                                @otp-copied-to-clipboard="notify.success({ text: t('message.copied_to_clipboard') })"
+                                @validation-error="mapDisplayerErrors"
+                                @error="(error) => errorHandler.show(error)"
+                            />
+                        </div>
+                        <div v-if="form.errors.any()" role="alert" class="m-3">
+                            <ul v-for="(field, index) in form.errors.errors" :key="index" class="help is-danger">
+                                <li v-for="(error, index) in field" :key="index">{{ error }}</li>
+                            </ul>
+                        </div>
                         <div class="field is-grouped is-grouped-centered">
                             <div class="control">
                                 <VueButton nativeType="submit" :isLoading="form.isBusy" >{{ $t('message.save') }}</VueButton>
                             </div>
                             <NavigationButton action="cancel" :isText="true" :isRounded="false" :useLinkTag="false" @canceled="cancelCreation" />
                         </div>
-                    </div>
+                    </form>
                 </div>
             </div>
-        </form>
+        </div>
         <!-- Full form -->
         <FormWrapper v-if="showAdvancedForm" :title="isEditMode ? 'message.twofaccounts.forms.edit_account' : 'message.twofaccounts.forms.new_account'">
             <form @submit.prevent="handleSubmit" @keydown="form.onKeydown($event)">
