@@ -13,7 +13,7 @@
 <template>
     <ResponsiveWidthWrapper>
     <UseColorMode v-slot="{ mode }">
-        <h1 class="title has-text-grey-dark">{{ $t('message.about') }}</h1>
+        <h1 class="title has-text-grey-dark">{{ $t('heading.about') }}</h1>
         <p class="block">
             <span :class="mode == 'dark' ? 'has-text-white':'has-text-black'">
                 <span class="is-size-5">2FAuth</span>
@@ -27,7 +27,7 @@
             ©Bubka <a class="is-size-7" href="https://github.com/Bubka/2FAuth/blob/master/LICENSE">AGPL-3.0 license</a>
         </p>
         <h2 class="title is-5 has-text-grey-light">
-            {{ $t('message.resources') }}
+            {{ $t('heading.resources') }}
         </h2>
         <div class="buttons">
             <a class="button" :class="{'is-dark' : mode == 'dark'}" href="https://github.com/Bubka/2FAuth" target="_blank">
@@ -40,23 +40,23 @@
                 <span class="icon is-small">
                     <FontAwesomeIcon :icon="['fas', 'book']" />
                 </span>
-                <span>Docs</span>
+                <span>{{ $t('label.docs') }}</span>
             </a>
             <a class="button" :class="{'is-dark' : mode == 'dark'}" href="https://demo.2fauth.app/" target="_blank">
                 <span class="icon is-small">
                     <FontAwesomeIcon :icon="['fas', 'flask']" />
                 </span>
-                <span>Demo</span>
+                <span>{{ $t('label.demo') }}</span>
             </a>
             <a class="button" :class="{'is-dark' : mode == 'dark'}" href="https://docs.2fauth.app/resources/rapidoc.html" target="_blank">
                 <span class="icon is-small">
                     <FontAwesomeIcon :icon="['fas', 'code']" />
                 </span>
-                <span>API</span>
+                <span>{{ $t('label.api') }}</span>
             </a>
         </div>
         <h2 class="title is-5 has-text-grey-light">
-            {{ $t('message.credits') }}
+            {{ $t('heading.credits') }}
         </h2>
         <ul>
             <li>{{ $t('message.made_with') }}&nbsp;<a href="https://docs.2fauth.app/credits/">Laravel, Bulma CSS, Vue.js and more</a></li>

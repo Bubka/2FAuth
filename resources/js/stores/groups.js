@@ -42,11 +42,11 @@ export const useGroups = defineStore('groups', () => {
         
         if (index > -1) {
             items.value[index] = group
-            notify.success({ text: this.$i18n.global.t('message.groups.group_name_saved') })
+            notify.success({ text: this.$i18n.global.t('notification.group_name_saved') })
         }
         else {
             items.value.push(group)
-            notify.success({ text: this.$i18n.global.t('message.groups.group_successfully_created') })
+            notify.success({ text: this.$i18n.global.t('notification.group_successfully_created') })
         }            
     }
 
@@ -71,10 +71,10 @@ export const useGroups = defineStore('groups', () => {
      * Deletes a group
      */
     async function remove(id) {
-        if (confirm(this.$i18n.global.t('message.groups.confirm.delete'))) {
+        if (confirm(this.$i18n.global.t('confirmation.delete_group'))) {
             await groupService.delete(id).then(response => {
                 items.value = items.value.filter(a => a.id !== id)
-                notify.success({ text: this.$i18n.global.t('message.groups.group_successfully_deleted') })
+                notify.success({ text: this.$i18n.global.t('notification.group_successfully_deleted') })
 
                 // Reset group filter to 'All' (groupId=0) since the backend has already made
                 // the change automatically. This prevents a new request.

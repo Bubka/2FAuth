@@ -39,6 +39,6 @@ class PasswordController extends Controller
             Log::info(sprintf('Password of user ID #%s updated', $user->id));
         }
 
-        return response()->json(['message' => __('message.auth.forms.password_successfully_changed')]);
+        return response()->json(['message' => __('notification.password_successfully_changed')]);
     }
 }

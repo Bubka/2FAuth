@@ -45,19 +45,19 @@
 </script>
 
 <template>
-    <FormWrapper title="message.auth.forms.new_password">
+    <FormWrapper title="heading.new_password">
         <form @submit.prevent="resetPassword" @keydown="form.onKeydown($event)">
-            <FormField v-model="form.email" :isDisabled="true" fieldName="email" :errorMessage="form.errors.get('email')" label="message.auth.forms.email" autofocus />
-            <FormPasswordField v-model="form.password" fieldName="password" :errorMessage="form.errors.get('password')" autocomplete="new-password" :showRules="true" label="message.auth.forms.new_password" />
+            <FormField v-model="form.email" :isDisabled="true" fieldName="email" :errorMessage="form.errors.get('email')" label="field.email" autofocus />
+            <FormPasswordField v-model="form.password" fieldName="password" :errorMessage="form.errors.get('password')" autocomplete="new-password" :showRules="true" label="field.new_password" />
             <FormFieldError v-if="form.errors.get('token') != undefined" :error="form.errors.get('token')" :field="form.token" />
             <FormButtons
                 v-if="isPending"
                 :submitId="'btnResetPwd'"
                 :isBusy="form.isBusy"
-                submitLabel="message.auth.forms.change_password"
+                submitLabel="label.change_password"
                 :showCancelButton="true"
                 @cancel="router.push({ name: 'login' })" />
-            <RouterLink v-if="!isPending" id="btnContinue" :to="{ name: 'accounts' }" class="button is-link">{{ $t('message.continue') }}</RouterLink>
+            <RouterLink v-if="!isPending" id="btnContinue" :to="{ name: 'accounts' }" class="button is-link">{{ $t('link.continue') }}</RouterLink>
         </form>
         <VueFooter />
     </FormWrapper>

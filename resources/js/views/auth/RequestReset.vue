@@ -38,16 +38,16 @@
 </script>
 
 <template>
-    <FormWrapper :title="isWebauthnReset ? 'message.auth.webauthn.account_recovery' : 'message.auth.forms.reset_password'" :punchline="isWebauthnReset ? 'message.auth.webauthn.recovery_punchline' : 'message.auth.forms.reset_punchline'">
+    <FormWrapper :title="isWebauthnReset ? 'heading.account_recovery' : 'heading.reset_password'" :punchline="isWebauthnReset ? 'message.recovery_punchline' : 'message.reset_punchline'">
         <div v-if="isWebauthnReset" class="block">
-            {{ $t('message.auth.webauthn.ensure_you_open_mail_in_trusted_device') }}
+            {{ $t('message.ensure_you_open_mail_in_trusted_device') }}
         </div>
         <form @submit.prevent="requestPasswordReset" @keydown="form.onKeydown($event)">
-            <FormField v-model="form.email" fieldName="email" :errorMessage="form.errors.get('email')" label="message.auth.forms.email" autofocus />
+            <FormField v-model="form.email" fieldName="email" :errorMessage="form.errors.get('email')" label="field.email" autofocus />
             <FormButtons
                 :submitId="'btnSendResetPwd'"
                 :isBusy="form.isBusy"
-                :submitLabel="isWebauthnReset ? 'message.auth.webauthn.send_recovery_link' : 'message.auth.forms.send_password_reset_link'"
+                :submitLabel="isWebauthnReset ? 'label.send_recovery_link' : 'label.send_password_reset_link'"
                 :showCancelButton="true"
                 @cancel="router.push({ name: 'login' })" />
         </form>

@@ -42,7 +42,7 @@
         isClearingCache.value = true;
 
         systemService.clearCache().then(response => {
-            useNotify().success({ text: t('message.admin.cache_cleared') })
+            useNotify().success({ text: t('notification.cache_cleared') })
         })
         .finally(() => {
             isClearingCache.value = false;
@@ -74,16 +74,16 @@
         <div class="options-tabs">
             <FormWrapper>
                 <form>
-                    <h4 class="title is-4 pt-4 has-text-grey-light">{{ $t('message.settings.general') }}</h4>
+                    <h4 class="title is-4 pt-4 has-text-grey-light">{{ $t('heading.general') }}</h4>
                     <!-- Check for update -->
-                    <FormCheckbox v-model="appSettings.checkForUpdate" @update:model-value="val => useAppSettingsUpdater('checkForUpdate', val)" fieldName="checkForUpdate" label="message.check_for_update" help="message.check_for_update_help" />
+                    <FormCheckbox v-model="appSettings.checkForUpdate" @update:model-value="val => useAppSettingsUpdater('checkForUpdate', val)" fieldName="checkForUpdate" label="field.check_for_update" help="field.check_for_update.help" />
                     <VersionChecker />
                     <!-- email config test -->
                     <div class="field">
-                        <label class="label" for="btnTestEmail" v-html="$t('message.admin.forms.test_email.label')" />
-                        <p class="help" v-html="$t('message.admin.forms.test_email.help')" />
+                        <label class="label" for="btnTestEmail" v-html="$t('field.test_email')" />
+                        <p class="help" v-html="$t('field.test_email.help')" />
                         <p class="help">
-                            <i18n-t keypath="message.admin.forms.test_email.email_will_be_send_to_x" tag="span">
+                            <i18n-t keypath="message.email_will_be_send_to_x" tag="span">
                                 <template v-slot:email>
                                     <span class="is-family-code has-text-info">{{ user.email }}</span>
                                 </template>
@@ -96,43 +96,43 @@
                                 <span class="icon is-small">
                                     <FontAwesomeIcon :icon="['far', 'paper-plane']" />
                                 </span>
-                                <span>{{ $t('message.send') }}</span>
+                                <span>{{ $t('label.send') }}</span>
                             </button>   
                         </div>
                     </div>
                     <!-- healthcheck -->
                     <div class="field">
-                        <label class="label" for="lnkHealthCheck" v-html="$t('message.admin.forms.health_endpoint.label')" />
-                        <p class="help" v-html="$t('message.admin.forms.health_endpoint.help')" />
+                        <label class="label" for="lnkHealthCheck" v-html="$t('field.health_endpoint')" />
+                        <p class="help" v-html="$t('field.health_endpoint.help')" />
                     </div>
                     <div class="field mb-5">
                         <a id="lnkHealthCheck" target="_blank" :href="healthEndPoint">{{ healthEndPointFullPath }}</a>
                     </div>
-                    <h4 class="title is-4 pt-5 has-text-grey-light">{{ $t('message.admin.storage') }}</h4>
+                    <h4 class="title is-4 pt-5 has-text-grey-light">{{ $t('heading.storage') }}</h4>
                     <!-- store icons in database -->
-                    <FormCheckbox v-model="appSettings.storeIconsInDatabase" @update:model-value="val => useAppSettingsUpdater('storeIconsInDatabase', val)" fieldName="storeIconsInDatabase" label="message.admin.forms.store_icon_to_database.label" help="message.admin.forms.store_icon_to_database.help" />
-                    <h4 class="title is-4 pt-5 has-text-grey-light">{{ $t('message.settings.security') }}</h4>
+                    <FormCheckbox v-model="appSettings.storeIconsInDatabase" @update:model-value="val => useAppSettingsUpdater('storeIconsInDatabase', val)" fieldName="storeIconsInDatabase" label="field.store_icon_to_database" help="field.store_icon_to_database.help" />
+                    <p class="help">{{ $t('field.store_icon_to_database.help_bis') }}</p>
+                    <h4 class="title is-4 pt-5 has-text-grey-light">{{ $t('heading.security') }}</h4>
                     <!-- protect db -->
-                    <FormCheckbox v-model="appSettings.useEncryption" @update:model-value="val => useAppSettingsUpdater('useEncryption', val)" fieldName="useEncryption" label="message.admin.forms.use_encryption.label" help="message.admin.forms.use_encryption.help" />
+                    <FormCheckbox v-model="appSettings.useEncryption" @update:model-value="val => useAppSettingsUpdater('useEncryption', val)" fieldName="useEncryption" label="field.use_encryption" help="field.use_encryption.help" />
                 </form>
 
-                <h4 class="title is-4 pt-5 has-text-grey-light">{{ $t('message.environment') }}</h4>
+                <h4 class="title is-4 pt-5 has-text-grey-light">{{ $t('heading.environment') }}</h4>
                 <!-- cache management -->
                 <div class="field">
-                    <!-- <h5 class="title is-5">{{ $t('message.settings.security') }}</h5> -->
-                    <label for="btnClearCache" class="label" v-html="$t('message.admin.forms.cache_management.label')" />
-                    <p class="help" v-html="$t('message.admin.forms.cache_management.help')" />
+                    <label for="btnClearCache" class="label" v-html="$t('field.cache_management')" />
+                    <p class="help" v-html="$t('field.cache_management.help')" />
                 </div>
                 <div class="field mb-5 is-grouped">
                     <p class="control">
                         <button id="btnClearCache" type="button" :class="isClearingCache ? 'is-loading' : ''" class="button is-link is-rounded is-small" @click="clearCache">
-                            {{ $t('message.clear') }}
+                            {{ $t('label.clear') }}
                         </button>
                     </p>
                 </div>
                 <!-- env vars -->
                 <div class="field">
-                    <label for="btnCopyEnvVars" class="label"  v-html="$t('message.admin.variables')" />
+                    <label for="btnCopyEnvVars" class="label"  v-html="$t('label.variables')" />
                 </div>
                 <div v-if="infos" class="about-debug box is-family-monospace is-size-7">
                     <CopyButton id="btnCopyEnvVars" :token="listInfos?.innerText" />

@@ -39,7 +39,7 @@
         <!-- New item buttons -->
         <p class="control" v-if="!inManagementMode">
             <button type="button" class="button is-link is-rounded is-focus" @click="goAddNewAccount">
-                <span>{{ $t('message.new') }}</span>
+                <span>{{ $t('label.new') }}</span>
                 <span class="icon is-small">
                     <FontAwesomeIcon :icon="['fas', 'qrcode']" />
                 </span>
@@ -47,7 +47,7 @@
         </p>
         <!-- Manage button -->
         <p class="control" v-if="!inManagementMode">
-            <button type="button" id="btnManage" class="button is-rounded" :class="{'is-dark' : mode == 'dark'}" @click="$emit('update:inManagementMode', true)">{{ $t('message.manage') }}</button>
+            <button type="button" id="btnManage" class="button is-rounded" :class="{'is-dark' : mode == 'dark'}" @click="$emit('update:inManagementMode', true)">{{ $t('label.manage') }}</button>
         </p>
         <!-- move button -->
         <p class="control" v-if="inManagementMode">
@@ -56,8 +56,8 @@
                 :disabled='areDisabled' class="button is-rounded"
                 :class="[{ 'is-outlined': mode == 'dark' || areDisabled }, areDisabled ? 'is-dark': 'is-link']"
                 @click="$emit('move-button-clicked')"
-                :title="$t('message.groups.move_selected_to_group')" >
-                    {{ $t('message.move') }}
+                :title="$t('tooltip.move_selected_to_group')" >
+                    {{ $t('label.move') }}
             </button>
         </p>
         <!-- delete button -->
@@ -67,7 +67,7 @@
                 :disabled='areDisabled' class="button is-rounded"
                 :class="[{ 'is-outlined': mode == 'dark' || areDisabled }, areDisabled ? 'is-dark': 'is-link']"
                 @click="$emit('delete-button-clicked')" >
-                    {{ $t('message.delete') }}
+                    {{ $t('label.delete') }}
             </button>
         </p>
         <!-- export button -->
@@ -77,8 +77,8 @@
                 :disabled='areDisabled' class="button is-rounded"
                 :class="[{ 'is-outlined': mode == 'dark' || areDisabled }, areDisabled ? 'is-dark': 'is-link']"
                 @click="$emit('export-button-clicked')"
-                :title="$t('message.twofaccounts.export_selected_accounts')" >
-                    {{ $t('message.export') }}
+                :title="$t('tooltip.export_selected_accounts')" >
+                    {{ $t('label.export') }}
             </button>
         </p>
     </UseColorMode>

@@ -5,9 +5,9 @@
 @lang('message.notifications.new_device.connection_details'):
 
 <x-mail::panel>
-@lang('message.time'): **{{ $time->toCookieString() }}**<br/>
-@lang('message.ip_address'): **{{ $ipAddress }}**<br/>
-@lang('message.device'): **@lang('message.admin.browser_on_platform', ['browser' => $browser, 'platform' => $platform])**<br/>
+@lang('label.time'): **{{ $time->toCookieString() }}**<br/>
+@lang('label.ip_address'): **{{ $ipAddress }}**<br/>
+@lang('label.device'): **@lang('message.browser_on_platform', ['browser' => $browser, 'platform' => $platform])**<br/>
 </x-mail::panel>
 
 @lang('message.notifications.new_device.recommandations')<br/>

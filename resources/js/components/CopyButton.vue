@@ -12,12 +12,12 @@
 
     function copyToClipboard() {
         copy(props.token)
-        notify.success({ text: t('message.copied_to_clipboard') })
+        notify.success({ text: t('notification.copied_to_clipboard') })
     }
 </script>
 
 <template>
-    <button type="button" :aria-label="$t('message.copy_to_clipboard')" :title="$t('message.copy_to_clipboard')" class="button is-like-text is-pulled-right is-small is-text" @click.stop="copyToClipboard()">
+    <button type="button" :aria-label="$t('label.copy_to_clipboard')" :title="$t('tooltip.copy_to_clipboard')" class="button is-like-text is-pulled-right is-small is-text" @click.stop="copyToClipboard()">
         <FontAwesomeIcon :icon="['fas', 'copy']" />
     </button>
 </template>

@@ -78,7 +78,7 @@ export const useUserStore = defineStore({
                 authService.logout({ returnError: true }).then(() => {
                     if (kicked) {
                         notify.clear()
-                        notify.warn({ text: this.$i18n.global.t('message.auth.autolock_triggered_punchline'), duration:-1 })
+                        notify.warn({ text: this.$i18n.global.t('notification.autolock_triggered_punchline'), duration:-1 })
                     }
                     this.tossOut()
                 })

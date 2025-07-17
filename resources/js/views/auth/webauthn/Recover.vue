@@ -31,7 +31,7 @@
         })
         .catch(error => {
             if ( error.response.status === 401 ) {
-                notify.alert({ text: t('message.auth.forms.authentication_failed'), duration:-1 })
+                notify.alert({ text: t('notification.authentication_failed'), duration:-1 })
             }
             else if (error.response.status === 422) {
                 notify.alert({ text: error.response.data.message, duration:-1 })
@@ -48,16 +48,16 @@
 </script>
 
 <template>
-    <FormWrapper title="message.auth.webauthn.account_recovery" punchline="message.auth.webauthn.recover_account_instructions" >
+    <FormWrapper title="heading.account_recovery" punchline="message.recover_account_instructions" >
         <div>
             <form @submit.prevent="recover" @keydown="form.onKeydown($event)">
-                <FormCheckbox v-model="form.revokeAll" fieldName="revokeAll" label="message.auth.webauthn.disable_all_security_devices" help="message.auth.webauthn.disable_all_security_devices_help" />
-                <FormPasswordField v-model="form.password" fieldName="password" :errorMessage="form.errors.get('password')" autocomplete="current-password" :showRules="false" label="message.auth.forms.current_password.label" help="message.auth.forms.current_password.help" />
+                <FormCheckbox v-model="form.revokeAll" fieldName="revokeAll" label="field.disable_all_security_devices" help="field.disable_all_security_devices.help" />
+                <FormPasswordField v-model="form.password" fieldName="password" :errorMessage="form.errors.get('password')" autocomplete="current-password" :showRules="false" label="field.current_password" help="field.current_password.help" />
                 <div class="field">
                     <p>
-                        {{ $t('message.auth.forms.forgot_your_password') }}&nbsp;
-                        <RouterLink id="lnkResetPwd" :to="{ name: 'password.request' }" class="is-link" :aria-label="$t('message.auth.forms.reset_your_password')">
-                            {{ $t('message.auth.forms.request_password_reset') }}
+                        {{ $t('message.forgot_your_password') }}&nbsp;
+                        <RouterLink id="lnkResetPwd" :to="{ name: 'password.request' }" class="is-link" :aria-label="$t('link.reset_your_password')">
+                            {{ $t('link.request_password_reset') }}
                         </RouterLink>
                     </p>
                 </div>
@@ -65,7 +65,7 @@
                     :submitId="'btnRecover'"
                     :isBusy="form.isBusy"
                     :isDisabled="form.isDisabled"
-                    submitLabel="message.continue"
+                    submitLabel="label.continue"
                     :showCancelButton="true"
                     @cancel="router.push({ name: 'login' })" />
             </form>

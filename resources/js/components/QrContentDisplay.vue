@@ -40,7 +40,7 @@
      */
     function copyToClipboard(data) {
         copy(data)
-        notify.success({ text: t('message.copied_to_clipboard') })
+        notify.success({ text: t('notification.copied_to_clipboard') })
     }
 </script>
 
@@ -53,13 +53,13 @@
     <!-- Copy to clipboard -->
     <div class="block has-text-link" v-if="qrContent">
         <button type="button" class="button is-link is-outlined is-rounded" @click.stop="copyToClipboard(qrContent)">
-            {{ $t('message.copy_to_clipboard') }}
+            {{ $t('label.copy_to_clipboard') }}
         </button>
     </div>
     <!-- Open in browser -->
     <div class="block has-text-link" v-if="isUrl(qrContent)" @click="openInBrowser(qrContent)">
         <button type="button" class="button is-link is-outlined is-rounded">
-            <span>{{ $t('message.open_in_browser') }}</span>
+            <span>{{ $t('label.open_in_browser') }}</span>
             <span class="icon is-small">
                 <FontAwesomeIcon :icon="['fas', 'external-link-alt']" />
             </span>

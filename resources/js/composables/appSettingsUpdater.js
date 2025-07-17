@@ -18,7 +18,7 @@ export async function useAppSettingsUpdater(setting, value, returnValidationErro
     await appSettingService.update(setting, value, { returnError: true })
     .then(response => {
         data = value
-        useNotify().success({ text: t('message.settings.forms.setting_saved') })
+        useNotify().success({ text: t('notification.setting_saved') })
     })
     .catch(err => {
         if( returnValidationError && err.response.status === 422 ) {

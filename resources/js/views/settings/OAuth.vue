@@ -103,12 +103,12 @@
      * revoke a token (after confirmation)
      */
     function revokeToken(tokenId) {
-        if(confirm(t('message.settings.confirm.revoke'))) {
+        if(confirm(t('confirmation.revoke_token'))) {
             userService.deletePersonalAccessToken(tokenId)
             .then(response => {
                 // Remove the revoked token from the collection
                 tokens.value = tokens.value.filter(a => a.id !== tokenId)
-                notify.success({ text: t('message.settings.token_revoked') })
+                notify.success({ text: t('notification.token_revoked') })
             })
         }
     }
@@ -128,7 +128,7 @@
      */
     function copyToClipboard(data) {
         copy(data)
-        notify.success({ text: t('message.copied_to_clipboard') })
+        notify.success({ text: t('notification.copied_to_clipboard') })
     }
 
     /**
@@ -152,18 +152,18 @@
         <div class="options-tabs">
             <FormWrapper>
                 <div v-if="isDisabled && user.oauth_provider" class="notification is-warning has-text-centered">
-                    {{ $t('message.auth.sso_only_x_settings_are_disabled', { auth_method: 'OAuth' }) }}
+                    {{ $t('message.sso_only_x_settings_are_disabled', { auth_method: 'OAuth' }) }}
                 </div>
                 <div v-if="isDisabled && user.authenticated_by_proxy" class="notification is-warning has-text-centered">
-                    {{ $t('message.auth.auth_handled_by_proxy') + '<br />' + $t('message.auth.manage_auth_at_proxy_level') }}
+                    {{ $t('message.auth_handled_by_proxy') + '<br />' + $t('message.manage_auth_at_proxy_level') }}
                 </div>
-                <h4 class="title is-4 has-text-grey-light">{{ $t('message.settings.personal_access_tokens') }}</h4>
+                <h4 class="title is-4 has-text-grey-light">{{ $t('heading.personal_access_tokens') }}</h4>
                 <div class="is-size-7-mobile">
-                    {{ $t('message.settings.token_legend')}}
+                    {{ $t('message.token_legend')}}
                 </div>
                 <div class="mt-3">
                     <a tabindex="0" class="is-link" @click="showPATcreationForm" @keyup.enter="showPATcreationForm">
-                        <FontAwesomeIcon :icon="['fas', 'plus-circle']" /> {{ $t('message.settings.generate_new_token')}}
+                        <FontAwesomeIcon :icon="['fas', 'plus-circle']" /> {{ $t('link.generate_new_token')}}
                     </a>
                 </div>
                 <div v-if="tokens.length > 0">
@@ -173,16 +173,16 @@
                         <div class="tags is-pulled-right">
                             <UseColorMode v-slot="{ mode }">
                                 <button type="button" v-if="token.value" class="button tag" :class="{'is-link': mode != 'dark'}" @click.stop="copyToClipboard(token.value)">
-                                    {{ $t('message.copy') }}
+                                    {{ $t('label.copy') }}
                                 </button>
-                                <button type="button" class="button tag" :class="mode === 'dark' ? 'is-dark':'is-white'" @click="revokeToken(token.id)" :title="$t('message.settings.revoke')">
-                                    {{ $t('message.settings.revoke') }}
+                                <button type="button" class="button tag" :class="mode === 'dark' ? 'is-dark':'is-white'" @click="revokeToken(token.id)" :title="$t('tooltip.revoke')">
+                                    {{ $t('label.revoke') }}
                                 </button>
                             </UseColorMode>
                         </div>
                         <!-- warning msg -->
                         <span v-if="token.value" class="is-size-7-mobile is-size-6 my-3">
-                            {{ $t('message.settings.make_sure_copy_token') }}
+                            {{ $t('message.make_sure_copy_token') }}
                         </span>
                         <!-- token value -->
                         <span v-if="token.value" class="pat is-family-monospace is-size-6 is-size-7-mobile has-text-success">
@@ -190,7 +190,7 @@
                         </span>
                     </div>
                     <div class="mt-2 is-size-7 is-pulled-right">
-                        {{ $t('message.settings.revoking_a_token_is_permanent')}}
+                        {{ $t('message.revoking_a_token_is_permanent')}}
                     </div>
                 </div>
                 <Spinner :isVisible="isFetching && tokens.length === 0" type="list-loading" />
@@ -204,18 +204,18 @@
         </div>
         <div v-if="createPATModalIsVisible" class="is-overlay modal-otp modal-background">
             <main class="main-section">
-                <FormWrapper title="message.settings.forms.new_token">
+                <FormWrapper title="heading.new_token">
                     <form @submit.prevent="generatePAToken" @keydown="form.onKeydown($event)">
-                        <FormField v-model="form.name" fieldName="name" :errorMessage="form.errors.get('name')" inputType="text" label="message.name" autofocus />
+                        <FormField v-model="form.name" fieldName="name" :errorMessage="form.errors.get('name')" inputType="text" label="field.name" autofocus />
                         <div class="field is-grouped">
                             <div class="control">
                                 <VueButton nativeType="submit" :id="'btnGenerateToken'" :isLoading="form.isBusy" >
-                                    {{ $t('message.generate') }}
+                                    {{ $t('label.generate') }}
                                 </VueButton>
                             </div>
                             <div class="control">
                                 <VueButton @click="cancelPATcreation" nativeType="button" id="btnCancel" :color="'is-text'">
-                                    {{ $t('message.cancel') }}
+                                    {{ $t('label.cancel') }}
                                 </VueButton>
                             </div>
                         </div>

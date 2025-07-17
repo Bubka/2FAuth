@@ -7,7 +7,7 @@
     const router = useRouter()
     const notify = useNotify()
     const form = reactive(new Form({
-        name: t('message.auth.webauthn.my_device')
+        name: t('label.my_device')
     }))
 
     const props = defineProps({
@@ -20,7 +20,7 @@
     function updateCredential() {
         form.patch('/webauthn/credentials/' + props.credentialId + '/name')
         .then(() => {
-            notify.success({ text: t('message.auth.webauthn.device_successfully_registered') })
+            notify.success({ text: t('notification.device_successfully_registered') })
             router.push({ name: 'settings.webauthn.devices' })
         })
     }
@@ -28,13 +28,13 @@
 </script>
 
 <template>
-    <FormWrapper title="message.auth.webauthn.rename_device">
+    <FormWrapper title="heading.rename_device">
         <form @submit.prevent="updateCredential" @keydown="form.onKeydown($event)">
-            <FormField v-model="form.name" fieldName="name" :errorMessage="form.errors.get('name')" inputType="text" label="message.new_name" autofocus />
+            <FormField v-model="form.name" fieldName="name" :errorMessage="form.errors.get('name')" inputType="text" label="field.new_name" autofocus />
             <FormButtons
                 :submitId="'btnEditCredential'"
                 :isBusy="form.isBusy"
-                submitLabel="message.save"
+                submitLabel="label.save"
                 :showCancelButton="true"
                 @cancel="router.push({ name: 'settings.webauthn.devices' })"
             />

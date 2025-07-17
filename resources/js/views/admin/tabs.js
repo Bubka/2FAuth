@@ -1,16 +1,16 @@
 export default [
     {
-        'name' : 'message.admin.app_setup',
+        'name' : 'label.app_setup',
         'view' : 'admin.appSetup',
         'id'   : 'lnkTabApp'
     },
     {
-        'name' : 'message.admin.auth',
+        'name' : 'label.auth',
         'view' : 'admin.auth',
         'id'   : 'lnkTabAuth'
     },
     {
-        'name' : 'message.admin.users',
+        'name' : 'label.users',
         'view' : 'admin.users',
         'id'   : 'lnkTabUsers'
     },

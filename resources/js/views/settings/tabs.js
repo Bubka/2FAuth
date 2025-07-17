@@ -1,21 +1,21 @@
 export default [
     {
-        'name' : 'message.settings.options',
+        'name' : 'label.options',
         'view' : 'settings.options',
         'id'   : 'lnkTabOptions'
     },
     {
-        'name' : 'message.settings.account',
+        'name' : 'label.account',
         'view' : 'settings.account',
         'id'   : 'lnkTabAccount'
     },
     {
-        'name' : 'message.settings.oauth',
+        'name' : 'label.oauth',
         'view' : 'settings.oauth.tokens',
         'id'   : 'lnkTabOAuth'
     },
     {
-        'name' : 'message.settings.webauthn',
+        'name' : 'label.webauthn',
         'view' : 'settings.webauthn.devices',
         'id'   : 'lnkTabWebauthn'
     },

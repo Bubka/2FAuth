@@ -30,7 +30,7 @@ class GroupStoreRequest extends FormRequest
                 'required',
                 'regex:/^[A-zÀ-ú0-9\s\-_]+$/',
                 'max:32',
-                Rule::notIn([__('message.all')]),
+                Rule::notIn([__('label.all')]),
                 Rule::unique('groups')->where(fn ($query) => $query->where('user_id', $this->user()->id)),
             ],
         ];

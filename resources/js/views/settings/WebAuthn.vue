@@ -31,7 +31,7 @@
 
     watch(() => user.preferences.useWebauthnOnly, () => {
         userService.updatePreference('useWebauthnOnly', user.preferences.useWebauthnOnly).then(response => {
-            notify.success({ text: t('message.settings.forms.setting_saved') })
+            notify.success({ text: t('notification.setting_saved') })
         })
     })
 
@@ -67,7 +67,7 @@
      * revoke a credential
      */
     function revokeCredential(credentialId) {
-        if(confirm(t('message.auth.confirm.revoke_device'))) {
+        if(confirm(t('confirmation.revoke_device'))) {
             userService.revokeWebauthnDevice(credentialId).then(response => {
                 // Remove the revoked credential from the collection
                 credentials.value = credentials.value.filter(a => a.id !== credentialId)
@@ -78,7 +78,7 @@
                     user.preferences.useWebauthnOnly = false
                 }
 
-                notify.success({ text: t('message.auth.webauthn.device_revoked') })
+                notify.success({ text: t('notification.device_revoked') })
             });
         }
     }
@@ -87,7 +87,7 @@
      * Always display a printable name
      */
     function displayName(credential) {
-        return credential.alias ? credential.alias : t('message.auth.webauthn.my_device') + ' (#' + credential.id.substring(0, 10) + ')'
+        return credential.alias ? credential.alias : t('label.my_device') + ' (#' + credential.id.substring(0, 10) + ')'
     }
 
     /**
@@ -128,18 +128,18 @@
         <div class="options-tabs">
             <FormWrapper>
                 <div v-if="isDisabled && user.oauth_provider" class="notification is-warning has-text-centered">
-                    {{ $t('message.auth.sso_only_x_settings_are_disabled', { auth_method: 'WebAuthn' }) }}
+                    {{ $t('message.sso_only_x_settings_are_disabled', { auth_method: 'WebAuthn' }) }}
                 </div>
                 <div v-if="isDisabled && user.authenticated_by_proxy" class="notification is-warning has-text-centered">
-                    {{ $t('message.auth.auth_handled_by_proxy') + '<br />' + $t('message.auth.manage_auth_at_proxy_level') }}
+                    {{ $t('message.auth_handled_by_proxy') + '<br />' + $t('message.manage_auth_at_proxy_level') }}
                 </div>
-                <h4 class="title is-4 has-text-grey-light">{{ $t('message.auth.webauthn.security_devices') }}</h4>
+                <h4 class="title is-4 has-text-grey-light">{{ $t('heading.security_devices') }}</h4>
                 <div class="is-size-7-mobile">
-                    {{ $t('message.auth.webauthn.security_devices_legend')}}
+                    {{ $t('message.security_devices_legend')}}
                 </div>
                 <div class="mt-3">
                     <a tabindex="0" @click="register" @keyup.enter="register">
-                        <FontAwesomeIcon :icon="['fas', 'plus-circle']" />&nbsp;{{ $t('message.auth.webauthn.register_a_new_device')}}
+                        <FontAwesomeIcon :icon="['fas', 'plus-circle']" />&nbsp;{{ $t('link.register_a_new_device')}}
                     </a>
                 </div>
                 <!-- credentials list -->
@@ -148,33 +148,35 @@
                         {{ displayName(credential) }}
                         <!-- revoke link -->
                         <UseColorMode v-slot="{ mode }">
-                            <button type="button" class="button tag is-pulled-right" :class="mode === 'dark' ? 'is-dark':'is-white'" @click="revokeCredential(credential.id)" :title="$t('message.settings.revoke')">
-                                {{ $t('message.settings.revoke') }}
+                            <button type="button" class="button tag is-pulled-right" :class="mode === 'dark' ? 'is-dark':'is-white'" @click="revokeCredential(credential.id)" :title="$t('tooltip.revoke')">
+                                {{ $t('label.revoke') }}
                             </button>
                         </UseColorMode>
                         <!-- edit link -->
-                        <!-- <RouterLink :to="{ name: '' }" class="has-text-grey pl-1" :title="$t('message.rename')">
+                        <!-- <RouterLink :to="{ name: '' }" class="has-text-grey pl-1" :title="$t('tooltip.rename')">
                             <FontAwesomeIcon :icon="['fas', 'pen-square']" />
                         </RouterLink> -->
                     </div>
                     <div class="mt-2 is-size-7 is-pulled-right">
-                        {{ $t('message.auth.webauthn.revoking_a_device_is_permanent')}}
+                        {{ $t('message.revoking_a_device_is_permanent')}}
                     </div>
                 </div>
                 <Spinner :isVisible="isFetching && credentials.length === 0" type="list-loading" />
-                <h4 class="title is-4 pt-6 has-text-grey-light">{{ $t('message.auth.webauthn.options') }}</h4>
+                <h4 class="title is-4 pt-6 has-text-grey-light">{{ $t('heading.options') }}</h4>
                 <div class="field">
-                    {{ $t('message.auth.webauthn.need_a_security_device_to_enable_options')}}
+                    {{ $t('message.need_a_security_device_to_enable_options')}}
                 </div>
                 <form>
                     <!-- use webauthn only -->
                     <FormCheckbox
                         v-model="user.preferences.useWebauthnOnly"
                         fieldName="useWebauthnOnly"
-                        label="message.auth.webauthn.use_webauthn_only.label"
-                        help="message.auth.webauthn.use_webauthn_only.help"
+                        label="field.use_webauthn_only"
+                        help="field.use_webauthn_only.help"
                         :isDisabled="isDisabled || credentials.length === 0"
                     />
+                    <p class="help">{{ $t('field.use_webauthn_only.help_bis') }}</p>
+                    <p class="help mt-3">{{ $t('field.use_webauthn_only.help_ter') }}</p>
                 </form>
                 <!-- footer -->
                 <VueFooter>
