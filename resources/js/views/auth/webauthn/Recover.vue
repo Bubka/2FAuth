@@ -56,7 +56,7 @@
                 <div class="field">
                     <p>
                         {{ $t('message.forgot_your_password') }}&nbsp;
-                        <RouterLink id="lnkResetPwd" :to="{ name: 'password.request' }" class="is-link" :aria-label="$t('link.reset_your_password')">
+                        <RouterLink id="lnkResetPwd" :to="{ name: 'password.request' }" class="is-link" :aria-label="$t('label.reset_your_password')">
                             {{ $t('link.request_password_reset') }}
                         </RouterLink>
                     </p>

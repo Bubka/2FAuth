@@ -73,7 +73,7 @@
     ])
     const captureModes = [
         { text: 'label.livescan', value: 'livescan' },
-        { text: 'label.upload', value: 'upload' },
+        { text: 'label.qr_code_upload', value: 'upload' },
         { text: 'label.advanced_form', value: 'advancedForm' },
     ]
     const getOtpTriggers = [
