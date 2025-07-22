@@ -125,7 +125,7 @@
 <template>
     <!-- webauthn authentication -->
     <FormWrapper v-if="activeForm == 'webauthn'" title="heading.webauthn_login" punchline="message.welcome_to_2fauth">
-        <div v-if="appSettings.enableSso == true && appSettings.useSsoOnly == true" class="notification is-warning has-text-centered" v-html="$t('message.sso_only_form_restricted_to_admin')" />
+        <div v-if="appSettings.enableSso == true && appSettings.useSsoOnly == true" class="notification is-warning has-text-centered">{{ $t('message.sso_only_form_restricted_to_admin') }}</div>
         <div class="block">
             {{ $t('message.use_security_device_to_sign_in') }}
         </div>
@@ -237,7 +237,7 @@
                 </template>
             </i18n-t>
         </div>
-        <div v-if="appSettings.enableSso == true && appSettings.useSsoOnly == true" class="notification is-warning has-text-centered" v-html="$t('message.sso_only_form_restricted_to_admin')" />
+        <div v-if="appSettings.enableSso == true && appSettings.useSsoOnly == true" class="notification is-warning has-text-centered">{{ $t('message.sso_only_form_restricted_to_admin') }}</div>
         <form id="frmLegacyLogin" @submit.prevent="LegacysignIn" @keydown="form.onKeydown($event)">
             <FormField v-model="form.email" fieldName="email" :errorMessage="form.errors.get('email')" inputType="email" label="field.email" autocomplete="username" autofocus />
             <FormPasswordField v-model="form.password" fieldName="password" :errorMessage="form.errors.get('password')" label="field.password" autocomplete="current-password" />

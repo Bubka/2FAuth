@@ -242,10 +242,10 @@
                         </div>
                     </div>
                     <div class="is-size-7 is-size-7-mobile has-text-grey-dark">
-                        <span v-if="managedUser.password_reset === 0" v-html="$t('message.password_request_expired')" class="is-block block"></span>
-                        <span v-else-if="managedUser.password_reset" v-html="$t('message.password_requested_on_t', { datetime: managedUser.password_reset })" class="is-block block"></span>
-                        <span v-if="managedUser.password_reset" v-html="$t('message.resend_email_help')" class="is-block block"></span>
-                        <span v-html="$t('message.reset_password_help')" class="is-block block"></span>
+                        <span v-if="managedUser.password_reset === 0" class="is-block block">{{ $t('message.password_request_expired') }}</span>
+                        <span v-else-if="managedUser.password_reset" class="is-block block">{{ $t('message.password_requested_on_t', { datetime: managedUser.password_reset }) }}</span>
+                        <span v-if="managedUser.password_reset" class="is-block block">{{ $t('message.resend_email_help') }}</span>
+                        <span class="is-block block">{{ $t('message.reset_password_help') }}</span>
                     </div>
                 </div>
                 <!-- personal access tokens -->

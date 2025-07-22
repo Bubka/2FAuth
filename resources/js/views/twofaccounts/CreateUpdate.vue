@@ -602,7 +602,7 @@
                 </div>
                 <div class="field">
                     <FormFieldError v-if="iconForm.errors.hasAny('icon')" :error="iconForm.errors.get('icon')" :field="'icon'" class="help-for-file" />
-                    <p id="lgdTryMyLuck" v-if="user.preferences.getOfficialIcons" class="help" v-html="$t('message.i_m_lucky_legend')"></p>
+                    <p id="lgdTryMyLuck" v-if="user.preferences.getOfficialIcons" class="help">{{ $t('message.i_m_lucky_legend') }}</p>
                 </div>
                 <!-- group -->
                 <FormSelect v-if="groups.length > 0" v-model="form.group_id" :options="groups" fieldName="group_id" label="field.group" help="field.group.help" />

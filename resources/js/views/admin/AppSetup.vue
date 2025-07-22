@@ -80,8 +80,8 @@
                     <VersionChecker />
                     <!-- email config test -->
                     <div class="field">
-                        <label class="label" for="btnTestEmail" v-html="$t('field.test_email')" />
-                        <p class="help" v-html="$t('field.test_email.help')" />
+                        <label class="label" for="btnTestEmail">{{ $t('field.test_email') }}</label>
+                        <p class="help">{{ $t('field.test_email.help') }}</p>
                         <p class="help">
                             <i18n-t keypath="message.email_will_be_send_to_x" tag="span">
                                 <template v-slot:email>
@@ -102,8 +102,8 @@
                     </div>
                     <!-- healthcheck -->
                     <div class="field">
-                        <label class="label" for="lnkHealthCheck" v-html="$t('field.health_endpoint')" />
-                        <p class="help" v-html="$t('field.health_endpoint.help')" />
+                        <label class="label" for="lnkHealthCheck">{{ $t('field.health_endpoint') }}</label>
+                        <p class="help">{{ $t('field.health_endpoint.help') }}</p>
                     </div>
                     <div class="field mb-5">
                         <a id="lnkHealthCheck" target="_blank" :href="healthEndPoint">{{ healthEndPointFullPath }}</a>
@@ -120,8 +120,8 @@
                 <h4 class="title is-4 pt-5 has-text-grey-light">{{ $t('heading.environment') }}</h4>
                 <!-- cache management -->
                 <div class="field">
-                    <label for="btnClearCache" class="label" v-html="$t('field.cache_management')" />
-                    <p class="help" v-html="$t('field.cache_management.help')" />
+                    <label for="btnClearCache" class="label">{{ $t('field.cache_management') }}</label>
+                    <p class="help">{{ $t('field.cache_management.help') }}</p>
                 </div>
                 <div class="field mb-5 is-grouped">
                     <p class="control">
@@ -132,7 +132,7 @@
                 </div>
                 <!-- env vars -->
                 <div class="field">
-                    <label for="btnCopyEnvVars" class="label"  v-html="$t('label.variables')" />
+                    <label for="btnCopyEnvVars" class="label">{{ $t('label.variables') }}</label>
                 </div>
                 <div v-if="infos" class="about-debug box is-family-monospace is-size-7">
                     <CopyButton id="btnCopyEnvVars" :token="listInfos?.innerText" />

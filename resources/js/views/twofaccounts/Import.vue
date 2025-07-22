@@ -271,7 +271,7 @@
                                             </figure>
                                         </div>
                                         <div class="media-content">
-                                            <p class="title is-5 has-text-grey" v-html="$t('heading.qr_code')" />
+                                            <p class="title is-5 has-text-grey">{{ $t('heading.qr_code') }}</p>
                                             <p class="subtitle is-6 is-size-7-mobile">{{ $t('message.supported_formats_for_qrcode_upload') }}</p>
                                         </div>
                                     </div>
@@ -322,7 +322,7 @@
                                             </figure>
                                         </div>
                                         <div class="media-content">
-                                            <p class="title is-5 has-text-grey" v-html="$t('message.direct_input')" />
+                                            <p class="title is-5 has-text-grey">{{ $t('message.direct_input') }}</p>
                                             <p class="subtitle is-6 is-size-7-mobile">{{ $t('message.expected_format_for_direct_input') }}</p>
                                         </div>
                                     </div>
