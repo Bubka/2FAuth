@@ -116,7 +116,7 @@
                 </div>
                 <form @submit.prevent="submitProfile" @keydown="formProfile.onKeydown($event)">
                     <div v-if="$2fauth.config.proxyAuth" class="notification is-warning has-text-centered">
-                        {{ $t('message.user_account_controlled_by_proxy') + '<br />' + $t('message.manage_account_at_proxy_level') }}
+                        {{ $t('message.user_account_controlled_by_proxy') + ' ' + $t('message.manage_account_at_proxy_level') }}
                     </div>
                     <h4 class="title is-4 has-text-grey-light">{{ $t('heading.profile') }}</h4>
                     <fieldset :disabled="$2fauth.config.proxyAuth || user.oauth_provider">

@@ -155,7 +155,7 @@
                     {{ $t('message.sso_only_x_settings_are_disabled', { auth_method: 'OAuth' }) }}
                 </div>
                 <div v-if="isDisabled && user.authenticated_by_proxy" class="notification is-warning has-text-centered">
-                    {{ $t('message.auth_handled_by_proxy') + '<br />' + $t('message.manage_auth_at_proxy_level') }}
+                    {{ $t('message.auth_handled_by_proxy') + ' ' + $t('message.manage_auth_at_proxy_level') }}
                 </div>
                 <h4 class="title is-4 has-text-grey-light">{{ $t('heading.personal_access_tokens') }}</h4>
                 <div class="is-size-7-mobile">
