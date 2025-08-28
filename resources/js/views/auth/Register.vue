@@ -5,6 +5,7 @@
     import { useNotify } from '@2fauth/ui'
     import { useI18n } from 'vue-i18n'
     import { useErrorHandler } from '@2fauth/stores'
+    import { LucideCheck } from 'lucide-vue-next'
 
     const errorHandler = useErrorHandler()
     const { t } = useI18n()
@@ -88,7 +89,9 @@
                 {{ $t('message.webauthn_uses_trusted_devices') }}
             </div>
             <div v-if="deviceId" class="field">
-                <label id="lblDeviceRegistrationSuccess" class="label mb-5">{{ $t('notification.device_successfully_registered') }}&nbsp;<font-awesome-icon :icon="['fas', 'check']" /></label>
+                <label id="lblDeviceRegistrationSuccess" class="label mb-5">
+                    {{ $t('notification.device_successfully_registered') }}<LucideCheck class="ml-1 inline" />
+                </label>
                 <form @submit.prevent="RenameDevice" @keydown="renameDeviceForm.onKeydown($event)">
                     <FormField v-model="renameDeviceForm.name" fieldName="name" :errorMessage="renameDeviceForm.errors.get('name')" inputType="text" placeholder="iPhone 12, TouchID, Yubikey 5C" label="field.name_this_device" />
                     <FormButtons :isBusy="renameDeviceForm.isBusy" :isDisabled="renameDeviceForm.isDisabled" submitLabel="label.continue" />
