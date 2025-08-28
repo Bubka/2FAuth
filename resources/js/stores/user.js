@@ -9,9 +9,7 @@ import { useNotify } from '@2fauth/ui'
 import { useAppSettingsStore } from '@/stores/appSettings'
 import { useErrorHandler } from '@2fauth/stores'
 
-export const useUserStore = defineStore({
-    id: 'user',
-
+export const useUserStore = defineStore('user', {
     state: () => {
         return {
             id: undefined,

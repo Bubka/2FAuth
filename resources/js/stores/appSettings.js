@@ -2,9 +2,7 @@ import appSettingService from '@/services/appSettingService'
 import { defineStore } from 'pinia'
 import { useNotify } from '@2fauth/ui'
 
-export const useAppSettingsStore = defineStore({
-    id: 'appSettings',
-
+export const useAppSettingsStore = defineStore('appSettings', {
     state: () => {
         return {
             lockedPreferences: window.lockedPreferences,

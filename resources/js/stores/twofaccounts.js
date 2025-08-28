@@ -5,9 +5,7 @@ import { useNotify } from '@2fauth/ui'
 import twofaccountService from '@/services/twofaccountService'
 import { saveAs } from 'file-saver'
 
-export const useTwofaccounts = defineStore({
-    id: 'twofaccounts',
-
+export const useTwofaccounts = defineStore('twofaccounts', {
     state: () => {
         return {
             items: [],
