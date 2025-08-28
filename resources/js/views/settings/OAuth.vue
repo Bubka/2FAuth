@@ -8,6 +8,7 @@
     import { useUserStore } from '@/stores/user'
     import { useI18n } from 'vue-i18n'
     import { useErrorHandler } from '@2fauth/stores'
+    import { LucideCirclePlus, LucideCheck } from 'lucide-vue-next'
 
     const errorHandler = useErrorHandler()
     const { t } = useI18n()
@@ -163,12 +164,12 @@
                 </div>
                 <div class="mt-3">
                     <a tabindex="0" class="is-link" @click="showPATcreationForm" @keyup.enter="showPATcreationForm">
-                        <FontAwesomeIcon :icon="['fas', 'plus-circle']" /> {{ $t('link.generate_new_token')}}
+                        <LucideCirclePlus /> {{ $t('link.generate_new_token')}}
                     </a>
                 </div>
                 <div v-if="tokens.length > 0">
                     <div v-for="token in tokens" :key="token.id" class="group-item is-size-5 is-size-6-mobile">
-                        <FontAwesomeIcon v-if="token.value" class="has-text-success" :icon="['fas', 'check']" /> {{ token.name }}
+                        <LucideCheck v-if="token.value" class="mr-1 has-text-success inline" />{{ token.name }}
                         <!-- revoke link -->
                         <div class="tags is-pulled-right">
                             <UseColorMode v-slot="{ mode }">

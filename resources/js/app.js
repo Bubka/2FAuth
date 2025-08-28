@@ -4,8 +4,6 @@ import i18n from './i18n'
 import Notifications from '@kyvg/vue3-notification'
 import App from './App.vue'
 import router from './router'
-import FontAwesomeIcon from './icons'
-// import helpers from './helpers'
 
 const app = createApp(App)
 
@@ -62,7 +60,6 @@ import {
 } from '@2fauth/ui'
 
 app
-    .component('FontAwesomeIcon', FontAwesomeIcon)
     .component('ResponsiveWidthWrapper', ResponsiveWidthWrapper)
     .component('Spinner', Spinner)
     .component('FormWrapper', FormWrapper)

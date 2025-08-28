@@ -4,6 +4,7 @@
     import { useNotify, TabBar, SearchBox } from '@2fauth/ui'
     import { UseColorMode } from '@vueuse/components'
     import { useErrorHandler } from '@2fauth/stores'
+    import { LucideCirclePlus } from 'lucide-vue-next'
 
     const errorHandler = useErrorHandler()
     const $2fauth = inject('2fauth')
@@ -114,7 +115,7 @@
                 </div>
                 <div class="mb-6 mt-3">
                     <RouterLink class="is-link mt-5" :to="{ name: 'admin.createUser' }">
-                        <FontAwesomeIcon :icon="['fas', 'plus-circle']" /> {{ $t('link.create_new_user') }}
+                        <LucideCirclePlus /> {{ $t('link.create_new_user') }}
                     </RouterLink>
                 </div>
                 <!-- search -->
@@ -142,7 +143,6 @@
                         <UseColorMode v-slot="{ mode }">
                             <div class="has-ellipsis">
                                 <span>{{ user.name }}</span>
-                                <!-- <FontAwesomeIcon v-if="token.value" class="has-text-success" :icon="['fas', 'check']" /> {{ token.name }} -->
                                 <!-- set as admin link -->
                                 <!-- admin tag -->
                                 <span class="is-block has-ellipsis is-family-primary is-size-6 is-size-7-mobile has-text-grey">{{ user.email }}</span>

@@ -8,6 +8,7 @@
     import { useTwofaccounts } from '@/stores/twofaccounts'
     import { UseColorMode } from '@vueuse/components'
     import { useI18n } from 'vue-i18n'
+    import { LucideCheck, LucideCircleAlert, LucideCircleX, LucideFileText, LucideQrCode, LucideTextCursorInput, LucideTriangleAlert, LucideX } from 'lucide-vue-next'
 
     const { t } = useI18n()
     const $2fauth = inject('2fauth')
@@ -267,7 +268,7 @@
                                     <div class="media">
                                         <div class="media-left">
                                             <figure class="image is-32x32">
-                                                <FontAwesomeIcon :icon="['fas', 'qrcode']" size="2x" :class="mode == 'dark' ? 'has-text-grey-darker' : 'has-text-grey-lighter'" />
+                                                <LucideQrCode class="icon-size-2" :class="mode == 'dark' ? 'has-text-grey-darker' : 'has-text-grey-lighter'" />
                                             </figure>
                                         </div>
                                         <div class="media-content">
@@ -294,7 +295,7 @@
                                     <div class="media">
                                         <div class="media-left">
                                             <figure class="image is-32x32">
-                                                <FontAwesomeIcon :icon="['fas', 'file-lines']" size="2x" :class="mode == 'dark' ? 'has-text-grey-darker' : 'has-text-grey-lighter'" />
+                                                <LucideFileText class="icon-size-2" :class="mode == 'dark' ? 'has-text-grey-darker' : 'has-text-grey-lighter'" />
                                             </figure>
                                         </div>
                                         <div class="media-content">
@@ -318,7 +319,7 @@
                                     <div class="media">
                                         <div class="media-left">
                                             <figure class="image is-32x32">
-                                                <FontAwesomeIcon :icon="['fas', 'align-left']" size="2x" :class="mode == 'dark' ? 'has-text-grey-darker' : 'has-text-grey-lighter'" />
+                                                <LucideTextCursorInput class="icon-size-2" :class="mode == 'dark' ? 'has-text-grey-darker' : 'has-text-grey-lighter'" />
                                             </figure>
                                         </div>
                                         <div class="media-content">
@@ -342,7 +343,7 @@
                 <!-- Supported migration resources -->
                 <h2 class="title is-5 has-text-grey-dark">{{ $t('heading.supported_migration_formats') }}</h2>
                 <div class="block is-size-7-mobile">
-                    <FontAwesomeIcon :icon="['fas', 'fa-triangle-exclamation']" class="has-text-warning-dark" />
+                    <LucideTriangleAlert class="inline icon-size-1 has-text-warning-dark" />
                     {{  $t('message.do_not_set_password_or_encryption') }}
                 </div>
                 <table class="table is-size-7-mobile is-fullwidth">
@@ -358,24 +359,24 @@
                         <tr>
                             <th>Google Authenticator</th>
                             <td></td>
-                            <td><FontAwesomeIcon :icon="['fas', 'circle-check']" /></td>
+                            <td><LucideCheck stroke-width="3" class="icon-size-1" /></td>
                             <td></td>
                         </tr>
                         <tr>
                             <th>Aegis Auth</th>
-                            <td><FontAwesomeIcon :icon="['fas', 'circle-check']" /></td>
+                            <td><LucideCheck stroke-width="3" class="icon-size-1" /></td>
                             <td></td>
-                            <td><FontAwesomeIcon :icon="['fas', 'circle-check']" /></td>
+                            <td><LucideCheck stroke-width="3" class="icon-size-1" /></td>
                         </tr>
                         <tr>
                             <th>2FAS auth</th>
                             <td></td>
                             <td></td>
-                            <td><FontAwesomeIcon :icon="['fas', 'circle-check']" /></td>
+                            <td><LucideCheck stroke-width="3" class="icon-size-1" /></td>
                         </tr>
                         <tr>
                             <th>FreeOTP+</th>
-                            <td><FontAwesomeIcon :icon="['fas', 'circle-check']" /></td>
+                            <td><LucideCheck stroke-width="3" class="icon-size-1" /></td>
                             <td></td>
                             <td></td>
                         </tr>
@@ -383,7 +384,7 @@
                             <th>2FAuth</th>
                             <td></td>
                             <td></td>
-                            <td><FontAwesomeIcon :icon="['fas', 'circle-check']" /></td>
+                            <td><LucideCheck stroke-width="3" class="icon-size-1" /></td>
                         </tr>
                     </tbody>
                 </table>           
@@ -406,22 +407,22 @@
                         <div v-else class="is-flex-grow-1 has-ellipsis">{{ account.account }}</div>
                         <!-- buttons -->
                         <div v-if="account.imported === -1" class="tags is-flex-wrap-nowrap">
-                            <!-- discard button -->
-                            <button type="button" class="button tag" :class="{'is-dark has-text-grey-light' : mode == 'dark'}" @click="discardAccount(index)"  :title="$t('tooltip.discard_this_account')">
-                                <FontAwesomeIcon :icon="['fas', 'trash']" />
-                            </button>
                             <!-- import button -->
                             <button v-if="account.id > -2" type="button" class="button tag is-link" @click="createAccount(index)"  :title="$t('tooltip.import_this_account')">
                                 {{ $t('label.to_import') }}
+                            </button>
+                            <!-- discard button -->
+                            <button type="button" class="button tag" :class="{'is-dark has-text-grey-light' : mode == 'dark'}" @click="discardAccount(index)"  :title="$t('tooltip.discard_this_account')">
+                                <LucideX class="icon-size-1" />
                             </button>
                         </div>
                         <!-- result label -->
                         <div v-else class="has-nowrap">
                             <span v-if="account.imported === 1" class="has-text-success">
-                                {{ $t('message.imported') }} <FontAwesomeIcon :icon="['fas', 'check']" />
+                                {{ $t('message.imported') }} <LucideCheck class="inline" />
                             </span>
                             <span v-else class="has-text-danger">
-                                {{ $t('message.failure') }} <FontAwesomeIcon :icon="['fas', 'times']" />
+                                {{ $t('message.failure') }} <LucideX class="inline" />
                             </span>
                         </div>
                     </div>
@@ -430,11 +431,11 @@
                         <div class="is-family-primary has-text-grey">{{ $t('label.issuer') }}: {{ account.service }}</div>
                         <!-- reasons to invalid G-Auth data -->
                         <div v-if="account.id === -2" class="has-text-danger">
-                            <FontAwesomeIcon class="mr-1" :icon="['fas', 'times-circle']" />{{ account.secret }}
+                            <LucideCircleX class="mr-1 icon-size-1 inline" />{{ account.secret }}
                         </div>
                         <!-- possible duplicates -->
                         <div v-if="account.id === -1 && account.imported !== 1 && !account.errors" class="has-text-warning">
-                            <FontAwesomeIcon class="mr-1" :icon="['fas', 'exclamation-circle']" />{{ $t('message.possible_duplicate') }}
+                            <LucideCircleAlert class="mr-1 icon-size-1 inline" />{{ $t('message.possible_duplicate') }}
                         </div>
                         <!-- errors during account creation -->
                         <ul v-if="account.errors">
@@ -458,9 +459,6 @@
                     <p class="control" v-if="importableCount > 0">
                         <button type="button" class="button is-link is-rounded is-focus" @click="createAccounts">
                             <span>{{ $t('label.import_all') }} ({{ importableCount }})</span>
-                            <!-- <span class="icon is-small">
-                                <FontAwesomeIcon :icon="['fas', 'qrcode']" />
-                            </span> -->
                         </button>
                     </p>
                     <NavigationButton v-if="importableCount > 0" action="cancel" @canceled="router.push({ name: 'accounts' })" />

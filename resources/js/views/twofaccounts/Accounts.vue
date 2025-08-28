@@ -13,6 +13,7 @@
     import { useSortable, moveArrayElement } from '@vueuse/integrations/useSortable'
     import { useI18n } from 'vue-i18n'
     import { useErrorHandler } from '@2fauth/stores'
+    import { LucideChevronDown, LucideCircleAlert, LucideMenu, LucideQrCode } from 'lucide-vue-next'
 
     const errorHandler = useErrorHandler()
     const { t } = useI18n()
@@ -394,7 +395,7 @@
                             <div class="column" v-else>
                                 <button type="button" id="btnShowGroupSwitch" :title="$t('tooltip.show_group_selector')" tabindex="1" class="button is-text is-like-text" :class="{'has-text-grey' : mode != 'dark'}" @click.stop="showGroupSwitch = !showGroupSwitch">
                                     {{ groups.current ? groups.current : $t('label.all') }} ({{ twofaccounts.filteredCount }})&nbsp;
-                                    <FontAwesomeIcon  :icon="['fas', 'caret-down']" />
+                                    <LucideChevronDown class="mt-1" />
                                 </button>
                             </div>
                         </div>
@@ -458,7 +459,7 @@
                                 <div class="tfa-text has-ellipsis">
                                     <img v-if="account.icon && user.preferences.showAccountsIcons" role="presentation" class="tfa-icon" :src="$2fauth.config.subdirectory + '/storage/icons/' + account.icon" alt="">
                                     <img v-else-if="account.icon == null && user.preferences.showAccountsIcons" role="presentation" class="tfa-icon" :src="$2fauth.config.subdirectory + '/storage/noicon.svg'" alt="">
-                                    {{ account.service ? account.service : $t('message.no_service') }}<FontAwesomeIcon class="has-text-danger is-size-5 ml-2" v-if="account.account === $t('error.indecipherable')" :icon="['fas', 'exclamation-circle']" />
+                                    {{ account.service ? account.service : $t('message.no_service') }}<LucideCircleAlert class="has-text-danger ml-2" v-if="account.account === $t('error.indecipherable')" />
                                     <span class="is-block has-ellipsis is-family-primary is-size-6 is-size-7-mobile has-text-grey ">{{ account.account }}</span>
                                 </div>
                             </div>
@@ -518,13 +519,13 @@
                                         {{ $t('link.edit') }}
                                     </RouterLink>
                                     <RouterLink :to="{ name: 'showQRcode', params: { twofaccountId: account.id }}" class="tag is-rounded" :class="mode == 'dark' ? 'is-dark' : 'is-white'" :title="$t('tooltip.show_qrcode')">
-                                        <FontAwesomeIcon :icon="['fas', 'qrcode']" />
+                                        <LucideQrCode class="icon-size-1" />
                                     </RouterLink>
                                 </div>
                             </transition>
                             <transition name="fadeInOut">
                                 <div class="drag-handle tfa-cell tfa-dots has-text-grey" v-if="bus.inManagementMode">
-                                    <FontAwesomeIcon :icon="['fas', 'bars']" />
+                                    <LucideMenu />
                                 </div>
                             </transition>
                         </div>

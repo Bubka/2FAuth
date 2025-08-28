@@ -8,6 +8,7 @@
     import VersionChecker from '@/components/VersionChecker.vue'
     import CopyButton from '@/components/CopyButton.vue'
     import { useI18n } from 'vue-i18n'
+    import { LucideSend } from 'lucide-vue-next'
 
     const { t } = useI18n()
     const $2fauth = inject('2fauth')
@@ -94,7 +95,7 @@
                         <div class="column is-narrow">
                             <button id="btnTestEmail" type="button" :class="isSendingTestEmail ? 'is-loading' : ''" class="button is-link is-rounded is-small" @click="sendTestEmail" >
                                 <span class="icon is-small">
-                                    <FontAwesomeIcon :icon="['far', 'paper-plane']" />
+                                    <LucideSend class="icon-size-1" />
                                 </span>
                                 <span>{{ $t('label.send') }}</span>
                             </button>   

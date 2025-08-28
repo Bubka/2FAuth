@@ -11,6 +11,7 @@
     import { UseColorMode } from '@vueuse/components'
     import { useI18n } from 'vue-i18n'
     import { useErrorHandler } from '@2fauth/stores'
+    import { LucideHardDriveUpload, LucideImageUp, LucideQrCode, LucideWandSparkles } from 'lucide-vue-next'
 
     const errorHandler = useErrorHandler()
     const { t } = useI18n()
@@ -487,9 +488,9 @@
                     <form @submit.prevent="createAccount" @keydown="form.onKeydown($event)">
                         <div>
                             <FormFieldError v-if="iconForm.errors.hasAny('icon')" :error="iconForm.errors.get('icon')" :field="'icon'" class="help-for-file" />
-                            <label for="filUploadIcon" class="add-icon-button" v-if="!tempIcon">
+                            <label for="filUploadIcon" class="add-icon-button pt-2" v-if="!tempIcon">
                                 <input id="filUploadIcon" class="file-input" type="file" accept="image/*" v-on:change="uploadIcon" ref="iconInput">
-                                <FontAwesomeIcon :icon="['fas', 'image']" size="2x" />
+                                <LucideImageUp class="icon-size-3" />
                             </label>
                             <button type="button" class="delete delete-icon-button is-medium" v-if="tempIcon" @click.prevent="deleteTempIcon"></button>
                             <OtpDisplay
@@ -532,10 +533,9 @@
                             <label class="file-label" :title="$t('tooltip.use_qrcode')" ref="qrcodeInputLabel">
                                 <input inert tabindex="-1" class="file-input" type="file" accept="image/*" v-on:change="uploadQrcode" ref="qrcodeInput">
                                 <span class="file-cta">
-                                    <span class="file-icon">
-                                        <FontAwesomeIcon :icon="['fas', 'qrcode']" size="lg" />
+                                    <span class="file-label">
+                                        <LucideQrCode class="mr-2" />{{ $t('label.prefill_using_qrcode') }}
                                     </span>
-                                    <span class="file-label">{{ $t('label.prefill_using_qrcode') }}</span>
                                 </span>
                             </label>
                         </div>
@@ -576,7 +576,7 @@
                     <div class="control">
                         <VueButton @click="fetchLogo" :color="mode == 'dark' ? 'is-dark' : ''" nativeType="button" :is-loading="fetchingLogo" :disabled="!form.service" aria-describedby="lgdTryMyLuck">
                             <span class="icon is-small">
-                                <FontAwesomeIcon :icon="['fas', 'globe']" />
+                                <LucideWandSparkles />
                             </span>
                             <span>{{ $t('label.i_m_lucky') }}</span>
                         </VueButton>
@@ -587,10 +587,9 @@
                             <label for="filUploadIcon" class="file-label" ref="iconInputLabel">
                                 <input id="filUploadIcon" tabindex="-1" class="file-input" type="file" accept="image/*" v-on:change="uploadIcon" ref="iconInput">
                                 <span class="file-cta">
-                                    <span class="file-icon">
-                                        <FontAwesomeIcon :icon="['fas', 'upload']" />
+                                    <span class="file-label">
+                                        <LucideHardDriveUpload class="mr-2" />{{ $t('label.choose_image') }}
                                     </span>
-                                    <span class="file-label">{{ $t('label.choose_image') }}</span>
                                 </span>
                             </label>
                         </div>

@@ -1,9 +1,17 @@
 <script setup>
     import userService from '@/services/userService'
-    import { FontAwesomeLayers } from '@fortawesome/vue-fontawesome'
     import { UseColorMode } from '@vueuse/components'
     import { useErrorHandler } from '@2fauth/stores'
     import { SearchBox } from '@2fauth/ui'
+    import {
+        LucideCalendarArrowDown,
+        LucideCalendarArrowUp,
+        LucideSmartphone,
+        LucideMonitor,
+        LucideTablet,
+        LucideCheck,
+        LucideX
+    } from 'lucide-vue-next'
 
     const errorHandler = useErrorHandler()
     const $2fauth = inject('2fauth')
@@ -154,12 +162,10 @@
                     {{ $t('label.one_year') }}
                 </button>
                 <button id="btnSortLogDesc" v-on:click="setDesc" :title="$t('tooltip.sort_by_date_desc')" :class="{ 'has-text-grey' : !orderIsDesc }" type="button" class="button p-1 is-ghost">
-                    <FontAwesomeIcon :icon="['fas', 'arrow-up-long']" flip="vertical" />
-                    <FontAwesomeIcon :icon="['far', 'calendar']" />
+                    <LucideCalendarArrowDown />
                 </button>
                 <button id="btnSortLogAsc" v-on:click="setAsc" :title="$t('tooltip.sort_by_date_asc')" :class="{ 'has-text-grey' : orderIsDesc }" type="button" class="button p-1 is-ghost">
-                    <FontAwesomeIcon :icon="['fas', 'arrow-up-long']" />
-                    <FontAwesomeIcon :icon="['far', 'calendar']" />
+                    <LucideCalendarArrowUp />
                 </button>
             </div>
         </div>
@@ -200,13 +206,15 @@
                         {{ $t('label.operating_system_short') }}: <span class="light-or-darker">{{ authentication.platform }}</span>
                     </div>
                 </div>
-                <div :class="mode == 'dark' ? 'has-text-grey-darker' : 'has-text-grey-lighter'" class="is-align-self-center ">
-                    <font-awesome-layers class="fa-2x width-1-5x">
-                        <FontAwesomeIcon :icon="['fas', deviceIcon(authentication.device)]" transform="grow-6" fixed-width />
-                        <FontAwesomeIcon :icon="['fas', isFailedEntry(authentication) ? 'times' : 'check']"
-                            :transform="'shrink-7' + (authentication.device == 'desktop' ? ' up-2' : '')"
-                            :class="isFailedEntry(authentication) ? 'has-text-danger' + (mode == 'dark' ? '-dark' : '') : 'has-text-success' + (mode == 'dark' ? '-dark' : '')" fixed-width />
-                    </font-awesome-layers>
+                <div :class="mode == 'dark' ? 'has-text-grey-darker' : 'has-text-grey-lighter'"
+                    class="is-align-self-center ">
+                    <div class="log-icon-wrapper">
+                        <LucideSmartphone v-if="authentication.device=='phone'" class="log-icon-bg" />
+                        <LucideTablet v-else-if="authentication.device=='tablet'" class="log-icon-bg" />
+                        <LucideMonitor v-else class="log-icon-bg" />
+                        <LucideX v-if="isFailedEntry(authentication)" stroke-width=3 class="log-icon-mark" :class="'has-text-danger' + (mode == 'dark' ? '-dark' : '')" />
+                        <LucideCheck v-else stroke-width=3 class="log-icon-mark" :class="'has-text-success' + (mode == 'dark' ? '-dark' : '')" />
+                    </div>
                 </div>
             </UseColorMode>
         </div>

@@ -7,6 +7,7 @@
     import { useAppSettingsStore } from '@/stores/appSettings'
     import { timezones } from './timezones'
     import { useI18n } from 'vue-i18n'
+    import { LucideExternalLink } from 'lucide-vue-next'
 
     const { t } = useI18n()
     const $2fauth = inject('2fauth')
@@ -186,7 +187,7 @@
                             {{ $t('message.some_translation_are_missing') }}
                             <a class="ml-2" href="https://crowdin.com/project/2fauth">
                                 {{ $t('link.help_translate_2fauth') }}
-                                <FontAwesomeIcon :icon="['fas', 'external-link-alt']" />
+                                <LucideExternalLink class="icon-size-1" />
                             </a>
                         </div>
                         <!-- timezone -->
@@ -202,7 +203,7 @@
                         <!-- icon collections -->
                         <FormSelect v-model="user.preferences.iconCollection" @update:model-value="val => saveIconCollection(val)" :options="iconCollections" fieldName="iconCollection" :isLocked="appSettings.lockedPreferences.includes('iconCollection')" :isDisabled="!user.preferences.getOfficialIcons" label="field.icon_collection" help="field.icon_collection.help" :isIndented="true">
                             <a class="button is-ghost" :href="iconCollectionUrl" target="_blank" :title="$t('tooltip.visit_x', { website: iconCollectionDomain})">
-                                <FontAwesomeIcon :icon="['fas', 'external-link-alt']" />
+                                <LucideExternalLink />
                             </a>
                         </FormSelect>
                         <!-- icon variant -->

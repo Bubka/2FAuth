@@ -1,6 +1,7 @@
 <script setup>
     import { UseColorMode } from '@vueuse/components'
     import { useUserStore } from '@/stores/user'
+    import { LucideCodeXml, LucideFlaskConical, LucideFolderGit2, LucideGraduationCap } from 'lucide-vue-next'
 
     const $2fauth = inject('2fauth')
     const user = useUserStore()
@@ -32,25 +33,25 @@
         <div class="buttons">
             <a class="button" :class="{'is-dark' : mode == 'dark'}" href="https://github.com/Bubka/2FAuth" target="_blank">
                 <span class="icon is-small">
-                    <FontAwesomeIcon :icon="['fab', 'github-alt']" />
+                    <LucideFolderGit2 />
                 </span>
                 <span>Github</span>
             </a>
             <a class="button" :class="{'is-dark' : mode == 'dark'}" href="https://docs.2fauth.app/" target="_blank">
                 <span class="icon is-small">
-                    <FontAwesomeIcon :icon="['fas', 'book']" />
+                    <LucideGraduationCap />
                 </span>
                 <span>{{ $t('label.docs') }}</span>
             </a>
             <a class="button" :class="{'is-dark' : mode == 'dark'}" href="https://demo.2fauth.app/" target="_blank">
                 <span class="icon is-small">
-                    <FontAwesomeIcon :icon="['fas', 'flask']" />
+                    <LucideFlaskConical />
                 </span>
                 <span>{{ $t('label.demo') }}</span>
             </a>
             <a class="button" :class="{'is-dark' : mode == 'dark'}" href="https://docs.2fauth.app/resources/rapidoc.html" target="_blank">
                 <span class="icon is-small">
-                    <FontAwesomeIcon :icon="['fas', 'code']" />
+                    <LucideCodeXml />
                 </span>
                 <span>{{ $t('label.api') }}</span>
             </a>
@@ -60,7 +61,7 @@
         </h2>
         <ul>
             <li>{{ $t('message.made_with') }}&nbsp;<a href="https://docs.2fauth.app/credits/">Laravel, Bulma CSS, Vue.js and more</a></li>
-            <li>{{ $t('message.ui_icons_by') }}&nbsp;<a href="https://fontawesome.com/">Font Awesome</a>&nbsp;<a class="is-size-7" href="https://fontawesome.com/license/free">(CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)</a></li>
+            <li>{{ $t('message.ui_icons_by') }}&nbsp;<a href="https://lucide.dev/">Lucide</a>&nbsp;<a class="is-size-7" href="https://lucide.dev/license">(ISC License)</a></li>
             <li>{{ $t('message.logos_by') }}&nbsp;<a href="https://2fa.directory/">2FA Directory</a>&nbsp;<a class="is-size-7" href="https://github.com/2factorauth/twofactorauth/blob/master/LICENSE.md">(MIT License)</a></li>
         </ul>
         <!-- footer -->

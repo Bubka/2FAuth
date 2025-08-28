@@ -1,6 +1,7 @@
 <script setup>
     import { UseColorMode  } from '@vueuse/components'
     import { useUserStore } from '@/stores/user'
+    import { LucideQrCode, LucideScanQrCode } from 'lucide-vue-next'
 
     const router = useRouter()
     const user = useUserStore()
@@ -41,7 +42,7 @@
             <button type="button" class="button is-link is-rounded is-focus" @click="goAddNewAccount">
                 <span>{{ $t('label.new') }}</span>
                 <span class="icon is-small">
-                    <FontAwesomeIcon :icon="['fas', 'qrcode']" />
+                    <LucideScanQrCode />
                 </span>
             </button>
         </p>

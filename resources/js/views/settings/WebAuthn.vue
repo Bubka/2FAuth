@@ -8,6 +8,7 @@
     import { UseColorMode } from '@vueuse/components'
     import { useI18n } from 'vue-i18n'
     import { useErrorHandler } from '@2fauth/stores'
+    import { LucideCirclePlus } from 'lucide-vue-next'
 
     const errorHandler = useErrorHandler()
     const { t } = useI18n()
@@ -139,7 +140,7 @@
                 </div>
                 <div class="mt-3">
                     <a tabindex="0" @click="register" @keyup.enter="register">
-                        <FontAwesomeIcon :icon="['fas', 'plus-circle']" />&nbsp;{{ $t('link.register_a_new_device')}}
+                        <LucideCirclePlus />&nbsp;{{ $t('link.register_a_new_device')}}
                     </a>
                 </div>
                 <!-- credentials list -->
@@ -152,10 +153,6 @@
                                 {{ $t('label.revoke') }}
                             </button>
                         </UseColorMode>
-                        <!-- edit link -->
-                        <!-- <RouterLink :to="{ name: '' }" class="has-text-grey pl-1" :title="$t('tooltip.rename')">
-                            <FontAwesomeIcon :icon="['fas', 'pen-square']" />
-                        </RouterLink> -->
                     </div>
                     <div class="mt-2 is-size-7 is-pulled-right">
                         {{ $t('message.revoking_a_device_is_permanent')}}

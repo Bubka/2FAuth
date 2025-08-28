@@ -2,6 +2,7 @@
     import { UseColorMode } from '@vueuse/components'
     import { useGroups } from '@/stores/groups'
     import { useBusStore } from '@/stores/bus'
+    import { LucideCirclePlus, LucideSquarePen } from 'lucide-vue-next'
 
     const router = useRouter()
     const groups = useGroups()
@@ -41,7 +42,7 @@
         </div>
         <div class="mt-3 mb-6">
             <RouterLink class="is-link mt-5" :to="{ name: 'createGroup' }">
-                <FontAwesomeIcon :icon="['fas', 'plus-circle']" /> {{ $t('link.create_group') }}
+                <LucideCirclePlus /> {{ $t('link.create_group') }}
             </RouterLink>
         </div>
         <div v-if="!groups.isEmpty">
@@ -55,7 +56,7 @@
                 </UseColorMode>
                 <!-- edit link -->
                 <RouterLink :to="{ name: 'editGroup', params: { groupId: group.id }}" class="has-text-grey px-1" :title="$t('tooltip.rename')">
-                    <FontAwesomeIcon :icon="['fas', 'pen-square']" />
+                    <LucideSquarePen class="icon-size-1" />
                 </RouterLink>
                 <span class="is-family-primary is-size-6 is-size-7-mobile has-text-grey">{{ $t('message.x_accounts', { count: group.twofaccounts_count }) }}</span>
             </div>

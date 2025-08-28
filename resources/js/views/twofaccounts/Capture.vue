@@ -7,6 +7,7 @@
     import { QrcodeStream } from 'vue-qrcode-reader'
     import { useI18n } from 'vue-i18n'
     import { useErrorHandler } from '@2fauth/stores'
+    import { LucideLock, LucideVideoOff, LucideStar, LucideCamera } from 'lucide-vue-next'
 
     const errorHandler = useErrorHandler()
     const { t } = useI18n()
@@ -153,25 +154,19 @@
                                         
                                         <div class="addressbar columns is-mobile is-gapless">
                                             <div class="column is-narrow has-text-left circled">
-                                                <FontAwesomeIcon :icon="['fas', 'lock']" class="ml-1" size="xs" />
-                                                <FontAwesomeIcon :icon="['fas', 'video-slash']" class="ml-3" size="xs" />
+                                                <LucideLock class="ml-1 inline icon-size-1-15" />
+                                                <LucideVideoOff class="ml-3 inline icon-size-1-15" />
                                             </div>
                                             <div class="column has-text-left ml-3">
                                                 http://my.2fauth.app/...
                                             </div>
                                             <div class="column is-narrow has-text-right">
-                                                <FontAwesomeIcon :icon="['far', 'star']" class="mr-1" />
+                                                <LucideStar class="mr-1 inline icon-size-1-15" />
                                             </div>
                                         </div>
                                         <p>
                                             <a @click.stop="reloadLocation">{{ $t('label.refresh') }}</a>
                                         </p>
-                                        
-                                        <!-- <div class="addressbar">
-                                            <FontAwesomeIcon :icon="['fas', 'video-slash']" class="mr-3 ml-2" size="xs" />
-                                            <span class="circled">http://my.2fauth.app/...</span>
-                                            <FontAwesomeIcon :icon="['far', 'star']" class="mr-3" size="xs" />
-                                        </div> -->
                                     </div>
                                     <p v-else class="is-size-7">{{ $t('message.stream.' + errorPhrase + '.solution') }}</p>
                                 </div>
@@ -204,7 +199,7 @@
                         </select>
                     </span>
                     <span class="icon is-small is-left">
-                        <FontAwesomeIcon :icon="['fas', 'camera']" />
+                        <LucideCamera />
                     </span>
                 </p>
             </div>

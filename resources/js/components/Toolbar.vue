@@ -1,4 +1,6 @@
 <script setup>
+    import { LucideArrowDownAZ, LucideArrowUpAZ, LucideSquareCheck } from 'lucide-vue-next';
+
     const props = defineProps({
         selectedCount: Number
     })
@@ -15,14 +17,14 @@
                 <!-- select all button -->
                 <button type="button" id="btnSelectAll" @click="$emit('select-all')" class="button mr-5 has-line-height p-1 is-ghost has-text-grey" :title="$t('tooltip.select_all')">
                     <span>{{ $t('label.check_all') }}</span>
-                    <FontAwesomeIcon class="ml-1" :icon="['fas', 'check-square']" />
+                    <LucideSquareCheck class="ml-1" />
                 </button>
                 <!-- sort asc/desc buttons -->
                 <button type="button" id="btnSortAscending" @click="$emit('sort-asc')" class="button has-line-height p-1 is-ghost has-text-grey" :title="$t('tooltip.sort_ascending')">
-                    <FontAwesomeIcon :icon="['fas', 'sort-alpha-down']" />
+                    <LucideArrowDownAZ />
                 </button>
                 <button type="button" id="btnSortDescending" @click="$emit('sort-desc')" class="button has-line-height p-1 is-ghost has-text-grey" :title="$t('tooltip.sort_descending')">
-                    <FontAwesomeIcon :icon="['fas', 'sort-alpha-up']" />
+                    <LucideArrowUpAZ />
                 </button>
             </div>
         </div>

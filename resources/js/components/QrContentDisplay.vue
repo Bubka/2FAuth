@@ -1,6 +1,7 @@
 <script setup>
     const { copy } = useClipboard({ legacy: true })
     import { useNotify } from '@2fauth/ui'
+    import { LucideExternalLink } from 'lucide-vue-next'
     import { useI18n } from 'vue-i18n'
 
     const { t } = useI18n()
@@ -61,7 +62,7 @@
         <button type="button" class="button is-link is-outlined is-rounded">
             <span>{{ $t('label.open_in_browser') }}</span>
             <span class="icon is-small">
-                <FontAwesomeIcon :icon="['fas', 'external-link-alt']" />
+                <LucideExternalLink />
             </span>
         </button>
     </div>
