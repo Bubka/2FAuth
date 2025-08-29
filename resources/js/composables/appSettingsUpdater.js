@@ -1,7 +1,5 @@
 import appSettingService from '@/services/appSettingService'
-import { useI18n } from 'vue-i18n'
 import { useErrorHandler } from '@2fauth/stores'
-import { useNotify } from '@2fauth/ui'
 
 /**
  * Saves a setting on the backend
@@ -10,19 +8,16 @@ import { useNotify } from '@2fauth/ui'
  */
 export async function useAppSettingsUpdater(setting, value, returnValidationError = false) {
 
-    const { t } = useI18n()
-
     let data = null
     let error = null
 
     await appSettingService.update(setting, value, { returnError: true })
     .then(response => {
         data = value
-        useNotify().success({ text: t('notification.setting_saved') })
     })
     .catch(err => {
         if( returnValidationError && err.response.status === 422 ) {
-            error = err
+            error = err.response.data.message
         }
         else {
             useErrorHandler().show(err)

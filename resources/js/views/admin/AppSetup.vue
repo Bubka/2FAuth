@@ -43,12 +43,24 @@
         isClearingCache.value = true;
 
         systemService.clearCache().then(response => {
-            useNotify().success({ text: t('notification.cache_cleared') })
+            notify.success({ text: t('notification.cache_cleared') })
         })
         .finally(() => {
             isClearingCache.value = false;
         })
     }
+
+    /**
+     * Saves a setting
+     */
+    async function saveSetting(setting, value) {
+        const { error } = await useAppSettingsUpdater(setting, value)
+
+        if (error == null) {
+            notify.success({ text: t('notification.setting_saved') })
+        }
+    }
+
 
     onBeforeRouteLeave((to) => {
         if (! to.name.startsWith('admin.')) {
@@ -77,7 +89,7 @@
                 <form>
                     <h4 class="title is-4 pt-4 has-text-grey-light">{{ $t('heading.general') }}</h4>
                     <!-- Check for update -->
-                    <FormCheckbox v-model="appSettings.checkForUpdate" @update:model-value="val => useAppSettingsUpdater('checkForUpdate', val)" fieldName="checkForUpdate" label="field.check_for_update" help="field.check_for_update.help" />
+                    <FormCheckbox v-model="appSettings.checkForUpdate" @update:model-value="val => saveSetting('checkForUpdate', val)" fieldName="checkForUpdate" label="field.check_for_update" help="field.check_for_update.help" />
                     <VersionChecker />
                     <!-- email config test -->
                     <div class="field">
@@ -111,11 +123,11 @@
                     </div>
                     <h4 class="title is-4 pt-5 has-text-grey-light">{{ $t('heading.storage') }}</h4>
                     <!-- store icons in database -->
-                    <FormCheckbox v-model="appSettings.storeIconsInDatabase" @update:model-value="val => useAppSettingsUpdater('storeIconsInDatabase', val)" fieldName="storeIconsInDatabase" label="field.store_icon_to_database" help="field.store_icon_to_database.help" />
+                    <FormCheckbox v-model="appSettings.storeIconsInDatabase" @update:model-value="val => saveSetting('storeIconsInDatabase', val)" fieldName="storeIconsInDatabase" label="field.store_icon_to_database" help="field.store_icon_to_database.help" />
                     <p class="help">{{ $t('field.store_icon_to_database.help_bis') }}</p>
                     <h4 class="title is-4 pt-5 has-text-grey-light">{{ $t('heading.security') }}</h4>
                     <!-- protect db -->
-                    <FormCheckbox v-model="appSettings.useEncryption" @update:model-value="val => useAppSettingsUpdater('useEncryption', val)" fieldName="useEncryption" label="field.use_encryption" help="field.use_encryption.help" />
+                    <FormCheckbox v-model="appSettings.useEncryption" @update:model-value="val => saveSetting('useEncryption', val)" fieldName="useEncryption" label="field.use_encryption" help="field.use_encryption.help" />
                 </form>
 
                 <h4 class="title is-4 pt-5 has-text-grey-light">{{ $t('heading.environment') }}</h4>
