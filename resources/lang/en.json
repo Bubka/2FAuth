@@ -198,7 +198,7 @@
     "field.period": "Period",
     "field.remember_active_group.help": "Save the last group filter applied and restore it on your next visit",
     "field.remember_active_group": "Remember group filter",
-    "field.restrict_list.help": "Emails in this list will be allowed to register. Separate addresses with a pipe ('|')",
+    "field.restrict_list.help": "Emails in this list will be allowed to register. Separate addresses with a pipe ('{'|'}')",
     "field.restrict_list": "Filtering list",
     "field.restrict_registration.help": "Make registration only available to a limited range of email addresses. Both rules can be used simultaneously. This has no effect on registration via SSO.",
     "field.restrict_registration": "Restrict registration",
