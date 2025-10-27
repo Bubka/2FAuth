@@ -37,18 +37,21 @@
             </div>
             <div class="column is-one-third-tablet is-one-quarter-desktop is-one-quarter-widescreen is-one-quarter-fullhd">
                 <div class="columns is-multiline">
-                    <div class="column is-full" v-for="group in groups" :key="group.id">
-                        <UseColorMode v-slot="{ mode }">
-                            <button type="button" class="button is-fullwidth" :class="{'is-link' : destinationGroupId === group.id, 'is-dark has-text-light is-outlined': mode == 'dark'}" @click="destinationGroupId = group.id">
-                                <span v-if="group.id === 0" class="is-italic">
-                                    {{ $t('label.no_group') }}
-                                </span>
-                                <span v-else>
-                                    {{ group.name }}
-                                </span>
+                    <UseColorMode v-slot="{ mode }">
+                        <div class="column is-full" v-for="group in groups" :key="group.id">
+                            <button v-if="group.id > 0" type="button" class="button is-fullwidth" :class="{'is-link' : destinationGroupId === group.id, 'is-dark has-text-light is-outlined': mode == 'dark'}" @click="destinationGroupId = group.id">
+                                {{ group.name }}
                             </button>
-                        </UseColorMode>
-                    </div>
+                        </div>
+                        <div class="column has-text-centered">
+                            {{ $t('message.or') }}
+                        </div>
+                        <div class="column is-full">
+                            <button type="button" class="button is-fullwidth" :class="{'is-link' : destinationGroupId === 0, 'is-dark has-text-light is-outlined': mode == 'dark'}" @click="destinationGroupId = 0">
+                                {{ $t('label.remove_from_group') }}
+                            </button>
+                        </div>
+                    </UseColorMode>
                 </div>
                 <div class="columns is-centered">
                     <div class="column has-text-centered">
@@ -61,7 +64,7 @@
             <template #default>
                 <!-- Move to selected group button -->
                 <p class="control">
-                    <button type="button" class="button is-link is-rounded" @click="moveAccounts">{{ $t('label.move') }}</button>
+                    <button type="button" class="button is-link is-rounded" @click="moveAccounts">{{ $t('label.apply') }}</button>
                 </p>
                 <NavigationButton action="cancel" :useLinkTag="false" @canceled="$emit('update:showDestinationGroupSelector', false)" />
             </template>
