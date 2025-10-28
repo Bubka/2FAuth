@@ -7,6 +7,10 @@
         "rebuild": "vite build --watch"
     },
     "devDependencies": {
+        "@2fauth/formcontrols": "file:../2FAuth-Components/packages/formcontrols",
+        "@2fauth/stores": "file:../2FAuth-Components/packages/stores",
+        "@2fauth/styles": "file:../2FAuth-Components/packages/styles",
+        "@2fauth/ui": "file:../2FAuth-Components/packages/ui",
         "@eslint/js": "^9.23.0",
         "@intlify/unplugin-vue-i18n": "^6.0.8",
         "@kyvg/vue3-notification": "^3.4.1",
