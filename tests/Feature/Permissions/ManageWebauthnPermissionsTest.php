@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Http\Middlewares;
+namespace Tests\Feature\Permissions;
 
 use App\Facades\Settings;
 use App\Http\Controllers\Auth\WebAuthnManageController;
