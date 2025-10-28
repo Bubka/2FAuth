@@ -95,9 +95,10 @@ export default defineConfig({
             },
         },
     },
-    // server: {
-    //     watch: {
-    //         followSymlinks: false,
-    //     }
-    // }
+    server: {
+        cors: true, // Configure CORS for the dev server. Pass an options object to fine tune the behavior or true to allow any origin
+        // watch: {
+        //     followSymlinks: false,
+        // }
+    }
 });

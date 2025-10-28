@@ -2,7 +2,7 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "dev": "vite",
+        "dev": "vite --host=127.0.0.1",
         "build": "vite build",
         "rebuild": "vite build --watch"
     },
