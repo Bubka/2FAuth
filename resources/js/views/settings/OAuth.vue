@@ -1,16 +1,20 @@
 <script setup>
+    import tabs from './tabs'
     import Form from '@/components/formElements/Form'
     import userService from '@/services/userService'
-    import SettingTabs from '@/layouts/SettingTabs.vue'
     import { useAppSettingsStore } from '@/stores/appSettings'
-    import { useNotifyStore } from '@/stores/notify'
+    import { useNotify, TabBar } from '@2fauth/ui'
     import { UseColorMode } from '@vueuse/components'
     import { useUserStore } from '@/stores/user'
-    import Spinner from '@/components/Spinner.vue'
+    import { useI18n } from 'vue-i18n'
+    import { useErrorHandler } from '@2fauth/stores'
+    import { LucideCirclePlus, LucideCheck } from 'lucide-vue-next'
 
+    const errorHandler = useErrorHandler()
+    const { t } = useI18n()
     const appSettings = useAppSettingsStore()
     const $2fauth = inject('2fauth')
-    const notify = useNotifyStore()
+    const notify = useNotify()
     const user = useUserStore()
     const returnTo = useStorage($2fauth.prefix + 'returnTo', 'accounts')
     const { copy } = useClipboard({ legacy: true })
@@ -59,7 +63,7 @@
                 // The form is already disabled (see isDisabled) so we do nothing more here
             }
             else {
-                notify.error(error)
+                errorHandler.show(error)
             }
         })
         .finally(() => {
@@ -77,7 +81,7 @@
         clearTokenValues()
 
         if (isDisabled.value) {
-            notify.warn({ text: trans('errors.unsupported_with_reverseproxy') })
+            notify.warn({ text: t('error.unsupported_with_reverseproxy') })
         }
         else createPATModalIsVisible.value = true
     }
@@ -100,12 +104,12 @@
      * revoke a token (after confirmation)
      */
     function revokeToken(tokenId) {
-        if(confirm(trans('settings.confirm.revoke'))) {
+        if(confirm(t('confirmation.revoke_token'))) {
             userService.deletePersonalAccessToken(tokenId)
             .then(response => {
                 // Remove the revoked token from the collection
                 tokens.value = tokens.value.filter(a => a.id !== tokenId)
-                notify.success({ text: trans('settings.token_revoked') })
+                notify.success({ text: t('notification.token_revoked') })
             })
         }
     }
@@ -125,7 +129,7 @@
      */
     function copyToClipboard(data) {
         copy(data)
-        notify.success({ text: trans('commons.copied_to_clipboard') })
+        notify.success({ text: t('notification.copied_to_clipboard') })
     }
 
     /**
@@ -145,39 +149,41 @@
 
 <template>
     <div>
-        <SettingTabs :activeTab="'settings.oauth.tokens'" />
+        <TabBar :tabs="tabs" :active-tab="'settings.oauth.tokens'" @tab-selected="(to) => router.push({ name: to })" />
         <div class="options-tabs">
             <FormWrapper>
                 <div v-if="isDisabled && user.oauth_provider" class="notification is-warning has-text-centered">
-                    {{ $t('auth.sso_only_x_settings_are_disabled', { auth_method: 'OAuth' }) }}
+                    {{ $t('message.sso_only_x_settings_are_disabled', { auth_method: 'OAuth' }) }}
                 </div>
-                <div v-if="isDisabled && user.authenticated_by_proxy" class="notification is-warning has-text-centered" v-html="$t('auth.auth_handled_by_proxy')" />
-                <h4 class="title is-4 has-text-grey-light">{{ $t('settings.personal_access_tokens') }}</h4>
+                <div v-if="isDisabled && user.authenticated_by_proxy" class="notification is-warning has-text-centered">
+                    {{ $t('message.auth_handled_by_proxy') + ' ' + $t('message.manage_auth_at_proxy_level') }}
+                </div>
+                <h4 class="title is-4 has-text-grey-light">{{ $t('heading.personal_access_tokens') }}</h4>
                 <div class="is-size-7-mobile">
-                    {{ $t('settings.token_legend')}}
+                    {{ $t('message.token_legend')}}
                 </div>
                 <div class="mt-3">
                     <a tabindex="0" class="is-link" @click="showPATcreationForm" @keyup.enter="showPATcreationForm">
-                        <FontAwesomeIcon :icon="['fas', 'plus-circle']" /> {{ $t('settings.generate_new_token')}}
+                        <LucideCirclePlus /> {{ $t('link.generate_new_token')}}
                     </a>
                 </div>
                 <div v-if="tokens.length > 0">
                     <div v-for="token in tokens" :key="token.id" class="group-item is-size-5 is-size-6-mobile">
-                        <FontAwesomeIcon v-if="token.value" class="has-text-success" :icon="['fas', 'check']" /> {{ token.name }}
+                        <LucideCheck v-if="token.value" class="mr-1 has-text-success inline" />{{ token.name }}
                         <!-- revoke link -->
                         <div class="tags is-pulled-right">
                             <UseColorMode v-slot="{ mode }">
                                 <button type="button" v-if="token.value" class="button tag" :class="{'is-link': mode != 'dark'}" @click.stop="copyToClipboard(token.value)">
-                                    {{ $t('commons.copy') }}
+                                    {{ $t('label.copy') }}
                                 </button>
-                                <button type="button" class="button tag" :class="mode === 'dark' ? 'is-dark':'is-white'" @click="revokeToken(token.id)" :title="$t('settings.revoke')">
-                                    {{ $t('settings.revoke') }}
+                                <button type="button" class="button tag" :class="mode === 'dark' ? 'is-dark':'is-white'" @click="revokeToken(token.id)" :title="$t('tooltip.revoke')">
+                                    {{ $t('label.revoke') }}
                                 </button>
                             </UseColorMode>
                         </div>
                         <!-- warning msg -->
                         <span v-if="token.value" class="is-size-7-mobile is-size-6 my-3">
-                            {{ $t('settings.make_sure_copy_token') }}
+                            {{ $t('message.make_sure_copy_token') }}
                         </span>
                         <!-- token value -->
                         <span v-if="token.value" class="pat is-family-monospace is-size-6 is-size-7-mobile has-text-success">
@@ -185,30 +191,32 @@
                         </span>
                     </div>
                     <div class="mt-2 is-size-7 is-pulled-right">
-                        {{ $t('settings.revoking_a_token_is_permanent')}}
+                        {{ $t('message.revoking_a_token_is_permanent')}}
                     </div>
                 </div>
-                <Spinner :isVisible="isFetching && tokens.length === 0" />
+                <Spinner :isVisible="isFetching && tokens.length === 0" type="list-loading" />
                 <!-- footer -->
-                <VueFooter :showButtons="true">
-                    <ButtonBackCloseCancel :returnTo="{ name: returnTo }" action="close" />
+                <VueFooter>
+                    <template #default>
+                        <NavigationButton action="close" @closed="router.push({ name: returnTo })" :current-page-title="$t('title.settings.oauth.tokens')" />
+                    </template>
                 </VueFooter>
             </FormWrapper>
         </div>
         <div v-if="createPATModalIsVisible" class="is-overlay modal-otp modal-background">
             <main class="main-section">
-                <FormWrapper title="settings.forms.new_token">
+                <FormWrapper title="heading.new_token">
                     <form @submit.prevent="generatePAToken" @keydown="form.onKeydown($event)">
-                        <FormField v-model="form.name" fieldName="name" :fieldError="form.errors.get('name')" inputType="text" label="commons.name" autofocus />
+                        <FormField v-model="form.name" fieldName="name" :errorMessage="form.errors.get('name')" inputType="text" label="field.name" autofocus />
                         <div class="field is-grouped">
                             <div class="control">
-                                <VueButton :id="'btnGenerateToken'" :isLoading="form.isBusy" >
-                                    {{ $t('commons.generate') }}
+                                <VueButton nativeType="submit" :id="'btnGenerateToken'" :isLoading="form.isBusy" >
+                                    {{ $t('label.generate') }}
                                 </VueButton>
                             </div>
                             <div class="control">
-                                <VueButton @click="cancelPATcreation" :nativeType="'button'" id="btnCancel" :color="'is-text'">
-                                    {{ $t('commons.cancel') }}
+                                <VueButton @click="cancelPATcreation" nativeType="button" id="btnCancel" :color="'is-text'">
+                                    {{ $t('label.cancel') }}
                                 </VueButton>
                             </div>
                         </div>

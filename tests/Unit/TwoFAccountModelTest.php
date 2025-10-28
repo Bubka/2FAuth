@@ -110,7 +110,7 @@ class TwoFAccountModelTest extends ModelTestCase
 
         $twofaccount = TwoFAccount::factory()->make();
 
-        $this->assertEquals(__('errors.indecipherable'), $twofaccount->$attribute);
+        $this->assertEquals(__('error.indecipherable'), $twofaccount->$attribute);
         $this->forgetMock(SettingService::class);
     }
 

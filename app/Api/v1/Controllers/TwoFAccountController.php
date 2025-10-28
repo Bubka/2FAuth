@@ -151,7 +151,7 @@ class TwoFAccountController extends Controller
 
             return $migrationResource instanceof \Illuminate\Http\UploadedFile
                 ? new TwoFAccountCollection(TwoFAccounts::migrate($migrationResource->get()))
-                : response()->json(['message' => __('errors.file_upload_failed')], 500);
+                : response()->json(['message' => __('error.file_upload_failed')], 500);
         } else {
             return new TwoFAccountCollection(TwoFAccounts::migrate($request->payload));
         }
@@ -203,7 +203,7 @@ class TwoFAccountController extends Controller
         if ($this->tooManyIds($validated['ids'])) {
             return response()->json([
                 'message' => 'bad request',
-                'reason'  => [__('errors.too_many_ids')],
+                'reason'  => [__('error.too_many_ids')],
             ], 400);
         }
 
@@ -276,7 +276,7 @@ class TwoFAccountController extends Controller
         if ($this->tooManyIds($validated['ids'])) {
             return response()->json([
                 'message' => 'bad request',
-                'reason'  => [__('errors.too_many_ids')],
+                'reason'  => [__('error.too_many_ids')],
             ], 400);
         }
 
@@ -316,7 +316,7 @@ class TwoFAccountController extends Controller
         if ($this->tooManyIds($validated['ids'])) {
             return response()->json([
                 'message' => 'bad request',
-                'reason'  => [__('errors.too_many_ids')],
+                'reason'  => [__('error.too_many_ids')],
             ], 400);
         }
 

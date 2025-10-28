@@ -72,8 +72,8 @@ class FixServiceFieldEncryption extends Command
     protected function encryptServiceField() : void
     {
         $twofaccounts                   = TwoFAccount::all();
-        $fullyEncryptedTwofaccounts     = $twofaccounts->whereNotIn('service', [__('errors.indecipherable')]);
-        $partiallyEncryptedTwofaccounts = $twofaccounts->where('service', __('errors.indecipherable'));
+        $fullyEncryptedTwofaccounts     = $twofaccounts->whereNotIn('service', [__('error.indecipherable')]);
+        $partiallyEncryptedTwofaccounts = $twofaccounts->where('service', __('error.indecipherable'));
 
         if ($fullyEncryptedTwofaccounts->count() === $twofaccounts->count()) {
             $this->components->info('The Service field is fully encrypted');

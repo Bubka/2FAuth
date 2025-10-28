@@ -18,7 +18,7 @@ class WebauthnAttestationRequest extends AttestationRequest
      */
     protected function failedAuthorization()
     {
-        throw new AccessDeniedHttpException(__('errors.unsupported_with_sso_only'));
+        throw new AccessDeniedHttpException(__('error.unsupported_with_sso_only'));
     }
 
     /**

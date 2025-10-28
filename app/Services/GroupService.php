@@ -88,7 +88,7 @@ class GroupService
     public static function prependTheAllGroup(Collection $groups, User $user)
     {
         $theAllGroup = new Group([
-            'name' => __('commons.all'),
+            'name' => __('label.all'),
         ]);
 
         $theAllGroup->id                 = 0;

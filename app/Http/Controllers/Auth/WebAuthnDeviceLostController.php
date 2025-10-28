@@ -51,6 +51,6 @@ class WebAuthnDeviceLostController extends Controller
      */
     protected function sendRecoveryLinkResponse(Request $request, string $response)
     {
-        return response()->json(['message' => __('auth.webauthn.account_recovery_email_sent')]);
+        return response()->json(['message' => __('message.account_recovery_email_sent')]);
     }
 }

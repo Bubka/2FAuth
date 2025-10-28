@@ -112,7 +112,7 @@ class Group extends Model
         // resolution logic to return an instance instead of not found.
         if ($value === '0') {
             $group = new self([
-                'name' => __('commons.all'),
+                'name' => __('label.all'),
             ]);
             $group->id = 0;
 

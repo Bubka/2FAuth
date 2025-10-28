@@ -19,7 +19,7 @@ class WebAuthnManageController extends Controller
     public function index(Request $request)
     {
         if (Gate::denies('manage-webauthn-credentials')) {
-            throw new AccessDeniedHttpException(__('errors.unsupported_with_sso_only'));
+            throw new AccessDeniedHttpException(__('error.unsupported_with_sso_only'));
         }
 
         $allUserCredentials = $request->user()->webAuthnCredentials()->WhereEnabled()->get();
@@ -54,7 +54,7 @@ class WebAuthnManageController extends Controller
         Log::info('Deletion of security device requested');
 
         if (Gate::denies('manage-webauthn-credentials')) {
-            throw new AccessDeniedHttpException(__('errors.unsupported_with_sso_only'));
+            throw new AccessDeniedHttpException(__('error.unsupported_with_sso_only'));
         }
 
         $user = $request->user();

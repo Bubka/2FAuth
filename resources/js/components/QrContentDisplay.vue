@@ -1,8 +1,11 @@
 <script setup>
     const { copy } = useClipboard({ legacy: true })
-    import { useNotifyStore } from '@/stores/notify'
-    
-    const notify = useNotifyStore()
+    import { useNotify } from '@2fauth/ui'
+    import { LucideExternalLink } from 'lucide-vue-next'
+    import { useI18n } from 'vue-i18n'
+
+    const { t } = useI18n()
+    const notify = useNotify()
 
     const props = defineProps({
         qrContent: String,
@@ -38,28 +41,28 @@
      */
     function copyToClipboard(data) {
         copy(data)
-        notify.success({ text: trans('commons.copied_to_clipboard') })
+        notify.success({ text: t('notification.copied_to_clipboard') })
     }
 </script>
 
 <template>
     <div class="too-bad"></div>
     <div class="block">
-        {{ $t('errors.data_of_qrcode_is_not_valid_URI') }}
+        {{ $t('error.data_of_qrcode_is_not_valid_URI') }}
     </div>
-    <div class="block mb-6 light-or-darker">{{ qrContent ? qrContent : '[' + trans('commons.nothing') + ']' }}</div>
+    <div class="block mb-6 light-or-darker">{{ qrContent ? qrContent : '[' + $t('message.nothing') + ']' }}</div>
     <!-- Copy to clipboard -->
     <div class="block has-text-link" v-if="qrContent">
         <button type="button" class="button is-link is-outlined is-rounded" @click.stop="copyToClipboard(qrContent)">
-            {{ $t('commons.copy_to_clipboard') }}
+            {{ $t('label.copy_to_clipboard') }}
         </button>
     </div>
     <!-- Open in browser -->
     <div class="block has-text-link" v-if="isUrl(qrContent)" @click="openInBrowser(qrContent)">
         <button type="button" class="button is-link is-outlined is-rounded">
-            <span>{{ $t('commons.open_in_browser') }}</span>
+            <span>{{ $t('label.open_in_browser') }}</span>
             <span class="icon is-small">
-                <FontAwesomeIcon :icon="['fas', 'external-link-alt']" />
+                <LucideExternalLink />
             </span>
         </button>
     </div>

@@ -3,12 +3,12 @@
  */
 export default async function adminOnly({ to, next, nextMiddleware, stores }) {
     const { user } = stores
-    const { notify } = stores
+    const { errorHandler } = stores
 
     if (! user.isAdmin) {
         let err = new Error('unauthorized')
         err.response.status = 403
-        notify.error(err)
+        errorHandler.show(err)
     }
     else nextMiddleware()
 }

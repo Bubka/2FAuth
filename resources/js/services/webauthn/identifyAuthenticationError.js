@@ -38,7 +38,7 @@ export function identifyAuthenticationError(error, options) {
             // https://www.w3.org/TR/webauthn-2/#sctn-createCredential (Step 16)
 
             return {
-                phrase: 'errors.aborted_by_user',
+                phrase: 'error.aborted_by_user',
                 type: 'is-warning'
             }
         }
@@ -50,7 +50,7 @@ export function identifyAuthenticationError(error, options) {
          */
 
         return {
-            phrase: 'errors.not_allowed_operation',
+            phrase: 'error.not_allowed_operation',
             type: 'is-danger'
         }
 
@@ -63,7 +63,7 @@ export function identifyAuthenticationError(error, options) {
             // https://www.w3.org/TR/webauthn-2/#sctn-discover-from-external-source (Step 5)
 
             return {
-                phrase: 'errors.2fauth_has_not_a_valid_domain',
+                phrase: 'error.2fauth_has_not_a_valid_domain',
                 type: 'is-danger'
             }
 
@@ -72,7 +72,7 @@ export function identifyAuthenticationError(error, options) {
             // // https://www.w3.org/TR/webauthn-2/#sctn-discover-from-external-source (Step 6)
 
             return {
-                phrase: 'errors.security_error_check_rpid',
+                phrase: 'error.security_error_check_rpid',
                 type: 'is-danger'
             }
         }
@@ -83,13 +83,13 @@ export function identifyAuthenticationError(error, options) {
         // https://www.w3.org/TR/webauthn-2/#sctn-op-get-assertion (Step 12)
 
         return {
-            phrase: 'errors.unknown_error',
+            phrase: 'error.unknown_error',
             type: 'is-danger'
         }
     }
 
     return {
-        phrase: 'errors.unknown_error',
+        phrase: 'error.unknown_error',
         type: 'is-danger'
     }
 }

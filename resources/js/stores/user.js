@@ -5,12 +5,11 @@ import router from '@/router'
 import { useColorMode } from '@vueuse/core'
 import { useTwofaccounts } from '@/stores/twofaccounts'
 import { useGroups } from '@/stores/groups'
-import { useNotifyStore } from '@/stores/notify'
+import { useNotify } from '@2fauth/ui'
 import { useAppSettingsStore } from '@/stores/appSettings'
+import { useErrorHandler } from '@2fauth/stores'
 
-export const useUserStore = defineStore({
-    id: 'user',
-
+export const useUserStore = defineStore('user', {
     state: () => {
         return {
             id: undefined,
@@ -63,7 +62,8 @@ export const useUserStore = defineStore({
          */
         logout(options = {}) {
             const { kicked } = options
-            const notify = useNotifyStore()
+            const notify = useNotify()
+            const errorHandler = useErrorHandler()
 
             // async appLogout(evt) {
             if (this.$2fauth.config.proxyAuth) {
@@ -76,7 +76,7 @@ export const useUserStore = defineStore({
                 authService.logout({ returnError: true }).then(() => {
                     if (kicked) {
                         notify.clear()
-                        notify.warn({ text: trans('auth.autolock_triggered_punchline'), duration:-1 })
+                        notify.warn({ text: this.$i18n.global.t('notification.autolock_triggered_punchline'), duration:-1 })
                     }
                     this.tossOut()
                 })
@@ -85,7 +85,7 @@ export const useUserStore = defineStore({
                     // backend has already detect inactivity on its side. In this case we
                     // don't want any error to be displayed.
                     if (error.response.status !== 401) {
-                        notify.error(error)
+                        errorHandler.show(error)
                     }
                     else this.tossOut()
                 })
@@ -108,7 +108,7 @@ export const useUserStore = defineStore({
          */
         applyTheme() {
             const mode = useColorMode({
-                attribute: 'data-theme',
+                class: 'dark',
             })
             mode.value = this.preferences.theme == 'system' ? 'auto' : this.preferences.theme
         },
@@ -118,24 +118,16 @@ export const useUserStore = defineStore({
          */
         applyLanguage() {
             const { isSupported, language } = useNavigatorLanguage()
-            let lang = 'en'
+            let lang = this.$i18n.fallbackLocale
 
             if (isSupported) {
-                if (this.preferences.lang == 'browser') {
-                    if (this.$2fauth.langs.includes(language.value)) {
-                        lang = language.value
-                    }
-                    // If the language tag pushed by the browser is composed of
-                    // multiple subtags (ex: fr-FR) we need to retry but only with
-                    // the "language subtag" (ex: fr)
-                    else if (this.$2fauth.langs.includes(language.value.slice(0, 2))) {
-                        lang = language.value.slice(0, 2)
-                    }
-                }
-                else lang = this.preferences.lang
+                // The language tag pushed by the browser may be composed of
+                // multiple subtags (ex: fr-FR) so we keep only the
+                // "language subtag" (ex: fr)
+                lang = this.preferences.lang == 'browser' ? language.value.slice(0, 2)  : this.preferences.lang
             }
 
-            loadLanguageAsync(lang)
+            this.$i18n.global.locale = lang
         },
 
         /**
@@ -167,8 +159,8 @@ export const useUserStore = defineStore({
                 })
             })
             .catch(error => {
-                const notify = useNotifyStore()
-                notify.alert({ text: trans('errors.data_cannot_be_refreshed_from_server') })
+                const notify = useNotify()
+                notify.alert({ text: this.$i18n.global.t('error.data_cannot_be_refreshed_from_server') })
             })
         }
 

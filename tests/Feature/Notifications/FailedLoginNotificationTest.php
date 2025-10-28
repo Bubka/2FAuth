@@ -73,7 +73,7 @@ class FailedLoginNotificationTest extends FeatureTestCase
         );
 
         $this->assertStringContainsString(
-            __('admin.browser_on_platform', ['browser' => 'Firefox', 'platform' => 'Windows']),
+            __('message.browser_on_platform', ['browser' => 'Firefox', 'platform' => 'Windows']),
             $mail
         );
     }

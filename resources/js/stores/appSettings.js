@@ -1,10 +1,8 @@
 import appSettingService from '@/services/appSettingService'
 import { defineStore } from 'pinia'
-import { useNotifyStore } from '@/stores/notify'
+import { useNotify } from '@2fauth/ui'
 
-export const useAppSettingsStore = defineStore({
-    id: 'appSettings',
-
+export const useAppSettingsStore = defineStore('appSettings', {
     state: () => {
         return {
             lockedPreferences: window.lockedPreferences,
@@ -30,7 +28,7 @@ export const useAppSettingsStore = defineStore({
                 })
             })
             .catch(error => {
-                useNotifyStore().alert({ text: trans('errors.failed_to_retrieve_app_settings') })
+                useNotify().alert({ text: this.$i18n.global.t('error.failed_to_retrieve_app_settings') })
             })
         },
     },

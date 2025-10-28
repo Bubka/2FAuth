@@ -67,7 +67,7 @@ class FixOrphanAccounts extends Command
         $this->line('Trying to fix them...');
 
         foreach ($twofaccounts as $twofaccount) {
-            if ($twofaccount->legacy_uri === __('errors.indecipherable')) {
+            if ($twofaccount->legacy_uri === __('error.indecipherable')) {
                 $this->error(sprintf('Account #%d cannot be deciphered', $twofaccount->id));
             } else {
                 try {

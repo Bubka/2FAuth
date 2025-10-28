@@ -538,7 +538,7 @@ class TwoFAccountModelTest extends FeatureTestCase
         $otp_from_uri = $twofaccount->fillWithOtpParameters([
             'account'  => OtpTestData::ACCOUNT,
             'otp_type' => 'totp',
-            'secret'   => __('errors.indecipherable'),
+            'secret'   => __('error.indecipherable'),
         ])->getOTP();
     }
 

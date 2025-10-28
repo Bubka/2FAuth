@@ -1,26 +1,25 @@
 <script setup>
     import twofaccountService from '@/services/twofaccountService'
-    import TotpLooper from '@/components/TotpLooper.vue'
-    import GroupSwitch from '@/components/GroupSwitch.vue'
     import DestinationGroupSelector from '@/components/DestinationGroupSelector.vue'
-    import SearchBox from '@/components/SearchBox.vue'
     import Toolbar from '@/components/Toolbar.vue'
-    import OtpDisplay from '@/components/OtpDisplay.vue'
     import ActionButtons from '@/components/ActionButtons.vue'
     import ExportButtons from '@/components/ExportButtons.vue'
-    import Dots from '@/components/Dots.vue'
     import { UseColorMode } from '@vueuse/components'
     import { useUserStore } from '@/stores/user'
-    import { useNotifyStore } from '@/stores/notify'
+    import { useNotify, SearchBox, GroupSwitch, OtpDisplay, Dots, DotsController, useVisiblePassword } from '@2fauth/ui'
     import { useBusStore } from '@/stores/bus'
     import { useTwofaccounts } from '@/stores/twofaccounts'
     import { useGroups } from '@/stores/groups'
-    import { useDisplayablePassword } from '@/composables/helpers'
     import { useSortable, moveArrayElement } from '@vueuse/integrations/useSortable'
+    import { useI18n } from 'vue-i18n'
+    import { useErrorHandler } from '@2fauth/stores'
+    import { LucideChevronDown, LucideCircleAlert, LucideEye, LucideEyeOff, LucideMenu, LucideQrCode } from 'lucide-vue-next'
 
+    const errorHandler = useErrorHandler()
+    const { t } = useI18n()
     const $2fauth = inject('2fauth')
     const router = useRouter()
-    const notify = useNotifyStore()
+    const notify = useNotify()
     const user = useUserStore()
     const bus = useBusStore()
     const { copy, copied } = useClipboard({ legacy: true })
@@ -37,13 +36,19 @@
     const opacities = ref({})
 
     const otpDisplay = ref(null)
-    const otpDisplayProps = ref({
+    const accountParams = ref({
         otp_type: '',
-        account : '',
-        service : '',
-        icon : '',
+        account: '',
+        service: '',
+        icon: '',
+        secret: '',
+        digits: null,
+        algorithm: '',
+        period: null,
+        counter: null,
+        image: ''
     })
-    const looperRefs = ref([])
+    const dotsControllers = ref([])
     const dotsRefs = ref([])
 
     let stopSortable
@@ -92,7 +97,7 @@
         else {
             twofaccounts.fetch().then(() => {
                 if (twofaccounts.backendWasNewer) {
-                    notify.info({ text: trans('commons.data_refreshed_to_reflect_server_changes'), duration: 10000 })
+                    notify.info({ text: t('notification.data_refreshed_to_reflect_server_changes'), duration: 10000 })
                 }
             })
         }
@@ -126,7 +131,7 @@
         twofaccounts.fetch()
         twofaccounts.selectNone()
         showDestinationGroupSelector.value = false
-        notify.success({ text: trans('twofaccounts.accounts_moved') })
+        notify.success({ text: t('notification.accounts_moved') })
     }
 
     /**
@@ -135,10 +140,10 @@
     function showOTP(account) {
         // Data that should be displayed quickly by the OtpDisplay
         // component are passed using props.
-        otpDisplayProps.value.otp_type = account.otp_type
-        otpDisplayProps.value.service = account.service
-        otpDisplayProps.value.account = account.account
-        otpDisplayProps.value.icon = account.icon
+        accountParams.value.otp_type = account.otp_type
+        accountParams.value.service = account.service
+        accountParams.value.account = account.account
+        accountParams.value.icon = account.icon
 
         nextTick().then(() => {
             showOtpInModal.value = true
@@ -183,7 +188,7 @@
                     : user.preferences.defaultGroup
             }
             
-            notify.success({ text: trans('commons.copied_to_clipboard') })
+            notify.success({ text: t('notification.copied_to_clipboard') })
         }
     }
 
@@ -248,7 +253,7 @@
     }
 
     /**
-     * Updates "Always On" OTPs for all TOTP accounts and (re)starts loopers
+     * Updates "Always On" OTPs for all TOTP accounts and (re)starts dots controllers
      */
     async function updateTotps(period) {
         let fetchPromise
@@ -292,11 +297,11 @@
                 }
             })
 
-            // Loopers restart at new timestamp
-            looperRefs.value.forEach((looper) => {
-                if (looper.props.period == period || period == undefined) {
+            // dots controllers restart at new timestamp
+            dotsControllers.value.forEach((dotsController) => {
+                if (dotsController.props.period == period || period == undefined) {
                     nextTick().then(() => {
-                        looper.startLoop(generatedAt)
+                        dotsController.startStepping(generatedAt)
                     })
                 }
             })
@@ -327,12 +332,37 @@
         twofaccounts.selectNone()
     }
 
+    /**
+     * Saves the active group to the backends
+     */
+    // TODO : Delegate this to the store or a global watcher
+    function saveActiveGroup(newActiveGroupId) {
+        // When invoked by GroupSwitch event,  newActiveGroupId should
+        // be the same as user.preferences.activeGroup because of the v-model
+        // binding.
+        // When invoked by OtpDisplay we have to update the user preference too.
+        if (user.preferences.activeGroup != newActiveGroupId) {
+            user.preferences.activeGroup = newActiveGroupId
+        }
+
+        if( user.preferences.rememberActiveGroup) {
+            userService.updatePreference('activeGroup', user.preferences.activeGroup)
+        }
+    }
+
 </script>
 
 <template>
     <UseColorMode v-slot="{ mode }">
     <div>
-        <GroupSwitch v-if="showGroupSwitch" v-model:showGroupSwitch="showGroupSwitch" v-model:groups="groups.items" />
+        <GroupSwitch
+            v-if="showGroupSwitch"
+            v-model:is-visible="showGroupSwitch"
+            v-model:active-group="user.preferences.activeGroup"
+            :groups="groups.items"
+            @active-group-changed="saveActiveGroup">
+                <RouterLink :to="{ name: 'groups' }" >{{ $t('link.manage_groups') }}</RouterLink>
+        </GroupSwitch>
         <DestinationGroupSelector
             v-if="showDestinationGroupSelector"
             v-model:showDestinationGroupSelector="showDestinationGroupSelector"
@@ -358,14 +388,14 @@
                     <div v-else class="has-text-centered">
                         <div class="columns">
                             <div class="column" v-if="showGroupSwitch">
-                                <button type="button" id="btnHideGroupSwitch" :title="$t('groups.hide_group_selector')" tabindex="1" class="button is-text is-like-text" :class="{'has-text-grey' : mode != 'dark'}" @click.stop="showGroupSwitch = !showGroupSwitch">
-                                    {{ $t('groups.select_accounts_to_show') }}
+                                <button type="button" id="btnHideGroupSwitch" :title="$t('tooltip.hide_group_selector')" tabindex="1" class="button is-text is-like-text" :class="{'has-text-grey' : mode != 'dark'}" @click.stop="showGroupSwitch = !showGroupSwitch">
+                                    {{ $t('label.select_accounts_to_show') }}
                                 </button>
                             </div>
                             <div class="column" v-else>
-                                <button type="button" id="btnShowGroupSwitch" :title="$t('groups.show_group_selector')" tabindex="1" class="button is-text is-like-text" :class="{'has-text-grey' : mode != 'dark'}" @click.stop="showGroupSwitch = !showGroupSwitch">
-                                    {{ groups.current }} ({{ twofaccounts.filteredCount }})&nbsp;
-                                    <FontAwesomeIcon  :icon="['fas', 'caret-down']" />
+                                <button type="button" id="btnShowGroupSwitch" :title="$t('tooltip.show_group_selector')" tabindex="1" class="button is-text is-like-text" :class="{'has-text-grey' : mode != 'dark'}" @click.stop="showGroupSwitch = !showGroupSwitch">
+                                    {{ groups.current ? groups.current : $t('label.all') }} ({{ twofaccounts.filteredCount }})&nbsp;
+                                    <LucideChevronDown class="mt-1" />
                                 </button>
                             </div>
                         </div>
@@ -384,24 +414,31 @@
         <Modal v-model="showOtpInModal">
             <OtpDisplay
                 ref="otpDisplay"
-                v-bind="otpDisplayProps"
+                :accountParams="accountParams"
+                :preferences="user.preferences"
+                :twofaccountService="twofaccountService"
+                :iconPathPrefix="$2fauth.config.subdirectory"
                 @please-close-me="showOtpInModal = false"
-                @please-clear-search="twofaccounts.filter = ''">
-            </OtpDisplay>
+                @please-clear-search="twofaccounts.filter = ''"
+                @kickme="user.logout({ kicked: true})"
+                @please-update-activeGroup="saveActiveGroup"
+                @otp-copied-to-clipboard="notify.success({ text: t('notification.copied_to_clipboard') })"
+                @error="(error) => errorHandler.show(error)"
+            />
         </Modal>
-        <!-- totp loopers -->
+        <!-- dots controllers -->
         <span v-if="!user.preferences.getOtpOnRequest">
-            <TotpLooper
+            <DotsController
                 v-for="period in twofaccounts.periods"
+                ref="dotsControllers"
                 :key="period.period"
                 :autostart="false"
                 :period="period.period"
                 :generated_at="period.generated_at"
-                v-on:loop-ended="updateTotps(period.period)"
-                v-on:loop-started="turnDotsOn(period.period, $event)"
-                v-on:stepped-up="turnDotsOn(period.period, $event)"
-                ref="looperRefs"
-            ></TotpLooper>
+                @stepping-ended="updateTotps(period.period)"
+                @stepping-started="turnDotsOn(period.period, $event)"
+                @stepped-up="turnDotsOn(period.period, $event)"
+            ></DotsController>
         </span>
         <!-- show accounts list -->
         <div class="container" v-if="showAccounts" :class="bus.inManagementMode ? 'is-edit-mode' : ''">
@@ -422,31 +459,46 @@
                                 <div class="tfa-text has-ellipsis">
                                     <img v-if="account.icon && user.preferences.showAccountsIcons" role="presentation" class="tfa-icon" :src="$2fauth.config.subdirectory + '/storage/icons/' + account.icon" alt="">
                                     <img v-else-if="account.icon == null && user.preferences.showAccountsIcons" role="presentation" class="tfa-icon" :src="$2fauth.config.subdirectory + '/storage/noicon.svg'" alt="">
-                                    {{ account.service ? account.service : $t('twofaccounts.no_service') }}<FontAwesomeIcon class="has-text-danger is-size-5 ml-2" v-if="account.account === $t('errors.indecipherable')" :icon="['fas', 'exclamation-circle']" />
+                                    {{ account.service ? account.service : $t('message.no_service') }}<LucideCircleAlert class="has-text-danger ml-2" v-if="account.account === $t('error.indecipherable')" />
                                     <span class="is-block has-ellipsis is-family-primary is-size-6 is-size-7-mobile has-text-grey ">{{ account.account }}</span>
                                 </div>
                             </div>
                             <transition name="popLater">
                                 <div v-show="user.preferences.getOtpOnRequest == false && !bus.inManagementMode" class="has-text-right">
                                     <div v-if="account.otp != undefined">
-                                        <div class="always-on-otp is-clickable has-nowrap has-text-grey is-size-5 ml-4" @click="copyToClipboard(account.otp.password)" @keyup.enter="copyToClipboard(account.otp.password)" :title="$t('commons.copy_to_clipboard')">
-                                            {{ useDisplayablePassword(account.otp.password, user.preferences.showOtpAsDot && user.preferences.revealDottedOTP && revealPassword == account.id) }}
+                                        <div class="always-on-otp is-clickable has-nowrap has-text-grey is-size-5 ml-4" @click="copyToClipboard(account.otp.password)" @keyup.enter="copyToClipboard(account.otp.password)" :title="$t('tooltip.copy_to_clipboard')">
+                                            {{ useVisiblePassword(
+                                                    account.otp.password,
+                                                    user.preferences.formatPassword,
+                                                    user.preferences.formatPasswordBy,
+                                                    user.preferences.showOtpAsDot,
+                                                    user.preferences.revealDottedOTP && revealPassword == account.id
+                                                )
+                                            }}
                                         </div>
                                         <div class="has-nowrap" style="line-height: 0.9;">
-                                            <span v-if="user.preferences.showNextOtp" class="always-on-otp is-clickable has-nowrap has-text-grey is-size-7 mr-2" :class="opacities[account.period]" @click="copyToClipboard(account.otp.next_password)" @keyup.enter="copyToClipboard(account.otp.next_password)" :title="$t('commons.copy_next_password')">
-                                                {{ useDisplayablePassword(account.otp.next_password, user.preferences.showOtpAsDot && user.preferences.revealDottedOTP && revealPassword == account.id) }}
+                                            <span v-if="user.preferences.showNextOtp" class="always-on-otp is-clickable has-nowrap has-text-grey is-size-7 mr-2" :class="opacities[account.period]" @click="copyToClipboard(account.otp.next_password)" @keyup.enter="copyToClipboard(account.otp.next_password)" :title="$t('tooltip.copy_next_password')">
+                                                {{ useVisiblePassword(
+                                                        account.otp.next_password,
+                                                        user.preferences.formatPassword,
+                                                        user.preferences.formatPasswordBy,
+                                                        user.preferences.showOtpAsDot,
+                                                        user.preferences.revealDottedOTP && revealPassword == account.id
+                                                    )
+                                                }}
                                             </span>
                                             <Dots
                                                 v-if="account.otp_type.includes('totp')"
-                                                :class="'condensed is-inline-block'"
                                                 ref="dotsRefs"
+                                                :class="'is-inline-block'"
+                                                :isCondensed="true"
                                                 :period="account.period" />
                                         </div>
                                     </div>
                                     <div v-else>
                                         <!-- get hotp button -->
-                                        <button type="button" class="button tag" :class="mode == 'dark' ? 'is-dark' : 'is-white'" @click="showOTP(account)" :title="$t('twofaccounts.import.import_this_account')">
-                                            {{ $t('commons.generate') }}
+                                        <button type="button" class="button tag" :class="mode == 'dark' ? 'is-dark' : 'is-white'" @click="showOTP(account)" :title="$t('tooltip.import_this_account')">
+                                            {{ $t('label.generate') }}
                                         </button>
                                     </div>
                                 </div>
@@ -454,40 +506,50 @@
                             <transition name="popLater" v-if="user.preferences.showOtpAsDot && user.preferences.revealDottedOTP">
                                 <div v-show="user.preferences.getOtpOnRequest == false && !bus.inManagementMode" class="has-text-right">
                                     <button v-if="revealPassword == account.id" type="button" class="pr-0 button is-ghost has-text-grey-dark" @click.stop="revealPassword = null">
-                                        <font-awesome-icon :icon="['fas', 'eye']" />
+                                        <LucideEye />
                                     </button>
                                     <button v-else type="button" class="pr-0 button is-ghost has-text-grey-dark" @click.stop="revealPassword = account.id">
-                                        <font-awesome-icon :icon="['fas', 'eye-slash']" />
+                                        <LucideEyeOff />
                                     </button>
                                 </div>
                             </transition>
                             <transition name="fadeInOut">
                                 <div class="tfa-cell tfa-edit has-text-grey" v-if="bus.inManagementMode">
                                     <RouterLink :to="{ name: 'editAccount', params: { twofaccountId: account.id }}" class="tag is-rounded mr-1" :class="mode == 'dark' ? 'is-dark' : 'is-white'">
-                                        {{ $t('commons.edit') }}
+                                        {{ $t('link.edit') }}
                                     </RouterLink>
-                                    <RouterLink :to="{ name: 'showQRcode', params: { twofaccountId: account.id }}" class="tag is-rounded" :class="mode == 'dark' ? 'is-dark' : 'is-white'" :title="$t('twofaccounts.show_qrcode')">
-                                        <FontAwesomeIcon :icon="['fas', 'qrcode']" />
+                                    <RouterLink :to="{ name: 'showQRcode', params: { twofaccountId: account.id }}" class="tag is-rounded" :class="mode == 'dark' ? 'is-dark' : 'is-white'" :title="$t('tooltip.show_qrcode')">
+                                        <LucideQrCode class="icon-size-1" />
                                     </RouterLink>
                                 </div>
                             </transition>
                             <transition name="fadeInOut">
                                 <div class="drag-handle tfa-cell tfa-dots has-text-grey" v-if="bus.inManagementMode">
-                                    <FontAwesomeIcon :icon="['fas', 'bars']" />
+                                    <LucideMenu />
                                 </div>
                             </transition>
                         </div>
                     </div>
                 </span>
             </div>
-            <VueFooter :showButtons="true" :internalFooterType="bus.inManagementMode && !showDestinationGroupSelector ? 'doneButton' : 'navLinks'" @done-button-clicked="exitManagementMode">
-                <ActionButtons
-                    v-model:inManagementMode="bus.inManagementMode"
-                    :areDisabled="twofaccounts.hasNoneSelected"
-                    @move-button-clicked="showDestinationGroupSelector = true"
-                    @delete-button-clicked="deleteAccounts"
-                    @export-button-clicked="showExportFormatSelector = true">
-                </ActionButtons>
+            <VueFooter v-if="bus.inManagementMode && !showDestinationGroupSelector">
+                <template #default>
+                    <ActionButtons
+                        v-model:inManagementMode="bus.inManagementMode"
+                        :areDisabled="twofaccounts.hasNoneSelected"
+                        @move-button-clicked="showDestinationGroupSelector = true"
+                        @delete-button-clicked="deleteAccounts"
+                        @export-button-clicked="showExportFormatSelector = true">
+                    </ActionButtons>
+                </template>
+                <template #subpart>
+                    <button type="button" id="lnkExitEdit" class="button is-ghost is-like-text" @click.stop="exitManagementMode">{{ $t('label.done') }}</button>
+                </template>
+            </VueFooter>
+            <VueFooter v-else>
+                <template #default>
+                    <ActionButtons v-model:inManagementMode="bus.inManagementMode" />
+                </template>
             </VueFooter>
         </div>
     </div>

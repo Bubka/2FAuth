@@ -109,7 +109,7 @@ class SettingController extends Controller
         if (array_key_exists($settingName, $defaultAppSettings) && $defaultAppSettings[$settingName] !== '') {
             return response()->json(
                 ['message'   => 'bad request',
-                    'reason' => [__('errors.delete_user_setting_only')],
+                    'reason' => [__('error.delete_user_setting_only')],
                 ], 400);
         }
 

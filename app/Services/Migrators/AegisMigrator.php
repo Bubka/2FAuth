@@ -101,8 +101,8 @@ class AegisMigrator extends Migrator
                 $fakeAccount->id       = TwoFAccount::FAKE_ID;
                 $fakeAccount->otp_type = $otp_parameters['type'] ?? TwoFAccount::TOTP;
                 // Only basic fields are filled to limit the risk of another exception.
-                $fakeAccount->account = $otp_parameters['name'] ?? __('twofaccounts.import.invalid_account');
-                $fakeAccount->service = $otp_parameters['issuer'] ?? __('twofaccounts.import.invalid_service');
+                $fakeAccount->account = $otp_parameters['name'] ?? __('message.invalid_account');
+                $fakeAccount->service = $otp_parameters['issuer'] ?? __('message.invalid_service');
                 // The secret field is used to pass the error, not very clean but will do the job for now.
                 $fakeAccount->secret = $exception->getMessage();
 

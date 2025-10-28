@@ -1,13 +1,14 @@
 <script setup>
-    import AdminTabs from '@/layouts/AdminTabs.vue'
+    import tabs from './tabs'
     import userService from '@/services/userService'
-    import { useNotifyStore } from '@/stores/notify'
+    import { useNotify, TabBar, SearchBox } from '@2fauth/ui'
     import { UseColorMode } from '@vueuse/components'
-    import Spinner from '@/components/Spinner.vue'
-    import SearchBox from '@/components/SearchBox.vue'
+    import { useErrorHandler } from '@2fauth/stores'
+    import { LucideCirclePlus } from 'lucide-vue-next'
 
+    const errorHandler = useErrorHandler()
     const $2fauth = inject('2fauth')
-    const notify = useNotifyStore()
+    const notify = useNotify()
     const returnTo = useStorage($2fauth.prefix + 'returnTo', 'accounts')
 
     const users = ref([])
@@ -88,7 +89,7 @@
             users.value = response.data
         })
         .catch(error => {
-            notify.error(error)
+            errorHandler.show(error)
         })
         .finally(() => {
             isFetching.value = false
@@ -105,28 +106,28 @@
 
 <template>
     <div>
-        <AdminTabs activeTab="admin.users" />
+        <TabBar :tabs="tabs" :active-tab="'admin.users'" @tab-selected="(to) => router.push({ name: to })" />
         <div class="options-tabs">
             <FormWrapper>
-                <h4 class="title is-4 has-text-grey-light">{{ $t('admin.users') }}</h4>
+                <h4 class="title is-4 has-text-grey-light">{{ $t('heading.users') }}</h4>
                 <div class="is-size-7-mobile">
-                    {{ $t('admin.users_legend')}}
+                    {{ $t('message.admin_users_legend')}}
                 </div>
                 <div class="mb-6 mt-3">
                     <RouterLink class="is-link mt-5" :to="{ name: 'admin.createUser' }">
-                        <FontAwesomeIcon :icon="['fas', 'plus-circle']" /> {{ $t('admin.create_new_user') }}
+                        <LucideCirclePlus /> {{ $t('link.create_new_user') }}
                     </RouterLink>
                 </div>
                 <!-- search -->
                 <div class="columns">
                     <div class="column pb-0">
-                        <SearchBox v-model:keyword="searched" :hasNoBackground="true" :placeholder="$t('admin.search_user_placeholder')" />
+                        <SearchBox v-model:keyword="searched" :hasNoBackground="true" :placeholder="$t('placeholder.search_user_placeholder')" />
                     </div>
                 </div>
                 <div class="level is-mobile mb-0">
                     <div class="level-item has-text-centered is-justify-content-end">
                         <p class="subtitle is-7">
-                            {{ $t('admin.quick_filters_colons') }}
+                            {{ $t('message.quick_filters_colons') }}
                         </p>
                     </div>
                     <div class="level-item has-text-centered is-justify-content-start">
@@ -142,7 +143,6 @@
                         <UseColorMode v-slot="{ mode }">
                             <div class="has-ellipsis">
                                 <span>{{ user.name }}</span>
-                                <!-- <FontAwesomeIcon v-if="token.value" class="has-text-success" :icon="['fas', 'check']" /> {{ token.name }} -->
                                 <!-- set as admin link -->
                                 <!-- admin tag -->
                                 <span class="is-block has-ellipsis is-family-primary is-size-6 is-size-7-mobile has-text-grey">{{ user.email }}</span>
@@ -154,24 +154,26 @@
                             </div>
                             <div class="ml-3">
                                 <!-- manage link -->
-                                <RouterLink :to="{ name: 'admin.manageUser', params: { userId: user.id }}" class="button is-small has-normal-radius" :class="{'is-dark' : mode == 'dark'}" :title="$t('commons.manage')">
-                                    {{ $t('commons.manage') }}
+                                <RouterLink :to="{ name: 'admin.manageUser', params: { userId: user.id }}" class="button is-small has-normal-radius" :class="{'is-dark' : mode == 'dark'}" :title="$t('tooltip.manage')">
+                                    {{ $t('link.manage') }}
                                 </RouterLink>
 
                             </div>
                         </UseColorMode>
                     </div>
                     <!-- <div class="mt-2 is-size-7 is-pulled-right">
-                        {{ $t('settings.revoking_a_token_is_permanent')}}
+                        {{ $t('message.revoking_a_token_is_permanent')}}
                     </div> -->
                 </div>
+                <Spinner v-else-if="isFetching" :isVisible="true" type="list-loading" />
                 <div v-else class="mt-4 pl-3">
-                    {{ $t('commons.no_result') }}
+                    {{ $t('message.no_result') }}
                 </div>
-                <Spinner :isVisible="isFetching && users.length === 0" />
                 <!-- footer -->
-                <VueFooter :showButtons="true">
-                    <ButtonBackCloseCancel :returnTo="{ name: returnTo }" action="close" />
+                <VueFooter>
+                    <template #default>
+                        <NavigationButton action="close" @closed="router.push({ name: returnTo })" :current-page-title="$t('title.admin.users')" />
+                    </template>
                 </VueFooter>
             </FormWrapper>
         </div>

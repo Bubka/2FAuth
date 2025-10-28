@@ -1,13 +1,11 @@
 import { defineStore } from 'pinia'
 import { startsWithUppercase } from '@/composables/helpers'
 import { useUserStore } from '@/stores/user'
-import { useNotifyStore } from '@/stores/notify'
+import { useNotify } from '@2fauth/ui'
 import twofaccountService from '@/services/twofaccountService'
 import { saveAs } from 'file-saver'
 
-export const useTwofaccounts = defineStore({
-    id: 'twofaccounts',
-
+export const useTwofaccounts = defineStore('twofaccounts', {
     state: () => {
         return {
             items: [],
@@ -146,7 +144,7 @@ export const useTwofaccounts = defineStore({
          * Deletes selected accounts
          */
         async deleteSelected() {
-            if(confirm(trans('twofaccounts.confirm.delete')) && this.selectedIds.length > 0) {
+            if(confirm(this.$i18n.global.t('confirmation.delete_twofaccount')) && this.selectedIds.length > 0) {
                 await twofaccountService.batchDelete(this.selectedIds.join())
                 .then(response => {
                     let remainingItems = this.items
@@ -155,7 +153,7 @@ export const useTwofaccounts = defineStore({
                     })
                     this.items = remainingItems
                     this.selectNone()
-                    useNotifyStore().success({ text: trans('twofaccounts.accounts_deleted') })
+                    useNotify().success({ text: this.$i18n.global.t('notification.accounts_deleted') })
                 })
             }
         },

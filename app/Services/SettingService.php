@@ -190,7 +190,7 @@ class SettingService
                 }
             } else {
                 Log::warning('Some data cannot be encrypted/decrypted, the useEncryption setting remain unchanged');
-                throw new DbEncryptionException($state === true ? __('errors.error_during_encryption') : __('errors.error_during_decryption'));
+                throw new DbEncryptionException($state === true ? __('error.error_during_encryption') : __('error.error_during_decryption'));
             }
         }
     }

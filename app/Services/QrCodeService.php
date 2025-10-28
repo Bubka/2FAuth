@@ -58,13 +58,13 @@ class QrCodeService
         if (! $text) {
             switch (get_class($qrcode->getError())) {
                 case NotFoundException::class:
-                    throw new \App\Exceptions\InvalidQrCodeException(__('errors.cannot_detect_qrcode_in_image'));
+                    throw new \App\Exceptions\InvalidQrCodeException(__('error.cannot_detect_qrcode_in_image'));
                 case FormatException::class:
-                    throw new \App\Exceptions\InvalidQrCodeException(__('errors.cannot_decode_detected_qrcode'));
+                    throw new \App\Exceptions\InvalidQrCodeException(__('error.cannot_decode_detected_qrcode'));
                 case ChecksumException::class:
-                    throw new \App\Exceptions\InvalidQrCodeException(__('errors.qrcode_has_invalid_checksum'));
+                    throw new \App\Exceptions\InvalidQrCodeException(__('error.qrcode_has_invalid_checksum'));
                 default:
-                    throw new \App\Exceptions\InvalidQrCodeException(__('errors.no_readable_qrcode'));
+                    throw new \App\Exceptions\InvalidQrCodeException(__('error.no_readable_qrcode'));
             }
         }
 

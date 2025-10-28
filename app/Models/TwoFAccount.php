@@ -406,7 +406,7 @@ class TwoFAccount extends Model implements Sortable
         Log::info(sprintf('OTP requested for TwoFAccount (%s)', $this->id ? 'id:' . $this->id : 'preview'));
 
         // Early exit if the model has an undecipherable secret
-        if (strtolower($this->secret) === __('errors.indecipherable')) {
+        if (strtolower($this->secret) === __('error.indecipherable')) {
             Log::error('Secret cannot be deciphered, OTP generation aborted');
 
             throw new UndecipherableException;

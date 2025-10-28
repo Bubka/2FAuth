@@ -102,7 +102,7 @@ class IconModelTest extends ModelTestCase
 
         $icon = Icon::factory()->make();
 
-        $this->assertEquals(__('errors.indecipherable'), $icon->$attribute);
+        $this->assertEquals(__('error.indecipherable'), $icon->$attribute);
         $this->forgetMock(SettingService::class);
     }
 

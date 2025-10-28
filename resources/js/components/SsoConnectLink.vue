@@ -24,8 +24,8 @@
 
 <template>
     <a :id="'lnkSignWith' + props.provider" class="button is-link" :href="'socialite/redirect/' + props.provider">
-        {{ $t('auth.sso_providers.' + props.provider) }}
-        <FontAwesomeIcon class="ml-2" :icon="[icons[props.provider].collection, icons[props.provider].icon]" />
+        {{ $t('label.' + props.provider) }}
     </a>
+    
 </template>
 

@@ -1,17 +1,21 @@
 <script setup>
-    import SettingTabs from '@/layouts/SettingTabs.vue'
+    import tabs from './tabs'
     import userService from '@/services/userService'
     import { webauthnService } from '@/services/webauthn/webauthnService'
     import { useAppSettingsStore } from '@/stores/appSettings'
     import { useUserStore } from '@/stores/user'
-    import { useNotifyStore } from '@/stores/notify'
+    import { useNotify, TabBar } from '@2fauth/ui'
     import { UseColorMode } from '@vueuse/components'
-    import Spinner from '@/components/Spinner.vue'
+    import { useI18n } from 'vue-i18n'
+    import { useErrorHandler } from '@2fauth/stores'
+    import { LucideCirclePlus } from 'lucide-vue-next'
 
+    const errorHandler = useErrorHandler()
+    const { t } = useI18n()
     const $2fauth = inject('2fauth')
     const user = useUserStore()
     const appSettings = useAppSettingsStore()
-    const notify = useNotifyStore()
+    const notify = useNotify()
     const router = useRouter()
     const returnTo = useStorage($2fauth.prefix + 'returnTo', 'accounts')
 
@@ -28,7 +32,7 @@
 
     watch(() => user.preferences.useWebauthnOnly, () => {
         userService.updatePreference('useWebauthnOnly', user.preferences.useWebauthnOnly).then(response => {
-            notify.success({ text: trans('settings.forms.setting_saved') })
+            notify.success({ text: t('notification.setting_saved') })
         })
     })
 
@@ -37,7 +41,7 @@
      */
     function register() {
         if (isDisabled.value == true) {
-            notify.warn({text: trans('errors.unsupported_with_reverseproxy') })
+            notify.warn({text: t('error.unsupported_with_reverseproxy') })
             return false
         }
 
@@ -47,15 +51,15 @@
         .catch(error => {
             if ('webauthn' in error) {
                 if (error.name == 'is-warning') {
-                    notify.warn({ text: trans(error.message) })
+                    notify.warn({ text: t(error.message) })
                 }
-                else notify.alert({ text: trans(error.message) })
+                else notify.alert({ text: t(error.message) })
             }
             else if( error.response?.status === 422 ) {
                 notify.alert({ text: error.response.data.message })
             }
             else {
-                notify.error(error);
+                errorHandler.show(error)
             }
         })
     }
@@ -64,7 +68,7 @@
      * revoke a credential
      */
     function revokeCredential(credentialId) {
-        if(confirm(trans('auth.confirm.revoke_device'))) {
+        if(confirm(t('confirmation.revoke_device'))) {
             userService.revokeWebauthnDevice(credentialId).then(response => {
                 // Remove the revoked credential from the collection
                 credentials.value = credentials.value.filter(a => a.id !== credentialId)
@@ -75,7 +79,7 @@
                     user.preferences.useWebauthnOnly = false
                 }
 
-                notify.success({ text: trans('auth.webauthn.device_revoked') })
+                notify.success({ text: t('notification.device_revoked') })
             });
         }
     }
@@ -84,7 +88,7 @@
      * Always display a printable name
      */
     function displayName(credential) {
-        return credential.alias ? credential.alias : trans('auth.webauthn.my_device') + ' (#' + credential.id.substring(0, 10) + ')'
+        return credential.alias ? credential.alias : t('label.my_device') + ' (#' + credential.id.substring(0, 10) + ')'
     }
 
     /**
@@ -104,7 +108,7 @@
                 // The form is already disabled (see isDisabled) so we do nothing more here
             }
             else {
-                notify.error(error)
+                errorHandler.show(error)
             }
         })
         .finally(() => {
@@ -121,20 +125,22 @@
 
 <template>
     <div>
-        <SettingTabs :activeTab="'settings.webauthn.devices'" />
+        <TabBar :tabs="tabs" :active-tab="'settings.webauthn.devices'" @tab-selected="(to) => router.push({ name: to })" />
         <div class="options-tabs">
             <FormWrapper>
                 <div v-if="isDisabled && user.oauth_provider" class="notification is-warning has-text-centered">
-                    {{ $t('auth.sso_only_x_settings_are_disabled', { auth_method: 'WebAuthn' }) }}
+                    {{ $t('message.sso_only_x_settings_are_disabled', { auth_method: 'WebAuthn' }) }}
                 </div>
-                <div v-if="isDisabled && user.authenticated_by_proxy" class="notification is-warning has-text-centered" v-html="$t('auth.auth_handled_by_proxy')" />
-                <h4 class="title is-4 has-text-grey-light">{{ $t('auth.webauthn.security_devices') }}</h4>
+                <div v-if="isDisabled && user.authenticated_by_proxy" class="notification is-warning has-text-centered">
+                    {{ $t('message.auth_handled_by_proxy') + ' ' + $t('message.manage_auth_at_proxy_level') }}
+                </div>
+                <h4 class="title is-4 has-text-grey-light">{{ $t('heading.security_devices') }}</h4>
                 <div class="is-size-7-mobile">
-                    {{ $t('auth.webauthn.security_devices_legend')}}
+                    {{ $t('message.security_devices_legend')}}
                 </div>
                 <div class="mt-3">
                     <a tabindex="0" @click="register" @keyup.enter="register">
-                        <FontAwesomeIcon :icon="['fas', 'plus-circle']" />&nbsp;{{ $t('auth.webauthn.register_a_new_device')}}
+                        <LucideCirclePlus />&nbsp;{{ $t('link.register_a_new_device')}}
                     </a>
                 </div>
                 <!-- credentials list -->
@@ -143,37 +149,37 @@
                         {{ displayName(credential) }}
                         <!-- revoke link -->
                         <UseColorMode v-slot="{ mode }">
-                            <button type="button" class="button tag is-pulled-right" :class="mode === 'dark' ? 'is-dark':'is-white'" @click="revokeCredential(credential.id)" :title="$t('settings.revoke')">
-                                {{ $t('settings.revoke') }}
+                            <button type="button" class="button tag is-pulled-right" :class="mode === 'dark' ? 'is-dark':'is-white'" @click="revokeCredential(credential.id)" :title="$t('tooltip.revoke')">
+                                {{ $t('label.revoke') }}
                             </button>
                         </UseColorMode>
-                        <!-- edit link -->
-                        <!-- <RouterLink :to="{ name: '' }" class="has-text-grey pl-1" :title="$t('commons.rename')">
-                            <FontAwesomeIcon :icon="['fas', 'pen-square']" />
-                        </RouterLink> -->
                     </div>
                     <div class="mt-2 is-size-7 is-pulled-right">
-                        {{ $t('auth.webauthn.revoking_a_device_is_permanent')}}
+                        {{ $t('message.revoking_a_device_is_permanent')}}
                     </div>
                 </div>
-                <Spinner :isVisible="isFetching && credentials.length === 0" />
-                <h4 class="title is-4 pt-6 has-text-grey-light">{{ $t('auth.webauthn.options') }}</h4>
+                <Spinner :isVisible="isFetching && credentials.length === 0" type="list-loading" />
+                <h4 class="title is-4 pt-6 has-text-grey-light">{{ $t('heading.options') }}</h4>
                 <div class="field">
-                    {{ $t('auth.webauthn.need_a_security_device_to_enable_options')}}
+                    {{ $t('message.need_a_security_device_to_enable_options')}}
                 </div>
                 <form>
                     <!-- use webauthn only -->
                     <FormCheckbox
                         v-model="user.preferences.useWebauthnOnly"
                         fieldName="useWebauthnOnly"
-                        label="auth.webauthn.use_webauthn_only.label"
-                        help="auth.webauthn.use_webauthn_only.help"
+                        label="field.use_webauthn_only"
+                        help="field.use_webauthn_only.help"
                         :isDisabled="isDisabled || credentials.length === 0"
                     />
+                    <p class="help">{{ $t('field.use_webauthn_only.help_bis') }}</p>
+                    <p class="help mt-3">{{ $t('field.use_webauthn_only.help_ter') }}</p>
                 </form>
                 <!-- footer -->
-                <VueFooter :showButtons="true">
-                    <ButtonBackCloseCancel :returnTo="{ name: returnTo }" action="close" />
+                <VueFooter>
+                    <template #default>
+                        <NavigationButton action="close" @closed="router.push({ name: returnTo })" :current-page-title="$t('title.settings.webauthn.devices')" />
+                    </template>
                 </VueFooter>
             </FormWrapper>
         </div>

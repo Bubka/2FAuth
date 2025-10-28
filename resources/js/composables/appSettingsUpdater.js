@@ -1,5 +1,5 @@
 import appSettingService from '@/services/appSettingService'
-import { useNotifyStore } from '@/stores/notify'
+import { useErrorHandler } from '@2fauth/stores'
 
 /**
  * Saves a setting on the backend
@@ -14,14 +14,13 @@ export async function useAppSettingsUpdater(setting, value, returnValidationErro
     await appSettingService.update(setting, value, { returnError: true })
     .then(response => {
         data = value
-        useNotifyStore().success({ type: 'is-success', text: trans('settings.forms.setting_saved') })
     })
     .catch(err => {
         if( returnValidationError && err.response.status === 422 ) {
-            error = err
+            error = err.response.data.message
         }
         else {
-            useNotifyStore().error(err);
+            useErrorHandler().show(err)
         }
     })
 

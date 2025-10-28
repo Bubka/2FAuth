@@ -1,10 +1,9 @@
-import '/resources/js/assets/app.scss'; 
+import '@2fauth/styles/src/app.scss';
 
+import i18n from './i18n'
 import Notifications from '@kyvg/vue3-notification'
 import App from './App.vue'
 import router from './router'
-import FontAwesomeIcon from './icons'
-// import helpers from './helpers'
 
 const app = createApp(App)
 
@@ -17,80 +16,89 @@ const $2fauth = {
     isTestingApp: window.isTestingApp,
     langs: window.appLocales,
     urls: window.urls,
+    context: 'webapp',
 }
 app.provide('2fauth', readonly($2fauth))
+
+// Localization
+app.use(i18n)
 
 // Stores
 const pinia = createPinia()
 pinia.use(({ store }) => {
-    store.$2fauth = $2fauth;
-});
+    store.$2fauth = $2fauth
+    store.$i18n = i18n
+    store.$router = markRaw(router)
+})
 app.use(pinia)
 
 // Router
 app.use(router)
 
-// Localization
-app.use(i18nVue, {
-    lang: document.documentElement.lang,
-    resolve: async lang => {
-        const langs = import.meta.glob('../lang/*.json');
-        if (lang.includes('php_')) {
-            return await langs[`../lang/${lang}.json`]();
-        }
-    }
-})
-
 // Notifications
 app.use(Notifications)
 
 // Global components registration
-import ResponsiveWidthWrapper from '@/layouts/ResponsiveWidthWrapper.vue'
-import FormWrapper from '@/layouts/FormWrapper.vue'
-import Footer from '@/layouts/Footer.vue'
-import Modal from '@/layouts/Modal.vue'
-import VueButton           from '@/components/formElements/Button.vue'
-import ButtonBackCloseCancel from '@/components/formElements/ButtonBackCloseCancel.vue'
-import FieldError       from '@/components/formElements/FieldError.vue'
-import FormField        from '@/components/formElements/FormField.vue'
-import FormPasswordField        from '@/components/formElements/FormPasswordField.vue'
-import FormSelect       from '@/components/formElements/FormSelect.vue'
-import FormToggle       from '@/components/formElements/FormToggle.vue'
-import FormCheckbox     from '@/components/formElements/FormCheckbox.vue'
-import FormButtons      from '@/components/formElements/FormButtons.vue'
-import Kicker           from '@/components/Kicker.vue'
+import {
+    FormField,
+    FormPasswordField,
+    FormFieldError,
+    FormCheckbox,
+    FormSelect,
+    FormToggle,
+    FormButtons,
+    NavigationButton,
+    VueButton
+} from '@2fauth/formcontrols'
+
+import {
+    FormWrapper,
+    Modal,
+    ResponsiveWidthWrapper,
+    Spinner,
+    VueFooter,
+} from '@2fauth/ui'
 
 app
-    .component('FontAwesomeIcon', FontAwesomeIcon)
     .component('ResponsiveWidthWrapper', ResponsiveWidthWrapper)
+    .component('Spinner', Spinner)
     .component('FormWrapper', FormWrapper)
-    .component('VueFooter', Footer)
+    .component('VueFooter', VueFooter)
     .component('Modal', Modal)
     .component('VueButton', VueButton)
-    .component('ButtonBackCloseCancel', ButtonBackCloseCancel)
-    .component('FieldError', FieldError)
+    .component('NavigationButton', NavigationButton)
+    .component('FormFieldError', FormFieldError)
     .component('FormField', FormField)
     .component('FormPasswordField', FormPasswordField)
     .component('FormSelect', FormSelect)
     .component('FormToggle', FormToggle)
     .component('FormCheckbox', FormCheckbox)
     .component('FormButtons', FormButtons)
-    .component('Kicker', Kicker)
 
 // Global error handling
-// import { useNotifyStore } from '@/stores/notify'
+// import { useNotify } from '@2fauth/ui'
 // if (process.env.NODE_ENV != 'development') {
 //     app.config.errorHandler = (err) => {
-//         useNotifyStore().error(err)
+//         useNotify().parse(err)
+//         router.push({ name: 'genericError' })
 //     }
 // }
 
 // Helpers
 // app.config.globalProperties.$helpers = helpers
 
+// App inject for footer
+// TODO : Try to avoid those global injection
+import { useUserStore } from '@/stores/user'
+import { useAppSettingsStore } from '@/stores/appSettings'
+
+const user = useUserStore()
+const appSettings = useAppSettingsStore()
+
+user.applyUserPrefs()
+
+app.provide('userStore', user)
+app.provide('appSettingsStore', appSettings)
+
 // App mounting
 app.mount('#app')
-
-// Theme
-import { useUserStore } from '@/stores/user'
-useUserStore().applyUserPrefs()

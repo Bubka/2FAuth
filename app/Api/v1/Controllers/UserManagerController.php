@@ -72,7 +72,7 @@ class UserManagerController extends Controller
         } else {
             return response()->json([
                 'message' => 'bad request',
-                'reason'  => is_string($response) ? __($response) : __('errors.no_pwd_reset_for_this_user_type'),
+                'reason'  => is_string($response) ? __($response) : __('error.no_pwd_reset_for_this_user_type'),
             ], 400);
         }
 
@@ -181,7 +181,7 @@ class UserManagerController extends Controller
         // Deletion will not be done (and returns False) if the user is the only existing admin (see UserObserver clas)
         return $user->delete() === false
             ? response()->json([
-                'message' => __('errors.cannot_delete_the_only_admin'),
+                'message' => __('error.cannot_delete_the_only_admin'),
             ], 403)
             : response()->json(null, 204);
     }
@@ -203,7 +203,7 @@ class UserManagerController extends Controller
         }
 
         return response()->json([
-            'message' => __('errors.cannot_demote_the_only_admin'),
+            'message' => __('error.cannot_demote_the_only_admin'),
         ], 403);
     }
 

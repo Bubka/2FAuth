@@ -41,8 +41,8 @@ class PlainTextMigrator extends Migrator
                 $fakeAccount->id       = TwoFAccount::FAKE_ID;
                 $fakeAccount->otp_type = substr($uri, 10, 4);
                 // Only basic fields are filled to limit the risk of another exception.
-                $fakeAccount->account = __('twofaccounts.import.invalid_account');
-                $fakeAccount->service = filter_input(INPUT_GET, 'issuer', FILTER_SANITIZE_ENCODED) ?? __('twofaccounts.import.invalid_service');
+                $fakeAccount->account = __('message.invalid_account');
+                $fakeAccount->service = filter_input(INPUT_GET, 'issuer', FILTER_SANITIZE_ENCODED) ?? __('message.invalid_service');
                 // The secret field is used to pass the error, not very clean but will do the job for now.
                 $fakeAccount->secret = $exception->getMessage();
 

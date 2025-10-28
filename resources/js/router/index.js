@@ -3,7 +3,8 @@ import middlewarePipeline from "@/router/middlewarePipeline";
 import { useUserStore } from '@/stores/user'
 import { useTwofaccounts } from '@/stores/twofaccounts'
 import { useAppSettingsStore } from '@/stores/appSettings'
-import { useNotifyStore } from '@/stores/notify'
+import { useNotify } from '@2fauth/ui'
+import { useErrorHandler } from '@2fauth/stores'
 
 import authGuard        from './middlewares/authGuard'
 import adminOnly        from './middlewares/adminOnly'
@@ -62,8 +63,9 @@ router.beforeEach((to, from, next) => {
     const user = useUserStore()
     const twofaccounts = useTwofaccounts()
     const appSettings = useAppSettingsStore()
-    const notify = useNotifyStore()
-    const stores = { user: user, twofaccounts: twofaccounts, appSettings: appSettings, notify: notify }
+    const notify = useNotify()
+    const errorHandler = useErrorHandler()
+    const stores = { user: user, twofaccounts: twofaccounts, appSettings: appSettings, notify: notify, errorHandler: errorHandler }
     const nextMiddleware = {}
     const context = { to, from, next, nextMiddleware, stores }
 
@@ -75,11 +77,6 @@ router.beforeEach((to, from, next) => {
         ...context,
         nextMiddleware: middlewarePipeline(context, middlewares, 1),
     });
-})
-
-router.afterEach((to, from) => {
-    to.meta.title = trans('titles.' + to.name)
-    document.title = to.meta.title
 })
 
 export default router

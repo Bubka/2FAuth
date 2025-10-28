@@ -20,7 +20,7 @@ class RejectIfAuthenticated
 
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
-                return response()->json(['message' => __('auth.already_authenticated')], 400);
+                return response()->json(['message' => __('message.already_authenticated')], 400);
             }
         }
 

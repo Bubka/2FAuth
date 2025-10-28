@@ -2,13 +2,13 @@
     import Form from '@/components/formElements/Form'
     import { useUserStore } from '@/stores/user'
     import { useBusStore } from '@/stores/bus'
-    import { useNotifyStore } from '@/stores/notify'
+    import { useNotify } from '@2fauth/ui'
     import { useTwofaccounts } from '@/stores/twofaccounts'
 
     const router = useRouter()
     const user = useUserStore()
     const bus = useBusStore()
-    const notify = useNotifyStore()
+    const notify = useNotify()
     const twofaccounts = useTwofaccounts()
 
     const qrcodeInput = ref(null)
@@ -64,8 +64,8 @@
         <div class="columns quick-uploader">
             <!-- trailer phrase that invite to add an account -->
             <div class="column is-full quick-uploader-header" :class="{ 'is-invisible' : twofaccounts.count !== 0 }">
-                {{ $t('twofaccounts.no_account_here') }}<br>
-                {{ $t('twofaccounts.add_first_account') }}
+                {{ $t('message.no_account_here') }}<br>
+                {{ $t('message.add_first_account') }}
             </div>
             <!-- Livescan button -->
             <div class="column is-full quick-uploader-button" >
@@ -73,42 +73,44 @@
                     <!-- upload a qr code (with basic file field and backend decoding) -->
                     <label role="button" tabindex="0" v-if="user.preferences.useBasicQrcodeReader" class="button is-link is-medium is-rounded is-main" ref="qrcodeInputLabel" @keyup.enter="qrcodeInputLabel.click()">
                         <input aria-hidden="true" tabindex="-1" class="file-input" type="file" accept="image/*" v-on:change="submitQrCode" ref="qrcodeInput">
-                        {{ $t('twofaccounts.forms.upload_qrcode') }}
+                        {{ $t('label.upload_qrcode') }}
                     </label>
                     <!-- scan button that launch camera stream -->
                     <button v-else type="button" class="button is-link is-medium is-rounded is-main" @click="capture()">
-                        {{ $t('twofaccounts.forms.scan_qrcode') }}
+                        {{ $t('label.scan_qrcode') }}
                     </button>
                 </div>
-                <FieldError v-if="form.errors.hasAny('qrcode')" :error="form.errors.get('qrcode')" :field="'qrcode'" />
+                <FormFieldError v-if="form.errors.hasAny('qrcode')" :error="form.errors.get('qrcode')" :field="'qrcode'" />
             </div>
             <!-- alternative methods -->
             <div class="column is-full">
-                <div class="block light-or-darker">{{ $t('twofaccounts.forms.alternative_methods') }}</div>
+                <div class="block light-or-darker">{{ $t('message.alternative_methods') }}</div>
                 <!-- upload a qr code -->
                 <div class="block has-text-link" v-if="!user.preferences.useBasicQrcodeReader">
                     <label role="button" tabindex="0" class="button is-link is-outlined is-rounded" ref="qrcodeInputLabel" @keyup.enter="qrcodeInputLabel.click()">
                         <input aria-hidden="true" tabindex="-1" class="file-input" type="file" accept="image/*" v-on:change="submitQrCode" ref="qrcodeInput">
-                        {{ $t('twofaccounts.forms.upload_qrcode') }}
+                        {{ $t('label.upload_qrcode') }}
                     </label>
                 </div>
                 <!-- link to advanced form -->
                 <div class="block has-text-link">
                     <RouterLink class="button is-link is-outlined is-rounded" :to="{ name: 'createAccount' }" >
-                        {{ $t('twofaccounts.forms.use_advanced_form') }}
+                        {{ $t('link.use_advanced_form') }}
                     </RouterLink>
                 </div>
                 <!-- link to import view -->
                 <div class="block has-text-link">
                     <RouterLink id="btnImport" class="button is-link is-outlined is-rounded" :to="{ name: 'importAccounts' }" >
-                        {{ $t('twofaccounts.import.import') }}
+                        {{ $t('label.import') }}
                     </RouterLink>
                 </div>
             </div>
         </div>
         <!-- Footer -->
-        <VueFooter :showButtons="true" >
-            <ButtonBackCloseCancel :returnTo="{ name: 'accounts' }" action="back" v-if="!twofaccounts.isEmpty" />
+        <VueFooter >
+            <template #default>
+                <NavigationButton v-if="!twofaccounts.isEmpty" action="back" @goback="router.push({ name: 'accounts' })" :previous-page-title="$t('title.accounts')" />
+            </template>
         </VueFooter>
     </div>
 </template>

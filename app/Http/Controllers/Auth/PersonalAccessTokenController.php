@@ -17,7 +17,7 @@ class PersonalAccessTokenController extends PassportPatController
     public function forUser(Request $request)
     {
         if (Gate::denies('manage-pat')) {
-            throw new AccessDeniedHttpException(__('errors.unsupported_with_sso_only'));
+            throw new AccessDeniedHttpException(__('error.unsupported_with_sso_only'));
         }
 
         return parent::forUser($request);
@@ -31,7 +31,7 @@ class PersonalAccessTokenController extends PassportPatController
     public function store(Request $request)
     {
         if (Gate::denies('manage-pat')) {
-            throw new AccessDeniedHttpException(__('errors.unsupported_with_sso_only'));
+            throw new AccessDeniedHttpException(__('error.unsupported_with_sso_only'));
         }
 
         return parent::store($request);
@@ -46,7 +46,7 @@ class PersonalAccessTokenController extends PassportPatController
     public function destroy(Request $request, $tokenId)
     {
         if (Gate::denies('manage-pat')) {
-            throw new AccessDeniedHttpException(__('errors.unsupported_with_sso_only'));
+            throw new AccessDeniedHttpException(__('error.unsupported_with_sso_only'));
         }
 
         return parent::destroy($request, $tokenId);

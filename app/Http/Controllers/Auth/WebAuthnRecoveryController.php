@@ -80,7 +80,7 @@ class WebAuthnRecoveryController extends Controller
      */
     protected function sendRecoveryResponse(Request $request, string $response) : JsonResponse
     {
-        return response()->json(['message' => __('auth.webauthn.webauthn_login_disabled')]);
+        return response()->json(['message' => __('message.webauthn_login_disabled')]);
     }
 
     /**
@@ -93,7 +93,7 @@ class WebAuthnRecoveryController extends Controller
     {
         switch ($response) {
             case Password::INVALID_TOKEN:
-                throw ValidationException::withMessages(['token' => [__('auth.webauthn.invalid_reset_token')]]);
+                throw ValidationException::withMessages(['token' => [__('message.invalid_reset_token')]]);
             default:
                 throw ValidationException::withMessages(['email' => [trans($response)]]);
         }
