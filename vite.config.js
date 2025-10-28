@@ -32,10 +32,7 @@ export default defineConfig({
             },
         }),
         vueI18n({
-            include: [
-                'resources/lang/en.json',
-                'resources/lang/fr.json',
-            ]
+            include: 'resources/lang/*.json'
         }),
         AutoImport({
             // https://github.com/unplugin/unplugin-auto-import?tab=readme-ov-file#configuration
