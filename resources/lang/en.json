@@ -65,7 +65,7 @@
     "error.indecipherable": "*indecipherable*",
     "error.invalid_2fa_data": "Invalid 2FA data",
     "error.invalid_or_unknown_token": "Invalid or unknown personal access token",
-    "error.invalid_x_migration": "Invalid or unreadable {appname} data",
+    "error.invalid_x_migration": "Invalid or unreadable :appname data",
     "error.no_authenticator_support_specified_algorithms": "No authenticators support specified algorithms",
     "error.no_entry_was_of_type_public_key": "No entry was of type 'public-key'",
     "error.no_icon_for_this_variant": "No icon available in this variant",
