@@ -4,6 +4,7 @@ namespace App\Api\v1\Controllers;
 
 use App\Api\v1\Requests\GroupAssignRequest;
 use App\Api\v1\Requests\GroupStoreRequest;
+use App\Api\v1\Requests\ReorderRequest;
 use App\Api\v1\Resources\GroupResource;
 use App\Api\v1\Resources\TwoFAccountCollection;
 use App\Facades\Groups;
@@ -33,7 +34,7 @@ class GroupController extends Controller
 
         // We do not use fluent call all over the call chain to ease tests
         $user   = $request->user();
-        $groups = $user->groups()->withCount('twofaccounts')->get();
+        $groups = $user->groups()->withCount('twofaccounts')->get()->sortBy('order_column');
 
         return GroupResource::collection(Groups::prependTheAllGroup($groups, $request->user()));
     }
@@ -90,6 +91,27 @@ class GroupController extends Controller
         $group->update($validated);
 
         return new GroupResource($group);
+    }
+
+    /**
+     * Save Groups order
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function reorder(ReorderRequest $request)
+    {
+        $validated = $request->validated();
+
+        $groups = Group::whereIn('id', $validated['orderedIds'])->get();
+        $this->authorize('updateEach', [new Group, $groups]);
+
+        Group::setNewOrder($validated['orderedIds']);
+        $orderedIds = $request->user()->groups->sortBy('order_column')->pluck('id');
+
+        return response()->json([
+            'message'    => 'order saved',
+            'orderedIds' => $orderedIds,
+        ], 200);
     }
 
     /**

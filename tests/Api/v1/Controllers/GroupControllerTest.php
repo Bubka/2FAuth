@@ -352,6 +352,50 @@ class GroupControllerTest extends FeatureTestCase
                 'message',
             ]);
     }
+    
+
+    #[Test]
+    public function test_reorder_returns_success()
+    {
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('POST', '/api/v1/groups/reorder', [
+                'orderedIds' => [$this->userGroupB->id, $this->userGroupA->id],
+            ])
+            ->assertStatus(200)
+            ->assertJsonStructure([
+                'message',
+                'orderedIds'
+            ])
+            ->assertJsonFragment([
+                'orderedIds' => [
+                    $this->userGroupB->id,
+                    $this->userGroupA->id
+                ]
+            ]);
+    }
+
+    #[Test]
+    public function test_reorder_with_invalid_data_returns_validation_error()
+    {
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('POST', '/api/v1/groups/reorder', [
+                'orderedIds' => '3,2,1',
+            ])
+            ->assertStatus(422);
+    }
+
+    #[Test]
+    public function test_reorder_groups_of_another_user_is_forbidden()
+    {
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('POST', '/api/v1/groups/reorder', [
+                'orderedIds' => [$this->anotherUserGroupB->id, $this->anotherUserGroupA->id],
+            ])
+            ->assertForbidden()
+            ->assertJsonStructure([
+                'message',
+            ]);
+    }
 
     #[Test]
     public function test_accounts_returns_twofaccounts_collection()

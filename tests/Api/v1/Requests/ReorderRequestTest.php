@@ -2,7 +2,7 @@
 
 namespace Tests\Api\v1\Requests;
 
-use App\Api\v1\Requests\TwoFAccountReorderRequest;
+use App\Api\v1\Requests\ReorderRequest;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -12,10 +12,10 @@ use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 /**
- * TwoFAccountReorderRequestTest test class
+ * ReorderRequestTest test class
  */
-#[CoversClass(TwoFAccountReorderRequest::class)]
-class TwoFAccountReorderRequestTest extends TestCase
+#[CoversClass(ReorderRequest::class)]
+class ReorderRequestTest extends TestCase
 {
     use WithoutMiddleware;
 
@@ -26,7 +26,7 @@ class TwoFAccountReorderRequestTest extends TestCase
             ->once()
             ->andReturn(true);
 
-        $request = new TwoFAccountReorderRequest;
+        $request = new ReorderRequest;
 
         $this->assertTrue($request->authorize());
     }
@@ -35,7 +35,7 @@ class TwoFAccountReorderRequestTest extends TestCase
     #[DataProvider('provideValidData')]
     public function test_valid_data(array $data) : void
     {
-        $request = new TwoFAccountReorderRequest;
+        $request = new ReorderRequest;
         $request->merge($data);
 
         $validator = Validator::make($data, $request->rules());
@@ -62,7 +62,7 @@ class TwoFAccountReorderRequestTest extends TestCase
     #[DataProvider('provideInvalidData')]
     public function test_invalid_data(array $data) : void
     {
-        $request = new TwoFAccountReorderRequest;
+        $request = new ReorderRequest;
         $request->merge($data);
 
         $validator = Validator::make($data, $request->rules());

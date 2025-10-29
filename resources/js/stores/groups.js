@@ -21,6 +21,10 @@ export const useGroups = defineStore('groups', () => {
         return group && user.preferences.activeGroup != 0 ? group.name : null
     })
 
+    const orderedIds = computed(() => {
+        return items.value.map(a => a.id)
+    })
+
     const withoutTheAllGroup = computed(() => items.value.filter(item => item.id > 0))
     const theAllGroup = computed(() => items.value.find(item => item.id == 0))
     const isEmpty = computed(() => withoutTheAllGroup.value.length == 0)
@@ -84,6 +88,13 @@ export const useGroups = defineStore('groups', () => {
             })
         }
     }
+    
+    /**
+     * Saves the groups order to db
+     */
+    function saveOrder() {
+        groupService.saveOrder(orderedIds.value)
+    }
 
     return {
         // STATE
@@ -92,6 +103,7 @@ export const useGroups = defineStore('groups', () => {
 
         // GETTERS
         current,
+        orderedIds,
         withoutTheAllGroup,
         theAllGroup,
         isEmpty,
@@ -102,5 +114,6 @@ export const useGroups = defineStore('groups', () => {
         addOrEdit,
         fetch,
         remove,
+        saveOrder,
     }
 })

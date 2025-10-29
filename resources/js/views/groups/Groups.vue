@@ -2,13 +2,41 @@
     import { UseColorMode } from '@vueuse/components'
     import { useGroups } from '@/stores/groups'
     import { useBusStore } from '@/stores/bus'
-    import { LucideCirclePlus, LucideSquarePen } from 'lucide-vue-next'
+    import { LucideCirclePlus, LucideSquarePen, LucideMenu } from 'lucide-vue-next'
+    import { useSortable, moveArrayElement } from '@vueuse/integrations/useSortable'
 
     const router = useRouter()
     const groups = useGroups()
     const bus = useBusStore()
 
     const isFetching = ref(false)
+
+    // Enables the sortable behaviour of the groups list
+    const { start, stop } = useSortable('#dv', groups.withoutTheAllGroup, {
+        animation: 200,
+        handle: '.drag-handle',
+        onUpdate: (e) => {
+            const movedId = groups.withoutTheAllGroup[e.oldIndex].id
+            const inItemsIndex = groups.items.findIndex(item => item.id == movedId)
+            moveArrayElement(groups.items, inItemsIndex, e.newIndex + 1, e)
+
+            nextTick(() => {
+                groups.saveOrder()
+            })
+        }
+    })
+
+    watch(
+        () => groups.isEmpty,
+        (val) => {
+            if (val == false) {
+                nextTick(() => {
+                    start()
+                })
+            }
+            else stop()
+        }
+    )
 
     onMounted(() => {
         // We want the store to be up-to-date to manage the groups
@@ -46,20 +74,23 @@
             </RouterLink>
         </div>
         <div v-if="!groups.isEmpty">
-            <div v-for="group in groups.withoutTheAllGroup" :key="group.id" class="group-item is-size-5 is-size-6-mobile">
-                {{ group.name }}
-                <!-- delete icon -->
-                <UseColorMode v-slot="{ mode }">
-                    <button type="button" class="button tag is-pulled-right" :class="mode == 'dark' ? 'is-dark' : 'is-white'" @click="groups.remove(group.id)"  :title="$t('tooltip.delete')">
-                        {{ $t('label.delete') }}
-                    </button>
-                </UseColorMode>
-                <!-- edit link -->
-                <RouterLink :to="{ name: 'editGroup', params: { groupId: group.id }}" class="has-text-grey px-1" :title="$t('tooltip.rename')">
-                    <LucideSquarePen class="icon-size-1" />
-                </RouterLink>
-                <span class="is-family-primary is-size-6 is-size-7-mobile has-text-grey">{{ $t('message.x_accounts', { count: group.twofaccounts_count }) }}</span>
-            </div>
+            <UseColorMode v-slot="{ mode }">
+                <span id="dv">
+                    <div v-for="group in groups.withoutTheAllGroup" :key="group.id" class="group-item is-size-5 is-size-6-mobile">
+                        {{ group.name }}
+                        <LucideMenu class="drag-handle pt-1 ml-2 is-pulled-right has-text-grey is-draggable" />
+                        <!-- delete icon -->
+                        <button type="button" class="button tag is-pulled-right" :class="mode == 'dark' ? 'is-dark' : 'is-white'" @click="groups.remove(group.id)"  :title="$t('tooltip.delete')">
+                            {{ $t('label.delete') }}
+                        </button>
+                        <!-- edit link -->
+                        <RouterLink :to="{ name: 'editGroup', params: { groupId: group.id }}" class="has-text-grey px-1" :title="$t('tooltip.rename')">
+                            <LucideSquarePen class="icon-size-1" />
+                        </RouterLink>
+                        <span class="is-family-primary is-size-6 is-size-7-mobile has-text-grey">{{ $t('message.x_accounts', { count: group.twofaccounts_count }) }}</span>
+                    </div>
+                </span>
+            </UseColorMode>
             <div class="mt-2 is-size-7 is-pulled-right">
                 {{ $t('message.deleting_group_does_not_delete_accounts')}}
             </div>

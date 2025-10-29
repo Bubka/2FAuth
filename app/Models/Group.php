@@ -7,6 +7,8 @@ use Database\Factories\GroupFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
+use Spatie\EloquentSortable\Sortable;
+use Spatie\EloquentSortable\SortableTrait;
 
 /**
  * App\Models\Group
@@ -14,6 +16,7 @@ use Illuminate\Support\Facades\Log;
  * @property int $twofaccounts_count
  * @property int $id
  * @property string $name
+ * @property int|null $order_column
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int|null $user_id
@@ -34,12 +37,12 @@ use Illuminate\Support\Facades\Log;
  *
  * @method static \Illuminate\Database\Eloquent\Builder|Group orphans()
  */
-class Group extends Model
+class Group extends Model implements Sortable
 {
     /**
      * @use HasFactory<GroupFactory>
      */
-    use HasFactory;
+    use HasFactory, SortableTrait;
 
     /**
      * model's array form.
@@ -97,6 +100,16 @@ class Group extends Model
             Log::info(sprintf('Group %s (id #%d) updated by user ID #%s', var_export($model->name, true), $model->id, $model->user_id));
         });
     }
+
+    /**
+     * Settings for @spatie/eloquent-sortable package
+     *
+     * @var array
+     */
+    public $sortable = [
+        'order_column_name'  => 'order_column',
+        'sort_when_creating' => true,
+    ];
 
     /**
      * Retrieve the model for a bound value.

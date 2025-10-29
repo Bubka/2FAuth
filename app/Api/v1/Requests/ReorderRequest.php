@@ -5,7 +5,7 @@ namespace App\Api\v1\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
-class TwoFAccountReorderRequest extends FormRequest
+class ReorderRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
