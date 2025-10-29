@@ -81,7 +81,7 @@
     /**
      * Posts the migration payload
      */
-    async function migrate(payload) {
+    async function migrate(payload, form = null) {
         isFetching.value = true
 
         await twofaccountService.migrate(payload, { returnError: true }).then(response => {
@@ -94,6 +94,11 @@
         })
         .catch(error => {
             notify.alert({ text: t(error.response.data.message) })
+
+            if(form != null && error.response.status === 422) {
+                form.clear()
+                form.errors.set(form.extractErrors(error.response))
+            }
         })
         .finally(() => {
             isFetching.value = false
@@ -191,7 +196,7 @@
         })
         .catch(error => {
             if (error.response.status === 422) {
-                if (error.response.data.errors.file == undefined) {
+                if (error.response.data.errors?.file == undefined) {
                     notify.alert({ text: t('error.invalid_2fa_data') })
                 }
             }
@@ -212,11 +217,11 @@
         qrcodeForm.qrcode = qrcodeInput.value.files[0]
 
         qrcodeForm.upload('/api/v1/qrcode/decode', { returnError: true }).then(response => {
-            migrate(response.data.data)
+            migrate(response.data.data, qrcodeForm)
         })
         .catch(error => {
             if( error.response.status === 422 ) {
-                if (error.response.data.errors.qrcode == undefined) {
+                if (error.response.data.errors?.qrcode == undefined) {
                     notify.alert({ text: t('error.invalid_2fa_data') })
                 }
             }
@@ -276,7 +281,12 @@
                                             <p class="subtitle is-6 is-size-7-mobile">{{ $t('message.supported_formats_for_qrcode_upload') }}</p>
                                         </div>
                                     </div>
-                                    <FormFieldError v-if="qrcodeForm.errors.hasAny('qrcode')" :error="qrcodeForm.errors.get('qrcode')" :field="'qrcode'" />
+                                    <!-- <FormFieldError v-if="qrcodeForm.errors.hasAny('qrcode')" :error="qrcodeForm.errors.get('qrcode')" :field="'qrcode'" /> -->
+                                    <template v-if="qrcodeForm.errors.any()">
+                                        <template v-for="(messages, error) in qrcodeForm.errors.all()" :key="error">
+                                            <FormFieldError :error="qrcodeForm.errors.get(error)" :field="error" />
+                                        </template>
+                                    </template>
                                 </div>
                                 <footer class="card-footer">
                                     <RouterLink id="btnCapture" :to="{ name: 'capture' }" class="card-footer-item">
@@ -303,7 +313,11 @@
                                             <p class="subtitle is-6 is-size-7-mobile">{{ $t('message.supported_formats_for_file_upload') }}</p>
                                         </div>
                                     </div>
-                                    <FormFieldError v-if="fileForm.errors.hasAny('file')" :error="fileForm.errors.get('file')" :field="'file'" />
+                                    <template v-if="fileForm.errors.any()">
+                                        <template v-for="(messages, error) in fileForm.errors.all()" :key="error">
+                                            <FormFieldError :error="fileForm.errors.get(error)" :field="error" />
+                                        </template>
+                                    </template>
                                 </div>
                                 <footer class="card-footer">
                                     <a role="button" tabindex="0" class="card-footer-item is-relative" @click="fileInput.click()" @keyup.enter="fileInput.click()">
