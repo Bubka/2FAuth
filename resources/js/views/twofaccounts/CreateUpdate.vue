@@ -42,9 +42,9 @@
         icon: null
     }))
     const iconCollections = [
-        { text: 'selfh.st', value: 'selfh', asVariant: true },
-        { text: 'dashboardicons.com', value: 'dashboardicons', asVariant: true },
-        { text: '2fa.directory', value: 'tfa', asVariant: false },
+        { text: 'selfh.st', value: 'selfh', hasVariant: true },
+        { text: 'dashboardicons.com', value: 'dashboardicons', hasVariant: true },
+        { text: '2fa.directory', value: 'tfa', hasVariant: false },
     ]
     const iconCollectionVariants = {
         selfh: [
@@ -56,6 +56,9 @@
             { text: 'label.regular', value: 'regular' },
             { text: 'label.light', value: 'light' },
             { text: 'label.dark', value: 'dark' },
+        ],
+        tfa: [
+            { text: 'label.regular', value: 'regular' },
         ]
     }
     const accountParams = ref({
