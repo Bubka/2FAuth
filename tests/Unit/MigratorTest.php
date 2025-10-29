@@ -11,6 +11,7 @@ use App\Models\TwoFAccount;
 use App\Providers\MigrationServiceProvider;
 use App\Providers\TwoFAuthServiceProvider;
 use App\Services\Migrators\AegisMigrator;
+use App\Services\Migrators\BitwardenMigrator;
 use App\Services\Migrators\GoogleAuthMigrator;
 use App\Services\Migrators\Migrator;
 use App\Services\Migrators\PlainTextMigrator;
@@ -227,6 +228,18 @@ class MigratorTest extends TestCase
                 'custom',
                 $hasSteam = true,
             ],
+            'BITWARDEN_AUTH_JSON_MIGRATION_PAYLOAD' => [
+                new BitwardenMigrator,
+                MigrationTestData::VALID_BITWARDEN_AUTH_JSON_MIGRATION_PAYLOAD,
+                'custom',
+                $hasSteam = true,
+            ],
+            'BITWARDEN_JSON_MIGRATION_PAYLOAD' => [
+                new BitwardenMigrator,
+                MigrationTestData::VALID_BITWARDEN_JSON_MIGRATION_PAYLOAD,
+                'custom',
+                $hasSteam = false,
+            ],
         ];
     }
 
@@ -292,6 +305,10 @@ class MigratorTest extends TestCase
             'INVALID_2FAUTH_JSON_MIGRATION_PAYLOAD' => [
                 new TwoFAuthMigrator,
                 MigrationTestData::INVALID_2FAUTH_JSON_MIGRATION_PAYLOAD,
+            ],
+            'INVALID_BITWARDEN_AUTH_JSON_MIGRATION_PAYLOAD' => [
+                new BitwardenMigrator,
+                MigrationTestData::INVALID_BITWARDEN_AUTH_JSON_MIGRATION_PAYLOAD,
             ],
 
         ];
@@ -509,6 +526,14 @@ class MigratorTest extends TestCase
                 MigrationTestData::VALID_2FAUTH_JSON_MIGRATION_PAYLOAD,
                 TwoFAuthMigrator::class,
             ],
+            'BITWARDEN_AUTH_MIGRATION_URI' => [
+                MigrationTestData::VALID_BITWARDEN_AUTH_JSON_MIGRATION_PAYLOAD,
+                BitwardenMigrator::class,
+            ],
+            'BITWARDEN_MIGRATION_URI' => [
+                MigrationTestData::VALID_BITWARDEN_JSON_MIGRATION_PAYLOAD,
+                BitwardenMigrator::class,
+            ],
         ];
     }
 
@@ -543,6 +568,12 @@ class MigratorTest extends TestCase
             ],
             'ENCRYPTED_2FAS_MIGRATION_PAYLOAD' => [
                 MigrationTestData::ENCRYPTED_2FAS_MIGRATION_PAYLOAD,
+            ],
+            'ENCRYPTED_BITWARDEN_AUTH_JSON_MIGRATION_PAYLOAD' => [
+                MigrationTestData::ENCRYPTED_BITWARDEN_AUTH_JSON_MIGRATION_PAYLOAD,
+            ],
+            'ENCRYPTED_BITWARDEN_JSON_MIGRATION_PAYLOAD' => [
+                MigrationTestData::ENCRYPTED_BITWARDEN_JSON_MIGRATION_PAYLOAD,
             ],
         ];
     }

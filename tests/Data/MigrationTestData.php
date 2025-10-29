@@ -206,165 +206,168 @@ class MigrationTestData
             }
         }';
 
-    const VALID_2FAS_MIGRATION_PAYLOAD = '{
-        "groups":
-        [{
-            "id": "C2F69014-C4C7-4EEC-9225-D24E750F77FD",
-            "name": "Test",
-            "isExpanded": true
-        }],
-        "schemaVersion": 2,
-        "appOrigin": "ios",
-        "appVersionCode": 32001,
-        "services":
-        [{
-            "secret": "' . OtpTestData::SECRET . '",
-            "badge": {"color": "Default"},
-            "order": {"position": 1},
-            "otp":
-            {
-                "account": "' . OtpTestData::ACCOUNT . '",
-                "digits": ' . OtpTestData::DIGITS_CUSTOM . ',
-                "counter": 0,
-                "period": ' . OtpTestData::PERIOD_CUSTOM . ',
-                "algorithm": "' . OtpTestData::ALGORITHM_CUSTOM . '",
-                "tokenType": "TOTP"
-            },
-            "updatedAt": 1657529430000,
-            "name": "' . OtpTestData::SERVICE . '",
-            "type": "ManuallyAdded"
-        },
+    const VALID_2FAS_MIGRATION_PAYLOAD = '
         {
-            "secret": "' . OtpTestData::SECRET . '",
-            "badge": {"color": "Default"},
-            "order": {"position": 2},
-            "otp":
-            {
-                "account": "' . OtpTestData::ACCOUNT . '",
-                "digits": ' . OtpTestData::DIGITS_CUSTOM . ',
-                "counter": ' . OtpTestData::COUNTER_CUSTOM . ',
-                "period": 30,
-                "algorithm": "' . OtpTestData::ALGORITHM_CUSTOM . '",
-                "tokenType": "HOTP"
-            },
-            "updatedAt": 1657529430000,
-            "name": "' . OtpTestData::SERVICE . '",
-            "type": "ManuallyAdded",
-            "icon":
-            {
-                "selected": "Brand",
-                "brand":
-                {
-                    "id": "ManuallyAdded"
-                },
-                "label":
-                {
-                    "text": "OW",
-                    "backgroundColor": "LightBlue"
-                }
-            }
-        }],
-        "appVersionName": "3.20.1"
-    }';
-
-    const VALID_2FAS_MIGRATION_PAYLOAD_WITH_UNSUPPORTED_OTP_TYPE = '{
-        "groups":
-        [{
-            "id": "C2F69014-C4C7-4EEC-9225-D24E750F77FD",
-            "name": "Test",
-            "isExpanded": true
-        }],
-        "schemaVersion": 2,
-        "appOrigin": "ios",
-        "appVersionCode": 32001,
-        "services":
-        [{
-            "secret": "' . OtpTestData::SECRET . '",
-            "badge": {"color": "Default"},
-            "order": {"position": 1},
-            "otp":
-            {
-                "account": "' . OtpTestData::ACCOUNT . '",
-                "digits": ' . OtpTestData::DIGITS_CUSTOM . ',
-                "counter": 0,
-                "period": ' . OtpTestData::PERIOD_CUSTOM . ',
-                "algorithm": "' . OtpTestData::ALGORITHM_CUSTOM . '",
-                "tokenType": "TOTP"
-            },
-            "updatedAt": 1657529430000,
-            "name": "' . OtpTestData::SERVICE . '",
-            "type": "ManuallyAdded"
-        },
-        {
-            "secret": "' . OtpTestData::SECRET . '",
-            "badge": {"color": "Default"},
-            "order": {"position": 2},
-            "otp":
-            {
-                "account": "' . OtpTestData::ACCOUNT . '",
-                "digits": ' . OtpTestData::DIGITS_CUSTOM . ',
-                "counter": ' . OtpTestData::COUNTER_CUSTOM . ',
-                "period": 30,
-                "algorithm": "' . OtpTestData::ALGORITHM_CUSTOM . '",
-                "tokenType": "XOTP"
-            },
-            "updatedAt": 1657529430000,
-            "name": "' . OtpTestData::SERVICE . '",
-            "type": "ManuallyAdded"
-        }],
-        "appVersionName": "3.20.1"
-    }';
-
-    const INVALID_2FAS_MIGRATION_PAYLOAD = '{
-        "groups":
-        [{
-            "id": "C2F69014-C4C7-4EEC-9225-D24E750F77FD",
-            "name": "Test",
-            "isExpanded": true
-        }],
-        "schemaVersion": 2,
-        "appOrigin": "ios",
-        "appVersionCode": 32001,
-        "service__BAD__NAME___s":
-        [{
-            "secret": "' . OtpTestData::SECRET . '",
-            "badge": {"color": "Default"},
-            "order": {"position": 1},
-            "otp":
-            {
-                "account": "' . OtpTestData::ACCOUNT . '",
-                "digits": ' . OtpTestData::DIGITS_CUSTOM . ',
-                "counter": 0,
-                "period": ' . OtpTestData::PERIOD_CUSTOM . ',
-                "algorithm": "' . OtpTestData::ALGORITHM_CUSTOM . '",
-                "tokenType": "TOTP"
-            },
-            "updatedAt": 1657529430000,
-            "name": "' . OtpTestData::SERVICE . '",
-            "type": "ManuallyAdded"
-        }],
-        "appVersionName": "3.20.1"
-    }';
-
-    const ENCRYPTED_2FAS_MIGRATION_PAYLOAD = '
-    {
-        "reference": "RPKUw+hful0yPrvxaDjt2IZWMVgesKPMgJQ/U8CzT6I+eyPo9+yO1xX7jdYYS0aD3DGghxXBN6diIjTe5wKhbWXGvBdCF1a528j1/bgY0cn+MCXf0eG6uQ7oE+idBXeFZsXk5oxqZEA5waYsuwBenILCHqzU7mIlzqUXcNyb3gFF+AhkQGlfUBKeVcIXrbuTuwbtA8IwgJfV8klsUFH96EGsiCMQ2v2MCXVaqFR3TlTMfj4iDg9ULktnKisxfm6O3B/XQtsiDVpnhqQzFSqktbh9vKOrO2NgK40kLmgRkS08SpxiC4Yt0CoGyp9bgLYySdQDvKMnbYxVatx6AJpckVuA7ICiQjbHa5mItGITU78=:yrDmOf1HirJ5N7wlYXyUmL0EtNy2t5oNpvQw1rV22nA=:8MwK8sWyL3iVv+6w",
-        "schemaVersion": 2,
-        "appVersionCode": 32001,
-        "services":
-        [],
-        "groups":
-        [
-            {
+            "groups":
+            [{
                 "id": "C2F69014-C4C7-4EEC-9225-D24E750F77FD",
                 "name": "Test",
                 "isExpanded": true
-            }
-        ],
-        "appOrigin": "ios",
-        "servicesEncrypted": "xlH6lrz/oW/TJO2WExdt33bI4CvCjE/W2wlcl+8VVbRj/BHrYujY7AexaenaBhoJUB0xeOMDL1q2swvtVYQZLAMFoBcg4XMEVfk5R6R0SjwJd7/cvcv89nKNDX/eHtIHKoaDkgFxk4Po9YN1OtG0M/jXH9DdERu+LAJHboLK8VpnehOJTbs/s0vahrw0q4jZiHGCfV7vXrylsuEjXBVv90/dT0mZE5iiPIteWCJyxl+04cuTLMl6kMUXem0OGTsqOLmmSMVz8sCrf6HRzqH8KFj1sR6h+MGVdsVij8f99O4ZB+tCCy0A3BY8Yn68J8aBAOUU4nzETAl0Zhc489E9X9eibMLkaBt452gfwXU/9muIeA2WM8so3sM6SPQVls8xYu653z7bh7WCCIjrJmZ10DVydK9Krjoe6nd+DQjuNy/vcNFeCe6/CljF3KWfWyNRdcwaUH+yKZE/TFw3P+ZuvudnfHRBE6OsE3c/XmxnI66mSy+SePhmIoe9x0rxC5T5LM5Fw+bWBLR6mLXo1ouxxrljeboqJ4THR6a2x8hhhP8wvK30v/PDPyLTtBdLv+HilQibXF9YqVH562BhlmhLAe5dv67srP6JwK10tAo5TfhKjewMqTouOiCqT+/mvvqpTV/1f676mzF7s1Rh83ikfqzT/u5OJrFqZdu3tC86KqCLIDx0fQYF/Ha88tXPkVGvPXygH3Adgf7c8spyC9s3yeAAtSSc/qtIpm1Ux5XvaZx3M9cD9ku0KLJqE+rJr0HS2AatS54I/ybdHSbMLaPRdV67jeM1OwCkY5F+FXQpFfcQkpmgCMTvFddnkhUqTR8GgqXcOg2aPcwNQ/EqhIJr+sXqfFS85+eSlroErvUuR9gO/awB2XA4NsZI6bHK9GNebcSTmA16FhiuAFpOqfWcdN3iPeKS/kcUJ8KRlsAO0x9UINnkwJtpSGSA8bdXkOFfnd4rPPDcBGrx7dBtPC+Sc5Y8nvbkLcxn8/CCFgenQByPwGLUp4NuMz8H1/1EwNQ4jF5swoqdnhz6ldBAF+T1trOzQEmpFfG54lur3yEoiYipaZ5WTKJnp6X0GHkgT3Wi0N0im4oGEsqyPEEknm17BamooqRo1JMPA6+cp90udr91DKeLxzRBi8rYaolQjaATbc6rvufcoCuEdOYpGqWfX6mGKD/jmHko4RaoM+7cx6LaH5zRdpBLDzr1aW0TJSAHGgTuTiMJwW73MBaayUf+X+alzlXpcyDlWW+aGpSsYI/TkKTPaIgQFcNWa/+1ayUyg1Tmvuf1J6YgyQJNBVf2LV06I+TziUHPGkwwN7nj/0chqw4sv29I4mpI41C6a/NnoSCa3Vz448DPlk1e80KyMba722gBMTCyU+S1K/UtVE7cPchOETL7X5tl6yoyeh95jbpYX4kJhXHNFZ5XA7d0tFxmYF0mSN5+D63jP2tTqPW7lsz3No9y+VFhQLWTEShrBck1blgNXRFdUCDX5zN4vSYmt44vYGWl3+iDNhYysVh2x2bAGOxCR5EPNPNuUjrxCHRtt8X7Xof7/R0fZF4Qi/F1o6D/ToUpp4XZ/3sjJ1BTouw2Jpx/f2gGDwzFq8uql46eeBgqiQwCSYZTbSSYliVaXh01jJltfqFaMMQF9UGehNdcsAHaLr53I8snMJZLl4IIGwtNgb9cHZYXYM68RtP0UPBntCFA74fWMBVcLLfbpUcGe5fuj4CoBo5gCakYygnsvlqcsmXNR/zaf5xIOC009qVUU0BO+qtgt+TGxAn4K9jgxVOCzR7TPGPvwaOajURwcutj9QXUKuqHz9LwIYZLLzDd2OQxkDoPKfLqKSLP4ZXpKiRP8LkgvZE91ZgxJgCy37STqO1py/VyrHjT3OOmbZ6srwaIOJhZ8/YGh6mecA7n4qJsJUepvD3sbAF0FZJE0xu1kkw=:yrDmOf1HirJ5N7wlYXyUmL0EtNy2t5oNpvQw1rV22nA=:ZhgkRGr/vRf6K1ri",
-        "appVersionName": "3.20.1"
-    }';
+            }],
+            "schemaVersion": 2,
+            "appOrigin": "ios",
+            "appVersionCode": 32001,
+            "services":
+            [{
+                "secret": "' . OtpTestData::SECRET . '",
+                "badge": {"color": "Default"},
+                "order": {"position": 1},
+                "otp":
+                {
+                    "account": "' . OtpTestData::ACCOUNT . '",
+                    "digits": ' . OtpTestData::DIGITS_CUSTOM . ',
+                    "counter": 0,
+                    "period": ' . OtpTestData::PERIOD_CUSTOM . ',
+                    "algorithm": "' . OtpTestData::ALGORITHM_CUSTOM . '",
+                    "tokenType": "TOTP"
+                },
+                "updatedAt": 1657529430000,
+                "name": "' . OtpTestData::SERVICE . '",
+                "type": "ManuallyAdded"
+            },
+            {
+                "secret": "' . OtpTestData::SECRET . '",
+                "badge": {"color": "Default"},
+                "order": {"position": 2},
+                "otp":
+                {
+                    "account": "' . OtpTestData::ACCOUNT . '",
+                    "digits": ' . OtpTestData::DIGITS_CUSTOM . ',
+                    "counter": ' . OtpTestData::COUNTER_CUSTOM . ',
+                    "period": 30,
+                    "algorithm": "' . OtpTestData::ALGORITHM_CUSTOM . '",
+                    "tokenType": "HOTP"
+                },
+                "updatedAt": 1657529430000,
+                "name": "' . OtpTestData::SERVICE . '",
+                "type": "ManuallyAdded",
+                "icon":
+                {
+                    "selected": "Brand",
+                    "brand":
+                    {
+                        "id": "ManuallyAdded"
+                    },
+                    "label":
+                    {
+                        "text": "OW",
+                        "backgroundColor": "LightBlue"
+                    }
+                }
+            }],
+            "appVersionName": "3.20.1"
+        }';
+
+    const VALID_2FAS_MIGRATION_PAYLOAD_WITH_UNSUPPORTED_OTP_TYPE = '
+        {
+            "groups":
+            [{
+                "id": "C2F69014-C4C7-4EEC-9225-D24E750F77FD",
+                "name": "Test",
+                "isExpanded": true
+            }],
+            "schemaVersion": 2,
+            "appOrigin": "ios",
+            "appVersionCode": 32001,
+            "services":
+            [{
+                "secret": "' . OtpTestData::SECRET . '",
+                "badge": {"color": "Default"},
+                "order": {"position": 1},
+                "otp":
+                {
+                    "account": "' . OtpTestData::ACCOUNT . '",
+                    "digits": ' . OtpTestData::DIGITS_CUSTOM . ',
+                    "counter": 0,
+                    "period": ' . OtpTestData::PERIOD_CUSTOM . ',
+                    "algorithm": "' . OtpTestData::ALGORITHM_CUSTOM . '",
+                    "tokenType": "TOTP"
+                },
+                "updatedAt": 1657529430000,
+                "name": "' . OtpTestData::SERVICE . '",
+                "type": "ManuallyAdded"
+            },
+            {
+                "secret": "' . OtpTestData::SECRET . '",
+                "badge": {"color": "Default"},
+                "order": {"position": 2},
+                "otp":
+                {
+                    "account": "' . OtpTestData::ACCOUNT . '",
+                    "digits": ' . OtpTestData::DIGITS_CUSTOM . ',
+                    "counter": ' . OtpTestData::COUNTER_CUSTOM . ',
+                    "period": 30,
+                    "algorithm": "' . OtpTestData::ALGORITHM_CUSTOM . '",
+                    "tokenType": "XOTP"
+                },
+                "updatedAt": 1657529430000,
+                "name": "' . OtpTestData::SERVICE . '",
+                "type": "ManuallyAdded"
+            }],
+            "appVersionName": "3.20.1"
+        }';
+
+    const INVALID_2FAS_MIGRATION_PAYLOAD = '
+        {
+            "groups":
+            [{
+                "id": "C2F69014-C4C7-4EEC-9225-D24E750F77FD",
+                "name": "Test",
+                "isExpanded": true
+            }],
+            "schemaVersion": 2,
+            "appOrigin": "ios",
+            "appVersionCode": 32001,
+            "service__BAD__NAME___s":
+            [{
+                "secret": "' . OtpTestData::SECRET . '",
+                "badge": {"color": "Default"},
+                "order": {"position": 1},
+                "otp":
+                {
+                    "account": "' . OtpTestData::ACCOUNT . '",
+                    "digits": ' . OtpTestData::DIGITS_CUSTOM . ',
+                    "counter": 0,
+                    "period": ' . OtpTestData::PERIOD_CUSTOM . ',
+                    "algorithm": "' . OtpTestData::ALGORITHM_CUSTOM . '",
+                    "tokenType": "TOTP"
+                },
+                "updatedAt": 1657529430000,
+                "name": "' . OtpTestData::SERVICE . '",
+                "type": "ManuallyAdded"
+            }],
+            "appVersionName": "3.20.1"
+        }';
+
+    const ENCRYPTED_2FAS_MIGRATION_PAYLOAD = '
+        {
+            "reference": "RPKUw+hful0yPrvxaDjt2IZWMVgesKPMgJQ/U8CzT6I+eyPo9+yO1xX7jdYYS0aD3DGghxXBN6diIjTe5wKhbWXGvBdCF1a528j1/bgY0cn+MCXf0eG6uQ7oE+idBXeFZsXk5oxqZEA5waYsuwBenILCHqzU7mIlzqUXcNyb3gFF+AhkQGlfUBKeVcIXrbuTuwbtA8IwgJfV8klsUFH96EGsiCMQ2v2MCXVaqFR3TlTMfj4iDg9ULktnKisxfm6O3B/XQtsiDVpnhqQzFSqktbh9vKOrO2NgK40kLmgRkS08SpxiC4Yt0CoGyp9bgLYySdQDvKMnbYxVatx6AJpckVuA7ICiQjbHa5mItGITU78=:yrDmOf1HirJ5N7wlYXyUmL0EtNy2t5oNpvQw1rV22nA=:8MwK8sWyL3iVv+6w",
+            "schemaVersion": 2,
+            "appVersionCode": 32001,
+            "services":
+            [],
+            "groups":
+            [
+                {
+                    "id": "C2F69014-C4C7-4EEC-9225-D24E750F77FD",
+                    "name": "Test",
+                    "isExpanded": true
+                }
+            ],
+            "appOrigin": "ios",
+            "servicesEncrypted": "xlH6lrz/oW/TJO2WExdt33bI4CvCjE/W2wlcl+8VVbRj/BHrYujY7AexaenaBhoJUB0xeOMDL1q2swvtVYQZLAMFoBcg4XMEVfk5R6R0SjwJd7/cvcv89nKNDX/eHtIHKoaDkgFxk4Po9YN1OtG0M/jXH9DdERu+LAJHboLK8VpnehOJTbs/s0vahrw0q4jZiHGCfV7vXrylsuEjXBVv90/dT0mZE5iiPIteWCJyxl+04cuTLMl6kMUXem0OGTsqOLmmSMVz8sCrf6HRzqH8KFj1sR6h+MGVdsVij8f99O4ZB+tCCy0A3BY8Yn68J8aBAOUU4nzETAl0Zhc489E9X9eibMLkaBt452gfwXU/9muIeA2WM8so3sM6SPQVls8xYu653z7bh7WCCIjrJmZ10DVydK9Krjoe6nd+DQjuNy/vcNFeCe6/CljF3KWfWyNRdcwaUH+yKZE/TFw3P+ZuvudnfHRBE6OsE3c/XmxnI66mSy+SePhmIoe9x0rxC5T5LM5Fw+bWBLR6mLXo1ouxxrljeboqJ4THR6a2x8hhhP8wvK30v/PDPyLTtBdLv+HilQibXF9YqVH562BhlmhLAe5dv67srP6JwK10tAo5TfhKjewMqTouOiCqT+/mvvqpTV/1f676mzF7s1Rh83ikfqzT/u5OJrFqZdu3tC86KqCLIDx0fQYF/Ha88tXPkVGvPXygH3Adgf7c8spyC9s3yeAAtSSc/qtIpm1Ux5XvaZx3M9cD9ku0KLJqE+rJr0HS2AatS54I/ybdHSbMLaPRdV67jeM1OwCkY5F+FXQpFfcQkpmgCMTvFddnkhUqTR8GgqXcOg2aPcwNQ/EqhIJr+sXqfFS85+eSlroErvUuR9gO/awB2XA4NsZI6bHK9GNebcSTmA16FhiuAFpOqfWcdN3iPeKS/kcUJ8KRlsAO0x9UINnkwJtpSGSA8bdXkOFfnd4rPPDcBGrx7dBtPC+Sc5Y8nvbkLcxn8/CCFgenQByPwGLUp4NuMz8H1/1EwNQ4jF5swoqdnhz6ldBAF+T1trOzQEmpFfG54lur3yEoiYipaZ5WTKJnp6X0GHkgT3Wi0N0im4oGEsqyPEEknm17BamooqRo1JMPA6+cp90udr91DKeLxzRBi8rYaolQjaATbc6rvufcoCuEdOYpGqWfX6mGKD/jmHko4RaoM+7cx6LaH5zRdpBLDzr1aW0TJSAHGgTuTiMJwW73MBaayUf+X+alzlXpcyDlWW+aGpSsYI/TkKTPaIgQFcNWa/+1ayUyg1Tmvuf1J6YgyQJNBVf2LV06I+TziUHPGkwwN7nj/0chqw4sv29I4mpI41C6a/NnoSCa3Vz448DPlk1e80KyMba722gBMTCyU+S1K/UtVE7cPchOETL7X5tl6yoyeh95jbpYX4kJhXHNFZ5XA7d0tFxmYF0mSN5+D63jP2tTqPW7lsz3No9y+VFhQLWTEShrBck1blgNXRFdUCDX5zN4vSYmt44vYGWl3+iDNhYysVh2x2bAGOxCR5EPNPNuUjrxCHRtt8X7Xof7/R0fZF4Qi/F1o6D/ToUpp4XZ/3sjJ1BTouw2Jpx/f2gGDwzFq8uql46eeBgqiQwCSYZTbSSYliVaXh01jJltfqFaMMQF9UGehNdcsAHaLr53I8snMJZLl4IIGwtNgb9cHZYXYM68RtP0UPBntCFA74fWMBVcLLfbpUcGe5fuj4CoBo5gCakYygnsvlqcsmXNR/zaf5xIOC009qVUU0BO+qtgt+TGxAn4K9jgxVOCzR7TPGPvwaOajURwcutj9QXUKuqHz9LwIYZLLzDd2OQxkDoPKfLqKSLP4ZXpKiRP8LkgvZE91ZgxJgCy37STqO1py/VyrHjT3OOmbZ6srwaIOJhZ8/YGh6mecA7n4qJsJUepvD3sbAF0FZJE0xu1kkw=:yrDmOf1HirJ5N7wlYXyUmL0EtNy2t5oNpvQw1rV22nA=:ZhgkRGr/vRf6K1ri",
+            "appVersionName": "3.20.1"
+        }';
 
     const VALID_AEGIS_JSON_MIGRATION_PAYLOAD_WITH_UNSUPPORTED_OTP_TYPE = '
         {
@@ -409,60 +412,60 @@ class MigrationTestData
         }';
 
     const INVALID_AEGIS_JSON_MIGRATION_PAYLOAD = '
-    {
-        "version": 1,
-        "header": {
-            "slots": null,
-            "params": null
-        },
-        "db": {
-            "version": 2,
-            "thisIsNotTheCorrectKeyName": [
-                {
-                    "type": "totp",
-                    "uuid": "5be1b189-260d-4fe1-930a-a78cb669dd86",
-                    "name": "' . OtpTestData::ACCOUNT . '",
-                    "issuer": "' . OtpTestData::SERVICE . '",
-                    "note": "",
-                    "icon": null,
-                    "info": {
-                        "secret": "' . OtpTestData::SECRET . '",
-                        "algo": "' . OtpTestData::ALGORITHM_DEFAULT . '",
-                        "digits": ' . OtpTestData::DIGITS_DEFAULT . ',
-                        "period": ' . OtpTestData::PERIOD_DEFAULT . '
+        {
+            "version": 1,
+            "header": {
+                "slots": null,
+                "params": null
+            },
+            "db": {
+                "version": 2,
+                "thisIsNotTheCorrectKeyName": [
+                    {
+                        "type": "totp",
+                        "uuid": "5be1b189-260d-4fe1-930a-a78cb669dd86",
+                        "name": "' . OtpTestData::ACCOUNT . '",
+                        "issuer": "' . OtpTestData::SERVICE . '",
+                        "note": "",
+                        "icon": null,
+                        "info": {
+                            "secret": "' . OtpTestData::SECRET . '",
+                            "algo": "' . OtpTestData::ALGORITHM_DEFAULT . '",
+                            "digits": ' . OtpTestData::DIGITS_DEFAULT . ',
+                            "period": ' . OtpTestData::PERIOD_DEFAULT . '
+                        }
                     }
-                }
-            ]
-        }
-    }';
+                ]
+            }
+        }';
 
     const ENCRYPTED_AEGIS_JSON_MIGRATION_PAYLOAD = '
-    {
-        "version": 1,
-        "header": {
-            "slots": [
-                {
-                    "type": 1,
-                    "uuid": "1f447956-c71c-4be4-8192-97197dc67df7",
-                    "key": "d742967686cae462c5732023a72d59245d8q7c5c93a66aeb2q2a350bb8b6a7ae",
-                    "key_params": {
-                        "nonce": "77a8ff6d84265efd2a3ed9b7",
-                        "tag": "cc13fb4a5baz3fd27bc97f5eacaa00d0"
-                    },
-                    "n": 32768,
-                    "r": 8,
-                    "p": 1,
-                    "salt": "1c245b2696b948dt040c30c538aeb6f9620b054d9ff182f33dd4b285b67bed51",
-                    "repaired": true
+        {
+            "version": 1,
+            "header": {
+                "slots": [
+                    {
+                        "type": 1,
+                        "uuid": "1f447956-c71c-4be4-8192-97197dc67df7",
+                        "key": "d742967686cae462c5732023a72d59245d8q7c5c93a66aeb2q2a350bb8b6a7ae",
+                        "key_params": {
+                            "nonce": "77a8ff6d84265efd2a3ed9b7",
+                            "tag": "cc13fb4a5baz3fd27bc97f5eacaa00d0"
+                        },
+                        "n": 32768,
+                        "r": 8,
+                        "p": 1,
+                        "salt": "1c245b2696b948dt040c30c538aeb6f9620b054d9ff182f33dd4b285b67bed51",
+                        "repaired": true
+                    }
+                ],
+                "params": {
+                    "nonce": "f31675d9966d2z588bd07788",
+                    "tag": "ad5729fa135dc6d6sw87e0c955932661"
                 }
-            ],
-            "params": {
-                "nonce": "f31675d9966d2z588bd07788",
-                "tag": "ad5729fa135dc6d6sw87e0c955932661"
-            }
-        },
-        "db": "1rX0ajzsxNbhN2hvnNCMBNooLlzqwz\/LMT3bNEIJjPH+zIvIbA6GVVPHLpna+yvjxLPKVkt1OQig=="
-    }';
+            },
+            "db": "1rX0ajzsxNbhN2hvnNCMBNooLlzqwz\/LMT3bNEIJjPH+zIvIbA6GVVPHLpna+yvjxLPKVkt1OQig=="
+        }';
 
     const VALID_2FAUTH_JSON_MIGRATION_PAYLOAD = '
         {
@@ -720,7 +723,7 @@ class MigrationTestData
                     "legacy_uri": "' . OtpTestData::TOTP_FULL_CUSTOM_URI_NO_IMG . '"
                 }
             ]
-    }';
+        }';
 
     const INVALID_2FAUTH_JSON_MIGRATION_PAYLOAD = '
         {
@@ -730,6 +733,178 @@ class MigrationTestData
             "data":
             [
                 ,
+            ]
+        }';
+
+
+    const VALID_BITWARDEN_AUTH_JSON_MIGRATION_PAYLOAD = '
+        {
+            "encrypted": false,
+            "items": [
+                {
+                    "favorite": false,
+                    "id": "d135d04d-58d0-4f16-83fa-576280caa73d",
+                    "login": {
+                        "totp": "' . OtpTestData::TOTP_FULL_CUSTOM_URI_NO_IMG . '",
+                        "username": "' . OtpTestData::ACCOUNT . '"
+                    },
+                    "name": "' . OtpTestData::SERVICE . '",
+                    "type": 1
+                },
+                {
+                    "favorite": false,
+                    "id": "d135d04d-58d0-4f16-83fa-576280caa73d",
+                    "login": {
+                        "totp": "' . OtpTestData::HOTP_FULL_CUSTOM_URI_NO_IMG . '",
+                        "username": "' . OtpTestData::ACCOUNT . '"
+                    },
+                    "name": "' . OtpTestData::SERVICE . '",
+                    "type": 1
+                },
+                {
+                    "favorite": false,
+                    "id": "d135d04d-58d0-4f16-83fa-576280caa73d",
+                    "login": {
+                        "totp": "steam://' . OtpTestData::STEAM_SECRET . '",
+                        "username": "' . OtpTestData::ACCOUNT . '"
+                    },
+                    "name": "' . OtpTestData::STEAM . '",
+                    "type": 1
+                }
+            ]
+        }';
+
+    const INVALID_BITWARDEN_AUTH_JSON_MIGRATION_PAYLOAD = '
+        {
+            "encrypted": false,
+            "thisIsNotTheCorrectKeyName": [
+                {
+                    "favorite": false,
+                    "id": "d135d04d-58d0-4f16-83fa-576280caa73d",
+                    "login": {
+                        "totp": "' . OtpTestData::TOTP_FULL_CUSTOM_URI_NO_IMG . '",
+                        "username": "' . OtpTestData::ACCOUNT . '"
+                    },
+                    "name": "' . OtpTestData::SERVICE . '",
+                    "type": 1
+                }
+            ]
+        }';
+
+    const ENCRYPTED_BITWARDEN_AUTH_JSON_MIGRATION_PAYLOAD = '
+        {
+            "encrypted": true,
+            "items": [
+                {
+                    "favorite": false,
+                    "id": "d135d04d-58d0-4f16-83fa-576280caa73d",
+                    "login": {
+                        "totp": "d742967686cae462c5732023a72d59245d8q7c5c93a66aeb2q2a350bb8b6a7ae",
+                        "username": "d742967686cae462c5732023a72d59245d8q7c5c93a66aeb2q2a350bb8b6a7ae"
+                    },
+                    "name": "d742967686cae462c5732023a72d59245d8q7c5c93a66aeb2q2a350bb8b6a7ae",
+                    "type": 1
+                }
+            ]
+        }';
+
+    const VALID_BITWARDEN_JSON_MIGRATION_PAYLOAD = '
+        {
+            "encrypted": false,
+            "folders": [],
+            "items": [
+                {
+                    "passwordHistory": [],
+                    "revisionDate": "2025-10-28T15:27:43.012Z",
+                    "creationDate": "2024-01-03T12:30:50.043Z",
+                    "deletedDate": null,
+                    "archivedDate": null,
+                    "id": "d135d04d-58d0-4f16-83fa-576280caa73d",
+                    "organizationId": null,
+                    "folderId": null,
+                    "type": 1,
+                    "reprompt": 0,
+                    "name": "' . OtpTestData::SERVICE . '",
+                    "notes": null,
+                    "favorite": false,
+                    "fields": [],
+                    "login": {
+                    "uris": [
+                        {
+                        "match": null,
+                        "uri": "http://localhost/login"
+                        }
+                    ],
+                    "username": "' . OtpTestData::ACCOUNT . '",
+                    "password": "password",
+                    "totp": "' . OtpTestData::TOTP_FULL_CUSTOM_URI_NO_IMG . '"
+                    },
+                    "collectionIds": null
+                },
+                {
+                    "passwordHistory": [],
+                    "revisionDate": "2025-10-28T15:27:43.012Z",
+                    "creationDate": "2024-01-03T12:30:50.043Z",
+                    "deletedDate": null,
+                    "archivedDate": null,
+                    "id": "d135d04d-58d0-4f16-83fa-576280caa73d",
+                    "organizationId": null,
+                    "folderId": null,
+                    "type": 1,
+                    "reprompt": 0,
+                    "name": "' . OtpTestData::SERVICE . '",
+                    "notes": null,
+                    "favorite": false,
+                    "fields": [],
+                    "login": {
+                    "uris": [
+                        {
+                        "match": null,
+                        "uri": "http://localhost/login"
+                        }
+                    ],
+                    "username": "' . OtpTestData::ACCOUNT . '",
+                    "password": "password",
+                    "totp": "' . OtpTestData::HOTP_FULL_CUSTOM_URI_NO_IMG . '"
+                    },
+                    "collectionIds": null
+                }
+            ]
+        }';
+
+    const ENCRYPTED_BITWARDEN_JSON_MIGRATION_PAYLOAD = '
+        {
+            "encrypted": true,
+            "folders": [],
+            "items": [
+            {
+                "passwordHistory": [],
+                "revisionDate": "2025-10-28T15:27:43.012Z",
+                "creationDate": "2024-01-03T12:30:50.043Z",
+                "deletedDate": null,
+                "archivedDate": null,
+                "id": "d135d04d-58d0-4f16-83fa-576280caa73d",
+                "organizationId": null,
+                "folderId": null,
+                "type": 1,
+                "reprompt": 0,
+                "name": "d742967686cae462c5732023a72d59245d8q7c5c93a66aeb2q2a350bb8b6a7ae",
+                "notes": null,
+                "favorite": false,
+                "fields": [],
+                "login": {
+                "uris": [
+                    {
+                    "match": null,
+                    "uri": "http://localhost/login"
+                    }
+                ],
+                "username": "d742967686cae462c5732023a72d59245d8q7c5c93a66aeb2q2a350bb8b6a7ae",
+                "password": "d742967686cae462c5732023a72d59245d8q7c5c93a66aeb2q2a350bb8b6a7ae",
+                "totp": "d742967686cae462c5732023a72d59245d8q7c5c93a66aeb2q2a350bb8b6a7ae"
+                },
+                "collectionIds": null
+            }
             ]
         }';
 }

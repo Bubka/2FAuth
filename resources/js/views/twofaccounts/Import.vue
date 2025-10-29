@@ -386,6 +386,18 @@
                             <td></td>
                             <td><LucideCheck stroke-width="3" class="icon-size-1" /></td>
                         </tr>
+                        <tr>
+                            <th>Bitwarden</th>
+                            <td></td>
+                            <td></td>
+                            <td><LucideCheck stroke-width="3" class="icon-size-1" /></td>
+                        </tr>
+                        <tr>
+                            <th>Bitwarden Authenticator</th>
+                            <td></td>
+                            <td></td>
+                            <td><LucideCheck stroke-width="3" class="icon-size-1" /></td>
+                        </tr>
                     </tbody>
                 </table>           
             </div>
