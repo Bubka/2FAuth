@@ -9,6 +9,7 @@ use App\Models\User;
 use Exception;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\UserProvider;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -59,7 +60,7 @@ class RemoteUserProvider implements UserProvider
             $user = User::create([
                 'name'     => $name,
                 'email'    => strtolower($email),
-                'password' => bcrypt(Str::random(64)),
+                'password' => Hash::make(Str::random(64)),
             ]);
 
             Log::info(sprintf('Remote user %s created with email address %s', var_export($user->name, true), var_export($user->email, true)));

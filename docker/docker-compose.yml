@@ -8,6 +8,10 @@ services:
     ports:
       - 8000:8000/tcp
     environment:
+      #
+      # See https://docs.2fauth.app/getting-started/config/env-vars/
+      # for details of all the available variables and configuration options
+      #
       # You can change the name of the app
       - APP_NAME=2FAuth
       # You can leave this on "local". If you change it to production most console commands will ask for extra confirmation.

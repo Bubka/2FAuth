@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Group;
 use App\Models\TwoFAccount;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DemoSeeder extends Seeder
 {
@@ -19,7 +20,7 @@ class DemoSeeder extends Seeder
         $user = User::create([
             'name' => 'demo',
             'email' => 'demo@2fauth.app',
-            'password' => bcrypt('demo'),
+            'password' => Hash::make('demo'),
             'is_admin' => 1,
         ]);
 

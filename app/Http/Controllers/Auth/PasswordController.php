@@ -34,7 +34,7 @@ class PasswordController extends Controller
 
         if (! config('2fauth.config.isDemoApp')) {
             $user->update([
-                'password' => bcrypt($validated['password']),
+                'password' => Hash::make($validated['password']),
             ]);
             Log::info(sprintf('Password of user ID #%s updated', $user->id));
         }

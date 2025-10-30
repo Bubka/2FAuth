@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
@@ -69,7 +70,7 @@ class SocialiteController extends Controller
             } elseif (Settings::get('disableRegistration') && ! Settings::get('keepSsoRegistrationEnabled')) {
                 return redirect('/error?err=sso_no_register');
             }
-            $user->password = bcrypt(Str::random());
+            $user->password = Hash::make(Str::random());
         }
 
         $user->email        = $socialiteEmail;
