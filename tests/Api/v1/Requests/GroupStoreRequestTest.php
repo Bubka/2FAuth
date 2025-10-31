@@ -70,6 +70,21 @@ class GroupStoreRequestTest extends FeatureTestCase
             [[
                 'name' => 'validWord',
             ]],
+            [[
+                'name' => 'valid Word',
+            ]],
+            [[
+                'name' => 'valid_Word',
+            ]],
+            [[
+                'name' => 'valid-Word',
+            ]],
+            [[
+                'name' => 'valid\'Word',
+            ]],
+            [[
+                'name' => 'vàlîdWörd',
+            ]],
         ];
     }
 
@@ -107,6 +122,9 @@ class GroupStoreRequestTest extends FeatureTestCase
             ]],
             [[
                 'name' => self::UNIQUE_GROUP_NAME, // unique
+            ]],
+            [[
+                'name' => 'valid"Word', // special char
             ]],
         ];
     }
