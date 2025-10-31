@@ -239,6 +239,8 @@
 
         if (form.errors.any() === false) {
             twofaccounts.items.push(data)
+            twofaccounts.sortDefault()
+            
             notify.success({ text: t('notification.account_created') })
             router.push({ name: 'accounts' });
         }
@@ -262,6 +264,7 @@
         if( form.errors.any() === false ) {
             const index = twofaccounts.items.findIndex(acc => acc.id === data.id)
             twofaccounts.items.splice(index, 1, data)
+            twofaccounts.sortDefault()
 
             notify.success({ text: t('notification.account_updated') })
             router.push({ name: 'accounts' })

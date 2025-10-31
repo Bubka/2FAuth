@@ -115,7 +115,7 @@
                 moveArrayElement(twofaccounts.items, inItemsIndex, e.newIndex)
 
                 nextTick(() => {
-                    twofaccounts.saveOrder()
+                    twofaccounts.saveOrder('free')
                 })
             }
         })
@@ -223,7 +223,6 @@
      */
     function onEnd() {
         isDragging.value = false
-        twofaccounts.saveOrder()
     }
 
     /**
@@ -381,6 +380,7 @@
                     <SearchBox v-model:keyword="twofaccounts.filter"/>
                     <!-- toolbar -->
                     <Toolbar v-if="bus.inManagementMode"
+                        v-model:sortOrder="user.preferences.sortOrder"
                         :selectedCount="twofaccounts.selectedCount"
                         @clear-selected="twofaccounts.selectNone()"
                         @select-all="twofaccounts.selectAll()"

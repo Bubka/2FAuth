@@ -33,6 +33,7 @@ $preferences = [
     'notifyOnNewAuthDevice'  => envUnlessEmpty('USERPREF_DEFAULT__NOTIFY_ON_NEW_AUTH_DEVICE', false),
     'notifyOnFailedLogin'    => envUnlessEmpty('USERPREF_DEFAULT__NOTIFY_ON_FAILED_LOGIN', false),
     'timezone'               => envUnlessEmpty('USERPREF_DEFAULT__TIMEZONE', 'UTC'),
+    'sortOrder'              => envUnlessEmpty('USERPREF_DEFAULT__SORT_ORDER', 'asc'),
     'sortCaseSensitive'      => envUnlessEmpty('USERPREF_DEFAULT__SORT_CASE_SENSITIVE', false),
     'autoCloseTimeout'       => envUnlessEmpty('USERPREF_DEFAULT__AUTO_CLOSE_TIMEOUT', 2),
     'AutoSaveQrcodedAccount' => envUnlessEmpty('USERPREF_DEFAULT__AUTO_SAVE_QRCODED_ACCOUNT', false),
@@ -43,6 +44,7 @@ $nonLockablePreferences = [
     'activeGroup',
     'defaultGroup',
     'useWebauthnOnly',
+    'sortOrder',
 ];
 
 return [

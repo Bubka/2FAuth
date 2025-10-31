@@ -189,8 +189,24 @@ export const useTwofaccounts = defineStore('twofaccounts', {
         /**
          * Saves the accounts order to db
          */
-        saveOrder() {
-            twofaccountService.saveOrder(this.orderedIds)
+        saveOrder(newOrder = 'free') {
+            twofaccountService.saveOrder(this.orderedIds).then(() => {
+                useUserStore().preferences.sortOrder = newOrder
+                userService.updatePreference('sortOrder', newOrder)
+            })
+        },
+        
+        /**
+         * Sorts accounts based on user default option
+         */
+        sortDefault() {
+            if (useUserStore().preferences.sortOrder == 'asc') {
+                this.sortAsc()
+            }
+
+            if (useUserStore().preferences.sortOrder == 'desc') {
+                this.sortDesc()
+            }
         },
         
         /**
@@ -208,7 +224,7 @@ export const useTwofaccounts = defineStore('twofaccounts', {
                 return serviceA.localeCompare(serviceB, useUserStore().preferences.lang)
             });
 
-            this.saveOrder()
+            this.saveOrder('asc')
         },
 
         /**
@@ -226,7 +242,7 @@ export const useTwofaccounts = defineStore('twofaccounts', {
                 return serviceB.localeCompare(serviceA, useUserStore().preferences.lang)
             });
 
-            this.saveOrder()
+            this.saveOrder('desc')
         },
         
         /**

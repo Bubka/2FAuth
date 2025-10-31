@@ -145,6 +145,7 @@
                 await createAccount(index)
             }
         }
+        twofaccounts.sortDefault()
     }
 
     /**

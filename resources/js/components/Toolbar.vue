@@ -1,9 +1,23 @@
 <script setup>
     import { LucideArrowDownAZ, LucideArrowUpAZ, LucideSquareCheck } from 'lucide-vue-next';
 
+    const sortOrder = defineModel('sortOrder')
+
     const props = defineProps({
         selectedCount: Number
     })
+
+    const emit = defineEmits(['sort-asc', 'sort-desc'])
+
+    /**
+     * 
+     * @param sortOrder string
+     */
+    function setSortOrder(newOrder) {
+        sortOrder.value = newOrder
+        emit('sort-' + newOrder)
+    }
+
 </script>
 
 <template>
@@ -20,10 +34,10 @@
                     <LucideSquareCheck class="ml-1" />
                 </button>
                 <!-- sort asc/desc buttons -->
-                <button type="button" id="btnSortAscending" @click="$emit('sort-asc')" class="button has-line-height p-0 is-ghost has-text-grey pt-1" :title="$t('tooltip.sort_ascending')">
+                <button type="button" id="btnSortAscending" @click="setSortOrder('asc')" :class="{'has-text-grey' : sortOrder != 'asc'}" class="button has-line-height p-0 is-ghost pt-1" :title="$t('tooltip.sort_ascending')">
                     <LucideArrowDownAZ />
                 </button>
-                <button type="button" id="btnSortDescending" @click="$emit('sort-desc')" class="button has-line-height p-0 pl-2 is-ghost has-text-grey pt-1" :title="$t('tooltip.sort_descending')">
+                <button type="button" id="btnSortDescending" @click="setSortOrder('desc')" :class="{'has-text-grey' : sortOrder != 'desc'}" class="button has-line-height p-0 pl-2 is-ghost pt-1" :title="$t('tooltip.sort_descending')">
                     <LucideArrowUpAZ />
                 </button>
             </div>
