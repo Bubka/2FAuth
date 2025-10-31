@@ -99,7 +99,17 @@ export const useUserStore = defineStore('user', {
             this.$reset()
             this.initDataStores()
             this.applyUserPrefs()
+
+            // We don't want sso settings to be reset in order to activate the
+            // appropriate login form once pushed to login view
+            const enableSso = useAppSettingsStore().enableSso
+            const useSsoOnly = useAppSettingsStore().useSsoOnly
+
             useAppSettingsStore().$reset()
+
+            useAppSettingsStore().enableSso = enableSso
+            useAppSettingsStore().useSsoOnly = useSsoOnly
+
             router.push({ name: 'login' })
         },
 

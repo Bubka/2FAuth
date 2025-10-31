@@ -15,33 +15,29 @@
     const user = useUserStore()
     const notify = useNotify()
     const appSettings = useAppSettingsStore()
-    const showWebauthnForm = user.preferences.useWebauthnOnly ? true : useStorage($2fauth.prefix + 'showWebauthnForm', false) 
     const form = reactive(new Form({
         email: '',
         password: ''
     }))
     const isBusy = ref(false)
-    const activeForm = ref()
+    const activeLoginForm = useStorage($2fauth.prefix + 'activeLoginForm', null)
 
     onMounted(() => {
         if (appSettings.enableSso == true && appSettings.useSsoOnly == true) {
-            activeForm.value = 'sso'
+            activeLoginForm.value = 'sso'
         }
-        else if (showWebauthnForm.value == true) {
-            activeForm.value = 'webauthn'
+        else if (activeLoginForm.value == null || activeLoginForm.value == 'sso') {
+            activeLoginForm.value = 'legacy'
         }
-        else activeForm.value = 'legacy'
     })
 
-    
 
     /**
      * Toggle the form between legacy and webauthn method
      */
     function switchToForm(formName) {
         form.clear()
-        activeForm.value = formName
-        showWebauthnForm.value = activeForm.value == 'webauthn'
+        activeLoginForm.value = formName
     }
 
     /**
@@ -124,7 +120,7 @@
 
 <template>
     <!-- webauthn authentication -->
-    <FormWrapper v-if="activeForm == 'webauthn'" title="heading.webauthn_login" punchline="message.welcome_to_2fauth">
+    <FormWrapper v-if="activeLoginForm == 'webauthn'" title="heading.webauthn_login" punchline="message.welcome_to_2fauth">
         <div v-if="appSettings.enableSso == true && appSettings.useSsoOnly == true" class="notification is-warning has-text-centered">{{ $t('message.sso_only_form_restricted_to_admin') }}</div>
         <div class="block">
             {{ $t('message.use_security_device_to_sign_in') }}
@@ -166,7 +162,7 @@
         </div>
     </FormWrapper>
     <!-- SSO only links -->
-    <FormWrapper v-else-if="activeForm == 'sso'" title="heading.sso_login" punchline="message.welcome_to_2fauth">
+    <FormWrapper v-else-if="activeLoginForm == 'sso'" title="heading.sso_login" punchline="message.welcome_to_2fauth">
         <div v-if="$2fauth.isDemoApp" class="notification is-info has-text-centered is-radiusless">
             {{ $t('message.welcome_to_demo_app') }}<br />
             <i18n-t keypath="message.sign_in_using_email_password" tag="span">
@@ -214,7 +210,7 @@
         </div>
     </FormWrapper>
     <!-- login/password legacy form -->
-    <FormWrapper v-else-if="activeForm == 'legacy'" title="heading.login" punchline="message.welcome_to_2fauth">
+    <FormWrapper v-else-if="activeLoginForm == 'legacy'" title="heading.login" punchline="message.welcome_to_2fauth">
         <div v-if="$2fauth.isDemoApp" class="notification is-info has-text-centered is-radiusless">
             {{ $t('message.welcome_to_demo_app') }}<br />
             <i18n-t keypath="message.sign_in_using_email_password" tag="span">

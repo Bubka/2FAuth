@@ -18,6 +18,7 @@
     const notify = useNotify()
     const router = useRouter()
     const returnTo = useStorage($2fauth.prefix + 'returnTo', 'accounts')
+    const activeLoginForm = useStorage($2fauth.prefix + 'activeLoginForm', 'legacy')
 
     const credentials = ref([])
     const isFetching = ref(false)
@@ -116,6 +117,13 @@
         })
     }
 
+    /**
+     * Updates the active login form on local storage
+     */
+    async function setActiveLoginForm() {
+        activeLoginForm.value = 'webauthn'
+    }
+
     onBeforeRouteLeave((to) => {
         if (! to.name.startsWith('settings.')) {
             notify.clear()
@@ -145,15 +153,15 @@
                 </div>
                 <!-- credentials list -->
                 <div v-if="credentials.length > 0" class="field">
-                    <div v-for="credential in credentials" :key="credential.id" class="group-item is-size-5 is-size-6-mobile">
-                        {{ displayName(credential) }}
-                        <!-- revoke link -->
-                        <UseColorMode v-slot="{ mode }">
+                    <UseColorMode v-slot="{ mode }">
+                        <div v-for="credential in credentials" :key="credential.id" class="group-item is-size-5 is-size-6-mobile">
+                            {{ displayName(credential) }}
+                            <!-- revoke link -->
                             <button type="button" class="button tag is-pulled-right" :class="mode === 'dark' ? 'is-dark':'is-white'" @click="revokeCredential(credential.id)" :title="$t('tooltip.revoke')">
                                 {{ $t('label.revoke') }}
                             </button>
-                        </UseColorMode>
-                    </div>
+                        </div>
+                    </UseColorMode>
                     <div class="mt-2 is-size-7 is-pulled-right">
                         {{ $t('message.revoking_a_device_is_permanent')}}
                     </div>
@@ -167,6 +175,7 @@
                     <!-- use webauthn only -->
                     <FormCheckbox
                         v-model="user.preferences.useWebauthnOnly"
+                        @update:model-value="val => setActiveLoginForm()"
                         fieldName="useWebauthnOnly"
                         label="field.use_webauthn_only"
                         help="field.use_webauthn_only.help"
