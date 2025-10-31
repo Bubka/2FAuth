@@ -337,6 +337,8 @@
      */
     // TODO : Delegate this to the store or a global watcher
     function saveActiveGroup(newActiveGroupId) {
+        twofaccounts.groupLessOnly = false
+
         // When invoked by GroupSwitch event,  newActiveGroupId should
         // be the same as user.preferences.activeGroup because of the v-model
         // binding.
@@ -360,7 +362,8 @@
             v-model:is-visible="showGroupSwitch"
             v-model:active-group="user.preferences.activeGroup"
             :groups="groups.items"
-            @active-group-changed="saveActiveGroup">
+            @active-group-changed="saveActiveGroup"
+            @show-group-less="twofaccounts.groupLessOnly = true">
                 <RouterLink :to="{ name: 'groups' }" >{{ $t('link.manage_groups') }}</RouterLink>
         </GroupSwitch>
         <DestinationGroupSelector
@@ -394,7 +397,15 @@
                             </div>
                             <div class="column" v-else>
                                 <button type="button" id="btnShowGroupSwitch" :title="$t('tooltip.show_group_selector')" tabindex="1" class="button is-text is-like-text" :class="{'has-text-grey' : mode != 'dark'}" @click.stop="showGroupSwitch = !showGroupSwitch">
-                                    {{ groups.current ? groups.current : $t('label.all') }} ({{ twofaccounts.filteredCount }})&nbsp;
+                                    <template v-if="groups.current">
+                                        {{ groups.current }} ({{ twofaccounts.filteredCount }})&nbsp;
+                                    </template>
+                                    <template v-else-if="twofaccounts.groupLessOnly">
+                                        {{ $t('label.group_less') }} ({{ twofaccounts.filteredCount }})&nbsp;
+                                    </template>
+                                    <template v-else>
+                                        {{ $t('label.all') }} ({{ twofaccounts.filteredCount }})&nbsp;
+                                    </template>
                                     <LucideChevronDown class="mt-1" />
                                 </button>
                             </div>

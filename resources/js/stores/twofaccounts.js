@@ -13,6 +13,7 @@ export const useTwofaccounts = defineStore('twofaccounts', {
             filter: '',
             backendWasNewer: false,
             fetchedOn: null,
+            groupLessOnly: false,
         }
     },
 
@@ -22,7 +23,10 @@ export const useTwofaccounts = defineStore('twofaccounts', {
 
             return state.items.filter(
                 item => {
-                    if (parseInt(user.preferences.activeGroup) > 0 ) {
+                    if (state.groupLessOnly) {
+                        return item.group_id == null
+                    }
+                    else if (parseInt(user.preferences.activeGroup) > 0) {
                         return ((item.service ? item.service.toLowerCase().includes(state.filter.toLowerCase()) : false) ||
                             item.account.toLowerCase().includes(state.filter.toLowerCase())) &&
                             (item.group_id == parseInt(user.preferences.activeGroup))
