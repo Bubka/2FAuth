@@ -153,7 +153,7 @@
                 </div>
                 <div class="column py-1">
                     <div class="buttons">
-                        <template v-for="(isEnabled, provider) in $2fauth.config.sso">
+                        <template v-for="(isEnabled, provider) in $2fauth.config.sso" :key="provider">
                             <SsoConnectLink v-if="isEnabled" :class="'is-outlined is-small'" :provider="provider" />
                         </template>
                     </div>
@@ -190,7 +190,7 @@
             <p class="">{{ $t('message.sign_in_using_sso') }}</p>
         </div>
         <div v-if="Object.values($2fauth.config.sso).includes(true)" class="buttons mt-4">
-            <template v-for="(isEnabled, provider) in $2fauth.config.sso">
+            <template v-for="(isEnabled, provider) in $2fauth.config.sso" :key="provider">
                 <SsoConnectLink v-if="isEnabled" :provider="provider" />
             </template>
         </div>
@@ -262,7 +262,7 @@
                 </div>
                 <div class="column py-1">
                     <div class="buttons">
-                        <template v-for="(isEnabled, provider) in $2fauth.config.sso">
+                        <template v-for="(isEnabled, provider) in $2fauth.config.sso" :key="provider">
                             <SsoConnectLink v-if="isEnabled" :class="'is-outlined is-small'" :provider="provider" />
                         </template>
                     </div>
