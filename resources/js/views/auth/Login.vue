@@ -45,7 +45,6 @@
      */
     function LegacysignIn(e) {
         notify.clear()
-        isBusy.value = true
 
         form.post('/user/login', {returnError: true}).then(async (response) => {
             await user.loginAs({
@@ -67,9 +66,6 @@
             else if( error.response?.status !== 422 ) {
                 errorHandler.show(error)
             }
-        })
-        .finally(() => {
-            isBusy.value = false
         })
     }
 
@@ -237,7 +233,7 @@
         <form id="frmLegacyLogin" @submit.prevent="LegacysignIn" @keydown="form.onKeydown($event)">
             <FormField v-model="form.email" fieldName="email" :errorMessage="form.errors.get('email')" inputType="email" label="field.email" autocomplete="username" autofocus />
             <FormPasswordField v-model="form.password" fieldName="password" :errorMessage="form.errors.get('password')" label="field.password" autocomplete="current-password" />
-            <FormButtons :isBusy="isBusy" submitLabel="label.sign_in" submitId="btnSignIn"/>
+            <FormButtons :isBusy="form.isBusy" submitLabel="label.sign_in" submitId="btnSignIn"/>
         </form>
         <div class="nav-links">
             <p>{{ $t('message.forgot_your_password') }}&nbsp;
