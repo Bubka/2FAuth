@@ -12,19 +12,22 @@ jobs:
   copy-docker-compose-file:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-      with:
-        ref: dev
+      - name: Checkout 2FAuth
+        uses: actions/checkout@v4
+        with:
+          ref: dev
+          fetch-depth: 0
 
-    - name: Pushes docker-compose
-      uses: dmnemec/copy_file_to_another_repo_action@main
-      env:
-        API_TOKEN_GITHUB: ${{ secrets.ACTIONS_TOKEN_2FAUTH_DOCS }}
-      with:
-        source_file: 'docker/docker-compose.yml'
-        destination_repo: 'Bubka/2FAuth-Docs'
-        destination_folder: 'docs/static'
-        user_email: '858858+Bubka@users.noreply.github.com'
-        user_name: 'Bubka'
-        commit_message: '[Auto] Update docker-compose file'
+      - name: Copy file
+        run: |
+          git clone https://github.com/Bubka/2FAuth-Docs 2FAuth-Docs
+          cp docker/docker-compose.yml 2FAuth-Docs/docs/static/docker-compose.yml
+
+      - name: Commit & push to 2FAuth-Docs
+        run: |
+          cd 2FAuth-Docs
+          git config user.name "Bubka[bot]"
+          git config user.email "858858+Bubka@users.noreply.github.com"
+          git add docs/static/docker-compose.yml
+          git commit -m "[Auto] Update docker-compose file" || echo "no change"
+          git push https://x-access-token:${{ secrets.ACTIONS_TOKEN_2FAUTH_DOCS }}@github.com/Bubka/2FAuth-Docs.git main
