@@ -12,7 +12,7 @@ The shared components are ready, as is a new version of the web extension that m
 
 #### New env vars
 
-- `OPENID_HTTP_VERIFY_SSL_PEER`: Enable or disable SSL peer verification during OpenID authentication process ([doc](https://docs.2fauth.app/getting-started/configuration/#openid_http_verify_ssl_peer)).
+- `OPENID_HTTP_VERIFY_SSL_PEER`: Enable or disable SSL peer verification during OpenID authentication process ([doc](https://docs.2fauth.app/getting-started/config/env-vars/#openid_http_verify_ssl_peer)).
 
 ### Changed
 
@@ -25,7 +25,7 @@ The shared components are ready, as is a new version of the web extension that m
 
 ### API [1.8.0]
 
-- `/api/v1/icons/default` POST path added ([doc](https://docs.2fauth.app/resources/rapidoc.html#get-/api/v1/icons/default)).
+- `/api/v1/icons/default` POST path added ([doc](https://docs.2fauth.app/resources/rapidoc.html#post-/api/v1/icons/default)).
 
 ## [5.5.2] - 2025-04-11
 
