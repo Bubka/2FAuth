@@ -28,10 +28,24 @@ class GroupStoreRequest extends FormRequest
         return [
             'name' => [
                 'required',
-                'regex:/^[A-zÀ-ú0-9\s\-_]+$/',
+                'regex:/^[A-zÀ-ú0-9\s\-_\']+$/',
                 'max:32',
+                Rule::notIn([__('label.all')]),
                 Rule::unique('groups')->where(fn ($query) => $query->where('user_id', $this->user()->id)),
             ],
+        ];
+    }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array<string, string>
+     */
+    public function messages() : array
+    {
+        return [
+            'name.not_in' => __('error.reserved_name_please_choose_something_else'),
+            'name.regex' => __('error.accepted_char_for_group_name'),
         ];
     }
 }

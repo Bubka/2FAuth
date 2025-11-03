@@ -9,6 +9,4 @@ use Exception;
  *
  * @codeCoverageIgnore
  */
-class InvalidQrCodeException extends Exception
-{
-}
+class InvalidQrCodeException extends Exception {}

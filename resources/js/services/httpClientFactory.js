@@ -1,6 +1,6 @@
 import axios from "axios"
 import { useUserStore } from '@/stores/user'
-import { useNotifyStore } from '@/stores/notify'
+import { useErrorHandler } from '@2fauth/stores'
 
 export const httpClientFactory = (endpoint = 'api') => {
 	let baseURL
@@ -62,7 +62,7 @@ export const httpClientFactory = (endpoint = 'api') => {
             }
             
             if (error.response && [407].includes(error.response.status)) {
-                useNotifyStore().error(error)
+                useErrorHandler().show(error)
                 return new Promise(() => {})
             }
 
@@ -83,11 +83,11 @@ export const httpClientFactory = (endpoint = 'api') => {
 
             // Not found
             if (error.response.status === 404) {
-                useNotifyStore().notFound()
+                useErrorHandler().notFound()
                 return new Promise(() => {})
             }
 
-            useNotifyStore().error(error)
+            useErrorHandler().show(error)
             return new Promise(() => {})
         }
     )

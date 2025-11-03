@@ -3,8 +3,8 @@
 namespace App\Providers;
 
 use App\Events\GroupDeleted;
-use App\Events\GroupDeleting;
 use App\Events\ScanForNewReleaseCalled;
+use App\Events\StoreIconsInDatabaseSettingChanged;
 use App\Events\TwoFAccountDeleted;
 use App\Events\VisitedByProxyUser;
 use App\Listeners\Authentication\FailedLoginListener;
@@ -13,10 +13,11 @@ use App\Listeners\Authentication\LogoutListener;
 use App\Listeners\Authentication\VisitedByProxyUserListener;
 use App\Listeners\CleanIconStorage;
 use App\Listeners\DissociateTwofaccountFromGroup;
-use App\Listeners\LogNotification;
+use App\Listeners\LogNotificationListener;
 use App\Listeners\RegisterOpenId;
 use App\Listeners\ReleaseRadar;
 use App\Listeners\ResetUsersPreference;
+use App\Listeners\ToggleIconReplicationToDatabase;
 use App\Models\User;
 use App\Observers\UserObserver;
 use Illuminate\Auth\Events\Failed;
@@ -42,10 +43,8 @@ class EventServiceProvider extends ServiceProvider
         TwoFAccountDeleted::class => [
             CleanIconStorage::class,
         ],
-        GroupDeleting::class => [
-            DissociateTwofaccountFromGroup::class,
-        ],
         GroupDeleted::class => [
+            DissociateTwofaccountFromGroup::class,
             ResetUsersPreference::class,
         ],
         ScanForNewReleaseCalled::class => [
@@ -55,7 +54,7 @@ class EventServiceProvider extends ServiceProvider
             RegisterOpenId::class,
         ],
         NotificationSent::class => [
-            LogNotification::class,
+            LogNotificationListener::class,
         ],
         Login::class => [
             LoginListener::class,
@@ -69,6 +68,9 @@ class EventServiceProvider extends ServiceProvider
         VisitedByProxyUser::class => [
             VisitedByProxyUserListener::class,
         ],
+        StoreIconsInDatabaseSettingChanged::class => [
+            ToggleIconReplicationToDatabase::class,
+        ],
     ];
 
     /**
@@ -76,6 +78,7 @@ class EventServiceProvider extends ServiceProvider
      *
      * @var array<string, string|object|array<int, string|object>>
      */
+    // TODO: bind the observer using the ObservedBy attribute (https://laravel.com/docs/11.x/eloquent#defining-observers)
     protected $observers = [
         User::class => [UserObserver::class],
     ];

@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\WebauthnRenameRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class WebAuthnManageController extends Controller
 {
@@ -16,6 +18,10 @@ class WebAuthnManageController extends Controller
      */
     public function index(Request $request)
     {
+        if (Gate::denies('manage-webauthn-credentials')) {
+            throw new AccessDeniedHttpException(__('error.unsupported_with_sso_only'));
+        }
+
         $allUserCredentials = $request->user()->webAuthnCredentials()->WhereEnabled()->get();
 
         return response()->json($allUserCredentials, 200);
@@ -46,6 +52,10 @@ class WebAuthnManageController extends Controller
     public function delete(Request $request, $credential)
     {
         Log::info('Deletion of security device requested');
+
+        if (Gate::denies('manage-webauthn-credentials')) {
+            throw new AccessDeniedHttpException(__('error.unsupported_with_sso_only'));
+        }
 
         $user = $request->user();
         $user->flushCredential($credential);

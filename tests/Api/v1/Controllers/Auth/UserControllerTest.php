@@ -6,6 +6,7 @@ use App\Api\v1\Controllers\UserController;
 use App\Api\v1\Resources\UserResource;
 use App\Models\User;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\FeatureTestCase;
 
 /**
@@ -23,21 +24,17 @@ class UserControllerTest extends FeatureTestCase
     private const PREFERENCE_JSON_STRUCTURE = [
         'key',
         'value',
+        'locked',
     ];
 
-    /**
-     * @test
-     */
-    public function setUp() : void
+    protected function setUp() : void
     {
         parent::setUp();
 
         $this->user = User::factory()->create();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_show_existing_user_when_authenticated_returns_success()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -54,9 +51,7 @@ class UserControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_allPreferences_returns_consistent_json_structure()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -67,10 +62,8 @@ class UserControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
-    public function test_allPreferences_returns_preferences_with_default_values()
+    #[Test]
+    public function test_allPreferences_returns_preferences_with_default_config_values()
     {
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('GET', '/api/v1/user/preferences')
@@ -84,9 +77,7 @@ class UserControllerTest extends FeatureTestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_allPreferences_returns_preferences_with_user_values()
     {
         $userPrefs = [];
@@ -117,10 +108,8 @@ class UserControllerTest extends FeatureTestCase
         }
     }
 
-    /**
-     * @test
-     */
-    public function test_showPreference_returns_preference_with_default_value()
+    #[Test]
+    public function test_showPreference_returns_preference_with_default_config_value()
     {
         /**
          * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
@@ -131,14 +120,34 @@ class UserControllerTest extends FeatureTestCase
             ->json('GET', '/api/v1/user/preferences/showOtpAsDot')
             ->assertOk()
             ->assertExactJson([
-                'key'   => 'showOtpAsDot',
-                'value' => config('2fauth.preferences.showOtpAsDot'),
+                'key'    => 'showOtpAsDot',
+                'value'  => config('2fauth.preferences.showOtpAsDot'),
+                'locked' => false,
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
+    public function test_showPreference_returns_preference_with_locked_default_env_value()
+    {
+        // See .env.testing which sets USERPREF_DEFAULT__THEME=light
+        // while config/2fauth.php sets the default value to 'system'
+
+        /**
+         * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
+         */
+        $this->user = User::factory()->create();
+
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('GET', '/api/v1/user/preferences/theme')
+            ->assertOk()
+            ->assertExactJson([
+                'key'    => 'theme',
+                'value'  => 'light',
+                'locked' => true,
+            ]);
+    }
+
+    #[Test]
     public function test_showPreference_returns_preference_with_custom_value()
     {
         $showOtpAsDot                            = ! config('2fauth.preferences.showOtpAsDot');
@@ -153,9 +162,7 @@ class UserControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_showPreference_for_missing_preference_returns_not_found()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -163,9 +170,7 @@ class UserControllerTest extends FeatureTestCase
             ->assertNotFound();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_setPreference_returns_updated_preference()
     {
         /**
@@ -187,9 +192,7 @@ class UserControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_setPreference_for_missing_preference_returns_not_found()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -200,9 +203,7 @@ class UserControllerTest extends FeatureTestCase
             ->assertNotFound();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_setPreference_with_invalid_data_returns_validation_error()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -211,5 +212,17 @@ class UserControllerTest extends FeatureTestCase
                 'value' => null,
             ])
             ->assertStatus(422);
+    }
+
+    #[Test]
+    public function test_setPreference_on_locked_preference_returns_forbidden()
+    {
+        // See .env.testing which sets USERPREF_LOCKED__THEME=true
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('PUT', '/api/v1/user/preferences/theme', [
+                'key'   => 'theme',
+                'value' => 'system',
+            ])
+            ->assertStatus(403);
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The MIT License (MIT)
  * Copyright (c) 2023 Bubka
@@ -142,7 +143,7 @@ class Install extends Command
     protected function installPassport() : void
     {
         $this->components->task('Setting up Passport', function () : void {
-            $this->callSilently('passport:install');
+            $this->callSilently('passport:install', ['--no-interaction' => true]);
         });
     }
 

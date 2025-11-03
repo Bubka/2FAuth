@@ -6,6 +6,7 @@ use App\Models\Group;
 use App\Models\TwoFAccount;
 use App\Models\User;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\ModelTestCase;
 
 /**
@@ -14,12 +15,10 @@ use Tests\ModelTestCase;
 #[CoversClass(User::class)]
 class UserModelTest extends ModelTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function test_model_configuration()
     {
-        $this->runConfigurationAssertions(new User(),
+        $this->runConfigurationAssertions(new User,
             ['name', 'email', 'password', 'oauth_id', 'oauth_provider'],
             ['password', 'remember_token'],
             ['*'],
@@ -35,9 +34,7 @@ class UserModelTest extends ModelTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_email_is_set_lowercased()
     {
         $user = User::factory()->make([
@@ -47,23 +44,104 @@ class UserModelTest extends ModelTestCase
         $this->assertEquals(strtolower('UPPERCASE@example.COM'), $user->email);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_twofaccounts_relation()
     {
-        $user     = new User();
+        $user     = new User;
         $accounts = $user->twofaccounts();
-        $this->assertHasManyRelation($accounts, $user, new TwoFAccount());
+        $this->assertHasManyRelation($accounts, $user, new TwoFAccount);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_groups_relation()
     {
-        $user   = new User();
+        $user   = new User;
         $groups = $user->groups();
-        $this->assertHasManyRelation($groups, $user, new Group());
+        $this->assertHasManyRelation($groups, $user, new Group);
+    }
+
+    #[Test]
+    public function test_equals_is_true()
+    {
+        $user = User::factory()->make([
+            'oauth_id'       => 'fake_id',
+            'oauth_provider' => 'fake_provider',
+        ]);
+        $anotherUser = User::factory()->make([
+            'name'           => $user->name,
+            'email '         => $user->email,
+            'oauth_id'       => $user->oauth_id,
+            'oauth_provider' => $user->oauth_provider,
+        ]);
+
+        $this->assertTrue($user->equals($anotherUser));
+    }
+
+    #[Test]
+    public function test_equals_is_false_if_name_differs()
+    {
+        $user = User::factory()->make([
+            'oauth_id'       => 'fake_id',
+            'oauth_provider' => 'fake_provider',
+        ]);
+        $anotherUser = User::factory()->make([
+            'name'           => 'another name',
+            'email '         => $user->email,
+            'oauth_id'       => $user->oauth_id,
+            'oauth_provider' => $user->oauth_provider,
+        ]);
+
+        $this->assertFalse($user->equals($anotherUser));
+    }
+
+    #[Test]
+    public function test_equals_is_false_if_email_differs()
+    {
+        $user = User::factory()->make([
+            'oauth_id'       => 'fake_id',
+            'oauth_provider' => 'fake_provider',
+        ]);
+        $anotherUser = User::factory()->make([
+            'name'           => $user->name,
+            'email '         => 'another@email.com',
+            'oauth_id'       => $user->oauth_id,
+            'oauth_provider' => $user->oauth_provider,
+        ]);
+
+        $this->assertFalse($user->equals($anotherUser));
+    }
+
+    #[Test]
+    public function test_equals_is_false_if_oauthid_differs()
+    {
+        $user = User::factory()->make([
+            'oauth_id'       => 'fake_id',
+            'oauth_provider' => 'fake_provider',
+        ]);
+        $anotherUser = User::factory()->make([
+            'name'           => $user->name,
+            'email '         => $user->email,
+            'oauth_id'       => 'another_fake_id',
+            'oauth_provider' => $user->oauth_provider,
+        ]);
+
+        $this->assertFalse($user->equals($anotherUser));
+    }
+
+    #[Test]
+    public function test_equals_is_false_if_oauth_provider_differs()
+    {
+        $user = User::factory()->make([
+            'oauth_id'       => 'fake_id',
+            'oauth_provider' => 'fake_provider',
+        ]);
+        $anotherUser = User::factory()->make([
+            'name'           => $user->name,
+            'email '         => $user->email,
+            'oauth_id'       => $user->oauth_id,
+            'oauth_provider' => 'another_provider',
+        ]);
+
+        $this->assertFalse($user->equals($anotherUser));
     }
 }

@@ -1,8 +1,10 @@
 <script setup>
     import Form from '@/components/formElements/Form'
-    import { useNotifyStore } from '@/stores/notify'
+    import { useNotify } from '@2fauth/ui'
+    import { useErrorHandler } from '@2fauth/stores'
 
-    const notify = useNotifyStore()
+    const errorHandler = useErrorHandler()
+    const notify = useNotify()
     const route = useRoute()
 
     const isWebauthnReset = route.name == 'webauthn.lost'
@@ -25,7 +27,7 @@
                 notify.alert({ text: error.response.data.requestFailed, duration:-1 })
             }
             else if( error.response.status !== 422 ) {
-                notify.error(error)
+                errorHandler.show(error)
             }
         })
     }
@@ -36,15 +38,18 @@
 </script>
 
 <template>
-    <FormWrapper :title="$t(isWebauthnReset ? 'auth.webauthn.account_recovery' : 'auth.forms.reset_password')" :punchline="$t(isWebauthnReset ? 'auth.webauthn.recovery_punchline' : 'auth.forms.reset_punchline')">
+    <FormWrapper :title="isWebauthnReset ? 'heading.account_recovery' : 'heading.reset_password'" :punchline="isWebauthnReset ? 'message.recovery_punchline' : 'message.reset_punchline'">
+        <div v-if="isWebauthnReset" class="block">
+            {{ $t('message.ensure_you_open_mail_in_trusted_device') }}
+        </div>
         <form @submit.prevent="requestPasswordReset" @keydown="form.onKeydown($event)">
-            <FormField v-model="form.email" fieldName="email" :fieldError="form.errors.get('email')" label="auth.forms.email" autofocus />
+            <FormField v-model="form.email" fieldName="email" :errorMessage="form.errors.get('email')" label="field.email" autofocus />
             <FormButtons
                 :submitId="'btnSendResetPwd'"
                 :isBusy="form.isBusy"
-                :caption="$t(isWebauthnReset ? 'auth.webauthn.send_recovery_link' : 'auth.forms.send_password_reset_link')"
+                :submitLabel="isWebauthnReset ? 'label.send_recovery_link' : 'label.send_password_reset_link'"
                 :showCancelButton="true"
-                cancelLandingView="login" />
+                @cancel="router.push({ name: 'login' })" />
         </form>
         <VueFooter />
     </FormWrapper>

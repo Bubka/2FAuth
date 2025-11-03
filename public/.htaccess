@@ -5,6 +5,9 @@
 
     RewriteEngine On
 
+    # Uncomment this if you need to access '/server-info' or '/server-status' urls to monitor apache2
+    # RewriteRule ^(server-info|server-status) - [L]
+
     # Uncomment and set the RewriteBase path to the desired subdirectory if you want to
     # serve 2FAuth from a domain subdirectory like https://mydomain/2fauth/
     #

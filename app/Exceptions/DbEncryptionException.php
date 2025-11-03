@@ -9,6 +9,4 @@ use Exception;
  *
  * @codeCoverageIgnore
  */
-class DbEncryptionException extends Exception
-{
-}
+class DbEncryptionException extends Exception {}

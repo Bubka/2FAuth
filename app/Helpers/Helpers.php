@@ -2,6 +2,8 @@
 
 namespace App\Helpers;
 
+use Illuminate\Support\Str;
+
 class Helpers
 {
     /**
@@ -38,5 +40,31 @@ class Helpers
         }
 
         return $ids;
+    }
+
+    /**
+     * Generate a unique filename with the given extension
+     */
+    public static function getRandomFilename(string $extension, int $length = 40) : string
+    {
+        return Str::random($length) . '.' . $extension;
+    }
+
+    /**
+     * Defines preferences locked for change.
+     * This helper is only intended to be called from the 2FAuth config file.
+     */
+    public static function lockedPreferences(array $preferences) : array
+    {
+        foreach ($preferences as $key => $value) {
+            $_key     = $key === 'revealDottedOTP' ? 'revealDottedOtp' : $key;
+            $isLocked = envUnlessEmpty(Str::of($_key)->snake('_')->upper()->prepend('USERPREF_LOCKED__')->toString(), false);
+
+            if ($isLocked) {
+                $lockedPreferences[] = $key;
+            }
+        }
+
+        return $lockedPreferences ?? [];
     }
 }

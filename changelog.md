@@ -1,5 +1,204 @@
 # Change log
 
+## [5.6.0] - 2025-06-18
+
+Unless you are an icon lover, there isn't much to get excited about with 2FAuth v5.6 (see below for details). That's because I'm focused on refactoring the web app's front end and the web extension so that they are built using shared components. The process is time consuming, but it's a necessary step to optimize future developments and avoid repeating code.
+
+The shared components are ready, as is a new version of the web extension that makes use of these components. I plan to migrate the 2FAuth web app as soon as possible so that I can start working on new features again.
+
+### Added
+
+- The _Get official icon_ feature now includes two new icon providers, [selfh.st](https://selfh.st/icons/) and [dashboardicons.com](https://dashboardicons.com/), as well as the ability to select a preferred variant or to switch between providers directly from the Advanced form. ([#475](https://github.com/Bubka/2FAuth/issues/475)).
+
+#### New env vars
+
+- `OPENID_HTTP_VERIFY_SSL_PEER`: Enable or disable SSL peer verification during OpenID authentication process ([doc](https://docs.2fauth.app/getting-started/configuration/#openid_http_verify_ssl_peer)).
+
+### Changed
+
+- Personal Access Token (PAT) can be used when authentication is restricted to SSO only. This is particularly useful when you want to use the 2FAuth web extension. Check out the new _Allow PAT usage_ setting in the Admin > Auth > SSO section ([#474](https://github.com/Bubka/2FAuth/issues/474)).
+
+### Fixed
+
+- [issue #477](https://github.com/Bubka/2FAuth/issues/477) Steam OTP codes don't refresh when become invalid
+- [PR #482](https://github.com/Bubka/2FAuth/pull/482) Docker entrypoint not calling the right php-fpm version, thanks to [@jkoch22](https://github.com/jkoch22)
+
+### API [1.8.0]
+
+- `/api/v1/icons/default` POST path added ([doc](https://docs.2fauth.app/resources/rapidoc.html#get-/api/v1/icons/default)).
+
+## [5.5.2] - 2025-04-11
+
+### Fixed
+
+- [issue #472](https://github.com/Bubka/2FAuth/issues/472) QR scan reader blocked by csp
+
+## [5.5.1] - 2025-04-11
+
+### Changed
+
+- The _Show next OTP_ user preference is enabled by default
+
+### Fixed
+
+- [issue #472](https://github.com/Bubka/2FAuth/issues/472) QR scan reader blocked by csp
+
+## [5.5.0] - 2025-03-27
+
+### Announcement
+
+Did you know that the 2FAuth official web browser extension has been released!?
+
+The goal of this web extension is to offer an alternative way to interact with your 2FAuth server and to make 2FA account registration and OTP generation even easier and faster.
+
+It's still in early (and beta) stage, but it's functional. For now, only OTP generation is supported, as well as the Search & Group features. Next step is to be able to capture QR codes in the browser pages. This will allow to register a 2FA account in 2FAuth during the 2FA enrollment process on the service website.
+
+- [2FAuth web extension for Firefox](https://addons.mozilla.org/en-US/firefox/addon/2fauth-addon/)
+- [2FAuth web extension for Chrome](https://chromewebstore.google.com/detail/2fauth-beta/kokhpbhfeokchmbimdlaldcmlinjpipm?hl=en)
+- [2FAuth web extension for Edge](https://microsoftedge.microsoft.com/addons/detail/2fauth-beta/kgfofcnddpapmmhibkbaljffnpmcmlde)
+
+Feedback and bug reports (in this repository please) are very welcome.
+
+<hr/>
+
+⚠️ This release drops PHP 8.2 support ⚠️
+
+### Added
+
+- It is now possible to define custom defaults for user preferences as well as to lock the preferences from being changed by users. This feature requires a bit of configuration, a [dedicated page](https://docs.2fauth.app/getting-started/config/user-preferences/) has been added to the documentation site to guide you through the process. ([#413](https://github.com/Bubka/2FAuth/issues/413))
+- A user preference to enable precalculation and display of the next OTP code.  
+  Don't be surprised if you don't see the next code right after enabling this option, the code fades in slowly in order to maintain good readability of the current code. ([#416](https://github.com/Bubka/2FAuth/issues/416))
+- New languages: Danish, Dutch, Italian, Korean, Portuguese (Brazilian)
+
+### Changed
+
+- The version number has been removed from the footer and from the About page for unauthenticated users. ([#432](https://github.com/Bubka/2FAuth/issues/432))
+- 2FAuth now starts searching as soon as the user starts typing, without having to explicitly give focus to the search field. ([#441](https://github.com/Bubka/2FAuth/issues/441))
+
+### Fixed
+
+- [issue #438](https://github.com/Bubka/2FAuth/issues/438) Sorting not working if "Service" is null
+- [issue #458](https://github.com/Bubka/2FAuth/issues/458) The `/up` route no longer creates sessions
+- [issue #462](https://github.com/Bubka/2FAuth/issues/462) The check for new versions is no longer triggered whereas the _Check for new version_ setting is disabled
+- [PR #455](https://github.com/Bubka/2FAuth/pull/455) Logo size overflow, by [@BitSleek](https://github.com/BitSleek)
+- Multiple Race Condition in Group Management Feature. Credits to [@bugdiscole](https://github.com/bugdisclose)
+
+### API [1.7.0]
+
+- New `403` response for the PUT operation of path `/api/v1/user/preferences/{name}`
+- New `409` response for the POST operation of path `/api/v1/groups/{id}/assign`
+- New `locked` property in the `userPreference` model
+
+## [5.4.3] - 2024-11-27
+
+### Fixed
+
+- [issue #408](https://github.com/Bubka/2FAuth/issues/408) Deleted icon is back after saving from the advanced form
+- [issue #417](https://github.com/Bubka/2FAuth/issues/417) Login page does not load after v5.4.1 update
+- [issue #418](https://github.com/Bubka/2FAuth/issues/418) Opening of the footer menu submits the advanced form
+- [issue #420](https://github.com/Bubka/2FAuth/issues/420) QR codes are cropped on small screens
+- [issue #421](https://github.com/Bubka/2FAuth/issues/421) Freeze when switching to Manage mode
+- [issue #423](https://github.com/Bubka/2FAuth/issues/423) Icon for accounts without an icon doesn't exist
+
+### Changed
+
+- CSS styles are no longer loaded from tailwindcss.com in the `/up` view
+
+## [5.4.2] - 2024-11-18
+
+### Changed
+
+- CSP has been turned off (for now) since it breaks the app under Google Chrome. ([#417](https://github.com/Bubka/2FAuth/issues/417))
+
+## [5.4.1] - 2024-11-17
+
+### Security release
+
+- Fix XSS & SSRF vulnerabilities (thx to the XBOW team).
+- Content Security Policy is now available and enable by default. CSP helps to prevent or minimize the risk of certain types of security threats.  
+  If CSP is already enable on your server, you can set the `CONTENT_SECURITY_POLICY` environment variable to `false` to disable it at 2FAuth level.
+
+## [5.4.0] - 2024-11-08
+
+### Changed
+
+- The links in the footer (Settings, [Admin,] Sign out) have been replaced by the email address of the logged in user. Clicking on this email shows a navigation menu containing the links that were previously visible in the footer. The former display is still available if you don't like the new one, just uncheck the new _Show email in footer_ user option in Settings. ([#404](https://github.com/Bubka/2FAuth/issues/404))
+
+### Added
+
+- Administrators can now configure 2FAuth to register 2FA icons in the database (see the new _Store icons to database_ setting in the admin panel). When enabled, existing icons in the local file system are automatically registered in the database. These files are retained and then used for caching purposes only. 2FAuth will automatically re-create cache files if they are missing, so you only have to consider the database when backing up your instance. When disabled, 2FAuth will check that all registered icons in the database have a corresponding local file before flushing out the db icons table. ([#364](https://github.com/Bubka/2FAuth/issues/364)).
+- The ability to export 2FA accounts as a list of otpauth URIs ([#386](https://github.com/Bubka/2FAuth/issues/386)).
+
+### Fixed
+
+- Part of the content of some pages (such as the error page) could be hidden by the footer on small screens.
+
+### API [1.6.0]
+
+- New `otpauth` query parameter for the GET operation of path `/api/v1/twofaccounts/export` to force data export as otpauth URIs instead of the 2FAuth json format.
+
+## [5.3.2] - 2024-10-26
+
+### Fixed
+
+- [issue #402](https://github.com/Bubka/2FAuth/issues/402) Error asking me to log out when using multiple devices, pressing back logs me in anyway
+
+## [5.3.1] - 2024-10-12
+
+### Fixed
+
+- [issue #396](https://github.com/Bubka/2FAuth/issues/396) PROXY_HEADER_FOR_IP not working as intended
+- [issue #397](https://github.com/Bubka/2FAuth/issues/397) Base table or view not found: 1146 Table '2fauth.jobs' doesn't exist
+- [issue #399](https://github.com/Bubka/2FAuth/issues/399) Cannot set CACHE_DRIVER and SESSION_DRIVER to database
+
+## [5.3.0] - 2024-09-27
+
+### Added
+
+- The `/up` endpoint for health checks ([#271](https://github.com/Bubka/2FAuth/issues/271)).
+- A user preference to close the on-screen OTP after a predefined delay
+- A user preference to automatically register a 2FA account immediately after a QR code scan. When enabled, there is no need to click the Save button anymore to save the account to the database.
+- An admin setting to make SSO the only authentication method available (does not apply to admins). ([#368](https://github.com/Bubka/2FAuth/issues/368)).
+- The ability to assign a 2FA account to a specific group directly from the advanced form ([#372](https://github.com/Bubka/2FAuth/issues/372)).
+- A new _Auth_ tab in the admin panel to gather settings related to authentication
+- Proxy support for the OpenID connector (using `PROXY_FOR_OUTGOING_REQUESTS`), thanks to [@rstefko](https://github.com/rstefko) ([PR #367](https://github.com/Bubka/2FAuth/pull/367))
+
+#### New env vars
+
+A lot of new environment variables are available thanks to the Laravel 11 upgrade. They give more control over various features of the application:
+
+- `ARGON_THREADS`: Number of threads that Argon2 will use to compute a hash.
+- `ARGON_TIME`: Maximum amount of time it may take to compute an Argon2 hash.
+- `ARGON_MEMORY`: Maximum memory (in kibibytes) that may be used to compute an Argon2 hash.
+- `DB_CHARSET`: The character set of the database.
+- `DB_COLLATION`: The collation of the database.
+- `HASH_DRIVER`: The hash algorithm used to hash user passwords.
+- `LOG_STACK`: The stack of log channels used when the log channel is set to `stack`.
+- `LOG_DAILY_DAYS`: Number of log files to generate/rotate when using the `daily` log channel.
+- `LOG_SLACK_USERNAME`: The name of the user sending the log messages when using the `slack` log channel.
+- `LOG_SLACK_EMOJI`: The Emoji code of the emoji used to illustrate log messages when using the `slack` log channel.
+- `LOG_SYSLOG_FACILITY`: The syslog facility that provides a rough clue of where in a system the message originated.
+- `SESSION_TABLE`: Name of the table to be used to store sessions when using the database `session` driver.
+- `SESSION_ENCRYPT`: Whether or not session data are encrypted before it is stored.
+
+Please refer to the [Configuration doc](https://docs.2fauth.app/getting-started/configuration/) to find out when and how to use them.
+
+### Changed
+
+- The Service data field is now encrypted in the database ([#365](https://github.com/Bubka/2FAuth/issues/365)).
+- Upgrade to Laravel 11
+
+### Fixed
+
+- [issue #347](https://github.com/Bubka/2FAuth/issues/347) Sort with ignore case
+- [issue #349](https://github.com/Bubka/2FAuth/issues/349) "Show QR Code" feature returns wrong QR code
+- [issue #360](https://github.com/Bubka/2FAuth/issues/360) Can’t import QR Codes from Confluence 2FA
+- [issue #362](https://github.com/Bubka/2FAuth/issues/362) Cannot use SSO if app runs in subdirectory
+
+### API [1.5.0]
+
+- New `group_id` property for POST and PUT operations of the `/api/v1/twofaccounts` path
+
 ## [5.2.0] - 2024-05-29
 
 2FAuth v5.2 offers a new notification feature. Each user can now decide whether they want to receive an email after a successful login from a new device, or after a failed login.

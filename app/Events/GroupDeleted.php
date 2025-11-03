@@ -6,6 +6,7 @@ use App\Models\Group;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class GroupDeleted
 {
@@ -24,5 +25,7 @@ class GroupDeleted
     public function __construct(Group $group)
     {
         $this->group = $group;
+
+        Log::info(sprintf('Group %s (id #%d) deleted ', var_export($group->name, true), $group->id));
     }
 }

@@ -23,7 +23,7 @@ class TwoFAccountExportCollection extends ResourceCollection
     {
         return [
             'app'      => '2fauth_v' . config('2fauth.version'),
-            'schema'   => 1,
+            'schema'   => $this->when($request->missing('otpauth') || ! $request->boolean('otpauth'), 1),
             'datetime' => now(),
             'data'     => $this->collection,
         ];

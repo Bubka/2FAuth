@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\FeatureTestCase;
 
 /**
@@ -21,27 +22,25 @@ class SettingStoreRequestTest extends FeatureTestCase
 
     const UNIQUE_KEY = 'UniqueKey';
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_user_is_authorized()
     {
         Auth::shouldReceive('check')
             ->once()
             ->andReturn(true);
 
-        $request = new SettingStoreRequest();
+        $request = new SettingStoreRequest;
 
         $this->assertTrue($request->authorize());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     #[DataProvider('provideValidData')]
     public function test_valid_data(array $data) : void
     {
-        $request   = new SettingStoreRequest();
+        $request = new SettingStoreRequest;
+        $request->merge($data);
+
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->fails());
@@ -68,15 +67,15 @@ class SettingStoreRequestTest extends FeatureTestCase
         ];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     #[DataProvider('provideInvalidData')]
     public function test_invalid_data(array $data) : void
     {
         Settings::set(self::UNIQUE_KEY, 'uniqueValue');
 
-        $request   = new SettingStoreRequest();
+        $request = new SettingStoreRequest;
+        $request->merge($data);
+
         $validator = Validator::make($data, $request->rules());
 
         $this->assertTrue($validator->fails());

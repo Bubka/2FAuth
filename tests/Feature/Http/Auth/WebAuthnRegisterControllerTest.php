@@ -3,13 +3,14 @@
 namespace Tests\Feature\Http\Auth;
 
 use App\Http\Controllers\Auth\WebAuthnRegisterController;
+use App\Http\Requests\WebauthnAttestationRequest;
+use App\Http\Requests\WebauthnAttestedRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Config;
 use Laragear\WebAuthn\Enums\UserVerification;
-use Laragear\WebAuthn\Http\Requests\AttestationRequest;
-use Laragear\WebAuthn\Http\Requests\AttestedRequest;
 use Laragear\WebAuthn\JsonTransport;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\FeatureTestCase;
 
 /**
@@ -23,56 +24,47 @@ class WebAuthnRegisterControllerTest extends FeatureTestCase
      */
     protected $user;
 
-    /**
-     * @test
-     */
-    public function setUp() : void
+    protected function setUp() : void
     {
         parent::setUp();
 
         $this->user = User::factory()->create();
     }
 
-    /**
-     * @test
-     */
-    public function test_uses_attestation_with_fastRegistration_request() : void
+    #[Test]
+    public function test_uses_attestation_with_fast_registration_request() : void
     {
         Config::set('webauthn.user_verification', UserVerification::DISCOURAGED);
 
-        $request = $this->mock(AttestationRequest::class);
+        $request = $this->mock(WebauthnAttestationRequest::class);
 
         $request->expects('fastRegistration')->andReturnSelf();
-        $request->expects('toCreate')->andReturn(new JsonTransport());
+        $request->expects('toCreate')->andReturn(new JsonTransport);
 
         $this->actingAs($this->user, 'web-guard')
             ->json('POST', '/webauthn/register/options')
             ->assertOk();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_uses_attestation_with_secureRegistration_request() : void
     {
         Config::set('webauthn.user_verification', UserVerification::REQUIRED);
 
-        $request = $this->mock(AttestationRequest::class);
+        $request = $this->mock(WebauthnAttestationRequest::class);
 
         $request->expects('secureRegistration')->andReturnSelf();
-        $request->expects('toCreate')->andReturn(new JsonTransport());
+        $request->expects('toCreate')->andReturn(new JsonTransport);
 
         $this->actingAs($this->user, 'web-guard')
             ->json('POST', '/webauthn/register/options')
             ->assertOk();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_register_uses_attested_request() : void
     {
-        $request = $this->mock(AttestedRequest::class);
+        $request = $this->mock(WebauthnAttestedRequest::class);
 
         $request->expects('save')->andReturn();
         $request->expects('user')->andReturn($this->user);

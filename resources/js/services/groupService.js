@@ -22,5 +22,9 @@ export default {
     delete(id, config = {}) {
         return apiClient.delete('/groups/' + id, { ...config })
     },
+
+    saveOrder(orderedIds, config = {}) {
+        return apiClient.post('/groups/reorder', { orderedIds: orderedIds }, { ...config })
+    },
     
 }

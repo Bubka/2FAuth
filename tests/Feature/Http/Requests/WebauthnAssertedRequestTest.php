@@ -7,6 +7,7 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Validator;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 /**
@@ -17,13 +18,13 @@ class WebauthnAssertedRequestTest extends TestCase
 {
     use WithoutMiddleware;
 
-    /**
-     * @test
-     */
+    #[Test]
     #[DataProvider('provideValidData')]
     public function test_valid_data(array $data) : void
     {
-        $request   = new WebauthnAssertedRequest();
+        $request = new WebauthnAssertedRequest;
+        $request->merge($data);
+
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->fails());
@@ -50,13 +51,13 @@ class WebauthnAssertedRequestTest extends TestCase
         ];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     #[DataProvider('provideInvalidData')]
     public function test_invalid_data(array $data) : void
     {
-        $request   = new WebauthnAssertedRequest();
+        $request = new WebauthnAssertedRequest;
+        $request->merge($data);
+
         $validator = Validator::make($data, $request->rules());
 
         $this->assertTrue($validator->fails());

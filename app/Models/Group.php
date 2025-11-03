@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use App\Events\GroupDeleted;
-use App\Events\GroupDeleting;
+use Database\Factories\GroupFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
+use Spatie\EloquentSortable\Sortable;
+use Spatie\EloquentSortable\SortableTrait;
 
 /**
  * App\Models\Group
@@ -14,15 +16,33 @@ use Illuminate\Support\Facades\Log;
  * @property int $twofaccounts_count
  * @property int $id
  * @property string $name
+ * @property int|null $order_column
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int|null $user_id
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TwoFAccount[] $twofaccounts
  * @property-read \App\Models\User|null $user
+ *
+ * @method static \Database\Factories\GroupFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|Group newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Group newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Group query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Group whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Group whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Group whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Group whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Group whereUserId($value)
+ *
+ * @mixin \Eloquent
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|Group orphans()
  */
-class Group extends Model
+class Group extends Model implements Sortable
 {
-    use HasFactory;
+    /**
+     * @use HasFactory<GroupFactory>
+     */
+    use HasFactory, SortableTrait;
 
     /**
      * model's array form.
@@ -61,8 +81,7 @@ class Group extends Model
      * @var array
      */
     protected $dispatchesEvents = [
-        'deleting' => GroupDeleting::class,
-        'deleted'  => GroupDeleted::class,
+        'deleted' => GroupDeleted::class,
     ];
 
     /**
@@ -80,15 +99,46 @@ class Group extends Model
         static::updated(function (object $model) {
             Log::info(sprintf('Group %s (id #%d) updated by user ID #%s', var_export($model->name, true), $model->id, $model->user_id));
         });
-        static::deleted(function (object $model) {
-            Log::info(sprintf('Group %s (id #%d) deleted ', var_export($model->name, true), $model->id));
-        });
+    }
+
+    /**
+     * Settings for @spatie/eloquent-sortable package
+     *
+     * @var array
+     */
+    public $sortable = [
+        'order_column_name'  => 'order_column',
+        'sort_when_creating' => true,
+    ];
+
+    /**
+     * Retrieve the model for a bound value.
+     *
+     * @param  mixed  $value
+     * @param  string|null  $field
+     * @return \Illuminate\Database\Eloquent\Model|null
+     */
+    public function resolveRouteBinding($value, $field = null)
+    {
+        // The All group is a virtual group with id==0.
+        // It never exists in database so we enforce the route binding
+        // resolution logic to return an instance instead of not found.
+        if ($value === '0') {
+            $group = new self([
+                'name' => __('label.all'),
+            ]);
+            $group->id = 0;
+
+            return $group;
+        } else {
+            return parent::resolveRouteBinding($value, $field);
+        }
     }
 
     /**
      * Get the TwoFAccounts of the group.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<TwoFAccount>
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\App\Models\TwoFAccount, $this>
      */
     public function twofaccounts()
     {
@@ -98,7 +148,7 @@ class Group extends Model
     /**
      * Get the user that owns the group.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Models\User, \App\Models\Group>
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Models\User, $this>
      */
     public function user()
     {

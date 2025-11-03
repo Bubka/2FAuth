@@ -4,9 +4,9 @@ namespace App\Models\Dto;
 
 class OtpDto
 {
-    /* @var integer */
+    /* @var string */
     public string $password;
 
-    /* @var integer */
+    /* @var string */
     public string $otp_type;
 }

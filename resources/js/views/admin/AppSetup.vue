@@ -1,16 +1,19 @@
 <script setup>
-    import AdminTabs from '@/layouts/AdminTabs.vue'
-    import appSettingService from '@/services/appSettingService'
+    import tabs from './tabs'
     import systemService from '@/services/systemService'
+    import { useAppSettingsUpdater } from '@/composables/appSettingsUpdater'
     import { useAppSettingsStore } from '@/stores/appSettings'
-    import { useNotifyStore } from '@/stores/notify'
+    import { useNotify, TabBar } from '@2fauth/ui'
     import { useUserStore } from '@/stores/user'
     import VersionChecker from '@/components/VersionChecker.vue'
     import CopyButton from '@/components/CopyButton.vue'
+    import { useI18n } from 'vue-i18n'
+    import { LucideSend } from 'lucide-vue-next'
 
+    const { t } = useI18n()
     const $2fauth = inject('2fauth')
     const user = useUserStore()
-    const notify = useNotifyStore()
+    const notify = useNotify()
     const appSettings = useAppSettingsStore()
     const returnTo = useStorage($2fauth.prefix + 'returnTo', 'accounts')
 
@@ -18,68 +21,8 @@
     const listInfos = ref(null)
     const isSendingTestEmail = ref(false)
     const isClearingCache = ref(false)
-    const fieldErrors = ref({
-        restrictList: null,
-        restrictRule: null,
-    })
-    const _settings = ref({
-        checkForUpdate: appSettings.checkForUpdate,
-        useEncryption: appSettings.useEncryption,
-        restrictRegistration: appSettings.restrictRegistration,
-        restrictList: appSettings.restrictList,
-        restrictRule: appSettings.restrictRule,
-        disableRegistration: appSettings.disableRegistration,
-        keepSsoRegistrationEnabled: appSettings.keepSsoRegistrationEnabled,
-        enableSso: appSettings.enableSso,
-    })
-
-    /**
-     * Saves a setting on the backend
-     * @param {string} preference 
-     * @param {any} value 
-     */
-    function saveSetting(setting, value) {
-        fieldErrors.value[setting] = null
-
-        appSettingService.update(setting, value).then(response => {
-            appSettings[setting] = value
-            useNotifyStore().success({ type: 'is-success', text: trans('settings.forms.setting_saved') })
-        })
-        .catch(error => {
-            if( error.response.status === 422 ) {
-                fieldErrors.value[setting] = error.response.data.message
-            }
-            else {
-                notify.error(error);
-            }
-        })
-    }
-
-    /**
-     * Saves a setting on the backend
-     * @param {string} preference 
-     * @param {any} value 
-     */
-    function saveOrDeleteSetting(setting, value) {
-        if (value == '') {
-            fieldErrors.value[setting] = null
-
-            appSettingService.delete(setting, { returnError: true }).then(response => {
-                appSettings[setting] = ''
-                useNotifyStore().success({ type: 'is-success', text: trans('settings.forms.setting_saved') })
-            })
-            .catch(error => {
-                // appSettings[setting] = oldValue
-
-                if( error.response.status !== 404 ) {
-                    notify.error(error);
-                }
-            })
-        }
-        else {
-            saveSetting(setting, value)
-        }
-    }
+    const healthEndPoint = $2fauth.config.subdirectory + '/up'
+    const healthEndPointFullPath = location.hostname + $2fauth.config.subdirectory + '/up'
 
     /**
      * Sends a test email
@@ -100,12 +43,24 @@
         isClearingCache.value = true;
 
         systemService.clearCache().then(response => {
-            useNotifyStore().success({ type: 'is-success', text: trans('admin.cache_cleared') })
+            notify.success({ text: t('notification.cache_cleared') })
         })
         .finally(() => {
             isClearingCache.value = false;
         })
     }
+
+    /**
+     * Saves a setting
+     */
+    async function saveSetting(setting, value) {
+        const { error } = await useAppSettingsUpdater(setting, value)
+
+        if (error == null) {
+            notify.success({ text: t('notification.setting_saved') })
+        }
+    }
+
 
     onBeforeRouteLeave((to) => {
         if (! to.name.startsWith('admin.')) {
@@ -114,21 +69,7 @@
     })
 
     onMounted(async () => {
-        appSettingService.get({ returnError: true })
-        .then(response => {
-            // we reset those two because they are not registered on server side
-            // in order to be able to set them to blank
-            _settings.value.restrictList = ''
-            _settings.value.restrictRule = ''
-
-            response.data.forEach(setting => {
-                appSettings[setting.key] = setting.value
-                _settings.value[setting.key] = setting.value
-            })
-        })
-        .catch(error => {
-            notify.alert({ text: trans('errors.data_cannot_be_refreshed_from_server') })
-        })
+        await appSettings.fetch()
 
         systemService.getSystemInfos({returnError: true}).then(response => {
             infos.value = response.data.common
@@ -142,67 +83,69 @@
 
 <template>
     <div>
-        <AdminTabs activeTab="admin.appSetup" />
+        <TabBar :tabs="tabs" :active-tab="'admin.appSetup'" @tab-selected="(to) => router.push({ name: to })" />
         <div class="options-tabs">
             <FormWrapper>
                 <form>
-                    <h4 class="title is-4 pt-4 has-text-grey-light">{{ $t('settings.general') }}</h4>
+                    <h4 class="title is-4 pt-4 has-text-grey-light">{{ $t('heading.general') }}</h4>
                     <!-- Check for update -->
-                    <FormCheckbox v-model="_settings.checkForUpdate" @update:model-value="val => saveSetting('checkForUpdate', val)" fieldName="checkForUpdate" label="commons.check_for_update" help="commons.check_for_update_help" />
+                    <FormCheckbox v-model="appSettings.checkForUpdate" @update:model-value="val => saveSetting('checkForUpdate', val)" fieldName="checkForUpdate" label="field.check_for_update" help="field.check_for_update.help" />
                     <VersionChecker />
                     <!-- email config test -->
                     <div class="field">
-                        <!-- <h5 class="title is-5">{{ $t('settings.security') }}</h5> -->
-                        <label class="label"  v-html="$t('admin.forms.test_email.label')" />
-                        <p class="help" v-html="$t('admin.forms.test_email.help')" />
-                        <p class="help" v-html="$t('admin.forms.test_email.email_will_be_send_to_x', { email: user.email })" />
+                        <label class="label" for="btnTestEmail">{{ $t('field.test_email') }}</label>
+                        <p class="help">{{ $t('field.test_email.help') }}</p>
+                        <p class="help">
+                            <i18n-t keypath="message.email_will_be_send_to_x" tag="span">
+                                <template v-slot:email>
+                                    <span class="is-family-code has-text-info">{{ user.email }}</span>
+                                </template>
+                            </i18n-t>
+                        </p>
                     </div>
                     <div class="columns is-mobile is-vcentered">
                         <div class="column is-narrow">
-                            <button type="button" :class="isSendingTestEmail ? 'is-loading' : ''" class="button is-link is-rounded is-small" @click="sendTestEmail">
+                            <button id="btnTestEmail" type="button" :class="isSendingTestEmail ? 'is-loading' : ''" class="button is-link is-rounded is-small" @click="sendTestEmail" >
                                 <span class="icon is-small">
-                                    <FontAwesomeIcon :icon="['far', 'paper-plane']" />
+                                    <LucideSend class="icon-size-1" />
                                 </span>
-                                <span>{{ $t('commons.send') }}</span>
+                                <span>{{ $t('label.send') }}</span>
                             </button>   
                         </div>
-                    </div>    
-
-                    <h4 class="title is-4 pt-4 has-text-grey-light">{{ $t('settings.security') }}</h4>
+                    </div>
+                    <!-- healthcheck -->
+                    <div class="field">
+                        <label class="label" for="lnkHealthCheck">{{ $t('field.health_endpoint') }}</label>
+                        <p class="help">{{ $t('field.health_endpoint.help') }}</p>
+                    </div>
+                    <div class="field mb-5">
+                        <a id="lnkHealthCheck" target="_blank" :href="healthEndPoint">{{ healthEndPointFullPath }}</a>
+                    </div>
+                    <h4 class="title is-4 pt-5 has-text-grey-light">{{ $t('heading.storage') }}</h4>
+                    <!-- store icons in database -->
+                    <FormCheckbox v-model="appSettings.storeIconsInDatabase" @update:model-value="val => saveSetting('storeIconsInDatabase', val)" fieldName="storeIconsInDatabase" label="field.store_icon_to_database" help="field.store_icon_to_database.help" />
+                    <p class="help">{{ $t('field.store_icon_to_database.help_bis') }}</p>
+                    <h4 class="title is-4 pt-5 has-text-grey-light">{{ $t('heading.security') }}</h4>
                     <!-- protect db -->
-                    <FormCheckbox v-model="_settings.useEncryption" @update:model-value="val => saveSetting('useEncryption', val)" fieldName="useEncryption" label="admin.forms.use_encryption.label" help="admin.forms.use_encryption.help" />
-                    <h4 class="title is-4 pt-4 has-text-grey-light">{{ $t('admin.registrations') }}</h4>
-                    <!-- disable SSO registration -->
-                    <FormCheckbox v-model="_settings.enableSso" @update:model-value="val => saveSetting('enableSso', val)" fieldName="enableSso" label="admin.forms.enable_sso.label" help="admin.forms.enable_sso.help" />
-                    <!-- restrict registration -->
-                    <FormCheckbox v-model="_settings.restrictRegistration" @update:model-value="val => saveSetting('restrictRegistration', val)" fieldName="restrictRegistration" :isDisabled="appSettings.disableRegistration" label="admin.forms.restrict_registration.label" help="admin.forms.restrict_registration.help" />
-                        <!-- restrict list -->
-                        <FormField v-model="_settings.restrictList" @change:model-value="val => saveOrDeleteSetting('restrictList', val)" :fieldError="fieldErrors.restrictList" fieldName="restrictList" :isDisabled="!appSettings.restrictRegistration || appSettings.disableRegistration" label="admin.forms.restrict_list.label" help="admin.forms.restrict_list.help" :isIndented="true" />
-                        <!-- restrict rule -->
-                        <FormField v-model="_settings.restrictRule" @change:model-value="val => saveOrDeleteSetting('restrictRule', val)" :fieldError="fieldErrors.restrictRule" fieldName="restrictRule" :isDisabled="!appSettings.restrictRegistration || appSettings.disableRegistration" label="admin.forms.restrict_rule.label" help="admin.forms.restrict_rule.help" :isIndented="true" leftIcon="slash" rightIcon="slash" />
-                    <!-- disable registration -->
-                    <FormCheckbox v-model="_settings.disableRegistration" @update:model-value="val => saveSetting('disableRegistration', val)" fieldName="disableRegistration" label="admin.forms.disable_registration.label" help="admin.forms.disable_registration.help" />
-                        <!-- keep sso registration -->
-                        <FormCheckbox v-model="_settings.keepSsoRegistrationEnabled" @update:model-value="val => saveSetting('keepSsoRegistrationEnabled', val)" :fieldError="fieldErrors.keepSsoRegistrationEnabled" fieldName="keepSsoRegistrationEnabled" :isDisabled="!appSettings.enableSso || !appSettings.disableRegistration" label="admin.forms.keep_sso_registration_enabled.label" help="admin.forms.keep_sso_registration_enabled.help" :isIndented="true" />
+                    <FormCheckbox v-model="appSettings.useEncryption" @update:model-value="val => saveSetting('useEncryption', val)" fieldName="useEncryption" label="field.use_encryption" help="field.use_encryption.help" />
                 </form>
 
-                <h4 class="title is-4 pt-5 has-text-grey-light">{{ $t('commons.environment') }}</h4>
+                <h4 class="title is-4 pt-5 has-text-grey-light">{{ $t('heading.environment') }}</h4>
                 <!-- cache management -->
                 <div class="field">
-                    <!-- <h5 class="title is-5">{{ $t('settings.security') }}</h5> -->
-                    <label class="label"  v-html="$t('admin.forms.cache_management.label')" />
-                    <p class="help" v-html="$t('admin.forms.cache_management.help')" />
+                    <label for="btnClearCache" class="label">{{ $t('field.cache_management') }}</label>
+                    <p class="help">{{ $t('field.cache_management.help') }}</p>
                 </div>
                 <div class="field mb-5 is-grouped">
                     <p class="control">
-                        <button type="button" :class="isClearingCache ? 'is-loading' : ''" class="button is-link is-rounded is-small" @click="clearCache">
-                            {{ $t('commons.clear') }}
+                        <button id="btnClearCache" type="button" :class="isClearingCache ? 'is-loading' : ''" class="button is-link is-rounded is-small" @click="clearCache">
+                            {{ $t('label.clear') }}
                         </button>
                     </p>
                 </div>
                 <!-- env vars -->
                 <div class="field">
-                    <label class="label"  v-html="$t('admin.variables')" />
+                    <label for="btnCopyEnvVars" class="label">{{ $t('label.variables') }}</label>
                 </div>
                 <div v-if="infos" class="about-debug box is-family-monospace is-size-7">
                     <CopyButton id="btnCopyEnvVars" :token="listInfos?.innerText" />
@@ -213,12 +156,14 @@
                     </ul>
                 </div>
                 <div v-else-if="infos === null" class="about-debug box is-family-monospace is-size-7 has-text-warning-dark">
-                    {{ $t('errors.error_during_data_fetching') }}
+                    {{ $t('error.error_during_data_fetching') }}
                 </div>
             </FormWrapper>
         </div>
-        <VueFooter :showButtons="true">
-            <ButtonBackCloseCancel :returnTo="{ name: returnTo }" action="close" />
+        <VueFooter>
+            <template #default>
+                <NavigationButton action="close" @closed="router.push({ name: returnTo })" :current-page-title="$t('title.admin.appSetup')" />
+            </template>
         </VueFooter>
     </div>
 </template>

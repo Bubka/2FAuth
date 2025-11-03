@@ -41,13 +41,13 @@ class WebauthnService {
 
         // Check https context
         if (!window.isSecureContext) {
-            err.message = 'errors.https_required'
+            err.message = 'error.https_required'
             return Promise.reject(err)
         }
 
         // Check browser support
         if (! WebauthnService.supportsWebAuthn) {
-            err.message = 'errors.browser_does_not_support_webauthn'
+            err.message = 'error.browser_does_not_support_webauthn'
             return Promise.reject(err)
         }
 
@@ -80,13 +80,13 @@ class WebauthnService {
 
         // Check https context
         if (!window.isSecureContext) {
-            err.message = 'errors.https_required'
+            err.message = 'error.https_required'
             return Promise.reject(err)
         }
 
         // Check browser support
         if (! WebauthnService.supportsWebAuthn) {
-            err.message = 'errors.browser_does_not_support_webauthn'
+            err.message = 'error.browser_does_not_support_webauthn'
             return Promise.reject(err)
         }
 

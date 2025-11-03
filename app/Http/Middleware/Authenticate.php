@@ -2,8 +2,11 @@
 
 namespace App\Http\Middleware;
 
+use App\Events\VisitedByProxyUser;
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 
 class Authenticate extends Middleware
 {
@@ -17,13 +20,14 @@ class Authenticate extends Middleware
      */
     protected function authenticate($request, array $guards)
     {
+        $proxyGuard = 'reverse-proxy-guard';
+
         if (empty($guards)) {
             // Will retreive the default guard
             $guards = [null];
         } else {
-            // We replace routes guard by the reverse proxy guard if necessary
-            $proxyGuard = 'reverse-proxy-guard';
-
+            // If reverse proxy is defined as the default guard, we force the
+            // authentication against this only guard.
             if (config('auth.defaults.guard') === $proxyGuard) {
                 $guards = [$proxyGuard];
             }
@@ -35,10 +39,20 @@ class Authenticate extends Middleware
 
                 // We now have an authenticated user so we override the locale already set
                 // by the SetLanguage global middleware
-                $lang = $this->auth->guard()->user()->preferences['lang'];
+                $user = $this->auth->guard()->user();
+                $lang = $user->preferences['lang'];
 
                 if (in_array($lang, config('2fauth.locales')) && ! App::isLocale($lang)) {
                     App::setLocale($lang);
+                }
+
+                // Unlike the SessionGuard, the reverse-proxy-guard does not implement an attempt()
+                // method when it comes to log the user in. So auth events (Login, FailedLogin, etc..) are not
+                // fired by the guard, they are not even relevant.
+                // So when using the reverse-proxy-guard, we fire a VisitedByProxyUser event from here, but only
+                // if the user last request is older than 15 minutes to avoid too many dispatchs
+                if ($guard === $proxyGuard && (! $user->last_seen_at || Carbon::parse($user->last_seen_at) < Carbon::now()->subMinutes(15))) {
+                    event(new VisitedByProxyUser($user));
                 }
 
                 return;

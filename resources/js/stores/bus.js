@@ -1,8 +1,6 @@
 import { defineStore } from 'pinia'
 
-export const useBusStore = defineStore({
-    id: 'bus',
-
+export const useBusStore = defineStore('bus', {
     state: () => {
         return {
             migrationUri: null,

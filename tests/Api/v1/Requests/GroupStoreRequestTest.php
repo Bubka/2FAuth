@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Validator;
 use Mockery;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\FeatureTestCase;
 
 /**
@@ -28,33 +29,26 @@ class GroupStoreRequestTest extends FeatureTestCase
 
     const UNIQUE_GROUP_NAME = 'MyGroup';
 
-    /**
-     * @test
-     */
-    public function setUp() : void
+    protected function setUp() : void
     {
         parent::setUp();
 
         $this->user = User::factory()->create();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_user_is_authorized()
     {
         Auth::shouldReceive('check')
             ->once()
             ->andReturn(true);
 
-        $request = new GroupStoreRequest();
+        $request = new GroupStoreRequest;
 
         $this->assertTrue($request->authorize());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     #[DataProvider('provideValidData')]
     public function test_valid_data(array $data) : void
     {
@@ -76,12 +70,25 @@ class GroupStoreRequestTest extends FeatureTestCase
             [[
                 'name' => 'validWord',
             ]],
+            [[
+                'name' => 'valid Word',
+            ]],
+            [[
+                'name' => 'valid_Word',
+            ]],
+            [[
+                'name' => 'valid-Word',
+            ]],
+            [[
+                'name' => 'valid\'Word',
+            ]],
+            [[
+                'name' => 'vàlîdWörd',
+            ]],
         ];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     #[DataProvider('provideInvalidData')]
     public function test_invalid_data(array $data) : void
     {
@@ -115,6 +122,9 @@ class GroupStoreRequestTest extends FeatureTestCase
             ]],
             [[
                 'name' => self::UNIQUE_GROUP_NAME, // unique
+            ]],
+            [[
+                'name' => 'valid"Word', // special char
             ]],
         ];
     }

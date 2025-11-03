@@ -2,12 +2,12 @@
 
 namespace App\Observers;
 
+use App\Facades\IconStore;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Password;
-use Illuminate\Support\Facades\Storage;
 
 class UserObserver
 {
@@ -62,11 +62,12 @@ class UserObserver
 
         // Deleting user's twofaccounts icon
         $iconPathes = $user->twofaccounts->filter(function ($twofaccount, $key) {
-            return $twofaccount->icon;
+            return filled($twofaccount->icon);
         })->map(function ($twofaccount, $key) {
             return $twofaccount->icon;
         });
-        Storage::disk('icons')->delete($iconPathes->toArray());
+
+        IconStore::delete($iconPathes->toArray());
 
         return true;
     }

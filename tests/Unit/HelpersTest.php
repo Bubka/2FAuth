@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use App\Helpers\Helpers;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 /**
@@ -13,9 +14,7 @@ use Tests\TestCase;
 #[CoversClass(Helpers::class)]
 class HelpersTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     #[DataProvider('versionNumberProvider')]
     public function test_cleanVersionNumber_returns_cleaned_version($dirtyVersion, $expected)
     {
@@ -49,9 +48,7 @@ class HelpersTest extends TestCase
         ];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     #[DataProvider('invalidVersionNumberProvider')]
     public function test_cleanVersionNumber_returns_false_with_invalid_semver($dirtyVersion)
     {
@@ -84,9 +81,7 @@ class HelpersTest extends TestCase
         ];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     #[DataProvider('toBase32PaddedStringProvider')]
     public function test_toBase32Format_returns_base32_formated_string($str, $expected)
     {
@@ -136,9 +131,7 @@ class HelpersTest extends TestCase
         ];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     #[DataProvider('commaSeparatedToArrayProvider')]
     public function test_commaSeparatedToArray_returns_ids_in_array($str, $expected)
     {
@@ -164,9 +157,7 @@ class HelpersTest extends TestCase
         ];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     #[DataProvider('invalidCommaSeparatedToArrayProvider')]
     public function test_commaSeparatedToArray_returns_unchanged_ids($str, $expected)
     {
@@ -226,5 +217,43 @@ class HelpersTest extends TestCase
                 null,
             ],
         ];
+    }
+
+    #[Test]
+    public function test_lockedPreferences_returns_locked_preferences()
+    {
+        // See .env.testing which sets USERPREF_DEFAULT__THEME=light
+        // while config/2fauth.php sets the default value to 'system'
+        $lockedPreferences = Helpers::lockedPreferences(config('2fauth.preferences'));
+
+        $this->assertContains('theme', $lockedPreferences);
+    }
+
+    #[Test]
+    public function test_lockedPreferences_returns_empty_array_when_empty_array_is_provided()
+    {
+        $param = [];
+
+        $lockedPreferences = Helpers::lockedPreferences($param);
+
+        $this->assertEquals([], $lockedPreferences);
+    }
+
+    #[Test]
+    public function test_lockedPreferences_excludes_preference_when_env_var_is_empty()
+    {
+        // See .env.testing which sets USERPREF_LOCKED__DISPLAY_MODE=
+        $lockedPreferences = Helpers::lockedPreferences(config('2fauth.preferences'));
+
+        $this->assertNotContains('displayMode', $lockedPreferences);
+    }
+
+    #[Test]
+    public function test_lockedPreferences_excludes_preference_when_env_var_is_malformed()
+    {
+        // See .env.testing which sets USERPREF_LOCKED___FORMAT_PASSWORD=false
+        $lockedPreferences = Helpers::lockedPreferences(config('2fauth.preferences'));
+
+        $this->assertNotContains('formatPassword', $lockedPreferences);
     }
 }

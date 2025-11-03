@@ -3,10 +3,11 @@
 namespace App\Services\Migrators;
 
 use App\Exceptions\InvalidMigrationDataException;
-use App\Facades\TwoFAccounts;
 use App\Models\TwoFAccount;
+use App\Services\IconService;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
 
 class AegisMigrator extends Migrator
@@ -37,7 +38,8 @@ class AegisMigrator extends Migrator
      */
     public function migrate(mixed $migrationPayload) : Collection
     {
-        $json = json_decode(htmlspecialchars_decode($migrationPayload), true);
+        $iconService = App::make(IconService::class);
+        $json        = json_decode(htmlspecialchars_decode($migrationPayload), true);
 
         if (is_null($json) || Arr::has($json, 'db.entries') == false) {
             Log::error('Aegis JSON migration data cannot be read');
@@ -76,7 +78,7 @@ class AegisMigrator extends Migrator
                             break;
 
                         default:
-                            throw new \Exception();
+                            throw new \Exception;
                     }
                     $parameters['iconData'] = base64_decode($otp_parameters['icon']);
                 }
@@ -88,19 +90,19 @@ class AegisMigrator extends Migrator
                 $twofaccounts[$key] = new TwoFAccount;
                 $twofaccounts[$key]->fillWithOtpParameters($parameters);
                 if (Arr::has($parameters, 'iconExt') && Arr::has($parameters, 'iconData')) {
-                    $twofaccounts[$key]->setIcon($parameters['iconData'], $parameters['iconExt']);
+                    $twofaccounts[$key]->icon = $iconService->buildFromResource($parameters['iconData'], $parameters['iconExt']);
                 }
             } catch (\Exception $exception) {
                 Log::error(sprintf('Cannot instanciate a TwoFAccount object with OTP parameters from imported item #%s', $key));
                 Log::debug($exception->getMessage());
 
                 // The token failed to generate a valid account so we create a fake account to be returned.
-                $fakeAccount           = new TwoFAccount();
+                $fakeAccount           = new TwoFAccount;
                 $fakeAccount->id       = TwoFAccount::FAKE_ID;
                 $fakeAccount->otp_type = $otp_parameters['type'] ?? TwoFAccount::TOTP;
                 // Only basic fields are filled to limit the risk of another exception.
-                $fakeAccount->account = $otp_parameters['name'] ?? __('twofaccounts.import.invalid_account');
-                $fakeAccount->service = $otp_parameters['issuer'] ?? __('twofaccounts.import.invalid_service');
+                $fakeAccount->account = $otp_parameters['name'] ?? __('message.invalid_account');
+                $fakeAccount->service = $otp_parameters['issuer'] ?? __('message.invalid_service');
                 // The secret field is used to pass the error, not very clean but will do the job for now.
                 $fakeAccount->secret = $exception->getMessage();
 

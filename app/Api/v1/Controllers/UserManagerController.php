@@ -4,7 +4,7 @@ namespace App\Api\v1\Controllers;
 
 use App\Api\v1\Requests\UserManagerPromoteRequest;
 use App\Api\v1\Requests\UserManagerStoreRequest;
-use App\Api\v1\Resources\UserAuthentication;
+use App\Api\v1\Resources\UserAuthenticationResource;
 use App\Api\v1\Resources\UserManagerResource;
 use App\Http\Controllers\Controller;
 use App\Models\User;
@@ -72,7 +72,7 @@ class UserManagerController extends Controller
         } else {
             return response()->json([
                 'message' => 'bad request',
-                'reason'  => is_string($response) ? __($response) : __('errors.no_pwd_reset_for_this_user_type'),
+                'reason'  => is_string($response) ? __($response) : __('error.no_pwd_reset_for_this_user_type'),
             ], 400);
         }
 
@@ -181,7 +181,7 @@ class UserManagerController extends Controller
         // Deletion will not be done (and returns False) if the user is the only existing admin (see UserObserver clas)
         return $user->delete() === false
             ? response()->json([
-                'message' => __('errors.cannot_delete_the_only_admin'),
+                'message' => __('error.cannot_delete_the_only_admin'),
             ], 403)
             : response()->json(null, 204);
     }
@@ -203,7 +203,7 @@ class UserManagerController extends Controller
         }
 
         return response()->json([
-            'message' => __('errors.cannot_demote_the_only_admin'),
+            'message' => __('error.cannot_demote_the_only_admin'),
         ], 403);
     }
 
@@ -231,7 +231,7 @@ class UserManagerController extends Controller
         $authentications = $request->has('period') ? $user->authenticationsByPeriod($validated['period']) : $user->authentications;
         $authentications = $request->has('limit') ? $authentications->take($validated['limit']) : $authentications;
 
-        return UserAuthentication::collection($authentications);
+        return UserAuthenticationResource::collection($authentications);
     }
 
     /**

@@ -26,7 +26,14 @@ namespace App\Listeners\Authentication;
 
 use App\Models\AuthLog;
 use Illuminate\Auth\Events\OtherDeviceLogout;
+use TypeError;
 
+/**
+ * @codeCoverageIgnore
+ *
+ * Excluded from test coverage as long as 2FAuth does not offer a logout Other Devices feature
+ * See \Illuminate\Auth\SessionGuard::logoutOtherDevices when the time comes
+ */
 class OtherDeviceLogoutListener extends AbstractAccessListener
 {
     /**
@@ -35,17 +42,22 @@ class OtherDeviceLogoutListener extends AbstractAccessListener
     public function handle(mixed $event) : void
     {
         if (! $event instanceof OtherDeviceLogout) {
-            return;
+            throw new TypeError(self::class . '::handle(): Argument #1 ($event) must be of type ' . OtherDeviceLogout::class);
         }
 
         /**
          * @var \App\Models\User
          */
-        $user      = $event->user;
-        $ip        = config('2fauth.proxy_headers.forIp') ?? $this->request->ip();
+        $user = $event->user;
+        $ip   = config('2fauth.proxy_headers.forIp')
+            ? $this->request->header(config('2fauth.proxy_headers.forIp'), $this->request->ip())
+            : $this->request->ip();
         $userAgent = $this->request->userAgent();
-        $authLog   = $user->authentications()->whereIpAddress($ip)->whereUserAgent($userAgent)->first();
-        $guard     = $event->guard;
+        $authLog   = $user->authentications()
+            ->whereIpAddress($ip)
+            ->whereUserAgent($userAgent)
+            ->first();
+        $guard = $event->guard;
 
         if (! $authLog) {
             $authLog = new AuthLog([

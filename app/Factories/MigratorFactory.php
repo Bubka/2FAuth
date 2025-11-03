@@ -5,6 +5,7 @@ namespace App\Factories;
 use App\Exceptions\EncryptedMigrationException;
 use App\Exceptions\UnsupportedMigrationException;
 use App\Services\Migrators\AegisMigrator;
+use App\Services\Migrators\BitwardenMigrator;
 use App\Services\Migrators\GoogleAuthMigrator;
 use App\Services\Migrators\Migrator;
 use App\Services\Migrators\PlainTextMigrator;
@@ -29,12 +30,14 @@ class MigratorFactory implements MigratorFactoryInterface
             return App::make(AegisMigrator::class);
         } elseif ($this->is2FASv2($migrationPayload)) {
             return App::make(TwoFASMigrator::class);
-        } elseif ($this->isGoogleAuth($migrationPayload)) {
+        } elseif (self::isGoogleAuth($migrationPayload)) {
             return App::make(GoogleAuthMigrator::class);
+        } elseif ($this->isBitwardenJson($migrationPayload)) {
+            return App::make(BitwardenMigrator::class);
         } elseif ($this->isPlainText($migrationPayload)) {
             return App::make(PlainTextMigrator::class);
         } else {
-            throw new UnsupportedMigrationException();
+            throw new UnsupportedMigrationException;
         }
     }
 
@@ -43,7 +46,7 @@ class MigratorFactory implements MigratorFactoryInterface
      *
      * @param  string  $migrationPayload  The payload to analyse
      */
-    private function isGoogleAuth(string $migrationPayload) : bool
+    public static function isGoogleAuth(string $migrationPayload) : bool
     {
         // - Google Auth migration URI : a string starting with otpauth-migration://offline?data= on a single line
 
@@ -130,7 +133,7 @@ class MigratorFactory implements MigratorFactoryInterface
 
         if (Arr::has($json, 'db')) {
             if (is_string($json['db']) && is_array(Arr::get($json, 'header.slots'))) {
-                throw new EncryptedMigrationException();
+                throw new EncryptedMigrationException;
             } else {
                 return count(Validator::validate(
                     $json,
@@ -180,7 +183,7 @@ class MigratorFactory implements MigratorFactoryInterface
 
         if (Arr::has($json, 'schemaVersion') && (Arr::has($json, 'services') || Arr::has($json, 'servicesEncrypted'))) {
             if (Arr::has($json, 'servicesEncrypted')) {
-                throw new EncryptedMigrationException();
+                throw new EncryptedMigrationException;
             } else {
                 return count(Validator::validate(
                     $json,
@@ -188,6 +191,100 @@ class MigratorFactory implements MigratorFactoryInterface
                         'services.*.secret' => 'present',
                         'services.*.name'   => 'present',
                         'services.*.otp'    => 'present',
+                    ]
+                )) > 0;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Determine if a payload comes from Bitwarden Authenticator
+     *
+     * @param  string  $migrationPayload  The payload to analyse
+     * @return bool
+     */
+    private function isBitwardenJson(string $migrationPayload) : mixed
+    {
+        // JSON from the bitwarden app:
+        //
+        // {
+        //   "encrypted": false,
+        //   "folders": [],
+        //   "items": [
+        //     {
+        //       "passwordHistory": [],
+        //       "revisionDate": "2025-10-28T15:27:43.012Z",
+        //       "creationDate": "2024-01-03T12:30:50.043Z",
+        //       "deletedDate": null,
+        //       "archivedDate": null,
+        //       "id": "d135d04d-58d0-4f16-83fa-576280caa73d",
+        //       "organizationId": null,
+        //       "folderId": null,
+        //       "type": 1,
+        //       "reprompt": 0,
+        //       "name": "Google",
+        //       "notes": null,
+        //       "favorite": false,
+        //       "fields": [],
+        //       "login": {
+        //         "uris": [
+        //           {
+        //             "match": null,
+        //             "uri": "http://localhost/login"
+        //           }
+        //         ],
+        //         "username": "john.doe@gmail.com",
+        //         "password": "password",
+        //         "totp": "otpauth://totp/Google%3Ajohn%2Edoe?issuer=Google&secret=A5GRFTVVRBGY7UIW"
+        //       },
+        //       "collectionIds": null
+        //     }
+        //   ]
+        // }
+        //
+        // JSON form the bitwarden authenticator mobile app:
+        //
+        // {
+        //     "encrypted": false,
+        //     "items": [
+        //         {
+        //             "favorite": false,
+        //             "id": "d135d04d-58d0-4f16-83fa-576280caa73d",
+        //             "login": {
+        //                 "totp": "otpauth://totp/Google:john%2Edoe%40gmail%2Ecom?secret=A5GRFTVVRBGY7UIW&issuer=Google&algorithm=SHA256&digits=7&period=60",
+        //                 "username": "john.doe@gmail.com"
+        //             },
+        //             "name": "Google",
+        //             "type": 1
+        //         },
+        //         {
+        //             "favorite": false,
+        //             "id": "d135d04d-58d0-4f16-83fa-576280caa73d",
+        //             "login": {
+        //                 "totp": "steam://A5GRFTVVRBGY7UIW",
+        //                 "username": "john.doe@gmail.com"
+        //              },
+        //              "name": "Steam",
+        //              "type": 1
+        //         }
+        //     ]
+        // }
+
+        $json = json_decode($migrationPayload, true);
+
+        if (Arr::has($json, 'encrypted') && (Arr::has($json, 'items'))) {
+            if ($json['encrypted'] == true) {
+                throw new EncryptedMigrationException;
+            } else {
+                return count(Validator::validate(
+                    $json,
+                    [
+                        'items.*.id'             => 'present',
+                        'items.*.name'           => 'present',
+                        'items.*.login.username' => 'present',
+                        'items.*.login.totp'     => 'present',
                     ]
                 )) > 0;
             }

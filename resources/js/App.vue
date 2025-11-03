@@ -1,9 +1,35 @@
 <script setup>
     import { RouterView } from 'vue-router'
+    import { Kicker } from '@2fauth/ui'
+
+    const { t } = useI18n()
+    const { language } = useNavigatorLanguage()
     const route = useRoute()
-    const kickUser = ref(null)
+    const user = inject('userStore')
+
+    const mustKick = ref(false)
     const kickUserAfter = ref(null)
     const isProtectedRoute = ref(route.meta.watchedByKicker)
+
+    mustKick.value = user.isAuthenticated
+    kickUserAfter.value = parseInt(user.preferences.kickUserAfter)
+
+    watch(
+        () => user.preferences.kickUserAfter,
+        () => {
+            kickUserAfter.value = parseInt(user.preferences.kickUserAfter)
+        }
+    )
+    watch(
+        () => user.isAuthenticated,
+        () => {
+            mustKick.value = user.isAuthenticated
+        }
+    )
+
+    watch(language, () => {
+        user.applyLanguage()
+    })
 
     watch(
         () => route.name,
@@ -12,31 +38,9 @@
         }
     )
 
-    // const kickInactiveUser = computed(() => kickUser && kickUserAfter.value > 0 && isProtectedRoute.value)
-
-    onBeforeMount(async () => {
-        const { useUserStore } = await import('./stores/user.js')
-        const { language } = useNavigatorLanguage()
-        const user = useUserStore()
-
-        kickUserAfter.value = parseInt(user.preferences.kickUserAfter)
-        kickUser.value = user.isAuthenticated
-
-        watch(
-            () => user.preferences.kickUserAfter,
-            () => {
-                kickUserAfter.value = parseInt(user.preferences.kickUserAfter)
-            }
-        )
-        watch(
-            () => user.isAuthenticated,
-            () => {
-                kickUser.value = user.isAuthenticated
-            }
-        )
-        watch(language, () => {
-            user.applyLanguage()
-        })
+    router.afterEach((to, from) => {
+        to.meta.title = t('title.' + to.name)
+        document.title = to.meta.title
     })
 
 </script>
@@ -54,5 +58,9 @@
     <main class="main-section">
         <RouterView />
     </main>
-    <kicker v-if="kickUser && kickUserAfter > 0 && isProtectedRoute" :kickAfter="kickUserAfter"></kicker>
+    <Kicker
+        v-if="mustKick && kickUserAfter > 0 && isProtectedRoute"
+        :kickAfter="kickUserAfter"
+        @kicked="() => user.logout({ kicked: true})"
+    />
 </template>

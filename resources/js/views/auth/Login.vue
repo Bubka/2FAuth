@@ -1,28 +1,43 @@
 <script setup>
     import Form from '@/components/formElements/Form'
+    import SsoConnectLink from '@/components/SsoConnectLink.vue'
     import { useUserStore } from '@/stores/user'
-    import { useNotifyStore } from '@/stores/notify'
+    import { useNotify } from '@2fauth/ui'
     import { useAppSettingsStore } from '@/stores/appSettings'
     import { webauthnService } from '@/services/webauthn/webauthnService'
+    import { useI18n } from 'vue-i18n'
+    import { useErrorHandler } from '@2fauth/stores'
 
+    const errorHandler = useErrorHandler()
+    const { t } = useI18n()
     const $2fauth = inject('2fauth')
     const router = useRouter()
     const user = useUserStore()
-    const notify = useNotifyStore()
+    const notify = useNotify()
     const appSettings = useAppSettingsStore()
-    const showWebauthnForm = user.preferences.useWebauthnOnly ? true : useStorage($2fauth.prefix + 'showWebauthnForm', false) 
     const form = reactive(new Form({
         email: '',
         password: ''
     }))
     const isBusy = ref(false)
+    const activeLoginForm = useStorage($2fauth.prefix + 'activeLoginForm', null)
+
+    onMounted(() => {
+        if (appSettings.enableSso == true && appSettings.useSsoOnly == true) {
+            activeLoginForm.value = 'sso'
+        }
+        else if (activeLoginForm.value == null || activeLoginForm.value == 'sso') {
+            activeLoginForm.value = 'legacy'
+        }
+    })
+
 
     /**
      * Toggle the form between legacy and webauthn method
      */
-    function toggleForm() {
+    function switchToForm(formName) {
         form.clear()
-        showWebauthnForm.value = ! showWebauthnForm.value
+        activeLoginForm.value = formName
     }
 
     /**
@@ -37,6 +52,7 @@
                 name: response.data.name,
                 email: response.data.email,
                 oauth_provider: response.data.oauth_provider,
+                authenticated_by_proxy: false,
                 preferences: response.data.preferences,
                 isAdmin: response.data.is_admin,
             })
@@ -44,11 +60,11 @@
             router.push({ name: 'accounts' })
         })
         .catch(error => {
-            if( error.response.status === 401 ) {
-                notify.alert({text: trans('auth.forms.authentication_failed'), duration: 10000 })
+            if( error.response?.status === 401 ) {
+                notify.alert({text: t('notification.authentication_failed'), duration: 10000 })
             }
-            else if( error.response.status !== 422 ) {
-                notify.error(error)
+            else if( error.response?.status !== 422 ) {
+                errorHandler.show(error)
             }
         })
     }
@@ -67,6 +83,7 @@
                 name: response.data.name,
                 email: response.data.email,
                 oauth_provider: response.data.oauth_provider,
+                authenticated_by_proxy: false,
                 preferences: response.data.preferences,
                 isAdmin: response.data.is_admin,
             })
@@ -76,18 +93,18 @@
         .catch(error => {
             if ('webauthn' in error) {
                 if (error.name == 'is-warning') {
-                    notify.warn({ text: trans(error.message) })
+                    notify.warn({ text: t(error.message) })
                 }
-                else notify.alert({ text: trans(error.message) })
+                else notify.alert({ text: t(error.message) })
             }
             else if( error.response.status === 401 ) {
-                notify.alert({text: trans('auth.forms.authentication_failed'), duration: 10000 })
+                notify.alert({text: t('notification.authentication_failed'), duration: 10000 })
             }
             else if( error.response.status == 422 ) {
                 form.errors.set(form.extractErrors(error.response))
             }
             else {
-                notify.error(error)
+                errorHandler.show(error)
             }
         })
         .finally(() => {
@@ -99,88 +116,155 @@
 
 <template>
     <!-- webauthn authentication -->
-    <FormWrapper v-if="showWebauthnForm" title="auth.forms.webauthn_login" punchline="auth.welcome_to_2fauth">
-        <div class="field">
-            {{ $t('auth.webauthn.use_security_device_to_sign_in') }}
+    <FormWrapper v-if="activeLoginForm == 'webauthn'" title="heading.webauthn_login" punchline="message.welcome_to_2fauth">
+        <div v-if="appSettings.enableSso == true && appSettings.useSsoOnly == true" class="notification is-warning has-text-centered">{{ $t('message.sso_only_form_restricted_to_admin') }}</div>
+        <div class="block">
+            {{ $t('message.use_security_device_to_sign_in') }}
         </div>
         <form id="frmWebauthnLogin" @submit.prevent="webauthnLogin" @keydown="form.onKeydown($event)">
-            <FormField v-model="form.email" fieldName="email" :fieldError="form.errors.get('email')" inputType="email" label="auth.forms.email" autofocus />
-            <FormButtons :isBusy="isBusy" caption="commons.continue" submitId="btnContinue"/>
+            <FormField v-model="form.email" fieldName="email" :errorMessage="form.errors.get('email')" inputType="email" label="field.email" autofocus />
+            <FormButtons :isBusy="isBusy" submitLabel="label.continue" submitId="btnContinue"/>
         </form>
         <div class="nav-links">
             <p>
-                {{ $t('auth.webauthn.lost_your_device') }}&nbsp;
+                {{ $t('message.lost_your_device') }}&nbsp;
                 <RouterLink id="lnkRecoverAccount" :to="{ name: 'webauthn.lost' }" class="is-link">
-                    {{ $t('auth.webauthn.recover_your_account') }}
+                    {{ $t('link.recover_your_account') }}
                 </RouterLink>
             </p>
-            <p v-if="!user.preferences.useWebauthnOnly">{{ $t('auth.sign_in_using') }}&nbsp;
-                <a id="lnkSignWithLegacy" role="button" class="is-link" @keyup.enter="toggleForm" @click="toggleForm" tabindex="0">
-                    {{ $t('auth.login_and_password') }}
+            <p>{{ $t('message.sign_in_using') }}&nbsp;
+                <a id="lnkSignWithLegacy" role="button" class="is-link" @keyup.enter="switchToForm('legacy')" @click="switchToForm('legacy')" tabindex="0">
+                    {{ $t('link.login_and_password') }}
                 </a>
             </p>
-            <p v-if="appSettings.disableRegistration == false" class="mt-4">
-                {{ $t('auth.forms.dont_have_account_yet') }}&nbsp;
+            <p v-if="appSettings.disableRegistration == false && appSettings.useSsoOnly == false" class="mt-4">
+                {{ $t('message.dont_have_account_yet') }}&nbsp;
                 <RouterLink id="lnkRegister" :to="{ name: 'register' }" class="is-link">
-                    {{ $t('auth.register') }}
+                    {{ $t('link.register') }}
                 </RouterLink>
             </p>
-            <div v-if="appSettings.enableSso && Object.values($2fauth.config.sso).includes(true)" class="columns mt-4 is-variable is-1">
+            <div v-if="appSettings.enableSso == true && Object.values($2fauth.config.sso).includes(true)" class="columns mt-4 is-variable is-1">
                 <div class="column is-narrow py-1">
-                    {{ $t('auth.or_continue_with') }}
+                    {{ $t('message.or_continue_with') }}
                 </div>
                 <div class="column py-1">
-                    <a v-if="$2fauth.config.sso.openid" id="lnkSignWithOpenID" class="button is-link is-outlined is-small ml-2" href="/socialite/redirect/openid">
-                        OpenID<FontAwesomeIcon class="ml-2" :icon="['fab', 'openid']" />
-                    </a>
-                    <a v-if="$2fauth.config.sso.github" id="lnkSignWithGithub" class="button is-link is-outlined is-small ml-2" href="/socialite/redirect/github">
-                        Github<FontAwesomeIcon class="ml-2" :icon="['fab', 'github-alt']" />
-                    </a>
+                    <div class="buttons">
+                        <template v-for="(isEnabled, provider) in $2fauth.config.sso" :key="provider">
+                            <SsoConnectLink v-if="isEnabled" :class="'is-outlined is-small'" :provider="provider" />
+                        </template>
+                    </div>
                 </div>
             </div>
+        </div>
+    </FormWrapper>
+    <!-- SSO only links -->
+    <FormWrapper v-else-if="activeLoginForm == 'sso'" title="heading.sso_login" punchline="message.welcome_to_2fauth">
+        <div v-if="$2fauth.isDemoApp" class="notification is-info has-text-centered is-radiusless">
+            {{ $t('message.welcome_to_demo_app') }}<br />
+            <i18n-t keypath="message.sign_in_using_email_password" tag="span">
+                <template v-slot:email>
+                    <strong>demo@2fauth.app</strong>
+                </template>
+                <template v-slot:password>
+                    <strong>demo</strong>
+                </template>
+            </i18n-t>
+        </div>
+        <div v-if="$2fauth.isTestingApp" class="notification is-warning has-text-centered is-radiusless">
+            {{ $t('message.welcome_to_testing_app') }}
+            <i18n-t keypath="message.use_those_credentials" tag="span">
+                <template v-slot:email>
+                    <strong>testing@2fauth.app</strong>
+                </template>
+                <template v-slot:password>
+                    <strong>password</strong>
+                </template>
+            </i18n-t>
+        </div>
+        <div class="nav-links">
+            <p class="">{{ $t('message.password_login_and_webauthn_are_disabled') }}</p>
+            <p class="">{{ $t('message.sign_in_using_sso') }}</p>
+        </div>
+        <div v-if="Object.values($2fauth.config.sso).includes(true)" class="buttons mt-4">
+            <template v-for="(isEnabled, provider) in $2fauth.config.sso" :key="provider">
+                <SsoConnectLink v-if="isEnabled" :provider="provider" />
+            </template>
+        </div>
+        <p v-else class="is-italic">- {{ $t('message.no_provider') }} -</p>
+        <div class="nav-links">
+            <p>
+                {{ $t('message.no_sso_provider_or_provider_is_missing') }}&nbsp;
+                <a id="lnkSsoDocs" class="is-link" tabindex="0" :href="$2fauth.urls.ssoDocUrl" target="_blank">
+                    {{ $t('link.see_how_to_enable_sso') }}
+                </a>
+            </p>
+            <p >{{ $t('message.if_administrator') }}&nbsp;
+                <a id="lnkSignWithLegacy" role="button" class="is-link" @keyup.enter="switchToForm('legacy')" @click="switchToForm('legacy')" tabindex="0">
+                    {{ $t('link.sign_in_here') }}
+                </a>
+            </p>
         </div>
     </FormWrapper>
     <!-- login/password legacy form -->
-    <FormWrapper v-else title="auth.forms.login" punchline="auth.welcome_to_2fauth">
-        <div v-if="$2fauth.isDemoApp" class="notification is-info has-text-centered is-radiusless" v-html="$t('auth.forms.welcome_to_demo_app_use_those_credentials')" />
-        <div v-if="$2fauth.isTestingApp" class="notification is-warning has-text-centered is-radiusless" v-html="$t('auth.forms.welcome_to_testing_app_use_those_credentials')" />
+    <FormWrapper v-else-if="activeLoginForm == 'legacy'" title="heading.login" punchline="message.welcome_to_2fauth">
+        <div v-if="$2fauth.isDemoApp" class="notification is-info has-text-centered is-radiusless">
+            {{ $t('message.welcome_to_demo_app') }}<br />
+            <i18n-t keypath="message.sign_in_using_email_password" tag="span">
+                <template v-slot:email>
+                    <strong>demo@2fauth.app</strong>
+                </template>
+                <template v-slot:password>
+                    <strong>demo</strong>
+                </template>
+            </i18n-t>
+        </div>
+        <div v-if="$2fauth.isTestingApp" class="notification is-warning has-text-centered is-radiusless">
+            {{ $t('message.welcome_to_testing_app') }}
+            <i18n-t keypath="message.use_those_credentials" tag="span">
+                <template v-slot:email>
+                    <strong>testing@2fauth.app</strong>
+                </template>
+                <template v-slot:password>
+                    <strong>password</strong>
+                </template>
+            </i18n-t>
+        </div>
+        <div v-if="appSettings.enableSso == true && appSettings.useSsoOnly == true" class="notification is-warning has-text-centered">{{ $t('message.sso_only_form_restricted_to_admin') }}</div>
         <form id="frmLegacyLogin" @submit.prevent="LegacysignIn" @keydown="form.onKeydown($event)">
-            <FormField v-model="form.email" fieldName="email" :fieldError="form.errors.get('email')" inputType="email" label="auth.forms.email" autofocus />
-            <FormPasswordField v-model="form.password" fieldName="password" :fieldError="form.errors.get('password')" label="auth.forms.password" />
-            <FormButtons :isBusy="form.isBusy" caption="auth.sign_in" submitId="btnSignIn"/>
+            <FormField v-model="form.email" fieldName="email" :errorMessage="form.errors.get('email')" inputType="email" label="field.email" autocomplete="username" autofocus />
+            <FormPasswordField v-model="form.password" fieldName="password" :errorMessage="form.errors.get('password')" label="field.password" autocomplete="current-password" />
+            <FormButtons :isBusy="form.isBusy" submitLabel="label.sign_in" submitId="btnSignIn"/>
         </form>
         <div class="nav-links">
-            <p>{{ $t('auth.forms.forgot_your_password') }}&nbsp;
-                <RouterLink id="lnkResetPwd" :to="{ name: 'password.request' }" class="is-link" :aria-label="$t('auth.forms.reset_your_password')">
-                    {{ $t('auth.forms.request_password_reset') }}
+            <p>{{ $t('message.forgot_your_password') }}&nbsp;
+                <RouterLink id="lnkResetPwd" :to="{ name: 'password.request' }" class="is-link" :aria-label="$t('label.reset_your_password')">
+                    {{ $t('link.request_password_reset') }}
                 </RouterLink>
             </p>
-            <p >{{ $t('auth.sign_in_using') }}&nbsp;
-                <a id="lnkSignWithWebauthn" role="button" class="is-link" @keyup.enter="toggleForm" @click="toggleForm" tabindex="0" :aria-label="$t('auth.sign_in_using_security_device')">
-                    {{ $t('auth.webauthn.security_device') }}
+            <p >{{ $t('message.sign_in_using') }}&nbsp;
+                <a id="lnkSignWithWebauthn" role="button" class="is-link" @keyup.enter="switchToForm('webauthn')" @click="switchToForm('webauthn')" tabindex="0" :aria-label="$t('tooltip.sign_in_using_security_device')">
+                    {{ $t('link.security_device') }}
                 </a>
             </p>
-            <p v-if="appSettings.disableRegistration == false" class="mt-4">
-                {{ $t('auth.forms.dont_have_account_yet') }}&nbsp;
+            <p v-if="appSettings.disableRegistration == false && appSettings.useSsoOnly == false" class="mt-4">
+                {{ $t('message.dont_have_account_yet') }}&nbsp;
                 <RouterLink id="lnkRegister" :to="{ name: 'register' }" class="is-link">
-                    {{ $t('auth.register') }}
+                    {{ $t('link.register') }}
                 </RouterLink>
             </p>
             <div v-if="appSettings.enableSso && Object.values($2fauth.config.sso).includes(true)" class="columns mt-4 is-variable is-1">
                 <div class="column is-narrow py-1">
-                    {{ $t('auth.or_continue_with') }}
+                    {{ $t('message.or_continue_with') }}
                 </div>
                 <div class="column py-1">
-                    <a v-if="$2fauth.config.sso.openid" id="lnkSignWithOpenID" class="button is-link is-outlined is-small mr-2" href="/socialite/redirect/openid">
-                        OpenID<FontAwesomeIcon class="ml-2" :icon="['fab', 'openid']" />
-                    </a>
-                    <a v-if="$2fauth.config.sso.github" id="lnkSignWithGithub" class="button is-link is-outlined is-small mr-2" href="/socialite/redirect/github">
-                        Github<FontAwesomeIcon class="ml-2" :icon="['fab', 'github-alt']" />
-                    </a>
+                    <div class="buttons">
+                        <template v-for="(isEnabled, provider) in $2fauth.config.sso" :key="provider">
+                            <SsoConnectLink v-if="isEnabled" :class="'is-outlined is-small'" :provider="provider" />
+                        </template>
+                    </div>
                 </div>
             </div>
         </div>
     </FormWrapper>
-    <!-- footer -->
-    <VueFooter/>
+    <VueFooter />
 </template>

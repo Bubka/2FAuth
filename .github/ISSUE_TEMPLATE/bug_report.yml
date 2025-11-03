@@ -1,27 +1,21 @@
-name: Bug report
-description: Create a bug report to help improve 2FAuth
+name: 2FAuth bug report
+description: Something is not working as expected with 2FAuth
+labels: ["triage"]
 projects: Bubka/1
 body:
   - type: input
     id: 2fauth_version
     attributes:
       label: Version
-      description: The 2FAuth version on which the issue occurs
-      placeholder: x.y.z
+      description: The version of 2FAuth on which the issue occurs
+      placeholder: ex. 5.3.0
     validations:
       required: true
   - type: textarea
-    id: reproduction_steps
+    id: what_happened
     attributes:
-      label: Details & Steps to reproduce
-      description: A clear and concise description of what is happening and how to reproduce it. Screenshots are welcome.
-    validations:
-      required: true
-  - type: textarea
-    id: expectation
-    attributes:
-      label: Expectation
-      description: A  description of what you expected to happen
+      label: What happened?
+      description: Describe what is happening and how to reproduce it. Also tell us what did you expect to happen. Screenshots are welcome.
     validations:
       required: true
   - type: textarea
@@ -29,14 +23,15 @@ body:
     attributes:
       label: Error & Logs
       description: >-
-        Error message, stack trace, error/access logs from the web server, php or your database system.
+        Any execution data you think may help understand and solve your problem: Error message, stack trace, error/access logs from the web server, php or your database system.
       placeholder: 2FAuth logs can be found in [2FAuth_install_directory]/storage/logs/
       render: shell
   - type: textarea
-    id: environment
+    id: configuration
     attributes:
-      label: Execution environment
-      description: How do you run 2FAuth, how do you access it and how it is configured
+      label: Configuration
+      description: >-
+        Any information you think may give a good idea of your setup: Configurations, settings, network, proxies.
       placeholder: >-
         The /about page of your 2FAuth instance displays environment variables,
         user preferences and admin settings you can easily copy and past here as a good starting point
@@ -44,9 +39,16 @@ body:
     id: context
     attributes:
       label: Containerization
+      description: Is your 2FAuth instance running from a container?
       options:
         - label: Docker
           required: false
+  - type: input
+    id: integration
+    attributes:
+      label: Integration
+      description: If you run an integrated version of 2FAuth, tell us the name of the embedding app or server
+      placeholder: ex. Yunohost
   - type: textarea
     id: additional_info
     attributes:

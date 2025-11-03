@@ -2,11 +2,12 @@
 
 namespace App\Api\v1\Controllers;
 
+use App\Api\v1\Requests\ReorderRequest;
 use App\Api\v1\Requests\TwoFAccountBatchRequest;
 use App\Api\v1\Requests\TwoFAccountDynamicRequest;
+use App\Api\v1\Requests\TwoFAccountExportRequest;
 use App\Api\v1\Requests\TwoFAccountImportRequest;
 use App\Api\v1\Requests\TwoFAccountIndexRequest;
-use App\Api\v1\Requests\TwoFAccountReorderRequest;
 use App\Api\v1\Requests\TwoFAccountStoreRequest;
 use App\Api\v1\Requests\TwoFAccountUpdateRequest;
 use App\Api\v1\Requests\TwoFAccountUriRequest;
@@ -20,6 +21,7 @@ use App\Helpers\Helpers;
 use App\Http\Controllers\Controller;
 use App\Models\TwoFAccount;
 use App\Models\User;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 
@@ -42,10 +44,6 @@ class TwoFAccountController extends Controller
 
         $validated = $request->validated();
 
-        // if ($request->has('withOtp')) {
-        //     $request->merge(['at' => time()]);
-        // }
-
         return Arr::has($validated, 'ids')
             ? new TwoFAccountCollection($request->user()->twofaccounts()->whereIn('id', Helpers::commaSeparatedToArray($validated['ids']))->get()->sortBy('order_column'))
             : new TwoFAccountCollection($request->user()->twofaccounts->sortBy('order_column'));
@@ -59,6 +57,9 @@ class TwoFAccountController extends Controller
     public function show(TwoFAccount $twofaccount)
     {
         $this->authorize('view', $twofaccount);
+
+        // $icon = $twofaccount->icon;
+        // $iconRes = $twofaccount->icon()->get();
 
         return new TwoFAccountReadResource($twofaccount);
     }
@@ -89,7 +90,12 @@ class TwoFAccountController extends Controller
         $request->user()->twofaccounts()->save($twofaccount);
 
         // Possible group association
-        Groups::assign($twofaccount->id, $request->user());
+        try {
+            Groups::assign($twofaccount->id, $request->user(), Arr::get($validated, 'group_id', null));
+        } catch (\Throwable $th) {
+            // The group association might fail but we don't want the twofaccount
+            // creation to be reverted so we do nothing here.
+        }
 
         return (new TwoFAccountReadResource($twofaccount->refresh()))
             ->response()
@@ -107,8 +113,24 @@ class TwoFAccountController extends Controller
 
         $validated = $request->validated();
 
-        $twofaccount->fillWithOtpParameters($validated);
+        $twofaccount->fillWithOtpParameters($validated, $twofaccount->icon && is_null(Arr::get($validated, 'icon', null)));
         $request->user()->twofaccounts()->save($twofaccount);
+
+        // Possible group change
+        $groupId = Arr::get($validated, 'group_id', null);
+        if ($twofaccount->group_id != $groupId) {
+            if ((int) $groupId === 0) {
+                TwoFAccounts::withdraw($twofaccount->id);
+            } else {
+                try {
+                    Groups::assign($twofaccount->id, $request->user(), $groupId);
+                } catch (ModelNotFoundException $exc) {
+                    // The destination group no longer exists, the twofaccount is withdrawn
+                    TwoFAccounts::withdraw($twofaccount->id);
+                }
+            }
+            $twofaccount->refresh();
+        }
 
         return (new TwoFAccountReadResource($twofaccount))
             ->response()
@@ -129,7 +151,7 @@ class TwoFAccountController extends Controller
 
             return $migrationResource instanceof \Illuminate\Http\UploadedFile
                 ? new TwoFAccountCollection(TwoFAccounts::migrate($migrationResource->get()))
-                : response()->json(['message' => __('errors.file_upload_failed')], 500);
+                : response()->json(['message' => __('error.file_upload_failed')], 500);
         } else {
             return new TwoFAccountCollection(TwoFAccounts::migrate($request->payload));
         }
@@ -140,12 +162,12 @@ class TwoFAccountController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function reorder(TwoFAccountReorderRequest $request)
+    public function reorder(ReorderRequest $request)
     {
         $validated = $request->validated();
 
         $twofaccounts = TwoFAccount::whereIn('id', $validated['orderedIds'])->get();
-        $this->authorize('updateEach', [new TwoFAccount(), $twofaccounts]);
+        $this->authorize('updateEach', [new TwoFAccount, $twofaccounts]);
 
         TwoFAccount::setNewOrder($validated['orderedIds']);
         $orderedIds = $request->user()->twofaccounts->sortBy('order_column')->pluck('id');
@@ -174,19 +196,19 @@ class TwoFAccountController extends Controller
      *
      * @return TwoFAccountExportCollection|\Illuminate\Http\JsonResponse
      */
-    public function export(TwoFAccountBatchRequest $request)
+    public function export(TwoFAccountExportRequest $request)
     {
         $validated = $request->validated();
 
         if ($this->tooManyIds($validated['ids'])) {
             return response()->json([
                 'message' => 'bad request',
-                'reason'  => [__('errors.too_many_ids')],
+                'reason'  => [__('error.too_many_ids')],
             ], 400);
         }
 
         $twofaccounts = TwoFAccounts::export($validated['ids']);
-        $this->authorize('viewEach', [new TwoFAccount(), $twofaccounts]);
+        $this->authorize('viewEach', [new TwoFAccount, $twofaccounts]);
 
         return new TwoFAccountExportCollection($twofaccounts);
     }
@@ -225,7 +247,7 @@ class TwoFAccountController extends Controller
         // The request inputs should define an account
         else {
             $validatedData = $request->validate((new TwoFAccountStoreRequest)->rules());
-            $twofaccount   = new TwoFAccount();
+            $twofaccount   = new TwoFAccount;
             $twofaccount->fillWithOtpParameters($validatedData, true);
         }
 
@@ -254,14 +276,14 @@ class TwoFAccountController extends Controller
         if ($this->tooManyIds($validated['ids'])) {
             return response()->json([
                 'message' => 'bad request',
-                'reason'  => [__('errors.too_many_ids')],
+                'reason'  => [__('error.too_many_ids')],
             ], 400);
         }
 
         $ids          = Helpers::commaSeparatedToArray($validated['ids']);
         $twofaccounts = TwoFAccount::whereIn('id', $ids)->get();
 
-        $this->authorize('updateEach', [new TwoFAccount(), $twofaccounts]);
+        $this->authorize('updateEach', [new TwoFAccount, $twofaccounts]);
 
         TwoFAccounts::withdraw($ids);
 
@@ -294,14 +316,14 @@ class TwoFAccountController extends Controller
         if ($this->tooManyIds($validated['ids'])) {
             return response()->json([
                 'message' => 'bad request',
-                'reason'  => [__('errors.too_many_ids')],
+                'reason'  => [__('error.too_many_ids')],
             ], 400);
         }
 
         $ids          = Helpers::commaSeparatedToArray($validated['ids']);
         $twofaccounts = TwoFAccount::whereIn('id', $ids)->get();
 
-        $this->authorize('deleteEach', [new TwoFAccount(), $twofaccounts]);
+        $this->authorize('deleteEach', [new TwoFAccount, $twofaccounts]);
 
         TwoFAccounts::delete($validated['ids']);
 

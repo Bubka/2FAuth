@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\Classes\LocalFile;
 use Tests\TestCase;
 
@@ -19,27 +20,25 @@ class QrCodeDecodeRequestTest extends TestCase
 {
     use WithoutMiddleware;
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_user_is_authorized()
     {
         Auth::shouldReceive('check')
             ->once()
             ->andReturn(true);
 
-        $request = new QrCodeDecodeRequest();
+        $request = new QrCodeDecodeRequest;
 
         $this->assertTrue($request->authorize());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     #[DataProvider('provideValidData')]
     public function test_valid_data(array $data) : void
     {
-        $request   = new QrCodeDecodeRequest();
+        $request = new QrCodeDecodeRequest;
+        $request->merge($data);
+
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->fails());
@@ -59,13 +58,13 @@ class QrCodeDecodeRequestTest extends TestCase
         ];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     #[DataProvider('provideInvalidData')]
     public function test_invalid_data(array $data) : void
     {
-        $request   = new QrCodeDecodeRequest();
+        $request = new QrCodeDecodeRequest;
+        $request->merge($data);
+
         $validator = Validator::make($data, $request->rules());
 
         $this->assertTrue($validator->fails());

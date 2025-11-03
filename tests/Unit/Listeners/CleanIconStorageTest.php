@@ -5,11 +5,13 @@ namespace Tests\Unit\Listeners;
 use App\Events\TwoFAccountDeleted;
 use App\Listeners\CleanIconStorage;
 use App\Models\TwoFAccount;
+use App\Services\IconStoreService;
 use App\Services\SettingService;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Storage;
 use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 /**
@@ -18,30 +20,35 @@ use Tests\TestCase;
 #[CoversClass(CleanIconStorage::class)]
 class CleanIconStorageTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function test_it_deletes_icon_file_using_storage_facade()
+    #[Test]
+    public function test_it_deletes_icon_file_using_the_iconstore()
     {
-        $settingService = $this->mock(SettingService::class, function (MockInterface $settingService) {
-            $settingService->shouldReceive('get')
-                ->andReturn(false);
+        $this->mock(SettingService::class, function (MockInterface $iconStore) {
+            foreach (config('2fauth.settings') as $setting => $value) {
+                $iconStore->shouldReceive('get')
+                    ->with($setting)
+                    ->andReturn($value);
+            }
         });
 
         $twofaccount = TwoFAccount::factory()->make();
         $event       = new TwoFAccountDeleted($twofaccount);
-        $listener    = new CleanIconStorage();
+        $listener    = App::make(CleanIconStorage::class);
 
-        Storage::shouldReceive('disk->delete')
-            ->with($event->twofaccount->icon)
-            ->andReturn(true);
+        $mockedIconStore = $this->mock(IconStoreService::class, function (MockInterface $iconStore) use ($event) {
+            $iconStore->shouldReceive('delete')
+                ->once()
+                ->with($event->twofaccount->icon)
+                ->andReturn(true);
+        });
 
-        $this->assertNull($listener->handle($event));
+        /**
+         * @disregard P1009 Undefined type
+         */
+        $this->assertNull($listener->handle($event, $mockedIconStore));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_CleanIconStorage_listen_to_TwoFAccountDeleted_event()
     {
         Event::fake();

@@ -26,6 +26,7 @@ namespace App\Listeners\Authentication;
 
 use App\Models\AuthLog;
 use Illuminate\Auth\Events\Logout;
+use TypeError;
 
 class LogoutListener extends AbstractAccessListener
 {
@@ -34,28 +35,38 @@ class LogoutListener extends AbstractAccessListener
      */
     public function handle(mixed $event) : void
     {
-        if (! $event instanceof Logout || $event->user == null) {
-            return;
+        if (! $event instanceof Logout) {
+            throw new TypeError(self::class . '::handle(): Argument #1 ($event) must be of type ' . Logout::class);
         }
 
         /**
          * @var \App\Models\User
          */
-        $user      = $event->user;
-        $ip        = config('2fauth.proxy_headers.forIp') ?? $this->request->ip();
-        $userAgent = $this->request->userAgent();
-        $log       = $user->authentications()->whereIpAddress($ip)->whereUserAgent($userAgent)->whereGuard($event->guard)->orderByDesc('login_at')->first();
-        $guard     = $event->guard;
+        $user = $event->user;
 
-        if (! $log) {
-            $log = new AuthLog([
-                'ip_address' => $ip,
-                'user_agent' => $userAgent,
-                'guard'      => $guard,
-            ]);
+        if ($user != null) {
+            $ip = config('2fauth.proxy_headers.forIp')
+                ? $this->request->header(config('2fauth.proxy_headers.forIp'), $this->request->ip())
+                : $this->request->ip();
+            $userAgent = $this->request->userAgent();
+            $log       = $user->authentications()
+                ->whereIpAddress($ip)
+                ->whereUserAgent($userAgent)
+                ->whereGuard($event->guard)
+                ->orderByDesc('login_at')
+                ->first();
+
+            if (! $log) {
+                $log = new AuthLog([
+                    'ip_address'   => $ip,
+                    'user_agent'   => $userAgent,
+                    'guard'        => $event->guard,
+                    'login_method' => $this->loginMethod(),
+                ]);
+            }
+
+            $log->logout_at = now();
+            $user->authentications()->save($log);
         }
-
-        $log->logout_at = now();
-        $user->authentications()->save($log);
     }
 }

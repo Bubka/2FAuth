@@ -1,7 +1,7 @@
 ARG BUILDPLATFORM=linux/amd64
 ARG TARGETPLATFORM
-ARG ALPINE_VERSION=3.19
-ARG PHP_VERSION=8.2-alpine${ALPINE_VERSION}
+ARG ALPINE_VERSION=3.21
+ARG PHP_VERSION=8.3-alpine${ALPINE_VERSION}
 ARG COMPOSER_VERSION=2.7
 ARG SUPERVISORD_VERSION=v0.7.3
 
@@ -46,28 +46,28 @@ COPY --from=supervisord --chown=${UID}:${GID} /bin /usr/local/bin/supervisord
 # Install PHP and PHP system dependencies
 RUN apk add --update --no-cache \
     # PHP
-    php82 \
+    php83 \
     # Composer dependencies
-    php82-phar \
+    php83-phar \
     # PHP SQLite, MySQL/MariaDB & Postgres drivers
-    php82-pdo_sqlite php82-sqlite3 php82-pdo_mysql php82-pdo_pgsql php82-pgsql \
+    php83-pdo_sqlite php83-sqlite3 php83-pdo_mysql php83-pdo_pgsql php83-pgsql \
     # PHP extensions
-    php82-xml php82-gd php82-mbstring php82-tokenizer php82-fileinfo php82-bcmath php82-ctype php82-dom \
+    php83-xml php83-gd php83-mbstring php83-tokenizer php83-fileinfo php83-bcmath php83-ctype php83-dom php-redis \
     # Runtime dependencies
-    php82-session php82-openssl \
+    php83-session php83-openssl \
     # Nginx and PHP FPM to serve over HTTP
-    php82-fpm nginx
+    php83-fpm nginx
 
 # PHP FPM configuration
 # Change username and ownership in php-fpm pool config
-RUN sed -i '/user = nobody/d' /etc/php82/php-fpm.d/www.conf && \
-    sed -i '/group = nobody/d' /etc/php82/php-fpm.d/www.conf && \
-    sed -i '/listen.owner/d' /etc/php82/php-fpm.d/www.conf && \
-    sed -i '/listen.group/d' /etc/php82/php-fpm.d/www.conf
+RUN sed -i '/user = nobody/d' /etc/php83/php-fpm.d/www.conf && \
+    sed -i '/group = nobody/d' /etc/php83/php-fpm.d/www.conf && \
+    sed -i '/listen.owner/d' /etc/php83/php-fpm.d/www.conf && \
+    sed -i '/listen.group/d' /etc/php83/php-fpm.d/www.conf
 # Pre-create files with the correct permissions
 RUN mkdir /run/php && \
-    chown ${UID}:${GID} /run/php /var/log/php82 && \
-    chmod 700 /run/php /var/log/php82
+    chown ${UID}:${GID} /run/php /var/log/php83 && \
+    chmod 700 /run/php /var/log/php83
 
 # NGINX
 # Clean up
@@ -227,6 +227,10 @@ ENV \
     # OPENID_USERINFO_URL= \
     # OPENID_CLIENT_ID= \
     # OPENID_CLIENT_SECRET= \
+    # OPENID_HTTP_VERIFY_SSL_PEER=true \
+    # Can also be the path to a custom certificate on disk, i.e
+    # OPENID_HTTP_VERIFY_SSL_PEER=/path/to/cert.pem \
+    #
     # GITHUB_CLIENT_ID= \
     # GITHUB_CLIENT_SECRET= \
     # Use this setting to declare trusted proxied.
@@ -238,6 +242,11 @@ ENV \
     # You can provide a proxy URL that contains a scheme, username, and password.
     # For example, "http://username:password@192.168.16.1:10".
     PROXY_FOR_OUTGOING_REQUESTS=null \
+    # Set this to true to enable Content-Security-Policy (CSP).
+    # CSP helps to prevent or minimize the risk of certain types of security threats.
+    # This is mainly used as a defense against cross-site scripting (XSS) attacks, in which
+    # an attacker is able to inject malicious code into the web app
+    CONTENT_SECURITY_POLICY=true \
     # Leave the following configuration vars as is.
     # Unless you like to tinker and know what you're doing.
     BROADCAST_DRIVER=log \

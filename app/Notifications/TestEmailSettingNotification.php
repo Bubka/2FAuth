@@ -26,10 +26,7 @@ class TestEmailSettingNotification extends Notification
     /**
      * TestEmailSettingNotification constructor.
      */
-    public function __construct()
-    {
-
-    }
+    public function __construct() {}
 
     /**
      * Get the notification's delivery channels.
@@ -51,13 +48,13 @@ class TestEmailSettingNotification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject(Lang::get('notifications.test_email_settings.subject'))
-            ->greeting(Lang::get('notifications.hello'))
+            ->subject(Lang::get('message.notifications.test_email_settings.subject'))
+            ->greeting(Lang::get('message.notifications.hello'))
             ->line(
-                Lang::get('notifications.test_email_settings.reason')
+                Lang::get('message.notifications.test_email_settings.reason')
             )
             ->line(
-                Lang::get('notifications.test_email_settings.success')
+                Lang::get('message.notifications.test_email_settings.success')
             );
     }
 }

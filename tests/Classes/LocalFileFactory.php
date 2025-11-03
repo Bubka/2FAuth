@@ -215,4 +215,20 @@ class LocalFileFactory
             fwrite($temp, ob_get_clean());
         }));
     }
+
+    /**
+     * Create a new local infected SVG file.
+     *
+     * @return \Illuminate\Http\Testing\File
+     */
+    public function infectedSvgIconFile()
+    {
+        return new File('infectedSvgIcon.svg', tap(tmpfile(), function ($temp) {
+            ob_start();
+
+            echo OtpTestData::ICON_SVG_DATA_INFECTED;
+
+            fwrite($temp, ob_get_clean());
+        }));
+    }
 }

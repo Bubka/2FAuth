@@ -3,10 +3,11 @@
 namespace App\Providers\Socialite;
 
 use GuzzleHttp\RequestOptions;
+use Laravel\Socialite\Two\ProviderInterface;
 use SocialiteProviders\Manager\OAuth2\AbstractProvider;
 use SocialiteProviders\Manager\OAuth2\User;
 
-class OpenId extends AbstractProvider
+class OpenId extends AbstractProvider implements ProviderInterface
 {
     public const IDENTIFIER = 'OPENID';
 
@@ -56,27 +57,9 @@ class OpenId extends AbstractProvider
     /**
      * {@inheritdoc}
      */
-    public function refreshToken($refreshToken)
-    {
-        return $this->getHttpClient()->post( /** @phpstan-ignore-line */
-            $this->getTokenUrl(),
-            [
-                RequestOptions::FORM_PARAMS => [
-                    'client_id'     => $this->clientId,
-                    'client_secret' => $this->clientSecret,
-                    'grant_type'    => 'refresh_token',
-                    'refresh_token' => $refreshToken,
-                ],
-            ]
-        );
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     protected function mapUserToObject(array $user)
     {
-        return (new User())->setRaw($user)->map([
+        return (new User)->setRaw($user)->map([
             'email'              => $user['email'] ?? null,
             'email_verified'     => $user['email_verified'] ?? null,
             'name'               => $user['name'] ?? null,

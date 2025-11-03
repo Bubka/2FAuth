@@ -6,6 +6,7 @@ use App\Models\AuthLog;
 use App\Models\User;
 use Illuminate\Support\Carbon;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\FeatureTestCase;
 
 class PurgeLogTest extends FeatureTestCase
@@ -15,29 +16,22 @@ class PurgeLogTest extends FeatureTestCase
      */
     protected $user;
 
-    /**
-     * @test
-     */
-    public function setUp() : void
+    protected function setUp() : void
     {
         parent::setUp();
 
         $this->user = User::factory()->create();
     }
 
-    /**
-     * @test
-     */
-    public function test_purgeLog_completes()
+    #[Test]
+    public function test_purge_log_completes()
     {
         $this->artisan('2fauth:purge-log')
             ->assertSuccessful();
     }
 
-    /**
-     * @test
-     */
-    public function test_purgeLog_defaults_to_one_year()
+    #[Test]
+    public function test_purge_log_defaults_to_one_year()
     {
         $oneYearOldLog   = AuthLog::factory()->daysAgo(366)->for($this->user, 'authenticatable')->create();
         $sixMonthsOldLog = AuthLog::factory()->daysAgo(364)->for($this->user, 'authenticatable')->create();
@@ -52,9 +46,7 @@ class PurgeLogTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_purgeLog_deletes_records_older_than_retention_time()
     {
         $retention = 180;
@@ -68,9 +60,7 @@ class PurgeLogTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_purgeLog_deletes_logout_only_records_older_than_retention_time()
     {
         $retention = 180;
@@ -85,9 +75,7 @@ class PurgeLogTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_purgeLog_does_not_delete_records_younger_than_retention_time()
     {
         $retention = 180;
@@ -101,9 +89,7 @@ class PurgeLogTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     #[DataProvider('provideInvalidConfig')]
     public function test_purgeLog_with_invalid_config_defaults_to_one_year($config)
     {

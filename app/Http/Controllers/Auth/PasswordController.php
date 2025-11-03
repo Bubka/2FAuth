@@ -20,25 +20,25 @@ class PasswordController extends Controller
         $user      = $request->user();
         $validated = $request->validated();
 
-        if (config('auth.defaults.guard') === 'reverse-proxy-guard' || $user->oauth_provider) {
-            Log::notice('Password update rejected: reverse-proxy-guard enabled or account from external sso provider');
+        if ($user->oauth_provider) {
+            Log::notice('Password update rejected: external account from a sso provider');
 
-            return response()->json(['message' => __('errors.account_managed_by_external_provider')], 400);
+            return response()->json(['message' => __('error.account_managed_by_external_provider')], 400);
         }
 
         if (! Hash::check($validated['currentPassword'], Auth::user()->password)) {
             Log::notice('Password update failed: wrong password provided');
 
-            return response()->json(['message' => __('errors.wrong_current_password')], 400);
+            return response()->json(['message' => __('error.wrong_current_password')], 400);
         }
 
         if (! config('2fauth.config.isDemoApp')) {
             $user->update([
-                'password' => bcrypt($validated['password']),
+                'password' => Hash::make($validated['password']),
             ]);
             Log::info(sprintf('Password of user ID #%s updated', $user->id));
         }
 
-        return response()->json(['message' => __('auth.forms.password_successfully_changed')]);
+        return response()->json(['message' => __('notification.password_successfully_changed')]);
     }
 }

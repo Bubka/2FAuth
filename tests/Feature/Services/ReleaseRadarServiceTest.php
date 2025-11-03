@@ -3,30 +3,38 @@
 namespace Tests\Feature\Services;
 
 use App\Facades\Settings;
+use App\Providers\TwoFAuthServiceProvider;
+use App\Services\ReleaseRadarService as ServicesReleaseRadarService;
 // use App\Services\ReleaseRadarService;
 use Facades\App\Services\ReleaseRadarService;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Http;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\Data\HttpRequestTestData;
 use Tests\FeatureTestCase;
 
 /**
  * ReleaseRadarServiceTest test class
  */
-#[CoversClass(\App\Services\ReleaseRadarService::class)]
+#[CoversClass(ServicesReleaseRadarService::class)]
+#[CoversClass(TwoFAuthServiceProvider::class)]
 class ReleaseRadarServiceTest extends FeatureTestCase
 {
     use WithoutMiddleware;
 
-    /**
-     * @test
-     */
+    protected function setUp() : void
+    {
+        parent::setUp();
+
+        Http::preventStrayRequests();
+    }
+
+    #[Test]
     public function test_manualScan_returns_no_new_release()
     {
         $url = config('2fauth.latestReleaseUrl');
 
-        Http::preventStrayRequests();
         Http::fake([
             $url => Http::response(HttpRequestTestData::LATEST_RELEASE_BODY_NO_NEW_RELEASE, 200),
         ]);
@@ -41,14 +49,11 @@ class ReleaseRadarServiceTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_manualScan_returns_new_release()
     {
         $url = config('2fauth.latestReleaseUrl');
 
-        Http::preventStrayRequests();
         Http::fake([
             $url => Http::response(HttpRequestTestData::LATEST_RELEASE_BODY_NEW_RELEASE, 200),
         ]);
@@ -63,40 +68,33 @@ class ReleaseRadarServiceTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_manualScan_complete_when_http_call_fails()
     {
-        // We do not fake the http request so an exception will be thrown
-        Http::preventStrayRequests();
-
-        $this->assertNull(ReleaseRadarService::manualScan());
-    }
-
-    /**
-     * @test
-     */
-    public function test_manualScan_succeed_when_github_is_unreachable()
-    {
-        $url = config('2fauth.latestReleaseUrl');
-
-        Http::preventStrayRequests();
         Http::fake([
-            $url => Http::response(null, 400),
+            config('2fauth.latestReleaseUrl') => Http::response('not found', 404),
         ]);
 
         $this->assertNull(ReleaseRadarService::manualScan());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
+    public function test_manualScan_succeed_when_github_is_unreachable()
+    {
+        $url = config('2fauth.latestReleaseUrl');
+
+        Http::fake([
+            $url => Http::response(null, 404),
+        ]);
+
+        $this->assertNull(ReleaseRadarService::manualScan());
+    }
+
+    #[Test]
     public function test_scheduleScan_runs_after_one_week()
     {
         $url = config('2fauth.latestReleaseUrl');
 
-        Http::preventStrayRequests();
         Http::fake([
             $url => Http::response(HttpRequestTestData::LATEST_RELEASE_BODY_NEW_RELEASE, 200),
         ]);
@@ -119,14 +117,11 @@ class ReleaseRadarServiceTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_scheduleScan_does_not_run_before_one_week()
     {
         $url = config('2fauth.latestReleaseUrl');
 
-        Http::preventStrayRequests();
         Http::fake([
             $url => Http::response(HttpRequestTestData::LATEST_RELEASE_BODY_NEW_RELEASE, 200),
         ]);
@@ -149,13 +144,14 @@ class ReleaseRadarServiceTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_scheduleScan_complete_when_http_call_fails()
     {
-        // We do not fake the http request so an exception will be thrown
-        Http::preventStrayRequests();
+        $url = config('2fauth.latestReleaseUrl');
+
+        Http::fake([
+            $url => Http::response(null, 404),
+        ]);
 
         $this->assertNull(ReleaseRadarService::scheduledScan());
     }

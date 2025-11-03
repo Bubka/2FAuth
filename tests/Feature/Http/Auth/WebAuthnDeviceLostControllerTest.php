@@ -8,19 +8,23 @@ use App\Http\Requests\WebauthnDeviceLostRequest;
 use App\Models\User;
 use App\Notifications\WebauthnRecoveryNotification;
 use App\Providers\AuthServiceProvider;
-use Illuminate\Support\Facades\Lang;
+use App\Rules\CaseInsensitiveEmailExists;
 use Illuminate\Support\Facades\Notification;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\FeatureTestCase;
 
 /**
  * WebAuthnDeviceLostControllerTest test class
  */
+#[CoversMethod(User::class, 'sendWebauthnRecoveryNotification')]
 #[CoversClass(WebAuthnDeviceLostController::class)]
 #[CoversClass(WebauthnRecoveryNotification::class)]
 #[CoversClass(WebauthnCredentialBroker::class)]
 #[CoversClass(WebauthnDeviceLostRequest::class)]
 #[CoversClass(AuthServiceProvider::class)]
+#[CoversMethod(CaseInsensitiveEmailExists::class, 'validate')]
 class WebAuthnDeviceLostControllerTest extends FeatureTestCase
 {
     /**
@@ -28,22 +32,15 @@ class WebAuthnDeviceLostControllerTest extends FeatureTestCase
      */
     protected $user;
 
-    /**
-     * @test
-     */
-    public function setUp() : void
+    protected function setUp() : void
     {
         parent::setUp();
 
         $this->user = User::factory()->create();
     }
 
-    /**
-     * @test
-     *
-     * @covers  \App\Models\Traits\WebAuthnManageCredentials
-     */
-    public function test_sendRecoveryEmail_sends_notification_on_success()
+    #[Test]
+    public function test_send_recovery_email_sends_notification_on_success()
     {
         Notification::fake();
 
@@ -63,47 +60,7 @@ class WebAuthnDeviceLostControllerTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
-    public function test_WebauthnRecoveryNotification_renders_to_email()
-    {
-        $mail = (new WebauthnRecoveryNotification('test_token'))->toMail($this->user)->render();
-
-        $this->assertStringContainsString(
-            'http://localhost/webauthn/recover?token=test_token&amp;email=' . urlencode($this->user->email),
-            $mail
-        );
-
-        $this->assertStringContainsString(
-            Lang::get('Recover Account'),
-            $mail
-        );
-
-        $this->assertStringContainsString(
-            Lang::get(
-                'You are receiving this email because we received an account recovery request for your account.'
-            ),
-            $mail
-        );
-
-        $this->assertStringContainsString(
-            Lang::get(
-                'This recovery link will expire in :count minutes.',
-                ['count' => config('auth.passwords.webauthn.expire')]
-            ),
-            $mail
-        );
-
-        $this->assertStringContainsString(
-            Lang::get('If you did not request an account recovery, no further action is required.'),
-            $mail
-        );
-    }
-
-    /**
-     * @test
-     */
+    #[Test]
     public function test_sendRecoveryEmail_does_not_send_anything_to_unknown_email()
     {
         Notification::fake();
@@ -124,9 +81,7 @@ class WebAuthnDeviceLostControllerTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_sendRecoveryEmail_does_not_send_anything_to_invalid_email()
     {
         Notification::fake();
@@ -147,14 +102,12 @@ class WebAuthnDeviceLostControllerTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_sendRecoveryEmail_does_not_send_anything_to_not_WebAuthnAuthenticatable()
     {
         $mock = $this->mock(\App\Extensions\WebauthnCredentialBroker::class)->makePartial();
         $mock->shouldReceive('getUser')
-            ->andReturn(new \Illuminate\Foundation\Auth\User());
+            ->andReturn(new \Illuminate\Foundation\Auth\User);
 
         Notification::fake();
 
@@ -170,9 +123,7 @@ class WebAuthnDeviceLostControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_sendRecoveryEmail_is_throttled()
     {
         Notification::fake();
@@ -202,9 +153,7 @@ class WebAuthnDeviceLostControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_error_if_no_broker_is_set()
     {
         $this->app['config']->set('auth.passwords.webauthn', null);

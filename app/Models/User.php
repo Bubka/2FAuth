@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Traits\HasAuthenticationLog;
 use App\Models\Traits\WebAuthnManageCredentials;
+use Database\Factories\UserFactory;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Contracts\Translation\HasLocalePreference;
@@ -48,13 +49,37 @@ use Laravel\Passport\HasApiTokens;
  * @property-read \App\Models\AuthLog|null $latestAuthentication
  *
  * @method static \Illuminate\Database\Eloquent\Builder|User admins()
+ * @method static \Database\Factories\UserFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|User query()
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereEmailVerifiedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereIsAdmin($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereLastSeenAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User wherePreferences($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  *
  * @mixin \Eloquent
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereOauthId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereOauthProvider($value)
  */
 class User extends Authenticatable implements HasLocalePreference, WebAuthnAuthenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, Notifiable;
     use HasAuthenticationLog;
+
+    /**
+     * @use HasFactory<UserFactory>
+     */
+    use HasFactory;
+
     use WebAuthnAuthentication, WebAuthnManageCredentials;
 
     /**
@@ -217,7 +242,7 @@ class User extends Authenticatable implements HasLocalePreference, WebAuthnAuthe
     /**
      * Get the TwoFAccounts of the user.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<TwoFAccount>
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\App\Models\TwoFAccount, $this>
      */
     public function twofaccounts()
     {
@@ -227,10 +252,21 @@ class User extends Authenticatable implements HasLocalePreference, WebAuthnAuthe
     /**
      * Get the Groups of the user.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Group>
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\App\Models\Group, $this>
      */
     public function groups()
     {
         return $this->hasMany(\App\Models\Group::class);
+    }
+
+    /**
+     * Compare 2 Users
+     */
+    public function equals(self $other) : bool
+    {
+        return $this->name === $other->name &&
+            $this->email === $other->email &&
+            $this->oauth_id == $other->oauth_id &&
+            $this->oauth_provider == $other->oauth_provider;
     }
 }

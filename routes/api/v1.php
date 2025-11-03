@@ -47,6 +47,7 @@ Route::group(['middleware' => 'auth:api-guard'], function () {
 
     Route::get('groups/{group}/twofaccounts', [GroupController::class, 'accounts'])->name('groups.show.twofaccounts');
     Route::post('groups/{group}/assign', [GroupController::class, 'assignAccounts'])->name('groups.assign.twofaccounts');
+    Route::post('groups/reorder', [GroupController::class, 'reorder'])->name('groups.reorder');
     Route::apiResource('groups', GroupController::class);
 
     Route::post('qrcode/decode', [QrCodeController::class, 'decode'])->name('qrcode.decode');

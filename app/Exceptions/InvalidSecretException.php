@@ -9,6 +9,4 @@ use Exception;
  *
  * @codeCoverageIgnore
  */
-class InvalidSecretException extends Exception
-{
-}
+class InvalidSecretException extends Exception {}

@@ -28,7 +28,7 @@ class GroupPolicy
      */
     public function view(User $user, Group $group)
     {
-        $can = $this->isOwnerOf($user, $group);
+        $can = $this->isOwnerOf($user, $group) || $group->id === 0;
 
         if (! $can) {
             Log::notice(sprintf('User ID #%s cannot view group %s (ID #%s)', $user->id, var_export($group->name, true), $group->id));
@@ -92,19 +92,19 @@ class GroupPolicy
      * @param  \Illuminate\Support\Collection<int, \App\Models\Group>  $groups
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    // public function updateEach(User $user, Group $group, $groups)
-    // {
-    //     $can = $this->isOwnerOfEach($user, $groups);
+    public function updateEach(User $user, Group $group, $groups)
+    {
+        $can = $this->isOwnerOfEach($user, $groups);
 
-    //     if (! $can) {
-    //         $ids = $groups->map(function ($group, $key) {
-    //             return $group->id;
-    //         });
-    //         Log::notice(sprintf('User ID #%s cannot update all groups in IDs #%s', $user->id, implode(',', $ids->toArray())));
-    //     }
+        if (! $can) {
+            $ids = $groups->map(function ($group, $key) {
+                return $group->id;
+            });
+            Log::notice(sprintf('User ID #%s cannot update all groups in IDs #%s', $user->id, implode(',', $ids->toArray())));
+        }
 
-    //     return $can;
-    // }
+        return $can;
+    }
 
     /**
      * Determine whether the user can delete the model.

@@ -5,17 +5,18 @@ import router from '@/router'
 import { useColorMode } from '@vueuse/core'
 import { useTwofaccounts } from '@/stores/twofaccounts'
 import { useGroups } from '@/stores/groups'
-import { useNotifyStore } from '@/stores/notify'
+import { useNotify } from '@2fauth/ui'
+import { useAppSettingsStore } from '@/stores/appSettings'
+import { useErrorHandler } from '@2fauth/stores'
 
-export const useUserStore = defineStore({
-    id: 'user',
-
+export const useUserStore = defineStore('user', {
     state: () => {
         return {
             id: undefined,
             name: undefined,
             email: undefined,
             oauth_provider: undefined,
+            authenticated_by_proxy: undefined,
             preferences: window.defaultPreferences,
             isAdmin: false,
         }
@@ -61,7 +62,8 @@ export const useUserStore = defineStore({
          */
         logout(options = {}) {
             const { kicked } = options
-            const notify = useNotifyStore()
+            const notify = useNotify()
+            const errorHandler = useErrorHandler()
 
             // async appLogout(evt) {
             if (this.$2fauth.config.proxyAuth) {
@@ -74,7 +76,7 @@ export const useUserStore = defineStore({
                 authService.logout({ returnError: true }).then(() => {
                     if (kicked) {
                         notify.clear()
-                        notify.warn({ text: trans('auth.autolock_triggered_punchline'), duration:-1 })
+                        notify.warn({ text: this.$i18n.global.t('notification.autolock_triggered_punchline'), duration:-1 })
                     }
                     this.tossOut()
                 })
@@ -83,7 +85,7 @@ export const useUserStore = defineStore({
                     // backend has already detect inactivity on its side. In this case we
                     // don't want any error to be displayed.
                     if (error.response.status !== 401) {
-                        notify.error(error)
+                        errorHandler.show(error)
                     }
                     else this.tossOut()
                 })
@@ -97,6 +99,17 @@ export const useUserStore = defineStore({
             this.$reset()
             this.initDataStores()
             this.applyUserPrefs()
+
+            // We don't want sso settings to be reset in order to activate the
+            // appropriate login form once pushed to login view
+            const enableSso = useAppSettingsStore().enableSso
+            const useSsoOnly = useAppSettingsStore().useSsoOnly
+
+            useAppSettingsStore().$reset()
+
+            useAppSettingsStore().enableSso = enableSso
+            useAppSettingsStore().useSsoOnly = useSsoOnly
+
             router.push({ name: 'login' })
         },
 
@@ -105,7 +118,7 @@ export const useUserStore = defineStore({
          */
         applyTheme() {
             const mode = useColorMode({
-                attribute: 'data-theme',
+                class: 'dark',
             })
             mode.value = this.preferences.theme == 'system' ? 'auto' : this.preferences.theme
         },
@@ -115,11 +128,16 @@ export const useUserStore = defineStore({
          */
         applyLanguage() {
             const { isSupported, language } = useNavigatorLanguage()
+            let lang = this.$i18n.fallbackLocale
 
             if (isSupported) {
-                loadLanguageAsync(this.preferences.lang == 'browser' ? language.value.slice(0, 2)  : this.preferences.lang)
+                // The language tag pushed by the browser may be composed of
+                // multiple subtags (ex: fr-FR) so we keep only the
+                // "language subtag" (ex: fr)
+                lang = this.preferences.lang == 'browser' ? language.value.slice(0, 2)  : this.preferences.lang
             }
-            else loadLanguageAsync('en')
+
+            this.$i18n.global.locale = lang
         },
 
         /**
@@ -134,15 +152,25 @@ export const useUserStore = defineStore({
          * Refresh user preferences with backend state
          */
         refreshPreferences() {
+            const appSettings = useAppSettingsStore()
+
             userService.getPreferences({returnError: true})
             .then(response => {
                 response.data.forEach(preference => {
                     this.preferences[preference.key] = preference.value
+                    let index = appSettings.lockedPreferences.indexOf(preference.key)
+
+                    if (preference.locked == true && index === -1) {
+                        appSettings.lockedPreferences.push(preference.key)
+                    }
+                    else if (preference.locked == false && index > 0) {
+                        appSettings.lockedPreferences.splice(index, 1)
+                    }
                 })
             })
             .catch(error => {
-                const notify = useNotifyStore()
-                notify.alert({ text: trans('errors.data_cannot_be_refreshed_from_server') })
+                const notify = useNotify()
+                notify.alert({ text: this.$i18n.global.t('error.data_cannot_be_refreshed_from_server') })
             })
         }
 

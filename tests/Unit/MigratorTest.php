@@ -5,10 +5,13 @@ namespace Tests\Unit;
 use App\Exceptions\EncryptedMigrationException;
 use App\Exceptions\InvalidMigrationDataException;
 use App\Exceptions\UnsupportedMigrationException;
+use App\Facades\Icons;
 use App\Factories\MigratorFactory;
 use App\Models\TwoFAccount;
 use App\Providers\MigrationServiceProvider;
+use App\Providers\TwoFAuthServiceProvider;
 use App\Services\Migrators\AegisMigrator;
+use App\Services\Migrators\BitwardenMigrator;
 use App\Services\Migrators\GoogleAuthMigrator;
 use App\Services\Migrators\Migrator;
 use App\Services\Migrators\PlainTextMigrator;
@@ -19,6 +22,7 @@ use Illuminate\Support\Facades\Storage;
 use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use Tests\Data\MigrationTestData;
 use Tests\Data\OtpTestData;
@@ -28,6 +32,7 @@ use Tests\TestCase;
  * MigratorTest test class
  */
 #[CoversClass(MigrationServiceProvider::class)]
+#[CoversClass(TwoFAuthServiceProvider::class)]
 #[CoversClass(MigratorFactory::class)]
 #[CoversClass(Migrator::class)]
 #[CoversClass(AegisMigrator::class)]
@@ -65,14 +70,16 @@ class MigratorTest extends TestCase
 
     protected $fakeTwofaccount;
 
-    public function setUp() : void
+    protected function setUp() : void
     {
         parent::setUp();
 
-        $this->mock(SettingService::class, function (MockInterface $settingService) {
-            $settingService->allows()
-                ->get('useEncryption')
-                ->andReturn(false);
+        $this->mock(SettingService::class, function (MockInterface $iconStore) {
+            foreach (config('2fauth.settings') as $setting => $value) {
+                $iconStore->shouldReceive('get')
+                    ->with($setting)
+                    ->andReturn($value);
+            }
         });
 
         $this->totpTwofaccount             = new TwoFAccount;
@@ -150,9 +157,7 @@ class MigratorTest extends TestCase
         parent::tearDown();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     #[DataProvider('validMigrationsProvider')]
     public function test_migrate_returns_consistent_accounts(Migrator $migrator, mixed $payload, string $expected, bool $hasSteam)
     {
@@ -188,47 +193,57 @@ class MigratorTest extends TestCase
     {
         return [
             'PLAIN_TEXT_PAYLOAD' => [
-                new PlainTextMigrator(),
+                new PlainTextMigrator,
                 MigrationTestData::VALID_PLAIN_TEXT_PAYLOAD,
                 'custom',
                 $hasSteam = true,
             ],
             'PLAIN_TEXT_PAYLOAD_WITH_INTRUDER' => [
-                new PlainTextMigrator(),
+                new PlainTextMigrator,
                 MigrationTestData::VALID_PLAIN_TEXT_PAYLOAD_WITH_INTRUDER,
                 'custom',
                 $hasSteam = true,
             ],
             'AEGIS_JSON_MIGRATION_PAYLOAD' => [
-                new AegisMigrator(),
+                new AegisMigrator,
                 MigrationTestData::VALID_AEGIS_JSON_MIGRATION_PAYLOAD,
                 'custom',
                 $hasSteam = true,
             ],
             '2FAS_MIGRATION_PAYLOAD' => [
-                new TwoFASMigrator(),
+                new TwoFASMigrator,
                 MigrationTestData::VALID_2FAS_MIGRATION_PAYLOAD,
                 'custom',
                 $hasSteam = false,
             ],
             'GOOGLE_AUTH_MIGRATION_PAYLOAD' => [
-                new GoogleAuthMigrator(),
+                new GoogleAuthMigrator,
                 MigrationTestData::GOOGLE_AUTH_MIGRATION_URI,
                 'gauth',
                 $hasSteam = false,
             ],
             '2FAUTH_MIGRATION_PAYLOAD' => [
-                new TwoFAuthMigrator(),
+                new TwoFAuthMigrator,
                 MigrationTestData::VALID_2FAUTH_JSON_MIGRATION_PAYLOAD,
                 'custom',
                 $hasSteam = true,
             ],
+            'BITWARDEN_AUTH_JSON_MIGRATION_PAYLOAD' => [
+                new BitwardenMigrator,
+                MigrationTestData::VALID_BITWARDEN_AUTH_JSON_MIGRATION_PAYLOAD,
+                'custom',
+                $hasSteam = true,
+            ],
+            'BITWARDEN_JSON_MIGRATION_PAYLOAD' => [
+                new BitwardenMigrator,
+                MigrationTestData::VALID_BITWARDEN_JSON_MIGRATION_PAYLOAD,
+                'custom',
+                $hasSteam = false,
+            ],
         ];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     #[DataProvider('invalidMigrationsProvider')]
     public function test_migrate_with_invalid_payload_returns_InvalidMigrationDataException(Migrator $migrator, mixed $payload)
     {
@@ -244,60 +259,62 @@ class MigratorTest extends TestCase
     {
         return [
             'INVALID_PLAIN_TEXT_NO_URI' => [
-                new PlainTextMigrator(),
+                new PlainTextMigrator,
                 MigrationTestData::INVALID_PLAIN_TEXT_NO_URI,
             ],
             'INVALID_PLAIN_TEXT_ONLY_EMPTY_LINES' => [
-                new PlainTextMigrator(),
+                new PlainTextMigrator,
                 MigrationTestData::INVALID_PLAIN_TEXT_ONLY_EMPTY_LINES,
             ],
             'INVALID_PLAIN_TEXT_NULL' => [
-                new PlainTextMigrator(),
+                new PlainTextMigrator,
                 null,
             ],
             'INVALID_PLAIN_TEXT_EMPTY_STRING' => [
-                new PlainTextMigrator(),
+                new PlainTextMigrator,
                 '',
             ],
             'INVALID_PLAIN_TEXT_INT' => [
-                new PlainTextMigrator(),
+                new PlainTextMigrator,
                 10,
             ],
             'INVALID_PLAIN_TEXT_BOOL' => [
-                new PlainTextMigrator(),
+                new PlainTextMigrator,
                 true,
             ],
             'INVALID_AEGIS_JSON_MIGRATION_PAYLOAD' => [
-                new AegisMigrator(),
+                new AegisMigrator,
                 MigrationTestData::INVALID_AEGIS_JSON_MIGRATION_PAYLOAD,
             ],
             'ENCRYPTED_AEGIS_JSON_MIGRATION_PAYLOAD' => [
-                new AegisMigrator(),
+                new AegisMigrator,
                 MigrationTestData::ENCRYPTED_AEGIS_JSON_MIGRATION_PAYLOAD,
             ],
             'INVALID_2FAS_MIGRATION_PAYLOAD' => [
-                new TwoFASMigrator(),
+                new TwoFASMigrator,
                 MigrationTestData::INVALID_2FAS_MIGRATION_PAYLOAD,
             ],
             'INVALID_GOOGLE_AUTH_MIGRATION_URI' => [
-                new GoogleAuthMigrator(),
+                new GoogleAuthMigrator,
                 MigrationTestData::INVALID_GOOGLE_AUTH_MIGRATION_URI,
             ],
             'GOOGLE_AUTH_MIGRATION_URI_WITH_INVALID_DATA' => [
-                new GoogleAuthMigrator(),
+                new GoogleAuthMigrator,
                 MigrationTestData::GOOGLE_AUTH_MIGRATION_URI_WITH_INVALID_DATA,
             ],
             'INVALID_2FAUTH_JSON_MIGRATION_PAYLOAD' => [
-                new TwoFAuthMigrator(),
+                new TwoFAuthMigrator,
                 MigrationTestData::INVALID_2FAUTH_JSON_MIGRATION_PAYLOAD,
+            ],
+            'INVALID_BITWARDEN_AUTH_JSON_MIGRATION_PAYLOAD' => [
+                new BitwardenMigrator,
+                MigrationTestData::INVALID_BITWARDEN_AUTH_JSON_MIGRATION_PAYLOAD,
             ],
 
         ];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     #[DataProvider('migrationWithInvalidAccountsProvider')]
     public function test_migrate_returns_fake_accounts(Migrator $migrator, mixed $payload)
     {
@@ -319,32 +336,30 @@ class MigratorTest extends TestCase
     {
         return [
             'PLAIN_TEXT_PAYLOAD_WITH_INVALID_URI' => [
-                new PlainTextMigrator(),
+                new PlainTextMigrator,
                 MigrationTestData::PLAIN_TEXT_PAYLOAD_WITH_INVALID_URI,
             ],
             'VALID_AEGIS_JSON_MIGRATION_PAYLOAD_WITH_UNSUPPORTED_OTP_TYPE' => [
-                new AegisMigrator(),
+                new AegisMigrator,
                 MigrationTestData::VALID_AEGIS_JSON_MIGRATION_PAYLOAD_WITH_UNSUPPORTED_OTP_TYPE,
             ],
             'VALID_2FAS_MIGRATION_PAYLOAD_WITH_UNSUPPORTED_OTP_TYPE' => [
-                new TwoFASMigrator(),
+                new TwoFASMigrator,
                 MigrationTestData::VALID_2FAS_MIGRATION_PAYLOAD_WITH_UNSUPPORTED_OTP_TYPE,
             ],
             'VALID_2FAUTH_MIGRATION_PAYLOAD_WITH_UNSUPPORTED_OTP_TYPE' => [
-                new TwoFAuthMigrator(),
+                new TwoFAuthMigrator,
                 MigrationTestData::VALID_2FAUTH_MIGRATION_PAYLOAD_WITH_UNSUPPORTED_OTP_TYPE,
             ],
         ];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_migrate_gauth_returns_fake_accounts()
     {
         $migrator = $this->partialMock(GoogleAuthMigrator::class, function (MockInterface $migrator) {
             $migrator->shouldAllowMockingProtectedMethods()->shouldReceive('toBase32')
-                ->andThrow(new \Exception());
+                ->andThrow(new \Exception);
         });
 
         /** @disregard Undefined function */
@@ -361,20 +376,20 @@ class MigratorTest extends TestCase
         $this->forgetMock(GoogleAuthMigrator::class);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     #[DataProvider('AegisWithIconMigrationProvider')]
     public function test_migrate_aegis_payload_with_icon_sets_and_stores_the_icon($migration)
     {
+        Icons::spy();
         Storage::fake('icons');
 
-        $migrator = new AegisMigrator();
+        $migrator = new AegisMigrator;
         $accounts = $migrator->migrate($migration);
 
         $this->assertContainsOnlyInstancesOf(TwoFAccount::class, $accounts);
         $this->assertCount(1, $accounts);
 
+        Icons::shouldHaveReceived('buildFromResource')->once();
         Storage::disk('icons')->assertExists($accounts->first()->icon);
     }
 
@@ -396,14 +411,12 @@ class MigratorTest extends TestCase
         ];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_migrate_aegis_payload_with_unsupported_icon_does_not_fail()
     {
         Storage::fake('icons');
 
-        $migrator = new AegisMigrator();
+        $migrator = new AegisMigrator;
         $accounts = $migrator->migrate(MigrationTestData::VALID_AEGIS_JSON_MIGRATION_PAYLOAD_WITH_UNSUPPORTED_ICON);
 
         $this->assertContainsOnlyInstancesOf(TwoFAccount::class, $accounts);
@@ -413,20 +426,20 @@ class MigratorTest extends TestCase
         Storage::disk('icons')->assertDirectoryEmpty('/');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     #[DataProvider('TwoFAuthWithIconMigrationProvider')]
     public function test_migrate_2fauth_payload_with_icon_sets_and_stores_the_icon($migration)
     {
+        Icons::spy();
         Storage::fake('icons');
 
-        $migrator = new TwoFAuthMigrator();
+        $migrator = new TwoFAuthMigrator;
         $accounts = $migrator->migrate($migration);
 
         $this->assertContainsOnlyInstancesOf(TwoFAccount::class, $accounts);
         $this->assertCount(1, $accounts);
 
+        Icons::shouldHaveReceived('buildFromResource')->once();
         Storage::disk('icons')->assertExists($accounts->first()->icon);
     }
 
@@ -448,20 +461,21 @@ class MigratorTest extends TestCase
             'BMP' => [
                 MigrationTestData::VALID_2FAUTH_JSON_MIGRATION_PAYLOAD_WITH_BMP_ICON,
             ],
+            'XBMP' => [
+                MigrationTestData::VALID_2FAUTH_JSON_MIGRATION_PAYLOAD_WITH_XBMP_ICON,
+            ],
             'WEBP' => [
                 MigrationTestData::VALID_2FAUTH_JSON_MIGRATION_PAYLOAD_WITH_WEBP_ICON,
             ],
         ];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_migrate_2fauth_payload_with_unsupported_icon_does_not_fail()
     {
         Storage::fake('icons');
 
-        $migrator = new TwoFAuthMigrator();
+        $migrator = new TwoFAuthMigrator;
         $accounts = $migrator->migrate(MigrationTestData::VALID_2FAUTH_JSON_MIGRATION_PAYLOAD_WITH_UNSUPPORTED_ICON);
 
         $this->assertContainsOnlyInstancesOf(TwoFAccount::class, $accounts);
@@ -471,13 +485,11 @@ class MigratorTest extends TestCase
         Storage::disk('icons')->assertDirectoryEmpty('/');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     #[DataProvider('factoryProvider')]
     public function test_factory_returns_relevant_migrator($payload, $migratorClass)
     {
-        $factory = new MigratorFactory();
+        $factory = new MigratorFactory;
 
         $migrator = $factory->create($payload);
 
@@ -514,29 +526,33 @@ class MigratorTest extends TestCase
                 MigrationTestData::VALID_2FAUTH_JSON_MIGRATION_PAYLOAD,
                 TwoFAuthMigrator::class,
             ],
+            'BITWARDEN_AUTH_MIGRATION_URI' => [
+                MigrationTestData::VALID_BITWARDEN_AUTH_JSON_MIGRATION_PAYLOAD,
+                BitwardenMigrator::class,
+            ],
+            'BITWARDEN_MIGRATION_URI' => [
+                MigrationTestData::VALID_BITWARDEN_JSON_MIGRATION_PAYLOAD,
+                BitwardenMigrator::class,
+            ],
         ];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_factory_throw_UnsupportedMigrationException()
     {
         $this->expectException(UnsupportedMigrationException::class);
-        $factory = new MigratorFactory();
+        $factory = new MigratorFactory;
 
         $migrator = $factory->create('not_a_valid_payload');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     #[DataProvider('encryptedMigrationDataProvider')]
     public function test_factory_throw_EncryptedMigrationException($payload)
     {
         $this->expectException(EncryptedMigrationException::class);
 
-        $factory = new MigratorFactory();
+        $factory = new MigratorFactory;
 
         $migrator = $factory->create($payload);
     }
@@ -552,6 +568,12 @@ class MigratorTest extends TestCase
             ],
             'ENCRYPTED_2FAS_MIGRATION_PAYLOAD' => [
                 MigrationTestData::ENCRYPTED_2FAS_MIGRATION_PAYLOAD,
+            ],
+            'ENCRYPTED_BITWARDEN_AUTH_JSON_MIGRATION_PAYLOAD' => [
+                MigrationTestData::ENCRYPTED_BITWARDEN_AUTH_JSON_MIGRATION_PAYLOAD,
+            ],
+            'ENCRYPTED_BITWARDEN_JSON_MIGRATION_PAYLOAD' => [
+                MigrationTestData::ENCRYPTED_BITWARDEN_JSON_MIGRATION_PAYLOAD,
             ],
         ];
     }

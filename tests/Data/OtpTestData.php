@@ -32,7 +32,13 @@ class OtpTestData
 
     const COUNTER_CUSTOM = 5;
 
-    const IMAGE = 'https%3A%2F%2Fen.opensuse.org%2Fimages%2F4%2F44%2FButton-filled-colour.png';
+    const EXTERNAL_IMAGE_URL_DECODED = 'https://en.opensuse.org/images/4/44/Button-filled-colour.png';
+
+    const EXTERNAL_IMAGE_URL_ENCODED = 'https%3A%2F%2Fen.opensuse.org%2Fimages%2F4%2F44%2FButton-filled-colour.png';
+
+    const EXTERNAL_INFECTED_IMAGE_URL_DECODED = 'https://image.com/infected.svg';
+
+    const EXTERNAL_INFECTED_IMAGE_URL_ENCODED = 'https%3A%2F%2Fimage.com%2Finfected.svg';
 
     const ICON_PNG = 'test.png';
 
@@ -52,9 +58,17 @@ class OtpTestData
 
     const ICON_SVG = 'test.svg';
 
-    const ICON_SVG_DATA = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024"><circle cx="512" cy="512" r="512" style="fill:#000e9c"/><path d="m700.2 466.5 61.2-106.3c23.6 41.6 37.2 89.8 37.2 141.1 0 68.8-24.3 131.9-64.7 181.4H575.8l48.7-84.6h-64.4l75.8-131.7 64.3.1zm-55.4-125.2L448.3 682.5l.1.2H290.1c-40.5-49.5-64.7-112.6-64.7-181.4 0-51.4 13.6-99.6 37.3-141.3l102.5 178.2 113.3-197h166.3z" style="fill:#fff"/></svg>';
+    const ICON_SVG_DATA = '<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024"><circle cx="512" cy="512" r="512" style="fill:#000e9c"></circle><path d="m700.2 466.5 61.2-106.3c23.6 41.6 37.2 89.8 37.2 141.1 0 68.8-24.3 131.9-64.7 181.4H575.8l48.7-84.6h-64.4l75.8-131.7 64.3.1zm-55.4-125.2L448.3 682.5l.1.2H290.1c-40.5-49.5-64.7-112.6-64.7-181.4 0-51.4 13.6-99.6 37.3-141.3l102.5 178.2 113.3-197h166.3z" style="fill:#fff"></path></svg>';
 
-    const ICON_SVG_DATA_ENCODED = 'PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDI0IDEwMjQiPg0KICAgPGNpcmNsZSBjeD0iNTEyIiBjeT0iNTEyIiByPSI1MTIiIHN0eWxlPSJmaWxsOiMwMDBlOWMiLz4NCiAgIDxwYXRoIGQ9Im03MDAuMiA0NjYuNSA2MS4yLTEwNi4zYzIzLjYgNDEuNiAzNy4yIDg5LjggMzcuMiAxNDEuMSAwIDY4LjgtMjQuMyAxMzEuOS02NC43IDE4MS40SDU3NS44bDQ4LjctODQuNmgtNjQuNGw3NS44LTEzMS43IDY0LjMuMXptLTU1LjQtMTI1LjJMNDQ4LjMgNjgyLjVsLjEuMkgyOTAuMWMtNDAuNS00OS41LTY0LjctMTEyLjYtNjQuNy0xODEuNCAwLTUxLjQgMTMuNi05OS42IDM3LjMtMTQxLjNsMTAyLjUgMTc4LjIgMTEzLjMtMTk3aDE2Ni4zeiIgc3R5bGU9ImZpbGw6I2ZmZiIvPg0KPC9zdmc+DQo=';
+    const ICON_SVG_DATA_ENCODED = 'PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4gPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDI0IDEwMjQiPjxjaXJjbGUgY3g9IjUxMiIgY3k9IjUxMiIgcj0iNTEyIiBzdHlsZT0iZmlsbDojMDAwZTljIj48L2NpcmNsZT48cGF0aCBkPSJtNzAwLjIgNDY2LjUgNjEuMi0xMDYuM2MyMy42IDQxLjYgMzcuMiA4OS44IDM3LjIgMTQxLjEgMCA2OC44LTI0LjMgMTMxLjktNjQuNyAxODEuNEg1NzUuOGw0OC43LTg0LjZoLTY0LjRsNzUuOC0xMzEuNyA2NC4zLjF6bS01NS40LTEyNS4yTDQ0OC4zIDY4Mi41bC4xLjJIMjkwLjFjLTQwLjUtNDkuNS02NC43LTExMi42LTY0LjctMTgxLjQgMC01MS40IDEzLjYtOTkuNiAzNy4zLTE0MS4zbDEwMi41IDE3OC4yIDExMy4zLTE5N2gxNjYuM3oiIHN0eWxlPSJmaWxsOiNmZmYiPjwvcGF0aD48L3N2Zz4g';
+
+    const ICON_SVG_MALICIOUS_CODE = '<script>alert("XSS");</script>';
+
+    const ICON_SVG_DATA_INFECTED = '<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="100" height="100" version="1.1" xmlns="http://www..w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">' . self::ICON_SVG_MALICIOUS_CODE . '</svg>';
+
+    const ICON_GIF = 'test.gif';
+
+    const ICON_GIF_DATA = 'R0lGODlhAQACAPcAAAAAAAAAMwAAZgAAmQAAzAAA/wArAAArMwArZgArmQArzAAr/wBVAABVMwBVZgBVmQBVzABV/wCAAACAMwCAZgCAmQCAzACA/wCqAACqMwCqZgCqmQCqzACq/wDVAADVMwDVZgDVmQDVzADV/wD/AAD/MwD/ZgD/mQD/zAD//zMAADMAMzMAZjMAmTMAzDMA/zMrADMrMzMrZjMrmTMrzDMr/zNVADNVMzNVZjNVmTNVzDNV/zOAADOAMzOAZjOAmTOAzDOA/zOqADOqMzOqZjOqmTOqzDOq/zPVADPVMzPVZjPVmTPVzDPV/zP/ADP/MzP/ZjP/mTP/zDP//2YAAGYAM2YAZmYAmWYAzGYA/2YrAGYrM2YrZmYrmWYrzGYr/2ZVAGZVM2ZVZmZVmWZVzGZV/2aAAGaAM2aAZmaAmWaAzGaA/2aqAGaqM2aqZmaqmWaqzGaq/2bVAGbVM2bVZmbVmWbVzGbV/2b/AGb/M2b/Zmb/mWb/zGb//5kAAJkAM5kAZpkAmZkAzJkA/5krAJkrM5krZpkrmZkrzJkr/5lVAJlVM5lVZplVmZlVzJlV/5mAAJmAM5mAZpmAmZmAzJmA/5mqAJmqM5mqZpmqmZmqzJmq/5nVAJnVM5nVZpnVmZnVzJnV/5n/AJn/M5n/Zpn/mZn/zJn//8wAAMwAM8wAZswAmcwAzMwA/8wrAMwrM8wrZswrmcwrzMwr/8xVAMxVM8xVZsxVmcxVzMxV/8yAAMyAM8yAZsyAmcyAzMyA/8yqAMyqM8yqZsyqmcyqzMyq/8zVAMzVM8zVZszVmczVzMzV/8z/AMz/M8z/Zsz/mcz/zMz///8AAP8AM/8AZv8Amf8AzP8A//8rAP8rM/8rZv8rmf8rzP8r//9VAP9VM/9VZv9Vmf9VzP9V//+AAP+AM/+AZv+Amf+AzP+A//+qAP+qM/+qZv+qmf+qzP+q///VAP/VM//VZv/Vmf/VzP/V////AP//M///Zv//mf//zP///wAAAAAAAAAAAAAAACH5BAEAAPwALAAAAAABAAIAAAgFAPftCwgAOw==';
 
     const TOTP_FULL_CUSTOM_URI_NO_IMG = 'otpauth://totp/' . self::SERVICE . ':' . self::ACCOUNT . '?secret=' . self::SECRET . '&issuer=' . self::SERVICE . '&digits=' . self::DIGITS_CUSTOM . '&period=' . self::PERIOD_CUSTOM . '&algorithm=' . self::ALGORITHM_CUSTOM;
 
@@ -64,17 +78,23 @@ class OtpTestData
 
     const TOTP_MICROSOFT_CORPORATE_URI_MISMATCHING_ISSUER = 'otpauth://totp/' . self::ORGANIZATION . ':' . self::ACCOUNT . '?secret=' . self::SECRET . '&issuer=' . self::MICROSOFT;
 
-    const TOTP_FULL_CUSTOM_URI = self::TOTP_FULL_CUSTOM_URI_NO_IMG . '&image=' . self::IMAGE;
+    const TOTP_FULL_CUSTOM_URI = self::TOTP_FULL_CUSTOM_URI_NO_IMG . '&image=' . self::EXTERNAL_IMAGE_URL_ENCODED;
 
     const HOTP_FULL_CUSTOM_URI_NO_IMG = 'otpauth://hotp/' . self::SERVICE . ':' . self::ACCOUNT . '?secret=' . self::SECRET . '&issuer=' . self::SERVICE . '&digits=' . self::DIGITS_CUSTOM . '&counter=' . self::COUNTER_CUSTOM . '&algorithm=' . self::ALGORITHM_CUSTOM;
 
-    const HOTP_FULL_CUSTOM_URI = self::HOTP_FULL_CUSTOM_URI_NO_IMG . '&image=' . self::IMAGE;
+    const HOTP_FULL_CUSTOM_URI = self::HOTP_FULL_CUSTOM_URI_NO_IMG . '&image=' . self::EXTERNAL_IMAGE_URL_ENCODED;
 
     const TOTP_SHORT_URI = 'otpauth://totp/' . self::ACCOUNT . '?secret=' . self::SECRET;
 
     const HOTP_SHORT_URI = 'otpauth://hotp/' . self::ACCOUNT . '?secret=' . self::SECRET;
 
-    const TOTP_URI_WITH_UNREACHABLE_IMAGE = 'otpauth://totp/service:account?secret=A4GRFHVVRBGY7UIW&image=https%3A%2F%2Fen.opensuse.org%2Fimage.png';
+    const UNREACHABLE_IMAGE_URL = 'https%3A%2F%2Fwww.example.com%2Fimage.png';
+
+    const UNREACHABLE_IMAGE_URL_DECODED = 'https://www.example.com/image.png';
+
+    const TOTP_URI_WITH_UNREACHABLE_IMAGE = 'otpauth://totp/service:account?secret=A4GRFHVVRBGY7UIW&image=' . self::UNREACHABLE_IMAGE_URL;
+
+    const TOTP_URI_WITH_INFECTED_SVG_IMAGE = 'otpauth://totp/service:account?secret=A4GRFHVVRBGY7UIW&image=' . self::EXTERNAL_INFECTED_IMAGE_URL_ENCODED;
 
     const INVALID_OTPAUTH_URI = 'otpauth://Xotp/' . self::ACCOUNT . '?secret=' . self::SECRET;
 

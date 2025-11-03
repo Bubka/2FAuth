@@ -66,15 +66,15 @@
 </script>
 
 <template>
-    <FormWrapper :title="isEditMode ? $t('groups.forms.rename_group') : $t('groups.forms.new_group')">
+    <FormWrapper :title="isEditMode ? 'heading.rename_group' : 'heading.new_group'">
         <form @submit.prevent="handleSubmit" @keydown="form.onKeydown($event)">
-            <FormField v-model="form.name" fieldName="name" :fieldError="form.errors.get('name')" label="commons.name" autofocus />
+            <FormField v-model="form.name" fieldName="name" :errorMessage="form.errors.get('name')" label="field.name" autofocus />
             <FormButtons
                 :submitId="isEditMode ? 'btnEditGroup' : 'btnCreateGroup'"
                 :isBusy="form.isBusy"
-                :caption="isEditMode ? $t('commons.save') : $t('commons.create')"
+                :submitLabel="isEditMode ? 'label.save' : 'label.create'"
                 :showCancelButton="true"
-                cancelLandingView="groups" />
+                @cancel="router.push({ name: 'groups' })" />
         </form>
     </FormWrapper>
 </template>

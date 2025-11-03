@@ -11,6 +11,8 @@ class ForceJsonResponse
      *
      * @param  \Illuminate\Http\Request  $request
      * @return mixed
+     *
+     * @codeCoverageIgnore
      */
     public function handle($request, Closure $next)
     {

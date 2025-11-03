@@ -9,6 +9,8 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\DB;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversTrait;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\FeatureTestCase;
 
 /**
@@ -16,7 +18,7 @@ use Tests\FeatureTestCase;
  */
 #[CoversClass(WebAuthnManageController::class)]
 #[CoversClass(RejectIfReverseProxy::class)]
-#[CoversClass(WebAuthnManageCredentials::class)]
+#[CoversTrait(WebAuthnManageCredentials::class)]
 class WebAuthnManageControllerTest extends FeatureTestCase
 {
     // use WithoutMiddleware;
@@ -30,19 +32,14 @@ class WebAuthnManageControllerTest extends FeatureTestCase
 
     public const CREDENTIAL_ID_RAW = '+VOLFKPY+/FuMI/sJ7gMllK76L3VoRUINj6lL/Z3qDg=';
 
-    /**
-     * @test
-     */
-    public function setUp() : void
+    protected function setUp() : void
     {
         parent::setUp();
 
         $this->user = User::factory()->create();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_index_returns_success_with_credentials()
     {
         DB::table('webauthn_credentials')->insert([
@@ -71,9 +68,7 @@ class WebAuthnManageControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_rename_returns_success_with_new_name()
     {
         DB::table('webauthn_credentials')->insert([
@@ -102,9 +97,7 @@ class WebAuthnManageControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_rename_invalid_data_returns_validation_error()
     {
         $response = $this->actingAs($this->user, 'web-guard')
@@ -114,9 +107,7 @@ class WebAuthnManageControllerTest extends FeatureTestCase
             ->assertStatus(422);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_rename_missing_credential_returns_not_found()
     {
         $response = $this->actingAs($this->user, 'web-guard')
@@ -129,9 +120,7 @@ class WebAuthnManageControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_index_as_reverse_proxy_returns_error()
     {
         $response = $this->actingAs($this->user, 'reverse-proxy-guard')
@@ -139,9 +128,7 @@ class WebAuthnManageControllerTest extends FeatureTestCase
             ->assertStatus(405);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_rename_as_reverse_proxy_returns_error()
     {
         $response = $this->actingAs($this->user, 'reverse-proxy-guard')
@@ -149,9 +136,7 @@ class WebAuthnManageControllerTest extends FeatureTestCase
             ->assertStatus(405);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_delete_as_reverse_proxy_returns_error()
     {
         $response = $this->actingAs($this->user, 'reverse-proxy-guard')
@@ -159,9 +144,7 @@ class WebAuthnManageControllerTest extends FeatureTestCase
             ->assertStatus(405);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_delete_returns_no_content()
     {
         $response = $this->actingAs($this->user, 'web-guard')

@@ -2,6 +2,7 @@
 
 namespace App\Api\v1\Resources;
 
+use App\Facades\IconStore;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
@@ -29,7 +30,7 @@ class TwoFAccountStoreResource extends JsonResource
             'otp_type' => $this->otp_type,
             'account'  => $this->account,
             'service'  => $this->service,
-            'icon'     => $this->icon,
+            'icon'     => $this->icon && IconStore::exists($this->icon) ? $this->icon : null,
             'secret'   => $this->when(
                 ! $request->has('withSecret') || (int) filter_var($request->input('withSecret'), FILTER_VALIDATE_BOOLEAN) == 1,
                 $this->secret

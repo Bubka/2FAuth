@@ -3,11 +3,15 @@
 namespace App\Api\v1\Controllers;
 
 use App\Api\v1\Requests\IconFetchRequest;
+use App\Facades\IconStore;
+use App\Facades\LogoLib;
+use App\Helpers\Helpers;
 use App\Http\Controllers\Controller;
 use App\Models\TwoFAccount;
-use App\Services\LogoService;
+use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Arr;
 
 class IconController extends Controller
 {
@@ -22,12 +26,22 @@ class IconController extends Controller
             'icon' => 'required|image',
         ]);
 
-        $icon = $request->file('icon');
-        $path = $icon instanceof \Illuminate\Http\UploadedFile ? $icon->store('', 'icons') : false;
+        $icon     = $request->file('icon');
+        $isStored = $name = false;
 
-        return $path
-                ? response()->json(['filename' => pathinfo($path)['basename']], 201)
-                : response()->json(['message' => __('errors.file_upload_failed')], 500);
+        if ($icon instanceof UploadedFile) {
+            try {
+                if ($content = $icon->get()) {
+                    $name     = Helpers::getRandomFilename($icon->extension());
+                    $isStored = IconStore::store($name, $content);
+                }
+            } catch (Exception) {
+            }
+        }
+
+        return $isStored
+                ? response()->json(['filename' => $name], 201)
+                : response()->json(['message' => __('error.file_upload_failed')], 500);
     }
 
     /**
@@ -35,11 +49,19 @@ class IconController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function fetch(IconFetchRequest $request, LogoService $logoService)
+    public function fetch(IconFetchRequest $request)
     {
         $validated = $request->validated();
 
-        $icon = $logoService->getIcon($validated['service']);
+        $iconCollection = Arr::has($validated, 'iconCollection') && $validated['iconCollection']
+            ? $validated['iconCollection']
+            : $request->user()->preferences['iconCollection'];
+
+        $variant = Arr::has($validated, 'variant') && $validated['variant']
+            ? $validated['variant']
+            : 'regular';
+
+        $icon = LogoLib::driver($iconCollection)->getIcon($validated['service'], $variant);
 
         return $icon
             ? response()->json(['filename' => $icon], 201)
@@ -58,7 +80,7 @@ class IconController extends Controller
             abort(403, 'unauthorized');
         }
 
-        Storage::disk('icons')->delete($icon);
+        IconStore::delete($icon);
 
         return response()->json(null, 204);
     }

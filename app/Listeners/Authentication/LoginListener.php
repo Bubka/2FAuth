@@ -24,9 +24,10 @@
 
 namespace App\Listeners\Authentication;
 
-use App\Notifications\SignedInWithNewDevice;
+use App\Notifications\SignedInWithNewDeviceNotification;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Support\Carbon;
+use TypeError;
 
 class LoginListener extends AbstractAccessListener
 {
@@ -36,30 +37,36 @@ class LoginListener extends AbstractAccessListener
     public function handle(mixed $event) : void
     {
         if (! $event instanceof Login) {
-            return;
+            throw new TypeError(self::class . '::handle(): Argument #1 ($event) must be of type ' . Login::class);
         }
 
         /**
          * @var \App\Models\User
          */
-        $user      = $event->user;
-        $ip        = config('2fauth.proxy_headers.forIp') ?? $this->request->ip();
+        $user = $event->user;
+        $ip   = config('2fauth.proxy_headers.forIp')
+            ? $this->request->header(config('2fauth.proxy_headers.forIp'), $this->request->ip())
+            : $this->request->ip();
         $userAgent = $this->request->userAgent();
-        $known     = $user->authentications()->whereIpAddress($ip)->whereUserAgent($userAgent)->whereLoginSuccessful(true)->first();
-        $newUser   = Carbon::parse($user->{$user->getCreatedAtColumn()})->diffInMinutes(Carbon::now()) < 1;
-        $guard     = $event->guard;
+        $known     = $user->authentications()
+            ->whereIpAddress($ip)
+            ->whereUserAgent($userAgent)
+            ->whereLoginSuccessful(true)
+            ->whereGuard($event->guard)
+            ->first();
+        $newUser = Carbon::parse($user->{$user->getCreatedAtColumn()})->diffInMinutes(Carbon::now(), true) < 1;
 
         $log = $user->authentications()->create([
             'ip_address'       => $ip,
             'user_agent'       => $userAgent,
             'login_at'         => now(),
             'login_successful' => true,
-            'guard'            => $guard,
+            'guard'            => $event->guard,
             'login_method'     => $this->loginMethod(),
         ]);
 
         if (! $known && ! $newUser && $user->preferences['notifyOnNewAuthDevice'] == true) {
-            $user->notify(new SignedInWithNewDevice($log));
+            $user->notify(new SignedInWithNewDeviceNotification($log));
         }
     }
 }

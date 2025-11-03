@@ -24,6 +24,7 @@
 
 namespace App\Models;
 
+use Database\Factories\AuthLogFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -40,9 +41,32 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property bool $cleared_by_user
  * @property string|null $guard
  * @property string|null $method
+ * @property string|null $login_method
+ * @property-read Model|\Eloquent $authenticatable
+ *
+ * @mixin \Eloquent
+ *
+ * @method static \Database\Factories\AuthLogFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder|AuthLog newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|AuthLog newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|AuthLog query()
+ * @method static \Illuminate\Database\Eloquent\Builder|AuthLog whereAuthenticatableId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AuthLog whereAuthenticatableType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AuthLog whereClearedByUser($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AuthLog whereGuard($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AuthLog whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AuthLog whereIpAddress($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AuthLog whereLoginAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AuthLog whereLoginMethod($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AuthLog whereLoginSuccessful($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AuthLog whereLogoutAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AuthLog whereUserAgent($value)
  */
 class AuthLog extends Model
 {
+    /**
+     * @use HasFactory<AuthLogFactory>
+     */
     use HasFactory;
 
     /**
@@ -77,10 +101,25 @@ class AuthLog extends Model
     /**
      * MorphTo relation to get the associated authenticatable user
      *
-     * @return MorphTo<\Illuminate\Database\Eloquent\Model, AuthLog>
+     * @return \Illuminate\Database\Eloquent\Relations\MorphTo<\Illuminate\Database\Eloquent\Model, $this>
      */
     public function authenticatable()
     {
         return $this->morphTo();
+    }
+
+    /**
+     * Compare 2 Authentications
+     */
+    public function equals(self $other) : bool
+    {
+        return $this->ip_address === $other->ip_address &&
+            $this->user_agent === $other->user_agent &&
+            $this->login_at == $other->login_at &&
+            $this->login_successful == $other->login_successful &&
+            $this->logout_at == $other->logout_at &&
+            $this->cleared_by_user == $other->cleared_by_user &&
+            $this->guard == $other->guard &&
+            $this->login_method == $other->login_method;
     }
 }

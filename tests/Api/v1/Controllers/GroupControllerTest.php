@@ -4,12 +4,14 @@ namespace Tests\Api\v1\Controllers;
 
 use App\Api\v1\Controllers\GroupController;
 use App\Api\v1\Resources\GroupResource;
+use App\Listeners\DissociateTwofaccountFromGroup;
 use App\Listeners\ResetUsersPreference;
 use App\Models\Group;
 use App\Models\TwoFAccount;
 use App\Models\User;
 use App\Policies\GroupPolicy;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\FeatureTestCase;
 
 #[CoversClass(GroupController::class)]
@@ -17,6 +19,7 @@ use Tests\FeatureTestCase;
 #[CoversClass(ResetUsersPreference::class)]
 #[CoversClass(GroupPolicy::class)]
 #[CoversClass(Group::class)]
+#[CoversClass(DissociateTwofaccountFromGroup::class)]
 class GroupControllerTest extends FeatureTestCase
 {
     /**
@@ -50,10 +53,7 @@ class GroupControllerTest extends FeatureTestCase
 
     private const NEW_GROUP_NAME = 'MyNewGroup';
 
-    /**
-     * @test
-     */
-    public function setUp() : void
+    protected function setUp() : void
     {
         parent::setUp();
 
@@ -80,9 +80,7 @@ class GroupControllerTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_index_returns_user_groups_only_with_pseudo_group()
     {
         $this->actingAs($this->user, 'api-guard')
@@ -107,9 +105,28 @@ class GroupControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
+    public function test_orphan_groups_are_reassign_to_the_only_user()
+    {
+        config(['auth.defaults.guard' => 'reverse-proxy-guard']);
+
+        $this->anotherUser->delete();
+        $this->userGroupA->user_id = null;
+        $this->userGroupA->save();
+
+        $this->assertCount(1, User::all());
+        $this->assertNull($this->userGroupA->user_id);
+
+        $this->actingAs($this->user, 'reverse-proxy-guard')
+            ->json('GET', '/api/v1/groups')
+            ->assertOk();
+
+        $this->userGroupA->refresh();
+
+        $this->assertNotNull($this->userGroupA->user_id);
+    }
+
+    #[Test]
     public function test_store_returns_created_group_resource()
     {
         $this->actingAs($this->user, 'api-guard')
@@ -128,9 +145,27 @@ class GroupControllerTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
+    public function test_store_with_existing_group_name_returns_validation_error()
+    {
+        $this->actingAs($this->user, 'api-guard')
+            ->json('POST', '/api/v1/groups', [
+                'name' => $this->userGroupA->name,
+            ])
+            ->assertStatus(422);
+    }
+
+    #[Test]
+    public function test_store_with_all_group_name_returns_validation_error()
+    {
+        $this->actingAs($this->user, 'api-guard')
+            ->json('POST', '/api/v1/groups', [
+                'name' => __('label.all'),
+            ])
+            ->assertStatus(422);
+    }
+
+    #[Test]
     public function test_store_invalid_data_returns_validation_error()
     {
         $this->actingAs($this->user, 'api-guard')
@@ -140,9 +175,7 @@ class GroupControllerTest extends FeatureTestCase
             ->assertStatus(422);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_show_returns_group_resource()
     {
         $group = Group::factory()->for($this->user)->create([
@@ -158,9 +191,7 @@ class GroupControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_show_missing_group_returns_not_found()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -171,9 +202,7 @@ class GroupControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_show_group_of_another_user_is_forbidden()
     {
         $response = $this->actingAs($this->anotherUser, 'api-guard')
@@ -184,9 +213,21 @@ class GroupControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
+    public function test_show_missing_group_with_id_0_returns_the_virtual_all_group_resource()
+    {
+        $userTwofaccounts = $this->user->twofaccounts;
+
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('GET', '/api/v1/groups/0')
+            ->assertOk()
+            ->assertJsonFragment([
+                'name'               => __('label.all'),
+                'twofaccounts_count' => $userTwofaccounts->count(),
+            ]);
+    }
+
+    #[Test]
     public function test_update_returns_updated_group_resource()
     {
         $group = Group::factory()->for($this->user)->create();
@@ -202,9 +243,7 @@ class GroupControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_update_missing_group_returns_not_found()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -217,9 +256,7 @@ class GroupControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_update_with_invalid_data_returns_validation_error()
     {
         $group = Group::factory()->for($this->user)->create();
@@ -231,9 +268,7 @@ class GroupControllerTest extends FeatureTestCase
             ->assertStatus(422);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_update_group_of_another_user_is_forbidden()
     {
         $response = $this->actingAs($this->anotherUser, 'api-guard')
@@ -246,9 +281,7 @@ class GroupControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_assign_accounts_returns_updated_group_resource()
     {
         $group    = Group::factory()->for($this->user)->create();
@@ -266,9 +299,7 @@ class GroupControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_assign_accounts_to_missing_group_returns_not_found()
     {
         $accounts = TwoFAccount::factory()->count(2)->for($this->user)->create();
@@ -283,9 +314,7 @@ class GroupControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_assign_invalid_accounts_returns_validation_error()
     {
         $group    = Group::factory()->for($this->user)->create();
@@ -298,9 +327,7 @@ class GroupControllerTest extends FeatureTestCase
             ->assertStatus(422);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_assign_to_group_of_another_user_is_forbidden()
     {
         $response = $this->actingAs($this->anotherUser, 'api-guard')
@@ -313,9 +340,7 @@ class GroupControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_assign_accounts_of_another_user_is_forbidden()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -327,10 +352,52 @@ class GroupControllerTest extends FeatureTestCase
                 'message',
             ]);
     }
+    
 
-    /**
-     * @test
-     */
+    #[Test]
+    public function test_reorder_returns_success()
+    {
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('POST', '/api/v1/groups/reorder', [
+                'orderedIds' => [$this->userGroupB->id, $this->userGroupA->id],
+            ])
+            ->assertStatus(200)
+            ->assertJsonStructure([
+                'message',
+                'orderedIds'
+            ])
+            ->assertJsonFragment([
+                'orderedIds' => [
+                    $this->userGroupB->id,
+                    $this->userGroupA->id
+                ]
+            ]);
+    }
+
+    #[Test]
+    public function test_reorder_with_invalid_data_returns_validation_error()
+    {
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('POST', '/api/v1/groups/reorder', [
+                'orderedIds' => '3,2,1',
+            ])
+            ->assertStatus(422);
+    }
+
+    #[Test]
+    public function test_reorder_groups_of_another_user_is_forbidden()
+    {
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('POST', '/api/v1/groups/reorder', [
+                'orderedIds' => [$this->anotherUserGroupB->id, $this->anotherUserGroupA->id],
+            ])
+            ->assertForbidden()
+            ->assertJsonStructure([
+                'message',
+            ]);
+    }
+
+    #[Test]
     public function test_accounts_returns_twofaccounts_collection()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -358,9 +425,7 @@ class GroupControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_accounts_returns_twofaccounts_collection_with_secret()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -383,9 +448,7 @@ class GroupControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_accounts_of_missing_group_returns_not_found()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -396,9 +459,7 @@ class GroupControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_accounts_of_another_user_group_is_forbidden()
     {
         $response = $this->actingAs($this->anotherUser, 'api-guard')
@@ -409,11 +470,19 @@ class GroupControllerTest extends FeatureTestCase
             ]);
     }
 
+    #[Test]
+    public function test_accounts_of_the_all_group_returns_user_twofaccounts_collection()
+    {
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('GET', '/api/v1/groups/0/twofaccounts')
+            ->assertOk()
+            ->assertJsonCount(2);
+    }
+
     /**
      * test Group deletion via API
-     *
-     * @test
      */
+    #[Test]
     public function test_destroy_group_returns_success()
     {
         $group = Group::factory()->for($this->user)->create();
@@ -425,9 +494,8 @@ class GroupControllerTest extends FeatureTestCase
 
     /**
      * test Group deletion via API
-     *
-     * @test
      */
+    #[Test]
     public function test_destroy_missing_group_returns_not_found()
     {
         $this->actingAs($this->user, 'api-guard')
@@ -438,9 +506,7 @@ class GroupControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_destroy_group_of_another_user_is_forbidden()
     {
         $response = $this->actingAs($this->anotherUser, 'api-guard')
@@ -451,9 +517,18 @@ class GroupControllerTest extends FeatureTestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
+    public function test_destroy_the_all_group_is_forbidden()
+    {
+        $response = $this->actingAs($this->anotherUser, 'api-guard')
+            ->json('DELETE', '/api/v1/groups/0')
+            ->assertForbidden()
+            ->assertJsonStructure([
+                'message',
+            ]);
+    }
+
+    #[Test]
     public function test_destroy_group_resets_user_preferences()
     {
         // Set the default group to a specific one
@@ -474,9 +549,7 @@ class GroupControllerTest extends FeatureTestCase
         $this->assertEquals(0, $this->user->preferences['activeGroup']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_twofaccount_is_released_on_group_destroy()
     {
         $this->actingAs($this->user, 'api-guard')

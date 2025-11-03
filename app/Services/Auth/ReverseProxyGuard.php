@@ -5,7 +5,6 @@
 
 namespace App\Services\Auth;
 
-use App\Events\VisitedByProxyUser;
 use Illuminate\Auth\GuardHelpers;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\UserProvider;
@@ -46,11 +45,12 @@ class ReverseProxyGuard implements Guard
         $remoteUserHeader = config('auth.auth_proxy_headers.user');
         $remoteUserHeader = $remoteUserHeader ?: 'REMOTE_USER';
         $identifier       = [];
+        $identifier['id'] = null;
 
         try {
             $identifier['id'] = request()->server($remoteUserHeader) ?? apache_request_headers()[$remoteUserHeader] ?? null;
-        } catch (\Throwable $e) {
-            $identifier['id'] = null;
+        } catch (\Throwable $e) { // @codeCoverageIgnore
+            // Do nothing
         }
 
         if (! $identifier['id'] || is_array($identifier['id'])) {
@@ -75,13 +75,7 @@ class ReverseProxyGuard implements Guard
             }
         }
 
-        if ($this->user = $this->provider->retrieveById($identifier)) {
-            if ($this->user->lastLoginAt() < now()->subMinutes(15)) {
-                event(new VisitedByProxyUser($this->user));
-            }
-        }
-
-        return $this->user;
+        return $this->user = $this->provider->retrieveById($identifier);
     }
 
     /**

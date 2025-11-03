@@ -33,13 +33,12 @@ class SetLanguage
                 array_diff(explode(',', $accepted), ['*']),
                 function ($langs, $langItem) {
                     [$langLong, $weight] = array_merge(explode(';q=', $langItem), [1]);
-                    $langShort           = substr($langLong, 0, 2);
-                    if (array_key_exists($langShort, $langs)) {
-                        if ($langs[$langShort] < $weight) {
-                            $langs[$langShort] = (float) $weight;
+                    if (array_key_exists($langLong, $langs)) {
+                        if ($langs[$langLong] < $weight) {
+                            $langs[$langLong] = (float) $weight;
                         }
                     } else {
-                        $langs[$langShort] = (float) $weight;
+                        $langs[$langLong] = (float) $weight;
                     }
 
                     return $langs;
@@ -49,17 +48,27 @@ class SetLanguage
             arsort($prefLocales);
 
             // We take the first accepted language available
+            $availableLocales = config('2fauth.locales');
+
             foreach ($prefLocales as $locale => $weight) {
-                if (in_array($locale, config('2fauth.locales'))) {
+                if (in_array($locale, $availableLocales)) {
                     $lang = $locale;
+                    break;
+                }
+                // If the language tags pushed by the browser are composed of
+                // multiple subtags (ex: fr-FR) we need to retry but only with
+                // the "language subtag" (ex: fr)
+                $shortLocale = substr($locale, 0, 2);
+                if (in_array($shortLocale, $availableLocales)) {
+                    $lang = $shortLocale;
                     break;
                 }
             }
         }
 
         $user = $request->user();
-        if (! is_null($user) && $request->user()->preferences['lang'] != 'browser') {
-            $lang = $request->user()->preferences['lang'];
+        if (! is_null($user) && $user->preferences['lang'] != 'browser') {
+            $lang = $user->preferences['lang'];
         }
 
         // If the language is not available (or partial), strings will be translated using the fallback language.

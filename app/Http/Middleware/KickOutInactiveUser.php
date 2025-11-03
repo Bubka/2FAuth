@@ -29,7 +29,7 @@ class KickOutInactiveUser
 
         $user        = Auth::user();
         $now         = Carbon::now();
-        $inactiveFor = $now->diffInSeconds(Carbon::parse($user->last_seen_at));
+        $inactiveFor = (int) $now->diffInSeconds(Carbon::parse($user->last_seen_at), true);
 
         // Fetch all setting values
         $kickUserAfterXSecond = intval($user->preferences['kickUserAfter']) * 60;

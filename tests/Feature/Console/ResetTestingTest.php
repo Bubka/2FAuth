@@ -3,13 +3,12 @@
 namespace Tests\Feature\Console;
 
 use Illuminate\Support\Facades\Config;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\FeatureTestCase;
 
 class ResetTestingTest extends FeatureTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function test_reset_testing_without_testing_mode_succeeded()
     {
         $this->artisan('2fauth:reset-testing')
@@ -17,9 +16,7 @@ class ResetTestingTest extends FeatureTestCase
             ->assertSuccessful();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_reset_testing_succeeded()
     {
         Config::set('2fauth.config.isTestingApp', true);
@@ -132,9 +129,7 @@ class ResetTestingTest extends FeatureTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_reset_testing_with_invalid_confirmation_succeeded()
     {
         Config::set('2fauth.config.isTestingApp', true);
@@ -145,9 +140,7 @@ class ResetTestingTest extends FeatureTestCase
             ->assertSuccessful();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function test_reset_testing_with_no_confirm_option_succeeded()
     {
         Config::set('2fauth.config.isTestingApp', true);

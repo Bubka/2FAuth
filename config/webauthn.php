@@ -16,7 +16,7 @@ return [
     */
 
     'relying_party' => [
-        'name' => envUnlessEmpty('WEBAUTHN_NAME', config('app.name')),
+        'name' => envUnlessEmpty('WEBAUTHN_NAME', envUnlessEmpty('APP_NAME', '2FAuth')),
         'id'   => envUnlessEmpty('WEBAUTHN_ID', null),
     ],
 

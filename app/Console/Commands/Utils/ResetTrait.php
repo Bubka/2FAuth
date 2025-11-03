@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands\Utils;
 
+use App\Facades\IconStore;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 
 trait ResetTrait
 {
@@ -21,8 +21,7 @@ trait ResetTrait
      */
     protected function deleteIcons() : void
     {
-        $filesForDelete = \Illuminate\Support\Facades\File::glob('public/icons/*.png');
-        Storage::delete($filesForDelete);
+        IconStore::clear();
 
         $this->line('Existing icons deleted');
     }
@@ -32,15 +31,20 @@ trait ResetTrait
      */
     protected function generateIcons() : void
     {
-        IconGenerator::generateIcon('amazon', IconGenerator::AMAZON);
-        IconGenerator::generateIcon('apple', IconGenerator::APPLE);
-        IconGenerator::generateIcon('dropbox', IconGenerator::DROPBOX);
-        IconGenerator::generateIcon('facebook', IconGenerator::FACEBOOK);
-        IconGenerator::generateIcon('github', IconGenerator::GITHUB);
-        IconGenerator::generateIcon('google', IconGenerator::GOOGLE);
-        IconGenerator::generateIcon('instagram', IconGenerator::INSTAGRAM);
-        IconGenerator::generateIcon('linkedin', IconGenerator::LINKEDIN);
-        IconGenerator::generateIcon('twitter', IconGenerator::TWITTER);
+        $icons = collect();
+        $icons->push(['amazon.png', base64_decode(DemoIcons::AMAZON)]);
+        $icons->push(['apple.png', base64_decode(DemoIcons::APPLE)]);
+        $icons->push(['dropbox.png', base64_decode(DemoIcons::DROPBOX)]);
+        $icons->push(['facebook.png', base64_decode(DemoIcons::FACEBOOK)]);
+        $icons->push(['github.png', base64_decode(DemoIcons::GITHUB)]);
+        $icons->push(['google.png', base64_decode(DemoIcons::GOOGLE)]);
+        $icons->push(['instagram.png', base64_decode(DemoIcons::INSTAGRAM)]);
+        $icons->push(['linkedin.png', base64_decode(DemoIcons::LINKEDIN)]);
+        $icons->push(['twitter.png', base64_decode(DemoIcons::TWITTER)]);
+
+        $icons->each(function (array $icon) {
+            IconStore::store($icon[0], $icon[1]);
+        });
 
         $this->line('Icons regenerated');
     }
@@ -81,7 +85,8 @@ trait ResetTrait
     protected function seedDB(string $seeder) : void
     {
         $this->callSilent('db:seed', [
-            '--class' => $seeder,
+            '--class'          => $seeder,
+            '--no-interaction' => 1,
         ]);
 
         $this->line('Database seeded');

@@ -3,6 +3,7 @@
 namespace App\Api\v1\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * @property mixed $id
@@ -23,12 +24,13 @@ class UserResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id'             => $this->id,
-            'name'           => $this->name,
-            'email'          => $this->email,
-            'oauth_provider' => $this->oauth_provider,
-            'preferences'    => $this->preferences,
-            'is_admin'       => $this->is_admin,
+            'id'                     => $this->id,
+            'name'                   => $this->name,
+            'email'                  => $this->email,
+            'oauth_provider'         => $this->oauth_provider,
+            'authenticated_by_proxy' => Auth::getDefaultDriver() === 'reverse-proxy-guard',
+            'preferences'            => $this->preferences,
+            'is_admin'               => $this->is_admin,
         ];
     }
 }

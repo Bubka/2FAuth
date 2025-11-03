@@ -14,6 +14,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use ParagonIE\ConstantTime\Base32;
+use TypeError;
 
 class GoogleAuthMigrator extends Migrator
 {
@@ -27,7 +28,7 @@ class GoogleAuthMigrator extends Migrator
     {
         try {
             $migrationData = base64_decode(urldecode(Str::replace('otpauth-migration://offline?data=', '', strval($migrationPayload))));
-            $protobuf      = new Payload();
+            $protobuf      = new Payload;
             $protobuf->mergeFromString($migrationData);
             $otpParameters = $protobuf->getOtpParameters();
         } catch (Exception $ex) {
@@ -58,12 +59,12 @@ class GoogleAuthMigrator extends Migrator
                 Log::debug($exception->getMessage());
 
                 // The token failed to generate a valid account so we create a fake account to be returned.
-                $fakeAccount           = new TwoFAccount();
+                $fakeAccount           = new TwoFAccount;
                 $fakeAccount->id       = TwoFAccount::FAKE_ID;
                 $fakeAccount->otp_type = $fakeAccount::TOTP;
                 // Only basic fields are filled to limit the risk of another exception.
-                $fakeAccount->account = $otp_parameters->getName() ?? __('twofaccounts.import.invalid_account');
-                $fakeAccount->service = $otp_parameters->getIssuer() ?? __('twofaccounts.import.invalid_service');
+                $fakeAccount->account = $otp_parameters->getName() ?? __('message.invalid_account');
+                $fakeAccount->service = $otp_parameters->getIssuer() ?? __('message.invalid_service');
                 // The secret field is used to pass the error, not very clean but will do the job for now.
                 $fakeAccount->secret = $exception->getMessage();
 
@@ -76,8 +77,10 @@ class GoogleAuthMigrator extends Migrator
 
     /**
      * Encode into uppercase Base32
+     *
+     * @throws TypeError
      */
-    protected function toBase32(string $str)
+    protected function toBase32(string $str) : string
     {
         return Base32::encodeUpper($str);
     }

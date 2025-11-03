@@ -29,8 +29,11 @@ class TwoFAccountCollection extends ResourceCollection
             $request->merge(['withSecret' => false]);
         }
 
+        // Here we add a timestamp to the request if OTPs have to be in the response.
+        // The 'at' parameter is used by the TwoFAccountReadResource class to obtain
+        // all OTPs at the same timestamps
         if ($request->has('withOtp')) {
-            $request->merge(['at' => time()]);
+            $request->merge(['at' => now()->timestamp]);
         }
 
         return $this->collection;

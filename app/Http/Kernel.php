@@ -71,14 +71,16 @@ class Kernel extends HttpKernel
      * @var array<string, class-string|string>
      */
     protected $middlewareAliases = [
-        'auth'                 => \App\Http\Middleware\Authenticate::class,
-        'admin'                => \App\Http\Middleware\AdminOnly::class,
-        'guest'                => \App\Http\Middleware\RejectIfAuthenticated::class,
-        'SkipIfAuthenticated'  => \App\Http\Middleware\SkipIfAuthenticated::class,
-        'throttle'             => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-        'rejectIfDemoMode'     => \App\Http\Middleware\RejectIfDemoMode::class,
-        'rejectIfReverseProxy' => \App\Http\Middleware\RejectIfReverseProxy::class,
-        'cache.headers'        => \Illuminate\Http\Middleware\SetCacheHeaders::class,
+        'auth'                          => \App\Http\Middleware\Authenticate::class,
+        'admin'                         => \App\Http\Middleware\AdminOnly::class,
+        'rejectIfAuthenticated'         => \App\Http\Middleware\RejectIfAuthenticated::class,
+        'throttle'                      => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        'rejectIfDemoMode'              => \App\Http\Middleware\RejectIfDemoMode::class,
+        'rejectIfReverseProxy'          => \App\Http\Middleware\RejectIfReverseProxy::class,
+        'RejectIfSsoOnlyAndNotForAdmin' => \App\Http\Middleware\RejectIfSsoOnlyAndNotForAdmin::class,
+        'cache.headers'                 => \Illuminate\Http\Middleware\SetCacheHeaders::class,
+        'kickOutInactiveUser'           => \App\Http\Middleware\KickOutInactiveUser::class,
+        'forceLogout'                   => \App\Http\Middleware\ForceLogout::class,
         // 'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
         // 'signed' => \App\Http\Middleware\ValidateSignature::class,
     ];

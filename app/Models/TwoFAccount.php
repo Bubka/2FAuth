@@ -7,23 +7,18 @@ use App\Exceptions\InvalidOtpParameterException;
 use App\Exceptions\InvalidSecretException;
 use App\Exceptions\UndecipherableException;
 use App\Exceptions\UnsupportedOtpTypeException;
-use App\Facades\Settings;
+use App\Facades\Icons;
 use App\Helpers\Helpers;
 use App\Models\Dto\HotpDto;
 use App\Models\Dto\TotpDto;
-use App\Services\LogoService;
-use Exception;
+use App\Models\Traits\CanEncryptField;
+use Database\Factories\TwoFAccountFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use OTPHP\Factory;
 use OTPHP\HOTP;
@@ -53,10 +48,41 @@ use SteamTotp\SteamTotp;
  * @property int|null $counter
  * @property int|null $user_id
  * @property-read \App\Models\User|null $user
+ *
+ * @method static \Database\Factories\TwoFAccountFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount ordered(string $direction = 'asc')
+ * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount query()
+ * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereAccount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereAlgorithm($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereCounter($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereDigits($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereGroupId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereIcon($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereLegacyUri($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereOrderColumn($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereOtpType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount wherePeriod($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereSecret($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereService($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereUserId($value)
+ *
+ * @mixin \Eloquent
+ *
+ * @property-read \App\Models\Icon|null $iconResource
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount orphans()
  */
 class TwoFAccount extends Model implements Sortable
 {
-    use HasFactory, SortableTrait;
+    /**
+     * @use HasFactory<TwoFAccountFactory>
+     */
+    use CanEncryptField, HasFactory, SortableTrait;
 
     const TOTP = 'totp';
 
@@ -97,17 +123,7 @@ class TwoFAccount extends Model implements Sortable
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        // 'service',
-        // 'account',
-        // 'otp_type',
-        // 'digits',
-        // 'secret',
-        // 'algorithm',
-        // 'counter',
-        // 'period',
-        // 'icon'
-    ];
+    protected $fillable = [];
 
     /**
      * The table associated with the model.
@@ -124,7 +140,7 @@ class TwoFAccount extends Model implements Sortable
     public $appends = [];
 
     /**
-     * The model's default values for attributes.
+     * The model's attributes.
      *
      * @var array
      */
@@ -211,11 +227,21 @@ class TwoFAccount extends Model implements Sortable
     /**
      * Get the user that owns the twofaccount.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Models\User, \App\Models\TwoFAccount>
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Models\User, $this>
      */
     public function user()
     {
         return $this->belongsTo(\App\Models\User::class);
+    }
+
+    /**
+     * Get the relation between the icon resource and the model.
+     *
+     * @return HasOne<\App\Models\Icon, $this>
+     */
+    public function iconResource() : HasOne
+    {
+        return $this->hasOne(Icon::class, 'name', 'icon');
     }
 
     /**
@@ -273,6 +299,29 @@ class TwoFAccount extends Model implements Sortable
     {
         // Encrypt when needed
         $this->attributes['account'] = $this->encryptOrReturn($value);
+    }
+
+    /**
+     * Get service attribute
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getServiceAttribute($value)
+    {
+        return $this->decryptOrReturn($value);
+    }
+
+    /**
+     * Set service attribute
+     *
+     * @param  string  $value
+     * @return void
+     */
+    public function setServiceAttribute($value)
+    {
+        // Encrypt when needed
+        $this->attributes['service'] = $value ? $this->encryptOrReturn($value) : $value;
     }
 
     /**
@@ -357,17 +406,17 @@ class TwoFAccount extends Model implements Sortable
         Log::info(sprintf('OTP requested for TwoFAccount (%s)', $this->id ? 'id:' . $this->id : 'preview'));
 
         // Early exit if the model has an undecipherable secret
-        if (strtolower($this->secret) === __('errors.indecipherable')) {
+        if (strtolower($this->secret) === __('error.indecipherable')) {
             Log::error('Secret cannot be deciphered, OTP generation aborted');
 
-            throw new UndecipherableException();
+            throw new UndecipherableException;
         }
 
         $this->initGenerator();
 
         try {
             if ($this->otp_type === self::HOTP) {
-                $OtpDto           = new HotpDto();
+                $OtpDto           = new HotpDto;
                 $OtpDto->otp_type = $this->otp_type;
                 $counter          = $this->generator->getParameter('counter');
                 $OtpDto->password = $this->generator->at($counter);
@@ -378,12 +427,17 @@ class TwoFAccount extends Model implements Sortable
                     $this->save();
                 }
             } else {
-                $OtpDto               = new TotpDto();
+                $OtpDto               = new TotpDto;
                 $OtpDto->otp_type     = $this->otp_type;
                 $OtpDto->generated_at = $time ?: time();
-                $OtpDto->password     = $this->otp_type === self::TOTP
-                    ? $this->generator->at($OtpDto->generated_at)
-                    : SteamTotp::getAuthCode(base64_encode(Base32::decodeUpper($this->secret)));
+                $expires_in           = $this->generator->expiresIn(); /** @phpstan-ignore-line - expiresIn() is in the TOTPInterface only */
+                if ($this->otp_type === self::TOTP) {
+                    $OtpDto->password      = $this->generator->at($OtpDto->generated_at);
+                    $OtpDto->next_password = $this->generator->at($OtpDto->generated_at + $expires_in + 2);
+                } else {
+                    $OtpDto->password      = SteamTotp::getAuthCode(base64_encode(Base32::decodeUpper($this->secret)));
+                    $OtpDto->next_password = SteamTotp::getAuthCode(base64_encode(Base32::decodeUpper($this->secret)), $expires_in + 2);
+                }
                 $OtpDto->period = $this->period;
             }
 
@@ -427,8 +481,8 @@ class TwoFAccount extends Model implements Sortable
             $this->enforceAsSteam();
         }
 
-        if (! $this->icon && ! $skipIconFetching) {
-            $this->icon = $this->getDefaultIcon();
+        if (! $this->icon && ! $skipIconFetching && Auth::user()?->preferences['getOfficialIcons']) {
+            $this->icon = Icons::buildFromOfficialLogo($this->service);
         }
 
         Log::info(sprintf('TwoFAccount filled with OTP parameters'));
@@ -495,11 +549,11 @@ class TwoFAccount extends Model implements Sortable
             $this->enforceAsSteam();
         }
         if ($this->generator->hasParameter('image')) {
-            self::setIcon($this->generator->getParameter('image'));
+            $this->icon = Icons::buildFromRemoteImage($this->generator->getParameter('image'));
         }
 
-        if (! $this->icon && ! $skipIconFetching) {
-            $this->icon = $this->getDefaultIcon();
+        if (! $this->icon && ! $skipIconFetching && Auth::user()?->preferences['getOfficialIcons']) {
+            $this->icon = Icons::buildFromOfficialLogo($this->service);
         }
 
         Log::info(sprintf('TwoFAccount filled with an URI'));
@@ -590,7 +644,7 @@ class TwoFAccount extends Model implements Sortable
                     break;
 
                 default:
-                    throw new UnsupportedOtpTypeException();
+                    throw new UnsupportedOtpTypeException;
             }
 
             if ($this->service) {
@@ -608,167 +662,7 @@ class TwoFAccount extends Model implements Sortable
     }
 
     /**
-     * Store and set the provided icon
-     *
-     * @param  \Psr\Http\Message\StreamInterface|\Illuminate\Http\File|\Illuminate\Http\UploadedFile|string|resource  $data
-     * @param  string|null  $extension  The resource extension, without the dot
-     */
-    public function setIcon($data, $extension = null) : void
-    {
-        $isRemoteData = Str::startsWith($data, ['http://', 'https://']) && Validator::make(
-            [$data],
-            ['url']
-        )->passes();
-
-        if ($isRemoteData) {
-            $icon = $this->storeRemoteImageAsIcon($data);
-        } else {
-            $icon = $extension ? $this->storeFileDataAsIcon($data, $extension) : null;
-        }
-
-        $this->icon = $icon ?: $this->icon;
-    }
-
-    /**
-     * Store img data as an icon file.
-     *
-     * @param  \Psr\Http\Message\StreamInterface|\Illuminate\Http\File|\Illuminate\Http\UploadedFile|string|resource  $content
-     * @param  string  $extension  The file extension, without the dot
-     * @return string|null The filename of the stored icon or null if the operation fails
-     */
-    private function storeFileDataAsIcon($content, $extension) : ?string
-    {
-        $filename = self::getUniqueFilename($extension);
-
-        if (Storage::disk('icons')->put($filename, $content)) {
-            if (self::isValidIcon($filename, 'icons')) {
-                Log::info(sprintf('Image "%s" successfully stored for import', $filename));
-
-                return $filename;
-            } else {
-                Storage::disk('icons')->delete($filename);
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Generate a unique filename
-     *
-     * @return string The filename
-     */
-    private function getUniqueFilename(string $extension) : string
-    {
-        return Str::random(40) . '.' . $extension;
-    }
-
-    /**
-     * Validate a file is a valid image
-     *
-     * @param  string  $filename
-     * @param  string  $disk
-     */
-    private function isValidIcon($filename, $disk) : bool
-    {
-        return in_array(Storage::disk($disk)->mimeType($filename), [
-            'image/png',
-            'image/jpeg',
-            'image/webp',
-            'image/bmp',
-            'image/x-ms-bmp',
-            'image/svg+xml',
-        ]) && (Storage::disk($disk)->mimeType($filename) !== 'image/svg+xml' ? getimagesize(Storage::disk($disk)->path($filename)) : true);
-    }
-
-    /**
-     * Gets the image resource pointed by the image url and store it as an icon
-     *
-     * @return string|null The filename of the stored icon or null if the operation fails
-     */
-    private function storeRemoteImageAsIcon(string $url) : ?string
-    {
-        try {
-            $path_parts  = pathinfo($url);
-            $newFilename = self::getUniqueFilename($path_parts['extension']);
-
-            try {
-                $response = Http::withOptions([
-                    'proxy' => config('2fauth.config.outgoingProxy'),
-                ])->retry(3, 100)->get($url);
-
-                if ($response->successful()) {
-                    Storage::disk('imagesLink')->put($newFilename, $response->body());
-                }
-            } catch (\Exception $exception) {
-                Log::error(sprintf('Cannot fetch imageLink at "%s"', $url));
-            }
-
-            if (self::isValidIcon($newFilename, 'imagesLink')) {
-                // Should be a valid image, we move it to the icons disk
-                if (Storage::disk('icons')->put($newFilename, Storage::disk('imagesLink')->get($newFilename))) {
-                    Storage::disk('imagesLink')->delete($newFilename);
-                }
-
-                Log::info(sprintf('Icon file "%s" stored', $newFilename));
-            } else {
-                Storage::disk('imagesLink')->delete($newFilename);
-                throw new \Exception('Unsupported mimeType or missing image on storage');
-            }
-
-            return Storage::disk('icons')->exists($newFilename) ? $newFilename : null;
-        }
-        // @codeCoverageIgnoreStart
-        catch (\Exception|\Throwable $ex) {
-            Log::error(sprintf('Icon storage failed: %s', $ex->getMessage()));
-
-            return null;
-        }
-        // @codeCoverageIgnoreEnd
-    }
-
-    /**
-     * Triggers logo fetching if necessary
-     *
-     * @return string|null The icon
-     */
-    private function getDefaultIcon()
-    {
-        // $logoService = App::make(LogoService::class);
-
-        return (bool) Auth::user()?->preferences['getOfficialIcons']
-            ? App::make(LogoService::class)->getIcon($this->service)
-            : null;
-    }
-
-    /**
-     * Returns an acceptable value
-     */
-    private function decryptOrReturn(mixed $value) : mixed
-    {
-        // Decipher when needed
-        if (Settings::get('useEncryption') && $value) {
-            try {
-                return Crypt::decryptString($value);
-            } catch (Exception $ex) {
-                return __('errors.indecipherable');
-            }
-        } else {
-            return $value;
-        }
-    }
-
-    /**
-     * Encrypt a value
-     */
-    private function encryptOrReturn(mixed $value) : mixed
-    {
-        // should be replaced by laravel 8 attribute encryption casting
-        return Settings::get('useEncryption') ? Crypt::encryptString($value) : $value;
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Builder<TwoFAccount>
+     * @return \Illuminate\Database\Eloquent\Builder<static>
      */
     public function buildSortQuery()
     {

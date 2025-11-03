@@ -34,6 +34,6 @@ class QrCodeController extends Controller
 
         return $file instanceof \Illuminate\Http\UploadedFile
             ? response()->json(['data' => QrCode::decode($file)], 200)
-            : response()->json(['message' => __('errors.file_upload_failed')], 500);
+            : response()->json(['message' => __('error.file_upload_failed')], 500);
     }
 }

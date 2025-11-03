@@ -22,11 +22,11 @@ This applies to Debian Buster, but similar instructions should apply for other D
 
     ```bash
     apt-get install -y --no-install-recommends \
-    php8.2 \
-    php8.2-sqlite3 php8.2-mysql \
-    php-xml php8.2-gd php8.2-mbstring \
+    php8.3 \
+    php8.3-sqlite3 php8.3-mysql \
+    php-xml php8.3-gd php8.3-mbstring \
     unzip wget ca-certificates \
-    php8.2-fpm nginx
+    php8.3-fpm nginx
     ```
 
 ## Download the code
@@ -71,7 +71,7 @@ http {
       error_page 404 /index.php;
 
       location ~ \.php$ {
-          fastcgi_pass unix:/var/run/php/php8.2-fpm.sock;
+          fastcgi_pass unix:/var/run/php/php8.3-fpm.sock;
           fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
           include fastcgi_params;
       }
@@ -155,14 +155,14 @@ chmod 500 /usr/local/bin/composer
 
     ```bash
     mkdir -p /run/php /www/data/.composer
-    touch /run/nginx.pid /var/log/php8.2-fpm.log
+    touch /run/nginx.pid /var/log/php8.3-fpm.log
     chown -R www-data \
-      /var/log/php8.2-fpm.log \
+      /var/log/php8.3-fpm.log \
       /run/nginx.pid \
       /run/php \
       /www/data/.composer
     chmod 700 /run/php /www/data/.composer
-    chmod 600 /var/log/php8.2-fpm.log
+    chmod 600 /var/log/php8.3-fpm.log
     ```
 
 ## Change user

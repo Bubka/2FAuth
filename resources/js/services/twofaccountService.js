@@ -19,8 +19,12 @@ export default {
         return apiClient.post('/twofaccounts/preview', { uri: uri }, { ...config })
     },
 
-    getLogo(service, config = {}) {
-        return apiClient.post('/icons/default', { service: service }, { ...config })
+    storeFromUri(uri, config = {}) {
+        return apiClient.post('/twofaccounts', { uri: uri }, { ...config })
+    },
+
+    getLogo(service, iconCollection, variant, config = {}) {
+        return apiClient.post('/icons/default', { service: service, iconCollection: iconCollection, variant: variant }, { ...config })
     },
 
     deleteIcon(icon, config = {}) {
@@ -51,8 +55,8 @@ export default {
         return apiClient.delete('/twofaccounts?ids=' + ids, { ...config })
     },
 
-    export(ids, config = {}) {
-        return apiClient.get('/twofaccounts/export?ids=' + ids, { ...config })
+    export(ids, otpauthFormat, config = {}) {
+        return apiClient.get('/twofaccounts/export?ids=' + ids + (otpauthFormat ? '&otpauth=1' : ''), { ...config })
     },
 
     getQrcode(id, config = {}) {

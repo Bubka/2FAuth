@@ -48,7 +48,7 @@ You can sign in 2FAuth using a security key like a Yubikey or a Titan key and di
 
 ### Data encryption
 
-Sensitive data stored in the database can be encrypted to protect them against db compromise. Encryption is provided as an option which is disabled by default. It is strongly recommanded to backup the APP_KEY value of your .env file (or the whole file) when encryption is On.
+Sensitive data stored in the database can be encrypted to protect them against db compromise. Encryption is provided as an option which is disabled by default. It is strongly recommended to backup the APP_KEY value of your .env file (or the whole file) when encryption is On.
 
 ### Auto logout
 
@@ -60,7 +60,7 @@ Sensitive data stored in the database can be encrypted to protect them against d
 
 ## Requirements
 
-* [![Requires PHP8](https://img.shields.io/badge/php-^8.2-red.svg?style=flat-square)](https://secure.php.net/downloads.php)
+* [![Requires PHP8](https://img.shields.io/badge/php-^8.3-red.svg?style=flat-square)](https://secure.php.net/downloads.php)
 * See [Laravel server requirements](https://laravel.com/docs/installation#server-requirements)
 * Any database [supported by Laravel](https://laravel.com/docs/database)
 

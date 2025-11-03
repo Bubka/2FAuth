@@ -6,7 +6,7 @@ echo "Running version ${VERSION} commit ${COMMIT} built on ${CREATED}"
 
 # Show versions
 echo "supervisord version: $(supervisord version)"
-php-fpm82 -v | head -n 1
+php-fpm83 -v | head -n 1
 nginx -v
 
 # Database creation
@@ -55,14 +55,16 @@ if [ -f /2fauth/installed ]; then
   fi
 else
   php artisan migrate:refresh --force
-  php artisan passport:install
+  php artisan passport:install --no-interaction
 fi
 
 echo "${COMMIT}" > /2fauth/installed
 php artisan storage:link --quiet
-php artisan optimize:clear
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
+
+# Clearing compiled, cache has already been cleared
+php artisan clear-compiled
+
+# Clearing and Caching config, events, routes, views
+php artisan optimize
 
 supervisord

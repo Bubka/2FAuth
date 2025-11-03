@@ -7,6 +7,8 @@ use App\Models\TwoFAccount;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class GroupService
@@ -15,28 +17,63 @@ class GroupService
      * Assign one or more accounts to a group
      *
      * @param  array|int  $ids  accounts ids to assign
-     * @param  \App\Models\Group|null  $group  The group the accounts will be assigned to
+     * @param  User  $user  The user who owns the accounts & the target group
+     * @param  mixed  $targetGroup  The group the accounts should be assigned to
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
-    public static function assign($ids, User $user, ?Group $group = null) : void
+    public static function assign($ids, User $user, mixed $targetGroup = null) : void
     {
+        // targetGroup == 0 == The pseudo group named 'All' == No group
+        // It means we do not want the accounts to be associated to a group, either a
+        // specific group or the default group from user preferences.
+        // If you need to release the accounts from an existing association, use the
+        // TwoFAccountService::withdraw() method.
+        if ($targetGroup === 0 || $targetGroup === '0') {
+            Log::info('Group assignment skipped, no group explicitly requested');
+
+            return;
+        }
+
+        // Two main cases :
+        // - A group (or group id) is passed as parameter => It has priority for use, if the group is valid
+        // - No group is passed => We try to identify a destination group through user preferences
+        $group = null;
+
+        if (! is_null($targetGroup)) {
+            if ($targetGroup instanceof Group && $targetGroup->exists && $targetGroup->user_id == $user->id) {
+                $group = $targetGroup;
+            } else {
+                $group = Group::where('id', (int) $targetGroup)
+                    ->where('user_id', $user->id)
+                    ->first();
+            }
+        }
+
         if (! $group) {
             $group = self::defaultGroup($user);
         }
 
         if ($group) {
-            $ids          = is_array($ids) ? $ids : [$ids];
-            $twofaccounts = TwoFAccount::find($ids);
+            $ids = is_array($ids) ? $ids : [$ids];
 
-            if ($user->cannot('updateEach', [(new TwoFAccount), $twofaccounts])) {
-                throw new AuthorizationException();
-            }
+            DB::transaction(function () use ($group, $ids, $user) {
+                $group        = Group::sharedLock()->find($group->id);
+                $twofaccounts = TwoFAccount::sharedLock()->find($ids);
 
-            $group->twofaccounts()->saveMany($twofaccounts);
-            $group->loadCount('twofaccounts');
+                if (! $group) {
+                    throw new ModelNotFoundException('group no longer exists');
+                }
 
-            Log::info(sprintf('Twofaccounts #%s assigned to group %s (ID #%s)', implode(',', $ids), var_export($group->name, true), $group->id));
+                if ($user->cannot('updateEach', [(new TwoFAccount), $twofaccounts])) {
+                    throw new AuthorizationException;
+                }
+
+                $group->twofaccounts()->saveMany($twofaccounts);
+
+                Log::info(sprintf('Twofaccounts #%s assigned to group %s (ID #%s)', implode(',', $ids), var_export($group->name, true), $group->id));
+            }, 5);
         } else {
             Log::info('Cannot find a group to assign the TwoFAccounts to');
         }
@@ -45,13 +82,13 @@ class GroupService
     /**
      * Prepends the pseudo group named 'All' to a group collection
      *
-     * @param  Collection<int, Group>  $groups
-     * @return Collection<int, Group>
+     * @param  \Illuminate\Database\Eloquent\Collection<int, Group>  $groups
+     * @return \Illuminate\Database\Eloquent\Collection<int, Group>
      */
-    public static function prependTheAllGroup(Collection $groups, User $user) : Collection
+    public static function prependTheAllGroup(Collection $groups, User $user)
     {
         $theAllGroup = new Group([
-            'name' => __('commons.all'),
+            'name' => __('label.all'),
         ]);
 
         $theAllGroup->id                 = 0;
@@ -63,7 +100,7 @@ class GroupService
     /**
      * Set owner of given groups
      *
-     * @param  Collection<int, Group>  $groups
+     * @param  \Illuminate\Database\Eloquent\Collection<int, Group>  $groups
      */
     public static function setUser(Collection $groups, User $user) : void
     {
@@ -82,6 +119,8 @@ class GroupService
     {
         $id = $user->preferences['defaultGroup'] === -1 ? (int) $user->preferences['activeGroup'] : (int) $user->preferences['defaultGroup'];
 
-        return Group::find($id);
+        return Group::where('id', $id)
+            ->where('user_id', $user->id)
+            ->first();
     }
 }
