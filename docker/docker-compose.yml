@@ -1,7 +1,8 @@
 version: "3"
 services:
   2fauth:
-    image: 2fauth/2fauth
+    env_file: settings.env
+    image: 2fauth/2fauth:${TAG:-latest}
     container_name: 2fauth
     volumes:
       - ./2fauth:/2fauth
