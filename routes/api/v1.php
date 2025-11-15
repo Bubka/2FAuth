@@ -52,6 +52,7 @@ Route::group(['middleware' => 'auth:api-guard'], function () {
 
     Route::post('qrcode/decode', [QrCodeController::class, 'decode'])->name('qrcode.decode');
 
+    Route::get('icons/packs', [IconController::class, 'iconPacks'])->name('icons.iconPacks');
     Route::post('icons/default', [IconController::class, 'fetch'])->name('icons.fetch');
     Route::post('icons', [IconController::class, 'upload'])->name('icons.upload');
     Route::delete('icons/{icon}', [IconController::class, 'delete'])->name('icons.delete');

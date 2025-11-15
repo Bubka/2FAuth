@@ -5,6 +5,8 @@ namespace App\Services;
 use App\Facades\IconStore;
 use App\Facades\LogoLib;
 use App\Helpers\Helpers;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -124,8 +126,58 @@ class IconService
     public static function isValidImageResource($filename, $content) : bool
     {
         Storage::disk('temp')->put($filename, $content);
-        $extension         = Str::replace('jpg', 'jpeg', pathinfo($filename, PATHINFO_EXTENSION), false);
-        $mimeType          = Storage::disk('temp')->mimeType($filename);
+        $extension = Str::replace('jpg', 'jpeg', pathinfo($filename, PATHINFO_EXTENSION), false);
+        $mimeType  = Storage::disk('temp')->mimeType($filename);
+
+        $isValid = self::IsSupportedMimeType($mimeType)
+            && ($mimeType !== 'image/svg+xml' ? self::IsImage(Storage::disk('temp')->path($filename)) : true)
+            && Str::contains($mimeType, $extension, true);
+
+        Storage::disk('temp')->delete($filename);
+
+        return $isValid;
+    }
+
+    /**
+     * List available icon packs from the configured disk
+     *
+     * @return \Illuminate\Support\Collection<int|string, array{name: string}>
+     */
+    public static function getIconPacks() : Collection
+    {
+        $iconPacks = collect();
+
+        foreach (Arr::sort(Storage::disk('iconPacks')->allDirectories()) as $directory) {
+            $files = Storage::disk('iconPacks')->files($directory);
+
+            if (str_starts_with($directory, '.') || count($files) === 0) {
+                continue;
+            }
+
+            foreach ($files as $file) {
+                $mimeType = Storage::disk('iconPacks')->mimeType($file);
+                $isImage  = $mimeType !== 'image/svg+xml'
+                    ? self::IsImage(Storage::disk('iconPacks')->path($file))
+                    : true;
+
+                if ($mimeType && self::IsSupportedMimeType($mimeType) && $isImage) {
+                    $iconPacks->push([
+                        'name' => $directory,
+                    ]);
+
+                    break;
+                }
+            }
+        }
+
+        return $iconPacks;
+    }
+
+    /**
+     * Check if the given mime type is a supported image type
+     */
+    private static function IsSupportedMimeType(string $mimeType) : bool
+    {
         $acceptedMimeTypes = [
             'image/png',
             'image/jpeg',
@@ -135,12 +187,14 @@ class IconService
             'image/svg+xml',
         ];
 
-        $isValid = in_array($mimeType, $acceptedMimeTypes)
-            && ($mimeType !== 'image/svg+xml' ? getimagesize(Storage::disk('temp')->path($filename)) : true)
-            && Str::contains($mimeType, $extension, true);
+        return in_array(Str::lower($mimeType), $acceptedMimeTypes, true);
+    }
 
-        Storage::disk('temp')->delete($filename);
-
-        return $isValid;
+    /**
+     * Check if the given path is an image file
+     */
+    private static function IsImage(string $path) : bool
+    {
+        return getimagesize($path) ? true : false;
     }
 }

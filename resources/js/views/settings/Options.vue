@@ -1,13 +1,14 @@
 <script setup>
     import tabs from './tabs'
     import userService from '@/services/userService'
+    import iconService from '@/services/iconService'
     import { useUserStore } from '@/stores/user'
     import { useGroups } from '@/stores/groups'
     import { useNotify, TabBar } from '@2fauth/ui'
     import { useAppSettingsStore } from '@/stores/appSettings'
     import { timezones } from './timezones'
     import { useI18n } from 'vue-i18n'
-    import { LucideExternalLink } from 'lucide-vue-next'
+    import { LucideExternalLink, LucideRefreshCw } from 'lucide-vue-next'
 
     const { t } = useI18n()
     const $2fauth = inject('2fauth')
@@ -16,6 +17,7 @@
     const notify = useNotify()
     const appSettings = useAppSettingsStore()
     const returnTo = useStorage($2fauth.prefix + 'returnTo', 'accounts')
+    const isLoading = ref(false)
 
     const layouts = [
         { text: 'label.grid', value: 'grid', icon: 'Grid3X3' },
@@ -25,6 +27,10 @@
         { text: 'label.light', value: 'light', icon: 'Sun' },
         { text: 'label.dark', value: 'dark', icon: 'Moon' },
         { text: 'label.automatic', value: 'system', icon: 'MonitorCheck' },
+    ]
+    const iconSources = [
+        { text: 'label.online_collection', value: 'logolib' },
+        { text: 'label.uploaded_pack', value: 'iconpack' },
     ]
     const iconCollections = [
         { text: 'selfh.st', value: 'selfh', url: 'https://selfh.st/icons/', defaultVariant: 'regular' },
@@ -46,6 +52,9 @@
             { text: 'label.regular', value: 'regular' },
         ],
     }
+    const iconPack = ref('/') // we use '/' as no-pack indicator because it's the only string that cannot be a valid pack folder name
+    const iconPacks = ref([])
+    const hasSomeIconPack = ref(false)
     const passwordFormats = [
         { text: 'label.pair_digit', value: 2, legend: 'label.pair', title: 'label.pair.legend' },
         { text: 'label.trio_digit', value: 3, legend: 'label.trio', title: 'label.trio.legend' },
@@ -116,7 +125,8 @@
                 }
             })
         }
-
+        
+        refreshIconPackList()
         user.refreshPreferences()
     })
 
@@ -126,13 +136,31 @@
      * @param {any} value 
      */
     function savePreference(preference, value) {
+
+        if (preference === 'iconSource' && value === 'iconpack') {
+            if (!hasSomeIconPack.value) {
+                useNotify().alert({ text: t('notification.no_available_icon_packs') })
+                user.preferences.iconSource = 'logolib'
+                return false
+            }
+            else {
+                if (user.preferences.iconPack != iconPack.value)
+                {
+                    user.preferences.iconPack = iconPack.value
+                    userService.updatePreference('iconPack', iconPack.value)
+                }
+            }
+        }
+
         userService.updatePreference(preference, value).then(response => {
-            useNotify().success({ text: t('notification.setting_saved') })
+            // if (showNotification) {
+                useNotify().success({ text: t('notification.setting_saved') })
+            // }
             
-            if(preference === 'lang') {
+            if (preference === 'lang') {
                 user.applyLanguage()
             }
-            else if(preference === 'theme') {
+            else if (preference === 'theme') {
                 user.applyTheme()
             }
         })
@@ -158,6 +186,39 @@
                 userService.updatePreference('iconVariant', user.preferences.iconVariant)
             }
         }
+    }
+
+    /**
+     * Refreshes the list of available icon packs
+     */
+    function refreshIconPackList() {
+        isLoading.value = true
+
+        iconService.getIconPacks().then(response => {
+            iconPacks.value = []
+            response.data.forEach((pack) => {
+                iconPacks.value.push({
+                    text: pack.name,
+                    value: pack.name
+                })
+            })
+
+            if (iconPacks.value.length == 0) {
+                hasSomeIconPack.value = false
+                iconPack.value = '/'
+                iconPacks.value.push({ text: 'label.no_available_icon_packs', value: '/' })
+            }
+            else {
+                hasSomeIconPack.value = true
+
+                iconPack.value = user.preferences.iconPack == null || !iconPacks.value.some((pack) => pack.value === user.preferences.iconPack)
+                    ? iconPacks.value[0].value
+                    : user.preferences.iconPack
+            }
+        })
+        .finally(() => {
+            isLoading.value = false
+        })
     }
 
     onBeforeRouteLeave((to) => {
@@ -200,16 +261,24 @@
                         <FormCheckbox v-model="user.preferences.showAccountsIcons" @update:model-value="val => savePreference('showAccountsIcons', val)" fieldName="showAccountsIcons" :isLocked="appSettings.lockedPreferences.includes('showAccountsIcons')" label="field.show_accounts_icons" help="field.show_accounts_icons.help" />
                         <!-- Official icons -->
                         <FormCheckbox v-model="user.preferences.getOfficialIcons" @update:model-value="val => savePreference('getOfficialIcons', val)" fieldName="getOfficialIcons" :isLocked="appSettings.lockedPreferences.includes('getOfficialIcons')" label="field.get_official_icons" help="field.get_official_icons.help" />
+                        <!-- icon source -->
+                        <FormToggle v-model="user.preferences.iconSource" @update:model-value="val => savePreference('iconSource', val)" :choices="iconSources" fieldName="iconSource" :isLocked="appSettings.lockedPreferences.includes('iconSource')" :isDisabled="!user.preferences.getOfficialIcons" label="field.icon_source" help="field.icon_source.help" />
                         <!-- icon collections -->
-                        <FormSelect v-model="user.preferences.iconCollection" @update:model-value="val => saveIconCollection(val)" :options="iconCollections" fieldName="iconCollection" :isLocked="appSettings.lockedPreferences.includes('iconCollection')" :isDisabled="!user.preferences.getOfficialIcons" label="field.icon_collection" help="field.icon_collection.help" :isIndented="true">
+                        <FormSelect v-model="user.preferences.iconCollection" @update:model-value="val => saveIconCollection(val)" :options="iconCollections" fieldName="iconCollection" :isLocked="appSettings.lockedPreferences.includes('iconCollection')" :isDisabled="!user.preferences.getOfficialIcons || user.preferences.iconSource != 'logolib'" label="field.icon_collection" help="field.icon_collection.help" :isIndented="true">
                             <a class="button is-ghost" :href="iconCollectionUrl" target="_blank" :title="$t('tooltip.visit_x', { website: iconCollectionDomain})">
                                 <LucideExternalLink />
                             </a>
                         </FormSelect>
                         <!-- icon variant -->
-                        <FormSelect v-model="user.preferences.iconVariant" @update:model-value="val => savePreference('iconVariant', val)" :options="iconCollectionVariants[user.preferences.iconCollection]" fieldName="iconVariant" :isLocked="appSettings.lockedPreferences.includes('iconVariant')" :isDisabled="!user.preferences.getOfficialIcons" label="field.icon_variant" help="field.icon_variant.help" :isIndented="true" />
+                        <FormSelect v-model="user.preferences.iconVariant" @update:model-value="val => savePreference('iconVariant', val)" :options="iconCollectionVariants[user.preferences.iconCollection]" fieldName="iconVariant" :isLocked="appSettings.lockedPreferences.includes('iconVariant')" :isDisabled="!user.preferences.getOfficialIcons || user.preferences.iconSource != 'logolib'"  label="field.icon_variant" help="field.icon_variant.help" :isIndented="true" />
                         <!-- icon variant strict fetch -->
-                        <FormCheckbox v-model="user.preferences.iconVariantStrictFetch" @update:model-value="val => savePreference('iconVariantStrictFetch', val)" fieldName="iconVariantStrictFetch" :isLocked="appSettings.lockedPreferences.includes('iconVariantStrictFetch')" :isDisabled="user.preferences.iconVariant == 'regular'" label="field.icon_variant_strict_fetch" help="field.icon_variant_strict_fetch.help" :isIndented="true" />
+                        <FormCheckbox v-model="user.preferences.iconVariantStrictFetch" @update:model-value="val => savePreference('iconVariantStrictFetch', val)" fieldName="iconVariantStrictFetch" :isLocked="appSettings.lockedPreferences.includes('iconVariantStrictFetch')" :isDisabled="!user.preferences.getOfficialIcons || user.preferences.iconVariant == 'regular' || user.preferences.iconSource != 'logolib'" label="field.icon_variant_strict_fetch" help="field.icon_variant_strict_fetch.help" :isIndented="true" />
+                        <!-- icon pack -->
+                        <FormSelect v-model="iconPack" @update:model-value="val => savePreference('iconPack', val)" :options="iconPacks" fieldName="iconPack" :errorMessage="user.preferences.iconSource == 'iconpack' && ! hasSomeIconPack ? t('message.warning_no_icon_pack') : null" :isLocked="appSettings.lockedPreferences.includes('iconPack')" :isDisabled="!user.preferences.getOfficialIcons || user.preferences.iconSource != 'iconpack' || !hasSomeIconPack" label="field.icon_pack" help="field.icon_pack.help" :isIndented="true">
+                            <button v-if="user.preferences.iconSource == 'iconpack' && user.preferences.getOfficialIcons" class="button is-ghost" @click="refreshIconPackList" type="button" :title="$t('tooltip.refresh_icon_pack_list')">
+                                <LucideRefreshCw :class="{ 'spinning': isLoading }"/>
+                            </button>
+                        </FormSelect>
                         <!-- password format -->
                         <FormCheckbox v-model="user.preferences.formatPassword" @update:model-value="val => savePreference('formatPassword', val)" fieldName="formatPassword" :isLocked="appSettings.lockedPreferences.includes('formatPassword')" label="field.password_format" help="field.password_format.help" />
                         <FormToggle v-model="user.preferences.formatPasswordBy" @update:model-value="val => savePreference('formatPasswordBy', val)" :choices="passwordFormats" fieldName="formatPasswordBy" :isLocked="appSettings.lockedPreferences.includes('formatPasswordBy')" :isDisabled="!user.preferences.formatPassword" />

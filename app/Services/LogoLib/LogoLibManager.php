@@ -25,4 +25,9 @@ class LogoLibManager extends Manager
     {
         return new DashboardiconsLogoLib;
     }
+
+    public function createStorageDriver() : StorageLogoLib
+    {
+        return new StorageLogoLib;
+    }
 }

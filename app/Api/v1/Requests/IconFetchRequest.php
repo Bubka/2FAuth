@@ -25,11 +25,18 @@ class IconFetchRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'service'        => 'string',
-            'iconCollection' => 'sometimes|required|string|in:tfa,selfh,dashboardicons',
+            'service'  => 'string',
+            'iconPack' => [
+                'sometimes',
+                'required_without:iconCollection',
+                'string',
+                new \App\Rules\IconPackExists,
+            ],
+            'iconCollection' => 'sometimes|required_without:iconPack|string|in:tfa,selfh,dashboardicons',
             'variant'        => [
                 'sometimes',
-                'required',
+                'required_with:iconCollection',
+                'missing_with:iconPack',
                 'string',
             ],
         ];

@@ -7,6 +7,7 @@ use App\Services\LogoLib\AbstractLogoLib;
 use App\Services\LogoLib\DashboardiconsLogoLib;
 use App\Services\LogoLib\LogoLibInterface;
 use App\Services\LogoLib\SelfhLogoLib;
+use App\Services\LogoLib\StorageLogoLib;
 use App\Services\LogoLib\TfaLogoLib;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Http;
@@ -38,13 +39,14 @@ class LogoLibsTest extends FeatureTestCase
         parent::setUp();
 
         Storage::fake('icons');
+        Storage::fake('iconPacks');
         Storage::fake('logos');
         Storage::fake('imagesLink');
     }
 
     #[Test]
     #[DataProvider('provideLogoData')]
-    public function test_getIcon_returns_stored_icon_file_in_requested_variant_when_logo_exists(array $logo)
+    public function test_geticon_returns_stored_icon_file_in_requested_variant_when_logo_exists(array $logo)
     {
         Http::preventStrayRequests();
         Http::fake([
@@ -108,7 +110,78 @@ class LogoLibsTest extends FeatureTestCase
     }
 
     #[Test]
-    public function test_getIcon_fetches_png_when_svg_is_not_available()
+    #[DataProvider('provideStorageLogoData')]
+    public function test_geticon_returns_stored_icon_file_from_local_iconpack_when_logo_exists(array $logo)
+    {
+        Http::preventStrayRequests();
+
+        if ($logo['filetype'] === 'svg') {
+            Storage::disk('iconPacks')->put($logo['packDir'] . '/' . $logo['iconName'], $logo['iconData']);
+        } else {
+            Storage::disk('iconPacks')->put($logo['packDir'] . '/' . $logo['iconName'], base64_decode($logo['iconData']));
+        }
+
+        $this->logoLib = $this->app->make(StorageLogoLib::class);
+        $icon          = $this->logoLib->getIcon(OtpTestData::ICON_NAME, $logo['packDir']);
+
+        $this->assertNotNull($icon);
+        $this->assertStringEndsWith($logo['filetype'], $icon);
+        Storage::disk('icons')->assertExists($icon);
+    }
+
+    /**
+     * Provide Valid data for validation test
+     */
+    public static function provideStorageLogoData() : array
+    {
+        return [
+            'SVG_ICON' => [[
+                'filetype' => 'svg',
+                'packDir'  => 'packDir',
+                'iconName' => OtpTestData::ICON_SVG,
+                'iconData' => OtpTestData::ICON_SVG_DATA,
+            ]],
+            'PNG_ICON' => [[
+                'filetype' => 'png',
+                'packDir'  => 'packDir',
+                'iconName' => OtpTestData::ICON_PNG,
+                'iconData' => OtpTestData::ICON_PNG_DATA,
+            ]],
+            'JPG_ICON' => [[
+                'filetype' => 'jpg',
+                'packDir'  => 'packDir',
+                'iconName' => OtpTestData::ICON_JPEG,
+                'iconData' => OtpTestData::ICON_JPEG_DATA,
+            ]],
+            'WEBP_ICON' => [[
+                'filetype' => 'webp',
+                'packDir'  => 'packDir',
+                'iconName' => OtpTestData::ICON_WEBP,
+                'iconData' => OtpTestData::ICON_WEBP_DATA,
+            ]],
+            'BMP_ICON' => [[
+                'filetype' => 'bmp',
+                'packDir'  => 'packDir',
+                'iconName' => OtpTestData::ICON_BMP,
+                'iconData' => OtpTestData::ICON_BMP_DATA,
+            ]],
+            'PNG_ICON_IN_SUBDIR' => [[
+                'filetype' => 'png',
+                'packDir'  => 'packDir/subDir',
+                'iconName' => OtpTestData::ICON_PNG,
+                'iconData' => OtpTestData::ICON_PNG_DATA,
+            ]],
+            'PNG_ICON_IN_SUBDIR' => [[
+                'filetype' => 'svg',
+                'packDir'  => 'packDir/subDir/anotherSubDir',
+                'iconName' => OtpTestData::ICON_SVG,
+                'iconData' => OtpTestData::ICON_SVG_DATA,
+            ]],
+        ];
+    }
+
+    #[Test]
+    public function test_geticon_fetches_png_when_svg_is_not_available()
     {
         Http::preventStrayRequests();
         Http::fake([
@@ -123,13 +196,13 @@ class LogoLibsTest extends FeatureTestCase
     }
 
     #[Test]
-    public function test_getIcon_fallbacks_to_regular_when_requested_variant_is_not_available()
+    public function test_geticon_fallbacks_to_regular_when_requested_variant_is_not_available()
     {
         Http::preventStrayRequests();
         Http::fake([
-            CommonDataProvider::SELFH_URL_ROOT . 'svg/myservice-dark.svg'  => Http::response('not found', 404),
-            CommonDataProvider::SELFH_URL_ROOT . 'png/myservice-dark.png'  => Http::response('not found', 404),
-            CommonDataProvider::SELFH_URL_ROOT . 'svg/myservice.svg' => Http::response(HttpRequestTestData::SVG_LOGO_BODY_VARIANT_REGULAR, 200),
+            CommonDataProvider::SELFH_URL_ROOT . 'svg/myservice-dark.svg' => Http::response('not found', 404),
+            CommonDataProvider::SELFH_URL_ROOT . 'png/myservice-dark.png' => Http::response('not found', 404),
+            CommonDataProvider::SELFH_URL_ROOT . 'svg/myservice.svg'      => Http::response(HttpRequestTestData::SVG_LOGO_BODY_VARIANT_REGULAR, 200),
         ]);
 
         $this->logoLib = $this->app->make(SelfhLogoLib::class);
@@ -139,16 +212,16 @@ class LogoLibsTest extends FeatureTestCase
     }
 
     #[Test]
-    public function test_getIcon_does_not_fallback_to_regular_when_requested_variant_is_not_available()
+    public function test_geticon_does_not_fallback_to_regular_when_requested_variant_is_not_available()
     {
-        $user = User::factory()->create();
+        $user                                        = User::factory()->create();
         $user['preferences->iconVariantStrictFetch'] = true;
         $user->save();
 
         Http::preventStrayRequests();
         Http::fake([
-            CommonDataProvider::SELFH_URL_ROOT . 'svg/myservice-dark.svg'  => Http::response('not found', 404),
-            CommonDataProvider::SELFH_URL_ROOT . 'png/myservice-dark.png'  => Http::response('not found', 404),
+            CommonDataProvider::SELFH_URL_ROOT . 'svg/myservice-dark.svg' => Http::response('not found', 404),
+            CommonDataProvider::SELFH_URL_ROOT . 'png/myservice-dark.png' => Http::response('not found', 404),
         ]);
 
         $this->logoLib = $this->app->make(SelfhLogoLib::class);
@@ -158,7 +231,7 @@ class LogoLibsTest extends FeatureTestCase
     }
 
     #[Test]
-    public function test_getIcon_fallbacks_to_user_preferences_when_variant_is_omitted()
+    public function test_geticon_fallbacks_to_user_preferences_when_variant_is_omitted()
     {
         $user                             = User::factory()->create();
         $user['preferences->iconVariant'] = 'dark';
@@ -177,8 +250,25 @@ class LogoLibsTest extends FeatureTestCase
     }
 
     #[Test]
+    public function test_geticon_fallbacks_to_user_preferenced_iconpack_when_variant_is_omitted()
+    {
+        $userIconPack = 'myIconPack';
+
+        $user                          = User::factory()->create();
+        $user['preferences->iconPack'] = $userIconPack;
+        $user->save();
+
+        Storage::disk('iconPacks')->put($userIconPack . '/' . OtpTestData::ICON_SVG, HttpRequestTestData::SVG_LOGO_BODY_VARIANT_DARK);
+
+        $this->logoLib = $this->app->make(StorageLogoLib::class);
+        $icon          = $this->actingAs($user)->logoLib->getIcon(OtpTestData::ICON_NAME);
+
+        $this->assertEquals(trim(Storage::disk('icons')->get($icon)), '<?xml version="1.0" encoding="UTF-8"?> ' . HttpRequestTestData::SVG_LOGO_BODY_VARIANT_DARK);
+    }
+
+    #[Test]
     #[DataProvider('provideVariantInvalidData')]
-    public function test_getIcon_fallbacks_to_regular_when_variant_is_invalid_without_auth($variant)
+    public function test_geticon_fallbacks_to_regular_when_variant_is_invalid_without_auth($variant)
     {
         Http::preventStrayRequests();
         Http::fake([
@@ -210,7 +300,7 @@ class LogoLibsTest extends FeatureTestCase
     }
 
     #[Test]
-    public function test_getIcon_returns_null_when_tfa_github_request_fails()
+    public function test_geticon_returns_null_when_tfa_github_request_fails()
     {
         Http::preventStrayRequests();
         Http::fake([
@@ -226,7 +316,7 @@ class LogoLibsTest extends FeatureTestCase
 
     #[Test]
     #[DataProviderExternal(CommonDataProvider::class, 'iconsCollectionProvider')]
-    public function test_getIcon_returns_null_when_logo_fetching_fails(array $iconProvider)
+    public function test_geticon_returns_null_when_logo_fetching_fails(array $iconProvider)
     {
         Http::preventStrayRequests();
         Http::fake([
@@ -243,7 +333,7 @@ class LogoLibsTest extends FeatureTestCase
     }
 
     #[Test]
-    public function test_getIcon_returns_null_when_no_logo_exists_in_the_tfa_collection()
+    public function test_geticon_returns_null_when_no_logo_matches_in_the_tfa_collection()
     {
         Http::preventStrayRequests();
         Http::fake([
@@ -252,13 +342,13 @@ class LogoLibsTest extends FeatureTestCase
         ]);
 
         $this->logoLib = $this->app->make(TfalogoLib::class);
-        $icon          = $this->logoLib->getIcon('no_logo_should_exists_with_this_name');
+        $icon          = $this->logoLib->getIcon('no_logo_should_match_with_this_name');
 
         $this->assertNull($icon);
     }
 
     #[Test]
-    public function test_TfalogoLib_loads_empty_collection_when_tfajson_fetching_fails()
+    public function test_tfalogolib_loads_empty_collection_when_tfajson_fetching_fails()
     {
         Http::preventStrayRequests();
         Http::fake([
@@ -271,5 +361,31 @@ class LogoLibsTest extends FeatureTestCase
 
         $this->assertNull($icon);
         Storage::disk('logos')->assertMissing(TfalogoLib::TFA_JSON);
+    }
+
+    #[Test]
+    public function test_geticon_returns_null_when_no_logo_matches_in_the_iconpack()
+    {
+        Http::preventStrayRequests();
+
+        Storage::disk('iconPacks')->put('packDir/' . OtpTestData::ICON_SVG, OtpTestData::ICON_SVG_DATA);
+
+        $this->logoLib = $this->app->make(StorageLogoLib::class);
+        $icon          = $this->logoLib->getIcon('no_logo_should_match_with_this_name', 'packDir');
+
+        $this->assertNull($icon);
+    }
+
+    #[Test]
+    public function test_geticon_returns_null_when_the_iconpack_does_not_exist()
+    {
+        Http::preventStrayRequests();
+
+        Storage::disk('iconPacks')->put('packDir/' . OtpTestData::ICON_SVG, OtpTestData::ICON_SVG_DATA);
+
+        $this->logoLib = $this->app->make(StorageLogoLib::class);
+        $icon          = $this->logoLib->getIcon(OtpTestData::ICON_SVG, 'missing_packDir');
+
+        $this->assertNull($icon);
     }
 }

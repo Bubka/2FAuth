@@ -3,6 +3,7 @@
     import QrContentDisplay from '@/components/QrContentDisplay.vue'
     import { FormProtectedField } from '@2fauth/formcontrols'
     import twofaccountService from '@/services/twofaccountService'
+    import iconService from '@/services/iconService'
     import { useUserStore } from '@/stores/user'
     import { useTwofaccounts } from '@/stores/twofaccounts'
     import { useGroups } from '@/stores/groups'
@@ -342,13 +343,13 @@
         if (isEditMode.value) {
             if (tempIcon.value) {
                 if (tempIcon.value !== form.icon) {
-                    twofaccountService.deleteIcon(tempIcon.value)
+                    iconService.deleteIcon(tempIcon.value)
                 }
                 tempIcon.value = ''
             }
         }
         else if (tempIcon.value) {
-            twofaccountService.deleteIcon(tempIcon.value)
+            iconService.deleteIcon(tempIcon.value)
             tempIcon.value = ''
             if (showQuickForm.value) {
                 form.icon = ''
@@ -421,21 +422,44 @@
         if (user.preferences.getOfficialIcons) {
             fetchingLogo.value = true
 
-            twofaccountService.getLogo(form.service, iconCollection.value, iconCollectionVariant.value, { returnError: true })
-            .then(response => {
-                if (response.status === 201) {
-                    // clean possible already uploaded temp icon
-                    deleteTempIcon()
-                    tempIcon.value = response.data.filename;
-                }
-                else notify.warn( {text: t('error.no_icon_for_this_variant') })
-            })
-            .catch(() => {
-                notify.warn({ text: t('error.no_icon_for_this_variant') })
-            })
-            .finally(() => {
-                fetchingLogo.value = false
-            })
+            if (user.preferences.iconSource == 'logolib') {
+                iconService.getLogo(form.service, iconCollection.value, iconCollectionVariant.value, { returnError: true })
+                .then(response => {
+                    if (response.status === 201) {
+                        // clean possible already uploaded temp icon
+                        deleteTempIcon()
+                        tempIcon.value = response.data.filename;
+                    }
+                    else notify.warn( {text: t('error.no_icon_for_this_variant') })
+                })
+                .catch(() => {
+                    notify.warn({ text: t('error.no_icon_for_this_variant') })
+                })
+                .finally(() => {
+                    fetchingLogo.value = false
+                })
+            }
+            else {
+                iconService.getLogoFromPack(form.service, user.preferences.iconPack, { returnError: true })
+                .then(response => {
+                    if (response.status === 201) {
+                        // clean possible already uploaded temp icon
+                        deleteTempIcon()
+                        tempIcon.value = response.data.filename;
+                    }
+                    else notify.warn( {text: t('error.no_match_in_the_icon_pack') })
+                })
+                .catch(error => {
+                    if (error.response.status === 422) {
+                        form.clear()
+                        form.errors.set(form.extractErrors(error.response))
+                    }
+                    else notify.warn({ text: t('error.no_match_in_the_icon_pack') })
+                })
+                .finally(() => {
+                    fetchingLogo.value = false
+                })
+            }
         }
     }
 
@@ -556,26 +580,38 @@
                 <label for="filUploadIcon" class="label">{{ $t('field.icon') }}</label>
                 <!-- try my luck -->
                 <!-- <fieldset v-if="user.preferences.getOfficialIcons" :disabled="!form.service"> -->
-                    <div class="field has-addons">
-                        <div class="control">
-                            <div class="select">
-                                <select :disabled="!form.service" name="icon-collection" v-model="iconCollection">
-                                    <option v-for="collection in iconCollections" :key="collection.text" :value="collection.value">
-                                        {{ collection.text }}
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-                        <div v-if="iconCollectionVariants[iconCollection]" class="control">
-                            <div class="select">
-                                <select :disabled="!form.service" name="icon-collection-variant" v-model="iconCollectionVariant">
-                                    <option v-for="variant in iconCollectionVariants[iconCollection]" :key="variant.value" :value="variant.value">
-                                        {{ $t(variant.text) }}
-                                    </option>
-                                </select>
-                            </div>
+                <div v-if="user.preferences.iconSource == 'logolib'" class="field has-addons">
+                    <div class="control">
+                        <div class="select">
+                            <select :disabled="!form.service" name="icon-collection" v-model="iconCollection">
+                                <option v-for="collection in iconCollections" :key="collection.text" :value="collection.value">
+                                    {{ collection.text }}
+                                </option>
+                            </select>
                         </div>
                     </div>
+                    <div v-if="iconCollectionVariants[iconCollection]" class="control">
+                        <div class="select">
+                            <select :disabled="!form.service" name="icon-collection-variant" v-model="iconCollectionVariant">
+                                <option v-for="variant in iconCollectionVariants[iconCollection]" :key="variant.value" :value="variant.value">
+                                    {{ $t(variant.text) }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div v-else-if="user.preferences.iconSource == 'iconpack'" class="field">
+                    <div class="control">
+                        <div class="select">
+                            <select :disabled="true" name="icon-pack" v-model="user.preferences.iconPack">
+                                <option :value="user.preferences.iconPack">
+                                    {{ user.preferences.iconPack }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <FormFieldError v-if="form.errors.hasAny('iconPack') != undefined" :error="form.errors.get('iconPack')" :field="'iconPack'" />
+                </div>
                 <!-- </fieldset> -->
                 <div class="field is-grouped">
                     <!-- try my luck button -->

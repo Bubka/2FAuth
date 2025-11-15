@@ -3,6 +3,7 @@
 namespace App\Api\v1\Controllers;
 
 use App\Api\v1\Requests\IconFetchRequest;
+use App\Facades\Icons;
 use App\Facades\IconStore;
 use App\Facades\LogoLib;
 use App\Helpers\Helpers;
@@ -53,19 +54,35 @@ class IconController extends Controller
     {
         $validated = $request->validated();
 
-        $iconCollection = Arr::has($validated, 'iconCollection') && $validated['iconCollection']
-            ? $validated['iconCollection']
-            : $request->user()->preferences['iconCollection'];
+        if (Arr::has($validated, 'iconPack')) {
+            $icon = LogoLib::driver('storage')->getIcon($validated['service'], Arr::get($validated, 'iconPack'));
+        } else {
+            $iconCollection = Arr::has($validated, 'iconCollection') && $validated['iconCollection']
+                ? $validated['iconCollection']
+                : $request->user()->preferences['iconCollection'];
 
-        $variant = Arr::has($validated, 'variant') && $validated['variant']
-            ? $validated['variant']
-            : 'regular';
+            $variant = Arr::has($validated, 'variant') && $validated['variant']
+                ? $validated['variant']
+                : 'regular';
 
-        $icon = LogoLib::driver($iconCollection)->getIcon($validated['service'], $variant);
+            $icon = LogoLib::driver($iconCollection)->getIcon($validated['service'], $variant);
+        }
 
         return $icon
             ? response()->json(['filename' => $icon], 201)
             : response()->json(null, 204);
+    }
+
+    /**
+     * List all icon packs
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function iconPacks(Request $request)
+    {
+        $iconPacks = Icons::getIconPacks();
+
+        return response()->json($iconPacks, 200);
     }
 
     /**

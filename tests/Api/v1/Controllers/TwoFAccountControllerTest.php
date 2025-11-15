@@ -238,6 +238,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         parent::setUp();
 
         Storage::fake('icons');
+        Storage::fake('iconPacks');
         Storage::fake('logos');
         Storage::fake('imagesLink');
 
@@ -1174,8 +1175,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->assertJsonFragment([
                 'orderedIds' => [
                     $this->twofaccountB->id,
-                    $this->twofaccountA->id
-                ]
+                    $this->twofaccountA->id,
+                ],
             ]);
     }
 

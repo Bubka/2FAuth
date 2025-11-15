@@ -23,14 +23,6 @@ export default {
         return apiClient.post('/twofaccounts', { uri: uri }, { ...config })
     },
 
-    getLogo(service, iconCollection, variant, config = {}) {
-        return apiClient.post('/icons/default', { service: service, iconCollection: iconCollection, variant: variant }, { ...config })
-    },
-
-    deleteIcon(icon, config = {}) {
-        return apiClient.delete('/icons/' + icon, { ...config })
-    },
-
     getOtpById(id, config = {}) {
         return apiClient.get('/twofaccounts/' + id + '/otp', { ...config }) 
     },

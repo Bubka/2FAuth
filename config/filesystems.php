@@ -68,6 +68,12 @@ return [
             'throw' => false,
         ],
 
+        'iconPacks' => [
+            'driver' => 'local',
+            'root' => storage_path('app/iconPacks'),
+            'throw' => false,
+        ],
+
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
