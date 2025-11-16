@@ -64,19 +64,41 @@ trait ResetTrait
     protected function flushDB() : void
     {
         // Reset the db
-        DB::table(config('auth.passwords.users.table'))->delete();
-        DB::table('oauth_access_tokens')->delete();
-        DB::table('oauth_personal_access_clients')->delete();
-        DB::table('oauth_refresh_tokens')->delete();
-        DB::table('webauthn_credentials')->delete();
-        DB::table(config('auth.passwords.webauthn.table'))->delete();
-        DB::table('twofaccounts')->delete();
-        DB::table('groups')->delete();
-        DB::table('users')->delete();
-        DB::table('options')->delete();
-        DB::table('auth_logs')->delete();
+        $tables = [
+            config('auth.passwords.users.table'), // password_resets
+            'oauth_access_tokens',
+            'oauth_auth_codes',
+            'oauth_clients',
+            'oauth_personal_access_clients',
+            'oauth_refresh_tokens',
+            'webauthn_credentials',
+            config('auth.passwords.webauthn.table'), // webauthn_recoveries
+            'twofaccounts',
+            'groups',
+            'users',
+            'options',
+            'icons',
+            'auth_logs',
+            'sessions',
+            'cache',
+            'cache_locks',
+        ];
+
+        foreach ($tables as $table) {
+            $this->deleteTableRecords($table);
+        }
 
         $this->line('Database cleaned');
+    }
+
+    /**
+     * Delete all records from a table
+     */
+    protected function deleteTableRecords(string $table) : void
+    {
+        if (DB::getSchemaBuilder()->hasTable($table)) {
+            DB::table($table)->delete();
+        }
     }
 
     /**
