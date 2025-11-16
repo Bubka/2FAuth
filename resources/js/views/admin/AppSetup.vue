@@ -4,12 +4,14 @@
     import { useAppSettingsUpdater } from '@/composables/appSettingsUpdater'
     import { useAppSettingsStore } from '@/stores/appSettings'
     import { useNotify, TabBar } from '@2fauth/ui'
+    import { useErrorHandler } from '@2fauth/stores'
     import { useUserStore } from '@/stores/user'
     import VersionChecker from '@/components/VersionChecker.vue'
     import CopyButton from '@/components/CopyButton.vue'
     import { useI18n } from 'vue-i18n'
     import { LucideSend } from 'lucide-vue-next'
 
+    const errorHandler = useErrorHandler()
     const { t } = useI18n()
     const $2fauth = inject('2fauth')
     const user = useUserStore()
@@ -20,6 +22,7 @@
     const infos = ref()
     const listInfos = ref(null)
     const isSendingTestEmail = ref(false)
+    const testEmailError = ref(null)
     const isClearingCache = ref(false)
     const healthEndPoint = $2fauth.config.subdirectory + '/up'
     const healthEndPointFullPath = location.hostname + $2fauth.config.subdirectory + '/up'
@@ -28,9 +31,20 @@
      * Sends a test email
      */
     function sendTestEmail() {
-        isSendingTestEmail.value = true;
+        isSendingTestEmail.value = true
+        testEmailError.value = null
 
-        systemService.sendTestEmail()
+        systemService.sendTestEmail({returnError: true}).then(response => {
+            notify.success({ text: t('notification.test_email_sent') })
+        })
+        .catch(error => {
+            if (error.response.status === 424) {
+                testEmailError.value = error.response.data.details
+            }
+            else  {
+                errorHandler.show(error)
+            }
+        })
         .finally(() => {
             isSendingTestEmail.value = false;
         })
@@ -112,6 +126,10 @@
                                 <span>{{ $t('label.send') }}</span>
                             </button>   
                         </div>
+                    </div>
+                    <div v-if="testEmailError" class="about-debug box is-family-monospace is-size-7">
+                        <FormFieldError v-if="testEmailError" :error="$t('error.email_sending_failed')" :field="'testEmail'" />
+                        {{ testEmailError }}
                     </div>
                     <!-- healthcheck -->
                     <div class="field">

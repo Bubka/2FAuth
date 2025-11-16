@@ -24,7 +24,7 @@ export default {
      * @returns Promise
      */
     sendTestEmail(config = {}) {
-        return webClient.post('system/test-email', { ...config })
+        return webClient.post('system/test-email', {}, { ...config })
     },
 
     /**

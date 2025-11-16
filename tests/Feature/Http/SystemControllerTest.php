@@ -120,7 +120,7 @@ class SystemControllerTest extends FeatureTestCase
     }
 
     #[Test]
-    public function test_testEmail_sends_a_notification()
+    public function test_testemail_sends_a_notification()
     {
         Notification::fake();
 
@@ -133,22 +133,22 @@ class SystemControllerTest extends FeatureTestCase
     }
 
     #[Test]
-    public function test_testEmail_returns_unauthorized()
+    public function test_testemail_returns_unauthorized()
     {
-        $response = $this->json('GET', '/system/infos')
+        $response = $this->json('POST', '/system/test-email', [])
             ->assertUnauthorized();
     }
 
     #[Test]
-    public function test_testEmail_returns_forbidden()
+    public function test_testemail_returns_forbidden()
     {
         $response = $this->actingAs($this->user, 'api-guard')
-            ->json('GET', '/system/infos')
+            ->json('POST', '/system/test-email', [])
             ->assertForbidden();
     }
 
     #[Test]
-    public function test_testEmail_returns_success_even_if_sending_fails()
+    public function test_testemail_returns_error_if_sending_fails()
     {
         Notification::fake();
 
@@ -157,13 +157,13 @@ class SystemControllerTest extends FeatureTestCase
         $response = $this->actingAs($this->admin, 'web-guard')
             ->json('POST', '/system/test-email', []);
 
-        $response->assertStatus(200);
+        $response->assertStatus(424);
 
         Notification::assertNothingSentTo($this->admin);
     }
 
     #[Test]
-    public function test_clearCache_returns_success()
+    public function test_clearcache_returns_success()
     {
         $response = $this->actingAs($this->admin, 'web-guard')
             ->json('GET', '/system/clear-cache');
@@ -172,7 +172,7 @@ class SystemControllerTest extends FeatureTestCase
     }
 
     #[Test]
-    public function test_clearCache_is_forbidden_to_user()
+    public function test_clearcache_is_forbidden_to_user()
     {
         $response = $this->actingAs($this->user, 'web-guard')
             ->json('GET', '/system/clear-cache');

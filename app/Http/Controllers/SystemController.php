@@ -73,6 +73,8 @@ class SystemController extends Controller
             $request->user()->notify(new TestEmailSettingNotification);
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
+
+            return response()->json(['message' => __('error.email_sending_failed'), 'details' => $th->getMessage()], 424);
         }
 
         return response()->json(['message' => 'Ok']);
