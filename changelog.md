@@ -1,5 +1,11 @@
 # Change log
 
+## [5.6.1] - 2025-11-21
+
+### Fixed
+
+- [issue #510](https://github.com/Bubka/2FAuth/issues/510) Composer 2.7+ blocks installation due to svg-sanitize advisory
+
 ## [5.6.0] - 2025-06-18
 
 Unless you are an icon lover, there isn't much to get excited about with 2FAuth v5.6 (see below for details). That's because I'm focused on refactoring the web app's front end and the web extension so that they are built using shared components. The process is time consuming, but it's a necessary step to optimize future developments and avoid repeating code.
