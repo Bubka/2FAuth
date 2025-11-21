@@ -28,7 +28,7 @@
         "ext-xml": "*",
         "chillerlan/php-qrcode": "^5.0.3",
         "doctormckay/steam-totp": "^1.0",
-        "enshrined/svg-sanitize": "^0.20.0",
+        "enshrined/svg-sanitize": "^0.22.0",
         "google/protobuf": "^4.26",
         "jackiedo/dotenv-editor": "dev-master",
         "jenssegers/agent": "^2.6.4",
