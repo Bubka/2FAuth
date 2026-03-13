@@ -19,6 +19,7 @@ use App\Http\Middleware\AddContentSecurityPolicyHeaders;
 use App\Http\Middleware\CustomCreateFreshApiToken;
 use App\Http\Middleware\SetLanguage;
 use App\Http\Middleware\VerifyCsrfToken;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 // use Illuminate\Foundation\Events\DiagnosingHealth;
@@ -102,16 +103,51 @@ Route::get('refresh-csrf', function () {
     return csrf_token();
 });
 
+Route::get('/manifest.json', function () {
+    $base = request()->getBaseUrl();
+
+    return response()->json([
+        "short_name" => config('app.name'),
+        "name" => config('app.name'),
+        "start_url" => url('/'),
+        "scope" => "/",
+        "display" => "standalone",
+        "theme_color" => "#242424",
+        "icons" => [[
+            "src"   => "favicon_lg.png",
+            "type"  => "image/png",
+            "sizes" => "180x180"
+        ]],
+        "shortcuts" => [
+            [
+                "name"        => "New 2FA",
+                "url"         => "/start",
+                "description" => "Add a new 2FA account by flashing a QR code or filling out a form"
+            ],
+            [
+                "name"        => "Import 2FAs",
+                "url"         => "/account/import",
+                "description" => "Import 2FA accounts previously exported from another 2FA app"
+            ],
+            [
+                "name"        => "Settings",
+                "url"         => "/settings/options",
+                "description" => "Manage your 2FAuth user settings"
+            ],
+        ]
+    ]);
+});
+
 Route::withoutMiddleware([
     StartSession::class,
     VerifyCsrfToken::class,
     SubstituteBindings::class,
     SetLanguage::class,
     CustomCreateFreshApiToken::class,
-])->get('/up', function () {
+])->get('/up', function (Request $request) {
     // Event::dispatch(new DiagnosingHealth);
     return view('health', [
-        'isSecure' => str_starts_with(config('app.url'), 'https'),
+        'isSecure' => $request->isSecure(),
     ]);
 });
 

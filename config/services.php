@@ -27,7 +27,7 @@ return [
         'userinfo_url' => env('OPENID_USERINFO_URL'),
         'client_id' => env('OPENID_CLIENT_ID'),
         'client_secret' => env('OPENID_CLIENT_SECRET'),
-        'redirect' => env('APP_URL') . '/socialite/callback/openid',
+        'redirect' => rtrim(env('APP_URL', 'http://localhost'), '/') . '/socialite/callback/openid',
         'guzzle' => [
             'verify' => envUnlessEmpty('OPENID_HTTP_VERIFY_SSL_PEER', true), // https://docs.guzzlephp.org/en/stable/request-options.html#verify
             'proxy' => env('PROXY_FOR_OUTGOING_REQUESTS', ''),
@@ -37,7 +37,7 @@ return [
     'github' => [
         'client_id' => env('GITHUB_CLIENT_ID'),
         'client_secret' => env('GITHUB_CLIENT_SECRET'),
-        'redirect' => env('APP_URL') . '/socialite/callback/github',
+        'redirect' => rtrim(env('APP_URL', 'http://localhost'), '/') . '/socialite/callback/github',
         'guzzle' => [
             'proxy' => env('PROXY_FOR_OUTGOING_REQUESTS', ''),
         ]
@@ -46,7 +46,7 @@ return [
     // 'google' => [    
     //     'client_id' => env('GOOGLE_CLIENT_ID'),  
     //     'client_secret' => env('GOOGLE_CLIENT_SECRET'),  
-    //     'redirect' => env('APP_URL') . '/socialite/callback/google ',
+    //     'redirect' => rtrim(env('APP_URL', 'http://localhost'), '/') . '/socialite/callback/google ',
     // ],
 
     'postmark' => [

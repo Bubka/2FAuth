@@ -1,4 +1,6 @@
 <script setup>
+    const $2fauth = inject('2fauth')
+    
     const props = defineProps({
         provider: {
             type: String,
@@ -23,7 +25,7 @@
 </script>
 
 <template>
-    <a :id="'lnkSignWith' + props.provider" class="button is-link" :href="'socialite/redirect/' + props.provider">
+    <a :id="'lnkSignWith' + props.provider" class="button is-link" :href="$2fauth.config.subdirectory + '/socialite/redirect/' + props.provider">
         {{ $t('label.' + props.provider) }}
     </a>
     

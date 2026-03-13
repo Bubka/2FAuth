@@ -62,7 +62,7 @@ return [
 
     // 'frontend_url' => env('FRONTEND_URL', 'http://localhost:3000'),
 
-    'asset_url' => env('ASSET_URL', $appUrl),
+    'asset_url' => env('ASSET_URL', '/' . env('APP_SUBDIRECTORY', '')),
 
     /*
     |--------------------------------------------------------------------------
