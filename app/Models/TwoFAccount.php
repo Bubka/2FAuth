@@ -15,6 +15,7 @@ use App\Models\Traits\CanEncryptField;
 use Database\Factories\TwoFAccountFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
@@ -48,6 +49,7 @@ use SteamTotp\SteamTotp;
  * @property int|null $counter
  * @property int|null $user_id
  * @property-read \App\Models\User|null $user
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TwoFAccountShare> $shares
  *
  * @method static \Database\Factories\TwoFAccountFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount newModelQuery()
@@ -242,6 +244,60 @@ class TwoFAccount extends Model implements Sortable
     public function iconResource() : HasOne
     {
         return $this->hasOne(Icon::class, 'name', 'icon');
+    }
+
+    /**
+     * Get shares defined for the twofaccount.
+     *
+     * @return HasMany<\App\Models\TwoFAccountShare, $this>
+     */
+    public function shares() : HasMany
+    {
+        return $this->hasMany(TwoFAccountShare::class, 'twofaccount_id');
+    }
+
+    /**
+     * Determine whether the provided user owns this account.
+     */
+    public function isOwnedBy(User $user) : bool
+    {
+        return (int) $this->user_id === (int) $user->id;
+    }
+
+    /**
+     * Determine whether the provided user is granted a share on this account.
+     */
+    public function isSharedWith(User $user) : bool
+    {
+        if ($this->isOwnedBy($user)) {
+            return false;
+        }
+
+        return $this->shares()
+            ->where(function ($query) use ($user) {
+                $query->where(function ($innerQuery) use ($user) {
+                    $innerQuery
+                        ->where('scope', TwoFAccountShare::SCOPE_USER)
+                        ->where('shared_with_user_id', $user->id);
+                })->orWhere('scope', TwoFAccountShare::SCOPE_ALL_USERS);
+            })
+            ->exists();
+    }
+
+    /**
+     * Determine whether the provided user can generate an OTP for this account.
+     */
+    public function canGenerateOtp(User $user) : bool
+    {
+        return $this->isOwnedBy($user) || $this->isSharedWith($user);
+    }
+
+    /**
+     * Determine whether the provided user can read account secret.
+     */
+    public function canReadSecret(User $user) : bool
+    {
+        return $this->isOwnedBy($user);
     }
 
     /**

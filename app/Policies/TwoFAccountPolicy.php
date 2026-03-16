@@ -28,10 +28,42 @@ class TwoFAccountPolicy
      */
     public function view(User $user, TwoFAccount $twofaccount)
     {
-        $can = $this->isOwnerOf($user, $twofaccount);
+        $can = $twofaccount->isOwnedBy($user) || $twofaccount->isSharedWith($user);
 
         if (! $can) {
             Log::notice(sprintf('User ID #%s cannot view twofaccount ID #%s', $user->id, $twofaccount->id));
+        }
+
+        return $can;
+    }
+
+    /**
+     * Determine whether the user can read the account secret.
+     *
+     * @return \Illuminate\Auth\Access\Response|bool
+     */
+    public function viewSecret(User $user, TwoFAccount $twofaccount)
+    {
+        $can = $twofaccount->canReadSecret($user);
+
+        if (! $can) {
+            Log::notice(sprintf('User ID #%s cannot view secret of twofaccount ID #%s', $user->id, $twofaccount->id));
+        }
+
+        return $can;
+    }
+
+    /**
+     * Determine whether the user can generate OTP for the account.
+     *
+     * @return \Illuminate\Auth\Access\Response|bool
+     */
+    public function generateOtp(User $user, TwoFAccount $twofaccount)
+    {
+        $can = $twofaccount->canGenerateOtp($user);
+
+        if (! $can) {
+            Log::notice(sprintf('User ID #%s cannot generate otp for twofaccount ID #%s', $user->id, $twofaccount->id));
         }
 
         return $can;
@@ -136,6 +168,38 @@ class TwoFAccountPolicy
                 return $twofaccount->id;
             });
             Log::notice(sprintf('User ID #%s cannot delete all twofaccounts in IDs #%s', $user->id, implode(',', $ids->toArray())));
+        }
+
+        return $can;
+    }
+
+    /**
+     * Determine whether the user can transfer account ownership.
+     *
+     * @return \Illuminate\Auth\Access\Response|bool
+     */
+    public function transferOwnership(User $user, TwoFAccount $twofaccount)
+    {
+        $can = $twofaccount->isOwnedBy($user);
+
+        if (! $can) {
+            Log::notice(sprintf('User ID #%s cannot transfer twofaccount ID #%s', $user->id, $twofaccount->id));
+        }
+
+        return $can;
+    }
+
+    /**
+     * Determine whether the user can manage account shares.
+     *
+     * @return \Illuminate\Auth\Access\Response|bool
+     */
+    public function manageShares(User $user, TwoFAccount $twofaccount)
+    {
+        $can = $twofaccount->isOwnedBy($user);
+
+        if (! $can) {
+            Log::notice(sprintf('User ID #%s cannot manage shares for twofaccount ID #%s', $user->id, $twofaccount->id));
         }
 
         return $can;
