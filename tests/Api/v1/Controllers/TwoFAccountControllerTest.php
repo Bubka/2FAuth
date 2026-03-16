@@ -363,6 +363,25 @@ class TwoFAccountControllerTest extends FeatureTestCase
     }
 
     #[Test]
+    public function test_index_includes_accounts_shared_with_authenticated_user()
+    {
+        TwoFAccountShare::create([
+            'twofaccount_id' => $this->twofaccountC->id,
+            'shared_with_user_id' => $this->user->id,
+            'scope' => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id' => $this->anotherUser->id,
+        ]);
+
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts')
+            ->assertOk()
+            ->assertJsonCount(3, $key = null)
+            ->assertJsonFragment([
+                'id' => $this->twofaccountC->id,
+            ]);
+    }
+
+    #[Test]
     public function test_orphan_accounts_are_reassign_to_the_only_user()
     {
         config(['auth.defaults.guard' => 'reverse-proxy-guard']);
@@ -1576,13 +1595,71 @@ class TwoFAccountControllerTest extends FeatureTestCase
     }
 
     #[Test]
+    public function test_get_otp_of_shared_twofaccount_returns_success()
+    {
+        TwoFAccountShare::create([
+            'twofaccount_id' => $this->twofaccountC->id,
+            'shared_with_user_id' => $this->user->id,
+            'scope' => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id' => $this->anotherUser->id,
+        ]);
+
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/otp')
+            ->assertOk()
+            ->assertJsonPath('password', fn ($value) => is_string($value) && strlen($value) > 0);
+    }
+
+    #[Test]
     public function test_count_returns_right_number_of_twofaccounts()
     {
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('GET', '/api/v1/twofaccounts/count')
             ->assertStatus(200)
             ->assertExactJson([
-                'count' => 2,
+                'owned' => 2,
+                'shared' => 0,
+                'total' => 2,
+            ]);
+    }
+
+    #[Test]
+    public function test_count_includes_shared_twofaccounts()
+    {
+        TwoFAccountShare::create([
+            'twofaccount_id' => $this->twofaccountC->id,
+            'shared_with_user_id' => $this->user->id,
+            'scope' => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id' => $this->anotherUser->id,
+        ]);
+
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/count')
+            ->assertStatus(200)
+            ->assertExactJson([
+                'owned' => 2,
+                'shared' => 1,
+                'total' => 3,
+            ]);
+    }
+
+    #[Test]
+    public function test_count_includes_accounts_shared_with_all_users()
+    {
+        TwoFAccountShare::create([
+            'twofaccount_id' => $this->twofaccountC->id,
+            'shared_with_user_id' => null,
+            'scope' => TwoFAccountShare::SCOPE_ALL_USERS,
+            'created_by_user_id' => $this->anotherUser->id,
+        ]);
+
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/count')
+            ->assertStatus(200)
+            ->assertExactJson([
+                'owned' => 2,
+                'shared' => 1,
+                'total' => 3,
             ]);
     }
 

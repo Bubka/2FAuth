@@ -20,6 +20,7 @@ use App\Facades\TwoFAccounts;
 use App\Helpers\Helpers;
 use App\Http\Controllers\Controller;
 use App\Models\TwoFAccount;
+use App\Models\TwoFAccountShare;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -42,11 +43,27 @@ class TwoFAccountController extends Controller
             }
         }
 
-        $validated = $request->validated();
+        $validated                = $request->validated();
+        $visibleTwoFAccountsQuery = TwoFAccount::query()
+            ->where(function ($query) use ($request) {
+                $query
+                    ->where('user_id', $request->user()->id)
+                    ->orWhereHas('shares', function ($shareQuery) use ($request) {
+                        $shareQuery->where(function ($scopeQuery) use ($request) {
+                            $scopeQuery
+                                ->where(function ($userScopeQuery) use ($request) {
+                                    $userScopeQuery
+                                        ->where('scope', TwoFAccountShare::SCOPE_USER)
+                                        ->where('shared_with_user_id', $request->user()->id);
+                                })
+                                ->orWhere('scope', TwoFAccountShare::SCOPE_ALL_USERS);
+                        });
+                    });
+            });
 
         return Arr::has($validated, 'ids')
-            ? new TwoFAccountCollection($request->user()->twofaccounts()->whereIn('id', Helpers::commaSeparatedToArray($validated['ids']))->get()->sortBy('order_column'))
-            : new TwoFAccountCollection($request->user()->twofaccounts->sortBy('order_column'));
+            ? new TwoFAccountCollection($visibleTwoFAccountsQuery->whereIn('id', Helpers::commaSeparatedToArray($validated['ids']))->get()->sortBy('order_column'))
+            : new TwoFAccountCollection($visibleTwoFAccountsQuery->get()->sortBy('order_column'));
     }
 
     /**
@@ -226,7 +243,7 @@ class TwoFAccountController extends Controller
         // The request input is the ID of an existing account
         if ($id) {
             $twofaccount = TwoFAccount::findOrFail((int) $id);
-            $this->authorize('view', $twofaccount);
+            $this->authorize('generateOtp', $twofaccount);
         }
 
         // The request input is an uri
@@ -261,7 +278,33 @@ class TwoFAccountController extends Controller
      */
     public function count(Request $request)
     {
-        return response()->json(['count' => $request->user()->twofaccounts->count()], 200);
+        $ownedCount = TwoFAccount::query()
+            ->where('user_id', $request->user()->id)
+            ->count();
+
+        $sharedCount = TwoFAccount::query()
+            ->where('user_id', '!=', $request->user()->id)
+            ->whereHas('shares', function ($shareQuery) use ($request) {
+                $shareQuery->where(function ($scopeQuery) use ($request) {
+                    $scopeQuery
+                        ->where(function ($userScopeQuery) use ($request) {
+                            $userScopeQuery
+                                ->where('scope', TwoFAccountShare::SCOPE_USER)
+                                ->where('shared_with_user_id', $request->user()->id);
+                        })
+                        ->orWhere('scope', TwoFAccountShare::SCOPE_ALL_USERS);
+                });
+            })
+            ->distinct('twofaccounts.id')
+            ->count('twofaccounts.id');
+
+        $totalCount = $ownedCount + $sharedCount;
+
+        return response()->json([
+            'owned'  => $ownedCount,
+            'shared' => $sharedCount,
+            'total'  => $totalCount,
+        ], 200);
     }
 
     /**
