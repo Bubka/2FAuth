@@ -6,6 +6,7 @@ use App\Api\v1\Controllers\IconController;
 use App\Api\v1\Controllers\QrCodeController;
 use App\Api\v1\Controllers\SettingController;
 use App\Api\v1\Controllers\TwoFAccountController;
+use App\Api\v1\Controllers\TwoFAccountShareController;
 use App\Api\v1\Controllers\UserController;
 use App\Api\v1\Controllers\UserManagerController;
 use Illuminate\Support\Facades\Date;
@@ -44,6 +45,12 @@ Route::group(['middleware' => 'auth:api-guard'], function () {
     Route::get('twofaccounts/count', [TwoFAccountController::class, 'count'])->name('twofaccounts.count');
     Route::get('twofaccounts/{id}/otp', [TwoFAccountController::class, 'otp'])->where('id', '[0-9]+')->name('twofaccounts.show.otp');
     Route::post('twofaccounts/otp', [TwoFAccountController::class, 'otp'])->name('twofaccounts.otp');
+    Route::get('twofaccounts/{twofaccount}/shares', [TwoFAccountShareController::class, 'index'])->name('twofaccounts.shares.index');
+    Route::post('twofaccounts/{twofaccount}/shares', [TwoFAccountShareController::class, 'store'])->name('twofaccounts.shares.store');
+    Route::delete('twofaccounts/{twofaccount}/shares', [TwoFAccountShareController::class, 'destroyAllUsers'])->name('twofaccounts.shares.destroyAllUsers');
+    Route::post('twofaccounts/{twofaccount}/shares/all', [TwoFAccountShareController::class, 'shareAll'])->name('twofaccounts.shares.shareAll');
+    Route::delete('twofaccounts/{twofaccount}/shares/all', [TwoFAccountShareController::class, 'unshareAll'])->name('twofaccounts.shares.unshareAll');
+    Route::delete('twofaccounts/{twofaccount}/shares/{user}', [TwoFAccountShareController::class, 'destroy'])->name('twofaccounts.shares.destroy');
     Route::apiResource('twofaccounts', TwoFAccountController::class);
 
     Route::get('groups/{group}/twofaccounts', [GroupController::class, 'accounts'])->name('groups.show.twofaccounts');
