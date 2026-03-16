@@ -4,6 +4,7 @@ namespace Tests\Api\v1\Controllers;
 
 use App\Api\v1\Controllers\QrCodeController;
 use App\Models\TwoFAccount;
+use App\Models\TwoFAccountShare;
 use App\Models\User;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -74,6 +75,24 @@ class QrCodeControllerTest extends FeatureTestCase
     #[Test]
     public function test_show_qrcode_of_another_user_is_forbidden()
     {
+        $response = $this->actingAs($this->anotherUser, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/qrcode')
+            ->assertForbidden()
+            ->assertJsonStructure([
+                'message',
+            ]);
+    }
+
+    #[Test]
+    public function test_show_qrcode_of_shared_account_is_forbidden()
+    {
+        TwoFAccountShare::create([
+            'twofaccount_id' => $this->twofaccount->id,
+            'shared_with_user_id' => $this->anotherUser->id,
+            'scope' => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id' => $this->user->id,
+        ]);
+
         $response = $this->actingAs($this->anotherUser, 'api-guard')
             ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/qrcode')
             ->assertForbidden()

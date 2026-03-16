@@ -12,6 +12,7 @@ use App\Facades\IconStore;
 use App\Facades\Settings;
 use App\Models\Group;
 use App\Models\TwoFAccount;
+use App\Models\TwoFAccountShare;
 use App\Models\User;
 use App\Policies\TwoFAccountPolicy;
 use App\Providers\MigrationServiceProvider;
@@ -462,6 +463,35 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->assertJsonStructure([
                 'message',
             ]);
+    }
+
+    #[Test]
+    public function test_show_twofaccount_shared_with_user_returns_resource_without_secret()
+    {
+        TwoFAccountShare::create([
+            'twofaccount_id' => $this->twofaccountC->id,
+            'shared_with_user_id' => $this->user->id,
+            'scope' => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id' => $this->anotherUser->id,
+        ]);
+
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '?withSecret=1')
+            ->assertOk()
+            ->assertJsonFragment([
+                'id' => $this->twofaccountC->id,
+            ])
+            ->assertJsonMissingPath('secret');
+    }
+
+    #[Test]
+    public function test_show_owner_can_request_secret_explicitly()
+    {
+        $response = $this->actingAs($this->anotherUser, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '?withSecret=1')
+            ->assertOk()
+            ->assertJsonPath('id', $this->twofaccountC->id)
+            ->assertJsonPath('secret', $this->twofaccountC->secret);
     }
 
     #[Test]
