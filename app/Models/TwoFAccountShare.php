@@ -51,9 +51,9 @@ class TwoFAccountShare extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'twofaccount_id' => 'integer',
+        'twofaccount_id'      => 'integer',
         'shared_with_user_id' => 'integer',
-        'created_by_user_id' => 'integer',
+        'created_by_user_id'  => 'integer',
     ];
 
     /**
