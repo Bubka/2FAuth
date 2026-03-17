@@ -47,10 +47,7 @@ class TwoFAccountShareController extends Controller
         $this->authorize('manageShares', $twofaccount);
 
         if ($this->twoFAccountShareService->isSharedWithAll($twofaccount)) {
-            return response()->json([
-                'message' => 'conflict',
-                'reason'  => ['twofaccount' => 'This account is already shared with all users.'],
-            ], 409);
+            return $this->shareAllConflictResponse('This account is already shared with all users.');
         }
 
         $targetUsers = User::query()
@@ -86,10 +83,7 @@ class TwoFAccountShareController extends Controller
         $this->authorize('manageShares', $twofaccount);
 
         if ($this->twoFAccountShareService->isSharedWithAll($twofaccount)) {
-            return response()->json([
-                'message' => 'conflict',
-                'reason'  => ['twofaccount' => 'This account is shared with all users.'],
-            ], 409);
+            return $this->shareAllConflictResponse('This account is already shared with all users.');
         }
 
         $this->twoFAccountShareService->revokeUserShare($twofaccount, $user);
@@ -105,10 +99,7 @@ class TwoFAccountShareController extends Controller
         $this->authorize('manageShares', $twofaccount);
 
         if ($this->twoFAccountShareService->isSharedWithAll($twofaccount)) {
-            return response()->json([
-                'message' => 'conflict',
-                'reason'  => ['twofaccount' => 'This account is shared with all users.'],
-            ], 409);
+            return $this->shareAllConflictResponse('This account is already shared with all users.');
         }
 
         $this->twoFAccountShareService->revokeAllUserShares($twofaccount);
@@ -150,5 +141,16 @@ class TwoFAccountShareController extends Controller
         $this->twoFAccountShareService->unshareWithAll($twofaccount);
 
         return response()->json(null, 204);
+    }
+
+    /**
+     * Return a conflict response for actions that cannot be performed when the account is shared with all users.
+     */
+    private function shareAllConflictResponse(string $reason) : JsonResponse
+    {
+        return response()->json([
+            'message' => 'conflict',
+            'reason'  => ['twofaccount' => $reason],
+        ], 409);
     }
 }
