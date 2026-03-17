@@ -5,6 +5,7 @@ namespace Tests\Feature\Services;
 use App\Facades\TwoFAccounts;
 use App\Models\Group;
 use App\Models\TwoFAccount;
+use App\Models\TwoFAccountShare;
 use App\Models\User;
 use App\Services\TwoFAccountService;
 use Illuminate\Support\Facades\Exceptions;
@@ -319,6 +320,106 @@ class TwoFAccountServiceTest extends FeatureTestCase
 
         $this->assertDatabaseMissing('twofaccounts', [
             'id' => $twofaccount->id,
+        ]);
+    }
+
+    #[Test]
+    public function test_transfer_ownership_sets_new_owner_and_returns_refreshed_model()
+    {
+        $owner = User::factory()->create();
+        $newOwner = User::factory()->create();
+        $twofaccount = TwoFAccount::factory()->for($owner)->create();
+
+        $transferredTwofaccount = TwoFAccounts::transferOwnership($twofaccount, $newOwner);
+
+        $this->assertEquals($newOwner->id, $transferredTwofaccount->user_id);
+        $this->assertDatabaseHas('twofaccounts', [
+            'id'      => $twofaccount->id,
+            'user_id' => $newOwner->id,
+        ]);
+    }
+
+    #[Test]
+    public function test_transfer_ownership_removes_obsolete_user_share_to_new_owner_only()
+    {
+        $owner = User::factory()->create();
+        $newOwner = User::factory()->create();
+        $otherSharedUser = User::factory()->create();
+        $twofaccount = TwoFAccount::factory()->for($owner)->create();
+
+        TwoFAccountShare::create([
+            'twofaccount_id' => $twofaccount->id,
+            'shared_with_user_id' => $newOwner->id,
+            'scope' => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id' => $owner->id,
+        ]);
+        TwoFAccountShare::create([
+            'twofaccount_id' => $twofaccount->id,
+            'shared_with_user_id' => $otherSharedUser->id,
+            'scope' => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id' => $owner->id,
+        ]);
+
+        TwoFAccounts::transferOwnership($twofaccount, $newOwner);
+
+        $this->assertDatabaseMissing('twofaccount_shares', [
+            'twofaccount_id' => $twofaccount->id,
+            'scope' => TwoFAccountShare::SCOPE_USER,
+            'shared_with_user_id' => $newOwner->id,
+        ]);
+        $this->assertDatabaseHas('twofaccount_shares', [
+            'twofaccount_id' => $twofaccount->id,
+            'scope' => TwoFAccountShare::SCOPE_USER,
+            'shared_with_user_id' => $otherSharedUser->id,
+        ]);
+    }
+
+    #[Test]
+    public function test_transfer_ownership_preserves_all_users_share_scope()
+    {
+        $owner = User::factory()->create();
+        $newOwner = User::factory()->create();
+        $twofaccount = TwoFAccount::factory()->for($owner)->create();
+
+        TwoFAccountShare::create([
+            'twofaccount_id' => $twofaccount->id,
+            'shared_with_user_id' => null,
+            'scope' => TwoFAccountShare::SCOPE_ALL_USERS,
+            'created_by_user_id' => $owner->id,
+        ]);
+
+        TwoFAccounts::transferOwnership($twofaccount, $newOwner);
+
+        $this->assertDatabaseHas('twofaccount_shares', [
+            'twofaccount_id' => $twofaccount->id,
+            'scope' => TwoFAccountShare::SCOPE_ALL_USERS,
+            'shared_with_user_id' => null,
+            'created_by_user_id' => $owner->id,
+        ]);
+    }
+
+    #[Test]
+    public function test_transfer_ownership_preserves_created_by_user_id_for_remaining_user_share()
+    {
+        $owner = User::factory()->create();
+        $newOwner = User::factory()->create();
+        $otherSharedUser = User::factory()->create();
+        $twofaccount = TwoFAccount::factory()->for($owner)->create();
+
+        TwoFAccountShare::create([
+            'twofaccount_id' => $twofaccount->id,
+            'shared_with_user_id' => $otherSharedUser->id,
+            'scope' => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id' => $owner->id,
+        ]);
+
+        TwoFAccounts::transferOwnership($twofaccount, $newOwner);
+
+        $this->assertDatabaseHas('twofaccount_shares', [
+            'twofaccount_id' => $twofaccount->id,
+            'scope' => TwoFAccountShare::SCOPE_USER,
+            'shared_with_user_id' => $otherSharedUser->id,
+            'created_by_user_id' => $owner->id,
         ]);
     }
 

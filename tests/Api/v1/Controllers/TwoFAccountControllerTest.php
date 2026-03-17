@@ -889,6 +889,16 @@ class TwoFAccountControllerTest extends FeatureTestCase
     }
 
     #[Test]
+    public function test_transfer_ownership_of_missing_twofaccount_returns_not_found()
+    {
+        $this->actingAs($this->anotherUser, 'api-guard')
+            ->json('PATCH', '/api/v1/twofaccounts/1000000/owner', [
+                'new_owner_id' => $this->user->id,
+            ])
+            ->assertNotFound();
+    }
+
+    #[Test]
     public function test_transfer_ownership_removes_explicit_share_of_new_owner()
     {
         TwoFAccountShare::create([
@@ -908,6 +918,51 @@ class TwoFAccountControllerTest extends FeatureTestCase
             'twofaccount_id' => $this->twofaccountC->id,
             'shared_with_user_id' => $this->user->id,
             'scope' => TwoFAccountShare::SCOPE_USER,
+        ]);
+    }
+
+    #[Test]
+    public function test_transfer_ownership_keeps_explicit_share_to_other_users()
+    {
+        TwoFAccountShare::create([
+            'twofaccount_id' => $this->twofaccountC->id,
+            'shared_with_user_id' => $this->anotherUser->id,
+            'scope' => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id' => $this->anotherUser->id,
+        ]);
+
+        $this->actingAs($this->anotherUser, 'api-guard')
+            ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
+                'new_owner_id' => $this->user->id,
+            ])
+            ->assertOk();
+
+        $this->assertDatabaseHas('twofaccount_shares', [
+            'twofaccount_id' => $this->twofaccountC->id,
+            'shared_with_user_id' => $this->anotherUser->id,
+            'scope' => TwoFAccountShare::SCOPE_USER,
+        ]);
+    }
+
+    #[Test]
+    public function test_transfer_ownership_does_not_reassign_created_by_user_id()
+    {
+        $share = TwoFAccountShare::create([
+            'twofaccount_id' => $this->twofaccountC->id,
+            'shared_with_user_id' => $this->anotherUser->id,
+            'scope' => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id' => $this->anotherUser->id,
+        ]);
+
+        $this->actingAs($this->anotherUser, 'api-guard')
+            ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
+                'new_owner_id' => $this->user->id,
+            ])
+            ->assertOk();
+
+        $this->assertDatabaseHas('twofaccount_shares', [
+            'id' => $share->id,
+            'created_by_user_id' => $this->anotherUser->id,
         ]);
     }
 
@@ -965,6 +1020,49 @@ class TwoFAccountControllerTest extends FeatureTestCase
     }
 
     #[Test]
+    public function test_transfer_ownership_grants_new_owner_secret_access()
+    {
+        $this->actingAs($this->anotherUser, 'api-guard')
+            ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
+                'new_owner_id' => $this->user->id,
+            ])
+            ->assertOk();
+
+        $this->actingAs($this->user, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '?withSecret=1')
+            ->assertOk()
+            ->assertJsonPath('secret', $this->twofaccountC->secret);
+    }
+
+    #[Test]
+    public function test_transfer_ownership_grants_new_owner_qrcode_access()
+    {
+        $this->actingAs($this->anotherUser, 'api-guard')
+            ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
+                'new_owner_id' => $this->user->id,
+            ])
+            ->assertOk();
+
+        $this->actingAs($this->user, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/qrcode')
+            ->assertOk();
+    }
+
+    #[Test]
+    public function test_transfer_ownership_revokes_old_owner_otp_access_without_share_all()
+    {
+        $this->actingAs($this->anotherUser, 'api-guard')
+            ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
+                'new_owner_id' => $this->user->id,
+            ])
+            ->assertOk();
+
+        $this->actingAs($this->anotherUser, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/otp')
+            ->assertForbidden();
+    }
+
+    #[Test]
     public function test_transfer_ownership_keeps_share_all_scope_if_already_applied()
     {
         TwoFAccountShare::create([
@@ -985,6 +1083,287 @@ class TwoFAccountControllerTest extends FeatureTestCase
             'shared_with_user_id' => null,
             'scope' => TwoFAccountShare::SCOPE_ALL_USERS,
         ]);
+    }
+
+    #[Test]
+    public function test_transfer_ownership_with_share_all_keeps_old_owner_view_access()
+    {
+        TwoFAccountShare::create([
+            'twofaccount_id' => $this->twofaccountC->id,
+            'shared_with_user_id' => null,
+            'scope' => TwoFAccountShare::SCOPE_ALL_USERS,
+            'created_by_user_id' => $this->anotherUser->id,
+        ]);
+
+        $this->actingAs($this->anotherUser, 'api-guard')
+            ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
+                'new_owner_id' => $this->user->id,
+            ])
+            ->assertOk();
+
+        $this->actingAs($this->anotherUser, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccountC->id)
+            ->assertOk();
+    }
+
+    #[Test]
+    public function test_transfer_ownership_with_share_all_keeps_old_owner_otp_access()
+    {
+        TwoFAccountShare::create([
+            'twofaccount_id' => $this->twofaccountC->id,
+            'shared_with_user_id' => null,
+            'scope' => TwoFAccountShare::SCOPE_ALL_USERS,
+            'created_by_user_id' => $this->anotherUser->id,
+        ]);
+
+        $this->actingAs($this->anotherUser, 'api-guard')
+            ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
+                'new_owner_id' => $this->user->id,
+            ])
+            ->assertOk();
+
+        $this->actingAs($this->anotherUser, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/otp')
+            ->assertOk()
+            ->assertJsonPath('password', fn ($value) => is_string($value) && strlen($value) > 0);
+    }
+
+    #[Test]
+    public function test_transfer_ownership_with_share_all_does_not_expose_secret_to_old_owner()
+    {
+        TwoFAccountShare::create([
+            'twofaccount_id' => $this->twofaccountC->id,
+            'shared_with_user_id' => null,
+            'scope' => TwoFAccountShare::SCOPE_ALL_USERS,
+            'created_by_user_id' => $this->anotherUser->id,
+        ]);
+
+        $this->actingAs($this->anotherUser, 'api-guard')
+            ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
+                'new_owner_id' => $this->user->id,
+            ])
+            ->assertOk();
+
+        $this->actingAs($this->anotherUser, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '?withSecret=1')
+            ->assertOk()
+            ->assertJsonMissingPath('secret');
+    }
+
+    #[Test]
+    public function test_transfer_ownership_with_share_all_forbids_old_owner_qrcode_access()
+    {
+        TwoFAccountShare::create([
+            'twofaccount_id' => $this->twofaccountC->id,
+            'shared_with_user_id' => null,
+            'scope' => TwoFAccountShare::SCOPE_ALL_USERS,
+            'created_by_user_id' => $this->anotherUser->id,
+        ]);
+
+        $this->actingAs($this->anotherUser, 'api-guard')
+            ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
+                'new_owner_id' => $this->user->id,
+            ])
+            ->assertOk();
+
+        $this->actingAs($this->anotherUser, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/qrcode')
+            ->assertForbidden();
+    }
+
+    #[Test]
+    public function test_transfer_ownership_updates_count_for_old_and_new_owner()
+    {
+        $this->actingAs($this->anotherUser, 'api-guard')
+            ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
+                'new_owner_id' => $this->user->id,
+            ])
+            ->assertOk();
+
+        $this->actingAs($this->anotherUser, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/count')
+            ->assertOk()
+            ->assertExactJson([
+                'owned' => 2,
+                'shared' => 0,
+                'total' => 2,
+            ]);
+
+        $this->actingAs($this->user, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/count')
+            ->assertOk()
+            ->assertExactJson([
+                'owned' => 3,
+                'shared' => 0,
+                'total' => 3,
+            ]);
+    }
+
+    #[Test]
+    public function test_transfer_ownership_with_share_all_keeps_old_owner_count_as_shared()
+    {
+        TwoFAccountShare::create([
+            'twofaccount_id' => $this->twofaccountC->id,
+            'shared_with_user_id' => null,
+            'scope' => TwoFAccountShare::SCOPE_ALL_USERS,
+            'created_by_user_id' => $this->anotherUser->id,
+        ]);
+
+        $this->actingAs($this->anotherUser, 'api-guard')
+            ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
+                'new_owner_id' => $this->user->id,
+            ])
+            ->assertOk();
+
+        $this->actingAs($this->anotherUser, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/count')
+            ->assertOk()
+            ->assertExactJson([
+                'owned' => 2,
+                'shared' => 1,
+                'total' => 3,
+            ]);
+    }
+
+    #[Test]
+    public function test_transfer_ownership_revokes_old_owner_manage_shares_permission()
+    {
+        $this->actingAs($this->anotherUser, 'api-guard')
+            ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
+                'new_owner_id' => $this->user->id,
+            ])
+            ->assertOk();
+
+        $this->actingAs($this->anotherUser, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/shares')
+            ->assertForbidden();
+    }
+
+    #[Test]
+    public function test_transfer_ownership_revokes_old_owner_update_permission()
+    {
+        $this->actingAs($this->anotherUser, 'api-guard')
+            ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
+                'new_owner_id' => $this->user->id,
+            ])
+            ->assertOk();
+
+        $this->actingAs($this->anotherUser, 'api-guard')
+            ->json('PUT', '/api/v1/twofaccounts/' . $this->twofaccountC->id, OtpTestData::ARRAY_OF_FULL_VALID_PARAMETERS_FOR_CUSTOM_HOTP)
+            ->assertForbidden();
+    }
+
+    #[Test]
+    public function test_transfer_ownership_revokes_old_owner_delete_permission()
+    {
+        $this->actingAs($this->anotherUser, 'api-guard')
+            ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
+                'new_owner_id' => $this->user->id,
+            ])
+            ->assertOk();
+
+        $this->actingAs($this->anotherUser, 'api-guard')
+            ->json('DELETE', '/api/v1/twofaccounts/' . $this->twofaccountC->id)
+            ->assertForbidden();
+    }
+
+    #[Test]
+    public function test_transfer_ownership_grants_new_owner_manage_shares_permission()
+    {
+        $this->actingAs($this->anotherUser, 'api-guard')
+            ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
+                'new_owner_id' => $this->user->id,
+            ])
+            ->assertOk();
+
+        $this->actingAs($this->user, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/shares')
+            ->assertOk();
+    }
+
+    #[Test]
+    public function test_transfer_ownership_grants_new_owner_share_store_permission()
+    {
+        $this->actingAs($this->anotherUser, 'api-guard')
+            ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
+                'new_owner_id' => $this->user->id,
+            ])
+            ->assertOk();
+
+        $this->actingAs($this->user, 'api-guard')
+            ->json('POST', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/shares', [
+                'ids' => [$this->anotherUser->id],
+            ])
+            ->assertCreated()
+            ->assertJsonPath('twofaccount_id', $this->twofaccountC->id)
+            ->assertJsonPath('users.0.id', $this->anotherUser->id);
+    }
+
+    #[Test]
+    public function test_transfer_ownership_grants_new_owner_share_all_permission()
+    {
+        $this->actingAs($this->anotherUser, 'api-guard')
+            ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
+                'new_owner_id' => $this->user->id,
+            ])
+            ->assertOk();
+
+        $this->actingAs($this->user, 'api-guard')
+            ->json('POST', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/shares/all')
+            ->assertCreated()
+            ->assertJsonPath('is_shared_with_all', true)
+            ->assertJsonPath('twofaccount_id', $this->twofaccountC->id);
+    }
+
+    #[Test]
+    public function test_transfer_ownership_grants_new_owner_unshare_all_permission()
+    {
+        TwoFAccountShare::create([
+            'twofaccount_id' => $this->twofaccountC->id,
+            'shared_with_user_id' => null,
+            'scope' => TwoFAccountShare::SCOPE_ALL_USERS,
+            'created_by_user_id' => $this->anotherUser->id,
+        ]);
+
+        $this->actingAs($this->anotherUser, 'api-guard')
+            ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
+                'new_owner_id' => $this->user->id,
+            ])
+            ->assertOk();
+
+        $this->actingAs($this->user, 'api-guard')
+            ->json('DELETE', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/shares/all')
+            ->assertNoContent();
+    }
+
+    #[Test]
+    public function test_transfer_ownership_revokes_old_owner_share_store_permission()
+    {
+        $this->actingAs($this->anotherUser, 'api-guard')
+            ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
+                'new_owner_id' => $this->user->id,
+            ])
+            ->assertOk();
+
+        $this->actingAs($this->anotherUser, 'api-guard')
+            ->json('POST', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/shares', [
+                'ids' => [$this->anotherUser->id],
+            ])
+            ->assertForbidden();
+    }
+
+    #[Test]
+    public function test_transfer_ownership_revokes_old_owner_share_all_permission()
+    {
+        $this->actingAs($this->anotherUser, 'api-guard')
+            ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
+                'new_owner_id' => $this->user->id,
+            ])
+            ->assertOk();
+
+        $this->actingAs($this->anotherUser, 'api-guard')
+            ->json('POST', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/shares/all')
+            ->assertForbidden();
     }
 
     #[Test]
