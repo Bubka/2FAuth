@@ -9,6 +9,7 @@ use App\Api\v1\Requests\TwoFAccountExportRequest;
 use App\Api\v1\Requests\TwoFAccountImportRequest;
 use App\Api\v1\Requests\TwoFAccountIndexRequest;
 use App\Api\v1\Requests\TwoFAccountStoreRequest;
+use App\Api\v1\Requests\TwoFAccountTransferOwnershipRequest;
 use App\Api\v1\Requests\TwoFAccountUpdateRequest;
 use App\Api\v1\Requests\TwoFAccountUriRequest;
 use App\Api\v1\Resources\TwoFAccountCollection;
@@ -23,6 +24,7 @@ use App\Models\TwoFAccount;
 use App\Models\TwoFAccountShare;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 
@@ -152,6 +154,23 @@ class TwoFAccountController extends Controller
         return (new TwoFAccountReadResource($twofaccount))
             ->response()
             ->setStatusCode(200);
+    }
+
+    /**
+     * Transfer ownership of a 2FA account.
+     */
+    public function transferOwnership(TwoFAccountTransferOwnershipRequest $request, TwoFAccount $twofaccount) : JsonResponse
+    {
+        $this->authorize('transferOwnership', $twofaccount);
+
+        $newOwner = User::query()->findOrFail((int) $request->validated('new_owner_id'));
+
+        TwoFAccounts::transferOwnership($twofaccount, $newOwner);
+
+        return response()->json([
+            'twofaccount_id' => $twofaccount->id,
+            'owner_id'       => $newOwner->id,
+        ], 200);
     }
 
     /**

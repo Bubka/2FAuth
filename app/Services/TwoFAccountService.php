@@ -5,9 +5,11 @@ namespace App\Services;
 use App\Factories\MigratorFactoryInterface;
 use App\Helpers\Helpers;
 use App\Models\TwoFAccount;
+use App\Models\TwoFAccountShare;
 use App\Models\User;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class TwoFAccountService
@@ -109,6 +111,28 @@ class TwoFAccountService
             $twofaccount->user_id = $user->id;
             $twofaccount->save();
         });
+    }
+
+    /**
+     * Transfer ownership of a twofaccount to another user.
+     *
+     * Keeps existing share audit trail untouched and only removes obsolete
+     * explicit share to the new owner if it exists.
+     */
+    public static function transferOwnership(TwoFAccount $twofaccount, User $newOwner) : TwoFAccount
+    {
+        DB::transaction(function () use ($twofaccount, $newOwner) {
+            $twofaccount->user_id = $newOwner->id;
+            $twofaccount->save();
+
+            TwoFAccountShare::query()
+                ->where('twofaccount_id', $twofaccount->id)
+                ->where('scope', TwoFAccountShare::SCOPE_USER)
+                ->where('shared_with_user_id', $newOwner->id)
+                ->delete();
+        });
+
+        return $twofaccount->refresh();
     }
 
     /**
