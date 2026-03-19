@@ -166,7 +166,7 @@ class TwoFAccountController extends Controller
         $this->authorize('transferOwnership', $twofaccount);
 
         $oldOwnerId = $twofaccount->user_id;
-        $newOwner   = User::query()->findOrFail((int) $request->validated('new_owner_id'));
+        $newOwner   = User::findOrFail((int) $request->validated('new_owner_id'));
 
         TwoFAccounts::transferOwnership($twofaccount, $newOwner);
 
@@ -317,9 +317,7 @@ class TwoFAccountController extends Controller
      */
     public function count(Request $request)
     {
-        $ownedCount = TwoFAccount::query()
-            ->where('user_id', $request->user()->id)
-            ->count();
+        $ownedCount = TwoFAccount::where('user_id', $request->user()->id)->count();
 
         $sharedCount = TwoFAccount::query()
             ->where('user_id', '!=', $request->user()->id)

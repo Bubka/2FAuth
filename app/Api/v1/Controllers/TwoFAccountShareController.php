@@ -51,10 +51,7 @@ class TwoFAccountShareController extends Controller
             return $this->shareAllConflictResponse();
         }
 
-        $targetUsers = User::query()
-            ->whereIn('id', $request->validated('ids'))
-            ->orderBy('id')
-            ->get();
+        $targetUsers = User::whereIn('id', $request->validated('ids'))->orderBy('id')->get();
 
         if ($targetUsers->contains(fn (User $targetUser) => $twofaccount->isOwnedBy($targetUser))) {
             return response()->json([
