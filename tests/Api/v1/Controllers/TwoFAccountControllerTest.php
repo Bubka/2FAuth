@@ -787,6 +787,22 @@ class TwoFAccountControllerTest extends FeatureTestCase
     }
 
     #[Test]
+    public function test_update_twofaccount_cannot_change_owner()
+    {
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('PUT', '/api/v1/twofaccounts/' . $this->twofaccountA->id, array_merge(
+                OtpTestData::ARRAY_OF_FULL_VALID_PARAMETERS_FOR_CUSTOM_TOTP,
+                ["user_id" => $this->anotherUser->id]
+            ))
+            ->assertOk();
+
+        $this->assertDatabaseHas('twofaccounts', [
+            'id' => $this->twofaccountA->id,
+            'user_id' => $this->user->id,
+        ]);
+    }
+
+    #[Test]
     public function test_update_with_assignement_to_null_group_returns_success_with_updated_resource()
     {
         $this->assertNotEquals(null, $this->twofaccountA->group_id);
@@ -870,6 +886,29 @@ class TwoFAccountControllerTest extends FeatureTestCase
     }
 
     #[Test]
+    public function test_update_with_removed_icon_prevents_official_logo_fetching()
+    {
+        $attributes = ([
+            'otp_type'   => 'totp',
+            'account'    => OtpTestData::ACCOUNT,
+            'service'    => OtpTestData::SERVICE,
+            'secret'     => OtpTestData::SECRET,
+            'algorithm'  => OtpTestData::ALGORITHM_DEFAULT,
+            'digits'     => OtpTestData::DIGITS_DEFAULT,
+            'period'     => OtpTestData::PERIOD_DEFAULT,
+            'legacy_uri' => OtpTestData::TOTP_SHORT_URI,
+            'icon'       => 'icon.png',
+        ]);
+        $twofaccount        = TwoFAccount::factory()->for($this->user)->create($attributes);
+        $attributes['icon'] = '';
+
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('PUT', '/api/v1/twofaccounts/' . $twofaccount->id, $attributes);
+
+        $this->assertNull($response->json('icon'));
+    }
+
+    #[Test]
     public function test_transfer_ownership_returns_success_and_reassigns_account_to_new_owner()
     {
         $this->actingAs($this->anotherUser, 'api-guard')
@@ -896,6 +935,46 @@ class TwoFAccountControllerTest extends FeatureTestCase
                 'new_owner_id' => $this->user->id,
             ])
             ->assertNotFound();
+    }
+
+    #[Test]
+    public function test_transfer_ownership_returns_forbidden_when_sharing_is_disabled()
+    {
+        Settings::set('enableSharing', false);
+
+        $this->actingAs($this->anotherUser, 'api-guard')
+            ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
+                'new_owner_id' => $this->user->id,
+            ])
+            ->assertForbidden()
+            ->assertJsonPath('message', __('error.sharing_is_disabled'));
+
+        $this->assertDatabaseHas('twofaccounts', [
+            'id' => $this->twofaccountC->id,
+            'user_id' => $this->anotherUser->id,
+        ]);
+
+        Settings::set('enableSharing', true);
+    }
+
+    #[Test]
+    public function test_transfer_ownership_of_another_user_account_returns_forbidden_when_sharing_is_disabled()
+    {
+        Settings::set('enableSharing', false);
+
+        $this->actingAs($this->user, 'api-guard')
+            ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
+                'new_owner_id' => $this->anotherUser->id,
+            ])
+            ->assertForbidden()
+            ->assertJsonPath('message', __('error.sharing_is_disabled'));
+
+        $this->assertDatabaseHas('twofaccounts', [
+            'id' => $this->twofaccountC->id,
+            'user_id' => $this->anotherUser->id,
+        ]);
+
+        Settings::set('enableSharing', true);
     }
 
     #[Test]
@@ -1364,29 +1443,6 @@ class TwoFAccountControllerTest extends FeatureTestCase
         $this->actingAs($this->anotherUser, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/shares/all')
             ->assertForbidden();
-    }
-
-    #[Test]
-    public function test_update_with_removed_icon_prevents_official_logo_fetching()
-    {
-        $attributes = ([
-            'otp_type'   => 'totp',
-            'account'    => OtpTestData::ACCOUNT,
-            'service'    => OtpTestData::SERVICE,
-            'secret'     => OtpTestData::SECRET,
-            'algorithm'  => OtpTestData::ALGORITHM_DEFAULT,
-            'digits'     => OtpTestData::DIGITS_DEFAULT,
-            'period'     => OtpTestData::PERIOD_DEFAULT,
-            'legacy_uri' => OtpTestData::TOTP_SHORT_URI,
-            'icon'       => 'icon.png',
-        ]);
-        $twofaccount        = TwoFAccount::factory()->for($this->user)->create($attributes);
-        $attributes['icon'] = '';
-
-        $response = $this->actingAs($this->user, 'api-guard')
-            ->json('PUT', '/api/v1/twofaccounts/' . $twofaccount->id, $attributes);
-
-        $this->assertNull($response->json('icon'));
     }
 
     #[Test]

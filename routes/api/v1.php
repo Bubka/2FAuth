@@ -47,6 +47,7 @@ Route::group(['middleware' => 'auth:api-guard'], function () {
     Route::patch('twofaccounts/{twofaccount}/owner', [TwoFAccountController::class, 'transferOwnership'])->name('twofaccounts.transferOwnership');
     Route::post('twofaccounts/otp', [TwoFAccountController::class, 'otp'])->name('twofaccounts.otp');
     Route::middleware('rejectIfShareDisabled')->group(function () {
+        Route::patch('twofaccounts/{twofaccount}/owner', [TwoFAccountController::class, 'transferOwnership'])->name('twofaccounts.transferOwnership');
         Route::get('twofaccounts/{twofaccount}/shares', [TwoFAccountShareController::class, 'index'])->name('twofaccounts.shares.index');
         Route::post('twofaccounts/{twofaccount}/shares', [TwoFAccountShareController::class, 'store'])->name('twofaccounts.shares.store');
         Route::delete('twofaccounts/{twofaccount}/shares', [TwoFAccountShareController::class, 'destroyAllUsers'])->name('twofaccounts.shares.destroyAllUsers');
