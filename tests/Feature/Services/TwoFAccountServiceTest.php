@@ -324,6 +324,36 @@ class TwoFAccountServiceTest extends FeatureTestCase
     }
 
     #[Test]
+    public function test_delete_single_id_cascades_to_related_shares()
+    {
+        $twofaccount = TwoFAccount::factory()->for($this->user)->create();
+        $targetUser = User::factory()->create();
+
+        $userShare = TwoFAccountShare::create([
+            'twofaccount_id' => $twofaccount->id,
+            'shared_with_user_id' => $targetUser->id,
+            'scope' => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id' => $this->user->id,
+        ]);
+
+        $allUsersShare = TwoFAccountShare::create([
+            'twofaccount_id' => $twofaccount->id,
+            'shared_with_user_id' => null,
+            'scope' => TwoFAccountShare::SCOPE_ALL_USERS,
+            'created_by_user_id' => $this->user->id,
+        ]);
+
+        TwoFAccounts::delete($twofaccount->id);
+
+        $this->assertDatabaseMissing('twofaccount_shares', [
+            'id' => $userShare->id,
+        ]);
+        $this->assertDatabaseMissing('twofaccount_shares', [
+            'id' => $allUsersShare->id,
+        ]);
+    }
+
+    #[Test]
     public function test_transfer_ownership_sets_new_owner_and_returns_refreshed_model()
     {
         $owner = User::factory()->create();

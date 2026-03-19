@@ -6,6 +6,7 @@ use App\Facades\IconStore;
 use App\Models\AuthLog;
 use App\Models\Group;
 use App\Models\TwoFAccount;
+use App\Models\TwoFAccountShare;
 use App\Models\User;
 use App\Observers\UserObserver;
 use Database\Factories\AuthLogFactory;
@@ -179,6 +180,76 @@ class UserModelTest extends FeatureTestCase
         $user->delete();
 
         Storage::disk('icons')->assertMissing($twofaccount->icon);
+    }
+
+    #[Test]
+    public function test_delete_removes_shares_for_owned_twofaccounts()
+    {
+        $owner = User::factory()->create();
+        $targetUser = User::factory()->create();
+        $twofaccount = TwoFAccount::factory()->for($owner)->create();
+
+        $share = TwoFAccountShare::create([
+            'twofaccount_id' => $twofaccount->id,
+            'shared_with_user_id' => $targetUser->id,
+            'scope' => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id' => $owner->id,
+        ]);
+
+        $owner->delete();
+
+        $this->assertDatabaseMissing('twofaccount_shares', [
+            'id' => $share->id,
+        ]);
+    }
+
+    #[Test]
+    public function test_delete_removes_shares_where_user_is_target()
+    {
+        $owner = User::factory()->create();
+        $targetUser = User::factory()->create();
+        $twofaccount = TwoFAccount::factory()->for($owner)->create();
+
+        $share = TwoFAccountShare::create([
+            'twofaccount_id' => $twofaccount->id,
+            'shared_with_user_id' => $targetUser->id,
+            'scope' => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id' => $owner->id,
+        ]);
+
+        $targetUser->delete();
+
+        $this->assertDatabaseMissing('twofaccount_shares', [
+            'id' => $share->id,
+        ]);
+        $this->assertDatabaseHas('twofaccounts', [
+            'id' => $twofaccount->id,
+        ]);
+    }
+
+    #[Test]
+    public function test_delete_removes_shares_where_user_is_creator()
+    {
+        $owner = User::factory()->create();
+        $creator = User::factory()->create();
+        $targetUser = User::factory()->create();
+        $twofaccount = TwoFAccount::factory()->for($owner)->create();
+
+        $share = TwoFAccountShare::create([
+            'twofaccount_id' => $twofaccount->id,
+            'shared_with_user_id' => $targetUser->id,
+            'scope' => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id' => $creator->id,
+        ]);
+
+        $creator->delete();
+
+        $this->assertDatabaseMissing('twofaccount_shares', [
+            'id' => $share->id,
+        ]);
+        $this->assertDatabaseHas('twofaccounts', [
+            'id' => $twofaccount->id,
+        ]);
     }
 
     #[Test]
