@@ -89,6 +89,7 @@
     "error.resource_not_found": "Resource not found",
     "error.security_device_already_registered": "Device already registered",
     "error.security_error_check_rpid": "Security error: Check your WEBAUTHN_ID env var",
+    "error.sharing_is_disabled": "Sharing feature is disabled",
     "error.something_wrong_with_server": "Something is wrong with your server",
     "error.spaces_are_ignored": "Unwanted spaces will be automatically removed",
     "error.sso_bad_provider_setup": "This SSO provider is not fully setup in your .env file",

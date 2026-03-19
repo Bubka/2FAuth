@@ -17,6 +17,7 @@ use App\Api\v1\Resources\TwoFAccountExportCollection;
 use App\Api\v1\Resources\TwoFAccountReadResource;
 use App\Api\v1\Resources\TwoFAccountStoreResource;
 use App\Facades\Groups;
+use App\Facades\Settings;
 use App\Facades\TwoFAccounts;
 use App\Helpers\Helpers;
 use App\Http\Controllers\Controller;
@@ -263,11 +264,20 @@ class TwoFAccountController extends Controller
     {
         $inputs             = $request->all();
         $isPersistedAccount = false;
+        $isSharedAccess     = false;
 
         // The request input is the ID of an existing account
         if ($id) {
             $twofaccount        = TwoFAccount::findOrFail((int) $id);
             $isPersistedAccount = true;
+            $isSharedAccess     = $request->user()->id !== $twofaccount->user_id;
+
+            if ($isSharedAccess && ! Settings::get('enableSharing')) {
+                return response()->json([
+                    'message' => __('error.sharing_is_disabled'),
+                ], 403);
+            }
+
             $this->authorize('generateOtp', $twofaccount);
         }
 

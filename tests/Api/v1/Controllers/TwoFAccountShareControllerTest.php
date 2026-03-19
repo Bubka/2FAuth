@@ -4,11 +4,13 @@ namespace Tests\Api\v1\Controllers;
 
 use App\Api\v1\Controllers\TwoFAccountShareController;
 use App\Api\v1\Requests\TwoFAccountShareStoreRequest;
+use App\Facades\Settings;
 use App\Models\TwoFAccount;
 use App\Models\TwoFAccountShare;
 use App\Models\User;
 use App\Services\TwoFAccountShareService;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\FeatureTestCase;
 
@@ -637,5 +639,41 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
         $this->actingAs($this->targetUser, 'api-guard')
             ->json('DELETE', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/shares/all')
             ->assertForbidden();
+    }
+
+    #[Test]
+    #[DataProvider('provideSharingRoutes')]
+    public function test_sharing_routes_return_403_when_feature_is_disabled(string $method, string $uri, array $payload = []) : void
+    {
+        Settings::set('enableSharing', false);
+
+        $uri = str_replace(
+            ['{accountId}', '{userId}'],
+            [(string) $this->twofaccount->id, (string) $this->targetUser->id],
+            $uri
+        );
+
+        if (isset($payload['ids'])) {
+            $payload['ids'] = [$this->targetUser->id];
+        }
+
+        $response = $this->actingAs($this->owner, 'api-guard')
+            ->json($method, $uri, $payload);
+
+        $response
+            ->assertForbidden()
+            ->assertJsonPath('message', __('error.sharing_is_disabled'));
+    }
+
+    public static function provideSharingRoutes() : array
+    {
+        return [
+            ['GET', '/api/v1/twofaccounts/{accountId}/shares'],
+            ['POST', '/api/v1/twofaccounts/{accountId}/shares', ['ids' => [0]]],
+            ['DELETE', '/api/v1/twofaccounts/{accountId}/shares/{userId}'],
+            ['DELETE', '/api/v1/twofaccounts/{accountId}/shares'],
+            ['POST', '/api/v1/twofaccounts/{accountId}/shares/all'],
+            ['DELETE', '/api/v1/twofaccounts/{accountId}/shares/all'],
+        ];
     }
 }

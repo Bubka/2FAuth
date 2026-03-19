@@ -76,6 +76,7 @@ class Kernel extends HttpKernel
         'rejectIfAuthenticated'         => \App\Http\Middleware\RejectIfAuthenticated::class,
         'throttle'                      => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'rejectIfDemoMode'              => \App\Http\Middleware\RejectIfDemoMode::class,
+        'rejectIfShareDisabled'         => \App\Http\Middleware\RejectIfShareDisabled::class,
         'rejectIfReverseProxy'          => \App\Http\Middleware\RejectIfReverseProxy::class,
         'RejectIfSsoOnlyAndNotForAdmin' => \App\Http\Middleware\RejectIfSsoOnlyAndNotForAdmin::class,
         'cache.headers'                 => \Illuminate\Http\Middleware\SetCacheHeaders::class,
