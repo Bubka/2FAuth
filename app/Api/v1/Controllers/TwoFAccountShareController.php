@@ -48,7 +48,7 @@ class TwoFAccountShareController extends Controller
         $this->authorize('manageShares', $twofaccount);
 
         if ($this->twoFAccountShareService->isSharedWithAll($twofaccount)) {
-            return $this->shareAllConflictResponse('This account is already shared with all users.');
+            return $this->shareAllConflictResponse();
         }
 
         $targetUsers = User::query()
@@ -86,7 +86,7 @@ class TwoFAccountShareController extends Controller
         $this->authorize('manageShares', $twofaccount);
 
         if ($this->twoFAccountShareService->isSharedWithAll($twofaccount)) {
-            return $this->shareAllConflictResponse('This account is already shared with all users.');
+            return $this->shareAllConflictResponse();
         }
 
         $this->twoFAccountShareService->revokeUserShare($twofaccount, $user);
@@ -143,7 +143,7 @@ class TwoFAccountShareController extends Controller
         if (! $this->twoFAccountShareService->isSharedWithAll($twofaccount)) {
             return response()->json([
                 'message' => 'conflict',
-                'reason'  => ['twofaccount' => 'This account is not shared with all users.'],
+                'reason'  => __('error.this_account_is_not_shared_with_all'),
             ], 409);
         }
 
@@ -157,11 +157,11 @@ class TwoFAccountShareController extends Controller
     /**
      * Return a conflict response for actions that cannot be performed when the account is shared with all users.
      */
-    private function shareAllConflictResponse(string $reason) : JsonResponse
+    private function shareAllConflictResponse() : JsonResponse
     {
         return response()->json([
             'message' => 'conflict',
-            'reason'  => ['twofaccount' => $reason],
+            'reason'  => __('error.this_account_is_already_shared_with_all'),
         ], 409);
     }
 }

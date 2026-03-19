@@ -97,6 +97,8 @@
     "error.sso_email_already_used": "A user account with the same email address already exists but it does not match your external account ID. Do not use SSO if you are already registered on 2FAuth with this email.",
     "error.sso_failed": "Authentication via SSO rejected",
     "error.sso_no_register": "Registrations are disabled",
+    "error.this_account_is_already_shared_with_all": "This account is already shared with all users.",
+    "error.this_account_is_not_shared_with_all": "This account is not shared with all users",
     "error.too_many_ids": "too many ids were included in the query parameter, max 100 allowed",
     "error.Unable_to_decrypt_uri": "Unable to decrypt uri",
     "error.unauthorized.legend": "You do not have permissions to view this resource or to perform this action",
