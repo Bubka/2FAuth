@@ -27,6 +27,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
 
 class TwoFAccountController extends Controller
 {
@@ -163,9 +164,12 @@ class TwoFAccountController extends Controller
     {
         $this->authorize('transferOwnership', $twofaccount);
 
-        $newOwner = User::query()->findOrFail((int) $request->validated('new_owner_id'));
+        $oldOwnerId = $twofaccount->user_id;
+        $newOwner   = User::query()->findOrFail((int) $request->validated('new_owner_id'));
 
         TwoFAccounts::transferOwnership($twofaccount, $newOwner);
+
+        Log::info(sprintf('Ownership of TwoFAccount ID #%s transferred from User ID #%s to User ID #%s by User ID #%s', $twofaccount->id, $oldOwnerId, $newOwner->id, $request->user()->id));
 
         return response()->json([
             'twofaccount_id' => $twofaccount->id,
@@ -257,11 +261,13 @@ class TwoFAccountController extends Controller
      */
     public function otp(Request $request, $id = null)
     {
-        $inputs = $request->all();
+        $inputs             = $request->all();
+        $isPersistedAccount = false;
 
         // The request input is the ID of an existing account
         if ($id) {
-            $twofaccount = TwoFAccount::findOrFail((int) $id);
+            $twofaccount        = TwoFAccount::findOrFail((int) $id);
+            $isPersistedAccount = true;
             $this->authorize('generateOtp', $twofaccount);
         }
 
@@ -285,6 +291,10 @@ class TwoFAccountController extends Controller
             $validatedData = $request->validate((new TwoFAccountStoreRequest)->rules());
             $twofaccount   = new TwoFAccount;
             $twofaccount->fillWithOtpParameters($validatedData, true);
+        }
+
+        if ($isPersistedAccount) {
+            Log::info(sprintf('OTP requested by User ID #%s for TwoFAccount ID #%s owned by User ID #%s', $request->user()->id, $twofaccount->id, $twofaccount->user_id));
         }
 
         return response()->json($twofaccount->getOTP(), 200);

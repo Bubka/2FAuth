@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Services\TwoFAccountShareService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class TwoFAccountShareController extends Controller
 {
@@ -65,6 +66,8 @@ class TwoFAccountShareController extends Controller
         $results = $this->twoFAccountShareService->shareWithUsers($twofaccount, $request->user(), $targetUsers);
         $created = $results->where('created', true)->count();
 
+        Log::info(sprintf('TwoFAccount #%s owned by User ID #%s has been shared by User ID #%s with %s users : %s', $twofaccount->id, $twofaccount->user_id, $request->user()->id, $created, implode(', ', $results->where('created', true)->map(fn (array $result) => $result['user']->id)->values()->all())));
+
         return response()->json([
             'users' => $results
                 ->map(fn (array $result) => [
@@ -88,21 +91,25 @@ class TwoFAccountShareController extends Controller
 
         $this->twoFAccountShareService->revokeUserShare($twofaccount, $user);
 
+        Log::info(sprintf('Share with User ID #%s of TwoFAccount #%s owned by User ID #%s has been revoked by User ID #%s', $user->id, $twofaccount->id, $twofaccount->user_id, $request->user()->id));
+
         return response()->json(null, 204);
     }
 
     /**
      * Revoke all explicit user shares for the account.
      */
-    public function destroyAllUsers(TwoFAccount $twofaccount) : JsonResponse
+    public function destroyAllUsers(Request $request, TwoFAccount $twofaccount) : JsonResponse
     {
         $this->authorize('manageShares', $twofaccount);
 
         if ($this->twoFAccountShareService->isSharedWithAll($twofaccount)) {
-            return $this->shareAllConflictResponse('This account is already shared with all users.');
+            return $this->shareAllConflictResponse();
         }
 
         $this->twoFAccountShareService->revokeAllUserShares($twofaccount);
+
+        Log::info(sprintf('All user shares of TwoFAccount #%s owned by User ID #%s have been revoked by User ID #%s', $twofaccount->id, $twofaccount->user_id, $request->user()->id));
 
         return response()->json(null, 204);
     }
@@ -118,6 +125,8 @@ class TwoFAccountShareController extends Controller
 
         $result = $this->twoFAccountShareService->shareWithAll($twofaccount, $request->user());
 
+        Log::info(sprintf('TwoFAccount #%s owned by User ID #%s has been shared with all users by User ID #%s', $twofaccount->id, $twofaccount->user_id, $request->user()->id));
+
         return response()->json([
             'is_shared_with_all' => true,
             'twofaccount_id'     => $twofaccount->id,
@@ -127,7 +136,7 @@ class TwoFAccountShareController extends Controller
     /**
      * Revoke global share.
      */
-    public function unshareAll(TwoFAccount $twofaccount) : JsonResponse
+    public function unshareAll(Request $request, TwoFAccount $twofaccount) : JsonResponse
     {
         $this->authorize('manageShares', $twofaccount);
 
@@ -139,6 +148,8 @@ class TwoFAccountShareController extends Controller
         }
 
         $this->twoFAccountShareService->unshareWithAll($twofaccount);
+
+        Log::info(sprintf('Global share of TwoFAccount #%s owned by User ID #%s has been revoked by User ID #%s', $twofaccount->id, $twofaccount->user_id, $request->user()->id));
 
         return response()->json(null, 204);
     }
