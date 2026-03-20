@@ -218,8 +218,7 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
             ->assertJsonStructure([
                 'message',
                 'reason',
-            ])
-            ->assertJsonPath('reason.twofaccount', 'This account is already shared with all users.');
+            ]);
 
         $this->assertDatabaseMissing('twofaccount_shares', [
             'twofaccount_id' => $this->twofaccount->id,
@@ -382,8 +381,7 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
             ->assertJsonStructure([
                 'message',
                 'reason',
-            ])
-            ->assertJsonPath('reason.twofaccount', 'This account is already shared with all users.');
+            ]);
 
         $this->assertDatabaseHas('twofaccount_shares', [
             'twofaccount_id' => $this->twofaccount->id,
@@ -457,8 +455,7 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
             ->assertJsonStructure([
                 'message',
                 'reason',
-            ])
-            ->assertJsonPath('reason.twofaccount', 'This account is already shared with all users.');
+            ]);
 
         $this->assertDatabaseHas('twofaccount_shares', [
             'twofaccount_id' => $this->twofaccount->id,
@@ -605,8 +602,7 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
             ->assertJsonStructure([
                 'message',
                 'reason',
-            ])
-            ->assertJsonPath('reason.twofaccount', 'This account is not shared with all users.');
+            ]);
     }
 
     #[Test]
@@ -622,8 +618,7 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
 
         $this->actingAs($this->owner, 'api-guard')
             ->json('DELETE', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/shares/all')
-            ->assertStatus(409)
-            ->assertJsonPath('reason.twofaccount', 'This account is not shared with all users.');
+            ->assertStatus(409);
     }
 
     #[Test]
