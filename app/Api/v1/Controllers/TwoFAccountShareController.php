@@ -118,7 +118,7 @@ class TwoFAccountShareController extends Controller
     {
         $this->authorize('manageShares', $twofaccount);
 
-        $this->twoFAccountShareService->revokeAllUserShares($twofaccount);
+        $this->twoFAccountShareService->revokeAllUserShares($twofaccount, false);
 
         $result = $this->twoFAccountShareService->shareWithAll($twofaccount, $request->user());
 

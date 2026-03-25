@@ -41,20 +41,13 @@ class TestEmailSettingNotification extends Notification
 
     /**
      * Get the mail representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    public function toMail($notifiable)
+    public function toMail(mixed $notifiable) : MailMessage
     {
         return (new MailMessage)
             ->subject(Lang::get('message.notifications.test_email_settings.subject'))
             ->greeting(Lang::get('message.notifications.hello'))
-            ->line(
-                Lang::get('message.notifications.test_email_settings.reason')
-            )
-            ->line(
-                Lang::get('message.notifications.test_email_settings.success')
-            );
+            ->line(Lang::get('message.notifications.test_email_settings.reason'))
+            ->line(Lang::get('message.notifications.test_email_settings.success'));
     }
 }

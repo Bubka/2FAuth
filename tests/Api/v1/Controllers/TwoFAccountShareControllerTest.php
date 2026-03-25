@@ -4,11 +4,14 @@ namespace Tests\Api\v1\Controllers;
 
 use App\Api\v1\Controllers\TwoFAccountShareController;
 use App\Api\v1\Requests\TwoFAccountShareStoreRequest;
+use App\Events\TwoFAccountShareRevoked;
+use App\Events\TwoFAccountShared;
 use App\Facades\Settings;
 use App\Models\TwoFAccount;
 use App\Models\TwoFAccountShare;
 use App\Models\User;
 use App\Services\TwoFAccountShareService;
+use Illuminate\Support\Facades\Event;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
@@ -30,6 +33,8 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
     protected function setUp() : void
     {
         parent::setUp();
+
+        Event::fake();
 
         $this->owner = User::factory()->create();
         $this->targetUser = User::factory()->create();
@@ -183,6 +188,23 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
             'shared_with_user_id' => $this->thirdUser->id,
             'scope' => TwoFAccountShare::SCOPE_USER,
         ]);
+    }
+
+    #[Test]
+    public function test_store_sends_share_notification_to_target_users() : void
+    {
+        $this->actingAs($this->owner, 'api-guard')
+            ->json('POST', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/shares', [
+                'ids' => [$this->targetUser->id, $this->thirdUser->id],
+            ])
+            ->assertCreated();
+
+        Event::assertDispatched(TwoFAccountShared::class, function (TwoFAccountShared $event) {
+            $recipientIds = $event->recipients->pluck('id')->all();
+            sort($recipientIds);
+
+            return $recipientIds === [$this->targetUser->id, $this->thirdUser->id];
+        });
     }
 
     #[Test]
@@ -425,6 +447,35 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
     }
 
     #[Test]
+    public function test_destroy_all_users_sends_revoke_notification_to_shared_users() : void
+    {
+        TwoFAccountShare::create([
+            'twofaccount_id' => $this->twofaccount->id,
+            'shared_with_user_id' => $this->targetUser->id,
+            'scope' => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id' => $this->owner->id,
+        ]);
+
+        TwoFAccountShare::create([
+            'twofaccount_id' => $this->twofaccount->id,
+            'shared_with_user_id' => $this->thirdUser->id,
+            'scope' => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id' => $this->owner->id,
+        ]);
+
+        $this->actingAs($this->owner, 'api-guard')
+            ->json('DELETE', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/shares')
+            ->assertNoContent();
+
+        Event::assertDispatched(TwoFAccountShareRevoked::class, function (TwoFAccountShareRevoked $event) {
+            $recipientIds = $event->recipients->pluck('id')->all();
+            sort($recipientIds);
+
+            return $recipientIds === [$this->targetUser->id, $this->thirdUser->id];
+        });
+    }
+
+    #[Test]
     public function test_destroy_all_users_returns_no_content_when_no_explicit_share_exists()
     {
         $this->actingAs($this->owner, 'api-guard')
@@ -496,6 +547,22 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
             'twofaccount_id' => $this->twofaccount->id,
             'scope' => TwoFAccountShare::SCOPE_ALL_USERS,
         ]);
+    }
+
+    #[Test]
+    public function test_share_all_sends_shared_notification_to_all_users_except_owner() : void
+    {
+        $this->actingAs($this->owner, 'api-guard')
+            ->json('POST', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/shares/all')
+            ->assertCreated();
+
+        Event::assertDispatched(TwoFAccountShared::class, function (TwoFAccountShared $event) {
+            $recipientIds = $event->recipients->pluck('id')->all();
+            sort($recipientIds);
+
+            return $event->scope === TwoFAccountShare::SCOPE_ALL_USERS
+                && $recipientIds === [$this->targetUser->id, $this->thirdUser->id];
+        });
     }
 
     #[Test]

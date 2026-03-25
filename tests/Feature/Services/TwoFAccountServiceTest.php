@@ -2,12 +2,14 @@
 
 namespace Tests\Feature\Services;
 
+use App\Events\TwoFAccountOwnershipTransferred;
 use App\Facades\TwoFAccounts;
 use App\Models\Group;
 use App\Models\TwoFAccount;
 use App\Models\TwoFAccountShare;
 use App\Models\User;
 use App\Services\TwoFAccountService;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Exceptions;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -45,6 +47,8 @@ class TwoFAccountServiceTest extends FeatureTestCase
     {
         parent::setUp();
 
+        Event::fake();
+        
         $this->user       = User::factory()->create();
         $this->userGroupA = Group::factory()->for($this->user)->create();
         $this->userGroupB = Group::factory()->for($this->user)->create();
@@ -367,6 +371,21 @@ class TwoFAccountServiceTest extends FeatureTestCase
             'id'      => $twofaccount->id,
             'user_id' => $newOwner->id,
         ]);
+    }
+
+    #[Test]
+    public function test_transfer_ownership_dispatches_notification_event()
+    {
+        $owner = User::factory()->create();
+        $newOwner = User::factory()->create();
+        $twofaccount = TwoFAccount::factory()->for($owner)->create();
+
+        TwoFAccounts::transferOwnership($twofaccount, $newOwner);
+
+        Event::assertDispatched(TwoFAccountOwnershipTransferred::class, function (TwoFAccountOwnershipTransferred $event) use ($twofaccount, $newOwner, $owner) {
+            return $event->twofaccount->id === $twofaccount->id
+                && $event->previousOwner->id === $owner->id;
+        });
     }
 
     #[Test]

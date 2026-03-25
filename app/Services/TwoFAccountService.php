@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Events\TwoFAccountOwnershipTransferred;
 use App\Factories\MigratorFactoryInterface;
 use App\Helpers\Helpers;
 use App\Models\TwoFAccount;
@@ -121,6 +122,8 @@ class TwoFAccountService
      */
     public static function transferOwnership(TwoFAccount $twofaccount, User $newOwner) : TwoFAccount
     {
+        $previousOwner = $twofaccount->user;
+
         DB::transaction(function () use ($twofaccount, $newOwner) {
             $twofaccount->user_id = $newOwner->id;
             $twofaccount->save();
@@ -132,7 +135,11 @@ class TwoFAccountService
                 ->delete();
         });
 
-        return $twofaccount->refresh();
+        $refreshedTwofaccount = $twofaccount->refresh();
+
+        event(new TwoFAccountOwnershipTransferred($refreshedTwofaccount, $previousOwner));
+
+        return $refreshedTwofaccount;
     }
 
     /**

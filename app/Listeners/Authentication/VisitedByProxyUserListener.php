@@ -4,14 +4,16 @@ namespace App\Listeners\Authentication;
 
 use App\Events\VisitedByProxyUser;
 use App\Extensions\RemoteUserProvider;
+use App\Listeners\Traits\HasLocalizedNotification;
 use App\Notifications\SignedInWithNewDeviceNotification;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Str;
 use TypeError;
 
 class VisitedByProxyUserListener extends AbstractAccessListener
 {
+    use HasLocalizedNotification;
+
     /**
      * Handle the event.
      */
@@ -48,7 +50,7 @@ class VisitedByProxyUserListener extends AbstractAccessListener
         ]);
 
         if (! $known && ! $newUser && Str::endsWith($user->email, RemoteUserProvider::FAKE_REMOTE_DOMAIN) && $user->preferences['notifyOnNewAuthDevice']) {
-            $user->notify((new SignedInWithNewDeviceNotification($log))->locale($user->preferredLocale() == 'browser' ? App::currentLocale() : $user->preferredLocale()));
+            $user->notify((new SignedInWithNewDeviceNotification($log))->locale($this->userLocale($user)));
         }
     }
 }

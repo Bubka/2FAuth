@@ -6,6 +6,9 @@ use App\Events\GroupDeleted;
 use App\Events\ScanForNewReleaseCalled;
 use App\Events\StoreIconsInDatabaseSettingChanged;
 use App\Events\TwoFAccountDeleted;
+use App\Events\TwoFAccountOwnershipTransferred;
+use App\Events\TwoFAccountShared;
+use App\Events\TwoFAccountShareRevoked;
 use App\Events\VisitedByProxyUser;
 use App\Listeners\Authentication\FailedLoginListener;
 use App\Listeners\Authentication\LoginListener;
@@ -17,6 +20,9 @@ use App\Listeners\LogNotificationListener;
 use App\Listeners\RegisterOpenId;
 use App\Listeners\ReleaseRadar;
 use App\Listeners\ResetUsersPreference;
+use App\Listeners\SendTwoFAccountOwnershipTransferredNotification;
+use App\Listeners\SendTwoFAccountSharedNotification;
+use App\Listeners\SendTwoFAccountShareRevokedNotification;
 use App\Listeners\ToggleIconReplicationToDatabase;
 use App\Models\User;
 use App\Observers\UserObserver;
@@ -42,6 +48,15 @@ class EventServiceProvider extends ServiceProvider
         ],
         TwoFAccountDeleted::class => [
             CleanIconStorage::class,
+        ],
+        TwoFAccountOwnershipTransferred::class => [
+            SendTwoFAccountOwnershipTransferredNotification::class,
+        ],
+        TwoFAccountShared::class => [
+            SendTwoFAccountSharedNotification::class,
+        ],
+        TwoFAccountShareRevoked::class => [
+            SendTwoFAccountShareRevokedNotification::class,
         ],
         GroupDeleted::class => [
             DissociateTwofaccountFromGroup::class,

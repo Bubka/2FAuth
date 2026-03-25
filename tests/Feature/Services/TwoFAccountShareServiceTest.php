@@ -2,10 +2,13 @@
 
 namespace Tests\Feature\Services;
 
+use App\Events\TwoFAccountShareRevoked;
+use App\Events\TwoFAccountShared;
 use App\Models\TwoFAccount;
 use App\Models\TwoFAccountShare;
 use App\Models\User;
 use App\Services\TwoFAccountShareService;
+use Illuminate\Support\Facades\Event;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\FeatureTestCase;
@@ -22,6 +25,8 @@ class TwoFAccountShareServiceTest extends FeatureTestCase
     protected function setUp() : void
     {
         parent::setUp();
+
+        Event::fake();
 
         $this->owner = User::factory()->create();
         $this->twofaccount = TwoFAccount::factory()->for($this->owner)->create();
@@ -101,6 +106,23 @@ class TwoFAccountShareServiceTest extends FeatureTestCase
     }
 
     #[Test]
+    public function test_share_with_users_dispatches_event_for_newly_created_shares_only() : void
+    {
+        $existingTargetUser = User::factory()->create();
+        $newTargetUser = User::factory()->create();
+
+        $this->service->shareWithUser($this->twofaccount, $this->owner, $existingTargetUser);
+        $this->service->shareWithUsers($this->twofaccount, $this->owner, collect([$existingTargetUser, $newTargetUser]));
+
+        Event::assertDispatched(TwoFAccountShared::class, function (TwoFAccountShared $event) use ($newTargetUser) {
+            $this->assertSame(TwoFAccountShare::SCOPE_USER, $event->scope);
+            $this->assertSame($this->owner->id, $event->actor->id);
+
+            return $event->recipients->pluck('id')->all() === [$newTargetUser->id];
+        });
+    }
+
+    #[Test]
     public function test_share_with_user_returns_null_share_when_shared_with_all() : void
     {
         $targetUser = User::factory()->create();
@@ -139,6 +161,25 @@ class TwoFAccountShareServiceTest extends FeatureTestCase
             ->where('twofaccount_id', $this->twofaccount->id)
             ->where('scope', TwoFAccountShare::SCOPE_USER)
             ->count());
+    }
+
+    #[Test]
+    public function test_revoke_all_user_shares_dispatches_event_for_explicit_recipients() : void
+    {
+        $targetUserA = User::factory()->create();
+        $targetUserB = User::factory()->create();
+
+        $this->service->shareWithUser($this->twofaccount, $this->owner, $targetUserA);
+        $this->service->shareWithUser($this->twofaccount, $this->owner, $targetUserB);
+        $this->service->revokeAllUserShares($this->twofaccount);
+
+        Event::assertDispatched(TwoFAccountShareRevoked::class, function (TwoFAccountShareRevoked $event) use ($targetUserA, $targetUserB) {
+            $recipientIds = $event->recipients->pluck('id')->all();
+            sort($recipientIds);
+
+            return $event->scope === TwoFAccountShare::SCOPE_USER
+                && $recipientIds === [$targetUserA->id, $targetUserB->id];
+        });
     }
 
     #[Test]
@@ -193,6 +234,23 @@ class TwoFAccountShareServiceTest extends FeatureTestCase
 
         $this->assertEquals(1, $deletedRows);
         $this->assertFalse($this->service->isSharedWithAll($this->twofaccount));
+    }
+
+    #[Test]
+    public function test_share_with_all_dispatches_event_without_actor() : void
+    {
+        $targetUserA = User::factory()->create();
+        $targetUserB = User::factory()->create();
+
+        $this->service->shareWithAll($this->twofaccount, $this->owner);
+
+        Event::assertDispatched(TwoFAccountShared::class, function (TwoFAccountShared $event) use ($targetUserA, $targetUserB) {
+            $recipientIds = $event->recipients->pluck('id')->all();
+            sort($recipientIds);
+
+            return $event->scope === TwoFAccountShare::SCOPE_ALL_USERS
+                && $recipientIds === [$targetUserA->id, $targetUserB->id];
+        });
     }
 
     #[Test]
