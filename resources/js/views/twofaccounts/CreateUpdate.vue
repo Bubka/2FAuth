@@ -725,7 +725,7 @@
                     </div>
                 </form>
                 <!-- otp display modal (for previewing) -->
-                <Modal v-model="ShowTwofaccountInModal">
+                <Modal v-model:is-active="ShowTwofaccountInModal">
                     <OtpDisplay
                         ref="OtpDisplayForAdvancedForm"
                         :accountParams="form.data()"
@@ -742,7 +742,7 @@
                 </Modal>
             </FormWrapper>
             <!-- alternatives -->
-            <Modal v-model="showAlternatives">
+            <Modal v-model:is-active="showAlternatives">
                 <QrContentDisplay :qrContent="uri" />
             </Modal>
         </template>

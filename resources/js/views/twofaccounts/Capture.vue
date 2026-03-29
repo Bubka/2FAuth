@@ -202,7 +202,7 @@
                         @camera-off="cameraOff"
                     ></qrcode-stream>
                 </div>
-                <Modal v-model="showQrContent">
+                <Modal v-model:is-active="showQrContent">
                     <QrContentDisplay :qrContent="form.uri" />
                 </Modal>
             </section>

@@ -552,7 +552,7 @@
             </template>
         </StackLayout>
         <!-- export modal -->
-        <Modal v-model="showExportFormatSelector">
+        <Modal v-model:is-active="showExportFormatSelector">
             <ExportButtons
                 @export-twofauth-format="twofaccounts.export()"
                 @export-otpauth-format="twofaccounts.export('otpauth')">

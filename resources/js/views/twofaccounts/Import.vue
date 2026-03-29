@@ -480,7 +480,7 @@
             </ResponsiveWidthWrapper>
             <Spinner v-if="isFetching && exportedAccounts.length === 0" :type="'fullscreen-overlay'" :isVisible="true" message="message.parsing_data" />
             <!-- modal -->
-            <Modal v-model="showTwofaccountInModal">
+            <Modal v-model:is-active="showTwofaccountInModal">
                 <OtpDisplay
                     ref="otpDisplay"
                     :accountParams="form.data()"
