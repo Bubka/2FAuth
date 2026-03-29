@@ -21,7 +21,7 @@
     import { useSortable, moveArrayElement } from '@vueuse/integrations/useSortable'
     import { useI18n } from 'vue-i18n'
     import { useErrorHandler } from '@2fauth/stores'
-    import { LucideChevronDown, LucideCircleAlert, LucideEye, LucideEyeOff, LucideMenu, LucideQrCode } from 'lucide-vue-next'
+    import { LucideChevronDown, LucideCircleAlert, LucideEye, LucideEyeOff, LucideMenu, LucideQrCode, LucideX } from 'lucide-vue-next'
 
     const errorHandler = useErrorHandler()
     const { t } = useI18n()
@@ -42,6 +42,8 @@
     const renewedPeriod = ref(null)
     const revealPassword = ref(null)
     const opacities = ref({})
+    const showFooterMenu = ref(false)
+    const visibleAccountId = ref(null)
 
     const otpDisplay = ref(null)
     const accountParams = ref({
@@ -152,6 +154,8 @@
         accountParams.value.service = account.service
         accountParams.value.account = account.account
         accountParams.value.icon = account.icon
+
+        visibleAccountId.value = account.id
 
         nextTick().then(() => {
             showOtpInModal.value = true
@@ -555,20 +559,45 @@
             </ExportButtons>
         </Modal>
         <!-- otp modal -->
-        <Modal v-model="showOtpInModal">
-            <OtpDisplay
-                ref="otpDisplay"
-                :accountParams="accountParams"
-                :preferences="user.preferences"
-                :twofaccountService="twofaccountService"
-                :iconPathPrefix="$2fauth.config.subdirectory"
-                @please-close-me="showOtpInModal = false"
-                @please-clear-search="twofaccounts.filter = ''"
-                @kickme="user.logout({ kicked: true})"
-                @please-update-activeGroup="saveActiveGroup"
-                @otp-copied-to-clipboard="notify.success({ text: t('notification.copied_to_clipboard') })"
-                @error="(error) => errorHandler.show(error)"
-            />
+        <Modal v-model:is-active="showOtpInModal" v-model:show-footer-menu="showFooterMenu">
+            <template #default>
+                <OtpDisplay
+                    ref="otpDisplay"
+                    :accountParams="accountParams"
+                    :preferences="user.preferences"
+                    :twofaccountService="twofaccountService"
+                    :iconPathPrefix="$2fauth.config.subdirectory"
+                    @please-close-me="showOtpInModal = false"
+                    @please-clear-search="twofaccounts.filter = ''"
+                    @kickme="user.logout({ kicked: true})"
+                    @please-update-activeGroup="saveActiveGroup"
+                    @otp-copied-to-clipboard="notify.success({ text: t('notification.copied_to_clipboard') })"
+                    @error="(error) => errorHandler.show(error)"
+                />
+            </template>
+            <template #footer-submenu>
+                <ul class="ml-0 mt-1">
+                    <!-- edit link -->
+                    <li class="column">
+                        <router-link id="lnkEdit" :to="{ name: 'editAccount', params: { twofaccountId: visibleAccountId }}" class="is-link">
+                            {{ $t('link.edit') }}
+                        </router-link>
+                    </li>
+                    <!-- share link -->
+                    <li class="column">
+                        <router-link id="lnkShare" :to="{ name: 'editAccount', params: { twofaccountId: visibleAccountId }}" class="is-link">
+                            {{ $t('link.share') }}
+                        </router-link>
+                    </li>
+                </ul>
+            </template>
+            <template #footer-subpart>
+                <button type="button" id="btnActions" @click="showFooterMenu = !showFooterMenu" class="button is-text is-like-text has-text-grey" style="width: 100%;">
+                    <span class="mr-2 has-ellipsis">{{ $t('label.actions') }}</span>
+                    <LucideMenu v-if="!showFooterMenu" />
+                    <LucideX v-else />
+                </button>
+            </template>
         </Modal>
         <!-- dots controllers -->
         <span v-if="!user.preferences.getOtpOnRequest">
