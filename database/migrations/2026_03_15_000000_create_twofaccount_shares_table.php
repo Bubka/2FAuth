@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('twofaccount_shares', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('twofaccount_id')->constrained('twofaccounts')->cascadeOnDelete();
+            $table->unsignedInteger('twofaccount_id');
+            $table->foreign('twofaccount_id')->references('id')->on('twofaccounts')->cascadeOnDelete();
             $table->foreignId('shared_with_user_id')->nullable()->constrained('users')->cascadeOnDelete();
             $table->string('scope', 24);
             $table->foreignId('created_by_user_id')->constrained('users')->cascadeOnDelete();
