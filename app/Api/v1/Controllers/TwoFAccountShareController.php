@@ -29,7 +29,8 @@ class TwoFAccountShareController extends Controller
             : $this->twoFAccountShareService->explicitSharedUsers($twofaccount)
                 ->map(function (User $user) {
                     return [
-                        'id' => $user->id,
+                        'id'   => $user->id,
+                        'name' => $user->name,
                     ];
                 })
                 ->values();
@@ -68,7 +69,8 @@ class TwoFAccountShareController extends Controller
         return response()->json([
             'users' => $results
                 ->map(fn (array $result) => [
-                    'id' => $result['user']->id,
+                    'id'   => $result['user']->id,
+                    'name' => $result['user']->name,
                 ])
                 ->values(),
             'twofaccount_id' => $twofaccount->id,

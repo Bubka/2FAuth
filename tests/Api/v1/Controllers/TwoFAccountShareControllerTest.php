@@ -81,7 +81,7 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
             ->assertOk()
             ->assertJsonPath('is_shared_with_all', false)
             ->assertJsonPath('users.0.id', $this->targetUser->id)
-            ->assertJsonMissingPath('users.0.name')
+            ->assertJsonPath('users.0.name', $this->targetUser->name)
             ->assertJsonMissingPath('users.0.email');
     }
 
@@ -139,8 +139,8 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
             ])
             ->assertCreated()
             ->assertJsonPath('users.0.id', $this->targetUser->id)
+            ->assertJsonPath('users.0.name', $this->targetUser->name)
             ->assertJsonPath('twofaccount_id', $this->twofaccount->id)
-            ->assertJsonMissingPath('users.0.name')
             ->assertJsonMissingPath('users.0.email')
             ->assertJsonMissingPath('users.0.created')
             ->assertJsonMissingPath('created');
@@ -151,8 +151,8 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
             ])
             ->assertOk()
             ->assertJsonPath('users.0.id', $this->targetUser->id)
+            ->assertJsonPath('users.0.name', $this->targetUser->name)
             ->assertJsonPath('twofaccount_id', $this->twofaccount->id)
-            ->assertJsonMissingPath('users.0.name')
             ->assertJsonMissingPath('users.0.email')
             ->assertJsonMissingPath('users.0.created')
             ->assertJsonMissingPath('created');
@@ -167,12 +167,12 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
             ])
             ->assertCreated()
             ->assertJsonPath('users.0.id', $this->targetUser->id)
+            ->assertJsonPath('users.0.name', $this->targetUser->name)
             ->assertJsonPath('users.1.id', $this->thirdUser->id)
+            ->assertJsonPath('users.1.name', $this->thirdUser->name)
             ->assertJsonPath('twofaccount_id', $this->twofaccount->id)
-            ->assertJsonMissingPath('users.0.name')
             ->assertJsonMissingPath('users.0.email')
             ->assertJsonMissingPath('users.0.created')
-            ->assertJsonMissingPath('users.1.name')
             ->assertJsonMissingPath('users.1.email')
             ->assertJsonMissingPath('users.1.created')
             ->assertJsonMissingPath('created');
@@ -298,8 +298,8 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
             ])
             ->assertCreated()
             ->assertJsonPath('users.0.id', $this->targetUser->id)
+            ->assertJsonPath('users.0.name', $this->targetUser->name)
             ->assertJsonPath('twofaccount_id', $this->twofaccount->id)
-            ->assertJsonMissingPath('users.0.name')
             ->assertJsonMissingPath('users.0.email')
             ->assertJsonMissingPath('users.0.created')
             ->assertJsonMissingPath('created');
