@@ -68,6 +68,32 @@ class TwoFAccountShareServiceTest extends FeatureTestCase
     }
 
     #[Test]
+    public function test_share_with_user_dispatches_event() : void
+    {
+        $newTargetUser = User::factory()->create();
+
+        $this->service->shareWithUser($this->twofaccount, $this->owner, $newTargetUser);
+
+        Event::assertDispatched(TwoFAccountShared::class, function (TwoFAccountShared $event) use ($newTargetUser) {
+            $this->assertSame(TwoFAccountShare::SCOPE_USER, $event->scope);
+            $this->assertSame($this->owner->id, $event->actor->id);
+
+            return $event->recipients->pluck('id')->all() === [$newTargetUser->id];
+        });
+    }
+
+    #[Test]
+    public function test_share_with_user_dispatches_event_for_newly_created_share_only() : void
+    {
+        $newTargetUser = User::factory()->create();
+
+        $this->service->shareWithUser($this->twofaccount, $this->owner, $newTargetUser);
+        $this->service->shareWithUser($this->twofaccount, $this->owner, $newTargetUser);
+
+        Event::assertDispatchedOnce(TwoFAccountShared::class);
+    }
+
+    #[Test]
     public function test_share_with_users_returns_not_created_when_shared_with_all() : void
     {
         $targetUserA = User::factory()->create();
