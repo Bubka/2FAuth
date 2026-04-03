@@ -35,12 +35,6 @@ class TwoFAccountShareService
                 'user'    => $targetUser,
                 'created' => $result['created'],
             ];
-        })->tap(function (Collection $results) use ($twofaccount, $owner) {
-            $recipients = $results->where('created', true)->pluck('user')->values();
-
-            if ($recipients->isNotEmpty()) {
-                event(new TwoFAccountShared($twofaccount, $owner, $recipients, TwoFAccountShare::SCOPE_USER));
-            }
         });
     }
 
@@ -69,7 +63,9 @@ class TwoFAccountShareService
             ]
         );
 
-        event(new TwoFAccountShared($twofaccount, $owner, collect([$targetUser]), TwoFAccountShare::SCOPE_USER));
+        if ($share->wasRecentlyCreated) {
+            event(new TwoFAccountShared($twofaccount, $owner, collect([$targetUser]), TwoFAccountShare::SCOPE_USER));
+        }
 
         return [
             'share'   => $share,
