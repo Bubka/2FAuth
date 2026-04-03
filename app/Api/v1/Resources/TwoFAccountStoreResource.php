@@ -26,9 +26,8 @@ class TwoFAccountStoreResource extends JsonResource
      */
     public function toArray($request)
     {
-        $withSecret       = ! $request->has('withSecret') || (int) filter_var($request->input('withSecret'), FILTER_VALIDATE_BOOLEAN) == 1;
-        $isPersistedModel = $this->resource instanceof \Illuminate\Database\Eloquent\Model && $this->resource->exists;
-        $canViewSecret    = ! $request->user() || ! $isPersistedModel || $request->user()->can('viewSecret', $this->resource);
+        $withSecret    = ! $request->has('withSecret') || (int) filter_var($request->input('withSecret'), FILTER_VALIDATE_BOOLEAN) == 1;
+        $canViewSecret = $request->user()->can('viewSecret', $this->resource);
 
         return [
             'otp_type' => $this->otp_type,
