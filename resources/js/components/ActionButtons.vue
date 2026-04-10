@@ -58,7 +58,24 @@
                 :class="[{ 'is-outlined': mode == 'dark' || areDisabled }, areDisabled ? 'is-dark': 'is-link']"
                 @click="$emit('move-button-clicked')"
                 :title="$t('tooltip.move_selected_to_group')" >
-                    {{ $t('label.move') }}
+                <span class="is-hidden-desktop icon is-small mx-0">
+                    <LucideGroup />
+                </span>
+                <span class="is-hidden-touch">{{ $t('label.move') }}</span>
+            </button>
+        </p>
+        <!-- share button -->
+        <p class="control" v-if="inManagementMode">
+            <button
+                id="btnShare" 
+                :disabled='areDisabled' class="button is-rounded"
+                :class="[{ 'is-outlined': mode == 'dark' || areDisabled }, areDisabled ? 'is-dark': 'is-link']"
+                @click="$emit('share-button-clicked')"
+                :title="$t('tooltip.share_selected_accounts')" >
+                <span class="is-hidden-desktop icon is-small mx-0">
+                    <LucideUsers />
+                </span>
+                <span class="is-hidden-touch">{{ $t('label.share') }}</span>
             </button>
         </p>
         <!-- delete button -->
@@ -67,8 +84,12 @@
                 id="btnDelete" 
                 :disabled='areDisabled' class="button is-rounded"
                 :class="[{ 'is-outlined': mode == 'dark' || areDisabled }, areDisabled ? 'is-dark': 'is-link']"
-                @click="$emit('delete-button-clicked')" >
-                    {{ $t('label.delete') }}
+                @click="$emit('delete-button-clicked')"
+                :title="$t('tooltip.delete_selected_accounts')" >
+                    <span class="is-hidden-desktop icon is-small mx-0">
+                        <LucideTrash2 />
+                    </span>
+                    <span class="is-hidden-touch">{{ $t('label.delete') }}</span>
             </button>
         </p>
         <!-- export button -->
@@ -79,7 +100,10 @@
                 :class="[{ 'is-outlined': mode == 'dark' || areDisabled }, areDisabled ? 'is-dark': 'is-link']"
                 @click="$emit('export-button-clicked')"
                 :title="$t('tooltip.export_selected_accounts')" >
-                    {{ $t('label.export') }}
+                <span class="is-hidden-desktop icon is-small mx-0">
+                    <LucideDownload />
+                </span>
+                <span class="is-hidden-touch">{{ $t('label.export') }}</span>
             </button>
         </p>
     </UseColorMode>

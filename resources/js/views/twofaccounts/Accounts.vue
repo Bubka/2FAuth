@@ -567,7 +567,7 @@
                     :preferences="user.preferences"
                     :twofaccountService="twofaccountService"
                     :iconPathPrefix="$2fauth.config.subdirectory"
-                    @please-close-me="showOtpInModal = false"
+                    @please-close-me="showOtpInModal = false; showFooterMenu = false"
                     @please-clear-search="twofaccounts.filter = ''"
                     @kickme="user.logout({ kicked: true})"
                     @please-update-activeGroup="saveActiveGroup"
@@ -577,16 +577,22 @@
             </template>
             <template #footer-submenu>
                 <ul class="ml-0 mt-1">
+                    <!-- manage sharing link -->
+                    <li class="column">
+                        <router-link id="lnkManageSharing" :to="{ name: 'accountSharing', params: { twofaccountId: visibleAccountId }}" class="is-link">
+                            {{ $t('link.share') }}
+                        </router-link>
+                    </li>
                     <!-- edit link -->
                     <li class="column">
                         <router-link id="lnkEdit" :to="{ name: 'editAccount', params: { twofaccountId: visibleAccountId }}" class="is-link">
                             {{ $t('link.edit') }}
                         </router-link>
                     </li>
-                    <!-- share link -->
+                    <!-- qrcode link -->
                     <li class="column">
-                        <router-link id="lnkShare" :to="{ name: 'editAccount', params: { twofaccountId: visibleAccountId }}" class="is-link">
-                            {{ $t('link.share') }}
+                        <router-link id="lnkQrCode" :to="{ name: 'showQRcode', params: { twofaccountId: visibleAccountId }}" class="is-link" :title="$t('tooltip.show_qrcode')">
+                            {{ $t('link.view_as_qrcode') }}
                         </router-link>
                     </li>
                 </ul>

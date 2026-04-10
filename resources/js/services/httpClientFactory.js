@@ -42,6 +42,15 @@ export const httpClientFactory = (endpoint = 'api') => {
             return response;
         },
         async function (error) {
+            if (axios.isCancel(error) || error?.code === 'ERR_CANCELED') {
+                return Promise.reject(error)
+            }
+
+            if (!error?.response) {
+                useErrorHandler().show(error)
+                return new Promise(() => {})
+            }
+
             const originalRequestConfig = error.config
 
             // Here we handle a missing/invalid CSRF cookie
