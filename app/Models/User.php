@@ -261,6 +261,26 @@ class User extends Authenticatable implements HasLocalePreference, WebAuthnAuthe
     }
 
     /**
+     * Get TwoFAccount shared by the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\App\Models\TwoFAccountShare, $this>
+     */
+    public function twofaccountsSharedBy()
+    {
+        return $this->hasMany(\App\Models\TwoFAccountShare::class, 'created_by_user_id');
+    }
+
+    /**
+     * Get TwoFAccount shared with the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\App\Models\TwoFAccountShare, $this>
+     */
+    public function twofaccountsSharedWith()
+    {
+        return $this->hasMany(\App\Models\TwoFAccountShare::class, 'shared_with_user_id');
+    }
+
+    /**
      * Compare 2 Users
      */
     public function equals(self $other) : bool

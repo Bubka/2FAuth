@@ -3,6 +3,7 @@
 namespace App\Api\v1\Controllers;
 
 use App\Api\v1\Requests\TwoFAccountShareStoreRequest;
+use App\Api\v1\Resources\USerShareRecipientResource;
 use App\Http\Controllers\Controller;
 use App\Models\TwoFAccount;
 use App\Models\User;
@@ -10,6 +11,8 @@ use App\Services\TwoFAccountShareService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class TwoFAccountShareController extends Controller
 {
@@ -28,10 +31,7 @@ class TwoFAccountShareController extends Controller
             ? collect([])
             : $this->twoFAccountShareService->explicitSharedUsers($twofaccount)
                 ->map(function (User $user) {
-                    return [
-                        'id'   => $user->id,
-                        'name' => $user->name,
-                    ];
+                    return new USerShareRecipientResource($user);
                 })
                 ->values();
 
@@ -68,13 +68,26 @@ class TwoFAccountShareController extends Controller
 
         return response()->json([
             'users' => $results
-                ->map(fn (array $result) => [
-                    'id'   => $result['user']->id,
-                    'name' => $result['user']->name,
-                ])
+                ->map(fn (array $result) => (new USerShareRecipientResource($result['user']))->toArray($request))
                 ->values(),
             'twofaccount_id' => $twofaccount->id,
         ], $created > 0 ? 201 : 200);
+    }
+
+    /**
+     * List all potential share recipients for a twofaccount
+     *
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     */
+    public function recipients(TwoFAccount $twofaccount, Request $request)
+    {
+        $users = QueryBuilder::for(User::whereNot('id', $request->user()->id))
+            ->allowedFilters(
+                AllowedFilter::partial('name'),
+            )
+            ->get();
+
+        return USerShareRecipientResource::collection($users);
     }
 
     /**

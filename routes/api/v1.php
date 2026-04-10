@@ -54,6 +54,7 @@ Route::group(['middleware' => 'auth:api-guard'], function () {
         Route::post('twofaccounts/{twofaccount}/shares/all', [TwoFAccountShareController::class, 'shareAll'])->name('twofaccounts.shares.shareAll');
         Route::delete('twofaccounts/{twofaccount}/shares/all', [TwoFAccountShareController::class, 'unshareAll'])->name('twofaccounts.shares.unshareAll');
         Route::delete('twofaccounts/{twofaccount}/shares/{user}', [TwoFAccountShareController::class, 'destroy'])->name('twofaccounts.shares.destroy');
+        Route::get('twofaccounts/{twofaccount}/recipients', [TwoFAccountShareController::class, 'recipients'])->name('twofaccounts.shares.recipients');
     });
     Route::apiResource('twofaccounts', TwoFAccountController::class);
 
