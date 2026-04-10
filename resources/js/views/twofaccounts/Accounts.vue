@@ -21,7 +21,7 @@
     import { useSortable, moveArrayElement } from '@vueuse/integrations/useSortable'
     import { useI18n } from 'vue-i18n'
     import { useErrorHandler } from '@2fauth/stores'
-    import { LucideChevronDown, LucideCircleAlert, LucideEye, LucideEyeOff, LucideMenu, LucideQrCode, LucideX } from 'lucide-vue-next'
+    import { LucideChevronDown, LucideCircleAlert, LucideEye, LucideEyeOff, LucideMenu, LucideQrCode, LucideX } from '@lucide/vue'
 
     const errorHandler = useErrorHandler()
     const { t } = useI18n()

@@ -18,7 +18,7 @@
         LucideQrCode,
         LucideWandSparkles,
         LucideRefreshCw
-    } from 'lucide-vue-next'
+    } from '@lucide/vue'
 
     const errorHandler = useErrorHandler()
     const { t } = useI18n()

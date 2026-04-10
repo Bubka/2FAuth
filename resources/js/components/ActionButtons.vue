@@ -1,7 +1,7 @@
 <script setup>
     import { UseColorMode  } from '@vueuse/components'
     import { useUserStore } from '@/stores/user'
-    import { LucideQrCode, LucideScanQrCode } from 'lucide-vue-next'
+    import { LucideTrash2, LucideScanQrCode, LucideFolderDown, LucideDownload, LucideUsers, LucideShapes, LucideGroup } from '@lucide/vue'
 
     const router = useRouter()
     const user = useUserStore()

@@ -1,7 +1,7 @@
 <script setup>
     import systemService from '@/services/systemService'
     import { useAppSettingsStore } from '@/stores/appSettings'
-    import { LucideCheck, LucideX } from 'lucide-vue-next'
+    import { LucideCheck, LucideX } from '@lucide/vue'
 
     const appSettings = useAppSettingsStore()
     const isScanning = ref(false)

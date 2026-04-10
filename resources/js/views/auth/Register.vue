@@ -5,7 +5,7 @@
     import { useNotify } from '@2fauth/ui'
     import { useI18n } from 'vue-i18n'
     import { useErrorHandler } from '@2fauth/stores'
-    import { LucideCheck } from 'lucide-vue-next'
+    import { LucideCheck } from '@lucide/vue'
 
     const errorHandler = useErrorHandler()
     const { t } = useI18n()

@@ -1,7 +1,7 @@
 <script setup>
     import { UseColorMode } from '@vueuse/components'
     import { useUserStore } from '@/stores/user'
-    import { LucideCodeXml, LucideFlaskConical, LucideFolderGit2, LucideGraduationCap } from 'lucide-vue-next'
+    import { LucideCodeXml, LucideFlaskConical, LucideFolderGit2, LucideGraduationCap } from '@lucide/vue'
 
     const $2fauth = inject('2fauth')
     const user = useUserStore()

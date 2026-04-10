@@ -8,7 +8,7 @@
     import { useAppSettingsStore } from '@/stores/appSettings'
     import { timezones } from './timezones'
     import { useI18n } from 'vue-i18n'
-    import { LucideExternalLink, LucideRefreshCw } from 'lucide-vue-next'
+    import { LucideExternalLink, LucideRefreshCw } from '@lucide/vue'
 
     const { t } = useI18n()
     const $2fauth = inject('2fauth')

@@ -11,7 +11,7 @@
         LucideTablet,
         LucideCheck,
         LucideX
-    } from 'lucide-vue-next'
+    } from '@lucide/vue'
 
     const errorHandler = useErrorHandler()
     const $2fauth = inject('2fauth')

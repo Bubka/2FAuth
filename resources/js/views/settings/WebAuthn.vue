@@ -8,7 +8,7 @@
     import { UseColorMode } from '@vueuse/components'
     import { useI18n } from 'vue-i18n'
     import { useErrorHandler } from '@2fauth/stores'
-    import { LucideCirclePlus } from 'lucide-vue-next'
+    import { LucideCirclePlus } from '@lucide/vue'
 
     const errorHandler = useErrorHandler()
     const { t } = useI18n()

@@ -8,7 +8,7 @@
     import { useUserStore } from '@/stores/user'
     import { useI18n } from 'vue-i18n'
     import { useErrorHandler } from '@2fauth/stores'
-    import { LucideCirclePlus, LucideCheck } from 'lucide-vue-next'
+    import { LucideCirclePlus, LucideCheck } from '@lucide/vue'
 
     const errorHandler = useErrorHandler()
     const { t } = useI18n()

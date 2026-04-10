@@ -9,7 +9,7 @@
     import VersionChecker from '@/components/VersionChecker.vue'
     import CopyButton from '@/components/CopyButton.vue'
     import { useI18n } from 'vue-i18n'
-    import { LucideSend } from 'lucide-vue-next'
+    import { LucideSend } from '@lucide/vue'
 
     const errorHandler = useErrorHandler()
     const { t } = useI18n()
