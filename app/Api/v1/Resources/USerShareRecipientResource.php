@@ -7,7 +7,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 /**
  * @property mixed $id
  * @property string $name
- * @property \Illuminate\Database\Eloquent\Relations\HasMany<\App\Models\TwoFAccountShare, \App\Models\User> $twofaccountsSharedWith
+ * @property \Illuminate\Database\Eloquent\Relations\HasMany<\App\Models\TwoFAccountShare, \App\Models\User> $borrowedTwofaccounts
  */
 class USerShareRecipientResource extends JsonResource
 {
@@ -20,7 +20,7 @@ class USerShareRecipientResource extends JsonResource
     public function toArray($request)
     {
         $twofaccount = $request->route('twofaccount');
-        $isShared    = $this->twofaccountsSharedWith->where('twofaccount_id', $twofaccount->id)->first();
+        $isShared    = $this->borrowedTwofaccounts->where('twofaccount_id', $twofaccount->id)->first();
 
         return [
             'id'           => $this->id,

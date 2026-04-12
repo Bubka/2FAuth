@@ -5,7 +5,9 @@ namespace App\Api\v1\Resources;
 /**
  * @property mixed $id
  * @property mixed $group_id
+ * @property \App\Models\User|null $user
  *
+ * @method bool isSharedWith(\App\Models\User $user)
  * @method \App\Models\Dto\TotpDto|\App\Models\Dto\HotpDto getOtp(int $time)
  */
 class TwoFAccountReadResource extends TwoFAccountStoreResource
@@ -18,10 +20,14 @@ class TwoFAccountReadResource extends TwoFAccountStoreResource
      */
     public function toArray($request)
     {
+        $isShared = $this->isSharedWith($request->user());
+
         return array_merge(
             [
-                'id'       => (int) $this->id,
-                'group_id' => is_null($this->group_id) ? null : (int) $this->group_id,
+                'id'          => (int) $this->id,
+                'group_id'    => is_null($this->group_id) ? null : (int) $this->group_id,
+                'is_borrowed' => $this->when($isShared, true),
+                'borrowed_by' => $this->when($isShared, $this->user?->name),
             ],
             parent::toArray($request),
             [
