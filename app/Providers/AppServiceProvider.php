@@ -46,12 +46,6 @@ class AppServiceProvider extends ServiceProvider
             KeysCommand::class,
         ]);
 
-        Gate::before(function (User $user, string $ability) {
-            if ($user->isAdministrator()) {
-                return true;
-            }
-        });
-
         Gate::define('manage-pat', function (User $user) {
             $useSsoOnly = Settings::get('useSsoOnly');
 
