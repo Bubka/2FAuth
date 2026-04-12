@@ -118,6 +118,13 @@ export const useTwofaccounts = defineStore('twofaccounts', {
         },
 
         /**
+         * Get a 2FA account by its ID
+         */
+        getById(id) {
+            return this.items.find(a => a.id == id)
+        },
+
+        /**
          * Adds an account to the current selection
          */
         select(id) {
