@@ -382,7 +382,28 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->assertJsonFragment([
                 'is_borrowed' => true,
                 'borrowed_by' => $this->anotherUser->name,
-            ]);
+            ])
+            ->assertJsonMissingPath('is_shared');
+    }
+
+    #[Test]
+    public function test_index_returns_accounts_with_shared_ones_identified()
+    {
+        TwoFAccountShare::create([
+            'twofaccount_id' => $this->twofaccountA->id,
+            'shared_with_user_id' => $this->anotherUser->id,
+            'scope' => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id' => $this->user->id,
+        ]);
+
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts')
+            ->assertOk()
+            ->assertJsonFragment([
+                'is_shared' => true,
+            ])
+            ->assertJsonMissingPath('is_borrowed')
+            ->assertJsonMissingPath('borrowed_by');
     }
 
     #[Test]
@@ -510,20 +531,37 @@ class TwoFAccountControllerTest extends FeatureTestCase
     #[Test]
     public function test_show_twofaccount_shared_with_user_returns_resource_with_sharing_info()
     {
-        $twofaccountSharedByUserWithAnotherUser = TwoFAccount::factory()->for($this->user)->create();
-
         TwoFAccountShare::create([
-            'twofaccount_id' => $twofaccountSharedByUserWithAnotherUser->id,
+            'twofaccount_id' => $this->twofaccountA->id,
             'shared_with_user_id' => $this->anotherUser->id,
             'scope' => TwoFAccountShare::SCOPE_USER,
             'created_by_user_id' => $this->user->id,
         ]);
 
         $this->actingAs($this->anotherUser, 'api-guard')
-            ->json('GET', '/api/v1/twofaccounts/' . $twofaccountSharedByUserWithAnotherUser->id . '?withOtp=0')
+            ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccountA->id . '?withOtp=0')
             ->assertOk()
             ->assertJsonPath('is_borrowed', true)
-            ->assertJsonPath('borrowed_by', $this->user->name);
+            ->assertJsonPath('borrowed_by', $this->user->name)
+            ->assertJsonMissingPath('is_shared');
+    }
+
+    #[Test]
+    public function test_show_twofaccount_shared_by_user_returns_resource_with_sharing_info()
+    {
+        TwoFAccountShare::create([
+            'twofaccount_id' => $this->twofaccountA->id,
+            'shared_with_user_id' => $this->anotherUser->id,
+            'scope' => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id' => $this->user->id,
+        ]);
+
+        $this->actingAs($this->user, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccountA->id . '?withOtp=0')
+            ->assertOk()
+            ->assertJsonPath('is_shared', true)
+            ->assertJsonMissingPath('is_borrowed')
+            ->assertJsonMissingPath('borrowed_by');
     }
 
     #[Test]
@@ -533,7 +571,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccountA->id . '?withOtp=0')
             ->assertOk()
             ->assertJsonMissingPath('is_borrowed')
-            ->assertJsonMissingPath('borrowed_by');
+            ->assertJsonMissingPath('borrowed_by')
+            ->assertJsonMissingPath('is_shared');
     }
 
     #[Test]
@@ -558,7 +597,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->assertJsonStructure(self::VALID_RESOURCE_STRUCTURE_WITH_SECRET)
             ->assertJsonFragment($expected)
             ->assertJsonMissingPath('is_borrowed')
-            ->assertJsonMissingPath('borrowed_by');
+            ->assertJsonMissingPath('borrowed_by')
+            ->assertJsonMissingPath('is_shared');
     }
 
     #[Test]
@@ -573,7 +613,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->assertJsonStructure(self::VALID_RESOURCE_STRUCTURE_WITH_SECRET)
             ->assertJsonFragment($expected)
             ->assertJsonMissingPath('is_borrowed')
-            ->assertJsonMissingPath('borrowed_by');
+            ->assertJsonMissingPath('borrowed_by')
+            ->assertJsonMissingPath('is_shared');
     }
 
     /**
@@ -805,7 +846,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->assertOk()
             ->assertJsonFragment(self::JSON_FRAGMENTS_FOR_CUSTOM_TOTP)
             ->assertJsonMissingPath('is_borrowed')
-            ->assertJsonMissingPath('borrowed_by');
+            ->assertJsonMissingPath('borrowed_by')
+            ->assertJsonMissingPath('is_shared');;
     }
 
     #[Test]
@@ -816,7 +858,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->assertOk()
             ->assertJsonFragment(self::JSON_FRAGMENTS_FOR_CUSTOM_HOTP)
             ->assertJsonMissingPath('is_borrowed')
-            ->assertJsonMissingPath('borrowed_by');
+            ->assertJsonMissingPath('borrowed_by')
+            ->assertJsonMissingPath('is_shared');
     }
 
     #[Test]
@@ -1520,8 +1563,10 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ])
             ->assertJsonMissingPath('0.is_borrowed')
             ->assertJsonMissingPath('0.borrowed_by')
+            ->assertJsonMissingPath('0.is_shared')
             ->assertJsonMissingPath('1.is_borrowed')
-            ->assertJsonMissingPath('1.borrowed_by');
+            ->assertJsonMissingPath('1.borrowed_by')
+            ->assertJsonMissingPath('1.is_shared');
     }
 
     #[Test]
@@ -1860,7 +1905,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->assertOk()
             ->assertJsonFragment(self::JSON_FRAGMENTS_FOR_CUSTOM_TOTP)
             ->assertJsonMissingPath('is_borrowed')
-            ->assertJsonMissingPath('borrowed_by');
+            ->assertJsonMissingPath('borrowed_by')
+            ->assertJsonMissingPath('is_shared');
     }
 
     #[Test]

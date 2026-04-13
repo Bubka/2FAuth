@@ -281,6 +281,16 @@ class User extends Authenticatable implements HasLocalePreference, WebAuthnAuthe
     }
 
     /**
+     * Determine if the user has shared the given TwoFAccount.
+     */
+    public function isSharing(TwoFAccount $twofaccount) : bool
+    {
+        return $this->sharedTwofaccounts()
+            ->where('twofaccount_id', $twofaccount->id)
+            ->exists();
+    }
+
+    /**
      * Compare 2 Users
      */
     public function equals(self $other) : bool

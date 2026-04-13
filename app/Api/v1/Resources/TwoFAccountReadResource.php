@@ -7,6 +7,7 @@ namespace App\Api\v1\Resources;
  * @property mixed $group_id
  * @property \App\Models\User|null $user
  *
+ * @method \Illuminate\Database\Eloquent\Collection<array-key, \App\Models\TwoFAccount> loadCount(string $relations)
  * @method bool isSharedWith(\App\Models\User $user)
  * @method \App\Models\Dto\TotpDto|\App\Models\Dto\HotpDto getOtp(int $time)
  */
@@ -20,14 +21,16 @@ class TwoFAccountReadResource extends TwoFAccountStoreResource
      */
     public function toArray($request)
     {
-        $isShared = $this->isSharedWith($request->user());
+        $isBorrowed = $this->isSharedWith($request->user());
+        $isShared   = $request->user()->isSharing($this->resource);
 
         return array_merge(
             [
                 'id'          => (int) $this->id,
                 'group_id'    => is_null($this->group_id) ? null : (int) $this->group_id,
-                'is_borrowed' => $this->when($isShared, true),
-                'borrowed_by' => $this->when($isShared, $this->user?->name),
+                'is_borrowed' => $this->when($isBorrowed, true),
+                'borrowed_by' => $this->when($isBorrowed, $this->user?->name),
+                'is_shared'   => $this->when($isShared, true),
             ],
             parent::toArray($request),
             [
