@@ -13,7 +13,10 @@ export const useTwofaccounts = defineStore('twofaccounts', {
             filter: '',
             backendWasNewer: false,
             fetchedOn: null,
-            groupLessOnly: false,
+            globalFilter: null,
+                // -1: group less items
+                // -2: items shared by me
+                // -3: items shared with me
         }
     },
 
@@ -23,18 +26,36 @@ export const useTwofaccounts = defineStore('twofaccounts', {
 
             return state.items.filter(
                 item => {
-                    if (state.groupLessOnly) {
-                        return item.group_id == null
+                    let itemMatch = state.globalFilter >= 0
+
+                    // gorup less items
+                    if (state.globalFilter == -1 && item.group_id == null) {
+                        itemMatch = itemMatch || true
                     }
-                    else if (parseInt(user.preferences.activeGroup) > 0) {
-                        return ((item.service ? item.service.toLowerCase().includes(state.filter.toLowerCase()) : false) ||
-                            item.account.toLowerCase().includes(state.filter.toLowerCase())) &&
-                            (item.group_id == parseInt(user.preferences.activeGroup))
+                    
+                    // items I share
+                    if (state.globalFilter == -2 && item.is_shared == true) {
+                        itemMatch = itemMatch || true
                     }
-                    else {
-                        return ((item.service ? item.service.toLowerCase().includes(state.filter.toLowerCase()) : false) ||
-                            item.account.toLowerCase().includes(state.filter.toLowerCase()))
+                    
+                    // items shared with me
+                    if (state.globalFilter == -3 && item.is_borrowed == true) {
+                        itemMatch = itemMatch || true
                     }
+
+                    // group items
+                    if (parseInt(user.preferences.activeGroup) > 0 && item.group_id == parseInt(user.preferences.activeGroup)) {
+                        itemMatch = itemMatch || true
+                    }
+
+                    if (state.filter) {
+                        itemMatch = itemMatch && (
+                            (item.service ? item.service.toLowerCase().includes(state.filter.toLowerCase()) : false)
+                            || item.account.toLowerCase().includes(state.filter.toLowerCase())
+                        )
+                    }
+
+                    return itemMatch
                 }
             )
         },

@@ -348,7 +348,10 @@
      */
     // TODO : Delegate this to the store or a global watcher
     function saveActiveGroup(newActiveGroupId) {
-        twofaccounts.groupLessOnly = false
+        if (newActiveGroupId < 0) {
+            twofaccounts.globalFilter = newActiveGroupId
+        }
+        else twofaccounts.globalFilter = null
 
         // When invoked by GroupSwitch event,  newActiveGroupId should
         // be the same as user.preferences.activeGroup because of the v-model
@@ -411,8 +414,14 @@
                     </div>
                     <div v-else>
                         <button type="button" id="btnShowGroupSwitch" :title="$t('tooltip.show_group_selector')" tabindex="1" class="button is-text is-like-text has-text-grey-dark" :class="{'has-text-grey' : mode != 'dark'}" @click.stop="showGroupSwitch = !showGroupSwitch">
-                            <template v-if="twofaccounts.groupLessOnly">
+                            <template v-if="twofaccounts.globalFilter == -1">
                                 {{ $t('label.group_less') }} ({{ twofaccounts.filteredCount }})&nbsp;
+                            </template>
+                            <template v-else-if="twofaccounts.globalFilter == -2">
+                                {{ $t('label.shared_by_me') }} ({{ twofaccounts.filteredCount }})&nbsp;
+                            </template>
+                            <template v-else-if="twofaccounts.globalFilter == -3">
+                                 {{ $t('label.shared_with_me') }} ({{ twofaccounts.filteredCount }})&nbsp;
                             </template>
                             <template v-else-if="groups.current">
                                 {{ groups.current }} ({{ twofaccounts.filteredCount }})&nbsp;
@@ -431,8 +440,7 @@
                     v-model:is-visible="showGroupSwitch"
                     v-model:active-group="user.preferences.activeGroup"
                     :groups="groups.items"
-                    @active-group-changed="saveActiveGroup"
-                    @show-group-less="twofaccounts.groupLessOnly = true">
+                    @active-group-changed="saveActiveGroup">
                         <RouterLink :to="{ name: 'groups' }" >{{ $t('link.manage_groups') }}</RouterLink>
                 </GroupSwitch>
                 <DestinationGroupSelector
