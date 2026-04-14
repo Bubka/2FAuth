@@ -6,6 +6,7 @@ use App\Events\TwoFAccountOwnershipTransferred;
 use App\Factories\MigratorFactoryInterface;
 use App\Helpers\Helpers;
 use App\Models\TwoFAccount;
+use App\Models\TwoFAccountGroupAssignment;
 use App\Models\TwoFAccountShare;
 use App\Models\User;
 use Illuminate\Support\Collection;
@@ -33,19 +34,23 @@ class TwoFAccountService
      *
      * @param  int|array|string  $ids  twofaccount ids to free
      */
-    public static function withdraw($ids) : void
+    public static function withdraw($ids, ?User $user = null) : void
     {
         // $ids as string could be a comma-separated list of ids
         // so in this case we explode the string to an array
         $ids = Helpers::commaSeparatedToArray($ids);
+        $ids = is_array($ids) ? $ids : [$ids]; // whereIn() expects an array
+        $user ??= Auth::user();
 
-        // whereIn() expects an array
-        $ids = is_array($ids) ? $ids : func_get_args();
+        if (! $user) {
+            Log::warning(sprintf('Cannot withdraw TwoFAccounts from groups without an authenticated user (ids: %s)', implode(',', $ids)));
 
-        $affectedCount = TwoFAccount::whereIn('id', $ids)
-            ->update(
-                ['group_id' => null]
-            );
+            return;
+        }
+
+        $affectedCount = TwoFAccountGroupAssignment::where('user_id', $user->id)
+            ->whereIn('twofaccount_id', $ids)
+            ->delete();
 
         if ($affectedCount) {
             Log::info(sprintf('TwoFAccounts with IDs #%s withdrawn', implode(',', $ids)));

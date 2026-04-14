@@ -8,6 +8,7 @@ use App\Listeners\DissociateTwofaccountFromGroup;
 use App\Listeners\ResetUsersPreference;
 use App\Models\Group;
 use App\Models\TwoFAccount;
+use App\Models\TwoFAccountShare;
 use App\Models\User;
 use App\Policies\GroupPolicy;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -30,7 +31,7 @@ class GroupControllerTest extends FeatureTestCase
     protected $anotherUser;
 
     /**
-     * @var App\Models\Group
+     * @var \App\Models\Group
      */
     protected $userGroupA;
 
@@ -41,7 +42,7 @@ class GroupControllerTest extends FeatureTestCase
     protected $anotherUserGroupB;
 
     /**
-     * @var App\Models\TwoFAccount
+     * @var \App\Models\TwoFAccount
      */
     protected $twofaccountA;
 
@@ -61,23 +62,15 @@ class GroupControllerTest extends FeatureTestCase
         $this->userGroupA = Group::factory()->for($this->user)->create();
         $this->userGroupB = Group::factory()->for($this->user)->create();
 
-        $this->twofaccountA = TwoFAccount::factory()->for($this->user)->create([
-            'group_id' => $this->userGroupA->id,
-        ]);
-        $this->twofaccountB = TwoFAccount::factory()->for($this->user)->create([
-            'group_id' => $this->userGroupA->id,
-        ]);
+        $this->twofaccountA = $this->createTwofaccountInGroup($this->user, $this->userGroupA);
+        $this->twofaccountB = $this->createTwofaccountInGroup($this->user, $this->userGroupA);
 
         $this->anotherUser       = User::factory()->create();
         $this->anotherUserGroupA = Group::factory()->for($this->anotherUser)->create();
         $this->anotherUserGroupB = Group::factory()->for($this->anotherUser)->create();
 
-        $this->twofaccountC = TwoFAccount::factory()->for($this->anotherUser)->create([
-            'group_id' => $this->anotherUserGroupA->id,
-        ]);
-        $this->twofaccountD = TwoFAccount::factory()->for($this->anotherUser)->create([
-            'group_id' => $this->anotherUserGroupB->id,
-        ]);
+        $this->twofaccountC = $this->createTwofaccountInGroup($this->anotherUser, $this->anotherUserGroupA);
+        $this->twofaccountD = $this->createTwofaccountInGroup($this->anotherUser, $this->anotherUserGroupB);
     }
 
     #[Test]
@@ -352,6 +345,29 @@ class GroupControllerTest extends FeatureTestCase
                 'message',
             ]);
     }
+
+    #[Test]
+    public function test_assign_shared_account_to_owned_group_is_allowed()
+    {
+        TwoFAccountShare::create([
+            'twofaccount_id'      => $this->twofaccountC->id,
+            'shared_with_user_id' => $this->user->id,
+            'scope'               => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id'  => $this->anotherUser->id,
+        ]);
+
+        $this->actingAs($this->user, 'api-guard')
+            ->json('POST', '/api/v1/groups/' . $this->userGroupA->id . '/assign', [
+                'ids' => [$this->twofaccountC->id],
+            ])
+            ->assertOk();
+
+        $this->assertDatabaseHas('twofaccount_group_assignments', [
+            'twofaccount_id' => $this->twofaccountC->id,
+            'user_id'        => $this->user->id,
+            'group_id'       => $this->userGroupA->id,
+        ]);
+    }
     
 
     #[Test]
@@ -479,6 +495,25 @@ class GroupControllerTest extends FeatureTestCase
             ->assertJsonCount(2);
     }
 
+    #[Test]
+    public function test_accounts_of_the_all_group_includes_shared_accounts()
+    {
+        TwoFAccountShare::create([
+            'twofaccount_id'      => $this->twofaccountC->id,
+            'shared_with_user_id' => $this->user->id,
+            'scope'               => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id'  => $this->anotherUser->id,
+        ]);
+
+        $this->actingAs($this->user, 'api-guard')
+            ->json('GET', '/api/v1/groups/0/twofaccounts')
+            ->assertOk()
+            ->assertJsonCount(3)
+            ->assertJsonFragment([
+                'id' => $this->twofaccountC->id,
+            ]);
+    }
+
     /**
      * test Group deletion via API
      */
@@ -559,7 +594,13 @@ class GroupControllerTest extends FeatureTestCase
         $this->twofaccountA->refresh();
         $this->twofaccountB->refresh();
 
-        $this->assertNull($this->twofaccountA->group_id);
-        $this->assertNull($this->twofaccountB->group_id);
+        $this->assertDatabaseMissing('twofaccount_group_assignments', [
+            'twofaccount_id' => $this->twofaccountA->id,
+            'user_id'        => $this->user->id,
+        ]);
+        $this->assertDatabaseMissing('twofaccount_group_assignments', [
+            'twofaccount_id' => $this->twofaccountB->id,
+            'user_id'        => $this->user->id,
+        ]);
     }
 }

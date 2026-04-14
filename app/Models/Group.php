@@ -6,6 +6,8 @@ use App\Events\GroupDeleted;
 use Database\Factories\GroupFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Log;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
@@ -138,11 +140,23 @@ class Group extends Model implements Sortable
     /**
      * Get the TwoFAccounts of the group.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\App\Models\TwoFAccount, $this>
+     * @return BelongsToMany<\App\Models\TwoFAccount, $this>
      */
-    public function twofaccounts()
+    public function twofaccounts() : BelongsToMany
     {
-        return $this->hasMany(\App\Models\TwoFAccount::class);
+        return $this->belongsToMany(\App\Models\TwoFAccount::class, 'twofaccount_group_assignments', 'group_id', 'twofaccount_id')
+            ->withPivot('user_id')
+            ->withTimestamps();
+    }
+
+    /**
+     * Get assignment rows for the group.
+     *
+     * @return HasMany<\App\Models\TwoFAccountGroupAssignment, $this>
+     */
+    public function twofaccountGroupAssignments() : HasMany
+    {
+        return $this->hasMany(TwoFAccountGroupAssignment::class, 'group_id');
     }
 
     /**

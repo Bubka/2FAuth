@@ -138,6 +138,34 @@ class TwoFAccountPolicy
     }
 
     /**
+     * Determine whether the user can assign all provided models to one of their groups.
+     *
+     * @param  \Illuminate\Support\Collection<int, \App\Models\TwoFAccount>  $twofaccounts
+     * @return \Illuminate\Auth\Access\Response|bool
+     */
+    public function assignToGroupEach(User $user, TwoFAccount $twofaccount, $twofaccounts)
+    {
+        $can = true;
+
+        foreach ($twofaccounts as $candidate) {
+            if (! $candidate->isOwnedBy($user) && ! $candidate->isSharedWith($user)) {
+                $can = false;
+                break;
+            }
+        }
+
+        if (! $can) {
+            $ids = $twofaccounts->map(function ($candidate, $key) {
+                return $candidate->id;
+            });
+
+            Log::notice(sprintf('User ID #%s cannot assign all twofaccounts in IDs #%s to a group', $user->id, implode(',', $ids->toArray())));
+        }
+
+        return $can;
+    }
+
+    /**
      * Determine whether the user can delete the model.
      *
      * @return \Illuminate\Auth\Access\Response|bool

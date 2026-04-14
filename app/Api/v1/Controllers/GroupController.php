@@ -10,6 +10,7 @@ use App\Api\v1\Resources\TwoFAccountCollection;
 use App\Facades\Groups;
 use App\Http\Controllers\Controller;
 use App\Models\Group;
+use App\Models\TwoFAccount;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -149,12 +150,28 @@ class GroupController extends Controller
         $this->authorize('view', $group);
 
         // group with id==0 is the 'All' virtual group that lists
-        // all the user's twofaccounts. From the db pov the accounts
-        // are not assigned to any group record.
+        // all visible accounts for the requester, regardless of assignment.
         if ($group->id === 0) {
-            $twofaccounts = $request->user()->twofaccounts;
+            $twofaccounts = TwoFAccount::visibleTo($request->user())
+                ->with([
+                    'groups' => function ($query) use ($request) {
+                        $query->where('user_id', $request->user()->id);
+                    },
+                ])
+                ->get();
         } else {
-            $twofaccounts = $group->twofaccounts;
+            $twofaccounts = TwoFAccount::visibleTo($request->user())
+                ->whereHas('groups', function ($query) use ($group, $request) {
+                    $query
+                        ->where('group_id', $group->id)
+                        ->where('user_id', $request->user()->id);
+                })
+                ->with([
+                    'groups' => function ($query) use ($request) {
+                        $query->where('user_id', $request->user()->id);
+                    },
+                ])
+                ->get();
         }
 
         return new TwoFAccountCollection($twofaccounts);

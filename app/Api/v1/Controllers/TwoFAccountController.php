@@ -48,22 +48,11 @@ class TwoFAccountController extends Controller
         }
 
         $validated                = $request->validated();
-        $visibleTwoFAccountsQuery = TwoFAccount::query()
-            ->where(function ($query) use ($request) {
-                $query
-                    ->where('user_id', $request->user()->id)
-                    ->orWhereHas('shares', function ($shareQuery) use ($request) {
-                        $shareQuery->where(function ($scopeQuery) use ($request) {
-                            $scopeQuery
-                                ->where(function ($userScopeQuery) use ($request) {
-                                    $userScopeQuery
-                                        ->where('scope', TwoFAccountShare::SCOPE_USER)
-                                        ->where('shared_with_user_id', $request->user()->id);
-                                })
-                                ->orWhere('scope', TwoFAccountShare::SCOPE_ALL_USERS);
-                        });
-                    });
-            });
+        $visibleTwoFAccountsQuery = TwoFAccount::visibleTo($request->user())->with([
+            'groups' => function ($query) use ($request) {
+                $query->where('user_id', $request->user()->id);
+            },
+        ]);
 
         return Arr::has($validated, 'ids')
             ? new TwoFAccountCollection($visibleTwoFAccountsQuery->whereIn('id', Helpers::commaSeparatedToArray($validated['ids']))->get()->sortBy('order_column'))
@@ -75,9 +64,15 @@ class TwoFAccountController extends Controller
      *
      * @return \App\Api\v1\Resources\TwoFAccountReadResource
      */
-    public function show(TwoFAccount $twofaccount)
+    public function show(Request $request, TwoFAccount $twofaccount)
     {
         $this->authorize('view', $twofaccount);
+
+        $twofaccount->load([
+            'groups' => function ($query) use ($request) {
+                $query->where('user_id', $request->user()->id);
+            },
+        ]);
 
         // $icon = $twofaccount->icon;
         // $iconRes = $twofaccount->icon()->get();
@@ -118,7 +113,13 @@ class TwoFAccountController extends Controller
             // creation to be reverted so we do nothing here.
         }
 
-        return (new TwoFAccountReadResource($twofaccount->refresh()))
+        $twofaccount = $twofaccount->refresh()->load([
+            'groups' => function ($query) use ($request) {
+                $query->where('user_id', $request->user()->id);
+            },
+        ]);
+
+        return (new TwoFAccountReadResource($twofaccount))
             ->response()
             ->setStatusCode(201);
     }
@@ -138,20 +139,27 @@ class TwoFAccountController extends Controller
         $request->user()->twofaccounts()->save($twofaccount);
 
         // Possible group change
-        $groupId = Arr::get($validated, 'group_id', null);
-        if ($twofaccount->group_id != $groupId) {
+        $groupId        = Arr::get($validated, 'group_id', null);
+        $currentGroupId = $twofaccount->groupIdForUser($request->user());
+
+        if ($currentGroupId != $groupId) {
             if ((int) $groupId === 0) {
-                TwoFAccounts::withdraw($twofaccount->id);
+                TwoFAccounts::withdraw($twofaccount->id, $request->user());
             } else {
                 try {
                     Groups::assign($twofaccount->id, $request->user(), $groupId);
                 } catch (ModelNotFoundException $exc) {
                     // The destination group no longer exists, the twofaccount is withdrawn
-                    TwoFAccounts::withdraw($twofaccount->id);
+                    TwoFAccounts::withdraw($twofaccount->id, $request->user());
                 }
             }
-            $twofaccount->refresh();
         }
+
+        $twofaccount = $twofaccount->refresh()->load([
+            'groups' => function ($query) use ($request) {
+                $query->where('user_id', $request->user()->id);
+            },
+        ]);
 
         return (new TwoFAccountReadResource($twofaccount))
             ->response()
@@ -363,9 +371,9 @@ class TwoFAccountController extends Controller
         $ids          = Helpers::commaSeparatedToArray($validated['ids']);
         $twofaccounts = TwoFAccount::whereIn('id', $ids)->get();
 
-        $this->authorize('updateEach', [new TwoFAccount, $twofaccounts]);
+        $this->authorize('assignToGroupEach', [new TwoFAccount, $twofaccounts]);
 
-        TwoFAccounts::withdraw($ids);
+        TwoFAccounts::withdraw($ids, $request->user());
 
         return response()->json(['message' => 'accounts withdrawn'], 200);
     }

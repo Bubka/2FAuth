@@ -54,7 +54,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
     protected $anotherUser;
 
     /**
-     * @var App\Models\Group
+     * @var \App\Models\Group
      */
     protected $userGroupA;
 
@@ -65,7 +65,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
     protected $anotherUserGroupB;
 
     /**
-     * @var App\Models\TwoFAccount
+     * @var \App\Models\TwoFAccount
      */
     protected $twofaccountA;
 
@@ -258,26 +258,16 @@ class TwoFAccountControllerTest extends FeatureTestCase
         $this->userGroupA = Group::factory()->for($this->user)->create();
         $this->userGroupB = Group::factory()->for($this->user)->create();
 
-        $this->twofaccountA = TwoFAccount::factory()->for($this->user)->create([
-            'group_id' => $this->userGroupA->id,
-        ]);
-        $this->twofaccountB = TwoFAccount::factory()->for($this->user)->create([
-            'group_id' => $this->userGroupA->id,
-        ]);
+        $this->twofaccountA = $this->createTwofaccountInGroup($this->user, $this->userGroupA);
+        $this->twofaccountB = $this->createTwofaccountInGroup($this->user, $this->userGroupA);
 
         $this->anotherUser       = User::factory()->create();
         $this->anotherUserGroupA = Group::factory()->for($this->anotherUser)->create();
         $this->anotherUserGroupB = Group::factory()->for($this->anotherUser)->create();
 
-        $this->twofaccountC = TwoFAccount::factory()->for($this->anotherUser)->create([
-            'group_id' => $this->anotherUserGroupA->id,
-        ]);
-        $this->twofaccountD = TwoFAccount::factory()->for($this->anotherUser)->create([
-            'group_id' => $this->anotherUserGroupB->id,
-        ]);
-        $this->twofaccountE = TwoFAccount::factory()->for($this->anotherUser)->create([
-            'group_id' => $this->anotherUserGroupB->id,
-        ]);
+        $this->twofaccountC = $this->createTwofaccountInGroup($this->anotherUser, $this->anotherUserGroupA);
+        $this->twofaccountD = $this->createTwofaccountInGroup($this->anotherUser, $this->anotherUserGroupB);
+        $this->twofaccountE = $this->createTwofaccountInGroup($this->anotherUser, $this->anotherUserGroupB);
     }
 
     #[Test]
@@ -544,6 +534,28 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->assertJsonPath('is_borrowed', true)
             ->assertJsonPath('borrowed_by', $this->user->name)
             ->assertJsonMissingPath('is_shared');
+    }
+
+    #[Test]
+    public function test_show_twofaccount_shared_with_user_returns_requester_group_assignment()
+    {
+        TwoFAccountShare::create([
+            'twofaccount_id'      => $this->twofaccountA->id,
+            'shared_with_user_id' => $this->anotherUser->id,
+            'scope'               => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id'  => $this->user->id,
+        ]);
+
+        $this->actingAs($this->anotherUser, 'api-guard')
+            ->json('POST', '/api/v1/groups/' . $this->anotherUserGroupB->id . '/assign', [
+                'ids' => [$this->twofaccountA->id],
+            ])
+            ->assertOk();
+
+        $this->actingAs($this->anotherUser, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccountA->id . '?withOtp=0')
+            ->assertOk()
+            ->assertJsonPath('group_id', $this->anotherUserGroupB->id);
     }
 
     #[Test]
@@ -889,7 +901,11 @@ class TwoFAccountControllerTest extends FeatureTestCase
     #[Test]
     public function test_update_with_assignement_to_null_group_returns_success_with_updated_resource()
     {
-        $this->assertNotEquals(null, $this->twofaccountA->group_id);
+        $this->assertDatabaseHas('twofaccount_group_assignments', [
+            'twofaccount_id' => $this->twofaccountA->id,
+            'user_id'        => $this->user->id,
+            'group_id'       => $this->userGroupA->id,
+        ]);
 
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('PUT', '/api/v1/twofaccounts/' . $this->twofaccountA->id, array_merge(
@@ -906,7 +922,11 @@ class TwoFAccountControllerTest extends FeatureTestCase
     #[Test]
     public function test_update_with_assignement_to_zero_group_returns_success_with_updated_resource()
     {
-        $this->assertNotEquals(null, $this->twofaccountA->group_id);
+        $this->assertDatabaseHas('twofaccount_group_assignments', [
+            'twofaccount_id' => $this->twofaccountA->id,
+            'user_id'        => $this->user->id,
+            'group_id'       => $this->userGroupA->id,
+        ]);
 
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('PUT', '/api/v1/twofaccounts/' . $this->twofaccountA->id, array_merge(
@@ -923,7 +943,11 @@ class TwoFAccountControllerTest extends FeatureTestCase
     #[Test]
     public function test_update_with_assignement_to_new_groupid_returns_success_with_updated_resource()
     {
-        $this->assertEquals($this->userGroupA->id, $this->twofaccountA->group_id);
+        $this->assertDatabaseHas('twofaccount_group_assignments', [
+            'twofaccount_id' => $this->twofaccountA->id,
+            'user_id'        => $this->user->id,
+            'group_id'       => $this->userGroupA->id,
+        ]);
 
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('PUT', '/api/v1/twofaccounts/' . $this->twofaccountA->id, array_merge(
@@ -2336,6 +2360,44 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->assertJsonStructure([
                 'message',
             ]);
+    }
+
+    #[Test]
+    public function test_withdraw_shared_account_removes_only_requester_assignment()
+    {
+        TwoFAccountShare::create([
+            'twofaccount_id'      => $this->twofaccountC->id,
+            'shared_with_user_id' => $this->user->id,
+            'scope'               => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id'  => $this->anotherUser->id,
+        ]);
+
+        $this->actingAs($this->user, 'api-guard')
+            ->json('POST', '/api/v1/groups/' . $this->userGroupA->id . '/assign', [
+                'ids' => [$this->twofaccountC->id],
+            ])
+            ->assertOk();
+
+        $this->assertDatabaseHas('twofaccount_group_assignments', [
+            'twofaccount_id' => $this->twofaccountC->id,
+            'user_id'        => $this->user->id,
+            'group_id'       => $this->userGroupA->id,
+        ]);
+
+        $this->actingAs($this->user, 'api-guard')
+            ->json('PATCH', '/api/v1/twofaccounts/withdraw?ids=' . $this->twofaccountC->id)
+            ->assertOk();
+
+        $this->assertDatabaseMissing('twofaccount_group_assignments', [
+            'twofaccount_id' => $this->twofaccountC->id,
+            'user_id'        => $this->user->id,
+        ]);
+
+        $this->assertDatabaseHas('twofaccount_group_assignments', [
+            'twofaccount_id' => $this->twofaccountC->id,
+            'user_id'        => $this->anotherUser->id,
+            'group_id'       => $this->anotherUserGroupA->id,
+        ]);
     }
 
     #[Test]

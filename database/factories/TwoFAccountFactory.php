@@ -20,9 +20,8 @@ class TwoFAccountFactory extends Factory
         $account = $this->faker->safeEmail();
         $service = $this->faker->domainName();
         $secret = Base32::encodeUpper($this->faker->regexify('[A-Z0-9]{8}'));
-    
+
         return [
-            'group_id' => null,
             'otp_type' => 'totp',
             'account' => $account,
             'service' => $service,

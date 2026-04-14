@@ -49,6 +49,7 @@ use SteamTotp\SteamTotp;
  * @property int|null $counter
  * @property int|null $user_id
  * @property-read \App\Models\User|null $user
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TwoFAccountGroupAssignment> $groups
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TwoFAccountShare> $shares
  *
  * @method static \Database\Factories\TwoFAccountFactory factory(...$parameters)
@@ -257,6 +258,32 @@ class TwoFAccount extends Model implements Sortable
     }
 
     /**
+     * Get group assignments defined for this account.
+     *
+     * @return HasMany<\App\Models\TwoFAccountGroupAssignment, $this>
+     */
+    public function groups() : HasMany
+    {
+        return $this->hasMany(TwoFAccountGroupAssignment::class, 'twofaccount_id');
+    }
+
+    /**
+     * Return the group id assigned to this account by the provided user.
+     */
+    public function groupIdForUser(User $user) : ?int
+    {
+        if ($this->relationLoaded('groups')) {
+            return $this->groups
+                ->where('user_id', (int) $user->id)
+                ->first()?->group_id;
+        }
+
+        return $this->groups()
+            ->where('user_id', $user->id)
+            ->value('group_id');
+    }
+
+    /**
      * Determine whether the provided user owns this account.
      */
     public function isOwnedBy(User $user) : bool
@@ -298,6 +325,31 @@ class TwoFAccount extends Model implements Sortable
     public function canReadSecret(User $user) : bool
     {
         return $this->isOwnedBy($user);
+    }
+
+    /**
+     * Scope a query to include accounts visible by the provided user.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder<TwoFAccount>  $query
+     * @return \Illuminate\Database\Eloquent\Builder<TwoFAccount>
+     */
+    public function scopeVisibleTo($query, User $user)
+    {
+        return $query->where(function ($visibleQuery) use ($user) {
+            $visibleQuery
+                ->where('user_id', $user->id)
+                ->orWhereHas('shares', function ($shareQuery) use ($user) {
+                    $shareQuery->where(function ($scopeQuery) use ($user) {
+                        $scopeQuery
+                            ->where(function ($userScopeQuery) use ($user) {
+                                $userScopeQuery
+                                    ->where('scope', TwoFAccountShare::SCOPE_USER)
+                                    ->where('shared_with_user_id', $user->id);
+                            })
+                            ->orWhere('scope', TwoFAccountShare::SCOPE_ALL_USERS);
+                    });
+                });
+        });
     }
 
     /**

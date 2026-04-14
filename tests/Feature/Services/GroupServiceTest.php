@@ -62,16 +62,9 @@ class GroupServiceTest extends FeatureTestCase
 
         Group::factory()->count(2)->for($this->otherUser)->create();
 
-        $this->twofaccountOne = TwoFAccount::factory()->for($this->user)->create([
-            'group_id' => $this->groupOne->id,
-        ]);
-        $this->twofaccountTwo = TwoFAccount::factory()->for($this->user)->create([
-            'group_id' => $this->groupTwo->id,
-        ]);
-
-        $this->twofaccountThree = TwoFAccount::factory()->for($this->otherUser)->create([
-            'group_id' => $this->groupThree->id,
-        ]);
+        $this->twofaccountOne = $this->createTwofaccountInGroup($this->user, $this->groupOne);
+        $this->twofaccountTwo = $this->createTwofaccountInGroup($this->user, $this->groupTwo);
+        $this->twofaccountThree = $this->createTwofaccountInGroup($this->otherUser, $this->groupThree);
     }
 
     #[Test]
@@ -79,9 +72,10 @@ class GroupServiceTest extends FeatureTestCase
     {
         Groups::assign($this->twofaccountOne->id, $this->user, $this->groupTwo);
 
-        $this->assertDatabaseHas('twofaccounts', [
-            'id'       => $this->twofaccountOne->id,
-            'group_id' => $this->groupTwo->id,
+        $this->assertDatabaseHas('twofaccount_group_assignments', [
+            'twofaccount_id' => $this->twofaccountOne->id,
+            'user_id'        => $this->user->id,
+            'group_id'       => $this->groupTwo->id,
         ]);
     }
 
@@ -90,13 +84,15 @@ class GroupServiceTest extends FeatureTestCase
     {
         Groups::assign([$this->twofaccountOne->id, $this->twofaccountTwo->id], $this->user, $this->groupTwo);
 
-        $this->assertDatabaseHas('twofaccounts', [
-            'id'       => $this->twofaccountOne->id,
-            'group_id' => $this->groupTwo->id,
+        $this->assertDatabaseHas('twofaccount_group_assignments', [
+            'twofaccount_id' => $this->twofaccountOne->id,
+            'user_id'        => $this->user->id,
+            'group_id'       => $this->groupTwo->id,
         ]);
-        $this->assertDatabaseHas('twofaccounts', [
-            'id'       => $this->twofaccountTwo->id,
-            'group_id' => $this->groupTwo->id,
+        $this->assertDatabaseHas('twofaccount_group_assignments', [
+            'twofaccount_id' => $this->twofaccountTwo->id,
+            'user_id'        => $this->user->id,
+            'group_id'       => $this->groupTwo->id,
         ]);
     }
 
@@ -108,9 +104,10 @@ class GroupServiceTest extends FeatureTestCase
 
         Groups::assign($this->twofaccountOne->id, $this->user);
 
-        $this->assertDatabaseHas('twofaccounts', [
-            'id'       => $this->twofaccountOne->id,
-            'group_id' => $this->groupTwo->id,
+        $this->assertDatabaseHas('twofaccount_group_assignments', [
+            'twofaccount_id' => $this->twofaccountOne->id,
+            'user_id'        => $this->user->id,
+            'group_id'       => $this->groupTwo->id,
         ]);
     }
 
@@ -123,16 +120,17 @@ class GroupServiceTest extends FeatureTestCase
 
         Groups::assign($this->twofaccountOne->id, $this->user);
 
-        $this->assertDatabaseHas('twofaccounts', [
-            'id'       => $this->twofaccountOne->id,
-            'group_id' => $this->groupTwo->id,
+        $this->assertDatabaseHas('twofaccount_group_assignments', [
+            'twofaccount_id' => $this->twofaccountOne->id,
+            'user_id'        => $this->user->id,
+            'group_id'       => $this->groupTwo->id,
         ]);
     }
 
     #[Test]
     public function test_assign_a_twofaccount_to_missing_active_group_returns_not_found()
     {
-        $orginalGroup = $this->twofaccountOne->group_id;
+        $orginalGroup = $this->groupOne->id;
 
         $this->user['preferences->defaultGroup'] = -1;
         $this->user['preferences->activeGroup']  = 1000;
@@ -140,9 +138,10 @@ class GroupServiceTest extends FeatureTestCase
 
         Groups::assign($this->twofaccountOne->id, $this->user);
 
-        $this->assertDatabaseHas('twofaccounts', [
-            'id'       => $this->twofaccountOne->id,
-            'group_id' => $orginalGroup,
+        $this->assertDatabaseHas('twofaccount_group_assignments', [
+            'twofaccount_id' => $this->twofaccountOne->id,
+            'user_id'        => $this->user->id,
+            'group_id'       => $orginalGroup,
         ]);
     }
 
