@@ -26,26 +26,27 @@ export const useTwofaccounts = defineStore('twofaccounts', {
 
             return state.items.filter(
                 item => {
-                    let itemMatch = state.globalFilter >= 0
+                    let itemMatch = false
 
-                    // gorup less items
+                    // group less items
                     if (state.globalFilter == -1 && item.group_id == null) {
-                        itemMatch = itemMatch || true
+                        itemMatch = true
                     }
-                    
                     // items I share
-                    if (state.globalFilter == -2 && item.is_shared == true) {
-                        itemMatch = itemMatch || true
+                    else if (state.globalFilter == -2 && item.is_shared == true) {
+                        itemMatch = true
                     }
-                    
                     // items shared with me
-                    if (state.globalFilter == -3 && item.is_borrowed == true) {
-                        itemMatch = itemMatch || true
+                    else if (state.globalFilter == -3 && item.is_borrowed == true) {
+                        itemMatch = true
                     }
-
-                    // group items
-                    if (parseInt(user.preferences.activeGroup) > 0 && item.group_id == parseInt(user.preferences.activeGroup)) {
-                        itemMatch = itemMatch || true
+                    else if (parseInt(user.preferences.activeGroup) > 0 && item.group_id == parseInt(user.preferences.activeGroup)) {
+                        // no global filter but a group
+                        itemMatch = true
+                    }
+                    else if (parseInt(user.preferences.activeGroup) == 0 && state.globalFilter == null) {
+                        // , all items are matching
+                        itemMatch = true
                     }
 
                     if (state.filter) {
