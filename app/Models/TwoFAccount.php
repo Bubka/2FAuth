@@ -25,8 +25,6 @@ use OTPHP\Factory;
 use OTPHP\HOTP;
 use OTPHP\TOTP;
 use ParagonIE\ConstantTime\Base32;
-use Spatie\EloquentSortable\Sortable;
-use Spatie\EloquentSortable\SortableTrait;
 use SteamTotp\SteamTotp;
 
 /**
@@ -39,7 +37,6 @@ use SteamTotp\SteamTotp;
  * @property string|null $icon
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property int|null $order_column
  * @property int|null $group_id
  * @property string $otp_type
  * @property string $secret
@@ -55,7 +52,6 @@ use SteamTotp\SteamTotp;
  * @method static \Database\Factories\TwoFAccountFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount ordered(string $direction = 'asc')
  * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount query()
  * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereAccount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereAlgorithm($value)
@@ -66,7 +62,6 @@ use SteamTotp\SteamTotp;
  * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereIcon($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereLegacyUri($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereOrderColumn($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereOtpType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount wherePeriod($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereSecret($value)
@@ -80,12 +75,12 @@ use SteamTotp\SteamTotp;
  *
  * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount orphans()
  */
-class TwoFAccount extends Model implements Sortable
+class TwoFAccount extends Model
 {
     /**
      * @use HasFactory<TwoFAccountFactory>
      */
-    use CanEncryptField, HasFactory, SortableTrait;
+    use CanEncryptField, HasFactory;
 
     const TOTP = 'totp';
 
@@ -208,16 +203,6 @@ class TwoFAccount extends Model implements Sortable
             Log::info(sprintf('TwoFAccount ID #%d deleted ', $model->id));
         });
     }
-
-    /**
-     * Settings for @spatie/eloquent-sortable package
-     *
-     * @var array
-     */
-    public $sortable = [
-        'order_column_name'  => 'order_column',
-        'sort_when_creating' => true,
-    ];
 
     /**
      * The OTP generator.

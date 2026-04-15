@@ -82,6 +82,14 @@ class UserObserver
         // (despite DB_FOREIGN_KEYS=true which is supposed to enable it)
         // So it ends with a direct db delete for SQLite...
         if (DB::getDriverName() === 'sqlite') {
+            $ownedTwoFAccountIds = DB::table('twofaccounts')->where('user_id', $user->id)->pluck('id');
+
+            DB::table('twofaccount_user_orders')->where('user_id', $user->id)->delete();
+
+            if ($ownedTwoFAccountIds->isNotEmpty()) {
+                DB::table('twofaccount_user_orders')->whereIn('twofaccount_id', $ownedTwoFAccountIds->all())->delete();
+            }
+
             DB::table('twofaccounts')->where('user_id', $user->id)->delete();
             DB::table('groups')->where('user_id', $user->id)->delete();
         }

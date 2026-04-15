@@ -18,6 +18,7 @@ use App\Policies\TwoFAccountPolicy;
 use App\Providers\MigrationServiceProvider;
 use App\Providers\TwoFAuthServiceProvider;
 use App\Services\LogoLib\TfaLogoLib;
+use App\Services\TwoFAccountShareService;
 use Illuminate\Http\Testing\FileFactory;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
@@ -1897,6 +1898,54 @@ class TwoFAccountControllerTest extends FeatureTestCase
     }
 
     #[Test]
+    public function test_reorder_shared_twofaccounts_is_allowed()
+    {
+        TwoFAccountShare::create([
+            'twofaccount_id'      => $this->twofaccountC->id,
+            'shared_with_user_id' => $this->user->id,
+            'scope'               => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id'  => $this->anotherUser->id,
+        ]);
+
+        $this->actingAs($this->user, 'api-guard')
+            ->json('POST', '/api/v1/twofaccounts/reorder', [
+                'orderedIds' => [$this->twofaccountC->id, $this->twofaccountB->id, $this->twofaccountA->id],
+            ])
+            ->assertOk()
+            ->assertJsonFragment([
+                'orderedIds' => [
+                    $this->twofaccountC->id,
+                    $this->twofaccountB->id,
+                    $this->twofaccountA->id,
+                ],
+            ]);
+    }
+
+    #[Test]
+    public function test_index_returns_twofaccounts_sorted_with_custom_user_order()
+    {
+        TwoFAccountShare::create([
+            'twofaccount_id'      => $this->twofaccountC->id,
+            'shared_with_user_id' => $this->user->id,
+            'scope'               => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id'  => $this->anotherUser->id,
+        ]);
+
+        $this->actingAs($this->user, 'api-guard')
+            ->json('POST', '/api/v1/twofaccounts/reorder', [
+                'orderedIds' => [$this->twofaccountC->id, $this->twofaccountB->id, $this->twofaccountA->id],
+            ])
+            ->assertOk();
+
+        $this->actingAs($this->user, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts')
+            ->assertOk()
+            ->assertJsonPath('0.id', $this->twofaccountC->id)
+            ->assertJsonPath('1.id', $this->twofaccountB->id)
+            ->assertJsonPath('2.id', $this->twofaccountA->id);
+    }
+
+    #[Test]
     public function test_reorder_with_invalid_data_returns_validation_error()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -1916,6 +1965,42 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->assertForbidden()
             ->assertJsonStructure([
                 'message',
+            ]);
+    }
+
+    #[Test]
+    public function test_unshare_removes_borrower_custom_order_entry()
+    {
+        TwoFAccountShare::create([
+            'twofaccount_id'      => $this->twofaccountC->id,
+            'shared_with_user_id' => $this->user->id,
+            'scope'               => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id'  => $this->anotherUser->id,
+        ]);
+
+        $this->actingAs($this->user, 'api-guard')
+            ->json('POST', '/api/v1/twofaccounts/reorder', [
+                'orderedIds' => [$this->twofaccountC->id, $this->twofaccountB->id, $this->twofaccountA->id],
+            ])
+            ->assertOk();
+
+        $this->assertDatabaseHas('twofaccount_user_orders', [
+            'user_id'        => $this->user->id,
+            'twofaccount_id' => $this->twofaccountC->id,
+        ]);
+
+        resolve(TwoFAccountShareService::class)->revokeUserShare($this->twofaccountC, $this->user);
+
+        $this->assertDatabaseMissing('twofaccount_user_orders', [
+            'user_id'        => $this->user->id,
+            'twofaccount_id' => $this->twofaccountC->id,
+        ]);
+
+        $this->actingAs($this->user, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts')
+            ->assertOk()
+            ->assertJsonMissing([
+                'id' => $this->twofaccountC->id,
             ]);
     }
 

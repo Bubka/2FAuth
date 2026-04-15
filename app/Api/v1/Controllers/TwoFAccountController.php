@@ -54,9 +54,13 @@ class TwoFAccountController extends Controller
             },
         ]);
 
-        return Arr::has($validated, 'ids')
-            ? new TwoFAccountCollection($visibleTwoFAccountsQuery->whereIn('id', Helpers::commaSeparatedToArray($validated['ids']))->get()->sortBy('order_column'))
-            : new TwoFAccountCollection($visibleTwoFAccountsQuery->get()->sortBy('order_column'));
+        $twofaccounts = Arr::has($validated, 'ids')
+            ? $visibleTwoFAccountsQuery->whereIn('id', Helpers::commaSeparatedToArray($validated['ids']))->get()
+            : $visibleTwoFAccountsQuery->get();
+
+        $sortedTwoFAccounts = TwoFAccounts::sortForUser($twofaccounts, $request->user());
+
+        return new TwoFAccountCollection($sortedTwoFAccounts);
     }
 
     /**
@@ -216,10 +220,10 @@ class TwoFAccountController extends Controller
         $validated = $request->validated();
 
         $twofaccounts = TwoFAccount::whereIn('id', $validated['orderedIds'])->get();
-        $this->authorize('updateEach', [new TwoFAccount, $twofaccounts]);
+        $this->authorize('reorderEach', [new TwoFAccount, $twofaccounts]);
 
-        TwoFAccount::setNewOrder($validated['orderedIds']);
-        $orderedIds = $request->user()->twofaccounts->sortBy('order_column')->pluck('id');
+        TwoFAccounts::saveOrderForUser($request->user(), $validated['orderedIds']);
+        $orderedIds = TwoFAccounts::orderedVisibleIdsForUser($request->user());
 
         return response()->json([
             'message'    => 'order saved',

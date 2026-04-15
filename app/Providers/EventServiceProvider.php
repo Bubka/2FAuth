@@ -15,8 +15,11 @@ use App\Listeners\Authentication\LoginListener;
 use App\Listeners\Authentication\LogoutListener;
 use App\Listeners\Authentication\VisitedByProxyUserListener;
 use App\Listeners\CleanIconStorage;
+use App\Listeners\DeleteRevokedTwoFAccountUserOrders;
+use App\Listeners\DeleteTwoFAccountUserOrders;
 use App\Listeners\DissociateTwofaccountFromGroup;
 use App\Listeners\LogNotificationListener;
+use App\Listeners\PruneTwoFAccountUserOrdersAfterOwnershipTransfer;
 use App\Listeners\RegisterOpenId;
 use App\Listeners\ReleaseRadar;
 use App\Listeners\ResetUsersPreference;
@@ -48,14 +51,17 @@ class EventServiceProvider extends ServiceProvider
         ],
         TwoFAccountDeleted::class => [
             CleanIconStorage::class,
+            DeleteTwoFAccountUserOrders::class,
         ],
         TwoFAccountOwnershipTransferred::class => [
+            PruneTwoFAccountUserOrdersAfterOwnershipTransfer::class,
             SendTwoFAccountOwnershipTransferredNotification::class,
         ],
         TwoFAccountShared::class => [
             SendTwoFAccountSharedNotification::class,
         ],
         TwoFAccountShareRevoked::class => [
+            DeleteRevokedTwoFAccountUserOrders::class,
             SendTwoFAccountShareRevokedNotification::class,
         ],
         GroupDeleted::class => [
