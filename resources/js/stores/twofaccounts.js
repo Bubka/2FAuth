@@ -96,6 +96,14 @@ export const useTwofaccounts = defineStore('twofaccounts', {
 
         hasNoneSelected(state) {
             return state.selectedIds.length == 0
+        },
+
+        hasBorrowedSelected(state) {
+            return state.items.some(a => state.selectedIds.includes(a.id) && a.is_borrowed)
+        },
+
+        hasSharedSelected(state) {
+            return state.items.some(a => state.selectedIds.includes(a.id) && a.is_shared)
         }
     },
 

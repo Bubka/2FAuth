@@ -11,6 +11,22 @@
             type: Boolean,
             default: false
         },
+        canMove: {
+            type: Boolean,
+            default: true
+        },
+        canDelete: {
+            type: Boolean,
+            default: true
+        },
+        canShare: {
+            type: Boolean,
+            default: true
+        },
+        canExport: {
+            type: Boolean,
+            default: true
+        },
         areDisabled: {
             type: Boolean,
             default: false
@@ -54,7 +70,7 @@
         <p class="control" v-if="inManagementMode">
             <button
                 id="btnMove" 
-                :disabled='areDisabled' class="button is-rounded"
+                :disabled='areDisabled || !canMove' class="button is-rounded"
                 :class="[{ 'is-outlined': mode == 'dark' || areDisabled }, areDisabled ? 'is-dark': 'is-link']"
                 @click="$emit('move-button-clicked')"
                 :title="$t('tooltip.move_selected_to_group')" >
@@ -68,7 +84,7 @@
         <p class="control" v-if="inManagementMode">
             <button
                 id="btnShare" 
-                :disabled='areDisabled' class="button is-rounded"
+                :disabled='areDisabled || !canShare' class="button is-rounded"
                 :class="[{ 'is-outlined': mode == 'dark' || areDisabled }, areDisabled ? 'is-dark': 'is-link']"
                 @click="$emit('share-button-clicked')"
                 :title="$t('tooltip.share_selected_accounts')" >
@@ -82,7 +98,7 @@
         <p class="control" v-if="inManagementMode">
             <button
                 id="btnDelete" 
-                :disabled='areDisabled' class="button is-rounded"
+                :disabled='areDisabled || !canDelete' class="button is-rounded"
                 :class="[{ 'is-outlined': mode == 'dark' || areDisabled }, areDisabled ? 'is-dark': 'is-link']"
                 @click="$emit('delete-button-clicked')"
                 :title="$t('tooltip.delete_selected_accounts')" >
@@ -96,7 +112,7 @@
         <p class="control" v-if="inManagementMode">
             <button
                 id="btnExport" 
-                :disabled='areDisabled' class="button is-rounded"
+                :disabled='areDisabled || !canExport' class="button is-rounded"
                 :class="[{ 'is-outlined': mode == 'dark' || areDisabled }, areDisabled ? 'is-dark': 'is-link']"
                 @click="$emit('export-button-clicked')"
                 :title="$t('tooltip.export_selected_accounts')" >

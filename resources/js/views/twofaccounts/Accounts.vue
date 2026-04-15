@@ -370,12 +370,7 @@
      * Selects an account
      */
     function selectAccount(account) {
-        if (account.is_borrowed) {
-            return
-        }
-        else {
-            twofaccounts.select(account.id)
-        }
+        twofaccounts.select(account.id)
     }
 
 </script>
@@ -560,6 +555,9 @@
                         <ActionButtons
                             v-model:inManagementMode="bus.inManagementMode"
                             :areDisabled="twofaccounts.hasNoneSelected"
+                            :canShare="!twofaccounts.hasBorrowedSelected"
+                            :canDelete="!twofaccounts.hasBorrowedSelected"
+                            :canExport="!twofaccounts.hasBorrowedSelected"
                             @move-button-clicked="showDestinationGroupSelector = true"
                             @delete-button-clicked="deleteAccounts"
                             @export-button-clicked="showExportFormatSelector = true">
