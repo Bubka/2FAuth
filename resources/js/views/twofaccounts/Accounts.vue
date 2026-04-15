@@ -456,24 +456,23 @@
                     <div class="accounts">
                         <span id="dv" class="columns is-multiline m-0" :class="{ 'is-centered': user.preferences.displayMode === 'grid' }">
                             <div :class="[user.preferences.displayMode === 'grid' ? 'tfa-grid' : 'tfa-list']" class="column is-narrow" v-for="account in twofaccounts.filtered" :key="account.id">
-                                <div class="tfa-container" :class="{ 'is-opacity-2': account.is_borrowed && bus.inManagementMode}">
+                                <div class="tfa-container">
                                     <transition name="slideCheckbox">
                                         <div class="tfa-cell tfa-checkbox" v-if="bus.inManagementMode">
                                             <div class="field">
-                                                <input class="is-checkradio is-small" :class="mode == 'dark' ? 'is-white':'is-info'" :id="'ckb_' + account.id" :value="account.id" type="checkbox" :name="'ckb_' + account.id" v-model="twofaccounts.selectedIds" :disabled="account.is_borrowed" />
+                                                <input class="is-checkradio is-small" :class="mode == 'dark' ? 'is-white':'is-info'" :id="'ckb_' + account.id" :value="account.id" type="checkbox" :name="'ckb_' + account.id" v-model="twofaccounts.selectedIds"  />
                                                 <label tabindex="0" :for="'ckb_' + account.id" v-on:keypress.space.prevent="selectAccount(account)"></label>
                                             </div>
                                         </div>
                                     </transition>
                                     <div tabindex="0" class="tfa-cell tfa-content is-size-3 is-size-4-mobile" @click.exact="showOrCopy(account)" @keyup.enter="showOrCopy(account)" @click.ctrl="getAndCopyOTP(account)" role="button">  
-                                        <div class="tfa-text has-ellipsis" :class="{ 'is-clickable': !bus.inManagementMode || (!account.is_borrowed && bus.inManagementMode) }">
+                                        <div class="tfa-text has-ellipsis is-clickable">
                                             <img v-if="account.icon && user.preferences.showAccountsIcons" role="presentation" class="tfa-icon" :src="$2fauth.config.subdirectory + '/storage/icons/' + account.icon" alt="">
                                             <img v-else-if="account.icon == null && user.preferences.showAccountsIcons" role="presentation" class="tfa-icon" :src="$2fauth.config.subdirectory + '/storage/noicon.svg'" alt="">
                                             {{ account.service ? account.service : $t('message.no_service') }}<LucideCircleAlert class="has-text-danger ml-2" v-if="account.account === $t('error.indecipherable')" />
                                             <span class="is-block has-ellipsis is-family-primary is-size-6 is-size-7-mobile has-text-grey ">
                                                 <template v-if="account.is_borrowed">
-                                                    <span :title="$t('tooltip.this_account_is_shared_by_x_with_you', { username: account.borrowed_by })" class="tag p-1-5 is-hidden-mobile mr-2" :class="mode == 'dark' ? 'is-dark':'is-white'" >{{ $t('label.shared') }}</span>
-                                                    <span :title="$t('tooltip.this_account_is_shared_by_x_with_you', { username: account.borrowed_by })" class="tag p-1-5 is-hidden-tablet mr-2" :class="mode == 'dark' ? 'is-dark':'is-white'">{{ $t(bus.inManagementMode ? 'label.shared' : 'label.shared_first_char') }}</span>
+                                                    <span :title="$t('tooltip.this_account_is_shared_by_x_with_you', { username: account.borrowed_by })" class="tag p-1 mr-1" :class="mode == 'dark' ? 'is-dark':'is-white'" >@{{ bus.inManagementMode ? account.borrowed_by : '' }}</span>
                                                 </template>
                                                 {{ account.account }}
                                             </span>
