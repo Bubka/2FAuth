@@ -29,7 +29,7 @@
     const sharingScopes = [
         { id: 'ShareWithAll', label: 'label.share_with_all' },
         { id: 'NotShared', label: 'label.not_shared' },
-        { id: 'ShareWithUsers', label: 'label.share_with_user_selection' }
+        { id: 'ShareWithUsers', label: 'label.share_with_specific_users' }
     ]
     const activeSharingScope = ref('NotShared')
 

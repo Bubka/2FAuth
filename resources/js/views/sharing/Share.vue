@@ -202,7 +202,6 @@
                                             </span>
                                         </p>
                                     </div>
-                                    <!-- <input ref="inputField" v-model="searchQuery" type="text" class="input ghost" autofocus /> -->
                                 </div>
                                 <div class="dropdown-menu" id="dropdown-menu" role="menu">
                                     <div class="dropdown-content is-shadowless">

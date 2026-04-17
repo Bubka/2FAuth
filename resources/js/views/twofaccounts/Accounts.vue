@@ -1,5 +1,6 @@
 <script setup>
     import twofaccountService from '@/services/twofaccountService'
+    import shareService from '@/services/shareService'
     import DestinationGroupSelector from '@/components/DestinationGroupSelector.vue'
     import Toolbar from '@/components/Toolbar.vue'
     import ActionButtons from '@/components/ActionButtons.vue'
@@ -373,6 +374,18 @@
         twofaccounts.select(account.id)
     }
 
+    /**
+     * 
+     * @param userId
+     */
+    function unshareUser(account, userId) {
+        if (confirm(t('confirmation.are_you_sure')) === true) {
+            shareService.unshareWithUser(account.id, userId).then(response => {
+                usershares.value = usershares.value.filter(user => user.id != userId)
+            })
+        }
+    }
+
 </script>
 
 <template>
@@ -524,7 +537,15 @@
                                         </div>
                                     </transition>
                                     <transition name="fadeInOut">
-                                        <div class="tfa-cell tfa-edit has-text-grey" v-if="bus.inManagementMode && ! account.is_borrowed">
+                                        <div class="tfa-cell tfa-edit has-text-grey" v-if="bus.inManagementMode && user.preferences.activeGroup == -2">
+                                            <RouterLink :to="{ name: 'shareAccount', params: { twofaccountId: account.id } }" class="tag is-rounded mr-1" :class="mode == 'dark' ? 'is-dark' : 'is-white'">
+                                                {{ $t('link.add_users') }}
+                                            </RouterLink>
+                                            <button class="tag is-rounded mr-1" :class="mode == 'dark' ? 'is-dark' : 'is-white'" @click="unshareUser(account, user.id)" :title="$t('tooltip.revoke')">
+                                                {{ $t('label.unshare') }}
+                                            </button>
+                                        </div>
+                                        <div class="tfa-cell tfa-edit has-text-grey" v-else-if="bus.inManagementMode && ! account.is_borrowed">
                                             <RouterLink :to="{ name: 'editAccount', params: { twofaccountId: account.id }}" class="tag is-rounded mr-1" :class="mode == 'dark' ? 'is-dark' : 'is-white'">
                                                 {{ $t('link.edit') }}
                                             </RouterLink>
