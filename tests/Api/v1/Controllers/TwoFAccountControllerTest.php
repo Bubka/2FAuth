@@ -1520,7 +1520,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->assertOk();
 
         $this->actingAs($this->user, 'api-guard')
-            ->json('DELETE', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/shares/all')
+            ->json('DELETE', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/shares')
             ->assertNoContent();
     }
 

@@ -109,19 +109,16 @@ class TwoFAccountShareController extends Controller
     }
 
     /**
-     * Revoke all explicit user shares for the account.
+     * Revoke all account shares.
      */
-    public function destroyAllUsers(Request $request, TwoFAccount $twofaccount) : JsonResponse
+    public function destroyAll(Request $request, TwoFAccount $twofaccount) : JsonResponse
     {
         $this->authorize('manageShares', $twofaccount);
 
-        if ($this->twoFAccountShareService->isSharedWithAll($twofaccount)) {
-            return $this->shareAllConflictResponse();
-        }
-
         $this->twoFAccountShareService->revokeAllUserShares($twofaccount);
+        $this->twoFAccountShareService->unshareWithAll($twofaccount);
 
-        Log::info(sprintf('All user shares of TwoFAccount #%s owned by User ID #%s have been revoked by User ID #%s', $twofaccount->id, $twofaccount->user_id, $request->user()->id));
+        Log::info(sprintf('All shares of TwoFAccount #%s owned by User ID #%s have been revoked by User ID #%s', $twofaccount->id, $twofaccount->user_id, $request->user()->id));
 
         return response()->json(null, 204);
     }
@@ -143,27 +140,6 @@ class TwoFAccountShareController extends Controller
             'is_shared_with_all' => true,
             'twofaccount_id'     => $twofaccount->id,
         ], $result['created'] ? 201 : 200);
-    }
-
-    /**
-     * Revoke global share.
-     */
-    public function unshareAll(Request $request, TwoFAccount $twofaccount) : JsonResponse
-    {
-        $this->authorize('manageShares', $twofaccount);
-
-        if (! $this->twoFAccountShareService->isSharedWithAll($twofaccount)) {
-            return response()->json([
-                'message' => 'conflict',
-                'reason'  => __('error.this_account_is_not_shared_with_all'),
-            ], 409);
-        }
-
-        $this->twoFAccountShareService->unshareWithAll($twofaccount);
-
-        Log::info(sprintf('Global share of TwoFAccount #%s owned by User ID #%s has been revoked by User ID #%s', $twofaccount->id, $twofaccount->user_id, $request->user()->id));
-
-        return response()->json(null, 204);
     }
 
     /**

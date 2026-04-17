@@ -123,17 +123,12 @@
                 break
 
             case "NotShared":
-                if (activeSharingScope.value == "ShareWithAll") {
-                    sharePromise = shareService.unshareAll(props.twofaccountId)
-                }
-                else if (activeSharingScope.value == "ShareWithUsers") {
-                    sharePromise = shareService.unshareWithAllUsers(props.twofaccountId)
-                }
+                sharePromise = shareService.unshare(props.twofaccountId)
                 break
 
             case "ShareWithUsers":
                 if (activeSharingScope.value == "ShareWithAll") {
-                    sharePromise = shareService.unshareAll(props.twofaccountId)
+                    sharePromise = shareService.unshare(props.twofaccountId)
                 }
                 else sharePromise = Promise.resolve(true)
                 break

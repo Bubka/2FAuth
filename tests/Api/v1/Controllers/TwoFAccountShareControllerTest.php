@@ -484,7 +484,7 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
     }
 
     #[Test]
-    public function test_destroy_all_users_returns_conflict_when_shared_with_all_users()
+    public function test_destroy_all_users_revokes_explicit_and_global_shares_when_both_exist()
     {
         TwoFAccountShare::create([
             'twofaccount_id' => $this->twofaccount->id,
@@ -502,16 +502,18 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
 
         $this->actingAs($this->owner, 'api-guard')
             ->json('DELETE', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/shares')
-            ->assertStatus(409)
-            ->assertJsonStructure([
-                'message',
-                'reason',
-            ]);
+            ->assertNoContent();
 
-        $this->assertDatabaseHas('twofaccount_shares', [
+        $this->assertDatabaseMissing('twofaccount_shares', [
             'twofaccount_id' => $this->twofaccount->id,
             'shared_with_user_id' => $this->targetUser->id,
             'scope' => TwoFAccountShare::SCOPE_USER,
+        ]);
+
+        $this->assertDatabaseMissing('twofaccount_shares', [
+            'twofaccount_id' => $this->twofaccount->id,
+            'shared_with_user_id' => null,
+            'scope' => TwoFAccountShare::SCOPE_ALL_USERS,
         ]);
     }
 
@@ -540,7 +542,7 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
         ]);
 
         $this->actingAs($this->owner, 'api-guard')
-            ->json('DELETE', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/shares/all')
+            ->json('DELETE', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/shares')
             ->assertNoContent();
 
         $this->assertDatabaseMissing('twofaccount_shares', [
@@ -661,35 +663,31 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
     }
 
     #[Test]
-    public function test_unshare_all_returns_conflict_when_share_all_is_not_applied()
+    public function test_destroy_all_returns_no_content_when_share_all_is_not_applied()
     {
         $this->actingAs($this->owner, 'api-guard')
-            ->json('DELETE', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/shares/all')
-            ->assertStatus(409)
-            ->assertJsonStructure([
-                'message',
-                'reason',
-            ]);
+            ->json('DELETE', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/shares')
+            ->assertNoContent();
     }
 
     #[Test]
-    public function test_unshare_all_returns_conflict_when_called_twice()
+    public function test_destroy_all_returns_no_content_when_called_twice()
     {
         $this->actingAs($this->owner, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/shares/all')
             ->assertStatus(201);
 
         $this->actingAs($this->owner, 'api-guard')
-            ->json('DELETE', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/shares/all')
+            ->json('DELETE', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/shares')
             ->assertNoContent();
 
         $this->actingAs($this->owner, 'api-guard')
-            ->json('DELETE', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/shares/all')
-            ->assertStatus(409);
+            ->json('DELETE', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/shares')
+            ->assertNoContent();
     }
 
     #[Test]
-    public function test_unshare_all_for_non_owner_is_forbidden()
+    public function test_destroy_all_for_non_owner_is_forbidden_when_account_is_shared_with_all()
     {
         TwoFAccountShare::create([
             'twofaccount_id' => $this->twofaccount->id,
@@ -699,7 +697,7 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
         ]);
 
         $this->actingAs($this->targetUser, 'api-guard')
-            ->json('DELETE', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/shares/all')
+            ->json('DELETE', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/shares')
             ->assertForbidden();
     }
 
@@ -735,7 +733,6 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
             ['DELETE', '/api/v1/twofaccounts/{accountId}/shares/{userId}'],
             ['DELETE', '/api/v1/twofaccounts/{accountId}/shares'],
             ['POST', '/api/v1/twofaccounts/{accountId}/shares/all'],
-            ['DELETE', '/api/v1/twofaccounts/{accountId}/shares/all'],
         ];
     }
 }

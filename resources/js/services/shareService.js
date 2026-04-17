@@ -16,7 +16,7 @@ export default {
         return apiClient.delete('/twofaccounts/' + twofaccountId + '/shares/' + userId, { ...config })
     },
 
-    unshareWithAllUsers(twofaccountId, config = {}) {
+    unshare(twofaccountId, config = {}) {
         return apiClient.delete('/twofaccounts/' + twofaccountId + '/shares', { ...config })
     },
 
@@ -26,9 +26,5 @@ export default {
 
     shareWithAll(twofaccountId, config = {}) {
         return apiClient.post('/twofaccounts/' + twofaccountId + '/shares/all', { ...config })
-    },
-
-    unshareAll(twofaccountId, config = {}) {
-        return apiClient.delete('/twofaccounts/' + twofaccountId + '/shares/all', { ...config })
     },
 }

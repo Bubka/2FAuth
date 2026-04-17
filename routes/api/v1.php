@@ -44,15 +44,13 @@ Route::group(['middleware' => 'auth:api-guard'], function () {
     Route::get('twofaccounts/{twofaccount}/qrcode', [QrCodeController::class, 'show'])->name('twofaccounts.show.qrcode');
     Route::get('twofaccounts/count', [TwoFAccountController::class, 'count'])->name('twofaccounts.count');
     Route::get('twofaccounts/{id}/otp', [TwoFAccountController::class, 'otp'])->where('id', '[0-9]+')->name('twofaccounts.show.otp');
-    Route::patch('twofaccounts/{twofaccount}/owner', [TwoFAccountController::class, 'transferOwnership'])->name('twofaccounts.transferOwnership');
     Route::post('twofaccounts/otp', [TwoFAccountController::class, 'otp'])->name('twofaccounts.otp');
     Route::middleware('rejectIfShareDisabled')->group(function () {
         Route::patch('twofaccounts/{twofaccount}/owner', [TwoFAccountController::class, 'transferOwnership'])->name('twofaccounts.transferOwnership');
         Route::get('twofaccounts/{twofaccount}/shares', [TwoFAccountShareController::class, 'index'])->name('twofaccounts.shares.index');
         Route::post('twofaccounts/{twofaccount}/shares', [TwoFAccountShareController::class, 'store'])->name('twofaccounts.shares.store');
-        Route::delete('twofaccounts/{twofaccount}/shares', [TwoFAccountShareController::class, 'destroyAllUsers'])->name('twofaccounts.shares.destroyAllUsers');
+        Route::delete('twofaccounts/{twofaccount}/shares', [TwoFAccountShareController::class, 'destroyAll'])->name('twofaccounts.shares.destroyAll');
         Route::post('twofaccounts/{twofaccount}/shares/all', [TwoFAccountShareController::class, 'shareAll'])->name('twofaccounts.shares.shareAll');
-        Route::delete('twofaccounts/{twofaccount}/shares/all', [TwoFAccountShareController::class, 'unshareAll'])->name('twofaccounts.shares.unshareAll');
         Route::delete('twofaccounts/{twofaccount}/shares/{user}', [TwoFAccountShareController::class, 'destroy'])->name('twofaccounts.shares.destroy');
         Route::get('twofaccounts/{twofaccount}/recipients', [TwoFAccountShareController::class, 'recipients'])->name('twofaccounts.shares.recipients');
     });
