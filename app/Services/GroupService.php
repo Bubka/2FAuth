@@ -142,6 +142,10 @@ class GroupService
      */
     private static function defaultGroup(User $user)
     {
+        if ($user->preferences['defaultGroup'] === -1 && (int) $user->preferences['activeGroup'] <= 0) {
+            return null;
+        }
+
         $id = $user->preferences['defaultGroup'] === -1 ? (int) $user->preferences['activeGroup'] : (int) $user->preferences['defaultGroup'];
 
         return Group::where('id', $id)

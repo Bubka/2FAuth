@@ -585,6 +585,21 @@ class GroupControllerTest extends FeatureTestCase
     }
 
     #[Test]
+    public function test_destroy_group_does_not_reset_user_preferences_when_using_pseudo_active_group()
+    {
+        // Set the active group to a pseudo one
+        $this->user['preferences->activeGroup'] = -2;
+        $this->user->save();
+
+        $this->actingAs($this->user, 'api-guard')
+            ->json('DELETE', '/api/v1/groups/' . $this->userGroupA->id);
+
+        $this->user->refresh();
+
+        $this->assertEquals(-2, $this->user->preferences['activeGroup']);
+    }
+
+    #[Test]
     public function test_twofaccount_is_released_on_group_destroy()
     {
         $this->actingAs($this->user, 'api-guard')

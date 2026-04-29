@@ -25,16 +25,17 @@ class ResetUsersPreference
      */
     public function handle(GroupDeleted $event)
     {
-        // a group is possibly set as the default group or the active group for some users.
+        // A group is possibly set as the default group or the active group for some users.
         // In this case, after the group has been deleted, we must reset:
         //      - the 'defaultGroup' preference to "No group" (groupId = 0)
         //      - the 'activeGroup' preference to the pseudo "All" group (groupId = 0)
+        // Caution: having activeGroup < 0 means the user uses a virtual group filter (Groupless, Shared by, Shared with) and should not be reset.
         foreach (User::all() as $user) {
             if ($user->preferences['defaultGroup'] == $event->group->id) {
                 $user['preferences->defaultGroup'] = 0;
             }
 
-            if ($user->preferences['activeGroup'] == $event->group->id) {
+            if ($user->preferences['activeGroup'] > 0 && $user->preferences['activeGroup'] == $event->group->id) {
                 $user['preferences->activeGroup'] = 0;
             }
 

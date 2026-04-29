@@ -34,7 +34,7 @@
         account: '',
         otp_type: '',
         icon: '',
-        group_id: user.preferences.defaultGroup == -1 ? user.preferences.activeGroup : user.preferences.defaultGroup,
+        group_id: defineDefaultGroup(),
         secret: '',
         algorithm: '',
         digits: null,
@@ -247,6 +247,16 @@
             }
         }
     )
+
+    /** */
+    function defineDefaultGroup() {
+        if (user.preferences.defaultGroup == -1) {
+            return user.preferences.activeGroup <= 0 ? 0 : user.preferences.activeGroup
+        }
+
+        return user.preferences.defaultGroup
+        
+    }
 
     /**
      * Wrapper to call the appropriate function at form submit

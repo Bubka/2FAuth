@@ -13,10 +13,6 @@ export const useTwofaccounts = defineStore('twofaccounts', {
             filter: '',
             backendWasNewer: false,
             fetchedOn: null,
-            globalFilter: null,
-                // -1: group less items
-                // -2: items shared by me
-                // -3: items shared with me
         }
     },
 
@@ -28,24 +24,31 @@ export const useTwofaccounts = defineStore('twofaccounts', {
                 item => {
                     let itemMatch = false
 
+                    // Group filters :
+                    // -1: group less items
+                    // -2: items shared by me
+                    // -3: items shared with me
+                    //  0: all items (no group filter)
+                    // >0: any concrete group
+
                     // group less items
-                    if (state.globalFilter == -1 && item.group_id == null) {
+                    if (parseInt(user.preferences.activeGroup) == -1 && item.group_id == null) {
                         itemMatch = true
                     }
                     // items I share
-                    else if (state.globalFilter == -2 && item.is_shared == true) {
+                    else if (parseInt(user.preferences.activeGroup) == -2 && (item.is_shared == true || item.is_shared_with_all == true)) {
                         itemMatch = true
                     }
                     // items shared with me
-                    else if (state.globalFilter == -3 && item.is_borrowed == true) {
+                    else if (parseInt(user.preferences.activeGroup) == -3 && item.is_borrowed == true) {
                         itemMatch = true
                     }
                     else if (parseInt(user.preferences.activeGroup) > 0 && item.group_id == parseInt(user.preferences.activeGroup)) {
                         // no global filter but a group
                         itemMatch = true
                     }
-                    else if (parseInt(user.preferences.activeGroup) == 0 && state.globalFilter == null) {
-                        // , all items are matching
+                    else if (parseInt(user.preferences.activeGroup) == 0) {
+                        // All items are matching
                         itemMatch = true
                     }
 

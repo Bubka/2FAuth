@@ -848,6 +848,24 @@ class TwoFAccountControllerTest extends FeatureTestCase
     }
 
     #[Test]
+    public function test_store_does_not_assign_created_account_when_active_group_is_pseudo_group()
+    {
+        // Set the default group to be the active one
+        $this->user['preferences->defaultGroup'] = -1;
+        // Set the active group to a pseudo one
+        $this->user['preferences->activeGroup'] = -2;
+        $this->user->save();
+
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('POST', '/api/v1/twofaccounts', [
+                'uri' => OtpTestData::TOTP_SHORT_URI,
+            ])
+            ->assertJsonFragment([
+                'group_id' => null,
+            ]);
+    }
+
+    #[Test]
     public function test_store_assigns_created_account_when_default_group_is_no_group()
     {
         // Set the default group to No group
