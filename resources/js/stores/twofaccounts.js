@@ -106,7 +106,7 @@ export const useTwofaccounts = defineStore('twofaccounts', {
         },
 
         hasSharedSelected(state) {
-            return state.items.some(a => state.selectedIds.includes(a.id) && a.is_shared)
+            return state.items.some(a => state.selectedIds.includes(a.id) && (a.is_shared == true || a.is_shared_with_all == true))
         }
     },
 
