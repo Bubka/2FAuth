@@ -91,7 +91,7 @@
                 <span class="is-hidden-desktop icon is-small mx-0">
                     <LucideUserX />
                 </span>
-                <span class="is-hidden-touch">{{ $t('label.share') }}</span>
+                <span class="is-hidden-touch">{{ $t('label.unshare') }}</span>
             </button>
         </p>
         <!-- delete button -->
