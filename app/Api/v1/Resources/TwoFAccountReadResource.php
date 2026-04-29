@@ -2,6 +2,8 @@
 
 namespace App\Api\v1\Resources;
 
+use App\Services\TwoFAccountShareService;
+
 /**
  * @property mixed $id
  * @property \App\Models\User|null $user
@@ -21,17 +23,19 @@ class TwoFAccountReadResource extends TwoFAccountStoreResource
      */
     public function toArray($request)
     {
-        $isBorrowed = $this->isSharedWith($request->user());
-        $isShared   = $request->user()->isSharing($this->resource);
-        $groupId    = $this->groupIdForUser($request->user());
+        $isBorrowed      = $this->isSharedWith($request->user());
+        $isSharedWithAll = $request->user()->isSharing($this->resource) && app()->make(TwoFAccountShareService::class)->isSharedWithAll($this->resource);
+        $isShared        = $request->user()->isSharing($this->resource) && ! $isSharedWithAll;
+        $groupId         = $this->groupIdForUser($request->user());
 
         return array_merge(
             [
-                'id'          => (int) $this->id,
-                'group_id'    => is_null($groupId) ? null : (int) $groupId,
-                'is_borrowed' => $this->when($isBorrowed, true),
-                'borrowed_by' => $this->when($isBorrowed, $this->user?->name),
-                'is_shared'   => $this->when($isShared, true),
+                'id'                 => (int) $this->id,
+                'group_id'           => is_null($groupId) ? null : (int) $groupId,
+                'is_borrowed'        => $this->when($isBorrowed, true),
+                'borrowed_by'        => $this->when($isBorrowed, $this->user?->name),
+                'is_shared'          => $this->when($isShared, true),
+                'is_shared_with_all' => $this->when($isSharedWithAll, true),
             ],
             parent::toArray($request),
             [
