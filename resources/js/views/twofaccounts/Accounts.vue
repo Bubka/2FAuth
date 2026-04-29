@@ -22,7 +22,7 @@
     import { useSortable, moveArrayElement } from '@vueuse/integrations/useSortable'
     import { useI18n } from 'vue-i18n'
     import { useErrorHandler } from '@2fauth/stores'
-    import { LucideChevronDown, LucideCircleAlert, LucideEye, LucideEyeOff, LucideMenu, LucideQrCode, LucideX } from '@lucide/vue'
+    import { LucideChevronDown, LucideCircleAlert, LucideEye, LucideEyeOff, LucideMenu, LucideQrCode, LucideUserPen, LucideUserPlus, LucideUsers, LucideX } from '@lucide/vue'
 
     const errorHandler = useErrorHandler()
     const { t } = useI18n()
@@ -379,7 +379,7 @@
      * @param userId
      */
     function unshareUser(account, userId) {
-        if (confirm(t('confirmation.are_you_sure')) === true) {
+        if (confirm(t('confirmation.unshare')) === true) {
             shareService.unshareWithUser(account.id, userId).then(response => {
                 usershares.value = usershares.value.filter(user => user.id != userId)
             })
@@ -538,17 +538,25 @@
                                     </transition>
                                     <transition name="fadeInOut">
                                         <div class="tfa-cell tfa-edit has-text-grey" v-if="bus.inManagementMode && user.preferences.activeGroup == -2">
-                                            <RouterLink :to="{ name: 'shareAccount', params: { twofaccountId: account.id } }" class="tag is-rounded mr-1" :class="mode == 'dark' ? 'is-dark' : 'is-white'">
-                                                {{ $t('link.add_users') }}
+                                            <!-- new user share button -->
+                                            <RouterLink v-if="account.is_shared" :to="{ name: 'shareAccount', params: { twofaccountId: account.id } }" class="tag is-rounded mr-1" :class="mode == 'dark' ? 'is-dark' : 'is-white'" :title="$t('tooltip.share_with_new_users')">
+                                                <LucideUserPlus class="icon-size-1" />
                                             </RouterLink>
-                                            <button class="tag is-rounded mr-1" :class="mode == 'dark' ? 'is-dark' : 'is-white'" @click="unshareUser(account, user.id)" :title="$t('tooltip.revoke')">
-                                                {{ $t('label.unshare') }}
-                                            </button>
+                                            <!-- shared with all flag -->
+                                            <span v-else-if="account.is_shared_with_all" class="tag is-rounded is-light has-no-background mr-1" :title="$t('tooltip.shared_with_all')">
+                                                <LucideUsers class="icon-size-1" />
+                                            </span>
+                                            <!-- manage sharing button -->
+                                            <RouterLink :to="{ name: 'accountSharing', params: { twofaccountId: account.id }}" class="tag is-rounded" :class="mode == 'dark' ? 'is-dark' : 'is-white'" :title="$t('tooltip.edit_sharing')">
+                                                <LucideUserPen class="icon-size-1" />
+                                            </RouterLink>
                                         </div>
                                         <div class="tfa-cell tfa-edit has-text-grey" v-else-if="bus.inManagementMode && ! account.is_borrowed">
+                                            <!-- edit button -->
                                             <RouterLink :to="{ name: 'editAccount', params: { twofaccountId: account.id }}" class="tag is-rounded mr-1" :class="mode == 'dark' ? 'is-dark' : 'is-white'">
                                                 {{ $t('link.edit') }}
                                             </RouterLink>
+                                            <!-- show qrcode button -->
                                             <RouterLink :to="{ name: 'showQRcode', params: { twofaccountId: account.id }}" class="tag is-rounded" :class="mode == 'dark' ? 'is-dark' : 'is-white'" :title="$t('tooltip.show_qrcode')">
                                                 <LucideQrCode class="icon-size-1" />
                                             </RouterLink>
