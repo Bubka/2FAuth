@@ -9,10 +9,12 @@
     import { useTwofaccounts } from '@/stores/twofaccounts'
     import { UseColorMode } from '@vueuse/components'
 
+    const $2fauth = inject('2fauth')
     const router = useRouter()
     const route = useRoute()
     const bus = useBusStore()
     const twofaccounts = useTwofaccounts()
+    const returnTo = useStorage($2fauth.prefix + 'returnTo', 'accountSharing')
 
     const props = defineProps({
         twofaccountId: [Number, String]
@@ -35,6 +37,15 @@
     const recipients = ref([])
     const shareWithAll = ref(false)
     
+    const returnToObject = computed(() => {
+        if (returnTo.value == 'accountSharing') {
+            return { name: 'accountSharing', params: { twofaccountId: route.params.twofaccountId }}
+        }
+        else {
+            return { name: returnTo.value }
+        }
+    })
+
     const showCandidates = computed(() => {
         return candidates.value?.length > 0
     })
@@ -242,7 +253,7 @@
                         :isBusy="isSending"
                         :submitLabel="'label.share'"
                         :showCancelButton="true"
-                        @cancel="router.push({ name: 'accountSharing', params: { twofaccountId: twofaccountId }})" />
+                        @cancel="router.push(returnToObject)" />
                 </form>
             </FormWrapper>
             </UseColorMode>
