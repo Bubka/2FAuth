@@ -62,5 +62,5 @@ export default {
     count(config = {}) {
         return apiClient.get('/twofaccounts/count', { ...config })
     },
-    
+
 }

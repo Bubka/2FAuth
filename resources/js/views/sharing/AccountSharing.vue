@@ -7,7 +7,7 @@
     import { UseColorMode } from '@vueuse/components'
     import { useTwofaccounts } from '@/stores/twofaccounts'
     import { useUserStore } from '@/stores/user'
-    import { LucideUsers, LucideUser, LucideUserPlus2, LucideCirclePlus } from '@lucide/vue'
+    import { LucideUsers, LucideUser, LucideCirclePlus } from '@lucide/vue'
 
     const props = defineProps({
         twofaccountId: [Number, String]

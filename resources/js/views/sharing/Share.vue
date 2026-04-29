@@ -1,5 +1,4 @@
 <script setup>
-    import Form from '@/components/formElements/Form'
     import twofaccountService from '@/services/twofaccountService'
     import shareService from '@/services/shareService'
     import { useBusStore } from '@/stores/bus'
