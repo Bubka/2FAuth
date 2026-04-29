@@ -1,7 +1,7 @@
 <script setup>
     import { UseColorMode  } from '@vueuse/components'
     import { useUserStore } from '@/stores/user'
-    import { LucideTrash2, LucideScanQrCode, LucideFolderDown, LucideDownload, LucideUsers, LucideShapes, LucideGroup } from '@lucide/vue'
+    import { LucideTrash2, LucideScanQrCode, LucideUserX, LucidePackage, FolderInput } from '@lucide/vue'
 
     const router = useRouter()
     const user = useUserStore()
@@ -75,21 +75,21 @@
                 @click="$emit('move-button-clicked')"
                 :title="$t('tooltip.move_selected_to_group')" >
                 <span class="is-hidden-desktop icon is-small mx-0">
-                    <LucideGroup />
+                    <FolderInput />
                 </span>
                 <span class="is-hidden-touch">{{ $t('label.move') }}</span>
             </button>
         </p>
-        <!-- share button -->
+        <!-- unshare button -->
         <p class="control" v-if="inManagementMode">
             <button
                 id="btnShare" 
                 :disabled='areDisabled || !canShare' class="button is-rounded"
                 :class="[{ 'is-outlined': mode == 'dark' || areDisabled }, areDisabled ? 'is-dark': 'is-link']"
                 @click="$emit('share-button-clicked')"
-                :title="$t('tooltip.share_selected_accounts')" >
+                :title="$t('tooltip.unshare_selected_accounts')" >
                 <span class="is-hidden-desktop icon is-small mx-0">
-                    <LucideUsers />
+                    <LucideUserX />
                 </span>
                 <span class="is-hidden-touch">{{ $t('label.share') }}</span>
             </button>
@@ -117,7 +117,7 @@
                 @click="$emit('export-button-clicked')"
                 :title="$t('tooltip.export_selected_accounts')" >
                 <span class="is-hidden-desktop icon is-small mx-0">
-                    <LucideDownload />
+                    <LucidePackage />
                 </span>
                 <span class="is-hidden-touch">{{ $t('label.export') }}</span>
             </button>

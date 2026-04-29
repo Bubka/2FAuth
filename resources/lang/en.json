@@ -844,6 +844,7 @@
     "tooltip.this_account_is_shared_by_x_with_you": "{username} shared this account with you",
     "tooltip.twofauth_export_format_sub": "Export data using the 2FAuth json schema",
     "tooltip.unlock": "Unlock it (at your own risk)",
+    "tooltip.unshare_selected_accounts": "Revoke all shares on selected accounts",
     "tooltip.use_qrcode": "Use a QR code to fill the form magically",
     "tooltip.visit_x": "Visit {website}",
     "validation.accepted_if": "The :attribute field must be accepted when :other is :value.",
