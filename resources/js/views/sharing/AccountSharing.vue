@@ -186,16 +186,7 @@
                                 <p class="subtitle is-6">{{ twofaccount.account }}</p>
                             </div>
                         </div>
-                        <!-- <div class="is-left-bordered-link">
-                            <p class="title is-4" :class="{ 'has-text-grey-lighter' : mode == 'dark' }">{{ twofaccount.service }}</p>
-                            <p class="subtitle is-6 block">{{ twofaccount.account }}</p>
-                        </div> -->
                     </div>
-                    <!-- <div class="column is-narrow">
-                        <RouterLink class="button is-link" :to="{ name: 'shareAccount', params: { twofaccountId: props.twofaccountId } }">
-                            <LucideUserPlus2 class="mr-2" /> {{ $t('link.share') }}
-                        </RouterLink>
-                    </div> -->
                 </div>
                 <h4 class="subtitle is-6 mb-3">{{ $t('label.sharing_settings') }}</h4>
                 <div class="columns is-mobile is-multiline">
@@ -222,10 +213,13 @@
                  <template v-if="isFetching == false">
                     <UseColorMode v-slot="{ mode }">
                         <template v-if="isSharedWithUsers">
-                            <div class="block mt-5">
+                            <div class="pt-2">
                                 <RouterLink class="is-link" :to="{ name: 'shareAccount', params: { twofaccountId: props.twofaccountId } }">
                                     <LucideCirclePlus class="mr-2" /> {{ $t('link.add_users') }}
                                 </RouterLink>
+                                <div class="list-item pt-0">
+                                    <p class="is-size-6 is-size-7-mobile has-text-grey pt-2">{{ $t('message.add_your_first_user_to_share_this_account_with') }}</p>
+                                </div>
                             </div>
                             <template v-if="usershares.length > 0">
                                 <SearchBox v-if="usershares.length > 5" v-model:keyword="userFilter" :hasNoBackground="true" />

@@ -624,16 +624,16 @@
             </template>
             <template v-if="showOtpInModal && ! visibleAccount.is_borrowed" #footer-submenu>
                 <ul class="ml-0 mt-1">
-                    <!-- manage sharing link -->
-                    <li class="column">
-                        <router-link id="lnkManageSharing" :to="{ name: 'accountSharing', params: { twofaccountId: visibleAccount.id }}" class="is-link">
-                            {{ $t('link.share') }}
-                        </router-link>
-                    </li>
                     <!-- edit link -->
                     <li class="column">
                         <router-link id="lnkEdit" :to="{ name: 'editAccount', params: { twofaccountId: visibleAccount.id }}" class="is-link">
                             {{ $t('link.edit') }}
+                        </router-link>
+                    </li>
+                    <!-- manage sharing link -->
+                    <li class="column">
+                        <router-link id="lnkManageSharing" :to="{ name: 'accountSharing', params: { twofaccountId: visibleAccount.id }}" class="is-link">
+                            {{ $t('link.manage_sharing') }}
                         </router-link>
                     </li>
                     <!-- qrcode link -->
