@@ -642,6 +642,12 @@
                             {{ $t('link.manage_sharing') }}
                         </router-link>
                     </li>
+                    <!-- transfer ownership link -->
+                    <li class="column">
+                        <router-link id="lnkTransferOwnership" :to="{ name: 'transferOwnership', params: { twofaccountId: visibleAccount.id }}" class="is-link">
+                            {{ $t('link.transfer_ownership') }}
+                        </router-link>
+                    </li>
                     <!-- qrcode link -->
                     <li class="column">
                         <router-link id="lnkQrCode" :to="{ name: 'showQRcode', params: { twofaccountId: visibleAccount.id }}" class="is-link" :title="$t('tooltip.show_qrcode')">
