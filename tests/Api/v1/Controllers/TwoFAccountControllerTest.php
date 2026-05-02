@@ -19,6 +19,7 @@ use App\Providers\MigrationServiceProvider;
 use App\Providers\TwoFAuthServiceProvider;
 use App\Services\LogoLib\TfaLogoLib;
 use App\Services\TwoFAccountShareService;
+use Database\Factories\UserFactory;
 use Illuminate\Http\Testing\FileFactory;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
@@ -77,6 +78,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
     protected $twofaccountD;
 
     protected $twofaccountE;
+
+    private const DEFAULT_USER_PASSWORD = UserFactory::USER_PASSWORD;
 
     private const VALID_RESOURCE_STRUCTURE_WITHOUT_SECRET = [
         'id',
@@ -1071,6 +1074,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         $this->actingAs($this->anotherUser, 'api-guard')
             ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
                 'new_owner_id' => $this->user->id,
+                'confirm_password' => self::DEFAULT_USER_PASSWORD,
             ])
             ->assertOk()
             ->assertExactJson([
@@ -1085,11 +1089,29 @@ class TwoFAccountControllerTest extends FeatureTestCase
     }
 
     #[Test]
+    public function test_transfer_ownership_with_invalid_password_returns_unauthorized()
+    {
+        $this->actingAs($this->anotherUser, 'api-guard')
+            ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
+                'new_owner_id' => $this->user->id,
+                'confirm_password' => strrev(self::DEFAULT_USER_PASSWORD),
+            ])
+            ->assertUnauthorized()
+            ->assertJsonPath('message', 'unauthorized');
+
+        $this->assertDatabaseHas('twofaccounts', [
+            'id' => $this->twofaccountC->id,
+            'user_id' => $this->anotherUser->id,
+        ]);
+    }
+
+    #[Test]
     public function test_transfer_ownership_of_missing_twofaccount_returns_not_found()
     {
         $this->actingAs($this->anotherUser, 'api-guard')
             ->json('PATCH', '/api/v1/twofaccounts/1000000/owner', [
                 'new_owner_id' => $this->user->id,
+                'confirm_password' => self::DEFAULT_USER_PASSWORD,
             ])
             ->assertNotFound();
     }
@@ -1102,6 +1124,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         $this->actingAs($this->anotherUser, 'api-guard')
             ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
                 'new_owner_id' => $this->user->id,
+                'confirm_password' => self::DEFAULT_USER_PASSWORD,
             ])
             ->assertForbidden()
             ->assertJsonPath('message', __('error.sharing_is_disabled'));
@@ -1122,6 +1145,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         $this->actingAs($this->user, 'api-guard')
             ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
                 'new_owner_id' => $this->anotherUser->id,
+                'confirm_password' => self::DEFAULT_USER_PASSWORD,
             ])
             ->assertForbidden()
             ->assertJsonPath('message', __('error.sharing_is_disabled'));
@@ -1147,6 +1171,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         $this->actingAs($this->anotherUser, 'api-guard')
             ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
                 'new_owner_id' => $this->user->id,
+                'confirm_password' => self::DEFAULT_USER_PASSWORD,
             ])
             ->assertOk();
 
@@ -1170,6 +1195,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         $this->actingAs($this->anotherUser, 'api-guard')
             ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
                 'new_owner_id' => $this->user->id,
+                'confirm_password' => self::DEFAULT_USER_PASSWORD,
             ])
             ->assertOk();
 
@@ -1193,6 +1219,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         $this->actingAs($this->anotherUser, 'api-guard')
             ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
                 'new_owner_id' => $this->user->id,
+                'confirm_password' => self::DEFAULT_USER_PASSWORD,
             ])
             ->assertOk();
 
@@ -1208,6 +1235,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         $this->actingAs($this->user, 'api-guard')
             ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
                 'new_owner_id' => $this->user->id,
+                'confirm_password' => self::DEFAULT_USER_PASSWORD,
             ])
             ->assertForbidden()
             ->assertJsonStructure([
@@ -1221,6 +1249,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         $this->actingAs($this->anotherUser, 'api-guard')
             ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
                 'new_owner_id' => $this->anotherUser->id,
+                'confirm_password' => self::DEFAULT_USER_PASSWORD,
             ])
             ->assertStatus(422)
             ->assertJsonValidationErrorFor('new_owner_id');
@@ -1232,6 +1261,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         $this->actingAs($this->anotherUser, 'api-guard')
             ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
                 'new_owner_id' => 9999999,
+                'confirm_password' => self::DEFAULT_USER_PASSWORD,
             ])
             ->assertStatus(422)
             ->assertJsonValidationErrorFor('new_owner_id');
@@ -1243,6 +1273,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         $this->actingAs($this->anotherUser, 'api-guard')
             ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
                 'new_owner_id' => $this->user->id,
+                'confirm_password' => self::DEFAULT_USER_PASSWORD,
             ])
             ->assertOk();
 
@@ -1261,6 +1292,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         $this->actingAs($this->anotherUser, 'api-guard')
             ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
                 'new_owner_id' => $this->user->id,
+                'confirm_password' => self::DEFAULT_USER_PASSWORD,
             ])
             ->assertOk();
 
@@ -1276,6 +1308,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         $this->actingAs($this->anotherUser, 'api-guard')
             ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
                 'new_owner_id' => $this->user->id,
+                'confirm_password' => self::DEFAULT_USER_PASSWORD,
             ])
             ->assertOk();
 
@@ -1290,6 +1323,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         $this->actingAs($this->anotherUser, 'api-guard')
             ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
                 'new_owner_id' => $this->user->id,
+                'confirm_password' => self::DEFAULT_USER_PASSWORD,
             ])
             ->assertOk();
 
@@ -1311,6 +1345,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         $this->actingAs($this->anotherUser, 'api-guard')
             ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
                 'new_owner_id' => $this->user->id,
+                'confirm_password' => self::DEFAULT_USER_PASSWORD,
             ])
             ->assertOk();
 
@@ -1334,6 +1369,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         $this->actingAs($this->anotherUser, 'api-guard')
             ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
                 'new_owner_id' => $this->user->id,
+                'confirm_password' => self::DEFAULT_USER_PASSWORD,
             ])
             ->assertOk();
 
@@ -1355,6 +1391,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         $this->actingAs($this->anotherUser, 'api-guard')
             ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
                 'new_owner_id' => $this->user->id,
+                'confirm_password' => self::DEFAULT_USER_PASSWORD,
             ])
             ->assertOk();
 
@@ -1377,6 +1414,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         $this->actingAs($this->anotherUser, 'api-guard')
             ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
                 'new_owner_id' => $this->user->id,
+                'confirm_password' => self::DEFAULT_USER_PASSWORD,
             ])
             ->assertOk();
 
@@ -1399,6 +1437,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         $this->actingAs($this->anotherUser, 'api-guard')
             ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
                 'new_owner_id' => $this->user->id,
+                'confirm_password' => self::DEFAULT_USER_PASSWORD,
             ])
             ->assertOk();
 
@@ -1413,6 +1452,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         $this->actingAs($this->anotherUser, 'api-guard')
             ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
                 'new_owner_id' => $this->user->id,
+                'confirm_password' => self::DEFAULT_USER_PASSWORD,
             ])
             ->assertOk();
 
@@ -1448,6 +1488,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         $this->actingAs($this->anotherUser, 'api-guard')
             ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
                 'new_owner_id' => $this->user->id,
+                'confirm_password' => self::DEFAULT_USER_PASSWORD,
             ])
             ->assertOk();
 
@@ -1467,6 +1508,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         $this->actingAs($this->anotherUser, 'api-guard')
             ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
                 'new_owner_id' => $this->user->id,
+                'confirm_password' => self::DEFAULT_USER_PASSWORD,
             ])
             ->assertOk();
 
@@ -1481,6 +1523,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         $this->actingAs($this->anotherUser, 'api-guard')
             ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
                 'new_owner_id' => $this->user->id,
+                'confirm_password' => self::DEFAULT_USER_PASSWORD,
             ])
             ->assertOk();
 
@@ -1495,6 +1538,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         $this->actingAs($this->anotherUser, 'api-guard')
             ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
                 'new_owner_id' => $this->user->id,
+                'confirm_password' => self::DEFAULT_USER_PASSWORD,
             ])
             ->assertOk();
 
@@ -1509,6 +1553,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         $this->actingAs($this->anotherUser, 'api-guard')
             ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
                 'new_owner_id' => $this->user->id,
+                'confirm_password' => self::DEFAULT_USER_PASSWORD,
             ])
             ->assertOk();
 
@@ -1523,6 +1568,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         $this->actingAs($this->anotherUser, 'api-guard')
             ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
                 'new_owner_id' => $this->user->id,
+                'confirm_password' => self::DEFAULT_USER_PASSWORD,
             ])
             ->assertOk();
 
@@ -1541,6 +1587,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         $this->actingAs($this->anotherUser, 'api-guard')
             ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
                 'new_owner_id' => $this->user->id,
+                'confirm_password' => self::DEFAULT_USER_PASSWORD,
             ])
             ->assertOk();
 
@@ -1564,6 +1611,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         $this->actingAs($this->anotherUser, 'api-guard')
             ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
                 'new_owner_id' => $this->user->id,
+                'confirm_password' => self::DEFAULT_USER_PASSWORD,
             ])
             ->assertOk();
 
@@ -1578,6 +1626,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         $this->actingAs($this->anotherUser, 'api-guard')
             ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
                 'new_owner_id' => $this->user->id,
+                'confirm_password' => self::DEFAULT_USER_PASSWORD,
             ])
             ->assertOk();
 
@@ -1594,6 +1643,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
         $this->actingAs($this->anotherUser, 'api-guard')
             ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
                 'new_owner_id' => $this->user->id,
+                'confirm_password' => self::DEFAULT_USER_PASSWORD,
             ])
             ->assertOk();
 

@@ -28,6 +28,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 
 class TwoFAccountController extends Controller
@@ -176,6 +177,10 @@ class TwoFAccountController extends Controller
     public function transferOwnership(TwoFAccountTransferOwnershipRequest $request, TwoFAccount $twofaccount) : JsonResponse
     {
         $this->authorize('transferOwnership', $twofaccount);
+
+        if (! Hash::check($request->confirm_password, $request->user()->password)) {
+            return response()->json(['message' => 'unauthorized'], 401);
+        }
 
         $oldOwnerId = $twofaccount->user_id;
         $newOwner   = User::findOrFail((int) $request->validated('new_owner_id'));

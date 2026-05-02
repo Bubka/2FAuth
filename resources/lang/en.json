@@ -954,6 +954,7 @@
     "validation.multiple_of": "The :attribute field must be a multiple of :value.",
     "validation.not_in": "The selected :attribute is invalid.",
     "validation.not_regex": "The :attribute field format is invalid.",
+    "validation.not_current_owner": "The new owner must not be the current owner.",
     "validation.numeric": "The :attribute field must be a number.",
     "validation.onlyCustomOtpWithUri": "The uri parameter must be provided alone or only in combination with the 'custom_otp' parameter",
     "validation.password.letters": "The :attribute field must contain at least one letter.",

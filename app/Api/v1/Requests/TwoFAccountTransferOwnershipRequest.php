@@ -25,7 +25,8 @@ class TwoFAccountTransferOwnershipRequest extends FormRequest
     public function rules() : array
     {
         return [
-            'new_owner_id' => 'required|integer|exists:users,id',
+            'new_owner_id'     => 'required|integer|exists:users,id',
+            'confirm_password' => 'required|string',
         ];
     }
 
@@ -43,7 +44,7 @@ class TwoFAccountTransferOwnershipRequest extends FormRequest
             }
 
             if ((int) $this->input('new_owner_id') === (int) $twofaccount->user_id) {
-                $validator->errors()->add('new_owner_id', __('validation.different', ['attribute' => 'new_owner_id', 'value' => 'owner']));
+                $validator->errors()->add('new_owner_id', __('validation.not_current_owner'));
             }
         });
     }

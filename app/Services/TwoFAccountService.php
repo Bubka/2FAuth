@@ -253,6 +253,10 @@ class TwoFAccountService
      */
     public static function transferOwnership(TwoFAccount $twofaccount, User $newOwner) : TwoFAccount
     {
+        if ($twofaccount->user_id === $newOwner->id) {
+            return $twofaccount;
+        }
+
         $previousOwner = $twofaccount->user;
 
         DB::transaction(function () use ($twofaccount, $newOwner) {
