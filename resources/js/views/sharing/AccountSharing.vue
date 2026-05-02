@@ -217,7 +217,7 @@
                                 <RouterLink class="is-link" :to="{ name: 'shareAccount', params: { twofaccountId: props.twofaccountId } }">
                                     <LucideCirclePlus class="mr-2" /> {{ $t('link.add_users') }}
                                 </RouterLink>
-                                <div class="list-item pt-0">
+                                <div v-if="usershares.length == 0" class="list-item pt-0">
                                     <p class="is-size-6 is-size-7-mobile has-text-grey pt-2">{{ $t('message.add_your_first_user_to_share_this_account_with') }}</p>
                                 </div>
                             </div>
