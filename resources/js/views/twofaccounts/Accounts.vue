@@ -22,7 +22,7 @@
     import { useSortable, moveArrayElement } from '@vueuse/integrations/useSortable'
     import { useI18n } from 'vue-i18n'
     import { useErrorHandler } from '@2fauth/stores'
-    import { LucideChevronDown, LucideCircleAlert, LucideEye, LucideEyeOff, LucideMenu, LucideQrCode, LucideUserPen, LucideUserPlus, LucideUsers, LucideX } from '@lucide/vue'
+    import { LucideChevronDown, LucideCircleAlert, LucideEye, LucideEyeOff, LucideMenu, LucideQrCode, LucideUserCheck, LucideUserPen, LucideUserPlus, LucideUsers, LucideX } from '@lucide/vue'
 
     const errorHandler = useErrorHandler()
     const { t } = useI18n()
@@ -474,9 +474,15 @@
                                             <img v-else-if="account.icon == null && user.preferences.showAccountsIcons" role="presentation" class="tfa-icon" :src="$2fauth.config.subdirectory + '/storage/noicon.svg'" alt="">
                                             {{ account.service ? account.service : $t('message.no_service') }}<LucideCircleAlert class="has-text-danger ml-2" v-if="account.account === $t('error.indecipherable')" />
                                             <span class="is-block has-ellipsis is-family-primary is-size-6 is-size-7-mobile has-text-grey ">
-                                                <template v-if="account.is_borrowed">
-                                                    <span :title="$t('tooltip.this_account_is_shared_by_x_with_you', { username: account.borrowed_by })" class="tag p-1 mr-1" :class="mode == 'dark' ? 'is-dark':'is-white'" >@{{ bus.inManagementMode ? account.borrowed_by : '' }}</span>
-                                                </template>
+                                                <span v-if="account.is_borrowed" :title="$t('tooltip.this_account_is_shared_by_x_with_you', { username: account.borrowed_by })" class="tag p-1 mr-1" :class="mode == 'dark' ? 'is-dark':'is-white'" >
+                                                    @{{ bus.inManagementMode ? account.borrowed_by : '' }}
+                                                </span>
+                                                <span v-else-if="account.is_shared" :title="$t('tooltip.this_account_is_shared_with_specific_users')" class="tag p-1 mr-1" :class="mode == 'dark' ? 'is-dark':'is-white'" >
+                                                    <LucideUserCheck class="icon-size-0-75" />
+                                                </span>
+                                                <span v-else-if="account.is_shared_with_all" :title="$t('tooltip.this_account_is_shared_with_all')" class="tag p-1 mr-1" :class="mode == 'dark' ? 'is-dark':'is-white'" >
+                                                    <LucideUsers class="icon-size-0-75" />
+                                                </span>
                                                 {{ account.account }}
                                             </span>
                                         </div>

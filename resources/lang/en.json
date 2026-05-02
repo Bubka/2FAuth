@@ -846,6 +846,8 @@
     "tooltip.sort_by_date_desc": "Show most recent first",
     "tooltip.sort_descending": "Sort descending",
     "tooltip.this_account_is_shared_by_x_with_you": "{username} shared this account with you",
+    "tooltip.this_account_is_shared_with_all": "This account is shared with all users",
+    "tooltip.this_account_is_shared_with_specific_users": "This account is shared with specific users",
     "tooltip.twofauth_export_format_sub": "Export data using the 2FAuth json schema",
     "tooltip.unlock": "Unlock it (at your own risk)",
     "tooltip.unshare_selected_accounts": "Revoke all shares on selected accounts",
