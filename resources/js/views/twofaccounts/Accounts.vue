@@ -474,13 +474,13 @@
                                             <img v-else-if="account.icon == null && user.preferences.showAccountsIcons" role="presentation" class="tfa-icon" :src="$2fauth.config.subdirectory + '/storage/noicon.svg'" alt="">
                                             {{ account.service ? account.service : $t('message.no_service') }}<LucideCircleAlert class="has-text-danger ml-2" v-if="account.account === $t('error.indecipherable')" />
                                             <span class="is-block has-ellipsis is-family-primary is-size-6 is-size-7-mobile has-text-grey ">
-                                                <span v-if="account.is_borrowed" :title="$t('tooltip.this_account_is_shared_by_x_with_you', { username: account.borrowed_by })" class="tag p-1 mr-1" :class="mode == 'dark' ? 'is-dark':'is-white'" >
+                                                <span v-if="account.is_borrowed" :title="$t('tooltip.this_account_is_shared_by_x_with_you', { username: account.borrowed_by })" class="tag p-1 mr-1" :class="mode == 'dark' ? 'is-black is-opacity-4':'is-light is-white'" >
                                                     @{{ bus.inManagementMode ? account.borrowed_by : '' }}
                                                 </span>
-                                                <span v-else-if="account.is_shared" :title="$t('tooltip.this_account_is_shared_with_specific_users')" class="tag p-1 mr-1" :class="mode == 'dark' ? 'is-dark':'is-white'" >
+                                                <span v-else-if="account.is_shared" :title="$t('tooltip.this_account_is_shared_with_specific_users')" class="tag p-1 mr-1" :class="mode == 'dark' ? 'is-black is-opacity-4':'is-light is-white'" >
                                                     <LucideUserCheck class="icon-size-0-75" />
                                                 </span>
-                                                <span v-else-if="account.is_shared_with_all" :title="$t('tooltip.this_account_is_shared_with_all')" class="tag p-1 mr-1" :class="mode == 'dark' ? 'is-dark':'is-white'" >
+                                                <span v-else-if="account.is_shared_with_all" :title="$t('tooltip.this_account_is_shared_with_all')" class="tag p-1 mr-1" :class="mode == 'dark' ? 'is-black is-opacity-4':'is-light is-white'" >
                                                     <LucideUsers class="icon-size-0-75" />
                                                 </span>
                                                 {{ account.account }}
@@ -543,10 +543,6 @@
                                             <RouterLink v-if="account.is_shared" :to="{ name: 'shareAccount', params: { twofaccountId: account.id } }" class="tag is-rounded mr-1" :class="mode == 'dark' ? 'is-dark' : 'is-white'" :title="$t('tooltip.share_with_new_users')">
                                                 <LucideUserPlus class="icon-size-1" />
                                             </RouterLink>
-                                            <!-- shared with all flag -->
-                                            <span v-else-if="account.is_shared_with_all" class="tag is-rounded is-light has-no-background mr-1" :title="$t('tooltip.shared_with_all')">
-                                                <LucideUsers class="icon-size-1" />
-                                            </span>
                                             <!-- manage sharing button -->
                                             <RouterLink :to="{ name: 'accountSharing', params: { twofaccountId: account.id }}" class="tag is-rounded" :class="mode == 'dark' ? 'is-dark' : 'is-white'" :title="$t('tooltip.edit_sharing')">
                                                 <LucideUserPen class="icon-size-1" />
