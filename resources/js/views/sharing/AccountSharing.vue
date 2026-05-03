@@ -168,27 +168,23 @@
 <template>
     <StackLayout>
         <template #content>
+            <UseColorMode v-slot="{ mode }">
             <ResponsiveWidthWrapper>
                 <h1 class="title mb-6">
-                    {{ $t('heading.account_sharing') }}
+                    {{ $t('heading.sharing_setting') }}
                 </h1>
-                <div class="columns mb-5">
-                    <div class="column ">
-                        <div class="media">
-                            <div class="media-left" v-if="user.preferences.showAccountsIcons">
-                                <figure class="image is-48x48">
-                                    <img v-if="twofaccount.icon" role="presentation" :src="$2fauth.config.subdirectory + '/storage/icons/' + twofaccount.icon" alt="">
-                                    <img v-else-if="twofaccount.icon == null" role="presentation" :src="$2fauth.config.subdirectory + '/storage/noicon.svg'" alt="">
-                                </figure>
-                            </div>
-                            <div class="media-content">
-                                <p class="title is-4">{{ twofaccount.service }}</p>
-                                <p class="subtitle is-6">{{ twofaccount.account }}</p>
-                            </div>
-                        </div>
+                <div class="columns mb-5 is-mobile is-2 is-align-items-center">
+                    <div class="column is-narrow">
+                        <figure class="image is-32x32">
+                            <img v-if="twofaccount.icon" role="presentation" :src="$2fauth.config.subdirectory + '/storage/icons/' + twofaccount.icon" alt="">
+                            <img v-else-if="twofaccount.icon == null" role="presentation" :src="$2fauth.config.subdirectory + '/storage/noicon.svg'" alt="">
+                        </figure>
+                    </div>
+                    <div class="column">
+                        <p class="title is-5" :class="mode == 'dark' ? 'has-text-grey-lighter' : 'has-text-black'">{{ twofaccount.service }}</p>
+                        <p class="subtitle is-7">{{ twofaccount.account }}</p>
                     </div>
                 </div>
-                <h4 class="subtitle is-6 mb-3">{{ $t('label.sharing_settings') }}</h4>
                 <div class="columns is-mobile is-multiline">
                     <div class="column is-narrow">
                     <div class="toggle-wrapper has-background-dark p-1">
@@ -209,51 +205,49 @@
                     </div>
                     </div>
                 </div>
-                <!-- <h4 class="title is-5 mb-2">{{ $t('heading.existing_sharing') }}</h4> -->
                  <template v-if="isFetching == false">
-                    <UseColorMode v-slot="{ mode }">
-                        <template v-if="isSharedWithUsers">
-                            <div class="pt-2 mb-4">
-                                <RouterLink class="is-link" :to="{ name: 'shareAccount', params: { twofaccountId: props.twofaccountId } }">
-                                    <LucideCirclePlus class="mr-2" /> {{ $t('link.add_users') }}
-                                </RouterLink>
+                    <template v-if="isSharedWithUsers">
+                        <div class="pt-2 mb-4">
+                            <RouterLink class="is-link" :to="{ name: 'shareAccount', params: { twofaccountId: props.twofaccountId } }">
+                                <LucideCirclePlus class="mr-2" /> {{ $t('link.add_users') }}
+                            </RouterLink>
+                        </div>
+                        <div v-if="usershares.length == 0" class="list-item is-size-6 is-size-7-mobile has-text-grey pt-2">
+                            {{ $t('message.add_your_first_user_to_share_this_account_with') }}
+                        </div>
+                        <template v-if="usershares.length > 0">
+                            <SearchBox v-if="usershares.length > 5" v-model:keyword="userFilter" :hasNoBackground="true" :isSmall="true" />
+                            <div v-for="user in visibleUsershares" :key="user.id" class="list-item is-size-5 is-size-6-mobile">
+                                {{ user.name }}
+                                <!-- revoke icon -->
+                                <button type="button" class="button tag is-pulled-right" :class="mode == 'dark' ? 'is-dark' : 'is-white'" @click="unshareUser(user.id)"  :title="$t('tooltip.revoke')">
+                                    {{ $t('label.revoke') }}
+                                </button>
+                                <span class="is-block is-family-primary is-size-7 has-text-grey">{{ $t('message.shared_since_x', { date: user.is_shared_since }) }}</span>
                             </div>
-                            <div v-if="usershares.length == 0" class="list-item is-size-6 is-size-7-mobile has-text-grey pt-2">
-                                {{ $t('message.add_your_first_user_to_share_this_account_with') }}
-                            </div>
-                            <template v-if="usershares.length > 0">
-                                <SearchBox v-if="usershares.length > 5" v-model:keyword="userFilter" :hasNoBackground="true" :isSmall="true" />
-                                <div v-for="user in visibleUsershares" :key="user.id" class="list-item is-size-5 is-size-6-mobile">
-                                    {{ user.name }}
-                                    <!-- revoke icon -->
-                                    <button type="button" class="button tag is-pulled-right" :class="mode == 'dark' ? 'is-dark' : 'is-white'" @click="unshareUser(user.id)"  :title="$t('tooltip.revoke')">
-                                        {{ $t('label.revoke') }}
-                                    </button>
-                                    <span class="is-block is-family-primary is-size-7 has-text-grey">{{ $t('message.shared_since_x', { date: user.is_shared_since }) }}</span>
-                                </div>
-                            </template>
                         </template>
-                        <template v-else-if="isSharedWithAll == true">
-                            <div class="list-item is-size-5 is-size-6-mobile">
-                                <span class="icon-text">
-                                    <span class="icon">
-                                        <LucideUsers class="icon-size-1" />
-                                    </span>
-                                    <span>{{ $t('message.is_shared_with_all_users') }}</span>
+                    </template>
+                    <template v-else-if="isSharedWithAll == true">
+                        <div class="list-item is-size-5 is-size-6-mobile">
+                            <span class="icon-text">
+                                <span class="icon">
+                                    <LucideUsers class="icon-size-1" />
                                 </span>
-                                <p class="is-size-6 is-size-7-mobile has-text-grey pt-2">{{ $t('message.is_shared_with_all_users_legend') }}</p>
-                            </div>
-                        </template>
-                        <div v-else class="list-item pt-0">
-                            <p class="is-size-6 is-size-7-mobile has-text-grey pt-2">{{ $t('message.all_users_meaning') }}</p>
-                            <p class="is-size-6 is-size-7-mobile has-text-grey pt-2">{{ $t('message.selected_users_meaning') }}</p>
+                                <span>{{ $t('message.is_shared_with_all_users') }}</span>
+                            </span>
+                            <p class="is-size-6 is-size-7-mobile has-text-grey pt-2">{{ $t('message.is_shared_with_all_users_legend') }}</p>
                         </div>
-                        <div class="mt-2 is-size-7 is-pulled-right">
-                            {{ $t('message.you_can_toggle_sharing_setting_at_any_time')}}
-                        </div>
-                    </UseColorMode>
+                    </template>
+                    <div v-else class="list-item pt-0">
+                        <p class="is-size-6 is-size-7-mobile has-text-grey pt-2">{{ $t('message.all_users_meaning') }}</p>
+                        <p class="is-size-6 is-size-7-mobile has-text-grey pt-2">{{ $t('message.selected_users_meaning') }}</p>
+                    </div>
+                    <div class="mt-2 is-size-7 is-pulled-right">
+                        {{ $t('message.you_can_toggle_sharing_setting_at_any_time')}}
+                    </div>
                  </template>
             </ResponsiveWidthWrapper>
+            </UseColorMode>
         </template>
         <template #footer>
             <VueFooter>
