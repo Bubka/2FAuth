@@ -141,7 +141,7 @@
         sharePromise.then(response => {
             activeSharingScope.value = newScope
 
-            if (newScope == "NotShared") {
+            if (newScope != "ShareWithUsers") {
                 usershares.value = []
             }
             
