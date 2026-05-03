@@ -222,7 +222,7 @@
                                 {{ $t('message.add_your_first_user_to_share_this_account_with') }}
                             </div>
                             <template v-if="usershares.length > 0">
-                                <SearchBox v-if="usershares.length > 5" v-model:keyword="userFilter" :hasNoBackground="true" />
+                                <SearchBox v-if="usershares.length > 5" v-model:keyword="userFilter" :hasNoBackground="true" :isSmall="true" />
                                 <div v-for="user in visibleUsershares" :key="user.id" class="list-item is-size-5 is-size-6-mobile">
                                     {{ user.name }}
                                     <!-- revoke icon -->
