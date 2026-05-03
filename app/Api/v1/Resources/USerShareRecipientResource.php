@@ -3,6 +3,7 @@
 namespace App\Api\v1\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Carbon;
 
 /**
  * @property mixed $id
@@ -21,11 +22,14 @@ class USerShareRecipientResource extends JsonResource
     {
         $twofaccount = $request->route('twofaccount');
         $isShared    = $this->borrowedTwofaccounts->where('twofaccount_id', $twofaccount->id)->first();
+        $sharedSince = $isShared ? $isShared->created_at : null;
+        $tz          = $request->user()?->preferences['timezone'] ?? config('app.timezone');
 
         return [
-            'id'           => $this->id,
-            'name'         => $this->name,
-            'isSharedWith' => $isShared != null,
+            'id'              => $this->id,
+            'name'            => $this->name,
+            'is_shared_with'  => $isShared != null,
+            'is_shared_since' => $this->when($isShared != null, Carbon::parse($sharedSince)->tz($tz)->toDayDateTimeString()),
         ];
     }
 }

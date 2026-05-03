@@ -674,6 +674,7 @@
     "message.selected_users_meaning": "Set to 'Selected users' to share this account with the users of your choice.",
     "message.settings_managed_by_administrator": "Some settings are being managed by your administrator",
     "message.shared_by_x": "Shared by {username}",
+    "message.shared_since_x": "Since {date}",
     "message.shared_with_all": "shared with all",
     "message.shared_with_specific_users": "shared with specific users",
     "message.sign_in_using_email_password": "You can connect using the email address {email} and the password {password}",

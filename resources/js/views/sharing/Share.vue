@@ -217,7 +217,7 @@
                                     <div class="dropdown-content is-shadowless">
                                         <template v-if="showCandidates">
                                             <template v-for="candidate in candidates" :key="candidate.id" >
-                                                <a v-if="!candidate.isSharedWith" @click="addToRecipients(candidate)" class="dropdown-item">{{ candidate.name }}</a>
+                                                <a v-if="!candidate.is_shared_with" @click="addToRecipients(candidate)" class="dropdown-item">{{ candidate.name }}</a>
                                                 <span v-else class="dropdown-item has-text-grey">
                                                     {{ candidate.name }} ({{ $t('message.already_shared') }})
                                                 </span>

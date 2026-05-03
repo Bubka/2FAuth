@@ -7,7 +7,7 @@
     import { UseColorMode } from '@vueuse/components'
     import { useTwofaccounts } from '@/stores/twofaccounts'
     import { useUserStore } from '@/stores/user'
-    import { LucideUsers, LucideUser, LucideCirclePlus } from '@lucide/vue'
+    import { LucideUsers, LucideCirclePlus } from '@lucide/vue'
 
     const props = defineProps({
         twofaccountId: [Number, String]
@@ -213,27 +213,23 @@
                  <template v-if="isFetching == false">
                     <UseColorMode v-slot="{ mode }">
                         <template v-if="isSharedWithUsers">
-                            <div class="pt-2">
+                            <div class="pt-2 mb-4">
                                 <RouterLink class="is-link" :to="{ name: 'shareAccount', params: { twofaccountId: props.twofaccountId } }">
                                     <LucideCirclePlus class="mr-2" /> {{ $t('link.add_users') }}
                                 </RouterLink>
-                                <div v-if="usershares.length == 0" class="list-item pt-0">
-                                    <p class="is-size-6 is-size-7-mobile has-text-grey pt-2">{{ $t('message.add_your_first_user_to_share_this_account_with') }}</p>
-                                </div>
+                            </div>
+                            <div v-if="usershares.length == 0" class="list-item is-size-6 is-size-7-mobile has-text-grey pt-2">
+                                {{ $t('message.add_your_first_user_to_share_this_account_with') }}
                             </div>
                             <template v-if="usershares.length > 0">
                                 <SearchBox v-if="usershares.length > 5" v-model:keyword="userFilter" :hasNoBackground="true" />
                                 <div v-for="user in visibleUsershares" :key="user.id" class="list-item is-size-5 is-size-6-mobile">
-                                    <span class="icon-text">
-                                        <span class="icon">
-                                            <LucideUser class="icon-size-1" />
-                                        </span>
-                                        <span>{{ user.name }}</span>
-                                    </span>
+                                    {{ user.name }}
                                     <!-- revoke icon -->
                                     <button type="button" class="button tag is-pulled-right" :class="mode == 'dark' ? 'is-dark' : 'is-white'" @click="unshareUser(user.id)"  :title="$t('tooltip.revoke')">
                                         {{ $t('label.revoke') }}
                                     </button>
+                                    <span class="is-block is-family-primary is-size-7 has-text-grey">{{ $t('message.shared_since_x', { date: user.is_shared_since }) }}</span>
                                 </div>
                             </template>
                         </template>

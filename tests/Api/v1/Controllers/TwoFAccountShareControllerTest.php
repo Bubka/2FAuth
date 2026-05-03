@@ -11,6 +11,8 @@ use App\Models\TwoFAccount;
 use App\Models\TwoFAccountShare;
 use App\Models\User;
 use App\Services\TwoFAccountShareService;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -702,6 +704,89 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
     }
 
     #[Test]
+    public function test_recipients_returns_other_users_and_excludes_authenticated_user() : void
+    {
+        TwoFAccountShare::create([
+            'twofaccount_id' => $this->twofaccount->id,
+            'shared_with_user_id' => $this->targetUser->id,
+            'scope' => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id' => $this->owner->id,
+        ]);
+
+        $response = $this->actingAs($this->owner, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/recipients')
+            ->assertOk()
+            ->assertJsonCount(2)
+            ->assertJsonMissing(['id' => $this->owner->id]);
+
+        $recipients = collect($response->json())->keyBy('id');
+
+        $this->assertTrue($recipients->has($this->targetUser->id));
+        $this->assertTrue($recipients->has($this->thirdUser->id));
+        $this->assertTrue($recipients->get($this->targetUser->id)['is_shared_with']);
+        $this->assertFalse($recipients->get($this->thirdUser->id)['is_shared_with']);
+        $this->assertArrayHasKey('is_shared_since', $recipients->get($this->targetUser->id));
+        $this->assertArrayNotHasKey('is_shared_since', $recipients->get($this->thirdUser->id));
+        $this->assertArrayNotHasKey('email', $recipients->get($this->targetUser->id));
+        $this->assertArrayNotHasKey('email', $recipients->get($this->thirdUser->id));
+    }
+
+    #[Test]
+    public function test_recipients_supports_partial_name_filter() : void
+    {
+        $nameFilter = substr($this->targetUser->name, 0, 3);
+
+        $this->actingAs($this->owner, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/recipients?filter[name]=' . $nameFilter)
+            ->assertOk()
+            ->assertJsonCount(1)
+            ->assertJsonPath('0.id', $this->targetUser->id)
+            ->assertJsonPath('0.name', $this->targetUser->name);
+    }
+
+    #[Test]
+    public function test_recipients_for_non_owner_is_allowed() : void
+    {
+        $this->actingAs($this->targetUser, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/recipients')
+            ->assertOk();
+    }
+
+    #[Test]
+    public function test_recipients_returns_is_shared_since_with_timezoned_format() : void
+    {
+        $timezone                             = 'Europe/Paris';
+        $this->owner['preferences->timezone'] = $timezone;
+        $this->owner->save();
+
+        $sharedAt = Carbon::create(2026, 1, 15, 10, 30, 45, 'UTC');
+
+        $share = TwoFAccountShare::create([
+            'twofaccount_id' => $this->twofaccount->id,
+            'shared_with_user_id' => $this->targetUser->id,
+            'scope' => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id' => $this->owner->id,
+        ]);
+
+        DB::table('twofaccount_shares')
+            ->where('id', $share->id)
+            ->update([
+                'created_at' => $sharedAt,
+                'updated_at' => $sharedAt,
+            ]);
+
+        $expectedSharedSince = Carbon::parse($sharedAt)->tz($timezone)->toDayDateTimeString();
+
+        $response = $this->actingAs($this->owner, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/recipients')
+            ->assertOk();
+
+        $recipients = collect($response->json())->keyBy('id');
+
+        $this->assertSame($expectedSharedSince, $recipients->get($this->targetUser->id)['is_shared_since']);
+    }
+
+    #[Test]
     #[DataProvider('provideSharingRoutes')]
     public function test_sharing_routes_return_403_when_feature_is_disabled(string $method, string $uri, array $payload = []) : void
     {
@@ -733,6 +818,7 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
             ['DELETE', '/api/v1/twofaccounts/{accountId}/shares/{userId}'],
             ['DELETE', '/api/v1/twofaccounts/{accountId}/shares'],
             ['POST', '/api/v1/twofaccounts/{accountId}/shares/all'],
+            ['GET', '/api/v1/twofaccounts/{accountId}/recipients'],
         ];
     }
 }
