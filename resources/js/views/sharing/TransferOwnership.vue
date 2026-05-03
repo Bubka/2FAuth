@@ -118,10 +118,16 @@
                     </div>
                 </div>
                 <div class="block is-size-7-mobile">
-                    <p class="mb-2" :class="mode == 'dark' ? 'has-text-grey' : 'has-text-black'">{{ $t('message.this_account_is_currently_x', { sharing_status: twofaccountShareStatus }) }}</p>
-                    <p>{{ $t('message.ownership_can_be_transferred_sharing_legend')}}</p>
+                    <p class="mb-2">{{ $t('message.ownership_can_be_transferred_sharing_legend')}}</p>
+                    <i18n-t keypath="message.this_account_is_currently_x" tag="p" :class="mode == 'dark' ? 'has-text-grey' : 'has-text-black'">
+                        <template v-slot:sharing_status>
+                            <RouterLink class="is-link" :to="{ name: 'accountSharing', params: { twofaccountId: props.twofaccountId } }">
+                                {{ twofaccountShareStatus }}
+                            </RouterLink>
+                        </template>
+                    </i18n-t>
                 </div>
-                <form @submit.prevent="handleSubmit" @keydown="form.onKeydown($event)">
+                <form @submit.prevent="handleSubmit" @keydown="form.onKeydown($event)" class="mb-6">
                     <!-- user selector -->
                     <FormSelect v-model="form.new_owner_id" :options="recipients" fieldName="new_owner_id" :errorMessage="form.errors.get('new_owner_id')" is-loading="isFetchingRecipients" label="field.new_owner" help="field.new_owner.help" />
                     <div class="is-size-7-mobile mb-3" :class="mode == 'dark' ? 'has-text-grey' : 'has-text-black'">

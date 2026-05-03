@@ -560,7 +560,7 @@
     "message.disabled_in_demo": "Feature disabled in Demo mode",
     "message.do_not_set_password_or_encryption": "Do NOT enable Password protection or Encryption when you export data from a 2FA app otherwise 2FAuth will not be able to decipher them.",
     "message.dont_have_account_yet": "Don't have your account yet?",
-    "message.double_check_new_owner": "Be sure to double-check your choices before proceeding as this action cannot be undone (by you). Also, ensure you are transferring the ownership to a trusted user as they will have full control over this 2FA account.",
+    "message.double_check_new_owner": "Be sure to double-check your choice before proceeding as this action cannot be undone (by you). Also, ensure you are transferring the ownership to a trusted user as they will have full control over this 2FA account.",
     "message.email_will_be_send_to_x": "The email will be send to {email}",
     "message.enhance_security_using_webauthn": "You can enhance the security of your 2FAuth account by enabling WebAuthn authentication.",
     "message.ensure_you_open_mail_in_trusted_device": "Ensure you open the email on a device you fully own.",
