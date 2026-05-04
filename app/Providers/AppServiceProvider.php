@@ -47,13 +47,17 @@ class AppServiceProvider extends ServiceProvider
         ]);
 
         Gate::define('manage-pat', function (User $user) {
+            if ($user->isAdministrator()) {
+                return true;
+            }
+
             $useSsoOnly = Settings::get('useSsoOnly');
 
             return ($useSsoOnly && Settings::get('allowPatWhileSsoOnly')) || $useSsoOnly !== true;
         });
 
         Gate::define('manage-webauthn-credentials', function (User $user) {
-            return ! Settings::get('useSsoOnly');
+            return ! Settings::get('useSsoOnly') || $user->isAdministrator();
         });
     }
 }
