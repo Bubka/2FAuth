@@ -73,6 +73,9 @@ trait ResetTrait
             'oauth_refresh_tokens',
             'webauthn_credentials',
             config('auth.passwords.webauthn.table'), // webauthn_recoveries
+            'twofaccount_group_assignments',
+            'twofaccount_shares',
+            'twofaccount_user_orders',
             'twofaccounts',
             'groups',
             'users',
