@@ -42,6 +42,7 @@ class TwoFAccountTransferOwnershipRequestTest extends TestCase
         $newOwner = User::factory()->create();
         $data = [
             'new_owner_id' => $newOwner->id,
+            'confirm_password' => 'password',
         ];
 
         $request = new TwoFAccountTransferOwnershipRequest;
@@ -71,8 +72,14 @@ class TwoFAccountTransferOwnershipRequestTest extends TestCase
     {
         return [
             [[]],
-            [['new_owner_id' => 'abc']],
-            [['new_owner_id' => 999_999_999]],
+            [[
+                'new_owner_id' => 'abc',
+                'confirm_password' => 'password',
+            ]],
+            [[
+                'new_owner_id' => 999_999_999,
+                'confirm_password' => 'password',
+            ]],
         ];
     }
 
@@ -84,6 +91,7 @@ class TwoFAccountTransferOwnershipRequestTest extends TestCase
 
         $data = [
             'new_owner_id' => $owner->id,
+            'confirm_password' => 'password',
         ];
 
         $request = new TwoFAccountTransferOwnershipRequest;
@@ -107,6 +115,7 @@ class TwoFAccountTransferOwnershipRequestTest extends TestCase
         $newOwner = User::factory()->create();
         $data = [
             'new_owner_id' => $newOwner->id,
+            'confirm_password' => 'password',
         ];
 
         $request = new TwoFAccountTransferOwnershipRequest;

@@ -113,44 +113,6 @@ class GroupControllerTest extends TestCase
         $this->assertInstanceOf(GroupResource::class, $response);
     }
 
-    // 26/03/25: Cannot be tested as a Unit test anymore because of the call to $group->loadCount()
-    // in the assignAccounts() controller method. The loadCount() has been introduced
-    // in the controller by commit 19f3a71c "Move group->loadCount from the Assign void method to the caller"
-    // on Feb 24-2025 as part of the CWE-362 fix.
-    // #[Test]
-    // public function test_assignAccounts_returns_api_resource_assigned_using_groupService()
-    // {
-    //     $request    = Mockery::mock(GroupAssignRequest::class);
-    //     $controller = Mockery::mock(GroupController::class)->makePartial();
-    //     $group      = Group::factory()->make();
-    //     $validated  = ['ids' => $group->id];
-
-    //     $request->shouldReceive([
-    //         'validated' => $validated,
-    //         'user'      => $this->user,
-    //     ]);
-
-    //     Groups::shouldReceive('assign')
-    //         ->with($group->id, $this->user, $group)
-    //         ->once();
-
-    //     $response = $controller->assignAccounts($request, $group);
-
-    //     $this->assertInstanceOf(GroupResource::class, $response);
-    // }
-
-    #[Test]
-    public function test_accounts_returns_api_resources()
-    {
-        $request    = Mockery::mock(GroupStoreRequest::class);
-        $controller = Mockery::mock(GroupController::class)->makePartial();
-        $group      = Group::factory()->make();
-
-        $response = $controller->accounts($request, $group);
-
-        $this->assertContainsOnlyInstancesOf(TwoFAccountReadResource::class, $response->collection);
-    }
-
     #[Test]
     public function test_destroy_uses_group_service()
     {

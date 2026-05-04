@@ -5,6 +5,7 @@ namespace Tests;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 // https://github.com/framgia/laravel-test-examples/blob/master/tests/ModelTestCase.php
@@ -127,5 +128,18 @@ abstract class ModelTestCase extends TestCase
         }
 
         $this->assertEquals($owner, $relation->getOwnerKey());
+    }
+
+    /**
+     * @param  BelongsToMany  $relation
+     * @param  string  $foreignPivotKey
+     * @param  string  $relatedPivotKey
+     */
+    protected function assertBelongsToManyRelation($relation, string $foreignPivotKey, string $relatedPivotKey)
+    {
+        $this->assertInstanceOf(BelongsToMany::class, $relation);
+
+        $this->assertEquals($foreignPivotKey, $relation->getForeignPivotKeyName());
+        $this->assertEquals($relatedPivotKey, $relation->getRelatedPivotKeyName());
     }
 }
