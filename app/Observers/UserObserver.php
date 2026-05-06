@@ -81,15 +81,16 @@ class UserObserver
         // for an unknown reason, SQLite refuses to delete these related.
         // (despite DB_FOREIGN_KEYS=true which is supposed to enable it)
         // So it ends with a direct db delete for SQLite...
+        // 2026/05/06: The bug seems to be fixed, but we keep the workaround for older versions and to be safe.
         if (DB::getDriverName() === 'sqlite') {
             $ownedTwoFAccountIds = DB::table('twofaccounts')->where('user_id', $user->id)->pluck('id');
 
-            DB::table('twofaccount_user_orders')->where('user_id', $user->id)->delete();
-
             if ($ownedTwoFAccountIds->isNotEmpty()) {
-                DB::table('twofaccount_user_orders')->whereIn('twofaccount_id', $ownedTwoFAccountIds->all())->delete();
+                DB::table('twofaccount_shares')->whereIn('twofaccount_id', $ownedTwoFAccountIds->all())->delete(); // @codeCoverageIgnore
             }
 
+            DB::table('twofaccount_group_assignments')->where('user_id', $user->id)->delete();
+            DB::table('twofaccount_user_orders')->where('user_id', $user->id)->delete();
             DB::table('twofaccounts')->where('user_id', $user->id)->delete();
             DB::table('groups')->where('user_id', $user->id)->delete();
         }
