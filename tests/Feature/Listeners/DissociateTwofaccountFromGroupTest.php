@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Listeners;
+namespace Tests\Feature\Listeners;
 
 use App\Events\GroupDeleted;
 use App\Listeners\DissociateTwofaccountFromGroup;
@@ -18,7 +18,7 @@ use Tests\FeatureTestCase;
 class DissociateTwofaccountFromGroupTest extends FeatureTestCase
 {
     #[Test]
-    public function test_DissociateTwofaccountFromGroup_listen_to_groupDeleted_event()
+    public function test_it_listens_to_groupDeleted_event()
     {
         Event::fake();
 

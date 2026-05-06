@@ -244,6 +244,16 @@ class SettingControllerTest extends FeatureTestCase
     }
 
     #[Test]
+    public function test_update_restrictRule_setting_rejects_invalid_regex()
+    {
+        $response = $this->actingAs($this->admin, 'api-guard')
+            ->json('PUT', '/api/v1/settings/restrictRule', [
+                'value' => 'HOHI\\',
+            ])
+            ->assertJsonValidationErrorFor('value');
+    }
+
+    #[Test]
     public function test_destroy_user_setting_returns_success()
     {
         Settings::set(self::USER_DEFINED_SETTING, self::USER_DEFINED_SETTING_VALUE);

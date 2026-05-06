@@ -28,6 +28,8 @@ class RegisterControllerTest extends FeatureTestCase
 
     private const EMAIL_EXCLUDED_BY_FILTERING_RULE = 'johndoe@anywhere.org';
 
+    private const EMAIL_EXCLUDED_BY_BOTH_FILTERING_RULE_AND_LIST = 'bob@anywhere.org';
+
     private const PASSWORD = 'password';
 
     private const EMAIL_FILTERING_LIST = 'johndoe@example.org|johndoe@test.org|johndoe@anywhere.org';
@@ -240,5 +242,21 @@ class RegisterControllerTest extends FeatureTestCase
             'password_confirmation' => self::PASSWORD,
         ])
             ->assertStatus(201);
+    }
+
+    #[Test]
+    public function test_register_fails_when_email_is_denied_by_regex_and_list()
+    {
+        Settings::set('restrictRegistration', true);
+        Settings::set('restrictList', self::EMAIL_FILTERING_LIST);
+        Settings::set('restrictRule', self::EMAIL_FILTERING_RULE);
+
+        $this->json('POST', '/user', [
+            'name'                  => self::USERNAME,
+            'email'                 => self::EMAIL_EXCLUDED_BY_BOTH_FILTERING_RULE_AND_LIST,
+            'password'              => self::PASSWORD,
+            'password_confirmation' => self::PASSWORD,
+        ])
+            ->assertStatus(422);
     }
 }

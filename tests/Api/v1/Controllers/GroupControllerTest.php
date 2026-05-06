@@ -4,6 +4,7 @@ namespace Tests\Api\v1\Controllers;
 
 use App\Api\v1\Controllers\GroupController;
 use App\Api\v1\Resources\GroupResource;
+use App\Facades\Groups;
 use App\Listeners\DissociateTwofaccountFromGroup;
 use App\Listeners\ResetUsersPreference;
 use App\Models\Group;
@@ -11,6 +12,7 @@ use App\Models\TwoFAccount;
 use App\Models\TwoFAccountShare;
 use App\Models\User;
 use App\Policies\GroupPolicy;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\FeatureTestCase;
@@ -295,16 +297,36 @@ class GroupControllerTest extends FeatureTestCase
     #[Test]
     public function test_assign_accounts_to_missing_group_returns_not_found()
     {
+        $group    = Group::factory()->for($this->user)->create();
         $accounts = TwoFAccount::factory()->count(2)->for($this->user)->create();
 
+        Groups::shouldReceive('assign')
+            ->andThrow(ModelNotFoundException::class);
+
         $response = $this->actingAs($this->user, 'api-guard')
-            ->json('POST', '/api/v1/groups/1000/assign', [
+            ->json('POST', '/api/v1/groups/' . $group->id . '/assign', [
                 'ids' => [$accounts[0]->id, $accounts[1]->id],
             ])
             ->assertNotFound()
             ->assertJsonStructure([
                 'message',
             ]);
+    }
+
+    #[Test]
+    public function test_assign_accounts_returns_conflict()
+    {
+        $group    = Group::factory()->for($this->user)->create();
+        $accounts = TwoFAccount::factory()->count(2)->for($this->user)->create();
+
+        Groups::shouldReceive('assign')
+            ->andThrow(new \Exception);
+
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('POST', '/api/v1/groups/' . $group->id . '/assign', [
+                'ids' => [$accounts[0]->id, $accounts[1]->id],
+            ])
+            ->assertStatus(409);
     }
 
     #[Test]

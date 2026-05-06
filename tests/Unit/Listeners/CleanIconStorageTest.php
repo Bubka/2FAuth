@@ -49,7 +49,7 @@ class CleanIconStorageTest extends TestCase
     }
 
     #[Test]
-    public function test_CleanIconStorage_listen_to_TwoFAccountDeleted_event()
+    public function test_it_listens_to_TwoFAccountDeleted_event()
     {
         Event::fake();
 

@@ -6,6 +6,7 @@ use App\Events\TwoFAccountShareRevoked;
 use App\Events\TwoFAccountShared;
 use App\Models\TwoFAccount;
 use App\Models\TwoFAccountShare;
+use App\Models\TwoFAccountUserOrder;
 use App\Models\User;
 use App\Services\TwoFAccountShareService;
 use Illuminate\Support\Facades\Event;
@@ -14,6 +15,8 @@ use PHPUnit\Framework\Attributes\Test;
 use Tests\FeatureTestCase;
 
 #[CoversClass(TwoFAccountShareService::class)]
+#[CoversClass(TwoFAccountShared::class)]
+#[CoversClass(TwoFAccountShareRevoked::class)]
 class TwoFAccountShareServiceTest extends FeatureTestCase
 {
     private User $owner;

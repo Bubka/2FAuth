@@ -16,7 +16,7 @@ use Tests\TestCase;
 class ResetUsersPreferenceTest extends TestCase
 {
     #[Test]
-    public function test_ResetUsersPreference_listen_to_GroupDeleted_event()
+    public function test_it_listens_to_GroupDeleted_event()
     {
         Event::fake();
 

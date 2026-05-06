@@ -31,7 +31,7 @@ class ReleaseRadarTest extends TestCase
     }
 
     #[Test]
-    public function test_ReleaseRadar_listen_to_ScanForNewReleaseCalled_event()
+    public function test_it_listens_to_ScanForNewReleaseCalled_event()
     {
         Event::fake();
 

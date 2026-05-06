@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Services;
 
+use App\Facades\LogoLib;
 use App\Models\User;
 use App\Services\LogoLib\AbstractLogoLib;
 use App\Services\LogoLib\DashboardiconsLogoLib;
@@ -24,10 +25,12 @@ use Tests\FeatureTestCase;
 /**
  * LogoLibsTest test class
  */
+#[CoversClass(LogoLib::class)]
 #[CoversClass(AbstractLogoLib::class)]
 #[CoversClass(SelfhLogoLib::class)]
 #[CoversClass(DashboardiconsLogoLib::class)]
-#[CoversClass(TfalogoLib::class)]
+#[CoversClass(TfaLogoLib::class)]
+#[CoversClass(StorageLogoLib::class)]
 class LogoLibsTest extends FeatureTestCase
 {
     use WithoutMiddleware;

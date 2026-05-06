@@ -7,9 +7,12 @@ use App\Facades\Groups;
 use App\Facades\TwoFAccounts;
 use App\Models\Group;
 use App\Models\TwoFAccount;
+use App\Models\TwoFAccountGroupAssignment;
 use App\Models\TwoFAccountShare;
+use App\Models\TwoFAccountUserOrder;
 use App\Models\User;
 use App\Services\TwoFAccountService;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Exceptions;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -18,11 +21,15 @@ use Tests\Data\MigrationTestData;
 use Tests\Data\OtpTestData;
 use Tests\FeatureTestCase;
 
+use function PHPUnit\Framework\assertCount;
+use function PHPUnit\Framework\assertGreaterThan;
+
 /**
  * TwoFAccountServiceTest test class
  */
 #[CoversClass(TwoFAccountService::class)]
 #[CoversClass(TwoFAccounts::class)]
+#[CoversClass(TwoFAccountOwnershipTransferred::class)]
 class TwoFAccountServiceTest extends FeatureTestCase
 {
     /**
@@ -184,6 +191,23 @@ class TwoFAccountServiceTest extends FeatureTestCase
         Exceptions::assertNothingReported();
 
         TwoFAccounts::withdraw(null, $this->user);
+    }
+
+    #[Test]
+    public function test_withdraw_wrong_user_does_nothing()
+    {
+        $anotherUser = User::factory()->create();
+
+        Groups::assign([
+            $this->customHotpTwofaccount->id,
+            $this->customTotpTwofaccount->id,
+        ], $this->user, $this->userGroupA);
+
+        $originalAssignmentCount = DB::table((new TwoFAccountGroupAssignment)->getTable())->count();
+
+        TwoFAccounts::withdraw($this->customHotpTwofaccount->id, $anotherUser);
+
+        $this->assertEquals($originalAssignmentCount, DB::table((new TwoFAccountGroupAssignment)->getTable())->count());
     }
 
     #[Test]
@@ -401,6 +425,18 @@ class TwoFAccountServiceTest extends FeatureTestCase
     }
 
     #[Test]
+    public function test_transfer_ownership_to_same_user_does_nothing()
+    {
+        $owner = User::factory()->create();
+        $twofaccount = TwoFAccount::factory()->for($owner)->create();
+
+        $twofaccount = TwoFAccounts::transferOwnership($twofaccount, $owner);
+
+        $this->assertTrue($twofaccount->isClean());
+        Event::assertNotDispatched(TwoFAccountOwnershipTransferred::class);
+    }
+
+    #[Test]
     public function test_transfer_ownership_removes_obsolete_user_share_to_new_owner_only()
     {
         $owner = User::factory()->create();
@@ -481,6 +517,217 @@ class TwoFAccountServiceTest extends FeatureTestCase
             'scope' => TwoFAccountShare::SCOPE_USER,
             'shared_with_user_id' => $otherSharedUser->id,
             'created_by_user_id' => $owner->id,
+        ]);
+    }
+
+    #[Test]
+    public function test_save_order_for_user_persists_requested_order_and_appends_omitted_visible_accounts()
+    {
+        $user = User::factory()->create();
+        $twofaccountA = TwoFAccount::factory()->for($user)->create();
+        $twofaccountB = TwoFAccount::factory()->for($user)->create();
+        $twofaccountC = TwoFAccount::factory()->for($user)->create();
+
+        TwoFAccountUserOrder::create([
+            'user_id' => $user->id,
+            'twofaccount_id' => $twofaccountB->id,
+            'position' => 1,
+        ]);
+        TwoFAccountUserOrder::create([
+            'user_id' => $user->id,
+            'twofaccount_id' => $twofaccountC->id,
+            'position' => 2,
+        ]);
+        TwoFAccountUserOrder::create([
+            'user_id' => $user->id,
+            'twofaccount_id' => $twofaccountA->id,
+            'position' => 3,
+        ]);
+
+        $finalOrder = TwoFAccounts::saveOrderForUser($user, [$twofaccountA->id]);
+
+        $this->assertEquals([
+            $twofaccountA->id,
+            $twofaccountB->id,
+            $twofaccountC->id,
+        ], $finalOrder->all());
+
+        $this->assertDatabaseHas('twofaccount_user_orders', [
+            'user_id' => $user->id,
+            'twofaccount_id' => $twofaccountA->id,
+            'position' => 1,
+        ]);
+        $this->assertDatabaseHas('twofaccount_user_orders', [
+            'user_id' => $user->id,
+            'twofaccount_id' => $twofaccountB->id,
+            'position' => 2,
+        ]);
+        $this->assertDatabaseHas('twofaccount_user_orders', [
+            'user_id' => $user->id,
+            'twofaccount_id' => $twofaccountC->id,
+            'position' => 3,
+        ]);
+    }
+
+    #[Test]
+    public function test_save_order_for_user_returns_empty_collection()
+    {
+        $user = User::factory()->create();
+        $finalOrder = TwoFAccounts::saveOrderForUser($user, []);
+        
+        $this->assertCount(0, $finalOrder);
+    }
+
+    #[Test]
+    public function test_sort_for_user_returns_models_sorted_by_custom_order_then_unordered_tail()
+    {
+        $twofaccountA = TwoFAccount::factory()->for($this->user)->create();
+        $twofaccountB = TwoFAccount::factory()->for($this->user)->create();
+        $twofaccountC = TwoFAccount::factory()->for($this->user)->create();
+
+        TwoFAccountUserOrder::create([
+            'user_id' => $this->user->id,
+            'twofaccount_id' => $twofaccountC->id,
+            'position' => 1,
+        ]);
+        TwoFAccountUserOrder::create([
+            'user_id' => $this->user->id,
+            'twofaccount_id' => $twofaccountA->id,
+            'position' => 2,
+        ]);
+
+        $sorted = TwoFAccounts::sortForUser(collect([
+            $twofaccountB,
+            $twofaccountA,
+            $twofaccountC,
+        ]), $this->user);
+
+        $this->assertEquals([
+            $twofaccountC->id,
+            $twofaccountA->id,
+            $twofaccountB->id,
+        ], $sorted->pluck('id')->all());
+    }
+
+    #[Test]
+    public function test_sort_for_user_returns_empty_collection()
+    {
+        $sorted = TwoFAccounts::sortForUser(collect([]), $this->user);
+
+        $this->assertCount(0, $sorted);
+    }
+
+    #[Test]
+    public function test_prune_users_without_access_for_account_deletes_orders_of_unshared_users_only()
+    {
+        $owner = User::factory()->create();
+        $sharedUser = User::factory()->create();
+        $otherUser = User::factory()->create();
+        $twofaccount = TwoFAccount::factory()->for($owner)->create();
+
+        TwoFAccountUserOrder::create([
+            'user_id' => $owner->id,
+            'twofaccount_id' => $twofaccount->id,
+            'position' => 1,
+        ]);
+        TwoFAccountUserOrder::create([
+            'user_id' => $sharedUser->id,
+            'twofaccount_id' => $twofaccount->id,
+            'position' => 1,
+        ]);
+        TwoFAccountUserOrder::create([
+            'user_id' => $otherUser->id,
+            'twofaccount_id' => $twofaccount->id,
+            'position' => 1,
+        ]);
+
+        TwoFAccountShare::create([
+            'twofaccount_id' => $twofaccount->id,
+            'shared_with_user_id' => $sharedUser->id,
+            'scope' => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id' => $owner->id,
+        ]);
+
+        TwoFAccounts::pruneUsersWithoutAccessForAccount($twofaccount);
+
+        $this->assertDatabaseHas('twofaccount_user_orders', [
+            'user_id' => $owner->id,
+            'twofaccount_id' => $twofaccount->id,
+        ]);
+        $this->assertDatabaseHas('twofaccount_user_orders', [
+            'user_id' => $sharedUser->id,
+            'twofaccount_id' => $twofaccount->id,
+        ]);
+        $this->assertDatabaseMissing('twofaccount_user_orders', [
+            'user_id' => $otherUser->id,
+            'twofaccount_id' => $twofaccount->id,
+        ]);
+    }
+
+    #[Test]
+    public function test_prune_users_without_access_for_account_keeps_orders_when_shared_with_all_users()
+    {
+        $owner = User::factory()->create();
+        $anotherUser = User::factory()->create();
+        $twofaccount = TwoFAccount::factory()->for($owner)->create();
+
+        TwoFAccountUserOrder::create([
+            'user_id' => $owner->id,
+            'twofaccount_id' => $twofaccount->id,
+            'position' => 1,
+        ]);
+        TwoFAccountUserOrder::create([
+            'user_id' => $anotherUser->id,
+            'twofaccount_id' => $twofaccount->id,
+            'position' => 1,
+        ]);
+
+        TwoFAccountShare::create([
+            'twofaccount_id' => $twofaccount->id,
+            'shared_with_user_id' => null,
+            'scope' => TwoFAccountShare::SCOPE_ALL_USERS,
+            'created_by_user_id' => $owner->id,
+        ]);
+
+        TwoFAccounts::pruneUsersWithoutAccessForAccount($twofaccount);
+
+        $this->assertDatabaseHas('twofaccount_user_orders', [
+            'user_id' => $owner->id,
+            'twofaccount_id' => $twofaccount->id,
+        ]);
+        $this->assertDatabaseHas('twofaccount_user_orders', [
+            'user_id' => $anotherUser->id,
+            'twofaccount_id' => $twofaccount->id,
+        ]);
+    }
+
+    #[Test]
+    public function test_prune_users_without_access_for_account_deletes_all_orders_for_orphan_account()
+    {
+        $userA = User::factory()->create();
+        $userB = User::factory()->create();
+        $twofaccount = TwoFAccount::factory()->create();
+
+        TwoFAccountUserOrder::create([
+            'user_id' => $userA->id,
+            'twofaccount_id' => $twofaccount->id,
+            'position' => 1,
+        ]);
+        TwoFAccountUserOrder::create([
+            'user_id' => $userB->id,
+            'twofaccount_id' => $twofaccount->id,
+            'position' => 1,
+        ]);
+
+        TwoFAccounts::pruneUsersWithoutAccessForAccount($twofaccount);
+
+        $this->assertDatabaseMissing('twofaccount_user_orders', [
+            'user_id' => $userA->id,
+            'twofaccount_id' => $twofaccount->id,
+        ]);
+        $this->assertDatabaseMissing('twofaccount_user_orders', [
+            'user_id' => $userB->id,
+            'twofaccount_id' => $twofaccount->id,
         ]);
     }
 

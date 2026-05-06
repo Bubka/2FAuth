@@ -3,6 +3,8 @@
 namespace Tests\Api\v1\Requests;
 
 use App\Api\v1\Requests\IconFetchRequest;
+use App\Facades\Icons;
+use App\Rules\IconPackExists;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -17,6 +19,7 @@ use Tests\TestCase;
  * IconFetchRequestTest test class
  */
 #[CoversClass(IconFetchRequest::class)]
+#[CoversClass(IconPackExists::class)]
 class IconFetchRequestTest extends TestCase
 {
     use WithoutMiddleware;
@@ -47,6 +50,23 @@ class IconFetchRequestTest extends TestCase
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->fails());
+    }
+
+    #[Test]
+    public function test_iconpack_fails_on_exception() : void
+    {
+        $data = [
+            'service'  => 'validWord',
+            'iconPack' => 'myIconPack',
+        ];
+        Icons::shouldReceive('getIconPacks')->andThrow(new \Exception);
+
+        $request = new IconFetchRequest;
+        $request->merge($data);
+
+        $validator = Validator::make($data, $request->rules());
+
+        $this->assertTrue($validator->fails());
     }
 
     /**

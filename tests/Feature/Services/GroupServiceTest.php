@@ -80,6 +80,26 @@ class GroupServiceTest extends FeatureTestCase
     }
 
     #[Test]
+    public function test_assign_a_twofaccount_to_zero_group_does_nothing()
+    {
+        Groups::assign($this->twofaccountOne->id, $this->user, 0);
+
+        $this->assertDatabaseMissing('twofaccount_group_assignments', [
+            'twofaccount_id' => $this->twofaccountOne->id,
+            'user_id'        => $this->user->id,
+            'group_id'       => 0,
+        ]);
+
+        Groups::assign($this->twofaccountOne->id, $this->user, '0');
+
+        $this->assertDatabaseMissing('twofaccount_group_assignments', [
+            'twofaccount_id' => $this->twofaccountOne->id,
+            'user_id'        => $this->user->id,
+            'group_id'       => 0,
+        ]);
+    }
+
+    #[Test]
     public function test_assign_multiple_twofaccounts_to_group_persists_the_relation()
     {
         Groups::assign([$this->twofaccountOne->id, $this->twofaccountTwo->id], $this->user, $this->groupTwo);

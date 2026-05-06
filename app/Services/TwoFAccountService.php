@@ -35,21 +35,14 @@ class TwoFAccountService
      *
      * @param  int|array|string  $ids  twofaccount ids to free
      */
-    public static function withdraw($ids, ?User $user = null) : void
+    public static function withdraw($ids, User $owner) : void
     {
         // $ids as string could be a comma-separated list of ids
         // so in this case we explode the string to an array
         $ids = Helpers::commaSeparatedToArray($ids);
         $ids = is_array($ids) ? $ids : [$ids]; // whereIn() expects an array
-        $user ??= Auth::user();
 
-        if (! $user) {
-            Log::warning(sprintf('Cannot withdraw TwoFAccounts from groups without an authenticated user (ids: %s)', implode(',', $ids)));
-
-            return;
-        }
-
-        $affectedCount = TwoFAccountGroupAssignment::where('user_id', $user->id)
+        $affectedCount = TwoFAccountGroupAssignment::where('user_id', $owner->id)
             ->whereIn('twofaccount_id', $ids)
             ->delete();
 

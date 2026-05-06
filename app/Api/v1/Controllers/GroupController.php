@@ -130,6 +130,7 @@ class GroupController extends Controller
             Groups::assign($validated['ids'], $request->user(), $group);
             $group->loadCount('twofaccounts');
         } catch (ModelNotFoundException $exc) {
+            // This can happen in case of race conditions when the group is deleted between the validation and the actual assignment
             abort(404);
         } catch (AuthorizationException $exc) {
             abort(403);

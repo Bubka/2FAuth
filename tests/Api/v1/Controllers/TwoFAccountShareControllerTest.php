@@ -4,6 +4,7 @@ namespace Tests\Api\v1\Controllers;
 
 use App\Api\v1\Controllers\TwoFAccountShareController;
 use App\Api\v1\Requests\TwoFAccountShareStoreRequest;
+use App\Api\v1\Resources\USerShareRecipientResource;
 use App\Events\TwoFAccountShareRevoked;
 use App\Events\TwoFAccountShared;
 use App\Facades\Settings;
@@ -19,9 +20,12 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\FeatureTestCase;
 
+#[CoversClass(TwoFAccountShare::class)]
 #[CoversClass(TwoFAccountShareController::class)]
 #[CoversClass(TwoFAccountShareStoreRequest::class)]
 #[CoversClass(TwoFAccountShareService::class)]
+#[CoversClass(USerShareRecipientResource::class)]
+#[CoversClass(TwoFAccountShareRevoked::class)]
 class TwoFAccountShareControllerTest extends FeatureTestCase
 {
     protected User $owner;

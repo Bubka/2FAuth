@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Listeners;
 
+use App\Events\Traits\HasSharingScopes;
 use App\Facades\TwoFAccounts;
 use App\Listeners\SendTwoFAccountOwnershipTransferredNotification;
 use App\Listeners\SendTwoFAccountSharedNotification;
@@ -23,6 +24,7 @@ use Tests\FeatureTestCase;
 #[CoversClass(SendTwoFAccountOwnershipTransferredNotification::class)]
 #[CoversClass(SendTwoFAccountSharedNotification::class)]
 #[CoversClass(SendTwoFAccountShareRevokedNotification::class)]
+#[CoversClass(HasSharingScopes::class)]
 class SendNotificationTest extends FeatureTestCase
 {
     #[Test]

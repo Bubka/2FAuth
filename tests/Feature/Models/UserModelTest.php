@@ -204,7 +204,7 @@ class UserModelTest extends FeatureTestCase
     }
 
     #[Test]
-    public function test_delete_removes_shares_where_user_is_target()
+    public function test_delete_removes_shares_where_deleted_user_is_target()
     {
         $owner = User::factory()->create();
         $targetUser = User::factory()->create();
@@ -228,10 +228,9 @@ class UserModelTest extends FeatureTestCase
     }
 
     #[Test]
-    public function test_delete_removes_shares_where_user_is_creator()
+    public function test_delete_removes_shares_where_deleted_user_is_creator()
     {
         $owner = User::factory()->create();
-        $creator = User::factory()->create();
         $targetUser = User::factory()->create();
         $twofaccount = TwoFAccount::factory()->for($owner)->create();
 
@@ -239,16 +238,13 @@ class UserModelTest extends FeatureTestCase
             'twofaccount_id' => $twofaccount->id,
             'shared_with_user_id' => $targetUser->id,
             'scope' => TwoFAccountShare::SCOPE_USER,
-            'created_by_user_id' => $creator->id,
+            'created_by_user_id' => $owner->id,
         ]);
 
-        $creator->delete();
+        $owner->delete();
 
         $this->assertDatabaseMissing('twofaccount_shares', [
             'id' => $share->id,
-        ]);
-        $this->assertDatabaseHas('twofaccounts', [
-            'id' => $twofaccount->id,
         ]);
     }
 

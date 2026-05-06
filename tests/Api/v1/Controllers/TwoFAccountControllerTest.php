@@ -3,11 +3,14 @@
 namespace Tests\Api\v1\Controllers;
 
 use App\Api\v1\Controllers\TwoFAccountController;
+use App\Api\v1\Requests\TwoFAccountDynamicRequest;
+use App\Api\v1\Requests\TwoFAccountUpdateRequest;
 use App\Api\v1\Resources\TwoFAccountCollection;
 use App\Api\v1\Resources\TwoFAccountExportCollection;
 use App\Api\v1\Resources\TwoFAccountExportResource;
 use App\Api\v1\Resources\TwoFAccountReadResource;
 use App\Api\v1\Resources\TwoFAccountStoreResource;
+use App\Facades\Groups;
 use App\Facades\IconStore;
 use App\Facades\Settings;
 use App\Models\Group;
@@ -20,11 +23,13 @@ use App\Providers\TwoFAuthServiceProvider;
 use App\Services\LogoLib\TfaLogoLib;
 use App\Services\TwoFAccountShareService;
 use Database\Factories\UserFactory;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Testing\FileFactory;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Classes\LocalFile;
@@ -46,6 +51,8 @@ use Tests\FeatureTestCase;
 #[CoversClass(MigrationServiceProvider::class)]
 #[CoversClass(TwoFAuthServiceProvider::class)]
 #[CoversClass(TwoFAccountPolicy::class)]
+#[CoversClass(TwoFAccountUpdateRequest::class)]
+#[CoversClass(TwoFAccountDynamicRequest::class)]
 class TwoFAccountControllerTest extends FeatureTestCase
 {
     /**
@@ -738,6 +745,23 @@ class TwoFAccountControllerTest extends FeatureTestCase
     }
 
     #[Test]
+    public function test_store_does_not_assign_to_provided_groupid_when_race_condition_occurs()
+    {
+        Groups::shouldReceive('assign')
+            ->andThrow(ModelNotFoundException::class);
+
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('POST', '/api/v1/twofaccounts', array_merge(
+                OtpTestData::ARRAY_OF_FULL_VALID_PARAMETERS_FOR_CUSTOM_TOTP,
+                ['group_id' => $this->userGroupA->id]
+            ))
+            ->assertCreated()
+            ->assertJsonFragment([
+                'group_id' => null,
+            ]);
+    }
+
+    #[Test]
     public function test_store_with_assignement_to_missing_groupid_returns_validation_error()
     {
         $response = $this->actingAs($this->user, 'api-guard')
@@ -1022,6 +1046,23 @@ class TwoFAccountControllerTest extends FeatureTestCase
                 ['group_id' => 9999999]
             ))
             ->assertJsonValidationErrorFor('group_id');
+    }
+
+    #[Test]
+    public function test_update_with_assignement_to_missing_groupid_withdraws_the_account()
+    {
+        Groups::shouldReceive('assign')
+            ->andThrow(ModelNotFoundException::class);
+
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('PUT', '/api/v1/twofaccounts/' . $this->twofaccountA->id, array_merge(
+                OtpTestData::ARRAY_OF_FULL_VALID_PARAMETERS_FOR_CUSTOM_TOTP,
+                ['group_id' => $this->userGroupB->id]
+            ))
+            ->assertOk()
+            ->assertJsonFragment([
+                'group_id' => null,
+            ]);
     }
 
     #[Test]
@@ -2480,6 +2521,24 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/otp')
             ->assertOk()
             ->assertJsonPath('password', fn ($value) => is_string($value) && strlen($value) > 0);
+    }
+
+    #[Test]
+    public function test_get_otp_of_shared_twofaccount_fails_when_sharing_feature_is_disabled()
+    {
+        Settings::set('enableSharing', false);
+
+        TwoFAccountShare::create([
+            'twofaccount_id' => $this->twofaccountC->id,
+            'shared_with_user_id' => $this->user->id,
+            'scope' => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id' => $this->anotherUser->id,
+        ]);
+
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/otp')
+            ->assertForbidden()
+            ->assertJsonPath('message', __('error.sharing_is_disabled'));
     }
 
     #[Test]

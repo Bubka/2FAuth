@@ -30,7 +30,7 @@ class RegisterOpenIdTest extends TestCase
     }
 
     #[Test]
-    public function test_RegisterOpenId_listen_to_SocialiteWasCalled_event()
+    public function test_it_listens_to_SocialiteWasCalled_event()
     {
         Event::fake();
 
