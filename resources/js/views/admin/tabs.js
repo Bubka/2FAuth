@@ -2,16 +2,19 @@ export default [
     {
         'name' : 'label.app_setup',
         'view' : 'admin.appSetup',
-        'id'   : 'lnkTabApp'
+        'id'   : 'lnkTabApp',
+        'icon' : 'Settings'
     },
     {
         'name' : 'label.auth',
         'view' : 'admin.auth',
-        'id'   : 'lnkTabAuth'
+        'id'   : 'lnkTabAuth',
+        'icon' : 'ShieldUser'
     },
     {
         'name' : 'label.users',
         'view' : 'admin.users',
-        'id'   : 'lnkTabUsers'
+        'id'   : 'lnkTabUsers',
+        'icon' : 'UsersRound'
     },
 ]

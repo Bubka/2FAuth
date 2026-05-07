@@ -91,7 +91,7 @@
         <template #content>
             <FormWrapper>
                 <form>
-                    <h4 class="title is-4 pt-4">{{ $t('heading.single_sign_on') }}</h4>
+                    <h4 class="title is-4">{{ $t('heading.single_sign_on') }}</h4>
                     <!-- enable SSO -->
                     <FormCheckbox v-model="appSettings.enableSso" @update:model-value="val => saveSetting('enableSso', val)" fieldName="enableSso" label="field.enable_sso" help="field.enable_sso.help" />
                         <!-- use SSO only -->

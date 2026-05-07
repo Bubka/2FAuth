@@ -103,7 +103,7 @@
         <template #content>
             <FormWrapper>
                 <form>
-                    <h4 class="title is-4 pt-4">{{ $t('heading.general') }}</h4>
+                    <h4 class="title is-4">{{ $t('heading.general') }}</h4>
                     <!-- Check for update -->
                     <FormCheckbox v-model="appSettings.checkForUpdate" @update:model-value="val => saveSetting('checkForUpdate', val)" fieldName="checkForUpdate" label="field.check_for_update" help="field.check_for_update.help" />
                     <VersionChecker />

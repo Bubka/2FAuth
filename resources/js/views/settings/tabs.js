@@ -2,21 +2,25 @@ export default [
     {
         'name' : 'label.options',
         'view' : 'settings.options',
-        'id'   : 'lnkTabOptions'
+        'id'   : 'lnkTabOptions',
+        'icon' : 'SlidersHorizontal'
     },
     {
         'name' : 'label.account',
         'view' : 'settings.account',
-        'id'   : 'lnkTabAccount'
+        'id'   : 'lnkTabAccount',
+        'icon' : 'CircleUser'
     },
     {
         'name' : 'label.oauth',
         'view' : 'settings.oauth.tokens',
-        'id'   : 'lnkTabOAuth'
+        'id'   : 'lnkTabOAuth',
+        'icon' : 'KeySquare'
     },
     {
         'name' : 'label.webauthn',
         'view' : 'settings.webauthn.devices',
-        'id'   : 'lnkTabWebauthn'
+        'id'   : 'lnkTabWebauthn',
+        'icon' : 'ScanFace'
     },
 ]
