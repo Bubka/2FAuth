@@ -110,9 +110,6 @@
         </template>
         <template #content>
             <FormWrapper>
-                <div v-if="user.isAdmin" class="notification is-warning">
-                    {{ $t('message.you_are_administrator') }}
-                </div>
                 <div v-if="user.oauth_provider" class="notification is-info has-text-centered">
                     {{ $t('message.account_linked_to_sso_x_provider', { provider: user.oauth_provider }) }}
                 </div>
@@ -120,7 +117,12 @@
                     <div v-if="$2fauth.config.proxyAuth" class="notification is-warning has-text-centered">
                         {{ $t('message.user_account_controlled_by_proxy') + ' ' + $t('message.manage_account_at_proxy_level') }}
                     </div>
-                    <h4 class="title is-4">{{ $t('heading.profile') }}</h4>
+                    <h4 class="title is-4">
+                        {{ $t('heading.profile') }}
+                        <span v-if="user.isAdmin" class="tag is-warning ml-1">
+                            {{ $t('label.administrator') }}
+                        </span>
+                    </h4>
                     <fieldset :disabled="$2fauth.config.proxyAuth || user.oauth_provider">
                         <FormField v-model="formProfile.name" fieldName="name" :errorMessage="formProfile.errors.get('name')" label="field.name" :maxLength="255" autocomplete="username" autofocus />
                         <FormField v-model="formProfile.email" fieldName="email" :errorMessage="formProfile.errors.get('email')" inputType="email" label="field.email" autocomplete="email" :maxLength="255" autofocus />
