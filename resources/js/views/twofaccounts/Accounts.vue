@@ -16,6 +16,7 @@
         DotsController,
         useVisiblePassword
     } from '@2fauth/ui'
+    import { useAppSettingsStore } from '@/stores/appSettings'
     import { useBusStore } from '@/stores/bus'
     import { useTwofaccounts } from '@/stores/twofaccounts'
     import { useGroups } from '@/stores/groups'
@@ -34,6 +35,7 @@
     const { copy, copied } = useClipboard({ legacy: true })
     const twofaccounts = useTwofaccounts()
     const groups = useGroups()
+    const appSettings = useAppSettingsStore()
 
     const showOtpInModal = ref(false)
     const showExportFormatSelector = ref(false)
@@ -374,7 +376,7 @@
      * @param userId
      */
     function unshareUser(account, userId) {
-        if (confirm(t('confirmation.unshare')) === true) {
+        if (appSettings.enableSharing && confirm(t('confirmation.unshare')) === true) {
             shareService.unshareWithUser(account.id, userId).then(response => {
                 usershares.value = usershares.value.filter(user => user.id != userId)
             })
@@ -420,10 +422,10 @@
                             <template v-if="parseInt(user.preferences.activeGroup) == -1">
                                 {{ $t('label.group_less') }} ({{ twofaccounts.filteredCount }})&nbsp;
                             </template>
-                            <template v-else-if="parseInt(user.preferences.activeGroup) == -2">
+                            <template v-else-if="appSettings.enableSharing && parseInt(user.preferences.activeGroup) == -2">
                                 {{ $t('label.shared_by_me') }} ({{ twofaccounts.filteredCount }})&nbsp;
                             </template>
-                            <template v-else-if="parseInt(user.preferences.activeGroup) == -3">
+                            <template v-else-if="appSettings.enableSharing && parseInt(user.preferences.activeGroup) == -3">
                                  {{ $t('label.shared_with_me') }} ({{ twofaccounts.filteredCount }})&nbsp;
                             </template>
                             <template v-else-if="groups.current">
@@ -443,6 +445,7 @@
                     v-model:is-visible="showGroupSwitch"
                     v-model:active-group="user.preferences.activeGroup"
                     :groups="groups.items"
+                    :useShare="appSettings.enableSharing"
                     @active-group-changed="saveActiveGroup">
                         <RouterLink :to="{ name: 'groups' }" >{{ $t('link.manage_groups') }}</RouterLink>
                 </GroupSwitch>
@@ -474,13 +477,13 @@
                                             <img v-else-if="account.icon == null && user.preferences.showAccountsIcons" role="presentation" class="tfa-icon" :src="$2fauth.config.subdirectory + '/storage/noicon.svg'" alt="">
                                             {{ account.service ? account.service : $t('message.no_service') }}<LucideCircleAlert class="has-text-danger ml-2" v-if="account.account === $t('error.indecipherable')" />
                                             <span class="is-block has-ellipsis is-family-primary is-size-6 is-size-7-mobile has-text-grey ">
-                                                <span v-if="account.is_borrowed" :title="$t('tooltip.this_account_is_shared_by_x_with_you', { username: account.borrowed_by })" class="tag p-1 mr-1" :class="mode == 'dark' ? 'is-black is-opacity-4':'is-light is-white'" >
+                                                <span v-if="appSettings.enableSharing && account.is_borrowed" :title="$t('tooltip.this_account_is_shared_by_x_with_you', { username: account.borrowed_by })" class="tag p-1 mr-1" :class="mode == 'dark' ? 'is-black is-opacity-4':'is-light is-white'" >
                                                     @{{ bus.inManagementMode ? account.borrowed_by : '' }}
                                                 </span>
-                                                <span v-else-if="account.is_shared" :title="$t('tooltip.this_account_is_shared_with_specific_users')" class="tag p-1 mr-1" :class="mode == 'dark' ? 'is-black is-opacity-4':'is-light is-white'" >
+                                                <span v-else-if="appSettings.enableSharing && account.is_shared" :title="$t('tooltip.this_account_is_shared_with_specific_users')" class="tag p-1 mr-1" :class="mode == 'dark' ? 'is-black is-opacity-4':'is-light is-white'" >
                                                     <LucideUserCheck class="icon-size-0-75" />
                                                 </span>
-                                                <span v-else-if="account.is_shared_with_all" :title="$t('tooltip.this_account_is_shared_with_all')" class="tag p-1 mr-1" :class="mode == 'dark' ? 'is-black is-opacity-4':'is-light is-white'" >
+                                                <span v-else-if="appSettings.enableSharing && account.is_shared_with_all" :title="$t('tooltip.this_account_is_shared_with_all')" class="tag p-1 mr-1" :class="mode == 'dark' ? 'is-black is-opacity-4':'is-light is-white'" >
                                                     <LucideUsers class="icon-size-0-75" />
                                                 </span>
                                                 {{ account.account }}
@@ -538,7 +541,7 @@
                                         </div>
                                     </transition>
                                     <transition name="fadeInOut">
-                                        <div class="tfa-cell tfa-edit has-text-grey" v-if="bus.inManagementMode && user.preferences.activeGroup == -2">
+                                        <div class="tfa-cell tfa-edit has-text-grey" v-if="bus.inManagementMode && appSettings.enableSharing && user.preferences.activeGroup == -2">
                                             <!-- new user share button -->
                                             <RouterLink v-if="account.is_shared" :to="{ name: 'shareAccount', params: { twofaccountId: account.id } }" class="tag is-rounded mr-1" :class="mode == 'dark' ? 'is-dark' : 'is-white'" :title="$t('tooltip.share_with_new_users')">
                                                 <LucideUserPlus class="icon-size-1" />
@@ -582,6 +585,7 @@
                             v-model:inManagementMode="bus.inManagementMode"
                             :areDisabled="twofaccounts.hasNoneSelected"
                             :canShare="!twofaccounts.hasBorrowedSelected"
+                            :showShare="appSettings.enableSharing"
                             :canDelete="!twofaccounts.hasBorrowedSelected"
                             :canExport="!twofaccounts.hasBorrowedSelected"
                             @move-button-clicked="showDestinationGroupSelector = true"
@@ -633,13 +637,13 @@
                         </router-link>
                     </li>
                     <!-- manage sharing link -->
-                    <li class="column">
+                    <li v-if="appSettings.enableSharing" class="column">
                         <router-link id="lnkManageSharing" :to="{ name: 'accountSharing', params: { twofaccountId: visibleAccount.id }}" class="is-link">
                             {{ $t('link.manage_sharing') }}
                         </router-link>
                     </li>
                     <!-- transfer ownership link -->
-                    <li class="column">
+                    <li v-if="appSettings.enableSharing" class="column">
                         <router-link id="lnkTransferOwnership" :to="{ name: 'transferOwnership', params: { twofaccountId: visibleAccount.id }}" class="is-link">
                             {{ $t('link.transfer_ownership') }}
                         </router-link>
@@ -653,7 +657,7 @@
                 </ul>
             </template>
             <template #footer-subpart>
-                <span v-if="showOtpInModal && visibleAccount.is_borrowed" class="has-text-grey">
+                <span v-if="showOtpInModal && appSettings.enableSharing && visibleAccount.is_borrowed" class="has-text-grey">
                     {{ $t('message.shared_by_x', { username: visibleAccount.borrowed_by }) }}
                 </span>
                 <button v-else type="button" id="btnActions" @click="showFooterMenu = !showFooterMenu" class="button is-text is-like-text has-text-grey" style="width: 100%;">

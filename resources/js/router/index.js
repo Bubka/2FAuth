@@ -6,15 +6,16 @@ import { useAppSettingsStore } from '@/stores/appSettings'
 import { useNotify } from '@2fauth/ui'
 import { useErrorHandler } from '@2fauth/stores'
 
-import authGuard        from './middlewares/authGuard'
-import adminOnly        from './middlewares/adminOnly'
-import ownerOnly        from './middlewares/ownerOnly'
-import starter          from './middlewares/starter'
-import noEmptyError     from './middlewares/noEmptyError'
-import noRegistration   from './middlewares/noRegistration'
-import setReturnTo      from './middlewares/setReturnTo'
-import skipIfAuthProxy  from './middlewares/skipIfAuthProxy'
-import syncAppSettings  from './middlewares/syncAppSettings'
+import authGuard             from './middlewares/authGuard'
+import adminOnly             from './middlewares/adminOnly'
+import ownerOnly             from './middlewares/ownerOnly'
+import starter               from './middlewares/starter'
+import noEmptyError          from './middlewares/noEmptyError'
+import noRegistration        from './middlewares/noRegistration'
+import setReturnTo           from './middlewares/setReturnTo'
+import skipIfAuthProxy       from './middlewares/skipIfAuthProxy'
+import skipIfSharingDisabled from './middlewares/skipIfSharingDisabled'
+import syncAppSettings       from './middlewares/syncAppSettings'
 
 const router = createRouter({
 	history: createWebHistory(window.appConfig.subdirectory ? window.appConfig.subdirectory : '/'),
@@ -27,9 +28,9 @@ const router = createRouter({
         { path: '/account/import', name: 'importAccounts', component: () => import('../views/twofaccounts/Import.vue'), meta: { middlewares: [authGuard, syncAppSettings, setReturnTo], watchedByKicker: true } },
         { path: '/account/:twofaccountId/edit', name: 'editAccount', component: () => import('../views/twofaccounts/CreateUpdate.vue'), meta: { middlewares: [authGuard, syncAppSettings, ownerOnly, setReturnTo], watchedByKicker: true }, props: true },
         { path: '/account/:twofaccountId/qrcode', name: 'showQRcode', component: () => import('../views/twofaccounts/QRcode.vue'), meta: { middlewares: [authGuard, syncAppSettings, ownerOnly, setReturnTo], watchedByKicker: true } },
-        { path: '/account/:twofaccountId/sharing', name: 'accountSharing', component: () => import('../views/sharing/AccountSharing.vue'), meta: { middlewares: [authGuard, syncAppSettings, ownerOnly, setReturnTo], watchedByKicker: true }, props: true },
-        { path: '/account/:twofaccountId/share', name: 'shareAccount', component: () => import('../views/sharing/Share.vue'), meta: { middlewares: [authGuard, syncAppSettings, ownerOnly], watchedByKicker: true }, props: true },
-        { path: '/account/:twofaccountId/transfer', name: 'transferOwnership', component: () => import('../views/sharing/TransferOwnership.vue'), meta: { middlewares: [authGuard, syncAppSettings, ownerOnly], watchedByKicker: true }, props: true },
+        { path: '/account/:twofaccountId/sharing', name: 'accountSharing', component: () => import('../views/sharing/AccountSharing.vue'), meta: { middlewares: [authGuard, syncAppSettings, skipIfSharingDisabled, ownerOnly, setReturnTo], watchedByKicker: true }, props: true },
+        { path: '/account/:twofaccountId/share', name: 'shareAccount', component: () => import('../views/sharing/Share.vue'), meta: { middlewares: [authGuard, syncAppSettings, skipIfSharingDisabled, ownerOnly], watchedByKicker: true }, props: true },
+        { path: '/account/:twofaccountId/transfer', name: 'transferOwnership', component: () => import('../views/sharing/TransferOwnership.vue'), meta: { middlewares: [authGuard, syncAppSettings, skipIfSharingDisabled, ownerOnly], watchedByKicker: true }, props: true },
 
         { path: '/groups', name: 'groups', component: () => import('../views/groups/Groups.vue'), meta: { middlewares: [authGuard, syncAppSettings, setReturnTo], watchedByKicker: true }, props: true },
         { path: '/group/create', name: 'createGroup', component: () => import('../views/groups/CreateUpdate.vue'), meta: { middlewares: [authGuard, syncAppSettings, setReturnTo], watchedByKicker: true } },

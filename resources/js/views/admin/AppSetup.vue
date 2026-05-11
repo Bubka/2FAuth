@@ -141,6 +141,9 @@
                     <div class="field mb-5">
                         <a id="lnkHealthCheck" class="is-link" target="_blank" :href="healthEndPoint">{{ healthEndPointFullPath }}</a>
                     </div>
+                    <h4 class="title is-4 pt-5">{{ $t('heading.sharing') }}</h4>
+                    <!-- sharing -->
+                    <FormCheckbox v-model="appSettings.enableSharing" @update:model-value="val => saveSetting('enableSharing', val)" fieldName="enableSharing" label="field.enable_sharing" help="field.enable_sharing.help" />
                     <h4 class="title is-4 pt-5">{{ $t('heading.storage') }}</h4>
                     <!-- store icons in database -->
                     <FormCheckbox v-model="appSettings.storeIconsInDatabase" @update:model-value="val => saveSetting('storeIconsInDatabase', val)" fieldName="storeIconsInDatabase" label="field.store_icon_to_database" help="field.store_icon_to_database.help" />

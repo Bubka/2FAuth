@@ -15,7 +15,15 @@
             type: Boolean,
             default: true
         },
+        showMove: {
+            type: Boolean,
+            default: true
+        },
         canDelete: {
+            type: Boolean,
+            default: true
+        },
+        showDelete: {
             type: Boolean,
             default: true
         },
@@ -23,7 +31,15 @@
             type: Boolean,
             default: true
         },
+        showShare: {
+            type: Boolean,
+            default: false
+        },
         canExport: {
+            type: Boolean,
+            default: true
+        },
+        showExport: {
             type: Boolean,
             default: true
         },
@@ -67,7 +83,7 @@
             <button type="button" id="btnManage" class="button is-rounded" :class="{'is-dark' : mode == 'dark'}" @click="$emit('update:inManagementMode', true)">{{ $t('label.manage') }}</button>
         </p>
         <!-- move button -->
-        <p class="control" v-if="inManagementMode">
+        <p class="control" v-if="inManagementMode && showMove">
             <button
                 id="btnMove" 
                 :disabled='areDisabled || !canMove' class="button is-rounded"
@@ -81,7 +97,7 @@
             </button>
         </p>
         <!-- unshare button -->
-        <p class="control" v-if="inManagementMode">
+        <p class="control" v-if="inManagementMode && showShare">
             <button
                 id="btnShare" 
                 :disabled='areDisabled || !canShare' class="button is-rounded"
@@ -95,7 +111,7 @@
             </button>
         </p>
         <!-- delete button -->
-        <p class="control" v-if="inManagementMode">
+        <p class="control" v-if="inManagementMode && showDelete">
             <button
                 id="btnDelete" 
                 :disabled='areDisabled || !canDelete' class="button is-rounded"
@@ -109,7 +125,7 @@
             </button>
         </p>
         <!-- export button -->
-        <p class="control" v-if="inManagementMode">
+        <p class="control" v-if="inManagementMode && showExport">
             <button
                 id="btnExport" 
                 :disabled='areDisabled || !canExport' class="button is-rounded"
