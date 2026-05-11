@@ -5,6 +5,7 @@ namespace Tests\Api\v1\Controllers;
 use App\Api\v1\Controllers\GroupController;
 use App\Api\v1\Resources\GroupResource;
 use App\Facades\Groups;
+use App\Facades\Settings;
 use App\Listeners\DissociateTwofaccountFromGroup;
 use App\Listeners\ResetUsersPreference;
 use App\Models\Group;
@@ -98,6 +99,42 @@ class GroupControllerTest extends FeatureTestCase
                     'twofaccounts_count' => 0,
                 ],
             ]);
+    }
+
+    #[Test]
+    public function test_index_pseudo_group_count_includes_shared_accounts_when_sharing_is_enabled()
+    {
+        TwoFAccountShare::create([
+            'twofaccount_id'      => $this->twofaccountC->id,
+            'shared_with_user_id' => $this->user->id,
+            'scope'               => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id'  => $this->anotherUser->id,
+        ]);
+
+        $this->actingAs($this->user, 'api-guard')
+            ->json('GET', '/api/v1/groups')
+            ->assertOk()
+            ->assertJsonPath('0.twofaccounts_count', 3);
+    }
+
+    #[Test]
+    public function test_index_pseudo_group_count_excludes_shared_accounts_when_sharing_is_disabled()
+    {
+        Settings::set('enableSharing', false);
+
+        TwoFAccountShare::create([
+            'twofaccount_id'      => $this->twofaccountC->id,
+            'shared_with_user_id' => $this->user->id,
+            'scope'               => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id'  => $this->anotherUser->id,
+        ]);
+
+        $this->actingAs($this->user, 'api-guard')
+            ->json('GET', '/api/v1/groups')
+            ->assertOk()
+            ->assertJsonPath('0.twofaccounts_count', 2);
+
+        Settings::set('enableSharing', true);
     }
 
     #[Test]
@@ -220,6 +257,22 @@ class GroupControllerTest extends FeatureTestCase
                 'name'               => __('label.all'),
                 'twofaccounts_count' => $userTwofaccounts->count(),
             ]);
+    }
+
+    #[Test]
+    public function test_show_missing_group_with_id_0_includes_shared_accounts_when_sharing_is_enabled()
+    {
+        TwoFAccountShare::create([
+            'twofaccount_id'      => $this->twofaccountC->id,
+            'shared_with_user_id' => $this->user->id,
+            'scope'               => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id'  => $this->anotherUser->id,
+        ]);
+
+        $this->actingAs($this->user, 'api-guard')
+            ->json('GET', '/api/v1/groups/0')
+            ->assertOk()
+            ->assertJsonPath('twofaccounts_count', 3);
     }
 
     #[Test]
@@ -534,6 +587,29 @@ class GroupControllerTest extends FeatureTestCase
             ->assertJsonFragment([
                 'id' => $this->twofaccountC->id,
             ]);
+    }
+
+    #[Test]
+    public function test_accounts_of_the_all_group_excludes_shared_accounts_when_sharing_is_disabled()
+    {
+        Settings::set('enableSharing', false);
+
+        TwoFAccountShare::create([
+            'twofaccount_id'      => $this->twofaccountC->id,
+            'shared_with_user_id' => $this->user->id,
+            'scope'               => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id'  => $this->anotherUser->id,
+        ]);
+
+        $this->actingAs($this->user, 'api-guard')
+            ->json('GET', '/api/v1/groups/0/twofaccounts')
+            ->assertOk()
+            ->assertJsonCount(2)
+            ->assertJsonMissing([
+                'id' => $this->twofaccountC->id,
+            ]);
+            
+        Settings::set('enableSharing', true);
     }
 
     /**

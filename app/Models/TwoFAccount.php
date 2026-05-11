@@ -7,6 +7,7 @@ use App\Exceptions\InvalidOtpParameterException;
 use App\Exceptions\InvalidSecretException;
 use App\Exceptions\UndecipherableException;
 use App\Exceptions\UnsupportedOtpTypeException;
+use App\Facades\Settings;
 use App\Facades\Icons;
 use App\Helpers\Helpers;
 use App\Models\Dto\HotpDto;
@@ -281,6 +282,10 @@ class TwoFAccount extends Model
      */
     public function isSharedWith(User $user) : bool
     {
+        if (! Settings::get('enableSharing')) {
+            return false;
+        }
+
         if ($this->isOwnedBy($user)) {
             return false;
         }
@@ -320,6 +325,10 @@ class TwoFAccount extends Model
      */
     public function scopeVisibleTo($query, User $user)
     {
+        if (! Settings::get('enableSharing')) {
+            return $query->where('user_id', $user->id);
+        }
+
         return $query->where(function ($visibleQuery) use ($user) {
             $visibleQuery
                 ->where('user_id', $user->id)

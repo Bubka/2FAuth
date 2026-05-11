@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Facades\Settings;
 use App\Models\Traits\HasAuthenticationLog;
 use App\Models\Traits\WebAuthnManageCredentials;
 use App\Notifications\ResetPassword;
@@ -285,6 +286,10 @@ class User extends Authenticatable implements HasLocalePreference, WebAuthnAuthe
      */
     public function isSharing(TwoFAccount $twofaccount) : bool
     {
+        if (! Settings::get('enableSharing')) {
+            return false;
+        }
+
         return $this->sharedTwofaccounts()
             ->where('twofaccount_id', $twofaccount->id)
             ->exists();

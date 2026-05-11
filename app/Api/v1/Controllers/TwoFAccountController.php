@@ -336,21 +336,23 @@ class TwoFAccountController extends Controller
     {
         $ownedCount = TwoFAccount::where('user_id', $request->user()->id)->count();
 
-        $sharedCount = TwoFAccount::query()
-            ->where('user_id', '!=', $request->user()->id)
-            ->whereHas('shares', function ($shareQuery) use ($request) {
-                $shareQuery->where(function ($scopeQuery) use ($request) {
-                    $scopeQuery
-                        ->where(function ($userScopeQuery) use ($request) {
-                            $userScopeQuery
-                                ->where('scope', TwoFAccountShare::SCOPE_USER)
-                                ->where('shared_with_user_id', $request->user()->id);
-                        })
-                        ->orWhere('scope', TwoFAccountShare::SCOPE_ALL_USERS);
-                });
-            })
-            ->distinct('twofaccounts.id')
-            ->count('twofaccounts.id');
+        $sharedCount = Settings::get('enableSharing')
+            ? TwoFAccount::query()
+                ->where('user_id', '!=', $request->user()->id)
+                ->whereHas('shares', function ($shareQuery) use ($request) {
+                    $shareQuery->where(function ($scopeQuery) use ($request) {
+                        $scopeQuery
+                            ->where(function ($userScopeQuery) use ($request) {
+                                $userScopeQuery
+                                    ->where('scope', TwoFAccountShare::SCOPE_USER)
+                                    ->where('shared_with_user_id', $request->user()->id);
+                            })
+                            ->orWhere('scope', TwoFAccountShare::SCOPE_ALL_USERS);
+                    });
+                })
+                ->distinct('twofaccounts.id')
+                ->count('twofaccounts.id')
+            : 0;
 
         $totalCount = $ownedCount + $sharedCount;
 

@@ -72,7 +72,7 @@ class GroupController extends Controller
         // with just the name property. The twofaccounts_count has to be
         // set here.
         if ($group->id === 0) {
-            $group->twofaccounts_count = $request->user()->twofaccounts->count();
+            $group->twofaccounts_count = TwoFAccount::visibleTo($request->user())->count();
         }
 
         return new GroupResource($group);

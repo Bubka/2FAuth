@@ -389,6 +389,29 @@ class TwoFAccountControllerTest extends FeatureTestCase
     }
 
     #[Test]
+    public function test_index_excludes_shared_accounts_when_sharing_is_disabled()
+    {
+        Settings::set('enableSharing', false);
+
+        TwoFAccountShare::create([
+            'twofaccount_id' => $this->twofaccountC->id,
+            'shared_with_user_id' => $this->user->id,
+            'scope' => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id' => $this->anotherUser->id,
+        ]);
+
+        $this->actingAs($this->user, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts')
+            ->assertOk()
+            ->assertJsonCount(2, $key = null)
+            ->assertJsonMissing([
+                'id' => $this->twofaccountC->id,
+            ]);
+            
+        Settings::set('enableSharing', true);
+    }
+
+    #[Test]
     public function test_index_returns_accounts_with_user_shared_ones_identified()
     {
         TwoFAccountShare::create([
@@ -569,6 +592,25 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->assertJsonPath('borrowed_by', $this->user->name)
             ->assertJsonMissingPath('is_shared')
             ->assertJsonMissingPath('is_shared_with_all');
+    }
+
+    #[Test]
+    public function test_show_shared_twofaccount_returns_forbidden_when_sharing_is_disabled()
+    {
+        Settings::set('enableSharing', false);
+
+        TwoFAccountShare::create([
+            'twofaccount_id' => $this->twofaccountA->id,
+            'shared_with_user_id' => $this->anotherUser->id,
+            'scope' => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id' => $this->user->id,
+        ]);
+
+        $this->actingAs($this->anotherUser, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccountA->id)
+            ->assertForbidden();
+
+        Settings::set('enableSharing', true);
     }
 
     #[Test]
@@ -2592,6 +2634,30 @@ class TwoFAccountControllerTest extends FeatureTestCase
                 'shared' => 1,
                 'total' => 3,
             ]);
+    }
+
+    #[Test]
+    public function test_count_excludes_shared_twofaccounts_when_sharing_is_disabled()
+    {
+        Settings::set('enableSharing', false);
+
+        TwoFAccountShare::create([
+            'twofaccount_id' => $this->twofaccountC->id,
+            'shared_with_user_id' => $this->user->id,
+            'scope' => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id' => $this->anotherUser->id,
+        ]);
+
+        $this->actingAs($this->user, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/count')
+            ->assertStatus(200)
+            ->assertExactJson([
+                'owned' => 2,
+                'shared' => 0,
+                'total' => 2,
+            ]);
+            
+        Settings::set('enableSharing', true);
     }
 
     #[Test]
