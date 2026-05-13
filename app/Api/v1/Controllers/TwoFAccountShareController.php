@@ -36,8 +36,9 @@ class TwoFAccountShareController extends Controller
                 ->values();
 
         return response()->json([
+            'twofaccount_id'     => $twofaccount->id,
             'is_shared_with_all' => $isSharedWithAll,
-            'users'              => $users,
+            'specific_users'     => $users,
         ], 200);
     }
 
@@ -52,12 +53,12 @@ class TwoFAccountShareController extends Controller
             return $this->shareAllConflictResponse();
         }
 
-        $targetUsers = User::whereIn('id', $request->validated('ids'))->orderBy('id')->get();
+        $targetUsers = User::whereIn('id', $request->validated('user_ids'))->orderBy('id')->get();
 
         if ($targetUsers->contains(fn (User $targetUser) => $twofaccount->isOwnedBy($targetUser))) {
             return response()->json([
                 'message' => 'bad request',
-                'reason'  => ['ids' => __('validation.different', ['attribute' => 'ids', 'value' => 'owner'])],
+                'reason'  => ['user_ids' => __('validation.different', ['attribute' => 'user_ids', 'value' => 'owner'])],
             ], 422);
         }
 
@@ -67,10 +68,11 @@ class TwoFAccountShareController extends Controller
         Log::info(sprintf('TwoFAccount #%s owned by User ID #%s has been shared by User ID #%s with %s users : %s', $twofaccount->id, $twofaccount->user_id, $request->user()->id, $created, implode(', ', $results->where('created', true)->map(fn (array $result) => $result['user']->id)->values()->all())));
 
         return response()->json([
-            'users' => $results
-                ->map(fn (array $result) => (new USerShareRecipientResource($result['user']))->toArray($request))
+            'twofaccount_id'     => $twofaccount->id,
+            'is_shared_with_all' => false,
+            'specific_users'     => $results
+                ->map(fn (array $result) => (new UserShareRecipientResource($result['user']))->toArray($request))
                 ->values(),
-            'twofaccount_id' => $twofaccount->id,
         ], $created > 0 ? 201 : 200);
     }
 
@@ -137,8 +139,8 @@ class TwoFAccountShareController extends Controller
         Log::info(sprintf('TwoFAccount #%s owned by User ID #%s has been shared with all users by User ID #%s', $twofaccount->id, $twofaccount->user_id, $request->user()->id));
 
         return response()->json([
-            'is_shared_with_all' => true,
             'twofaccount_id'     => $twofaccount->id,
+            'is_shared_with_all' => true,
         ], $result['created'] ? 201 : 200);
     }
 

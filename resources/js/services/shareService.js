@@ -9,7 +9,7 @@ export default {
     },
 
     shareWithUsers(twofaccountId, userIds, config = {}) {
-        return apiClient.post('/twofaccounts/' + twofaccountId + '/shares', { ids: userIds }, { ...config })
+        return apiClient.post('/twofaccounts/' + twofaccountId + '/shares', { user_ids: userIds }, { ...config })
     },
 
     unshareWithUser(twofaccountId, userId, config = {}) {

@@ -70,7 +70,7 @@
                 activeSharingScope.value = 'ShareWithAll'
             }
             else {
-                usershares.value = asArray(response?.data?.users)
+                usershares.value = asArray(response?.data?.specific_users)
                 if (usershares.value.length > 0) {
                     activeSharingScope.value = 'ShareWithUsers'
                 }

@@ -68,8 +68,9 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
         $this->actingAs($this->owner, 'api-guard')
             ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/shares')
             ->assertOk()
+            ->assertJsonPath('twofaccount_id', $this->twofaccount->id)
             ->assertJsonPath('is_shared_with_all', true)
-            ->assertJsonCount(0, 'users');
+            ->assertJsonCount(0, 'specific_users');
     }
 
     #[Test]
@@ -85,10 +86,11 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
         $this->actingAs($this->owner, 'api-guard')
             ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/shares')
             ->assertOk()
+            ->assertJsonPath('twofaccount_id', $this->twofaccount->id)
             ->assertJsonPath('is_shared_with_all', false)
-            ->assertJsonPath('users.0.id', $this->targetUser->id)
-            ->assertJsonPath('users.0.name', $this->targetUser->name)
-            ->assertJsonMissingPath('users.0.email');
+            ->assertJsonPath('specific_users.0.id', $this->targetUser->id)
+            ->assertJsonPath('specific_users.0.name', $this->targetUser->name)
+            ->assertJsonMissingPath('specific_users.0.email');
     }
 
     #[Test]
@@ -97,8 +99,9 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
         $this->actingAs($this->owner, 'api-guard')
             ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/shares')
             ->assertOk()
+            ->assertJsonPath('twofaccount_id', $this->twofaccount->id)
             ->assertJsonPath('is_shared_with_all', false)
-            ->assertJsonCount(0, 'users');
+            ->assertJsonCount(0, 'specific_users');
     }
 
     #[Test]
@@ -124,8 +127,8 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
         $this->actingAs($this->owner, 'api-guard')
             ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/shares')
             ->assertOk()
-            ->assertJsonPath('users.0.id', $sortedIds[0])
-            ->assertJsonPath('users.1.id', $sortedIds[1]);
+            ->assertJsonPath('specific_users.0.id', $sortedIds[0])
+            ->assertJsonPath('specific_users.1.id', $sortedIds[1]);
     }
 
     #[Test]
@@ -141,26 +144,27 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
     {
         $this->actingAs($this->owner, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/shares', [
-                'ids' => [$this->targetUser->id],
+                'user_ids' => [$this->targetUser->id],
             ])
             ->assertCreated()
-            ->assertJsonPath('users.0.id', $this->targetUser->id)
-            ->assertJsonPath('users.0.name', $this->targetUser->name)
+            ->assertJsonPath('specific_users.0.id', $this->targetUser->id)
+            ->assertJsonPath('specific_users.0.name', $this->targetUser->name)
             ->assertJsonPath('twofaccount_id', $this->twofaccount->id)
-            ->assertJsonMissingPath('users.0.email')
-            ->assertJsonMissingPath('users.0.created')
+            ->assertJsonMissingPath('specific_users.0.email')
+            ->assertJsonMissingPath('specific_users.0.created')
             ->assertJsonMissingPath('created');
 
         $this->actingAs($this->owner, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/shares', [
-                'ids' => [$this->targetUser->id],
+                'user_ids' => [$this->targetUser->id],
             ])
             ->assertOk()
-            ->assertJsonPath('users.0.id', $this->targetUser->id)
-            ->assertJsonPath('users.0.name', $this->targetUser->name)
             ->assertJsonPath('twofaccount_id', $this->twofaccount->id)
-            ->assertJsonMissingPath('users.0.email')
-            ->assertJsonMissingPath('users.0.created')
+            ->assertJsonPath('is_shared_with_all', false)
+            ->assertJsonPath('specific_users.0.id', $this->targetUser->id)
+            ->assertJsonPath('specific_users.0.name', $this->targetUser->name)
+            ->assertJsonMissingPath('specific_users.0.email')
+            ->assertJsonMissingPath('specific_users.0.created')
             ->assertJsonMissingPath('created');
     }
 
@@ -169,18 +173,19 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
     {
         $this->actingAs($this->owner, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/shares', [
-                'ids' => [$this->targetUser->id, $this->thirdUser->id],
+                'user_ids' => [$this->targetUser->id, $this->thirdUser->id],
             ])
             ->assertCreated()
-            ->assertJsonPath('users.0.id', $this->targetUser->id)
-            ->assertJsonPath('users.0.name', $this->targetUser->name)
-            ->assertJsonPath('users.1.id', $this->thirdUser->id)
-            ->assertJsonPath('users.1.name', $this->thirdUser->name)
             ->assertJsonPath('twofaccount_id', $this->twofaccount->id)
-            ->assertJsonMissingPath('users.0.email')
-            ->assertJsonMissingPath('users.0.created')
-            ->assertJsonMissingPath('users.1.email')
-            ->assertJsonMissingPath('users.1.created')
+            ->assertJsonPath('is_shared_with_all', false)
+            ->assertJsonPath('specific_users.0.id', $this->targetUser->id)
+            ->assertJsonPath('specific_users.0.name', $this->targetUser->name)
+            ->assertJsonPath('specific_users.1.id', $this->thirdUser->id)
+            ->assertJsonPath('specific_users.1.name', $this->thirdUser->name)
+            ->assertJsonMissingPath('specific_users.0.email')
+            ->assertJsonMissingPath('specific_users.0.created')
+            ->assertJsonMissingPath('specific_users.1.email')
+            ->assertJsonMissingPath('specific_users.1.created')
             ->assertJsonMissingPath('created');
 
         $this->assertDatabaseHas('twofaccount_shares', [
@@ -201,7 +206,7 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
     {
         $this->actingAs($this->owner, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/shares', [
-                'ids' => [$this->targetUser->id, $this->thirdUser->id],
+                'user_ids' => [$this->targetUser->id, $this->thirdUser->id],
             ])
             ->assertCreated();
 
@@ -221,11 +226,11 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
 
         $this->actingAs($this->owner, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/shares', [
-                'ids' => [$this->thirdUser->id, $this->targetUser->id],
+                'user_ids' => [$this->thirdUser->id, $this->targetUser->id],
             ])
             ->assertCreated()
-            ->assertJsonPath('users.0.id', $sortedIds[0])
-            ->assertJsonPath('users.1.id', $sortedIds[1]);
+            ->assertJsonPath('specific_users.0.id', $sortedIds[0])
+            ->assertJsonPath('specific_users.1.id', $sortedIds[1]);
     }
 
     #[Test]
@@ -240,7 +245,7 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
 
         $this->actingAs($this->owner, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/shares', [
-                'ids' => [$this->targetUser->id, $this->thirdUser->id],
+                'user_ids' => [$this->targetUser->id, $this->thirdUser->id],
             ])
             ->assertStatus(409)
             ->assertJsonStructure([
@@ -266,7 +271,7 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
     {
         $this->actingAs($this->owner, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/shares', [
-                'ids' => [$this->owner->id],
+                'user_ids' => [$this->owner->id],
             ])
             ->assertStatus(422)
             ->assertJsonStructure([
@@ -280,7 +285,7 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
     {
         $this->actingAs($this->owner, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/shares', [
-                'ids' => [$this->owner->id, $this->targetUser->id],
+                'user_ids' => [$this->owner->id, $this->targetUser->id],
             ])
             ->assertStatus(422)
             ->assertJsonStructure([
@@ -303,11 +308,12 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
                 'user_id' => $this->targetUser->id,
             ])
             ->assertCreated()
-            ->assertJsonPath('users.0.id', $this->targetUser->id)
-            ->assertJsonPath('users.0.name', $this->targetUser->name)
             ->assertJsonPath('twofaccount_id', $this->twofaccount->id)
-            ->assertJsonMissingPath('users.0.email')
-            ->assertJsonMissingPath('users.0.created')
+            ->assertJsonPath('is_shared_with_all', false)
+            ->assertJsonPath('specific_users.0.id', $this->targetUser->id)
+            ->assertJsonPath('specific_users.0.name', $this->targetUser->name)
+            ->assertJsonMissingPath('specific_users.0.email')
+            ->assertJsonMissingPath('specific_users.0.created')
             ->assertJsonMissingPath('created');
     }
 
@@ -316,11 +322,11 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
     {
         $this->actingAs($this->owner, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/shares', [
-                'ids' => [$this->thirdUser->id],
+                'user_ids' => [$this->thirdUser->id],
                 'user_id' => $this->targetUser->id,
             ])
             ->assertCreated()
-            ->assertJsonPath('users.0.id', $this->thirdUser->id);
+            ->assertJsonPath('specific_users.0.id', $this->thirdUser->id);
 
         $this->assertDatabaseHas('twofaccount_shares', [
             'twofaccount_id' => $this->twofaccount->id,
@@ -340,10 +346,10 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
     {
         $this->actingAs($this->owner, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/shares', [
-                'ids' => [],
+                'user_ids' => [],
             ])
             ->assertStatus(422)
-            ->assertJsonValidationErrorFor('ids');
+            ->assertJsonValidationErrorFor('user_ids');
     }
 
     #[Test]
@@ -351,10 +357,10 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
     {
         $this->actingAs($this->owner, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/shares', [
-                'ids' => [$this->targetUser->id, $this->targetUser->id],
+                'user_ids' => [$this->targetUser->id, $this->targetUser->id],
             ])
             ->assertStatus(422)
-            ->assertJsonValidationErrorFor('ids.1');
+            ->assertJsonValidationErrorFor('user_ids.1');
     }
 
     #[Test]

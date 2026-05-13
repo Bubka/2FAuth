@@ -12,9 +12,9 @@ class TwoFAccountShareStoreRequest extends FormRequest
      */
     protected function prepareForValidation() : void
     {
-        if ($this->filled('user_id') && ! $this->has('ids')) {
+        if ($this->filled('user_id') && ! $this->has('user_ids')) {
             $this->merge([
-                'ids' => [(int) $this->input('user_id')],
+                'user_ids' => [(int) $this->input('user_id')],
             ]);
         }
     }
@@ -35,8 +35,8 @@ class TwoFAccountShareStoreRequest extends FormRequest
     public function rules() : array
     {
         return [
-            'ids'   => 'required|array|min:1',
-            'ids.*' => 'required|integer|distinct|exists:users,id',
+            'user_ids'   => 'required|array|min:1',
+            'user_ids.*' => 'required|integer|distinct|exists:users,id',
         ];
     }
 }
