@@ -3,7 +3,7 @@
 namespace App\Api\v1\Controllers;
 
 use App\Api\v1\Requests\TwoFAccountShareStoreRequest;
-use App\Api\v1\Resources\USerShareRecipientResource;
+use App\Api\v1\Resources\UserShareRecipientResource;
 use App\Http\Controllers\Controller;
 use App\Models\TwoFAccount;
 use App\Models\User;
@@ -31,7 +31,7 @@ class TwoFAccountShareController extends Controller
             ? collect([])
             : $this->twoFAccountShareService->explicitSharedUsers($twofaccount)
                 ->map(function (User $user) {
-                    return new USerShareRecipientResource($user);
+                    return new UserShareRecipientResource($user);
                 })
                 ->values();
 
@@ -87,7 +87,7 @@ class TwoFAccountShareController extends Controller
             )
             ->get();
 
-        return USerShareRecipientResource::collection($users);
+        return UserShareRecipientResource::collection($users);
     }
 
     /**

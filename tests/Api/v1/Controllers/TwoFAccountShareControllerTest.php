@@ -4,7 +4,7 @@ namespace Tests\Api\v1\Controllers;
 
 use App\Api\v1\Controllers\TwoFAccountShareController;
 use App\Api\v1\Requests\TwoFAccountShareStoreRequest;
-use App\Api\v1\Resources\USerShareRecipientResource;
+use App\Api\v1\Resources\UserShareRecipientResource;
 use App\Events\TwoFAccountShareRevoked;
 use App\Events\TwoFAccountShared;
 use App\Facades\Settings;
@@ -24,7 +24,7 @@ use Tests\FeatureTestCase;
 #[CoversClass(TwoFAccountShareController::class)]
 #[CoversClass(TwoFAccountShareStoreRequest::class)]
 #[CoversClass(TwoFAccountShareService::class)]
-#[CoversClass(USerShareRecipientResource::class)]
+#[CoversClass(UserShareRecipientResource::class)]
 #[CoversClass(TwoFAccountShareRevoked::class)]
 class TwoFAccountShareControllerTest extends FeatureTestCase
 {

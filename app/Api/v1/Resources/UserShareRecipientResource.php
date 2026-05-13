@@ -10,7 +10,7 @@ use Illuminate\Support\Carbon;
  * @property string $name
  * @property \Illuminate\Database\Eloquent\Relations\HasMany<\App\Models\TwoFAccountShare, \App\Models\User> $borrowedTwofaccounts
  */
-class USerShareRecipientResource extends JsonResource
+class UserShareRecipientResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
