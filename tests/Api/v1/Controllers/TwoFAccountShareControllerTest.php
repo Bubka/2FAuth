@@ -49,7 +49,7 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
     }
 
     #[Test]
-    public function test_index_returns_empty_users_when_global_share_status_is_enabled()
+    public function test_index_returns_no_user_when_global_share_status_is_enabled()
     {
         TwoFAccountShare::create([
             'twofaccount_id' => $this->twofaccount->id,
@@ -70,7 +70,7 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
             ->assertOk()
             ->assertJsonPath('twofaccount_id', $this->twofaccount->id)
             ->assertJsonPath('is_shared_with_all', true)
-            ->assertJsonCount(0, 'specific_users');
+            ->assertJsonMissingPath('specific_users');
     }
 
     #[Test]

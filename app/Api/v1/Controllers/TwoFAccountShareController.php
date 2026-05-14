@@ -35,11 +35,16 @@ class TwoFAccountShareController extends Controller
                 })
                 ->values();
 
-        return response()->json([
+        $payload = [
             'twofaccount_id'     => $twofaccount->id,
             'is_shared_with_all' => $isSharedWithAll,
-            'specific_users'     => $users,
-        ], 200);
+        ];
+
+        if (! $isSharedWithAll) {
+            $payload['specific_users'] = $users;
+        }
+
+        return response()->json($payload, 200);
     }
 
     /**
