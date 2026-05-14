@@ -53,8 +53,6 @@ class TwoFAccountShareRevokedNotification extends Notification
                 'actor'       => $this->actorName,
                 'twofaccount' => $this->twoFAccountLabel(),
             ]))
-            ->line(__('message.notifications.regards'))
-            ->action(__('link.go_to_2fauth_host'), url('/'))
-            ->line(__('message.notifications.regards'));
+            ->action(__('link.go_to_2fauth_host'), url('/'));
     }
 }

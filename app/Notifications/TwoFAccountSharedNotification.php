@@ -54,7 +54,6 @@ class TwoFAccountSharedNotification extends Notification
                 'twofaccount' => $this->twoFAccountLabel(),
             ]))
             ->line(__('message.notifications.twofaccount_shared.use_it_to_generate_otp'))
-            ->action(__('link.go_to_2fauth_host'), url('/'))
-            ->line(__('message.notifications.regards'));
+            ->action(__('link.go_to_2fauth_host'), url('/'));
     }
 }

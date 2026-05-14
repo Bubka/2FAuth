@@ -48,7 +48,6 @@ class TwoFAccountOwnershipTransferredNotification extends Notification
                 'twofaccount' => $this->twoFAccountLabel(),
             ]))
             ->line(__('message.notifications.twofaccount_ownership_transferred.check_shares'))
-            ->action(__('link.go_to_2fauth_host'), url('/'))
-            ->line(__('message.notifications.regards'));
+            ->action(__('link.go_to_2fauth_host'), url('/'));
     }
 }
