@@ -24,8 +24,8 @@
         clearSearch()
     })
 
-    const inputField = useTemplateRef('inputField')
-    const { focused: inputFieldFocus } = useFocus(inputField)
+    const findUserForShareField = useTemplateRef('findUserForShare')
+    const { focused: findUserForShareFocus } = useFocus(findUserForShareField)
 
     const twofaccount = ref(twofaccounts.items.find(account => account.id == props.twofaccountId))
     const isFetching = ref(false)
@@ -125,7 +125,7 @@
         }
         clearCandidates()
         searchQuery.value = ''
-        inputFieldFocus.value = true
+        findUserForShareFocus.value = true
     }
 
     /**
@@ -206,15 +206,15 @@
                 </div>
                 <form @submit.prevent="handleSubmit">
                     <div class="field">
-                        <label for="inputField" class="label" :class="{ 'is-opacity-5': shareWithAll }">
-                            {{ $t('label.search_for_user') }}
+                        <label for="findUserForShare" class="label" :class="{ 'is-opacity-5': shareWithAll }">
+                            {{ $t('field.findUserForShare') }}
                         </label>
                         <div class="control" :class="{ 'has-icons-left' : leftIcon, 'has-icons-right': rightIcon }">
                             <div class="dropdown" :class="{ 'is-active': candidates || isSearching }">
                                 <div class="dropdown-trigger">
                                     <div class="field">
                                         <p class="control has-icons-right">
-                                            <input ref="inputField" id="inputField" v-model="searchQuery" type="text" class="input" autofocus :disabled="shareWithAll" />
+                                            <input ref="findUserForShare" id="findUserForShare" v-model="searchQuery" type="text" class="input" autofocus :disabled="shareWithAll" />
                                             <span class="icon is-right">
                                                 <button type="button" v-if="searchQuery != ''" id="btnClearSearch" tabindex="1" :title="$t('tooltip.clear_search')" class="clear-selection delete" @click="clearSearch"></button>
                                                 <LucideSearch v-else />
@@ -242,6 +242,7 @@
                                 </div>
                             </div>
                         </div>
+                        <p class="help">{{ $t('field.findUserForShare.help') }}</p>
                     </div>
                     <div class="mb-5">
                         <div v-if="recipients.length > 0" class="field is-grouped is-grouped-multiline">
@@ -253,7 +254,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="block is-size-7-mobile">
+                    <div class="block is-size-7-mobile has-text-grey">
                         {{ $t('message.keep_in_mind_share_principle') }}
                     </div>
                     <FormButtons

@@ -21,7 +21,7 @@ export default {
     },
 
     getRecipients(twofaccountId, names = '', config = {}) {
-        return apiClient.get('/twofaccounts/' + twofaccountId + '/recipients' + (names ? '?filter[name]=' + names : ''), { ...config })
+        return apiClient.get('/twofaccounts/' + twofaccountId + '/recipients' + (names ? '?filter[nameOrEmail]=' + names : ''), { ...config })
     },
 
     shareWithAll(twofaccountId, config = {}) {

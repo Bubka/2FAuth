@@ -742,16 +742,73 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
     }
 
     #[Test]
-    public function test_recipients_supports_partial_name_filter() : void
+    #[DataProvider('provideBadRecipientsKeyword')]
+    public function test_recipients_returns_empty_if_no_input(string $filter) : void
+    {
+        $this->actingAs($this->owner, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/recipients?filter[nameOrEmail]=' . $filter)
+            ->assertOk()
+            ->assertJsonCount(0);
+    }
+
+    /**
+     * Data provider for invalid recipient filter keywords
+     */
+    public static function provideBadRecipientsKeyword() : array
+    {
+        return [
+            [''],
+            ['&'],
+            ['&é'],
+        ];
+    }
+
+    #[Test]
+    public function test_recipients_returns_empty_if_no_match() : void
+    {
+        $nameFilter = 'NonExistingName';
+
+        $this->actingAs($this->owner, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/recipients?filter[nameOrEmail]=' . $nameFilter)
+            ->assertOk()
+            ->assertJsonCount(0);
+    }
+
+    #[Test]
+    public function test_recipients_supports_partial_name_filtering() : void
     {
         $nameFilter = substr($this->targetUser->name, 0, 3);
 
         $this->actingAs($this->owner, 'api-guard')
-            ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/recipients?filter[name]=' . $nameFilter)
+            ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/recipients?filter[nameOrEmail]=' . $nameFilter)
             ->assertOk()
             ->assertJsonCount(1)
             ->assertJsonPath('0.id', $this->targetUser->id)
             ->assertJsonPath('0.name', $this->targetUser->name);
+    }
+
+    #[Test]
+    public function test_recipients_supports_exact_email_filtering() : void
+    {
+        $emailFilter = $this->targetUser->email;
+
+        $this->actingAs($this->owner, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/recipients?filter[nameOrEmail]=' . $emailFilter)
+            ->assertOk()
+            ->assertJsonCount(1)
+            ->assertJsonPath('0.id', $this->targetUser->id)
+            ->assertJsonPath('0.name', $this->targetUser->name);
+    }
+
+    #[Test]
+    public function test_recipients_does_not_support_partial_email_filtering() : void
+    {
+        $emailFilter = substr($this->targetUser->email, 0, 3);
+
+        $this->actingAs($this->owner, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/recipients?filter[nameOrEmail]=' . $emailFilter)
+            ->assertOk()
+            ->assertJsonCount(0);
     }
 
     #[Test]

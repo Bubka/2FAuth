@@ -11,6 +11,7 @@ use App\Services\TwoFAccountShareService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -88,10 +89,26 @@ class TwoFAccountShareController extends Controller
      */
     public function recipients(TwoFAccount $twofaccount, Request $request)
     {
+        $input = $request->input('filter.nameOrEmail', null);
+
+        if (! $input) {
+            return UserShareRecipientResource::collection(collect([]));
+        }
+
+        if (Validator::make(
+            $request->all(),
+            [
+                'filter.nameOrEmail' => 'email',
+            ]
+        )->passes()
+        ) {
+            $filter = AllowedFilter::exact('nameOrEmail', 'email');
+        } else {
+            $filter = AllowedFilter::partial('nameOrEmail', 'name');
+        }
+
         $users = QueryBuilder::for(User::whereNot('id', $request->user()->id))
-            ->allowedFilters(
-                AllowedFilter::partial('name'),
-            )
+            ->allowedFilters($filter)
             ->get();
 
         return UserShareRecipientResource::collection($users);
