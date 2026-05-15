@@ -189,10 +189,14 @@
         <template #content>
             <UseColorMode v-slot="{ mode }">
             <ResponsiveWidthWrapper>
-                <h1 class="title mb-6">
+                <h1 class="title">
                     {{ $t('heading.new_sharing') }}
                 </h1>
-                <div class="columns mb-5 is-mobile is-2 is-align-items-center">
+                <div class="block is-size-7-mobile">
+                    {{ $t('message.share_account_with_other_users')}}<br />
+                    {{ $t('message.this_form_does_not_affect_existing_sharing')}}
+                </div>
+                <div class="columns mb-6 is-mobile is-2 is-align-items-center">
                     <div class="column is-narrow">
                         <figure class="image is-32x32">
                             <img v-if="twofaccount.icon" role="presentation" :src="$2fauth.config.subdirectory + '/storage/icons/' + twofaccount.icon" alt="">

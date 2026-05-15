@@ -31,7 +31,7 @@
     const twofaccount = ref(twofaccounts.items.find(account => account.id == props.twofaccountId))
     const isFetchingRecipients = ref(false)
     const recipients = ref([])
-    
+
     const returnToObject = computed(() => {
         if (returnTo.value == 'accountSharing') {
             return { name: 'accountSharing', params: { twofaccountId: route.params.twofaccountId }}
@@ -109,11 +109,15 @@
                 <div class="block is-size-7-mobile">
                     {{ $t('message.ownership_can_be_transferred_legend')}}
                 </div>
-                <div class="block">
-                    <div class="is-left-bordered-link">
-                        <p>
-                            <span class="title is-5" :class="mode == 'dark' ? 'has-text-grey-lighter' : 'has-text-black'">{{ twofaccount.service }}</span>
-                        </p>
+                <div class="columns mb-5 is-mobile is-2 is-align-items-center">
+                    <div class="column is-narrow">
+                        <figure class="image is-32x32">
+                            <img v-if="twofaccount.icon" role="presentation" :src="$2fauth.config.subdirectory + '/storage/icons/' + twofaccount.icon" alt="">
+                            <img v-else-if="twofaccount.icon == null" role="presentation" :src="$2fauth.config.subdirectory + '/storage/noicon.svg'" alt="">
+                        </figure>
+                    </div>
+                    <div class="column">
+                        <p class="title is-5" :class="mode == 'dark' ? 'has-text-grey-lighter' : 'has-text-black'">{{ twofaccount.service }}</p>
                         <p class="subtitle is-7">{{ twofaccount.account }}</p>
                     </div>
                 </div>
