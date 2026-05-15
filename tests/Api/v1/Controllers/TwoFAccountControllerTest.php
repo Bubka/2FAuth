@@ -1657,11 +1657,11 @@ class TwoFAccountControllerTest extends FeatureTestCase
 
         $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/shares', [
-                'ids' => [$this->anotherUser->id],
+                'user_ids' => [$this->anotherUser->id],
             ])
             ->assertCreated()
             ->assertJsonPath('twofaccount_id', $this->twofaccountC->id)
-            ->assertJsonPath('users.0.id', $this->anotherUser->id);
+            ->assertJsonPath('specific_users.0.id', $this->anotherUser->id);
     }
 
     #[Test]
@@ -1715,7 +1715,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
 
         $this->actingAs($this->anotherUser, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/shares', [
-                'ids' => [$this->anotherUser->id],
+                'user_ids' => [$this->anotherUser->id],
             ])
             ->assertForbidden();
     }

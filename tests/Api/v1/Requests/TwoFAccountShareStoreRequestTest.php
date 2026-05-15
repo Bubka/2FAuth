@@ -52,7 +52,7 @@ class TwoFAccountShareStoreRequestTest extends FeatureTestCase
     {
         return [
             [[
-                'ids' => ['USER_A_ID', 'USER_B_ID'],
+                'user_ids' => ['USER_A_ID', 'USER_B_ID'],
             ], false],
             [[
                 'user_id' => 'USER_A_ID',
@@ -79,19 +79,19 @@ class TwoFAccountShareStoreRequestTest extends FeatureTestCase
     {
         return [
             [[
-                'ids' => null,
+                'user_ids' => null,
             ]],
             [[
-                'ids' => [],
+                'user_ids' => [],
             ]],
             [[
-                'ids' => '1,2',
+                'user_ids' => '1,2',
             ]],
             [[
-                'ids' => ['USER_A_ID', 'USER_A_ID'],
+                'user_ids' => ['USER_A_ID', 'USER_A_ID'],
             ]],
             [[
-                'ids' => [99999999],
+                'user_ids' => [99999999],
             ]],
             [[
                 'user_id' => 99999999,
@@ -110,7 +110,7 @@ class TwoFAccountShareStoreRequestTest extends FeatureTestCase
         ]);
         $request->callPrepareForValidation();
 
-        $this->assertEquals([$targetUser->id], $request->input('ids'));
+        $this->assertEquals([$targetUser->id], $request->input('user_ids'));
     }
 
     #[Test]
@@ -122,11 +122,11 @@ class TwoFAccountShareStoreRequestTest extends FeatureTestCase
         $request = $this->newRequest();
         $request->merge([
             'user_id' => $userA->id,
-            'ids' => [$userB->id],
+            'user_ids' => [$userB->id],
         ]);
         $request->callPrepareForValidation();
 
-        $this->assertEquals([$userB->id], $request->input('ids'));
+        $this->assertEquals([$userB->id], $request->input('user_ids'));
     }
 
     private function newRequest() : TwoFAccountShareStoreRequest
