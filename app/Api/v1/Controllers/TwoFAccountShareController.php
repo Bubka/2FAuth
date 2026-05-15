@@ -91,7 +91,7 @@ class TwoFAccountShareController extends Controller
     {
         $input = $request->input('filter.nameOrEmail', null);
 
-        if (! $input) {
+        if ($request->has('filter.nameOrEmail') && ! $input) {
             return UserShareRecipientResource::collection(collect([]));
         }
 
