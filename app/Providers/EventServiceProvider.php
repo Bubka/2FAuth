@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Events\GroupDeleted;
+use App\Events\OtpGenerated;
 use App\Events\ScanForNewReleaseCalled;
 use App\Events\StoreIconsInDatabaseSettingChanged;
 use App\Events\TwoFAccountDeleted;
@@ -19,6 +20,7 @@ use App\Listeners\DeleteRevokedTwoFAccountUserOrders;
 use App\Listeners\DeleteTwoFAccountUserOrders;
 use App\Listeners\DissociateTwofaccountFromGroup;
 use App\Listeners\LogNotificationListener;
+use App\Listeners\LogOtpGeneration;
 use App\Listeners\PruneTwoFAccountUserOrdersAfterOwnershipTransfer;
 use App\Listeners\RegisterOpenId;
 use App\Listeners\ReleaseRadar;
@@ -48,6 +50,9 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         Registered::class => [
             SendEmailVerificationNotification::class,
+        ],
+        OtpGenerated::class => [
+            LogOtpGeneration::class,
         ],
         TwoFAccountDeleted::class => [
             CleanIconStorage::class,

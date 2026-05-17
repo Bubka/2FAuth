@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use App\Events\OtpGenerated;
 use App\Events\TwoFAccountDeleted;
 use App\Exceptions\InvalidOtpParameterException;
 use App\Exceptions\InvalidSecretException;
 use App\Exceptions\UndecipherableException;
 use App\Exceptions\UnsupportedOtpTypeException;
-use App\Facades\Settings;
 use App\Facades\Icons;
+use App\Facades\Settings;
 use App\Helpers\Helpers;
 use App\Models\Dto\HotpDto;
 use App\Models\Dto\TotpDto;
@@ -251,6 +252,16 @@ class TwoFAccount extends Model
     public function groups() : HasMany
     {
         return $this->hasMany(TwoFAccountGroupAssignment::class, 'twofaccount_id');
+    }
+
+    /**
+     * Get OTP logs for the twofaccount.
+     *
+     * @return HasMany<\App\Models\OtpLog, $this>
+     */
+    public function otpLogs() : HasMany
+    {
+        return $this->hasMany(OtpLog::class, 'twofaccount_id');
     }
 
     /**
@@ -543,7 +554,7 @@ class TwoFAccount extends Model
                 $OtpDto->period = $this->period;
             }
 
-            Log::info(sprintf('New OTP generated for TwoFAccount (%s)', $this->id ? 'id:' . $this->id : 'preview'));
+            OtpGenerated::dispatch($this, $OtpDto);
 
             return $OtpDto;
         } catch (\Throwable $ex) {

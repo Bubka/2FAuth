@@ -82,6 +82,7 @@ return [
         'proxyLogoutUrl' => env('PROXY_LOGOUT_URL', null),
         'appSubdirectory' => env('APP_SUBDIRECTORY', ''),
         'authLogRetentionTime' => envUnlessEmpty('AUTHENTICATION_LOG_RETENTION', 365),
+        'otpLogRetentionTime' => envUnlessEmpty('OTP_LOG_RETENTION', 365),
         'contentSecurityPolicy' => envUnlessEmpty('CONTENT_SECURITY_POLICY', true),
         'blockOtpauthImagelinkFetching' => envUnlessEmpty('BLOCK_OPTAUTH_IMAGELINK_FETCHING', true),
     ],

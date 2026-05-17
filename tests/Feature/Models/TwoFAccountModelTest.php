@@ -2,11 +2,13 @@
 
 namespace Tests\Feature\Models;
 
+use App\Events\OtpGenerated;
 use App\Facades\Icons;
 use App\Models\TwoFAccount;
 use App\Models\User;
 use App\Services\LogoLib\TfaLogoLib;
 use Illuminate\Http\Testing\FileFactory;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Mockery\MockInterface;
@@ -541,6 +543,17 @@ class TwoFAccountModelTest extends FeatureTestCase
             'otp_type' => 'totp',
             'secret'   => __('error.indecipherable'),
         ])->getOTP();
+    }
+
+    #[Test]
+    public function test_getotp_dispatched_otp_generated_event()
+    {
+        Event::fake();
+        
+        $twofaccount = new TwoFAccount;
+        $twofaccount->fillWithURI(OtpTestData::TOTP_FULL_CUSTOM_URI)->getOTP();
+
+        Event::assertDispatched(OtpGenerated::class);
     }
 
     #[Test]

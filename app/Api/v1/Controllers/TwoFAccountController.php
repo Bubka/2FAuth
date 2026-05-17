@@ -12,6 +12,7 @@ use App\Api\v1\Requests\TwoFAccountStoreRequest;
 use App\Api\v1\Requests\TwoFAccountTransferOwnershipRequest;
 use App\Api\v1\Requests\TwoFAccountUpdateRequest;
 use App\Api\v1\Requests\TwoFAccountUriRequest;
+use App\Api\v1\Resources\OtpLogResource;
 use App\Api\v1\Resources\TwoFAccountCollection;
 use App\Api\v1\Resources\TwoFAccountExportCollection;
 use App\Api\v1\Resources\TwoFAccountReadResource;
@@ -28,6 +29,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 
@@ -325,6 +327,40 @@ class TwoFAccountController extends Controller
         }
 
         return response()->json($twofaccount->getOTP(), 200);
+    }
+
+    /**
+     * Get otp generation logs
+     *
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     */
+    public function otpLogs(Request $request, TwoFAccount $twofaccount)
+    {
+        $this->authorize('update', $twofaccount);
+
+        // Here we purge the otp log.
+        // Running the purge command when someone fetchs the otp log
+        // is not very elegant but it's straitforward compared
+        // to a scheduled task, and the delete query is light.
+        // => To enhance.
+        Artisan::call('2fauth:purge-otp-log');
+
+        $validated = $this->validate($request, [
+            'period' => 'sometimes|numeric',
+            'limit'  => 'sometimes|numeric',
+        ]);
+
+        $otopLogQuery = $twofaccount->otpLogs();
+
+        if ($request->has('period')) {
+            $otopLogQuery->ByPeriod($validated['period']);
+        }
+
+        $otpLogs = $request->has('limit')
+            ? $otopLogQuery->with('requester', 'owner', 'twofaccount')->take($validated['limit'])
+            : $otopLogQuery->with('requester', 'owner', 'twofaccount')->get();
+
+        return OtpLogResource::collection($otpLogs);
     }
 
     /**

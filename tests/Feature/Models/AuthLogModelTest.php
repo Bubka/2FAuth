@@ -9,7 +9,7 @@ use PHPUnit\Framework\Attributes\Test;
 use Tests\FeatureTestCase;
 
 /**
- * UserModelTest test class
+ * AuthLogModelTest test class
  */
 #[CoversClass(AuthLog::class)]
 class AuthLogModelTest extends FeatureTestCase
