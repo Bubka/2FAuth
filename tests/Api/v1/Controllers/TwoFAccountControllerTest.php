@@ -13,6 +13,7 @@ use App\Api\v1\Resources\TwoFAccountStoreResource;
 use App\Facades\Groups;
 use App\Facades\IconStore;
 use App\Facades\Settings;
+use App\Facades\TwoFAccounts;
 use App\Models\Group;
 use App\Models\TwoFAccount;
 use App\Models\TwoFAccountShare;
@@ -1733,6 +1734,147 @@ class TwoFAccountControllerTest extends FeatureTestCase
         $this->actingAs($this->anotherUser, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/shares/all')
             ->assertForbidden();
+    }
+
+    #[Test]
+    public function test_otp_logs_returns_logs_for_given_totp_account()
+    {
+        $this->actingAs($this->user, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccountA->id . '/otp')
+            ->assertOk();
+
+        $result = $this->actingAs($this->user, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccountA->id . '/otp-logs')
+            ->assertOk();
+
+        $ip = $result->baseRequest->ip();
+
+        $result->assertJsonCount(1)
+            ->assertJsonPath('0.requester_name', $this->user->name)
+            ->assertJsonPath('0.requester_email', $this->user->email)
+            ->assertJsonPath('0.owner_name', $this->user->name)
+            ->assertJsonPath('0.owner_email', $this->user->email)
+            ->assertJsonPath('0.otp_type', $this->twofaccountA->otp_type)
+            ->assertJsonPath('0.ip_address', $ip)
+            ->assertJsonMissingPath('0.counter');
+    }
+
+    #[Test]
+    public function test_otp_logs_returns_logs_for_given_hotp_account()
+    {
+        $hotpAccount = TwoFAccount::factory()->for($this->user)->create(self::JSON_FRAGMENTS_FOR_DEFAULT_HOTP);
+
+        $this->actingAs($this->user, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/' . $hotpAccount->id . '/otp')
+            ->assertOk();
+
+        $result = $this->actingAs($this->user, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/' . $hotpAccount->id . '/otp-logs')
+            ->assertOk();
+
+        $ip = $result->baseRequest->ip();
+
+        $result->assertJsonCount(1)
+            ->assertJsonPath('0.requester_name', $this->user->name)
+            ->assertJsonPath('0.requester_email', $this->user->email)
+            ->assertJsonPath('0.owner_name', $this->user->name)
+            ->assertJsonPath('0.owner_email', $this->user->email)
+            ->assertJsonPath('0.otp_type', $hotpAccount->otp_type)
+            ->assertJsonPath('0.ip_address', $ip)
+            ->assertJsonPath('0.counter', $hotpAccount->counter + 1);
+    }
+
+    #[Test]
+    public function test_otp_logs_returns_logs_for_given_account_including_shared_one()
+    {
+        TwoFAccountShare::create([
+            'twofaccount_id'      => $this->twofaccountA->id,
+            'shared_with_user_id' => $this->anotherUser->id,
+            'scope'               => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id'  => $this->user->id,
+        ]);
+
+        $this->actingAs($this->anotherUser, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccountA->id . '/otp')
+            ->assertOk();
+
+        $this->actingAs($this->user, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccountA->id . '/otp')
+            ->assertOk();
+
+        $this->actingAs($this->anotherUser, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/otp')
+            ->assertOk();
+
+        $result = $this->actingAs($this->user, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccountA->id . '/otp-logs')
+            ->assertOk();
+
+        $ip = $result->baseRequest->ip();
+
+        $result->assertJsonCount(2)
+            ->assertJsonPath('0.requester_name', $this->anotherUser->name)
+            ->assertJsonPath('0.requester_email', $this->anotherUser->email)
+            ->assertJsonPath('0.owner_name', $this->user->name)
+            ->assertJsonPath('0.owner_email', $this->user->email)
+            ->assertJsonPath('0.otp_type', $this->twofaccountA->otp_type)
+            ->assertJsonPath('0.ip_address', $ip)
+            ->assertJsonPath('1.requester_name', $this->user->name)
+            ->assertJsonPath('1.requester_email', $this->user->email)
+            ->assertJsonPath('1.owner_name', $this->user->name)
+            ->assertJsonPath('1.owner_email', $this->user->email)
+            ->assertJsonPath('1.otp_type', $this->twofaccountA->otp_type)
+            ->assertJsonPath('1.ip_address', $ip);
+    }
+
+    #[Test]
+    public function test_otp_logs_returns_logs_with_deleted_requester_data()
+    {
+        TwoFAccountShare::create([
+            'twofaccount_id'      => $this->twofaccountA->id,
+            'shared_with_user_id' => $this->anotherUser->id,
+            'scope'               => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id'  => $this->user->id,
+        ]);
+
+        $this->actingAs($this->anotherUser, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccountA->id . '/otp')
+            ->assertOk();
+
+        $anotherUserName = $this->anotherUser->name;
+        $anotherUserEmail = $this->anotherUser->email;
+        $this->anotherUser->delete();
+
+        $this->actingAs($this->user, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccountA->id . '/otp-logs')
+            ->assertOk()
+            ->assertJsonPath('0.requester_name', $anotherUserName)
+            ->assertJsonPath('0.requester_email', $anotherUserEmail);
+    }
+
+    #[Test]
+    public function test_otp_logs_returns_logs_with_deleted_requester_and_owner_data()
+    {
+        $newOwner = User::factory()->create();
+
+        $this->actingAs($this->user, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccountA->id . '/otp')
+            ->assertOk();
+
+        TwoFAccounts::transferOwnership($this->twofaccountA, $newOwner);
+
+        $userName = $this->user->name;
+        $userEmail = $this->user->email;
+
+        $this->user->delete();
+
+        $this->actingAs($newOwner, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccountA->id . '/otp-logs')
+            ->assertOk()
+            ->assertJsonPath('0.requester_name', $userName)
+            ->assertJsonPath('0.requester_email', $userEmail)
+            ->assertJsonPath('0.owner_name', $userName)
+            ->assertJsonPath('0.owner_email', $userEmail);
     }
 
     #[Test]

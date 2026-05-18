@@ -9,7 +9,6 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 class OtpGenerated
 {
@@ -26,6 +25,11 @@ class OtpGenerated
     public $requester;
 
     /**
+     * @var \App\Models\User
+     */
+    public $owner;
+
+    /**
      * @var \App\Models\Dto\TotpDto|\App\Models\Dto\HotpDto
      */
     public $otpDto;
@@ -37,8 +41,7 @@ class OtpGenerated
     {
         $this->twofaccount = $twofaccount;
         $this->requester   = Auth::user();
+        $this->owner       = $twofaccount->user ?? Auth::user(); // We used the logged in user as owner if the 2FA account is not persisted
         $this->otpDto      = $otpDto;
-
-        Log::info(sprintf('New OTP generated for TwoFAccount (%s)', $twofaccount->id ? 'id:' . $twofaccount->id : 'preview'));
     }
 }

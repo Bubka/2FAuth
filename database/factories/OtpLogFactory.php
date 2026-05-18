@@ -27,8 +27,6 @@ class OtpLogFactory extends Factory
             'owner_name'  => 'N/A',
             'owner_email' => $this->faker->safeEmail(),
             'twofaccount_id' => null,
-            'twofaccount_account' => $this->faker->safeEmail(),
-            'twofaccount_service' => $this->faker->domainName(),
             'ip_address'   => self::IP,
             'otp_type' => 'totp',
             'generated_at' => now(),

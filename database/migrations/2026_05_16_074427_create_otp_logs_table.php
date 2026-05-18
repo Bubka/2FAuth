@@ -20,9 +20,7 @@ return new class extends Migration
             $table->unsignedBigInteger('owner_id')->nullable();
             $table->string('owner_name');
             $table->string('owner_email');
-            $table->unsignedInteger('twofaccount_id')->nullable();
-            $table->string('twofaccount_account');
-            $table->string('twofaccount_service')->nullable();
+            $table->unsignedInteger('twofaccount_id');
             $table->string('ip_address', 45);
             $table->string('otp_type', 10);
             $table->unsignedMediumInteger('counter')->nullable();
@@ -30,7 +28,7 @@ return new class extends Migration
 
             $table->foreign('requester_id')->references('id')->on('users')->nullOnDelete();
             $table->foreign('owner_id')->references('id')->on('users')->nullOnDelete();
-            $table->foreign('twofaccount_id')->references('id')->on('twofaccounts')->nullOnDelete();
+            $table->foreign('twofaccount_id')->references('id')->on('twofaccounts')->cascadeOnDelete();
 
             $table->index('requester_id');
             $table->index('twofaccount_id');

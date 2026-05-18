@@ -30,8 +30,6 @@ class OtpLogModelTest extends ModelTestCase
                 'owner_name',
                 'owner_email',
                 'twofaccount_id',
-                'twofaccount_account',
-                'twofaccount_service',
                 'ip_address',
                 'generated_at',
                 'otp_type',

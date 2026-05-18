@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Events\OtpGenerated;
 use App\Events\TwoFAccountDeleted;
 use App\Exceptions\InvalidOtpParameterException;
 use App\Exceptions\InvalidSecretException;
@@ -554,7 +553,7 @@ class TwoFAccount extends Model
                 $OtpDto->period = $this->period;
             }
 
-            OtpGenerated::dispatch($this, $OtpDto);
+            Log::info(sprintf('New OTP generated for TwoFAccount (%s)', $this->id ? 'id:' . $this->id : 'preview'));
 
             return $OtpDto;
         } catch (\Throwable $ex) {

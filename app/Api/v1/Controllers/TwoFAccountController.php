@@ -17,6 +17,7 @@ use App\Api\v1\Resources\TwoFAccountCollection;
 use App\Api\v1\Resources\TwoFAccountExportCollection;
 use App\Api\v1\Resources\TwoFAccountReadResource;
 use App\Api\v1\Resources\TwoFAccountStoreResource;
+use App\Events\OtpGenerated;
 use App\Facades\Groups;
 use App\Facades\Settings;
 use App\Facades\TwoFAccounts;
@@ -326,7 +327,10 @@ class TwoFAccountController extends Controller
             Log::info(sprintf('OTP requested by User ID #%s for TwoFAccount ID #%s owned by User ID #%s', $request->user()->id, $twofaccount->id, $twofaccount->user_id));
         }
 
-        return response()->json($twofaccount->getOTP(), 200);
+        $otpDto = $twofaccount->getOtp();
+        OtpGenerated::dispatch($twofaccount, $otpDto);
+
+        return response()->json($otpDto, 200);
     }
 
     /**

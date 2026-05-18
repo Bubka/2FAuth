@@ -16,8 +16,6 @@ use Illuminate\Support\Carbon;
  * @property string $owner_name
  * @property string $owner_email
  * @property int|null $twofaccount_id
- * @property string $twofaccount_account
- * @property string|null $twofaccount_service
  * @property string $ip_address
  * @property string $otp_type
  * @property int|null $counter
@@ -63,8 +61,6 @@ class OtpLog extends Model
         'owner_name',
         'owner_email',
         'twofaccount_id',
-        'twofaccount_account',
-        'twofaccount_service',
         'ip_address',
         'generated_at',
         'otp_type',
