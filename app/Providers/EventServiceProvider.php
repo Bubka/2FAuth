@@ -17,6 +17,7 @@ use App\Listeners\Authentication\LogoutListener;
 use App\Listeners\Authentication\VisitedByProxyUserListener;
 use App\Listeners\CleanIconStorage;
 use App\Listeners\DeleteRevokedTwoFAccountUserOrders;
+use App\Listeners\DeleteTwoFAccountOtpLogs;
 use App\Listeners\DeleteTwoFAccountUserOrders;
 use App\Listeners\DissociateTwofaccountFromGroup;
 use App\Listeners\LogNotificationListener;
@@ -57,6 +58,7 @@ class EventServiceProvider extends ServiceProvider
         TwoFAccountDeleted::class => [
             CleanIconStorage::class,
             DeleteTwoFAccountUserOrders::class,
+            DeleteTwoFAccountOtpLogs::class,
         ],
         TwoFAccountOwnershipTransferred::class => [
             PruneTwoFAccountUserOrdersAfterOwnershipTransfer::class,
