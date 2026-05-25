@@ -1,6 +1,7 @@
 <script setup>
     import twofaccountService from '@/services/twofaccountService'
     import shareService from '@/services/shareService'
+    import TwofaccountMedia from '@/components/TwofaccountMedia.vue'
     import { useBusStore } from '@/stores/bus'
     import { asArray } from '@/composables/helpers'
     import { useFocus, onKeyStroke } from '@vueuse/core'
@@ -196,18 +197,7 @@
                     {{ $t('message.share_account_with_other_users')}}<br />
                     {{ $t('message.this_form_does_not_affect_existing_sharing')}}
                 </div>
-                <div class="columns mb-6 is-mobile is-2 is-align-items-center">
-                    <div class="column is-narrow">
-                        <figure class="image is-32x32">
-                            <img v-if="twofaccount.icon" role="presentation" :src="$2fauth.config.subdirectory + '/storage/icons/' + twofaccount.icon" alt="">
-                            <img v-else-if="twofaccount.icon == null" role="presentation" :src="$2fauth.config.subdirectory + '/storage/noicon.svg'" alt="">
-                        </figure>
-                    </div>
-                    <div class="column">
-                        <p class="title is-5" :class="mode == 'dark' ? 'has-text-grey-lighter' : 'has-text-black'">{{ twofaccount.service }}</p>
-                        <p class="subtitle is-7">{{ twofaccount.account }}</p>
-                    </div>
-                </div>
+                <TwofaccountMedia :twofaccount="twofaccount" />
                 <form @submit.prevent="handleSubmit">
                     <div class="field">
                         <label for="findUserForShare" class="label" :class="{ 'is-opacity-5': shareWithAll }">
