@@ -31,6 +31,7 @@ const router = createRouter({
         { path: '/account/:twofaccountId/sharing', name: 'accountSharing', component: () => import('../views/sharing/AccountSharing.vue'), meta: { middlewares: [authGuard, syncAppSettings, skipIfSharingDisabled, ownerOnly, setReturnTo], watchedByKicker: true }, props: true },
         { path: '/account/:twofaccountId/share', name: 'shareAccount', component: () => import('../views/sharing/Share.vue'), meta: { middlewares: [authGuard, syncAppSettings, skipIfSharingDisabled, ownerOnly], watchedByKicker: true }, props: true },
         { path: '/account/:twofaccountId/transfer', name: 'transferOwnership', component: () => import('../views/sharing/TransferOwnership.vue'), meta: { middlewares: [authGuard, syncAppSettings, skipIfSharingDisabled, ownerOnly], watchedByKicker: true }, props: true },
+        { path: '/account/:twofaccountId/otp-logs', name: 'otpLogs', component: () => import('../views/twofaccounts/OtpLogs.vue'), meta: { middlewares: [authGuard, syncAppSettings, ownerOnly], watchedByKicker: true }, props: true },
 
         { path: '/groups', name: 'groups', component: () => import('../views/groups/Groups.vue'), meta: { middlewares: [authGuard, syncAppSettings, setReturnTo], watchedByKicker: true }, props: true },
         { path: '/group/create', name: 'createGroup', component: () => import('../views/groups/CreateUpdate.vue'), meta: { middlewares: [authGuard, syncAppSettings, setReturnTo], watchedByKicker: true } },

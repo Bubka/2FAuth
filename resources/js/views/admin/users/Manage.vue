@@ -289,7 +289,7 @@
                         <AccessLogViewer v-if="managedUser" :userId="props.userId" :lastOnly="true" @has-more-entries="showFullLogLink = true"/>
                     </div>
                     <div v-if="showFullLogLink" class="block is-size-6 is-size-7-mobile has-text-grey">
-                        {{ $t('message.access_log_has_more_entries') }} <router-link id="lnkFullLogs" class="is-link" :to="{ name: 'admin.logs.access', params: { userId: props.userId }}" >
+                        {{ $t('message.log_has_more_entries') }} <router-link id="lnkFullLogs" class="is-link" :to="{ name: 'admin.logs.access', params: { userId: props.userId }}" >
                             {{ $t('link.see_full_log') }}.
                         </router-link>
                     </div>

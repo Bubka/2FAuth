@@ -354,15 +354,15 @@ class TwoFAccountController extends Controller
             'limit'  => 'sometimes|numeric',
         ]);
 
-        $otopLogQuery = $twofaccount->otpLogs();
+        $otopLogQuery = $twofaccount->otpLogs()->with('requester', 'owner', 'twofaccount');
 
         if ($request->has('period')) {
             $otopLogQuery->ByPeriod($validated['period']);
         }
 
         $otpLogs = $request->has('limit')
-            ? $otopLogQuery->with('requester', 'owner', 'twofaccount')->take($validated['limit'])
-            : $otopLogQuery->with('requester', 'owner', 'twofaccount')->get();
+            ? $otopLogQuery->limit($validated['limit'])->get()
+            : $otopLogQuery->get();
 
         return OtpLogResource::collection($otpLogs);
     }

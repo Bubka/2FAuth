@@ -63,4 +63,8 @@ export default {
         return apiClient.get('/twofaccounts/count', { ...config })
     },
 
+    getOtpLogs(id, period = 12, limit, config = {}) {
+        return apiClient.get('/twofaccounts/' + id + '/otp-logs?period=' + period + (limit ? '&limit=' + limit : ''), { ...config })
+    },
+
 }

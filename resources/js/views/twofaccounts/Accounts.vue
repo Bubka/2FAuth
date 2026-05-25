@@ -23,7 +23,7 @@
     import { useSortable, moveArrayElement } from '@vueuse/integrations/useSortable'
     import { useI18n } from 'vue-i18n'
     import { useErrorHandler } from '@2fauth/stores'
-    import { LucideChevronDown, LucideCircleAlert, LucideEye, LucideEyeOff, LucideMenu, LucideQrCode, LucideUserCheck, LucideUserPen, LucideUserPlus, LucideUsers, LucideX } from '@lucide/vue'
+    import { LucideChevronDown, LucideCircleAlert, LucideEye, LucideEyeOff, LucideMenu, LucidePencil, LucideQrCode, LucideTrash2, LucideUserCheck, LucideUserPen, LucideUserPlus, LucideUsers, LucideX } from '@lucide/vue'
 
     const errorHandler = useErrorHandler()
     const { t } = useI18n()
@@ -322,6 +322,25 @@
         })
         .finally(() => {
             renewedPeriod.value = null
+        })
+    }
+
+    /**
+     * Deletes given account
+     */
+    async function deleteAccount(account) {
+        twofaccounts.selectNone()
+        selectAccount(account)
+        await twofaccounts.deleteSelected()
+
+        if (twofaccounts.isEmpty) {
+            bus.inManagementMode = false
+            router.push({ name: 'start' })
+        }
+
+        nextTick().then(() => {
+            showOtpInModal.value = false
+            showFooterMenu.value = false
         })
     }
 
@@ -630,12 +649,6 @@
             </template>
             <template v-if="showOtpInModal && ! visibleAccount.is_borrowed" #footer-submenu>
                 <ul class="ml-0 mt-1">
-                    <!-- edit link -->
-                    <li class="column">
-                        <router-link id="lnkEdit" :to="{ name: 'editAccount', params: { twofaccountId: visibleAccount.id }}" class="is-link">
-                            {{ $t('link.edit') }}
-                        </router-link>
-                    </li>
                     <!-- manage sharing link -->
                     <li v-if="appSettings.enableSharing" class="column">
                         <router-link id="lnkManageSharing" :to="{ name: 'accountSharing', params: { twofaccountId: visibleAccount.id }}" class="is-link">
@@ -648,11 +661,25 @@
                             {{ $t('link.transfer_ownership') }}
                         </router-link>
                     </li>
-                    <!-- qrcode link -->
+                    <!-- otp generation log link -->
                     <li class="column">
-                        <router-link id="lnkQrCode" :to="{ name: 'showQRcode', params: { twofaccountId: visibleAccount.id }}" class="is-link" :title="$t('tooltip.show_qrcode')">
-                            {{ $t('link.view_as_qrcode') }}
+                        <router-link id="lnkRead" :to="{ name: 'otpLogs', params: { twofaccountId: visibleAccount.id }}" class="is-link">
+                            {{ $t('link.otp_generation_log') }}
                         </router-link>
+                    </li>
+                    <!-- action buttons -->
+                    <li class="column">
+                        <div class="tags is-centered are-medium">
+                            <router-link id="lnkQrCode" :to="{ name: 'showQRcode', params: { twofaccountId: visibleAccount.id }}" class="tag is-rounded" :class="mode == 'dark' ? 'is-dark' : 'is-white'" :title="$t('tooltip.show_qrcode')">
+                                <LucideQrCode class="icon-size-1" />
+                            </router-link>
+                            <router-link id="lnkEdit" :to="{ name: 'editAccount', params: { twofaccountId: visibleAccount.id }}" class="tag is-rounded mx-2" :class="mode == 'dark' ? 'is-dark' : 'is-white'" :title="$t('tooltip.edit_account')">
+                                <LucidePencil class="icon-size-1" />
+                            </router-link>
+                            <button id="btnDelete" @click="deleteAccount(visibleAccount)" class="tag is-rounded" :class="mode == 'dark' ? 'is-dark' : 'is-white'" :title="$t('tooltip.delete_account')">
+                                <LucideTrash2 class="icon-size-1" />
+                            </button>
+                        </div>
                     </li>
                 </ul>
             </template>

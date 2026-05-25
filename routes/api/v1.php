@@ -43,6 +43,7 @@ Route::group(['middleware' => 'auth:api-guard'], function () {
     Route::get('twofaccounts/export', [TwoFAccountController::class, 'export'])->name('twofaccounts.export');
     Route::get('twofaccounts/{twofaccount}/qrcode', [QrCodeController::class, 'show'])->name('twofaccounts.show.qrcode');
     Route::get('twofaccounts/count', [TwoFAccountController::class, 'count'])->name('twofaccounts.count');
+    Route::get('twofaccounts/{twofaccount}/otp-logs', [TwoFAccountController::class, 'otpLogs'])->name('twofaccounts.show.otpLogs');
     Route::get('twofaccounts/{id}/otp', [TwoFAccountController::class, 'otp'])->where('id', '[0-9]+')->name('twofaccounts.show.otp');
     Route::post('twofaccounts/otp', [TwoFAccountController::class, 'otp'])->name('twofaccounts.otp');
     Route::middleware('rejectIfShareDisabled')->group(function () {

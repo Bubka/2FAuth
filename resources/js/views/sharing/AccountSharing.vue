@@ -177,6 +177,7 @@
                     {{ $t('message.share_account_with_other_users')}}<br />
                     {{ $t('message.shared_account_can_be_viewed_not_full_controlled')}}
                 </div>
+                <TwofaccountMedia :twofaccount="twofaccount" />
                 <div class="columns mb-6 is-mobile is-2 is-align-items-center">
                     <div class="column is-narrow">
                         <figure class="image is-32x32">
