@@ -35,6 +35,18 @@ return new class extends Migration
      */
     public function down(): void
     {
+        // cannot drop foreign keys in SQLite
+        Schema::whenTableHasColumn('twofaccount_user_orders', 'user_id', function (Blueprint $table) {
+            if (DB::getDriverName() !== 'sqlite') {
+                $table->dropForeign(['user_id']);
+            }
+        });
+        Schema::whenTableHasColumn('twofaccount_user_orders', 'twofaccount_id', function (Blueprint $table) {
+            if (DB::getDriverName() !== 'sqlite') {
+                $table->dropForeign(['twofaccount_id']);
+            }
+        });
+
         Schema::dropIfExists('twofaccount_user_orders');
     }
 
