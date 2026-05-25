@@ -4,6 +4,7 @@ namespace App\Api\v1\Controllers;
 
 use App\Api\v1\Requests\TwoFAccountShareStoreRequest;
 use App\Api\v1\Resources\UserShareRecipientResource;
+use App\Facades\Settings;
 use App\Http\Controllers\Controller;
 use App\Models\TwoFAccount;
 use App\Models\User;
@@ -26,7 +27,7 @@ class TwoFAccountShareController extends Controller
     {
         $this->authorize('manageShares', $twofaccount);
 
-        $isSharedWithAll = $this->twoFAccountShareService->isSharedWithAll($twofaccount);
+        $isSharedWithAll = Settings::get('enableAllUsersSharingScope') && $this->twoFAccountShareService->isSharedWithAll($twofaccount);
 
         $users = $isSharedWithAll
             ? collect([])
@@ -55,7 +56,7 @@ class TwoFAccountShareController extends Controller
     {
         $this->authorize('manageShares', $twofaccount);
 
-        if ($this->twoFAccountShareService->isSharedWithAll($twofaccount)) {
+        if (Settings::get('enableAllUsersSharingScope') && $this->twoFAccountShareService->isSharedWithAll($twofaccount)) {
             return $this->shareAllConflictResponse();
         }
 
@@ -121,7 +122,7 @@ class TwoFAccountShareController extends Controller
     {
         $this->authorize('manageShares', $twofaccount);
 
-        if ($this->twoFAccountShareService->isSharedWithAll($twofaccount)) {
+        if (Settings::get('enableAllUsersSharingScope') && $this->twoFAccountShareService->isSharedWithAll($twofaccount)) {
             return $this->shareAllConflictResponse();
         }
 
@@ -140,7 +141,10 @@ class TwoFAccountShareController extends Controller
         $this->authorize('manageShares', $twofaccount);
 
         $this->twoFAccountShareService->revokeAllUserShares($twofaccount);
-        $this->twoFAccountShareService->unshareWithAll($twofaccount);
+
+        if (Settings::get('enableAllUsersSharingScope')) {
+            $this->twoFAccountShareService->unshareWithAll($twofaccount);
+        }
 
         Log::info(sprintf('All shares of TwoFAccount #%s owned by User ID #%s have been revoked by User ID #%s', $twofaccount->id, $twofaccount->user_id, $request->user()->id));
 

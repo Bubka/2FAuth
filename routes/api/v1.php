@@ -51,7 +51,9 @@ Route::group(['middleware' => 'auth:api-guard'], function () {
         Route::get('twofaccounts/{twofaccount}/shares', [TwoFAccountShareController::class, 'index'])->name('twofaccounts.shares.index');
         Route::post('twofaccounts/{twofaccount}/shares', [TwoFAccountShareController::class, 'store'])->name('twofaccounts.shares.store');
         Route::delete('twofaccounts/{twofaccount}/shares', [TwoFAccountShareController::class, 'destroyAll'])->name('twofaccounts.shares.destroyAll');
-        Route::post('twofaccounts/{twofaccount}/shares/all', [TwoFAccountShareController::class, 'shareAll'])->name('twofaccounts.shares.shareAll');
+        Route::post('twofaccounts/{twofaccount}/shares/all', [TwoFAccountShareController::class, 'shareAll'])
+            ->name('twofaccounts.shares.shareAll')
+            ->middleware('rejectIfAllUsersSharingScopeDisabled');
         Route::delete('twofaccounts/{twofaccount}/shares/{user}', [TwoFAccountShareController::class, 'destroy'])->name('twofaccounts.shares.destroy');
         Route::get('twofaccounts/{twofaccount}/recipients', [TwoFAccountShareController::class, 'recipients'])->name('twofaccounts.shares.recipients');
     });

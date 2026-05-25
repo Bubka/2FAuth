@@ -296,17 +296,23 @@ class TwoFAccount extends Model
             return false;
         }
 
+        $allUsersSharingScopeEnabled = Settings::get('enableAllUsersSharingScope');
+
         if ($this->isOwnedBy($user)) {
             return false;
         }
 
         return $this->shares()
-            ->where(function ($query) use ($user) {
+            ->where(function ($query) use ($user, $allUsersSharingScopeEnabled) {
                 $query->where(function ($innerQuery) use ($user) {
                     $innerQuery
                         ->where('scope', TwoFAccountShare::SCOPE_USER)
                         ->where('shared_with_user_id', $user->id);
-                })->orWhere('scope', TwoFAccountShare::SCOPE_ALL_USERS);
+                });
+
+                if ($allUsersSharingScopeEnabled) {
+                    $query->orWhere('scope', TwoFAccountShare::SCOPE_ALL_USERS);
+                }
             })
             ->exists();
     }
@@ -339,18 +345,23 @@ class TwoFAccount extends Model
             return $query->where('user_id', $user->id);
         }
 
-        return $query->where(function ($visibleQuery) use ($user) {
+        $allUsersSharingScopeEnabled = Settings::get('enableAllUsersSharingScope');
+
+        return $query->where(function ($visibleQuery) use ($user, $allUsersSharingScopeEnabled) {
             $visibleQuery
                 ->where('user_id', $user->id)
-                ->orWhereHas('shares', function ($shareQuery) use ($user) {
-                    $shareQuery->where(function ($scopeQuery) use ($user) {
+                ->orWhereHas('shares', function ($shareQuery) use ($user, $allUsersSharingScopeEnabled) {
+                    $shareQuery->where(function ($scopeQuery) use ($user, $allUsersSharingScopeEnabled) {
                         $scopeQuery
                             ->where(function ($userScopeQuery) use ($user) {
                                 $userScopeQuery
                                     ->where('scope', TwoFAccountShare::SCOPE_USER)
                                     ->where('shared_with_user_id', $user->id);
-                            })
-                            ->orWhere('scope', TwoFAccountShare::SCOPE_ALL_USERS);
+                            });
+
+                        if ($allUsersSharingScopeEnabled) {
+                            $scopeQuery->orWhere('scope', TwoFAccountShare::SCOPE_ALL_USERS);
+                        }
                     });
                 });
         });

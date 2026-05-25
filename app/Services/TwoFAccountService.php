@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Events\TwoFAccountOwnershipTransferred;
+use App\Facades\Settings;
 use App\Factories\MigratorFactoryInterface;
 use App\Helpers\Helpers;
 use App\Models\TwoFAccount;
@@ -204,12 +205,7 @@ class TwoFAccountService
             return;
         }
 
-        $isSharedWithAll = TwoFAccountShare::query()
-            ->where('twofaccount_id', $twofaccountId)
-            ->where('scope', TwoFAccountShare::SCOPE_ALL_USERS)
-            ->exists();
-
-        if ($isSharedWithAll) {
+        if (Settings::get('enableAllUsersSharingScope') && app()->make(TwoFAccountShareService::class)->isSharedWithAll($twofaccount)) {
             return;
         }
 

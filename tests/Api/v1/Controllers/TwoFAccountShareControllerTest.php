@@ -49,8 +49,10 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
     }
 
     #[Test]
-    public function test_index_returns_no_user_when_global_share_status_is_enabled()
+    public function test_index_returns_is_shared_with_all_over_specific_user_list()
     {
+        Settings::set('enableAllUsersSharingScope', true);
+
         TwoFAccountShare::create([
             'twofaccount_id' => $this->twofaccount->id,
             'shared_with_user_id' => $this->targetUser->id,
@@ -71,10 +73,61 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
             ->assertJsonPath('twofaccount_id', $this->twofaccount->id)
             ->assertJsonPath('is_shared_with_all', true)
             ->assertJsonMissingPath('specific_users');
+
+        Settings::set('enableAllUsersSharingScope', false);
     }
 
     #[Test]
-    public function test_index_returns_explicit_user_ids_only_when_not_shared_with_all()
+    public function test_index_returns_specific_user_when_all_users_scope_is_disabled()
+    {
+        Settings::set('enableAllUsersSharingScope', false);
+
+        TwoFAccountShare::create([
+            'twofaccount_id' => $this->twofaccount->id,
+            'shared_with_user_id' => $this->targetUser->id,
+            'scope' => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id' => $this->owner->id,
+        ]);
+
+        TwoFAccountShare::create([
+            'twofaccount_id' => $this->twofaccount->id,
+            'shared_with_user_id' => null,
+            'scope' => TwoFAccountShare::SCOPE_ALL_USERS,
+            'created_by_user_id' => $this->owner->id,
+        ]);
+
+        $this->actingAs($this->owner, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/shares')
+            ->assertOk()
+            ->assertJsonPath('twofaccount_id', $this->twofaccount->id)
+            ->assertJsonPath('is_shared_with_all', false)
+            ->assertJsonPath('specific_users.0.id', $this->targetUser->id)
+            ->assertJsonPath('specific_users.0.name', $this->targetUser->name)
+            ->assertJsonMissingPath('specific_users.0.email');
+    }
+
+    #[Test]
+    public function test_index_returns_no_user_when_all_users_scope_is_disabled()
+    {
+        Settings::set('enableAllUsersSharingScope', false);
+
+        TwoFAccountShare::create([
+            'twofaccount_id' => $this->twofaccount->id,
+            'shared_with_user_id' => null,
+            'scope' => TwoFAccountShare::SCOPE_ALL_USERS,
+            'created_by_user_id' => $this->owner->id,
+        ]);
+
+        $this->actingAs($this->owner, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/shares')
+            ->assertOk()
+            ->assertJsonPath('twofaccount_id', $this->twofaccount->id)
+            ->assertJsonPath('is_shared_with_all', false)
+            ->assertJsonCount(0, 'specific_users');
+    }
+
+    #[Test]
+    public function test_index_returns_explicit_user_ids()
     {
         TwoFAccountShare::create([
             'twofaccount_id' => $this->twofaccount->id,
@@ -94,7 +147,7 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
     }
 
     #[Test]
-    public function test_index_returns_empty_users_when_no_share_exists()
+    public function test_index_returns_no_user_when_no_share_exists()
     {
         $this->actingAs($this->owner, 'api-guard')
             ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/shares')
@@ -102,6 +155,21 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
             ->assertJsonPath('twofaccount_id', $this->twofaccount->id)
             ->assertJsonPath('is_shared_with_all', false)
             ->assertJsonCount(0, 'specific_users');
+    }
+
+    #[Test]
+    public function test_index_returns_no_user_when_no_share_exists_with_all_users_scope_enabled()
+    {
+        Settings::set('enableAllUsersSharingScope', true);
+
+        $this->actingAs($this->owner, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/shares')
+            ->assertOk()
+            ->assertJsonPath('twofaccount_id', $this->twofaccount->id)
+            ->assertJsonPath('is_shared_with_all', false)
+            ->assertJsonCount(0, 'specific_users');
+
+        Settings::set('enableAllUsersSharingScope', false);
     }
 
     #[Test]
@@ -236,6 +304,8 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
     #[Test]
     public function test_store_returns_conflict_when_shared_with_all_users()
     {
+        Settings::set('enableAllUsersSharingScope', true);
+
         TwoFAccountShare::create([
             'twofaccount_id' => $this->twofaccount->id,
             'shared_with_user_id' => null,
@@ -264,6 +334,8 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
             'shared_with_user_id' => $this->thirdUser->id,
             'scope' => TwoFAccountShare::SCOPE_USER,
         ]);
+
+        Settings::set('enableAllUsersSharingScope', false);
     }
 
     #[Test]
@@ -395,6 +467,8 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
     #[Test]
     public function test_destroy_returns_conflict_when_shared_with_all_users()
     {
+        Settings::set('enableAllUsersSharingScope', true);
+
         TwoFAccountShare::create([
             'twofaccount_id' => $this->twofaccount->id,
             'shared_with_user_id' => $this->targetUser->id,
@@ -422,6 +496,8 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
             'shared_with_user_id' => $this->targetUser->id,
             'scope' => TwoFAccountShare::SCOPE_USER,
         ]);
+
+        Settings::set('enableAllUsersSharingScope', false);
     }
 
     #[Test]
@@ -498,6 +574,8 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
     #[Test]
     public function test_destroy_all_users_revokes_explicit_and_global_shares_when_both_exist()
     {
+        Settings::set('enableAllUsersSharingScope', true);
+
         TwoFAccountShare::create([
             'twofaccount_id' => $this->twofaccount->id,
             'shared_with_user_id' => $this->targetUser->id,
@@ -523,6 +601,44 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
         ]);
 
         $this->assertDatabaseMissing('twofaccount_shares', [
+            'twofaccount_id' => $this->twofaccount->id,
+            'shared_with_user_id' => null,
+            'scope' => TwoFAccountShare::SCOPE_ALL_USERS,
+        ]);
+
+        Settings::set('enableAllUsersSharingScope', false);
+    }
+
+    #[Test]
+    public function test_destroy_all_users_revokes_explicit_shares_only_when_share_with_all_is_disabled()
+    {
+        Settings::set('enableAllUsersSharingScope', false);
+
+        TwoFAccountShare::create([
+            'twofaccount_id' => $this->twofaccount->id,
+            'shared_with_user_id' => $this->targetUser->id,
+            'scope' => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id' => $this->owner->id,
+        ]);
+
+        TwoFAccountShare::create([
+            'twofaccount_id' => $this->twofaccount->id,
+            'shared_with_user_id' => null,
+            'scope' => TwoFAccountShare::SCOPE_ALL_USERS,
+            'created_by_user_id' => $this->owner->id,
+        ]);
+
+        $this->actingAs($this->owner, 'api-guard')
+            ->json('DELETE', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/shares')
+            ->assertNoContent();
+
+        $this->assertDatabaseMissing('twofaccount_shares', [
+            'twofaccount_id' => $this->twofaccount->id,
+            'shared_with_user_id' => $this->targetUser->id,
+            'scope' => TwoFAccountShare::SCOPE_USER,
+        ]);
+
+        $this->assertDatabaseHas('twofaccount_shares', [
             'twofaccount_id' => $this->twofaccount->id,
             'shared_with_user_id' => null,
             'scope' => TwoFAccountShare::SCOPE_ALL_USERS,
@@ -538,8 +654,10 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
     }
 
     #[Test]
-    public function test_share_all_and_unshare_all_toggle_global_share()
+    public function test_share_all_and_unshare_all_toggle_the_share()
     {
+        Settings::set('enableAllUsersSharingScope', true);
+
         $this->actingAs($this->owner, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/shares/all')
             ->assertCreated()
@@ -561,11 +679,15 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
             'twofaccount_id' => $this->twofaccount->id,
             'scope' => TwoFAccountShare::SCOPE_ALL_USERS,
         ]);
+
+        Settings::set('enableAllUsersSharingScope', false);
     }
 
     #[Test]
     public function test_share_all_sends_shared_notification_to_all_users_except_owner() : void
     {
+        Settings::set('enableAllUsersSharingScope', true);
+
         $this->actingAs($this->owner, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/shares/all')
             ->assertCreated();
@@ -577,11 +699,15 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
             return $event->scope === TwoFAccountShare::SCOPE_ALL_USERS
                 && $recipientIds === [$this->targetUser->id, $this->thirdUser->id];
         });
+
+        Settings::set('enableAllUsersSharingScope', false);
     }
 
     #[Test]
     public function test_share_all_revokes_existing_user_shares()
     {
+        Settings::set('enableAllUsersSharingScope', true);
+
         TwoFAccountShare::create([
             'twofaccount_id' => $this->twofaccount->id,
             'shared_with_user_id' => $this->targetUser->id,
@@ -620,11 +746,15 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
             'scope' => TwoFAccountShare::SCOPE_ALL_USERS,
             'shared_with_user_id' => null,
         ]);
+
+        Settings::set('enableAllUsersSharingScope', false);
     }
 
     #[Test]
     public function test_share_all_returns_ok_when_already_shared_with_all_users()
     {
+        Settings::set('enableAllUsersSharingScope', true);
+
         TwoFAccountShare::create([
             'twofaccount_id' => $this->twofaccount->id,
             'shared_with_user_id' => null,
@@ -638,11 +768,15 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
             ->assertJsonPath('is_shared_with_all', true)
             ->assertJsonPath('twofaccount_id', $this->twofaccount->id)
             ->assertJsonMissingPath('created');
+
+        Settings::set('enableAllUsersSharingScope', false);
     }
 
     #[Test]
     public function test_share_all_when_already_applied_cleans_up_stale_explicit_user_shares()
     {
+        Settings::set('enableAllUsersSharingScope', true);
+
         TwoFAccountShare::create([
             'twofaccount_id' => $this->twofaccount->id,
             'shared_with_user_id' => null,
@@ -672,6 +806,8 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
             'scope' => TwoFAccountShare::SCOPE_ALL_USERS,
             'shared_with_user_id' => null,
         ]);
+
+        Settings::set('enableAllUsersSharingScope', false);
     }
 
     #[Test]
@@ -685,6 +821,8 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
     #[Test]
     public function test_destroy_all_returns_no_content_when_called_twice()
     {
+        Settings::set('enableAllUsersSharingScope', true);
+
         $this->actingAs($this->owner, 'api-guard')
             ->json('POST', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/shares/all')
             ->assertStatus(201);
@@ -696,11 +834,15 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
         $this->actingAs($this->owner, 'api-guard')
             ->json('DELETE', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/shares')
             ->assertNoContent();
+
+        Settings::set('enableAllUsersSharingScope', false);
     }
 
     #[Test]
     public function test_destroy_all_for_non_owner_is_forbidden_when_account_is_shared_with_all()
     {
+        Settings::set('enableAllUsersSharingScope', true);
+
         TwoFAccountShare::create([
             'twofaccount_id' => $this->twofaccount->id,
             'shared_with_user_id' => null,
@@ -711,6 +853,8 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
         $this->actingAs($this->targetUser, 'api-guard')
             ->json('DELETE', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/shares')
             ->assertForbidden();
+
+        Settings::set('enableAllUsersSharingScope', false);
     }
 
     #[Test]
@@ -855,7 +999,7 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
 
     #[Test]
     #[DataProvider('provideSharingRoutes')]
-    public function test_sharing_routes_return_403_when_feature_is_disabled(string $method, string $uri, array $payload = []) : void
+    public function test_sharing_routes_return_403_when_sharing_feature_is_disabled(string $method, string $uri, array $payload = []) : void
     {
         Settings::set('enableSharing', false);
 
@@ -887,5 +1031,22 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
             ['POST', '/api/v1/twofaccounts/{accountId}/shares/all'],
             ['GET', '/api/v1/twofaccounts/{accountId}/recipients'],
         ];
+    }
+
+    #[Test]
+    public function test_share_all_route_returns_403_when_all_users_scope_is_disabled() : void
+    {
+        Settings::set('enableAllUsersSharingScope', false);
+
+        $this->actingAs($this->owner, 'api-guard')
+            ->json('POST', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/shares/all')
+            ->assertForbidden()
+            ->assertJsonPath('message', __('error.all_users_sharing_scope_is_disabled'));
+
+        $this->assertDatabaseMissing('twofaccount_shares', [
+            'twofaccount_id' => $this->twofaccount->id,
+            'scope' => TwoFAccountShare::SCOPE_ALL_USERS,
+            'shared_with_user_id' => null,
+        ]);
     }
 }

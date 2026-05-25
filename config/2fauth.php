@@ -172,6 +172,7 @@ return [
         'keepSsoRegistrationEnabled' => false,
         'storeIconsInDatabase' => false,
         'enableSharing' => true,
+        'enableAllUsersSharingScope' => false,
     ],
 
     /*

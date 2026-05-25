@@ -4,6 +4,7 @@ namespace Tests\Feature\Services;
 
 use App\Events\TwoFAccountOwnershipTransferred;
 use App\Facades\Groups;
+use App\Facades\Settings;
 use App\Facades\TwoFAccounts;
 use App\Models\Group;
 use App\Models\TwoFAccount;
@@ -667,6 +668,8 @@ class TwoFAccountServiceTest extends FeatureTestCase
     #[Test]
     public function test_prune_users_without_access_for_account_keeps_orders_when_shared_with_all_users()
     {
+        Settings::set('enableAllUsersSharingScope', true);
+
         $owner = User::factory()->create();
         $anotherUser = User::factory()->create();
         $twofaccount = TwoFAccount::factory()->for($owner)->create();
@@ -699,6 +702,8 @@ class TwoFAccountServiceTest extends FeatureTestCase
             'user_id' => $anotherUser->id,
             'twofaccount_id' => $twofaccount->id,
         ]);
+
+        Settings::set('enableAllUsersSharingScope', false);
     }
 
     #[Test]

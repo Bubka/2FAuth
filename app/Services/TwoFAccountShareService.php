@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Events\TwoFAccountShared;
 use App\Events\TwoFAccountShareRevoked;
+use App\Facades\Settings;
 use App\Models\TwoFAccount;
 use App\Models\TwoFAccountShare;
 use App\Models\User;
@@ -19,7 +20,7 @@ class TwoFAccountShareService
      */
     public function shareWithUsers(TwoFAccount $twofaccount, User $owner, Collection $targetUsers) : Collection
     {
-        if ($this->isSharedWithAll($twofaccount)) {
+        if (Settings::get('enableAllUsersSharingScope') && $this->isSharedWithAll($twofaccount)) {
             return $targetUsers->map(function (User $targetUser) {
                 return [
                     'user'    => $targetUser,
@@ -51,7 +52,7 @@ class TwoFAccountShareService
      */
     public function shareWithUser(TwoFAccount $twofaccount, User $owner, User $targetUser, bool $triggersEvent = true) : array
     {
-        if ($this->isSharedWithAll($twofaccount)) {
+        if (Settings::get('enableAllUsersSharingScope') && $this->isSharedWithAll($twofaccount)) {
             return [
                 'share'   => null,
                 'created' => false,
@@ -123,10 +124,17 @@ class TwoFAccountShareService
     /**
      * Share an account with all users
      *
-     * @return array{share: TwoFAccountShare, created: bool}
+     * @return array{share: TwoFAccountShare|null, created: bool}
      */
     public function shareWithAll(TwoFAccount $twofaccount, User $owner) : array
     {
+        if (! Settings::get('enableAllUsersSharingScope')) {
+            return [
+                'share'   => null,
+                'created' => false,
+            ];
+        }
+
         $share = TwoFAccountShare::firstOrCreate(
             [
                 'twofaccount_id'      => $twofaccount->id,
@@ -202,6 +210,10 @@ class TwoFAccountShareService
      */
     public function isSharedWithAll(TwoFAccount $twofaccount) : bool
     {
+        // if (! Settings::get('enableAllUsersSharingScope')) {
+        //     return false;
+        // }
+
         return TwoFAccountShare::query()
             ->where('twofaccount_id', $twofaccount->id)
             ->where('scope', TwoFAccountShare::SCOPE_ALL_USERS)

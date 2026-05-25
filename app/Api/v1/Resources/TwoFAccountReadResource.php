@@ -2,6 +2,7 @@
 
 namespace App\Api\v1\Resources;
 
+use App\Facades\Settings;
 use App\Services\TwoFAccountShareService;
 
 /**
@@ -24,7 +25,7 @@ class TwoFAccountReadResource extends TwoFAccountStoreResource
     public function toArray($request)
     {
         $isBorrowed      = $this->isSharedWith($request->user());
-        $isSharedWithAll = $request->user()->isSharing($this->resource) && app()->make(TwoFAccountShareService::class)->isSharedWithAll($this->resource);
+        $isSharedWithAll = Settings::get('enableAllUsersSharingScope') && $request->user()->isSharing($this->resource) && app()->make(TwoFAccountShareService::class)->isSharedWithAll($this->resource);
         $isShared        = $request->user()->isSharing($this->resource) && ! $isSharedWithAll;
         $groupId         = $this->groupIdForUser($request->user());
 

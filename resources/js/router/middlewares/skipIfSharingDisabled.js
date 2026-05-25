@@ -5,7 +5,17 @@ export default async function skipIfSharingDisabled({ to, next, nextMiddleware, 
     const { appSettings } = stores
     const { errorHandler } = stores
 
-    if (!appSettings.enableSharing) {
+    const until = (predFn) => {
+        const poll = (done) => (predFn() ? done() : setTimeout(() => poll(done), 100))
+        return new Promise(poll)
+    }
+
+    if (! appSettings.isSynced ) {
+        appSettings.fetch()
+        await until(() => appSettings.isSynced);
+    }
+
+    if (! appSettings.enableSharing) {
         let err = new Error('unauthorized')
         const responseOptions = { status: 403, statusText: 'unauthorized' }
         const response = new Response(null, responseOptions);
