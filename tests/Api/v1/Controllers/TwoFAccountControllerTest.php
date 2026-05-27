@@ -2709,6 +2709,18 @@ class TwoFAccountControllerTest extends FeatureTestCase
     }
 
     #[Test]
+    public function test_get_otp_dispatched_otp_generated_event()
+    {
+        Event::fake();
+        
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccountA->id . '/otp')
+            ->assertOk();
+
+        Event::assertDispatched(OtpGenerated::class);
+    }
+
+    #[Test]
     public function test_get_otp_using_indecipherable_twofaccount_id_returns_bad_request()
     {
         Settings::set('useEncryption', true);
@@ -2769,6 +2781,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
     #[Test]
     public function test_get_otp_of_shared_twofaccount_returns_success()
     {
+        Event::fake();
+
         TwoFAccountShare::create([
             'twofaccount_id' => $this->twofaccountC->id,
             'shared_with_user_id' => $this->user->id,
@@ -2780,6 +2794,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
             ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/otp')
             ->assertOk()
             ->assertJsonPath('password', fn ($value) => is_string($value) && strlen($value) > 0);
+
+        Event::assertDispatched(OtpGenerated::class);
     }
 
     #[Test]

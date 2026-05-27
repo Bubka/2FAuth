@@ -38,15 +38,10 @@ class LogOtpGenerationTest extends FeatureTestCase
     {
         $user = User::factory()->create();
         $twofaccount = TwoFAccount::factory()->for($user)->create();
-        $ip = '127.0.0.1';
 
-        $this->actingAs($user);
-        $request = Mockery::mock(Request::class);
-
-        $request->shouldReceive('ip')
-            ->andReturn($ip);
-
-        $totpDto = $twofaccount->getOTP();
+        $response = $this->actingAs($user, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/' . $twofaccount->id . '/otp')
+            ->assertOk();
         
         $otpLogs = OtpLog::all();
         $this->assertCount(1, $otpLogs);
@@ -59,9 +54,9 @@ class LogOtpGenerationTest extends FeatureTestCase
             ->where('owner_id', $user->id)
             ->where('owner_name', $user->name)
             ->where('owner_email', $user->email)
-            ->where('ip_address', $ip)
-            ->where('otp_type', $totpDto->otp_type)
-            ->where('generated_at', $totpDto->generated_at)
+            ->where('ip_address', $response->baseRequest->ip())
+            ->where('otp_type', $response->getData()->otp_type)
+            ->where('generated_at', $response->getData()->generated_at)
             ->get();
 
         $this->assertNotNull($otpLog);
@@ -72,15 +67,10 @@ class LogOtpGenerationTest extends FeatureTestCase
     {
         $user = User::factory()->create();
         $twofaccount = TwoFAccount::factory()->for($user)->create(OtpTestData::ARRAY_OF_FULL_VALID_PARAMETERS_FOR_CUSTOM_HOTP);
-        $ip = '127.0.0.1';
 
-        $this->actingAs($user);
-        $request = Mockery::mock(Request::class);
-
-        $request->shouldReceive('ip')
-            ->andReturn($ip);
-
-        $totpDto = $twofaccount->getOTP();
+        $response = $this->actingAs($user, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/' . $twofaccount->id . '/otp')
+            ->assertOk();
         
         $otpLogs = OtpLog::all();
         $this->assertCount(1, $otpLogs);
@@ -93,9 +83,9 @@ class LogOtpGenerationTest extends FeatureTestCase
             ->where('owner_id', $user->id)
             ->where('owner_name', $user->name)
             ->where('owner_email', $user->email)
-            ->where('ip_address', $ip)
-            ->where('otp_type', $totpDto->otp_type)
-            ->where('counter', $totpDto->counter)
+            ->where('ip_address', $response->baseRequest->ip())
+            ->where('otp_type', $response->getData()->otp_type)
+            ->where('counter', $response->getData()->counter)
             ->get();
 
         $this->assertNotNull($otpLog);
@@ -116,13 +106,9 @@ class LogOtpGenerationTest extends FeatureTestCase
             'created_by_user_id' => $user->id,
         ]);
 
-        $this->actingAs($requester);
-        $request = Mockery::mock(Request::class);
-
-        $request->shouldReceive('ip')
-            ->andReturn($ip);
-
-        $totpDto = $twofaccount->getOTP();
+        $response = $this->actingAs($user, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/' . $twofaccount->id . '/otp')
+            ->assertOk();
         
         $otpLogs = OtpLog::all();
         $this->assertCount(1, $otpLogs);
@@ -136,8 +122,8 @@ class LogOtpGenerationTest extends FeatureTestCase
             ->where('owner_name', $user->name)
             ->where('owner_email', $user->email)
             ->where('ip_address', $ip)
-            ->where('otp_type', $totpDto->otp_type)
-            ->where('generated_at', $totpDto->generated_at)
+            ->where('otp_type', $response->getData()->otp_type)
+            ->where('generated_at', $response->getData()->generated_at)
             ->get();
 
         $this->assertNotNull($otpLog);
