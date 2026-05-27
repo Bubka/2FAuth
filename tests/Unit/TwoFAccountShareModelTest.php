@@ -4,6 +4,7 @@ namespace Tests\Unit;
 
 use App\Models\TwoFAccount;
 use App\Models\TwoFAccountShare;
+use App\Models\User;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\ModelTestCase;
@@ -42,26 +43,29 @@ class TwoFAccountShareModelTest extends ModelTestCase
     public function test_twofaccount_relation()
     {
         $twoFAccountShare = new TwoFAccountShare;
-        $account          = $twoFAccountShare->twofaccount();
+        $relation         = $twoFAccountShare->twofaccount();
         
-        $this->assertBelongsToRelation($account, $twoFAccountShare, new TwoFAccount, 'twofaccount_id');
+        $this->assertBelongsToRelation($relation, $twoFAccountShare, new TwoFAccount, 'twofaccount_id');
+        $this->assertInstanceOf(TwoFAccount::class, $relation->getRelated());
     }
 
     #[Test]
     public function test_sharedWithUser_relation()
     {
         $twoFAccountShare = new TwoFAccountShare;
-        $account          = $twoFAccountShare->sharedWithUser();
+        $relation         = $twoFAccountShare->sharedWithUser();
         
-        $this->assertBelongsToRelation($account, $twoFAccountShare, new TwoFAccount, 'shared_with_user_id');
+        $this->assertBelongsToRelation($relation, $twoFAccountShare, new User, 'shared_with_user_id');
+        $this->assertInstanceOf(User::class, $relation->getRelated());
     }
 
     #[Test]
     public function test_createdByUser_relation()
     {
         $twoFAccountShare = new TwoFAccountShare;
-        $account          = $twoFAccountShare->createdByUser();
+        $relation         = $twoFAccountShare->createdByUser();
         
-        $this->assertBelongsToRelation($account, $twoFAccountShare, new TwoFAccount, 'created_by_user_id');
+        $this->assertBelongsToRelation($relation, $twoFAccountShare, new User, 'created_by_user_id');
+        $this->assertInstanceOf(User::class, $relation->getRelated());
     }
 }

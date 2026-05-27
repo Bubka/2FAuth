@@ -268,7 +268,17 @@ class User extends Authenticatable implements HasLocalePreference, WebAuthnAuthe
      */
     public function sharedTwofaccounts()
     {
-        return $this->hasMany(\App\Models\TwoFAccountShare::class, 'created_by_user_id');
+        $query = $this->hasMany(\App\Models\TwoFAccountShare::class, 'created_by_user_id');
+
+        if (! Settings::get('enableSharing')) {
+            return $query->where('id', -1); // Return empty result if sharing is disabled
+        }
+
+        if (! Settings::get('enableAllUsersSharingScope')) {
+            $query->where('scope', '!=', TwoFAccountShare::SCOPE_ALL_USERS); // Exclude all users shares
+        }
+
+        return $query;
     }
 
     /**
@@ -278,7 +288,17 @@ class User extends Authenticatable implements HasLocalePreference, WebAuthnAuthe
      */
     public function borrowedTwofaccounts()
     {
-        return $this->hasMany(\App\Models\TwoFAccountShare::class, 'shared_with_user_id');
+        $query = $this->hasMany(\App\Models\TwoFAccountShare::class, 'shared_with_user_id');
+
+        if (! Settings::get('enableSharing')) {
+            return $query->where('id', -1); // Return empty result if sharing is disabled
+        }
+
+        if (! Settings::get('enableAllUsersSharingScope')) {
+            $query->where('scope', '!=', TwoFAccountShare::SCOPE_ALL_USERS); // Exclude all users shares
+        }
+
+        return $query;
     }
 
     /**
@@ -286,10 +306,6 @@ class User extends Authenticatable implements HasLocalePreference, WebAuthnAuthe
      */
     public function isSharing(TwoFAccount $twofaccount) : bool
     {
-        if (! Settings::get('enableSharing')) {
-            return false;
-        }
-
         return $this->sharedTwofaccounts()
             ->where('twofaccount_id', $twofaccount->id)
             ->exists();
