@@ -144,6 +144,7 @@
                     <h4 class="title is-4 pt-5">{{ $t('heading.sharing') }}</h4>
                     <!-- sharing -->
                     <FormCheckbox v-model="appSettings.enableSharing" @update:model-value="val => saveSetting('enableSharing', val)" fieldName="enableSharing" label="field.enable_sharing" help="field.enable_sharing.help" />
+                    <FormCheckbox v-model="appSettings.enableAllUsersSharingScope" @update:model-value="val => saveSetting('enableAllUsersSharingScope', val)" fieldName="enableAllUsersSharingScope"  :isDisabled="!appSettings.enableSharing" label="field.enable_all_users_sharing_scope" help="field.enable_all_users_sharing_scope.help" />
                     <h4 class="title is-4 pt-5">{{ $t('heading.storage') }}</h4>
                     <!-- store icons in database -->
                     <FormCheckbox v-model="appSettings.storeIconsInDatabase" @update:model-value="val => saveSetting('storeIconsInDatabase', val)" fieldName="storeIconsInDatabase" label="field.store_icon_to_database" help="field.store_icon_to_database.help" />

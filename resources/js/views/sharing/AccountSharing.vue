@@ -7,7 +7,7 @@
     import { useI18n } from 'vue-i18n'
     import { UseColorMode } from '@vueuse/components'
     import { useTwofaccounts } from '@/stores/twofaccounts'
-    import { useUserStore } from '@/stores/user'
+    import { useAppSettingsStore } from '@/stores/appSettings'
     import { LucideUsers, LucideCirclePlus } from '@lucide/vue'
 
     const props = defineProps({
@@ -16,10 +16,9 @@
 
     const notify = useNotify()
     const { t } = useI18n()
-    const $2fauth = inject('2fauth')
     const twofaccounts = useTwofaccounts()
     const twofaccount = ref(twofaccounts.items.find(account => account.id == props.twofaccountId))
-    const user = useUserStore()
+    const appSettings = useAppSettingsStore()
 
     const activeScopeRef = useTemplateRef('activeScopeRef')
 
@@ -42,8 +41,14 @@
         )
     })
 
+    const availableSharingScopes = computed(() => {
+        return appSettings.enableAllUsersSharingScope
+            ? sharingScopes
+            : sharingScopes.filter(scope => scope.id != 'ShareWithAll')
+    })
+
     const activeScopeLabel = computed(() => {
-        return sharingScopes.find((scope) => scope.id == activeSharingScope.value).label
+        return availableSharingScopes.value.find((scope) => scope.id == activeSharingScope.value).label
     })
 
     const isSharedWithAll = computed(() => {
@@ -67,7 +72,7 @@
         })
 
         shareService.getShares(props.twofaccountId).then(response => {
-            if (response?.data?.is_shared_with_all) {
+            if (appSettings.enableAllUsersSharingScope && response?.data?.is_shared_with_all) {
                 activeSharingScope.value = 'ShareWithAll'
             }
             else {
@@ -185,7 +190,7 @@
                         <div class="toggle">
                             <div class="toggle-buttons">
                                 <button 
-                                    v-for="sharingScope in sharingScopes" 
+                                    v-for="sharingScope in availableSharingScopes" 
                                     :key="sharingScope.id"
                                     ref="shareButtonRefs"
                                     :id="'btn' + sharingScope.id"
@@ -199,7 +204,7 @@
                     </div>
                     </div>
                 </div>
-                 <template v-if="isFetching == false">
+                <template v-if="isFetching == false">
                     <template v-if="isSharedWithUsers">
                         <div class="pt-2 mb-4">
                             <RouterLink class="is-link" :to="{ name: 'shareAccount', params: { twofaccountId: props.twofaccountId } }">
@@ -221,7 +226,7 @@
                             </div>
                         </template>
                     </template>
-                    <template v-else-if="isSharedWithAll == true">
+                    <template v-else-if="appSettings.enableAllUsersSharingScope && isSharedWithAll == true">
                         <div class="list-item is-size-5 is-size-6-mobile">
                             <span class="icon-text">
                                 <span class="icon">
@@ -233,7 +238,7 @@
                         </div>
                     </template>
                     <div v-else class="list-item pt-0">
-                        <p class="is-size-6 is-size-7-mobile has-text-grey pt-2">{{ $t('message.all_users_meaning') }}</p>
+                        <p v-if="appSettings.enableAllUsersSharingScope" class="is-size-6 is-size-7-mobile has-text-grey pt-2">{{ $t('message.all_users_meaning') }}</p>
                         <p class="is-size-6 is-size-7-mobile has-text-grey pt-2">{{ $t('message.selected_users_meaning') }}</p>
                     </div>
                     <div class="mt-2 is-size-7 is-pulled-right">

@@ -2,6 +2,7 @@
 
 namespace App\Api\v1\Resources;
 
+use App\Facades\Settings;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 
@@ -30,7 +31,11 @@ class UserResource extends JsonResource
             'oauth_provider'         => $this->oauth_provider,
             'authenticated_by_proxy' => Auth::getDefaultDriver() === 'reverse-proxy-guard',
             'preferences'            => $this->preferences,
-            'is_admin'               => $this->is_admin,
+            'appSettings'            => [
+                'enableSharing'              => Settings::get('enableSharing'),
+                'enableAllUsersSharingScope' => Settings::get('enableAllUsersSharingScope'),
+            ],
+            'is_admin' => $this->is_admin,
         ];
     }
 }

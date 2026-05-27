@@ -35,7 +35,6 @@
     const searchQuery = ref('')
     const candidates = ref(null)
     const recipients = ref([])
-    const shareWithAll = ref(false)
     
     const returnToObject = computed(() => {
         if (returnTo.value == 'accountSharing') {
@@ -200,7 +199,7 @@
                 <TwofaccountMedia :twofaccount="twofaccount" />
                 <form @submit.prevent="handleSubmit">
                     <div class="field">
-                        <label for="findUserForShare" class="label" :class="{ 'is-opacity-5': shareWithAll }">
+                        <label for="findUserForShare" class="label">
                             {{ $t('field.findUserForShare') }}
                         </label>
                         <div class="control" :class="{ 'has-icons-left' : leftIcon, 'has-icons-right': rightIcon }">
@@ -208,7 +207,7 @@
                                 <div class="dropdown-trigger">
                                     <div class="field">
                                         <p class="control has-icons-right">
-                                            <input ref="findUserForShare" id="findUserForShare" v-model="searchQuery" type="text" class="input" autofocus :disabled="shareWithAll" />
+                                            <input ref="findUserForShare" id="findUserForShare" v-model="searchQuery" type="text" class="input" autofocus />
                                             <span class="icon is-right">
                                                 <button type="button" v-if="searchQuery != ''" id="btnClearSearch" tabindex="1" :title="$t('tooltip.clear_search')" class="clear-selection delete" @click="clearSearch"></button>
                                                 <LucideSearch v-else />
@@ -252,7 +251,7 @@
                         {{ $t('message.keep_in_mind_share_principle') }}
                     </div>
                     <FormButtons
-                        :isDisabled="!hasRecipients && !shareWithAll"
+                        :isDisabled="!hasRecipients"
                         :isBusy="isSending"
                         :submitLabel="'label.share'"
                         :showCancelButton="true"

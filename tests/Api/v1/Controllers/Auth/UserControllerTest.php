@@ -41,13 +41,16 @@ class UserControllerTest extends FeatureTestCase
             ->json('GET', '/api/v1/user')
             ->assertOk()
             ->assertJsonFragment([
-                'name'     => $this->user->name,
                 'id'       => $this->user->id,
+                'name'     => $this->user->name,
                 'email'    => $this->user->email,
+                'oauth_provider' => $this->user->oauth_provider,
+                'authenticated_by_proxy' => false,
                 'is_admin' => $this->user->is_admin,
             ])
             ->assertJsonStructure([
                 'preferences',
+                'appSettings',
             ]);
     }
 

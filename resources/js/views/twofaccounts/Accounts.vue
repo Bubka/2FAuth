@@ -502,7 +502,7 @@
                                                 <span v-else-if="appSettings.enableSharing && account.is_shared" :title="$t('tooltip.this_account_is_shared_with_specific_users')" class="tag p-1 mr-1" :class="mode == 'dark' ? 'is-black is-opacity-4':'is-light is-white'" >
                                                     <LucideUserCheck class="icon-size-0-75" />
                                                 </span>
-                                                <span v-else-if="appSettings.enableSharing && account.is_shared_with_all" :title="$t('tooltip.this_account_is_shared_with_all')" class="tag p-1 mr-1" :class="mode == 'dark' ? 'is-black is-opacity-4':'is-light is-white'" >
+                                                <span v-else-if="appSettings.enableSharing && appSettings.enableAllUsersSharingScope && account.is_shared_with_all" :title="$t('tooltip.this_account_is_shared_with_all')" class="tag p-1 mr-1" :class="mode == 'dark' ? 'is-black is-opacity-4':'is-light is-white'" >
                                                     <LucideUsers class="icon-size-0-75" />
                                                 </span>
                                                 {{ account.account }}
@@ -603,8 +603,8 @@
                         <ActionButtons
                             v-model:inManagementMode="bus.inManagementMode"
                             :areDisabled="twofaccounts.hasNoneSelected"
-                            :canShare="!twofaccounts.hasBorrowedSelected"
-                            :showShare="appSettings.enableSharing"
+                            :canUnshare="twofaccounts.hasOnlySharedSelected"
+                            :showUnshare="appSettings.enableSharing"
                             :canDelete="!twofaccounts.hasBorrowedSelected"
                             :canExport="!twofaccounts.hasBorrowedSelected"
                             @move-button-clicked="showDestinationGroupSelector = true"

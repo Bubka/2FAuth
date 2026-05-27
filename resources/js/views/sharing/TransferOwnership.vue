@@ -1,22 +1,20 @@
 <script setup>
     import Form from '@/components/formElements/Form'
-    import twofaccountService from '@/services/twofaccountService'
     import shareService from '@/services/shareService'
     import TwofaccountMedia from '@/components/TwofaccountMedia.vue'
     import { useNotify } from '@2fauth/ui'
-    import { useBusStore } from '@/stores/bus'
     import { useErrorHandler } from '@2fauth/stores'
+    import { useAppSettingsStore } from '@/stores/appSettings'
     import { asArray } from '@/composables/helpers'
-    import { LucideLoaderCircle, LucideSearch } from '@lucide/vue'
     import { useTwofaccounts } from '@/stores/twofaccounts'
     import { UseColorMode } from '@vueuse/components'
 
     const { t } = useI18n()
     const errorHandler = useErrorHandler()
+    const appSettings = useAppSettingsStore()
     const $2fauth = inject('2fauth')
     const router = useRouter()
     const route = useRoute()
-    const bus = useBusStore()
     const notify = useNotify()
     const twofaccounts = useTwofaccounts()
     const returnTo = useStorage($2fauth.prefix + 'returnTo', 'accountSharing')
@@ -45,7 +43,7 @@
     const twofaccountShareStatus = computed(() => {
         if (twofaccount.value.is_shared) {
             return t('message.shared_with_specific_users')
-        } else if (twofaccount.value.is_shared_with_all) {
+        } else if (appSettings.enableAllUsersSharingScope && twofaccount.value.is_shared_with_all) {
             return t('message.shared_with_all')
         }
         else {
@@ -112,7 +110,13 @@
                 </div>
                 <TwofaccountMedia :twofaccount="twofaccount" />
                 <div class="block is-size-7-mobile">
-                    <p class="mb-2">{{ $t('message.ownership_can_be_transferred_sharing_legend')}}</p>
+                    <p class="mb-2">
+                        {{ $t('message.ownership_can_be_transferred_sharing_legend')}}
+                        <template v-if="appSettings.enableAllUsersSharingScope">
+                            {{ $t('message.ownership_can_be_transferred_sharing_legend_if_with_all')}}
+                        </template>
+                        {{ $t('message.ownership_can_be_transferred_sharing_legend_if_with_specific_users')}}
+                    </p>
                     <i18n-t keypath="message.this_account_is_currently_x" tag="p" :class="mode == 'dark' ? 'has-text-grey' : 'has-text-black'">
                         <template v-slot:sharing_status>
                             <RouterLink class="is-link" :to="{ name: 'accountSharing', params: { twofaccountId: props.twofaccountId } }">

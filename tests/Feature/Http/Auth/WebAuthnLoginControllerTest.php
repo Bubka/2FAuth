@@ -118,14 +118,16 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
         $this->json('POST', '/webauthn/login', self::ASSERTION_RESPONSE)
             ->assertOk()
             ->assertJsonFragment([
-                'message'  => 'authenticated',
-                'id'       => $this->user->id,
-                'name'     => $this->user->name,
-                'email'    => $this->user->email,
-                'is_admin' => false,
+                'message'        => 'authenticated',
+                'id'             => $this->user->id,
+                'name'           => $this->user->name,
+                'email'          => $this->user->email,
+                'oauth_provider' => $this->user->oauth_provider,
+                'is_admin'       => false,
             ])
             ->assertJsonStructure([
                 'preferences',
+                'appSettings',
             ]);
     }
 

@@ -55,11 +55,14 @@ class RegisterControllerTest extends FeatureTestCase
             ->assertCreated()
             ->assertJsonStructure([
                 'message',
-                'name',
+                'id',
+                'oauth_provider',
+                'preferences',
+                'appSettings',
+                'is_admin',
             ])
-            ->assertJsonFragment([
-                'name' => self::USERNAME,
-            ]);
+            ->assertJsonPath('name', self::USERNAME)
+            ->assertJsonPath('email', self::EMAIL);
 
         $this->assertDatabaseHas('users', [
             'name'  => self::USERNAME,

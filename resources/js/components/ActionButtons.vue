@@ -27,11 +27,11 @@
             type: Boolean,
             default: true
         },
-        canShare: {
+        canUnshare: {
             type: Boolean,
             default: true
         },
-        showShare: {
+        showUnshare: {
             type: Boolean,
             default: false
         },
@@ -97,10 +97,10 @@
             </button>
         </p>
         <!-- unshare button -->
-        <p class="control" v-if="inManagementMode && showShare">
+        <p class="control" v-if="inManagementMode && showUnshare">
             <button
                 id="btnShare" 
-                :disabled='areDisabled || !canShare' class="button is-rounded"
+                :disabled='areDisabled || !canUnshare' class="button is-rounded"
                 :class="[{ 'is-outlined': mode == 'dark' || areDisabled }, areDisabled ? 'is-dark': 'is-link']"
                 @click="$emit('share-button-clicked')"
                 :title="$t('tooltip.unshare_selected_accounts')" >

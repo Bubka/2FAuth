@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Facades\Settings;
+use App\Http\Controllers\Auth\Traits\HasAuthenticatedPayload;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserStoreRequest;
 use App\Models\User;
@@ -25,7 +26,7 @@ class RegisterController extends Controller
     |
     */
 
-    use RegistersUsers;
+    use HasAuthenticatedPayload, RegistersUsers;
 
     /**
      * Handle a registration request for the application.
@@ -48,13 +49,7 @@ class RegisterController extends Controller
          */
         $user = $this->guard()->user();
 
-        return response()->json([
-            'message'     => 'account created',
-            'name'        => $user->name,
-            'email'       => $user->email,
-            'preferences' => $user->preferences,
-            'is_admin'    => $user->isAdministrator(),
-        ], 201);
+        return response()->json($this->authenticatedPayload('account created', $user), 201);
     }
 
     /**
