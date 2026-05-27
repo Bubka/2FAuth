@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia'
-import { startsWithUppercase } from '@/composables/helpers'
 import { useUserStore } from '@/stores/user'
 import { useNotify } from '@2fauth/ui'
 import twofaccountService from '@/services/twofaccountService'
@@ -105,8 +104,22 @@ export const useTwofaccounts = defineStore('twofaccounts', {
             return state.items.some(a => state.selectedIds.includes(a.id) && a.is_borrowed)
         },
 
+        hasOnlyBorrowedSelected(state) {
+            return state.selectedIds.length > 0 && state.selectedIds.every(id => {
+                const account = state.items.find(a => a.id === id)
+                return account?.is_borrowed === true
+            })
+        },
+
         hasSharedSelected(state) {
             return state.items.some(a => state.selectedIds.includes(a.id) && (a.is_shared == true || a.is_shared_with_all == true))
+        },
+
+        hasOnlySharedSelected(state) {
+            return state.selectedIds.length > 0 && state.selectedIds.every(id => {
+                const account = state.items.find(a => a.id === id)
+                return account?.is_shared === true || account?.is_shared_with_all === true
+            })
         }
     },
 
