@@ -578,6 +578,8 @@
     "message.ensure_you_open_mail_in_trusted_device": "Ensure you open the email on a device you fully own.",
     "message.error_occured": "An error occured:",
     "message.expected_format_for_direct_input": "Expected: A list of otpauth URI, one by line",
+    "message.expire_in_x_day": "Expires in {days_to_expiration} day(s)",
+    "message.expired_since_x": "Expired since {expired_at}",
     "message.failed_login_on": "Failed login on {login_at}",
     "message.failure": "Failure",
     "message.fetching_data": "Fetching data...",
