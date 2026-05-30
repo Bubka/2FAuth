@@ -8,6 +8,8 @@ use App\Facades\IconStore;
 use App\Facades\Settings;
 use App\Models\Icon;
 use App\Models\TwoFAccount;
+use App\Models\TwoFAccountShare;
+use App\Models\User;
 use App\Services\SettingService;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Crypt;
@@ -26,12 +28,9 @@ use Tests\FeatureTestCase;
 #[CoversClass(Settings::class)]
 class SettingServiceTest extends FeatureTestCase
 {
-    /**
-     * App\Models\Group $groupOne, $groupTwo
-     */
-    protected $twofaccountOne;
+    protected TwoFAccount $twofaccountOne;
 
-    protected $twofaccountTwo;
+    protected TwoFAccount $twofaccountTwo;
 
     private const KEY = 'key';
 
@@ -166,7 +165,7 @@ class SettingServiceTest extends FeatureTestCase
     #[Test]
     public function test_set_setting_persist_correct_value_in_db_and_cache()
     {
-        $value  = Settings::set(self::SETTING_NAME, self::SETTING_VALUE_STRING);
+        Settings::set(self::SETTING_NAME, self::SETTING_VALUE_STRING);
         $cached = Cache::get(SettingService::CACHE_ITEM_NAME); // returns a Collection
 
         $this->assertDatabaseHas('options', [
@@ -277,7 +276,7 @@ class SettingServiceTest extends FeatureTestCase
     #[Test]
     public function test_set_true_setting_persist_transformed_boolean()
     {
-        $value = Settings::set(self::SETTING_NAME, true);
+        Settings::set(self::SETTING_NAME, true);
 
         $this->assertDatabaseHas('options', [
             self::KEY   => self::SETTING_NAME,
@@ -288,7 +287,7 @@ class SettingServiceTest extends FeatureTestCase
     #[Test]
     public function test_set_false_setting_persist_transformed_boolean()
     {
-        $value = Settings::set(self::SETTING_NAME, false);
+        Settings::set(self::SETTING_NAME, false);
 
         $this->assertDatabaseHas('options', [
             self::KEY   => self::SETTING_NAME,
@@ -405,5 +404,74 @@ class SettingServiceTest extends FeatureTestCase
         Settings::set('storeIconsInDatabase', $newValue);
 
         $this->assertFalse(Settings::get('storeIconsInDatabase'));
+    }
+
+    #[Test]
+    public function test_enable_all_users_sharing_scope_reactivation_reconciles_conflicting_scopes() : void
+    {
+        Settings::set('enableAllUsersSharingScope', false);
+
+        $owner = User::factory()->create();
+        $targetUser = User::factory()->create();
+        $twofaccount = TwoFAccount::factory()->for($owner)->create();
+
+        TwoFAccountShare::create([
+            'twofaccount_id' => $twofaccount->id,
+            'shared_with_user_id' => null,
+            'scope' => TwoFAccountShare::SCOPE_ALL_USERS,
+            'created_by_user_id' => $owner->id,
+        ]);
+        TwoFAccountShare::create([
+            'twofaccount_id' => $twofaccount->id,
+            'shared_with_user_id' => $targetUser->id,
+            'scope' => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id' => $owner->id,
+        ]);
+
+        Settings::set('enableAllUsersSharingScope', true);
+
+        $this->assertDatabaseMissing('twofaccount_shares', [
+            'twofaccount_id' => $twofaccount->id,
+            'scope' => TwoFAccountShare::SCOPE_ALL_USERS,
+            'shared_with_user_id' => null,
+        ]);
+        $this->assertDatabaseHas('twofaccount_shares', [
+            'twofaccount_id' => $twofaccount->id,
+            'scope' => TwoFAccountShare::SCOPE_USER,
+            'shared_with_user_id' => $targetUser->id,
+        ]);
+    }
+
+    #[Test]
+    public function test_enable_all_users_sharing_scope_reactivation_leaves_non_conflicting_shares_untouched() : void
+    {
+        Settings::set('enableAllUsersSharingScope', false);
+
+        $owner = User::factory()->create();
+        $targetUser = User::factory()->create();
+        $twofaccountOnlyAllUsers = TwoFAccount::factory()->for($owner)->create();
+        $twofaccountOnlyUser = TwoFAccount::factory()->for($owner)->create();
+
+        $allUsersShare = TwoFAccountShare::create([
+            'twofaccount_id' => $twofaccountOnlyAllUsers->id,
+            'shared_with_user_id' => null,
+            'scope' => TwoFAccountShare::SCOPE_ALL_USERS,
+            'created_by_user_id' => $owner->id,
+        ]);
+        $userShare = TwoFAccountShare::create([
+            'twofaccount_id' => $twofaccountOnlyUser->id,
+            'shared_with_user_id' => $targetUser->id,
+            'scope' => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id' => $owner->id,
+        ]);
+
+        Settings::set('enableAllUsersSharingScope', true);
+
+        $this->assertDatabaseHas('twofaccount_shares', [
+            'id' => $allUsersShare->id,
+        ]);
+        $this->assertDatabaseHas('twofaccount_shares', [
+            'id' => $userShare->id,
+        ]);
     }
 }

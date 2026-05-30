@@ -29,6 +29,10 @@ class TwoFAccountShareService
             });
         }
 
+        if (! Settings::get('enableAllUsersSharingScope') && $this->isSharedWithAll($twofaccount)) {
+            $this->deleteAllUsersScopeShare($twofaccount);
+        }
+
         return $targetUsers->map(function (User $targetUser) use ($twofaccount, $owner) {
             $result = $this->shareWithUser($twofaccount, $owner, $targetUser, false);
 
@@ -57,6 +61,10 @@ class TwoFAccountShareService
                 'share'   => null,
                 'created' => false,
             ];
+        }
+
+        if (! Settings::get('enableAllUsersSharingScope') && $this->isSharedWithAll($twofaccount)) {
+            $this->deleteAllUsersScopeShare($twofaccount);
         }
 
         $share = TwoFAccountShare::firstOrCreate(
@@ -210,13 +218,20 @@ class TwoFAccountShareService
      */
     public function isSharedWithAll(TwoFAccount $twofaccount) : bool
     {
-        // if (! Settings::get('enableAllUsersSharingScope')) {
-        //     return false;
-        // }
-
         return TwoFAccountShare::query()
             ->where('twofaccount_id', $twofaccount->id)
             ->where('scope', TwoFAccountShare::SCOPE_ALL_USERS)
             ->exists();
+    }
+
+    /**
+     * Remove stale all-users scope share rows for a twofaccount.
+     */
+    private function deleteAllUsersScopeShare(TwoFAccount $twofaccount) : int
+    {
+        return TwoFAccountShare::query()
+            ->where('twofaccount_id', $twofaccount->id)
+            ->where('scope', TwoFAccountShare::SCOPE_ALL_USERS)
+            ->delete();
     }
 }

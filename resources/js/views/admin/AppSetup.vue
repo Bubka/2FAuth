@@ -9,7 +9,7 @@
     import VersionChecker from '@/components/VersionChecker.vue'
     import CopyButton from '@/components/CopyButton.vue'
     import { useI18n } from 'vue-i18n'
-    import { LucideSend } from '@lucide/vue'
+    import { LucideExternalLink, LucideSend } from '@lucide/vue'
 
     const errorHandler = useErrorHandler()
     const { t } = useI18n()
@@ -139,16 +139,33 @@
                         <p class="help">{{ $t('field.health_endpoint.help') }}</p>
                     </div>
                     <div class="field mb-5">
-                        <a id="lnkHealthCheck" class="is-link" target="_blank" :href="healthEndPoint">{{ healthEndPointFullPath }}</a>
+                        <a id="lnkHealthCheck" class="is-link" target="_blank" :href="healthEndPoint">
+                            {{ healthEndPointFullPath }}
+                            <LucideExternalLink />
+                        </a>
                     </div>
                     <h4 class="title is-4 pt-5">{{ $t('heading.sharing') }}</h4>
                     <!-- sharing -->
                     <FormCheckbox v-model="appSettings.enableSharing" @update:model-value="val => saveSetting('enableSharing', val)" fieldName="enableSharing" label="field.enable_sharing" help="field.enable_sharing.help" />
-                    <FormCheckbox v-model="appSettings.enableAllUsersSharingScope" @update:model-value="val => saveSetting('enableAllUsersSharingScope', val)" fieldName="enableAllUsersSharingScope"  :isDisabled="!appSettings.enableSharing" label="field.enable_all_users_sharing_scope" help="field.enable_all_users_sharing_scope.help" />
+
+                    <FormCheckbox v-model="appSettings.enableAllUsersSharingScope" @update:model-value="val => saveSetting('enableAllUsersSharingScope', val)" fieldName="enableAllUsersSharingScope"  :isDisabled="!appSettings.enableSharing" :isIndented="true" label="field.enable_all_users_sharing_scope" help="field.enable_all_users_sharing_scope.help" />
+                    <p class="help ml-5">{{ $t('field.enable_all_users_sharing_scope.help_bis') }}</p>
+                    <div class="field mt-4">
+                        <a id="lnkSharingDoc" class="is-link" target="_blank" href="https://docs.2fauth.app/usage/2fa-sharing/">
+                            {{ $t('link.sharing_doc') }}
+                            <LucideExternalLink />
+                        </a>
+                    </div>
                     <h4 class="title is-4 pt-5">{{ $t('heading.storage') }}</h4>
                     <!-- store icons in database -->
                     <FormCheckbox v-model="appSettings.storeIconsInDatabase" @update:model-value="val => saveSetting('storeIconsInDatabase', val)" fieldName="storeIconsInDatabase" label="field.store_icon_to_database" help="field.store_icon_to_database.help" />
                     <p class="help">{{ $t('field.store_icon_to_database.help_bis') }}</p>
+                    <div class="field mt-4">
+                        <a id="lnkIconsDoc" class="is-link" target="_blank" href="https://docs.2fauth.app/usage/icons/">
+                            {{ $t('link.icons_doc') }}
+                            <LucideExternalLink />
+                        </a>
+                    </div>
                     <h4 class="title is-4 pt-5">{{ $t('heading.security') }}</h4>
                     <!-- protect db -->
                     <FormCheckbox v-model="appSettings.useEncryption" @update:model-value="val => saveSetting('useEncryption', val)" fieldName="useEncryption" label="field.use_encryption" help="field.use_encryption.help" />

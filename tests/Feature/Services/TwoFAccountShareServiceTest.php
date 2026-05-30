@@ -177,6 +177,33 @@ class TwoFAccountShareServiceTest extends FeatureTestCase
     }
 
     #[Test]
+    public function test_share_with_user_removes_all_users_scope_when_feature_is_disabled() : void
+    {
+        Settings::set('enableAllUsersSharingScope', true);
+
+        $targetUser = User::factory()->create();
+
+        $this->service->shareWithAll($this->twofaccount, $this->owner);
+
+        Settings::set('enableAllUsersSharingScope', false);
+
+        $result = $this->service->shareWithUser($this->twofaccount, $this->owner, $targetUser);
+
+        $this->assertTrue($result['created']);
+        $this->assertNotNull($result['share']);
+        $this->assertDatabaseMissing('twofaccount_shares', [
+            'twofaccount_id' => $this->twofaccount->id,
+            'scope' => TwoFAccountShare::SCOPE_ALL_USERS,
+            'shared_with_user_id' => null,
+        ]);
+        $this->assertDatabaseHas('twofaccount_shares', [
+            'twofaccount_id' => $this->twofaccount->id,
+            'scope' => TwoFAccountShare::SCOPE_USER,
+            'shared_with_user_id' => $targetUser->id,
+        ]);
+    }
+
+    #[Test]
     public function test_revoke_all_user_shares_deletes_only_user_scope() : void
     {
         Settings::set('enableAllUsersSharingScope', true);
