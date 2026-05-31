@@ -18,7 +18,7 @@ export const useGroups = defineStore('groups', () => {
     const current = computed(() => {
         const group = items.value.find(item => item.id === parseInt(user.preferences.activeGroup))
 
-        return group && user.preferences.activeGroup != 0 ? group.name : null
+        return group && user.preferences.activeGroup > 0 ? group.name : null
     })
 
     const orderedIds = computed(() => {

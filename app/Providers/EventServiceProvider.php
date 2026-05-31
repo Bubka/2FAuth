@@ -3,20 +3,32 @@
 namespace App\Providers;
 
 use App\Events\GroupDeleted;
+use App\Events\OtpGenerated;
 use App\Events\ScanForNewReleaseCalled;
 use App\Events\StoreIconsInDatabaseSettingChanged;
 use App\Events\TwoFAccountDeleted;
+use App\Events\TwoFAccountOwnershipTransferred;
+use App\Events\TwoFAccountShared;
+use App\Events\TwoFAccountShareRevoked;
 use App\Events\VisitedByProxyUser;
 use App\Listeners\Authentication\FailedLoginListener;
 use App\Listeners\Authentication\LoginListener;
 use App\Listeners\Authentication\LogoutListener;
 use App\Listeners\Authentication\VisitedByProxyUserListener;
 use App\Listeners\CleanIconStorage;
+use App\Listeners\DeleteRevokedTwoFAccountUserOrders;
+use App\Listeners\DeleteTwoFAccountOtpLogs;
+use App\Listeners\DeleteTwoFAccountUserOrders;
 use App\Listeners\DissociateTwofaccountFromGroup;
 use App\Listeners\LogNotificationListener;
+use App\Listeners\LogOtpGeneration;
+use App\Listeners\PruneTwoFAccountUserOrdersAfterOwnershipTransfer;
 use App\Listeners\RegisterOpenId;
 use App\Listeners\ReleaseRadar;
 use App\Listeners\ResetUsersPreference;
+use App\Listeners\SendTwoFAccountOwnershipTransferredNotification;
+use App\Listeners\SendTwoFAccountSharedNotification;
+use App\Listeners\SendTwoFAccountShareRevokedNotification;
 use App\Listeners\ToggleIconReplicationToDatabase;
 use App\Models\User;
 use App\Observers\UserObserver;
@@ -40,8 +52,24 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        OtpGenerated::class => [
+            LogOtpGeneration::class,
+        ],
         TwoFAccountDeleted::class => [
             CleanIconStorage::class,
+            DeleteTwoFAccountUserOrders::class,
+            DeleteTwoFAccountOtpLogs::class,
+        ],
+        TwoFAccountOwnershipTransferred::class => [
+            PruneTwoFAccountUserOrdersAfterOwnershipTransfer::class,
+            SendTwoFAccountOwnershipTransferredNotification::class,
+        ],
+        TwoFAccountShared::class => [
+            SendTwoFAccountSharedNotification::class,
+        ],
+        TwoFAccountShareRevoked::class => [
+            DeleteRevokedTwoFAccountUserOrders::class,
+            SendTwoFAccountShareRevokedNotification::class,
         ],
         GroupDeleted::class => [
             DissociateTwofaccountFromGroup::class,

@@ -4,7 +4,7 @@
     import { useNotify, TabBar, SearchBox } from '@2fauth/ui'
     import { UseColorMode } from '@vueuse/components'
     import { useErrorHandler } from '@2fauth/stores'
-    import { LucideCirclePlus } from 'lucide-vue-next'
+    import { LucideCirclePlus } from '@lucide/vue'
 
     const errorHandler = useErrorHandler()
     const $2fauth = inject('2fauth')

@@ -41,7 +41,8 @@ class GroupModelTest extends ModelTestCase
     {
         $group    = new Group;
         $accounts = $group->twofaccounts();
-        $this->assertHasManyRelation($accounts, $group, new TwoFAccount);
+        
+        $this->assertBelongsToManyRelation($accounts, 'group_id', 'twofaccount_id');
     }
 
     #[Test]

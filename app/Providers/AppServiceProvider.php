@@ -46,20 +46,18 @@ class AppServiceProvider extends ServiceProvider
             KeysCommand::class,
         ]);
 
-        Gate::before(function (User $user, string $ability) {
+        Gate::define('manage-pat', function (User $user) {
             if ($user->isAdministrator()) {
                 return true;
             }
-        });
 
-        Gate::define('manage-pat', function (User $user) {
             $useSsoOnly = Settings::get('useSsoOnly');
 
             return ($useSsoOnly && Settings::get('allowPatWhileSsoOnly')) || $useSsoOnly !== true;
         });
 
         Gate::define('manage-webauthn-credentials', function (User $user) {
-            return ! Settings::get('useSsoOnly');
+            return ! Settings::get('useSsoOnly') || $user->isAdministrator();
         });
     }
 }

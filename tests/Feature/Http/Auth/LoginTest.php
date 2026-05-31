@@ -88,14 +88,16 @@ class LoginTest extends FeatureTestCase
         ])
             ->assertOk()
             ->assertJsonFragment([
-                'message'  => 'authenticated',
-                'id'       => $this->user->id,
-                'name'     => $this->user->name,
-                'email'    => $this->user->email,
-                'is_admin' => false,
+                'message'        => 'authenticated',
+                'id'             => $this->user->id,
+                'name'           => $this->user->name,
+                'email'          => $this->user->email,
+                'oauth_provider' => $this->user->oauth_provider,
+                'is_admin'       => false,
             ])
             ->assertJsonStructure([
                 'preferences',
+                'appSettings',
             ]);
     }
 

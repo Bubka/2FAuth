@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia'
-import { startsWithUppercase } from '@/composables/helpers'
 import { useUserStore } from '@/stores/user'
 import { useNotify } from '@2fauth/ui'
 import twofaccountService from '@/services/twofaccountService'
@@ -13,7 +12,6 @@ export const useTwofaccounts = defineStore('twofaccounts', {
             filter: '',
             backendWasNewer: false,
             fetchedOn: null,
-            groupLessOnly: false,
         }
     },
 
@@ -23,18 +21,44 @@ export const useTwofaccounts = defineStore('twofaccounts', {
 
             return state.items.filter(
                 item => {
-                    if (state.groupLessOnly) {
-                        return item.group_id == null
+                    let itemMatch = false
+
+                    // Group filters :
+                    // -1: group less items
+                    // -2: items shared by me
+                    // -3: items shared with me
+                    //  0: all items (no group filter)
+                    // >0: any concrete group
+
+                    // group less items
+                    if (parseInt(user.preferences.activeGroup) == -1 && item.group_id == null) {
+                        itemMatch = true
                     }
-                    else if (parseInt(user.preferences.activeGroup) > 0) {
-                        return ((item.service ? item.service.toLowerCase().includes(state.filter.toLowerCase()) : false) ||
-                            item.account.toLowerCase().includes(state.filter.toLowerCase())) &&
-                            (item.group_id == parseInt(user.preferences.activeGroup))
+                    // items I share
+                    else if (parseInt(user.preferences.activeGroup) == -2 && (item.is_shared == true || item.is_shared_with_all == true)) {
+                        itemMatch = true
                     }
-                    else {
-                        return ((item.service ? item.service.toLowerCase().includes(state.filter.toLowerCase()) : false) ||
-                            item.account.toLowerCase().includes(state.filter.toLowerCase()))
+                    // items shared with me
+                    else if (parseInt(user.preferences.activeGroup) == -3 && item.is_borrowed == true) {
+                        itemMatch = true
                     }
+                    else if (parseInt(user.preferences.activeGroup) > 0 && item.group_id == parseInt(user.preferences.activeGroup)) {
+                        // no global filter but a group
+                        itemMatch = true
+                    }
+                    else if (parseInt(user.preferences.activeGroup) == 0) {
+                        // All items are matching
+                        itemMatch = true
+                    }
+
+                    if (state.filter) {
+                        itemMatch = itemMatch && (
+                            (item.service ? item.service.toLowerCase().includes(state.filter.toLowerCase()) : false)
+                            || item.account.toLowerCase().includes(state.filter.toLowerCase())
+                        )
+                    }
+
+                    return itemMatch
                 }
             )
         },
@@ -74,6 +98,28 @@ export const useTwofaccounts = defineStore('twofaccounts', {
 
         hasNoneSelected(state) {
             return state.selectedIds.length == 0
+        },
+
+        hasBorrowedSelected(state) {
+            return state.items.some(a => state.selectedIds.includes(a.id) && a.is_borrowed)
+        },
+
+        hasOnlyBorrowedSelected(state) {
+            return state.selectedIds.length > 0 && state.selectedIds.every(id => {
+                const account = state.items.find(a => a.id === id)
+                return account?.is_borrowed === true
+            })
+        },
+
+        hasSharedSelected(state) {
+            return state.items.some(a => state.selectedIds.includes(a.id) && (a.is_shared == true || a.is_shared_with_all == true))
+        },
+
+        hasOnlySharedSelected(state) {
+            return state.selectedIds.length > 0 && state.selectedIds.every(id => {
+                const account = state.items.find(a => a.id === id)
+                return account?.is_shared === true || account?.is_shared_with_all === true
+            })
         }
     },
 
@@ -115,6 +161,13 @@ export const useTwofaccounts = defineStore('twofaccounts', {
                 })
             }
             else this.backendWasNewer = false
+        },
+
+        /**
+         * Get a 2FA account by its ID
+         */
+        getById(id) {
+            return this.items.find(a => a.id == id)
         },
 
         /**

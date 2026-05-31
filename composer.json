@@ -36,6 +36,7 @@
         "paragonie/constant_time_encoding": "^3.0",
         "socialiteproviders/manager": "^4.8.1",
         "spatie/eloquent-sortable": "^5.0",
+        "spatie/laravel-query-builder": "^7.1",
         "spomky-labs/otphp": "^11.3"
     },
     "require-dev": {

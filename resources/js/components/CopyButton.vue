@@ -1,6 +1,6 @@
 <script setup>
     import { useNotify } from '@2fauth/ui'
-    import { LucideCopy } from 'lucide-vue-next'
+    import { LucideCopy } from '@lucide/vue'
     import { useI18n } from 'vue-i18n'
     const { t } = useI18n()
 

@@ -7,7 +7,7 @@
     import { QrcodeStream } from 'vue-qrcode-reader'
     import { useI18n } from 'vue-i18n'
     import { useErrorHandler } from '@2fauth/stores'
-    import { LucideLock, LucideVideoOff, LucideStar, LucideCamera } from 'lucide-vue-next'
+    import { LucideLock, LucideVideoOff, LucideStar, LucideCamera } from '@lucide/vue'
 
     const errorHandler = useErrorHandler()
     const { t } = useI18n()
@@ -202,7 +202,7 @@
                         @camera-off="cameraOff"
                     ></qrcode-stream>
                 </div>
-                <Modal v-model="showQrContent">
+                <Modal v-model:is-active="showQrContent">
                     <QrContentDisplay :qrContent="form.uri" />
                 </Modal>
             </section>

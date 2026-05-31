@@ -221,7 +221,7 @@ class UserManagerController extends Controller
         // is not very elegant but it's straitforward compared
         // to a scheduled task, and the delete query is light.
         // => To enhance.
-        Artisan::call('2fauth:purge-log');
+        Artisan::call('2fauth:purge-auth-log');
 
         $validated = $this->validate($request, [
             'period' => 'sometimes|numeric',

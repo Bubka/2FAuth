@@ -57,6 +57,10 @@
                 isAdmin: response.data.is_admin,
             })
 
+            for (const [key, value] of Object.entries(response?.data?.appSettings || {})) {
+                appSettings[key] = value
+            }
+
             router.push({ name: 'accounts' })
         })
         .catch(error => {
@@ -87,6 +91,10 @@
                 preferences: response.data.preferences,
                 isAdmin: response.data.is_admin,
             })
+
+            for (const [key, value] of Object.entries(response?.data?.appSettings || {})) {
+                appSettings[key] = value
+            }
 
             router.push({ name: 'accounts' })
         })

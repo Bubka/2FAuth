@@ -1,7 +1,7 @@
 <script setup>
     const { copy } = useClipboard({ legacy: true })
     import { useNotify } from '@2fauth/ui'
-    import { LucideExternalLink } from 'lucide-vue-next'
+    import { LucideExternalLink } from '@lucide/vue'
     import { useI18n } from 'vue-i18n'
 
     const { t } = useI18n()

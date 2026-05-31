@@ -142,12 +142,16 @@ class UserManagerControllerTest extends FeatureTestCase
                     'preferences'        => $this->defaultPreferences,
                     'is_admin'           => false,
                     'twofaccounts_count' => 0,
-                    'last_seen_at'       => '0 seconds ago',
-                    'created_at'         => '0 seconds ago',
                 ],
                 'password_reset'               => null,
                 'valid_personal_access_tokens' => 0,
                 'webauthn_credentials'         => 0,
+            ])
+            ->assertJsonStructure([
+                'info' => [
+                    'last_seen_at',
+                    'created_at',
+                ],
             ]);
     }
 

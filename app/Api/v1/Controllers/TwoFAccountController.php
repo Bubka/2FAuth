@@ -9,21 +9,30 @@ use App\Api\v1\Requests\TwoFAccountExportRequest;
 use App\Api\v1\Requests\TwoFAccountImportRequest;
 use App\Api\v1\Requests\TwoFAccountIndexRequest;
 use App\Api\v1\Requests\TwoFAccountStoreRequest;
+use App\Api\v1\Requests\TwoFAccountTransferOwnershipRequest;
 use App\Api\v1\Requests\TwoFAccountUpdateRequest;
 use App\Api\v1\Requests\TwoFAccountUriRequest;
+use App\Api\v1\Resources\OtpLogResource;
 use App\Api\v1\Resources\TwoFAccountCollection;
 use App\Api\v1\Resources\TwoFAccountExportCollection;
 use App\Api\v1\Resources\TwoFAccountReadResource;
 use App\Api\v1\Resources\TwoFAccountStoreResource;
+use App\Events\OtpGenerated;
 use App\Facades\Groups;
+use App\Facades\Settings;
 use App\Facades\TwoFAccounts;
 use App\Helpers\Helpers;
 use App\Http\Controllers\Controller;
 use App\Models\TwoFAccount;
+use App\Models\TwoFAccountShare;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class TwoFAccountController extends Controller
 {
@@ -42,11 +51,20 @@ class TwoFAccountController extends Controller
             }
         }
 
-        $validated = $request->validated();
+        $validated                = $request->validated();
+        $visibleTwoFAccountsQuery = TwoFAccount::visibleTo($request->user())->with([
+            'groups' => function ($query) use ($request) {
+                $query->where('user_id', $request->user()->id);
+            },
+        ]);
 
-        return Arr::has($validated, 'ids')
-            ? new TwoFAccountCollection($request->user()->twofaccounts()->whereIn('id', Helpers::commaSeparatedToArray($validated['ids']))->get()->sortBy('order_column'))
-            : new TwoFAccountCollection($request->user()->twofaccounts->sortBy('order_column'));
+        $twofaccounts = Arr::has($validated, 'ids')
+            ? $visibleTwoFAccountsQuery->whereIn('id', Helpers::commaSeparatedToArray($validated['ids']))->get()
+            : $visibleTwoFAccountsQuery->get();
+
+        $sortedTwoFAccounts = TwoFAccounts::sortForUser($twofaccounts, $request->user());
+
+        return new TwoFAccountCollection($sortedTwoFAccounts);
     }
 
     /**
@@ -54,9 +72,15 @@ class TwoFAccountController extends Controller
      *
      * @return \App\Api\v1\Resources\TwoFAccountReadResource
      */
-    public function show(TwoFAccount $twofaccount)
+    public function show(Request $request, TwoFAccount $twofaccount)
     {
         $this->authorize('view', $twofaccount);
+
+        $twofaccount->load([
+            'groups' => function ($query) use ($request) {
+                $query->where('user_id', $request->user()->id);
+            },
+        ]);
 
         // $icon = $twofaccount->icon;
         // $iconRes = $twofaccount->icon()->get();
@@ -97,7 +121,13 @@ class TwoFAccountController extends Controller
             // creation to be reverted so we do nothing here.
         }
 
-        return (new TwoFAccountReadResource($twofaccount->refresh()))
+        $twofaccount = $twofaccount->refresh()->load([
+            'groups' => function ($query) use ($request) {
+                $query->where('user_id', $request->user()->id);
+            },
+        ]);
+
+        return (new TwoFAccountReadResource($twofaccount))
             ->response()
             ->setStatusCode(201);
     }
@@ -117,24 +147,55 @@ class TwoFAccountController extends Controller
         $request->user()->twofaccounts()->save($twofaccount);
 
         // Possible group change
-        $groupId = Arr::get($validated, 'group_id', null);
-        if ($twofaccount->group_id != $groupId) {
+        $groupId        = Arr::get($validated, 'group_id', null);
+        $currentGroupId = $twofaccount->groupIdForUser($request->user());
+
+        if ($currentGroupId != $groupId) {
             if ((int) $groupId === 0) {
-                TwoFAccounts::withdraw($twofaccount->id);
+                TwoFAccounts::withdraw($twofaccount->id, $request->user());
             } else {
                 try {
                     Groups::assign($twofaccount->id, $request->user(), $groupId);
                 } catch (ModelNotFoundException $exc) {
                     // The destination group no longer exists, the twofaccount is withdrawn
-                    TwoFAccounts::withdraw($twofaccount->id);
+                    TwoFAccounts::withdraw($twofaccount->id, $request->user());
                 }
             }
-            $twofaccount->refresh();
         }
+
+        $twofaccount = $twofaccount->refresh()->load([
+            'groups' => function ($query) use ($request) {
+                $query->where('user_id', $request->user()->id);
+            },
+        ]);
 
         return (new TwoFAccountReadResource($twofaccount))
             ->response()
             ->setStatusCode(200);
+    }
+
+    /**
+     * Transfer ownership of a 2FA account.
+     */
+    public function transferOwnership(TwoFAccountTransferOwnershipRequest $request, TwoFAccount $twofaccount) : JsonResponse
+    {
+        $this->authorize('transferOwnership', $twofaccount);
+
+        if (! Hash::check($request->confirm_password, $request->user()->password)) {
+            return response()->json(['message' => 'unauthorized'], 401);
+        }
+
+        $oldOwnerId = $twofaccount->user_id;
+        $newOwner   = User::findOrFail((int) $request->validated('new_owner_id'));
+
+        TwoFAccounts::transferOwnership($twofaccount, $newOwner);
+
+        Log::info(sprintf('Ownership of TwoFAccount ID #%s transferred from User ID #%s to User ID #%s by User ID #%s', $twofaccount->id, $oldOwnerId, $newOwner->id, $request->user()->id));
+
+        return response()->json([
+            'twofaccount_id' => $twofaccount->id,
+            'owner_id'       => $newOwner->id,
+        ], 200);
     }
 
     /**
@@ -167,10 +228,10 @@ class TwoFAccountController extends Controller
         $validated = $request->validated();
 
         $twofaccounts = TwoFAccount::whereIn('id', $validated['orderedIds'])->get();
-        $this->authorize('updateEach', [new TwoFAccount, $twofaccounts]);
+        $this->authorize('reorderEach', [new TwoFAccount, $twofaccounts]);
 
-        TwoFAccount::setNewOrder($validated['orderedIds']);
-        $orderedIds = $request->user()->twofaccounts->sortBy('order_column')->pluck('id');
+        TwoFAccounts::saveOrderForUser($request->user(), $validated['orderedIds']);
+        $orderedIds = TwoFAccounts::orderedVisibleIdsForUser($request->user());
 
         return response()->json([
             'message'    => 'order saved',
@@ -221,12 +282,23 @@ class TwoFAccountController extends Controller
      */
     public function otp(Request $request, $id = null)
     {
-        $inputs = $request->all();
+        $inputs             = $request->all();
+        $isPersistedAccount = false;
+        $isSharedAccess     = false;
 
         // The request input is the ID of an existing account
         if ($id) {
-            $twofaccount = TwoFAccount::findOrFail((int) $id);
-            $this->authorize('view', $twofaccount);
+            $twofaccount        = TwoFAccount::findOrFail((int) $id);
+            $isPersistedAccount = true;
+            $isSharedAccess     = $request->user()->id !== $twofaccount->user_id;
+
+            if ($isSharedAccess && ! Settings::get('enableSharing')) {
+                return response()->json([
+                    'message' => __('error.sharing_is_disabled'),
+                ], 403);
+            }
+
+            $this->authorize('generateOtp', $twofaccount);
         }
 
         // The request input is an uri
@@ -251,7 +323,48 @@ class TwoFAccountController extends Controller
             $twofaccount->fillWithOtpParameters($validatedData, true);
         }
 
-        return response()->json($twofaccount->getOTP(), 200);
+        if ($isPersistedAccount) {
+            Log::info(sprintf('OTP requested by User ID #%s for TwoFAccount ID #%s owned by User ID #%s', $request->user()->id, $twofaccount->id, $twofaccount->user_id));
+        }
+
+        $otpDto = $twofaccount->getOtp();
+        OtpGenerated::dispatch($twofaccount, $otpDto);
+
+        return response()->json($otpDto, 200);
+    }
+
+    /**
+     * Get otp generation logs
+     *
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     */
+    public function otpLogs(Request $request, TwoFAccount $twofaccount)
+    {
+        $this->authorize('update', $twofaccount);
+
+        // Here we purge the otp log.
+        // Running the purge command when someone fetchs the otp log
+        // is not very elegant but it's straitforward compared
+        // to a scheduled task, and the delete query is light.
+        // => To enhance.
+        Artisan::call('2fauth:purge-otp-log');
+
+        $validated = $this->validate($request, [
+            'period' => 'sometimes|numeric',
+            'limit'  => 'sometimes|numeric',
+        ]);
+
+        $otopLogQuery = $twofaccount->otpLogs()->with('requester', 'owner', 'twofaccount');
+
+        if ($request->has('period')) {
+            $otopLogQuery->ByPeriod($validated['period']);
+        }
+
+        $otpLogs = $request->has('limit')
+            ? $otopLogQuery->limit($validated['limit'])->get()
+            : $otopLogQuery->get();
+
+        return OtpLogResource::collection($otpLogs);
     }
 
     /**
@@ -261,7 +374,37 @@ class TwoFAccountController extends Controller
      */
     public function count(Request $request)
     {
-        return response()->json(['count' => $request->user()->twofaccounts->count()], 200);
+        $ownedCount                  = TwoFAccount::where('user_id', $request->user()->id)->count();
+        $allUsersSharingScopeEnabled = Settings::get('enableAllUsersSharingScope');
+
+        $sharedCount = Settings::get('enableSharing')
+            ? TwoFAccount::query()
+                ->where('user_id', '!=', $request->user()->id)
+                ->whereHas('shares', function ($shareQuery) use ($request, $allUsersSharingScopeEnabled) {
+                    $shareQuery->where(function ($scopeQuery) use ($request, $allUsersSharingScopeEnabled) {
+                        $scopeQuery
+                            ->where(function ($userScopeQuery) use ($request) {
+                                $userScopeQuery
+                                    ->where('scope', TwoFAccountShare::SCOPE_USER)
+                                    ->where('shared_with_user_id', $request->user()->id);
+                            });
+
+                        if ($allUsersSharingScopeEnabled) {
+                            $scopeQuery->orWhere('scope', TwoFAccountShare::SCOPE_ALL_USERS);
+                        }
+                    });
+                })
+                ->distinct('twofaccounts.id')
+                ->count('twofaccounts.id')
+            : 0;
+
+        $totalCount = $ownedCount + $sharedCount;
+
+        return response()->json([
+            'owned'  => $ownedCount,
+            'shared' => $sharedCount,
+            'total'  => $totalCount,
+        ], 200);
     }
 
     /**
@@ -283,9 +426,9 @@ class TwoFAccountController extends Controller
         $ids          = Helpers::commaSeparatedToArray($validated['ids']);
         $twofaccounts = TwoFAccount::whereIn('id', $ids)->get();
 
-        $this->authorize('updateEach', [new TwoFAccount, $twofaccounts]);
+        $this->authorize('assignToGroupEach', [new TwoFAccount, $twofaccounts]);
 
-        TwoFAccounts::withdraw($ids);
+        TwoFAccounts::withdraw($ids, $request->user());
 
         return response()->json(['message' => 'accounts withdrawn'], 200);
     }

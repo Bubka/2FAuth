@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Services;
 
+use App\Facades\Icons;
 use App\Facades\LogoLib;
 use App\Services\IconService;
 use App\Services\LogoLib\TfaLogoLib;
@@ -22,6 +23,7 @@ use Tests\FeatureTestCase;
  * IconServiceTest test class
  */
 #[CoversClass(IconService::class)]
+#[CoversClass(Icons::class)]
 class IconServiceTest extends FeatureTestCase
 {
     use WithoutMiddleware;

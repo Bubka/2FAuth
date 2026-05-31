@@ -24,14 +24,16 @@
 
 namespace App\Listeners\Authentication;
 
+use App\Listeners\Traits\HasLocalizedNotification;
 use App\Notifications\FailedLoginNotification;
 use Illuminate\Auth\Events\Failed;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
 use TypeError;
 
 class FailedLoginListener extends AbstractAccessListener
 {
+    use HasLocalizedNotification;
+
     /**
      * Handle the event.
      */
@@ -60,7 +62,7 @@ class FailedLoginListener extends AbstractAccessListener
             ]);
 
             if ($user->preferences['notifyOnFailedLogin'] == true) {
-                $user->notify((new FailedLoginNotification($log))->locale($user->preferredLocale() == 'browser' ? App::currentLocale() : $user->preferredLocale()));
+                $user->notify((new FailedLoginNotification($log))->locale($this->userLocale($user)));
             }
         } else {
             Log::info(sprintf('%s received an event with a null $user member. Nothing has been written to the auth log', self::class));

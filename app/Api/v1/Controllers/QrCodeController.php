@@ -16,7 +16,7 @@ class QrCodeController extends Controller
      */
     public function show(TwoFAccount $twofaccount)
     {
-        $this->authorize('view', $twofaccount);
+        $this->authorize('viewSecret', $twofaccount);
 
         $uri = $twofaccount->getURI();
 

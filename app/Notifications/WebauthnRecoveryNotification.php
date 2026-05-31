@@ -49,11 +49,8 @@ class WebauthnRecoveryNotification extends Notification
 
     /**
      * Get the mail representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    public function toMail($notifiable)
+    public function toMail(mixed $notifiable) : MailMessage
     {
         // if (static::$toMailCallback) {
         //     return call_user_func(static::$toMailCallback, $notifiable, $this->token);
@@ -76,18 +73,12 @@ class WebauthnRecoveryNotification extends Notification
 
         return (new MailMessage)
             ->subject(Lang::get('Account Recovery Notification'))
-            ->line(
-                Lang::get(
-                    'You are receiving this email because we received an account recovery request for your account.'
-                )
-            )
+            ->line(Lang::get('You are receiving this email because we received an account recovery request for your account.'))
             ->action(Lang::get('Recover Account'), $url)
-            ->line(
-                Lang::get(
-                    'This recovery link will expire in :count minutes.',
-                    ['count' => config('auth.passwords.webauthn.expire')]
-                )
-            )
+            ->line(Lang::get(
+                'This recovery link will expire in :count minutes.',
+                ['count' => config('auth.passwords.webauthn.expire')]
+            ))
             ->line(Lang::get('If you did not request an account recovery, no further action is required.'));
     }
 

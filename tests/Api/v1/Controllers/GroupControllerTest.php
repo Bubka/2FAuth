@@ -4,12 +4,16 @@ namespace Tests\Api\v1\Controllers;
 
 use App\Api\v1\Controllers\GroupController;
 use App\Api\v1\Resources\GroupResource;
+use App\Facades\Groups;
+use App\Facades\Settings;
 use App\Listeners\DissociateTwofaccountFromGroup;
 use App\Listeners\ResetUsersPreference;
 use App\Models\Group;
 use App\Models\TwoFAccount;
+use App\Models\TwoFAccountShare;
 use App\Models\User;
 use App\Policies\GroupPolicy;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\FeatureTestCase;
@@ -30,7 +34,7 @@ class GroupControllerTest extends FeatureTestCase
     protected $anotherUser;
 
     /**
-     * @var App\Models\Group
+     * @var \App\Models\Group
      */
     protected $userGroupA;
 
@@ -41,7 +45,7 @@ class GroupControllerTest extends FeatureTestCase
     protected $anotherUserGroupB;
 
     /**
-     * @var App\Models\TwoFAccount
+     * @var \App\Models\TwoFAccount
      */
     protected $twofaccountA;
 
@@ -61,23 +65,15 @@ class GroupControllerTest extends FeatureTestCase
         $this->userGroupA = Group::factory()->for($this->user)->create();
         $this->userGroupB = Group::factory()->for($this->user)->create();
 
-        $this->twofaccountA = TwoFAccount::factory()->for($this->user)->create([
-            'group_id' => $this->userGroupA->id,
-        ]);
-        $this->twofaccountB = TwoFAccount::factory()->for($this->user)->create([
-            'group_id' => $this->userGroupA->id,
-        ]);
+        $this->twofaccountA = $this->createTwofaccountInGroup($this->user, $this->userGroupA);
+        $this->twofaccountB = $this->createTwofaccountInGroup($this->user, $this->userGroupA);
 
         $this->anotherUser       = User::factory()->create();
         $this->anotherUserGroupA = Group::factory()->for($this->anotherUser)->create();
         $this->anotherUserGroupB = Group::factory()->for($this->anotherUser)->create();
 
-        $this->twofaccountC = TwoFAccount::factory()->for($this->anotherUser)->create([
-            'group_id' => $this->anotherUserGroupA->id,
-        ]);
-        $this->twofaccountD = TwoFAccount::factory()->for($this->anotherUser)->create([
-            'group_id' => $this->anotherUserGroupB->id,
-        ]);
+        $this->twofaccountC = $this->createTwofaccountInGroup($this->anotherUser, $this->anotherUserGroupA);
+        $this->twofaccountD = $this->createTwofaccountInGroup($this->anotherUser, $this->anotherUserGroupB);
     }
 
     #[Test]
@@ -103,6 +99,42 @@ class GroupControllerTest extends FeatureTestCase
                     'twofaccounts_count' => 0,
                 ],
             ]);
+    }
+
+    #[Test]
+    public function test_index_pseudo_group_count_includes_shared_accounts_when_sharing_is_enabled()
+    {
+        TwoFAccountShare::create([
+            'twofaccount_id'      => $this->twofaccountC->id,
+            'shared_with_user_id' => $this->user->id,
+            'scope'               => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id'  => $this->anotherUser->id,
+        ]);
+
+        $this->actingAs($this->user, 'api-guard')
+            ->json('GET', '/api/v1/groups')
+            ->assertOk()
+            ->assertJsonPath('0.twofaccounts_count', 3);
+    }
+
+    #[Test]
+    public function test_index_pseudo_group_count_excludes_shared_accounts_when_sharing_is_disabled()
+    {
+        Settings::set('enableSharing', false);
+
+        TwoFAccountShare::create([
+            'twofaccount_id'      => $this->twofaccountC->id,
+            'shared_with_user_id' => $this->user->id,
+            'scope'               => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id'  => $this->anotherUser->id,
+        ]);
+
+        $this->actingAs($this->user, 'api-guard')
+            ->json('GET', '/api/v1/groups')
+            ->assertOk()
+            ->assertJsonPath('0.twofaccounts_count', 2);
+
+        Settings::set('enableSharing', true);
     }
 
     #[Test]
@@ -228,6 +260,22 @@ class GroupControllerTest extends FeatureTestCase
     }
 
     #[Test]
+    public function test_show_missing_group_with_id_0_includes_shared_accounts_when_sharing_is_enabled()
+    {
+        TwoFAccountShare::create([
+            'twofaccount_id'      => $this->twofaccountC->id,
+            'shared_with_user_id' => $this->user->id,
+            'scope'               => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id'  => $this->anotherUser->id,
+        ]);
+
+        $this->actingAs($this->user, 'api-guard')
+            ->json('GET', '/api/v1/groups/0')
+            ->assertOk()
+            ->assertJsonPath('twofaccounts_count', 3);
+    }
+
+    #[Test]
     public function test_update_returns_updated_group_resource()
     {
         $group = Group::factory()->for($this->user)->create();
@@ -302,16 +350,36 @@ class GroupControllerTest extends FeatureTestCase
     #[Test]
     public function test_assign_accounts_to_missing_group_returns_not_found()
     {
+        $group    = Group::factory()->for($this->user)->create();
         $accounts = TwoFAccount::factory()->count(2)->for($this->user)->create();
 
+        Groups::shouldReceive('assign')
+            ->andThrow(ModelNotFoundException::class);
+
         $response = $this->actingAs($this->user, 'api-guard')
-            ->json('POST', '/api/v1/groups/1000/assign', [
+            ->json('POST', '/api/v1/groups/' . $group->id . '/assign', [
                 'ids' => [$accounts[0]->id, $accounts[1]->id],
             ])
             ->assertNotFound()
             ->assertJsonStructure([
                 'message',
             ]);
+    }
+
+    #[Test]
+    public function test_assign_accounts_returns_conflict()
+    {
+        $group    = Group::factory()->for($this->user)->create();
+        $accounts = TwoFAccount::factory()->count(2)->for($this->user)->create();
+
+        Groups::shouldReceive('assign')
+            ->andThrow(new \Exception);
+
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('POST', '/api/v1/groups/' . $group->id . '/assign', [
+                'ids' => [$accounts[0]->id, $accounts[1]->id],
+            ])
+            ->assertStatus(409);
     }
 
     #[Test]
@@ -351,6 +419,29 @@ class GroupControllerTest extends FeatureTestCase
             ->assertJsonStructure([
                 'message',
             ]);
+    }
+
+    #[Test]
+    public function test_assign_shared_account_to_owned_group_is_allowed()
+    {
+        TwoFAccountShare::create([
+            'twofaccount_id'      => $this->twofaccountC->id,
+            'shared_with_user_id' => $this->user->id,
+            'scope'               => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id'  => $this->anotherUser->id,
+        ]);
+
+        $this->actingAs($this->user, 'api-guard')
+            ->json('POST', '/api/v1/groups/' . $this->userGroupA->id . '/assign', [
+                'ids' => [$this->twofaccountC->id],
+            ])
+            ->assertOk();
+
+        $this->assertDatabaseHas('twofaccount_group_assignments', [
+            'twofaccount_id' => $this->twofaccountC->id,
+            'user_id'        => $this->user->id,
+            'group_id'       => $this->userGroupA->id,
+        ]);
     }
     
 
@@ -479,6 +570,48 @@ class GroupControllerTest extends FeatureTestCase
             ->assertJsonCount(2);
     }
 
+    #[Test]
+    public function test_accounts_of_the_all_group_includes_shared_accounts()
+    {
+        TwoFAccountShare::create([
+            'twofaccount_id'      => $this->twofaccountC->id,
+            'shared_with_user_id' => $this->user->id,
+            'scope'               => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id'  => $this->anotherUser->id,
+        ]);
+
+        $this->actingAs($this->user, 'api-guard')
+            ->json('GET', '/api/v1/groups/0/twofaccounts')
+            ->assertOk()
+            ->assertJsonCount(3)
+            ->assertJsonFragment([
+                'id' => $this->twofaccountC->id,
+            ]);
+    }
+
+    #[Test]
+    public function test_accounts_of_the_all_group_excludes_shared_accounts_when_sharing_is_disabled()
+    {
+        Settings::set('enableSharing', false);
+
+        TwoFAccountShare::create([
+            'twofaccount_id'      => $this->twofaccountC->id,
+            'shared_with_user_id' => $this->user->id,
+            'scope'               => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id'  => $this->anotherUser->id,
+        ]);
+
+        $this->actingAs($this->user, 'api-guard')
+            ->json('GET', '/api/v1/groups/0/twofaccounts')
+            ->assertOk()
+            ->assertJsonCount(2)
+            ->assertJsonMissing([
+                'id' => $this->twofaccountC->id,
+            ]);
+            
+        Settings::set('enableSharing', true);
+    }
+
     /**
      * test Group deletion via API
      */
@@ -550,6 +683,21 @@ class GroupControllerTest extends FeatureTestCase
     }
 
     #[Test]
+    public function test_destroy_group_does_not_reset_user_preferences_when_using_pseudo_active_group()
+    {
+        // Set the active group to a pseudo one
+        $this->user['preferences->activeGroup'] = -2;
+        $this->user->save();
+
+        $this->actingAs($this->user, 'api-guard')
+            ->json('DELETE', '/api/v1/groups/' . $this->userGroupA->id);
+
+        $this->user->refresh();
+
+        $this->assertEquals(-2, $this->user->preferences['activeGroup']);
+    }
+
+    #[Test]
     public function test_twofaccount_is_released_on_group_destroy()
     {
         $this->actingAs($this->user, 'api-guard')
@@ -559,7 +707,13 @@ class GroupControllerTest extends FeatureTestCase
         $this->twofaccountA->refresh();
         $this->twofaccountB->refresh();
 
-        $this->assertNull($this->twofaccountA->group_id);
-        $this->assertNull($this->twofaccountB->group_id);
+        $this->assertDatabaseMissing('twofaccount_group_assignments', [
+            'twofaccount_id' => $this->twofaccountA->id,
+            'user_id'        => $this->user->id,
+        ]);
+        $this->assertDatabaseMissing('twofaccount_group_assignments', [
+            'twofaccount_id' => $this->twofaccountB->id,
+            'user_id'        => $this->user->id,
+        ]);
     }
 }

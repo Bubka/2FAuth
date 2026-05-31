@@ -7,7 +7,9 @@ export default async function adminOnly({ to, next, nextMiddleware, stores }) {
 
     if (! user.isAdmin) {
         let err = new Error('unauthorized')
-        err.response.status = 403
+        const responseOptions = { status: 403, statusText: 'unauthorized' }
+        const response = new Response(null, responseOptions);
+        err.response = response
         errorHandler.show(err)
     }
     else nextMiddleware()

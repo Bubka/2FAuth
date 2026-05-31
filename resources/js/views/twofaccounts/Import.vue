@@ -8,7 +8,7 @@
     import { useTwofaccounts } from '@/stores/twofaccounts'
     import { UseColorMode } from '@vueuse/components'
     import { useI18n } from 'vue-i18n'
-    import { LucideCheck, LucideCircleAlert, LucideCircleX, LucideFileText, LucideQrCode, LucideTextCursorInput, LucideTriangleAlert, LucideX } from 'lucide-vue-next'
+    import { LucideCheck, LucideCircleAlert, LucideCircleX, LucideFileText, LucideQrCode, LucideTextCursorInput, LucideTriangleAlert, LucideX } from '@lucide/vue'
 
     const { t } = useI18n()
     const $2fauth = inject('2fauth')
@@ -480,7 +480,7 @@
             </ResponsiveWidthWrapper>
             <Spinner v-if="isFetching && exportedAccounts.length === 0" :type="'fullscreen-overlay'" :isVisible="true" message="message.parsing_data" />
             <!-- modal -->
-            <Modal v-model="showTwofaccountInModal">
+            <Modal v-model:is-active="showTwofaccountInModal">
                 <OtpDisplay
                     ref="otpDisplay"
                     :accountParams="form.data()"

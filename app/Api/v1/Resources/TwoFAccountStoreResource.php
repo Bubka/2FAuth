@@ -26,13 +26,18 @@ class TwoFAccountStoreResource extends JsonResource
      */
     public function toArray($request)
     {
+        $withSecret = ! $request->has('withSecret') || (int) filter_var($request->input('withSecret'), FILTER_VALIDATE_BOOLEAN) == 1;
+        // migrated accounts that are not yet saved to the database should have their secret visible by default
+        $isPersistedModel = $this->resource instanceof \Illuminate\Database\Eloquent\Model && $this->resource->exists;
+        $canViewSecret    = $this->resource->canReadSecret($request->user()) || ! $isPersistedModel;
+
         return [
             'otp_type' => $this->otp_type,
             'account'  => $this->account,
             'service'  => $this->service,
             'icon'     => $this->icon && IconStore::exists($this->icon) ? $this->icon : null,
             'secret'   => $this->when(
-                ! $request->has('withSecret') || (int) filter_var($request->input('withSecret'), FILTER_VALIDATE_BOOLEAN) == 1,
+                $withSecret && $canViewSecret,
                 $this->secret
             ),
             'digits'    => (int) $this->digits,

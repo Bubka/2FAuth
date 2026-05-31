@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Facades\Settings;
 use App\Models\Traits\HasAuthenticationLog;
 use App\Models\Traits\WebAuthnManageCredentials;
 use App\Notifications\ResetPassword;
@@ -258,6 +259,56 @@ class User extends Authenticatable implements HasLocalePreference, WebAuthnAuthe
     public function groups()
     {
         return $this->hasMany(\App\Models\Group::class);
+    }
+
+    /**
+     * Get TwoFAccount shared by the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\App\Models\TwoFAccountShare, $this>
+     */
+    public function sharedTwofaccounts()
+    {
+        $query = $this->hasMany(\App\Models\TwoFAccountShare::class, 'created_by_user_id');
+
+        if (! Settings::get('enableSharing')) {
+            return $query->where('id', -1); // Return empty result if sharing is disabled
+        }
+
+        if (! Settings::get('enableAllUsersSharingScope')) {
+            $query->where('scope', '!=', TwoFAccountShare::SCOPE_ALL_USERS); // Exclude all users shares
+        }
+
+        return $query;
+    }
+
+    /**
+     * Get TwoFAccounts shared with the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\App\Models\TwoFAccountShare, $this>
+     */
+    public function borrowedTwofaccounts()
+    {
+        $query = $this->hasMany(\App\Models\TwoFAccountShare::class, 'shared_with_user_id');
+
+        if (! Settings::get('enableSharing')) {
+            return $query->where('id', -1); // Return empty result if sharing is disabled
+        }
+
+        if (! Settings::get('enableAllUsersSharingScope')) {
+            $query->where('scope', '!=', TwoFAccountShare::SCOPE_ALL_USERS); // Exclude all users shares
+        }
+
+        return $query;
+    }
+
+    /**
+     * Determine if the user has shared the given TwoFAccount.
+     */
+    public function isSharing(TwoFAccount $twofaccount) : bool
+    {
+        return $this->sharedTwofaccounts()
+            ->where('twofaccount_id', $twofaccount->id)
+            ->exists();
     }
 
     /**

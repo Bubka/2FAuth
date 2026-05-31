@@ -3,9 +3,11 @@
 namespace Tests\Feature\Models;
 
 use App\Facades\IconStore;
+use App\Facades\Settings;
 use App\Models\AuthLog;
 use App\Models\Group;
 use App\Models\TwoFAccount;
+use App\Models\TwoFAccountShare;
 use App\Models\User;
 use App\Observers\UserObserver;
 use Database\Factories\AuthLogFactory;
@@ -179,6 +181,241 @@ class UserModelTest extends FeatureTestCase
         $user->delete();
 
         Storage::disk('icons')->assertMissing($twofaccount->icon);
+    }
+
+    #[Test]
+    public function test_delete_removes_shares_for_owned_twofaccounts()
+    {
+        $owner = User::factory()->create();
+        $targetUser = User::factory()->create();
+        $twofaccount = TwoFAccount::factory()->for($owner)->create();
+
+        $share = TwoFAccountShare::create([
+            'twofaccount_id' => $twofaccount->id,
+            'shared_with_user_id' => $targetUser->id,
+            'scope' => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id' => $owner->id,
+        ]);
+
+        $owner->delete();
+
+        $this->assertDatabaseMissing('twofaccount_shares', [
+            'id' => $share->id,
+        ]);
+    }
+
+    #[Test]
+    public function test_delete_removes_shares_where_deleted_user_is_target()
+    {
+        $owner = User::factory()->create();
+        $targetUser = User::factory()->create();
+        $twofaccount = TwoFAccount::factory()->for($owner)->create();
+
+        $share = TwoFAccountShare::create([
+            'twofaccount_id' => $twofaccount->id,
+            'shared_with_user_id' => $targetUser->id,
+            'scope' => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id' => $owner->id,
+        ]);
+
+        $targetUser->delete();
+
+        $this->assertDatabaseMissing('twofaccount_shares', [
+            'id' => $share->id,
+        ]);
+        $this->assertDatabaseHas('twofaccounts', [
+            'id' => $twofaccount->id,
+        ]);
+    }
+
+    #[Test]
+    public function test_delete_removes_shares_where_deleted_user_is_creator()
+    {
+        $owner = User::factory()->create();
+        $targetUser = User::factory()->create();
+        $twofaccount = TwoFAccount::factory()->for($owner)->create();
+
+        $share = TwoFAccountShare::create([
+            'twofaccount_id' => $twofaccount->id,
+            'shared_with_user_id' => $targetUser->id,
+            'scope' => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id' => $owner->id,
+        ]);
+
+        $owner->delete();
+
+        $this->assertDatabaseMissing('twofaccount_shares', [
+            'id' => $share->id,
+        ]);
+    }
+
+    #[Test]
+    public function test_sharedTwofaccounts_returns_all_shared_accounts()
+    {
+        Settings::set('enableSharing', true);
+        Settings::set('enableAllUsersSharingScope', true);
+
+        $owner = User::factory()->create();
+        $targetUser = User::factory()->create();
+
+        $twofaccountA = TwoFAccount::factory()->for($owner)->create();
+        $twofaccountB = TwoFAccount::factory()->for($owner)->create();
+
+        $userScopeShare = TwoFAccountShare::create([
+            'twofaccount_id' => $twofaccountA->id,
+            'shared_with_user_id' => $targetUser->id,
+            'scope' => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id' => $owner->id,
+        ]);
+        $allUsersScopeShare = TwoFAccountShare::create([
+            'twofaccount_id' => $twofaccountB->id,
+            'shared_with_user_id' => null,
+            'scope' => TwoFAccountShare::SCOPE_ALL_USERS,
+            'created_by_user_id' => $owner->id,
+        ]);
+
+        $shares = $owner->sharedTwofaccounts()->get();
+
+        $this->assertCount(2, $shares);
+        $this->assertTrue($shares->contains('id', $userScopeShare->id));
+        $this->assertTrue($shares->contains('id', $allUsersScopeShare->id));
+    }
+
+    #[Test]
+    public function test_sharedTwofaccounts_excludes_all_users_scope_when_disabled()
+    {
+        Settings::set('enableSharing', true);
+        Settings::set('enableAllUsersSharingScope', false);
+
+        $owner = User::factory()->create();
+        $targetUser = User::factory()->create();
+
+        $twofaccountA = TwoFAccount::factory()->for($owner)->create();
+        $twofaccountB = TwoFAccount::factory()->for($owner)->create();
+
+        $userScopeShare = TwoFAccountShare::create([
+            'twofaccount_id' => $twofaccountA->id,
+            'shared_with_user_id' => $targetUser->id,
+            'scope' => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id' => $owner->id,
+        ]);
+        $allUsersScopeShare = TwoFAccountShare::create([
+            'twofaccount_id' => $twofaccountB->id,
+            'shared_with_user_id' => null,
+            'scope' => TwoFAccountShare::SCOPE_ALL_USERS,
+            'created_by_user_id' => $owner->id,
+        ]);
+
+        $shares = $owner->sharedTwofaccounts()->get();
+
+        $this->assertCount(1, $shares);
+        $this->assertTrue($shares->contains('id', $userScopeShare->id));
+        $this->assertFalse($shares->contains('id', $allUsersScopeShare->id));
+    }
+
+    #[Test]
+    public function test_sharedTwofaccounts_returns_empty_when_sharing_is_disabled()
+    {
+        Settings::set('enableSharing', false);
+        Settings::set('enableAllUsersSharingScope', true);
+
+        $owner = User::factory()->create();
+        $targetUser = User::factory()->create();
+        $twofaccount = TwoFAccount::factory()->for($owner)->create();
+
+        TwoFAccountShare::create([
+            'twofaccount_id' => $twofaccount->id,
+            'shared_with_user_id' => $targetUser->id,
+            'scope' => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id' => $owner->id,
+        ]);
+
+        $shares = $owner->sharedTwofaccounts()->get();
+
+        $this->assertCount(0, $shares);
+    }
+
+    #[Test]
+    public function test_borrowedTwofaccounts_returns_only_borrowed_accounts()
+    {
+        Settings::set('enableSharing', true);
+        Settings::set('enableAllUsersSharingScope', true);
+
+        $owner = User::factory()->create();
+        $targetUser = User::factory()->create();
+        $anotherUser = User::factory()->create();
+        $twofaccount = TwoFAccount::factory()->for($owner)->create();
+
+        $targetShare = TwoFAccountShare::create([
+            'twofaccount_id' => $twofaccount->id,
+            'shared_with_user_id' => $targetUser->id,
+            'scope' => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id' => $owner->id,
+        ]);
+        TwoFAccountShare::create([
+            'twofaccount_id' => $twofaccount->id,
+            'shared_with_user_id' => $anotherUser->id,
+            'scope' => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id' => $owner->id,
+        ]);
+
+        $borrowedTwofaccounts = $targetUser->borrowedTwofaccounts()->get();
+
+        $this->assertCount(1, $borrowedTwofaccounts);
+        $this->assertTrue($borrowedTwofaccounts->contains('id', $targetShare->id));
+    }
+
+    #[Test]
+    public function test_borrowedTwofaccounts_excludes_all_users_scope_when_disabled()
+    {
+        Settings::set('enableSharing', true);
+        Settings::set('enableAllUsersSharingScope', false);
+
+        $owner = User::factory()->create();
+        $targetUser = User::factory()->create();
+        $twofaccountA = TwoFAccount::factory()->for($owner)->create();
+        $twofaccountB = TwoFAccount::factory()->for($owner)->create();
+
+        $userScopeShare = TwoFAccountShare::create([
+            'twofaccount_id' => $twofaccountA->id,
+            'shared_with_user_id' => $targetUser->id,
+            'scope' => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id' => $owner->id,
+        ]);
+        $allUsersScopeShare = TwoFAccountShare::create([
+            'twofaccount_id' => $twofaccountB->id,
+            'shared_with_user_id' => null,
+            'scope' => TwoFAccountShare::SCOPE_ALL_USERS,
+            'created_by_user_id' => $owner->id,
+        ]);
+
+        $borrowedShares = $targetUser->borrowedTwofaccounts()->get();
+
+        $this->assertCount(1, $borrowedShares);
+        $this->assertTrue($borrowedShares->contains('id', $userScopeShare->id));
+        $this->assertFalse($borrowedShares->contains('id', $allUsersScopeShare->id));
+    }
+
+    #[Test]
+    public function test_borrowedTwofaccounts_returns_empty_when_sharing_is_disabled()
+    {
+        Settings::set('enableSharing', false);
+        Settings::set('enableAllUsersSharingScope', true);
+
+        $owner = User::factory()->create();
+        $targetUser = User::factory()->create();
+        $twofaccount = TwoFAccount::factory()->for($owner)->create();
+
+        TwoFAccountShare::create([
+            'twofaccount_id' => $twofaccount->id,
+            'shared_with_user_id' => $targetUser->id,
+            'scope' => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id' => $owner->id,
+        ]);
+
+        $borrowedShares = $targetUser->borrowedTwofaccounts()->get();
+
+        $this->assertCount(0, $borrowedShares);
     }
 
     #[Test]

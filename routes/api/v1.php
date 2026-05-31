@@ -6,6 +6,7 @@ use App\Api\v1\Controllers\IconController;
 use App\Api\v1\Controllers\QrCodeController;
 use App\Api\v1\Controllers\SettingController;
 use App\Api\v1\Controllers\TwoFAccountController;
+use App\Api\v1\Controllers\TwoFAccountShareController;
 use App\Api\v1\Controllers\UserController;
 use App\Api\v1\Controllers\UserManagerController;
 use Illuminate\Support\Facades\Date;
@@ -42,8 +43,20 @@ Route::group(['middleware' => 'auth:api-guard'], function () {
     Route::get('twofaccounts/export', [TwoFAccountController::class, 'export'])->name('twofaccounts.export');
     Route::get('twofaccounts/{twofaccount}/qrcode', [QrCodeController::class, 'show'])->name('twofaccounts.show.qrcode');
     Route::get('twofaccounts/count', [TwoFAccountController::class, 'count'])->name('twofaccounts.count');
+    Route::get('twofaccounts/{twofaccount}/otp-logs', [TwoFAccountController::class, 'otpLogs'])->name('twofaccounts.show.otpLogs');
     Route::get('twofaccounts/{id}/otp', [TwoFAccountController::class, 'otp'])->where('id', '[0-9]+')->name('twofaccounts.show.otp');
     Route::post('twofaccounts/otp', [TwoFAccountController::class, 'otp'])->name('twofaccounts.otp');
+    Route::middleware('rejectIfShareDisabled')->group(function () {
+        Route::patch('twofaccounts/{twofaccount}/owner', [TwoFAccountController::class, 'transferOwnership'])->name('twofaccounts.transferOwnership')->middleware(['throttle:6,1']);
+        Route::get('twofaccounts/{twofaccount}/shares', [TwoFAccountShareController::class, 'index'])->name('twofaccounts.shares.index');
+        Route::post('twofaccounts/{twofaccount}/shares', [TwoFAccountShareController::class, 'store'])->name('twofaccounts.shares.store');
+        Route::delete('twofaccounts/{twofaccount}/shares', [TwoFAccountShareController::class, 'destroyAll'])->name('twofaccounts.shares.destroyAll');
+        Route::post('twofaccounts/{twofaccount}/shares/all', [TwoFAccountShareController::class, 'shareAll'])
+            ->name('twofaccounts.shares.shareAll')
+            ->middleware('rejectIfAllUsersSharingScopeDisabled');
+        Route::delete('twofaccounts/{twofaccount}/shares/{user}', [TwoFAccountShareController::class, 'destroy'])->name('twofaccounts.shares.destroy');
+        Route::get('twofaccounts/{twofaccount}/recipients', [TwoFAccountShareController::class, 'recipients'])->name('twofaccounts.shares.recipients');
+    });
     Route::apiResource('twofaccounts', TwoFAccountController::class);
 
     Route::get('groups/{group}/twofaccounts', [GroupController::class, 'accounts'])->name('groups.show.twofaccounts');

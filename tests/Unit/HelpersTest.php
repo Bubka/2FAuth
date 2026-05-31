@@ -256,4 +256,14 @@ class HelpersTest extends TestCase
 
         $this->assertNotContains('formatPassword', $lockedPreferences);
     }
+
+    #[Test]
+    public function test_getRandomFilename_returns_filename()
+    {
+        $extension = 'svg';
+
+        $filename = Helpers::getRandomFilename($extension, 40);
+
+        $this->assertMatchesRegularExpression('/^[a-zA-Z0-9]{40}\.svg$/', $filename);
+    }
 }

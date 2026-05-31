@@ -1,0 +1,422 @@
+<?php
+
+namespace Tests\Feature\Services;
+
+use App\Events\TwoFAccountShareRevoked;
+use App\Events\TwoFAccountShared;
+use App\Facades\Settings;
+use App\Models\TwoFAccount;
+use App\Models\TwoFAccountShare;
+use App\Models\User;
+use App\Services\TwoFAccountShareService;
+use Illuminate\Support\Facades\Event;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
+use Tests\FeatureTestCase;
+
+#[CoversClass(TwoFAccountShareService::class)]
+#[CoversClass(TwoFAccountShared::class)]
+#[CoversClass(TwoFAccountShareRevoked::class)]
+class TwoFAccountShareServiceTest extends FeatureTestCase
+{
+    private User $owner;
+
+    private TwoFAccount $twofaccount;
+
+    private TwoFAccountShareService $service;
+
+    protected function setUp() : void
+    {
+        parent::setUp();
+
+        Event::fake();
+
+        $this->owner = User::factory()->create();
+        $this->twofaccount = TwoFAccount::factory()->for($this->owner)->create();
+        $this->service = new TwoFAccountShareService;
+    }
+
+    #[Test]
+    public function test_share_with_user_creates_share_with_owner_as_creator() : void
+    {
+        $targetUser = User::factory()->create();
+
+        $result = $this->service->shareWithUser($this->twofaccount, $this->owner, $targetUser);
+
+        $this->assertTrue($result['created']);
+        $this->assertNotNull($result['share']);
+        $this->assertDatabaseHas('twofaccount_shares', [
+            'twofaccount_id' => $this->twofaccount->id,
+            'scope' => TwoFAccountShare::SCOPE_USER,
+            'shared_with_user_id' => $targetUser->id,
+            'created_by_user_id' => $this->owner->id,
+        ]);
+    }
+
+    #[Test]
+    public function test_share_with_user_is_idempotent() : void
+    {
+        $targetUser = User::factory()->create();
+
+        $firstResult = $this->service->shareWithUser($this->twofaccount, $this->owner, $targetUser);
+        $secondResult = $this->service->shareWithUser($this->twofaccount, $this->owner, $targetUser);
+
+        $this->assertTrue($firstResult['created']);
+        $this->assertFalse($secondResult['created']);
+        $this->assertEquals(1, TwoFAccountShare::query()
+            ->where('twofaccount_id', $this->twofaccount->id)
+            ->where('scope', TwoFAccountShare::SCOPE_USER)
+            ->where('shared_with_user_id', $targetUser->id)
+            ->count());
+    }
+
+    #[Test]
+    public function test_share_with_user_dispatches_event() : void
+    {
+        $newTargetUser = User::factory()->create();
+
+        $this->service->shareWithUser($this->twofaccount, $this->owner, $newTargetUser);
+
+        Event::assertDispatched(TwoFAccountShared::class, function (TwoFAccountShared $event) use ($newTargetUser) {
+            $this->assertSame(TwoFAccountShare::SCOPE_USER, $event->scope);
+            $this->assertSame($this->owner->id, $event->actor->id);
+
+            return $event->recipients->pluck('id')->all() === [$newTargetUser->id];
+        });
+    }
+
+    #[Test]
+    public function test_share_with_user_dispatches_event_for_newly_created_share_only() : void
+    {
+        $newTargetUser = User::factory()->create();
+
+        $this->service->shareWithUser($this->twofaccount, $this->owner, $newTargetUser);
+        $this->service->shareWithUser($this->twofaccount, $this->owner, $newTargetUser);
+
+        Event::assertDispatchedOnce(TwoFAccountShared::class);
+    }
+
+    #[Test]
+    public function test_share_with_users_returns_not_created_when_shared_with_all() : void
+    {
+        Settings::set('enableAllUsersSharingScope', true);
+
+        $targetUserA = User::factory()->create();
+        $targetUserB = User::factory()->create();
+
+        $this->service->shareWithAll($this->twofaccount, $this->owner);
+
+        $results = $this->service->shareWithUsers($this->twofaccount, $this->owner, collect([$targetUserA, $targetUserB]));
+
+        $this->assertCount(2, $results);
+        $this->assertFalse($results[0]['created']);
+        $this->assertFalse($results[1]['created']);
+        $this->assertEquals(0, TwoFAccountShare::query()
+            ->where('twofaccount_id', $this->twofaccount->id)
+            ->where('scope', TwoFAccountShare::SCOPE_USER)
+            ->count());
+
+        Settings::set('enableAllUsersSharingScope', false);
+    }
+
+    #[Test]
+    public function test_share_with_users_returns_mixed_created_statuses() : void
+    {
+        $existingTargetUser = User::factory()->create();
+        $newTargetUser = User::factory()->create();
+
+        $this->service->shareWithUser($this->twofaccount, $this->owner, $existingTargetUser);
+
+        $results = $this->service->shareWithUsers(
+            $this->twofaccount,
+            $this->owner,
+            collect([$existingTargetUser, $newTargetUser])
+        );
+
+        $this->assertCount(2, $results);
+        $this->assertFalse($results[0]['created']);
+        $this->assertTrue($results[1]['created']);
+    }
+
+    #[Test]
+    public function test_share_with_users_dispatches_event_for_newly_created_shares_only() : void
+    {
+        $existingTargetUser = User::factory()->create();
+        $newTargetUser = User::factory()->create();
+
+        $this->service->shareWithUser($this->twofaccount, $this->owner, $existingTargetUser);
+        $this->service->shareWithUsers($this->twofaccount, $this->owner, collect([$existingTargetUser, $newTargetUser]));
+
+        Event::assertDispatched(TwoFAccountShared::class, function (TwoFAccountShared $event) use ($newTargetUser) {
+            $this->assertSame(TwoFAccountShare::SCOPE_USER, $event->scope);
+            $this->assertSame($this->owner->id, $event->actor->id);
+
+            return $event->recipients->pluck('id')->all() === [$newTargetUser->id];
+        });
+    }
+
+    #[Test]
+    public function test_share_with_user_returns_null_share_when_shared_with_all() : void
+    {
+        Settings::set('enableAllUsersSharingScope', true);
+
+        $targetUser = User::factory()->create();
+
+        $this->service->shareWithAll($this->twofaccount, $this->owner);
+
+        $result = $this->service->shareWithUser($this->twofaccount, $this->owner, $targetUser);
+
+        $this->assertFalse($result['created']);
+        $this->assertNull($result['share']);
+        $this->assertEquals(0, TwoFAccountShare::query()
+            ->where('twofaccount_id', $this->twofaccount->id)
+            ->where('scope', TwoFAccountShare::SCOPE_USER)
+            ->count());
+
+        Settings::set('enableAllUsersSharingScope', false);
+    }
+
+    #[Test]
+    public function test_share_with_user_removes_all_users_scope_when_feature_is_disabled() : void
+    {
+        Settings::set('enableAllUsersSharingScope', true);
+
+        $targetUser = User::factory()->create();
+
+        $this->service->shareWithAll($this->twofaccount, $this->owner);
+
+        Settings::set('enableAllUsersSharingScope', false);
+
+        $result = $this->service->shareWithUser($this->twofaccount, $this->owner, $targetUser);
+
+        $this->assertTrue($result['created']);
+        $this->assertNotNull($result['share']);
+        $this->assertDatabaseMissing('twofaccount_shares', [
+            'twofaccount_id' => $this->twofaccount->id,
+            'scope' => TwoFAccountShare::SCOPE_ALL_USERS,
+            'shared_with_user_id' => null,
+        ]);
+        $this->assertDatabaseHas('twofaccount_shares', [
+            'twofaccount_id' => $this->twofaccount->id,
+            'scope' => TwoFAccountShare::SCOPE_USER,
+            'shared_with_user_id' => $targetUser->id,
+        ]);
+    }
+
+    #[Test]
+    public function test_revoke_all_user_shares_deletes_only_user_scope() : void
+    {
+        Settings::set('enableAllUsersSharingScope', true);
+
+        $targetUserA = User::factory()->create();
+        $targetUserB = User::factory()->create();
+
+        $this->service->shareWithUser($this->twofaccount, $this->owner, $targetUserA);
+        $this->service->shareWithUser($this->twofaccount, $this->owner, $targetUserB);
+        $this->service->shareWithAll($this->twofaccount, $this->owner);
+
+        $deletedRows = $this->service->revokeAllUserShares($this->twofaccount);
+
+        $this->assertEquals(2, $deletedRows);
+        $this->assertDatabaseHas('twofaccount_shares', [
+            'twofaccount_id' => $this->twofaccount->id,
+            'scope' => TwoFAccountShare::SCOPE_ALL_USERS,
+            'shared_with_user_id' => null,
+        ]);
+        $this->assertEquals(0, TwoFAccountShare::query()
+            ->where('twofaccount_id', $this->twofaccount->id)
+            ->where('scope', TwoFAccountShare::SCOPE_USER)
+            ->count());
+
+        Settings::set('enableAllUsersSharingScope', false);
+    }
+
+    #[Test]
+    public function test_revoke_all_user_shares_dispatches_event_for_explicit_recipients() : void
+    {
+        $targetUserA = User::factory()->create();
+        $targetUserB = User::factory()->create();
+
+        $this->service->shareWithUser($this->twofaccount, $this->owner, $targetUserA);
+        $this->service->shareWithUser($this->twofaccount, $this->owner, $targetUserB);
+        $this->service->revokeAllUserShares($this->twofaccount);
+
+        Event::assertDispatched(TwoFAccountShareRevoked::class, function (TwoFAccountShareRevoked $event) use ($targetUserA, $targetUserB) {
+            $recipientIds = $event->recipients->pluck('id')->all();
+            sort($recipientIds);
+
+            return $event->scope === TwoFAccountShare::SCOPE_USER
+                && $recipientIds === [$targetUserA->id, $targetUserB->id];
+        });
+    }
+
+    #[Test]
+    public function test_revoke_user_share_deletes_only_target_user_share() : void
+    {
+        $targetUserA = User::factory()->create();
+        $targetUserB = User::factory()->create();
+
+        $this->service->shareWithUser($this->twofaccount, $this->owner, $targetUserA);
+        $this->service->shareWithUser($this->twofaccount, $this->owner, $targetUserB);
+
+        $deletedRows = $this->service->revokeUserShare($this->twofaccount, $targetUserA);
+
+        $this->assertEquals(1, $deletedRows);
+        $this->assertDatabaseMissing('twofaccount_shares', [
+            'twofaccount_id' => $this->twofaccount->id,
+            'scope' => TwoFAccountShare::SCOPE_USER,
+            'shared_with_user_id' => $targetUserA->id,
+        ]);
+        $this->assertDatabaseHas('twofaccount_shares', [
+            'twofaccount_id' => $this->twofaccount->id,
+            'scope' => TwoFAccountShare::SCOPE_USER,
+            'shared_with_user_id' => $targetUserB->id,
+        ]);
+    }
+
+    #[Test]
+    public function test_revoke_user_share_returns_zero_when_target_share_does_not_exist() : void
+    {
+        $targetUser = User::factory()->create();
+
+        $deletedRows = $this->service->revokeUserShare($this->twofaccount, $targetUser);
+
+        $this->assertEquals(0, $deletedRows);
+    }
+
+    #[Test]
+    public function test_share_with_all_is_idempotent_and_unshare_toggles_state() : void
+    {
+        Settings::set('enableAllUsersSharingScope', true);
+
+        $firstResult = $this->service->shareWithAll($this->twofaccount, $this->owner);
+        $secondResult = $this->service->shareWithAll($this->twofaccount, $this->owner);
+
+        $this->assertTrue($firstResult['created']);
+        $this->assertFalse($secondResult['created']);
+        $this->assertTrue($this->service->isSharedWithAll($this->twofaccount));
+        $this->assertEquals(1, TwoFAccountShare::query()
+            ->where('twofaccount_id', $this->twofaccount->id)
+            ->where('scope', TwoFAccountShare::SCOPE_ALL_USERS)
+            ->count());
+
+        $deletedRows = $this->service->unshareWithAll($this->twofaccount);
+
+        $this->assertEquals(1, $deletedRows);
+        $this->assertFalse($this->service->isSharedWithAll($this->twofaccount));
+
+        Settings::set('enableAllUsersSharingScope', false);
+    }
+
+    #[Test]
+    public function test_share_with_all_does_nothing_when_all_users_scope_is_disabled() : void
+    {
+        Settings::set('enableAllUsersSharingScope', false);
+
+        $result = $this->service->shareWithAll($this->twofaccount, $this->owner);
+
+        $this->assertFalse($result['created']);
+        $this->assertNull($result['share']);
+        $this->assertFalse($this->service->isSharedWithAll($this->twofaccount));
+
+        $this->assertDatabaseMissing('twofaccount_shares', [
+            'twofaccount_id' => $this->twofaccount->id,
+            'scope' => TwoFAccountShare::SCOPE_ALL_USERS,
+            'shared_with_user_id' => null,
+        ]);
+    }
+
+    #[Test]
+    public function test_share_with_all_dispatches_event_without_actor() : void
+    {
+        Settings::set('enableAllUsersSharingScope', true);
+
+        $targetUserA = User::factory()->create();
+        $targetUserB = User::factory()->create();
+
+        $this->service->shareWithAll($this->twofaccount, $this->owner);
+
+        Event::assertDispatched(TwoFAccountShared::class, function (TwoFAccountShared $event) use ($targetUserA, $targetUserB) {
+            $recipientIds = $event->recipients->pluck('id')->all();
+            sort($recipientIds);
+
+            return $event->scope === TwoFAccountShare::SCOPE_ALL_USERS
+                && $recipientIds === [$targetUserA->id, $targetUserB->id];
+        });
+
+        Settings::set('enableAllUsersSharingScope', false);
+    }
+
+    #[Test]
+    public function test_share_with_all_keeps_initial_creator_on_subsequent_calls() : void
+    {
+        Settings::set('enableAllUsersSharingScope', true);
+
+        $otherOwner = User::factory()->create();
+
+        $this->service->shareWithAll($this->twofaccount, $this->owner);
+        $this->service->shareWithAll($this->twofaccount, $otherOwner);
+
+        $this->assertDatabaseHas('twofaccount_shares', [
+            'twofaccount_id' => $this->twofaccount->id,
+            'scope' => TwoFAccountShare::SCOPE_ALL_USERS,
+            'shared_with_user_id' => null,
+            'created_by_user_id' => $this->owner->id,
+        ]);
+        $this->assertDatabaseMissing('twofaccount_shares', [
+            'twofaccount_id' => $this->twofaccount->id,
+            'scope' => TwoFAccountShare::SCOPE_ALL_USERS,
+            'shared_with_user_id' => null,
+            'created_by_user_id' => $otherOwner->id,
+        ]);
+
+        Settings::set('enableAllUsersSharingScope', false);
+    }
+
+    #[Test]
+    public function test_unshare_with_all_returns_zero_when_no_global_share_exists() : void
+    {
+        Settings::set('enableAllUsersSharingScope', true);
+
+        $deletedRows = $this->service->unshareWithAll($this->twofaccount);
+
+        $this->assertEquals(0, $deletedRows);
+        $this->assertFalse($this->service->isSharedWithAll($this->twofaccount));
+
+        Settings::set('enableAllUsersSharingScope', false);
+
+        $deletedRows = $this->service->unshareWithAll($this->twofaccount);
+
+        $this->assertEquals(0, $deletedRows);
+        $this->assertFalse($this->service->isSharedWithAll($this->twofaccount));
+    }
+
+    #[Test]
+    public function test_explicit_shared_users_returns_sorted_users_only() : void
+    {
+        $targetUserA = User::factory()->create();
+        $targetUserB = User::factory()->create();
+
+        $this->service->shareWithUser($this->twofaccount, $this->owner, $targetUserB);
+        $this->service->shareWithUser($this->twofaccount, $this->owner, $targetUserA);
+        $this->service->shareWithAll($this->twofaccount, $this->owner);
+
+        $users = $this->service->explicitSharedUsers($this->twofaccount);
+
+        $this->assertCount(2, $users);
+        $this->assertEquals(
+            [$targetUserA->id, $targetUserB->id],
+            $users->pluck('id')->all()
+        );
+    }
+
+    #[Test]
+    public function test_explicit_shared_users_returns_empty_when_only_shared_with_all() : void
+    {
+        $this->service->shareWithAll($this->twofaccount, $this->owner);
+
+        $users = $this->service->explicitSharedUsers($this->twofaccount);
+
+        $this->assertCount(0, $users);
+    }
+}

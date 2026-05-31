@@ -9,7 +9,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\FeatureTestCase;
 
-class PurgeLogTest extends FeatureTestCase
+class PurgeAuthLogTest extends FeatureTestCase
 {
     /**
      * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
@@ -26,7 +26,7 @@ class PurgeLogTest extends FeatureTestCase
     #[Test]
     public function test_purge_log_completes()
     {
-        $this->artisan('2fauth:purge-log')
+        $this->artisan('2fauth:purge-auth-log')
             ->assertSuccessful();
     }
 
@@ -36,7 +36,7 @@ class PurgeLogTest extends FeatureTestCase
         $oneYearOldLog   = AuthLog::factory()->daysAgo(366)->for($this->user, 'authenticatable')->create();
         $sixMonthsOldLog = AuthLog::factory()->daysAgo(364)->for($this->user, 'authenticatable')->create();
 
-        $this->artisan('2fauth:purge-log');
+        $this->artisan('2fauth:purge-auth-log');
 
         $this->assertDatabaseHas('auth_logs', [
             'id' => $sixMonthsOldLog->id,
@@ -53,7 +53,7 @@ class PurgeLogTest extends FeatureTestCase
         config(['2fauth.config.authLogRetentionTime' => $retention]);
         $log = AuthLog::factory()->daysAgo($retention + 1)->for($this->user, 'authenticatable')->create();
 
-        $this->artisan('2fauth:purge-log');
+        $this->artisan('2fauth:purge-auth-log');
 
         $this->assertDatabaseMissing('auth_logs', [
             'id' => $log->id,
@@ -68,7 +68,7 @@ class PurgeLogTest extends FeatureTestCase
         $log = AuthLog::factory()->logoutOnly()->for($this->user, 'authenticatable')->create();
 
         $this->travelTo(Carbon::now()->addDays($retention + 1));
-        $this->artisan('2fauth:purge-log');
+        $this->artisan('2fauth:purge-auth-log');
 
         $this->assertDatabaseMissing('auth_logs', [
             'id' => $log->id,
@@ -82,7 +82,7 @@ class PurgeLogTest extends FeatureTestCase
         config(['2fauth.config.authLogRetentionTime' => $retention]);
         $log = AuthLog::factory()->daysAgo($retention - 1)->for($this->user, 'authenticatable')->create();
 
-        $this->artisan('2fauth:purge-log');
+        $this->artisan('2fauth:purge-auth-log');
 
         $this->assertDatabaseHas('auth_logs', [
             'id' => $log->id,
@@ -97,7 +97,7 @@ class PurgeLogTest extends FeatureTestCase
         $oneYearOldLog   = AuthLog::factory()->daysAgo(366)->for($this->user, 'authenticatable')->create();
         $sixMonthsOldLog = AuthLog::factory()->daysAgo(364)->for($this->user, 'authenticatable')->create();
 
-        $this->artisan('2fauth:purge-log');
+        $this->artisan('2fauth:purge-auth-log');
 
         $this->assertDatabaseHas('auth_logs', [
             'id' => $sixMonthsOldLog->id,

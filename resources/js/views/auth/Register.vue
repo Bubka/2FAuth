@@ -1,11 +1,12 @@
 <script setup>
     import Form from '@/components/formElements/Form'
     import { useUserStore } from '@/stores/user'
+    import { useAppSettingsStore } from '@/stores/appSettings'
     import { webauthnService } from '@/services/webauthn/webauthnService'
     import { useNotify } from '@2fauth/ui'
     import { useI18n } from 'vue-i18n'
     import { useErrorHandler } from '@2fauth/stores'
-    import { LucideCheck } from 'lucide-vue-next'
+    import { LucideCheck } from '@lucide/vue'
 
     const errorHandler = useErrorHandler()
     const { t } = useI18n()
@@ -13,6 +14,7 @@
     const notify = useNotify()
     const router = useRouter()
     const showWebauthnRegistration = ref(false)
+    const appSettings = useAppSettingsStore()
     const deviceId = ref(null)
     
     const registerForm = reactive(new Form({
@@ -34,13 +36,17 @@
 
         registerForm.post('/user').then(response => {
             user.$patch({
+                id: response.data.id,
                 name: response.data.name,
                 email: response.data.email,
                 preferences: response.data.preferences,
                 isAdmin: response.data.is_admin ?? false,
-                // TODO : Having the created 'id' in the response could be interesting
             })
             user.applyTheme()
+
+            for (const [key, value] of Object.entries(response?.data?.appSettings || {})) {
+                appSettings[key] = value
+            }
 
             showWebauthnRegistration.value = true
         })

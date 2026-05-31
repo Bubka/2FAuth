@@ -1,7 +1,8 @@
 import authService from '@/services/authService'
+import { asArray } from '@/composables/helpers'
 
 export default async function authGuard({ to, next, nextMiddleware, stores }) {
-    const { user } = stores
+    const { user, appSettings } = stores
 
     // No authenticated user on the front-end side, we try to
     // get an active user from the back-end side
@@ -17,6 +18,10 @@ export default async function authGuard({ to, next, nextMiddleware, stores }) {
                 preferences: currentUser.preferences,
                 isAdmin: currentUser.is_admin,
             })
+
+            for (const [key, value] of Object.entries(currentUser.appSettings || {})) {
+                appSettings[key] = value
+            }
         })
         .catch(error => {
             // nothing to do

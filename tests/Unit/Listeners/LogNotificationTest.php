@@ -19,7 +19,7 @@ use Tests\TestCase;
 class LogNotificationTest extends TestCase
 {
     #[Test]
-    public function test_LogNotificationTest_listen_to_NotificationSent_event()
+    public function test_it_listens_to_NotificationSent_event()
     {
         Event::fake();
 

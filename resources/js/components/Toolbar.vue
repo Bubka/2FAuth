@@ -1,5 +1,5 @@
 <script setup>
-    import { LucideArrowDownAZ, LucideArrowUpAZ, LucideSquareCheck } from 'lucide-vue-next';
+    import { LucideArrowDownAZ, LucideArrowUpAZ, LucideSquareCheck } from '@lucide/vue';
 
     const sortOrder = defineModel('sortOrder')
 

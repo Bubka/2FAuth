@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Events\StoreIconsInDatabaseSettingChanged;
 use App\Exceptions\DbEncryptionException;
 use App\Models\Option;
+use App\Models\TwoFAccountShare;
 use Exception;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
@@ -78,11 +79,26 @@ class SettingService
             $this->setEncryptionTo($value);
         }
 
+        $previousAllUsersScopeSetting = null;
+
+        if ($setting === 'enableAllUsersSharingScope') {
+            $previousAllUsersScopeSetting = (bool) $this->get('enableAllUsersSharingScope');
+        }
+
         if ($setting === 'storeIconsInDatabase') {
             StoreIconsInDatabaseSettingChanged::dispatch($value);
         }
 
         Option::updateOrCreate(['key' => $setting], ['value' => $this->replaceBoolean($value)]);
+
+        if ($setting === 'enableAllUsersSharingScope' && $previousAllUsersScopeSetting === false && (bool) $value === true) {
+            $deletedRows = $this->reconcileAllUsersAndUserScopes();
+
+            if ($deletedRows > 0) {
+                Log::notice(sprintf('Reconciled sharing scopes on enableAllUsersSharingScope reactivation by removing %d all-users share row(s)', $deletedRows));
+            }
+        }
+
         Log::notice(sprintf('App setting %s set to %s', var_export($setting, true), var_export($this->restoreType($value), true)));
 
         self::buildAndCache();
@@ -276,5 +292,31 @@ class SettingService
         } else {
             return false;
         }
+    }
+
+    /**
+     * Ensure share scope exclusivity by removing all-users scope where user-scoped shares exist.
+     *
+     * @return int Number of deleted all-users scope rows.
+     */
+    private function reconcileAllUsersAndUserScopes() : int
+    {
+        $conflictingTwoFAccountIds = TwoFAccountShare::query()
+            ->select('twofaccount_id')
+            ->groupBy('twofaccount_id')
+            ->havingRaw(
+                'SUM(CASE WHEN scope = ? THEN 1 ELSE 0 END) > 0 AND SUM(CASE WHEN scope = ? THEN 1 ELSE 0 END) > 0',
+                [TwoFAccountShare::SCOPE_USER, TwoFAccountShare::SCOPE_ALL_USERS]
+            )
+            ->pluck('twofaccount_id');
+
+        if ($conflictingTwoFAccountIds->isEmpty()) {
+            return 0;
+        }
+
+        return TwoFAccountShare::query()
+            ->whereIn('twofaccount_id', $conflictingTwoFAccountIds->all())
+            ->where('scope', TwoFAccountShare::SCOPE_ALL_USERS)
+            ->delete();
     }
 }

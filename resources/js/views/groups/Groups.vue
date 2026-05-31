@@ -2,7 +2,7 @@
     import { UseColorMode } from '@vueuse/components'
     import { useGroups } from '@/stores/groups'
     import { useBusStore } from '@/stores/bus'
-    import { LucideCirclePlus, LucideSquarePen, LucideMenu } from 'lucide-vue-next'
+    import { LucideCirclePlus, LucideSquarePen, LucideMenu } from '@lucide/vue'
     import { useSortable, moveArrayElement } from '@vueuse/integrations/useSortable'
 
     const router = useRouter()

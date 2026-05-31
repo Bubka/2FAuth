@@ -15,6 +15,10 @@ export default {
         return apiClient.get('/twofaccounts/' + id, { ...config })
     },
 
+    getWithoutSecret(id, config = {}) {
+        return apiClient.get('/twofaccounts/' + id + '?withSecret=0', { ...config })
+    },
+
     preview(uri, config = {}) {
         return apiClient.post('/twofaccounts/preview', { uri: uri }, { ...config })
     },
@@ -62,5 +66,9 @@ export default {
     count(config = {}) {
         return apiClient.get('/twofaccounts/count', { ...config })
     },
-    
+
+    getOtpLogs(id, period = 12, limit, config = {}) {
+        return apiClient.get('/twofaccounts/' + id + '/otp-logs?period=' + period + (limit ? '&limit=' + limit : ''), { ...config })
+    },
+
 }

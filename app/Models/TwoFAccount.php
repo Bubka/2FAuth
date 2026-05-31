@@ -8,6 +8,7 @@ use App\Exceptions\InvalidSecretException;
 use App\Exceptions\UndecipherableException;
 use App\Exceptions\UnsupportedOtpTypeException;
 use App\Facades\Icons;
+use App\Facades\Settings;
 use App\Helpers\Helpers;
 use App\Models\Dto\HotpDto;
 use App\Models\Dto\TotpDto;
@@ -15,6 +16,7 @@ use App\Models\Traits\CanEncryptField;
 use Database\Factories\TwoFAccountFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
@@ -24,8 +26,6 @@ use OTPHP\Factory;
 use OTPHP\HOTP;
 use OTPHP\TOTP;
 use ParagonIE\ConstantTime\Base32;
-use Spatie\EloquentSortable\Sortable;
-use Spatie\EloquentSortable\SortableTrait;
 use SteamTotp\SteamTotp;
 
 /**
@@ -38,7 +38,6 @@ use SteamTotp\SteamTotp;
  * @property string|null $icon
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property int|null $order_column
  * @property int|null $group_id
  * @property string $otp_type
  * @property string $secret
@@ -48,11 +47,12 @@ use SteamTotp\SteamTotp;
  * @property int|null $counter
  * @property int|null $user_id
  * @property-read \App\Models\User|null $user
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TwoFAccountGroupAssignment> $groups
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TwoFAccountShare> $shares
  *
  * @method static \Database\Factories\TwoFAccountFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount ordered(string $direction = 'asc')
  * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount query()
  * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereAccount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereAlgorithm($value)
@@ -63,7 +63,6 @@ use SteamTotp\SteamTotp;
  * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereIcon($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereLegacyUri($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereOrderColumn($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereOtpType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount wherePeriod($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereSecret($value)
@@ -77,12 +76,12 @@ use SteamTotp\SteamTotp;
  *
  * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount orphans()
  */
-class TwoFAccount extends Model implements Sortable
+class TwoFAccount extends Model
 {
     /**
      * @use HasFactory<TwoFAccountFactory>
      */
-    use CanEncryptField, HasFactory, SortableTrait;
+    use CanEncryptField, HasFactory;
 
     const TOTP = 'totp';
 
@@ -207,16 +206,6 @@ class TwoFAccount extends Model implements Sortable
     }
 
     /**
-     * Settings for @spatie/eloquent-sortable package
-     *
-     * @var array
-     */
-    public $sortable = [
-        'order_column_name'  => 'order_column',
-        'sort_when_creating' => true,
-    ];
-
-    /**
      * The OTP generator.
      * Instanciated as null to keep the model light
      *
@@ -242,6 +231,140 @@ class TwoFAccount extends Model implements Sortable
     public function iconResource() : HasOne
     {
         return $this->hasOne(Icon::class, 'name', 'icon');
+    }
+
+    /**
+     * Get shares defined for the twofaccount.
+     *
+     * @return HasMany<\App\Models\TwoFAccountShare, $this>
+     */
+    public function shares() : HasMany
+    {
+        return $this->hasMany(TwoFAccountShare::class, 'twofaccount_id');
+    }
+
+    /**
+     * Get group assignments defined for this account.
+     *
+     * @return HasMany<\App\Models\TwoFAccountGroupAssignment, $this>
+     */
+    public function groups() : HasMany
+    {
+        return $this->hasMany(TwoFAccountGroupAssignment::class, 'twofaccount_id');
+    }
+
+    /**
+     * Get OTP logs for the twofaccount.
+     *
+     * @return HasMany<\App\Models\OtpLog, $this>
+     */
+    public function otpLogs() : HasMany
+    {
+        return $this->hasMany(OtpLog::class, 'twofaccount_id');
+    }
+
+    /**
+     * Return the group id assigned to this account by the provided user.
+     */
+    public function groupIdForUser(User $user) : ?int
+    {
+        if ($this->relationLoaded('groups')) {
+            return $this->groups
+                ->where('user_id', (int) $user->id)
+                ->first()?->group_id;
+        }
+
+        return $this->groups()
+            ->where('user_id', $user->id)
+            ->value('group_id');
+    }
+
+    /**
+     * Determine whether the provided user owns this account.
+     */
+    public function isOwnedBy(User $user) : bool
+    {
+        return (int) $this->user_id === (int) $user->id;
+    }
+
+    /**
+     * Determine whether the provided user is granted a share on this account.
+     */
+    public function isSharedWith(User $user) : bool
+    {
+        if (! Settings::get('enableSharing')) {
+            return false;
+        }
+
+        $allUsersSharingScopeEnabled = Settings::get('enableAllUsersSharingScope');
+
+        if ($this->isOwnedBy($user)) {
+            return false;
+        }
+
+        return $this->shares()
+            ->where(function ($query) use ($user, $allUsersSharingScopeEnabled) {
+                $query->where(function ($innerQuery) use ($user) {
+                    $innerQuery
+                        ->where('scope', TwoFAccountShare::SCOPE_USER)
+                        ->where('shared_with_user_id', $user->id);
+                });
+
+                if ($allUsersSharingScopeEnabled) {
+                    $query->orWhere('scope', TwoFAccountShare::SCOPE_ALL_USERS);
+                }
+            })
+            ->exists();
+    }
+
+    /**
+     * Determine whether the provided user can generate an OTP for this account.
+     */
+    public function canGenerateOtp(User $user) : bool
+    {
+        return $this->isOwnedBy($user) || $this->isSharedWith($user);
+    }
+
+    /**
+     * Determine whether the provided user can read account secret.
+     */
+    public function canReadSecret(User $user) : bool
+    {
+        return $this->isOwnedBy($user);
+    }
+
+    /**
+     * Scope a query to include accounts visible by the provided user.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder<TwoFAccount>  $query
+     * @return \Illuminate\Database\Eloquent\Builder<TwoFAccount>
+     */
+    public function scopeVisibleTo($query, User $user)
+    {
+        if (! Settings::get('enableSharing')) {
+            return $query->where('user_id', $user->id);
+        }
+
+        $allUsersSharingScopeEnabled = Settings::get('enableAllUsersSharingScope');
+
+        return $query->where(function ($visibleQuery) use ($user, $allUsersSharingScopeEnabled) {
+            $visibleQuery
+                ->where('user_id', $user->id)
+                ->orWhereHas('shares', function ($shareQuery) use ($user, $allUsersSharingScopeEnabled) {
+                    $shareQuery->where(function ($scopeQuery) use ($user, $allUsersSharingScopeEnabled) {
+                        $scopeQuery
+                            ->where(function ($userScopeQuery) use ($user) {
+                                $userScopeQuery
+                                    ->where('scope', TwoFAccountShare::SCOPE_USER)
+                                    ->where('shared_with_user_id', $user->id);
+                            });
+
+                        if ($allUsersSharingScopeEnabled) {
+                            $scopeQuery->orWhere('scope', TwoFAccountShare::SCOPE_ALL_USERS);
+                        }
+                    });
+                });
+        });
     }
 
     /**

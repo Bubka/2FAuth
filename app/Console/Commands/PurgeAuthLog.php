@@ -35,7 +35,7 @@ class PurgeAuthLog extends Command
      *
      * @var string
      */
-    public $signature = '2fauth:purge-log';
+    public $signature = '2fauth:purge-auth-log';
 
     /**
      * The console command description.

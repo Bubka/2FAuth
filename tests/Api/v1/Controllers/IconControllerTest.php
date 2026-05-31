@@ -3,9 +3,11 @@
 namespace Tests\Api\v1\Controllers;
 
 use App\Api\v1\Controllers\IconController;
+use App\Api\v1\Requests\IconStoreRequest;
 use App\Facades\IconStore;
 use App\Models\TwoFAccount;
 use App\Models\User;
+use App\Services\LogoLib\LogoLibManager;
 use Illuminate\Http\Testing\FileFactory;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Http;
@@ -22,6 +24,8 @@ use Tests\FeatureTestCase;
  * IconController test class
  */
 #[CoversClass(IconController::class)]
+#[CoversClass(IconStoreRequest::class)]
+#[CoversClass(LogoLibManager::class)]
 class IconControllerTest extends FeatureTestCase
 {
     /**
@@ -84,6 +88,21 @@ class IconControllerTest extends FeatureTestCase
     }
 
     #[Test]
+    public function test_upload_returns_error_when_file_upload_fails()
+    {
+        $file = UploadedFile::fake()->image('testIcon.jpg');
+
+        IconStore::shouldReceive('store')
+            ->andThrow(new \Exception);
+
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('POST', '/api/v1/icons', [
+                'icon' => $file,
+            ])
+            ->assertStatus(500);
+    }
+
+    #[Test]
     public function test_upload_infected_svg_data_stores_stores_sanitized_svg_content()
     {
         $file = LocalFile::fake()->infectedSvgIconFile();
@@ -137,6 +156,34 @@ class IconControllerTest extends FeatureTestCase
         $svgContent = trim(str_replace('> <', '><', IconStore::get($response->getData()->filename)));
 
         $this->assertEquals(OtpTestData::ICON_SVG_DATA, $svgContent);
+    }
+
+    #[Test]
+    public function test_fetch_logo_using_specified_iconcollection_and_variant_returns_filename()
+    {
+        $service = 'service';
+        $variant = 'light';
+        
+        Http::fake([
+            CommonDataProvider::SELFH_URL          => Http::response(HttpRequestTestData::SVG_LOGO_BODY, 200),
+            CommonDataProvider::DASHBOARDICONS_URL_ROOT . 'svg/' . $service . '-' . $variant . '.svg' => Http::response(OtpTestData::ICON_SVG_DATA_LIGHT_VARIANT, 200),
+        ]);
+
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('POST', '/api/v1/icons/default', [
+                'service'        => $service,
+                'iconCollection' => 'dashboardicons',
+                'variant'        => $variant,
+            ])
+            ->assertStatus(201)
+            ->assertJsonStructure([
+                'filename',
+            ]);
+
+        // Don't know why but 'getData()->filename' has some unwanted spaces in it so we trim them
+        $svgContent = trim(str_replace('> <', '><', IconStore::get($response->getData()->filename)));
+
+        $this->assertEquals(OtpTestData::ICON_SVG_DATA_LIGHT_VARIANT, $svgContent);
     }
 
     #[Test]

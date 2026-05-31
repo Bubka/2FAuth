@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Hash;
 
 class DemoSeeder extends Seeder
 {
+    use SeederTrait;
+
     /**
      * Run the database seeds.
      *
@@ -28,63 +30,59 @@ class DemoSeeder extends Seeder
             'name' => 'Social Networks',
         ]);
 
-        $user->twofaccounts()->createMany([
-            [
-                'group_id' => $groupSocialNetwork->id,
-                'otp_type' => 'totp',
-                'account' => 'johndoe@facebook.com',
-                'service' => 'Facebook',
-                'secret' => 'A4GRFTVVRBGY7UIW',
-                'algorithm' => 'sha1',
-                'digits' => 6,
-                'period' => 30,
-                'icon' => 'facebook.png',
-                'legacy_uri' => 'otpauth://totp/Facebook:johndoe@facebook.com?secret=A4GRFTVVRBGY7UIW',
-            ],
-            [
-                'group_id' => $groupSocialNetwork->id,
-                'otp_type' => 'totp',
-                'service' => 'Twitter',
-                'account' => '@john',
-                'secret' => 'A2GRFTVVRBGY7UIW',
-                'algorithm' => 'sha1',
-                'digits' => 6,
-                'period' => 30,
-                'icon' => 'twitter.png',
-                'legacy_uri' => 'otpauth://totp/Twitter:@john?secret=A2GRFTVVRBGY7UIW',
-            ],
-            [
-                'group_id' => $groupSocialNetwork->id,
-                'otp_type' => 'totp',
-                'service' => 'Instagram',
-                'account' => '@johndoe',
-                'secret' => 'A6GRFTVVRBGY7UIW',
-                'algorithm' => 'sha1',
-                'digits' => 6,
-                'period' => 30,
-                'icon' => 'instagram.png',
-                'legacy_uri' => 'otpauth://totp/Instagram:@johndoe?secret=A6GRFTVVRBGY7UIW',
-            ],
-            [
-                'group_id' => $groupSocialNetwork->id,
-                'otp_type' => 'totp',
-                'service' => 'LinkedIn',
-                'account' => '@johndoe',
-                'secret' => 'A7GRFTVVRBGY7UIW',
-                'algorithm' => 'sha1',
-                'digits' => 6,
-                'period' => 30,
-                'icon' => 'linkedin.png',
-                'legacy_uri' => 'otpauth://totp/LinkedIn:@johndoe?secret=A7GRFTVVRBGY7UIW',
-            ]
-        ]);
+        $this->CreateTwoFAccountWithGroupAssignment($user, [
+            'otp_type' => 'totp',
+            'account' => 'johndoe@facebook.com',
+            'service' => 'Facebook',
+            'secret' => 'A4GRFTVVRBGY7UIW',
+            'algorithm' => 'sha1',
+            'digits' => 6,
+            'period' => 30,
+            'icon' => 'facebook.png',
+            'legacy_uri' => 'otpauth://totp/Facebook:johndoe@facebook.com?secret=A4GRFTVVRBGY7UIW',
+        ], $groupSocialNetwork);
+
+        $this->CreateTwoFAccountWithGroupAssignment($user, [
+            'otp_type' => 'totp',
+            'service' => 'Twitter',
+            'account' => '@john',
+            'secret' => 'A2GRFTVVRBGY7UIW',
+            'algorithm' => 'sha1',
+            'digits' => 6,
+            'period' => 30,
+            'icon' => 'twitter.png',
+            'legacy_uri' => 'otpauth://totp/Twitter:@john?secret=A2GRFTVVRBGY7UIW',
+        ], $groupSocialNetwork);
+
+        $this->CreateTwoFAccountWithGroupAssignment($user, [
+            'otp_type' => 'totp',
+            'service' => 'Instagram',
+            'account' => '@johndoe',
+            'secret' => 'A6GRFTVVRBGY7UIW',
+            'algorithm' => 'sha1',
+            'digits' => 6,
+            'period' => 30,
+            'icon' => 'instagram.png',
+            'legacy_uri' => 'otpauth://totp/Instagram:@johndoe?secret=A6GRFTVVRBGY7UIW',
+        ], $groupSocialNetwork);
+
+        $this->CreateTwoFAccountWithGroupAssignment($user, [
+            'otp_type' => 'totp',
+            'service' => 'LinkedIn',
+            'account' => '@johndoe',
+            'secret' => 'A7GRFTVVRBGY7UIW',
+            'algorithm' => 'sha1',
+            'digits' => 6,
+            'period' => 30,
+            'icon' => 'linkedin.png',
+            'legacy_uri' => 'otpauth://totp/LinkedIn:@johndoe?secret=A7GRFTVVRBGY7UIW',
+        ], $groupSocialNetwork);
 
         $groupECommerce = $user->groups()->create([
             'name' => 'eCommerce',
         ]);
 
-        $user->twofaccounts()->create([
-            'group_id' => $groupECommerce->id,
+        $this->CreateTwoFAccountWithGroupAssignment($user, [
             'otp_type' => 'totp',
             'account' => 'johndoe',
             'service' => 'Amazon',
@@ -94,7 +92,7 @@ class DemoSeeder extends Seeder
             'period' => 30,
             'icon' => 'amazon.png',
             'legacy_uri' => 'otpauth://totp/Amazon:johndoe?secret=A7GRFTVVRBGY7UIW',
-        ]);
+        ], $groupECommerce);
 
         $user->twofaccounts()->createMany([
             [

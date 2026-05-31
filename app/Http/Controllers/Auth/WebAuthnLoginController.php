@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Http\Controllers\Auth\Traits\HasAuthenticatedPayload;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\WebauthnAssertedRequest;
 use App\Models\User;
@@ -17,7 +18,7 @@ use Laragear\WebAuthn\Http\Requests\AssertionRequest;
 
 class WebAuthnLoginController extends Controller
 {
-    use AuthenticatesUsers;
+    use AuthenticatesUsers, HasAuthenticatedPayload;
 
     /**
      * The login throttle.
@@ -132,14 +133,7 @@ class WebAuthnLoginController extends Controller
 
         $this->authenticated($user);
 
-        return response()->json([
-            'message'     => 'authenticated',
-            'id'          => $user->id,
-            'name'        => $user->name,
-            'email'       => $user->email,
-            'preferences' => $user->preferences,
-            'is_admin'    => $user->isAdministrator(),
-        ], Response::HTTP_OK);
+        return response()->json($this->authenticatedPayload('authenticated', $user), Response::HTTP_OK);
     }
 
     /**

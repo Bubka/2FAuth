@@ -3,10 +3,13 @@
 namespace Tests\Feature\Models;
 
 use App\Facades\Icons;
+use App\Facades\Settings;
 use App\Models\TwoFAccount;
+use App\Models\TwoFAccountShare;
 use App\Models\User;
 use App\Services\LogoLib\TfaLogoLib;
 use Illuminate\Http\Testing\FileFactory;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Mockery\MockInterface;
@@ -95,6 +98,102 @@ class TwoFAccountModelTest extends FeatureTestCase
             'period'     => OtpTestData::PERIOD_DEFAULT,
             'counter'    => null,
         ]);
+    }
+
+    #[Test]
+    public function test_isSharedWith_returns_false_when_sharing_is_disabled()
+    {
+        Settings::set('enableSharing', false);
+        Settings::set('enableAllUsersSharingScope', true);
+
+        $owner = User::factory()->create();
+        $targetUser = User::factory()->create();
+        $twofaccount = TwoFAccount::factory()->for($owner)->create();
+
+        TwoFAccountShare::create([
+            'twofaccount_id' => $twofaccount->id,
+            'shared_with_user_id' => $targetUser->id,
+            'scope' => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id' => $owner->id,
+        ]);
+
+        $this->assertFalse($twofaccount->isSharedWith($targetUser));
+    }
+
+    #[Test]
+    public function test_isSharedWith_ignores_all_users_scope_when_disabled()
+    {
+        Settings::set('enableSharing', true);
+        Settings::set('enableAllUsersSharingScope', false);
+
+        $owner = User::factory()->create();
+        $targetUser = User::factory()->create();
+        $twofaccount = TwoFAccount::factory()->for($owner)->create();
+
+        TwoFAccountShare::create([
+            'twofaccount_id' => $twofaccount->id,
+            'shared_with_user_id' => null,
+            'scope' => TwoFAccountShare::SCOPE_ALL_USERS,
+            'created_by_user_id' => $owner->id,
+        ]);
+
+        $this->assertFalse($twofaccount->isSharedWith($targetUser));
+    }
+
+    #[Test]
+    public function test_scopeVisibleTo_returns_only_owned_accounts_when_sharing_is_disabled()
+    {
+        Settings::set('enableSharing', false);
+        Settings::set('enableAllUsersSharingScope', true);
+
+        $owner = User::factory()->create();
+        $targetUser = User::factory()->create();
+
+        $ownedAccount = TwoFAccount::factory()->for($targetUser)->create();
+        $sharedAccount = TwoFAccount::factory()->for($owner)->create();
+
+        TwoFAccountShare::create([
+            'twofaccount_id' => $sharedAccount->id,
+            'shared_with_user_id' => $targetUser->id,
+            'scope' => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id' => $owner->id,
+        ]);
+
+        $visibleIds = TwoFAccount::visibleTo($targetUser)->pluck('id')->all();
+
+        $this->assertContains($ownedAccount->id, $visibleIds);
+        $this->assertNotContains($sharedAccount->id, $visibleIds);
+    }
+
+    #[Test]
+    public function test_scopeVisibleTo_excludes_all_users_scope_when_disabled()
+    {
+        Settings::set('enableSharing', true);
+        Settings::set('enableAllUsersSharingScope', false);
+
+        $owner = User::factory()->create();
+        $targetUser = User::factory()->create();
+
+        $allUsersSharedAccount = TwoFAccount::factory()->for($owner)->create();
+        $userSharedAccount = TwoFAccount::factory()->for($owner)->create();
+
+        TwoFAccountShare::create([
+            'twofaccount_id' => $allUsersSharedAccount->id,
+            'shared_with_user_id' => null,
+            'scope' => TwoFAccountShare::SCOPE_ALL_USERS,
+            'created_by_user_id' => $owner->id,
+        ]);
+        TwoFAccountShare::create([
+            'twofaccount_id' => $userSharedAccount->id,
+            'shared_with_user_id' => $targetUser->id,
+            'scope' => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id' => $owner->id,
+        ]);
+
+        $visibleIds = TwoFAccount::visibleTo($targetUser)->pluck('id')->all();
+
+        $this->assertContains($userSharedAccount->id, $visibleIds);
+        $this->assertNotContains($allUsersSharedAccount->id, $visibleIds);
     }
 
     #[Test]

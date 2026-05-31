@@ -1,5 +1,6 @@
 <script setup>
     import twofaccountService from '@/services/twofaccountService'
+    import shareService from '@/services/shareService'
     import DestinationGroupSelector from '@/components/DestinationGroupSelector.vue'
     import Toolbar from '@/components/Toolbar.vue'
     import ActionButtons from '@/components/ActionButtons.vue'
@@ -15,13 +16,14 @@
         DotsController,
         useVisiblePassword
     } from '@2fauth/ui'
+    import { useAppSettingsStore } from '@/stores/appSettings'
     import { useBusStore } from '@/stores/bus'
     import { useTwofaccounts } from '@/stores/twofaccounts'
     import { useGroups } from '@/stores/groups'
     import { useSortable, moveArrayElement } from '@vueuse/integrations/useSortable'
     import { useI18n } from 'vue-i18n'
     import { useErrorHandler } from '@2fauth/stores'
-    import { LucideChevronDown, LucideCircleAlert, LucideEye, LucideEyeOff, LucideMenu, LucideQrCode } from 'lucide-vue-next'
+    import { LucideChevronDown, LucideCircleAlert, LucideEye, LucideEyeOff, LucideMenu, LucidePencil, LucideQrCode, LucideTrash2, LucideUserCheck, LucideUserPen, LucideUserPlus, LucideUsers, LucideX } from '@lucide/vue'
 
     const errorHandler = useErrorHandler()
     const { t } = useI18n()
@@ -33,6 +35,7 @@
     const { copy, copied } = useClipboard({ legacy: true })
     const twofaccounts = useTwofaccounts()
     const groups = useGroups()
+    const appSettings = useAppSettingsStore()
 
     const showOtpInModal = ref(false)
     const showExportFormatSelector = ref(false)
@@ -42,6 +45,8 @@
     const renewedPeriod = ref(null)
     const revealPassword = ref(null)
     const opacities = ref({})
+    const showFooterMenu = ref(false)
+    const visibleAccount = ref(null)
 
     const otpDisplay = ref(null)
     const accountParams = ref({
@@ -153,6 +158,8 @@
         accountParams.value.account = account.account
         accountParams.value.icon = account.icon
 
+        visibleAccount.value = account
+
         nextTick().then(() => {
             showOtpInModal.value = true
             otpDisplay.value.show(account.id);
@@ -165,7 +172,7 @@
     function showOrCopy(account) {
         // In Management mode, clicking an account does not show/copy, it selects the account
         if(bus.inManagementMode) {
-            twofaccounts.select(account.id)
+            selectAccount(account)
         }
         else {
             if (!user.preferences.getOtpOnRequest && account.otp_type.includes('totp')) {
@@ -319,6 +326,25 @@
     }
 
     /**
+     * Deletes given account
+     */
+    async function deleteAccount(account) {
+        twofaccounts.selectNone()
+        selectAccount(account)
+        await twofaccounts.deleteSelected()
+
+        if (twofaccounts.isEmpty) {
+            bus.inManagementMode = false
+            router.push({ name: 'start' })
+        }
+
+        nextTick().then(() => {
+            showOtpInModal.value = false
+            showFooterMenu.value = false
+        })
+    }
+
+    /**
      * Deletes selected accounts
      */
     async function deleteAccounts() {
@@ -344,8 +370,6 @@
      */
     // TODO : Delegate this to the store or a global watcher
     function saveActiveGroup(newActiveGroupId) {
-        twofaccounts.groupLessOnly = false
-
         // When invoked by GroupSwitch event,  newActiveGroupId should
         // be the same as user.preferences.activeGroup because of the v-model
         // binding.
@@ -356,6 +380,25 @@
 
         if( user.preferences.rememberActiveGroup) {
             userService.updatePreference('activeGroup', user.preferences.activeGroup)
+        }
+    }
+
+    /**
+     * Selects an account
+     */
+    function selectAccount(account) {
+        twofaccounts.select(account.id)
+    }
+
+    /**
+     * 
+     * @param userId
+     */
+    function unshareUser(account, userId) {
+        if (appSettings.enableSharing && confirm(t('confirmation.unshare')) === true) {
+            shareService.unshareWithUser(account.id, userId).then(response => {
+                usershares.value = usershares.value.filter(user => user.id != userId)
+            })
         }
     }
 
@@ -395,8 +438,14 @@
                     </div>
                     <div v-else>
                         <button type="button" id="btnShowGroupSwitch" :title="$t('tooltip.show_group_selector')" tabindex="1" class="button is-text is-like-text has-text-grey-dark" :class="{'has-text-grey' : mode != 'dark'}" @click.stop="showGroupSwitch = !showGroupSwitch">
-                            <template v-if="twofaccounts.groupLessOnly">
+                            <template v-if="parseInt(user.preferences.activeGroup) == -1">
                                 {{ $t('label.group_less') }} ({{ twofaccounts.filteredCount }})&nbsp;
+                            </template>
+                            <template v-else-if="appSettings.enableSharing && parseInt(user.preferences.activeGroup) == -2">
+                                {{ $t('label.shared_by_me') }} ({{ twofaccounts.filteredCount }})&nbsp;
+                            </template>
+                            <template v-else-if="appSettings.enableSharing && parseInt(user.preferences.activeGroup) == -3">
+                                 {{ $t('label.shared_with_me') }} ({{ twofaccounts.filteredCount }})&nbsp;
                             </template>
                             <template v-else-if="groups.current">
                                 {{ groups.current }} ({{ twofaccounts.filteredCount }})&nbsp;
@@ -415,8 +464,8 @@
                     v-model:is-visible="showGroupSwitch"
                     v-model:active-group="user.preferences.activeGroup"
                     :groups="groups.items"
-                    @active-group-changed="saveActiveGroup"
-                    @show-group-less="twofaccounts.groupLessOnly = true">
+                    :useShare="appSettings.enableSharing"
+                    @active-group-changed="saveActiveGroup">
                         <RouterLink :to="{ name: 'groups' }" >{{ $t('link.manage_groups') }}</RouterLink>
                 </GroupSwitch>
                 <DestinationGroupSelector
@@ -436,17 +485,28 @@
                                     <transition name="slideCheckbox">
                                         <div class="tfa-cell tfa-checkbox" v-if="bus.inManagementMode">
                                             <div class="field">
-                                                <input class="is-checkradio is-small" :class="mode == 'dark' ? 'is-white':'is-info'" :id="'ckb_' + account.id" :value="account.id" type="checkbox" :name="'ckb_' + account.id" v-model="twofaccounts.selectedIds">
-                                                <label tabindex="0" :for="'ckb_' + account.id" v-on:keypress.space.prevent="twofaccounts.select(account.id)"></label>
+                                                <input class="is-checkradio is-small" :class="mode == 'dark' ? 'is-white':'is-info'" :id="'ckb_' + account.id" :value="account.id" type="checkbox" :name="'ckb_' + account.id" v-model="twofaccounts.selectedIds"  />
+                                                <label tabindex="0" :for="'ckb_' + account.id" v-on:keypress.space.prevent="selectAccount(account)"></label>
                                             </div>
                                         </div>
                                     </transition>
                                     <div tabindex="0" class="tfa-cell tfa-content is-size-3 is-size-4-mobile" @click.exact="showOrCopy(account)" @keyup.enter="showOrCopy(account)" @click.ctrl="getAndCopyOTP(account)" role="button">  
-                                        <div class="tfa-text has-ellipsis">
+                                        <div class="tfa-text has-ellipsis is-clickable">
                                             <img v-if="account.icon && user.preferences.showAccountsIcons" role="presentation" class="tfa-icon" :src="$2fauth.config.subdirectory + '/storage/icons/' + account.icon" alt="">
                                             <img v-else-if="account.icon == null && user.preferences.showAccountsIcons" role="presentation" class="tfa-icon" :src="$2fauth.config.subdirectory + '/storage/noicon.svg'" alt="">
                                             {{ account.service ? account.service : $t('message.no_service') }}<LucideCircleAlert class="has-text-danger ml-2" v-if="account.account === $t('error.indecipherable')" />
-                                            <span class="is-block has-ellipsis is-family-primary is-size-6 is-size-7-mobile has-text-grey ">{{ account.account }}</span>
+                                            <span class="is-block has-ellipsis is-family-primary is-size-6 is-size-7-mobile has-text-grey ">
+                                                <span v-if="appSettings.enableSharing && account.is_borrowed" :title="$t('tooltip.this_account_is_shared_by_x_with_you', { username: account.borrowed_by })" class="tag p-1 mr-1" :class="mode == 'dark' ? 'is-black is-opacity-4':'is-light is-white'" >
+                                                    @{{ bus.inManagementMode ? account.borrowed_by : '' }}
+                                                </span>
+                                                <span v-else-if="appSettings.enableSharing && account.is_shared" :title="$t('tooltip.this_account_is_shared_with_specific_users')" class="tag p-1 mr-1" :class="mode == 'dark' ? 'is-black is-opacity-4':'is-light is-white'" >
+                                                    <LucideUserCheck class="icon-size-0-75" />
+                                                </span>
+                                                <span v-else-if="appSettings.enableSharing && appSettings.enableAllUsersSharingScope && account.is_shared_with_all" :title="$t('tooltip.this_account_is_shared_with_all')" class="tag p-1 mr-1" :class="mode == 'dark' ? 'is-black is-opacity-4':'is-light is-white'" >
+                                                    <LucideUsers class="icon-size-0-75" />
+                                                </span>
+                                                {{ account.account }}
+                                            </span>
                                         </div>
                                     </div>
                                     <transition name="popLater">
@@ -500,10 +560,22 @@
                                         </div>
                                     </transition>
                                     <transition name="fadeInOut">
-                                        <div class="tfa-cell tfa-edit has-text-grey" v-if="bus.inManagementMode">
+                                        <div class="tfa-cell tfa-edit has-text-grey" v-if="bus.inManagementMode && appSettings.enableSharing && user.preferences.activeGroup == -2">
+                                            <!-- new user share button -->
+                                            <RouterLink v-if="account.is_shared" :to="{ name: 'shareAccount', params: { twofaccountId: account.id } }" class="tag is-rounded mr-1" :class="mode == 'dark' ? 'is-dark' : 'is-white'" :title="$t('tooltip.share_with_new_users')">
+                                                <LucideUserPlus class="icon-size-1" />
+                                            </RouterLink>
+                                            <!-- manage sharing button -->
+                                            <RouterLink :to="{ name: 'accountSharing', params: { twofaccountId: account.id }}" class="tag is-rounded" :class="mode == 'dark' ? 'is-dark' : 'is-white'" :title="$t('tooltip.edit_sharing')">
+                                                <LucideUserPen class="icon-size-1" />
+                                            </RouterLink>
+                                        </div>
+                                        <div class="tfa-cell tfa-edit has-text-grey" v-else-if="bus.inManagementMode && ! account.is_borrowed">
+                                            <!-- edit button -->
                                             <RouterLink :to="{ name: 'editAccount', params: { twofaccountId: account.id }}" class="tag is-rounded mr-1" :class="mode == 'dark' ? 'is-dark' : 'is-white'">
                                                 {{ $t('link.edit') }}
                                             </RouterLink>
+                                            <!-- show qrcode button -->
                                             <RouterLink :to="{ name: 'showQRcode', params: { twofaccountId: account.id }}" class="tag is-rounded" :class="mode == 'dark' ? 'is-dark' : 'is-white'" :title="$t('tooltip.show_qrcode')">
                                                 <LucideQrCode class="icon-size-1" />
                                             </RouterLink>
@@ -531,6 +603,10 @@
                         <ActionButtons
                             v-model:inManagementMode="bus.inManagementMode"
                             :areDisabled="twofaccounts.hasNoneSelected"
+                            :canUnshare="twofaccounts.hasOnlySharedSelected"
+                            :showUnshare="appSettings.enableSharing"
+                            :canDelete="!twofaccounts.hasBorrowedSelected"
+                            :canExport="!twofaccounts.hasBorrowedSelected"
                             @move-button-clicked="showDestinationGroupSelector = true"
                             @delete-button-clicked="deleteAccounts"
                             @export-button-clicked="showExportFormatSelector = true">
@@ -548,27 +624,75 @@
             </template>
         </StackLayout>
         <!-- export modal -->
-        <Modal v-model="showExportFormatSelector">
+        <Modal v-model:is-active="showExportFormatSelector">
             <ExportButtons
                 @export-twofauth-format="twofaccounts.export()"
                 @export-otpauth-format="twofaccounts.export('otpauth')">
             </ExportButtons>
         </Modal>
         <!-- otp modal -->
-        <Modal v-model="showOtpInModal">
-            <OtpDisplay
-                ref="otpDisplay"
-                :accountParams="accountParams"
-                :preferences="user.preferences"
-                :twofaccountService="twofaccountService"
-                :iconPathPrefix="$2fauth.config.subdirectory"
-                @please-close-me="showOtpInModal = false"
-                @please-clear-search="twofaccounts.filter = ''"
-                @kickme="user.logout({ kicked: true})"
-                @please-update-activeGroup="saveActiveGroup"
-                @otp-copied-to-clipboard="notify.success({ text: t('notification.copied_to_clipboard') })"
-                @error="(error) => errorHandler.show(error)"
-            />
+        <Modal v-model:is-active="showOtpInModal" v-model:show-footer-menu="showFooterMenu">
+            <template #default>
+                <OtpDisplay
+                    ref="otpDisplay"
+                    :accountParams="accountParams"
+                    :preferences="user.preferences"
+                    :twofaccountService="twofaccountService"
+                    :iconPathPrefix="$2fauth.config.subdirectory"
+                    @please-close-me="showOtpInModal = false; showFooterMenu = false"
+                    @please-clear-search="twofaccounts.filter = ''"
+                    @kickme="user.logout({ kicked: true})"
+                    @please-update-activeGroup="saveActiveGroup"
+                    @otp-copied-to-clipboard="notify.success({ text: t('notification.copied_to_clipboard') })"
+                    @error="(error) => errorHandler.show(error)"
+                />
+            </template>
+            <template v-if="showOtpInModal && ! visibleAccount.is_borrowed" #footer-submenu>
+                <ul class="ml-0 mt-1">
+                    <!-- manage sharing link -->
+                    <li v-if="appSettings.enableSharing" class="column">
+                        <router-link id="lnkManageSharing" :to="{ name: 'accountSharing', params: { twofaccountId: visibleAccount.id }}" class="is-link">
+                            {{ $t('link.manage_sharing') }}
+                        </router-link>
+                    </li>
+                    <!-- transfer ownership link -->
+                    <li v-if="appSettings.enableSharing" class="column">
+                        <router-link id="lnkTransferOwnership" :to="{ name: 'transferOwnership', params: { twofaccountId: visibleAccount.id }}" class="is-link">
+                            {{ $t('link.transfer_ownership') }}
+                        </router-link>
+                    </li>
+                    <!-- otp generation log link -->
+                    <li class="column">
+                        <router-link id="lnkRead" :to="{ name: 'otpLogs', params: { twofaccountId: visibleAccount.id }}" class="is-link">
+                            {{ $t('link.otp_generation_log') }}
+                        </router-link>
+                    </li>
+                    <!-- action buttons -->
+                    <li class="column">
+                        <div class="tags is-centered are-medium">
+                            <router-link id="lnkQrCode" :to="{ name: 'showQRcode', params: { twofaccountId: visibleAccount.id }}" class="tag is-rounded" :class="mode == 'dark' ? 'is-dark' : 'is-white'" :title="$t('tooltip.show_qrcode')">
+                                <LucideQrCode class="icon-size-1" />
+                            </router-link>
+                            <router-link id="lnkEdit" :to="{ name: 'editAccount', params: { twofaccountId: visibleAccount.id }}" class="tag is-rounded mx-2" :class="mode == 'dark' ? 'is-dark' : 'is-white'" :title="$t('tooltip.edit_account')">
+                                <LucidePencil class="icon-size-1" />
+                            </router-link>
+                            <button id="btnDelete" @click="deleteAccount(visibleAccount)" class="tag is-rounded" :class="mode == 'dark' ? 'is-dark' : 'is-white'" :title="$t('tooltip.delete_account')">
+                                <LucideTrash2 class="icon-size-1" />
+                            </button>
+                        </div>
+                    </li>
+                </ul>
+            </template>
+            <template #footer-subpart>
+                <span v-if="showOtpInModal && appSettings.enableSharing && visibleAccount.is_borrowed" class="has-text-grey">
+                    {{ $t('message.shared_by_x', { username: visibleAccount.borrowed_by }) }}
+                </span>
+                <button v-else type="button" id="btnActions" @click="showFooterMenu = !showFooterMenu" class="button is-text is-like-text has-text-grey" style="width: 100%;">
+                    <span class="mr-2 has-ellipsis">{{ $t('label.actions') }}</span>
+                    <LucideMenu v-if="!showFooterMenu" />
+                    <LucideX v-else />
+                </button>
+            </template>
         </Modal>
         <!-- dots controllers -->
         <span v-if="!user.preferences.getOtpOnRequest">
