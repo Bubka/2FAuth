@@ -146,6 +146,7 @@ return [
     'features' => [
         'iconPack',
         'sharing',
+        'allUsersSharingScope',
         'showNextOtp',
     ],
 

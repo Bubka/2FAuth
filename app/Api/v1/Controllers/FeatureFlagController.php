@@ -2,6 +2,7 @@
 
 namespace App\Api\v1\Controllers;
 
+use App\Facades\Settings;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -18,7 +19,7 @@ class FeatureFlagController extends Controller
         foreach (config('2fauth.features', []) as $feature) {
             $features[] = [
                 'name'  => (string) $feature,
-                'state' => 'enabled',
+                'state' => $this->featureState($feature),
             ];
         }
 
@@ -38,7 +39,32 @@ class FeatureFlagController extends Controller
 
         return response()->json([
             'name'  => $feature,
-            'state' => 'enabled',
+            'state' => $this->featureState($feature),
         ], 200);
+    }
+
+    /**
+     * Return 'enabled' or 'disabled' based on the feature's status.
+     */
+    private function featureState(string $feature) : string
+    {
+        return $this->isFeatureEnabled($feature) ? 'enabled' : 'disabled';
+    }
+
+    /**
+     * Determine if a feature is enabled, taking into account both the existence of the feature in the config and the related settings.
+     */
+    private function isFeatureEnabled(string $feature) : bool
+    {
+        $featureExists = in_array($feature, config('2fauth.features', []), true);
+
+        switch ($feature) {
+            case 'sharing':
+                return Settings::get('enableSharing') && $featureExists;
+            case 'allUsersSharingScope':
+                return Settings::get('enableAllUsersSharingScope') && $featureExists;
+            default:
+                return $featureExists;
+        }
     }
 }
