@@ -164,7 +164,7 @@
     "field.display_mode.help": "Choose whether you want accounts to be displayed as a list or as a grid",
     "field.display_mode": "Display mode",
     "field.email": "Email",
-    "field.enable_sharing.help": "Allow users to share their 2FA accounts with other users of this 2FAuth instance. When shared, 2FA accounts can be viewed and used by sharing recipients to generate OTP codes. Only the owner of an account can edit, delete, export, or view their password. Sharing an account does not transfer its ownership, so only the owner can manage the sharing of their accounts.",
+    "field.enable_sharing.help": "Allow users to share their 2FA accounts with other users of this 2FAuth instance. When shared, 2FA accounts can be viewed and used by sharing recipients to generate OTP codes. Only the owner of an account can edit, delete, or export it, as well as view its secret or manage the sharing configuration of the account.",
     "field.enable_sharing": "Enable sharing",
     "field.enable_all_users_sharing_scope.help": "The All Users scope lets you target all users of the 2FAuth instance. When an account is shared at this level, it is automatically shared with all users, including those created after the sharing action.",
     "field.enable_all_users_sharing_scope.help_bis": "Disabling this setting will deactivate existing sharings with the All Users scope, but it will not revoke them. If you re-enable this setting later, these sharings will be active again unless sharings with specific users have been set up in the meantime.",
