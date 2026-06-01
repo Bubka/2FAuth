@@ -54,26 +54,29 @@ class SocialiteController extends Controller
         }
 
         $uniqueName     = $socialiteUser->getId() . '@' . $driver;
-        $socialiteEmail = strtolower($socialiteUser->getEmail() ?? $uniqueName);
+        $socialiteEmail = $socialiteUser->getEmail() ?? $uniqueName;
         $socialiteName  = ($socialiteUser->getNickname() ?? $socialiteUser->getName()) . ' (' . $uniqueName . ')';
-        $oauthId        = strtolower($socialiteUser->getId());
+        $oauthId        = $socialiteUser->getId();
 
-        // SQLite requires case insensitive collation for comparisons
-        $user = (DB::connection()->getDriverName() === 'sqlite')
-            ? User::whereRaw('oauth_id = ? COLLATE NOCASE', [$oauthId])
-                ->whereRaw('oauth_provider = ? COLLATE NOCASE', [$driver])
-                ->first() ?? new User([
-                    'oauth_id'       => $socialiteUser->getId(),
-                    'oauth_provider' => $driver,
-                ])
-            : User::firstOrNew([
+        /**
+         * @var User|null
+         */
+        $user = User::query()
+            ->where(DB::raw('LOWER(oauth_id)'), strtolower($oauthId))
+            ->where(DB::raw('LOWER(oauth_provider)'), strtolower($driver))
+            ->first();
+
+        // Don't know why but using firstOrNew() here does not work
+        if (! $user) {
+            $user = new User([
                 'oauth_id'       => $socialiteUser->getId(),
                 'oauth_provider' => $driver,
             ]);
+        }
 
         if (! $user->exists) {
             if (DB::table('users')
-                ->whereRaw('email = ?' . (DB::connection()->getDriverName() === 'sqlite' ? ' COLLATE NOCASE' : ''), [$socialiteEmail])
+                ->where(DB::raw('LOWER(email)'), strtolower($socialiteEmail))
                 ->exists()) {
                 return redirect('/error?err=sso_email_already_used');
             } elseif (User::count() === 0) {
