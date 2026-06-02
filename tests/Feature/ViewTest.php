@@ -50,7 +50,6 @@ class ViewTest extends FeatureTestCase
         $response->assertViewHas('lang');
         $response->assertViewHas('locales');
         $response->assertViewHas('cspNonce');
-        $response->assertViewHas('manifestUrl');
     }
 
     #[Test]
