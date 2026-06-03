@@ -259,6 +259,23 @@ class TwoFAccountModelTest extends FeatureTestCase
     }
 
     #[Test]
+    public function test_fill_with_ms_corporate_totp__with_sharp_uri_returns_correct_value()
+    {
+        $twofaccount = new TwoFAccount;
+        $twofaccount->fillWithURI(OtpTestData::TOTP_MICROSOFT_CORPORATE_URI_INCLUDING_SHARP);
+
+        $this->assertEquals('totp', $twofaccount->otp_type);
+        $this->assertEquals(OtpTestData::TOTP_MICROSOFT_CORPORATE_URI_INCLUDING_SHARP, $twofaccount->legacy_uri);
+        $this->assertEquals(OtpTestData::MICROSOFT, $twofaccount->service);
+        $this->assertEquals(OtpTestData::ACCOUNT_WITH_SHARP, $twofaccount->account);
+        $this->assertEquals(OtpTestData::SECRET, $twofaccount->secret);
+        $this->assertEquals(OtpTestData::DIGITS_DEFAULT, $twofaccount->digits);
+        $this->assertEquals(OtpTestData::PERIOD_DEFAULT, $twofaccount->period);
+        $this->assertEquals(null, $twofaccount->counter);
+        $this->assertEquals(OtpTestData::ALGORITHM_DEFAULT, $twofaccount->algorithm);
+    }
+
+    #[Test]
     public function test_fill_with_custom_hotp_uri_returns_correct_value()
     {
         $file = (new FileFactory)->image('file.png', 10, 10);

@@ -620,9 +620,11 @@ class TwoFAccount extends Model
      */
     public function fillWithURI(string $uri, bool $isSteamTotp = false, bool $skipIconFetching = false)
     {
+        $sanitizedUri = $this->sanitizeUri($uri);
+
         // First we instanciate the OTP generator
         try {
-            $this->generator = Factory::loadFromProvisioningUri($isSteamTotp ? str_replace('otpauth://steam', 'otpauth://totp', $uri) : $uri);
+            $this->generator = Factory::loadFromProvisioningUri($isSteamTotp ? str_replace('otpauth://steam', 'otpauth://totp', $sanitizedUri) : $sanitizedUri);
         } catch (\Throwable $ex) {
             throw ValidationException::withMessages([
                 'uri' => __('validation.custom.uri.regex', ['attribute' => 'uri']),
@@ -663,6 +665,17 @@ class TwoFAccount extends Model
         Log::info(sprintf('TwoFAccount filled with an URI'));
 
         return $this;
+    }
+
+    /**
+     * Sanitize otpauth uri
+     */
+    private function sanitizeUri(string $uri) : string
+    {
+        // MS includes #EXT# in the label for external users invited in azure AD tenant
+        $uri = str_replace('#', '%23', $uri);
+
+        return $uri;
     }
 
     /**

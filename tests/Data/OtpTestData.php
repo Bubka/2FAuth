@@ -6,6 +6,8 @@ class OtpTestData
 {
     const ACCOUNT = 'account';
 
+    const ACCOUNT_WITH_SHARP = 'account#EXT#@microsoft.com';
+
     const SERVICE = 'service';
 
     const STEAM = 'Steam';
@@ -81,6 +83,8 @@ class OtpTestData
     const ORGANIZATION = 'MyOrganization';
 
     const TOTP_MICROSOFT_CORPORATE_URI_MISMATCHING_ISSUER = 'otpauth://totp/' . self::ORGANIZATION . ':' . self::ACCOUNT . '?secret=' . self::SECRET . '&issuer=' . self::MICROSOFT;
+    
+    const TOTP_MICROSOFT_CORPORATE_URI_INCLUDING_SHARP = 'otpauth://totp/' . self::ORGANIZATION . ':' . self::ACCOUNT_WITH_SHARP . '?secret=' . self::SECRET . '&issuer=' . self::MICROSOFT;
 
     const TOTP_FULL_CUSTOM_URI = self::TOTP_FULL_CUSTOM_URI_NO_IMG . '&image=' . self::EXTERNAL_IMAGE_URL_ENCODED;
 
