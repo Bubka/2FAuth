@@ -16,10 +16,7 @@ use Tests\FeatureTestCase;
 #[CoversClass(UserResource::class)]
 class UserControllerTest extends FeatureTestCase
 {
-    /**
-     * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
-     */
-    protected $user;
+    protected User $user;
 
     private const PREFERENCE_JSON_STRUCTURE = [
         'key',

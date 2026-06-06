@@ -21,12 +21,9 @@ use Tests\FeatureTestCase;
 #[CoversMethod(SettingUpdateRequest::class, 'rules')]
 class SettingControllerTest extends FeatureTestCase
 {
-    /**
-     * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
-     */
-    protected $user;
+    protected User $user;
 
-    protected $admin;
+    protected User $admin;
 
     private const SETTING_JSON_STRUCTURE = [
         'key',

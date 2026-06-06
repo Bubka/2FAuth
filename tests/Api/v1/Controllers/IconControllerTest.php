@@ -28,10 +28,7 @@ use Tests\FeatureTestCase;
 #[CoversClass(LogoLibManager::class)]
 class IconControllerTest extends FeatureTestCase
 {
-    /**
-     * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
-     */
-    protected $user;
+    protected User $user;
 
     protected function setUp() : void
     {

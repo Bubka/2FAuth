@@ -17,17 +17,11 @@ use Tests\FeatureTestCase;
 #[CoversClass(QrCodeController::class)]
 class QrCodeControllerTest extends FeatureTestCase
 {
-    /**
-     * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
-     */
-    protected $user;
+    protected User $user;
 
-    protected $anotherUser;
+    protected User $anotherUser;
 
-    /**
-     * @var App\Models\TwoFAccount
-     */
-    protected $twofaccount;
+    protected TwoFAccount $twofaccount;
 
     protected function setUp() : void
     {

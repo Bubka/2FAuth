@@ -41,6 +41,7 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
         parent::setUp();
 
         Event::fake();
+        Settings::set('enableSharing', true);
 
         $this->owner = User::factory()->create();
         $this->targetUser = User::factory()->create();

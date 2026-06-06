@@ -57,36 +57,27 @@ use Tests\FeatureTestCase;
 #[CoversClass(TwoFAccountDynamicRequest::class)]
 class TwoFAccountControllerTest extends FeatureTestCase
 {
-    /**
-     * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
-     */
-    protected $user;
+    protected User $user;
 
-    protected $anotherUser;
+    protected User $anotherUser;
 
-    /**
-     * @var \App\Models\Group
-     */
-    protected $userGroupA;
+    protected Group $userGroupA;
 
-    protected $userGroupB;
+    protected Group $userGroupB;
 
-    protected $anotherUserGroupA;
+    protected Group $anotherUserGroupA;
 
-    protected $anotherUserGroupB;
+    protected Group $anotherUserGroupB;
 
-    /**
-     * @var \App\Models\TwoFAccount
-     */
-    protected $twofaccountA;
+    protected TwoFAccount $twofaccountA;
 
-    protected $twofaccountB;
+    protected TwoFAccount $twofaccountB;
 
-    protected $twofaccountC;
+    protected TwoFAccount $twofaccountC;
 
-    protected $twofaccountD;
+    protected TwoFAccount $twofaccountD;
 
-    protected $twofaccountE;
+    protected TwoFAccount $twofaccountE;
 
     private const DEFAULT_USER_PASSWORD = UserFactory::USER_PASSWORD;
 
@@ -285,7 +276,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
 
     #[Test]
     #[DataProvider('validResourceStructureProvider')]
-    public function test_index_returns_user_twofaccounts_only($urlParameter, $expected)
+    public function test_index_returns_user_twofaccounts_only(string $urlParameter, array $expected)
     {
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('GET', '/api/v1/twofaccounts' . $urlParameter)
@@ -368,6 +359,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
     #[Test]
     public function test_index_includes_accounts_shared_with_authenticated_user()
     {
+        Settings::set('enableSharing', true);
+
         TwoFAccountShare::create([
             'twofaccount_id' => $this->twofaccountC->id,
             'shared_with_user_id' => $this->user->id,
@@ -416,6 +409,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
     #[Test]
     public function test_index_returns_accounts_with_user_shared_ones_identified()
     {
+        Settings::set('enableSharing', true);
+
         TwoFAccountShare::create([
             'twofaccount_id' => $this->twofaccountA->id,
             'shared_with_user_id' => $this->anotherUser->id,
@@ -437,6 +432,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
     #[Test]
     public function test_index_returns_accounts_with_shared_with_all_ones_identified()
     {
+        Settings::set('enableSharing', true);
         Settings::set('enableAllUsersSharingScope', true);
 
         TwoFAccountShare::create([
@@ -462,6 +458,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
     #[Test]
     public function test_index_does_not_return_accounts_with_shared_with_all_ones_identified()
     {
+        Settings::set('enableSharing', true);
+
         TwoFAccountShare::create([
             'twofaccount_id' => $this->twofaccountA->id,
             'shared_with_user_id' => null,
@@ -501,7 +499,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
     }
 
     #[Test]
-    public function test_show_returns_twofaccount_resource_with_secret()
+    public function test_show_returns_twofaccount_resource_without_secret()
     {
         $response = $this->actingAs($this->user, 'api-guard')
             ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccountA->id)
@@ -510,10 +508,10 @@ class TwoFAccountControllerTest extends FeatureTestCase
     }
 
     #[Test]
-    public function test_show_returns_twofaccount_resource_without_secret()
+    public function test_show_returns_twofaccount_resource_with_secret()
     {
         $response = $this->actingAs($this->user, 'api-guard')
-            ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccountA->id . '?withSecret=0')
+            ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccountA->id . '?withSecret=1')
             ->assertOk()
             ->assertJsonStructure(self::VALID_RESOURCE_STRUCTURE_WITHOUT_SECRET);
     }
@@ -584,6 +582,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
     #[Test]
     public function test_show_twofaccount_shared_with_user_returns_resource_without_secret()
     {
+        Settings::set('enableSharing', true);
+
         TwoFAccountShare::create([
             'twofaccount_id' => $this->twofaccountC->id,
             'shared_with_user_id' => $this->user->id,
@@ -603,6 +603,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
     #[Test]
     public function test_show_twofaccount_shared_with_user_returns_resource_with_sharing_info()
     {
+        Settings::set('enableSharing', true);
+
         TwoFAccountShare::create([
             'twofaccount_id' => $this->twofaccountA->id,
             'shared_with_user_id' => $this->anotherUser->id,
@@ -641,6 +643,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
     #[Test]
     public function test_show_twofaccount_shared_with_user_returns_requester_group_assignment()
     {
+        Settings::set('enableSharing', true);
+
         TwoFAccountShare::create([
             'twofaccount_id'      => $this->twofaccountA->id,
             'shared_with_user_id' => $this->anotherUser->id,
@@ -663,6 +667,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
     #[Test]
     public function test_show_twofaccount_shared_by_user_returns_resource_with_sharing_info()
     {
+        Settings::set('enableSharing', true);
+
         TwoFAccountShare::create([
             'twofaccount_id' => $this->twofaccountA->id,
             'shared_with_user_id' => $this->anotherUser->id,
@@ -682,6 +688,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
     #[Test]
     public function test_show_twofaccount_not_shared_with_user_returns_resource_without_sharing_info()
     {
+        Settings::set('enableSharing', true);
+
         $this->actingAs($this->user, 'api-guard')
             ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccountA->id . '?withOtp=0')
             ->assertOk()
@@ -703,7 +711,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
 
     #[Test]
     #[DataProvider('accountCreationProvider')]
-    public function test_store_without_encryption_returns_success_with_consistent_resource_structure($payload, $expected)
+    public function test_store_without_encryption_returns_success_with_consistent_resource_structure(array $payload, array $expected)
     {
         Settings::set('useEncryption', false);
 
@@ -720,7 +728,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
 
     #[Test]
     #[DataProvider('accountCreationProvider')]
-    public function test_store_with_encryption_returns_success_with_consistent_resource_structure($payload, $expected)
+    public function test_store_with_encryption_returns_success_with_consistent_resource_structure(array $payload, array $expected)
     {
         Settings::set('useEncryption', true);
 
@@ -1179,6 +1187,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
     #[Test]
     public function test_transfer_ownership_returns_success_and_reassigns_account_to_new_owner()
     {
+        Settings::set('enableSharing', true);
+
         $this->actingAs($this->anotherUser, 'api-guard')
             ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
                 'new_owner_id' => $this->user->id,
@@ -1199,6 +1209,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
     #[Test]
     public function test_transfer_ownership_with_invalid_password_returns_unauthorized()
     {
+        Settings::set('enableSharing', true);
+
         $this->actingAs($this->anotherUser, 'api-guard')
             ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
                 'new_owner_id' => $this->user->id,
@@ -1216,6 +1228,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
     #[Test]
     public function test_transfer_ownership_of_missing_twofaccount_returns_not_found()
     {
+        Settings::set('enableSharing', true);
+
         $this->actingAs($this->anotherUser, 'api-guard')
             ->json('PATCH', '/api/v1/twofaccounts/1000000/owner', [
                 'new_owner_id' => $this->user->id,
@@ -1269,6 +1283,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
     #[Test]
     public function test_transfer_ownership_removes_explicit_share_of_new_owner()
     {
+        Settings::set('enableSharing', true);
+
         TwoFAccountShare::create([
             'twofaccount_id' => $this->twofaccountC->id,
             'shared_with_user_id' => $this->user->id,
@@ -1293,6 +1309,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
     #[Test]
     public function test_transfer_ownership_keeps_explicit_share_to_other_users()
     {
+        Settings::set('enableSharing', true);
+
         TwoFAccountShare::create([
             'twofaccount_id' => $this->twofaccountC->id,
             'shared_with_user_id' => $this->anotherUser->id,
@@ -1317,6 +1335,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
     #[Test]
     public function test_transfer_ownership_does_not_reassign_created_by_user_id()
     {
+        Settings::set('enableSharing', true);
+
         $share = TwoFAccountShare::create([
             'twofaccount_id' => $this->twofaccountC->id,
             'shared_with_user_id' => $this->anotherUser->id,
@@ -1340,6 +1360,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
     #[Test]
     public function test_transfer_ownership_of_another_user_twofaccount_is_forbidden()
     {
+        Settings::set('enableSharing', true);
+
         $this->actingAs($this->user, 'api-guard')
             ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
                 'new_owner_id' => $this->user->id,
@@ -1354,6 +1376,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
     #[Test]
     public function test_transfer_ownership_to_same_owner_returns_validation_error()
     {
+        Settings::set('enableSharing', true);
+
         $this->actingAs($this->anotherUser, 'api-guard')
             ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
                 'new_owner_id' => $this->anotherUser->id,
@@ -1366,6 +1390,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
     #[Test]
     public function test_transfer_ownership_to_unknown_user_returns_validation_error()
     {
+        Settings::set('enableSharing', true);
+
         $this->actingAs($this->anotherUser, 'api-guard')
             ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
                 'new_owner_id' => 9999999,
@@ -1378,6 +1404,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
     #[Test]
     public function test_transfer_ownership_revokes_old_owner_access_and_grants_new_owner_access()
     {
+        Settings::set('enableSharing', true);
+
         $this->actingAs($this->anotherUser, 'api-guard')
             ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
                 'new_owner_id' => $this->user->id,
@@ -1397,6 +1425,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
     #[Test]
     public function test_transfer_ownership_grants_new_owner_secret_access()
     {
+        Settings::set('enableSharing', true);
+
         $this->actingAs($this->anotherUser, 'api-guard')
             ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
                 'new_owner_id' => $this->user->id,
@@ -1413,6 +1443,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
     #[Test]
     public function test_transfer_ownership_grants_new_owner_qrcode_access()
     {
+        Settings::set('enableSharing', true);
+
         $this->actingAs($this->anotherUser, 'api-guard')
             ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
                 'new_owner_id' => $this->user->id,
@@ -1428,6 +1460,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
     #[Test]
     public function test_transfer_ownership_revokes_old_owner_otp_access_without_share_all()
     {
+        Settings::set('enableSharing', true);
+
         $this->actingAs($this->anotherUser, 'api-guard')
             ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
                 'new_owner_id' => $this->user->id,
@@ -1443,6 +1477,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
     #[Test]
     public function test_transfer_ownership_keeps_share_all_scope_if_already_applied()
     {
+        Settings::set('enableSharing', true);
+
         TwoFAccountShare::create([
             'twofaccount_id' => $this->twofaccountC->id,
             'shared_with_user_id' => null,
@@ -1467,6 +1503,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
     #[Test]
     public function test_transfer_ownership_with_share_all_keeps_old_owner_view_access()
     {
+        Settings::set('enableSharing', true);
         Settings::set('enableAllUsersSharingScope', true);
 
         TwoFAccountShare::create([
@@ -1493,6 +1530,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
     #[Test]
     public function test_transfer_ownership_with_share_all_keeps_old_owner_otp_access()
     {
+        Settings::set('enableSharing', true);
         Settings::set('enableAllUsersSharingScope', true);
 
         TwoFAccountShare::create([
@@ -1520,6 +1558,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
     #[Test]
     public function test_transfer_ownership_with_share_all_does_not_expose_secret_to_old_owner()
     {
+        Settings::set('enableSharing', true);
         Settings::set('enableAllUsersSharingScope', true);
 
         TwoFAccountShare::create([
@@ -1547,6 +1586,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
     #[Test]
     public function test_transfer_ownership_with_share_all_forbids_old_owner_qrcode_access()
     {
+        Settings::set('enableSharing', true);
         Settings::set('enableAllUsersSharingScope', true);
 
         TwoFAccountShare::create([
@@ -1573,6 +1613,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
     #[Test]
     public function test_transfer_ownership_updates_count_for_old_and_new_owner()
     {
+        Settings::set('enableSharing', true);
+
         $this->actingAs($this->anotherUser, 'api-guard')
             ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
                 'new_owner_id' => $this->user->id,
@@ -1602,6 +1644,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
     #[Test]
     public function test_transfer_ownership_without_share_all_keeps_old_owner_count_as_shared()
     {
+        Settings::set('enableSharing', true);
+
         TwoFAccountShare::create([
             'twofaccount_id' => $this->twofaccountC->id,
             'shared_with_user_id' => null,
@@ -1629,6 +1673,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
     #[Test]
     public function test_transfer_ownership_with_share_all_keeps_old_owner_count_as_shared()
     {
+        Settings::set('enableSharing', true);
         Settings::set('enableAllUsersSharingScope', true);
 
         TwoFAccountShare::create([
@@ -1660,6 +1705,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
     #[Test]
     public function test_transfer_ownership_revokes_old_owner_manage_shares_permission()
     {
+        Settings::set('enableSharing', true);
+
         $this->actingAs($this->anotherUser, 'api-guard')
             ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
                 'new_owner_id' => $this->user->id,
@@ -1675,6 +1722,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
     #[Test]
     public function test_transfer_ownership_revokes_old_owner_update_permission()
     {
+        Settings::set('enableSharing', true);
+
         $this->actingAs($this->anotherUser, 'api-guard')
             ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
                 'new_owner_id' => $this->user->id,
@@ -1690,6 +1739,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
     #[Test]
     public function test_transfer_ownership_revokes_old_owner_delete_permission()
     {
+        Settings::set('enableSharing', true);
+
         $this->actingAs($this->anotherUser, 'api-guard')
             ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
                 'new_owner_id' => $this->user->id,
@@ -1705,6 +1756,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
     #[Test]
     public function test_transfer_ownership_grants_new_owner_manage_shares_permission()
     {
+        Settings::set('enableSharing', true);
+
         $this->actingAs($this->anotherUser, 'api-guard')
             ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
                 'new_owner_id' => $this->user->id,
@@ -1720,6 +1773,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
     #[Test]
     public function test_transfer_ownership_grants_new_owner_share_store_permission()
     {
+        Settings::set('enableSharing', true);
+
         $this->actingAs($this->anotherUser, 'api-guard')
             ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
                 'new_owner_id' => $this->user->id,
@@ -1739,6 +1794,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
     #[Test]
     public function test_transfer_ownership_grants_new_owner_share_all_permission()
     {
+        Settings::set('enableSharing', true);
         Settings::set('enableAllUsersSharingScope', true);
 
         $this->actingAs($this->anotherUser, 'api-guard')
@@ -1760,6 +1816,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
     #[Test]
     public function test_transfer_ownership_grants_new_owner_unshare_all_permission()
     {
+        Settings::set('enableSharing', true);
+
         TwoFAccountShare::create([
             'twofaccount_id' => $this->twofaccountC->id,
             'shared_with_user_id' => null,
@@ -1782,6 +1840,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
     #[Test]
     public function test_transfer_ownership_revokes_old_owner_share_store_permission()
     {
+        Settings::set('enableSharing', true);
+
         $this->actingAs($this->anotherUser, 'api-guard')
             ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
                 'new_owner_id' => $this->user->id,
@@ -1799,6 +1859,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
     #[Test]
     public function test_transfer_ownership_revokes_old_owner_share_all_permission()
     {
+        Settings::set('enableSharing', true);
+
         $this->actingAs($this->anotherUser, 'api-guard')
             ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
                 'new_owner_id' => $this->user->id,
@@ -1862,6 +1924,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
     #[Test]
     public function test_otp_logs_returns_logs_for_given_account_including_shared_one()
     {
+        Settings::set('enableSharing', true);
+
         TwoFAccountShare::create([
             'twofaccount_id'      => $this->twofaccountA->id,
             'shared_with_user_id' => $this->anotherUser->id,
@@ -1905,6 +1969,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
     #[Test]
     public function test_otp_logs_returns_logs_with_deleted_requester_data()
     {
+        Settings::set('enableSharing', true);
+
         TwoFAccountShare::create([
             'twofaccount_id'      => $this->twofaccountA->id,
             'shared_with_user_id' => $this->anotherUser->id,
@@ -1930,6 +1996,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
     #[Test]
     public function test_otp_logs_returns_logs_with_deleted_requester_and_owner_data()
     {
+        Settings::set('enableSharing', true);
+
         $newOwner = User::factory()->create();
 
         $this->actingAs($this->user, 'api-guard')
@@ -2155,7 +2223,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
 
     #[Test]
     #[DataProvider('invalidAegisJsonFileProvider')]
-    public function test_migrate_invalid_aegis_json_file_returns_bad_request($file)
+    public function test_migrate_invalid_aegis_json_file_returns_bad_request(\Illuminate\Http\Testing\File $file)
     {
         $response = $this->withHeaders(['Content-Type' => 'multipart/form-data'])
             ->actingAs($this->user, 'api-guard')
@@ -2182,7 +2250,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
 
     #[Test]
     #[DataProvider('validPlainTextFileProvider')]
-    public function test_migrate_valid_plain_text_file_returns_success($file)
+    public function test_migrate_valid_plain_text_file_returns_success(\Illuminate\Http\Testing\File $file)
     {
         $response = $this->withHeaders(['Content-Type' => 'multipart/form-data'])
             ->actingAs($this->user, 'api-guard')
@@ -2244,7 +2312,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
 
     #[Test]
     #[DataProvider('invalidPlainTextFileProvider')]
-    public function test_migrate_invalid_plain_text_file_returns_bad_request($file)
+    public function test_migrate_invalid_plain_text_file_returns_bad_request(\Illuminate\Http\Testing\File $file)
     {
         $response = $this->withHeaders(['Content-Type' => 'multipart/form-data'])
             ->actingAs($this->user, 'api-guard')
@@ -2298,6 +2366,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
     #[Test]
     public function test_reorder_shared_twofaccounts_is_allowed()
     {
+        Settings::set('enableSharing', true);
+
         TwoFAccountShare::create([
             'twofaccount_id'      => $this->twofaccountC->id,
             'shared_with_user_id' => $this->user->id,
@@ -2322,6 +2392,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
     #[Test]
     public function test_index_returns_twofaccounts_sorted_with_custom_user_order()
     {
+        Settings::set('enableSharing', true);
+
         TwoFAccountShare::create([
             'twofaccount_id'      => $this->twofaccountC->id,
             'shared_with_user_id' => $this->user->id,
@@ -2369,6 +2441,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
     #[Test]
     public function test_unshare_removes_borrower_custom_order_entry()
     {
+        Settings::set('enableSharing', true);
+
         TwoFAccountShare::create([
             'twofaccount_id'      => $this->twofaccountC->id,
             'shared_with_user_id' => $this->user->id,
@@ -2553,6 +2627,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
     #[Test]
     public function test_export_of_shared_twofaccount_is_forbidden()
     {
+        Settings::set('enableSharing', true);
+
         TwoFAccountShare::create([
             'twofaccount_id' => $this->twofaccountA->id,
             'shared_with_user_id' => $this->anotherUser->id,
@@ -2782,6 +2858,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
     public function test_get_otp_of_shared_twofaccount_returns_success()
     {
         Event::fake();
+        Settings::set('enableSharing', true);
 
         TwoFAccountShare::create([
             'twofaccount_id' => $this->twofaccountC->id,
@@ -2832,6 +2909,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
     #[Test]
     public function test_count_includes_shared_twofaccounts()
     {
+        Settings::set('enableSharing', true);
+
         TwoFAccountShare::create([
             'twofaccount_id' => $this->twofaccountC->id,
             'shared_with_user_id' => $this->user->id,
@@ -2852,6 +2931,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
     #[Test]
     public function test_count_includes_accounts_shared_with_all_users()
     {
+        Settings::set('enableSharing', true);
         Settings::set('enableAllUsersSharingScope', true);
 
         TwoFAccountShare::create([
@@ -2876,6 +2956,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
     #[Test]
     public function test_count_excludes_accounts_shared_with_all_users_when_all_users_scope_is_disabled()
     {
+        Settings::set('enableSharing', true);
         Settings::set('enableAllUsersSharingScope', false);
 
         TwoFAccountShare::create([
@@ -2935,6 +3016,8 @@ class TwoFAccountControllerTest extends FeatureTestCase
     #[Test]
     public function test_withdraw_shared_account_removes_only_requester_assignment()
     {
+        Settings::set('enableSharing', true);
+        
         TwoFAccountShare::create([
             'twofaccount_id'      => $this->twofaccountC->id,
             'shared_with_user_id' => $this->user->id,

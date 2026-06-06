@@ -37,14 +37,11 @@ use Tests\FeatureTestCase;
 #[CoversClass(UserPolicy::class)]
 class UserManagerControllerTest extends FeatureTestCase
 {
-    /**
-     * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
-     */
-    protected $admin;
+    protected User $admin;
 
-    protected $user;
+    protected User $user;
 
-    protected $anotherUser;
+    protected User $anotherUser;
 
     /**
      * @var array
@@ -762,7 +759,7 @@ class UserManagerControllerTest extends FeatureTestCase
 
     #[Test]
     #[DataProvider('LimitProvider')]
-    public function test_authentications_returns_limited_entries($limit) : void
+    public function test_authentications_returns_limited_entries(int $limit) : void
     {
         AuthLog::factory()->for($this->user, 'authenticatable')->duringLastYear()->create();
         AuthLog::factory()->for($this->user, 'authenticatable')->duringLastSixMonth()->create();
@@ -808,7 +805,7 @@ class UserManagerControllerTest extends FeatureTestCase
 
     #[Test]
     #[DataProvider('invalidQueryParameterProvider')]
-    public function test_authentications_with_invalid_limit_returns_validation_error($limit) : void
+    public function test_authentications_with_invalid_limit_returns_validation_error(string $limit) : void
     {
         $this->actingAs($this->admin, 'api-guard')
             ->json('GET', '/api/v1/users/' . $this->user->id . '/authentications?limit=' . $limit)
@@ -817,7 +814,7 @@ class UserManagerControllerTest extends FeatureTestCase
 
     #[Test]
     #[DataProvider('invalidQueryParameterProvider')]
-    public function test_authentications_with_invalid_period_returns_validation_error($period) : void
+    public function test_authentications_with_invalid_period_returns_validation_error(string $period) : void
     {
         $this->actingAs($this->admin, 'api-guard')
             ->json('GET', '/api/v1/users/' . $this->user->id . '/authentications?period=' . $period)

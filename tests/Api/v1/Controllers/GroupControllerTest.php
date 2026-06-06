@@ -26,34 +26,25 @@ use Tests\FeatureTestCase;
 #[CoversClass(DissociateTwofaccountFromGroup::class)]
 class GroupControllerTest extends FeatureTestCase
 {
-    /**
-     * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
-     */
-    protected $user;
+    protected User $user;
 
-    protected $anotherUser;
+    protected User $anotherUser;
 
-    /**
-     * @var \App\Models\Group
-     */
-    protected $userGroupA;
+    protected Group $userGroupA;
 
-    protected $userGroupB;
+    protected Group $userGroupB;
 
-    protected $anotherUserGroupA;
+    protected Group $anotherUserGroupA;
 
-    protected $anotherUserGroupB;
+    protected Group $anotherUserGroupB;
 
-    /**
-     * @var \App\Models\TwoFAccount
-     */
-    protected $twofaccountA;
+    protected TwoFAccount $twofaccountA;
 
-    protected $twofaccountB;
+    protected TwoFAccount $twofaccountB;
 
-    protected $twofaccountC;
+    protected TwoFAccount $twofaccountC;
 
-    protected $twofaccountD;
+    protected TwoFAccount $twofaccountD;
 
     private const NEW_GROUP_NAME = 'MyNewGroup';
 
@@ -104,6 +95,8 @@ class GroupControllerTest extends FeatureTestCase
     #[Test]
     public function test_index_pseudo_group_count_includes_shared_accounts_when_sharing_is_enabled()
     {
+        Settings::set('enableSharing', true);
+
         TwoFAccountShare::create([
             'twofaccount_id'      => $this->twofaccountC->id,
             'shared_with_user_id' => $this->user->id,
@@ -262,6 +255,8 @@ class GroupControllerTest extends FeatureTestCase
     #[Test]
     public function test_show_missing_group_with_id_0_includes_shared_accounts_when_sharing_is_enabled()
     {
+        Settings::set('enableSharing', true);
+
         TwoFAccountShare::create([
             'twofaccount_id'      => $this->twofaccountC->id,
             'shared_with_user_id' => $this->user->id,
@@ -424,6 +419,8 @@ class GroupControllerTest extends FeatureTestCase
     #[Test]
     public function test_assign_shared_account_to_owned_group_is_allowed()
     {
+        Settings::set('enableSharing', true);
+
         TwoFAccountShare::create([
             'twofaccount_id'      => $this->twofaccountC->id,
             'shared_with_user_id' => $this->user->id,
@@ -573,6 +570,8 @@ class GroupControllerTest extends FeatureTestCase
     #[Test]
     public function test_accounts_of_the_all_group_includes_shared_accounts()
     {
+        Settings::set('enableSharing', true);
+
         TwoFAccountShare::create([
             'twofaccount_id'      => $this->twofaccountC->id,
             'shared_with_user_id' => $this->user->id,

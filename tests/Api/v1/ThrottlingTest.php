@@ -39,7 +39,7 @@ class ThrottlingTest extends FeatureTestCase
     }
     #[Test]
     #[DataProvider('DisabledThrottlingProvider')]
-    public function test_api_calls_are_not_throttled($throttlingStatus)
+    public function test_api_calls_are_not_throttled(mixed $throttlingStatus)
     {
         /**
          * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
