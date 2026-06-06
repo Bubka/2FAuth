@@ -143,7 +143,7 @@
         if (route.name == 'editAccount') {
             showSpinner.value = true
 
-            twofaccountService.getWithSecret(props.twofaccountId).then(response => {
+            twofaccountService.get(props.twofaccountId).then(response => {
                 form.fill(response.data)
                 if (form.group_id == null) {
                     form.group_id = 0

@@ -15,8 +15,8 @@ export default {
         return apiClient.get('/twofaccounts/' + id, { ...config })
     },
 
-    getWithSecret(id, config = {}) {
-        return apiClient.get('/twofaccounts/' + id + '?withSecret=1', { ...config })
+    getWithoutSecret(id, config = {}) {
+        return apiClient.get('/twofaccounts/' + id + '?withSecret=0', { ...config })
     },
 
     preview(uri, config = {}) {
