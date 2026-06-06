@@ -107,34 +107,34 @@ Route::get('/manifest.json', function () {
     $base = request()->getBaseUrl();
 
     return response()->json([
-        "short_name" => config('app.name'),
-        "name" => config('app.name'),
-        "start_url" => url('/'),
-        "scope" => "/",
-        "display" => "standalone",
-        "theme_color" => "#242424",
-        "icons" => [[
-            "src"   => "favicon_lg.png",
-            "type"  => "image/png",
-            "sizes" => "180x180"
+        'short_name'  => config('app.name'),
+        'name'        => config('app.name'),
+        'start_url'   => url('/'),
+        'scope'       => '/',
+        'display'     => 'standalone',
+        'theme_color' => '#242424',
+        'icons'       => [[
+            'src'   => 'favicon_lg.png',
+            'type'  => 'image/png',
+            'sizes' => '180x180',
         ]],
-        "shortcuts" => [
+        'shortcuts' => [
             [
-                "name"        => "New 2FA",
-                "url"         => "/start",
-                "description" => "Add a new 2FA account by flashing a QR code or filling out a form"
+                'name'        => 'New 2FA',
+                'url'         => '/start',
+                'description' => 'Add a new 2FA account by flashing a QR code or filling out a form',
             ],
             [
-                "name"        => "Import 2FAs",
-                "url"         => "/account/import",
-                "description" => "Import 2FA accounts previously exported from another 2FA app"
+                'name'        => 'Import 2FAs',
+                'url'         => '/account/import',
+                'description' => 'Import 2FA accounts previously exported from another 2FA app',
             ],
             [
-                "name"        => "Settings",
-                "url"         => "/settings/options",
-                "description" => "Manage your 2FAuth user settings"
+                'name'        => 'Settings',
+                'url'         => '/settings/options',
+                'description' => 'Manage your 2FAuth user settings',
             ],
-        ]
+        ],
     ]);
 });
 
