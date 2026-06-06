@@ -172,7 +172,7 @@ return [
         'restrictRule' => '',
         'keepSsoRegistrationEnabled' => false,
         'storeIconsInDatabase' => false,
-        'enableSharing' => true,
+        'enableSharing' => false,
         'enableAllUsersSharingScope' => false,
     ],
 
