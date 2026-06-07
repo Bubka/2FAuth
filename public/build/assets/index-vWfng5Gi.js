@@ -1,0 +1,2 @@
+import{v as s,am as a,r as n}from"./app-DI2R5r_q.js";const l=s((t,{slots:o})=>{const e=a(t),r=n({mode:e,system:e.system,store:e.store});return()=>{if(o.default)return o.default(r)}},{name:"UseColorMode",props:["attribute","deep","disableTransition","emitAuto","eventFilter","flush","initOnMounted","initialValue","listenToStorageChanges","mergeDefaults","modes","onChanged","onError","selector","serializer","shallow","storage","storageKey","storageRef","window","writeDefaults"]});export{l as U};
+//# sourceMappingURL=index-vWfng5Gi.js.map

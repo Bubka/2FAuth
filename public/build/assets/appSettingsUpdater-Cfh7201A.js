@@ -1,0 +1,2 @@
+import{aj as p,D as o}from"./app-DI2R5r_q.js";async function i(r,t,n=!1){let s=null,a=null;return await p.update(r,t,{returnError:!0}).then(e=>{s=t}).catch(e=>{n&&e.response.status===422?a=e.response.data.message:o().show(e)}),{data:s,error:a}}export{i as u};
+//# sourceMappingURL=appSettingsUpdater-Cfh7201A.js.map

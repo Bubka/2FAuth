@@ -1,1 +1,2 @@
 const e=[{name:"label.options",view:"settings.options",id:"lnkTabOptions",icon:"SlidersHorizontal"},{name:"label.account",view:"settings.account",id:"lnkTabAccount",icon:"CircleUser"},{name:"label.oauth",view:"settings.oauth.tokens",id:"lnkTabOAuth",icon:"KeySquare"},{name:"label.webauthn",view:"settings.webauthn.devices",id:"lnkTabWebauthn",icon:"ScanFace"}];export{e as t};
+//# sourceMappingURL=tabs-Btun2NN0.js.map
