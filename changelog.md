@@ -1,5 +1,49 @@
 # Change log
 
+## [7.0.0] - 2026-06-08
+
+Account sharing has finally arrived in 2FAuth!  
+First mentioned in February 2024, I believe this is the most anticipated feature since the beginning of 2FAuth's development.
+
+First, a quick reminder: The purpose of 2FA is to provide a second piece of evidence to prove your identity during an authentication process. That means the secret which allow to generate this short-lived piece of evidence, the One-Time Password, must be kept in a safe place and it should not be disclosed. This has guided the development of 2FAuth up to now and has also influenced the way the sharing feature has been designed: The shared resource should be the ability to generate OTPs, not the secret itself.
+
+In practice, sharing a 2FA account in 2FAuth does not grant the recipient full access to the account. While the recipient can view the account and generate OTPs, they cannot access the secret. Therefore, no editing, exporting, or displaying of QR codes is possible; these functions remain exclusive to the owner.
+From a UI perspective, I did my best to make it clear what is shared, with whom and under which conditions, while ensuring a seamless fit with the existing design — even on mobile — without disrupting the user experience. I hope you find this intregration efficient and convenient.
+
+This release also introduces the ability to transfer ownership of a 2FA account. This feature should provide flexibility for team-based usage, especially when responsibilities change or access needs to be transferred to another person. Please note that ownership transfer is only available when sharing is enabled.
+
+To complete the picture, OTP generation now comes with a log that is directly available in the web application. This audit trail makes it easy to review usage and keep track of who generated a code and when, without recording the code itself.
+
+2FA Sharing is disabled by default. You can activate it from the Admin Panel.
+
+### Added
+
+- 2FA sharing
+- 2FA ownership transfer
+- OTP generation log
+- Expiration date of OAuth tokens in User Settings ([#536](https://github.com/Bubka/2FAuth/issues/536)).
+
+### Changed
+
+- Dependency on the `APP_URL` environment variable has been reduced. It is now possible to access the web app using a URL other than the one set in `APP_URL`. Typically, this would be an internal URL, such as a local IP address. **Important**: Some features still rely on `APP_URL` to work as expected. These include SSO (during redirections) and WebAuthn authentication.
+- Minor UI adjustments
+
+### Fixed
+
+- [issue #538](https://github.com/Bubka/2FAuth/issues/538) Search field gets focus when trying to select an account in Manage mode using keyboard
+- [issue #545](https://github.com/Bubka/2FAuth/issues/545) Case sensitivity in e-mail/uid-string during SSO authentication
+- [issue #546](https://github.com/Bubka/2FAuth/issues/546) Unencoded # in otpauth URI breaks decoding
+
+### API [1.10.0]
+
+- New `is_borrowed`, `shared_by`, `is_shared` and `is_shared_with_all` properties in `2FAccount` resource description. See GET `/api/v1/twofaccounts/{id}` ([doc](https://docs.2fauth.app/resources/rapidoc.html#get-/api/v1/twofaccounts/-id-)) and GET `/api/v1/twofaccounts` ([doc](https://docs.2fauth.app/resources/rapidoc.html#get-/api/v1/twofaccounts)).
+- `/api/v1/twofaccounts/{id}/owner` PATCH path added ([doc](https://docs.2fauth.app/resources/rapidoc.html#patch-/api/v1/twofaccounts/-id-/owner)).
+- `/api/v1/twofaccounts/{id}/recipients` GET path added ([doc](https://docs.2fauth.app/resources/rapidoc.html#get-/api/v1/twofaccounts/-id-/recipients)).
+- `/api/v1/twofaccounts/{id}/shares` GET, POST, DELETE paths added ([doc](https://docs.2fauth.app/resources/rapidoc.html#get-/api/v1/twofaccounts/-id-/shares)).
+- `/api/v1/twofaccounts/{id}/shares/all` POST path added ([doc](https://docs.2fauth.app/resources/rapidoc.html#post-/api/v1/twofaccounts/-id-/shares/all)).
+- `/api/v1/twofaccounts/{id}/shares/{userid}` DELETE path added ([doc](https://docs.2fauth.app/resources/rapidoc.html#delete-/api/v1/twofaccounts/-id-/shares/-userid-)).
+- Documentation for `/api/v1/features` GET path added ([doc](https://docs.2fauth.app/resources/rapidoc.html#get-/api/v1/features)).
+
 ## [6.1.3] - 2026-04-03
 
 ### Fixed
