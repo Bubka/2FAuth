@@ -14,7 +14,7 @@ This release also introduces the ability to transfer ownership of a 2FA account.
 
 To complete the picture, OTP generation now comes with a log that is directly available in the web application. This audit trail makes it easy to review usage and keep track of who generated a code and when, without recording the code itself.
 
-2FA Sharing is disabled by default. You can activate it from the Admin Panel.
+2FA Sharing is disabled by default. You can activate it from the Admin Panel. If you'd like to learn more, please consult the [2FA Sharing documentation](https://docs.2fauth.app/usage/2fa-sharing/).
 
 ### Added
 
