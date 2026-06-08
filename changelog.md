@@ -1,5 +1,11 @@
 # Change log
 
+## [7.0.1] - 2026-06-09
+
+### Fixed
+
+- [issue #548](https://github.com/Bubka/2FAuth/issues/548) Sharing actions only available in “Show Password: After a Click/Tab” view, not obvious to users
+
 ## [7.0.0] - 2026-06-08
 
 Account sharing has finally arrived in 2FAuth!  
