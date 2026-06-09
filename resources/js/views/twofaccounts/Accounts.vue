@@ -392,13 +392,24 @@
     }
 
     /**
-     * 
-     * @param userId
+     * Unshare selected accounts
      */
-    function unshareUser(account, userId) {
-        if (appSettings.enableSharing && confirm(t('confirmation.unshare')) === true) {
-            shareService.unshareWithUser(account.id, userId).then(response => {
-                usershares.value = usershares.value.filter(user => user.id != userId)
+    async function bulkUnshare() {
+        if (appSettings.enableSharing && confirm(t('confirmation.bulk_unshare')) === true) {
+            twofaccounts.selectedIds.forEach((accountId) => {
+                const account = twofaccounts.getById(accountId)
+
+                if (account != undefined && (account.is_shared_with_all || account.is_shared)) {
+                    shareService.unshare(accountId).then(response => {
+                        try {
+                            const index = twofaccounts.items.findIndex(acc => acc.id === accountId)
+                            delete twofaccounts.items[index].is_shared
+                            delete twofaccounts.items[index].is_shared_with_all
+                        } catch (error) {
+                            console.error(error)
+                        }
+                    })
+                }
             })
         }
     }
@@ -663,7 +674,8 @@
                             :canExport="!twofaccounts.hasBorrowedSelected"
                             @move-button-clicked="showDestinationGroupSelector = true"
                             @delete-button-clicked="deleteAccounts"
-                            @export-button-clicked="showExportFormatSelector = true">
+                            @export-button-clicked="showExportFormatSelector = true"
+                            @unshare-button-clicked="bulkUnshare">
                         </ActionButtons>
                     </template>
                     <template #subpart>

@@ -49,7 +49,7 @@
         },
     }) 
     
-    const emit = defineEmits(['update:inManagementMode', 'move-button-clicked', 'delete-button-clicked', 'export-button-clicked'])
+    const emit = defineEmits(['update:inManagementMode', 'move-button-clicked', 'delete-button-clicked', 'export-button-clicked', 'unshare-button-clicked'])
 
     /**
      * Routes user to the appropriate submitting view
@@ -102,7 +102,7 @@
                 id="btnShare" 
                 :disabled='areDisabled || !canUnshare' class="button is-rounded"
                 :class="[{ 'is-outlined': mode == 'dark' || areDisabled }, areDisabled ? 'is-dark': 'is-link']"
-                @click="$emit('share-button-clicked')"
+                @click="$emit('unshare-button-clicked')"
                 :title="$t('tooltip.unshare_selected_accounts')" >
                 <span class="is-hidden-desktop icon is-small mx-0">
                     <LucideUserX />

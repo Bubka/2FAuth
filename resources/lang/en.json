@@ -20,6 +20,7 @@
     "confirmation.revoke_token": "Are you sure you want to revoke this token?",
     "confirmation.toggle_sharing_setting": "Are you sure you want to change the sharing setting?",
     "confirmation.unshare": "This will stop sharing this account with all users. Are you sure?",
+    "confirmation.bulk_unshare": "This will stop sharing these accounts. Are you sure?",
     "confirmation.you_will_loose_ownership": "You are about to lose ownership of this account. Are you sure?",
     "error.2fauth_has_not_a_valid_domain": "2FAuth's domain is not a valid domain",
     "error.aborted_by_user": "Aborted by user",
