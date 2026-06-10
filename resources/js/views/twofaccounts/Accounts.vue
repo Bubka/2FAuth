@@ -23,7 +23,7 @@
     import { useSortable, moveArrayElement } from '@vueuse/integrations/useSortable'
     import { useI18n } from 'vue-i18n'
     import { useErrorHandler } from '@2fauth/stores'
-    import { LucideChevronDown, LucideCircleAlert, LucideCircleEllipsis, LucideCircleX, LucideEye, LucideEyeOff, LucideHistory, LucideMenu, LucidePencil, LucideQrCode, LucideTrash2, LucideUserCheck, LucideUserPen, LucideUserPlus, LucideUsers, LucideX } from '@lucide/vue'
+    import { LucideAtSign, LucideChevronDown, LucideCircleAlert, LucideCircleEllipsis, LucideCircleX, LucideEye, LucideEyeOff, LucideHistory, LucideMenu, LucidePencil, LucideQrCode, LucideSquareSlash, LucideTrash2, LucideUserCheck, LucideUserPen, LucideUserPlus, LucideUsers, LucideX } from '@lucide/vue'
 
     const errorHandler = useErrorHandler()
     const { t } = useI18n()
@@ -449,7 +449,33 @@
                         </button>
                     </div>
                     <div v-else>
-                        <button type="button" id="btnShowGroupSwitch" :title="$t('tooltip.show_group_selector')" tabindex="1" class="button is-text is-like-text has-text-grey-dark" :class="{'has-text-grey' : mode != 'dark'}" @click.stop="showGroupSwitch = !showGroupSwitch">
+                        <div v-if="user.preferences.useGroupChips">
+                            <div id="groupChips" class="mx-3 tags is-justify-content-center">
+                                <button class="tag" :class="user.preferences.activeGroup == 0 ? 'is-black' : 'is-dark'" @click="saveActiveGroup(-0)" :title="$t('label.all_accounts')">
+                                    {{ $t('label.all') }}{{ user.preferences.activeGroup == 0 ? ` • ${twofaccounts.filteredCount}` : '' }}
+                                </button>
+                                <template v-for="group in groups.items" :key="group.id" >
+                                    <button v-if="(group.id != 0 && group.show_in_chips) || (user.preferences.activeGroup > 0 && group.id == user.preferences.activeGroup && ! group.show_in_chips)" class="tag is-dark" :class="{'is-dark has-text-grey' : user.preferences.activeGroup != group.id, 'is-link' : user.preferences.activeGroup == group.id}" @click="saveActiveGroup(group.id)">
+                                        <span class="chip-label mr-1">{{ group.name }}</span>{{ user.preferences.activeGroup == group.id ? `• ${twofaccounts.filteredCount}` : '' }}
+                                    </button>
+                                </template>
+                                <button class="tag is-dark has-text-grey" @click="showGroupSwitch = true">
+                                    ...
+                                </button>
+                                <template v-if="user.preferences.showVirtualChips">
+                                    <button v-if="appSettings.enableSharing" class="tag" :class="{'is-dark has-text-grey' : user.preferences.activeGroup != -2, 'is-link' : user.preferences.activeGroup == -2}" @click="saveActiveGroup(-2)" :title="$t('label.accounts_I_m_sharing')">
+                                        <LucideUsers class="icon-size-0-9 mr-1" />|<LucideUserCheck class="ml-1 icon-size-0-9" />
+                                    </button>
+                                    <button v-if="appSettings.enableSharing" class="tag" :class="{'is-dark has-text-grey' : user.preferences.activeGroup != -3, 'is-link' : user.preferences.activeGroup == -3}" @click="saveActiveGroup(-3)" :title="$t('label.accounts_shared_with_me')">
+                                        <LucideAtSign class="icon-size-0-9" />
+                                    </button>
+                                    <button class="tag" :class="{'is-dark has-text-grey' : user.preferences.activeGroup != -1, 'is-link' : user.preferences.activeGroup == -1}" @click="saveActiveGroup(-1)" :title="$t('label.group_less_accounts')">
+                                        <LucideSquareSlash class="icon-size-1" />
+                                    </button>
+                                </template>
+                            </div>
+                        </div>
+                        <button v-else type="button" id="btnShowGroupSwitch" :title="$t('tooltip.show_group_selector')" tabindex="1" class="button is-text is-like-text has-text-grey-dark" :class="{'has-text-grey' : mode != 'dark'}" @click.stop="showGroupSwitch = !showGroupSwitch">
                             <template v-if="parseInt(user.preferences.activeGroup) == -1">
                                 {{ $t('label.group_less') }} ({{ twofaccounts.filteredCount }})&nbsp;
                             </template>

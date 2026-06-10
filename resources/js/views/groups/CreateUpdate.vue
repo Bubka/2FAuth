@@ -19,6 +19,7 @@
     
     const form = reactive(new Form({
         name: '',
+        show_in_chips: false
     }))
 
     onBeforeMount(() => {
@@ -28,11 +29,11 @@
                 form.name = bus.editedGroupName
                 bus.editedGroupName = undefined
             }
-            else {
-                groupService.get(props.groupId).then(response => {
-                    form.name = response.data.name
-                })
-            }
+            
+            groupService.get(props.groupId).then(response => {
+                form.name = response.data.name
+                form.show_in_chips = response.data.show_in_chips
+            })
         }
     })
 
@@ -68,9 +69,10 @@
 <template>
     <StackLayout>
         <template #content>
-            <FormWrapper :title="isEditMode ? 'heading.rename_group' : 'heading.new_group'">
+            <FormWrapper :title="isEditMode ? 'heading.edit_group' : 'heading.new_group'">
                 <form @submit.prevent="handleSubmit" @keydown="form.onKeydown($event)">
                     <FormField v-model="form.name" fieldName="name" :errorMessage="form.errors.get('name')" label="field.name" autofocus />
+                    <FormCheckbox v-model="form.show_in_chips" fieldName="show_in_chips" label="field.show_in_chips" help="field.show_in_chips.help" />
                     <FormButtons
                         :submitId="isEditMode ? 'btnEditGroup' : 'btnCreateGroup'"
                         :isBusy="form.isBusy"

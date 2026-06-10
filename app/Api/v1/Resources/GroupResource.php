@@ -7,6 +7,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 /**
  * @property mixed $id
  * @property string $name
+ * @property bool $show_in_chips
  * @property int|null $twofaccounts_count
  */
 class GroupResource extends JsonResource
@@ -22,6 +23,7 @@ class GroupResource extends JsonResource
         return [
             'id'                 => $this->id,
             'name'               => $this->name,
+            'show_in_chips'      => $this->show_in_chips,
             'twofaccounts_count' => is_null($this->twofaccounts_count) ? 0 : $this->twofaccounts_count,
         ];
     }

@@ -25,14 +25,25 @@ class GroupStoreRequest extends FormRequest
      */
     public function rules()
     {
+        $toto = $this->group;
+
         return [
             'name' => [
                 'required',
                 'regex:/^[A-zÀ-ú0-9\s\-_\']+$/',
                 'max:32',
                 Rule::notIn([__('label.all')]),
-                Rule::unique('groups')->where(fn ($query) => $query->where('user_id', $this->user()->id)),
+                Rule::unique('groups')->where(
+                    fn ($query) => $query
+                        ->where('user_id', $this->user()->id)
+                        ->where('id', '<>', $this->group->id)
+                ),
             ],
+            'show_in_chips' => [
+                'sometimes',
+                'required',
+                'boolean'
+            ]
         ];
     }
 

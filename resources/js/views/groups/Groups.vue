@@ -2,12 +2,14 @@
     import { UseColorMode } from '@vueuse/components'
     import { useGroups } from '@/stores/groups'
     import { useBusStore } from '@/stores/bus'
-    import { LucideCirclePlus, LucideSquarePen, LucideMenu } from '@lucide/vue'
+    import { useUserStore } from '@/stores/user'
+    import { LucideBookmarkCheck, LucideCirclePlus, LucideMenu, LucideSquareStar, LucideStar, LucideToggleRight, LucideTrash2 } from '@lucide/vue'
     import { useSortable, moveArrayElement } from '@vueuse/integrations/useSortable'
 
     const router = useRouter()
     const groups = useGroups()
     const bus = useBusStore()
+    const user = useUserStore()
 
     const isFetching = ref(false)
 
@@ -78,18 +80,33 @@
                 <div v-if="!groups.isEmpty">
                     <UseColorMode v-slot="{ mode }">
                         <span id="dv">
-                            <div v-for="group in groups.withoutTheAllGroup" :key="group.id" class="group-item is-size-5 is-size-6-mobile">
-                                {{ group.name }}
-                                <LucideMenu class="drag-handle pt-1 ml-2 is-pulled-right has-text-grey is-draggable" />
-                                <!-- delete icon -->
-                                <button type="button" class="button tag is-pulled-right" :class="mode == 'dark' ? 'is-dark' : 'is-white'" @click="groups.remove(group.id)"  :title="$t('tooltip.delete')">
-                                    {{ $t('label.delete') }}
-                                </button>
-                                <!-- edit link -->
-                                <RouterLink :to="{ name: 'editGroup', params: { groupId: group.id }}" class="has-text-grey px-1" :title="$t('tooltip.rename')">
-                                    <LucideSquarePen class="icon-size-1" />
-                                </RouterLink>
-                                <span class="is-family-primary is-size-6 is-size-7-mobile has-text-grey">{{ $t('message.x_accounts', { count: group.twofaccounts_count }) }}</span>
+                            <div v-for="group in groups.withoutTheAllGroup" :key="group.id" class="group-item">
+                                <div class="is-flex is-align-items-center">
+                                    <div class="tfa-content is-size-5 is-size-6-mobile pr-2">
+                                        <div class="has-ellipsis">
+                                            {{ group.name }}
+                                            <span class="is-family-primary is-size-6 is-size-7-mobile has-text-grey">
+                                                {{ $t('message.x_accounts', { count: group.twofaccounts_count }) }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div v-if="user.preferences.useGroupChips && group.show_in_chips" class="tfa-cell">
+                                        <LucideBookmarkCheck class="icon mr-2" />
+                                    </div>
+                                    <div class="tfa-cell">
+                                        <!-- edit button -->
+                                        <RouterLink :to="{ name: 'editGroup', params: { groupId: group.id }}" class="button tag mr-1" :class="mode == 'dark' ? 'is-dark' : 'is-white'" :title="$t('tooltip.edit_group')">
+                                            {{ $t('label.edit') }}
+                                        </RouterLink>
+                                        <!-- delete icon -->
+                                        <button type="button" class="button tag" :class="mode == 'dark' ? 'is-dark' : 'is-white'" @click="groups.remove(group.id)"  :title="$t('tooltip.delete')">
+                                            <LucideTrash2 class="icon-size-1" />
+                                        </button>
+                                    </div>
+                                    <div class="tfa-cell ml-4">
+                                        <LucideMenu class="drag-handle has-text-grey is-draggable" />
+                                    </div>
+                                </div>
                             </div>
                         </span>
                     </UseColorMode>

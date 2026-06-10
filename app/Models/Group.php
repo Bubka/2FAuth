@@ -18,6 +18,7 @@ use Spatie\EloquentSortable\SortableTrait;
  * @property int $twofaccounts_count
  * @property int $id
  * @property string $name
+ * @property bool $show_in_chips
  * @property int|null $order_column
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -51,7 +52,10 @@ class Group extends Model implements Sortable
      *
      * @var list<string>
      */
-    protected $fillable = ['name'];
+    protected $fillable = [
+        'name',
+        'show_in_chips',
+    ];
 
     /**
      * The accessors to append to the model's array form.
@@ -75,6 +79,7 @@ class Group extends Model implements Sortable
     protected $casts = [
         'twofaccounts_count' => 'integer',
         'user_id'            => 'integer',
+        'show_in_chips'      => 'boolean',
     ];
 
     /**
