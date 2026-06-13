@@ -2,7 +2,37 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\AdminOnly;
+use App\Http\Middleware\Authenticate;
+use App\Http\Middleware\CustomCreateFreshApiToken;
+use App\Http\Middleware\EncryptCookies;
+use App\Http\Middleware\ForceJsonResponse;
+use App\Http\Middleware\ForceLogout;
+use App\Http\Middleware\KickOutInactiveUser;
+use App\Http\Middleware\LogUserLastSeen;
+use App\Http\Middleware\PreventRequestForgery;
+use App\Http\Middleware\PreventRequestsDuringMaintenance;
+use App\Http\Middleware\RejectIfAllUsersSharingScopeDisabled;
+use App\Http\Middleware\RejectIfAuthenticated;
+use App\Http\Middleware\RejectIfDemoMode;
+use App\Http\Middleware\RejectIfReverseProxy;
+use App\Http\Middleware\RejectIfShareDisabled;
+use App\Http\Middleware\RejectIfSsoOnlyAndNotForAdmin;
+use App\Http\Middleware\SetLanguage;
+use App\Http\Middleware\TrimStrings;
+use App\Http\Middleware\TrustProxies;
+use Illuminate\Auth\Middleware\Authorize;
+use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
+use Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull;
+use Illuminate\Foundation\Http\Middleware\ValidatePostSize;
+use Illuminate\Http\Middleware\HandleCors;
+use Illuminate\Http\Middleware\SetCacheHeaders;
+use Illuminate\Routing\Middleware\SubstituteBindings;
+use Illuminate\Routing\Middleware\ThrottleRequests;
+use Illuminate\Session\Middleware\AuthenticateSession;
+use Illuminate\Session\Middleware\StartSession;
+use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class Kernel extends HttpKernel
 {
@@ -15,13 +45,13 @@ class Kernel extends HttpKernel
      */
     protected $middleware = [
         // \App\Http\Middleware\TrustHosts::class,
-        \App\Http\Middleware\TrustProxies::class,
-        \Illuminate\Http\Middleware\HandleCors::class,
-        \App\Http\Middleware\PreventRequestsDuringMaintenance::class,
-        \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
-        \App\Http\Middleware\TrimStrings::class,
-        \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
-        \App\Http\Middleware\ForceJsonResponse::class,
+        TrustProxies::class,
+        HandleCors::class,
+        PreventRequestsDuringMaintenance::class,
+        ValidatePostSize::class,
+        TrimStrings::class,
+        ConvertEmptyStringsToNull::class,
+        ForceJsonResponse::class,
     ];
 
     /**
@@ -31,35 +61,35 @@ class Kernel extends HttpKernel
      */
     protected $middlewareGroups = [
         'web' => [
-            \App\Http\Middleware\EncryptCookies::class,
-            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
-            \Illuminate\Session\Middleware\StartSession::class,
+            EncryptCookies::class,
+            AddQueuedCookiesToResponse::class,
+            StartSession::class,
             // \Illuminate\Session\Middleware\AuthenticateSession::class,
-            \App\Http\Middleware\VerifyCsrfToken::class,
-            \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            \App\Http\Middleware\SetLanguage::class,
-            \App\Http\Middleware\CustomCreateFreshApiToken::class,
+            PreventRequestForgery::class,
+            SubstituteBindings::class,
+            SetLanguage::class,
+            CustomCreateFreshApiToken::class,
         ],
 
         'behind-auth' => [
-            \App\Http\Middleware\EncryptCookies::class,
-            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+            EncryptCookies::class,
+            AddQueuedCookiesToResponse::class,
             // \Illuminate\Session\Middleware\StartSession::class,
-            \App\Http\Middleware\VerifyCsrfToken::class,
-            \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            \App\Http\Middleware\Authenticate::class,
-            \App\Http\Middleware\KickOutInactiveUser::class,
-            \App\Http\Middleware\LogUserLastSeen::class,
-            \App\Http\Middleware\SetLanguage::class,
-            \App\Http\Middleware\CustomCreateFreshApiToken::class,
+            PreventRequestForgery::class,
+            SubstituteBindings::class,
+            Authenticate::class,
+            KickOutInactiveUser::class,
+            LogUserLastSeen::class,
+            SetLanguage::class,
+            CustomCreateFreshApiToken::class,
         ],
 
         'api.v1' => [
-            \Illuminate\Routing\Middleware\ThrottleRequests::class . ':api',
-            \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            \App\Http\Middleware\KickOutInactiveUser::class,
-            \App\Http\Middleware\LogUserLastSeen::class,
-            \App\Http\Middleware\SetLanguage::class,
+            ThrottleRequests::class . ':api',
+            SubstituteBindings::class,
+            KickOutInactiveUser::class,
+            LogUserLastSeen::class,
+            SetLanguage::class,
         ],
     ];
 
@@ -71,19 +101,19 @@ class Kernel extends HttpKernel
      * @var array<string, class-string|string>
      */
     protected $middlewareAliases = [
-        'auth'                                 => \App\Http\Middleware\Authenticate::class,
-        'admin'                                => \App\Http\Middleware\AdminOnly::class,
-        'rejectIfAuthenticated'                => \App\Http\Middleware\RejectIfAuthenticated::class,
-        'throttle'                             => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-        'rejectIfDemoMode'                     => \App\Http\Middleware\RejectIfDemoMode::class,
-        'rejectIfShareDisabled'                => \App\Http\Middleware\RejectIfShareDisabled::class,
-        'rejectIfAllUsersSharingScopeDisabled' => \App\Http\Middleware\RejectIfAllUsersSharingScopeDisabled::class,
-        'rejectIfReverseProxy'                 => \App\Http\Middleware\RejectIfReverseProxy::class,
-        'RejectIfSsoOnlyAndNotForAdmin'        => \App\Http\Middleware\RejectIfSsoOnlyAndNotForAdmin::class,
-        'cache.headers'                        => \Illuminate\Http\Middleware\SetCacheHeaders::class,
-        'kickOutInactiveUser'                  => \App\Http\Middleware\KickOutInactiveUser::class,
-        'forceLogout'                          => \App\Http\Middleware\ForceLogout::class,
-        'setLanguage'                          => \App\Http\Middleware\SetLanguage::class,
+        'auth'                                 => Authenticate::class,
+        'admin'                                => AdminOnly::class,
+        'rejectIfAuthenticated'                => RejectIfAuthenticated::class,
+        'throttle'                             => ThrottleRequests::class,
+        'rejectIfDemoMode'                     => RejectIfDemoMode::class,
+        'rejectIfShareDisabled'                => RejectIfShareDisabled::class,
+        'rejectIfAllUsersSharingScopeDisabled' => RejectIfAllUsersSharingScopeDisabled::class,
+        'rejectIfReverseProxy'                 => RejectIfReverseProxy::class,
+        'rejectIfSsoOnlyAndNotForAdmin'        => RejectIfSsoOnlyAndNotForAdmin::class,
+        'cache.headers'                        => SetCacheHeaders::class,
+        'kickOutInactiveUser'                  => KickOutInactiveUser::class,
+        'forceLogout'                          => ForceLogout::class,
+        'setLanguage'                          => SetLanguage::class,
         // 'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
         // 'signed' => \App\Http\Middleware\ValidateSignature::class,
     ];
@@ -96,12 +126,12 @@ class Kernel extends HttpKernel
      * @var string[]
      */
     protected $middlewarePriority = [
-        \Illuminate\Session\Middleware\StartSession::class,
-        \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-        \App\Http\Middleware\Authenticate::class,
-        \App\Http\Middleware\SetLanguage::class,
-        \Illuminate\Session\Middleware\AuthenticateSession::class,
-        \Illuminate\Routing\Middleware\SubstituteBindings::class,
-        \Illuminate\Auth\Middleware\Authorize::class,
+        StartSession::class,
+        ShareErrorsFromSession::class,
+        Authenticate::class,
+        SetLanguage::class,
+        AuthenticateSession::class,
+        SubstituteBindings::class,
+        Authorize::class,
     ];
 }

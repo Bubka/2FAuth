@@ -39,7 +39,7 @@ use Illuminate\Support\Facades\Route;
 /**
  * Routes that only work for unauthenticated user (otherwise, the user is logged out)
  */
-Route::group(['middleware' => ['rejectIfDemoMode', 'RejectIfSsoOnlyAndNotForAdmin', 'forceLogout', 'setLanguage']], function () {
+Route::group(['middleware' => ['rejectIfDemoMode', 'rejectIfSsoOnlyAndNotForAdmin', 'forceLogout', 'setLanguage']], function () {
     Route::post('user', [RegisterController::class, 'register'])->name('user.register');
     Route::post('user/password/lost', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('user.password.lost');
     Route::post('user/password/reset', [ResetPasswordController::class, 'reset'])->name('password.reset');
@@ -50,7 +50,7 @@ Route::group(['middleware' => ['rejectIfDemoMode', 'RejectIfSsoOnlyAndNotForAdmi
 /**
  * Routes that can be requested max 10 times per minute by the same IP
  */
-Route::group(['middleware' => ['rejectIfDemoMode', 'throttle:10,1', 'RejectIfSsoOnlyAndNotForAdmin', 'forceLogout']], function () {
+Route::group(['middleware' => ['rejectIfDemoMode', 'throttle:10,1', 'rejectIfSsoOnlyAndNotForAdmin', 'forceLogout']], function () {
     Route::post('webauthn/recover', [WebAuthnRecoveryController::class, 'recover'])->name('webauthn.recover');
 });
 
@@ -59,8 +59,8 @@ Route::group(['middleware' => ['rejectIfDemoMode', 'throttle:10,1', 'RejectIfSso
  * that can be requested max 10 times per minute by the same IP
  */
 Route::group(['middleware' => ['forceLogout', 'throttle:10,1']], function () {
-    Route::post('user/login', [LoginController::class, 'login'])->name('user.login')->middleware('RejectIfSsoOnlyAndNotForAdmin');
-    Route::post('webauthn/login', [WebAuthnLoginController::class, 'login'])->name('webauthn.login')->middleware('RejectIfSsoOnlyAndNotForAdmin');
+    Route::post('user/login', [LoginController::class, 'login'])->name('user.login')->middleware('rejectIfSsoOnlyAndNotForAdmin');
+    Route::post('webauthn/login', [WebAuthnLoginController::class, 'login'])->name('webauthn.login')->middleware('rejectIfSsoOnlyAndNotForAdmin');
 
     Route::get('/socialite/redirect/{driver}', [SocialiteController::class, 'redirect'])->name('socialite.redirect');
     Route::get('/socialite/callback/{driver}', [SocialiteController::class, 'callback'])->name('socialite.callback');
