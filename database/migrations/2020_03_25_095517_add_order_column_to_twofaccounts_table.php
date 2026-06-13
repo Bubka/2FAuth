@@ -17,13 +17,6 @@ class AddOrderColumnToTwofaccountsTable extends Migration
         Schema::table('twofaccounts', function (Blueprint $table) {
             $table->integer('order_column')->nullable();
         });
-
-        // The primary index is used to set a default value for the newly
-        // created order_column
-        foreach (TwoFAccount::get() as $twofaccount) {
-            $twofaccount->order_column = $twofaccount->id;
-            $twofaccount->save();
-        }
     }
 
     /**
