@@ -8,7 +8,10 @@ use App\Api\v1\Resources\UserAuthenticationResource;
 use App\Api\v1\Resources\UserManagerResource;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Contracts\Auth\PasswordBroker;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -20,7 +23,7 @@ class UserManagerController extends Controller
     /**
      * Display all users.
      *
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return AnonymousResourceCollection
      */
     public function index(Request $request)
     {
@@ -30,7 +33,7 @@ class UserManagerController extends Controller
     /**
      * Get a user
      *
-     * @return \App\Api\v1\Resources\UserManagerResource
+     * @return UserManagerResource
      */
     public function show(User $user)
     {
@@ -42,7 +45,7 @@ class UserManagerController extends Controller
     /**
      * Reset user's password
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function resetPassword(Request $request, User $user)
     {
@@ -87,7 +90,7 @@ class UserManagerController extends Controller
     /**
      * Store a newly created user in storage.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function store(UserManagerStoreRequest $request)
     {
@@ -120,7 +123,7 @@ class UserManagerController extends Controller
     /**
      * Purge user's PATs.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function revokePATs(Request $request, User $user, TokenRepository $tokenRepository)
     {
@@ -131,9 +134,9 @@ class UserManagerController extends Controller
         $tokens = $tokenRepository->forUser($user->getAuthIdentifier());
 
         $tokens->load('client')->filter(function ($token) {
-            return $token->client->personal_access_client && ! $token->revoked; /** @phpstan-ignore-line */
+            return $token->client->personal_access_client && ! $token->revoked;
         })->each(function ($token) {
-            $token->revoke(); /** @phpstan-ignore-line */
+            $token->revoke();
         });
 
         Log::info(sprintf('All personal access tokens for User ID #%s have been revoked', $user->id));
@@ -144,7 +147,7 @@ class UserManagerController extends Controller
     /**
      * Purge user's webauthn credentials.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function revokeWebauthnCredentials(Request $request, User $user)
     {
@@ -171,7 +174,7 @@ class UserManagerController extends Controller
     /**
      * Remove the specified user from storage.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function destroy(Request $request, User $user)
     {
@@ -189,7 +192,7 @@ class UserManagerController extends Controller
     /**
      * Promote (or demote) a user
      *
-     * @return \App\Api\v1\Resources\UserManagerResource|\Illuminate\Http\JsonResponse
+     * @return UserManagerResource|JsonResponse
      */
     public function promote(UserManagerPromoteRequest $request, User $user)
     {
@@ -210,7 +213,7 @@ class UserManagerController extends Controller
     /**
      * Get the user's authentication logs
      *
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return AnonymousResourceCollection
      */
     public function authentications(Request $request, User $user)
     {
@@ -237,7 +240,7 @@ class UserManagerController extends Controller
     /**
      * Get the broker to be used during password reset.
      *
-     * @return \Illuminate\Contracts\Auth\PasswordBroker|\Illuminate\Auth\Passwords\PasswordBroker
+     * @return PasswordBroker|\Illuminate\Auth\Passwords\PasswordBroker
      */
     protected function broker()
     {

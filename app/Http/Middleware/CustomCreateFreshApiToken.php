@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use Illuminate\Http\Request;
 use Laravel\Passport\Http\Middleware\CreateFreshApiToken;
 
 class CustomCreateFreshApiToken extends CreateFreshApiToken
@@ -9,12 +10,9 @@ class CustomCreateFreshApiToken extends CreateFreshApiToken
     /**
      * Determine if the request should receive a fresh token.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return bool
-     *
      * @codeCoverageIgnore
      */
-    protected function requestShouldReceiveFreshToken($request)
+    protected function requestShouldReceiveFreshToken(Request $request) : bool
     {
         return ! is_null($request->user($this->guard));
     }

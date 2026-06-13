@@ -2,7 +2,9 @@
 
 namespace App\Api\v1\Resources;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Laravel\Passport\TokenRepository;
@@ -12,7 +14,7 @@ use Laravel\Passport\TokenRepository;
  * @property string $name
  * @property string $email
  * @property string $oauth_provider
- * @property \Illuminate\Support\Collection<array-key, mixed> $preferences
+ * @property Collection<array-key, mixed> $preferences
  * @property string $is_admin
  * @property string $last_seen_at
  * @property string $created_at
@@ -55,7 +57,7 @@ class UserManagerResource extends UserResource
         $tokens          = $tokenRepository->forUser($this->resource->getAuthIdentifier());
 
         $PATs_count = $tokens->load('client')->filter(function ($token) {
-            return $token->client->personal_access_client && ! $token->revoked; /** @phpstan-ignore-line */
+            return $token->client->personal_access_client && ! $token->revoked;
         })->count();
 
         $this->with = [
@@ -80,7 +82,7 @@ class UserManagerResource extends UserResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array
      */
     public function toArray($request)

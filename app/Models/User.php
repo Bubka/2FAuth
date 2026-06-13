@@ -61,6 +61,7 @@ use Laravel\Passport\Token;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, AuthLog> $authentications
  * @property-read int|null $authentications_count
  * @property-read AuthLog|null $latestAuthentication
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|User admins()
  * @method static \Database\Factories\UserFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
@@ -79,8 +80,10 @@ use Laravel\Passport\Token;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereOauthId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereOauthProvider($value)
+ *
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Client> $oauthApps
  * @property-read int|null $oauth_apps_count
+ *
  * @mixin \Eloquent
  */
 #[Fillable(['name', 'email', 'password', 'oauth_id', 'oauth_provider'])]
