@@ -2,15 +2,14 @@
 
 namespace Database\Seeders;
 
-use App\Facades\Groups;
-use App\Models\TwoFAccount;
 use App\Models\User;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
 class TestingSeeder extends Seeder
 {
-    use SeederTrait;
+    use SeederTrait, WithoutModelEvents;
 
     /**
      * Run the database seeds.

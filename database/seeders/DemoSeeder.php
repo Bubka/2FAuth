@@ -3,14 +3,13 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use App\Models\Group;
-use App\Models\TwoFAccount;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
 class DemoSeeder extends Seeder
 {
-    use SeederTrait;
+    use SeederTrait, WithoutModelEvents;
 
     /**
      * Run the database seeds.

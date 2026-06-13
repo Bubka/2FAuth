@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Str;
+use Pdo\Mysql;
 
 return [
 
@@ -59,30 +60,29 @@ return [
             'strict' => true,
             'engine' => null,
             'options' => extension_loaded('pdo_mysql') ? array_filter([
-                (PHP_VERSION_ID >= 80500 ? \Pdo\Mysql::ATTR_SSL_CA : \PDO::MYSQL_ATTR_SSL_CA) => envUnlessEmpty('MYSQL_ATTR_SSL_CA', null),
+                Mysql::ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
         ],
 
-        // Disabled until 
-        // 'mariadb' => [
-        //     'driver' => 'mariadb',
-        //     'url' => env('DB_URL', env('DATABASE_URL')),
-        //     'host' => envUnlessEmpty('DB_HOST', '127.0.0.1'),
-        //     'port' => envUnlessEmpty('DB_PORT', '3306'),
-        //     'database' => envUnlessEmpty('DB_DATABASE', '2fauth'),
-        //     'username' => envUnlessEmpty('DB_USERNAME', '2fauth'),
-        //     'password' => env('DB_PASSWORD', ''),
-        //     'unix_socket' => env('DB_SOCKET', ''),
-        //     'charset' => env('DB_CHARSET', 'utf8mb4'),
-        //     'collation' => env('DB_COLLATION', 'utf8mb4_unicode_ci'),
-        //     'prefix' => '',
-        //     'prefix_indexes' => true,
-        //     'strict' => true,
-        //     'engine' => null,
-        //     'options' => extension_loaded('pdo_mysql') ? array_filter([
-        //         (PHP_VERSION_ID >= 80500 ? \Pdo\Mysql::ATTR_SSL_CA : \PDO::MYSQL_ATTR_SSL_CA) => envUnlessEmpty('MYSQL_ATTR_SSL_CA', null),
-        //     ]) : [],
-        // ],
+        'mariadb' => [
+            'driver' => 'mariadb',
+            'url' => env('DB_URL', env('DATABASE_URL')),
+            'host' => envUnlessEmpty('DB_HOST', '127.0.0.1'),
+            'port' => envUnlessEmpty('DB_PORT', '3306'),
+            'database' => envUnlessEmpty('DB_DATABASE', '2fauth'),
+            'username' => envUnlessEmpty('DB_USERNAME', '2fauth'),
+            'password' => env('DB_PASSWORD', ''),
+            'unix_socket' => env('DB_SOCKET', ''),
+            'charset' => env('DB_CHARSET', 'utf8mb4'),
+            'collation' => env('DB_COLLATION', 'utf8mb4_unicode_ci'),
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'strict' => true,
+            'engine' => null,
+            'options' => extension_loaded('pdo_mysql') ? array_filter([
+                Mysql::ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+            ]) : [],
+        ],
 
         'pgsql' => [
             'driver' => 'pgsql',
@@ -96,7 +96,7 @@ return [
             'prefix' => '',
             'prefix_indexes' => true,
             'search_path' => 'public',
-            'sslmode' => 'prefer',
+            'sslmode' => env('DB_SSLMODE', 'prefer'),
         ],
 
         'sqlsrv' => [
