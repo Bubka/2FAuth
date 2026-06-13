@@ -2,7 +2,11 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\TwoFAccountShare
@@ -12,11 +16,11 @@ use Illuminate\Database\Eloquent\Model;
  * @property int|null $shared_with_user_id
  * @property string $scope
  * @property int $created_by_user_id
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\TwoFAccount $twofaccount
- * @property-read \App\Models\User|null $sharedWithUser
- * @property-read \App\Models\User $createdByUser
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read TwoFAccount $twofaccount
+ * @property-read User|null $sharedWithUser
+ * @property-read User $createdByUser
  *
  * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccountShare forAllUsers()
  * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccountShare forUser(int $userId)
@@ -26,6 +30,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @mixin \Eloquent
  */
+#[Fillable(['twofaccount_id', 'shared_with_user_id', 'scope', 'created_by_user_id'])]
 class TwoFAccountShare extends Model
 {
     public const SCOPE_USER = 'user';
@@ -38,16 +43,6 @@ class TwoFAccountShare extends Model
     protected $table = 'twofaccount_shares';
 
     /**
-     * @var list<string>
-     */
-    protected $fillable = [
-        'twofaccount_id',
-        'shared_with_user_id',
-        'scope',
-        'created_by_user_id',
-    ];
-
-    /**
      * @var array<string, string>
      */
     protected $casts = [
@@ -57,7 +52,7 @@ class TwoFAccountShare extends Model
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Models\TwoFAccount, $this>
+     * @return BelongsTo<TwoFAccount, $this>
      */
     public function twofaccount()
     {
@@ -65,7 +60,7 @@ class TwoFAccountShare extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Models\User, $this>
+     * @return BelongsTo<User, $this>
      */
     public function sharedWithUser()
     {
@@ -73,7 +68,7 @@ class TwoFAccountShare extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Models\User, $this>
+     * @return BelongsTo<User, $this>
      */
     public function createdByUser()
     {
@@ -81,8 +76,8 @@ class TwoFAccountShare extends Model
     }
 
     /**
-     * @param  \Illuminate\Database\Eloquent\Builder<static>  $query
-     * @return \Illuminate\Database\Eloquent\Builder<static>
+     * @param  Builder<static>  $query
+     * @return Builder<static>
      */
     public function scopeForAllUsers($query)
     {
@@ -90,8 +85,8 @@ class TwoFAccountShare extends Model
     }
 
     /**
-     * @param  \Illuminate\Database\Eloquent\Builder<static>  $query
-     * @return \Illuminate\Database\Eloquent\Builder<static>
+     * @param  Builder<static>  $query
+     * @return Builder<static>
      */
     public function scopeForUser($query, int $userId)
     {

@@ -14,17 +14,24 @@ use App\Models\Dto\HotpDto;
 use App\Models\Dto\TotpDto;
 use App\Models\Traits\CanEncryptField;
 use Database\Factories\TwoFAccountFactory;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use OTPHP\Factory;
 use OTPHP\HOTP;
+use OTPHP\HOTPInterface;
+use OTPHP\OTPInterface;
 use OTPHP\TOTP;
+use OTPHP\TOTPInterface;
 use ParagonIE\ConstantTime\Base32;
 use SteamTotp\SteamTotp;
 
@@ -36,8 +43,8 @@ use SteamTotp\SteamTotp;
  * @property string $legacy_uri
  * @property string $account
  * @property string|null $icon
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property int|null $group_id
  * @property string $otp_type
  * @property string $secret
@@ -46,9 +53,9 @@ use SteamTotp\SteamTotp;
  * @property int|null $period
  * @property int|null $counter
  * @property int|null $user_id
- * @property-read \App\Models\User|null $user
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TwoFAccountGroupAssignment> $groups
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TwoFAccountShare> $shares
+ * @property-read User|null $user
+ * @property-read Collection<int, TwoFAccountGroupAssignment> $groups
+ * @property-read Collection<int, TwoFAccountShare> $shares
  *
  * @method static \Database\Factories\TwoFAccountFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount newModelQuery()
@@ -72,7 +79,7 @@ use SteamTotp\SteamTotp;
  *
  * @mixin \Eloquent
  *
- * @property-read \App\Models\Icon|null $iconResource
+ * @property-read Icon|null $iconResource
  *
  * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount orphans()
  */
@@ -116,13 +123,6 @@ class TwoFAccount extends Model
         'OTPHP\TOTP' => self::TOTP,
         'OTPHP\HOTP' => self::HOTP,
     ];
-
-    /**
-     * model's array form.
-     *
-     * @var list<string>
-     */
-    protected $fillable = [];
 
     /**
      * The table associated with the model.
@@ -209,24 +209,24 @@ class TwoFAccount extends Model
      * The OTP generator.
      * Instanciated as null to keep the model light
      *
-     * @var \OTPHP\OTPInterface|\OTPHP\TOTPInterface|\OTPHP\HOTPInterface|null
+     * @var OTPInterface|TOTPInterface|HOTPInterface|null
      */
     protected $generator = null;
 
     /**
      * Get the user that owns the twofaccount.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Models\User, $this>
+     * @return BelongsTo<User, $this>
      */
     public function user()
     {
-        return $this->belongsTo(\App\Models\User::class);
+        return $this->belongsTo(User::class);
     }
 
     /**
      * Get the relation between the icon resource and the model.
      *
-     * @return HasOne<\App\Models\Icon, $this>
+     * @return HasOne<Icon, $this>
      */
     public function iconResource() : HasOne
     {
@@ -236,7 +236,7 @@ class TwoFAccount extends Model
     /**
      * Get shares defined for the twofaccount.
      *
-     * @return HasMany<\App\Models\TwoFAccountShare, $this>
+     * @return HasMany<TwoFAccountShare, $this>
      */
     public function shares() : HasMany
     {
@@ -246,7 +246,7 @@ class TwoFAccount extends Model
     /**
      * Get group assignments defined for this account.
      *
-     * @return HasMany<\App\Models\TwoFAccountGroupAssignment, $this>
+     * @return HasMany<TwoFAccountGroupAssignment, $this>
      */
     public function groups() : HasMany
     {
@@ -256,7 +256,7 @@ class TwoFAccount extends Model
     /**
      * Get OTP logs for the twofaccount.
      *
-     * @return HasMany<\App\Models\OtpLog, $this>
+     * @return HasMany<OtpLog, $this>
      */
     public function otpLogs() : HasMany
     {
@@ -336,8 +336,8 @@ class TwoFAccount extends Model
     /**
      * Scope a query to include accounts visible by the provided user.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder<TwoFAccount>  $query
-     * @return \Illuminate\Database\Eloquent\Builder<TwoFAccount>
+     * @param  Builder<TwoFAccount>  $query
+     * @return Builder<TwoFAccount>
      */
     public function scopeVisibleTo($query, User $user)
     {
@@ -370,8 +370,8 @@ class TwoFAccount extends Model
     /**
      * Scope a query to only include orphan (userless) accounts.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder<User>  $query
-     * @return \Illuminate\Database\Eloquent\Builder<User>
+     * @param  Builder<User>  $query
+     * @return Builder<User>
      */
     public function scopeOrphans($query)
     {
@@ -779,7 +779,7 @@ class TwoFAccount extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Builder<static>
+     * @return Builder<static>
      */
     public function buildSortQuery()
     {

@@ -4,9 +4,11 @@ namespace App\Models;
 
 use App\Models\Traits\CanEncryptField;
 use Database\Factories\IconFactory;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\App;
 
 /**
@@ -14,9 +16,9 @@ use Illuminate\Support\Facades\App;
  *
  * @property string $name
  * @property string|null $content
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\TwoFAccount|null $twofaccount
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read TwoFAccount|null $twofaccount
  *
  * @method static \Database\Factories\IconFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Icon newModelQuery()
@@ -27,6 +29,7 @@ use Illuminate\Support\Facades\App;
  * @method static \Illuminate\Database\Eloquent\Builder|Icon whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Icon whereUpdatedAt($value)
  */
+#[Fillable(['name'])]
 class Icon extends Model
 {
     /**
@@ -58,7 +61,7 @@ class Icon extends Model
     /**
      * Get the twofaccount that owns the icon.
      *
-     * @return BelongsTo<\App\Models\TwoFAccount, $this>
+     * @return BelongsTo<TwoFAccount, $this>
      */
     public function twofaccount() : BelongsTo
     {
@@ -78,13 +81,6 @@ class Icon extends Model
      * @var list<string>
      */
     protected $hidden = ['created_at', 'updated_at'];
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
-    protected $fillable = ['name'];
 
     /**
      * Get content attribute

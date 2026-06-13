@@ -4,10 +4,15 @@ namespace App\Models;
 
 use App\Events\GroupDeleted;
 use Database\Factories\GroupFactory;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
@@ -20,11 +25,11 @@ use Spatie\EloquentSortable\SortableTrait;
  * @property string $name
  * @property bool $show_in_chips
  * @property int|null $order_column
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property int|null $user_id
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TwoFAccount[] $twofaccounts
- * @property-read \App\Models\User|null $user
+ * @property-read Collection|TwoFAccount[] $twofaccounts
+ * @property-read User|null $user
  *
  * @method static \Database\Factories\GroupFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Group newModelQuery()
@@ -40,22 +45,13 @@ use Spatie\EloquentSortable\SortableTrait;
  *
  * @method static \Illuminate\Database\Eloquent\Builder|Group orphans()
  */
+#[Fillable(['name', 'show_in_chips'])]
 class Group extends Model implements Sortable
 {
     /**
      * @use HasFactory<GroupFactory>
      */
     use HasFactory, SortableTrait;
-
-    /**
-     * model's array form.
-     *
-     * @var list<string>
-     */
-    protected $fillable = [
-        'name',
-        'show_in_chips',
-    ];
 
     /**
      * The accessors to append to the model's array form.
@@ -123,7 +119,7 @@ class Group extends Model implements Sortable
      *
      * @param  mixed  $value
      * @param  string|null  $field
-     * @return \Illuminate\Database\Eloquent\Model|null
+     * @return Model|null
      */
     public function resolveRouteBinding($value, $field = null)
     {
@@ -145,11 +141,11 @@ class Group extends Model implements Sortable
     /**
      * Get the TwoFAccounts of the group.
      *
-     * @return BelongsToMany<\App\Models\TwoFAccount, $this>
+     * @return BelongsToMany<TwoFAccount, $this>
      */
     public function twofaccounts() : BelongsToMany
     {
-        return $this->belongsToMany(\App\Models\TwoFAccount::class, 'twofaccount_group_assignments', 'group_id', 'twofaccount_id')
+        return $this->belongsToMany(TwoFAccount::class, 'twofaccount_group_assignments', 'group_id', 'twofaccount_id')
             ->withPivot('user_id')
             ->withTimestamps();
     }
@@ -157,7 +153,7 @@ class Group extends Model implements Sortable
     /**
      * Get assignment rows for the group.
      *
-     * @return HasMany<\App\Models\TwoFAccountGroupAssignment, $this>
+     * @return HasMany<TwoFAccountGroupAssignment, $this>
      */
     public function twofaccountGroupAssignments() : HasMany
     {
@@ -167,18 +163,18 @@ class Group extends Model implements Sortable
     /**
      * Get the user that owns the group.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Models\User, $this>
+     * @return BelongsTo<User, $this>
      */
     public function user()
     {
-        return $this->belongsTo(\App\Models\User::class);
+        return $this->belongsTo(User::class);
     }
 
     /**
      * Scope a query to only include orphan (userless) groups.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder<User>  $query
-     * @return \Illuminate\Database\Eloquent\Builder<User>
+     * @param  Builder<User>  $query
+     * @return Builder<User>
      */
     public function scopeOrphans($query)
     {

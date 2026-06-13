@@ -9,14 +9,24 @@ use App\Notifications\ResetPassword;
 use Database\Factories\UserFactory;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Contracts\Translation\HasLocalePreference;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\DatabaseNotification;
+use Illuminate\Notifications\DatabaseNotificationCollection;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Laragear\WebAuthn\Models\WebAuthnCredential;
 use Laragear\WebAuthn\WebAuthnAuthentication;
+use Laravel\Passport\Client;
 use Laravel\Passport\HasApiTokens;
+use Laravel\Passport\Token;
 
 /**
  * App\Models\User
@@ -24,31 +34,31 @@ use Laravel\Passport\HasApiTokens;
  * @property int $id
  * @property string $name
  * @property string $email
- * @property \Illuminate\Support\Carbon|null $email_verified_at
+ * @property Carbon|null $email_verified_at
  * @property string $password
  * @property string|null $remember_token
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property string|null $last_seen_at
  * @property bool $is_admin
- * @property \Illuminate\Support\Collection<array-key,mixed> $preferences
- * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Passport\Client[] $clients
+ * @property Collection<array-key,mixed> $preferences
+ * @property-read \Illuminate\Database\Eloquent\Collection|Client[] $clients
  * @property-read int|null $clients_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Group[] $groups
+ * @property-read \Illuminate\Database\Eloquent\Collection|Group[] $groups
  * @property-read int|null $groups_count
- * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<array-key,\Illuminate\Notifications\DatabaseNotification>|\Illuminate\Notifications\DatabaseNotification[] $notifications
+ * @property-read DatabaseNotificationCollection<array-key,DatabaseNotification>|DatabaseNotification[] $notifications
  * @property-read int|null $notifications_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Passport\Token[] $tokens
+ * @property-read \Illuminate\Database\Eloquent\Collection|Token[] $tokens
  * @property-read int|null $tokens_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TwoFAccount[] $twofaccounts
+ * @property-read \Illuminate\Database\Eloquent\Collection|TwoFAccount[] $twofaccounts
  * @property-read int|null $twofaccounts_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\Laragear\WebAuthn\Models\WebAuthnCredential[] $webAuthnCredentials
+ * @property-read \Illuminate\Database\Eloquent\Collection|WebAuthnCredential[] $webAuthnCredentials
  * @property-read int|null $web_authn_credentials_count
  * @property string|null $oauth_id
  * @property string|null $oauth_provider
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\AuthLog> $authentications
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, AuthLog> $authentications
  * @property-read int|null $authentications_count
- * @property-read \App\Models\AuthLog|null $latestAuthentication
+ * @property-read AuthLog|null $latestAuthentication
  *
  * @method static \Illuminate\Database\Eloquent\Builder|User admins()
  * @method static \Database\Factories\UserFactory factory(...$parameters)
@@ -72,6 +82,7 @@ use Laravel\Passport\HasApiTokens;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereOauthId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereOauthProvider($value)
  */
+#[Fillable(['name', 'email', 'password', 'oauth_id', 'oauth_provider'])]
 class User extends Authenticatable implements HasLocalePreference, WebAuthnAuthenticatable
 {
     use HasApiTokens, Notifiable;
@@ -83,15 +94,6 @@ class User extends Authenticatable implements HasLocalePreference, WebAuthnAuthe
     use HasFactory;
 
     use WebAuthnAuthentication, WebAuthnManageCredentials;
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
-    protected $fillable = [
-        'name', 'email', 'password', 'oauth_id', 'oauth_provider',
-    ];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -136,8 +138,8 @@ class User extends Authenticatable implements HasLocalePreference, WebAuthnAuthe
     /**
      * Scope a query to only include admin users.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder<User>  $query
-     * @return \Illuminate\Database\Eloquent\Builder<User>
+     * @param  Builder<User>  $query
+     * @return Builder<User>
      */
     public function scopeAdmins($query)
     {
@@ -209,7 +211,7 @@ class User extends Authenticatable implements HasLocalePreference, WebAuthnAuthe
      * Get Preferences attribute
      *
      * @param  string  $value
-     * @return \Illuminate\Support\Collection<array-key, mixed>
+     * @return Collection<array-key, mixed>
      */
     public function getPreferencesAttribute($value)
     {
@@ -244,31 +246,31 @@ class User extends Authenticatable implements HasLocalePreference, WebAuthnAuthe
     /**
      * Get the TwoFAccounts of the user.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\App\Models\TwoFAccount, $this>
+     * @return HasMany<TwoFAccount, $this>
      */
     public function twofaccounts()
     {
-        return $this->hasMany(\App\Models\TwoFAccount::class);
+        return $this->hasMany(TwoFAccount::class);
     }
 
     /**
      * Get the Groups of the user.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\App\Models\Group, $this>
+     * @return HasMany<Group, $this>
      */
     public function groups()
     {
-        return $this->hasMany(\App\Models\Group::class);
+        return $this->hasMany(Group::class);
     }
 
     /**
      * Get TwoFAccount shared by the user.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\App\Models\TwoFAccountShare, $this>
+     * @return HasMany<TwoFAccountShare, $this>
      */
     public function sharedTwofaccounts()
     {
-        $query = $this->hasMany(\App\Models\TwoFAccountShare::class, 'created_by_user_id');
+        $query = $this->hasMany(TwoFAccountShare::class, 'created_by_user_id');
 
         if (! Settings::get('enableSharing')) {
             return $query->where('id', -1); // Return empty result if sharing is disabled
@@ -284,11 +286,11 @@ class User extends Authenticatable implements HasLocalePreference, WebAuthnAuthe
     /**
      * Get TwoFAccounts shared with the user.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\App\Models\TwoFAccountShare, $this>
+     * @return HasMany<TwoFAccountShare, $this>
      */
     public function borrowedTwofaccounts()
     {
-        $query = $this->hasMany(\App\Models\TwoFAccountShare::class, 'shared_with_user_id');
+        $query = $this->hasMany(TwoFAccountShare::class, 'shared_with_user_id');
 
         if (! Settings::get('enableSharing')) {
             return $query->where('id', -1); // Return empty result if sharing is disabled

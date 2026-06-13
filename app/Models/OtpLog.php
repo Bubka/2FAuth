@@ -3,8 +3,11 @@
 namespace App\Models;
 
 use Database\Factories\OtpLogFactory;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
 /**
@@ -19,10 +22,10 @@ use Illuminate\Support\Carbon;
  * @property string $ip_address
  * @property string $otp_type
  * @property int|null $counter
- * @property \Illuminate\Support\Carbon|null $generated_at
- * @property-read \App\Models\User|null $requester
- * @property-read \App\Models\User|null $owner
- * @property-read \App\Models\TwoFAccount|null $twofaccount
+ * @property Carbon|null $generated_at
+ * @property-read User|null $requester
+ * @property-read User|null $owner
+ * @property-read TwoFAccount|null $twofaccount
  *
  * @mixin \Eloquent
  *
@@ -38,6 +41,7 @@ use Illuminate\Support\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder<OtpLog> whereCounter($value)
  * @method static \Illuminate\Database\Eloquent\Builder<OtpLog> whereGeneratedAt($value)
  */
+#[Fillable(['requester_id', 'requester_name', 'requester_email', 'owner_id', 'owner_name', 'owner_email', 'twofaccount_id', 'ip_address', 'generated_at', 'otp_type', 'counter'])]
 class OtpLog extends Model
 {
     /**
@@ -51,23 +55,6 @@ class OtpLog extends Model
     public $timestamps = false;
 
     /**
-     * The attributes that are mass assignable.
-     */
-    protected $fillable = [
-        'requester_id',
-        'requester_name',
-        'requester_email',
-        'owner_id',
-        'owner_name',
-        'owner_email',
-        'twofaccount_id',
-        'ip_address',
-        'generated_at',
-        'otp_type',
-        'counter',
-    ];
-
-    /**
      * The attributes that should be cast.
      */
     protected $casts = [
@@ -77,38 +64,38 @@ class OtpLog extends Model
     /**
      * Get the user that generated the OTP.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Models\User, $this>
+     * @return BelongsTo<User, $this>
      */
     public function requester()
     {
-        return $this->belongsTo(\App\Models\User::class, 'requester_id');
+        return $this->belongsTo(User::class, 'requester_id');
     }
 
     /**
      * Get the owner of TwoFAccount at the time of the OTP.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Models\User, $this>
+     * @return BelongsTo<User, $this>
      */
     public function owner()
     {
-        return $this->belongsTo(\App\Models\User::class, 'owner_id');
+        return $this->belongsTo(User::class, 'owner_id');
     }
 
     /**
      * Get the twofaccount associated with the OTP.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Models\TwoFAccount, $this>
+     * @return BelongsTo<TwoFAccount, $this>
      */
     public function twofaccount()
     {
-        return $this->belongsTo(\App\Models\TwoFAccount::class);
+        return $this->belongsTo(TwoFAccount::class);
     }
 
     /**
      * Get otp logs for the provided timespan (in month)
      *
-     * @param  \Illuminate\Database\Eloquent\Builder<OtpLog>  $query
-     * @return \Illuminate\Database\Eloquent\Builder<OtpLog>
+     * @param  Builder<OtpLog>  $query
+     * @return Builder<OtpLog>
      */
     public function scopeByPeriod($query, int $period = 1)
     {

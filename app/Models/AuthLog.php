@@ -25,9 +25,11 @@
 namespace App\Models;
 
 use Database\Factories\AuthLogFactory;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Support\Carbon;
 
 /**
  * @property int $id
@@ -35,9 +37,9 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property int $authenticatable_id
  * @property string|null $ip_address
  * @property string|null $user_agent
- * @property \Illuminate\Support\Carbon|null $login_at
+ * @property Carbon|null $login_at
  * @property bool $login_successful
- * @property \Illuminate\Support\Carbon|null $logout_at
+ * @property Carbon|null $logout_at
  * @property bool $cleared_by_user
  * @property string|null $guard
  * @property string|null $method
@@ -62,6 +64,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @method static \Illuminate\Database\Eloquent\Builder|AuthLog whereLogoutAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|AuthLog whereUserAgent($value)
  */
+#[Fillable(['ip_address', 'user_agent', 'login_at', 'login_successful', 'logout_at', 'cleared_by_user', 'guard', 'login_method'])]
 class AuthLog extends Model
 {
     /**
@@ -73,20 +76,6 @@ class AuthLog extends Model
      * Indicates if the model should be timestamped.
      */
     public $timestamps = false;
-
-    /**
-     * The attributes that are mass assignable.
-     */
-    protected $fillable = [
-        'ip_address',
-        'user_agent',
-        'login_at',
-        'login_successful',
-        'logout_at',
-        'cleared_by_user',
-        'guard',
-        'login_method',
-    ];
 
     /**
      * The attributes that should be cast.
@@ -101,7 +90,7 @@ class AuthLog extends Model
     /**
      * MorphTo relation to get the associated authenticatable user
      *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphTo<\Illuminate\Database\Eloquent\Model, $this>
+     * @return MorphTo<Model, $this>
      */
     public function authenticatable()
     {

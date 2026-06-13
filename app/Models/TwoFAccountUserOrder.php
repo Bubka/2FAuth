@@ -2,7 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\TwoFAccountUserOrder
@@ -11,10 +14,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $twofaccount_id
  * @property int $user_id
  * @property int $position
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\TwoFAccount $twofaccount
- * @property-read \App\Models\User $user
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read TwoFAccount $twofaccount
+ * @property-read User $user
  *
  * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccountUserOrder newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccountUserOrder newQuery()
@@ -22,21 +25,13 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @mixin \Eloquent
  */
+#[Fillable(['twofaccount_id', 'user_id', 'position'])]
 class TwoFAccountUserOrder extends Model
 {
     /**
      * @var string
      */
     protected $table = 'twofaccount_user_orders';
-
-    /**
-     * @var list<string>
-     */
-    protected $fillable = [
-        'twofaccount_id',
-        'user_id',
-        'position',
-    ];
 
     /**
      * @var array<string, string>
@@ -48,7 +43,7 @@ class TwoFAccountUserOrder extends Model
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Models\TwoFAccount, $this>
+     * @return BelongsTo<TwoFAccount, $this>
      */
     public function twofaccount()
     {
@@ -56,7 +51,7 @@ class TwoFAccountUserOrder extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Models\User, $this>
+     * @return BelongsTo<User, $this>
      */
     public function user()
     {
