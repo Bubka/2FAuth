@@ -131,6 +131,9 @@ return [
     |
     */
 
-    'serializable_classes' => false,
+    'serializable_classes' => [
+        Illuminate\Support\Collection::class,
+        Illuminate\Support\LazyCollection::class,
+    ],
 
 ];
