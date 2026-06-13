@@ -17,18 +17,12 @@ use App\Http\Controllers\SinglePageController;
 use App\Http\Controllers\SystemController;
 use App\Http\Middleware\AddContentSecurityPolicyHeaders;
 use App\Http\Middleware\CustomCreateFreshApiToken;
+use App\Http\Middleware\PreventRequestForgery;
 use App\Http\Middleware\SetLanguage;
-use App\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
-// use Illuminate\Foundation\Events\DiagnosingHealth;
-// use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
-
-// use App\Models\User;
-// use App\Notifications\SignedInWithNewDeviceNotification;
-// use App\Models\AuthLog;
 
 /*
 |--------------------------------------------------------------------------
@@ -140,7 +134,7 @@ Route::get('/manifest.json', function () {
 
 Route::withoutMiddleware([
     StartSession::class,
-    VerifyCsrfToken::class,
+    PreventRequestForgery::class,
     SubstituteBindings::class,
     SetLanguage::class,
     CustomCreateFreshApiToken::class,
