@@ -149,13 +149,6 @@ class TwoFAccount extends Model
     ];
 
     /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var list<string>
-     */
-    protected $hidden = [];
-
-    /**
      * The attributes that should be cast.
      *
      * @var array<string, string>

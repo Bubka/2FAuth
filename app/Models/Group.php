@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Events\GroupDeleted;
 use Database\Factories\GroupFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -46,6 +47,7 @@ use Spatie\EloquentSortable\SortableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|Group orphans()
  */
 #[Fillable(['name', 'show_in_chips'])]
+#[Hidden(['created_at', 'updated_at'])]
 class Group extends Model implements Sortable
 {
     /**
@@ -59,13 +61,6 @@ class Group extends Model implements Sortable
      * @var list<string>
      */
     protected $appends = [];
-
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var list<string>
-     */
-    protected $hidden = ['created_at', 'updated_at'];
 
     /**
      * The attributes that should be cast.

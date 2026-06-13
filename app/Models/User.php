@@ -10,6 +10,7 @@ use Database\Factories\UserFactory;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Contracts\Translation\HasLocalePreference;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -83,6 +84,7 @@ use Laravel\Passport\Token;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereOauthProvider($value)
  */
 #[Fillable(['name', 'email', 'password', 'oauth_id', 'oauth_provider'])]
+#[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable implements HasLocalePreference, WebAuthnAuthenticatable
 {
     use HasApiTokens, Notifiable;
@@ -94,16 +96,6 @@ class User extends Authenticatable implements HasLocalePreference, WebAuthnAuthe
     use HasFactory;
 
     use WebAuthnAuthentication, WebAuthnManageCredentials;
-
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
 
     /**
      * The attributes that should be cast.

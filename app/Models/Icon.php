@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Traits\CanEncryptField;
 use Database\Factories\IconFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -30,6 +31,7 @@ use Illuminate\Support\Facades\App;
  * @method static \Illuminate\Database\Eloquent\Builder|Icon whereUpdatedAt($value)
  */
 #[Fillable(['name'])]
+#[Hidden(['created_at', 'updated_at'])]
 class Icon extends Model
 {
     /**
@@ -74,13 +76,6 @@ class Icon extends Model
      * @var array<string, mixed>
      */
     protected $attributes = [];
-
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var list<string>
-     */
-    protected $hidden = ['created_at', 'updated_at'];
 
     /**
      * Get content attribute
