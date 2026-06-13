@@ -11,6 +11,7 @@ use Illuminate\Support\ServiceProvider;
 use Laravel\Passport\Console\ClientCommand;
 use Laravel\Passport\Console\InstallCommand;
 use Laravel\Passport\Console\KeysCommand;
+use Laravel\Passport\Passport;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -36,6 +37,9 @@ class AppServiceProvider extends ServiceProvider
         Schema::defaultStringLength(191);
 
         JsonResource::withoutWrapping();
+
+        Passport::$clientUuids            = false;
+        Passport::$registersJsonApiRoutes = true;
 
         $this->commands([
             InstallCommand::class,

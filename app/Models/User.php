@@ -26,6 +26,7 @@ use Illuminate\Support\Str;
 use Laragear\WebAuthn\Models\WebAuthnCredential;
 use Laragear\WebAuthn\WebAuthnAuthentication;
 use Laravel\Passport\Client;
+use Laravel\Passport\Contracts\OAuthenticatable;
 use Laravel\Passport\HasApiTokens;
 use Laravel\Passport\Token;
 
@@ -85,7 +86,7 @@ use Laravel\Passport\Token;
  */
 #[Fillable(['name', 'email', 'password', 'oauth_id', 'oauth_provider'])]
 #[Hidden(['password', 'remember_token'])]
-class User extends Authenticatable implements HasLocalePreference, WebAuthnAuthenticatable
+class User extends Authenticatable implements HasLocalePreference, OAuthenticatable, WebAuthnAuthenticatable
 {
     use HasApiTokens, Notifiable;
     use HasAuthenticationLog;
