@@ -26,9 +26,6 @@ use Illuminate\Support\Carbon;
  * @property-read User|null $requester
  * @property-read User|null $owner
  * @property-read TwoFAccount|null $twofaccount
- *
- * @mixin \Eloquent
- *
  * @method static \Database\Factories\OtpLogFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<OtpLog> newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<OtpLog> newQuery()
@@ -40,6 +37,14 @@ use Illuminate\Support\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder<OtpLog> whereIpAddress($value)
  * @method static \Illuminate\Database\Eloquent\Builder<OtpLog> whereCounter($value)
  * @method static \Illuminate\Database\Eloquent\Builder<OtpLog> whereGeneratedAt($value)
+ * @method static Builder<static>|OtpLog byPeriod(int $period = 1)
+ * @method static Builder<static>|OtpLog whereOtpType($value)
+ * @method static Builder<static>|OtpLog whereOwnerEmail($value)
+ * @method static Builder<static>|OtpLog whereOwnerName($value)
+ * @method static Builder<static>|OtpLog whereRequesterEmail($value)
+ * @method static Builder<static>|OtpLog whereRequesterId($value)
+ * @method static Builder<static>|OtpLog whereRequesterName($value)
+ * @mixin \Eloquent
  */
 #[Fillable(['requester_id', 'requester_name', 'requester_email', 'owner_id', 'owner_name', 'owner_email', 'twofaccount_id', 'ip_address', 'generated_at', 'otp_type', 'counter'])]
 class OtpLog extends Model

@@ -20,7 +20,6 @@ use Illuminate\Support\Facades\App;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read TwoFAccount|null $twofaccount
- *
  * @method static \Database\Factories\IconFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Icon newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Icon newQuery()
@@ -29,6 +28,7 @@ use Illuminate\Support\Facades\App;
  * @method static \Illuminate\Database\Eloquent\Builder|Icon whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Icon whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Icon whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 #[Fillable(['name'])]
 #[Hidden(['created_at', 'updated_at'])]

@@ -18,11 +18,15 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property-read TwoFAccount $twofaccount
  * @property-read User $user
- *
  * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccountUserOrder newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccountUserOrder newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccountUserOrder query()
- *
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|TwoFAccountUserOrder whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|TwoFAccountUserOrder whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|TwoFAccountUserOrder wherePosition($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|TwoFAccountUserOrder whereTwofaccountId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|TwoFAccountUserOrder whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|TwoFAccountUserOrder whereUserId($value)
  * @mixin \Eloquent
  */
 #[Fillable(['twofaccount_id', 'user_id', 'position'])]

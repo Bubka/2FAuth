@@ -56,7 +56,6 @@ use SteamTotp\SteamTotp;
  * @property-read User|null $user
  * @property-read Collection<int, TwoFAccountGroupAssignment> $groups
  * @property-read Collection<int, TwoFAccountShare> $shares
- *
  * @method static \Database\Factories\TwoFAccountFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount newQuery()
@@ -76,12 +75,14 @@ use SteamTotp\SteamTotp;
  * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereService($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereUserId($value)
- *
- * @mixin \Eloquent
- *
  * @property-read Icon|null $iconResource
- *
  * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount orphans()
+ * @property-read int|null $groups_count
+ * @property-read Collection<int, \App\Models\OtpLog> $otpLogs
+ * @property-read int|null $otp_logs_count
+ * @property-read int|null $shares_count
+ * @method static Builder<static>|TwoFAccount visibleTo(\App\Models\User $user)
+ * @mixin \Eloquent
  */
 class TwoFAccount extends Model
 {

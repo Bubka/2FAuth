@@ -31,7 +31,6 @@ use Spatie\EloquentSortable\SortableTrait;
  * @property int|null $user_id
  * @property-read Collection|TwoFAccount[] $twofaccounts
  * @property-read User|null $user
- *
  * @method static \Database\Factories\GroupFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Group newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Group newQuery()
@@ -41,10 +40,13 @@ use Spatie\EloquentSortable\SortableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|Group whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Group whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Group whereUserId($value)
- *
- * @mixin \Eloquent
- *
  * @method static \Illuminate\Database\Eloquent\Builder|Group orphans()
+ * @property-read Collection<int, \App\Models\TwoFAccountGroupAssignment> $twofaccountGroupAssignments
+ * @property-read int|null $twofaccount_group_assignments_count
+ * @method static Builder<static>|Group ordered(string $direction = 'asc')
+ * @method static Builder<static>|Group whereOrderColumn($value)
+ * @method static Builder<static>|Group whereShowInChips($value)
+ * @mixin \Eloquent
  */
 #[Fillable(['name', 'show_in_chips'])]
 #[Hidden(['created_at', 'updated_at'])]
