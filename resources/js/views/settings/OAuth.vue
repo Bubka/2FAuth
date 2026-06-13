@@ -93,7 +93,7 @@
         form.post('/oauth/personal-access-tokens')
         .then(response => {
             visibleToken.value = response.data.accessToken
-            visibleTokenId.value = response.data.token.id
+            visibleTokenId.value = response.data.accessTokenId
             fetchTokens()
             createPATModalIsVisible.value = false
             form.reset()
