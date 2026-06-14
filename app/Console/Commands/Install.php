@@ -146,6 +146,7 @@ class Install extends Command
             // Calling passport:install silently creates a Personal Access Client without a user provider so
             // we run the same instructions as the passport:install command do but with a user provider specified.
             $this->callSilently('passport:keys');
+            $this->callSilently('migrate');
 
             if (DB::table('oauth_clients')
                 ->where('personal_access_client', true)
