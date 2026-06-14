@@ -52,9 +52,10 @@ class GroupStoreRequestTest extends FeatureTestCase
     #[DataProvider('provideValidData')]
     public function test_valid_data(array $data) : void
     {
-        $request = Mockery::mock(GroupStoreRequest::class)->makePartial();
-        $request->shouldReceive('user')
-            ->andReturn($this->user);
+        $request = new GroupStoreRequest;
+        $request->setUserResolver(function () {
+            return $this->user;
+        });
 
         $validator = Validator::make($data, $request->rules());
 
@@ -96,9 +97,10 @@ class GroupStoreRequestTest extends FeatureTestCase
             'name' => self::UNIQUE_GROUP_NAME,
         ]);
 
-        $request = Mockery::mock(GroupStoreRequest::class)->makePartial();
-        $request->shouldReceive('user')
-            ->andReturn($this->user);
+        $request = new GroupStoreRequest;
+        $request->setUserResolver(function () {
+            return $this->user;
+        });
 
         $validator = Validator::make($data, $request->rules());
 
