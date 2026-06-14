@@ -68,7 +68,7 @@ trait ResetTrait
             config('auth.passwords.users.table'), // password_resets
             'oauth_access_tokens',
             'oauth_auth_codes',
-            // 'oauth_clients', // we keep the table to avoid re-creating the personal access clients on every install
+            'oauth_clients',
             'oauth_personal_access_clients',
             'oauth_refresh_tokens',
             'webauthn_credentials',
@@ -110,6 +110,12 @@ trait ResetTrait
      */
     protected function seedDB(string $seeder) : void
     {
+        $this->callSilently('passport:client', [
+            '--personal' => true,
+            '--name'     => config('app.name'),
+            '--provider' => config('guards.api-guard.provider', 'users'),
+        ]);
+
         $this->callSilent('db:seed', [
             '--class'          => $seeder,
             '--no-interaction' => 1,
