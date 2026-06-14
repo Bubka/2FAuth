@@ -143,7 +143,22 @@ class Install extends Command
     protected function installPassport() : void
     {
         $this->components->task('Setting up Passport', function () : void {
-            $this->callSilently('passport:install', ['--no-interaction' => true]);
+            // Calling passport:install silently creates a Personal Access Client without a user provider so
+            // we run the same instructions as the passport:install command do but with a user provider specified.
+            $this->callSilently('passport:keys');
+
+            if (DB::table('oauth_clients')
+                ->where('personal_access_client', true)
+                ->where('name', config('app.name'))
+                ->where('provider', config('guards.api-guard.provider', 'users'))
+                ->doesntExist()
+            ) {
+                $this->callSilently('passport:client', [
+                    '--personal' => true,
+                    '--name'     => config('app.name'),
+                    '--provider' => config('guards.api-guard.provider', 'users'),
+                ]);
+            }
         });
     }
 

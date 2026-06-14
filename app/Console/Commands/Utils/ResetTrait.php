@@ -68,7 +68,7 @@ trait ResetTrait
             config('auth.passwords.users.table'), // password_resets
             'oauth_access_tokens',
             'oauth_auth_codes',
-            'oauth_clients',
+            // 'oauth_clients', // we keep the table to avoid re-creating the personal access clients on every install
             'oauth_personal_access_clients',
             'oauth_refresh_tokens',
             'webauthn_credentials',
@@ -82,6 +82,7 @@ trait ResetTrait
             'options',
             'icons',
             'auth_logs',
+            'otp_logs',
             'sessions',
             'cache',
             'cache_locks',
