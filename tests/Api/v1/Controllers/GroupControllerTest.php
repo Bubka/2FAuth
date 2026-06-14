@@ -15,6 +15,7 @@ use App\Models\User;
 use App\Policies\GroupPolicy;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\FeatureTestCase;
 
@@ -77,16 +78,19 @@ class GroupControllerTest extends FeatureTestCase
                 '0' => [
                     'id'                 => 0,
                     'name'               => 'All',
+                    'show_in_chips'      => null,
                     'twofaccounts_count' => 2,
                 ],
                 '1' => [
                     'id'                 => $this->userGroupA->id,
                     'name'               => $this->userGroupA->name,
+                    'show_in_chips'      => false,
                     'twofaccounts_count' => 2,
                 ],
                 '2' => [
                     'id'                 => $this->userGroupB->id,
                     'name'               => $this->userGroupB->name,
+                    'show_in_chips'      => false,
                     'twofaccounts_count' => 0,
                 ],
             ]);
@@ -152,22 +156,57 @@ class GroupControllerTest extends FeatureTestCase
     }
 
     #[Test]
-    public function test_store_returns_created_group_resource()
+    #[DataProvider('validGroupStoreProvider')]
+    public function test_store_returns_created_group_resource(array $payload, array $expected)
     {
         $this->actingAs($this->user, 'api-guard')
-            ->json('POST', '/api/v1/groups', [
-                'name' => self::NEW_GROUP_NAME,
-            ])
+            ->json('POST', '/api/v1/groups', $payload)
             ->assertCreated()
-            ->assertJsonFragment([
-                'name'               => self::NEW_GROUP_NAME,
-                'twofaccounts_count' => 0,
-            ]);
+            ->assertJsonFragment($expected);
 
         $this->assertDatabaseHas('groups', [
             'name'    => self::NEW_GROUP_NAME,
             'user_id' => $this->user->id,
         ]);
+    }
+
+    /**
+     * Provide data for store tests
+     */
+    public static function validGroupStoreProvider()
+    {
+        return [
+            'NAME_ONLY' => [
+                [
+                    'name' => self::NEW_GROUP_NAME,
+                ],
+                [
+                    'name'               => self::NEW_GROUP_NAME,
+                    'twofaccounts_count' => 0,
+                ],
+            ],
+            'WITH_SHOW_IN_CHIPS' => [
+                [
+                    'name' => self::NEW_GROUP_NAME,
+                    'show_in_chips' => true,
+                ],
+                [
+                    'name'               => self::NEW_GROUP_NAME,
+                    'show_in_chips'      => true,
+                    'twofaccounts_count' => 0,
+                ],
+            ],
+        ];
+    }
+
+    #[Test]
+    public function test_store_using_existing_group_name_from_another_user_succeeds()
+    {
+        $this->actingAs($this->user, 'api-guard')
+            ->json('POST', '/api/v1/groups', [
+                'name' => $this->anotherUserGroupA->name,
+            ])
+            ->assertStatus(201);
     }
 
     #[Test]
@@ -271,19 +310,68 @@ class GroupControllerTest extends FeatureTestCase
     }
 
     #[Test]
-    public function test_update_returns_updated_group_resource()
+    #[DataProvider('validGroupUpdateProvider')]
+    public function test_update_returns_updated_group_resource(array $payload, array $expected)
     {
         $group = Group::factory()->for($this->user)->create();
 
         $response = $this->actingAs($this->user, 'api-guard')
-            ->json('PUT', '/api/v1/groups/' . $group->id, [
-                'name' => 'name updated',
-            ])
+            ->json('PUT', '/api/v1/groups/' . $group->id, $payload)
             ->assertOk()
-            ->assertJsonFragment([
-                'name'               => 'name updated',
-                'twofaccounts_count' => 0,
-            ]);
+            ->assertJsonFragment($expected);
+    }
+
+    /**
+     * Provide data for update tests
+     */
+    public static function validGroupUpdateProvider()
+    {
+        return [
+            'NAME_ONLY' => [
+                [
+                    'name' => 'name updated',
+                ],
+                [
+                    'name'               => 'name updated',
+                    'twofaccounts_count' => 0,
+                ],
+            ],
+            'WITH_SHOW_IN_CHIPS' => [
+                [
+                    'name' => 'name updated',
+                    'show_in_chips' => true,
+                ],
+                [
+                    'name'               => 'name updated',
+                    'show_in_chips'      => true,
+                    'twofaccounts_count' => 0,
+                ],
+            ],
+        ];
+    }
+
+    #[Test]
+    public function test_update_using_existing_group_name_fails()
+    {
+        $group = Group::factory()->for($this->user)->create();
+
+        $this->actingAs($this->user, 'api-guard')
+            ->json('PUT', '/api/v1/groups/' . $group->id, [
+                'name' => $this->userGroupA->name,
+            ])
+            ->assertStatus(422);
+    }
+
+    #[Test]
+    public function test_update_using_existing_group_name_from_another_user_succeeds()
+    {
+        $group = Group::factory()->for($this->user)->create();
+
+        $this->actingAs($this->user, 'api-guard')
+            ->json('PUT', '/api/v1/groups/' . $group->id, [
+                'name' => $this->anotherUserGroupA->name,
+            ])
+            ->assertOk();
     }
 
     #[Test]
@@ -338,6 +426,7 @@ class GroupControllerTest extends FeatureTestCase
             ->assertExactJson([
                 'id'                 => $group->id,
                 'name'               => $group->name,
+                'show_in_chips'      => false,
                 'twofaccounts_count' => 2,
             ]);
     }

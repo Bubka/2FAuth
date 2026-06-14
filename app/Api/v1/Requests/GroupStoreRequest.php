@@ -25,7 +25,13 @@ class GroupStoreRequest extends FormRequest
      */
     public function rules()
     {
-        $toto = $this->group;
+        $groupId        = $this->group?->id;
+        $nameUniqueRule = Rule::unique('groups', 'name')
+            ->where(fn ($query) => $query->where('user_id', $this->user()->id));
+
+        if ($groupId !== null) {
+            $nameUniqueRule->ignore($groupId);
+        }
 
         return [
             'name' => [
@@ -33,17 +39,13 @@ class GroupStoreRequest extends FormRequest
                 'regex:/^[A-zÀ-ú0-9\s\-_\']+$/',
                 'max:32',
                 Rule::notIn([__('label.all')]),
-                Rule::unique('groups')->where(
-                    fn ($query) => $query
-                        ->where('user_id', $this->user()->id)
-                        ->where('id', '<>', $this->group->id)
-                ),
+                $nameUniqueRule,
             ],
             'show_in_chips' => [
                 'sometimes',
                 'required',
-                'boolean'
-            ]
+                'boolean',
+            ],
         ];
     }
 
