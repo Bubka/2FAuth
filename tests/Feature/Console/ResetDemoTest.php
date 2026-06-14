@@ -25,6 +25,12 @@ class ResetDemoTest extends FeatureTestCase
             '--no-interaction' => 1,
         ]);
 
+        Artisan::call('passport:client', [
+            '--personal' => true,
+            '--name'     => config('app.name'),
+            '--provider' => config('guards.api-guard.provider', 'users'),
+        ]);
+
         Config::set('2fauth.config.isDemoApp', true);
 
         $this->artisan('2fauth:reset-demo')

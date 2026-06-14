@@ -340,7 +340,11 @@ class UserManagerControllerTest extends FeatureTestCase
             '--no-interaction' => 1,
         ]);
 
-        $tokenRepository = app(TokenRepository::class);
+        Artisan::call('passport:client', [
+            '--personal' => true,
+            '--name'     => config('app.name'),
+            '--provider' => config('guards.api-guard.provider', 'users'),
+        ]);
 
         $this->actingAs($this->user, 'api-guard')
             ->json('POST', '/oauth/personal-access-tokens', [
@@ -351,7 +355,7 @@ class UserManagerControllerTest extends FeatureTestCase
         $this->actingAs($this->admin, 'api-guard')
             ->json('DELETE', '/api/v1/users/' . $this->user->id . '/pats');
 
-        $tokens = $tokenRepository->forUser($this->user->getAuthIdentifier());
+        $tokens = $this->user->tokens()->get();
         $tokens = $tokens->load('client')->filter(function ($token) {
             return $token->client->personal_access_client && ! $token->revoked;
         });

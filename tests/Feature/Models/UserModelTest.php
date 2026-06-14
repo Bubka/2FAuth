@@ -115,6 +115,12 @@ class UserModelTest extends FeatureTestCase
             '--no-interaction' => 1,
         ]);
 
+        Artisan::call('passport:client', [
+            '--personal' => true,
+            '--name'     => config('app.name'),
+            '--provider' => config('guards.api-guard.provider', 'users'),
+        ]);
+
         $user = User::factory()->create();
         TwoFAccount::factory()->for($user)->create();
         AuthLog::factory()->for($user, 'authenticatable')->create();

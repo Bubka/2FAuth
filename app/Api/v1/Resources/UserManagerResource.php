@@ -7,7 +7,6 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
-use Laravel\Passport\TokenRepository;
 
 /**
  * @property mixed $id
@@ -53,8 +52,7 @@ class UserManagerResource extends UserResource
         }
 
         // Personal Access Tokens (PATs)
-        $tokenRepository = App::make(TokenRepository::class);
-        $tokens          = $tokenRepository->forUser($this->resource->getAuthIdentifier());
+        $tokens = $this->resource->tokens()->get();
 
         $PATs_count = $tokens->load('client')->filter(function ($token) {
             return $token->client->personal_access_client && ! $token->revoked;
