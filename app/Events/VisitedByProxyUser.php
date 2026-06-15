@@ -3,23 +3,20 @@
 namespace App\Events;
 
 use App\Models\User;
-use Illuminate\Contracts\Auth\Authenticatable;
 
 class VisitedByProxyUser
 {
     /**
      * The authenticated user.
-     *
-     * @var User|Authenticatable
      */
-    public $user;
+    public User $user;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(User|Authenticatable $user)
+    public function __construct(User $user)
     {
         $this->user = $user;
     }

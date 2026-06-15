@@ -16,20 +16,11 @@ use Tests\FeatureTestCase;
 #[CoversClass(FailedLoginNotification::class)]
 class FailedLoginNotificationTest extends FeatureTestCase
 {
-    /**
-     * @var \App\Models\User
-     */
-    protected $user;
+    protected User $user;
 
-    /**
-     * @var \App\Models\AuthLog
-     */
-    protected $authLog;
+    protected AuthLog $authLog;
 
-    /**
-     * @var \App\Notifications\FailedLoginNotification
-     */
-    protected $failedLogin;
+    protected FailedLoginNotification $failedLogin;
 
     protected function setUp() : void
     {

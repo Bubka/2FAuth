@@ -15,15 +15,9 @@ use Tests\FeatureTestCase;
 #[CoversClass(TestEmailSettingNotification::class)]
 class TestEmailSettingNotificationTest extends FeatureTestCase
 {
-    /**
-     * @var \App\Models\User
-     */
-    protected $user;
+    protected User $user;
 
-    /**
-     * @var \App\Notifications\TestEmailSettingNotification
-     */
-    protected $testEmailSettingNotification;
+    protected TestEmailSettingNotification $testEmailSettingNotification;
 
     protected function setUp() : void
     {

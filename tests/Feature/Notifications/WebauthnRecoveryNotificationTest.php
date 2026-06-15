@@ -16,15 +16,9 @@ use Tests\FeatureTestCase;
 #[CoversClass(WebauthnRecoveryNotification::class)]
 class WebauthnRecoveryNotificationTest extends FeatureTestCase
 {
-    /**
-     * @var \App\Models\User
-     */
-    protected $user;
+    protected User $user;
 
-    /**
-     * @var \App\Notifications\WebauthnRecoveryNotification
-     */
-    protected $webauthnRecoveryNotification;
+    protected WebauthnRecoveryNotification $webauthnRecoveryNotification;
 
     protected function setUp() : void
     {

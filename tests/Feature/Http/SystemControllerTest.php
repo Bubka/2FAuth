@@ -21,12 +21,9 @@ use Tests\FeatureTestCase;
 
 class SystemControllerTest extends FeatureTestCase
 {
-    /**
-     * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
-     */
-    protected $user;
+    protected User $user;
 
-    protected $admin;
+    protected User $admin;
 
     protected function setUp() : void
     {

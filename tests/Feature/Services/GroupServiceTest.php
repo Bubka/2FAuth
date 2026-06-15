@@ -19,35 +19,21 @@ use Tests\FeatureTestCase;
 #[CoversClass(Groups::class)]
 class GroupServiceTest extends FeatureTestCase
 {
-    /**
-     * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
-     */
-    protected $user;
+    protected User $user;
 
-    /**
-     * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
-     */
-    protected $otherUser;
+    protected User $otherUser;
 
-    /**
-     * App\Models\Group $groupOne, $groupTwo, $groupThree
-     */
-    protected $groupOne;
+    protected Group $groupOne;
 
-    protected $groupTwo;
+    protected Group $groupTwo;
 
-    protected $groupThree;
+    protected Group $groupThree;
 
-    /**
-     * App\Models\Group $twofaccountOne, $twofaccountTwo, $twofaccountThree
-     */
-    protected $twofaccountOne;
+    protected TwoFAccount $twofaccountOne;
 
-    protected $twofaccountTwo;
+    protected TwoFAccount $twofaccountTwo;
 
-    protected $twofaccountThree;
-
-    private const NEW_GROUP_NAME = 'MyNewGroup';
+    protected TwoFAccount $twofaccountThree;
 
     protected function setUp() : void
     {

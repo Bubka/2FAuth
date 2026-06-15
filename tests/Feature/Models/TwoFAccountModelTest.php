@@ -9,7 +9,6 @@ use App\Models\TwoFAccountShare;
 use App\Models\User;
 use App\Services\LogoLib\TfaLogoLib;
 use Illuminate\Http\Testing\FileFactory;
-use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Mockery\MockInterface;
@@ -25,26 +24,15 @@ use Tests\FeatureTestCase;
 #[CoversClass(TwoFAccount::class)]
 class TwoFAccountModelTest extends FeatureTestCase
 {
-    /**
-     * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
-     */
-    protected $user;
+    protected User $user;
 
-    protected $anotherUser;
+    protected User $anotherUser;
 
-    /**
-     * @var \App\Models\TwoFAccount
-     */
-    protected $customTotpTwofaccount;
+    protected TwoFAccount $customTotpTwofaccount;
 
-    protected $customHotpTwofaccount;
+    protected TwoFAccount $customHotpTwofaccount;
 
-    protected $customSteamTotpTwofaccount;
-
-    /**
-     * Helpers $helpers;
-     */
-    protected $helpers;
+    protected TwoFAccount $customSteamTotpTwofaccount;
 
     protected function setUp() : void
     {

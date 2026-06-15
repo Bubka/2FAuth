@@ -24,10 +24,8 @@ class UserAuthenticationResource extends JsonResource
 {
     /**
      * A user agent parser instance.
-     *
-     * @var mixed
      */
-    protected $agent;
+    protected mixed $agent;
 
     /**
      * Create a new resource instance.

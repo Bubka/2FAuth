@@ -16,7 +16,7 @@ class AppTest extends FeatureTestCase
     #[Test]
     public function test_events_should_be_explicitly_registered()
     {
-        $eventServiceProvider = app()->getProvider(EventServiceProvider::class);
+        $eventServiceProvider = new EventServiceProvider(app());
 
         $this->assertFalse($eventServiceProvider->shouldDiscoverEvents());
     }

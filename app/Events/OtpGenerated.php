@@ -5,6 +5,7 @@ namespace App\Events;
 use App\Models\Dto\HotpDto;
 use App\Models\Dto\TotpDto;
 use App\Models\TwoFAccount;
+use App\Models\User;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
@@ -14,25 +15,13 @@ class OtpGenerated
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /**
-     * @var \App\Models\TwoFAccount
-     */
-    public $twofaccount;
+    public TwoFAccount $twofaccount;
 
-    /**
-     * @var \App\Models\User
-     */
-    public $requester;
+    public User $requester;
 
-    /**
-     * @var \App\Models\User
-     */
-    public $owner;
+    public User $owner;
 
-    /**
-     * @var \App\Models\Dto\TotpDto|\App\Models\Dto\HotpDto
-     */
-    public $otpDto;
+    public TotpDto|HotpDto $otpDto;
 
     /**
      * Create a new event instance.

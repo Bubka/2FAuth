@@ -42,10 +42,7 @@ class CleanIconStorageTest extends TestCase
                 ->andReturn(true);
         });
 
-        /**
-         * @disregard P1009 Undefined type
-         */
-        $this->assertNull($listener->handle($event, $mockedIconStore));
+        $listener->handle($event);
     }
 
     #[Test]

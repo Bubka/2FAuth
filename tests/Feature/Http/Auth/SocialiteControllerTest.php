@@ -103,7 +103,7 @@ class SocialiteControllerTest extends FeatureTestCase
 
     #[Test]
     #[DataProvider('ssoConfigVarProvider')]
-    public function test_redirect_returns_error_when_openid_provider_client_secret_is_missing($ssoConfigVar)
+    public function test_redirect_returns_error_when_openid_provider_client_secret_is_missing(string $ssoConfigVar)
     {
         config(['services.openid.' . $ssoConfigVar => null]);
 

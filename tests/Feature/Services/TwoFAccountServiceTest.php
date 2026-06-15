@@ -22,9 +22,6 @@ use Tests\Data\MigrationTestData;
 use Tests\Data\OtpTestData;
 use Tests\FeatureTestCase;
 
-use function PHPUnit\Framework\assertCount;
-use function PHPUnit\Framework\assertGreaterThan;
-
 /**
  * TwoFAccountServiceTest test class
  */
@@ -33,24 +30,15 @@ use function PHPUnit\Framework\assertGreaterThan;
 #[CoversClass(TwoFAccountOwnershipTransferred::class)]
 class TwoFAccountServiceTest extends FeatureTestCase
 {
-    /**
-     * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
-     */
-    protected $user;
+    protected User $user;
 
-    /**
-     * @var \App\Models\TwoFAccount
-     */
-    protected $customTotpTwofaccount;
+    protected TwoFAccount $customTotpTwofaccount;
 
-    protected $customHotpTwofaccount;
+    protected TwoFAccount $customHotpTwofaccount;
 
-    /**
-     * @var \App\Models\Group
-     */
-    protected $userGroupA;
+    protected Group $userGroupA;
 
-    protected $userGroupB;
+    protected Group $userGroupB;
 
     protected function setUp() : void
     {
@@ -576,7 +564,7 @@ class TwoFAccountServiceTest extends FeatureTestCase
         $user = User::factory()->create();
         $finalOrder = TwoFAccounts::saveOrderForUser($user, []);
         
-        $this->assertCount(0, $finalOrder);
+        $this->assertCount(0, $finalOrder->toArray());
     }
 
     #[Test]
@@ -615,7 +603,7 @@ class TwoFAccountServiceTest extends FeatureTestCase
     {
         $sorted = TwoFAccounts::sortForUser(collect([]), $this->user);
 
-        $this->assertCount(0, $sorted);
+        $this->assertCount(0, $sorted->toArray());
     }
 
     #[Test]

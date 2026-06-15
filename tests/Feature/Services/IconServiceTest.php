@@ -95,7 +95,7 @@ class IconServiceTest extends FeatureTestCase
 
     #[Test]
     #[DataProvider('badBuildFromResourceInputsProvider')]
-    public function test_build_from_resource_with_bad_inputs_returns_null($resource, $extension)
+    public function test_build_from_resource_with_bad_inputs_returns_null(mixed $resource, mixed $extension)
     {
         $this->iconService = $this->app->make(IconService::class);
         $iconName          = $this->iconService->buildFromResource($resource, $extension);
@@ -146,7 +146,7 @@ class IconServiceTest extends FeatureTestCase
 
     #[Test]
     #[DataProviderExternal(IconStoreServiceTest::class, 'supportedMimeTypesProvider')]
-    public function test_build_from_remote_image_stores_icon_and_returns_name($name, $base64content, $mimetype)
+    public function test_build_from_remote_image_stores_icon_and_returns_name(string $name, string $base64content, string $mimetype)
     {
         $imageUrl = 'https://www.2fauth.app/' . $name;
         $resource = base64_decode($base64content);
@@ -166,7 +166,7 @@ class IconServiceTest extends FeatureTestCase
 
     #[Test]
     #[DataProvider('buildFromRemoteImageInvalidUrlProvider')]
-    public function test_build_from_remote_image_returns_null_when_url_is_invalid($url)
+    public function test_build_from_remote_image_returns_null_when_url_is_invalid(string $url)
     {
         $imageUrl = $url;
 

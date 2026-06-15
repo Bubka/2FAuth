@@ -8,6 +8,7 @@ use App\Http\Requests\WebauthnRecoveryRequest;
 use App\Models\User;
 use App\Providers\AuthServiceProvider;
 use Database\Factories\UserFactory;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -23,12 +24,9 @@ use Tests\FeatureTestCase;
 #[CoversClass(AuthServiceProvider::class)]
 class WebAuthnRecoveryControllerTest extends FeatureTestCase
 {
-    /**
-     * @var \App\Models\User
-     */
-    protected $user;
+    protected User $user;
 
-    protected $now;
+    protected Carbon $now;
 
     const STORED_TOKEN_VALUE = '$2y$10$P6q8rl8te5QaO1EdpyJcNO0s9VFlVgf62KaItQhrPTskxfyu97mlW';
 

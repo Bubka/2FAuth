@@ -19,9 +19,9 @@ use Illuminate\Support\Facades\Log;
 class TwoFAccountService
 {
     /**
-     * @var MigratorFactoryInterface The Migration service
+     * The Migration service
      */
-    protected $migratorFactory;
+    protected MigratorFactoryInterface $migratorFactory;
 
     /**
      * Constructor
@@ -58,7 +58,7 @@ class TwoFAccountService
      * Convert a migration payload to a set of TwoFAccount objects
      *
      * @param  string  $migrationPayload  Migration payload from 2FA apps export feature
-     * @return \Illuminate\Support\Collection<int|string, TwoFAccount> The converted accounts
+     * @return Collection<int|string, TwoFAccount> The converted accounts
      */
     public function migrate(string $migrationPayload) : Collection
     {
@@ -72,7 +72,7 @@ class TwoFAccountService
      * Export one or more twofaccounts
      *
      * @param  int|array|string  $ids  twofaccount ids to delete
-     * @return \Illuminate\Support\Collection<int, TwoFAccount> The converted accounts
+     * @return Collection<int, TwoFAccount> The converted accounts
      */
     public static function export($ids) : Collection
     {
@@ -104,7 +104,7 @@ class TwoFAccountService
     /**
      * Set owner of given twofaccounts
      *
-     * @param  \Illuminate\Support\Collection<int, TwoFAccount>  $twofaccounts
+     * @param  Collection<int, TwoFAccount>  $twofaccounts
      */
     public static function setUser(Collection $twofaccounts, User $user) : void
     {
@@ -270,8 +270,8 @@ class TwoFAccountService
      * Return the given collection with items marked as Duplicates (using id=-1) if similar records exist
      * in the authenticated user accounts
      *
-     * @param  \Illuminate\Support\Collection<int|string, TwoFAccount>  $twofaccounts
-     * @return \Illuminate\Support\Collection<int|string, TwoFAccount>
+     * @param  Collection<int|string, TwoFAccount>  $twofaccounts
+     * @return Collection<int|string, TwoFAccount>
      */
     private static function markAsDuplicate(Collection $twofaccounts) : Collection
     {

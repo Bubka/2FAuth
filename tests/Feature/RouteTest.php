@@ -49,7 +49,7 @@ class RouteTest extends FeatureTestCase
 
     #[Test]
     #[DataProvider('wherePatternProvider')]
-    public function test_router_has_expected_global_where_patterns($pattern)
+    public function test_router_has_expected_global_where_patterns(string $pattern)
     {
         $patterns = Route::getPatterns();
 

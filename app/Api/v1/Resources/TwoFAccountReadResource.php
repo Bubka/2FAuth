@@ -43,9 +43,6 @@ class TwoFAccountReadResource extends TwoFAccountStoreResource
                 'otp' => $this->when(
                     $this->otp_type != 'hotp' && ($request->has('withOtp') || (int) filter_var($request->input('withOtp'), FILTER_VALIDATE_BOOLEAN) == 1),
                     function () use ($request) {
-                        /**
-                         * @var \App\Models\Dto\TotpDto|\App\Models\Dto\HotpDto
-                         */
                         $otp = $this->getOtp($request->at);
 
                         return collect([

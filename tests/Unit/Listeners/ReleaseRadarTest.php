@@ -27,7 +27,7 @@ class ReleaseRadarTest extends TestCase
         $event    = new ScanForNewReleaseCalled;
         $listener = new ReleaseRadar;
 
-        $this->assertNull($listener->handle($event));
+        $listener->handle($event);
     }
 
     #[Test]

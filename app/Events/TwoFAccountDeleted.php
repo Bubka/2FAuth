@@ -12,10 +12,7 @@ class TwoFAccountDeleted
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /**
-     * @var \App\Models\TwoFAccount
-     */
-    public $twofaccount;
+    public TwoFAccount $twofaccount;
 
     /**
      * Create a new event instance.

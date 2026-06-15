@@ -82,7 +82,7 @@ class IconStoreServiceTest extends FeatureTestCase
 
     #[Test]
     #[DataProvider('supportedMimeTypesProvider')]
-    public function test_mimeType_returns_correct_mimetype($name, $base64content, $expected)
+    public function test_mimeType_returns_correct_mimetype(string $name, string $base64content, string $expected)
     {
         Storage::disk('icons')->put($name, $base64content);
 

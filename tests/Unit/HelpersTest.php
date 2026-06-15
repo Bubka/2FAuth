@@ -16,7 +16,7 @@ class HelpersTest extends TestCase
 {
     #[Test]
     #[DataProvider('versionNumberProvider')]
-    public function test_cleanVersionNumber_returns_cleaned_version($dirtyVersion, $expected)
+    public function test_cleanVersionNumber_returns_cleaned_version(string $dirtyVersion, string $expected)
     {
         $cleanedVersion = Helpers::cleanVersionNumber($dirtyVersion);
 
@@ -50,7 +50,7 @@ class HelpersTest extends TestCase
 
     #[Test]
     #[DataProvider('invalidVersionNumberProvider')]
-    public function test_cleanVersionNumber_returns_false_with_invalid_semver($dirtyVersion)
+    public function test_cleanVersionNumber_returns_false_with_invalid_semver(string $dirtyVersion)
     {
         $cleanedVersion = Helpers::cleanVersionNumber($dirtyVersion);
 
@@ -83,7 +83,7 @@ class HelpersTest extends TestCase
 
     #[Test]
     #[DataProvider('toBase32PaddedStringProvider')]
-    public function test_toBase32Format_returns_base32_formated_string($str, $expected)
+    public function test_toBase32Format_returns_base32_formated_string(mixed $str, string $expected)
     {
         $base32str = Helpers::PadToBase32Format($str);
 
@@ -133,7 +133,7 @@ class HelpersTest extends TestCase
 
     #[Test]
     #[DataProvider('commaSeparatedToArrayProvider')]
-    public function test_commaSeparatedToArray_returns_ids_in_array($str, $expected)
+    public function test_commaSeparatedToArray_returns_ids_in_array(string $str, array $expected)
     {
         $array = Helpers::commaSeparatedToArray($str);
 
@@ -159,7 +159,7 @@ class HelpersTest extends TestCase
 
     #[Test]
     #[DataProvider('invalidCommaSeparatedToArrayProvider')]
-    public function test_commaSeparatedToArray_returns_unchanged_ids($str, $expected)
+    public function test_commaSeparatedToArray_returns_unchanged_ids(mixed $str, mixed $expected)
     {
         $array = Helpers::commaSeparatedToArray($str);
 

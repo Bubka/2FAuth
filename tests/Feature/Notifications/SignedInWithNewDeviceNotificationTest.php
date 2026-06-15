@@ -16,20 +16,11 @@ use Tests\FeatureTestCase;
 #[CoversClass(SignedInWithNewDeviceNotification::class)]
 class SignedInWithNewDeviceNotificationTest extends FeatureTestCase
 {
-    /**
-     * @var \App\Models\User
-     */
-    protected $user;
+    protected User $user;
 
-    /**
-     * @var \App\Models\AuthLog
-     */
-    protected $authLog;
+    protected AuthLog $authLog;
 
-    /**
-     * @var \App\Notifications\SignedInWithNewDeviceNotification
-     */
-    protected $signedInWithNewDevice;
+    protected SignedInWithNewDeviceNotification $signedInWithNewDevice;
 
     protected function setUp() : void
     {

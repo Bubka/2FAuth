@@ -174,7 +174,7 @@ class LogoLibsTest extends FeatureTestCase
                 'iconName' => OtpTestData::ICON_PNG,
                 'iconData' => OtpTestData::ICON_PNG_DATA,
             ]],
-            'PNG_ICON_IN_SUBDIR' => [[
+            'SVG_ICON_IN_ANOTHER_SUBDIR' => [[
                 'filetype' => 'svg',
                 'packDir'  => 'packDir/subDir/anotherSubDir',
                 'iconName' => OtpTestData::ICON_SVG,
@@ -271,7 +271,7 @@ class LogoLibsTest extends FeatureTestCase
 
     #[Test]
     #[DataProvider('provideVariantInvalidData')]
-    public function test_geticon_fallbacks_to_regular_when_variant_is_invalid_without_auth($variant)
+    public function test_geticon_fallbacks_to_regular_when_variant_is_invalid_without_auth(mixed $variant)
     {
         Http::preventStrayRequests();
         Http::fake([

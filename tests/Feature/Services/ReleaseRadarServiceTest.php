@@ -153,6 +153,6 @@ class ReleaseRadarServiceTest extends FeatureTestCase
             $url => Http::response(null, 404),
         ]);
 
-        $this->assertNull(ReleaseRadarService::scheduledScan());
+        ReleaseRadarService::scheduledScan();
     }
 }

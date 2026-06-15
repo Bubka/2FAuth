@@ -43,32 +43,17 @@ use Tests\TestCase;
 #[UsesClass(TwoFAccount::class)]
 class MigratorTest extends TestCase
 {
-    /**
-     * App\Models\TwoFAccount $totpTwofaccount
-     */
-    protected $totpTwofaccount;
+    protected TwoFAccount $totpTwofaccount;
 
-    /**
-     * App\Models\TwoFAccount $totpTwofaccount
-     */
-    protected $hotpTwofaccount;
+    protected TwoFAccount $hotpTwofaccount;
 
-    /**
-     * App\Models\TwoFAccount $steamTwofaccount
-     */
-    protected $steamTwofaccount;
+    protected TwoFAccount $steamTwofaccount;
 
-    /**
-     * App\Models\TwoFAccount $GAuthTotpTwofaccount
-     */
-    protected $GAuthTotpTwofaccount;
+    protected TwoFAccount $GAuthTotpTwofaccount;
 
-    /**
-     * App\Models\TwoFAccount $GAuthTotpBisTwofaccount
-     */
-    protected $GAuthTotpBisTwofaccount;
+    protected TwoFAccount $GAuthTotpBisTwofaccount;
 
-    protected $fakeTwofaccount;
+    protected TwoFAccount $fakeTwofaccount;
 
     protected function setUp() : void
     {
@@ -378,7 +363,7 @@ class MigratorTest extends TestCase
 
     #[Test]
     #[DataProvider('AegisWithIconMigrationProvider')]
-    public function test_migrate_aegis_payload_with_icon_sets_and_stores_the_icon($migration)
+    public function test_migrate_aegis_payload_with_icon_sets_and_stores_the_icon(string $migration)
     {
         Icons::spy();
         Storage::fake('icons');
@@ -428,7 +413,7 @@ class MigratorTest extends TestCase
 
     #[Test]
     #[DataProvider('TwoFAuthWithIconMigrationProvider')]
-    public function test_migrate_2fauth_payload_with_icon_sets_and_stores_the_icon($migration)
+    public function test_migrate_2fauth_payload_with_icon_sets_and_stores_the_icon(string $migration)
     {
         Icons::spy();
         Storage::fake('icons');
@@ -487,7 +472,7 @@ class MigratorTest extends TestCase
 
     #[Test]
     #[DataProvider('factoryProvider')]
-    public function test_factory_returns_relevant_migrator($payload, $migratorClass)
+    public function test_factory_returns_relevant_migrator(string $payload, string $migratorClass)
     {
         $factory = new MigratorFactory;
 
@@ -548,7 +533,7 @@ class MigratorTest extends TestCase
 
     #[Test]
     #[DataProvider('encryptedMigrationDataProvider')]
-    public function test_factory_throw_EncryptedMigrationException($payload)
+    public function test_factory_throw_EncryptedMigrationException(string $payload)
     {
         $this->expectException(EncryptedMigrationException::class);
 

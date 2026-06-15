@@ -20,15 +20,9 @@ use Tests\FeatureTestCase;
 #[CoversMethod(AppServiceProvider::class, 'boot')]
 class ManagePatPermissionsTest extends FeatureTestCase
 {
-    /**
-     * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
-     */
-    protected $user;
+    protected User $user;
 
-    /**
-     * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
-     */
-    protected $admin;
+    protected User $admin;
 
     private const PASSWORD = 'password';
 

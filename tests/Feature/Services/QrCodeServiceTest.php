@@ -59,7 +59,7 @@ class QrCodeServiceTest extends FeatureTestCase
 
     #[Test]
     #[DataProvider('QrReaderExceptionProvider')]
-    public function test_decode_throws_an_exception($exception)
+    public function test_decode_throws_an_exception(\Exception $exception)
     {
         $this->expectException(\App\Exceptions\InvalidQrCodeException::class);
 

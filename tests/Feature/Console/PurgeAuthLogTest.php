@@ -91,7 +91,7 @@ class PurgeAuthLogTest extends FeatureTestCase
 
     #[Test]
     #[DataProvider('provideInvalidConfig')]
-    public function test_purgeLog_with_invalid_config_defaults_to_one_year($config)
+    public function test_purgeLog_with_invalid_config_defaults_to_one_year(mixed $config)
     {
         config(['2fauth.config.authLogRetentionTime' => $config]);
         $oneYearOldLog   = AuthLog::factory()->daysAgo(366)->for($this->user, 'authenticatable')->create();

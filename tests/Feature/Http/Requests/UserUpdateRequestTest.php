@@ -45,9 +45,10 @@ class UserUpdateRequestTest extends FeatureTestCase
             'email' => 'jane@example.com',
         ]);
 
-        $request = Mockery::mock(UserUpdateRequest::class)->makePartial();
-        $request->shouldReceive('user')
-            ->andReturn($user);
+        $request = new UserUpdateRequest;
+        $request->setUserResolver(function () use ($user) {
+            return $user;
+        });
 
         $validator = Validator::make($data, $request->rules());
 
@@ -95,9 +96,10 @@ class UserUpdateRequestTest extends FeatureTestCase
             'email' => 'bob@example.com',
         ]);
 
-        $request = Mockery::mock(UserUpdateRequest::class)->makePartial();
-        $request->shouldReceive('user')
-            ->andReturn($user);
+        $request = new UserUpdateRequest;
+        $request->setUserResolver(function () use ($user) {
+            return $user;
+        });
 
         $validator = Validator::make($data, $request->rules());
 

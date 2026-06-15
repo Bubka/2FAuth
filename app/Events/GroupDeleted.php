@@ -12,10 +12,7 @@ class GroupDeleted
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /**
-     * @var \App\Models\Group
-     */
-    public $group;
+    public Group $group;
 
     /**
      * Create a new event instance.
