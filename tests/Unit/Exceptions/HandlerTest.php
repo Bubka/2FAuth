@@ -16,6 +16,7 @@ use App\Exceptions\UnsupportedOtpTypeException;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
@@ -28,8 +29,9 @@ use Tests\TestCase;
 class HandlerTest extends TestCase
 {
     #[Test]
+    #[AllowMockObjectsWithoutExpectations]
     #[DataProvider('provideExceptionsforBadRequest')]
-    public function test_exceptions_returns_badRequest_json_response($exception)
+    public function test_exceptions_returns_badRequest_json_response(string $exception)
     {
         $instance = new Handler($this->createMock(Container::class));
         $class    = new \ReflectionClass(Handler::class);
@@ -88,8 +90,9 @@ class HandlerTest extends TestCase
     }
 
     #[Test]
+    #[AllowMockObjectsWithoutExpectations]
     #[DataProvider('provideExceptionsforNotFound')]
-    public function test_exceptions_returns_notFound_json_response($exception)
+    public function test_exceptions_returns_notFound_json_response(string $exception)
     {
         $instance = new Handler($this->createMock(Container::class));
         $class    = new \ReflectionClass(Handler::class);
@@ -124,6 +127,7 @@ class HandlerTest extends TestCase
     }
 
     #[Test]
+    #[AllowMockObjectsWithoutExpectations]
     public function test_authenticationException_returns_unauthorized_json_response()
     {
         $instance = new Handler($this->createMock(Container::class));
@@ -147,6 +151,7 @@ class HandlerTest extends TestCase
     }
 
     #[Test]
+    #[AllowMockObjectsWithoutExpectations]
     public function test_authenticationException_returns_proxyAuthRequired_json_response_with_proxy_guard()
     {
         $instance = new Handler($this->createMock(Container::class));
@@ -170,6 +175,7 @@ class HandlerTest extends TestCase
     }
 
     #[Test]
+    #[AllowMockObjectsWithoutExpectations]
     public function test_AccessDeniedException_returns_forbidden_json_response()
     {
         $instance = new Handler($this->createMock(Container::class));

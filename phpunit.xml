@@ -8,6 +8,8 @@
     displayDetailsOnTestsThatTriggerErrors="true"
     displayDetailsOnTestsThatTriggerNotices="true"
     displayDetailsOnTestsThatTriggerWarnings="true"
+    displayDetailsOnTestsThatTriggerDeprecations="true"
+    displayDetailsOnPhpunitNotices="true"
     displayDetailsOnPhpunitDeprecations="true"
     processIsolation="false"
     stopOnFailure="false"
