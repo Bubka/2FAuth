@@ -27,7 +27,7 @@
         form.post('/webauthn/recover', {returnError: true})
         .then(response => {
             showWebauthnForm.value = false
-            router.push({ name: 'login' })
+            router.push({ name: 'accounts' })
         })
         .catch(error => {
             if ( error.response.status === 401 ) {
