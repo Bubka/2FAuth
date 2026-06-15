@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Extensions\RemoteUserProvider;
 use App\Extensions\WebauthnCredentialBroker;
+use App\Extensions\WebauthnTwoFAuthUserProvider;
 use App\Models\Group;
 use App\Models\TwoFAccount;
 use App\Models\User;
@@ -12,9 +13,13 @@ use App\Policies\TwoFAccountPolicy;
 use App\Policies\UserPolicy;
 use App\Services\Auth\ReverseProxyGuard;
 use Illuminate\Auth\Passwords\DatabaseTokenRepository;
+use Illuminate\Contracts\Container\BindingResolutionException;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Laragear\WebAuthn\Assertion\Validator\AssertionValidator;
+use Laragear\WebAuthn\Auth\WebAuthnUserProvider;
 use RuntimeException;
 
 class AuthServiceProvider extends ServiceProvider
@@ -34,7 +39,7 @@ class AuthServiceProvider extends ServiceProvider
      * Register the service provider.
      *
      *
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     * @throws BindingResolutionException
      */
     public function register() : void
     {
@@ -91,12 +96,12 @@ class AuthServiceProvider extends ServiceProvider
         // As this option is now available in the $user->preferences array it is no more possible to overload the $fallback
         // value here because $user is not available at registration.
         Auth::provider(
-            'eloquent-webauthn',
-            static function (\Illuminate\Contracts\Foundation\Application $app, array $config) : \Laragear\WebAuthn\Auth\WebAuthnUserProvider {
-                return new \App\Extensions\WebauthnTwoFAuthUserProvider(
+            'eloquent',
+            static function (Application $app, array $config) : WebAuthnUserProvider {
+                return new WebauthnTwoFAuthUserProvider(
                     $app->make('hash'),
                     $config['model'],
-                    $app->make(\Laragear\WebAuthn\Assertion\Validator\AssertionValidator::class),
+                    $app->make(AssertionValidator::class),
                     true
                 );
             }
