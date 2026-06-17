@@ -61,30 +61,13 @@ use Laravel\Passport\Token;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, AuthLog> $authentications
  * @property-read int|null $authentications_count
  * @property-read AuthLog|null $latestAuthentication
- *
- * @method static \Illuminate\Database\Eloquent\Builder|User admins()
  * @method static \Database\Factories\UserFactory factory(...$parameters)
- * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|User query()
- * @method static \Illuminate\Database\Eloquent\Builder|User whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereEmail($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereEmailVerifiedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereIsAdmin($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereLastSeenAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User wherePreferences($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereOauthId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereOauthProvider($value)
- *
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Client> $oauthApps
  * @property-read int|null $oauth_apps_count
- *
- * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TwoFAccountShare> $borrowedTwofaccounts
+ * @property-read int|null $borrowed_twofaccounts_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TwoFAccountShare> $sharedTwofaccounts
+ * @property-read int|null $shared_twofaccounts_count
  */
 #[Fillable(['name', 'email', 'password', 'oauth_id', 'oauth_provider'])]
 #[Hidden(['password', 'remember_token'])]

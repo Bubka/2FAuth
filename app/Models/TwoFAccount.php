@@ -57,24 +57,6 @@ use SteamTotp\SteamTotp;
  * @property-read Collection<int, TwoFAccountGroupAssignment> $groups
  * @property-read Collection<int, TwoFAccountShare> $shares
  * @method static \Database\Factories\TwoFAccountFactory factory(...$parameters)
- * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount query()
- * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereAccount($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereAlgorithm($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereCounter($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereDigits($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereGroupId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereIcon($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereLegacyUri($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereOtpType($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount wherePeriod($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereSecret($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereService($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount whereUserId($value)
  * @property-read Icon|null $iconResource
  * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount orphans()
  * @property-read int|null $groups_count
@@ -82,7 +64,6 @@ use SteamTotp\SteamTotp;
  * @property-read int|null $otp_logs_count
  * @property-read int|null $shares_count
  * @method static Builder<static>|TwoFAccount visibleTo(\App\Models\User $user)
- * @mixin \Eloquent
  */
 class TwoFAccount extends Model
 {

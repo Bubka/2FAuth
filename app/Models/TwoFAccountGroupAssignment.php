@@ -19,16 +19,6 @@ use Illuminate\Support\Carbon;
  * @property-read Group $group
  * @property-read TwoFAccount $twofaccount
  * @property-read User $user
- * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccountGroupAssignment newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccountGroupAssignment newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccountGroupAssignment query()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|TwoFAccountGroupAssignment whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|TwoFAccountGroupAssignment whereGroupId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|TwoFAccountGroupAssignment whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|TwoFAccountGroupAssignment whereTwofaccountId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|TwoFAccountGroupAssignment whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|TwoFAccountGroupAssignment whereUserId($value)
- * @mixin \Eloquent
  */
 #[Fillable(['twofaccount_id', 'group_id', 'user_id'])]
 class TwoFAccountGroupAssignment extends Model

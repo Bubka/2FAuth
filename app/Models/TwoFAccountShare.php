@@ -21,19 +21,6 @@ use Illuminate\Support\Carbon;
  * @property-read TwoFAccount $twofaccount
  * @property-read User|null $sharedWithUser
  * @property-read User $createdByUser
- * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccountShare forAllUsers()
- * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccountShare forUser(int $userId)
- * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccountShare newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccountShare newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccountShare query()
- * @method static Builder<static>|TwoFAccountShare whereCreatedAt($value)
- * @method static Builder<static>|TwoFAccountShare whereCreatedByUserId($value)
- * @method static Builder<static>|TwoFAccountShare whereId($value)
- * @method static Builder<static>|TwoFAccountShare whereScope($value)
- * @method static Builder<static>|TwoFAccountShare whereSharedWithUserId($value)
- * @method static Builder<static>|TwoFAccountShare whereTwofaccountId($value)
- * @method static Builder<static>|TwoFAccountShare whereUpdatedAt($value)
- * @mixin \Eloquent
  */
 #[Fillable(['twofaccount_id', 'shared_with_user_id', 'scope', 'created_by_user_id'])]
 class TwoFAccountShare extends Model

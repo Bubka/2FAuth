@@ -70,7 +70,7 @@ return [
     |
     */
 
-    'write_model_magic_where' => true,
+    'write_model_magic_where' => false,
 
     /*
     |--------------------------------------------------------------------------
@@ -81,7 +81,7 @@ return [
     |
     */
 
-    'write_model_external_builder_methods' => true,
+    'write_model_external_builder_methods' => false,
 
     /*
     |--------------------------------------------------------------------------
@@ -180,7 +180,6 @@ return [
     */
 
     'extra' => [
-        'Eloquent' => ['Illuminate\Database\Eloquent\Builder', 'Illuminate\Database\Query\Builder'],
         'Session' => ['Illuminate\Session\Store'],
     ],
 
