@@ -20,7 +20,7 @@
         "ext-session": "*",
         "ext-tokenizer": "*",
         "ext-xml": "*",
-        "chillerlan/php-qrcode": "^5.0.3",
+        "chillerlan/php-qrcode": "^6.0.1",
         "doctormckay/steam-totp": "^1.0",
         "enshrined/svg-sanitize": "^0.22.0",
         "google/protobuf": "^4.33.6",
