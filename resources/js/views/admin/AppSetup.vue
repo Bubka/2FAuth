@@ -10,6 +10,7 @@
     import CopyButton from '@/components/CopyButton.vue'
     import { useI18n } from 'vue-i18n'
     import { LucideExternalLink, LucideSend } from '@lucide/vue'
+    import { useSettingsBreakpoints } from '@/composables/breakpoints'
 
     const errorHandler = useErrorHandler()
     const { t } = useI18n()
@@ -18,6 +19,7 @@
     const notify = useNotify()
     const appSettings = useAppSettingsStore()
     const returnTo = useStorage($2fauth.prefix + 'returnTo', 'accounts')
+    const { isLaptop } = useSettingsBreakpoints()
 
     const infos = ref()
     const listInfos = ref(null)
@@ -26,6 +28,18 @@
     const isClearingCache = ref(false)
     const healthEndPoint = $2fauth.config.subdirectory + '/up'
     const healthEndPointFullPath = location.hostname + $2fauth.config.subdirectory + '/up'
+    
+    const generalRef = useTemplateRef('general')
+    const sharingRef = useTemplateRef('sharing')
+    const storageRef = useTemplateRef('storage')
+    const securityRef = useTemplateRef('security')
+    const environmentRef = useTemplateRef('environment')
+
+    const scrollTo = (elRef) => {
+        if (!elRef) return
+
+        elRef.scrollIntoView({ behavior: 'smooth' })
+    }
 
     /**
      * Sends a test email
@@ -101,9 +115,20 @@
             <TabBar :tabs="tabs" :active-tab="'admin.appSetup'" @tab-selected="(to) => router.push({ name: to })" />
         </template>
         <template #content>
-            <FormWrapper>
+            <ResponsiveWidthWrapper>
+                <div v-if="isLaptop" class="pr-5 settings-menu">
+                    <aside class="menu">
+                        <ul class="menu-list">
+                            <li><button @click="scrollTo(generalRef)">{{ $t('heading.general') }}</button></li>
+                            <li><button @click="scrollTo(sharingRef)">{{ $t('heading.sharing') }}</button></li>
+                            <li><button @click="scrollTo(storageRef)">{{ $t('heading.storage') }}</button></li>
+                            <li><button @click="scrollTo(securityRef)">{{ $t('heading.security') }}</button></li>
+                            <li><button @click="scrollTo(environmentRef)">{{ $t('heading.environment') }}</button></li>
+                        </ul>
+                    </aside>
+                </div>
                 <form>
-                    <h4 class="title is-4">{{ $t('heading.general') }}</h4>
+                    <h4 ref="general" class="title is-4">{{ $t('heading.general') }}</h4>
                     <!-- Check for update -->
                     <FormCheckbox v-model="appSettings.checkForUpdate" @update:model-value="val => saveSetting('checkForUpdate', val)" fieldName="checkForUpdate" label="field.check_for_update" help="field.check_for_update.help" />
                     <VersionChecker />
@@ -144,7 +169,7 @@
                             <LucideExternalLink />
                         </a>
                     </div>
-                    <h4 class="title is-4 pt-5">{{ $t('heading.sharing') }}</h4>
+                    <h4 ref="sharing" class="title is-4 pt-5">{{ $t('heading.sharing') }}</h4>
                     <!-- sharing -->
                     <FormCheckbox v-model="appSettings.enableSharing" @update:model-value="val => saveSetting('enableSharing', val)" fieldName="enableSharing" label="field.enable_sharing" help="field.enable_sharing.help" />
 
@@ -156,7 +181,7 @@
                             <LucideExternalLink />
                         </a>
                     </div>
-                    <h4 class="title is-4 pt-5">{{ $t('heading.storage') }}</h4>
+                    <h4 ref="storage" class="title is-4 pt-5">{{ $t('heading.storage') }}</h4>
                     <!-- store icons in database -->
                     <FormCheckbox v-model="appSettings.storeIconsInDatabase" @update:model-value="val => saveSetting('storeIconsInDatabase', val)" fieldName="storeIconsInDatabase" label="field.store_icon_to_database" help="field.store_icon_to_database.help" />
                     <p class="help">{{ $t('field.store_icon_to_database.help_bis') }}</p>
@@ -166,12 +191,12 @@
                             <LucideExternalLink />
                         </a>
                     </div>
-                    <h4 class="title is-4 pt-5">{{ $t('heading.security') }}</h4>
+                    <h4 ref="security" class="title is-4 pt-5">{{ $t('heading.security') }}</h4>
                     <!-- protect db -->
                     <FormCheckbox v-model="appSettings.useEncryption" @update:model-value="val => saveSetting('useEncryption', val)" fieldName="useEncryption" label="field.use_encryption" help="field.use_encryption.help" />
                 </form>
 
-                <h4 class="title is-4 pt-5">{{ $t('heading.environment') }}</h4>
+                <h4 ref="environment" class="title is-4 pt-5">{{ $t('heading.environment') }}</h4>
                 <!-- cache management -->
                 <div class="field">
                     <label for="btnClearCache" class="label">{{ $t('field.cache_management') }}</label>
@@ -199,7 +224,7 @@
                 <div v-else-if="infos === null" class="about-debug box is-family-monospace is-size-7 has-text-warning-dark is-shadowless">
                     {{ $t('error.error_during_data_fetching') }}
                 </div>
-            </FormWrapper>
+            </ResponsiveWidthWrapper>
         </template>
         <template #footer>
             <VueFooter>

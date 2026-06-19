@@ -5,6 +5,7 @@
     import { useNotify, TabBar } from '@2fauth/ui'
     import { useI18n } from 'vue-i18n'
     import { useErrorHandler } from '@2fauth/stores'
+    import { useSettingsBreakpoints } from '@/composables/breakpoints'
 
     const errorHandler = useErrorHandler()
     const { t } = useI18n()
@@ -13,6 +14,7 @@
     const notify = useNotify()
     const router = useRouter()
     const returnTo = useStorage($2fauth.prefix + 'returnTo', 'accounts')
+    const { isLaptop } = useSettingsBreakpoints()
     
     const formProfile = reactive(new Form({
         name : user.name,
@@ -96,6 +98,16 @@
         }
     }
 
+    const profileRef = useTemplateRef('profile')
+    const changePasswordRef = useTemplateRef('changePassword')
+    const deleteAccountRef = useTemplateRef('deleteAccount')
+
+    const scrollTo = (elRef) => {
+        if (!elRef) return
+
+        elRef.scrollIntoView({ behavior: 'smooth' })
+    }
+
     onBeforeRouteLeave((to) => {
         if (! to.name.startsWith('settings.') && to.name === 'login') {
             notify.clear()
@@ -109,7 +121,16 @@
             <TabBar :tabs="tabs" :active-tab="'settings.account'" @tab-selected="(to) => router.push({ name: to })" />
         </template>
         <template #content>
-            <FormWrapper>
+            <ResponsiveWidthWrapper>
+                <div v-if="isLaptop" class="pr-5 settings-menu">
+                    <aside class="menu">
+                        <ul class="menu-list">
+                            <li><button @click="scrollTo(profileRef)">{{ $t('heading.profile') }}</button></li>
+                            <li><button @click="scrollTo(changePasswordRef)">{{ $t('heading.change_password') }}</button></li>
+                            <li><button @click="scrollTo(deleteAccountRef)">{{ $t('heading.delete_account') }}</button></li>
+                        </ul>
+                    </aside>
+                </div>
                 <div v-if="user.oauth_provider" class="notification is-info has-text-centered">
                     {{ $t('message.account_linked_to_sso_x_provider', { provider: user.oauth_provider }) }}
                 </div>
@@ -117,7 +138,7 @@
                     <div v-if="$2fauth.config.proxyAuth" class="notification is-warning has-text-centered">
                         {{ $t('message.user_account_controlled_by_proxy') + ' ' + $t('message.manage_account_at_proxy_level') }}
                     </div>
-                    <h4 class="title is-4">
+                    <h4 ref="profile" class="title is-4">
                         {{ $t('heading.profile') }}
                         <span v-if="user.isAdmin" class="tag is-warning ml-1">
                             {{ $t('label.administrator') }}
@@ -133,7 +154,7 @@
                 <form @submit.prevent="submitPassword" @keydown="formPassword.onKeydown($event)">
                     <input hidden type="text" name="name" :value="formProfile.name" autocomplete="username" />
                     <input hidden type="text" name="email" :value="formProfile.email" autocomplete="email" />
-                    <h4 class="title is-4 pt-6">{{ $t('heading.change_password') }}</h4>
+                    <h4 ref="changePassword" class="title is-4 pt-6">{{ $t('heading.change_password') }}</h4>
                     <fieldset :disabled="$2fauth.config.proxyAuth || user.oauth_provider">
                         <FormPasswordField v-model="formPassword.password" fieldName="password" :errorMessage="formPassword.errors.get('password')" idSuffix="ForUpdate" autocomplete="new-password" :showRules="true" label="field.new_password" />
                         <FormPasswordField v-model="formPassword.password_confirmation" :showRules="false" fieldName="password_confirmation" :errorMessage="formPassword.errors.get('password_confirmation')" inputType="password" autocomplete="new-password" label="field.confirm_new_password" />
@@ -144,7 +165,7 @@
                 <form id="frmDeleteAccount" @submit.prevent="submitDelete" @keydown="formDelete.onKeydown($event)">
                     <input hidden type="text" name="name" :value="formProfile.name" autocomplete="username" />
                     <input hidden type="text" name="email" :value="formProfile.email" autocomplete="email" />
-                    <h4 class="title is-4 pt-6 has-text-danger">{{ $t('heading.delete_account') }}</h4>
+                    <h4 ref="deleteAccount" class="title is-4 pt-6 has-text-danger">{{ $t('heading.delete_account') }}</h4>
                     <div class="field is-size-7-mobile">
                         <p class="block">{{ $t('message.delete_your_account_and_reset_all_data')}}</p>
                         <p>{{ $t('message.reset_your_password_to_delete_your_account') }}</p>
@@ -155,7 +176,7 @@
                         <FormButtons :isBusy="formDelete.isBusy" submitLabel="label.delete_your_account" submitId="btnDeleteAccount" color="is-danger" />
                     </fieldset>
                 </form>
-            </FormWrapper>
+            </ResponsiveWidthWrapper>
         </template>
         <template #footer>
             <VueFooter>
