@@ -254,7 +254,8 @@
         </template>
         <template #content>
             <ResponsiveWidthWrapper>
-                <div v-if="isLaptop" class="pr-5 settings-menu">
+                <div v-if="isLaptop && user.preferences.showQuickNavMenus" class="pr-5 settings-menu">
+                    <!-- quick nav menu -->
                     <aside class="menu">
                         <ul class="menu-list">
                             <li><button @click="scrollTo(generalRef)">{{ $t('heading.general') }}</button></li>
@@ -294,6 +295,8 @@
                         <FormToggle v-model="user.preferences.theme" @update:model-value="val => savePreference('theme', val)" :choices="themes" fieldName="theme" :isLocked="appSettings.lockedPreferences.includes('theme')" label="field.theme" help="field.theme.help" />
                         <!-- show email in footer -->
                         <FormCheckbox v-model="user.preferences.showEmailInFooter" @update:model-value="val => savePreference('showEmailInFooter', val)" fieldName="showEmailInFooter" :isLocked="appSettings.lockedPreferences.includes('showEmailInFooter')" label="field.show_email_in_footer" help="field.show_email_in_footer.help" />
+                        <!-- show quick nav menu -->
+                        <FormCheckbox v-model="user.preferences.showQuickNavMenus" @update:model-value="val => savePreference('showQuickNavMenus', val)" fieldName="showQuickNavMenus" :isLocked="appSettings.lockedPreferences.includes('showQuickNavMenus')" label="field.show_quick_nav_menus" help="field.show_quick_nav_menus.help" />
                     </div>   
                     <div class="block">
                         <h4 ref="accounts" class="title is-4 pt-4">{{ $t('heading.2fa_accounts') }}</h4>

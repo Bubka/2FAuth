@@ -116,7 +116,7 @@
         </template>
         <template #content>
             <ResponsiveWidthWrapper>
-                <div v-if="isLaptop" class="pr-5 settings-menu">
+                <div v-if="isLaptop && user.preferences.showQuickNavMenus" class="pr-5 settings-menu">
                     <aside class="menu">
                         <ul class="menu-list">
                             <li><button @click="scrollTo(generalRef)">{{ $t('heading.general') }}</button></li>

@@ -44,6 +44,7 @@ $preferences = [
     'autoCloseTimeout'          => envUnlessEmpty('USERPREF_DEFAULT__AUTO_CLOSE_TIMEOUT', 2),
     'AutoSaveQrcodedAccount'    => envUnlessEmpty('USERPREF_DEFAULT__AUTO_SAVE_QRCODED_ACCOUNT', false),
     'showEmailInFooter'         => envUnlessEmpty('USERPREF_DEFAULT__SHOW_EMAIL_IN_FOOTER', true),
+    'showQuickNavMenus'         => envUnlessEmpty('USERPREF_DEFAULT__SHOW_QUICK_NAV_MENUS', true),
 ];
 
 $nonLockablePreferences = [

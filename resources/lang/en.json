@@ -250,6 +250,8 @@
     "field.show_next_otp": "Show next OTP",
     "field.show_otp_as_dot.help": "Replace generated password characters with *** to ensure confidentiality. Does not affect the copy/paste feature",
     "field.show_otp_as_dot": "Show generated OTP as dot",
+    "field.show_quick_nav_menus.help": "Add a navigation menu to the side of certain long pages so that you can scroll directly to specific sections. This feature is only available on desktop. Menus won't be visible on mobile or tablet.",
+    "field.show_quick_nav_menus": "Show quick nav menus",
     "field.show_virtual_chips.help": "Show chips for virtual groups like the Group Less Accounts group, the Shared With/By Me group, etc...",
     "field.show_virtual_chips": "Show virtual groups",
     "field.sort_case_sensitive.help": "When invoked, force the Sort function to sort accounts on a case-sensitive basis",
