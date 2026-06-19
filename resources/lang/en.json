@@ -686,7 +686,6 @@
     "message.possible_duplicate": "An account with the exact same data already exists",
     "message.purpose_description": "This web extension is an add-on to the 2FAuth web application. It lets you access the 2FA data of your 2FAuth user account and generate OTPs directly from your browser bar.",
     "message.purpose_requirements": "You must have a 2FAuth user account and bind it to the extension in order to use it. This is done by providing the 2FAuth server address and a Personal Access Token (PAT).",
-    "message.quick_filters_colons": "Quick filters:",
     "message.recover_account_instructions": "To recover your account, 2FAuth resets some Webauthn settings so you will be able to sign in using your email and password.",
     "message.recovery_punchline": "2FAuth will send you a recovery link to this email address. Click the link in the received email and follow the instructions.",
     "message.registered_on_date": "Registered {date}",

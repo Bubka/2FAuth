@@ -111,6 +111,7 @@
         </template>
         <template #content>
             <FormWrapper>
+            <UseColorMode v-slot="{ mode }">
                 <h4 class="title is-4">{{ $t('heading.users') }}</h4>
                 <div class="is-size-7-mobile">
                     {{ $t('message.admin_users_legend')}}
@@ -126,42 +127,41 @@
                         <SearchBox v-model:keyword="searched" :hasNoBackground="true" :placeholder="$t('placeholder.search_user_placeholder')" />
                     </div>
                 </div>
-                <div class="level is-mobile mb-0">
-                    <div class="level-item has-text-centered is-justify-content-end">
-                        <p class="subtitle is-7">
-                            {{ $t('message.quick_filters_colons') }}
-                        </p>
-                    </div>
-                    <div class="level-item has-text-centered is-justify-content-start">
-                        <div class="buttons">
-                            <button type="button" class="button is-small is-ghost p-0" @click="addFilter('admin:1')">admin</button>
-                            <button type="button" class="button is-small is-ghost p-0" @click="addFilter('oauth:github')">github</button>
-                            <button type="button" class="button is-small is-ghost p-0" @click="addFilter('oauth:openid')">openId</button>
+                <div class="level has-text-centered is-mobile mb-0">
+                    <div class="level-item">
+                        <div id="groupChips" class="tags">
+                            <button @click="addFilter('admin:1')" class="button tag" :class="{'has-text-grey' : mode == 'dark', 'is-white has-text-grey' : mode != 'dark' }" >
+                                admin
+                            </button>
+                            <button @click="addFilter('oauth:github')" class="button tag" :class="{'has-text-grey' : mode == 'dark', 'is-white has-text-grey' : mode != 'dark' }" >
+                                github
+                            </button>
+                            <button @click="addFilter('oauth:openid')" class="button tag" :class="{'has-text-grey' : mode == 'dark', 'is-white has-text-grey' : mode != 'dark' }" >
+                                openId
+                            </button>
                         </div>
                     </div>
                 </div>
                 <div v-if="visibleUsers.length > 0">
                     <div v-for="user in visibleUsers" :key="user.id" class="list-item is-size-5 is-size-6-mobile is-flex is-justify-content-space-between">
-                        <UseColorMode v-slot="{ mode }">
-                            <div class="has-ellipsis">
-                                <span>{{ user.name }}</span>
-                                <!-- set as admin link -->
-                                <!-- admin tag -->
-                                <span class="is-block has-ellipsis is-family-primary is-size-6 is-size-7-mobile has-text-grey">{{ user.email }}</span>
-                                <!-- tag -->
-                                <div class="tags mt-2">
-                                    <span v-if="user.is_admin" class="tag is-rounded" :class="mode == 'dark' ? 'has-text-warning-40 has-background-black-bis' : 'has-text-warning-35 has-background-grey-lighter'" >admin</span>
-                                    <span v-if="user.oauth_provider" class="tag is-rounded  has-text-grey" :class="mode == 'dark' ? 'has-background-black-bis' : 'has-background-grey-lighter'" >oauth: {{ user.oauth_provider }}</span>
-                                </div>
+                        <div class="has-ellipsis">
+                            <span>{{ user.name }}</span>
+                            <!-- set as admin link -->
+                            <!-- admin tag -->
+                            <span class="is-block has-ellipsis is-family-primary is-size-6 is-size-7-mobile has-text-grey">{{ user.email }}</span>
+                            <!-- tag -->
+                            <div class="tags mt-2">
+                                <span v-if="user.is_admin" class="tag is-rounded" :class="mode == 'dark' ? 'has-text-warning-40 has-background-black-bis' : 'has-text-warning-35 has-background-grey-lighter'" >admin</span>
+                                <span v-if="user.oauth_provider" class="tag is-rounded  has-text-grey" :class="mode == 'dark' ? 'has-background-black-bis' : 'has-background-grey-lighter'" >oauth: {{ user.oauth_provider }}</span>
                             </div>
-                            <div class="ml-3">
-                                <!-- manage link -->
-                                <RouterLink :to="{ name: 'admin.manageUser', params: { userId: user.id }}" class="button is-small has-normal-radius" :class="{'is-dark' : mode == 'dark'}" :title="$t('tooltip.manage')">
-                                    {{ $t('link.manage') }}
-                                </RouterLink>
+                        </div>
+                        <div class="ml-3">
+                            <!-- manage link -->
+                            <RouterLink :to="{ name: 'admin.manageUser', params: { userId: user.id }}" class="button is-small has-normal-radius" :class="{'is-dark' : mode == 'dark'}" :title="$t('tooltip.manage')">
+                                {{ $t('link.manage') }}
+                            </RouterLink>
 
-                            </div>
-                        </UseColorMode>
+                        </div>
                     </div>
                     <!-- <div class="mt-2 is-size-7 is-pulled-right">
                         {{ $t('message.revoking_a_token_is_permanent')}}
@@ -171,6 +171,7 @@
                 <div v-else class="mt-4 pl-3">
                     {{ $t('message.no_result') }}
                 </div>
+            </UseColorMode>
             </FormWrapper>
         </template>
         <template #footer>
