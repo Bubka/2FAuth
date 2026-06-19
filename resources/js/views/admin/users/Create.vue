@@ -37,7 +37,7 @@
                     <FormField v-model="registerForm.name" fieldName="name" :errorMessage="registerForm.errors.get('name')" inputType="text" label="field.name" autocomplete="username" :maxLength="255" autofocus />
                     <FormField v-model="registerForm.email" fieldName="email" :errorMessage="registerForm.errors.get('email')" inputType="email" label="field.email" autocomplete="email" :maxLength="255" />
                     <FormPasswordField v-model="registerForm.password" fieldName="password" :errorMessage="registerForm.errors.get('password')" :showRules="true" label="field.password" autocomplete="new-password" />
-                    <FormCheckbox v-model="registerForm.is_admin" fieldName="is_admin" label="field.is_admin" help="field.is_admin.help" />
+                    <FormCheckbox v-model="registerForm.is_admin" :isDanger="true" fieldName="is_admin" label="field.is_admin" help="field.is_admin.help" />
                     <FormButtons :isBusy="registerForm.isBusy" :isDisabled="registerForm.isDisabled" :showCancelButton="true" @cancel="router.push({ name: 'admin.users' })" submitLabel="label.create" submitId="btnCreateUser" />
                 </form>
             </FormWrapper>

@@ -334,6 +334,7 @@
     "heading.sso_login": "SSO login",
     "heading.storage": "Storage",
     "heading.supported_migration_formats": "Supported migration formats",
+    "heading.user": "User",
     "heading.transfer_ownership": "Transfer ownership",
     "heading.twofauth_webext": "2FAuth webext",
     "heading.unauthorized": "Unauthorized",

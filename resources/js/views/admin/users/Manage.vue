@@ -8,6 +8,8 @@
     import { useBusStore } from '@/stores/bus'
     import { useI18n } from 'vue-i18n'
     import { useErrorHandler } from '@2fauth/stores'
+    import { LucideSquareUser } from '@lucide/vue'
+    import { useSettingsBreakpoints } from '@/composables/breakpoints'
 
     const errorHandler = useErrorHandler()
     const { t } = useI18n()
@@ -16,6 +18,7 @@
     const user = useUserStore()
     const bus = useBusStore()
     const $2fauth = inject('2fauth')
+    const { isLaptop } = useSettingsBreakpoints()
 
     const isFetching = ref(false)
     const managedUser = ref(null)
@@ -189,6 +192,18 @@
         }
         return true
     }
+
+    const userRef = useTemplateRef('user')
+    const accessRef = useTemplateRef('access')
+    const lastAccessesRef = useTemplateRef('lastAccesses')
+    const preferencesRef = useTemplateRef('preferences')
+    const dangerZoneRef = useTemplateRef('dangerZone')
+
+    const scrollTo = (elRef) => {
+        if (!elRef) return
+
+        elRef.scrollIntoView({ behavior: 'smooth' })
+    }
     
 </script>
 
@@ -198,15 +213,36 @@
     <StackLayout>
         <template #content>
             <ResponsiveWidthWrapper>
-                <h1 class="title mb-6">
+                <h1 ref="user" class="title mb-6">
                     {{ $t('heading.user_management') }}
                 </h1>
+                <div v-if="isLaptop && user.preferences.showQuickNavMenus" class="pr-5 settings-menu">
+                    <aside class="menu">
+                        <ul class="menu-list">
+                            <li><button @click="scrollTo(userRef)">{{ $t('heading.user') }}</button></li>
+                            <li v-if="!$2fauth.config.proxyAuth">
+                                <button @click="scrollTo(accessRef)" class="has-ellipsis">{{ $t('heading.access') }}</button>
+                                <ul class="mt-1">
+                                    <li><button @click="scrollTo(lastAccessesRef)">{{ $t('heading.last_accesses') }}</button></li>
+                                </ul>
+                            </li>
+                            <li><button @click="scrollTo(preferencesRef)">{{ $t('heading.preferences') }}</button></li>
+                            <li><button @click="scrollTo(dangerZoneRef)">{{ $t('heading.danger_zone') }}</button></li>
+                        </ul>
+                    </aside>
+                </div>
                 <!-- user info -->
                 <div v-if="! isFetching && managedUser">
-                    <div class="mb-6" :class="managedUser.info.is_admin ? 'is-left-bordered-warning' : 'is-left-bordered-link'">
-                        <p class="title is-4" :class="{ 'has-text-grey-lighter' : mode == 'dark' }">
-                        <span class="has-text-weight-light has-text-grey-dark is-pulled-right">#{{ managedUser.info.id }}</span>{{ managedUser.info.name }}</p>
-                        <p class="subtitle is-6 block">{{ managedUser.info.email }}</p>
+                    <div class="columns is-mobile is-2">
+                        <div class="column is-narrow" :class="mode == 'dark' ? 'has-text-grey' : 'has-text-grey-dark'">
+                            <LucideSquareUser :strokeWidth="1" class="icon-size-3" />
+                        </div>
+                        <div class="column">
+                            <p class="title is-4" :class="mode == 'dark' ? 'has-text-grey-lighter' : 'has-text-grey-dark'">
+                                <span class="has-text-weight-light has-text-grey-dark is-pulled-right">#{{ managedUser.info.id }}</span>{{ managedUser.info.name }}
+                            </p>
+                            <p class="subtitle is-6">{{ managedUser.info.email }}</p>
+                        </div>
                     </div>
                     <!-- oauth banner -->
                     <div v-if="managedUser.info.oauth_provider" class="notification is-dark is-size-7-mobile has-text-centered">
@@ -217,9 +253,9 @@
                     </div>
                     <!-- isAdmin option -->
                     <div class="block">
-                        <FormCheckbox v-model="managedUser.info.is_admin" @update:model-value="val => saveAdminRole(val === true)" fieldName="is_admin" label="field.is_admin" help="field.is_admin.help" />
+                        <FormCheckbox v-model="managedUser.info.is_admin" @update:model-value="val => saveAdminRole(val === true)" :isDanger="true" fieldName="is_admin" label="field.is_admin" help="field.is_admin.help" />
                     </div>
-                    <h2 v-if="!$2fauth.config.proxyAuth" class="title is-4">{{ $t('heading.access') }}</h2>
+                    <h2 v-if="!$2fauth.config.proxyAuth" ref="access" class="title is-4">{{ $t('heading.access') }}</h2>
                     <!-- access -->
                     <div v-if="!$2fauth.config.proxyAuth" class="block">
                         <!-- reset password -->
@@ -285,7 +321,7 @@
                     </div>
                     <!-- last access -->
                     <div class="block">
-                        <h3 class="title is-5 mb-2">{{ $t('heading.last_accesses') }}</h3>
+                        <h3 ref="lastAccesses" class="title is-5 mb-2">{{ $t('heading.last_accesses') }}</h3>
                         <AccessLogViewer v-if="managedUser" :userId="props.userId" :lastOnly="true" @has-more-entries="showFullLogLink = true"/>
                     </div>
                     <div v-if="showFullLogLink" class="block is-size-6 is-size-7-mobile has-text-grey">
@@ -294,7 +330,7 @@
                         </router-link>
                     </div>
                     <!-- preferences -->
-                    <h2 class="title is-4">{{ $t('heading.preferences') }}</h2>
+                    <h2 ref="preferences" class="title is-4">{{ $t('heading.preferences') }}</h2>
                     <div class="about-debug box is-family-monospace is-size-7 is-shadowless">
                         <CopyButton id="btnCopyEnvVars" :token="listUserPreferences?.innerText" />
                         <ul ref="listUserPreferences" id="listUserPreferences">
@@ -304,7 +340,7 @@
                         </ul>
                     </div>
                     <!-- danger zone -->
-                    <h2 class="title is-4 has-text-danger">{{ $t('heading.danger_zone') }}</h2>
+                    <h2 ref="dangerZone" class="title is-4 has-text-danger">{{ $t('heading.danger_zone') }}</h2>
                     <div class="is-left-bordered-danger">
                         <div class="block is-size-6 is-size-7-mobile">
                             {{  $t('message.delete_this_user_legend') }}
