@@ -34,8 +34,8 @@ const router = createRouter({
         { path: '/account/:twofaccountId/otp-logs', name: 'otpLogs', component: () => import('../views/twofaccounts/OtpLogs.vue'), meta: { middlewares: [authGuard, ownerOnly], watchedByKicker: true }, props: true },
 
         { path: '/groups', name: 'groups', component: () => import('../views/groups/Groups.vue'), meta: { middlewares: [authGuard, syncAppSettings, setReturnTo], watchedByKicker: true }, props: true },
-        { path: '/group/create', name: 'createGroup', component: () => import('../views/groups/CreateUpdate.vue'), meta: { middlewares: [authGuard, syncAppSettings, setReturnTo], watchedByKicker: true } },
-        { path: '/group/:groupId/edit', name: 'editGroup', component: () => import('../views/groups/CreateUpdate.vue'), meta: { middlewares: [authGuard, syncAppSettings, setReturnTo], watchedByKicker: true }, props: true },
+        { path: '/group/create', name: 'createGroup', component: () => import('../views/groups/CreateUpdate.vue'), meta: { middlewares: [authGuard, syncAppSettings], watchedByKicker: true } },
+        { path: '/group/:groupId/edit', name: 'editGroup', component: () => import('../views/groups/CreateUpdate.vue'), meta: { middlewares: [authGuard, syncAppSettings], watchedByKicker: true }, props: true },
 
         { path: '/settings/options', name: 'settings.options', component: () => import('../views/settings/Options.vue'), meta: { middlewares: [authGuard, syncAppSettings], watchedByKicker: true, showAbout: true } },
         { path: '/settings/account', name: 'settings.account', component: () => import('../views/settings/Account.vue'), meta: { middlewares: [authGuard, syncAppSettings], watchedByKicker: true, showAbout: true } },

@@ -8,6 +8,8 @@
     const router = useRouter()
     const route = useRoute()
     const bus = useBusStore()
+    const $2fauth = inject('2fauth')
+    const returnTo = useStorage($2fauth.prefix + 'returnTo', 'groups')
 
     const props = defineProps({
         groupId: [Number, String]
@@ -50,7 +52,7 @@
     async function createGroup() {
         form.post('/api/v1/groups').then(response => {
             groups.addOrEdit(response.data)
-            router.push({ name: 'groups' })
+            router.push({ name: returnTo.value })
         })
     }
 
@@ -60,7 +62,7 @@
     async function updateGroup() {
         form.put('/api/v1/groups/' + props.groupId).then(response => {
             groups.addOrEdit(response.data)
-            router.push({ name: 'groups' })
+            router.push({ name: returnTo.value })
         })
     }
 
@@ -78,7 +80,7 @@
                         :isBusy="form.isBusy"
                         :submitLabel="isEditMode ? 'label.save' : 'label.create'"
                         :showCancelButton="true"
-                        @cancel="router.push({ name: 'groups' })" />
+                        @cancel="router.push({ name: returnTo })" />
                 </form>
             </FormWrapper>
         </template>

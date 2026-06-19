@@ -506,9 +506,7 @@
                     v-model:active-group="user.preferences.activeGroup"
                     :groups="groups.items"
                     :useShare="appSettings.enableSharing"
-                    @active-group-changed="saveActiveGroup">
-                        <RouterLink :to="{ name: 'groups' }" >{{ $t('link.manage_groups') }}</RouterLink>
-                </GroupSwitch>
+                    @active-group-changed="saveActiveGroup" />
                 <DestinationGroupSelector
                     v-if="showDestinationGroupSelector"
                     v-model:showDestinationGroupSelector="showDestinationGroupSelector"
@@ -688,6 +686,18 @@
             </template>
             <template #footer v-if="showGroupSwitch">
                 <VueFooter :show-buttons="true">
+                    <!-- Create group buttons -->
+                    <p class="control">
+                        <RouterLink class="button is-link is-outlined is-rounded" :to="{ name: 'createGroup' }" :title="$t('tooltip.create_new_group')">
+                            {{ $t('label.new') }}
+                        </RouterLink>
+                    </p>
+                    <!-- Manage group buttons -->
+                    <p class="control">
+                        <RouterLink class="button is-link is-outlined is-rounded" :to="{ name: 'groups' }"  :title="$t('tooltip.manage_your_groups')">
+                            {{ $t('link.manage') }}
+                        </RouterLink>
+                    </p>
                     <NavigationButton action="close" :use-link-tag="false" @closed="showGroupSwitch = false" />
                 </VueFooter>
             </template>
