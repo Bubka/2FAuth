@@ -467,7 +467,7 @@
                                 </button>
                                 <template v-if="user.preferences.showVirtualChips">
                                     <button v-if="appSettings.enableSharing" class="button tag" :class="{'has-text-grey' : mode == 'dark' && user.preferences.activeGroup != -2, 'is-white has-text-grey' : mode != 'dark'&& user.preferences.activeGroup != -2, 'is-link' : user.preferences.activeGroup == -2}" @click="saveActiveGroup(-2)" :title="$t('label.accounts_I_m_sharing')">
-                                        <LucideUsers class="icon-size-0-9 mr-1" />|<LucideUserCheck class="ml-1 icon-size-0-9" />
+                                        <template v-if="appSettings.enableAllUsersSharingScope"><LucideUsers class="icon-size-0-9 mr-1" />|</template><LucideUserCheck class="ml-1 icon-size-0-9" />
                                     </button>
                                     <button v-if="appSettings.enableSharing" class="button tag" :class="{'has-text-grey' : mode == 'dark' && user.preferences.activeGroup != -3, 'is-white has-text-grey' : mode != 'dark'&& user.preferences.activeGroup != -3, 'is-link' : user.preferences.activeGroup == -3}" @click="saveActiveGroup(-3)" :title="$t('label.accounts_shared_with_me')">
                                         <LucideAtSign class="icon-size-0-9" />
@@ -506,6 +506,7 @@
                     v-model:active-group="user.preferences.activeGroup"
                     :groups="groups.items"
                     :useShare="appSettings.enableSharing"
+                    :useShareAllScope="appSettings.enableAllUsersSharingScope"
                     @active-group-changed="saveActiveGroup" />
                 <DestinationGroupSelector
                     v-if="showDestinationGroupSelector"
