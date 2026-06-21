@@ -27,9 +27,32 @@ jobs:
           # A release tag is fully-formed as refs/tags/<tag_name> so we remove the 10 first
           # characters to drop the 'refs/tags/' part.
           script: |
-            const tag = context.ref.substring(10)
-            const version = tag.replace('v', '')
-            core.setOutput('version', version)
+            const tagVersion = context.ref.substring(10);
+            const version = tagVersion.replace(/^v/, '');
+            const semverRegex =
+              /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|[0-9A-Za-z-][0-9A-Za-z-]*)(?:\.(?:0|[1-9]\d*|[0-9A-Za-z-][0-9A-Za-z-]*))*))?(?:\+([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?$/;
+            const match = version.match(semverRegex)
+            if (!match) {
+              core.setFailed(`Invalid SemVer version: "${tagVersion}"`);
+              return;
+            }
+            const [, major, minor, patch, prerelease, build] = match;
+            let label = '';
+            if (prerelease) {
+              label += `-${prerelease}`;
+            }
+            if (build) {
+              label += `+${build}`;
+            }
+            core.setOutput('version', version);
+            core.setOutput('major', major);
+            core.setOutput('minor', minor);
+            core.setOutput('patch', patch);
+            core.setOutput('prerelease', prerelease);
+            core.setOutput('build', build);
+            core.setOutput('label', label);
+            core.setOutput('major_minor', `${major}.${minor}`);
+            core.setOutput('major_minor_patch', `${major}.${minor}.${patch}`);
 
       - name: Set variables
         id: set_vars
@@ -63,7 +86,7 @@ jobs:
 
       - name: Build and push to docker Hub with stable tag latest
         # We do not want to publish a prerelease as the 'latest' image
-        if: ${{ github.event.release.prerelease == false }}
+        if: ${{ steps.set_tags.outputs.label == '' && github.event.release.prerelease == false }}
         uses: docker/build-push-action@v7
         with:
           platforms: ${{ steps.set_vars.outputs.platforms }}
