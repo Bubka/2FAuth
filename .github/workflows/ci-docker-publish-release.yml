@@ -72,7 +72,8 @@ jobs:
           short-description: A web app to manage your Two-Factor Authentication (2FA) accounts and generate their security codes
           readme-filepath: docker/README.md
 
-      - name: Build and push to docker Hub with version as unique tag
+      - name: Build and push to docker Hub (pre-release)
+        if: ${{ steps.set_tags.outputs.label != '' || github.event.release.prerelease == true }}
         uses: docker/build-push-action@v7
         with:
           platforms: ${{ steps.set_vars.outputs.platforms }}
@@ -84,8 +85,7 @@ jobs:
             2fauth/2fauth:${{ steps.set_tags.outputs.version }}
           push: true
 
-      - name: Build and push to docker Hub with stable tag latest
-        # We do not want to publish a prerelease as the 'latest' image
+      - name: Build and push to docker Hub (stable)
         if: ${{ steps.set_tags.outputs.label == '' && github.event.release.prerelease == false }}
         uses: docker/build-push-action@v7
         with:
@@ -93,7 +93,10 @@ jobs:
           build-args: |
             CREATED=${{ steps.set_vars.outputs.created }}
             COMMIT=${{ steps.set_vars.outputs.commit }}
-            VERSION=latest
+            VERSION=${{ steps.set_tags.outputs.version }}
           tags: |
+            2fauth/2fauth:${{ steps.set_tags.outputs.version }}
+            2fauth/2fauth:${{ steps.set_tags.outputs.major }}
+            2fauth/2fauth:${{ steps.set_tags.outputs.major_minor }}
             2fauth/2fauth:latest
           push: true
