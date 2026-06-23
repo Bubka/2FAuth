@@ -34,9 +34,9 @@ class OtpTestData
 
     const COUNTER_CUSTOM = 5;
 
-    const EXTERNAL_IMAGE_URL_DECODED = 'https://en.opensuse.org/images/4/44/Button-filled-colour.png';
+    const EXTERNAL_IMAGE_URL_DECODED = 'https://demo.2fauth.app/favicon.png';
 
-    const EXTERNAL_IMAGE_URL_ENCODED = 'https%3A%2F%2Fen.opensuse.org%2Fimages%2F4%2F44%2FButton-filled-colour.png';
+    const EXTERNAL_IMAGE_URL_ENCODED = 'https%3A%2F%2Fdemo.2fauth.app%2Ffavicon.png';
 
     const EXTERNAL_INFECTED_IMAGE_URL_DECODED = 'https://image.com/infected.svg';
 

@@ -43,9 +43,10 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
         Event::fake();
         Settings::set('enableSharing', true);
 
-        $this->owner = User::factory()->create();
-        $this->targetUser = User::factory()->create();
-        $this->thirdUser = User::factory()->create();
+        // we use deterministic names for the users so we can assert on them in the JSON response
+        $this->owner = User::factory()->create(['name' => 'John Doe']);
+        $this->targetUser = User::factory()->create(['name' => 'Jane Doe']);
+        $this->thirdUser = User::factory()->create(['name' => 'Jim Doe']);
         $this->twofaccount = TwoFAccount::factory()->for($this->owner)->create();
     }
 

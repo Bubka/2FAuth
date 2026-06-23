@@ -188,9 +188,10 @@ class TwoFAccountModelTest extends FeatureTestCase
     public function test_fill_with_custom_totp_uri_returns_correct_value()
     {
         $file = (new FileFactory)->image('file.png', 10, 10);
+        $fileRequestBody = stream_get_contents($file->tempFile, -1, 0);
 
         Http::fake([
-            OtpTestData::EXTERNAL_IMAGE_URL_DECODED => Http::response($file->tempFile, 200),
+            OtpTestData::EXTERNAL_IMAGE_URL_DECODED => Http::response($fileRequestBody, 200),
         ]);
 
         $twofaccount = new TwoFAccount;
@@ -267,9 +268,10 @@ class TwoFAccountModelTest extends FeatureTestCase
     public function test_fill_with_custom_hotp_uri_returns_correct_value()
     {
         $file = (new FileFactory)->image('file.png', 10, 10);
+        $fileRequestBody = stream_get_contents($file->tempFile, -1, 0);
 
         Http::fake([
-            OtpTestData::EXTERNAL_IMAGE_URL_DECODED => Http::response($file->tempFile, 200),
+            OtpTestData::EXTERNAL_IMAGE_URL_DECODED => Http::response($fileRequestBody, 200),
         ]);
 
         $twofaccount = new TwoFAccount;

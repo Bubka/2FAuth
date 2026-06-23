@@ -248,15 +248,22 @@ class TwoFAccountControllerTest extends FeatureTestCase
         Storage::fake('imagesLink');
 
         Http::preventStrayRequests();
+        $validImage = (new FileFactory)->image('file.png', 10, 10);
+        $validImageRequestBody = stream_get_contents($validImage->tempFile, -1, 0);
+        $invalidImage = (new FileFactory)->createWithContent('infected.svg', OtpTestData::ICON_SVG_DATA_INFECTED);
+        $invalidImageRequestBody = stream_get_contents($invalidImage->tempFile, -1, 0);
+
         Http::fake([
             CommonDataProvider::TFA_URL                      => Http::response(HttpRequestTestData::SVG_LOGO_BODY, 200),
             CommonDataProvider::SELFH_URL                    => Http::response(HttpRequestTestData::SVG_LOGO_BODY, 200),
             CommonDataProvider::DASHBOARDICONS_URL           => Http::response(HttpRequestTestData::SVG_LOGO_BODY, 200),
             TfaLogoLib::TFA_JSON_URL                         => Http::response(HttpRequestTestData::TFA_JSON_BODY, 200),
-            OtpTestData::EXTERNAL_IMAGE_URL_DECODED          => Http::response((new FileFactory)->image('file.png', 10, 10)->tempFile, 200),
-            OtpTestData::EXTERNAL_INFECTED_IMAGE_URL_DECODED => Http::response((new FileFactory)->createWithContent('infected.svg', OtpTestData::ICON_SVG_DATA_INFECTED)->tempFile, 200),
+            OtpTestData::EXTERNAL_IMAGE_URL_DECODED          => Http::response($validImageRequestBody, 200),
+            OtpTestData::EXTERNAL_INFECTED_IMAGE_URL_DECODED => Http::response($invalidImageRequestBody, 200),
             'example.com/*'                                  => Http::response(null, 400),
         ]);
+
+        config(['2fauth.config.blockOtpauthImagelinkFetching' => false]);
 
         $this->user       = User::factory()->create();
         $this->userGroupA = Group::factory()->for($this->user)->create();

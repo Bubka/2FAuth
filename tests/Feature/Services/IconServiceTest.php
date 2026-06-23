@@ -46,8 +46,12 @@ class IconServiceTest extends FeatureTestCase
             CommonDataProvider::DASHBOARDICONS_URL => Http::response(HttpRequestTestData::SVG_LOGO_BODY, 200),
             TfaLogoLib::TFA_JSON_URL               => Http::response(HttpRequestTestData::TFA_JSON_BODY, 200),
         ]);
+
+        $validImage = (new FileFactory)->image('file.png', 10, 10);
+        $validImageRequestBody = stream_get_contents($validImage->tempFile, -1, 0);
+        
         Http::fake([
-            OtpTestData::EXTERNAL_IMAGE_URL_DECODED => Http::response((new FileFactory)->image('file.png', 10, 10)->tempFile, 200),
+            OtpTestData::EXTERNAL_IMAGE_URL_DECODED => Http::response($validImageRequestBody, 200),
         ]);
 
         config(['2fauth.config.blockOtpauthImagelinkFetching' => false]);

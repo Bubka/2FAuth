@@ -40,9 +40,14 @@ class IconControllerTest extends FeatureTestCase
         Storage::fake('temp');
 
         Http::preventStrayRequests();
+        $validImage = (new FileFactory)->image('file.png', 10, 10);
+        $validImageRequestBody = stream_get_contents($validImage->tempFile, -1, 0);
+        
         Http::fake([
-            OtpTestData::EXTERNAL_IMAGE_URL_DECODED => Http::response((new FileFactory)->image('file.png', 10, 10)->tempFile, 200),
+            OtpTestData::EXTERNAL_IMAGE_URL_DECODED => Http::response($validImageRequestBody, 200),
         ]);
+
+        config(['2fauth.config.blockOtpauthImagelinkFetching' => false]);
 
         $this->user = User::factory()->create();
     }
