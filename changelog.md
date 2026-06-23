@@ -1,5 +1,29 @@
 # Change log
 
+## [8.0.0] - 2026-06-22
+
+2FAuth already bumps to v8 because of the upgrade of the Laravel PHP framework it is built on.
+
+> [!WARNING]
+> One of the underlying components has changed the way authentication tokens are generated, so your personal access tokens will become invalid. This is, strictly speaking, a breaking change, but the impact is limited (not everyone uses PAT) and generating new tokens is not a big deal. I'm sorry about that nonetheless.
+
+Despite the short time that has passed since v7, I found time to make two improvements to the user experience:
+
+- You can now switch groups without opening the selection menu. Groups are displayed as chips directly below the search bar for quick switching. You can choose to display a group as a chip by enabling the dedicated setting in the group editing form.
+- Lengthy pages in the Settings and Admin sections now have a quick navigation menu that automatically scrolls to the desired section.
+
+You can disable any of this from the *Settings > Options page* if you want to restore the previous behaviour.
+
+### Added
+
+- Group switching can be done directly from the main view using chips
+- The lengthy Settings and Admin pages now come with a quick navigation menu that lets you scroll directly to the desired section.
+- The docker image is now tagged with shifting major and minor tags ([#541](https://github.com/Bubka/2FAuth/issues/541)).
+
+### Fixed
+
+- [issue #549](https://github.com/Bubka/2FAuth/issues/549) Unshare action in Manage mode does not remove sharing
+
 ## [7.0.1] - 2026-06-09
 
 ### Fixed
