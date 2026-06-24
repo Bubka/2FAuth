@@ -151,6 +151,7 @@ return [
         'sharing',
         'allUsersSharingScope',
         'showNextOtp',
+        'groupChips',
     ],
 
     /*
