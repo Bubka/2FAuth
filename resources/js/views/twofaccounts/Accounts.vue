@@ -467,13 +467,16 @@
                                 </button>
                                 <template v-if="user.preferences.showVirtualChips">
                                     <button v-if="appSettings.enableSharing" class="button tag" :class="{'has-text-grey' : mode == 'dark' && user.preferences.activeGroup != -2, 'is-white has-text-grey' : mode != 'dark'&& user.preferences.activeGroup != -2, 'is-link' : user.preferences.activeGroup == -2}" @click="saveActiveGroup(-2)" :title="$t('label.accounts_I_m_sharing')">
-                                        <template v-if="appSettings.enableAllUsersSharingScope"><LucideUsers class="icon-size-0-9 mr-1" />|</template><LucideUserCheck class="ml-1 icon-size-0-9" />
+                                        <template v-if="appSettings.enableAllUsersSharingScope">
+                                            <LucideUsers class="icon-size-0-9 mr-1" />|
+                                        </template>
+                                        <LucideUserCheck class="ml-1 icon-size-0-9" :class="{ 'mr-1': user.preferences.activeGroup == -2 }" />{{ user.preferences.activeGroup == -2 ? `• ${twofaccounts.filteredCount}` : '' }}
                                     </button>
                                     <button v-if="appSettings.enableSharing" class="button tag" :class="{'has-text-grey' : mode == 'dark' && user.preferences.activeGroup != -3, 'is-white has-text-grey' : mode != 'dark'&& user.preferences.activeGroup != -3, 'is-link' : user.preferences.activeGroup == -3}" @click="saveActiveGroup(-3)" :title="$t('label.accounts_shared_with_me')">
-                                        <LucideAtSign class="icon-size-0-9" />
+                                        <LucideAtSign class="icon-size-0-9" :class="{ 'mr-1': user.preferences.activeGroup == -3 }" />{{ user.preferences.activeGroup == -3 ? `• ${twofaccounts.filteredCount}` : '' }}
                                     </button>
                                     <button class="button tag" :class="{'has-text-grey' : mode == 'dark' && user.preferences.activeGroup != -1, 'is-white has-text-grey' : mode != 'dark' && user.preferences.activeGroup != -1, 'is-link' : user.preferences.activeGroup == -1}" @click="saveActiveGroup(-1)" :title="$t('label.group_less_accounts')">
-                                        <LucideSquareSlash class="icon-size-1" />
+                                        <LucideSquareSlash class="icon-size-1" :class="{ 'mr-1': user.preferences.activeGroup == -1 }" />{{ user.preferences.activeGroup == -1 ? `• ${twofaccounts.filteredCount}` : '' }}
                                     </button>
                                 </template>
                             </div>
