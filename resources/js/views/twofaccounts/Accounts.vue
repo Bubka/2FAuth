@@ -419,7 +419,7 @@
 <template>
     <UseColorMode v-slot="{ mode }">
     <div>
-        <StackLayout>
+        <StackLayout :shouldShrinkSubheader="user.preferences.useGroupChips">
             <template #header>
                 <!-- header -->
                 <div class="header" v-if="showAccounts || showGroupSwitch">
