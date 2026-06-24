@@ -507,7 +507,12 @@
                     :groups="groups.items"
                     :useShare="appSettings.enableSharing"
                     :useShareAllScope="appSettings.enableAllUsersSharingScope"
-                    @active-group-changed="saveActiveGroup" />
+                    @active-group-changed="saveActiveGroup">
+                    <template v-if="groups.items.length < 2">
+                        <p class="my-5">{{ $t('message.no_group_yet') }}</p>
+                        <RouterLink :to="{ name: 'createGroup' }" >{{ $t('link.create_your_first_group') }}</RouterLink>
+                    </template>
+                </GroupSwitch>
                 <DestinationGroupSelector
                     v-if="showDestinationGroupSelector"
                     v-model:showDestinationGroupSelector="showDestinationGroupSelector"
