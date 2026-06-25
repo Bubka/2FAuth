@@ -45,6 +45,7 @@ use Illuminate\Support\Carbon;
  * @property string|null $method
  * @property string|null $login_method
  * @property-read Model $authenticatable
+ *
  * @method static \Database\Factories\AuthLogFactory factory($count = null, $state = [])
  */
 #[Fillable(['ip_address', 'user_agent', 'login_at', 'login_successful', 'logout_at', 'cleared_by_user', 'guard', 'login_method'])]

@@ -5,12 +5,15 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Auth\Traits\HasAuthenticatedPayload;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {
@@ -37,9 +40,9 @@ class LoginController extends Controller
     /**
      * Handle a login request to the application.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      *
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws ValidationException
      */
     public function login(LoginRequest $request)
     {
@@ -85,7 +88,7 @@ class LoginController extends Controller
     /**
      * log out current user
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function logout(Request $request)
     {
@@ -103,14 +106,14 @@ class LoginController extends Controller
     /**
      * Send the response after the user was authenticated.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     protected function sendLoginResponse(Request $request)
     {
         $this->clearLoginAttempts($request);
 
         /**
-         * @var \App\Models\User|null
+         * @var User|null
          */
         $user = $this->guard()->user();
         $this->authenticated($request, $this->guard()->user());
@@ -121,7 +124,7 @@ class LoginController extends Controller
     /**
      * Get the failed login response instance.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     protected function sendFailedLoginResponse(Request $request)
     {
@@ -131,7 +134,7 @@ class LoginController extends Controller
     /**
      * Redirect the user after determining they are locked out.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     protected function sendLockoutResponse(Request $request)
     {

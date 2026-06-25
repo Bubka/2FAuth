@@ -2,7 +2,9 @@
 
 namespace App\Api\v1\Resources;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Support\Collection;
 
 class TwoFAccountCollection extends ResourceCollection
 {
@@ -16,8 +18,8 @@ class TwoFAccountCollection extends ResourceCollection
     /**
      * Transform the resource collection into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Support\Collection<int|string, TwoFAccountReadResource>
+     * @param  Request  $request
+     * @return Collection<int|string, TwoFAccountReadResource>
      */
     public function toArray($request)
     {

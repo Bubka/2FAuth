@@ -67,7 +67,7 @@ class TwoFASMigrator extends Migrator
     /**
      * Convert migration data to a TwoFAccounts collection.
      *
-     * @return \Illuminate\Support\Collection<int|string, \App\Models\TwoFAccount> The converted accounts
+     * @return Collection<int|string, TwoFAccount> The converted accounts
      */
     public function migrate(mixed $migrationPayload) : Collection
     {
@@ -79,7 +79,7 @@ class TwoFASMigrator extends Migrator
         }
 
         /**
-         * @var array<int|string, \App\Models\TwoFAccount> $twofaccounts
+         * @var array<int|string, TwoFAccount> $twofaccounts
          */
         $twofaccounts = [];
 

@@ -6,7 +6,7 @@ use App\Services\QrCodeService;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @see \App\Services\QrCodeService
+ * @see QrCodeService
  */
 class QrCode extends Facade
 {

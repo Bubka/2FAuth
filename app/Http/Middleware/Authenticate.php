@@ -3,7 +3,9 @@
 namespace App\Http\Middleware;
 
 use App\Events\VisitedByProxyUser;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
+use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
@@ -13,10 +15,10 @@ class Authenticate extends Middleware
     /**
      * Determine if the user is logged in to any of the given guards.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return void
      *
-     * @throws \Illuminate\Auth\AuthenticationException
+     * @throws AuthenticationException
      */
     protected function authenticate($request, array $guards)
     {

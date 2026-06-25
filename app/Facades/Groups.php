@@ -6,7 +6,7 @@ use App\Services\GroupService;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @see \App\Services\GroupService
+ * @see GroupService
  */
 class Groups extends Facade
 {

@@ -11,7 +11,7 @@ class ResetPassword extends \Illuminate\Auth\Notifications\ResetPassword
      * Get the reset password notification mail message for the given URL.
      *
      * @param  string  $url
-     * @return \Illuminate\Notifications\Messages\MailMessage
+     * @return MailMessage
      */
     protected function buildMailMessage($url)
     {

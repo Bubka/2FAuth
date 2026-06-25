@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\App;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read TwoFAccount|null $twofaccount
+ *
  * @method static \Database\Factories\IconFactory factory($count = null, $state = [])
  */
 #[Fillable(['name'])]

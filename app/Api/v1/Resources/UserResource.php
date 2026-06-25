@@ -3,7 +3,9 @@
 namespace App\Api\v1\Resources;
 
 use App\Facades\Settings;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
 /**
@@ -11,7 +13,7 @@ use Illuminate\Support\Facades\Auth;
  * @property string $name
  * @property string $email
  * @property string $oauth_provider
- * @property \Illuminate\Support\Collection<array-key, mixed> $preferences
+ * @property Collection<array-key, mixed> $preferences
  * @property string $is_admin
  */
 class UserResource extends JsonResource
@@ -19,7 +21,7 @@ class UserResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array
      */
     public function toArray($request)

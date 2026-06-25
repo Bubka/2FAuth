@@ -6,7 +6,7 @@ use App\Services\IconService;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @see \App\Services\IconService
+ * @see IconService
  */
 class Icons extends Facade
 {

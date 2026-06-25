@@ -21,8 +21,8 @@ class GroupService
      * @param  User  $user  The user assigning visible accounts to one of their groups
      * @param  mixed  $targetGroup  The group the accounts should be assigned to
      *
-     * @throws \Illuminate\Auth\Access\AuthorizationException
-     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     * @throws AuthorizationException
+     * @throws ModelNotFoundException
      */
     public static function assign($ids, User $user, mixed $targetGroup = null) : void
     {
@@ -107,8 +107,8 @@ class GroupService
     /**
      * Prepends the pseudo group named 'All' to a group collection
      *
-     * @param  \Illuminate\Database\Eloquent\Collection<int, Group>  $groups
-     * @return \Illuminate\Database\Eloquent\Collection<int, Group>
+     * @param  Collection<int, Group>  $groups
+     * @return Collection<int, Group>
      */
     public static function prependTheAllGroup(Collection $groups, User $user)
     {
@@ -125,7 +125,7 @@ class GroupService
     /**
      * Set owner of given groups
      *
-     * @param  \Illuminate\Database\Eloquent\Collection<int, Group>  $groups
+     * @param  Collection<int, Group>  $groups
      */
     public static function setUser(Collection $groups, User $user) : void
     {
@@ -138,7 +138,7 @@ class GroupService
     /**
      * Determines the default group of the given user
      *
-     * @return \App\Models\Group|null The group or null if it does not exist
+     * @return Group|null The group or null if it does not exist
      */
     private static function defaultGroup(User $user)
     {

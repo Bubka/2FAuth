@@ -25,6 +25,7 @@
 namespace App\Listeners\Authentication;
 
 use App\Listeners\Traits\HasLocalizedNotification;
+use App\Models\User;
 use App\Notifications\SignedInWithNewDeviceNotification;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Support\Carbon;
@@ -44,7 +45,7 @@ class LoginListener extends AbstractAccessListener
         }
 
         /**
-         * @var \App\Models\User
+         * @var User
          */
         $user = $event->user;
         $ip   = config('2fauth.proxy_headers.forIp')

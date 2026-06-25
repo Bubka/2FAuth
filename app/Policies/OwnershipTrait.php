@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Models\User;
+use Illuminate\Contracts\Support\Arrayable;
 
 trait OwnershipTrait
 {
@@ -22,7 +23,7 @@ trait OwnershipTrait
      * @template TKey of array-key
      * @template TValue
      *
-     * @param  \Illuminate\Contracts\Support\Arrayable<TKey, TValue>|iterable<TKey, TValue>  $items
+     * @param  Arrayable<TKey, TValue>|iterable<TKey, TValue>  $items
      * @return bool
      */
     protected function isOwnerOfEach(User $user, $items)

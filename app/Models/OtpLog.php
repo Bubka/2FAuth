@@ -26,6 +26,7 @@ use Illuminate\Support\Carbon;
  * @property-read User|null $requester
  * @property-read User|null $owner
  * @property-read TwoFAccount|null $twofaccount
+ *
  * @method static \Database\Factories\OtpLogFactory factory($count = null, $state = [])
  */
 #[Fillable(['requester_id', 'requester_name', 'requester_email', 'owner_id', 'owner_name', 'owner_email', 'twofaccount_id', 'ip_address', 'generated_at', 'otp_type', 'counter'])]

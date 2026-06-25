@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Auth;
 use App\Facades\Settings;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Redirector;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -19,7 +21,7 @@ class SocialiteController extends Controller
     /**
      * Redirect to the provider's authentication url
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Illuminate\Http\RedirectResponse
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|RedirectResponse
      */
     public function redirect(Request $request, string $driver)
     {
@@ -41,7 +43,7 @@ class SocialiteController extends Controller
     /**
      * Register (if needed) the user and authenticate him
      *
-     * @return \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse
+     * @return Redirector|RedirectResponse
      */
     public function callback(Request $request, string $driver)
     {

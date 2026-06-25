@@ -14,14 +14,16 @@ use App\Models\TwoFAccount;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class GroupController extends Controller
 {
     /**
      * Display all user groups.
      *
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return AnonymousResourceCollection
      */
     public function index(Request $request)
     {
@@ -43,7 +45,7 @@ class GroupController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function store(GroupStoreRequest $request)
     {
@@ -61,7 +63,7 @@ class GroupController extends Controller
     /**
      * Display the specified resource.
      *
-     * @return \App\Api\v1\Resources\GroupResource
+     * @return GroupResource
      */
     public function show(Request $request, Group $group)
     {
@@ -81,7 +83,7 @@ class GroupController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @return \App\Api\v1\Resources\GroupResource
+     * @return GroupResource
      */
     public function update(GroupStoreRequest $request, Group $group)
     {
@@ -97,7 +99,7 @@ class GroupController extends Controller
     /**
      * Save Groups order
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function reorder(ReorderRequest $request)
     {
@@ -118,7 +120,7 @@ class GroupController extends Controller
     /**
      * Associate the specified accounts with the group
      *
-     * @return \App\Api\v1\Resources\GroupResource
+     * @return GroupResource
      */
     public function assignAccounts(GroupAssignRequest $request, Group $group)
     {
@@ -144,7 +146,7 @@ class GroupController extends Controller
     /**
      * Get accounts assigned to the group
      *
-     * @return \App\Api\v1\Resources\TwoFAccountCollection
+     * @return TwoFAccountCollection
      */
     public function accounts(Request $request, Group $group)
     {
@@ -181,7 +183,7 @@ class GroupController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function destroy(Group $group)
     {

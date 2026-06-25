@@ -2,11 +2,13 @@
 
 namespace App\Models\Traits;
 
+use App\Models\WebAuthnAuthenticatable;
 use App\Notifications\WebauthnRecoveryNotification;
+use Laragear\WebAuthn\Models\WebAuthnCredential;
 
 /**
- * @see \App\Models\WebAuthnAuthenticatable
- * @see \Laragear\WebAuthn\Models\WebAuthnCredential
+ * @see WebAuthnAuthenticatable
+ * @see WebAuthnCredential
  */
 trait WebAuthnManageCredentials
 {

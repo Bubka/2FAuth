@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Facades\Settings;
 use App\Notifications\TestEmailSettingNotification;
 use App\Services\ReleaseRadarService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\App;
@@ -17,7 +18,7 @@ class SystemController extends Controller
     /**
      * Get detailed information about the current installation
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function infos(Request $request)
     {
@@ -54,7 +55,7 @@ class SystemController extends Controller
     /**
      * Get latest release
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function latestRelease(Request $request, ReleaseRadarService $releaseRadar)
     {
@@ -66,7 +67,7 @@ class SystemController extends Controller
     /**
      * Send a test email
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function testEmail(Request $request)
     {
@@ -84,7 +85,7 @@ class SystemController extends Controller
     /**
      * Clears all app caches and rebuild them
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function optimize(Request $request)
     {
@@ -104,7 +105,7 @@ class SystemController extends Controller
     /**
      * Clears application cache
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function clear(Request $request)
     {

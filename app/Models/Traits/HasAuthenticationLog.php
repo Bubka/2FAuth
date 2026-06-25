@@ -25,6 +25,9 @@
 namespace App\Models\Traits;
 
 use App\Models\AuthLog;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Carbon;
 
 trait HasAuthenticationLog
@@ -32,7 +35,7 @@ trait HasAuthenticationLog
     /**
      * Get all user's authentications from the auth log
      *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany<\App\Models\AuthLog, $this>
+     * @return MorphMany<AuthLog, $this>
      */
     public function authentications()
     {
@@ -42,7 +45,7 @@ trait HasAuthenticationLog
     /**
      * Get authentications for the provided timespan (in month)
      *
-     * @return \Illuminate\Database\Eloquent\Collection<int, AuthLog>
+     * @return Collection<int, AuthLog>
      */
     public function authenticationsByPeriod(int $period = 1)
     {
@@ -56,7 +59,7 @@ trait HasAuthenticationLog
     /**
      * Get the user's latest authentication
      *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphOne<\App\Models\AuthLog, $this>
+     * @return MorphOne<AuthLog, $this>
      */
     public function latestAuthentication()
     {

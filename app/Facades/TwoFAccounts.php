@@ -6,7 +6,7 @@ use App\Services\TwoFAccountService;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @see \App\Services\TwoFAccountService
+ * @see TwoFAccountService
  */
 class TwoFAccounts extends Facade
 {

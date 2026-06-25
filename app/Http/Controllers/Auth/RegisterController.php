@@ -9,6 +9,7 @@ use App\Http\Requests\UserStoreRequest;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -31,7 +32,7 @@ class RegisterController extends Controller
     /**
      * Handle a registration request for the application.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function register(UserStoreRequest $request)
     {
@@ -45,7 +46,7 @@ class RegisterController extends Controller
 
         $this->guard()->login($user);
         /**
-         * @var \App\Models\User|null
+         * @var User|null
          */
         $user = $this->guard()->user();
 
@@ -55,7 +56,7 @@ class RegisterController extends Controller
     /**
      * Create a new user instance after a valid registration.
      *
-     * @return \App\Models\User
+     * @return User
      */
     protected function create(array $data)
     {

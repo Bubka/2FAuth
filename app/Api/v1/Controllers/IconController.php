@@ -11,6 +11,7 @@ use App\Helpers\Helpers;
 use App\Http\Controllers\Controller;
 use App\Models\TwoFAccount;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Arr;
@@ -20,7 +21,7 @@ class IconController extends Controller
     /**
      * Handle uploaded icon image
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function upload(IconStoreRequest $request)
     {
@@ -45,7 +46,7 @@ class IconController extends Controller
     /**
      * Fetch a logo
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function fetch(IconFetchRequest $request)
     {
@@ -73,7 +74,7 @@ class IconController extends Controller
     /**
      * List all icon packs
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function iconPacks(Request $request)
     {
@@ -85,7 +86,7 @@ class IconController extends Controller
     /**
      * delete an icon
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function delete(string $icon, Request $request)
     {

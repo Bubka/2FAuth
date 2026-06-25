@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Facades\Settings;
 use App\Models\User;
 use Closure;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -16,7 +17,7 @@ class RejectIfSsoOnlyAndNotForAdmin
      * - The impacted account does not have the Administrator role
      * - Authentication is restricted to SSO only
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return mixed
      */
     public function handle($request, Closure $next)

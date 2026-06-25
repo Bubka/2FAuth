@@ -6,11 +6,12 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class TfaLogoLib extends AbstractLogoLib implements LogoLibInterface
 {
     /**
-     * @var \Illuminate\Support\Collection<string, string>
+     * @var Collection<string, string>
      */
     protected $tfas;
 
@@ -42,7 +43,7 @@ class TfaLogoLib extends AbstractLogoLib implements LogoLibInterface
         $logoFilename = $this->getLogo(strval($serviceName));
 
         if ($logoFilename) {
-            $iconFilename = \Illuminate\Support\Str::random(40) . '.' . $this->format;
+            $iconFilename = Str::random(40) . '.' . $this->format;
 
             return $this->copyToIconStore($logoFilename, $iconFilename) ? $iconFilename : null;
         } else {

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 abstract class AbstractLogoLib implements LogoLibInterface
 {
@@ -57,7 +58,7 @@ abstract class AbstractLogoLib implements LogoLibInterface
         }
 
         if ($logoFilename) {
-            $iconFilename = \Illuminate\Support\Str::random(40) . '.' . $this->format;
+            $iconFilename = Str::random(40) . '.' . $this->format;
 
             return $this->copyToIconStore($logoFilename, $iconFilename) ? $iconFilename : null;
         } else {

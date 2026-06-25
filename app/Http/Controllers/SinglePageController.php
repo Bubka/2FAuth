@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Events\ScanForNewReleaseCalled;
 use App\Facades\Settings;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Vite;
 
@@ -12,7 +14,7 @@ class SinglePageController extends Controller
     /**
      * return the main view
      *
-     * @return \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory
+     * @return View|Factory
      */
     public function index()
     {

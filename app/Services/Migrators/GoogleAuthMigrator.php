@@ -22,7 +22,7 @@ class GoogleAuthMigrator extends Migrator
      * Convert Google Authenticator migration URI to a set of TwoFAccount objects.
      *
      * @param  mixed  $migrationPayload  migration uri provided by Google Authenticator export feature
-     * @return \Illuminate\Support\Collection<int|string, \App\Models\TwoFAccount> The converted accounts
+     * @return Collection<int|string, TwoFAccount> The converted accounts
      */
     public function migrate(mixed $migrationPayload) : Collection
     {
@@ -39,7 +39,7 @@ class GoogleAuthMigrator extends Migrator
         }
 
         /**
-         * @var array<int|string, \App\Models\TwoFAccount> $twofaccounts
+         * @var array<int|string, TwoFAccount> $twofaccounts
          */
         $twofaccounts = [];
 

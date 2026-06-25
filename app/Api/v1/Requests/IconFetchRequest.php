@@ -2,6 +2,7 @@
 
 namespace App\Api\v1\Requests;
 
+use App\Rules\IconPackExists;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
@@ -30,7 +31,7 @@ class IconFetchRequest extends FormRequest
                 'sometimes',
                 'required_without:iconCollection',
                 'string',
-                new \App\Rules\IconPackExists,
+                new IconPackExists,
             ],
             'iconCollection' => 'sometimes|required_without:iconPack|string|in:tfa,selfh,dashboardicons',
             'variant'        => [

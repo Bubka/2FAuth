@@ -5,6 +5,7 @@ namespace App\Listeners\Authentication;
 use App\Events\VisitedByProxyUser;
 use App\Extensions\RemoteUserProvider;
 use App\Listeners\Traits\HasLocalizedNotification;
+use App\Models\User;
 use App\Notifications\SignedInWithNewDeviceNotification;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
@@ -24,7 +25,7 @@ class VisitedByProxyUserListener extends AbstractAccessListener
         }
 
         /**
-         * @var \App\Models\User
+         * @var User
          */
         $user = $event->user;
         $ip   = config('2fauth.proxy_headers.forIp')

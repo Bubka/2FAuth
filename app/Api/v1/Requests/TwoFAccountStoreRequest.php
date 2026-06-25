@@ -2,6 +2,7 @@
 
 namespace App\Api\v1\Requests;
 
+use App\Rules\IsBase32Encoded;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
@@ -30,7 +31,7 @@ class TwoFAccountStoreRequest extends FormRequest
             'icon'      => 'nullable|string',
             'group_id'  => 'sometimes|nullable|integer|min:0',
             'otp_type'  => 'required|string|in:totp,hotp,steamtotp',
-            'secret'    => ['string', 'bail', new \App\Rules\IsBase32Encoded],
+            'secret'    => ['string', 'bail', new IsBase32Encoded],
             'digits'    => 'nullable|integer|between:5,10',
             'algorithm' => 'nullable|string|in:sha1,sha256,sha512,md5',
             'period'    => 'nullable|integer|min:1',

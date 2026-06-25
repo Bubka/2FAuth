@@ -2,20 +2,24 @@
 
 namespace App\Api\v1\Resources;
 
+use App\Models\TwoFAccountShare;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Carbon;
 
 /**
  * @property mixed $id
  * @property string $name
- * @property \Illuminate\Database\Eloquent\Relations\HasMany<\App\Models\TwoFAccountShare, \App\Models\User> $borrowedTwofaccounts
+ * @property HasMany<TwoFAccountShare, User> $borrowedTwofaccounts
  */
 class UserShareRecipientResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array
      */
     public function toArray($request)

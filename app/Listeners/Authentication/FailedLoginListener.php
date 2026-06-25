@@ -25,6 +25,7 @@
 namespace App\Listeners\Authentication;
 
 use App\Listeners\Traits\HasLocalizedNotification;
+use App\Models\User;
 use App\Notifications\FailedLoginNotification;
 use Illuminate\Auth\Events\Failed;
 use Illuminate\Support\Facades\Log;
@@ -45,7 +46,7 @@ class FailedLoginListener extends AbstractAccessListener
 
         if ($event->user) {
             /**
-             * @var \App\Models\User
+             * @var User
              */
             $user = $event->user;
             $ip   = config('2fauth.proxy_headers.forIp')

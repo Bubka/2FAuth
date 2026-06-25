@@ -31,8 +31,10 @@ use Spatie\EloquentSortable\SortableTrait;
  * @property int|null $user_id
  * @property-read Collection|TwoFAccount[] $twofaccounts
  * @property-read User|null $user
+ *
  * @method static \Database\Factories\GroupFactory factory(...$parameters)
- * @property-read Collection<int, \App\Models\TwoFAccountGroupAssignment> $twofaccountGroupAssignments
+ *
+ * @property-read Collection<int, TwoFAccountGroupAssignment> $twofaccountGroupAssignments
  * @property-read int|null $twofaccount_group_assignments_count
  */
 #[Fillable(['name', 'show_in_chips'])]

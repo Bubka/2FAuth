@@ -14,7 +14,7 @@ class WebauthnRenameRequest extends FormRequest
      *
      * @return void
      *
-     * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
+     * @throws AccessDeniedHttpException
      */
     protected function failedAuthorization()
     {

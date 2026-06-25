@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\WebauthnRenameRequest;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
@@ -14,7 +15,7 @@ class WebAuthnManageController extends Controller
     /**
      * List all WebAuthn registered credentials
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function index(Request $request)
     {
@@ -30,7 +31,7 @@ class WebAuthnManageController extends Controller
     /**
      * Rename a WebAuthn credential
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function rename(WebauthnRenameRequest $request, string $credential)
     {
@@ -47,7 +48,7 @@ class WebAuthnManageController extends Controller
      * Remove the specified credential from storage.
      *
      * @param  string|array  $credential
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function delete(Request $request, $credential)
     {

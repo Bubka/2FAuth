@@ -2,6 +2,7 @@
 
 namespace App\Services\Migrators;
 
+use App\Models\TwoFAccount;
 use Illuminate\Support\Collection;
 
 abstract class Migrator
@@ -9,7 +10,7 @@ abstract class Migrator
     /**
      * Convert migration data to a 2FAccounts collection.
      *
-     * @return \Illuminate\Support\Collection<int|string, \App\Models\TwoFAccount> The converted accounts
+     * @return Collection<int|string, TwoFAccount> The converted accounts
      */
     abstract public function migrate(mixed $migrationPayload) : Collection;
 

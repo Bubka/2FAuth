@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static bool store(string $name, string $content)
  * @method static bool exists(string $name)
  *
- * @see \App\Services\IconStoreService
+ * @see IconStoreService
  */
 class IconStore extends Facade
 {

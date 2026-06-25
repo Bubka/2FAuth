@@ -5,14 +5,18 @@ namespace App\Http\Controllers\Auth;
 use App\Extensions\WebauthnCredentialBroker;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\WebauthnRecoveryRequest;
+use App\Models\User;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\ValidationException;
+use Laragear\WebAuthn\Assertion\Validator\AssertionValidator;
+use Laragear\WebAuthn\Auth\WebAuthnUserProvider;
 
 class WebAuthnRecoveryController extends Controller
 {
@@ -22,9 +26,9 @@ class WebAuthnRecoveryController extends Controller
      * Let the user regain access to his account using email+password by resetting
      * the "use webauthn only" setting.
      *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\JsonResponse
+     * @return RedirectResponse|JsonResponse
      *
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws ValidationException
      */
     public function recover(WebauthnRecoveryRequest $request, WebauthnCredentialBroker $broker)
     {
@@ -37,10 +41,10 @@ class WebAuthnRecoveryController extends Controller
                 // with a password_fallback value set using the useWebauthnOnly user setting (see AuthServiceProvider.php).
                 // To ensure user login with email+pwd credentials, we replace the registered WebAuthnUserProvider instance
                 // with a new instance configured with password_fallback On.
-                $provider = new \Laragear\WebAuthn\Auth\WebAuthnUserProvider(
+                $provider = new WebAuthnUserProvider(
                     app()->make('hash'),
-                    \App\Models\User::class,
-                    app()->make(\Laragear\WebAuthn\Assertion\Validator\AssertionValidator::class),
+                    User::class,
+                    app()->make(AssertionValidator::class),
                     true,
                 );
 
@@ -87,7 +91,7 @@ class WebAuthnRecoveryController extends Controller
      * Get the response for a failed account recovery.
      *
      *
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws ValidationException
      */
     protected function sendRecoveryFailedResponse(Request $request, string $response) : JsonResponse
     {

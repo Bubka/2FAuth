@@ -14,7 +14,7 @@ class WebauthnAttestationRequest extends AttestationRequest
      *
      * @return void
      *
-     * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
+     * @throws AccessDeniedHttpException
      */
     protected function failedAuthorization()
     {

@@ -2,6 +2,7 @@
 
 namespace App\Api\v1\Requests;
 
+use App\Rules\IsBase32Encoded;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Fluent;
@@ -32,7 +33,7 @@ class TwoFAccountUpdateRequest extends FormRequest
             'icon'      => 'present|nullable|string',
             'group_id'  => 'sometimes|nullable|integer|min:0',
             'otp_type'  => 'required|string|in:totp,hotp,steamtotp',
-            'secret'    => ['present', 'string', 'bail', new \App\Rules\IsBase32Encoded],
+            'secret'    => ['present', 'string', 'bail', new IsBase32Encoded],
             'digits'    => 'present|integer|between:5,10',
             'algorithm' => 'present|string|in:sha1,sha256,sha512,md5',
             'period'    => 'nullable|integer|min:1',

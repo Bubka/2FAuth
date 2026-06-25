@@ -5,6 +5,7 @@ namespace App\Extensions;
 use App\Models\WebAuthnAuthenticatable;
 use Closure;
 use Illuminate\Auth\Passwords\PasswordBroker;
+use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Support\Facades\Log;
 
@@ -43,7 +44,7 @@ class WebauthnCredentialBroker extends PasswordBroker
     /**
      * Reset the password for the given token.
      *
-     * @return \Illuminate\Contracts\Auth\CanResetPassword|string
+     * @return CanResetPassword|string
      */
     public function reset(#[\SensitiveParameter] array $credentials, Closure $callback)
     {

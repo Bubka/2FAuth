@@ -5,6 +5,7 @@ namespace App\Api\v1\Controllers;
 use App\Api\v1\Requests\SettingUpdateRequest;
 use App\Api\v1\Resources\UserResource;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
@@ -14,7 +15,7 @@ class UserController extends Controller
     /**
      * Get detailed information about the authenticated user
      *
-     * @return \App\Api\v1\Resources\UserResource|\Illuminate\Http\JsonResponse
+     * @return UserResource|JsonResponse
      */
     public function show(Request $request)
     {
@@ -24,7 +25,7 @@ class UserController extends Controller
     /**
      * List all preferences
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function allPreferences(Request $request)
     {
@@ -45,7 +46,7 @@ class UserController extends Controller
     /**
      * Display a preference
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function showPreference(Request $request, string $preferenceName)
     {
@@ -63,7 +64,7 @@ class UserController extends Controller
     /**
      * Save a preference
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function setPreference(SettingUpdateRequest $request, string $preferenceName)
     {

@@ -6,13 +6,15 @@ use App\Api\v1\Requests\QrCodeDecodeRequest;
 use App\Facades\QrCode;
 use App\Http\Controllers\Controller;
 use App\Models\TwoFAccount;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\UploadedFile;
 
 class QrCodeController extends Controller
 {
     /**
      * Show a QR code image
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function show(TwoFAccount $twofaccount)
     {
@@ -26,13 +28,13 @@ class QrCodeController extends Controller
     /**
      * Decode an uploaded QR Code image
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function decode(QrCodeDecodeRequest $request)
     {
         $file = $request->file('qrcode');
 
-        return $file instanceof \Illuminate\Http\UploadedFile
+        return $file instanceof UploadedFile
             ? response()->json(['data' => QrCode::decode($file)], 200)
             : response()->json(['message' => __('error.file_upload_failed')], 500);
     }

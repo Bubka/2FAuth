@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\Traits\HasAuthenticatedPayload;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\WebauthnAssertedRequest;
 use App\Models\User;
+use App\Rules\CaseInsensitiveEmailExists;
 use Carbon\Carbon;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -56,7 +57,7 @@ class WebAuthnLoginController extends Controller
             'email' => [
                 'required',
                 'email',
-                new \App\Rules\CaseInsensitiveEmailExists,
+                new CaseInsensitiveEmailExists,
             ],
         ]));
     }
@@ -64,7 +65,7 @@ class WebAuthnLoginController extends Controller
     /**
      * Log the user in.
      *
-     * @return \Illuminate\Http\Response|\Illuminate\Http\JsonResponse
+     * @return Response|JsonResponse
      */
     public function login(WebauthnAssertedRequest $request)
     {
@@ -120,14 +121,14 @@ class WebAuthnLoginController extends Controller
     /**
      * Send the response after the user was authenticated.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     protected function sendLoginResponse(WebauthnAssertedRequest $request)
     {
         $this->clearLoginAttempts($request);
 
         /**
-         * @var \App\Models\User|null
+         * @var User|null
          */
         $user = $this->guard()->user();
 
@@ -139,7 +140,7 @@ class WebAuthnLoginController extends Controller
     /**
      * Get the failed login response instance.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     protected function sendFailedLoginResponse(WebauthnAssertedRequest $request)
     {
@@ -149,7 +150,7 @@ class WebAuthnLoginController extends Controller
     /**
      * Redirect the user after determining they are locked out.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     protected function sendLockoutResponse(WebauthnAssertedRequest $request)
     {
@@ -188,7 +189,7 @@ class WebAuthnLoginController extends Controller
      * The user has been authenticated.
      *
      * @param  mixed  $user
-     * @return void|\Illuminate\Http\JsonResponse
+     * @return void|JsonResponse
      */
     protected function authenticated($user)
     {

@@ -2,6 +2,7 @@
 
 namespace App\Extensions;
 
+use App\Models\User;
 use Illuminate\Auth\EloquentUserProvider;
 use Laragear\WebAuthn\Auth\WebAuthnUserProvider;
 
@@ -10,7 +11,7 @@ class WebauthnTwoFAuthUserProvider extends WebAuthnUserProvider
     /**
      * Validate a user against the given credentials.
      *
-     * @param  \App\Models\User  $user
+     * @param  User  $user
      */
     public function validateCredentials($user, array $credentials) : bool
     {

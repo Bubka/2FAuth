@@ -25,6 +25,7 @@
 namespace App\Listeners\Authentication;
 
 use App\Models\AuthLog;
+use App\Models\User;
 use Illuminate\Auth\Events\Logout;
 use TypeError;
 
@@ -40,7 +41,7 @@ class LogoutListener extends AbstractAccessListener
         }
 
         /**
-         * @var \App\Models\User
+         * @var User
          */
         $user = $event->user;
 

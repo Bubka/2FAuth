@@ -22,7 +22,7 @@ class RemoteUserProvider implements UserProvider
     /**
      * The currently authenticated user.
      *
-     * @var \App\Models\User|null
+     * @var User|null
      */
     protected $user;
 

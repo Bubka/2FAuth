@@ -6,6 +6,7 @@ use App\Api\v1\Resources\UserResource;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserDeleteRequest;
 use App\Http\Requests\UserUpdateRequest;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -15,7 +16,7 @@ class UserController extends Controller
     /**
      * Update the user's profile information.
      *
-     * @return \App\Api\v1\Resources\UserResource|\Illuminate\Http\JsonResponse
+     * @return UserResource|JsonResponse
      */
     public function update(UserUpdateRequest $request)
     {
@@ -50,7 +51,7 @@ class UserController extends Controller
     /**
      * Delete the user's account.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function delete(UserDeleteRequest $request)
     {

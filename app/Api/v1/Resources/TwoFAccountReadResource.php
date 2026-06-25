@@ -3,11 +3,13 @@
 namespace App\Api\v1\Resources;
 
 use App\Facades\Settings;
+use App\Models\User;
 use App\Services\TwoFAccountShareService;
+use Illuminate\Http\Request;
 
 /**
  * @property mixed $id
- * @property \App\Models\User|null $user
+ * @property User|null $user
  *
  * @method \Illuminate\Database\Eloquent\Collection<array-key, \App\Models\TwoFAccount> loadCount(string $relations)
  * @method bool isSharedWith(\App\Models\User $user)
@@ -19,7 +21,7 @@ class TwoFAccountReadResource extends TwoFAccountStoreResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array
      */
     public function toArray($request)

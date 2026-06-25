@@ -61,12 +61,14 @@ use Laravel\Passport\Token;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, AuthLog> $authentications
  * @property-read int|null $authentications_count
  * @property-read AuthLog|null $latestAuthentication
+ *
  * @method static \Database\Factories\UserFactory factory(...$parameters)
+ *
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Client> $oauthApps
  * @property-read int|null $oauth_apps_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TwoFAccountShare> $borrowedTwofaccounts
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, TwoFAccountShare> $borrowedTwofaccounts
  * @property-read int|null $borrowed_twofaccounts_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TwoFAccountShare> $sharedTwofaccounts
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, TwoFAccountShare> $sharedTwofaccounts
  * @property-read int|null $shared_twofaccounts_count
  */
 #[Fillable(['name', 'email', 'password', 'oauth_id', 'oauth_provider'])]

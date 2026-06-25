@@ -3,6 +3,7 @@
 namespace App\Api\v1\Resources;
 
 use Carbon\CarbonInterface;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Carbon;
 use Jenssegers\Agent\Agent;
@@ -44,7 +45,7 @@ class UserAuthenticationResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array
      */
     public function toArray($request)

@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Services\TwoFAccountShareService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -86,7 +87,7 @@ class TwoFAccountShareController extends Controller
     /**
      * List all potential share recipients for a twofaccount
      *
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return AnonymousResourceCollection
      */
     public function recipients(TwoFAccount $twofaccount, Request $request)
     {

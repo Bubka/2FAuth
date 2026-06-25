@@ -5,6 +5,8 @@ namespace App\Services;
 use App\Facades\IconStore;
 use App\Facades\LogoLib;
 use App\Helpers\Helpers;
+use Illuminate\Http\File;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -12,6 +14,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Psr\Http\Message\StreamInterface;
 
 class IconService
 {
@@ -32,7 +35,7 @@ class IconService
     /**
      * Build an icon from an image resource
      *
-     * @param  \Psr\Http\Message\StreamInterface|\Illuminate\Http\File|\Illuminate\Http\UploadedFile|string|resource  $resource
+     * @param  StreamInterface|File|UploadedFile|string|resource  $resource
      * @param  string  $extension  The file extension, without the dot
      */
     public function buildFromResource($resource, $extension) : ?string
@@ -159,7 +162,7 @@ class IconService
     /**
      * List available icon packs from the configured disk
      *
-     * @return \Illuminate\Support\Collection<int|string, array{name: string}>
+     * @return Collection<int|string, array{name: string}>
      */
     public static function getIconPacks() : Collection
     {

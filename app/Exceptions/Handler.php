@@ -2,7 +2,10 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -24,7 +27,7 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        $this->renderable(function (\Symfony\Component\HttpKernel\Exception\NotFoundHttpException $exception, $request) {
+        $this->renderable(function (NotFoundHttpException $exception, $request) {
             $message = $exception->getMessage() === 'unknowkn endpoint' ? 'unknowkn endpoint' : 'not found';
 
             return response()->json([
@@ -32,7 +35,7 @@ class Handler extends ExceptionHandler
             ], 404);
         });
 
-        $this->renderable(function (\Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException $exception, $request) {
+        $this->renderable(function (AccessDeniedHttpException $exception, $request) {
             return response()->json([
                 'message' => 'forbidden',
                 'reason'  => $exception->getMessage(),
@@ -98,7 +101,7 @@ class Handler extends ExceptionHandler
             ], 400);
         });
 
-        $this->renderable(function (\Illuminate\Auth\AuthenticationException $exception, $request) {
+        $this->renderable(function (AuthenticationException $exception, $request) {
             if ($exception->guards() === ['reverse-proxy-guard']) {
                 return response()->json([
                     'message' => $exception->getMessage(),

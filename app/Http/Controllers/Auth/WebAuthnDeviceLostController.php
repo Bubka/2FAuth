@@ -6,6 +6,8 @@ use App\Extensions\WebauthnCredentialBroker;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\WebauthnDeviceLostRequest;
 use Illuminate\Foundation\Auth\ResetsPasswords;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\ValidationException;
@@ -17,9 +19,9 @@ class WebAuthnDeviceLostController extends Controller
     /**
      * Send a recovery email to the user.
      *
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
+     * @return JsonResponse|RedirectResponse
      *
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws ValidationException
      */
     public function sendRecoveryEmail(WebauthnDeviceLostRequest $request, WebauthnCredentialBroker $broker)
     {
@@ -35,9 +37,9 @@ class WebAuthnDeviceLostController extends Controller
     /**
      * Get the response for a failed account recovery link.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      *
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws ValidationException
      */
     protected function sendRecoveryLinkFailedResponse(Request $request, string $response)
     {
@@ -47,7 +49,7 @@ class WebAuthnDeviceLostController extends Controller
     /**
      * Get the response for a successful account recovery link.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     protected function sendRecoveryLinkResponse(Request $request, string $response)
     {

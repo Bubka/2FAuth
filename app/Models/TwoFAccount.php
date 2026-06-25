@@ -56,13 +56,18 @@ use SteamTotp\SteamTotp;
  * @property-read User|null $user
  * @property-read Collection<int, TwoFAccountGroupAssignment> $groups
  * @property-read Collection<int, TwoFAccountShare> $shares
+ *
  * @method static \Database\Factories\TwoFAccountFactory factory(...$parameters)
+ *
  * @property-read Icon|null $iconResource
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|TwoFAccount orphans()
+ *
  * @property-read int|null $groups_count
- * @property-read Collection<int, \App\Models\OtpLog> $otpLogs
+ * @property-read Collection<int, OtpLog> $otpLogs
  * @property-read int|null $otp_logs_count
  * @property-read int|null $shares_count
+ *
  * @method static Builder<static>|TwoFAccount visibleTo(\App\Models\User $user)
  */
 class TwoFAccount extends Model

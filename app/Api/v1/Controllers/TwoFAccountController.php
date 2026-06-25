@@ -29,6 +29,8 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Hash;
@@ -39,7 +41,7 @@ class TwoFAccountController extends Controller
     /**
      * List all resources
      *
-     * @return \App\Api\v1\Resources\TwoFAccountCollection
+     * @return TwoFAccountCollection
      */
     public function index(TwoFAccountIndexRequest $request)
     {
@@ -70,7 +72,7 @@ class TwoFAccountController extends Controller
     /**
      * Display a 2FA account
      *
-     * @return \App\Api\v1\Resources\TwoFAccountReadResource
+     * @return TwoFAccountReadResource
      */
     public function show(Request $request, TwoFAccount $twofaccount)
     {
@@ -91,7 +93,7 @@ class TwoFAccountController extends Controller
     /**
      * Store a new 2FA account
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function store(TwoFAccountDynamicRequest $request)
     {
@@ -135,7 +137,7 @@ class TwoFAccountController extends Controller
     /**
      * Update a 2FA account
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function update(TwoFAccountUpdateRequest $request, TwoFAccount $twofaccount)
     {
@@ -201,7 +203,7 @@ class TwoFAccountController extends Controller
     /**
      * Convert a migration resource to a valid TwoFAccounts collection
      *
-     * @return \Illuminate\Http\JsonResponse|\App\Api\v1\Resources\TwoFAccountCollection
+     * @return JsonResponse|TwoFAccountCollection
      */
     public function migrate(TwoFAccountImportRequest $request)
     {
@@ -210,7 +212,7 @@ class TwoFAccountController extends Controller
         if (Arr::has($validated, 'file')) {
             $migrationResource = $request->file('file');
 
-            return $migrationResource instanceof \Illuminate\Http\UploadedFile
+            return $migrationResource instanceof UploadedFile
                 ? new TwoFAccountCollection(TwoFAccounts::migrate($migrationResource->get()))
                 : response()->json(['message' => __('error.file_upload_failed')], 500);
         } else {
@@ -221,7 +223,7 @@ class TwoFAccountController extends Controller
     /**
      * Save 2FA accounts order
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function reorder(ReorderRequest $request)
     {
@@ -242,7 +244,7 @@ class TwoFAccountController extends Controller
     /**
      * Preview account using an uri, without any db moves
      *
-     * @return \App\Api\v1\Resources\TwoFAccountStoreResource
+     * @return TwoFAccountStoreResource
      */
     public function preview(TwoFAccountUriRequest $request)
     {
@@ -255,7 +257,7 @@ class TwoFAccountController extends Controller
     /**
      * Export accounts
      *
-     * @return TwoFAccountExportCollection|\Illuminate\Http\JsonResponse
+     * @return TwoFAccountExportCollection|JsonResponse
      */
     public function export(TwoFAccountExportRequest $request)
     {
@@ -278,7 +280,7 @@ class TwoFAccountController extends Controller
      * Get a One-Time Password
      *
      * @param  string|null  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function otp(Request $request, $id = null)
     {
@@ -336,7 +338,7 @@ class TwoFAccountController extends Controller
     /**
      * Get otp generation logs
      *
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return AnonymousResourceCollection
      */
     public function otpLogs(Request $request, TwoFAccount $twofaccount)
     {
@@ -370,7 +372,7 @@ class TwoFAccountController extends Controller
     /**
      * A simple and light method to get the account count.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function count(Request $request)
     {
@@ -410,7 +412,7 @@ class TwoFAccountController extends Controller
     /**
      * Withdraw one or more accounts from their group
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function withdraw(TwoFAccountBatchRequest $request)
     {
@@ -436,7 +438,7 @@ class TwoFAccountController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function destroy(TwoFAccount $twofaccount)
     {
@@ -450,7 +452,7 @@ class TwoFAccountController extends Controller
     /**
      * Remove the specified resources from storage.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function batchDestroy(TwoFAccountBatchRequest $request)
     {

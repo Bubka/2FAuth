@@ -6,13 +6,14 @@ use App\Api\v1\Requests\SettingStoreRequest;
 use App\Api\v1\Requests\SettingUpdateRequest;
 use App\Facades\Settings;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 
 class SettingController extends Controller
 {
     /**
      * List all settings
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function index()
     {
@@ -32,7 +33,7 @@ class SettingController extends Controller
      * Display a setting
      *
      * @param  string  $settingName
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function show($settingName)
     {
@@ -51,7 +52,7 @@ class SettingController extends Controller
     /**
      * Store a setting
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function store(SettingStoreRequest $request)
     {
@@ -68,7 +69,7 @@ class SettingController extends Controller
     /**
      * Update a setting
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function update(SettingUpdateRequest $request, string $settingName)
     {
@@ -85,7 +86,7 @@ class SettingController extends Controller
     /**
      * Delete a setting
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function destroy(string $settingName)
     {

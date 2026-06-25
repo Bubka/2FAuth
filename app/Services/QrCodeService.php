@@ -2,9 +2,11 @@
 
 namespace App\Services;
 
+use App\Exceptions\InvalidQrCodeException;
 use App\Factories\MigratorFactory;
 use chillerlan\QRCode\QRCode;
 use chillerlan\QRCode\QROptions;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
 use Zxing\ChecksumException;
 use Zxing\FormatException;
@@ -38,7 +40,7 @@ class QrCodeService
      *
      * @return string
      */
-    public static function decode(\Illuminate\Http\UploadedFile $file)
+    public static function decode(UploadedFile $file)
     {
         ini_set('memory_limit', config('2fauth.config.phpMemoryLimitTempOverride', 512) . 'M');
 
@@ -61,13 +63,13 @@ class QrCodeService
         if (! $text) {
             switch (get_class($qrcode->getError())) {
                 case NotFoundException::class:
-                    throw new \App\Exceptions\InvalidQrCodeException(__('error.cannot_detect_qrcode_in_image'));
+                    throw new InvalidQrCodeException(__('error.cannot_detect_qrcode_in_image'));
                 case FormatException::class:
-                    throw new \App\Exceptions\InvalidQrCodeException(__('error.cannot_decode_detected_qrcode'));
+                    throw new InvalidQrCodeException(__('error.cannot_decode_detected_qrcode'));
                 case ChecksumException::class:
-                    throw new \App\Exceptions\InvalidQrCodeException(__('error.qrcode_has_invalid_checksum'));
+                    throw new InvalidQrCodeException(__('error.qrcode_has_invalid_checksum'));
                 default:
-                    throw new \App\Exceptions\InvalidQrCodeException(__('error.no_readable_qrcode'));
+                    throw new InvalidQrCodeException(__('error.no_readable_qrcode'));
             }
         }
 

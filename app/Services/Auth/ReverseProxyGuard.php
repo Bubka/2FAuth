@@ -5,7 +5,9 @@
 
 namespace App\Services\Auth;
 
+use App\Models\User;
 use Illuminate\Auth\GuardHelpers;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Support\Facades\Log;
@@ -17,7 +19,7 @@ class ReverseProxyGuard implements Guard
     /**
      * The currently authenticated user.
      *
-     * @var \Illuminate\Contracts\Auth\Authenticatable|\App\Models\User|null
+     * @var Authenticatable|User|null
      */
     protected $user;
 

@@ -5,6 +5,7 @@ namespace App\Services\LogoLib;
 use App\Facades\IconStore;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class StorageLogoLib extends AbstractLogoLib implements LogoLibInterface
 {
@@ -26,7 +27,7 @@ class StorageLogoLib extends AbstractLogoLib implements LogoLibInterface
         $logoFilename = $this->getLogo(strval($serviceName));
 
         if ($logoFilename) {
-            $iconFilename = \Illuminate\Support\Str::random(40) . '.' . pathinfo(basename($logoFilename), PATHINFO_EXTENSION);
+            $iconFilename = Str::random(40) . '.' . pathinfo(basename($logoFilename), PATHINFO_EXTENSION);
 
             return $this->copyToIconStore($logoFilename, $iconFilename) ? $iconFilename : null;
         } else {
