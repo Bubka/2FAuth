@@ -26,7 +26,10 @@ You can disable any of this from the *Settings > Options page* if you want to re
 
 ### Fixed
 
+- [issue #540](https://github.com/Bubka/2FAuth/issues/540) Scan/Import QR Code Not working
+- [issue #543](https://github.com/Bubka/2FAuth/issues/543) Scan/Import Google Authentificator QR Code
 - [issue #549](https://github.com/Bubka/2FAuth/issues/549) Unshare action in Manage mode does not remove sharing
+- UI elements overlapping during transitions on Manage mode enter/leave
 
 ## [7.0.1] - 2026-06-09
 
