@@ -1,6 +1,6 @@
 # Change log
 
-## [8.0.0] - 2026-06-22
+## [8.0.0] - 2026-06-25
 
 2FAuth already bumps to v8 because of the upgrade of the Laravel PHP framework it is built on.
 
@@ -9,10 +9,10 @@
 
 Despite the short time that has passed since v7, I found time to make two improvements to the user experience:
 
-- You can now switch groups without opening the selection menu. Groups are displayed as chips directly below the search bar for quick switching. You can choose to display a group as a chip by enabling the dedicated setting in the group editing form.
-- Lengthy pages in the Settings and Admin sections now have a quick navigation menu that automatically scrolls to the desired section.
+- You can now switch between groups without having to open the selection menu. Groups are displayed as chips directly below the search bar for quick switching. The groups displayed in the chips list are the ones you choose to make visible. A new option is available in the Group edit form to do so.
+- Lengthy pages in the Settings and Admin sections now have a navigation menu that lets you scrolls to the desired section. Don't be surprised — I took this opportunity to reorganize the *Settings > Options* page, as all the additions over time had made it a bit messy.
 
-You can disable any of this from the *Settings > Options page* if you want to restore the previous behaviour.
+You can disable any of this from the *Settings > Options* page if you want to restore the previous behaviour.
 
 ### Added
 
