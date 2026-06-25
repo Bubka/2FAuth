@@ -29,11 +29,11 @@
     const healthEndPoint = $2fauth.config.subdirectory + '/up'
     const healthEndPointFullPath = location.hostname + $2fauth.config.subdirectory + '/up'
     
-    const generalRef = useTemplateRef('general')
-    const sharingRef = useTemplateRef('sharing')
-    const storageRef = useTemplateRef('storage')
-    const securityRef = useTemplateRef('security')
-    const environmentRef = useTemplateRef('environment')
+    const generalRef = useTemplateRef('heading-general')
+    const sharingRef = useTemplateRef('heading-sharing')
+    const storageRef = useTemplateRef('heading-storage')
+    const securityRef = useTemplateRef('heading-security')
+    const environmentRef = useTemplateRef('heading-environment')
 
     const scrollTo = (elRef) => {
         if (!elRef) return
@@ -128,7 +128,7 @@
                     </aside>
                 </div>
                 <form>
-                    <h4 ref="general" class="title is-4">{{ $t('heading.general') }}</h4>
+                    <h4 ref="heading-general" class="title is-4">{{ $t('heading.general') }}</h4>
                     <!-- Check for update -->
                     <FormCheckbox v-model="appSettings.checkForUpdate" @update:model-value="val => saveSetting('checkForUpdate', val)" fieldName="checkForUpdate" label="field.check_for_update" help="field.check_for_update.help" />
                     <VersionChecker />
@@ -169,7 +169,7 @@
                             <LucideExternalLink />
                         </a>
                     </div>
-                    <h4 ref="sharing" class="title is-4 pt-5">{{ $t('heading.sharing') }}</h4>
+                    <h4 ref="heading-sharing" class="title is-4 pt-5">{{ $t('heading.sharing') }}</h4>
                     <!-- sharing -->
                     <FormCheckbox v-model="appSettings.enableSharing" @update:model-value="val => saveSetting('enableSharing', val)" fieldName="enableSharing" label="field.enable_sharing" help="field.enable_sharing.help" />
 
@@ -181,7 +181,7 @@
                             <LucideExternalLink />
                         </a>
                     </div>
-                    <h4 ref="storage" class="title is-4 pt-5">{{ $t('heading.storage') }}</h4>
+                    <h4 ref="heading-storage" class="title is-4 pt-5">{{ $t('heading.storage') }}</h4>
                     <!-- store icons in database -->
                     <FormCheckbox v-model="appSettings.storeIconsInDatabase" @update:model-value="val => saveSetting('storeIconsInDatabase', val)" fieldName="storeIconsInDatabase" label="field.store_icon_to_database" help="field.store_icon_to_database.help" />
                     <p class="help">{{ $t('field.store_icon_to_database.help_bis') }}</p>
@@ -191,12 +191,12 @@
                             <LucideExternalLink />
                         </a>
                     </div>
-                    <h4 ref="security" class="title is-4 pt-5">{{ $t('heading.security') }}</h4>
+                    <h4 ref="heading-security" class="title is-4 pt-5">{{ $t('heading.security') }}</h4>
                     <!-- protect db -->
                     <FormCheckbox v-model="appSettings.useEncryption" @update:model-value="val => saveSetting('useEncryption', val)" fieldName="useEncryption" label="field.use_encryption" help="field.use_encryption.help" />
                 </form>
 
-                <h4 ref="environment" class="title is-4 pt-5">{{ $t('heading.environment') }}</h4>
+                <h4 ref="heading-environment" class="title is-4 pt-5">{{ $t('heading.environment') }}</h4>
                 <!-- cache management -->
                 <div class="field">
                     <label for="btnClearCache" class="label">{{ $t('field.cache_management') }}</label>

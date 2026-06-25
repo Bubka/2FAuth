@@ -232,13 +232,13 @@
         }
     })
     
-    const generalRef = useTemplateRef('general')
-    const accountsRef = useTemplateRef('accounts')
-    const otpRef = useTemplateRef('otp')
-    const iconsRef = useTemplateRef('icons')
-    const groupsRef = useTemplateRef('groups')
-    const sessionRef = useTemplateRef('session')
-    const dataInputRef = useTemplateRef('dataInput')
+    const generalRef = useTemplateRef('heading-general')
+    const accountsRef = useTemplateRef('heading-accounts')
+    const otpRef = useTemplateRef('heading-otp')
+    const iconsRef = useTemplateRef('heading-icons')
+    const groupsRef = useTemplateRef('heading-groups')
+    const sessionRef = useTemplateRef('heading-session')
+    const dataInputRef = useTemplateRef('heading-dataInput')
 
     const scrollTo = (elRef) => {
         if (!elRef) return
@@ -276,7 +276,7 @@
                     <!-- <input type="hidden" name="isReady" id="isReady" :value="isReady" /> -->
                     <!-- user preferences -->
                     <div class="block">
-                        <h4 ref="general" class="title is-4">{{ $t('heading.general') }}</h4>
+                        <h4 ref="heading-general" class="title is-4">{{ $t('heading.general') }}</h4>
                         <div v-if="appSettings.lockedPreferences.length > 0" class="notification is-warning">
                             {{ $t('message.settings_managed_by_administrator') }}
                         </div>
@@ -299,13 +299,13 @@
                         <FormCheckbox v-model="user.preferences.showQuickNavMenus" @update:model-value="val => savePreference('showQuickNavMenus', val)" fieldName="showQuickNavMenus" :isLocked="appSettings.lockedPreferences.includes('showQuickNavMenus')" label="field.show_quick_nav_menus" help="field.show_quick_nav_menus.help" />
                     </div>   
                     <div class="block">
-                        <h4 ref="accounts" class="title is-4 pt-4">{{ $t('heading.2fa_accounts') }}</h4>
+                        <h4 ref="heading-accounts" class="title is-4 pt-4">{{ $t('heading.2fa_accounts') }}</h4>
                         <!-- display mode -->
                         <FormToggle v-model="user.preferences.displayMode" @update:model-value="val => savePreference('displayMode', val)" :choices="layouts" fieldName="displayMode" :isLocked="appSettings.lockedPreferences.includes('displayMode')" label="field.display_mode" help="field.display_mode.help" />
                         <!-- sort case sensitive -->
                         <FormCheckbox v-model="user.preferences.sortCaseSensitive" @update:model-value="val => savePreference('sortCaseSensitive', val)" fieldName="sortCaseSensitive" :isLocked="appSettings.lockedPreferences.includes('sortCaseSensitive')" label="field.sort_case_sensitive" help="field.sort_case_sensitive.help" />
 
-                        <h5 ref="otp" class="title is-5 pt-3 mb-3">{{ $t('heading.one_time_passwords') }}</h5>
+                        <h5 ref="heading-otp" class="title is-5 pt-3 mb-3">{{ $t('heading.one_time_passwords') }}</h5>
                         <!-- get OTP on request -->
                         <FormToggle v-model="user.preferences.getOtpOnRequest" @update:model-value="val => savePreference('getOtpOnRequest', val)" :choices="getOtpTriggers" fieldName="getOtpOnRequest" :isLocked="appSettings.lockedPreferences.includes('getOtpOnRequest')" label="field.otp_generation" help="field.otp_generation.help"/>
                             <!-- close otp on copy -->
@@ -326,7 +326,7 @@
                         <!-- clear search on copy -->
                         <FormCheckbox v-model="user.preferences.clearSearchOnCopy" @update:model-value="val => savePreference('clearSearchOnCopy', val)" fieldName="clearSearchOnCopy" :isLocked="appSettings.lockedPreferences.includes('clearSearchOnCopy')" label="field.clear_search_on_copy" help="field.clear_search_on_copy.help" />
 
-                        <h5 ref="icons" class="title is-5 pt-3 mb-4">{{ $t('heading.icons') }}</h5>
+                        <h5 ref="heading-icons" class="title is-5 pt-3 mb-4">{{ $t('heading.icons') }}</h5>
                         <!-- show icon -->
                         <FormCheckbox v-model="user.preferences.showAccountsIcons" @update:model-value="val => savePreference('showAccountsIcons', val)" fieldName="showAccountsIcons" :isLocked="appSettings.lockedPreferences.includes('showAccountsIcons')" label="field.show_accounts_icons" help="field.show_accounts_icons.help" />
                         <!-- Official icons -->
@@ -351,7 +351,7 @@
                         </FormSelect>
                     </div>
                     <div class="block">
-                        <h4 ref="groups" class="title is-4 pt-4">{{ $t('heading.groups') }}</h4>
+                        <h4 ref="heading-groups" class="title is-4 pt-4">{{ $t('heading.groups') }}</h4>
                         <!-- default group -->
                         <FormSelect v-model="user.preferences.defaultGroup" @update:model-value="val => savePreference('defaultGroup', val)" :options="groupsList" fieldName="defaultGroup" label="field.default_group" help="field.default_group.help" />
                         <!-- use chips selector -->
@@ -364,7 +364,7 @@
                         <FormCheckbox v-model="user.preferences.viewDefaultGroupOnCopy" @update:model-value="val => savePreference('viewDefaultGroupOnCopy', val)" fieldName="viewDefaultGroupOnCopy" :isLocked="appSettings.lockedPreferences.includes('viewDefaultGroupOnCopy')" label="field.view_default_group_on_copy" help="field.view_default_group_on_copy.help" />
                     </div>
                     <div class="block">
-                        <h4 ref="session" class="title is-4 pt-4">{{ $t('heading.session') }}</h4>
+                        <h4 ref="heading-session" class="title is-4 pt-4">{{ $t('heading.session') }}</h4>
                         <!-- auto lock -->
                         <FormSelect v-model="user.preferences.kickUserAfter" @update:model-value="val => savePreference('kickUserAfter', val)" :options="kickUserAfters" fieldName="kickUserAfter" :isLocked="appSettings.lockedPreferences.includes('kickUserAfter')" label="field.auto_lock" help="field.auto_lock.help" />
                         <h5 class="title is-5 mb-4">{{ $t('heading.notifications') }}</h5>
@@ -374,7 +374,7 @@
                         <FormCheckbox v-model="user.preferences.notifyOnFailedLogin" @update:model-value="val => savePreference('notifyOnFailedLogin', val)" fieldName="notifyOnFailedLogin" :isLocked="appSettings.lockedPreferences.includes('notifyOnFailedLogin')" label="field.notify_on_failed_login" help="field.notify_on_failed_login.help" />
                     </div>
                     <div class="block">
-                        <h4 ref="dataInput" class="title is-4 pt-4">{{ $t('heading.data_input') }}</h4>
+                        <h4 ref="heading-dataInput" class="title is-4 pt-4">{{ $t('heading.data_input') }}</h4>
                         <!-- auto-save QrCoded account -->
                         <FormCheckbox v-model="user.preferences.AutoSaveQrcodedAccount" @update:model-value="val => savePreference('AutoSaveQrcodedAccount', val)" fieldName="AutoSaveQrcodedAccount" :isLocked="appSettings.lockedPreferences.includes('AutoSaveQrcodedAccount')" label="field.auto_save_qrcoded_account" help="field.auto_save_qrcoded_account.help" />
                         <!-- basic qrcode -->

@@ -193,11 +193,11 @@
         return true
     }
 
-    const userRef = useTemplateRef('user')
-    const accessRef = useTemplateRef('access')
-    const lastAccessesRef = useTemplateRef('lastAccesses')
-    const preferencesRef = useTemplateRef('preferences')
-    const dangerZoneRef = useTemplateRef('dangerZone')
+    const userRef = useTemplateRef('heading-user')
+    const accessRef = useTemplateRef('heading-access')
+    const lastAccessesRef = useTemplateRef('heading-lastAccesses')
+    const preferencesRef = useTemplateRef('heading-preferences')
+    const dangerZoneRef = useTemplateRef('heading-dangerZone')
 
     const scrollTo = (elRef) => {
         if (!elRef) return
@@ -213,7 +213,7 @@
     <StackLayout>
         <template #content>
             <ResponsiveWidthWrapper>
-                <h1 ref="user" class="title mb-6">
+                <h1 ref="heading-user" class="title mb-6">
                     {{ $t('heading.user_management') }}
                 </h1>
                 <div v-if="isLaptop && user.preferences.showQuickNavMenus" class="pr-5 settings-menu">
@@ -255,7 +255,7 @@
                     <div class="block">
                         <FormCheckbox v-model="managedUser.info.is_admin" @update:model-value="val => saveAdminRole(val === true)" :isDanger="true" fieldName="is_admin" label="field.is_admin" help="field.is_admin.help" />
                     </div>
-                    <h2 v-if="!$2fauth.config.proxyAuth" ref="access" class="title is-4">{{ $t('heading.access') }}</h2>
+                    <h2 v-if="!$2fauth.config.proxyAuth" ref="heading-access" class="title is-4">{{ $t('heading.access') }}</h2>
                     <!-- access -->
                     <div v-if="!$2fauth.config.proxyAuth" class="block">
                         <!-- reset password -->
@@ -321,7 +321,7 @@
                     </div>
                     <!-- last access -->
                     <div class="block">
-                        <h3 ref="lastAccesses" class="title is-5 mb-2">{{ $t('heading.last_accesses') }}</h3>
+                        <h3 ref="heading-lastAccesses" class="title is-5 mb-2">{{ $t('heading.last_accesses') }}</h3>
                         <AccessLogViewer v-if="managedUser" :userId="props.userId" :lastOnly="true" @has-more-entries="showFullLogLink = true"/>
                     </div>
                     <div v-if="showFullLogLink" class="block is-size-6 is-size-7-mobile has-text-grey">
@@ -330,7 +330,7 @@
                         </router-link>
                     </div>
                     <!-- preferences -->
-                    <h2 ref="preferences" class="title is-4">{{ $t('heading.preferences') }}</h2>
+                    <h2 ref="heading-preferences" class="title is-4">{{ $t('heading.preferences') }}</h2>
                     <div class="about-debug box is-family-monospace is-size-7 is-shadowless">
                         <CopyButton id="btnCopyEnvVars" :token="listUserPreferences?.innerText" />
                         <ul ref="listUserPreferences" id="listUserPreferences">
@@ -340,7 +340,7 @@
                         </ul>
                     </div>
                     <!-- danger zone -->
-                    <h2 ref="dangerZone" class="title is-4 has-text-danger">{{ $t('heading.danger_zone') }}</h2>
+                    <h2 ref="heading-dangerZone" class="title is-4 has-text-danger">{{ $t('heading.danger_zone') }}</h2>
                     <div class="is-left-bordered-danger">
                         <div class="block is-size-6 is-size-7-mobile">
                             {{  $t('message.delete_this_user_legend') }}

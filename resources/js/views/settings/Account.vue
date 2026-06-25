@@ -98,9 +98,9 @@
         }
     }
 
-    const profileRef = useTemplateRef('profile')
-    const changePasswordRef = useTemplateRef('changePassword')
-    const deleteAccountRef = useTemplateRef('deleteAccount')
+    const profileRef = useTemplateRef('heading-profile')
+    const changePasswordRef = useTemplateRef('heading-changePassword')
+    const deleteAccountRef = useTemplateRef('heading-deleteAccount')
 
     const scrollTo = (elRef) => {
         if (!elRef) return
@@ -138,7 +138,7 @@
                     <div v-if="$2fauth.config.proxyAuth" class="notification is-warning has-text-centered">
                         {{ $t('message.user_account_controlled_by_proxy') + ' ' + $t('message.manage_account_at_proxy_level') }}
                     </div>
-                    <h4 ref="profile" class="title is-4">
+                    <h4 ref="heading-profile" class="title is-4">
                         {{ $t('heading.profile') }}
                         <span v-if="user.isAdmin" class="tag is-warning ml-1">
                             {{ $t('label.administrator') }}
@@ -154,7 +154,7 @@
                 <form @submit.prevent="submitPassword" @keydown="formPassword.onKeydown($event)">
                     <input hidden type="text" name="name" :value="formProfile.name" autocomplete="username" />
                     <input hidden type="text" name="email" :value="formProfile.email" autocomplete="email" />
-                    <h4 ref="changePassword" class="title is-4 pt-6">{{ $t('heading.change_password') }}</h4>
+                    <h4 ref="heading-changePassword" class="title is-4 pt-6">{{ $t('heading.change_password') }}</h4>
                     <fieldset :disabled="$2fauth.config.proxyAuth || user.oauth_provider">
                         <FormPasswordField v-model="formPassword.password" fieldName="password" :errorMessage="formPassword.errors.get('password')" idSuffix="ForUpdate" autocomplete="new-password" :showRules="true" label="field.new_password" />
                         <FormPasswordField v-model="formPassword.password_confirmation" :showRules="false" fieldName="password_confirmation" :errorMessage="formPassword.errors.get('password_confirmation')" inputType="password" autocomplete="new-password" label="field.confirm_new_password" />
@@ -165,7 +165,7 @@
                 <form id="frmDeleteAccount" @submit.prevent="submitDelete" @keydown="formDelete.onKeydown($event)">
                     <input hidden type="text" name="name" :value="formProfile.name" autocomplete="username" />
                     <input hidden type="text" name="email" :value="formProfile.email" autocomplete="email" />
-                    <h4 ref="deleteAccount" class="title is-4 pt-6 has-text-danger">{{ $t('heading.delete_account') }}</h4>
+                    <h4 ref="heading-deleteAccount" class="title is-4 pt-6 has-text-danger">{{ $t('heading.delete_account') }}</h4>
                     <div class="field is-size-7-mobile">
                         <p class="block">{{ $t('message.delete_your_account_and_reset_all_data')}}</p>
                         <p>{{ $t('message.reset_your_password_to_delete_your_account') }}</p>
