@@ -40,6 +40,8 @@ class QrCodeService
      */
     public static function decode(\Illuminate\Http\UploadedFile $file)
     {
+        ini_set('memory_limit', config('2fauth.config.phpMemoryLimitTempOverride', 512) . 'M');
+
         $qrcode = app()->make(QrReader::class, [
             'imgSource'  => $file->get(),
             'sourceType' => QrReader::SOURCE_TYPE_BLOB,

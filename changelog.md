@@ -20,6 +20,10 @@ You can disable any of this from the *Settings > Options page* if you want to re
 - The lengthy Settings and Admin pages now come with a quick navigation menu that lets you scroll directly to the desired section.
 - The docker image is now tagged with shifting major and minor tags ([#541](https://github.com/Bubka/2FAuth/issues/541)).
 
+#### New env vars
+
+- `PHP_MEMORY_LIMIT_TEMP_OVERRIDE`: Temporary PHP memory limit applied during QR code detection to prevent `exhausted memory error` ([doc](https://docs.2fauth.app/getting-started/config/env-vars/#PHP_MEMORY_LIMIT_TEMP_OVERRIDE)).
+
 ### Fixed
 
 - [issue #549](https://github.com/Bubka/2FAuth/issues/549) Unshare action in Manage mode does not remove sharing

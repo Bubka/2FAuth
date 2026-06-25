@@ -88,6 +88,7 @@ return [
         'otpLogRetentionTime' => envUnlessEmpty('OTP_LOG_RETENTION', 365),
         'contentSecurityPolicy' => envUnlessEmpty('CONTENT_SECURITY_POLICY', true),
         'blockOtpauthImagelinkFetching' => envUnlessEmpty('BLOCK_OPTAUTH_IMAGELINK_FETCHING', true),
+        'phpMemoryLimitTempOverride' => envUnlessEmpty('PHP_MEMORY_LIMIT_TEMP_OVERRIDE', 512),
     ],
 
     /*
