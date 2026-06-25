@@ -529,7 +529,7 @@
                                     <!-- actions block -->
                                     <template v-if="appSettings.enableSharing && user.preferences.getOtpOnRequest == false && !bus.inManagementMode && showActionsFor === account.id">
                                         <transition name="popLater">
-                                            <div class="has-text-grey action-container" :class="{'mt-3': user.preferences.displayMode == 'grid'}">
+                                            <div v-if="!bus.inManagementMode" class="has-text-grey action-container" :class="{'mt-3': user.preferences.displayMode == 'grid'}">
                                                 <div v-if="account.is_shared || account.is_shared_with_all" class="py-1">
                                                     <RouterLink v-if="account.is_shared" :to="{ name: 'shareAccount', params: { twofaccountId: account.id } }" class="tag is-rounded mr-1" :class="mode == 'dark' ? 'is-dark' : 'is-white'" :title="$t('tooltip.share_with_new_users')">
                                                         <LucideUserPlus class="icon-size-1" />
@@ -640,20 +640,16 @@
                                         </div>
                                     </transition>
                                     <!-- actions block toggling -->
-                                    <template v-if="appSettings.enableSharing && user.preferences.getOtpOnRequest == false && !bus.inManagementMode">
-                                        <transition name="popLater">
-                                            <div class="tfa-cell has-text-grey-dark is-clickable" :class="user.preferences.displayMode == 'grid' ? 'mt-4' : 'ml-4'" style="min-width: 20px;">
-                                                <template v-if="!account.is_borrowed">
-                                                    <button v-if="showActionsFor == null || showActionsFor != account.id" @click="showActionsFor = account.id" class="button is-ghost p-0 has-text-grey-dark" :class="mode == 'dark' ? 'has-text-grey-dark' : 'has-text-grey-light'">
-                                                        <LucideCircleEllipsis />
-                                                    </button>
-                                                    <button v-if="showActionsFor == account.id" @click="showActionsFor = null" class="button is-ghost p-0" :class="mode == 'dark' ? 'has-text-grey-dark' : 'has-text-grey-light'">
-                                                        <LucideCircleX />
-                                                    </button>
-                                                </template>
-                                            </div>
-                                        </transition>
-                                    </template>
+                                    <transition name="popLater">
+                                        <div v-if="appSettings.enableSharing && user.preferences.getOtpOnRequest == false && !bus.inManagementMode && ! account.is_borrowed" class="tfa-cell has-text-grey-dark is-clickable" :class="user.preferences.displayMode == 'grid' ? 'mt-4' : 'ml-4'" style="min-width: 20px;">
+                                            <button v-if="showActionsFor == null || showActionsFor != account.id" @click="showActionsFor = account.id" class="button is-ghost p-0 has-text-grey-dark" :class="mode == 'dark' ? 'has-text-grey-dark' : 'has-text-grey-light'">
+                                                <LucideCircleEllipsis />
+                                            </button>
+                                            <button v-if="showActionsFor == account.id" @click="showActionsFor = null" class="button is-ghost p-0" :class="mode == 'dark' ? 'has-text-grey-dark' : 'has-text-grey-light'">
+                                                <LucideCircleX />
+                                            </button>
+                                        </div>
+                                    </transition>
                                 </div>
                             </div>
                         </span>
