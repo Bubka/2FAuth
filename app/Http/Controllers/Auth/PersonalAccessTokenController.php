@@ -6,7 +6,9 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Gate;
+use Laravel\Passport\ClientRepository;
 use Laravel\Passport\Http\Controllers\PersonalAccessTokenController as PassportPatController;
 use Laravel\Passport\PersonalAccessTokenResult;
 use Laravel\Passport\Token;
@@ -25,6 +27,8 @@ class PersonalAccessTokenController extends PassportPatController
             throw new AccessDeniedHttpException(__('error.unsupported_with_sso_only'));
         }
 
+        $this->ensurePersonalAccessClientExists($request->user()->getProviderName());
+
         return parent::forUser($request);
     }
 
@@ -39,6 +43,8 @@ class PersonalAccessTokenController extends PassportPatController
             throw new AccessDeniedHttpException(__('error.unsupported_with_sso_only'));
         }
 
+        $this->ensurePersonalAccessClientExists($request->user()->getProviderName());
+
         return parent::store($request);
     }
 
@@ -52,5 +58,19 @@ class PersonalAccessTokenController extends PassportPatController
         }
 
         return parent::destroy($request, $tokenId);
+    }
+
+    /**
+     * Ensure a personal access client exists for the given user provider.
+     */
+    protected function ensurePersonalAccessClientExists(string $userProvider) : void
+    {
+        $clients = app()->make(ClientRepository::class);
+
+        try {
+            $personalAccessClient = $clients->personalAccessClient($userProvider);
+        } catch (\RuntimeException $e) {
+            $clients->createPersonalAccessGrantClient(config('app.name'), $userProvider);
+        }
     }
 }
