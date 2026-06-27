@@ -160,6 +160,8 @@ class Install extends Command
                     '--provider' => config('guards.api-guard.provider', 'users'),
                 ]);
             }
+
+            $this->callSilently('2fauth:fix-passport-key-permissions');
         });
     }
 

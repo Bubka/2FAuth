@@ -104,6 +104,7 @@ if [ -f /2fauth/installed ]; then
     php artisan cache:clear
     php artisan config:clear
     php artisan migrate --force
+    php artisan 2fauth:fix-passport-key-permissions
   fi
 else
   php artisan migrate:fresh --force
