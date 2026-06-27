@@ -1,6 +1,6 @@
 ARG BUILDPLATFORM=linux/amd64
 ARG TARGETPLATFORM
-ARG ALPINE_VERSION=3.23
+ARG ALPINE_VERSION=3.24
 ARG PHP_VERSION=8.4-alpine${ALPINE_VERSION}
 ARG COMPOSER_VERSION=2.9
 ARG SUPERVISORD_VERSION=v0.7.3
@@ -56,7 +56,8 @@ RUN apk add --update --no-cache \
     # Runtime dependencies
     php84-session php84-openssl \
     # Nginx and PHP FPM to serve over HTTP
-    php84-fpm nginx
+    php84-fpm nginx \
+&& ln -sf /usr/bin/php84 /usr/bin/php
 
 # PHP FPM configuration
 # Change username and ownership in php-fpm pool config
