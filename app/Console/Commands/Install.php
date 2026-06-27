@@ -151,13 +151,13 @@ class Install extends Command
             if (DB::table('oauth_clients')
                 ->where('personal_access_client', true)
                 ->where('name', config('app.name'))
-                ->where('provider', config('guards.api-guard.provider', 'users'))
+                ->where('provider', config('auth.guards.api-guard.provider', 'users'))
                 ->doesntExist()
             ) {
                 $this->callSilently('passport:client', [
                     '--personal' => true,
                     '--name'     => config('app.name'),
-                    '--provider' => config('guards.api-guard.provider', 'users'),
+                    '--provider' => config('auth.guards.api-guard.provider', 'users'),
                 ]);
             }
 
@@ -267,7 +267,7 @@ class Install extends Command
             'database.connections.' . $config['DB_CONNECTION'] . '.username' => $config['DB_USERNAME'],
             'database.connections.' . $config['DB_CONNECTION'] . '.password' => $config['DB_PASSWORD'],
         ]);
-        $this->laravel['db']->purge();
+        DB::purge();
     }
 
     /**
