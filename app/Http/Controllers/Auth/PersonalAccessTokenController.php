@@ -2,20 +2,31 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Services\Auth\PassportTokenRepository;
+use Illuminate\Contracts\Validation\Factory as ValidationFactory;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Validation\Rule;
 use Laravel\Passport\ClientRepository;
-use Laravel\Passport\Http\Controllers\PersonalAccessTokenController as PassportPatController;
+use Laravel\Passport\Passport;
 use Laravel\Passport\PersonalAccessTokenResult;
 use Laravel\Passport\Token;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
-class PersonalAccessTokenController extends PassportPatController
+class PersonalAccessTokenController
 {
+    /**
+     * Create a controller instance.
+     */
+    public function __construct(
+        protected PassportTokenRepository $tokenRepository,
+        protected ValidationFactory $validation,
+    ) {
+    }
+
     /**
      * Get all of the personal access tokens for the authenticated user.
      *
@@ -29,7 +40,11 @@ class PersonalAccessTokenController extends PassportPatController
 
         $this->ensurePersonalAccessClientExists($request->user()->getProviderName());
 
-        return parent::forUser($request);
+        return $this->tokenRepository->forUser($request->user())
+            ->filter(
+                fn (Token $token): bool => ! $token->client->revoked && $token->client->hasGrantType('personal_access')
+            )
+            ->values();
     }
 
     /**
@@ -44,8 +59,15 @@ class PersonalAccessTokenController extends PassportPatController
         }
 
         $this->ensurePersonalAccessClientExists($request->user()->getProviderName());
+        
+        $this->validation->make($request->all(), [
+            'name' => ['required', 'max:255'],
+            'scopes' => ['array', Rule::in(Passport::scopeIds())],
+        ])->validate();
 
-        return parent::store($request);
+        return $request->user()->createToken(
+            $request->name, $request->scopes ?: []
+        );
     }
 
     /**
@@ -56,8 +78,18 @@ class PersonalAccessTokenController extends PassportPatController
         if (Gate::denies('manage-pat')) {
             throw new AccessDeniedHttpException(__('error.unsupported_with_sso_only'));
         }
+        
+        $token = $this->tokenRepository->findForUser(
+            $tokenId, $request->user()
+        );
 
-        return parent::destroy($request, $tokenId);
+        if (is_null($token)) {
+            return new Response('', 404);
+        }
+
+        $token->revoke();
+
+        return new Response('', Response::HTTP_NO_CONTENT);
     }
 
     /**
