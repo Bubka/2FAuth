@@ -16,6 +16,8 @@ use App\Exceptions\UnsupportedOtpTypeException;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
+use Mockery;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -152,7 +154,7 @@ class HandlerTest extends TestCase
 
     #[Test]
     #[AllowMockObjectsWithoutExpectations]
-    public function test_authenticationException_returns_proxyAuthRequired_json_response_with_proxy_guard()
+    public function test_authenticationException_returns_proxyAuthRequired_json_response_with_trusted_proxy_guard()
     {
         $instance = new Handler($this->createMock(Container::class));
         $class    = new \ReflectionClass(Handler::class);
@@ -163,12 +165,46 @@ class HandlerTest extends TestCase
         $mockException = $this->createMock(\Illuminate\Auth\AuthenticationException::class);
         $mockException->method('guards')->willReturn(['reverse-proxy-guard']);
 
-        $response = $method->invokeArgs($instance, [new Request, $mockException]);
+        $mockRequest = Mockery::mock(Request::class);
+        $mockRequest->shouldReceive('isFromTrustedProxy')
+            ->once()
+            ->andReturn(true);
+
+        $response = $method->invokeArgs($instance, [$mockRequest, $mockException]);
 
         $this->assertInstanceOf(JsonResponse::class, $response);
 
         $response = \Illuminate\Testing\TestResponse::fromBaseResponse($response);
         $response->assertStatus(407)
+            ->assertJsonStructure([
+                'message',
+            ]);
+    }
+
+    #[Test]
+    #[AllowMockObjectsWithoutExpectations]
+    public function test_authenticationException_returns_proxyAuthRequired_json_response_with_untrusted_proxy_guard()
+    {
+        $instance = new Handler($this->createMock(Container::class));
+        $class    = new \ReflectionClass(Handler::class);
+
+        $method = $class->getMethod('render');
+        $method->setAccessible(true);
+
+        $mockException = $this->createMock(\Illuminate\Auth\AuthenticationException::class);
+        $mockException->method('guards')->willReturn(['reverse-proxy-guard']);
+
+        $mockRequest = Mockery::mock(Request::class);
+        $mockRequest->shouldReceive('isFromTrustedProxy')
+            ->once()
+            ->andReturn(false);
+
+        $response = $method->invokeArgs($instance, [$mockRequest, $mockException]);
+
+        $this->assertInstanceOf(JsonResponse::class, $response);
+
+        $response = \Illuminate\Testing\TestResponse::fromBaseResponse($response);
+        $response->assertStatus(403)
             ->assertJsonStructure([
                 'message',
             ]);

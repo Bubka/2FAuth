@@ -103,6 +103,12 @@ class Handler extends ExceptionHandler
 
         $this->renderable(function (AuthenticationException $exception, $request) {
             if ($exception->guards() === ['reverse-proxy-guard']) {
+                if (! $request->isFromTrustedProxy()) {
+                    return response()->json([
+                        'message' => __('error.request_not_from_trusted_proxy'),
+                    ], 403);
+                }
+                
                 return response()->json([
                     'message' => $exception->getMessage(),
                 ], 407);

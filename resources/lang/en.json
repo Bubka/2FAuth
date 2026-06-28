@@ -90,6 +90,7 @@
     "error.refresh": "Refresh",
     "error.reserved_name_please_choose_something_else": "Reserved name, please choose something else",
     "error.accepted_char_for_group_name": "Please only use letters, numbers, dashes, underscores, spaces or single quotation marks",
+    "error.request_not_from_trusted_proxy": "Request does not come from a trusted proxy",
     "error.resource_not_found": "Resource not found",
     "error.security_device_already_registered": "Device already registered",
     "error.security_error_check_rpid": "Security error: Check your WEBAUTHN_ID env var",
