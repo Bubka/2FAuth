@@ -27,6 +27,7 @@ use App\Services\TwoFAccountShareService;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Testing\FileFactory;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Http;
@@ -486,7 +487,7 @@ class TwoFAccountControllerTest extends FeatureTestCase
     #[Test]
     public function test_orphan_accounts_are_reassign_to_the_only_user()
     {
-        config(['auth.defaults.guard' => 'reverse-proxy-guard']);
+        Config::set('2fauth.config.trustedProxies', '127.0.0.1');
 
         $this->anotherUser->delete();
         $this->twofaccountA->user_id = null;

@@ -14,6 +14,7 @@ use App\Models\TwoFAccountShare;
 use App\Models\User;
 use App\Policies\GroupPolicy;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Config;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
@@ -137,7 +138,7 @@ class GroupControllerTest extends FeatureTestCase
     #[Test]
     public function test_orphan_groups_are_reassign_to_the_only_user()
     {
-        config(['auth.defaults.guard' => 'reverse-proxy-guard']);
+        Config::set('2fauth.config.trustedProxies', '127.0.0.1');
 
         $this->anotherUser->delete();
         $this->userGroupA->user_id = null;

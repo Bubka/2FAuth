@@ -25,7 +25,7 @@ class UserController extends Controller
 
         $this->authorize('update', $user);
 
-        if (config('auth.defaults.guard') === 'reverse-proxy-guard' || $user->oauth_provider) {
+        if (Auth::getDefaultDriver() === 'reverse-proxy-guard' || $user->oauth_provider) {
             Log::notice('Account update rejected: reverse-proxy-guard enabled or account from external sso provider');
 
             return response()->json(['message' => __('error.account_managed_by_external_provider')], 400);

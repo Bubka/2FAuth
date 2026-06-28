@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Auth;
 
 class GroupController extends Controller
 {
@@ -28,7 +29,7 @@ class GroupController extends Controller
     public function index(Request $request)
     {
         // Quick fix for #176
-        if (config('auth.defaults.guard') === 'reverse-proxy-guard' && User::count() === 1) {
+        if (Auth::getDefaultDriver() === 'reverse-proxy-guard' && User::count() === 1) {
             if (Group::orphans()->exists()) {
                 $groups = Group::orphans()->get();
                 Groups::setUser($groups, $request->user());

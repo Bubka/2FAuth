@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class RejectIfReverseProxy
@@ -16,7 +17,7 @@ class RejectIfReverseProxy
      */
     public function handle($request, Closure $next)
     {
-        if (config('auth.defaults.guard') === 'reverse-proxy-guard') {
+        if (Auth::getDefaultDriver() === 'reverse-proxy-guard') {
             Log::info('Cannot request this action in reverse proxy mode');
 
             return response()->json([

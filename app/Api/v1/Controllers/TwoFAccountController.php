@@ -33,6 +33,7 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 
@@ -46,7 +47,7 @@ class TwoFAccountController extends Controller
     public function index(TwoFAccountIndexRequest $request)
     {
         // Quick fix for #176
-        if (config('auth.defaults.guard') === 'reverse-proxy-guard' && User::count() === 1) {
+        if (Auth::getDefaultDriver() === 'reverse-proxy-guard' && User::count() === 1) {
             if (TwoFAccount::orphans()->exists()) {
                 $twofaccounts = TwoFAccount::orphans()->get();
                 TwoFAccounts::setUser($twofaccounts, $request->user());
