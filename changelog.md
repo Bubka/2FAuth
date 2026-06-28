@@ -24,6 +24,16 @@ You can disable any of this from the *Settings > Options* page if you want to re
 
 - `PHP_MEMORY_LIMIT_TEMP_OVERRIDE`: Temporary PHP memory limit applied during QR code detection to prevent `exhausted memory error` ([doc](https://docs.2fauth.app/getting-started/config/env-vars/#PHP_MEMORY_LIMIT_TEMP_OVERRIDE)).
 
+### Security fix
+
+- Fix of a possible user impersonation and admin privilege escalation issue when using an [authentication proxy](https://docs.2fauth.app/security/authentication/auth-proxy/) (thx [@Dokaoista](https://github.com/Dokaoista)).
+- Fix of SSRF vulnerability via dns rebinding during imageLink resource fetching (thx [@5ud0er / Tarmo Technologies](https://github.com/5ud0er)).
+- Block IPv6 NAT64 addresses in SSRF guard (thx [@tonghuaroot](https://github.com/tonghuaroot)).
+- Fix missing authorization on share recipients endpoint allowing cross-user account enumeration (thx [@de3erve-hunter](https://github.com/de3erve-hunter)).
+
+> [!WARNING]
+> To ensure authentication at 2FAuth level, your auth proxy must now be identified as trusted with the [TRUSTED_PROXIES](https://docs.2fauth.app/getting-started/config/env-vars/#trusted_proxies) environment variable.
+
 ### Fixed
 
 - [issue #540](https://github.com/Bubka/2FAuth/issues/540) Scan/Import QR Code Not working
