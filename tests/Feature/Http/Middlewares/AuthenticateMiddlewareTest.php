@@ -71,7 +71,7 @@ class AuthenticateMiddlewareTest extends FeatureTestCase
 
         $this->json('GET', '/api/v1/groups', [], [
             'HTTP_REMOTE_USER' => self::USER_NAME,
-        ])->assertStatus(407);
+        ])->assertStatus(403);
     }
 
     #[Test]
@@ -107,6 +107,6 @@ class AuthenticateMiddlewareTest extends FeatureTestCase
         $this->json('GET', '/api/v1/groups', [], [
             'HTTP_REMOTE_USER' => self::USER_NAME,
             'REMOTE_ADDR' => '10.0.0.25',
-        ])->assertStatus(407);
+        ])->assertStatus(403);
     }
 }

@@ -36,6 +36,11 @@ class Authenticate extends Middleware
         }
 
         foreach ($guards as $guard) {
+
+            if ($guard === 'reverse-proxy-guard' && ! $request->isFromTrustedProxy()) {
+                abort(403, 'Request does not come from a trusted proxy.');
+            }
+
             if ($this->auth->guard($guard)->check()) {
                 $this->auth->shouldUse($guard);
 
