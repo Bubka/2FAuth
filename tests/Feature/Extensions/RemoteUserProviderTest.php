@@ -92,6 +92,23 @@ class RemoteUserProviderTest extends FeatureTestCase
     }
 
     #[Test]
+    public function test_first_user_created_via_reverse_proxy_is_not_auto_promoted_to_admin()
+    {
+        Config::set('auth.auth_proxy_headers.user', 'HTTP_REMOTE_USER');
+
+        $this->app['auth']->shouldUse('reverse-proxy-guard');
+
+        $this->json('GET', '/api/v1/groups', [], [
+            'HTTP_REMOTE_USER' => self::USER_NAME,
+        ]);
+
+        $this->assertDatabaseHas('users', [
+            'name' => self::USER_NAME,
+            'is_admin' => false,
+        ]);
+    }
+
+    #[Test]
     public function test_user_is_set_from_proxy_headers_even_if_name_is_long()
     {
         Config::set('auth.auth_proxy_headers.user', 'HTTP_REMOTE_USER');
