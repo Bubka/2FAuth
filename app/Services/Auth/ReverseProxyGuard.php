@@ -5,9 +5,7 @@
 
 namespace App\Services\Auth;
 
-use App\Models\User;
 use Illuminate\Auth\GuardHelpers;
-use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Support\Facades\Log;
@@ -15,13 +13,6 @@ use Illuminate\Support\Facades\Log;
 class ReverseProxyGuard implements Guard
 {
     use GuardHelpers;
-
-    /**
-     * The currently authenticated user.
-     *
-     * @var Authenticatable|User|null
-     */
-    protected $user;
 
     /**
      * Create a new authentication guard.
@@ -41,6 +32,12 @@ class ReverseProxyGuard implements Guard
         // every call to this method because that would be tremendously slow.
         if (! is_null($this->user)) {
             return $this->user;
+        }
+
+        if (! request()->isFromTrustedProxy()) {
+            Log::warning('Reverse proxy authentication rejected: request does not come from a trusted proxy.');
+
+            return $this->user = null;
         }
 
         // Get the user identifier from $_SERVER or apache filtered headers

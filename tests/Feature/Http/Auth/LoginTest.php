@@ -73,6 +73,8 @@ class LoginTest extends FeatureTestCase
     {
         parent::setUp();
 
+        Config::set('2fauth.config.trustedProxies', '127.0.0.1');
+
         $this->user  = User::factory()->create();
         $this->admin = User::factory()->administrator()->create();
     }

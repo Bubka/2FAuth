@@ -20,6 +20,13 @@ class AuthenticateMiddlewareTest extends FeatureTestCase
 
     private const USER_EMAIL = 'john@example.com';
 
+    protected function setUp() : void
+    {
+        parent::setUp();
+
+        Config::set('2fauth.config.trustedProxies', '127.0.0.1');
+    }
+
     #[Test]
     public function test_it_always_authenticates_with_reverse_proxy_guard()
     {
@@ -55,6 +62,19 @@ class AuthenticateMiddlewareTest extends FeatureTestCase
     }
 
     #[Test]
+    public function test_it_does_not_authenticate_without_trusted_proxy_configuration()
+    {
+        Config::set('auth.auth_proxy_headers.user', 'HTTP_REMOTE_USER');
+        Config::set('2fauth.config.trustedProxies', null);
+
+        $this->app['auth']->shouldUse('reverse-proxy-guard');
+
+        $this->json('GET', '/api/v1/groups', [], [
+            'HTTP_REMOTE_USER' => self::USER_NAME,
+        ])->assertStatus(407);
+    }
+
+    #[Test]
     public function test_it_overrides_locale_when_auth_is_successful()
     {
         Config::set('auth.auth_proxy_headers.user', 'HTTP_REMOTE_USER');
@@ -75,5 +95,18 @@ class AuthenticateMiddlewareTest extends FeatureTestCase
         ]);
 
         $this->assertEquals($lang, App::getLocale());
+    }
+
+    #[Test]
+    public function test_it_rejects_reverse_proxy_headers_from_untrusted_remote_addresses()
+    {
+        Config::set('auth.auth_proxy_headers.user', 'HTTP_REMOTE_USER');
+
+        $this->app['auth']->shouldUse('reverse-proxy-guard');
+
+        $this->json('GET', '/api/v1/groups', [], [
+            'HTTP_REMOTE_USER' => self::USER_NAME,
+            'REMOTE_ADDR' => '10.0.0.25',
+        ])->assertStatus(407);
     }
 }

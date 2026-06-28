@@ -83,6 +83,7 @@ class PasswordControllerTest extends FeatureTestCase
     public function test_update_pwd_of_reverse_proxy_user_return_bad_request()
     {
         Config::set('auth.auth_proxy_headers.user', 'HTTP_REMOTE_USER');
+        Config::set('2fauth.config.trustedProxies', '127.0.0.1');
 
         $user = User::factory()->create([
             'name'  => self::USER_NAME,

@@ -21,6 +21,13 @@ class RemoteUserProviderTest extends FeatureTestCase
 
     private const USER_EMAIL = 'john@example.com';
 
+    protected function setUp() : void
+    {
+        parent::setUp();
+
+        Config::set('2fauth.config.trustedProxies', '127.0.0.1');
+    }
+
     public function test_user_is_retreived_from_db()
     {
         $dbUser = User::factory()->create([
@@ -121,6 +128,26 @@ class RemoteUserProviderTest extends FeatureTestCase
 
         $this->json('GET', '/api/v1/groups', [], [
             'HTTP_REMOTE_USER' => '',
+        ]);
+        $this->assertGuest('reverse-proxy-guard');
+
+        $user = $this->app->make('auth')->guard('reverse-proxy-guard')->user();
+
+        $this->assertNull($user);
+        $this->assertDatabaseCount('users', 0);
+    }
+
+    #[Test]
+    public function test_user_is_not_set_from_proxy_headers_when_remote_address_is_not_trusted()
+    {
+        Config::set('auth.auth_proxy_headers.user', 'HTTP_REMOTE_USER');
+        Config::set('2fauth.config.trustedProxies', '127.0.0.1');
+
+        $this->app['auth']->shouldUse('reverse-proxy-guard');
+
+        $this->json('GET', '/api/v1/groups', [], [
+            'HTTP_REMOTE_USER' => self::USER_NAME,
+            'REMOTE_ADDR' => '10.0.0.25',
         ]);
         $this->assertGuest('reverse-proxy-guard');
 
