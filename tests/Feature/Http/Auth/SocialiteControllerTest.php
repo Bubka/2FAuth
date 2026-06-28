@@ -250,11 +250,11 @@ class SocialiteControllerTest extends FeatureTestCase
     }
 
     #[Test]
-    public function test_callback_does_not_auto_promote_first_user()
+    public function test_callback_always_registers_first_user_as_admin()
     {
         DB::table('users')->delete();
-        Settings::set('disableRegistration', false);
-        Settings::set('keepSsoRegistrationEnabled', true);
+        Settings::set('disableRegistration', true);
+        Settings::set('enableSso', false);
 
         Socialite::shouldReceive('driver->user')
             ->andReturn($this->socialiteUser);
@@ -264,7 +264,7 @@ class SocialiteControllerTest extends FeatureTestCase
         $this->assertDatabaseHas('users', [
             'oauth_id'       => self::USER_OAUTH_ID,
             'oauth_provider' => self::USER_OAUTH_PROVIDER,
-            'is_admin'       => 0,
+            'is_admin'       => 1,
         ]);
     }
 

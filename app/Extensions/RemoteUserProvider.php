@@ -66,7 +66,8 @@ class RemoteUserProvider implements UserProvider
             Log::info(sprintf('Remote user %s created with email address %s', var_export($user->name, true), var_export($user->email, true)));
 
             if (User::count() === 1) {
-                Log::notice(sprintf('First account created via reverse-proxy mode (user ID #%s) is not auto-promoted to administrator.', $user->id));
+                $user->promoteToAdministrator();
+                $user->save();
             }
         } else {
             // Here we keep the account's email sync-ed
