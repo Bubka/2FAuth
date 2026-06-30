@@ -958,11 +958,11 @@ class TwoFAccountShareControllerTest extends FeatureTestCase
     }
 
     #[Test]
-    public function test_recipients_for_non_owner_is_allowed() : void
+    public function test_recipients_for_non_owner_is_forbidden() : void
     {
         $this->actingAs($this->targetUser, 'api-guard')
             ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccount->id . '/recipients')
-            ->assertOk();
+            ->assertForbidden();
     }
 
     #[Test]

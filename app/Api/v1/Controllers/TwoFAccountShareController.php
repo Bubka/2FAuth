@@ -91,6 +91,8 @@ class TwoFAccountShareController extends Controller
      */
     public function recipients(TwoFAccount $twofaccount, Request $request)
     {
+        $this->authorize('manageShares', $twofaccount);
+        
         $input = $request->input('filter.nameOrEmail', null);
 
         if ($request->has('filter.nameOrEmail') && ! $input) {
