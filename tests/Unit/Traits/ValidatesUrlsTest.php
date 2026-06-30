@@ -133,4 +133,79 @@ class ValidatesUrlsTest extends TestCase
 		];
 	}
 
+	#[Test]
+	public function test_getPublicRemoteTarget_returns_expected_payload_for_domain() : void
+	{
+		$validator = new class
+		{
+			use ValidatesUrls;
+
+			public function resolveTarget(string $url) : ?array
+			{
+				return $this->getPublicRemoteTarget($url);
+			}
+
+			protected function getDnsRecords(string $host) : array
+			{
+				return [
+					['ip' => '1.1.1.1'],
+					['ipv6' => '2606:4700:4700::1111'],
+				];
+			}
+		};
+
+		$target = $validator->resolveTarget('https://example.com/logo.png');
+
+		$this->assertNotNull($target);
+		$this->assertSame('https://example.com/logo.png', $target['url']);
+		$this->assertSame('example.com', $target['host']);
+		$this->assertSame(443, $target['port']);
+		$this->assertSame([
+			'example.com:443:1.1.1.1',
+			'example.com:443:2606:4700:4700::1111',
+		], $target['curlResolveEntries']);
+	}
+
+	#[Test]
+	public function test_getPublicRemoteTarget_returns_empty_resolve_entries_for_literal_ip() : void
+	{
+		$validator = new class
+		{
+			use ValidatesUrls;
+
+			public function resolveTarget(string $url) : ?array
+			{
+				return $this->getPublicRemoteTarget($url);
+			}
+		};
+
+		$target = $validator->resolveTarget('https://8.8.8.8/logo.png');
+
+		$this->assertNotNull($target);
+		$this->assertSame([], $target['curlResolveEntries']);
+	}
+
+	#[Test]
+	public function test_getPublicRemoteTarget_returns_null_when_dns_is_not_public() : void
+	{
+		$validator = new class
+		{
+			use ValidatesUrls;
+
+			public function resolveTarget(string $url) : ?array
+			{
+				return $this->getPublicRemoteTarget($url);
+			}
+
+			protected function getDnsRecords(string $host) : array
+			{
+				return [
+					['ip' => '127.0.0.1'],
+				];
+			}
+		};
+
+		$this->assertNull($validator->resolveTarget('https://example.com/logo.png'));
+	}
+
 }

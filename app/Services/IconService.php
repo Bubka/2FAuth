@@ -64,20 +64,32 @@ class IconService
      */
     public function buildFromRemoteImage(string $url) : ?string
     {
-        if (config('2fauth.config.blockOtpauthImagelinkFetching') || ! $this->isPublicRemoteUrl($url)) {
-            Log::notice(sprintf('ImageLink "%s": Requests to this address are not allowed, download aborted', $url));
+        $logMsg = sprintf('ImageLink "%s": Requests to this address are not allowed, download aborted', $url);
+
+        if (config('2fauth.config.blockOtpauthImagelinkFetching')) {
+            Log::notice($logMsg);
 
             return null;
         }
 
-        return $this->storeRemoteImage($url);
+        $remoteTarget = $this->getPublicRemoteTarget($url);
+
+        if ($remoteTarget === null) {
+            Log::notice($logMsg);
+
+            return null;
+        }
+
+        return $this->storeRemoteImage($remoteTarget);
     }
 
     /**
      * Fetch and store an external image file
      */
-    protected function storeRemoteImage(string $url) : ?string
+    protected function storeRemoteImage(array $remoteTarget) : ?string
     {
+        $url = $remoteTarget['url'];
+
         try {
             $path_parts = pathinfo(parse_url($url, PHP_URL_PATH) ?: '');
             $extension  = $path_parts['extension'] ?? null;
@@ -89,14 +101,28 @@ class IconService
             }
 
             $filename = Helpers::getRandomFilename($extension);
+            $options  = [
+                'proxy'           => config('2fauth.config.outgoingProxy'),
+                'allow_redirects' => false,
+                'connect_timeout' => 5,
+                'timeout'         => 10,
+            ];
+            $curlResolveEntries = $remoteTarget['curlResolveEntries'] ?? [];
+
+            if (is_array($curlResolveEntries) && $curlResolveEntries !== []) {
+                if (! $this->supportsCurlResolve()) {
+                    Log::error(sprintf('Cannot fetch imageLink at "%s": DNS pinning is unavailable (CURLOPT_RESOLVE not exposed)', $url));
+
+                    return null;
+                }
+                
+                $options['curl'] = [
+                    CURLOPT_RESOLVE => $curlResolveEntries,
+                ];
+            }
 
             try {
-                $response = Http::withOptions([
-                    'proxy'           => config('2fauth.config.outgoingProxy'),
-                    'allow_redirects' => false,
-                    'connect_timeout' => 5,
-                    'timeout'         => 10,
-                ])->retry(3, 100)->get($url);
+                $response = Http::withOptions($options)->retry(3, 100)->get($url);
 
                 if ($response->successful()) {
                     Storage::disk('imagesLink')->put($filename, $response->body());
@@ -132,6 +158,11 @@ class IconService
         // @codeCoverageIgnoreEnd
 
         return null;
+    }
+
+    protected function supportsCurlResolve() : bool
+    {
+        return defined('CURLOPT_RESOLVE');
     }
 
     /**

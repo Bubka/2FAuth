@@ -169,6 +169,66 @@ class IconServiceTest extends FeatureTestCase
     }
 
     #[Test]
+    public function test_build_from_remote_image_pins_dns_resolution_with_curl_resolve() : void
+    {
+        $imageUrl = 'https://example.com/icon.png';
+
+        $iconService = new class extends IconService
+        {
+            public ?array $capturedRemoteTarget = null;
+
+            protected function getDnsRecords(string $host) : array
+            {
+                return [
+                    ['ip' => '1.1.1.1'],
+                ];
+            }
+
+            protected function storeRemoteImage(array $remoteTarget) : ?string
+            {
+                $this->capturedRemoteTarget = $remoteTarget;
+
+                return 'pinned.png';
+            }
+        };
+
+        $this->iconService = $iconService;
+
+        $iconName = $this->iconService->buildFromRemoteImage($imageUrl);
+
+        $this->assertSame('pinned.png', $iconName);
+        $this->assertNotNull($iconService->capturedRemoteTarget);
+        $this->assertSame('example.com', $iconService->capturedRemoteTarget['host']);
+        $this->assertSame(443, $iconService->capturedRemoteTarget['port']);
+        $this->assertSame(['example.com:443:1.1.1.1'], $iconService->capturedRemoteTarget['curlResolveEntries']);
+    }
+
+    #[Test]
+    public function test_build_from_remote_image_fails_closed_when_dns_pinning_is_unavailable() : void
+    {
+        $imageUrl = 'https://example.com/icon.png';
+
+        $this->iconService = new class extends IconService
+        {
+            protected function getDnsRecords(string $host) : array
+            {
+                return [
+                    ['ip' => '1.1.1.1'],
+                ];
+            }
+
+            protected function supportsCurlResolve() : bool
+            {
+                return false;
+            }
+        };
+
+        $iconName = $this->iconService->buildFromRemoteImage($imageUrl);
+
+        $this->assertNull($iconName);
+    }
+
+    #[Test]
     #[DataProvider('buildFromRemoteImageInvalidUrlProvider')]
     public function test_build_from_remote_image_returns_null_when_url_is_invalid(string $url)
     {

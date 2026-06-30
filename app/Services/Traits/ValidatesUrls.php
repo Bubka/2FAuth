@@ -11,31 +11,63 @@ trait ValidatesUrls
      */
     private function isPublicRemoteUrl(string $url) : bool
     {
+        return $this->getPublicRemoteTarget($url) !== null;
+    }
+
+    /**
+     * Resolve a validated remote URL into a pinned target payload.
+     *
+     * @return array{url: string, host: string, port: int, curlResolveEntries: array<int, string>}|null
+     */
+    private function getPublicRemoteTarget(string $url) : ?array
+    {
         if (! $this->isHttpOrHttpsUrl($url)) {
-            return false;
+            return null;
         }
 
-        $parts = parse_url($url);
-        $host  = $parts['host'] ?? '';
+        $parts  = parse_url($url);
+        $host   = $parts['host'] ?? '';
+        $scheme = strtolower((string) ($parts['scheme'] ?? ''));
+        $port   = $parts['port'] ?? ($scheme === 'https' ? 443 : 80);
 
-        if ($host === '') {
-            return false;
+        if ($host === '' || $port < 1) {
+            return null;
         }
 
         $normalizedHost = trim($host, '[]');
 
         if (filter_var($normalizedHost, FILTER_VALIDATE_IP) !== false) {
-            return $this->isPublicIp($normalizedHost);
+            if (! $this->isPublicIp($normalizedHost)) {
+                return null;
+            }
+
+            return [
+                'url'                => $url,
+                'host'               => $normalizedHost,
+                'port'               => $port,
+                'curlResolveEntries' => [],
+            ];
         }
 
-        if (
-            ! $this->IsValidDomain($normalizedHost)
-            || ! $this->isExternalHost($normalizedHost)
-        ) {
-            return false;
+        if (! $this->IsValidDomain($normalizedHost)) {
+            return null;
         }
 
-        return true;
+        $resolvedIps = $this->getExternalHostIps($normalizedHost);
+
+        if ($resolvedIps === []) {
+            return null;
+        }
+
+        return [
+            'url'                => $url,
+            'host'               => $normalizedHost,
+            'port'               => $port,
+            'curlResolveEntries' => array_map(
+                fn (string $ip) : string => sprintf('%s:%d:%s', $normalizedHost, $port, $ip),
+                $resolvedIps,
+            ),
+        ];
     }
 
     /**
@@ -60,25 +92,47 @@ trait ValidatesUrls
      */
     private function isExternalHost(string $normalizedHost) : bool
     {
+        return $this->getExternalHostIps($normalizedHost) !== [];
+    }
+
+    /**
+     * Resolve the host to public external IP addresses.
+     *
+     * @return array<int, string>
+     */
+    private function getExternalHostIps(string $normalizedHost) : array
+    {
         try {
-            $dnsRecords = dns_get_record($normalizedHost, DNS_A | DNS_AAAA);
+            $dnsRecords = $this->getDnsRecords($normalizedHost);
         } catch (\Throwable) {
-            return false;
+            return [];
         }
 
-        if (! is_array($dnsRecords) || $dnsRecords === []) {
-            return false;
+        if ($dnsRecords === []) {
+            return [];
         }
+
+        $resolvedIps = [];
 
         foreach ($dnsRecords as $dnsRecord) {
             $ip = $dnsRecord['ip'] ?? $dnsRecord['ipv6'] ?? null;
 
             if (! is_string($ip) || ! $this->isPublicIp($ip)) {
-                return false;
+                return [];
             }
+
+            $resolvedIps[] = $ip;
         }
 
-        return true;
+        return array_values(array_unique($resolvedIps));
+    }
+
+    /**
+     * @return array<int, array<string, mixed>>
+     */
+    protected function getDnsRecords(string $host) : array
+    {
+        return dns_get_record($host, DNS_A | DNS_AAAA) ?: [];
     }
 
     /**
