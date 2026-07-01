@@ -14,6 +14,11 @@ Despite the short time that has passed since v7, I found time to make two improv
 
 You can disable any of this from the *Settings > Options* page if you want to restore the previous behaviour.
 
+This release also includes several security fixes, including one that affects authentication via a reverse proxy with the following consequence:
+
+> [!WARNING]
+> To ensure authentication at 2FAuth level, your auth proxy must now be identified as trusted with the [TRUSTED_PROXIES](https://docs.2fauth.app/getting-started/config/env-vars/#trusted_proxies) environment variable.
+
 ### Added
 
 - Group switching can be done directly from the main view using chips
@@ -30,9 +35,6 @@ You can disable any of this from the *Settings > Options* page if you want to re
 - Fix of SSRF vulnerability via dns rebinding during imageLink resource fetching (thx [@5ud0er / Tarmo Technologies](https://github.com/5ud0er)).
 - Block IPv6 NAT64 addresses in SSRF guard (thx [@tonghuaroot](https://github.com/tonghuaroot)).
 - Fix missing authorization on share recipients endpoint allowing cross-user account enumeration (thx [@de3erve-hunter](https://github.com/de3erve-hunter)).
-
-> [!WARNING]
-> To ensure authentication at 2FAuth level, your auth proxy must now be identified as trusted with the [TRUSTED_PROXIES](https://docs.2fauth.app/getting-started/config/env-vars/#trusted_proxies) environment variable.
 
 ### Fixed
 
