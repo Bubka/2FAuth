@@ -96,6 +96,7 @@ trait ValidatesUrls
             || $this->isCarrierGradeNatAddress($ip)
             || $this->isMulticast($ip)
             || $this->IsIMDS($ip)
+            || $this->isBlockedNat64($ip)
         ) {
             return false;
         }
@@ -162,6 +163,47 @@ trait ValidatesUrls
         }
 
         return false;
+    }
+
+    /**
+     * Check if the given ip is an IPv6 NAT64 address whose embedded IPv4 maps to
+     * a blocked target.
+     *
+     * NAT64 (RFC 6052 well-known 64:ff9b::/96 and RFC 8215 local-use
+     * 64:ff9b:1::/48) lets an IPv6-only host reach an IPv4 target through a
+     * translation gateway. FILTER_FLAG_NO_PRIV_RANGE / NO_RES_RANGE do not flag
+     * these prefixes, so an attacker-supplied URL resolving (via DNS64) to e.g.
+     * 64:ff9b:1::a9fe:a9fe would otherwise pass as "public" and reach the
+     * internal 169.254.169.254 metadata endpoint behind a NAT64 gateway. We
+     * decode the embedded IPv4 (low 32 bits) and re-apply the same checks.
+     */
+    private function isBlockedNat64(string $ip) : bool
+    {
+        $bin = @inet_pton($ip);
+
+        if ($bin === false || strlen($bin) !== 16) {
+            return false;
+        }
+
+        $wellKnown = inet_pton('64:ff9b::');   // 64:ff9b::/96  (RFC 6052)
+        $localUse  = inet_pton('64:ff9b:1::'); // 64:ff9b:1::/48 (RFC 8215)
+
+        $isNat64 = substr($bin, 0, 12) === substr($wellKnown, 0, 12)
+            || substr($bin, 0, 6) === substr($localUse, 0, 6);
+
+        if (! $isNat64) {
+            return false;
+        }
+
+        $embeddedV4 = long2ip(unpack('N', substr($bin, 12, 4))[1]);
+
+        if ($embeddedV4 === false) {
+            // Cannot decode the embedded address: fail closed.
+            return true;
+        }
+
+        // Re-validate the embedded IPv4 against the full public-IP policy.
+        return ! $this->isPublicIp($embeddedV4);
     }
 
     /**
