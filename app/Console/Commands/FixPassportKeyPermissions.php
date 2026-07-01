@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Laravel\Passport\Passport;
 use Illuminate\Console\Command;
+use Laravel\Passport\Passport;
 
 class FixPassportKeyPermissions extends Command
 {
@@ -41,7 +41,7 @@ class FixPassportKeyPermissions extends Command
     /**
      * Execute the console command.
      */
-    public function handle(): int
+    public function handle() : int
     {
         if (! windows_os()) {
             foreach ([
@@ -53,9 +53,9 @@ class FixPassportKeyPermissions extends Command
                 if (file_exists($path)) {
                     $perms = substr(sprintf('%o', fileperms($path)), -4);
 
-                    if ($perms != "0660" && $file === 'oauth-public.key') {
+                    if ($perms != '0660' && $file === 'oauth-public.key') {
                         chmod($path, 0660);
-                    } elseif ($perms != "0600" && $file === 'oauth-private.key') {
+                    } elseif ($perms != '0600' && $file === 'oauth-private.key') {
                         chmod($path, 0600);
                     }
                 }

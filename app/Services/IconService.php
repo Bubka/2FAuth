@@ -115,7 +115,7 @@ class IconService
 
                     return null;
                 }
-                
+
                 $options['curl'] = [
                     CURLOPT_RESOLVE => $curlResolveEntries,
                 ];

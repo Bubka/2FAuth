@@ -24,8 +24,7 @@ class PersonalAccessTokenController
     public function __construct(
         protected PassportTokenRepository $tokenRepository,
         protected ValidationFactory $validation,
-    ) {
-    }
+    ) {}
 
     /**
      * Get all of the personal access tokens for the authenticated user.
@@ -42,7 +41,7 @@ class PersonalAccessTokenController
 
         return $this->tokenRepository->forUser($request->user())
             ->filter(
-                fn (Token $token): bool => ! $token->client->revoked && $token->client->hasGrantType('personal_access')
+                fn (Token $token) : bool => ! $token->client->revoked && $token->client->hasGrantType('personal_access')
             )
             ->values();
     }
@@ -59,9 +58,9 @@ class PersonalAccessTokenController
         }
 
         $this->ensurePersonalAccessClientExists($request->user()->getProviderName());
-        
+
         $this->validation->make($request->all(), [
-            'name' => ['required', 'max:255'],
+            'name'   => ['required', 'max:255'],
             'scopes' => ['array', Rule::in(Passport::scopeIds())],
         ])->validate();
 
@@ -78,7 +77,7 @@ class PersonalAccessTokenController
         if (Gate::denies('manage-pat')) {
             throw new AccessDeniedHttpException(__('error.unsupported_with_sso_only'));
         }
-        
+
         $token = $this->tokenRepository->findForUser(
             $tokenId, $request->user()
         );

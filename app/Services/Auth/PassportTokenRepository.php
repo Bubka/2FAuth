@@ -26,6 +26,7 @@ namespace App\Services\Auth;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Date;
+use Laravel\Passport\Contracts\OAuthenticatable;
 use Laravel\Passport\Token;
 
 /**
@@ -36,9 +37,9 @@ class PassportTokenRepository
     /**
      * Get a token by the given user ID and token ID.
      *
-     * @param  \Laravel\Passport\Contracts\OAuthenticatable  $user
+     * @param  OAuthenticatable  $user
      */
-    public function findForUser(string $id, Authenticatable $user): ?Token
+    public function findForUser(string $id, Authenticatable $user) : ?Token
     {
         return $user->tokens()
             ->with('client')
@@ -50,10 +51,10 @@ class PassportTokenRepository
     /**
      * Get the token instances for the given user ID.
      *
-     * @param  \Laravel\Passport\Contracts\OAuthenticatable  $user
-     * @return \Illuminate\Database\Eloquent\Collection<int, \Laravel\Passport\Token>
+     * @param  OAuthenticatable  $user
+     * @return Collection<int, Token>
      */
-    public function forUser(Authenticatable $user): Collection
+    public function forUser(Authenticatable $user) : Collection
     {
         return $user->tokens()
             ->with('client')
