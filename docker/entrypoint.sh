@@ -104,7 +104,7 @@ if [ -f /2fauth/installed ]; then
     php artisan cache:clear
     php artisan config:clear
     php artisan migrate --force
-    php artisan 2fauth:fix-passport-key-permissions
+    php artisan 2fauth:fix-passport-key-permissions || echo "Warning: failed to fix Passport key permissions" >&2
   fi
 else
   php artisan migrate:fresh --force

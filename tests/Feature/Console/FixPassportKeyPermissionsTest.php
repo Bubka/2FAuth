@@ -46,10 +46,10 @@ class FixPassportKeyPermissionsTest extends FeatureTestCase
     }
 
     #[Test]
-    public function test_command_succeeds_when_keys_are_missing()
+    public function test_command_fails_when_keys_are_missing()
     {
         $this->artisan('2fauth:fix-passport-key-permissions')
-            ->assertSuccessful();
+            ->assertFailed();
     }
 
     #[Test]

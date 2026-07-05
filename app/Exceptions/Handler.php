@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use ErrorException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -27,6 +28,15 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
+        $this->renderable(function (ErrorException $exception, $request) {
+            if ($this->isPassportKeyPermissionNotice($exception)) {
+                return response()->json([
+                    'message' => __('error.passport_key_permissions'),
+                    'reason'  => 'https://docs.2fauth.app/getting-started/upgrade/upgrading-to-v8/#oauth-key-files-permissions',
+                ], 503);
+            }
+        });
+
         $this->renderable(function (NotFoundHttpException $exception, $request) {
             $message = $exception->getMessage() === 'unknowkn endpoint' ? 'unknowkn endpoint' : 'not found';
 
@@ -118,5 +128,21 @@ class Handler extends ExceptionHandler
                 ], 401);
             }
         });
+    }
+
+    /**
+     * Determine whether the exception is the Passport key permission notice.
+     */
+    private function isPassportKeyPermissionNotice(ErrorException $exception) : bool
+    {
+        if ($exception->getSeverity() !== E_USER_NOTICE) {
+            return false;
+        }
+
+        // $key = 'file://'.Passport::keyPath('oauth-'.$type.'.key');
+        // file:///home/bubka/Repositories/2FAuth/storage/oauth-public.key
+
+        return str_starts_with($exception->getMessage(), 'Key file "')
+            && str_contains($exception->getMessage(), 'permissions are not correct');
     }
 }

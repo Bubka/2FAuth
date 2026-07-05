@@ -85,6 +85,7 @@
     "error.no_valid_otp": "No valid OTP resource in this QR code",
     "error.not_a_supported_otp_type": "This OTP format is not currently supported",
     "error.not_allowed_operation": "Operation not allowed",
+    "error.passport_key_permissions": "OAuth key permissions are invalid on the server. Please refer to the 'Upgrading to v8' guide on the 2FAuth documentation site to resolve this issue.",
     "error.qrcode_cannot_be_read": "This QR code is unreadable",
     "error.qrcode_has_invalid_checksum": "QR code has invalid checksum",
     "error.refresh": "Refresh",

@@ -43,25 +43,53 @@ class FixPassportKeyPermissions extends Command
      */
     public function handle() : int
     {
-        if (! windows_os()) {
-            foreach ([
-                'oauth-public.key',
-                'oauth-private.key',
-            ] as $file) {
-                $path = Passport::keyPath($file);
+        if (windows_os()) {
+            return self::SUCCESS;
+        }
 
-                if (file_exists($path)) {
-                    $perms = substr(sprintf('%o', fileperms($path)), -4);
+        $hasIssues = false;
+        $expectedPermissions = [
+            'oauth-public.key' => 0660,
+            'oauth-private.key' => 0600,
+        ];
 
-                    if ($perms != '0660' && $file === 'oauth-public.key') {
-                        chmod($path, 0660);
-                    } elseif ($perms != '0600' && $file === 'oauth-private.key') {
-                        chmod($path, 0600);
-                    }
+        foreach ($expectedPermissions as $file => $expectedPermission) {
+            $path = Passport::keyPath($file);
+
+            if (! file_exists($path)) {
+                $this->warn("Passport key file {$file} was not found at {$path}");
+                $hasIssues = true;
+
+                continue;
+            }
+
+            try {
+                $permissions = fileperms($path);
+
+                if ($permissions === false) {
+                    $this->warn("Unable to read permissions for {$file} at {$path}");
+                    $hasIssues = true;
+
+                    continue;
                 }
+
+                $currentPermissions = substr(sprintf('%o', $permissions), -4);
+                $expectedPermissionsAsString = sprintf('%04o', $expectedPermission);
+
+                if ($currentPermissions === $expectedPermissionsAsString) {
+                    continue;
+                }
+
+                if (! chmod($path, $expectedPermission)) {
+                    $this->warn("Failed to set {$expectedPermissionsAsString} on {$file} at {$path}");
+                    $hasIssues = true;
+                }
+            } catch (\Throwable $e) {
+                $this->error("Failed to fix permissions for {$file}: " . $e->getMessage());
+                $hasIssues = true;
             }
         }
 
-        return self::SUCCESS;
+        return $hasIssues ? self::FAILURE : self::SUCCESS;
     }
 }
