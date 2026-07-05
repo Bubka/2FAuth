@@ -1,1 +1,0 @@
-import{al as p,C as o}from"./app-CJLOuk2H.js";async function l(r,t,n=!1){let s=null,a=null;return await p.update(r,t,{returnError:!0}).then(e=>{s=t}).catch(e=>{n&&e.response.status===422?a=e.response.data.message:o().show(e)}),{data:s,error:a}}export{l as u};
