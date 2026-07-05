@@ -28,13 +28,11 @@ class HandlerPassportKeyPermissionNoticeTest extends FeatureTestCase
     #[Test]
     public function test_passport_key_permission_notice_returns_service_unavailable_json_response()
     {
-        $error = 'Key file "file:///tmp/oauth-public.key" permissions are not correct, recommend changing to 600 or 660 instead of 777';
-
         $this->mock(ReleaseRadarService::class)
             ->shouldReceive('manualScan')
             ->once()
             ->andThrow(new ErrorException(
-                $error,
+                'Key file "file:///tmp/oauth-public.key" permissions are not correct',
                 0,
                 E_USER_NOTICE
             ));
@@ -45,7 +43,7 @@ class HandlerPassportKeyPermissionNoticeTest extends FeatureTestCase
         $response->assertStatus(503)
             ->assertJson([
                 'message' => __('error.passport_key_permissions'),
-                'reason'  => $error,
+                'reason'  => 'https://docs.2fauth.app/getting-started/upgrade/upgrading-to-v8/#oauth-key-files-permissions',
             ]);
     }
 }
