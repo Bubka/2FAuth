@@ -47,9 +47,9 @@ class FixPassportKeyPermissions extends Command
             return self::SUCCESS;
         }
 
-        $hasIssues = false;
+        $hasIssues           = false;
         $expectedPermissions = [
-            'oauth-public.key' => 0660,
+            'oauth-public.key'  => 0660,
             'oauth-private.key' => 0600,
         ];
 
@@ -73,7 +73,7 @@ class FixPassportKeyPermissions extends Command
                     continue;
                 }
 
-                $currentPermissions = substr(sprintf('%o', $permissions), -4);
+                $currentPermissions          = substr(sprintf('%o', $permissions), -4);
                 $expectedPermissionsAsString = sprintf('%04o', $expectedPermission);
 
                 if ($currentPermissions === $expectedPermissionsAsString) {
