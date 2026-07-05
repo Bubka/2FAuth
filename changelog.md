@@ -1,5 +1,12 @@
 # Change log
 
+## [8.0.1] - 2026-07-05
+
+### Fixed
+
+- [issue #558](https://github.com/Bubka/2FAuth/issues/558) docker container crashes while startup
+- [issue #561](https://github.com/Bubka/2FAuth/issues/561) Container fails to start when fixing Passport key permissions in rootless Docker
+
 ## [8.0.0] - 2026-06-25
 
 2FAuth already bumps to v8 because of the upgrade of the Laravel PHP framework it is built on.
