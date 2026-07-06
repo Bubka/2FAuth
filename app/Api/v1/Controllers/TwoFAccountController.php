@@ -61,9 +61,15 @@ class TwoFAccountController extends Controller
             },
         ]);
 
-        $twofaccounts = Arr::has($validated, 'ids')
-            ? $visibleTwoFAccountsQuery->whereIn('id', Helpers::commaSeparatedToArray($validated['ids']))->get()
-            : $visibleTwoFAccountsQuery->get();
+        if (Arr::has($validated, 'ids')) {
+            $twofaccounts = $visibleTwoFAccountsQuery->whereIn('id', Helpers::commaSeparatedToArray($validated['ids']))->get();
+        }
+        else if ($request->user()->preferences['usePagination'] ) {
+            $twofaccounts = collect($visibleTwoFAccountsQuery->jsonPaginate($request->user()->preferences['itemsPerPage'])->items());
+        }
+        else {
+            $twofaccounts = $visibleTwoFAccountsQuery->get();
+        }
 
         $sortedTwoFAccounts = TwoFAccounts::sortForUser($twofaccounts, $request->user());
 
