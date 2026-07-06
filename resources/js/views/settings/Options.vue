@@ -92,6 +92,13 @@
         { text: 'label.after_a_click_tap', value: true, legend: 'label.alone_in_its_own_view', title: 'label.alone_in_its_own_view.title' },
         { text: 'label.constantly', value: false, legend: 'label.all_of_them_on_home', title: 'label.all_of_them_on_home.title' },
     ]
+    const itemsPerPage = [
+        { text: '5', value: 5 },
+        { text: '10', value: 10 },
+        { text: '20', value: 20 },
+        { text: '50', value: 50 },
+        { text: '100', value: 100 },
+    ]
 
     const langs = computed(() => {
         let locales = [{
@@ -302,6 +309,10 @@
                         <h4 ref="heading-accounts" class="title is-4 pt-4">{{ $t('heading.2fa_accounts') }}</h4>
                         <!-- display mode -->
                         <FormToggle v-model="user.preferences.displayMode" @update:model-value="val => savePreference('displayMode', val)" :choices="layouts" fieldName="displayMode" :isLocked="appSettings.lockedPreferences.includes('displayMode')" label="field.display_mode" help="field.display_mode.help" />
+                        <!-- use pagination -->
+                        <FormCheckbox v-model="user.preferences.usePagination" @update:model-value="val => savePreference('usePagination', val)" fieldName="usePagination" :isLocked="appSettings.lockedPreferences.includes('usePagination')" label="field.use_pagination" help="field.use_pagination.help" />
+                        <!-- Items per page -->
+                        <FormSelect v-model="user.preferences.itemsPerPage" @update:model-value="val => savePreference('itemsPerPage', val)" :options="itemsPerPage" fieldName="itemsPerPage" :isLocked="appSettings.lockedPreferences.includes('itemsPerPage')" label="field.items_per_page" help="field.items_per_page.help" :isDisabled="!user.preferences.usePagination" :isIndented="true" />
                         <!-- sort case sensitive -->
                         <FormCheckbox v-model="user.preferences.sortCaseSensitive" @update:model-value="val => savePreference('sortCaseSensitive', val)" fieldName="sortCaseSensitive" :isLocked="appSettings.lockedPreferences.includes('sortCaseSensitive')" label="field.sort_case_sensitive" help="field.sort_case_sensitive.help" />
 

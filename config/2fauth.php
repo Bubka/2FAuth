@@ -45,6 +45,8 @@ $preferences = [
     'AutoSaveQrcodedAccount'    => envUnlessEmpty('USERPREF_DEFAULT__AUTO_SAVE_QRCODED_ACCOUNT', false),
     'showEmailInFooter'         => envUnlessEmpty('USERPREF_DEFAULT__SHOW_EMAIL_IN_FOOTER', true),
     'showQuickNavMenus'         => envUnlessEmpty('USERPREF_DEFAULT__SHOW_QUICK_NAV_MENUS', true),
+    'usePagination'             => envUnlessEmpty('USERPREF_DEFAULT__USE_PAGINATION', true),
+    'itemsPerPage'              => envUnlessEmpty('USERPREF_DEFAULT__ITEMS_PER_PAGE', 20),
 ];
 
 $nonLockablePreferences = [
