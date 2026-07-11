@@ -55,7 +55,7 @@ class TwoFAccountController extends Controller
         }
 
         $validated                = $request->validated();
-        $visibleTwoFAccountsQuery = TwoFAccount::visibleTo($request->user())->with([
+        $visibleTwoFAccountsQuery = TwoFAccounts::applyOrderToQueryForUser(TwoFAccount::visibleTo($request->user()), $request->user())->with([
             'groups' => function ($query) use ($request) {
                 $query->where('user_id', $request->user()->id);
             },
@@ -71,9 +71,7 @@ class TwoFAccountController extends Controller
             $twofaccounts = $visibleTwoFAccountsQuery->get();
         }
 
-        $sortedTwoFAccounts = TwoFAccounts::sortForUser($twofaccounts, $request->user());
-
-        return new TwoFAccountCollection($sortedTwoFAccounts);
+        return new TwoFAccountCollection($twofaccounts);
     }
 
     /**

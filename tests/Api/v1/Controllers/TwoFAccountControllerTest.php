@@ -2424,6 +2424,38 @@ class TwoFAccountControllerTest extends FeatureTestCase
     }
 
     #[Test]
+    public function test_index_paginates_on_already_sorted_twofaccounts()
+    {
+        Settings::set('enableSharing', true);
+
+        TwoFAccountShare::create([
+            'twofaccount_id'      => $this->twofaccountC->id,
+            'shared_with_user_id' => $this->user->id,
+            'scope'               => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id'  => $this->anotherUser->id,
+        ]);
+
+        $this->actingAs($this->user, 'api-guard')
+            ->json('POST', '/api/v1/twofaccounts/reorder', [
+                'orderedIds' => [$this->twofaccountC->id, $this->twofaccountB->id, $this->twofaccountA->id],
+            ])
+            ->assertOk();
+
+        $this->actingAs($this->user, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts?page[number]=1&page[size]=2')
+            ->assertOk()
+            ->assertJsonCount(2, $key = null)
+            ->assertJsonPath('0.id', $this->twofaccountC->id)
+            ->assertJsonPath('1.id', $this->twofaccountB->id);
+
+        $this->actingAs($this->user, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts?page[number]=2&page[size]=2')
+            ->assertOk()
+            ->assertJsonCount(1, $key = null)
+            ->assertJsonPath('0.id', $this->twofaccountA->id);
+    }
+
+    #[Test]
     public function test_reorder_with_invalid_data_returns_validation_error()
     {
         $response = $this->actingAs($this->user, 'api-guard')

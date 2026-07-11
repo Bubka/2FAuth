@@ -568,42 +568,49 @@ class TwoFAccountServiceTest extends FeatureTestCase
     }
 
     #[Test]
-    public function test_sort_for_user_returns_models_sorted_by_custom_order_then_unordered_tail()
+    public function test_apply_order_to_query_for_user_returns_models_sorted_by_custom_order_then_unordered_tail()
     {
-        $twofaccountA = TwoFAccount::factory()->for($this->user)->create();
-        $twofaccountB = TwoFAccount::factory()->for($this->user)->create();
-        $twofaccountC = TwoFAccount::factory()->for($this->user)->create();
+        $user = User::factory()->create();
+        $twofaccountA = TwoFAccount::factory()->for($user)->create();
+        $twofaccountB = TwoFAccount::factory()->for($user)->create();
+        $twofaccountC = TwoFAccount::factory()->for($user)->create();
 
         TwoFAccountUserOrder::create([
-            'user_id' => $this->user->id,
+            'user_id' => $user->id,
             'twofaccount_id' => $twofaccountC->id,
             'position' => 1,
         ]);
         TwoFAccountUserOrder::create([
-            'user_id' => $this->user->id,
+            'user_id' => $user->id,
             'twofaccount_id' => $twofaccountA->id,
             'position' => 2,
         ]);
 
-        $sorted = TwoFAccounts::sortForUser(collect([
-            $twofaccountB,
-            $twofaccountA,
-            $twofaccountC,
-        ]), $this->user);
+        $ordered = TwoFAccounts::applyOrderToQueryForUser(
+            TwoFAccount::query()->whereIn('id', [
+                $twofaccountB->id,
+                $twofaccountA->id,
+                $twofaccountC->id,
+            ]),
+            $user,
+        )->get();
 
         $this->assertEquals([
             $twofaccountC->id,
             $twofaccountA->id,
             $twofaccountB->id,
-        ], $sorted->pluck('id')->all());
+        ], $ordered->pluck('id')->all());
     }
 
     #[Test]
-    public function test_sort_for_user_returns_empty_collection()
+    public function test_apply_order_to_query_for_user_returns_empty_collection()
     {
-        $sorted = TwoFAccounts::sortForUser(collect([]), $this->user);
+        $ordered = TwoFAccounts::applyOrderToQueryForUser(
+            TwoFAccount::query()->where('id', -1),
+            $this->user,
+        )->get();
 
-        $this->assertCount(0, $sorted->toArray());
+        $this->assertCount(0, $ordered->toArray());
     }
 
     #[Test]
