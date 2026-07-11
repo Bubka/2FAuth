@@ -11,6 +11,7 @@ use App\Models\TwoFAccountGroupAssignment;
 use App\Models\TwoFAccountShare;
 use App\Models\TwoFAccountUserOrder;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -173,25 +174,29 @@ class TwoFAccountService
     }
 
     /**
-     * Sort a set of TwoFAccount models according to the custom order stored for a user.
+     * Apply user custom order directly to a TwoFAccount query.
      *
-     * @param  Collection<int, TwoFAccount>  $twofaccounts
-     * @return Collection<int, TwoFAccount>
+     * Accounts having an explicit user position come first, then remaining
+     * accounts sorted by id.
+     *
+     * @param  Builder<TwoFAccount>  $query
+     * @return Builder<TwoFAccount>
      */
-    public static function sortForUser(Collection $twofaccounts, User $user) : Collection
+    public static function applyOrderToQueryForUser(Builder $query, User $user) : Builder
     {
-        if ($twofaccounts->isEmpty()) {
-            return $twofaccounts;
-        }
+        $userOrders = TwoFAccountUserOrder::query()
+            ->select(['twofaccount_id', 'position'])
+            ->where('user_id', $user->id);
 
-        $accountIds = $twofaccounts->pluck('id')->map(static fn ($id) => (int) $id)->values();
-        $orderedIds = self::sortIdsByUserOrder($accountIds, $user);
-        $byId       = $twofaccounts->keyBy('id');
-
-        return $orderedIds
-            ->map(static fn (int $accountId) => $byId->get($accountId))
-            ->filter(static fn ($twofaccount) => $twofaccount instanceof TwoFAccount)
-            ->values();
+        return $query
+            ->leftJoinSub($userOrders, 'user_order', function ($join) {
+                $join
+                    ->on('twofaccounts.id', '=', 'user_order.twofaccount_id');
+            })
+            ->select('twofaccounts.*')
+            ->orderByRaw('CASE WHEN user_order.position IS NULL THEN 1 ELSE 0 END')
+            ->orderBy('user_order.position')
+            ->orderBy('twofaccounts.id');
     }
 
     /**
