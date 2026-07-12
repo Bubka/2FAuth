@@ -47,21 +47,27 @@
         notify.clear()
 
         form.post('/user/login', {returnError: true}).then(async (response) => {
-            await user.loginAs({
-                id: response.data.id,
-                name: response.data.name,
-                email: response.data.email,
-                oauth_provider: response.data.oauth_provider,
-                authenticated_by_proxy: false,
-                preferences: response.data.preferences,
-                isAdmin: response.data.is_admin,
-            })
+            const twofaccount_count = parseInt(response.data.twofaccount_count)
+            
+            await user.loginAs(
+                {
+                    id: response.data.id,
+                    name: response.data.name,
+                    email: response.data.email,
+                    oauth_provider: response.data.oauth_provider,
+                    authenticated_by_proxy: false,
+                    preferences: response.data.preferences,
+                    isAdmin: response.data.is_admin,
+                    twofaccount_count: response.data.twofaccount_count,
+                },
+                parseInt(response.data.twofaccount_count) > 0
+            )
 
             for (const [key, value] of Object.entries(response?.data?.appSettings || {})) {
                 appSettings[key] = value
             }
 
-            router.push({ name: 'accounts' })
+            pushToPostLogin(twofaccount_count)
         })
         .catch(error => {
             if( error.response?.status === 401 ) {
@@ -82,21 +88,27 @@
         isBusy.value = true
 
         webauthnService.authenticate(form.email).then(async (response) => {
-            await user.loginAs({
-                id: response.data.id,
-                name: response.data.name,
-                email: response.data.email,
-                oauth_provider: response.data.oauth_provider,
-                authenticated_by_proxy: false,
-                preferences: response.data.preferences,
-                isAdmin: response.data.is_admin,
-            })
+            const twofaccount_count = parseInt(response.data.twofaccount_count)
+
+            await user.loginAs(
+                {
+                    id: response.data.id,
+                    name: response.data.name,
+                    email: response.data.email,
+                    oauth_provider: response.data.oauth_provider,
+                    authenticated_by_proxy: false,
+                    preferences: response.data.preferences,
+                    isAdmin: response.data.is_admin,
+                    twofaccount_count: response.data.twofaccount_count,
+                },
+                parseInt(response.data.twofaccount_count) > 0
+            )
 
             for (const [key, value] of Object.entries(response?.data?.appSettings || {})) {
                 appSettings[key] = value
             }
 
-            router.push({ name: 'accounts' })
+            pushToPostLogin(twofaccount_count)
         })
         .catch(error => {
             if ('webauthn' in error) {
@@ -118,6 +130,17 @@
         .finally(() => {
             isBusy.value = false
         })
+    }
+
+    /**
+     * 
+     * @param twofaccount_count 
+     */
+    function pushToPostLogin(twofaccount_count) {
+        if (twofaccount_count == 0) {
+            router.push({ name: 'start' })
+        }
+        else router.push({ name: 'accounts' })
     }
 
 </script>

@@ -115,7 +115,7 @@ class LoginController extends Controller
         /**
          * @var User|null
          */
-        $user = $this->guard()->user();
+        $user = $this->guard()->user()->loadCount('twofaccounts');
         $this->authenticated($request, $this->guard()->user());
 
         return response()->json($this->authenticatedPayload('authenticated', $user), Response::HTTP_OK);

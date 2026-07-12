@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth\Traits;
 
 use App\Facades\Settings;
+use App\Models\TwoFAccount;
 use App\Models\User;
 
 trait HasAuthenticatedPayload
@@ -24,6 +25,7 @@ trait HasAuthenticatedPayload
                 'enableAllUsersSharingScope' => Settings::get('enableAllUsersSharingScope'),
             ],
             'is_admin' => $user->isAdministrator(),
+            'twofaccount_count' => TwoFAccount::visibleTo($user)->count(),
         ];
     }
 }

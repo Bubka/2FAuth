@@ -3,6 +3,7 @@
 namespace App\Api\v1\Resources;
 
 use App\Facades\Settings;
+use App\Models\TwoFAccount;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Collection;
@@ -15,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
  * @property string $oauth_provider
  * @property Collection<array-key, mixed> $preferences
  * @property string $is_admin
+ * @property int|null $twofaccounts_count
  */
 class UserResource extends JsonResource
 {
@@ -38,6 +40,7 @@ class UserResource extends JsonResource
                 'enableAllUsersSharingScope' => Settings::get('enableAllUsersSharingScope'),
             ],
             'is_admin' => $this->is_admin,
+            'twofaccount_count' => TwoFAccount::visibleTo($this->resource)->count(),
         ];
     }
 }

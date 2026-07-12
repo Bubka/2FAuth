@@ -9,7 +9,6 @@ import { useErrorHandler } from '@2fauth/stores'
 import authGuard             from './middlewares/authGuard'
 import adminOnly             from './middlewares/adminOnly'
 import ownerOnly             from './middlewares/ownerOnly'
-import starter               from './middlewares/starter'
 import noEmptyError          from './middlewares/noEmptyError'
 import noRegistration        from './middlewares/noRegistration'
 import setReturnTo           from './middlewares/setReturnTo'
@@ -23,7 +22,7 @@ const router = createRouter({
 		{ path: '/start', name: 'start', component: () => import('../views/Start.vue'), meta: { middlewares: [authGuard, syncAppSettings, setReturnTo], watchedByKicker: true } },
         { path: '/capture', name: 'capture', component: () => import('../views/twofaccounts/Capture.vue'), meta: { middlewares: [authGuard, syncAppSettings, setReturnTo], watchedByKicker: true } },
 
-        { path: '/accounts', name: 'accounts', component: () => import('../views/twofaccounts/Accounts.vue'), meta: { middlewares: [authGuard, syncAppSettings, starter, setReturnTo], watchedByKicker: true }, alias: '/' },
+        { path: '/accounts', name: 'accounts', component: () => import('../views/twofaccounts/Accounts.vue'), meta: { middlewares: [authGuard, syncAppSettings, setReturnTo], watchedByKicker: true }, alias: '/' },
         { path: '/account/create', name: 'createAccount', component: () => import('../views/twofaccounts/CreateUpdate.vue'), meta: { middlewares: [authGuard, syncAppSettings, setReturnTo], watchedByKicker: true } },
         { path: '/account/import', name: 'importAccounts', component: () => import('../views/twofaccounts/Import.vue'), meta: { middlewares: [authGuard, syncAppSettings, setReturnTo], watchedByKicker: true } },
         { path: '/account/:twofaccountId/edit', name: 'editAccount', component: () => import('../views/twofaccounts/CreateUpdate.vue'), meta: { middlewares: [authGuard, syncAppSettings, ownerOnly, setReturnTo], watchedByKicker: true }, props: true },
