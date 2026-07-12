@@ -31,6 +31,7 @@
     const { t } = useI18n()
     const $2fauth = inject('2fauth')
     const router = useRouter()
+    const route = useRoute()
     const notify = useNotify()
     const user = useUserStore()
     const bus = useBusStore()
@@ -111,7 +112,9 @@
             updateTotps()
         }
         else {
-            twofaccounts.fetch().then(() => {
+            const pageNumber = user.preferences.usePagination && route.query['page[number]'] ? parseInt(route.query['page[number]']) : null
+
+            twofaccounts.fetch(pageNumber).then(() => {
                 if (twofaccounts.backendWasNewer) {
                     notify.info({ text: t('notification.data_refreshed_to_reflect_server_changes'), duration: 10000 })
                 }
@@ -393,6 +396,12 @@
         twofaccounts.select(account.id)
     }
 
+    onBeforeRouteUpdate((to, from) => {
+        if (user.preferences.usePagination && to.query['page[number]'] != from.query['page[number]']) {
+            twofaccounts.fetch(to.query['page[number]'])
+        }
+    });
+
     /**
      * Unshare selected accounts
      */
@@ -654,6 +663,22 @@
                             </div>
                         </span>
                     </div>
+                </div>
+                <!-- <div class="paginator">
+                    <a class="button is-link" @click="fetchPreviousPage" v-if="twofaccounts.pagination && twofaccounts.pagination.current_page > 1">
+                        Previous
+                    </a>
+                    <a class="button is-link" @click="fetchNextPage" v-if="twofaccounts.pagination && twofaccounts.pagination.current_page < twofaccounts.pagination.last_page">
+                        Next
+                    </a>
+                </div> -->
+                <div class="paginator" v-if="twofaccounts.pagination">
+                    <RouterLink v-if="twofaccounts.pagination.current_page > 1" class="button is-link" :to="{ name: 'accounts', query: { 'page[number]': twofaccounts.previousPage } }" :title="$t('tooltip.create_new_group')">
+                        Previous
+                    </RouterLink>
+                    <RouterLink v-if="twofaccounts.pagination.current_page < twofaccounts.pagination.last_page" class="button is-link" :to="{ name: 'accounts', query: { 'page[number]': twofaccounts.nextPage } }" :title="$t('tooltip.create_new_group')">
+                        Next
+                    </RouterLink>
                 </div>
             </template>
             <template #footer v-if="showGroupSwitch">

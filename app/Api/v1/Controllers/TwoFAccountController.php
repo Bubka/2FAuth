@@ -65,7 +65,7 @@ class TwoFAccountController extends Controller
             $twofaccounts = $visibleTwoFAccountsQuery->whereIn('id', Helpers::commaSeparatedToArray($validated['ids']))->get();
         }
         else if ($request->user()->preferences['usePagination'] ) {
-            $twofaccounts = collect($visibleTwoFAccountsQuery->jsonPaginate($request->user()->preferences['itemsPerPage'])->items());
+            $twofaccounts = $visibleTwoFAccountsQuery->jsonPaginate($request->user()->preferences['itemsPerPage']);
         }
         else {
             $twofaccounts = $visibleTwoFAccountsQuery->get();

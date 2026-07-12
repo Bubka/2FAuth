@@ -12,6 +12,8 @@ export const useTwofaccounts = defineStore('twofaccounts', {
             filter: '',
             backendWasNewer: false,
             fetchedOn: null,
+            isFetching: false,
+            pagination: null
         }
     },
 
@@ -76,6 +78,18 @@ export const useTwofaccounts = defineStore('twofaccounts', {
             ))).sort()
         },
 
+        previousPage(state) {
+            return state.pagination
+                ? state.pagination.current_page - 1
+                : null
+        },
+
+        nextPage(state) {
+            return state.pagination
+                ? state.pagination.current_page + 1
+                : null
+        },
+
         orderedIds(state) {
             return state.items.map(a => a.id)
         },
@@ -128,21 +142,44 @@ export const useTwofaccounts = defineStore('twofaccounts', {
         /**
          * Refreshes the accounts collection using the backend
          */
-        async fetch(force = false) {
+        async fetch(pageNumber = null,force = false) {
             // We do not want to fetch fresh data multiple times in the same 2s timespan
             const age = Math.floor(Date.now() - this.fetchedOn)
             const isOutOfAge = age > 2000
+            const user = useUserStore()
 
-            if (isOutOfAge || force) {
+            pageNumber = user.preferences.usePagination && pageNumber ? pageNumber : null
+
+            if (isOutOfAge || force || (pageNumber && this.pagination && pageNumber != this.pagination.current_page)) {
+                this.isFetching = true
                 this.fetchedOn = Date.now()
 
-                await twofaccountService.getAll(! useUserStore().preferences.getOtpOnRequest).then(response => {
+
+                await twofaccountService.getAll(! user.preferences.getOtpOnRequest, pageNumber).then(response => {
+                    let fetchedAccounts
+
+                    if (response.data.meta) {
+                        this.pagination = {
+                            from: response.data.meta.from,
+                            to: response.data.meta.to,
+                            total: response.data.meta.total,
+                            per_page: response.data.meta.per_page,
+                            current_page: response.data.meta.current_page,
+                            last_page: response.data.meta.last_page,
+                        }
+                        fetchedAccounts = response.data.data
+                    }
+                    else {
+                        this.pagination = null
+                        fetchedAccounts = response.data
+                    }
+
                     // Defines if the store was up-to-date with the backend
                     if (force) {
-                        this.backendWasNewer = response.data.length !== this.items.length
+                        this.backendWasNewer = fetchedAccounts.length !== this.items.length
                         
                         this.items.forEach((item) => {
-                            let matchingBackendItem = response.data.find(e => e.id === item.id)
+                            let matchingBackendItem = fetchedAccounts.find(e => e.id === item.id)
                             if (matchingBackendItem == undefined) {
                                 this.backendWasNewer = true
                                 return;
@@ -157,7 +194,10 @@ export const useTwofaccounts = defineStore('twofaccounts', {
                     }
     
                     // Updates the state
-                    this.items = response.data
+                    this.items = fetchedAccounts
+                })
+                .finally(() => {
+                    this.isFetching = false
                 })
             }
             else this.backendWasNewer = false

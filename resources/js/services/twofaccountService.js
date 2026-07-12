@@ -1,10 +1,22 @@
 import { httpClientFactory } from '@/services/httpClientFactory'
+import { useUserStore } from '@/stores/user'
 
 const apiClient = httpClientFactory('api')
 
 export default {
-    getAll(withOtp = false, config = {}) {
-        return apiClient.get('/twofaccounts' + (withOtp ? '?withOtp=1' : ''), { ...config })
+    getAll(withOtp = false, pageNumber, config = {}) {
+        const user = useUserStore()
+        let queryString = ''
+
+        if (withOtp) {
+            queryString += (queryString ? '&' : '?') + 'withOtp=1'
+        }
+        
+        if (user.preferences.usePagination) {
+            queryString += (queryString ? '&' : '?') + `page[number]=${pageNumber ?? 1}&page[size]=${user.preferences.itemsPerPage ?? 10}`
+        }
+
+        return apiClient.get('/twofaccounts' + queryString, { ...config })
     },
 
     getByIds(ids, withOtp = false, config = {}) {
