@@ -1,5 +1,11 @@
 # Change log
 
+## [8.1.0] - 2026-mm-dd
+
+### Added
+
+- Quick selection buttons in Manage mode to make it easier to select accounts that are likely to be targeted by the action buttons (Move, Unshared, Delete, Export)
+
 ## [8.0.2] - 2026-09-02
 
 ### Fixed

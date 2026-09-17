@@ -9,6 +9,7 @@ use App\Helpers\Helpers;
 use App\Models\TwoFAccount;
 use App\Models\TwoFAccountGroupAssignment;
 use App\Models\TwoFAccountShare;
+use App\Models\TwoFAccountUserFavorite;
 use App\Models\TwoFAccountUserOrder;
 use App\Models\User;
 use Illuminate\Support\Collection;
@@ -51,6 +52,46 @@ class TwoFAccountService
             Log::info(sprintf('TwoFAccounts with IDs #%s withdrawn', implode(',', $ids)));
         } else {
             Log::info(sprintf('Cannot find TwoFAccounts to withdraw using ids #%s', implode(',', $ids)));
+        }
+    }
+
+    /**
+     * Set one or more twofaccounts as favorite for a given user
+     *
+     * @param  int|array|string  $ids  twofaccount ids to patch
+     */
+    public static function toggleFavorite($ids, bool $is_favorite, User $owner) : void
+    {
+        // $ids as string could be a comma-separated list of ids
+        // so in this case we explode the string to an array
+        $ids = Helpers::commaSeparatedToArray($ids);
+        $ids = is_array($ids) ? $ids : [$ids]; // whereIn() expects an array
+
+        if ($is_favorite) {
+            $payload = [];
+    
+            foreach ($ids as $twofaccountId) {
+                $payload[] = [
+                    'user_id'        => (int) $owner->id,
+                    'twofaccount_id' => (int) $twofaccountId,
+                ];
+            }
+
+            $affectedCount = TwoFAccountUserFavorite::query()->upsert(
+                $payload,
+                ['user_id', 'twofaccount_id'],
+            );
+        }
+        else {
+            $affectedCount = TwoFAccountUserFavorite::where('user_id', $owner->id)
+                ->whereIn('twofaccount_id', $ids)
+                ->delete();
+        }
+
+        if ($affectedCount) {
+            Log::info(sprintf('Favorite status of TwoFAccounts with IDs #%s toggled to %s', implode(',', $ids), $is_favorite));
+        } else {
+            Log::info(sprintf('Cannot find TwoFAccounts to fav/unfav using ids #%s', implode(',', $ids)));
         }
     }
 

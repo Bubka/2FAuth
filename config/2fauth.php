@@ -45,6 +45,7 @@ $preferences = [
     'AutoSaveQrcodedAccount'    => envUnlessEmpty('USERPREF_DEFAULT__AUTO_SAVE_QRCODED_ACCOUNT', false),
     'showEmailInFooter'         => envUnlessEmpty('USERPREF_DEFAULT__SHOW_EMAIL_IN_FOOTER', true),
     'showQuickNavMenus'         => envUnlessEmpty('USERPREF_DEFAULT__SHOW_QUICK_NAV_MENUS', true),
+    'enableFavorites'           => envUnlessEmpty('USERPREF_DEFAULT__ENABLE_FAVORITES', true),
 ];
 
 $nonLockablePreferences = [
@@ -153,6 +154,7 @@ return [
         'allUsersSharingScope',
         'showNextOtp',
         'groupChips',
+        'favorites',
     ],
 
     /*

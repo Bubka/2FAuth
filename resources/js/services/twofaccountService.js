@@ -71,4 +71,8 @@ export default {
         return apiClient.get('/twofaccounts/' + id + '/otp-logs?period=' + period + (limit ? '&limit=' + limit : ''), { ...config })
     },
 
+    toggleFavorite(id, is_favorite, config = {}) {
+        return apiClient.patch('/twofaccounts/' + id + '/favorite', { 'is_favorite': is_favorite }, { ...config })
+    },
+
 }

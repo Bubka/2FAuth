@@ -304,6 +304,8 @@
                         <FormToggle v-model="user.preferences.displayMode" @update:model-value="val => savePreference('displayMode', val)" :choices="layouts" fieldName="displayMode" :isLocked="appSettings.lockedPreferences.includes('displayMode')" label="field.display_mode" help="field.display_mode.help" />
                         <!-- sort case sensitive -->
                         <FormCheckbox v-model="user.preferences.sortCaseSensitive" @update:model-value="val => savePreference('sortCaseSensitive', val)" fieldName="sortCaseSensitive" :isLocked="appSettings.lockedPreferences.includes('sortCaseSensitive')" label="field.sort_case_sensitive" help="field.sort_case_sensitive.help" />
+                        <!-- enable favorites -->
+                        <FormCheckbox v-model="user.preferences.enableFavorites" @update:model-value="val => savePreference('enableFavorites', val)" fieldName="enableFavorites" :isLocked="appSettings.lockedPreferences.includes('enableFavorites')" label="field.enable_favorites" help="field.enable_favorites.help" />
 
                         <h5 ref="heading-otp" class="title is-5 pt-3 mb-3">{{ $t('heading.one_time_passwords') }}</h5>
                         <!-- get OTP on request -->

@@ -25,7 +25,25 @@
     import { useSortable, moveArrayElement } from '@vueuse/integrations/useSortable'
     import { useI18n } from 'vue-i18n'
     import { useErrorHandler } from '@2fauth/stores'
-    import { LucideCircleAlert, LucideCircleEllipsis, LucideCircleX, LucideEye, LucideEyeOff, LucideHistory, LucideMenu, LucidePencil, LucideQrCode, LucideTrash2, LucideUserCheck, LucideUserPen, LucideUserPlus, LucideUsers, LucideX } from '@lucide/vue'
+    import {
+        LucideCircleAlert,
+        LucideCircleEllipsis,
+        LucideCircleX,
+        LucideEllipsis,
+        LucideEye,
+        LucideEyeOff,
+        LucideHistory,
+        LucideMenu,
+        LucidePencil,
+        LucideQrCode,
+        LucideStar,
+        LucideTrash2,
+        LucideUserCheck,
+        LucideUserPen,
+        LucideUserPlus,
+        LucideUsers,
+        LucideX
+    } from '@lucide/vue'
 
     const errorHandler = useErrorHandler()
     const { t } = useI18n()
@@ -62,7 +80,8 @@
         algorithm: '',
         period: null,
         counter: null,
-        image: ''
+        image: '',
+        is_favorite: false
     })
     const dotsControllers = ref([])
     const dotsRefs = ref([])
@@ -117,7 +136,12 @@
                 }
             })
         }
+        
         groups.fetch()
+
+        if (! user.preferences.enableFavorites) {
+            twofaccounts.showFavoritesOnly = false
+        }
     })
 
     // Enables the sortable behaviour of the twofaccounts list
@@ -160,6 +184,7 @@
         accountParams.value.service = account.service
         accountParams.value.account = account.account
         accountParams.value.icon = account.icon
+        accountParams.value.is_favorite = account.is_favorite
 
         visibleAccount.value = account
 
@@ -394,6 +419,18 @@
     }
 
     /**
+     * Selects an account
+     */
+    async function toggleOtpDisplayFavorite(accountId) {
+        await twofaccounts.toggleIsFavorite(accountId)
+        const account = twofaccounts.getById(accountId)
+
+        if (account != undefined) {
+            otpDisplay.value?.setFavorite(account.is_favorite)
+        }
+    }
+
+    /**
      * Unshare selected accounts
      */
     async function bulkUnshare() {
@@ -441,7 +478,10 @@
                     @clear-selected="twofaccounts.selectNone()"
                     @select-all="twofaccounts.selectAll()"
                     @sort-asc="twofaccounts.sortAsc()"
-                    @sort-desc="twofaccounts.sortDesc()">
+                    @sort-desc="twofaccounts.sortDesc()"
+                    @select-mine="twofaccounts.selectMine()"
+                    @select-shared-by-me="twofaccounts.selectSharedByMe()"
+                    @select-groupless="twofaccounts.selectGroupless()">
                 </Toolbar>
                 <!-- group switch toggle -->
                 <div v-else class="has-text-centered">
@@ -454,11 +494,13 @@
                         <GroupChips v-if="user.preferences.useGroupChips"
                             v-model:active-group="user.preferences.activeGroup"
                             v-model:show-group-switch="showGroupSwitch"
+                            v-model:show-favorites-only="twofaccounts.showFavoritesOnly"
                             :groups="groups.items"
                             :filteredCount="twofaccounts.filteredCount"
                             :useShare="appSettings.enableSharing"
                             :useShareAllScope="appSettings.enableAllUsersSharingScope"
                             :useVirtualChips="user.preferences.showVirtualChips"
+                            :useFavorites="user.preferences.enableFavorites"
                             @active-group-changed="saveActiveGroup" />
                         <GroupCallToSwitch v-else
                             v-model:show-group-switch="showGroupSwitch"
@@ -499,7 +541,17 @@
                                 <div class="tfa-container">
                                     <!-- checkbox -->
                                     <transition name="slideCheckbox">
-                                        <div class="tfa-cell tfa-checkbox" v-if="bus.inManagementMode">
+                                        <div class="tfa-min-height is-size-4-mobile is-size-3" v-if="user.preferences.enableFavorites && bus.inManagementMode">
+                                            <span class="tfa-checkradio">
+                                                <input class="is-checkradio is-small" :class="mode == 'dark' ? 'is-white':'is-info'" :id="'ckb_' + account.id" :value="account.id" type="checkbox" :name="'ckb_' + account.id" v-model="twofaccounts.selectedIds"  />
+                                                <label tabindex="0" class="" :for="'ckb_' + account.id" v-on:keypress.space.prevent="selectAccount(account)"></label>
+                                            </span>
+                                            <span class="is-block is-size-6 is-size-7-mobile" role="button">
+                                                <LucideStar v-if="account.is_favorite" class="is-clickable" :class="mode == 'dark' ? 'has-text-warning-dark' : 'has-text-warning-dark-invert'" @click="twofaccounts.toggleIsFavorite(account.id)" :strokeWidth="1" fill="#ffb400" :title="$t('tooltip.remove_from_favorites')" />
+                                                <LucideStar v-else class="is-clickable" :class="mode == 'dark' ? 'has-text-grey-dark' : 'has-text-grey-light'" @click="twofaccounts.toggleIsFavorite(account.id)" :strokeWidth="1" :fill="mode == 'dark' ? '#111' : '#f5f5f5'" :title="$t('tooltip.set_as_favorite')" />
+                                            </span>
+                                        </div>
+                                        <div class="tfa-cell tfa-checkbox" v-else-if="bus.inManagementMode">
                                             <div class="field">
                                                 <input class="is-checkradio is-small" :class="mode == 'dark' ? 'is-white':'is-info'" :id="'ckb_' + account.id" :value="account.id" type="checkbox" :name="'ckb_' + account.id" v-model="twofaccounts.selectedIds"  />
                                                 <label tabindex="0" :for="'ckb_' + account.id" v-on:keypress.space.prevent="selectAccount(account)"></label>
@@ -720,6 +772,7 @@
                     @please-clear-search="twofaccounts.filter = ''"
                     @kickme="user.logout({ kicked: true})"
                     @please-update-activeGroup="saveActiveGroup"
+                    @please-toggle-favorite="toggleOtpDisplayFavorite"
                     @otp-copied-to-clipboard="notify.success({ text: t('notification.copied_to_clipboard') })"
                     @error="(error) => errorHandler.show(error)"
                 />

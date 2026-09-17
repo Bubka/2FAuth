@@ -1,5 +1,14 @@
 <script setup>
-    import { LucideArrowDownAZ, LucideArrowUpAZ, LucideSquareCheck } from '@lucide/vue';
+    import {
+        LucideArrowDownAZ,
+        LucideArrowUpAZ,
+        LucideCopyCheck,
+        LucideSquareAsterisk,
+        LucideSquareDashed,
+        LucideSquareDashedX,
+        LucideSquareSlash,
+        LucideSquareUserRound
+    } from '@lucide/vue';
 
     const sortOrder = defineModel('sortOrder')
 
@@ -7,7 +16,15 @@
         selectedCount: Number
     })
 
-    const emit = defineEmits(['sort-asc', 'sort-desc'])
+    const emit = defineEmits([
+        'sort-asc',
+        'sort-desc',
+        'clear-selected',
+        'select-all',
+        'select-mine',
+        'select-shared-by-me',
+        'select-groupless'
+    ])
 
     /**
      * 
@@ -23,19 +40,34 @@
 <template>
     <div class="toolbar has-text-centered has-nowrap">
         <!-- selected label -->
-        <span style="vertical-align: sub;" class="has-text-grey">{{ $t('message.x_selected', { count: selectedCount }) }}</span>
+        <span class="has-text-grey p-0 mr-3">({{ selectedCount }})</span>
         <!-- deselect all -->
-        <button style="vertical-align: middle;" type="button" id="btnUnselectAll" @click="$emit('clear-selected')" class="clear-selection delete mr-4 ml-1" :style="{visibility: selectedCount > 0 ? 'visible' : 'hidden'}" :title="$t('tooltip.clear_selection')"></button>
+        <button type="button" id="btnUnselectAll" @click="$emit('clear-selected')" class="button py-0 pl-0 pr-1 pt-1 has-line-height is-ghost has-text-grey " :title="$t('tooltip.clear_selection')" :disabled="selectedCount == 0">
+            <!-- <span>{{ $t('label.check_all') }}</span> -->
+            <LucideSquareDashed v-if="selectedCount == 0" />
+            <LucideSquareDashedX v-else />
+        </button>|
         <!-- select all button -->
-        <button type="button" id="btnSelectAll" @click="$emit('select-all')" class="button py-0 px-1 mr-5 has-line-height is-ghost has-text-grey pt-1" :title="$t('tooltip.select_all')">
-            <span>{{ $t('label.check_all') }}</span>
-            <LucideSquareCheck class="ml-1" />
+        <button type="button" id="btnSelectAll" @click="$emit('select-all')" class="button py-0 px-0 pt-1 mr-5 has-line-height is-ghost has-text-grey" :title="$t('tooltip.select_all')">
+            <LucideCopyCheck />
+        </button>
+        <!-- select my account button -->
+        <button type="button" id="btnSelectMine" @click="$emit('select-mine')" class="button py-0 px-1 pt-1 has-line-height is-ghost has-text-grey" :title="$t('tooltip.select_mine')">
+            <LucideSquareAsterisk />
+        </button>|
+        <!-- select shared button -->
+        <button type="button" id="btnSelectSharedByMe" @click="$emit('select-shared-by-me')" class="button py-0 pl-0 pr-1 pt-1 has-line-height is-ghost has-text-grey" :title="$t('tooltip.select_shared_by_me')">
+            <LucideSquareUserRound />
+        </button>|
+        <!-- select groupless button -->
+        <button type="button" id="btnSelectGroupless" @click="$emit('select-groupless')" class="button py-0 px-0 pt-1 mr-5 has-line-height is-ghost has-text-grey" :title="$t('tooltip.select_group_less')">
+            <LucideSquareSlash />
         </button>
         <!-- sort asc/desc buttons -->
-        <button type="button" id="btnSortAscending" @click="setSortOrder('asc')" :class="{'has-text-grey' : sortOrder != 'asc'}" class="button has-line-height p-0 is-ghost pt-1" :title="$t('tooltip.sort_ascending')">
+        <button type="button" id="btnSortAscending" @click="setSortOrder('asc')" :class="{'has-text-grey' : sortOrder != 'asc'}" class="button has-line-height p-0 pr-1 is-ghost pt-1" :title="$t('tooltip.sort_ascending')">
             <LucideArrowDownAZ />
-        </button>
-        <button type="button" id="btnSortDescending" @click="setSortOrder('desc')" :class="{'has-text-grey' : sortOrder != 'desc'}" class="button has-line-height p-0 pl-2 is-ghost pt-1" :title="$t('tooltip.sort_descending')">
+        </button>|
+        <button type="button" id="btnSortDescending" @click="setSortOrder('desc')" :class="{'has-text-grey' : sortOrder != 'desc'}" class="button has-line-height p-0 is-ghost pt-1" :title="$t('tooltip.sort_descending')">
             <LucideArrowUpAZ />
         </button>
     </div>

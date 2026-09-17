@@ -6,6 +6,7 @@ use App\Api\v1\Requests\ReorderRequest;
 use App\Api\v1\Requests\TwoFAccountBatchRequest;
 use App\Api\v1\Requests\TwoFAccountDynamicRequest;
 use App\Api\v1\Requests\TwoFAccountExportRequest;
+use App\Api\v1\Requests\TwoFAccountFavoriteRequest;
 use App\Api\v1\Requests\TwoFAccountImportRequest;
 use App\Api\v1\Requests\TwoFAccountIndexRequest;
 use App\Api\v1\Requests\TwoFAccountStoreRequest;
@@ -434,6 +435,22 @@ class TwoFAccountController extends Controller
         TwoFAccounts::withdraw($ids, $request->user());
 
         return response()->json(['message' => 'accounts withdrawn'], 200);
+    }
+
+    /**
+     * Set one account as favorite
+     *
+     * @return TwoFAccountReadResource
+     */
+    public function favorite(TwoFAccountFavoriteRequest $request, TwoFAccount $twofaccount)
+    {
+        $validated = $request->validated();
+
+        $this->authorize('view', $twofaccount);
+
+        TwoFAccounts::toggleFavorite($twofaccount->id, $validated['is_favorite'], $request->user());
+
+        return new TwoFAccountReadResource($twofaccount);
     }
 
     /**

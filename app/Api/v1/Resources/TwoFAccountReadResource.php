@@ -30,6 +30,7 @@ class TwoFAccountReadResource extends TwoFAccountStoreResource
         $isSharedWithAll = Settings::get('enableAllUsersSharingScope') && $request->user()->isSharing($this->resource) && app()->make(TwoFAccountShareService::class)->isSharedWithAll($this->resource);
         $isShared        = $request->user()->isSharing($this->resource) && ! $isSharedWithAll;
         $groupId         = $this->groupIdForUser($request->user());
+        $is_favorite     = $request->user()->hasFavorite($this->resource);
 
         return array_merge(
             [
@@ -39,6 +40,7 @@ class TwoFAccountReadResource extends TwoFAccountStoreResource
                 'borrowed_by'        => $this->when($isBorrowed, $this->user?->name),
                 'is_shared'          => $this->when($isShared, true),
                 'is_shared_with_all' => $this->when($isSharedWithAll, true),
+                'is_favorite'        => $is_favorite,
             ],
             parent::toArray($request),
             [

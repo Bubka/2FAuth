@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { useUserStore } from '@/stores/user'
+import { useErrorHandler } from '@2fauth/stores'
 import { useNotify } from '@2fauth/ui'
 import twofaccountService from '@/services/twofaccountService'
 import { saveAs } from 'file-saver'
@@ -10,6 +11,7 @@ export const useTwofaccounts = defineStore('twofaccounts', {
             items: [],
             selectedIds: [],
             filter: '',
+            showFavoritesOnly: false,
             backendWasNewer: false,
             fetchedOn: null,
         }
@@ -56,6 +58,10 @@ export const useTwofaccounts = defineStore('twofaccounts', {
                             (item.service ? item.service.toLowerCase().includes(state.filter.toLowerCase()) : false)
                             || item.account.toLowerCase().includes(state.filter.toLowerCase())
                         )
+                    }
+
+                    if (state.showFavoritesOnly) {
+                        itemMatch = itemMatch && item.is_favorite == true
                     }
 
                     return itemMatch
@@ -187,7 +193,7 @@ export const useTwofaccounts = defineStore('twofaccounts', {
          * Selects all accounts
          */
         selectAll() {
-            this.selectedIds = this.items.map(a => a.id)
+            this.selectedIds = this.filtered.map(a => a.id)
         },
 
         /**
@@ -195,6 +201,42 @@ export const useTwofaccounts = defineStore('twofaccounts', {
          */
         selectNone() {
             this.selectedIds = []
+        },
+
+        /**
+         * Selects shared by me account
+         */
+        selectSharedByMe() {
+            this.selectNone
+            this.selectedIds = this.filtered.filter(a => a.is_shared == true || a.is_shared_with_all == true)
+                .map(a => a.id)
+        },
+
+        /**
+         * Selects shared with me account
+         */
+        selectSharedWithMe() {
+            this.selectNone
+            this.selectedIds = this.filtered.filter(a => a.is_borrowed == true)
+                .map(a => a.id)
+        },
+
+        /**
+         * Selects my account
+         */
+        selectMine() {
+            this.selectNone
+            this.selectedIds = this.filtered.filter(a => a.is_borrowed == false || ! Object.prototype.hasOwnProperty.call(a, 'is_borrowed'))
+                .map(a => a.id)
+        },
+
+        /**
+         * Selects group-less account
+         */
+        selectGroupless() {
+            this.selectNone
+            this.selectedIds = this.filtered.filter(a => a.group_id == null)
+            .map(a => a.id)
         },
 
         /**
@@ -305,6 +347,34 @@ export const useTwofaccounts = defineStore('twofaccounts', {
          */
         accountIdsWithPeriod(period) {
             return this.items.filter(a => a.period == period).map(item => item.id)
+        },
+
+        /**
+         * Toggle the favorite status of an account
+         */
+        async toggleIsFavorite(accountId) {
+            const notify = useNotify()
+            const errorHandler = useErrorHandler()
+            const index = this.items.findIndex(acc => acc.id === parseInt(accountId))
+
+            if (index > -1) {
+                const is_favorite = ! this.items[index].is_favorite
+
+                await twofaccountService.toggleFavorite(accountId, is_favorite, { returnError: true }).then(response => {
+                    this.items[index].is_favorite = is_favorite
+                })
+                .catch(error => {
+                    if( error.response.status < 500 ) {
+                        notify.alert({ text: this.$i18n.global.t('error.failed_to_set_favorite_status') })
+                    }
+                    else {
+                        errorHandler.show(error)
+                    }
+                })
+            }
+            else {
+                notify.alert({ text: this.$i18n.global.t('error.failed_to_set_favorite_status') })
+            }
         },
     },
 })
