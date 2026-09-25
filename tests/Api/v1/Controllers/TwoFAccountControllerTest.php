@@ -4,6 +4,7 @@ namespace Tests\Api\v1\Controllers;
 
 use App\Api\v1\Controllers\TwoFAccountController;
 use App\Api\v1\Requests\TwoFAccountDynamicRequest;
+use App\Api\v1\Requests\TwoFAccountFavoriteRequest;
 use App\Api\v1\Requests\TwoFAccountUpdateRequest;
 use App\Api\v1\Resources\TwoFAccountCollection;
 use App\Api\v1\Resources\TwoFAccountExportCollection;
@@ -56,6 +57,7 @@ use Tests\FeatureTestCase;
 #[CoversClass(TwoFAccountPolicy::class)]
 #[CoversClass(TwoFAccountUpdateRequest::class)]
 #[CoversClass(TwoFAccountDynamicRequest::class)]
+#[CoversClass(TwoFAccountFavoriteRequest::class)]
 class TwoFAccountControllerTest extends FeatureTestCase
 {
     protected User $user;
@@ -280,6 +282,164 @@ class TwoFAccountControllerTest extends FeatureTestCase
         $this->twofaccountC = $this->createTwofaccountInGroup($this->anotherUser, $this->anotherUserGroupA);
         $this->twofaccountD = $this->createTwofaccountInGroup($this->anotherUser, $this->anotherUserGroupB);
         $this->twofaccountE = $this->createTwofaccountInGroup($this->anotherUser, $this->anotherUserGroupB);
+    }
+
+    #[Test]
+    public function test_user_can_favorite_and_unfavorite_a_visible_twofaccount()
+    {
+        $url = '/api/v1/twofaccounts/' . $this->twofaccountA->id . '/favorite';
+
+        $this->actingAs($this->user, 'api-guard')
+            ->json('PATCH', $url, ['is_favorite' => true])
+            ->assertOk()
+            ->assertJsonPath('is_favorite', true);
+
+        $this->assertDatabaseHas('twofaccount_user_favorites', [
+            'user_id'        => $this->user->id,
+            'twofaccount_id' => $this->twofaccountA->id,
+        ]);
+
+        $this->actingAs($this->user, 'api-guard')
+            ->json('PATCH', $url, ['is_favorite' => true])
+            ->assertOk()
+            ->assertJsonPath('is_favorite', true);
+
+        $this->assertDatabaseCount('twofaccount_user_favorites', 1);
+
+        $this->actingAs($this->user, 'api-guard')
+            ->json('PATCH', $url, ['is_favorite' => false])
+            ->assertOk()
+            ->assertJsonPath('is_favorite', false);
+
+        $this->assertDatabaseMissing('twofaccount_user_favorites', [
+            'user_id'        => $this->user->id,
+            'twofaccount_id' => $this->twofaccountA->id,
+        ]);
+    }
+
+    #[Test]
+    public function test_user_can_favorite_a_twofaccount_shared_directly_with_them()
+    {
+        Settings::set('enableSharing', true);
+
+        TwoFAccountShare::create([
+            'twofaccount_id'      => $this->twofaccountC->id,
+            'shared_with_user_id' => $this->user->id,
+            'scope'               => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id'  => $this->anotherUser->id,
+        ]);
+
+        $this->actingAs($this->user, 'api-guard')
+            ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/favorite', ['is_favorite' => true])
+            ->assertOk()
+            ->assertJsonPath('is_favorite', true);
+
+        $this->assertDatabaseHas('twofaccount_user_favorites', [
+            'user_id'        => $this->user->id,
+            'twofaccount_id' => $this->twofaccountC->id,
+        ]);
+    }
+
+    #[Test]
+    public function test_user_can_favorite_a_twofaccount_shared_with_all_users()
+    {
+        Settings::set('enableSharing', true);
+        Settings::set('enableAllUsersSharingScope', true);
+
+        TwoFAccountShare::create([
+            'twofaccount_id'      => $this->twofaccountC->id,
+            'shared_with_user_id' => null,
+            'scope'               => TwoFAccountShare::SCOPE_ALL_USERS,
+            'created_by_user_id'  => $this->anotherUser->id,
+        ]);
+
+        $this->actingAs($this->user, 'api-guard')
+            ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/favorite', ['is_favorite' => true])
+            ->assertOk()
+            ->assertJsonPath('is_favorite', true);
+
+        $this->assertDatabaseHas('twofaccount_user_favorites', [
+            'user_id'        => $this->user->id,
+            'twofaccount_id' => $this->twofaccountC->id,
+        ]);
+
+        Settings::set('enableAllUsersSharingScope', false);
+    }
+
+    #[Test]
+    public function test_deleting_owned_twofaccount_removes_users_favorite()
+    {
+        $this->actingAs($this->user, 'api-guard')
+            ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountA->id . '/favorite', ['is_favorite' => true])
+            ->assertOk();
+
+        $this->actingAs($this->user, 'api-guard')
+            ->json('DELETE', '/api/v1/twofaccounts/' . $this->twofaccountA->id)
+            ->assertNoContent();
+
+        $this->assertDatabaseMissing('twofaccount_user_favorites', [
+            'user_id'        => $this->user->id,
+            'twofaccount_id' => $this->twofaccountA->id,
+        ]);
+    }
+
+    #[Test]
+    public function test_deleting_borrowed_twofaccount_removes_borrowers_favorite()
+    {
+        Settings::set('enableSharing', true);
+
+        TwoFAccountShare::create([
+            'twofaccount_id'      => $this->twofaccountC->id,
+            'shared_with_user_id' => $this->user->id,
+            'scope'               => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id'  => $this->anotherUser->id,
+        ]);
+
+        $this->actingAs($this->user, 'api-guard')
+            ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/favorite', ['is_favorite' => true])
+            ->assertOk();
+
+        $this->actingAs($this->anotherUser, 'api-guard')
+            ->json('DELETE', '/api/v1/twofaccounts/' . $this->twofaccountC->id)
+            ->assertNoContent();
+
+        $this->assertDatabaseMissing('twofaccount_user_favorites', [
+            'user_id'        => $this->user->id,
+            'twofaccount_id' => $this->twofaccountC->id,
+        ]);
+    }
+
+    #[Test]
+    public function test_user_cannot_favorite_twofaccount_of_another_user()
+    {
+        $this->actingAs($this->user, 'api-guard')
+            ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/favorite', ['is_favorite' => true])
+            ->assertForbidden()
+            ->assertJsonStructure([
+                'message',
+            ]);
+
+        $this->assertDatabaseMissing('twofaccount_user_favorites', [
+            'user_id'        => $this->user->id,
+            'twofaccount_id' => $this->twofaccountC->id,
+        ]);
+    }
+
+    #[Test]
+    public function test_favorite_request_requires_a_boolean_status()
+    {
+        $this->actingAs($this->user, 'api-guard')
+            ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountA->id . '/favorite', ['is_favorite' => 'favorite'])
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors('is_favorite');
+    }
+
+    #[Test]
+    public function test_favorite_missing_twofaccount_returns_not_found()
+    {
+        $response = $this->actingAs($this->user, 'api-guard')
+            ->json('PATCH', '/api/v1/twofaccounts/1000/favorite', ['is_favorite' => true])
+            ->assertNotFound();
     }
 
     #[Test]
