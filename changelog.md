@@ -4,7 +4,8 @@
 
 ### Added
 
-- Quick selection buttons in Manage mode to make it easier to select accounts that are likely to be targeted by the action buttons (Move, Unshared, Delete, Export)
+- Favorite system: Frequently used 2FA accounts can be marked as favorite, regardless of whether they belong to a group. You can easily find your favorites again thanks to a brand new toggle in the filter bar.
+- New quick-select buttons in “Manage” mode to make it easier to select accounts that are likely to be targeted by the action buttons (Move, Unshared, Delete, Export)
 
 ## [8.0.2] - 2026-09-02
 
