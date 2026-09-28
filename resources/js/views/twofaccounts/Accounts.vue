@@ -16,6 +16,7 @@
         OtpDisplay,
         Dots,
         DotsController,
+        TwoFAccountList,
         TwoFAccountListItem
     } from '@2fauth/ui'
     import { useAppSettingsStore } from '@/stores/appSettings'
@@ -523,32 +524,35 @@
                     <!-- accounts -->
                     <div class="accounts">
                         <span id="dv" class="columns is-multiline m-0" :class="{ 'is-centered': user.preferences.displayMode === 'grid' }">
-                            <TwoFAccountListItem
-                                v-for="account in twofaccounts.filtered"
-                                v-model:selectedTwofaccountIds="twofaccounts.selectedIds"
-                                :key="account.id"
-                                :colorScheme="mode"
-                                :storageRootPath="$2fauth.config.subdirectory"
-                                :account="account"
-                                :inManagementMode="bus.inManagementMode"
-                                :enableSharing="appSettings.enableSharing"
-                                :enableAllUsersSharingScope="appSettings.enableAllUsersSharingScope"
-                                :preferences="user.preferences"
-                                :nextOtpOpacityClass="opacities[account.period]"
-                                @show-or-copy="(account) => showOrCopy(account)"
-                                @get-and-copy-otp="(account) => getAndCopyOtp(account)"
-                                @copy-to-clipboard="(pwd) => copyToClipboard(pwd)"
-                                @toggle-is-favorite="(accountId) => toggleOtpDisplayFavorite(accountId)"
-                                @show-otp="(account) => showOTP(account)"
-                            >
-                                <template v-slot:dots>
-                                    <Dots
-                                        ref="dotsRefs"
-                                        :class="'is-inline-block'"
-                                        :isCondensed="true"
-                                        :period="account.period" />
-                                </template>
-                            </TwoFAccountListItem>
+                            <TwoFAccountList :layout="user.preferences.displayMode">
+                                <TwoFAccountListItem
+                                    v-for="account in twofaccounts.filtered"
+                                    v-model:selectedTwofaccountIds="twofaccounts.selectedIds"
+                                    :layout="user.preferences.displayMode"
+                                    :key="account.id"
+                                    :colorScheme="mode"
+                                    :storageRootPath="$2fauth.config.subdirectory"
+                                    :account="account"
+                                    :inManagementMode="bus.inManagementMode"
+                                    :enableSharing="appSettings.enableSharing"
+                                    :enableAllUsersSharingScope="appSettings.enableAllUsersSharingScope"
+                                    :preferences="user.preferences"
+                                    :nextOtpOpacityClass="opacities[account.period]"
+                                    @show-or-copy="(account) => showOrCopy(account)"
+                                    @get-and-copy-otp="(account) => getAndCopyOtp(account)"
+                                    @copy-to-clipboard="(pwd) => copyToClipboard(pwd)"
+                                    @toggle-is-favorite="(accountId) => toggleOtpDisplayFavorite(accountId)"
+                                    @show-otp="(account) => showOTP(account)"
+                                >
+                                    <template v-slot:dots>
+                                        <Dots
+                                            ref="dotsRefs"
+                                            :class="'is-inline-block'"
+                                            :isCondensed="true"
+                                            :period="account.period" />
+                                    </template>
+                                </TwoFAccountListItem>
+                            </TwoFAccountList>
                         </span>
                     </div>
                 </div>
