@@ -302,6 +302,8 @@
                         <h4 ref="heading-accounts" class="title is-4 pt-4">{{ $t('heading.2fa_accounts') }}</h4>
                         <!-- display mode -->
                         <FormToggle v-model="user.preferences.displayMode" @update:model-value="val => savePreference('displayMode', val)" :choices="layouts" fieldName="displayMode" :isLocked="appSettings.lockedPreferences.includes('displayMode')" label="field.display_mode" help="field.display_mode.help" />
+                        <!-- use Desktop Table Layout -->
+                        <FormCheckbox v-model="user.preferences.useDesktopTableLayout" @update:model-value="val => savePreference('useDesktopTableLayout', val)" fieldName="useDesktopTableLayout" :isLocked="appSettings.lockedPreferences.includes('useDesktopTableLayout')" label="field.desktop_table_layout" help="field.desktop_table_layout.help" />
                         <!-- sort case sensitive -->
                         <FormCheckbox v-model="user.preferences.sortCaseSensitive" @update:model-value="val => savePreference('sortCaseSensitive', val)" fieldName="sortCaseSensitive" :isLocked="appSettings.lockedPreferences.includes('sortCaseSensitive')" label="field.sort_case_sensitive" help="field.sort_case_sensitive.help" />
                         <!-- enable favorites -->

@@ -7,6 +7,7 @@
     import ExportButtons from '@/components/ExportButtons.vue'
     import { UseColorMode } from '@vueuse/components'
     import { useUserStore } from '@/stores/user'
+    import { useSettingsBreakpoints } from '@/composables/breakpoints'
     import {
         useNotify,
         SearchBox,
@@ -45,6 +46,7 @@
     const twofaccounts = useTwofaccounts()
     const groups = useGroups()
     const appSettings = useAppSettingsStore()
+    const { isDesktop } = useSettingsBreakpoints()
 
     const showOtpInModal = ref(false)
     const showExportFormatSelector = ref(false)
@@ -106,6 +108,13 @@
     */
     const showAccounts = computed(() => {
         return !twofaccounts.isEmpty && !showGroupSwitch.value && !showDestinationGroupSelector.value
+    })
+
+    /**
+     * Returns whether or not the desktop table layout must be used
+    */
+    const showDesktopTable = computed(() => {
+        return isDesktop.value && user.preferences.useDesktopTableLayout
     })
 
     onMounted(async () => {
@@ -459,7 +468,9 @@
             </template>
             <template #subheader v-if="! showDestinationGroupSelector">
                 <!-- toolbar -->
-                <Toolbar v-if="bus.inManagementMode"
+                <Teleport defer to="#table-toolbar" :disabled="!showDesktopTable">
+                <!-- <Toolbar v-if="bus.inManagementMode" -->
+                <Toolbar v-if="bus.inManagementMode || showDesktopTable"
                     v-model:sortOrder="user.preferences.sortOrder"
                     :selectedCount="twofaccounts.selectedCount"
                     @clear-selected="twofaccounts.selectNone()"
@@ -470,26 +481,35 @@
                     @select-shared-by-me="twofaccounts.selectSharedByMe()"
                     @select-groupless="twofaccounts.selectGroupless()">
                 </Toolbar>
+                </Teleport>
                 <!-- group switch toggle -->
-                <div v-else class="has-text-centered">
+                <div v-if="!bus.inManagementMode" class="has-text-centered">
+                <!-- <div v-else class="has-text-centered"> -->
+                    <!-- group switch -->
                     <div v-if="showGroupSwitch">
                         <button type="button" id="btnHideGroupSwitch" :title="$t('tooltip.hide_group_selector')" tabindex="1" class="button is-text is-like-text has-text-grey-dark" :class="{'has-text-grey' : mode != 'dark'}" @click.stop="showGroupSwitch = !showGroupSwitch">
                             {{ $t('label.select_accounts_to_show') }}
                         </button>
                     </div>
                     <div v-else>
-                        <GroupChips v-if="user.preferences.useGroupChips"
-                            v-model:active-group="user.preferences.activeGroup"
-                            v-model:show-group-switch="showGroupSwitch"
-                            v-model:show-favorites-only="twofaccounts.showFavoritesOnly"
-                            :groups="groups.items"
-                            :filteredCount="twofaccounts.filteredCount"
-                            :useShare="appSettings.enableSharing"
-                            :useShareAllScope="appSettings.enableAllUsersSharingScope"
-                            :useVirtualChips="user.preferences.showVirtualChips"
-                            :useFavorites="user.preferences.enableFavorites"
-                            @active-group-changed="saveActiveGroup" />
-                        <GroupCallToSwitch v-else
+                        <!-- group chips -->
+                        <template  v-if="user.preferences.useGroupChips">
+                        <!-- <Teleport defer to="#table-groupchips" :disabled="!showDesktopTable"> -->
+                            <GroupChips
+                                v-model:active-group="user.preferences.activeGroup"
+                                v-model:show-group-switch="showGroupSwitch"
+                                v-model:show-favorites-only="twofaccounts.showFavoritesOnly"
+                                :groups="groups.items"
+                                :filteredCount="twofaccounts.filteredCount"
+                                :useShare="appSettings.enableSharing"
+                                :useShareAllScope="appSettings.enableAllUsersSharingScope"
+                                :useVirtualChips="user.preferences.showVirtualChips"
+                                :useFavorites="user.preferences.enableFavorites"
+                                @active-group-changed="saveActiveGroup" />
+                        <!-- </Teleport> -->
+
+                         </template>
+                        <GroupCallToSwitch v-if="!user.preferences.useGroupChips"
                             v-model:show-group-switch="showGroupSwitch"
                             :activeGroup="user.preferences.activeGroup"
                             :currentGroup="groups.current"
@@ -520,15 +540,19 @@
                     @accounts-moved="postGroupAssignementUpdate">
                 </DestinationGroupSelector>
                 <!-- show accounts list -->
-                <div class="accounts-container" v-if="showAccounts" :class="bus.inManagementMode ? 'is-edit-mode' : ''">
+                <div class="accounts-container" :class="[{ 'is-edit-mode': bus.inManagementMode }]" v-if="showAccounts">
+                    <div class="columns is-gapless mb-0">
+                        <div id="table-toolbar" class="column is-narrow ml-3"></div>
+                        <div id="table-groupchips" class="column ml-6"></div>
+                    </div>
                     <!-- accounts -->
                     <div class="accounts">
                         <span id="dv" class="columns is-multiline m-0" :class="{ 'is-centered': user.preferences.displayMode === 'grid' }">
-                            <TwoFAccountList :layout="user.preferences.displayMode">
+                            <TwoFAccountList :useDesktopTableLayout="showDesktopTable">
                                 <TwoFAccountListItem
                                     v-for="account in twofaccounts.filtered"
                                     v-model:selectedTwofaccountIds="twofaccounts.selectedIds"
-                                    :layout="user.preferences.displayMode"
+                                    :useDesktopTableLayout="showDesktopTable"
                                     :key="account.id"
                                     :colorScheme="mode"
                                     :storageRootPath="$2fauth.config.subdirectory"
@@ -539,7 +563,7 @@
                                     :preferences="user.preferences"
                                     :nextOtpOpacityClass="opacities[account.period]"
                                     @show-or-copy="(account) => showOrCopy(account)"
-                                    @get-and-copy-otp="(account) => getAndCopyOtp(account)"
+                                    @get-and-copy-otp="(account) => getAndCopyOTP(account)"
                                     @copy-to-clipboard="(pwd) => copyToClipboard(pwd)"
                                     @toggle-is-favorite="(accountId) => toggleOtpDisplayFavorite(accountId)"
                                     @show-otp="(account) => showOTP(account)"
@@ -575,30 +599,35 @@
                 </VueFooter>
             </template>
             <template #footer v-else-if="! showDestinationGroupSelector">
-                <VueFooter v-if="bus.inManagementMode && !showDestinationGroupSelector">
+                <VueFooter>
                     <template #default>
                         <ActionButtons
-                            v-model:inManagementMode="bus.inManagementMode"
                             :areDisabled="twofaccounts.hasNoneSelected"
-                            :canUnshare="twofaccounts.hasOnlySharedSelected"
-                            :showUnshare="appSettings.enableSharing"
+                            :showNew="!bus.inManagementMode || showDesktopTable"
+                            :showManage="!bus.inManagementMode && !showDesktopTable"
+                            :showMove="bus.inManagementMode || showDesktopTable"
+                            :showDelete="bus.inManagementMode || showDesktopTable"
+                            :showUnshare="(bus.inManagementMode || showDesktopTable) && appSettings.enableSharing"
+                            :showExport="bus.inManagementMode || showDesktopTable"
                             :canDelete="!twofaccounts.hasBorrowedSelected"
+                            :canUnshare="twofaccounts.hasOnlySharedSelected"
                             :canExport="!twofaccounts.hasBorrowedSelected"
+                            @switch-to-management-mode="bus.inManagementMode = true"
                             @move-button-clicked="showDestinationGroupSelector = true"
                             @delete-button-clicked="deleteAccounts"
                             @export-button-clicked="showExportFormatSelector = true"
                             @unshare-button-clicked="bulkUnshare">
                         </ActionButtons>
                     </template>
-                    <template #subpart>
+                    <template #subpart v-if="bus.inManagementMode && !showDestinationGroupSelector">
                         <button type="button" id="lnkExitEdit" class="button is-ghost is-like-text" @click.stop="exitManagementMode">{{ $t('label.done') }}</button>
                     </template>
                 </VueFooter>
-                <VueFooter v-else>
+                <!-- <VueFooter v-else>
                     <template #default>
                         <ActionButtons v-model:inManagementMode="bus.inManagementMode" />
                     </template>
-                </VueFooter>
+                </VueFooter> -->
             </template>
         </StackLayout>
         <!-- export modal -->

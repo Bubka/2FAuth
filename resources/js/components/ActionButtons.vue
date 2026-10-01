@@ -7,9 +7,13 @@
     const user = useUserStore()
 
     const props = defineProps({
-        inManagementMode: {
+        showNew: {
             type: Boolean,
-            default: false
+            default: true
+        },
+        showManage: {
+            type: Boolean,
+            default: true
         },
         canMove: {
             type: Boolean,
@@ -17,7 +21,7 @@
         },
         showMove: {
             type: Boolean,
-            default: true
+            default: false
         },
         canDelete: {
             type: Boolean,
@@ -25,7 +29,7 @@
         },
         showDelete: {
             type: Boolean,
-            default: true
+            default: false
         },
         canUnshare: {
             type: Boolean,
@@ -41,7 +45,7 @@
         },
         showExport: {
             type: Boolean,
-            default: true
+            default: false
         },
         areDisabled: {
             type: Boolean,
@@ -49,7 +53,14 @@
         },
     }) 
     
-    const emit = defineEmits(['update:inManagementMode', 'move-button-clicked', 'delete-button-clicked', 'export-button-clicked', 'unshare-button-clicked'])
+    const emit = defineEmits([
+        'update:inManagementMode',
+        'move-button-clicked',
+        'delete-button-clicked',
+        'export-button-clicked',
+        'unshare-button-clicked',
+        'switch-to-management-mode'
+    ])
 
     /**
      * Routes user to the appropriate submitting view
@@ -70,7 +81,7 @@
 <template>
     <UseColorMode v-slot="{ mode }">
         <!-- New item buttons -->
-        <p class="control" v-if="!inManagementMode">
+        <p class="control" v-if="showNew">
             <button type="button" class="button is-link is-rounded is-focus" @click="goAddNewAccount">
                 <span>{{ $t('label.new') }}</span>
                 <span class="icon is-small">
@@ -79,11 +90,18 @@
             </button>
         </p>
         <!-- Manage button -->
-        <p class="control" v-if="!inManagementMode">
-            <button type="button" id="btnManage" class="button is-rounded" :class="{'is-dark' : mode == 'dark'}" @click="$emit('update:inManagementMode', true)">{{ $t('label.manage') }}</button>
+        <p class="control" v-if="showManage">
+            <button
+                type="button"
+                id="btnManage"
+                class="button is-rounded"
+                :class="{'is-dark' : mode == 'dark'}"
+                @click="$emit('switch-to-management-mode')">
+                    {{ $t('label.manage') }}
+            </button>
         </p>
         <!-- move button -->
-        <p class="control" v-if="inManagementMode && showMove">
+        <p class="control" v-if="showMove">
             <button
                 id="btnMove" 
                 :disabled='areDisabled || !canMove' class="button is-rounded"
@@ -97,7 +115,7 @@
             </button>
         </p>
         <!-- unshare button -->
-        <p class="control" v-if="inManagementMode && showUnshare">
+        <p class="control" v-if="showUnshare">
             <button
                 id="btnShare" 
                 :disabled='areDisabled || !canUnshare' class="button is-rounded"
@@ -111,7 +129,7 @@
             </button>
         </p>
         <!-- delete button -->
-        <p class="control" v-if="inManagementMode && showDelete">
+        <p class="control" v-if="showDelete">
             <button
                 id="btnDelete" 
                 :disabled='areDisabled || !canDelete' class="button is-rounded"
@@ -125,7 +143,7 @@
             </button>
         </p>
         <!-- export button -->
-        <p class="control" v-if="inManagementMode && showExport">
+        <p class="control" v-if="showExport">
             <button
                 id="btnExport" 
                 :disabled='areDisabled || !canExport' class="button is-rounded"

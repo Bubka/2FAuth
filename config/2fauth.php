@@ -12,6 +12,7 @@ $preferences = [
     'clearSearchOnCopy'         => envUnlessEmpty('USERPREF_DEFAULT__CLEAR_SEARCH_ON_COPY', false),
     'useBasicQrcodeReader'      => envUnlessEmpty('USERPREF_DEFAULT__USE_BASIC_QRCODE_READER', false),
     'displayMode'               => envUnlessEmpty('USERPREF_DEFAULT__DISPLAY_MODE', 'list'),
+    'useDesktopTableLayout'     => envUnlessEmpty('USERPREF_DEFAULT__USE_DESKTOP_TABLE_LAYOUT', false),
     'showAccountsIcons'         => envUnlessEmpty('USERPREF_DEFAULT__SHOW_ACCOUNTS_ICONS', true),
     'iconSource'                => envUnlessEmpty('USERPREF_DEFAULT__ICON_SOURCE', 'logolib'),
     'iconCollection'            => envUnlessEmpty('USERPREF_DEFAULT__ICON_COLLECTION', 'selfh'),
