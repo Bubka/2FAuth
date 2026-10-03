@@ -485,48 +485,44 @@
                 </div>
             </template>
             <template #subheader v-if="! showDestinationGroupSelector">
-                <!-- toolbar -->
-                <Teleport defer to="#table-toolbar" :disabled="!showDesktopTable">
-                <!-- <Toolbar v-if="bus.inManagementMode" -->
-                <Toolbar v-if="bus.inManagementMode || showDesktopTable"
-                    v-model:sortOrder="user.preferences.sortOrder"
-                    :selectedCount="twofaccounts.selectedCount"
-                    @clear-selected="twofaccounts.selectNone()"
-                    @select-all="twofaccounts.selectAll()"
-                    @sort-asc="twofaccounts.sortAsc()"
-                    @sort-desc="twofaccounts.sortDesc()"
-                    @select-mine="twofaccounts.selectMine()"
-                    @select-shared-by-me="twofaccounts.selectSharedByMe()"
-                    @select-groupless="twofaccounts.selectGroupless()">
-                </Toolbar>
-                </Teleport>
-                <!-- group switch toggle -->
+                <div v-if="!showGroupSwitch" class="is-flex is-flex-direction-row accounts-container"
+                    :class="showDesktopTable ? 'pl-3 is-justify-content-space-between' : 'is-justify-content-space-around'">
+                    <!-- toolbar -->
+                    <Toolbar v-if="bus.inManagementMode || showDesktopTable"
+                        v-model:sortOrder="user.preferences.sortOrder"
+                        :selectedCount="twofaccounts.selectedCount"
+                        @clear-selected="twofaccounts.selectNone()"
+                        @select-all="twofaccounts.selectAll()"
+                        @sort-asc="twofaccounts.sortAsc()"
+                        @sort-desc="twofaccounts.sortDesc()"
+                        @select-mine="twofaccounts.selectMine()"
+                        @select-shared-by-me="twofaccounts.selectSharedByMe()"
+                        @select-groupless="twofaccounts.selectGroupless()">
+                    </Toolbar>
+                    <!-- group chips -->
+                    <GroupChips
+                        v-if="showDesktopTable || (user.preferences.useGroupChips && !bus.inManagementMode && !showGroupSwitch)"
+                        v-model:active-group="user.preferences.activeGroup"
+                        v-model:show-group-switch="showGroupSwitch"
+                        v-model:show-favorites-only="twofaccounts.showFavoritesOnly"
+                        :groups="groups.items"
+                        :filteredCount="twofaccounts.filteredCount"
+                        :useShare="appSettings.enableSharing"
+                        :useShareAllScope="appSettings.enableAllUsersSharingScope"
+                        :useVirtualChips="user.preferences.showVirtualChips"
+                        :useFavorites="user.preferences.enableFavorites"
+                        @active-group-changed="saveActiveGroup">
+                    </GroupChips>
+                </div>
                 <div v-if="!bus.inManagementMode" class="has-text-centered">
-                <!-- <div v-else class="has-text-centered"> -->
-                    <!-- group switch -->
+                    <!-- close call to switch label -->
                     <div v-if="showGroupSwitch">
                         <button type="button" id="btnHideGroupSwitch" :title="$t('tooltip.hide_group_selector')" tabindex="1" class="button is-text is-like-text has-text-grey-dark" :class="{'has-text-grey' : mode != 'dark'}" @click.stop="showGroupSwitch = !showGroupSwitch">
                             {{ $t('label.select_accounts_to_show') }}
                         </button>
                     </div>
-                    <div v-else>
-                        <!-- group chips -->
-                        <template  v-if="user.preferences.useGroupChips">
-                        <!-- <Teleport defer to="#table-groupchips" :disabled="!showDesktopTable"> -->
-                            <GroupChips
-                                v-model:active-group="user.preferences.activeGroup"
-                                v-model:show-group-switch="showGroupSwitch"
-                                v-model:show-favorites-only="twofaccounts.showFavoritesOnly"
-                                :groups="groups.items"
-                                :filteredCount="twofaccounts.filteredCount"
-                                :useShare="appSettings.enableSharing"
-                                :useShareAllScope="appSettings.enableAllUsersSharingScope"
-                                :useVirtualChips="user.preferences.showVirtualChips"
-                                :useFavorites="user.preferences.enableFavorites"
-                                @active-group-changed="saveActiveGroup" />
-                        <!-- </Teleport> -->
-
-                         </template>
+                    <!-- call to switch label -->
+                    <div v-else-if="!showDesktopTable">
                         <GroupCallToSwitch v-if="!user.preferences.useGroupChips"
                             v-model:show-group-switch="showGroupSwitch"
                             :activeGroup="user.preferences.activeGroup"
@@ -559,10 +555,6 @@
                 </DestinationGroupSelector>
                 <!-- show accounts list -->
                 <div class="accounts-container" :class="[{ 'is-edit-mode': bus.inManagementMode }]" v-if="showAccounts">
-                    <div class="columns is-gapless mb-0">
-                        <div id="table-toolbar" class="column is-narrow ml-3"></div>
-                        <div id="table-groupchips" class="column ml-6"></div>
-                    </div>
                     <!-- accounts -->
                     <div class="accounts">
                         <span id="dv" class="columns is-multiline m-0" :class="{ 'is-centered': user.preferences.displayMode === 'grid' }">
