@@ -45,7 +45,7 @@
         <button type="button" id="btnUnselectAll" @click="$emit('clear-selected')" class="button py-0 pl-0 pr-1 pt-1 has-line-height is-ghost has-text-grey " :title="$t('tooltip.clear_selection')" :disabled="selectedCount == 0">
             <!-- <span>{{ $t('label.check_all') }}</span> -->
             <LucideSquareDashed v-if="selectedCount == 0" stroke-width=1.5 />
-            <LucideSquareDashedX v-els stroke-width=1.5e />
+            <LucideSquareDashedX v-else stroke-width=1.5 />
         </button>|
         <!-- select all button -->
         <button type="button" id="btnSelectAll" @click="$emit('select-all')" class="button py-0 px-0 pt-1 mr-5 has-line-height is-ghost has-text-grey" :title="$t('tooltip.select_all')">
