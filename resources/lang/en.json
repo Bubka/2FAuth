@@ -25,6 +25,7 @@
     "error.2fauth_has_not_a_valid_domain": "2FAuth's domain is not a valid domain",
     "error.aborted_by_user": "Aborted by user",
     "error.account_managed_by_external_provider": "Account managed by an external provider",
+    "error.account_no_longer_exists": "This account no longer exists",
     "error.auth_proxy_failed.legend": "2Fauth is configured to run behind an authentication proxy but your proxy does not return the expected header. Check your configuration and try again.",
     "error.auth_proxy_failed": "Proxy authentication failed",
     "error.authenticator_missing_discoverable_credential_support": "Authenticator missing discoverable credential support",

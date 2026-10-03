@@ -47,6 +47,10 @@ export default {
         return apiClient.post('/twofaccounts/reorder', { orderedIds: orderedIds }, { ...config })
     },
 
+    delete(id, config = {}) {
+        return apiClient.delete('/twofaccounts/' + id, { ...config })
+    },
+
     batchDelete(ids, config = {}) {
         return apiClient.delete('/twofaccounts?ids=' + ids, { ...config })
     },

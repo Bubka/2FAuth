@@ -354,10 +354,8 @@
     /**
      * Deletes given account
      */
-    async function deleteAccount(account) {
-        twofaccounts.selectNone()
-        selectAccount(account)
-        await twofaccounts.deleteSelected()
+    async function deleteAccount(accountId) {
+        await twofaccounts.delete(accountId)
 
         if (twofaccounts.isEmpty) {
             bus.inManagementMode = false
@@ -580,6 +578,7 @@
                                     @toggle-is-favorite="(accountId) => toggleOtpDisplayFavorite(accountId)"
                                     @show-otp="(account) => showOTP(account)"
                                     @get-shares="(accountId) => getTwofaccountShares(accountId)"
+                                    @delete-account-clicked="(accountId) => deleteAccount(accountId)"
                                 >
                                     <template v-slot:dots>
                                         <Dots
@@ -697,7 +696,7 @@
                             <router-link id="lnkEdit" :to="{ name: 'editAccount', params: { twofaccountId: visibleAccount.id }}" class="tag is-rounded mx-2" :class="mode == 'dark' ? 'is-dark' : 'is-white'" :title="$t('tooltip.edit_account')">
                                 <LucidePencil class="icon-size-1" />
                             </router-link>
-                            <button id="btnDelete" @click="deleteAccount(visibleAccount)" class="tag is-rounded" :class="mode == 'dark' ? 'is-dark' : 'is-white'" :title="$t('tooltip.delete_account')">
+                            <button id="btnDelete" @click="deleteAccount(visibleAccount.id)" class="tag is-rounded" :class="mode == 'dark' ? 'is-dark' : 'is-white'" :title="$t('tooltip.delete_account')">
                                 <LucideTrash2 class="icon-size-1" />
                             </button>
                         </div>
