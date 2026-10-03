@@ -509,6 +509,7 @@
                         :useShareAllScope="appSettings.enableAllUsersSharingScope"
                         :useVirtualChips="user.preferences.showVirtualChips"
                         :useFavorites="user.preferences.enableFavorites"
+                        :isRightAligned="showDesktopTable"
                         @active-group-changed="saveActiveGroup">
                     </GroupChips>
                 </div>
