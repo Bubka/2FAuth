@@ -57,6 +57,8 @@
     const opacities = ref({})
     const showFooterMenu = ref(false)
     const visibleAccount = ref(null)
+    const isFetchingShares = ref(null)
+    const twofaccountSpecificShares = ref({})
 
     const otpDisplay = ref(null)
     const accountParams = ref({
@@ -427,6 +429,22 @@
     }
 
     /**
+     * Fetches list of specific user shares for a given account
+     */
+    function getTwofaccountShares(accountId) {
+        isFetchingShares.value = accountId
+
+        shareService.getShares(accountId).then(response => {
+            if (response?.data?.specific_users.length > 0) {
+                twofaccountSpecificShares.value[accountId] = response.data.specific_users
+            }
+        })
+        .finally(() => {
+            isFetchingShares.value = null
+        })
+    }
+
+    /**
      * Unshare selected accounts
      */
     async function bulkUnshare() {
@@ -551,9 +569,11 @@
                             <TwoFAccountList :useDesktopTableLayout="showDesktopTable">
                                 <TwoFAccountListItem
                                     v-for="account in twofaccounts.filtered"
-                                    v-model:selectedTwofaccountIds="twofaccounts.selectedIds"
-                                    :useDesktopTableLayout="showDesktopTable"
                                     :key="account.id"
+                                    v-model:selectedTwofaccountIds="twofaccounts.selectedIds"
+                                    v-bind="twofaccountSpecificShares[account.id] !== undefined ? { specificShares: twofaccountSpecificShares[account.id] } : { specificShares: [] }"
+                                    :useDesktopTableLayout="showDesktopTable"
+                                    :isFetchingShares="isFetchingShares == account.id"
                                     :colorScheme="mode"
                                     :storageRootPath="$2fauth.config.subdirectory"
                                     :account="account"
@@ -567,6 +587,7 @@
                                     @copy-to-clipboard="(pwd) => copyToClipboard(pwd)"
                                     @toggle-is-favorite="(accountId) => toggleOtpDisplayFavorite(accountId)"
                                     @show-otp="(account) => showOTP(account)"
+                                    @get-shares="(accountId) => getTwofaccountShares(accountId)"
                                 >
                                     <template v-slot:dots>
                                         <Dots
