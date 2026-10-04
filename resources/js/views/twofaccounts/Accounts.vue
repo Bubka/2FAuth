@@ -77,34 +77,6 @@
     const dotsControllers = ref([])
     const dotsRefs = ref([])
 
-    let stopSortable
-
-    watch(showOtpInModal, (val) => {
-        if (val == false) {
-            otpDisplay.value?.clearOTP()
-        }
-    })
-
-    watch(
-        () => twofaccounts.items,
-        (val) => {
-            stopSortable
-            if (bus.inManagementMode) {
-                setSortable()
-            }
-        }
-    )
-
-    watch(
-        () => bus.inManagementMode,
-        (val) => {
-            stopSortable
-            if (val) {
-                setSortable()
-            }
-        }
-    )
-
     /**
      * Returns whether or not the accounts should be displayed
     */
@@ -118,6 +90,41 @@
     const showDesktopTable = computed(() => {
         return isDesktop.value && user.preferences.useDesktopTableLayout
     })
+
+    const { start: startSortable, stop: stopSortable } = useSortable('#dv', twofaccounts.filtered, {
+        animation: 200,
+        handle: '.drag-handle',
+        watchElement: true,
+        onUpdate: (e) => {
+            const movedId = twofaccounts.filtered[e.oldIndex].id
+            const inItemsIndex = twofaccounts.items.findIndex(item => item.id == movedId)
+            moveArrayElement(twofaccounts.items, inItemsIndex, e.newIndex)
+
+            nextTick(() => {
+                twofaccounts.saveOrder('free')
+            })
+        }
+    })
+
+    watch(showOtpInModal, (val) => {
+        if (val == false) {
+            otpDisplay.value?.clearOTP()
+        }
+    })
+
+    watch(
+        [() => bus.inManagementMode, () => showDesktopTable.value, () => twofaccounts.items],
+        ([newInManagementMode, newShowDesktopTable, newTwofaccountItems]) => {
+            if (newTwofaccountItems.length > 0 && (newInManagementMode || newShowDesktopTable)) {
+                nextTick(() => {
+                    startSortable()
+                })
+            }
+            else {
+                stopSortable()
+            }
+        }
+    )
 
     onMounted(async () => {
         // This SFC is reached only if the user has some twofaccounts (see the starter middleware).
@@ -141,24 +148,6 @@
             twofaccounts.showFavoritesOnly = false
         }
     })
-
-    // Enables the sortable behaviour of the twofaccounts list
-    function setSortable() {
-        const { stop } = useSortable('#dv', twofaccounts.filtered, {
-            animation: 200,
-            handle: '.drag-handle',
-            onUpdate: (e) => {
-                const movedId = twofaccounts.filtered[e.oldIndex].id
-                const inItemsIndex = twofaccounts.items.findIndex(item => item.id == movedId)
-                moveArrayElement(twofaccounts.items, inItemsIndex, e.newIndex)
-
-                nextTick(() => {
-                    twofaccounts.saveOrder('free')
-                })
-            }
-        })
-        stopSortable = stop
-    }
 
     /**
      * Runs some updates after accounts assignement/withdrawal
@@ -556,41 +545,39 @@
                 <div class="accounts-container" :class="[{ 'is-edit-mode': bus.inManagementMode }]" v-if="showAccounts">
                     <!-- accounts -->
                     <div class="accounts">
-                        <span id="dv" class="columns is-multiline m-0" :class="{ 'is-centered': user.preferences.displayMode === 'grid' }">
-                            <TwoFAccountList :useDesktopTableLayout="showDesktopTable">
-                                <TwoFAccountListItem
-                                    v-for="account in twofaccounts.filtered"
-                                    :key="account.id"
-                                    v-model:selectedTwofaccountIds="twofaccounts.selectedIds"
-                                    v-bind="twofaccountSpecificShares[account.id] !== undefined ? { specificShares: twofaccountSpecificShares[account.id] } : { specificShares: [] }"
-                                    :useDesktopTableLayout="showDesktopTable"
-                                    :isFetchingShares="isFetchingShares == account.id"
-                                    :colorScheme="mode"
-                                    :storageRootPath="$2fauth.config.subdirectory"
-                                    :account="account"
-                                    :inManagementMode="bus.inManagementMode"
-                                    :enableSharing="appSettings.enableSharing"
-                                    :enableAllUsersSharingScope="appSettings.enableAllUsersSharingScope"
-                                    :preferences="user.preferences"
-                                    :nextOtpOpacityClass="opacities[account.period]"
-                                    @show-or-copy="(account) => showOrCopy(account)"
-                                    @get-and-copy-otp="(account) => getAndCopyOTP(account)"
-                                    @copy-to-clipboard="(pwd) => copyToClipboard(pwd)"
-                                    @toggle-is-favorite="(accountId) => toggleOtpDisplayFavorite(accountId)"
-                                    @show-otp="(account) => showOTP(account)"
-                                    @get-shares="(accountId) => getTwofaccountShares(accountId)"
-                                    @delete-account-clicked="(accountId) => deleteAccount(accountId)"
-                                >
-                                    <template v-slot:dots>
-                                        <Dots
-                                            ref="dotsRefs"
-                                            :class="'is-inline-block'"
-                                            :isCondensed="true"
-                                            :period="account.period" />
-                                    </template>
-                                </TwoFAccountListItem>
-                            </TwoFAccountList>
-                        </span>
+                        <TwoFAccountList :useDesktopTableLayout="showDesktopTable" :isCentered="user.preferences.displayMode === 'grid'">
+                            <TwoFAccountListItem
+                                v-for="account in twofaccounts.filtered"
+                                :key="account.id"
+                                v-model:selectedTwofaccountIds="twofaccounts.selectedIds"
+                                v-bind="twofaccountSpecificShares[account.id] !== undefined ? { specificShares: twofaccountSpecificShares[account.id] } : { specificShares: [] }"
+                                :useDesktopTableLayout="showDesktopTable"
+                                :isFetchingShares="isFetchingShares == account.id"
+                                :colorScheme="mode"
+                                :storageRootPath="$2fauth.config.subdirectory"
+                                :account="account"
+                                :inManagementMode="bus.inManagementMode"
+                                :enableSharing="appSettings.enableSharing"
+                                :enableAllUsersSharingScope="appSettings.enableAllUsersSharingScope"
+                                :preferences="user.preferences"
+                                :nextOtpOpacityClass="opacities[account.period]"
+                                @show-or-copy="(account) => showOrCopy(account)"
+                                @get-and-copy-otp="(account) => getAndCopyOTP(account)"
+                                @copy-to-clipboard="(pwd) => copyToClipboard(pwd)"
+                                @toggle-is-favorite="(accountId) => toggleOtpDisplayFavorite(accountId)"
+                                @show-otp="(account) => showOTP(account)"
+                                @get-shares="(accountId) => getTwofaccountShares(accountId)"
+                                @delete-account-clicked="(accountId) => deleteAccount(accountId)"
+                            >
+                                <template v-slot:dots>
+                                    <Dots
+                                        ref="dotsRefs"
+                                        :class="'is-inline-block'"
+                                        :isCondensed="true"
+                                        :period="account.period" />
+                                </template>
+                            </TwoFAccountListItem>
+                        </TwoFAccountList>
                     </div>
                 </div>
             </template>
