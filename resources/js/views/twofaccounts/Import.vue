@@ -373,32 +373,20 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <th>Google Authenticator</th>
-                                <td></td>
-                                <td><LucideCheck stroke-width="3" class="icon-size-1" /></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <th>Aegis Auth</th>
-                                <td><LucideCheck stroke-width="3" class="icon-size-1" /></td>
-                                <td></td>
-                                <td><LucideCheck stroke-width="3" class="icon-size-1" /></td>
-                            </tr>
-                            <tr>
                                 <th>2FAS auth</th>
                                 <td></td>
                                 <td></td>
                                 <td><LucideCheck stroke-width="3" class="icon-size-1" /></td>
                             </tr>
                             <tr>
-                                <th>FreeOTP+</th>
-                                <td><LucideCheck stroke-width="3" class="icon-size-1" /></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            <tr>
                                 <th>2FAuth</th>
                                 <td></td>
+                                <td></td>
+                                <td><LucideCheck stroke-width="3" class="icon-size-1" /></td>
+                            </tr>
+                            <tr>
+                                <th>Aegis Auth</th>
+                                <td><LucideCheck stroke-width="3" class="icon-size-1" /></td>
                                 <td></td>
                                 <td><LucideCheck stroke-width="3" class="icon-size-1" /></td>
                             </tr>
@@ -413,6 +401,24 @@
                                 <td></td>
                                 <td></td>
                                 <td><LucideCheck stroke-width="3" class="icon-size-1" /></td>
+                            </tr>
+                            <tr>
+                                <th>Ente Auth</th>
+                                <td><LucideCheck stroke-width="3" class="icon-size-1" /></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th>FreeOTP+</th>
+                                <td><LucideCheck stroke-width="3" class="icon-size-1" /></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th>Google Authenticator</th>
+                                <td></td>
+                                <td><LucideCheck stroke-width="3" class="icon-size-1" /></td>
+                                <td></td>
                             </tr>
                         </tbody>
                     </table>           
