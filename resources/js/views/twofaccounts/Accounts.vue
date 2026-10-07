@@ -582,7 +582,7 @@
                 </div>
             </template>
             <template #footer v-if="showGroupSwitch">
-                <VueFooter :show-buttons="true">
+                <VueFooter>
                     <!-- Create group buttons -->
                     <p class="control">
                         <RouterLink class="button is-link is-outlined is-rounded" :to="{ name: 'createGroup' }" :title="$t('tooltip.create_new_group')">
@@ -602,16 +602,16 @@
                 <VueFooter>
                     <template #default>
                         <ActionButtons
-                            :areDisabled="twofaccounts.hasNoneSelected"
                             :showNew="!bus.inManagementMode || showDesktopTable"
                             :showManage="!bus.inManagementMode && !showDesktopTable"
                             :showMove="bus.inManagementMode || showDesktopTable"
                             :showDelete="bus.inManagementMode || showDesktopTable"
                             :showUnshare="(bus.inManagementMode || showDesktopTable) && appSettings.enableSharing"
                             :showExport="bus.inManagementMode || showDesktopTable"
-                            :canDelete="!twofaccounts.hasBorrowedSelected"
-                            :canUnshare="twofaccounts.hasOnlySharedSelected"
-                            :canExport="!twofaccounts.hasBorrowedSelected"
+                            :canMove="twofaccounts.hasSelected"
+                            :canDelete="twofaccounts.hasSelected && !twofaccounts.hasBorrowedSelected"
+                            :canUnshare="twofaccounts.hasSelected && twofaccounts.hasOnlySharedSelected"
+                            :canExport="twofaccounts.hasSelected && !twofaccounts.hasBorrowedSelected"
                             @switch-to-management-mode="bus.inManagementMode = true"
                             @move-button-clicked="showDestinationGroupSelector = true"
                             @delete-button-clicked="deleteAccounts"
@@ -623,11 +623,6 @@
                         <button type="button" id="lnkExitEdit" class="button is-ghost is-like-text" @click.stop="exitManagementMode">{{ $t('label.done') }}</button>
                     </template>
                 </VueFooter>
-                <!-- <VueFooter v-else>
-                    <template #default>
-                        <ActionButtons v-model:inManagementMode="bus.inManagementMode" />
-                    </template>
-                </VueFooter> -->
             </template>
         </StackLayout>
         <!-- export modal -->
