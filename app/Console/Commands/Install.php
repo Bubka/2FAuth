@@ -113,8 +113,10 @@ class Install extends Command
             $this->newLine();
             $this->line('Fix the error and rerun the \'2fauth:install\' command to complete installation.');
             $this->newLine();
-            $this->line('As a reminder, you can always install/upgrade manually following the guide at:');
+            $this->line('As a reminder, you can always install/upgrade manually following the guides at:');
             $this->info(config('2fauth.installDocUrl'));
+            $this->newLine();
+            $this->info(config('2fauth.upgradeDocUrl'));
             $this->newLine();
             $this->line('You can also ask for some help at:');
             $this->info(config('2fauth.repository') . '/issues');
@@ -123,8 +125,15 @@ class Install extends Command
         }
 
         $this->newLine();
-        $this->output->success('Installation complete successfully');
+        $this->output->success('Installation completed successfully');
         $this->line('Visit <info>' . config('app.url') . '</info> to start using 2FAuth');
+        $this->newLine();
+
+        if ($this->envFileExists) {
+            $this->line('Please read the upgrade guide to review changes and any additional tasks that may need to be performed:');
+            $this->info(config('2fauth.upgradeDocUrl'));
+        }
+        
         $this->newLine();
         $this->line('-----------------------------------');
         $this->line('.▀█▀.█▄█.█▀█.█▄.█.█▄▀  █▄█.█▀█.█─█');
