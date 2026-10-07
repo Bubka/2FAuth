@@ -1,7 +1,6 @@
 import authService from '@/services/authService'
-import { asArray } from '@/composables/helpers'
 
-export default async function authGuard({ to, next, nextMiddleware, stores }) {
+export default async function authGuard({ stores }) {
     const { user, appSettings } = stores
 
     // No authenticated user on the front-end side, we try to
@@ -29,8 +28,8 @@ export default async function authGuard({ to, next, nextMiddleware, stores }) {
     }
 
     if (! user.isAuthenticated) {
-        next({ name: 'login' })
-    } else {
-        nextMiddleware()
+        return { name: 'login' }
     }
+
+    return true
 }

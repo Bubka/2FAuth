@@ -64,25 +64,33 @@ const router = createRouter({
 	]
 })
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, from) => {
     const middlewares = to.meta.middlewares
+
+    if (!middlewares) {
+        return
+    }
+    
     const user = useUserStore()
     const twofaccounts = useTwofaccounts()
     const appSettings = useAppSettingsStore()
     const notify = useNotify()
     const errorHandler = useErrorHandler()
-    const stores = { user: user, twofaccounts: twofaccounts, appSettings: appSettings, notify: notify, errorHandler: errorHandler }
-    const nextMiddleware = {}
-    const context = { to, from, next, nextMiddleware, stores }
 
-    if (!middlewares) {
-        return next();
-    }
-
-    middlewares[0]({
-        ...context,
-        nextMiddleware: middlewarePipeline(context, middlewares, 1),
-    });
+    return middlewarePipeline(
+        {
+            to,
+            from,
+            stores: {
+                user,
+                twofaccounts,
+                appSettings,
+                notify,
+                errorHandler
+            },
+        },
+        middlewares
+    )
 })
 
 export default router

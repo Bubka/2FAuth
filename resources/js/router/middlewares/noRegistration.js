@@ -1,11 +1,12 @@
 /**
  * Prevent the Register view to be reachable when registration is disabled
  */
-export default async function noRegistration({ to, next, nextMiddleware, stores }) {
+export default async function noRegistration({ stores }) {
     const { appSettings } = stores
 
     if (appSettings.disableRegistration) {
-        next({ name: 'notFound' })
+        return { name: 'notFound' }
     }
-    else nextMiddleware()
+
+    return true
 }

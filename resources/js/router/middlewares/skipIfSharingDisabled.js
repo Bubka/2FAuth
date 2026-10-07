@@ -1,9 +1,8 @@
 /**
  * Prevents the view to be reached by users when sharing is disabled
  */
-export default async function skipIfSharingDisabled({ to, next, nextMiddleware, stores }) {
-    const { appSettings } = stores
-    const { errorHandler } = stores
+export default async function skipIfSharingDisabled({ stores }) {
+    const { appSettings, errorHandler } = stores
 
     if (! appSettings.enableSharing) {
         let err = new Error('unauthorized')
@@ -12,5 +11,6 @@ export default async function skipIfSharingDisabled({ to, next, nextMiddleware, 
         err.response = response
         errorHandler.show(err)
     }
-    else nextMiddleware()
+
+    return true
 }

@@ -1,7 +1,7 @@
 /**
  * Allows an authenticated user to access the route only if he has administrator rights
  */
-export default async function adminOnly({ to, next, nextMiddleware, stores }) {
+export default async function adminOnly({ stores }) {
     const { user } = stores
     const { errorHandler } = stores
 
@@ -12,5 +12,6 @@ export default async function adminOnly({ to, next, nextMiddleware, stores }) {
         err.response = response
         errorHandler.show(err)
     }
-    else nextMiddleware()
+
+    return true
 }
