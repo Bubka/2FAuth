@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
  * @property string $email
  * @property string $oauth_provider
  * @property Collection<array-key, mixed> $preferences
+ * @property array<string, string> $appSettings
  * @property string $is_admin
  */
 class UserResource extends JsonResource

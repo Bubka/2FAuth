@@ -133,7 +133,7 @@ class Install extends Command
             $this->line('Please read the upgrade guide to review changes and any additional tasks that may need to be performed:');
             $this->info(config('2fauth.upgradeDocUrl'));
         }
-        
+
         $this->newLine();
         $this->line('-----------------------------------');
         $this->line('.▀█▀.█▄█.█▀█.█▄.█.█▄▀  █▄█.█▀█.█─█');

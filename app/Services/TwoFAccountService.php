@@ -69,7 +69,7 @@ class TwoFAccountService
 
         if ($is_favorite) {
             $payload = [];
-    
+
             foreach ($ids as $twofaccountId) {
                 $payload[] = [
                     'user_id'        => (int) $owner->id,
@@ -81,8 +81,7 @@ class TwoFAccountService
                 $payload,
                 ['user_id', 'twofaccount_id'],
             );
-        }
-        else {
+        } else {
             $affectedCount = TwoFAccountUserFavorite::where('user_id', $owner->id)
                 ->whereIn('twofaccount_id', $ids)
                 ->delete();
