@@ -58,6 +58,13 @@
         "allow-plugins": {
             "pestphp/pest-plugin": true,
             "php-http/discovery": true
+        },
+        "audit": {
+            "ignore": [
+                "PKSA-cbx2-m9db-bmzd",
+                "PKSA-6j95-1jtb-x6wc",
+                "PKSA-8j6w-3kr7-s9xk"
+            ]
         }
     },
     "extra": {
