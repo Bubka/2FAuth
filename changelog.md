@@ -1,12 +1,17 @@
 # Change log
 
-## [8.1.0] - 2026-mm-dd
+## [9.0.0] - 2026-mm-dd
 
 ### Added
 
-- Table layout for desktop resolution and higher.
+- Brand new Table layout for desktop resolution and higher.
 - Favorite system: Frequently used 2FA accounts can be marked as favorite, regardless of whether they belong to a group. You can easily find your favorites again thanks to a brand new toggle in the filter bar.
-- New quick-select buttons in “Manage” mode to make it easier to select accounts that are likely to be targeted by the action buttons (Move, Unshared, Delete, Export)
+- New quick-select buttons when managing 2FA accounts to make it easier to select accounts that are likely to be targeted by the action buttons (Move, Unshared, Delete, Export)
+- Support of Ente Auth export format
+
+### Fixed
+
+- [issue #571](https://github.com/Bubka/2FAuth/issues/571) Docker image: large API responses truncated (Network Error) when container runs as non-root user - fastcgi_temp_path not writable
 
 ## [8.0.2] - 2026-09-02
 
