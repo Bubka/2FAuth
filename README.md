@@ -66,6 +66,8 @@ Sensitive data stored in the database can be encrypted to protect them against d
 
 ## Installation guides
 
+* [![Deploy with Zenith](https://cdn.zenith.hosting/buttons/deploy-with-zenith.svg)](https://zenith.hosting/host/2fauth) one-click managed hosting, no server required
+
 * [Self-hosted server](https://docs.2fauth.app/getting-started/installation/self-hosted-server/)
 
 * [Docker (cli)](https://docs.2fauth.app/getting-started/installation/docker/docker-cli/)
