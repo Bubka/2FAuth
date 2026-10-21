@@ -1,5 +1,9 @@
 # Change log
 
+## [8.0.3] - 2026-10-21
+
+The sole purpose of this release is to push an updated docker image containing PHP 8.4.27, in order to have CVEs GHSA-w8hw-w9fx-j79w and GHSA-6wmf-4rv5-p3rp fixed.
+
 ## [8.0.2] - 2026-09-02
 
 ### Fixed
