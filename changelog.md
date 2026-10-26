@@ -12,6 +12,7 @@
 ### Fixed
 
 - [issue #571](https://github.com/Bubka/2FAuth/issues/571) Docker image: large API responses truncated (Network Error) when container runs as non-root user - fastcgi_temp_path not writable
+- [issue #575](https://github.com/Bubka/2FAuth/issues/575) Composer advisory block (enshrined/svg-sanitize) causes setup failure
 
 ## [8.0.2] - 2026-09-02
 
