@@ -1,11 +1,10 @@
 /**
- * Allows an authenticated user to access the main view only if he owns at least one twofaccount.
- * Push to the starter view otherwise.
+ * Sets the returnTo value in local storage
  */
-export default function setReturnTo({ to, next, nextMiddleware, stores }) {
+export default function setReturnTo({ to, stores }) {
     const { user } = stores
     const returnTo = useStorage(user.$2fauth.prefix + 'returnTo', 'accounts')
     returnTo.value = to.name
-    
-    nextMiddleware()
+
+    return true
 }

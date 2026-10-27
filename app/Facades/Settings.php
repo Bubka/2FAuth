@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Facade;
 /**
  * @method static string|int|boolean|null get($setting)
  * @method static \Illuminate\Support\Collection<string, mixed> all()
+ * @method static array<string, string> forVisitor()
+ * @method static array<string, string> forRegularUser()
  * @method static void set($setting, $value)
  * @method static void delete(string $name)
  * @method static bool isEdited($key)

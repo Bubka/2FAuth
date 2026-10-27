@@ -16,6 +16,7 @@ use App\Listeners\Authentication\LoginListener;
 use App\Listeners\Authentication\LogoutListener;
 use App\Listeners\Authentication\VisitedByProxyUserListener;
 use App\Listeners\CleanIconStorage;
+use App\Listeners\DeleteRevokedTwoFAccountUserFavorites;
 use App\Listeners\DeleteRevokedTwoFAccountUserOrders;
 use App\Listeners\DeleteTwoFAccountOtpLogs;
 use App\Listeners\DeleteTwoFAccountUserOrders;
@@ -70,6 +71,7 @@ class EventServiceProvider extends ServiceProvider
         ],
         TwoFAccountShareRevoked::class => [
             DeleteRevokedTwoFAccountUserOrders::class,
+            DeleteRevokedTwoFAccountUserFavorites::class,
             SendTwoFAccountShareRevokedNotification::class,
         ],
         GroupDeleted::class => [

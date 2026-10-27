@@ -1,12 +1,11 @@
-export default function middlewarePipeline(context, middlewares, index) {
-    const nextMiddleware = middlewares[index];
-    if (!nextMiddleware) {
-        return context.next;
+export default async function middlewarePipeline(context, middlewares) {
+    for (const middleware of middlewares) {
+        const result = await middleware(context)
+
+        if (result !== true && result !== undefined) {
+            return result
+        }
     }
-    return () => {
-        nextMiddleware({
-            ...context,
-            nextMiddleware: middlewarePipeline(context, middlewares, index + 1),
-        });
-    };
+
+    return true
 }

@@ -47,6 +47,10 @@ export default {
         return apiClient.post('/twofaccounts/reorder', { orderedIds: orderedIds }, { ...config })
     },
 
+    delete(id, config = {}) {
+        return apiClient.delete('/twofaccounts/' + id, { ...config })
+    },
+
     batchDelete(ids, config = {}) {
         return apiClient.delete('/twofaccounts?ids=' + ids, { ...config })
     },
@@ -69,6 +73,10 @@ export default {
 
     getOtpLogs(id, period = 12, limit, config = {}) {
         return apiClient.get('/twofaccounts/' + id + '/otp-logs?period=' + period + (limit ? '&limit=' + limit : ''), { ...config })
+    },
+
+    toggleFavorite(id, is_favorite, config = {}) {
+        return apiClient.patch('/twofaccounts/' + id + '/favorite', { 'is_favorite': is_favorite }, { ...config })
     },
 
 }

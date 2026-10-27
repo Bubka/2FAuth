@@ -12,6 +12,7 @@ $preferences = [
     'clearSearchOnCopy'         => envUnlessEmpty('USERPREF_DEFAULT__CLEAR_SEARCH_ON_COPY', false),
     'useBasicQrcodeReader'      => envUnlessEmpty('USERPREF_DEFAULT__USE_BASIC_QRCODE_READER', false),
     'displayMode'               => envUnlessEmpty('USERPREF_DEFAULT__DISPLAY_MODE', 'list'),
+    'useDesktopTableLayout'     => envUnlessEmpty('USERPREF_DEFAULT__USE_DESKTOP_TABLE_LAYOUT', false),
     'showAccountsIcons'         => envUnlessEmpty('USERPREF_DEFAULT__SHOW_ACCOUNTS_ICONS', true),
     'iconSource'                => envUnlessEmpty('USERPREF_DEFAULT__ICON_SOURCE', 'logolib'),
     'iconCollection'            => envUnlessEmpty('USERPREF_DEFAULT__ICON_COLLECTION', 'selfh'),
@@ -45,6 +46,7 @@ $preferences = [
     'AutoSaveQrcodedAccount'    => envUnlessEmpty('USERPREF_DEFAULT__AUTO_SAVE_QRCODED_ACCOUNT', false),
     'showEmailInFooter'         => envUnlessEmpty('USERPREF_DEFAULT__SHOW_EMAIL_IN_FOOTER', true),
     'showQuickNavMenus'         => envUnlessEmpty('USERPREF_DEFAULT__SHOW_QUICK_NAV_MENUS', true),
+    'enableFavorites'           => envUnlessEmpty('USERPREF_DEFAULT__ENABLE_FAVORITES', true),
 ];
 
 $nonLockablePreferences = [
@@ -63,10 +65,11 @@ return [
     |
     */
 
-    'version' => '8.0.3',
+    'version' => '9.0.0',
     'repository' => 'https://github.com/Bubka/2FAuth',
     'latestReleaseUrl' => 'https://api.github.com/repos/Bubka/2FAuth/releases/latest',
     'installDocUrl' => 'https://docs.2fauth.app/getting-started/installation/self-hosted-server/',
+    'upgradeDocUrl' => 'https://docs.2fauth.app/getting-started/upgrade/',
     'ssoDocUrl' => 'https://docs.2fauth.app/security/authentication/sso/',
     'exportSchemaUrl' => 'https://docs.2fauth.app/usage/migration/#export-schema',
 
@@ -153,6 +156,7 @@ return [
         'allUsersSharingScope',
         'showNextOtp',
         'groupChips',
+        'favorites',
     ],
 
     /*

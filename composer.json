@@ -22,7 +22,7 @@
         "ext-xml": "*",
         "chillerlan/php-qrcode": "^6.0.1",
         "doctormckay/steam-totp": "^1.0",
-        "enshrined/svg-sanitize": "^0.22.0",
+        "enshrined/svg-sanitize": "^1.0",
         "google/protobuf": "^4.33.6",
         "jenssegers/agent": "^2.6.4",
         "khanamiryan/qrcode-detector-decoder": "^2.0.3",

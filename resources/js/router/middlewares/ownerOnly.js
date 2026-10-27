@@ -1,8 +1,8 @@
 /**
  * Allows an authenticated user to access the route only if he is the owner of the resource he is trying to access.
  */
-export default async function ownerOnly({ to, next, nextMiddleware, stores }) {
-    const { user, twofaccounts } = stores
+export default async function ownerOnly({ to, stores }) {
+    const { twofaccounts } = stores
     const { errorHandler } = stores
     const twofaccount = twofaccounts.getById(to.params.twofaccountId)
 
@@ -13,5 +13,6 @@ export default async function ownerOnly({ to, next, nextMiddleware, stores }) {
         err.response = response
         errorHandler.show(err)
     }
-    else nextMiddleware()
+
+    return true
 }

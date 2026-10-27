@@ -244,6 +244,26 @@ class User extends Authenticatable implements HasLocalePreference, OAuthenticata
     }
 
     /**
+     * Get the favorite twofaccounts of the user.
+     *
+     * @return HasMany<TwoFAccountUserFavorite, $this>
+     */
+    public function favorites()
+    {
+        return $this->hasMany(TwoFAccountUserFavorite::class);
+    }
+
+    /**
+     * Determine if the user has favorited the given TwoFAccount.
+     */
+    public function hasFavorite(TwoFAccount $twofaccount) : bool
+    {
+        return $this->favorites()
+            ->where('twofaccount_id', $twofaccount->id)
+            ->exists();
+    }
+
+    /**
      * Get TwoFAccount shared by the user.
      *
      * @return HasMany<TwoFAccountShare, $this>
