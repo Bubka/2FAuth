@@ -131,17 +131,27 @@ export const useUserStore = defineStore('user', {
          */
         applyLanguage() {
             const { isSupported, language } = useNavigatorLanguage()
-            let lang = this.$i18n.fallbackLocale
-
-            if (isSupported) {
-                // The language tag pushed by the browser may be composed of
-                // multiple subtags (ex: fr-FR) so we keep only the
-                // "language subtag" (ex: fr)
-                lang = this.preferences.lang == 'browser' ? language.value.slice(0, 2)  : this.preferences.lang
-            }
-
-            this.$i18n.global.locale = lang
-        },
+            const i18n = this.$i18n.global
+        
+            const preferredLocale = this.preferences.lang === 'browser'
+                ? (isSupported ? language.value : null)
+                : this.preferences.lang
+        
+            const requestedLocale = preferredLocale || i18n.fallbackLocale
+            const langCode = requestedLocale.split('-')[0].toLowerCase()
+        
+            i18n.locale = 
+                i18n.availableLocales.find(locale =>
+                    locale.toLowerCase() === requestedLocale.toLowerCase()
+                ) ??
+                i18n.availableLocales.find(locale =>
+                    locale.toLowerCase() === langCode
+                ) ??
+                i18n.availableLocales.find(locale =>
+                    locale.toLowerCase().startsWith(`${langCode}-`)
+                ) ??
+                i18n.fallbackLocale
+            },
 
         /**
          * Applies both user theme & language
