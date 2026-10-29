@@ -58,4 +58,18 @@ class UserFactory extends Factory
             ];
         });
     }
+
+    /**
+     * Indicate that the user is an administrator.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
+     */
+    public function ssoUser()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'oauth_provider' => 'github',
+            ];
+        });
+    }
 }

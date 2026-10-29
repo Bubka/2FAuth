@@ -5,6 +5,7 @@ namespace App\Api\v1\Requests;
 use App\Models\TwoFAccount;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Validator;
 
 class TwoFAccountTransferOwnershipRequest extends FormRequest
@@ -26,7 +27,14 @@ class TwoFAccountTransferOwnershipRequest extends FormRequest
     {
         return [
             'new_owner_id'     => 'required|integer|exists:users,id',
-            'confirm_password' => 'required|string',
+            'confirm_password' => [
+                'nullable',
+                'string',
+                Rule::requiredIf(
+                    Auth::getDefaultDriver() !== 'reverse-proxy-guard'
+                    && ! $this->user()?->oauth_provider
+                ),
+            ],
         ];
     }
 

@@ -5,6 +5,7 @@
     import { useNotify } from '@2fauth/ui'
     import { useErrorHandler } from '@2fauth/stores'
     import { useAppSettingsStore } from '@/stores/appSettings'
+    import { useUserStore } from '@/stores/user'
     import { asArray } from '@/composables/helpers'
     import { useTwofaccounts } from '@/stores/twofaccounts'
     import { UseColorMode } from '@vueuse/components'
@@ -15,6 +16,7 @@
     const $2fauth = inject('2fauth')
     const router = useRouter()
     const route = useRoute()
+    const user = useUserStore()
     const notify = useNotify()
     const twofaccounts = useTwofaccounts()
     const returnTo = useStorage($2fauth.prefix + 'returnTo', 'accountSharing')
@@ -49,6 +51,10 @@
         else {
             return t('message.not_shared')
         }
+    })
+
+    const isPasswordRequired = computed(() => {
+        return ! user.oauth_provider && ! user.authenticated_by_proxy
     })
 
     onMounted(() => {
@@ -132,9 +138,9 @@
                         {{ $t('message.double_check_new_owner') }}
                     </div>
                     <!-- current password -->
-                    <FormPasswordField v-model="form.confirm_password" fieldName="confirm_password" :errorMessage="form.errors.get('confirm_password')" label="field.current_password" help="field.current_password.help" autocomplete="off" />
+                    <FormPasswordField v-if="isPasswordRequired" v-model="form.confirm_password" fieldName="confirm_password" :errorMessage="form.errors.get('confirm_password')" label="field.current_password" help="field.current_password.help" autocomplete="off" />
                     <FormButtons
-                        :isDisabled="!form.new_owner_id || !form.confirm_password"
+                        :isDisabled="!form.new_owner_id || (isPasswordRequired && !form.confirm_password)"
                         :isBusy="form.isBusy"
                         :submitLabel="'label.transfer'"
                         :showCancelButton="true"
