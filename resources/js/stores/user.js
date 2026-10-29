@@ -151,7 +151,7 @@ export const useUserStore = defineStore('user', {
                     locale.toLowerCase().startsWith(`${langCode}-`)
                 ) ??
                 i18n.fallbackLocale
-            },
+        },
 
         /**
          * Applies both user theme & language

@@ -91,7 +91,7 @@ export default defineConfig({
         // sourcemap: true,
         rollupOptions: {
             output: {
-                banner: '/*! 2FAuth version ' + version + ' - Copyright (c) 2025 Bubka - https://github.com/Bubka/2FAuth */',
+                banner: '/*! 2FAuth version ' + version + ' - Copyright (c) 2019-2026 Bubka - https://github.com/Bubka/2FAuth */',
             },
         },
     },
