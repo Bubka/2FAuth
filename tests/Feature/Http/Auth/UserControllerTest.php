@@ -8,6 +8,7 @@ use App\Http\Requests\UserUpdateRequest;
 use App\Models\User;
 use App\Observers\UserObserver;
 use App\Policies\UserPolicy;
+use Database\Factories\UserFactory;
 use Illuminate\Support\Facades\Config;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -32,7 +33,7 @@ class UserControllerTest extends FeatureTestCase
 
     private const NEW_EMAIL = 'janedoe@example.org';
 
-    private const PASSWORD = 'password';
+    private const PASSWORD = UserFactory::USER_PASSWORD;
 
     protected function setUp() : void
     {

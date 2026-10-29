@@ -10,6 +10,7 @@ use App\Listeners\Authentication\FailedLoginListener;
 use App\Listeners\Authentication\LoginListener;
 use App\Models\User;
 use App\Notifications\SignedInWithNewDeviceNotification;
+use Database\Factories\UserFactory;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
@@ -263,7 +264,7 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
 
         $response = $this->json('POST', '/user/login', [
             'email'    => self::EMAIL,
-            'password' => 'password',
+            'password' => UserFactory::USER_PASSWORD,
         ])
             ->assertUnauthorized();
     }

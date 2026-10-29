@@ -5,6 +5,7 @@ namespace Tests\Feature\Http\Auth;
 use App\Facades\Settings;
 use App\Http\Controllers\Auth\SocialiteController;
 use App\Models\User;
+use Database\Factories\UserFactory;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Laravel\Socialite\Facades\Socialite;
@@ -39,6 +40,8 @@ class SocialiteControllerTest extends FeatureTestCase
 
     private const USER_EMAIL = 'john@provider.com';
 
+    private const USER_PASSWORD = UserFactory::USER_PASSWORD;
+
     protected function setUp() : void
     {
         parent::setUp();
@@ -47,7 +50,7 @@ class SocialiteControllerTest extends FeatureTestCase
         $this->user = User::factory()->create([
             'name'           => self::USER_NAME,
             'email'          => self::USER_EMAIL,
-            'password'       => 'password',
+            'password'       => self::USER_PASSWORD,
             'is_admin'       => 1,
             'oauth_id'       => self::USER_OAUTH_ID,
             'oauth_provider' => self::USER_OAUTH_PROVIDER,
@@ -274,7 +277,7 @@ class SocialiteControllerTest extends FeatureTestCase
         $userWithSameEmail = User::factory()->create([
             'name'     => 'userWithSameEmail',
             'email'    => 'other@example.com',
-            'password' => 'password',
+            'password' => self::USER_PASSWORD,
         ]);
 
         $socialiteUserWithSameEmail           = new \Laravel\Socialite\Two\User;
@@ -301,7 +304,7 @@ class SocialiteControllerTest extends FeatureTestCase
         $userWithSameEmail = User::factory()->create([
             'name'     => 'userWithSameEmail',
             'email'    => 'other@example.com',
-            'password' => 'password',
+            'password' => self::USER_PASSWORD,
         ]);
 
         $socialiteUserWithSameEmail           = new \Laravel\Socialite\Two\User;

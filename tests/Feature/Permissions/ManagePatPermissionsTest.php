@@ -6,6 +6,7 @@ use App\Facades\Settings;
 use App\Http\Controllers\Auth\PersonalAccessTokenController;
 use App\Models\User;
 use App\Providers\AppServiceProvider;
+use Database\Factories\UserFactory;
 use Illuminate\Http\Response;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversMethod;
@@ -24,7 +25,7 @@ class ManagePatPermissionsTest extends FeatureTestCase
 
     protected User $admin;
 
-    private const PASSWORD = 'password';
+    private const PASSWORD = UserFactory::USER_PASSWORD;
 
     protected function setUp() : void
     {

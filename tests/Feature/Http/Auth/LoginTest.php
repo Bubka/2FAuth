@@ -19,6 +19,7 @@ use App\Models\User;
 use App\Notifications\FailedLoginNotification;
 use App\Notifications\SignedInWithNewDeviceNotification;
 use App\Rules\CaseInsensitiveEmailExists;
+use Database\Factories\UserFactory;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Notification;
@@ -61,7 +62,7 @@ class LoginTest extends FeatureTestCase
 
     private const REVERSE_PROXY_GUARD = 'reverse-proxy-guard';
 
-    private const PASSWORD = 'password';
+    private const PASSWORD = UserFactory::USER_PASSWORD;
 
     private const WRONG_PASSWORD = 'wrong_password';
 
