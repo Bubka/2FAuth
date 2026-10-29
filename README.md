@@ -6,6 +6,8 @@
 
 A web app to manage your Two-Factor Authentication (2FA) accounts and generate their security codes
 
+[![Deploy to Railyard](https://app.railyard.run/deploy/badge)](https://app.railyard.run/deploy?repo=https://github.com/Bubka/2FAuth)
+
 ![screens](https://user-images.githubusercontent.com/858858/100485897-18c21400-3102-11eb-9c72-ea0b1b46ef2e.png)
 
 [**2FAuth Demo**](https://demo.2fauth.app/)  
