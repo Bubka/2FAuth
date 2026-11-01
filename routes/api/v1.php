@@ -28,7 +28,7 @@ Route::get('user/name', function () {
 /**
  * Routes protected by the api authentication guard
  */
-Route::group(['middleware' => 'auth:api-guard'], function () {
+Route::group(['middleware' => ['auth:api-guard', 'rejectPatIfNotAllowed']], function () {
     Route::get('user', [UserController::class, 'show'])->name('user.show'); // Returns email address in addition to the username
 
     Route::get('user/preferences/{preferenceName}', [UserController::class, 'showPreference'])->name('user.preferences.show');
