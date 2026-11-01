@@ -12,6 +12,7 @@ use App\Policies\GroupPolicy;
 use App\Policies\TwoFAccountPolicy;
 use App\Policies\UserPolicy;
 use App\Services\Auth\ReverseProxyGuard;
+use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Auth\Passwords\DatabaseTokenRepository;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Contracts\Foundation\Application;
@@ -106,6 +107,14 @@ class AuthServiceProvider extends ServiceProvider
                 );
             }
         );
+
+        // Root reset links on APP_URL so a forged Host header cannot poison them
+        ResetPassword::createUrlUsing(static function (mixed $notifiable, string $token) : string {
+            return rtrim((string) config('app.url'), '/') . route('password.reset', [
+                'token' => $token,
+                'email' => $notifiable->getEmailForPasswordReset(),
+            ], false);
+        });
 
         // Normally we should set the Passport routes here using Passport::routes().
         // If so the passport routes would be set for both 'web' and 'api' middlewares without
