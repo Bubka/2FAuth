@@ -36,14 +36,13 @@ class WebAuthnDeviceLostController extends Controller
 
     /**
      * Get the response for a failed account recovery link.
+     * Answer exactly as on success so the response never reveals whether the account exists.
      *
      * @return JsonResponse
-     *
-     * @throws ValidationException
      */
     protected function sendRecoveryLinkFailedResponse(Request $request, string $response)
     {
-        throw ValidationException::withMessages(['email' => [trans($response)]]);
+        return $this->sendRecoveryLinkResponse($request, Password::RESET_LINK_SENT);
     }
 
     /**

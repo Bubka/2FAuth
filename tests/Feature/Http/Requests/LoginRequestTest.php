@@ -91,10 +91,6 @@ class LoginRequestTest extends FeatureTestCase
                 'password' => 'MyPassword',
             ]],
             [[
-                'email'    => 'john@example.com', // exists
-                'password' => 'MyPassword',
-            ]],
-            [[
                 'email'    => 'john.doe@example.com',
                 'password' => '', // required
             ]],

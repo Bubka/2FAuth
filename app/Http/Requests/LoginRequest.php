@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\CaseInsensitiveEmailExists;
 use Illuminate\Foundation\Http\FormRequest;
 
 class LoginRequest extends FormRequest
@@ -28,7 +27,6 @@ class LoginRequest extends FormRequest
             'email' => [
                 'required',
                 'email',
-                new CaseInsensitiveEmailExists,
             ],
             'password' => 'required|string',
         ];

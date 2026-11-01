@@ -8,7 +8,6 @@ use App\Http\Requests\WebauthnDeviceLostRequest;
 use App\Models\User;
 use App\Notifications\WebauthnRecoveryNotification;
 use App\Providers\AuthServiceProvider;
-use App\Rules\CaseInsensitiveEmailExists;
 use Illuminate\Support\Facades\Notification;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversMethod;
@@ -24,7 +23,6 @@ use Tests\FeatureTestCase;
 #[CoversClass(WebauthnCredentialBroker::class)]
 #[CoversClass(WebauthnDeviceLostRequest::class)]
 #[CoversClass(AuthServiceProvider::class)]
-#[CoversMethod(CaseInsensitiveEmailExists::class, 'validate')]
 class WebAuthnDeviceLostControllerTest extends FeatureTestCase
 {
     /**
@@ -61,20 +59,21 @@ class WebAuthnDeviceLostControllerTest extends FeatureTestCase
     }
 
     #[Test]
-    public function test_send_recovery_email_does_not_send_anything_to_unknown_email()
+    public function test_send_recovery_email_returns_same_response_for_unknown_email()
     {
         Notification::fake();
 
-        $response = $this->json('POST', '/webauthn/lost', [
+        $known = $this->json('POST', '/webauthn/lost', [
+            'email' => $this->user->email,
+        ]);
+
+        $unknown = $this->json('POST', '/webauthn/lost', [
             'email' => 'bad@email.com',
         ]);
 
-        Notification::assertNothingSent();
-
-        $response->assertStatus(422)
-            ->assertJsonValidationErrors([
-                'email',
-            ]);
+        $unknown->assertStatus(200);
+        $this->assertSame($known->getContent(), $unknown->getContent());
+        Notification::assertSentTimes(WebauthnRecoveryNotification::class, 1);
 
         $this->assertDatabaseMissing(config('auth.passwords.webauthn.table'), [
             'email' => 'bad@email.com',
@@ -87,7 +86,7 @@ class WebAuthnDeviceLostControllerTest extends FeatureTestCase
         Notification::fake();
 
         $response = $this->json('POST', '/webauthn/lost', [
-            'email' => 'bad@email.com',
+            'email' => 'not-an-email',
         ]);
 
         Notification::assertNothingSent();
@@ -96,24 +95,18 @@ class WebAuthnDeviceLostControllerTest extends FeatureTestCase
             ->assertJsonValidationErrors([
                 'email',
             ]);
-
-        $this->assertDatabaseMissing(config('auth.passwords.webauthn.table'), [
-            'email' => 'bad@email.com',
-        ]);
     }
 
     #[Test]
-    public function test_send_recovery_email_is_throttled()
+    public function test_send_recovery_email_when_throttled_returns_same_response()
     {
         Notification::fake();
 
-        $response = $this->json('POST', '/webauthn/lost', [
+        $first = $this->json('POST', '/webauthn/lost', [
             'email' => $this->user->email,
         ]);
 
-        Notification::assertSentTo($this->user, WebauthnRecoveryNotification::class);
-
-        $response->assertStatus(200)
+        $first->assertStatus(200)
             ->assertJsonStructure([
                 'message',
             ]);
@@ -122,14 +115,13 @@ class WebAuthnDeviceLostControllerTest extends FeatureTestCase
             'email' => $this->user->email,
         ]);
 
-        $this->json('POST', '/webauthn/lost', [
+        $second = $this->json('POST', '/webauthn/lost', [
             'email' => $this->user->email,
-        ])
-            ->assertStatus(422)
-            ->assertJsonValidationErrorfor('email')
-            ->assertJsonFragment([
-                'message' => __('passwords.throttled'),
-            ]);
+        ]);
+
+        $second->assertStatus(200);
+        $this->assertSame($first->getContent(), $second->getContent());
+        Notification::assertSentTimes(WebauthnRecoveryNotification::class, 1);
     }
 
     #[Test]

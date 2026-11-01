@@ -51,14 +51,38 @@ class ForgotPasswordControllerTest extends FeatureTestCase
     }
 
     #[Test]
-    public function test_submit_email_password_request_with_unknown_email_returns_validation_error()
+    public function test_submit_email_password_request_with_unknown_email_returns_same_response_as_known_email()
     {
-        $response = $this->json('POST', '/user/password/lost', [
+        Notification::fake();
+
+        $user = User::factory()->create();
+
+        $known = $this->json('POST', '/user/password/lost', [
+            'email' => $user->email,
+        ]);
+
+        $unknown = $this->json('POST', '/user/password/lost', [
             'email' => 'name@test.com',
         ]);
 
-        $response->assertStatus(422)
-            ->assertJsonValidationErrors(['email']);
+        $unknown->assertStatus(200);
+        $this->assertSame($known->getContent(), $unknown->getContent());
+        Notification::assertSentTimes(ResetPassword::class, 1);
+    }
+
+    #[Test]
+    public function test_submit_email_password_request_when_throttled_returns_same_response()
+    {
+        Notification::fake();
+
+        $user = User::factory()->create();
+
+        $first  = $this->json('POST', '/user/password/lost', ['email' => $user->email]);
+        $second = $this->json('POST', '/user/password/lost', ['email' => $user->email]);
+
+        $second->assertStatus(200);
+        $this->assertSame($first->getContent(), $second->getContent());
+        Notification::assertSentTimes(ResetPassword::class, 1);
     }
 
     #[Test]

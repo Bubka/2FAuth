@@ -18,8 +18,8 @@ use App\Models\AuthLog;
 use App\Models\User;
 use App\Notifications\FailedLoginNotification;
 use App\Notifications\SignedInWithNewDeviceNotification;
-use App\Rules\CaseInsensitiveEmailExists;
 use Database\Factories\UserFactory;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Notification;
@@ -39,7 +39,6 @@ use Tests\FeatureTestCase;
 #[CoversClass(LogoutListener::class)]
 #[CoversClass(FailedLoginListener::class)]
 #[CoversClass(VisitedByProxyUserListener::class)]
-#[CoversMethod(CaseInsensitiveEmailExists::class, 'validate')]
 #[CoversMethod(Handler::class, 'register')]
 #[CoversMethod(KickOutInactiveUser::class, 'handle')]
 #[CoversMethod(LogUserLastSeen::class, 'handle')]
@@ -49,12 +48,12 @@ use Tests\FeatureTestCase;
 class LoginTest extends FeatureTestCase
 {
     /**
-     * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
+     * @var User|Authenticatable
      */
     protected $user;
 
     /**
-     * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
+     * @var User|Authenticatable
      */
     protected $admin;
 
@@ -272,6 +271,23 @@ class LoginTest extends FeatureTestCase
                 'email',
                 'password',
             ]);
+    }
+
+    #[Test]
+    public function test_user_login_with_unknown_email_returns_same_response_as_wrong_password()
+    {
+        $known = $this->json('POST', '/user/login', [
+            'email'    => $this->user->email,
+            'password' => self::WRONG_PASSWORD,
+        ]);
+
+        $unknown = $this->json('POST', '/user/login', [
+            'email'    => 'unknown@example.com',
+            'password' => self::WRONG_PASSWORD,
+        ]);
+
+        $unknown->assertStatus(401);
+        $this->assertSame($known->getContent(), $unknown->getContent());
     }
 
     #[Test]
