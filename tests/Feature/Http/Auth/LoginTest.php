@@ -60,6 +60,8 @@ class LoginTest extends FeatureTestCase
 
     private const WEB_GUARD = 'web-guard';
 
+    private const API_GUARD = 'api-guard';
+
     private const REVERSE_PROXY_GUARD = 'reverse-proxy-guard';
 
     private const PASSWORD = UserFactory::USER_PASSWORD;
@@ -337,6 +339,45 @@ class LoginTest extends FeatureTestCase
 
         $this->json('POST', '/user/login', $post)
             ->assertStatus(429);
+    }
+    #[Test]
+    public function test_inactive_web_session_with_bogus_bearer_header_returns_teapot()
+    {
+        $this->user['preferences->kickUserAfter'] = 1;
+        $this->user->save();
+
+        $this->actingAs($this->user, self::WEB_GUARD)
+            ->json('GET', '/oauth/personal-access-tokens')
+            ->assertOk();
+
+        $this->travelTo(Carbon::now()->addMinutes(2));
+
+        $this->actingAs($this->user, self::WEB_GUARD)
+            ->withHeader('Authorization', 'Bearer not-a-token')
+            ->json('GET', '/oauth/personal-access-tokens')
+            ->assertStatus(418)
+            ->assertExactJson([
+                'message' => 'inactivity detected',
+            ]);
+    }
+
+    #[Test]
+    public function test_inactive_user_authenticated_via_bearer_token_is_not_kicked_out()
+    {
+        $this->user['preferences->kickUserAfter'] = 1;
+        $this->user->save();
+
+        $this->actingAs($this->user, self::API_GUARD)
+            ->withHeader('Authorization', 'Bearer a-valid-token')
+            ->json('GET', '/api/v1/twofaccounts')
+            ->assertOk();
+
+        $this->travelTo(Carbon::now()->addMinutes(2));
+
+        $this->actingAs($this->user, self::API_GUARD)
+            ->withHeader('Authorization', 'Bearer a-valid-token')
+            ->json('GET', '/api/v1/twofaccounts')
+            ->assertOk();
     }
 
     #[Test]
