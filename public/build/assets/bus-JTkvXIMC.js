@@ -1,1 +1,0 @@
-import{f as e}from"./app-DUbd50sb.js";var t=e(`bus`,{state:()=>({migrationUri:null,decodedUri:null,inManagementMode:!1,editedGroupName:null,username:null}),actions:{}});export{t};

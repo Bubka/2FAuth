@@ -22,7 +22,6 @@ use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
-use Laravel\Passport\TokenRepository;
 use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -52,7 +51,7 @@ class UserManagerControllerTest extends FeatureTestCase
 
     private const EMAIL = 'johndoe@example.org';
 
-    private const PASSWORD = 'password';
+    private const PASSWORD = UserFactory::USER_PASSWORD;
 
     protected function setUp() : void
     {

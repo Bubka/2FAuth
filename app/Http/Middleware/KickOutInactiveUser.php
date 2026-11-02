@@ -23,8 +23,9 @@ class KickOutInactiveUser
         // We do not track activity of:
         // - Guest
         // - User authenticated against a bearer token
+        //   (the api-guard must have actually validated it, a mere Authorization header is not enough)
         // - User authenticated via a reverse-proxy
-        if (Auth::guest() || $request->bearerToken() || Auth::getDefaultDriver() === 'reverse-proxy-guard') {
+        if (Auth::guest() || ($request->bearerToken() && Auth::getDefaultDriver() === 'api-guard') || Auth::getDefaultDriver() === 'reverse-proxy-guard') {
             return $next($request);
         }
 

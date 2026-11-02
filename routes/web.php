@@ -35,10 +35,10 @@ use Illuminate\Support\Facades\Route;
  */
 Route::group(['middleware' => ['rejectIfDemoMode', 'rejectIfSsoOnlyAndNotForAdmin', 'forceLogout', 'setLanguage']], function () {
     Route::post('user', [RegisterController::class, 'register'])->name('user.register');
-    Route::post('user/password/lost', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('user.password.lost');
+    Route::post('user/password/lost', [ForgotPasswordController::class, 'sendResetLinkEmail'])->middleware('throttle:10,1')->name('user.password.lost');
     Route::post('user/password/reset', [ResetPasswordController::class, 'reset'])->name('password.reset');
     Route::post('webauthn/login/options', [WebAuthnLoginController::class, 'options'])->name('webauthn.login.options');
-    Route::post('webauthn/lost', [WebAuthnDeviceLostController::class, 'sendRecoveryEmail'])->name('webauthn.lost');
+    Route::post('webauthn/lost', [WebAuthnDeviceLostController::class, 'sendRecoveryEmail'])->middleware('throttle:10,1')->name('webauthn.lost');
 });
 
 /**

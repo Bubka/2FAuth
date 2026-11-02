@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Requests\UserStoreRequest;
 use App\Models\User;
 use App\Rules\ComplyWithEmailRestrictionPolicy;
+use Database\Factories\UserFactory;
 use Illuminate\Support\Facades\DB;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -30,7 +31,7 @@ class RegisterControllerTest extends FeatureTestCase
 
     private const EMAIL_EXCLUDED_BY_BOTH_FILTERING_RULE_AND_LIST = 'bob@anywhere.org';
 
-    private const PASSWORD = 'password';
+    private const PASSWORD = UserFactory::USER_PASSWORD;
 
     private const EMAIL_FILTERING_LIST = 'johndoe@example.org|johndoe@test.org|johndoe@anywhere.org';
 

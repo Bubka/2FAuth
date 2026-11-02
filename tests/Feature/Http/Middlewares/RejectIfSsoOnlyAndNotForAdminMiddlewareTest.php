@@ -5,6 +5,7 @@ namespace Tests\Feature\Http\Middlewares;
 use App\Facades\Settings;
 use App\Http\Middleware\RejectIfSsoOnlyAndNotForAdmin;
 use App\Models\User;
+use Database\Factories\UserFactory;
 use Illuminate\Http\Response;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversNothing;
@@ -28,7 +29,7 @@ class RejectIfSsoOnlyAndNotForAdminMiddlewareTest extends FeatureTestCase
      */
     protected $admin;
 
-    private const PASSWORD = 'password';
+    private const PASSWORD = UserFactory::USER_PASSWORD;
 
     protected function setUp() : void
     {

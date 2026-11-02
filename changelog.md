@@ -1,5 +1,23 @@
 # Change log
 
+## [9.0.1] - 2026-11-02
+
+⚠️ This release includes several security fixes
+
+### Fixed
+
+- [issue #579](https://github.com/Bubka/2FAuth/issues/579) Upgrading to v9.0.0 (docker latest) does not create the twofaccount_user_favorites table
+- [issue #580](https://github.com/Bubka/2FAuth/issues/580) Transfer ownership doesn't work when initiated from an openid user
+- [issue #581](https://github.com/Bubka/2FAuth/issues/581) Login page always displays in English despite browser language being set to Chinese
+
+### Security fix
+
+- Fix an Observable Response Discrepancy on user account.
+- Fix possible host header injection in password reset and WebAuthn recovery emails (thx [@akash111-hue](https://github.com/akash111-hue)).
+- Fix previously issued Personal Access Tokens being authorized when SSO-only mode is enabled and PAT usage is not allowed (thx [@JimmypageLedz](https://github.com/JimmypageLedz)).
+- Fix the Auto-logout being bypassed on web routes (thx [@d3do-23](https://github.com/d3do-23)).
+- Fix SSRF protection bypass of the remote icon fetching guard using IPv4-mapped IPv6 addresses (thx [@xHacktivist](https://github.com/xHacktivist)).
+
 ## [9.0.0] - 2026-10-27
 
 ### Added

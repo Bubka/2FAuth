@@ -81,6 +81,13 @@ class ValidatesUrlsTest extends TestCase
 			'MULTICAST_IPV4_224_4' => ['224.0.0.1'],
 			'MULTICAST_IPV6_FF00_8' => ['ff02::1'],
 			'IMDS_IPV4' => ['169.254.169.254'],
+			'IPV4_MAPPED_IMDS' => ['::ffff:169.254.169.254'],
+			'IPV4_MAPPED_IMDS_HEX' => ['::ffff:a9fe:a9fe'],
+			'IPV4_MAPPED_LOOPBACK' => ['::ffff:127.0.0.1'],
+			'IPV4_MAPPED_PRIVATE_10_8' => ['::ffff:10.0.0.5'],
+			'IPV4_MAPPED_PRIVATE_192_168_16' => ['::ffff:192.168.1.1'],
+			'IPV4_MAPPED_CARRIER_GRADE_NAT' => ['::ffff:100.64.0.1'],
+			'IPV4_COMPATIBLE_LOOPBACK' => ['::7f00:1'],
 		];
 	}
 
@@ -126,6 +133,8 @@ class ValidatesUrlsTest extends TestCase
 			'MULTICAST_IPV4' => ['https://224.0.0.1/image.png', false],
 			'MULTICAST_IPV6' => ['https://[ff02::1]/image.png', false],
 			'IMDS_ENDPOINT' => ['https://169.254.169.254/latest/meta-data', false],
+			'IPV4_MAPPED_IMDS_ENDPOINT' => ['http://[::ffff:169.254.169.254]/latest/meta-data', false],
+			'IPV4_MAPPED_LOOPBACK' => ['http://[::ffff:127.0.0.1]/image.png', false],
 			'INVALID_SCHEME' => ['ftp://1.1.1.1/logo.png', false],
 			'INVALID_URL' => ['not-a-url', false],
 			'LOCALHOST' => ['http://localhost/logo.png', false],

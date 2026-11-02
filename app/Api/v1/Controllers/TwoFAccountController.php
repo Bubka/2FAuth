@@ -185,7 +185,7 @@ class TwoFAccountController extends Controller
     {
         $this->authorize('transferOwnership', $twofaccount);
 
-        if (! Hash::check($request->confirm_password, $request->user()->password)) {
+        if (Auth::getDefaultDriver() !== 'reverse-proxy-guard' && ! $request->user()->oauth_provider && ! Hash::check($request->confirm_password, $request->user()->password)) {
             return response()->json(['message' => 'unauthorized'], 401);
         }
 

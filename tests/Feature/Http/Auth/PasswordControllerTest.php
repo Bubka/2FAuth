@@ -4,6 +4,7 @@ namespace Tests\Feature\Http\Auth;
 
 use App\Http\Controllers\Auth\PasswordController;
 use App\Models\User;
+use Database\Factories\UserFactory;
 use Illuminate\Support\Facades\Config;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -20,7 +21,7 @@ class PasswordControllerTest extends FeatureTestCase
      */
     protected $user;
 
-    private const PASSWORD = 'password';
+    private const PASSWORD = UserFactory::USER_PASSWORD;
 
     private const NEW_PASSWORD = 'newPassword';
 
@@ -111,7 +112,7 @@ class PasswordControllerTest extends FeatureTestCase
         $this->user = User::factory()->create([
             'name'           => self::USER_NAME,
             'email'          => self::USER_EMAIL,
-            'password'       => 'password',
+            'password'       => self::PASSWORD,
             'is_admin'       => 1,
             'oauth_id'       => '12345',
             'oauth_provider' => 'github',

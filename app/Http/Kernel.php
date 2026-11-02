@@ -18,6 +18,7 @@ use App\Http\Middleware\RejectIfDemoMode;
 use App\Http\Middleware\RejectIfReverseProxy;
 use App\Http\Middleware\RejectIfShareDisabled;
 use App\Http\Middleware\RejectIfSsoOnlyAndNotForAdmin;
+use App\Http\Middleware\RejectPatIfNotAllowed;
 use App\Http\Middleware\SetLanguage;
 use App\Http\Middleware\TrimStrings;
 use App\Http\Middleware\TrustProxies;
@@ -109,6 +110,7 @@ class Kernel extends HttpKernel
         'rejectIfShareDisabled'                => RejectIfShareDisabled::class,
         'rejectIfAllUsersSharingScopeDisabled' => RejectIfAllUsersSharingScopeDisabled::class,
         'rejectIfReverseProxy'                 => RejectIfReverseProxy::class,
+        'rejectPatIfNotAllowed'                => RejectPatIfNotAllowed::class,
         'rejectIfSsoOnlyAndNotForAdmin'        => RejectIfSsoOnlyAndNotForAdmin::class,
         'cache.headers'                        => SetCacheHeaders::class,
         'kickOutInactiveUser'                  => KickOutInactiveUser::class,

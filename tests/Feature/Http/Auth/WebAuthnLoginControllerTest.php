@@ -10,10 +10,13 @@ use App\Listeners\Authentication\FailedLoginListener;
 use App\Listeners\Authentication\LoginListener;
 use App\Models\User;
 use App\Notifications\SignedInWithNewDeviceNotification;
+use Database\Factories\UserFactory;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 use Laragear\WebAuthn\Assertion\Validator\AssertionValidator;
+use Laragear\WebAuthn\ByteBuffer;
 use Laragear\WebAuthn\Challenge\Challenge;
 use Laragear\WebAuthn\Enums\UserVerification;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -33,7 +36,7 @@ use Tests\FeatureTestCase;
 class WebAuthnLoginControllerTest extends FeatureTestCase
 {
     /**
-     * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
+     * @var User|Authenticatable
      */
     protected $user;
 
@@ -263,7 +266,7 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
 
         $response = $this->json('POST', '/user/login', [
             'email'    => self::EMAIL,
-            'password' => 'password',
+            'password' => UserFactory::USER_PASSWORD,
         ])
             ->assertUnauthorized();
     }
@@ -443,15 +446,29 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
     }
 
     #[Test]
-    public function test_get_options_with_unknown_email_returns_validation_errors()
+    public function test_get_options_with_unknown_email_is_indistinguishable_from_known_email()
     {
-        $this->json('POST', '/webauthn/login/options', [
+        $this->createWebauthnCredential(self::CREDENTIAL_ID, $this->user->id, self::USER_ID);
+
+        $known = $this->json('POST', '/webauthn/login/options', [
+            'email' => $this->user->email,
+        ])->assertOk();
+
+        $unknown = $this->json('POST', '/webauthn/login/options', [
             'email' => 'john@example.com',
-        ])
-            ->assertStatus(422)
-            ->assertJsonValidationErrors([
-                'email',
-            ]);
+        ])->assertOk();
+
+        $this->assertSame(array_keys($known->json()), array_keys($unknown->json()));
+        $this->assertNotEmpty($unknown->json('allowCredentials'));
+    }
+
+    #[Test]
+    public function test_get_options_decoy_credentials_are_stable_for_a_given_email()
+    {
+        $first  = $this->json('POST', '/webauthn/login/options', ['email' => 'john@example.com']);
+        $second = $this->json('POST', '/webauthn/login/options', ['email' => 'JOHN@example.com']);
+
+        $this->assertSame($first->json('allowCredentials'), $second->json('allowCredentials'));
     }
 
     #[Test]
@@ -495,7 +512,7 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
     protected function addWebauthnChallengeToSession() : void
     {
         $this->session(['_webauthn' => new Challenge(
-            new \Laragear\WebAuthn\ByteBuffer(base64_decode(self::ASSERTION_CHALLENGE)),
+            new ByteBuffer(base64_decode(self::ASSERTION_CHALLENGE)),
             60,
             false,
         )]);
@@ -508,7 +525,7 @@ class WebAuthnLoginControllerTest extends FeatureTestCase
     {
         DB::table('webauthn_credentials')->insert([
             'id'                   => $credentialId,
-            'authenticatable_type' => \App\Models\User::class,
+            'authenticatable_type' => User::class,
             'authenticatable_id'   => $authenticatableId,
             'user_id'              => $userId,
             'counter'              => 0,

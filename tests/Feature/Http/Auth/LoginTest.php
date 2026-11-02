@@ -18,7 +18,8 @@ use App\Models\AuthLog;
 use App\Models\User;
 use App\Notifications\FailedLoginNotification;
 use App\Notifications\SignedInWithNewDeviceNotification;
-use App\Rules\CaseInsensitiveEmailExists;
+use Database\Factories\UserFactory;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Notification;
@@ -38,7 +39,6 @@ use Tests\FeatureTestCase;
 #[CoversClass(LogoutListener::class)]
 #[CoversClass(FailedLoginListener::class)]
 #[CoversClass(VisitedByProxyUserListener::class)]
-#[CoversMethod(CaseInsensitiveEmailExists::class, 'validate')]
 #[CoversMethod(Handler::class, 'register')]
 #[CoversMethod(KickOutInactiveUser::class, 'handle')]
 #[CoversMethod(LogUserLastSeen::class, 'handle')]
@@ -48,20 +48,22 @@ use Tests\FeatureTestCase;
 class LoginTest extends FeatureTestCase
 {
     /**
-     * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
+     * @var User|Authenticatable
      */
     protected $user;
 
     /**
-     * @var \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
+     * @var User|Authenticatable
      */
     protected $admin;
 
     private const WEB_GUARD = 'web-guard';
 
+    private const API_GUARD = 'api-guard';
+
     private const REVERSE_PROXY_GUARD = 'reverse-proxy-guard';
 
-    private const PASSWORD = 'password';
+    private const PASSWORD = UserFactory::USER_PASSWORD;
 
     private const WRONG_PASSWORD = 'wrong_password';
 
@@ -272,6 +274,23 @@ class LoginTest extends FeatureTestCase
     }
 
     #[Test]
+    public function test_user_login_with_unknown_email_returns_same_response_as_wrong_password()
+    {
+        $known = $this->json('POST', '/user/login', [
+            'email'    => $this->user->email,
+            'password' => self::WRONG_PASSWORD,
+        ]);
+
+        $unknown = $this->json('POST', '/user/login', [
+            'email'    => 'unknown@example.com',
+            'password' => self::WRONG_PASSWORD,
+        ]);
+
+        $unknown->assertStatus(401);
+        $this->assertSame($known->getContent(), $unknown->getContent());
+    }
+
+    #[Test]
     public function test_user_login_with_invalid_credentials_returns_unauthorized()
     {
         $response = $this->json('POST', '/user/login', [
@@ -336,6 +355,45 @@ class LoginTest extends FeatureTestCase
 
         $this->json('POST', '/user/login', $post)
             ->assertStatus(429);
+    }
+    #[Test]
+    public function test_inactive_web_session_with_bogus_bearer_header_returns_teapot()
+    {
+        $this->user['preferences->kickUserAfter'] = 1;
+        $this->user->save();
+
+        $this->actingAs($this->user, self::WEB_GUARD)
+            ->json('GET', '/oauth/personal-access-tokens')
+            ->assertOk();
+
+        $this->travelTo(Carbon::now()->addMinutes(2));
+
+        $this->actingAs($this->user, self::WEB_GUARD)
+            ->withHeader('Authorization', 'Bearer not-a-token')
+            ->json('GET', '/oauth/personal-access-tokens')
+            ->assertStatus(418)
+            ->assertExactJson([
+                'message' => 'inactivity detected',
+            ]);
+    }
+
+    #[Test]
+    public function test_inactive_user_authenticated_via_bearer_token_is_not_kicked_out()
+    {
+        $this->user['preferences->kickUserAfter'] = 1;
+        $this->user->save();
+
+        $this->actingAs($this->user, self::API_GUARD)
+            ->withHeader('Authorization', 'Bearer a-valid-token')
+            ->json('GET', '/api/v1/twofaccounts')
+            ->assertOk();
+
+        $this->travelTo(Carbon::now()->addMinutes(2));
+
+        $this->actingAs($this->user, self::API_GUARD)
+            ->withHeader('Authorization', 'Bearer a-valid-token')
+            ->json('GET', '/api/v1/twofaccounts')
+            ->assertOk();
     }
 
     #[Test]

@@ -151,6 +151,7 @@ trait ValidatesUrls
             || $this->isMulticast($ip)
             || $this->IsIMDS($ip)
             || $this->isBlockedNat64($ip)
+            || $this->isBlockedEmbeddedIpv4($ip)
         ) {
             return false;
         }
@@ -258,6 +259,35 @@ trait ValidatesUrls
 
         // Re-validate the embedded IPv4 against the full public-IP policy.
         return ! $this->isPublicIp($embeddedV4);
+    }
+
+    /**
+     * Check if the given ip is an IPv6 address embedding an IPv4 address in its
+     * low 32 bits that is not public: IPv4-mapped (::ffff:0:0/96) or the
+     * deprecated IPv4-compatible (::/96) forms.
+     *
+     * PHP's FILTER_FLAG_NO_PRIV_RANGE / NO_RES_RANGE do not unwrap these, so
+     * e.g. ::ffff:169.254.169.254 would otherwise pass as "public".
+     */
+    private function isBlockedEmbeddedIpv4(string $ip) : bool
+    {
+        $bin = @inet_pton($ip);
+
+        if ($bin === false || strlen($bin) !== 16) {
+            return false;
+        }
+
+        $isMapped     = substr($bin, 0, 12) === str_repeat("\0", 10) . "\xff\xff";
+        $isCompatible = substr($bin, 0, 12) === str_repeat("\0", 12);
+
+        if (! $isMapped && ! $isCompatible) {
+            return false;
+        }
+
+        $embeddedV4 = long2ip(unpack('N', substr($bin, 12, 4))[1]);
+
+        // Fail closed if the embedded address cannot be decoded.
+        return $embeddedV4 === false || ! $this->isPublicIp($embeddedV4);
     }
 
     /**

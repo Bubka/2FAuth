@@ -59,15 +59,14 @@ class WebauthnRecoveryNotification extends Notification
         // if (static::$createUrlCallback) {
         //     $url = call_user_func(static::$createUrlCallback, $notifiable, $this->token);
         // } else {
-        $url = url(
-            route(
-                'webauthn.recover',
-                [
-                    'token' => $this->token,
-                    'email' => $notifiable->getEmailForPasswordReset(),
-                ],
-                false
-            )
+        // Rooted on APP_URL so a forged Host header cannot poison the link.
+        $url = rtrim((string) config('app.url'), '/') . route(
+            'webauthn.recover',
+            [
+                'token' => $this->token,
+                'email' => $notifiable->getEmailForPasswordReset(),
+            ],
+            false
         );
         // }
 

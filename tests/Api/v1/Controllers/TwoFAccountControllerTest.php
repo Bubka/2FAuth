@@ -1394,6 +1394,119 @@ class TwoFAccountControllerTest extends FeatureTestCase
     }
 
     #[Test]
+    public function test_transfer_ownership_with_no_password_returns_invalid()
+    {
+        Settings::set('enableSharing', true);
+
+        $this->actingAs($this->anotherUser, 'api-guard')
+            ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
+                'new_owner_id' => $this->user->id,
+            ])
+            ->assertStatus(422);
+
+        $this->assertDatabaseHas('twofaccounts', [
+            'id' => $this->twofaccountC->id,
+            'user_id' => $this->anotherUser->id,
+        ]);
+    }
+
+    #[Test]
+    public function test_transfer_ownership_from_auth_proxy_user_does_not_expect_password()
+    {
+        Settings::set('enableSharing', true);
+
+        $this->actingAs($this->anotherUser, 'reverse-proxy-guard')
+            ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
+                'new_owner_id' => $this->user->id,
+            ])
+            ->assertOk()
+            ->assertExactJson([
+                'twofaccount_id' => $this->twofaccountC->id,
+                'owner_id' => $this->user->id,
+            ]);
+
+        $this->assertDatabaseHas('twofaccounts', [
+            'id' => $this->twofaccountC->id,
+            'user_id' => $this->user->id,
+        ]);
+    }
+
+    #[Test]
+    public function test_transfer_ownership_from_auth_proxy_user_returns_success_with_unexpected_password()
+    {
+        Settings::set('enableSharing', true);
+
+        $this->actingAs($this->anotherUser, 'reverse-proxy-guard')
+            ->json('PATCH', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '/owner', [
+                'new_owner_id' => $this->user->id,
+                'confirm_password' => strrev(self::DEFAULT_USER_PASSWORD),
+            ])
+            ->assertOk()
+            ->assertExactJson([
+                'twofaccount_id' => $this->twofaccountC->id,
+                'owner_id' => $this->user->id,
+            ]);
+
+        $this->assertDatabaseHas('twofaccounts', [
+            'id' => $this->twofaccountC->id,
+            'user_id' => $this->user->id,
+        ]);
+    }
+
+    #[Test]
+    public function test_transfer_ownership_from_sso_user_does_not_expect_password()
+    {
+        Settings::set('enableSharing', true);
+
+        $ssoUser = User::factory()->ssoUser()->create();
+        $twofaccountToTransfer = TwoFAccount::factory()
+            ->for($ssoUser)
+            ->create();
+
+        $this->actingAs($ssoUser, 'api-guard')
+            ->json('PATCH', '/api/v1/twofaccounts/' . $twofaccountToTransfer->id . '/owner', [
+                'new_owner_id' => $this->user->id,
+            ])
+            ->assertOk()
+            ->assertExactJson([
+                'twofaccount_id' => $twofaccountToTransfer->id,
+                'owner_id' => $this->user->id,
+            ]);
+
+        $this->assertDatabaseHas('twofaccounts', [
+            'id' => $twofaccountToTransfer->id,
+            'user_id' => $this->user->id,
+        ]);
+    }
+
+    #[Test]
+    public function test_transfer_ownership_from_sso_user_returns_success_with_unexpected_password()
+    {
+        Settings::set('enableSharing', true);
+
+        $ssoUser = User::factory()->ssoUser()->create();
+        $twofaccountToTransfer = TwoFAccount::factory()
+            ->for($ssoUser)
+            ->create();
+
+        $this->actingAs($ssoUser, 'api-guard')
+            ->json('PATCH', '/api/v1/twofaccounts/' . $twofaccountToTransfer->id . '/owner', [
+                'new_owner_id' => $this->user->id,
+                'confirm_password' => strrev(self::DEFAULT_USER_PASSWORD),
+            ])
+            ->assertOk()
+            ->assertExactJson([
+                'twofaccount_id' => $twofaccountToTransfer->id,
+                'owner_id' => $this->user->id,
+            ]);
+
+        $this->assertDatabaseHas('twofaccounts', [
+            'id' => $twofaccountToTransfer->id,
+            'user_id' => $this->user->id,
+        ]);
+    }
+
+    #[Test]
     public function test_transfer_ownership_of_missing_twofaccount_returns_not_found()
     {
         Settings::set('enableSharing', true);

@@ -37,6 +37,17 @@ class WebauthnRecoveryNotificationTest extends FeatureTestCase
     }
 
     #[Test]
+    public function test_recovery_link_ignores_forged_host_header()
+    {
+        $this->app['request']->headers->set('Host', 'attacker.example');
+
+        $mail = $this->webauthnRecoveryNotification->toMail($this->user)->render();
+
+        $this->assertStringNotContainsString('attacker.example', $mail);
+        $this->assertStringContainsString(config('app.url') . '/webauthn/recover?token=test_token', $mail);
+    }
+
+    #[Test]
     public function test_rendered_email_contains_expected_data()
     {
         $mail = $this->webauthnRecoveryNotification->toMail($this->user)->render();

@@ -1,5 +1,6 @@
 #!/bin/sh
 
+# stop on error
 set -e
 
 
@@ -96,22 +97,30 @@ for v in APP_KEY; do
     fi
 done
 
+
+# Always run migrations
+php artisan migrate --force
+
 # Note: ${COMMIT} is set by the CI
 if [ -f /2fauth/installed ]; then
   INSTALLED_COMMIT="$(cat /2fauth/installed)"
   if [ "${INSTALLED_COMMIT}" != "${COMMIT}" ]; then
-    echo "Installed commit ${INSTALLED_COMMIT} is different from program commit ${COMMIT}, we are migrating..."
+    echo "Installed commit ${INSTALLED_COMMIT} is different from program commit ${COMMIT}, we run some checks and upgrade tasks..."
     php artisan cache:clear
     php artisan config:clear
-    php artisan migrate --force
-    php artisan 2fauth:fix-passport-key-permissions || echo "Warning: failed to fix Passport key permissions" >&2
+    php artisan 2fauth:fix-passport-key-permissions || echo >&2 "Warning: failed to fix Passport key permissions"
+    # if [ ! -f 2fauth/storage/oauth-private.key ] || [ ! -f 2fauth/storage/oauth-public.key ]; then
+    #   echo >&2 "Error: at least one Passport key is missing in 2fauth/storage"
+    #   exit 1
+    # fi
   fi
 else
-  php artisan migrate:fresh --force
   php artisan passport:install --no-interaction
 fi
 
 echo "${COMMIT}" > /2fauth/installed
+
+# Creating the storage symlink
 php artisan storage:link --quiet
 
 # Clearing compiled, cache has already been cleared

@@ -6,7 +6,6 @@ use App\Http\Controllers\Auth\Traits\HasAuthenticatedPayload;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\WebauthnAssertedRequest;
 use App\Models\User;
-use App\Rules\CaseInsensitiveEmailExists;
 use Carbon\Carbon;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -16,6 +15,7 @@ use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Log;
 use Laragear\WebAuthn\Enums\UserVerification;
 use Laragear\WebAuthn\Http\Requests\AssertionRequest;
+use Laragear\WebAuthn\JsonTransport;
 
 class WebAuthnLoginController extends Controller
 {
@@ -53,13 +53,47 @@ class WebAuthnLoginController extends Controller
                 break;
         }
 
-        return $request->toVerify($request->validate([
-            'email' => [
-                'required',
-                'email',
-                new CaseInsensitiveEmailExists,
-            ],
-        ]));
+        $credentials = $request->validate(['email' => 'required|email']);
+        $options     = $request->toVerify($credentials);
+
+        // Without decoys, a missing allowCredentials list would tell the caller the account does not exist.
+        if ($options instanceof JsonTransport && $options->get('allowCredentials') === null) {
+            $ordered = [];
+
+            // Insert before the challenge to keep the same key order as real responses.
+            foreach ($options->json as $key => $value) {
+                if ($key === 'challenge') {
+                    $ordered['allowCredentials'] = $this->decoyCredentials($credentials['email']);
+                }
+                $ordered[$key] = $value;
+            }
+
+            $options->json = $ordered;
+        }
+
+        return $options;
+    }
+
+    /**
+     * Build stable fake credentials, derived from the email, so unknown accounts look like known ones.
+     *
+     * @return array<int, array{id: string, type: string}>
+     */
+    protected function decoyCredentials(string $email) : array
+    {
+        $seed   = hash_hmac('sha256', strtolower($email), (string) config('app.key'), true);
+        $count  = 1 + (ord($seed[0]) % 3);
+        $decoys = [];
+
+        for ($i = 0; $i < $count; $i++) {
+            $id       = hash_hmac('sha256', (string) $i, $seed, true);
+            $decoys[] = [
+                'id'   => rtrim(strtr(base64_encode($id), '+/', '-_'), '='),
+                'type' => 'public-key',
+            ];
+        }
+
+        return $decoys;
     }
 
     /**
