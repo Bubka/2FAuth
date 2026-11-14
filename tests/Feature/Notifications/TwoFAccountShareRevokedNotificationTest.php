@@ -16,8 +16,8 @@ class TwoFAccountShareRevokedNotificationTest extends FeatureTestCase
     #[Test]
     public function test_it_renders_to_email() : void
     {
-        $owner = User::factory()->create();
-        $recipient = User::factory()->create();
+        $owner       = User::factory()->create();
+        $recipient   = User::factory()->create();
         $twofaccount = TwoFAccount::factory()->for($owner)->create([
             'service' => 'Github',
             'account' => 'alice@example.org',
@@ -31,18 +31,33 @@ class TwoFAccountShareRevokedNotificationTest extends FeatureTestCase
     #[Test]
     public function test_rendered_email_contains_expected_data() : void
     {
-        $owner = User::factory()->create(['name' => 'Alice']);
-        $recipient = User::factory()->create();
+        $owner       = User::factory()->create(['name' => 'Alice']);
+        $recipient   = User::factory()->create();
         $twofaccount = TwoFAccount::factory()->for($owner)->create([
             'service' => 'Github',
             'account' => 'alice@example.org',
         ]);
 
         $notification = new TwoFAccountShareRevokedNotification($twofaccount, $owner->name, true);
-        $mail = $notification->toMail($recipient)->render();
+        $mail         = $notification->toMail($recipient)->render();
 
         $this->assertStringContainsString('Alice', $mail);
         $this->assertStringContainsString('Github (alice@example.org)', $mail);
         $this->assertStringContainsString(__('link.go_to_2fauth_host'), $mail);
+    }
+
+    #[Test]
+    public function test_action_link_ignores_forged_host_header() : void
+    {
+        $owner       = User::factory()->create();
+        $recipient   = User::factory()->create();
+        $twofaccount = TwoFAccount::factory()->for($owner)->create();
+
+        $this->app['request']->headers->set('Host', 'attacker.example');
+
+        $mail = (new TwoFAccountShareRevokedNotification($twofaccount, $owner->name, false))->toMail($recipient)->render();
+
+        $this->assertStringNotContainsString('attacker.example', $mail);
+        $this->assertStringContainsString('href="' . config('app.url') . '/"', $mail);
     }
 }

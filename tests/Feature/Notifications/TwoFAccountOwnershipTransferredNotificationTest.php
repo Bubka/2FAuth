@@ -17,8 +17,8 @@ class TwoFAccountOwnershipTransferredNotificationTest extends FeatureTestCase
     public function test_it_renders_to_email() : void
     {
         $previousOwner = User::factory()->create();
-        $newOwner = User::factory()->create();
-        $twofaccount = TwoFAccount::factory()->for($previousOwner)->create([
+        $newOwner      = User::factory()->create();
+        $twofaccount   = TwoFAccount::factory()->for($previousOwner)->create([
             'service' => 'Github',
             'account' => 'alice@example.org',
         ]);
@@ -32,17 +32,32 @@ class TwoFAccountOwnershipTransferredNotificationTest extends FeatureTestCase
     public function test_rendered_email_contains_expected_data() : void
     {
         $previousOwner = User::factory()->create(['name' => 'Alice']);
-        $newOwner = User::factory()->create();
-        $twofaccount = TwoFAccount::factory()->for($previousOwner)->create([
+        $newOwner      = User::factory()->create();
+        $twofaccount   = TwoFAccount::factory()->for($previousOwner)->create([
             'service' => 'Github',
             'account' => 'alice@example.org',
         ]);
 
         $notification = new TwoFAccountOwnershipTransferredNotification($twofaccount, $previousOwner);
-        $mail = $notification->toMail($newOwner)->render();
+        $mail         = $notification->toMail($newOwner)->render();
 
         $this->assertStringContainsString('Alice', $mail);
         $this->assertStringContainsString('Github (alice@example.org)', $mail);
         $this->assertStringContainsString(__('link.go_to_2fauth_host'), $mail);
+    }
+
+    #[Test]
+    public function test_action_link_ignores_forged_host_header() : void
+    {
+        $previousOwner = User::factory()->create();
+        $newOwner      = User::factory()->create();
+        $twofaccount   = TwoFAccount::factory()->for($previousOwner)->create();
+
+        $this->app['request']->headers->set('Host', 'attacker.example');
+
+        $mail = (new TwoFAccountOwnershipTransferredNotification($twofaccount, $previousOwner))->toMail($newOwner)->render();
+
+        $this->assertStringNotContainsString('attacker.example', $mail);
+        $this->assertStringContainsString('href="' . config('app.url') . '/"', $mail);
     }
 }

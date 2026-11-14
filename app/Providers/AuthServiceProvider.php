@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Extensions\RemoteUserProvider;
 use App\Extensions\WebauthnCredentialBroker;
 use App\Extensions\WebauthnTwoFAuthUserProvider;
+use App\Helpers\Helpers;
 use App\Models\Group;
 use App\Models\TwoFAccount;
 use App\Models\User;
@@ -110,10 +111,10 @@ class AuthServiceProvider extends ServiceProvider
 
         // Root reset links on APP_URL so a forged Host header cannot poison them
         ResetPassword::createUrlUsing(static function (mixed $notifiable, string $token) : string {
-            return rtrim((string) config('app.url'), '/') . route('password.reset', [
+            return Helpers::appUrl(route('password.reset', [
                 'token' => $token,
                 'email' => $notifiable->getEmailForPasswordReset(),
-            ], false);
+            ], false));
         });
 
         // Normally we should set the Passport routes here using Passport::routes().

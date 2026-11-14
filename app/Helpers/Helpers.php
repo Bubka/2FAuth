@@ -7,6 +7,14 @@ use Illuminate\Support\Str;
 class Helpers
 {
     /**
+     * Build an absolute URL rooted on APP_URL, never on the request Host header.
+     */
+    public static function appUrl(string $path = '/') : string
+    {
+        return rtrim((string) config('app.url'), '/') . '/' . ltrim($path, '/');
+    }
+
+    /**
      * Clean a version number string
      */
     public static function cleanVersionNumber(?string $release) : string|false

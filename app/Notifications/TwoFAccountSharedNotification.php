@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Helpers\Helpers;
 use App\Models\TwoFAccount;
 use App\Notifications\Traits\RendersTwoFAccount;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -54,6 +55,6 @@ class TwoFAccountSharedNotification extends Notification
                 'twofaccount' => $this->twoFAccountLabel(),
             ]))
             ->line(__('message.notifications.twofaccount_shared.use_it_to_generate_otp'))
-            ->action(__('link.go_to_2fauth_host'), url('/'));
+            ->action(__('link.go_to_2fauth_host'), Helpers::appUrl());
     }
 }

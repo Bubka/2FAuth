@@ -15,6 +15,43 @@ use Tests\TestCase;
 class HelpersTest extends TestCase
 {
     #[Test]
+    #[DataProvider('appUrlProvider')]
+    public function test_appUrl_is_rooted_on_app_url(string $appUrl, string $path, string $expected)
+    {
+        config(['app.url' => $appUrl]);
+
+        $this->assertSame($expected, Helpers::appUrl($path));
+    }
+
+    /**
+     * Provide data for appUrl() tests
+     */
+    public static function appUrlProvider() : array
+    {
+        return [
+            'DEFAULT_PATH' => [
+                'https://2fa.example.org',
+                '/',
+                'https://2fa.example.org/'
+            ],
+            'TRAILING_SLASH_IN_URL' => [
+                'https://2fa.example.org/',
+                '/foo?a=b',
+                'https://2fa.example.org/foo?a=b'],
+            'SUBDIRECTORY' => [
+                'https://example.org/2fa',
+                '/foo',
+                'https://example.org/2fa/foo'
+            ],
+            'PATH_WITHOUT_LEADING_SLASH' => [
+                'https://2fa.example.org',
+                'foo',
+                'https://2fa.example.org/foo'
+            ],
+        ];
+    }
+
+    #[Test]
     #[DataProvider('versionNumberProvider')]
     public function test_cleanVersionNumber_returns_cleaned_version(string $dirtyVersion, string $expected)
     {
@@ -91,7 +128,7 @@ class HelpersTest extends TestCase
     }
 
     /**
-     * Provide data for cleanVersionNumber() tests
+     * Provide data for toBase32Format() tests
      */
     public static function toBase32PaddedStringProvider()
     {

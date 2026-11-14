@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Helpers\Helpers;
 use Closure;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
@@ -60,14 +61,14 @@ class WebauthnRecoveryNotification extends Notification
         //     $url = call_user_func(static::$createUrlCallback, $notifiable, $this->token);
         // } else {
         // Rooted on APP_URL so a forged Host header cannot poison the link.
-        $url = rtrim((string) config('app.url'), '/') . route(
+        $url = Helpers::appUrl(route(
             'webauthn.recover',
             [
                 'token' => $this->token,
                 'email' => $notifiable->getEmailForPasswordReset(),
             ],
             false
-        );
+        ));
         // }
 
         return (new MailMessage)

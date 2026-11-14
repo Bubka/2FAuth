@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Helpers\Helpers;
 use App\Models\TwoFAccount;
 use App\Notifications\Traits\RendersTwoFAccount;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -53,6 +54,6 @@ class TwoFAccountShareRevokedNotification extends Notification
                 'actor'       => $this->actorName,
                 'twofaccount' => $this->twoFAccountLabel(),
             ]))
-            ->action(__('link.go_to_2fauth_host'), url('/'));
+            ->action(__('link.go_to_2fauth_host'), Helpers::appUrl());
     }
 }
