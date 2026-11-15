@@ -8,6 +8,7 @@ use App\Models\Icon;
 use App\Models\TwoFAccount;
 use App\Models\User;
 use App\Services\IconStoreService;
+use enshrined\svgSanitize\Sanitizer;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -532,6 +533,62 @@ class IconStoreServiceTest extends FeatureTestCase
         $this->assertDatabaseMissing('icons', [
             'name' => OtpTestData::ICON_SVG,
         ]);
+    }
+
+    #[Test]
+    public function test_store_never_writes_unsanitized_svg_to_disk()
+    {
+        $store = $this->makeRecordingIconStore();
+
+        $store->store(OtpTestData::ICON_SVG, OtpTestData::ICON_SVG_DATA_INFECTED);
+
+        $this->assertCount(1, $store->writes);
+
+        foreach ($store->writes as $content) {
+            $this->assertStringNotContainsString(OtpTestData::ICON_SVG_MALICIOUS_CODE, $content);
+        }
+    }
+
+    #[Test]
+    public function test_store_never_writes_unsanitized_svg_to_disk_when_name_has_no_svg_extension()
+    {
+        $store = $this->makeRecordingIconStore();
+
+        $store->store(OtpTestData::ICON_PNG, OtpTestData::ICON_SVG_DATA_INFECTED);
+
+        foreach ($store->writes as $content) {
+            $this->assertStringNotContainsString(OtpTestData::ICON_SVG_MALICIOUS_CODE, $content);
+        }
+    }
+
+    #[Test]
+    public function test_store_never_writes_svg_that_cannot_be_sanitized_to_disk()
+    {
+        $store = $this->makeRecordingIconStore();
+
+        $result = $store->store(OtpTestData::ICON_SVG, 'this_will_make_svg_data_invalid' . OtpTestData::ICON_SVG_DATA);
+
+        $this->assertFalse($result);
+        $this->assertSame([], $store->writes);
+    }
+
+    /**
+     * Build an IconStoreService that records every content sent to the disk
+     */
+    protected function makeRecordingIconStore() : IconStoreService
+    {
+        return new class($this->app->make(Sanitizer::class)) extends IconStoreService
+        {
+            /** @var array<int, string> */
+            public array $writes = [];
+
+            protected function storeToDisk(string $name, string $content) : bool
+            {
+                $this->writes[] = $content;
+
+                return parent::storeToDisk($name, $content);
+            }
+        };
     }
 
     #[Test]

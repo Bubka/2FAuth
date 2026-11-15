@@ -212,22 +212,18 @@ class IconStoreService
      */
     public function store(string $name, string $content) : bool
     {
-        $storedToDisk = $this->storeToDisk($name, $content);
-
-        if ($this->mimeType($name) == 'image/svg+xml') {
+        // An SVG must never reach the public disk before being sanitized
+        if ($this->isSvg($name, $content)) {
             $sanitized = $this->sanitize($content);
 
             if (! $sanitized) {
-                $this->delete($name);
-
                 return false;
             }
 
-            if ($content != $sanitized) {
-                $content      = $sanitized;
-                $storedToDisk = $this->storeToDisk($name, $content);
-            }
+            $content = $sanitized;
         }
+
+        $storedToDisk = $this->storeToDisk($name, $content);
 
         if ($this->usesDatabase) {
             return $this->storeToDatabase($name, $content);
@@ -237,9 +233,18 @@ class IconStoreService
     }
 
     /**
+     * Whether the given icon is an svg, based on either its name or its content
+     */
+    protected function isSvg(string $name, string $content) : bool
+    {
+        return Str::lower(pathinfo($name, PATHINFO_EXTENSION)) === 'svg'
+            || (new \finfo(FILEINFO_MIME_TYPE))->buffer($content) === 'image/svg+xml';
+    }
+
+    /**
      * Sanitize the given content (when icon is an svg image)
      */
-    protected function sanitize(string $content) : string
+    protected function sanitize(string $content) : string|false
     {
         return $this->svgSanitizer->sanitize($content);
     }

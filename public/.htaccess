@@ -3,6 +3,14 @@
         Options -MultiViews -Indexes
     </IfModule>
 
+    # Uploaded files must never be able to run scripts when browsed directly
+    <IfModule mod_headers.c>
+        <If "%{REQUEST_URI} =~ m#/storage/#">
+            Header always set Content-Security-Policy "default-src 'none'; style-src 'unsafe-inline'; sandbox"
+            Header always set X-Content-Type-Options "nosniff"
+        </If>
+    </IfModule>
+
     RewriteEngine On
 
     # Uncomment this if you need to access '/server-info' or '/server-status' urls to monitor apache2
