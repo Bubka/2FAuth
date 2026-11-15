@@ -224,6 +224,28 @@ class TwoFAccountUpdateRequestTest extends TestCase
                 'period'    => null,
                 'counter'   => 15,
             ]],
+            [[
+                'service'   => 'MyService',
+                'account'   => 'MyAccount',
+                'icon'      => '../../../../../local.sqlite',
+                'otp_type'  => 'totp',
+                'secret'    => 'A4GRFHZVRBGY7UIW',
+                'digits'    => 6,
+                'algorithm' => 'sha1',
+                'period'    => null,
+                'counter'   => 15,
+            ]],
+            [[
+                'service'   => 'MyService',
+                'account'   => 'MyAccount',
+                'icon'      => 'sub/icon.png',
+                'otp_type'  => 'totp',
+                'secret'    => 'A4GRFHZVRBGY7UIW',
+                'digits'    => 6,
+                'algorithm' => 'sha1',
+                'period'    => null,
+                'counter'   => 15,
+            ]],
         ];
     }
 }

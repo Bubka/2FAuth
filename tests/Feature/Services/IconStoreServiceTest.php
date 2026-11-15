@@ -844,4 +844,15 @@ class IconStoreServiceTest extends FeatureTestCase
             'content' => OtpTestData::ICON_JPEG_DATA,
         ]);
     }
+
+    #[Test]
+    public function test_unsafe_names_fail_closed()
+    {
+        $unsafeName = '../../../../../local.sqlite';
+
+        $this->assertFalse($this->iconStore->exists($unsafeName));
+        $this->assertNull($this->iconStore->get($unsafeName));
+        $this->assertFalse($this->iconStore->mimeType($unsafeName));
+        $this->assertTrue($this->iconStore->delete($unsafeName));
+    }
 }

@@ -21,6 +21,11 @@ class IconService
     use Traits\ValidatesUrls;
 
     /**
+     * The file extensions supported for icons, without the dot.
+     */
+    public const array SUPPORTED_FILE_EXTENSIONS = ['jpg', 'jpeg', 'png', 'bmp', 'webp', 'svg'];
+
+    /**
      * Build an icon by fetching the official logo on the internet
      */
     public function buildFromOfficialLogo(?string $service) : ?string
@@ -250,16 +255,7 @@ class IconService
      */
     private static function IsSupportedFileExtension(string $fileExtension) : bool
     {
-        $acceptedFileExtensions = [
-            'png',
-            'jpg',
-            'jpeg',
-            'webp',
-            'bmp',
-            'svg',
-        ];
-
-        return in_array(Str::lower($fileExtension), $acceptedFileExtensions, true);
+        return in_array(Str::lower($fileExtension), self::SUPPORTED_FILE_EXTENSIONS, true);
     }
 
     /**

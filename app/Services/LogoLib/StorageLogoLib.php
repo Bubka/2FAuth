@@ -3,6 +3,7 @@
 namespace App\Services\LogoLib;
 
 use App\Facades\IconStore;
+use App\Services\IconService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -12,7 +13,7 @@ class StorageLogoLib extends AbstractLogoLib implements LogoLibInterface
     /**
      * The file extensions to consider when searching for logos
      */
-    protected array $extensions = ['svg', 'png', 'webp', 'jpg', 'jpeg', 'bmp'];
+    protected array $extensions = IconService::SUPPORTED_FILE_EXTENSIONS;
 
     /**
      * Fetch a logo for the given service and save it as an icon

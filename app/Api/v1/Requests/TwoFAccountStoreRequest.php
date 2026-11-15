@@ -3,6 +3,7 @@
 namespace App\Api\v1\Requests;
 
 use App\Rules\IsBase32Encoded;
+use App\Rules\IsIconFilename;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
@@ -28,7 +29,7 @@ class TwoFAccountStoreRequest extends FormRequest
         return [
             'service'   => 'nullable|string|regex:/^[^:]+$/i',
             'account'   => 'required|string|regex:/^[^:]+$/i',
-            'icon'      => 'nullable|string',
+            'icon'      => ['nullable', 'string', new IsIconFilename],
             'group_id'  => 'sometimes|nullable|integer|min:0',
             'otp_type'  => 'required|string|in:totp,hotp,steamtotp',
             'secret'    => ['string', 'bail', new IsBase32Encoded],

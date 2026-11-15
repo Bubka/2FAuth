@@ -13,6 +13,9 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use League\Flysystem\CorruptedPathDetected;
+use League\Flysystem\PathTraversalDetected;
+use League\Flysystem\WhitespacePathNormalizer;
 use Mockery\MockInterface;
 
 class IconStoreService
@@ -136,6 +139,10 @@ class IconStoreService
      */
     public function get(string $name) : ?string
     {
+        if (! $this->isSafeName($name)) {
+            return null;
+        }
+
         if ($this->usesDatabase) {
             return Icon::find($name)?->content;
         } else {
@@ -148,6 +155,10 @@ class IconStoreService
      */
     public function mimeType(string $name) : string|false
     {
+        if (! $this->isSafeName($name)) {
+            return false;
+        }
+
         if ($this->usesDatabase && $this->missingInDisk($name)) {
             $this->storeToDisk($name, $this->get($name));
         }
@@ -175,7 +186,7 @@ class IconStoreService
     protected function clearDisk() : bool
     {
         $filesForDelete = Arr::where($this->disk()->files(), function (string $filename) {
-            return Str::endsWith($filename, ['png', 'jpg', 'jpeg', 'bmp', 'webp', 'svg']);
+            return in_array(Str::lower(pathinfo($filename, PATHINFO_EXTENSION)), IconService::SUPPORTED_FILE_EXTENSIONS, true);
         });
 
         return $this->disk()->delete($filesForDelete);
@@ -195,6 +206,7 @@ class IconStoreService
     public function delete(array|string $names) : bool
     {
         $names = is_array($names) ? $names : func_get_args();
+        $names = array_values(array_filter($names, $this->isSafeName(...)));
 
         $deletedFromDisk = $this->disk()->delete($names);
 
@@ -274,6 +286,10 @@ class IconStoreService
      */
     public function exists(string $name) : bool
     {
+        if (! $this->isSafeName($name)) {
+            return false;
+        }
+
         if ($this->usesDatabase) {
             $exists = $this->existsInDatabase($name);
             if ($exists && $this->missingInDisk($name)) {
@@ -308,5 +324,23 @@ class IconStoreService
     protected function missingInDisk(string $name) : bool
     {
         return ! $this->existsInDisk($name);
+    }
+
+    /**
+     * Determine if the given name is a bare filename that cannot escape the storage root
+     */
+    protected function isSafeName(mixed $name) : bool
+    {
+        if (! is_string($name) || $name === '' || $name !== basename($name)) {
+            return false;
+        }
+
+        try {
+            (new WhitespacePathNormalizer)->normalizePath($name);
+        } catch (PathTraversalDetected|CorruptedPathDetected) {
+            return false;
+        }
+
+        return true;
     }
 }

@@ -184,6 +184,16 @@ class TwoFAccountStoreRequestTest extends TestCase
                 'otp_type'  => 'totp',
                 'algorithm' => 'shaX',
             ]],
+            [[
+                'account'  => 'MyAccount',
+                'otp_type' => 'totp',
+                'icon'     => '../../../../../local.sqlite',
+            ]],
+            [[
+                'account'  => 'MyAccount',
+                'otp_type' => 'totp',
+                'icon'     => 'sub/icon.png',
+            ]],
         ];
     }
 }
