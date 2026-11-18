@@ -96,7 +96,12 @@ class BitwardenMigrator extends Migrator
 
         foreach ($json['items'] as $key => $otp_parameters) {
             $parameters = [];
-            $uri        = $otp_parameters['login']['totp'];
+            $uri        = $otp_parameters['login']['totp'] ?? null;
+
+            // Most vault items are logins without 2FA, notes or cards: nothing to import
+            if (! is_string($uri) || trim($uri) === '') {
+                continue;
+            }
 
             // For now Bitwarden only supports totp/steam, see https://bitwarden.com/help/integrated-authenticator/
             if ($isSteam = str_starts_with($uri, 'steam://')) {
@@ -106,13 +111,19 @@ class BitwardenMigrator extends Migrator
                 $parameters['otp_type'] = TwoFAccount::TOTP;
             }
 
+            // Bitwarden also accepts the bare secret instead of an otpauth URI
+            $isBareSecret = ! $isSteam && ! str_starts_with(strtolower($uri), 'otpauth://');
+            if ($isBareSecret) {
+                $parameters['secret'] = str_replace(' ', '', $uri);
+            }
+
             $parameters['service'] = $otp_parameters['name'];
             $parameters['account'] = $otp_parameters['login']['username'] ?? $parameters['service'];
 
             try {
                 $twofaccounts[$key] = new TwoFAccount;
 
-                if ($isSteam) {
+                if ($isSteam || $isBareSecret) {
                     $twofaccounts[$key]->fillWithOtpParameters($parameters);
                 } else {
                     $twofaccounts[$key]->fillWithURI($uri);
@@ -144,6 +155,7 @@ class BitwardenMigrator extends Migrator
 
         }
 
-        return collect($twofaccounts);
+        // Keys are vault item indexes, with gaps for the skipped items
+        return collect(array_values($twofaccounts));
     }
 }
