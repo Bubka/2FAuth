@@ -12,11 +12,8 @@ use enshrined\svgSanitize\Sanitizer;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\PreserveGlobalState;
-use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Data\OtpTestData;
 use Tests\FeatureTestCase;
@@ -767,8 +764,6 @@ class IconStoreServiceTest extends FeatureTestCase
     }
 
     #[Test]
-    #[RunInSeparateProcess]
-    #[PreserveGlobalState(false)]
     public function test_setDatabaseReplication_On_sends_exception_and_does_nothing_if_filling_database_fails()
     {
         $user  = User::factory()->create();
@@ -786,11 +781,8 @@ class IconStoreServiceTest extends FeatureTestCase
 
         $this->expectException(FailedIconStoreDatabaseTogglingException::class);
 
-        $mock = $this->mock('overload:' . Icon::class, function (MockInterface $iconModel) {
-            $iconModel->shouldReceive('truncate')
-                ->andReturn(true);
-            $iconModel->shouldReceive('firstOrNew')
-                ->andThrow(new \Exception);
+        Icon::saving(function () {
+            throw new \Exception;
         });
 
         Settings::set('storeIconsInDatabase', true);
