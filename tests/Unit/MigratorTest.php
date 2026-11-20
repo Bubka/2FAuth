@@ -523,6 +523,22 @@ class MigratorTest extends TestCase
     }
 
     #[Test]
+    public function test_migrate_bitwarden_vault_skips_items_without_totp()
+    {
+        $payload  = MigrationTestData::BITWARDEN_JSON_MIGRATION_PAYLOAD_WITH_ITEMS_WITHOUT_TOTP;
+        $migrator = (new MigratorFactory)->create($payload);
+
+        $this->assertInstanceOf(BitwardenMigrator::class, $migrator);
+
+        $accounts = $migrator->migrate($payload);
+
+        $this->assertSame([0, 1], $accounts->keys()->all());
+        $this->assertSame(OtpTestData::SERVICE, $accounts[0]->service);
+        $this->assertSame('dropbox', $accounts[1]->service);
+        $this->assertSame(OtpTestData::SECRET, $accounts[1]->secret);
+    }
+
+    #[Test]
     public function test_factory_throw_UnsupportedMigrationException()
     {
         $this->expectException(UnsupportedMigrationException::class);

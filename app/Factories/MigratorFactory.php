@@ -281,10 +281,9 @@ class MigratorFactory implements MigratorFactoryInterface
                 return count(Validator::validate(
                     $json,
                     [
-                        'items.*.id'             => 'present',
-                        'items.*.name'           => 'present',
-                        'items.*.login.username' => 'present',
-                        'items.*.login.totp'     => 'present',
+                        // Notes, cards and identities have no login, so login fields are not required
+                        'items.*.id'   => 'present',
+                        'items.*.name' => 'present',
                     ]
                 )) > 0;
             }

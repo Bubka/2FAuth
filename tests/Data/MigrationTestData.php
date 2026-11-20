@@ -872,6 +872,29 @@ class MigrationTestData
             ]
         }';
 
+    const BITWARDEN_JSON_MIGRATION_PAYLOAD_WITH_ITEMS_WITHOUT_TOTP = '
+        {
+            "encrypted": false,
+            "folders": [],
+            "items": [
+                {
+                    "id": "1", "type": 1, "name": "' . OtpTestData::SERVICE . '",
+                    "login": { "uris": [], "username": "' . OtpTestData::ACCOUNT . '", "password": "x", "totp": "' . OtpTestData::TOTP_FULL_CUSTOM_URI_NO_IMG . '" }
+                },
+                {
+                    "id": "2", "type": 1, "name": "shop",
+                    "login": { "uris": [], "username": "alice", "password": "y", "totp": null }
+                },
+                {
+                    "id": "3", "type": 2, "name": "wifi", "notes": "pw", "secureNote": { "type": 0 }
+                },
+                {
+                    "id": "4", "type": 1, "name": "dropbox",
+                    "login": { "uris": [], "username": "bob", "password": "z", "totp": "' . OtpTestData::SECRET . '" }
+                }
+            ]
+        }';
+
     const ENCRYPTED_BITWARDEN_JSON_MIGRATION_PAYLOAD = '
         {
             "encrypted": true,
