@@ -6,7 +6,9 @@ use App\Facades\Settings;
 use App\Models\TwoFAccount;
 use App\Models\User;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Route;
 use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Data\OtpTestData;
 use Tests\FeatureTestCase;
@@ -100,5 +102,40 @@ class PatUsageWithSsoOnlyTest extends FeatureTestCase
         $this->withHeader('Authorization', 'Bearer ' . $token)
             ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccount->id)
             ->assertOk();
+    }
+
+    #[Test]
+    #[DataProvider('providePassportRouteNames')]
+    public function test_passport_builtin_routes_are_not_registered(string $routeName)
+    {
+        $this->assertFalse(Route::has($routeName));
+    }
+
+    #[Test]
+    public function test_pat_cannot_be_exchanged_for_a_cookie()
+    {
+        $token = $this->issuePat();
+
+        Settings::set('useSsoOnly', true);
+        Settings::set('allowPatWhileSsoOnly', false);
+
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)
+            ->json('POST', '/oauth/token/refresh');
+
+        $this->assertNotEquals(200, $response->getStatusCode());
+        $response->assertCookieMissing('laravel_token');
+    }
+
+    public static function providePassportRouteNames() : array
+    {
+        return [
+            'TOKEN'         => ['passport.token'],
+            'TOKEN_REFRESH' => ['passport.token.refresh'],
+            'TOKENS_INDEX'  => ['passport.tokens.index'],
+            'CLIENTS_INDEX' => ['passport.clients.index'],
+            'CLIENTS_STORE' => ['passport.clients.store'],
+            'SCOPES_INDEX'  => ['passport.scopes.index'],
+            'AUTHORIZE'     => ['passport.authorizations.authorize'],
+        ];
     }
 }

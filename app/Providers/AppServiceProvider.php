@@ -22,7 +22,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        // Only the PAT management routes declared in routes/web.php are needed
+        Passport::ignoreRoutes();
     }
 
     /**
@@ -38,8 +39,7 @@ class AppServiceProvider extends ServiceProvider
 
         JsonResource::withoutWrapping();
 
-        Passport::$clientUuids            = false;
-        Passport::$registersJsonApiRoutes = true;
+        Passport::$clientUuids = false;
 
         $this->commands([
             InstallCommand::class,

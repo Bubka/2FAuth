@@ -22,9 +22,10 @@ class RejectPatIfNotAllowed
      */
     public function handle(Request $request, Closure $next)
     {
-        $token = $request->user()?->token();
+        $user  = $request->user(config('passport.guard'));
+        $token = $user?->token();
 
-        if ($token instanceof AccessToken && $token->client?->hasGrantType('personal_access') && Gate::denies('manage-pat')) {
+        if ($token instanceof AccessToken && $token->client?->hasGrantType('personal_access') && Gate::forUser($user)->denies('manage-pat')) {
             Log::notice(sprintf('Request to %s rejected, PAT usage is not allowed while authentication is restricted to SSO only', $request->getPathInfo()));
 
             return response()->json(['message' => __('error.unauthorized')], Response::HTTP_FORBIDDEN);
