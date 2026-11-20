@@ -1,0 +1,1 @@
+import{d as e,i as t}from"./app-j8-m1hSS.js";async function n(n,r,i=!1){let a=null,o=null;return await t.update(n,r,{returnError:!0}).then(e=>{a=r}).catch(t=>{i&&t.response.status===422?o=t.response.data.message:e().show(t)}),{data:a,error:o}}export{n as t};
