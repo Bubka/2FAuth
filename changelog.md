@@ -1,5 +1,18 @@
 # Change log
 
+## [9.0.2] - 2026-11-20
+
+⚠️ This is a security release for both 2FAuth and the official Docker image
+
+### Fixed
+
+- PHP2AfterShell: CVE-2026-109618 & CVE-2026-109619
+- nginx2root: CVE-2026-123007 & CVE-2026-123633
+- Security advisory GHSA-3xgg-3487-6cg6 : Cross-site scripting vulnerability in 2FAuth (moderate)
+- Security advisory GHSA-5j97-34rm-v5cp : host-header poisoning still reaches share/transfer notification email links  (moderate)
+- Security advisory GHSA-3c3f-fvc4-87rh : SSRF guard does not decode 6to4 (2002::/16) / Teredo (2001::/32) embedded IPv4 in otpauth image= fetch validator (low)
+- Security advisory GHSA-7j9c-p3v3-74xp : Unvalidated icon field: stored path-traversal string persistently breaks account views for owner and share recipients (moderate)
+
 ## [9.0.1] - 2026-11-02
 
 ⚠️ This release includes several security fixes
