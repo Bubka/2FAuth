@@ -1,5 +1,15 @@
 # Change log
 
+## [9.0.3] - 2026-11-23
+
+⚠️ This is a security release
+
+### Fixed
+
+- Security advisory GHSA-r66h-vhqv-h27f : SSO-only PAT lockout is bypassed by an authorization flaw at Passport's token-refresh route (high)
+- Security advisory GHSA-835v-w4x6-rh9j : Shared 2FA accounts: a share recipient can pre-compute future OTP codes (moderate)
+- Security advisory GHSA-3c3f-fvc4-87rh : SSRF guard does not decode 6to4 (2002::/16) / Teredo (2001::/32) embedded IPv4 in otpauth image= fetch validator (low)
+
 ## [9.0.2] - 2026-11-20
 
 ⚠️ This is a security release for both 2FAuth and the official Docker image
