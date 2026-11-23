@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
  * @method \Illuminate\Database\Eloquent\Collection<array-key, \App\Models\TwoFAccount> loadCount(string $relations)
  * @method bool isSharedWith(\App\Models\User $user)
  * @method int|null groupIdForUser(\App\Models\User $user)
- * @method \App\Models\Dto\TotpDto|\App\Models\Dto\HotpDto getOtp(int $time)
+ * @method \App\Models\Dto\TotpDto|\App\Models\Dto\HotpDto getOtp(?int $time = null)
  */
 class TwoFAccountReadResource extends TwoFAccountStoreResource
 {
@@ -47,7 +47,7 @@ class TwoFAccountReadResource extends TwoFAccountStoreResource
                 'otp' => $this->when(
                     $this->otp_type != 'hotp' && ($request->has('withOtp') || (int) filter_var($request->input('withOtp'), FILTER_VALIDATE_BOOLEAN) == 1),
                     function () use ($request) {
-                        $otp = $this->getOtp($request->at);
+                        $otp = $this->getOtp($request->attributes->get('otp_at'));
 
                         return collect([
                             'password'      => $otp->password,

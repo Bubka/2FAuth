@@ -717,6 +717,51 @@ class TwoFAccountControllerTest extends FeatureTestCase
     }
 
     #[Test]
+    public function test_show_ignores_client_supplied_timestamp_when_returning_otp()
+    {
+        $this->travelTo(now()->startOfSecond());
+        $now = now()->timestamp;
+
+        $this->actingAs($this->user, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccountA->id . '?withOtp=1&at=' . ($now + 86400))
+            ->assertOk()
+            ->assertJsonPath('otp.generated_at', $now);
+    }
+
+    #[Test]
+    public function test_show_shared_twofaccount_ignores_client_supplied_timestamp_when_returning_otp()
+    {
+        Settings::set('enableSharing', true);
+
+        TwoFAccountShare::create([
+            'twofaccount_id'      => $this->twofaccountC->id,
+            'shared_with_user_id' => $this->user->id,
+            'scope'               => TwoFAccountShare::SCOPE_USER,
+            'created_by_user_id'  => $this->anotherUser->id,
+        ]);
+
+        $this->travelTo(now()->startOfSecond());
+        $now = now()->timestamp;
+
+        $this->actingAs($this->user, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts/' . $this->twofaccountC->id . '?withOtp=1&at=' . ($now + 2592000))
+            ->assertOk()
+            ->assertJsonPath('otp.generated_at', $now);
+    }
+
+    #[Test]
+    public function test_index_ignores_client_supplied_timestamp_when_returning_otp()
+    {
+        $this->travelTo(now()->startOfSecond());
+        $now = now()->timestamp;
+
+        $this->actingAs($this->user, 'api-guard')
+            ->json('GET', '/api/v1/twofaccounts?withOtp=1&at=' . ($now + 86400))
+            ->assertOk()
+            ->assertJsonPath('0.otp.generated_at', $now);
+    }
+
+    #[Test]
     public function test_show_returns_twofaccount_resource_without_otp()
     {
         $response = $this->actingAs($this->user, 'api-guard')
