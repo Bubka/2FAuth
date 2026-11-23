@@ -1,1 +1,0 @@
-import{_ as e}from"./app-j8-m1hSS.js";function t(){let t=e({laptop:1024,desktop:1215});return{isLaptop:t.laptop,isDesktop:t.desktop}}export{t};

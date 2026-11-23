@@ -1,1 +1,0 @@
-import{f as e}from"./app-j8-m1hSS.js";var t=e(`bus`,{state:()=>({migrationUri:null,decodedUri:null,inManagementMode:!1,editedGroupName:null,username:null}),actions:{}});export{t};
