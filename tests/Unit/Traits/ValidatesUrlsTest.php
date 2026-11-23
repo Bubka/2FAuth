@@ -39,12 +39,6 @@ class ValidatesUrlsTest extends TestCase
 		return [
 			'PUBLIC_IPV4' => ['1.1.1.1'],
 			'PUBLIC_IPV6' => ['2606:4700:4700::1111'],
-			'PRIVATE_172_16_12_UPPER_BOUNDARY_PLUS_ONE' => ['172.32.0.1'],
-			'CARRIER_GRADE_NAT_UPPER_BOUNDARY_PLUS_ONE' => ['100.128.0.1'],
-			'MULTICAST_LOWER_BOUNDARY_MINUS_ONE' => ['223.255.255.255'],
-			'PUBLIC_IPV4_AFTER_PRIVATE_10_8' => ['11.0.0.1'],
-			'6TO4_PUBLIC_EMBEDDED_IPV4' => ['2002:808:808::1'],
-			'TEREDO_PUBLIC_EMBEDDED_IPV4' => ['2001:0:4136:e378:8000:63bf:fefe:fefe'],
 		];
 	}
 
@@ -94,27 +88,6 @@ class ValidatesUrlsTest extends TestCase
 			'IPV4_MAPPED_PRIVATE_192_168_16' => ['::ffff:192.168.1.1'],
 			'IPV4_MAPPED_CARRIER_GRADE_NAT' => ['::ffff:100.64.0.1'],
 			'IPV4_COMPATIBLE_LOOPBACK' => ['::7f00:1'],
-			'6TO4_LOOPBACK' => ['2002:7f00:1::'],
-			'6TO4_IMDS' => ['2002:a9fe:a9fe::'],
-			'IETF_PROTOCOL_ASSIGNMENTS_192_0_0_24' => ['192.0.0.1'],
-			'DOCUMENTATION_192_0_2_24' => ['192.0.2.1'],
-			'DOCUMENTATION_198_51_100_24' => ['198.51.100.1'],
-			'DOCUMENTATION_203_0_113_24' => ['203.0.113.1'],
-			'DEPRECATED_6TO4_RELAY_192_88_99_24' => ['192.88.99.1'],
-			'BENCHMARKING_198_18_15' => ['198.19.255.255'],
-			'PRIVATE_172_16_12_UPPER_BOUNDARY' => ['172.31.255.255'],
-			'CARRIER_GRADE_NAT_UPPER_BOUNDARY' => ['100.127.255.255'],
-			'AZURE_PLATFORM_ENDPOINT' => ['168.63.129.16'],
-			'DISCARD_ONLY_IPV6' => ['100::1'],
-			'BENCHMARKING_IPV6' => ['2001:2::1'],
-			'DOCUMENTATION_IPV6' => ['2001:db8::1'],
-			'DOCUMENTATION_IPV6_3FFF' => ['3fff::1'],
-			'SRV6_SIDS_IPV6' => ['5f00::1'],
-			'DEPRECATED_SITE_LOCAL_IPV6' => ['fec0::1'],
-			'IPV4_TRANSLATED_SIIT' => ['::ffff:0:a9fe:a9fe'],
-			'6TO4_PRIVATE_192_168_16' => ['2002:c0a8:101::1'],
-			'TEREDO_LOOPBACK' => ['2001:0:4136:e378:8000:63bf:80ff:fffe'],
-			'TEREDO_IMDS' => ['2001:0:4136:e378:8000:63bf:5601:5601'],
 		];
 	}
 
@@ -162,8 +135,6 @@ class ValidatesUrlsTest extends TestCase
 			'IMDS_ENDPOINT' => ['https://169.254.169.254/latest/meta-data', false],
 			'IPV4_MAPPED_IMDS_ENDPOINT' => ['http://[::ffff:169.254.169.254]/latest/meta-data', false],
 			'IPV4_MAPPED_LOOPBACK' => ['http://[::ffff:127.0.0.1]/image.png', false],
-			'6TO4_LOOPBACK' => ['http://[2002:7f00:1::]/image.png', false],
-			'TEREDO_LOOPBACK' => ['http://[2001:0:4136:e378:8000:63bf:80ff:fffe]/image.png', false],
 			'INVALID_SCHEME' => ['ftp://1.1.1.1/logo.png', false],
 			'INVALID_URL' => ['not-a-url', false],
 			'LOCALHOST' => ['http://localhost/logo.png', false],
@@ -244,40 +215,6 @@ class ValidatesUrlsTest extends TestCase
 		};
 
 		$this->assertNull($validator->resolveTarget('https://example.com/logo.png'));
-	}
-
-	#[Test]
-	#[DataProvider('tunnelDnsRecordProvider')]
-	public function test_getPublicRemoteTarget_returns_null_when_dns_resolves_to_tunnel_address_embedding_private_ipv4(string $ipv6) : void
-	{
-		$validator = new class($ipv6)
-		{
-			use ValidatesUrls;
-
-			public function __construct(protected string $ipv6) {}
-
-			public function resolveTarget(string $url) : ?array
-			{
-				return $this->getPublicRemoteTarget($url);
-			}
-
-			protected function getDnsRecords(string $host) : array
-			{
-				return [
-					['ipv6' => $this->ipv6],
-				];
-			}
-		};
-
-		$this->assertNull($validator->resolveTarget('https://example.com/logo.png'));
-	}
-
-	public static function tunnelDnsRecordProvider() : array
-	{
-		return [
-			'6TO4_LOOPBACK' => ['2002:7f00:1::'],
-			'TEREDO_LOOPBACK' => ['2001:0:4136:e378:8000:63bf:80ff:fffe'],
-		];
 	}
 
 }

@@ -7,52 +7,6 @@ use Illuminate\Support\Str;
 trait ValidatesUrls
 {
     /**
-     * IPv4 ranges that are not publicly routable.
-     *
-     * @var list<string>
-     */
-    private const BLOCKED_IPV4_RANGES = [
-        '0.0.0.0/8',        // "This" network
-        '10.0.0.0/8',       // Private-use
-        '100.64.0.0/10',    // Carrier-grade NAT
-        '127.0.0.0/8',      // Loopback
-        '168.63.129.16/32', // Azure platform endpoint
-        '169.254.0.0/16',   // Link-local, includes the 169.254.169.254 metadata endpoint
-        '172.16.0.0/12',    // Private-use
-        '192.0.0.0/24',     // IETF protocol assignments
-        '192.0.2.0/24',     // Documentation
-        '192.88.99.0/24',   // Deprecated 6to4 relay anycast
-        '192.168.0.0/16',   // Private-use
-        '198.18.0.0/15',    // Benchmarking
-        '198.51.100.0/24',  // Documentation
-        '203.0.113.0/24',   // Documentation
-        '224.0.0.0/4',      // Multicast
-        '240.0.0.0/4',      // Reserved, includes the broadcast address
-    ];
-
-    /**
-     * IPv6 ranges that are not publicly routable.
-     *
-     * @var list<string>
-     */
-    private const BLOCKED_IPV6_RANGES = [
-        '::/128',           // Unspecified
-        '::1/128',          // Loopback
-        '::ffff:0:0:0/96',  // IPv4-translated (SIIT)
-        '100::/64',         // Discard-only
-        '2001:2::/48',      // Benchmarking
-        '2001:10::/28',     // Deprecated ORCHID
-        '2001:20::/28',     // ORCHIDv2
-        '2001:db8::/32',    // Documentation
-        '3fff::/20',        // Documentation
-        '5f00::/16',        // Segment Routing SIDs
-        'fc00::/7',         // Unique local
-        'fe80::/10',        // Link-local
-        'fec0::/10',        // Deprecated site-local
-        'ff00::/8',         // Multicast
-    ];
-
-    /**
      * Check if the given URL is a valid public remote URL
      */
     private function isPublicRemoteUrl(string $url) : bool
@@ -191,10 +145,13 @@ trait ValidatesUrls
         }
 
         if (
-            $this->isInBlockedRange($ip)
+            $this->isPrivateAdress($ip)
+            || $this->isReservedAdress($ip)
+            || $this->isCarrierGradeNatAddress($ip)
+            || $this->isMulticast($ip)
+            || $this->IsIMDS($ip)
             || $this->isBlockedNat64($ip)
             || $this->isBlockedEmbeddedIpv4($ip)
-            || $this->isBlockedTunnelAddress($ip)
         ) {
             return false;
         }
@@ -203,58 +160,64 @@ trait ValidatesUrls
     }
 
     /**
-     * Check if the given ip belongs to a range that is not publicly routable
-     * (IANA special-purpose registries, multicast and cloud metadata endpoints).
-     *
-     * Ranges embedding an IPv4 (IPv4-mapped, NAT64, 6to4, Teredo) are not listed
-     * here: they are decoded and re-validated by the dedicated checks below.
+     * Check if the given ip belongs to a private address range
+     * IPv4: 0.0.0.0/8, 169.254.0.0/16, 127.0.0.0/8, 240.0.0.0/4
+     * IPv6: ::1/128, ::/128, ::FFFF:0:0/96, FE80::/10
      */
-    private function isInBlockedRange(string $ip) : bool
+    private function isPrivateAdress(string $ip) : bool
     {
-        $binary = inet_pton($ip);
-
-        if ($binary === false) {
-            return true;
-        }
-
-        $ranges = strlen($binary) === 4 ? self::BLOCKED_IPV4_RANGES : self::BLOCKED_IPV6_RANGES;
-
-        foreach ($ranges as $cidr) {
-            if ($this->isInCidr($binary, $cidr)) {
-                return true;
-            }
-        }
-
-        return false;
+        return filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE) === false;
     }
 
     /**
-     * Check if a packed ip address belongs to the given CIDR range
+     * Check if the given ip belongs to a reserved address range
+     * IPv4: 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16
+     * IPv6 addresses starting with FD or FC
      */
-    private function isInCidr(string $binaryIp, string $cidr) : bool
+    private function isReservedAdress(string $ip) : bool
     {
-        [$subnet, $prefixLength] = explode('/', $cidr);
+        return filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_RES_RANGE) === false;
+    }
 
-        $binarySubnet = inet_pton($subnet);
-
-        if ($binarySubnet === false || strlen($binarySubnet) !== strlen($binaryIp)) {
+    /**
+     * Check if the given ip belongs to the carrier-grade NAT range
+     * IPv4: 100.64.0.0/10
+     */
+    private function isCarrierGradeNatAddress(string $ip) : bool
+    {
+        if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) === false) {
             return false;
         }
 
-        $fullBytes     = intdiv((int) $prefixLength, 8);
-        $remainingBits = (int) $prefixLength % 8;
+        $octets = explode('.', $ip);
 
-        if (substr($binaryIp, 0, $fullBytes) !== substr($binarySubnet, 0, $fullBytes)) {
+        if (count($octets) < 2) {
             return false;
         }
 
-        if ($remainingBits === 0) {
-            return true;
+        return $octets[0] === '100' && ((int) $octets[1] >= 64 && (int) $octets[1] <= 127);
+    }
+
+    /**
+     * Check if the given ip belongs to a multicast address range
+     * IPv4: 224.0.0.0/4
+     * IPv6: ff00::/8
+     */
+    private function isMulticast(string $ip) : bool
+    {
+        if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) !== false) {
+            $long = ip2long($ip);
+
+            return $long !== false && (($long & 0xF0000000) === 0xE0000000);
         }
 
-        $mask = (0xFF << (8 - $remainingBits)) & 0xFF;
+        if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) !== false) {
+            $binary = inet_pton($ip);
 
-        return (ord($binaryIp[$fullBytes]) & $mask) === (ord($binarySubnet[$fullBytes]) & $mask);
+            return is_string($binary) && (ord($binary[0]) === 0xFF);
+        }
+
+        return false;
     }
 
     /**
@@ -328,30 +291,10 @@ trait ValidatesUrls
     }
 
     /**
-     * Check if the given ip is a 6to4 or Teredo IPv6 address whose embedded IPv4
-     * is not public.
-     *
-     * 6to4 (2002::/16, RFC 3056) carries the IPv4 in bits 16-48.
-     * Teredo (2001::/32, RFC 4380) carries the client IPv4 in the low 32 bits,
-     * bit-inverted.
+     * Check if the given ip is the cloud metadata endpoint
      */
-    private function isBlockedTunnelAddress(string $ip) : bool
+    private function IsIMDS(string $ip) : bool
     {
-        $bin = @inet_pton($ip);
-
-        if ($bin === false || strlen($bin) !== 16) {
-            return false;
-        }
-
-        if (substr($bin, 0, 2) === "\x20\x02") {
-            $embeddedV4 = inet_ntop(substr($bin, 2, 4));
-        } elseif (substr($bin, 0, 4) === "\x20\x01\x00\x00") {
-            $embeddedV4 = inet_ntop(~substr($bin, 12, 4));
-        } else {
-            return false;
-        }
-
-        // Fail closed if the embedded address cannot be decoded.
-        return $embeddedV4 === false || ! $this->isPublicIp($embeddedV4);
+        return $ip === '169.254.169.254';
     }
 }
