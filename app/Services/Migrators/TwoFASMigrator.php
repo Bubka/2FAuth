@@ -85,7 +85,7 @@ class TwoFASMigrator extends Migrator
 
         foreach ($json['services'] as $key => $otp_parameters) {
             $parameters              = [];
-            $parameters['otp_type']  = $otp_parameters['otp']['tokenType'];
+            $parameters['otp_type']  = strtoupper($otp_parameters['otp']['tokenType']) == 'STEAM' ? TwoFAccount::STEAM_TOTP : $otp_parameters['otp']['tokenType'];
             $parameters['service']   = $otp_parameters['name'];
             $parameters['account']   = $otp_parameters['otp']['account'] ?? $parameters['service'];
             $parameters['secret']    = $this->padToValidBase32Secret($otp_parameters['secret']);

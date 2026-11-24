@@ -264,6 +264,22 @@ class MigrationTestData
                         "backgroundColor": "LightBlue"
                     }
                 }
+            },
+            {
+                "secret": "' . OtpTestData::STEAM_SECRET . '",
+                "badge": {"color": "Default"},
+                "order": {"position": 3},
+                "otp":
+                {
+                    "account": "' . OtpTestData::ACCOUNT . '",
+                    "digits": ' . OtpTestData::DIGITS_STEAM . ',
+                    "period": ' . OtpTestData::PERIOD_DEFAULT . ',
+                    "algorithm": "' . OtpTestData::ALGORITHM_DEFAULT . '",
+                    "tokenType": "STEAM"
+                },
+                "updatedAt": 1657529430000,
+                "name": "' . OtpTestData::STEAM . '",
+                "type": "ManuallyAdded"
             }],
             "appVersionName": "3.20.1"
         }';

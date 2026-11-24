@@ -199,7 +199,7 @@ class MigratorTest extends TestCase
                 new TwoFASMigrator,
                 MigrationTestData::VALID_2FAS_MIGRATION_PAYLOAD,
                 'custom',
-                $hasSteam = false,
+                $hasSteam = true,
             ],
             'GOOGLE_AUTH_MIGRATION_PAYLOAD' => [
                 new GoogleAuthMigrator,
